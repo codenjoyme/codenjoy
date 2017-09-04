@@ -172,6 +172,7 @@ game.drawBoard = function(drawer) {
         if (char == 'Q') return RED;
         if (char == 'R') return GREEN;
         if (char == 'S') return YELLOW;
+        return -1;
     }
 
     var isBase = function(char) {
@@ -216,7 +217,7 @@ game.drawBoard = function(drawer) {
             fonts.forces.dy = fonts.forces.dyForce;
         }
         var color = getColor(x, y);
-        if (!color) return;
+        if (color == -1) return;
         fonts.forces.fillStyle = fonts.forces.fillStyles[color];
         fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
         canvas.drawText(count, {'x':x - 1, 'y':y}, fonts.forces);
