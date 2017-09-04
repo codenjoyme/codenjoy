@@ -25,13 +25,15 @@ package com.codenjoy.dojo.utils;
 
 public class TestUtils {
 
+    public static final int COUNT_NUMBERS = 3;
+
     public static String injectN(String expected) {
         int size = (int) Math.sqrt(expected.length());
         return inject(expected, size, "\n");
     }
 
-    public static String injectN2(String expected) {
-        int size = (int) Math.sqrt(expected.length()/2)*2;
+    public static String injectNN(String expected) {
+        int size = (int) Math.sqrt(expected.length()/COUNT_NUMBERS)*COUNT_NUMBERS;
         return inject(expected, size, "\n");
     }
 
