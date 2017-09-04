@@ -183,7 +183,7 @@ game.drawBoard = function(drawer) {
     }
 
     var parseCount = function(code) {
-        if (code == '-=') return 0;
+        if (code == '-=#') return 0;
         return parseInt(code, 36);
     }
 
@@ -198,9 +198,10 @@ game.drawBoard = function(drawer) {
         return color;
     }
 
+    var COUNT_NUMBERS = 3;
     var getCount = function(x, y) {
-        var l = length(x ,y);
-        var sub = forces.substring(l*2, (l + 1)*2);
+        var l = length(x, y);
+        var sub = forces.substring(l*COUNT_NUMBERS, (l + 1)*COUNT_NUMBERS);
         var count = parseCount(sub);
         return count;
     }

@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.client.Board;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
@@ -227,7 +226,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void assertF(String expected, int index) {
         Single single = single(index);
         assertEquals(expected,
-                TestUtils.injectN2(getBoardAsString(single).getForces()));
+                TestUtils.injectNN(getBoardAsString(single).getForces()));
     }
 
     protected EventListener verify(int index) {
@@ -265,7 +264,7 @@ public abstract class AbstractSinglePlayersTest {
                 TestUtils.injectN(json.getJSONArray("layers").getString(1)));
 
         assertEquals(forces,
-                TestUtils.injectN2(json.getString("forces")));
+                TestUtils.injectNN(json.getString("forces")));
 
         assertEquals(true,
                 json.getBoolean("showName"));

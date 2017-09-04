@@ -26,21 +26,21 @@ package com.epam.dojo.expansion.services;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Expansion;
-import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.items.HeroForces;
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jetty.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class Printer {
 
     private static final int BOUND_DEFAULT = 4;
     public static final int LAYERS_TOTAL = 2;
+    public static final int COUNT_NUMBERS = TestUtils.COUNT_NUMBERS;
 
     private int size;
     private Expansion game;
@@ -137,12 +137,12 @@ public class Printer {
             HeroForces forces = (HeroForces) item;
             int count = forces.getForces().getCount();
             String result = Integer.toString(count, Character.MAX_RADIX).toUpperCase();
-            if (result.length() < 2) { // TODO оптимизировать
-                return "0" + result;
+            if (result.length() < COUNT_NUMBERS) { // TODO оптимизировать
+                return StringUtils.leftPad(result, COUNT_NUMBERS, '0');
             }
             return result;
         } else {
-            return "-=";
+            return "-=#";
         }
     }
 

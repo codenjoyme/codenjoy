@@ -41,6 +41,8 @@ import static com.epam.dojo.expansion.model.Elements.Layers.*;
 
 public class Board extends AbstractBoard<Elements> {
 
+    private final int COUNT_NUMBERS = 3;
+
     @Override
     public Elements valueOf(char ch) {
         return Elements.valueOf(ch);
@@ -106,7 +108,7 @@ public class Board extends AbstractBoard<Elements> {
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 int l = y * size + x;
-                String sub = map.substring(l*2, (l + 1)*2);
+                String sub = map.substring(l*COUNT_NUMBERS, (l + 1)*COUNT_NUMBERS);
                 int count = parseCount(sub);
 
                 int xx = inversionX(x);
@@ -122,7 +124,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     private int parseCount(String sub) {
-        if (sub.equals("-=")) {
+        if (sub.equals("-=#")) {
             return 0;
         } else {
             return Integer.parseInt(sub, Character.MAX_RADIX);
