@@ -278,7 +278,7 @@ public class Board extends AbstractBoard<Elements> {
                 if (num.equals("   0")) num = "    ";
                 line += num + '|';
             }
-            layer3[y] = line;
+            layer3[size - 1 - y] = line;
         }
 
         int size = layer1.length;
