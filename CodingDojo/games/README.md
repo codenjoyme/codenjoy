@@ -20,7 +20,7 @@
 - пропиши переменную окружения `M2_HOME`, указывающую на корень папки `c:\java\apache-maven-3.x.x`
 - добавь в конец переменной `Path` строчку `;%M2_HOME%\bin`
 - установи jdk7 если не установлена (тоже в папку `c:\java`)
-- пропиши переменную окружения `JAVA_HOME`, указывающую на корень папки `c:\java\jdk1.7.x_xx`
+- пропиши переменную окружения `JAVA_HOME`, указывающую на корень папки `c:\java\jdk1.8.x_xx`
 - добавь в конец переменной Path строчку `;%JAVA_HOME%\bin`
 - проверь что все сделано правильно выполнив cmd.exe а в нем команду `mvn -version`.
 Если установилось - ты будешь видеть вывод команды: версию maven и java, а не что "команда не найдена"
@@ -28,8 +28,8 @@
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
 Maven home: C:\java\apache-maven-3.x.x
-Java version: 1.7.x_x, vendor: Oracle Corporation
-Java home: C:\java\jdk1.7.x_xx\jre
+Java version: 1.8.x_x, vendor: Oracle Corporation
+Java home: C:\java\jdk1.8.x_xx\jre
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>

@@ -24,7 +24,6 @@
         <module>games</module>
         <module>server</module>
         <module>builder</module>
-        <module>builder-codenjoy.com</module>
         <module>utilities</module>
     </modules>
 </project>

@@ -19,7 +19,7 @@ All you need to develop a game is jdk7, maven3, git client and IDE Idea.
 - add the `M2_HOME` environment variable that points to the root of `c:\java\apache-maven-3.x.x`
 - add the `;%M2_HOME%\bin` string at the end of the `Path` variable
 - install jdk7, if necessary (also to the folder `c:\java`)
-- add the `JAVA_HOME`environment variable that points to the root of `c:\java\jdk1.7.x_xx`
+- add the `JAVA_HOME`environment variable that points to the root of `c:\java\jdk1.8.x_xx`
 - add the `;%JAVA_HOME%\bin` string at the end of the Path variable
 - check by running cmd.exe with the `mvn -version` command.
 If installation is successful, you will see the command output the version of maven and java, rather than "command not found"
@@ -27,8 +27,8 @@ If installation is successful, you will see the command output the version of ma
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
 Maven home: C:\java\apache-maven-3.x.x
-Java version: 1.7.x_x, vendor: Oracle Corporation
-Java home: C:\java\jdk1.7.x_xx\jre
+Java version: 1.8.x_x, vendor: Oracle Corporation
+Java home: C:\java\jdk1.8.x_xx\jre
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
