@@ -69,7 +69,7 @@ public class ApofigBotSolver extends AbstractSolver {
      */
     @Override
     public Command whatToDo(Board board) {
-        calc();
+//        calc();
 
         if (!board.isMeAlive()) return doNothing();
         Point point = null;
@@ -131,11 +131,11 @@ public class ApofigBotSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        for (int i = 1; i <= 100; i++) {
-            WebSocketRunner.printToConsole = false;
-//            start("demo" + i + "@codenjoy.com", "ecsc00104a56.epam.com:8005", new ApofigBotSolver(new Random().nextInt(7)));
-            start("demo" + i + "@codenjoy.com", "127.0.0.1:8080", new ApofigBotSolver(new Random().nextInt(7)));
-        }
+//        for (int i = 1; i <= 1; i++) {
+//            WebSocketRunner.printToConsole = false;
+//            start("de mo" + i + "@codenjoy.com", "ecsc00104a56.epam.com:8005", new ApofigBotSolver(new Random().nextInt(7)));
+            start("oleksandr_baglai@epam.com", "ecsc00104eef.epam.com:8080", new ApofigBotSolver(new Random().nextInt(7) + 1));
+//        }
     }
 
 }
