@@ -55,6 +55,7 @@ public class Expansion implements Tickable, IField {
 
     private int ticks;
     private List<Player> players;
+    private List<Player> losers;
     private boolean waitingOthers = false;
 
     public Expansion(List<ILevel> levels, Dice dice, boolean multiple) {
@@ -65,6 +66,7 @@ public class Expansion implements Tickable, IField {
         ticks = 0;
 
         players = new LinkedList();
+        losers = new LinkedList();
     }
 
     /**
@@ -94,25 +96,63 @@ public class Expansion implements Tickable, IField {
             ((Tickable) item).tick();
         }
 
-        for (Player player : players) {
+        for (Player player : players.toArray(new Player[0])) {
             Hero hero = player.getHero();
 
             hero.applyGold();
 
-            checkAlone(hero);
+            if (isMultiple) {
+                boolean win = checkStatus(player, hero);
+                if (win) {
+                    List<Player> renew = new LinkedList<>();
+                    for (Player p : losers) {
+                        remove(p);
+                        renew.add(p);
+                    }
+                    remove(player);
+                    renew.add(player);
+                    losers.clear();
+                    for (Player p : renew) {
+                        newGame(p);
+                    }
+                    break;
+                }
+            }
+
+            if (!hero.isAlive()) {
+                // TODO продолжить тут
+            }
 
             if (hero.isWin()) {
                 player.event(Events.WIN(0, isMultiple));
                 player.setNextLevel();
             }
-
-            if (!hero.isAlive()) {
-                player.event(Events.LOOSE());
-            }
         }
     }
 
-    private void checkAlone(Hero hero) {
+    private boolean checkStatus(Player player, Hero hero) {
+        if (losers.contains(player)) return false;
+
+        List<HeroForces> allForces = level.getItems(HeroForces.class);
+        boolean alone = true;
+        boolean exists = false;
+        for (HeroForces item : allForces) {
+            alone &= item.itsMe(hero);
+            exists |= item.itsMe(hero);
+        }
+        if (alone && players.size() != 1) {
+            player.event(Events.WIN(0, isMultiple));
+            return true;
+        }
+        if (!exists) {
+            player.event(Events.LOOSE());
+            losers.add(player);
+            // players.remove(player); TODO продолжить тут
+        }
+        return false;
+    }
+
+    private void checkIsWinner(Hero hero) {
         List<HeroForces> allForces = level.getItems(HeroForces.class);
         boolean alone = true;
         for (HeroForces item : allForces) {
@@ -363,7 +403,7 @@ public class Expansion implements Tickable, IField {
         for (ICell cell : level.getCells()) {
             for (HeroForces forces : cell.getItems(HeroForces.class)) {
                 if (forces.itsMe(hero)) {
-                    cell.removeItem(forces);
+                    forces.removeFromCell();
                 }
             }
         }

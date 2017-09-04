@@ -965,9 +965,19 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#00U-=#-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+
         // kill this enemy
         hero(PLAYER3).move(new ForcesMoves(pt(1, 4), 10, QDirection.UP));
         tickAll();
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verify(PLAYER4).event(Events.LOOSE());
 
         assertE("-------" +
                 "-----♥-" +
@@ -1013,9 +1023,19 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#01E01401400K00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+
         // kill this enemy
         hero(PLAYER3).move(new ForcesMoves(pt(4, 1), 10, QDirection.RIGHT));
         tickAll();
+
+        verifyNoMoreInteractions(PLAYER1);
+        verify(PLAYER2).event(Events.LOOSE());
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
 
         assertE("-------" +
                 "-----♥-" +
@@ -1073,25 +1093,32 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         hero(PLAYER3).move(new ForcesMoves(pt(5, 4), 10, QDirection.UP));
         tickAll();
 
+        verify(PLAYER1).event(Events.LOOSE());
+        verifyNoMoreInteractions(PLAYER2);
+        verify(PLAYER3).event(Events.WIN(0, true));
+        verifyNoMoreInteractions(PLAYER4);
+
         assertE("-------" +
+                "-♠---♥-" +
                 "-------" +
-                "-♣---♣-" +
-                "-♣---♣-" +
-                "-♣---♣-" +
-                "-♣♣♣♣♣-" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
                 "-------", PLAYER1);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#00A-=#-=#-=#00A-=#\n" +
-                "-=#014-=#-=#-=#014-=#\n" +
-                "-=#014-=#-=#-=#014-=#\n" +
-                "-=#01E01401400B00L-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
+        tickAll();
+
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER3).event(Events.WIN(0, true));
         verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
         verifyNoMoreInteractions(PLAYER4);
     }
 
