@@ -134,9 +134,9 @@ game.drawBoard = function(drawer) {
     drawer.clear();
     drawer.drawBack();
 
-    var GREEN = 0;
+    var BLUE = 0;
     var RED = 1;
-    var BLUE = 2;
+    var GREEN = 2;
     var YELLOW = 3;
 
     var fonts = {};
@@ -170,8 +170,8 @@ game.drawBoard = function(drawer) {
     var parseColor = function(char) {
         if (char == 'P') return BLUE;
         if (char == 'Q') return RED;
-        if (char == 'S') return YELLOW;
         if (char == 'R') return GREEN;
+        if (char == 'S') return YELLOW;
     }
 
     var isBase = function(char) {
