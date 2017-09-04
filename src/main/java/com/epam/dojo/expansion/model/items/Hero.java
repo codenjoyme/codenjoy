@@ -298,7 +298,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return getBase().getCell().copy();
     }
 
-    public void increaseArmy() {
+    public void applyGold() {
         forcesPerTick += goldCount;
         goldCount = 0;
     }

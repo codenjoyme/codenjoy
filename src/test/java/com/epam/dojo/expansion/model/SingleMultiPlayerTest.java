@@ -23,11 +23,15 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -902,4 +906,193 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#00B-=#-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
     }
+
+    @Test
+    public void shouldOnlyOnePlayerWins() {
+        // given
+        givenFl("╔═════┐" +
+                "║4...1│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║3...2│" +
+                "└─────┘");
+        gameFactory.setWaitingOthers(true);
+        createPlayers(4);
+
+        // then
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // move to enemy
+        for (int i = 0; i < 20; i++) {
+            hero(PLAYER3, 1, 1).up();
+            tickAll();
+
+            hero(PLAYER3, 1, 2).up();
+            tickAll();
+
+            hero(PLAYER3, 1, 3).up();
+            tickAll();
+        }
+
+        assertE("-------" +
+                "-♠---♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#00K-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#00U-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // kill this enemy
+        hero(PLAYER3).move(new ForcesMoves(pt(1, 4), 10, QDirection.UP));
+        tickAll();
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#00U-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // move to another enemy
+        for (int i = 0; i < 20; i++) {
+            hero(PLAYER3, 1, 1).right();
+            tickAll();
+
+            hero(PLAYER3, 2, 1).right();
+            tickAll();
+
+            hero(PLAYER3, 3, 1).right();
+            tickAll();
+        }
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣♣♣♣♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#01E01401400K00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // kill this enemy
+        hero(PLAYER3).move(new ForcesMoves(pt(4, 1), 10, QDirection.RIGHT));
+        tickAll();
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣♣♣♣--" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#01E01401400A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        hero(PLAYER3, 4, 1).right();
+        tickAll();
+
+        // move to another enemy
+        for (int i = 0; i < 20; i++) {
+            hero(PLAYER3, 5, 1).up();
+            tickAll();
+
+            hero(PLAYER3, 5, 2).up();
+            tickAll();
+
+            hero(PLAYER3, 5, 3).up();
+            tickAll();
+        }
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣---♣-" +
+                "-♣---♣-" +
+                "-♣---♣-" +
+                "-♣♣♣♣♣-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#00K-=#\n" +
+                "-=#014-=#-=#-=#014-=#\n" +
+                "-=#014-=#-=#-=#014-=#\n" +
+                "-=#01E01401400B00L-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+
+        // kill this enemy
+        hero(PLAYER3).move(new ForcesMoves(pt(5, 4), 10, QDirection.UP));
+        tickAll();
+
+        assertE("-------" +
+                "-------" +
+                "-♣---♣-" +
+                "-♣---♣-" +
+                "-♣---♣-" +
+                "-♣♣♣♣♣-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#014-=#-=#-=#014-=#\n" +
+                "-=#014-=#-=#-=#014-=#\n" +
+                "-=#01E01401400B00L-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+        verify(PLAYER3).event(Events.WIN(0, true));
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER4);
+    }
+
 }

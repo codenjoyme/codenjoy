@@ -97,7 +97,9 @@ public class Expansion implements Tickable, IField {
         for (Player player : players) {
             Hero hero = player.getHero();
 
-            hero.increaseArmy();
+            hero.applyGold();
+
+            checkAlone(hero);
 
             if (hero.isWin()) {
                 player.event(Events.WIN(0, isMultiple));
@@ -107,6 +109,17 @@ public class Expansion implements Tickable, IField {
             if (!hero.isAlive()) {
                 player.event(Events.LOOSE());
             }
+        }
+    }
+
+    private void checkAlone(Hero hero) {
+        List<HeroForces> allForces = level.getItems(HeroForces.class);
+        boolean alone = true;
+        for (HeroForces item : allForces) {
+            alone &= item.itsMe(hero);
+        }
+        if (alone) {
+            hero.setWin();
         }
     }
 

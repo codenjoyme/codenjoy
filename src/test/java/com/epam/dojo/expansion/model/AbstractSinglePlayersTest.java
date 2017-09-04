@@ -199,6 +199,10 @@ public abstract class AbstractSinglePlayersTest {
         return getOnlyMovingJoystick(single(index), x, y);
     }
 
+    public Hero hero(int index) {
+        return (Hero) single(index).getJoystick();
+    }
+
     protected Single single(int index) {
         return singles.get(index);
     }
