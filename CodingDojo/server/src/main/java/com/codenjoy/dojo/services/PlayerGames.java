@@ -216,7 +216,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     if (index != -1) {
                         playersGroup.add(playerGames.get(index).getPlayer());
                     } else {
-                        System.out.println();
+                        // TODO этого не должн случиться, но лучше порефакторить
                     }
                 }
             }
@@ -238,7 +238,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
                     map.put(player2.getName(), new JSONObject(data));
                 } else {
-                    System.out.println();
+                    // TODO этого не должн случиться, но лучше порефакторить
                 }
             }
         }
