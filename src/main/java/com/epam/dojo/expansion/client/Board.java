@@ -31,6 +31,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -103,9 +104,33 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Forces> getAllForces() {
-        String map = source.getString("forces");
+        String map = getForcesString();
+        int[][] array = getForcesArray(map);
+        List<Forces> result = getForces(array);
+        return result;
+    }
 
+    private String getForcesString() {
+        return source.getString("forces");
+    }
+
+    @NotNull
+    private List<Forces> getForces(int[][] array) {
         List<Forces> result = new LinkedList<>();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                int count = array[x][y];
+                if (count > 0) {
+                    Forces force = new Forces(pt(x, y), count);
+                    result.add(force);
+                }
+            }
+        }
+        return result;
+    }
+
+    private int[][] getForcesArray(String map) {
+        int[][] result = new int[size][size];
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 int l = y * size + x;
@@ -115,10 +140,7 @@ public class Board extends AbstractBoard<Elements> {
                 int xx = inversionX(x);
                 int yy = inversionY(y);
 
-                if (count > 0) {
-                    Forces force = new Forces(pt(xx, yy), count);
-                    result.add(force);
-                }
+                result[xx][yy] = count;
             }
         }
         return result;
@@ -239,16 +261,29 @@ public class Board extends AbstractBoard<Elements> {
     @Override
     public String toString() {
         String temp = "0123456789012345678901234567890";
-        String temp2 = "  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0";
+        String temp2 = "  0    1    2    3    4    5    6    7    8    9" +
+                "    0    1    2    3    4    5    6    7    8    9" +
+                "    0    1    2    3    4    5    6    7    8    9    0";
 
         StringBuilder builder = new StringBuilder();
         String[] layer1 = boardAsString(LAYER1).split("\n");
         String[] layer2 = boardAsString(LAYER2).split("\n");
-        String[] layer3 = TestUtils.injectNN(source.getString("forces")).split("\n");
+        String[] layer3 = TestUtils.injectNN(getForcesString()).split("\n");
+
+        int[][] array = getForcesArray(getForcesString());
+        for (int y = 0; y < size; y++) {
+            String line = "";
+            for (int x = 0; x < size; x++) {
+                String num = StringUtils.leftPad(Integer.toString(array[x][y]), COUNT_NUMBERS + 1, ' ');
+                if (num.equals("   0")) num = "    ";
+                line += num + '|';
+            }
+            layer3[y] = line;
+        }
 
         int size = layer1.length;
         String numbers = temp.substring(0, size);
-        String numbers2 = temp2.substring(0, size*COUNT_NUMBERS);
+        String numbers2 = temp2.substring(0, size*(COUNT_NUMBERS + 2));
         String space = StringUtils.leftPad("", size - 5);
         String numbersLine = "  " + numbers + "   " + numbers +  "   " + numbers2;
         String firstPart = " Layer1 " + space + " Layer1 " + space + " Layer3\n" + numbersLine;
