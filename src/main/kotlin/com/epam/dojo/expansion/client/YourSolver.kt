@@ -62,5 +62,5 @@ class YourKotlinSolver() : AbstractSolver() {
  * Run this method for connect to the server and start the game
  */
 fun main(args: Array<String>) {
-    AbstractSolver.start("your@email.com", "127.0.0.1:8080", YourKotlinSolver())
+    AbstractSolver.start("your@email.com", "ecsc00104eef.epam.com:8080", YourKotlinSolver())
 }

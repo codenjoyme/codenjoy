@@ -84,7 +84,7 @@ public class YourSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "127.0.0.1:8080", new YourSolver());
+        start("your@email.com", "ecsc00104eef.epam.com:8080", new YourSolver());
     }
 
 }
