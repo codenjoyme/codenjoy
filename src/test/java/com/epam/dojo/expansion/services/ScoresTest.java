@@ -43,7 +43,6 @@ public class ScoresTest {
     private Settings settings;
     private Integer loosePenalty;
     private Integer winScore;
-    private Integer goldScore;
 
     public void loose() {
         scores.event(new Events());
@@ -53,10 +52,6 @@ public class ScoresTest {
         scores.event(Events.WIN(0));
     }
 
-    public void win(int goldCount) {
-        scores.event(Events.WIN(goldCount));
-    }
-
     @Before
     public void setup() {
         settings = new SettingsImpl();
@@ -64,7 +59,10 @@ public class ScoresTest {
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
-        goldScore = settings.getParameter("Gold score").type(Integer.class).getValue();
+    }
+
+    public void win(int goldCount) {
+        scores.event(Events.WIN(goldCount));
     }
 
     @Test
@@ -79,17 +77,6 @@ public class ScoresTest {
         loose(); //-
 
         assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
-    }
-
-    @Test
-    public void shouldWithWithGold() {
-        scores = new Scores(0, settings);
-
-        win(0);  //+
-        win(1);  //+
-        win(2);  //+
-
-        assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
     }
 
     @Test

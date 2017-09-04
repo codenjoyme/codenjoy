@@ -1095,7 +1095,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
         verify(PLAYER1).event(Events.LOOSE());
         verifyNoMoreInteractions(PLAYER2);
-        verify(PLAYER3).event(Events.WIN(0, true));
+        verify(PLAYER3).event(Events.WIN(1));
         verifyNoMoreInteractions(PLAYER4);
 
         assertE("-------" +

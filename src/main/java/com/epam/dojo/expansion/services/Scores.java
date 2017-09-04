@@ -35,7 +35,6 @@ public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> loosePenalty;
-    private final Parameter<Integer> goldScore;
 
     private volatile int score;
 
@@ -43,8 +42,7 @@ public class Scores implements PlayerScores {
         this.score = startScore;
 
         // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
-        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(1);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
     }
 
@@ -64,10 +62,7 @@ public class Scores implements PlayerScores {
         Events events = (Events)input;
 
         if (events.getType() == Events.Type.WIN) {
-            if (!events.isMultiple()) {
-                score += winScore.getValue(); // TODO test me
-            }
-            score += goldScore.getValue()*events.getGoldCount();
+            score += winScore.getValue();
         } else if (events.getType() == Events.Type.LOOSE) {
             score -= loosePenalty.getValue();
         }

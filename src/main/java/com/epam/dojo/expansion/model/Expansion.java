@@ -124,7 +124,7 @@ public class Expansion implements Tickable, IField {
             }
 
             if (hero.isWin()) {
-                player.event(Events.WIN(0, isMultiple));
+                player.event(Events.WIN(0));
                 player.setNextLevel();
             }
         }
@@ -141,7 +141,7 @@ public class Expansion implements Tickable, IField {
             exists |= item.itsMe(hero);
         }
         if (alone && players.size() != 1) {
-            player.event(Events.WIN(0, isMultiple));
+            player.event(Events.WIN(1));
             return true;
         }
         if (!exists) {

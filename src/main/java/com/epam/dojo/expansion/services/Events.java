@@ -29,12 +29,8 @@ package com.epam.dojo.expansion.services;
  */
 public class Events {
 
-    public static Events WIN(int goldCount) {
-        return WIN(goldCount, false);
-    }
-
-    public static Events WIN(int goldCount, boolean multiple) {
-        return new Events(goldCount, multiple);
+    public static Events WIN(int score) {
+        return new Events(score);
     }
 
     public static Events LOOSE() {
@@ -47,25 +43,19 @@ public class Events {
     }
     private Type type;
 
-    private int goldCount;
-    private boolean multiple;
+    private int score;
 
-    public Events(int goldCount, boolean multiple) {
-        this.multiple = multiple;
+    public Events(int score) {
         type = Type.WIN;
-        this.goldCount = goldCount;
+        this.score = score;
     }
 
     public Events() {
         type = Type.LOOSE;
     }
 
-    public boolean isMultiple() {
-        return multiple;
-    }
-
-    public int getGoldCount() {
-        return goldCount;
+    public int getScore() {
+        return score;
     }
 
     public Type getType() {
@@ -83,7 +73,7 @@ public class Events {
 
         Events events = (Events) o;
 
-        if (goldCount != events.goldCount) {
+        if (score != events.score) {
             return false;
         }
 
@@ -97,7 +87,7 @@ public class Events {
             result = type.hashCode();
         }
 
-        result = 31 * result + goldCount;
+        result = 31 * result + score;
         return result;
     }
 }
