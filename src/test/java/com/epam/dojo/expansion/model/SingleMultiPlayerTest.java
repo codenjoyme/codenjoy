@@ -23,9 +23,12 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
+
+import static junit.framework.Assert.assertEquals;
 
 /**
  * User: sanja
@@ -848,6 +851,12 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=-=-=-=-=-=-=\n" +
                 "-=0A-=-=-=0A-=\n" +
                 "-=-=-=-=-=-=-=\n", PLAYER1);
+
+        // but find the attempt
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':1}}]," +
+                        "'movements':[{'count':1,'direction':'UP','region':{'x':1,'y':1}}]}}," +
+                        "'coordinate':{'x':1,'y':1},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER3).getHero())));
 
         // when
         // but if register one more player
