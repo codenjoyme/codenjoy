@@ -321,6 +321,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
         }
 
+        // TODO а обязательно загружать каждый раз все рисунки снова?
         var images = {};
         for (var color in plotsUrls) {
             var image = new Image();
@@ -338,11 +339,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawPlot = function(color, x, y) {
             var image = images[color];
+            drawImage(image, x, y, 0, 0);
+        }
+
+        var drawImage = function(image, x, y, dx, dy) {
             var ctx = canvas[0].getContext("2d");
             ctx.drawImage(
                 image,
-                x * plotSize - (image.width - plotSize)/2,
-                (boardSize - 1 - y) * plotSize - (image.height - plotSize)
+                x * plotSize - (image.width - plotSize)/2 + dx,
+                (boardSize - 1 - y) * plotSize - (image.height - plotSize) + dy
             );
         };
 
@@ -394,6 +399,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         return {
+            drawImage : drawImage,
             drawPlot : drawPlot,
             drawText: drawText,
             clear : clear,
