@@ -220,43 +220,55 @@ game.drawBoard = function(drawer) {
         canvas.drawText(count, {'x':x - 1, 'y':y}, fonts.forces);
     }
 
-    drawer.drawLayers(function(layers, layerIndex, charIndex, x, y) {
-        var afterForce = (layerIndex == 1 && isForce(layers[layerIndex][charIndex]));
-        var afterBase = (layerIndex == 0 && isBase(layers[layerIndex][charIndex]));
-        if (afterForce || afterBase) {
-            drawForces(x, y, afterForce);
-        }
-    });
-
-    var h = canvas.getPlotSize()/2;
-    var drawArrow = function(color, direction, x, y) {
-        direction = direction.toLowerCase();
-        switch (direction) {
-            case 'right':      canvas.drawImage(arrows[color]['right'], x, y, h, 0); break;
-            case 'up':         canvas.drawImage(arrows[color]['up'], x, y, 0, -h); break;
-            case 'down':       canvas.drawImage(arrows[color]['down'], x, y, 0, h); break;
-            case 'left':       canvas.drawImage(arrows[color]['left'], x, y, -h, 0); break;
-            case 'right_up':   canvas.drawImage(arrows[color]['right_up'], x, y, h, -h); break;
-            case 'right_down': canvas.drawImage(arrows[color]['right_down'], x, y, h, h); break;
-            case 'left_up':    canvas.drawImage(arrows[color]['left_up'], x, y, -h, -h); break;
-            case 'left_down':  canvas.drawImage(arrows[color]['left_down'], x, y, -h, h); break;
-            default: break;
-        }
+    try {
+        drawer.drawLayers(function(layers, layerIndex, charIndex, x, y) {
+            try {
+                var afterForce = (layerIndex == 1 && isForce(layers[layerIndex][charIndex]));
+                var afterBase = (layerIndex == 0 && isBase(layers[layerIndex][charIndex]));
+                if (afterForce || afterBase) {
+                    drawForces(x, y, afterForce);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        });
+    } catch (err) {
+        console.log(err);
     }
-    for (var name in heroesData) {
-        var additionalData = heroesData[name][name].additionalData;
-        var lastAction = additionalData.lastAction;
-        if (!lastAction) continue;
-        var movements = lastAction.movements;
-        var increase = lastAction.increase;
 
-        for (var i in movements) {
-            var movement = movements[i];
-            var pt = movement.region;
-            var direction = movement.direction;
-
-            drawArrow(getColor(pt.x, pt.y), direction, pt.x, pt.y);
+    try {
+        var h = canvas.getPlotSize()/2;
+        var drawArrow = function(color, direction, x, y) {
+            direction = direction.toLowerCase();
+            switch (direction) {
+                case 'right':      canvas.drawImage(arrows[color]['right'], x, y, h, 0); break;
+                case 'up':         canvas.drawImage(arrows[color]['up'], x, y, 0, -h); break;
+                case 'down':       canvas.drawImage(arrows[color]['down'], x, y, 0, h); break;
+                case 'left':       canvas.drawImage(arrows[color]['left'], x, y, -h, 0); break;
+                case 'right_up':   canvas.drawImage(arrows[color]['right_up'], x, y, h, -h); break;
+                case 'right_down': canvas.drawImage(arrows[color]['right_down'], x, y, h, h); break;
+                case 'left_up':    canvas.drawImage(arrows[color]['left_up'], x, y, -h, -h); break;
+                case 'left_down':  canvas.drawImage(arrows[color]['left_down'], x, y, -h, h); break;
+                default: break;
+            }
         }
+        for (var name in heroesData) {
+            var additionalData = heroesData[name][name].additionalData;
+            var lastAction = additionalData.lastAction;
+            if (!lastAction) continue;
+            var movements = lastAction.movements;
+            var increase = lastAction.increase;
+
+            for (var i in movements) {
+                var movement = movements[i];
+                var pt = movement.region;
+                var direction = movement.direction;
+
+                drawArrow(getColor(pt.x, pt.y), direction, pt.x, pt.y);
+            }
+        }
+    } catch (err) {
+        console.log(err);
     }
 
     fonts.userName = {};
