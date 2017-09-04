@@ -216,6 +216,7 @@ game.drawBoard = function(drawer) {
             fonts.forces.dy = fonts.forces.dyForce;
         }
         var color = getColor(x, y);
+        if (!color) return;
         fonts.forces.fillStyle = fonts.forces.fillStyles[color];
         fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
         canvas.drawText(count, {'x':x - 1, 'y':y}, fonts.forces);
