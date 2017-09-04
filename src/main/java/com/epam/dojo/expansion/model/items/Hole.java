@@ -37,8 +37,8 @@ public class Hole extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        if (item instanceof Hero) {
-            Hero hero = (Hero)item;
+        if (item instanceof HeroForces) {
+            item.removeFromCell();
         }
     }
 }

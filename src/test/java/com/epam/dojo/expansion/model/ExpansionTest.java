@@ -4040,4 +4040,46 @@ public class ExpansionTest {
                 "-=-=-=-=-=-=\n");
     }
 
+    // если я перемещаю что-то на яму, то войска пропадают
+    @Test
+    public void shouldMoveOnHole_thenKillForces() {
+        // given
+        givenFl("╔═══┐" +
+                "║OOO│" +
+                "║O1O│" +
+                "║OOO│" +
+                "└───┘");
+
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
+
+        // when
+        hero.move(
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT_UP),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT_UP),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT),
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, QDirection.UP),
+                new ForcesMoves(pt(2, 2), 1, QDirection.DOWN)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "--♥--" +
+                "-----" +
+                "-----");
+
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=02-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
+    }
+
 }
