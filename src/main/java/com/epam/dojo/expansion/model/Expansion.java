@@ -80,7 +80,7 @@ public class Expansion implements Tickable, IField {
             ticks = 0;
         }
 
-        if (waitingOthers && players.size() != 4) return;
+        if (isWaiting()) return;
 
         for (Player player : players.toArray(new Player[0])) {
             player.tick();
@@ -108,6 +108,10 @@ public class Expansion implements Tickable, IField {
                 player.event(Events.LOOSE());
             }
         }
+    }
+
+    public boolean isWaiting() {
+        return waitingOthers && players.size() != 4;
     }
 
     public int size() {

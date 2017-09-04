@@ -36,7 +36,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType  {
 
-    private GameFactory gameFactory;
+    private MultipleGameFactory gameFactory;
 
     public GameRunner() {
         new Scores(0, settings);
@@ -44,6 +44,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                 Levels.collectSingle(),
                 Levels.collectMultiple()
         );
+        gameFactory.setWaitingOthers(true);
     }
 
     @Override
