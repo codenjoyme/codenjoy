@@ -726,4 +726,28 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=\n", PLAYER16);
     }
+
+    @Test
+    public void shouldOnlyMultipleLevel() {
+        // given
+        givenFl(MULTIPLE_LEVEL);
+        createPlayers(4);
+
+        // then
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+    }
 }

@@ -55,13 +55,17 @@ public class ProgressBar {
 
     public ProgressBar(GameFactory factory) {
         this.factory = factory;
-        this.single = factory.get(Expansion.SINGLE);
+        single = factory.get(Expansion.SINGLE);
 
-        current = single;
-        finished = false;
-        backToSingleLevel = null;
+        if (!single.getLevels().isEmpty()) {
+            current = single;
+            finished = false;
+            backToSingleLevel = null;
+            lastPassedLevel = -1;
+        } else {
+            current = factory.get(Expansion.MULTIPLE);
+        }
         currentLevel = 0;
-        lastPassedLevel = -1;
         loadLevel();
         buildPrinter();
     }
