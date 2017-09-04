@@ -8,7 +8,7 @@
         <module.name>expansion</module.name>
         <codenjoy.version>1.0.23</codenjoy.version>
 
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <org.json.version>20160810</org.json.version>
@@ -185,7 +185,7 @@
 
                                 <copy file="../engine/target/engine-${codenjoy.version}.jar" tofile="libs/engine-${codenjoy.version}.jar" failonerror="false"/>
                                 <copy file="../engine/target/engine-${codenjoy.version}-sources.jar" tofile="libs/engine-${codenjoy.version}-sources.jar" failonerror="false"/>
-                                <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
+                                <copy file="../engine/pom.xml" tofile="libs/engine-${codenjoy.version}-pom.xml" failonerror="false"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
