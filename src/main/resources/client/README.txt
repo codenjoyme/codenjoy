@@ -1,6 +1,6 @@
 Codenjoy steps:
 
-- install Java - JDK 7 (
+- install Java - JDK 8 (
 - create JAVA_HOME environment variable
 - install Maven3
 - create M2_HOME environment variable
@@ -27,4 +27,5 @@ Codenjoy steps:
 - read help at http://server:8080/codenjoy-contest/resources/expansion/landing-expansion-contest.html
 - restart java process when you want
 - when finish run build-client.bat and send folder .\out\ to the DojoSensei
+- for starting client from cmd after previous step you can run .\out\run-client.bat
 - Codenjoy!
