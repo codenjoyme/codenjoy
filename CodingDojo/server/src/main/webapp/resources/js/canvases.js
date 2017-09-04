@@ -217,22 +217,27 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawPlayerNames = function(font) {
-            if (singleBoardGame || !!board.showName) {
-                var currentPoint = null;
-                $.each(heroesData, function(name, heroData) {
-                    var point = heroData.coordinate;
-                    if (!!board.offset) {
-                        point.x -= board.offset.x;
-                        point.y -= board.offset.y;
-                    }
-                    if (playerName == name) {
-                        currentPoint = point;
-                    }
-                    if (!board.onlyMyName && !!heroData.singleBoardGame) {
-                        canvas.drawText(getNameFromEmail(name), point, font);
-                    }
-                });
-                canvas.drawText(getNameFromEmail(playerName), currentPoint, font);
+            try {
+                if (singleBoardGame || !!board.showName) {
+                    var currentPoint = null;
+                    $.each(heroesData, function(name, heroData) {
+                        var point = heroData.coordinate;
+                        if (!point) return; // TODO why this can happen?
+                        if (!!board.offset) {
+                            point.x -= board.offset.x;
+                            point.y -= board.offset.y;
+                        }
+                        if (playerName == name) {
+                            currentPoint = point;
+                        }
+                        if (!board.onlyMyName && !!heroData.singleBoardGame) {
+                            canvas.drawText(getNameFromEmail(name), point, font);
+                        }
+                    });
+                    canvas.drawText(getNameFromEmail(playerName), currentPoint, font);
+                }
+            } catch (err) {
+                console.log(err);
             }
         }
 
