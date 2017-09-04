@@ -126,7 +126,9 @@ public class Single implements Game {
 
         @Override
         public Object getAdditionalData() {
-            return null;
+            JSONObject result = new JSONObject();
+            result.put("lastAction", player.getCurrentAction());
+            return result;
         }
 
         @Override

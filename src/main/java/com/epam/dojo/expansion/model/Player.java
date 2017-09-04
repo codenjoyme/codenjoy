@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
+import org.json.JSONObject;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
@@ -123,5 +124,9 @@ public class Player {
 
     public Point getBasePosition() {
         return hero.getBasePosition();
+    }
+
+    public JSONObject getCurrentAction() {
+        return hero.getCurrentAction();
     }
 }

@@ -57,6 +57,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private List<ForcesMoves> movements;
     private IField field;
     private Point position;
+    private JSONObject currentAction;
+    private JSONObject lastAction;
 
     public Hero() {
         resetFlags();
@@ -71,6 +73,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         alive = true;
         goldCount = 0;
         position = null;
+        lastAction = null;
+        currentAction = null;
     }
 
     public void setField(IField field) {
@@ -124,26 +128,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         }
     }
 
-    /* format
-    {'increase':
-        [
-            {region:{x:3, y:0}, count:1},
-            {region:{x:2, y:2}, count:2},
-            {region:{x:1, y:3}, count:2},
-            {region:{x:0, y:4}, count:3}
-        ],
-    'movements':
-        [
-            {region:{x:3, y:0}, direction:'right', count:1},
-            {region:{x:2, y:2}, direction:'up', count:3},
-            {region:{x:1, y:3}, direction:'right_down', count:20},
-            {region:{x:0, y:4}, direction:'left_top', count:5}
-        ]}
-    */
     private void parseMoveMessage(String json) {
-        JSONObject data = new JSONObject(json);
-        increase = parseForces(data, INCREASE_KEY);
-        movements = parseForces(data, MOVEMENTS_KEY);
+        currentAction = new JSONObject(json);
+        increase = parseForces(currentAction, INCREASE_KEY);
+        movements = parseForces(currentAction, MOVEMENTS_KEY);
     }
 
     private List<ForcesMoves> parseForces(JSONObject data, String key) {
@@ -185,6 +173,12 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     @Override
     public void tick() {
+        if (lastAction == currentAction) {
+            lastAction = null;
+            currentAction = null;
+        } else {
+            lastAction = currentAction;
+        }
         if (!alive) {
             return;
         }
@@ -339,4 +333,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return forcesPerTick;
     }
 
+    public JSONObject getCurrentAction() {
+        return currentAction;
+    }
 }

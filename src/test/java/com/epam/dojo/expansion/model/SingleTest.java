@@ -1302,7 +1302,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
 
-        // one more time with structure
         assertEquals("{'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-='," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
@@ -1332,10 +1331,12 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-----", PLAYER1);
 
         // when then
-        assertEquals("{'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':2}}],'movements':[{'count':1,'direction':'DOWN','region':{'x':1,'y':2}}]}}," +
+                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
-        assertEquals("{'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':2,'y':3}}],'movements':[{'count':1,'direction':'RIGHT','region':{'x':2,'y':3}}]}}," +
+                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
 
         // when
@@ -1357,10 +1358,72 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=01-=-=-=\n" +
                 "-=-=-=-=-=\n", PLAYER1);
 
-        assertEquals("{'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':2}}],'movements':[{'count':1,'direction':'RIGHT','region':{'x':1,'y':2}}]}}," +
+                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
-        assertEquals("{'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':3,'y':3}}],'movements':[{'count':1,'direction':'DOWN','region':{'x':3,'y':3}}]}}," +
+                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+    }
+
+    @Test
+    public void testGetHeroData_clearLastActionAfterTick() {
+        // given
+        testGetBoardAsString();
+
+        assertL("╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘", PLAYER1);
+
+        assertE("-----" +
+                "--♦♦-" +
+                "-♥---" +
+                "-♥---" +
+                "-----", PLAYER1);
+
+        // when move
+        hero(PLAYER1, 1, 1).right();
+        hero(PLAYER2, 3, 3).down();
+
+        tickAll();
+
+        // then
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':1}}]," +
+                        "'movements':[{'count':1,'direction':'RIGHT','region':{'x':1,'y':1}}]}}," +
+                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+
+        assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':3,'y':3}}]," +
+                        "'movements':[{'count':1,'direction':'DOWN','region':{'x':3,'y':3}}]}}," +
+                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+
+        // when
+        tickAll();
+
+        // then
+        // still here
+        assertEquals("{'additionalData':{}," +
+                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+
+        assertEquals("{'additionalData':{}," +
+                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+
+        // when
+        tickAll();
+
+        // then
+        // removed
+        assertEquals("{'additionalData':{},'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+
+        assertEquals("{'additionalData':{}," +
+                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
     }
 
