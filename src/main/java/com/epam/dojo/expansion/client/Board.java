@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import org.apache.commons.lang.StringUtils;
@@ -238,21 +239,24 @@ public class Board extends AbstractBoard<Elements> {
     @Override
     public String toString() {
         String temp = "0123456789012345678901234567890";
+        String temp2 = "  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5  6  7  8  9  0";
 
         StringBuilder builder = new StringBuilder();
         String[] layer1 = boardAsString(LAYER1).split("\n");
         String[] layer2 = boardAsString(LAYER2).split("\n");
+        String[] layer3 = TestUtils.injectNN(source.getString("forces")).split("\n");
 
         int size = layer1.length;
         String numbers = temp.substring(0, size);
+        String numbers2 = temp2.substring(0, size*COUNT_NUMBERS);
         String space = StringUtils.leftPad("", size - 5);
-        String numbersLine = "  " + numbers + "   " + numbers + "";
-        String firstPart = " Layer1 " + space + " Layer2\n" + numbersLine;
+        String numbersLine = "  " + numbers + "   " + numbers +  "   " + numbers2;
+        String firstPart = " Layer1 " + space + " Layer1 " + space + " Layer3\n" + numbersLine;
 
         for (int i = 0; i < size; ++i) {
             int ii = size - 1 - i;
             String index = (ii < 10 ? " " : "") + ii;
-            builder.append(index + layer1[i] + " " + index + maskOverlay(layer2[i], layer1[i]));
+            builder.append(index + layer1[i] + " " + index + maskOverlay(layer2[i], layer1[i]) + " " + index + layer3[i]);
 
             switch (i) {
                 case 0:
