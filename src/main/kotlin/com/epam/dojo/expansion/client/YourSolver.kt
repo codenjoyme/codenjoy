@@ -52,6 +52,10 @@ class YourKotlinSolver() : AbstractSolver() {
                     .build()
         }
     }
+
+    override fun buildAnswer(board: Board): String {
+        return String.format("message('%s')", super.buildAnswer(board))
+    }
 }
 
 /**

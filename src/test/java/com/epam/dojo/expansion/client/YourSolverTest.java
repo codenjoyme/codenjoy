@@ -317,6 +317,6 @@ public class YourSolverTest {
 
     private void assertL(String json, String layer1, String layer2, Command expected) {
         String actual = ai.get(board(json, layer1, layer2));
-        assertEquals(expected.toString(), actual);
+        assertEquals(String.format("message('%s')", expected.toString()), actual);
     }
 }

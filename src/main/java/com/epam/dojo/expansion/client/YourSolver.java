@@ -75,11 +75,16 @@ public class YourSolver extends AbstractSolver {
                 .build();
     }
 
+    @Override
+    protected String buildAnswer(Board board) {
+        return String.format("message('%s')", super.buildAnswer(board));
+    }
+
     /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "127.0.0.1:8080", new YourSolver());
+        start("demo1@codenjoy.com", "127.0.0.1:8080", new YourSolver());
     }
 
 }
