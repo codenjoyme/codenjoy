@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.services;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.Forces;
 import org.json.JSONObject;
 
@@ -70,5 +71,10 @@ public class PrinterData {
 
     public void setForces(String forces) {
         this.forces = forces;
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(this);
     }
 }

@@ -23,6 +23,7 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
@@ -31,49 +32,34 @@ import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
- */
 public class Player {
 
+    private static Logger logger = DLoggerFactory.getLogger(Player.class);
+
     private EventListener listener;
-    private int maxScore;
-    private int score;
     Hero hero;
     private ProgressBar progressBar;
 
-    /**
-     * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
-     */
     public Player(EventListener listener, ProgressBar progressBar) {
         this.listener = listener;
         this.progressBar = progressBar;
         progressBar.setPlayer(this);
-        clearScore();
-    }
-
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
     }
 
     public int getMaxScore() {
-        return maxScore;
+        return 0;
     }
 
     public int getScore() {
-        return score;
+        return 0;
     }
 
-    /**
-     * Борда может файрить ивенты юзера с помощью этого метода
-     * @param event тип ивента
-     */
     public void event(Events event) {
-        switch (event.getType()) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+        if (logger.isDebugEnabled()) {
+            logger.debug("Player {} fired event {}", lg.id(), event);
         }
 
         if (listener != null && progressBar.enableWinScore()) {
@@ -81,23 +67,10 @@ public class Player {
         }
     }
 
-    private void gameOver() {
-        score = 0;
-    }
-
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
-    }
-
     public Hero getHero() {
         return hero;
     }
 
-    /**
-     * Когда создается новая игра для пользователя, кто-то должен создать героя
-     * @param field борда
-     */
     public void newHero(IField field) {
         if (hero == null) {
             hero = new Hero();
@@ -131,18 +104,30 @@ public class Player {
         return hero.getCurrentAction();
     }
 
-    @Override
-    public String toString() {
-        return JsonUtils.toStringSorted(new JSONObject(){{
-            put("id", "P@" + Integer.toHexString(this.hashCode()));
-            put("hero", hero.hashCode());
-            put("progressBar", progressBar.getJsonState());
-        }});
-    }
-
     public void destroyHero() {
         if (hero != null) {
             hero.destroy();
         }
+    }
+
+    public class LogState {
+        public JSONObject json() {
+            return new JSONObject(){{
+                put("id", id());
+                put("hero", hero.lg.json());
+                put("progressBar", progressBar.lg.json());
+            }};
+        }
+
+        public String id() {
+            return "P@" + Integer.toHexString(Player.this.hashCode());
+        }
+    }
+
+    public LogState lg = new LogState();
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(lg.json());
     }
 }

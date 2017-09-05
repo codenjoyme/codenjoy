@@ -23,13 +23,15 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -39,6 +41,8 @@ import java.util.List;
  * Created by oleksandr.baglai on 27.06.2016.
  */
 public class ProgressBar {
+
+    private static Logger logger = DLoggerFactory.getLogger(ProgressBar.class);
 
     private GameFactory factory;
     private Player player;
@@ -131,7 +135,6 @@ public class ProgressBar {
         }
     }
 
-    //will go to next level
     protected void nextLevel() {
         if (currentLevel < current.getLevels().size() - 1) {
             if (lastPassedLevel < currentLevel) {
@@ -155,6 +158,10 @@ public class ProgressBar {
     }
 
     public void tick() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("ProgressBar before tick {}", this.toString());
+        }
+
         current.tick();
         if (isMultiple()) {
             Integer level = getBackToSingleLevel();
@@ -168,6 +175,10 @@ public class ProgressBar {
             if (finished) {
                 loadMultiple();
             }
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("ProgressBar after tick {}", this.toString());
         }
     }
 
@@ -268,24 +279,31 @@ public class ProgressBar {
         return gameOwner;
     }
 
-    @Override
-    public String toString() {
-        return JsonUtils.toStringSorted(getJsonState());
+    public class LogState {
+        public JSONObject json() {
+            return new JSONObject(){{
+                put("id", id());
+                put("player", player.lg.id());
+                put("currentLevel", currentLevel);
+                put("lastPassedLevel", lastPassedLevel);
+                put("finished", finished);
+                put("nextLevel", nextLevel);
+                put("backToSingleLevel", backToSingleLevel);
+                put("single", single.lg.id());
+                put("current", current.lg.id());
+                put("gameOwner", gameOwner.lg.id());
+            }};
+        }
+
+        public String id() {
+            return "PB@" + Integer.toHexString(ProgressBar.this.hashCode());
+        }
     }
 
-    @NotNull
-    public JSONObject getJsonState() {
-        return new JSONObject(){{
-            put("id", "PB@" + Integer.toHexString(this.hashCode()));
-            put("player", "P@" + Integer.toHexString(player.hashCode()));
-            put("currentLevel", currentLevel);
-            put("lastPassedLevel", lastPassedLevel);
-            put("finished", finished);
-            put("nextLevel", nextLevel);
-            put("backToSingleLevel", backToSingleLevel);
-            put("single", "E@" + Integer.toHexString(single.hashCode()));
-            put("current", "E@" + Integer.toHexString(current.hashCode()));
-            put("gameOwner", "S@" + Integer.toHexString(gameOwner.hashCode()));
-        }};
+    public LogState lg = new LogState();
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(lg.json());
     }
 }

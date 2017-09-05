@@ -25,10 +25,13 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -37,6 +40,8 @@ import java.util.List;
  * пришлось сделать этот декоратор. Борда (@see Sample) - одна на всех, а игры (@see Single) у каждого своя. Кода тут не много.
  */
 public class Single implements Game {
+
+    private static Logger logger = DLoggerFactory.getLogger(Single.class);
 
     private ProgressBar progressBar;
     private Player player;
@@ -72,6 +77,10 @@ public class Single implements Game {
 
     @Override
     public void newGame() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starts new game for {}", lg.id());
+        }
+
         if (!StringUtils.isEmpty(save)) {
             progressBar.loadProgress(save);
         } else {
@@ -81,7 +90,7 @@ public class Single implements Game {
 
     @Override
     public JSONObject getBoardAsString() {
-        PrinterData data = getPrinter().getBoardAsString(2, player);
+        PrinterData data = getPrinter().getBoardAsString(player);
 
         JSONObject result = new JSONObject();
         result.put("layers", data.getLayers());
@@ -93,6 +102,11 @@ public class Single implements Game {
         result.put("showName", true);
         result.put("onlyMyName", !progress.getBoolean("multiple"));
         result.put("levelProgress", progress);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("getBoardAsString for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));
+        }
+
         return result;
     }
 
@@ -103,7 +117,7 @@ public class Single implements Game {
 
     @Override
     public void clearScore() {
-        player.clearScore();
+        // do nothing
     }
 
     @Override
@@ -131,6 +145,11 @@ public class Single implements Game {
         public Object getAdditionalData() {
             JSONObject result = new JSONObject();
             result.put("lastAction", player.getCurrentAction());
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("getAdditionalData for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));
+            }
+
             return result;
         }
 
@@ -147,7 +166,16 @@ public class Single implements Game {
 
     @Override
     public void tick() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("----------------------------------------------------------------------------------------------------------------------");
+            logger.debug("Game start tick {}", toString());
+        }
+
         progressBar.tick();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Game finish tick {}", toString());
+        }
     }
 
     public Player getPlayer() {
@@ -156,5 +184,27 @@ public class Single implements Game {
 
     public Printer getPrinter() {
         return progressBar.getPrinter();
+    }
+
+    public class LogState {
+        public JSONObject json() {
+            return new JSONObject(){{
+                put("id", id());
+                put("progressBar", progressBar.lg.id());
+                put("player", player.lg.id());
+                put("save", save);
+            }};
+        }
+
+        public String id() {
+            return "S@" + Integer.toHexString(Single.this.hashCode());
+        }
+    }
+
+    LogState lg = new LogState();
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(lg.json());
     }
 }

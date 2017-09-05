@@ -74,7 +74,11 @@ public class ApofigBotSolver extends AbstractSolver {
         if (!board.isMeAlive()) return doNothing();
         Point point = null;
         QDirection direction = null;
-        List<Point> destination = board.getGold();
+        List<Forces> forces = board.getEnemyForces();
+        List<Point> destination = new LinkedList<>();
+        for (Forces force : forces) {
+            destination.add(force.getRegion());
+        }
         if (!destination.isEmpty()) {
             int length = Integer.MAX_VALUE;
             List<Direction> shortestWay = null;
@@ -92,33 +96,12 @@ public class ApofigBotSolver extends AbstractSolver {
             }
         }
         if (direction == null) {
-            List<Point> goals = board.getFreeSpaces();
-//            for (Forces forces : board.getEnemyForces()) {
-//                goals.add(forces.getRegion());
-//            }
-            List<Forces> forces = board.getMyForces();
-            for (Forces force : forces) {
-                Point pt1 = force.getRegion();
-                List<QDirection> values = new LinkedList<>();
-                values.addAll(Arrays.asList(QDirection.values()));
-                Collections.shuffle(values);
-                for (QDirection d : values) {
-                    Point pt2 = d.change(pt1);
-                    if (goals.contains(pt2)) {
-                        point = pt1;
-                        direction = d;
-                        break;
-                    }
-                }
-            }
-        }
-        if (direction == null) {
             return doNothing();
         }
 
         return Command
-                .increase(new Forces(point, 10))
-                .move(new ForcesMoves(point, increase, direction))
+                .increase(new Forces(point, increase))
+                .move(new ForcesMoves(point, board.forceAt(point).getCount(), direction))
                 .build();
     }
 
@@ -131,11 +114,10 @@ public class ApofigBotSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-//        for (int i = 1; i <= 1; i++) {
-//            WebSocketRunner.printToConsole = false;
-//            start("de mo" + i + "@codenjoy.com", "ecsc00104a56.epam.com:8005", new ApofigBotSolver(new Random().nextInt(7)));
-            start("oleksandr_baglai@epam.com", "ecsc00104eef.epam.com:8080", new ApofigBotSolver(new Random().nextInt(7) + 1));
-//        }
+        for (int i = 1; i <= 10; i++) {
+            WebSocketRunner.printToConsole = false;
+            start("demo" + i + "@codenjoy.com", "127.0.0.1:8080", new ApofigBotSolver(new Random().nextInt(7)));
+        }
     }
 
 }

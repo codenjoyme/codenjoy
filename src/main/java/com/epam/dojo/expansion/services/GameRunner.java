@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.Levels;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -35,6 +37,8 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
 public class GameRunner extends AbstractGameType implements GameType  {
+
+    private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
     private MultipleGameFactory gameFactory;
 
@@ -58,6 +62,9 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (!isTrainingMode) {
             int total = Levels.collectSingle().get().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Starting new game with save {}", save);
         }
         Game single = new Single(gameFactory, listener, factory, save);
         single.newGame();

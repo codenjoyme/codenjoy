@@ -23,12 +23,14 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.client.Command;
+import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.interfaces.IField;
@@ -36,12 +38,15 @@ import com.epam.dojo.expansion.services.CodeSaver;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Hero extends MessageJoystick implements Joystick, Tickable {
+
+    private static Logger logger = DLoggerFactory.getLogger(Hero.class);
 
     // TODO move to constant
     public static final int INITIAL_FORCES = 10;
@@ -133,6 +138,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     @Override
     public void message(String command) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Hero {} gets message from client {}", lg.id(), command);
+        }
+
         if (StringUtils.isEmpty(command)) {
             return;
         }
@@ -310,25 +319,38 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public JSONObject getCurrentAction() {
-        return currentAction;
+        return (currentAction != null) ? currentAction : new JSONObject();
     }
 
     public void destroy() {
         field.removeFromCell(this);
     }
 
+    public class LogState {
+        public JSONObject json() {
+            return new JSONObject(){{
+                put("id", id());
+                put("forcesPerTick", forcesPerTick);
+                put("alive", alive);
+                put("win", win);
+                put("goldCount", goldCount);
+                put("resetToLevel", resetToLevel);
+                put("position", position);
+                put("lastAction", lastAction);
+                put("field", ((Expansion)field).lg.id());
+            }};
+        }
+
+        public String id() {
+            return "H@" + Integer.toHexString(Hero.this.hashCode());
+        }
+    }
+
+    public LogState lg = new LogState();
+
     @Override
     public String toString() {
-        return JsonUtils.toStringSorted(new JSONObject(){{
-            put("id", "H@" + Integer.toHexString(this.hashCode()));
-            put("forcesPerTick", forcesPerTick);
-            put("alive", alive);
-            put("win", win);
-            put("goldCount", goldCount);
-            put("resetToLevel", resetToLevel);
-            put("position", position);
-            put("lastAction", lastAction);
-            put("field", "E@" + Integer.toHexString(field.hashCode()));
-        }});
+        return JsonUtils.toStringSorted(lg.json());
     }
+
 }

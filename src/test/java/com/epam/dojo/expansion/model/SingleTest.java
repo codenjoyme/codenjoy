@@ -1406,11 +1406,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // then
         // still here
-        assertEquals("{'additionalData':{}," +
+        assertEquals("{'additionalData':{'lastAction':{}}," +
                         "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
-        assertEquals("{'additionalData':{}," +
+        assertEquals("{'additionalData':{'lastAction':{}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
 
@@ -1419,10 +1419,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // then
         // removed
-        assertEquals("{'additionalData':{},'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+        assertEquals("{'additionalData':{'lastAction':{}},'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
-        assertEquals("{'additionalData':{}," +
+        assertEquals("{'additionalData':{'lastAction':{}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
     }

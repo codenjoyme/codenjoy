@@ -63,7 +63,8 @@ public class Printer {
         needToCenter = bound != 0;
     }
 
-    public PrinterData getBoardAsString(int layers, Player player) {
+    public PrinterData getBoardAsString(Player player) {
+        int layers = LAYERS_TOTAL;
         size = game.size();
 
         centerPositionOnStart(player);

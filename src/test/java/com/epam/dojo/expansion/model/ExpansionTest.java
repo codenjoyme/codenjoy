@@ -94,7 +94,7 @@ public class ExpansionTest {
     }
 
     private PrinterData getBoardAsString() {
-        return printer.getBoardAsString(Printer.LAYERS_TOTAL, player);
+        return printer.getBoardAsString(player);
     }
 
     private void assertE(String expected) {

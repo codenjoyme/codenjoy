@@ -22,7 +22,7 @@ package com.epam.dojo.expansion.model;
  * #L%
  */
 
-
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
@@ -33,8 +33,12 @@ import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.*;
 import com.epam.dojo.expansion.services.Events;
+import com.epam.dojo.expansion.services.Printer;
+import com.epam.dojo.expansion.services.PrinterData;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -43,12 +47,9 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Expansion#tick()}
- */
 public class Expansion implements Tickable, IField {
+
+    private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
@@ -73,11 +74,12 @@ public class Expansion implements Tickable, IField {
         losers = new LinkedList();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Expansion {} started tick", "E@" + Integer.toHexString(this.hashCode()));
+        }
+
         if (isMultiple) {
             ticks++;
             if (ticks % players.size() != 0) {
@@ -87,6 +89,11 @@ public class Expansion implements Tickable, IField {
         }
 
         if (isWaiting()) return;
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Expansion processing board calculations. State before processing {}",
+                    this.toString());
+        }
 
         for (Player player : players.toArray(new Player[0])) {
             player.tick();
@@ -133,6 +140,10 @@ public class Expansion implements Tickable, IField {
                 player.event(Events.WIN(0));
                 player.setNextLevel();
             }
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Expansion finished tick. State after processing {}", this.toString());
         }
     }
 
@@ -434,16 +445,39 @@ public class Expansion implements Tickable, IField {
         waitingOthers = true;
     }
 
+    public class LogState {
+        public JSONObject json() {
+            return new JSONObject(){{
+                put("id", id());
+                put("players", players(Expansion.this.players));
+                put("isMultiple", isMultiple);
+                put("losers", players(losers));
+                put("waitingOthers", waitingOthers);
+                put("ticks", ticks);
+
+                put("level", printer());
+            }};
+        }
+
+        private PrinterData printer() {
+            Printer printer = new Printer(Expansion.this, size());
+            return printer.getBoardAsString(Expansion.this.players.get(0));
+        }
+
+        private List<String> players(List<Player> players) {
+            return players.stream().map(p -> p.lg.id()).collect(toList());
+        }
+
+        public String id() {
+            return "E@" + Integer.toHexString(Expansion.this.hashCode());
+        }
+    }
+
+    public LogState lg = new LogState();
+
     @Override
     public String toString() {
-        return JsonUtils.toStringSorted(new JSONObject(){{
-            put("id", "E@" + Integer.toHexString(this.hashCode()));
-            put("players", players.stream().map(p -> "Player@" + Integer.toHexString(p.hashCode())).collect(toList()));
-            put("isMultiple", isMultiple);
-            put("losers", losers.stream().map(p -> "Player@" + Integer.toHexString(p.hashCode())).collect(toList()));
-            put("waitingOthers", waitingOthers);
-            put("ticks", ticks);
-            put("level", "L@" + Integer.toHexString(level.hashCode()));
-        }});
+        return JsonUtils.toStringSorted(lg.json());
     }
+
 }

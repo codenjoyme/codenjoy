@@ -218,7 +218,7 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     private PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().getBoardAsString(Printer.LAYERS_TOTAL, single.getPlayer());
+        return single.getPrinter().getBoardAsString(single.getPlayer());
     }
 
     protected void assertE(String expected, int index) {
