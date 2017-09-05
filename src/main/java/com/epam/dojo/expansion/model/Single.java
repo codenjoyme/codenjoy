@@ -40,15 +40,14 @@ public class Single implements Game {
 
     private ProgressBar progressBar;
     private Player player;
+    private String save;
 
     public Single(GameFactory gameFactory, EventListener listener, PrinterFactory factory, String save) {
+        this.save = save;
         progressBar = new ProgressBar(gameFactory);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
         progressBar.setPlayer(player);
-        if (!StringUtils.isEmpty(save)) {
-            progressBar.loadProgress(save);
-        }
     }
 
     @Override
@@ -73,7 +72,11 @@ public class Single implements Game {
 
     @Override
     public void newGame() {
-        progressBar.newGame(player);
+        if (!StringUtils.isEmpty(save)) {
+            progressBar.loadProgress(save);
+        } else {
+            progressBar.newGame(player);
+        }
     }
 
     @Override

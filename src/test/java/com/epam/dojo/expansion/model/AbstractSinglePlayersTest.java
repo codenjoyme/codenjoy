@@ -280,6 +280,12 @@ public abstract class AbstractSinglePlayersTest {
                 json.getBoolean("onlyMyName"));
     }
 
+    protected void assertBoardData(int index, String expected) {
+        JSONObject json = getBoardAsString(index);
+        assertEquals(JsonUtils.clean(JsonUtils.toStringSorted(expected)),
+                JsonUtils.clean(JsonUtils.toStringSorted(json)));
+    }
+
     protected JSONObject getBoardAsString(int index) {
         return single(index).getBoardAsString();
     }

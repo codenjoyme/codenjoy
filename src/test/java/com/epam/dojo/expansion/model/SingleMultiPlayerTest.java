@@ -23,10 +23,8 @@ package com.epam.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
@@ -920,6 +918,143 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         gameFactory.setWaitingOthers(true);
         createPlayers(4);
 
+        // when then
+        atackFirstPlayer();
+        atackSecondPlayer();
+        attackThirdPlayerAndWin();
+    }
+
+    private void attackThirdPlayerAndWin() {
+        hero(PLAYER3, 4, 1).right();
+        tickAll();
+
+        // move to another enemy
+        for (int i = 0; i < 20; i++) {
+            hero(PLAYER3, 5, 1).up();
+            tickAll();
+
+            hero(PLAYER3, 5, 2).up();
+            tickAll();
+
+            hero(PLAYER3, 5, 3).up();
+            tickAll();
+        }
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣---♣-" +
+                "-♣---♣-" +
+                "-♣---♣-" +
+                "-♣♣♣♣♣-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#00K-=#\n" +
+                "-=#014-=#-=#-=#014-=#\n" +
+                "-=#014-=#-=#-=#014-=#\n" +
+                "-=#01E01401400B00L-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+
+        // kill this enemy
+        hero(PLAYER3).move(new ForcesMoves(pt(5, 4), 10, QDirection.UP));
+        tickAll();
+
+        verify(PLAYER1).event(Events.LOOSE());
+        verifyNoMoreInteractions(PLAYER2);
+        verify(PLAYER3).event(Events.WIN(1));
+        verifyNoMoreInteractions(PLAYER4);
+
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        tickAll();
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+    }
+
+    private void atackSecondPlayer() {
+        // move to another enemy
+        for (int i = 0; i < 20; i++) {
+            hero(PLAYER3, 1, 1).right();
+            tickAll();
+
+            hero(PLAYER3, 2, 1).right();
+            tickAll();
+
+            hero(PLAYER3, 3, 1).right();
+            tickAll();
+        }
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣♣♣♣♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#01E01401400K00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+
+        // kill this enemy
+        hero(PLAYER3).move(new ForcesMoves(pt(4, 1), 10, QDirection.RIGHT));
+        tickAll();
+
+        verifyNoMoreInteractions(PLAYER1);
+        verify(PLAYER2).event(Events.LOOSE());
+        verifyNoMoreInteractions(PLAYER3);
+        verifyNoMoreInteractions(PLAYER4);
+
+        assertE("-------" +
+                "-----♥-" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣-----" +
+                "-♣♣♣♣--" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#00A-=#\n" +
+                "-=#00A-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#01E01401400A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    private void atackFirstPlayer() {
         // then
         assertE("-------" +
                 "-♠---♥-" +
@@ -994,132 +1129,61 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#014-=#-=#-=#-=#-=#\n" +
                 "-=#00U-=#-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
 
-        // move to another enemy
-        for (int i = 0; i < 20; i++) {
-            hero(PLAYER3, 1, 1).right();
-            tickAll();
+    @Test
+    public void shouldLosePlayersCanGetInfoAboutGame() {
+        // given
+        givenFl("╔═════┐" +
+                "║4...1│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║3...2│" +
+                "└─────┘");
+        gameFactory.setWaitingOthers(true);
+        createPlayers(4);
 
-            hero(PLAYER3, 2, 1).right();
-            tickAll();
 
-            hero(PLAYER3, 3, 1).right();
-            tickAll();
-        }
+        // when
+        atackFirstPlayer();
 
-        assertE("-------" +
-                "-----♥-" +
-                "-♣-----" +
-                "-♣-----" +
-                "-♣-----" +
-                "-♣♣♣♣♦-" +
-                "-------", PLAYER1);
-
-        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#00A-=#\n" +
-                "-=#00A-=#-=#-=#-=#-=#\n" +
-                "-=#014-=#-=#-=#-=#-=#\n" +
-                "-=#014-=#-=#-=#-=#-=#\n" +
-                "-=#01E01401400K00A-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
-
-        verifyNoMoreInteractions(PLAYER1);
-        verifyNoMoreInteractions(PLAYER2);
-        verifyNoMoreInteractions(PLAYER3);
-        verifyNoMoreInteractions(PLAYER4);
-
-        // kill this enemy
-        hero(PLAYER3).move(new ForcesMoves(pt(4, 1), 10, QDirection.RIGHT));
+        // and go to new base
+        hero(PLAYER3, 1, 4).up();
         tickAll();
 
-        verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(Events.LOOSE());
-        verifyNoMoreInteractions(PLAYER3);
-        verifyNoMoreInteractions(PLAYER4);
-
         assertE("-------" +
-                "-----♥-" +
+                "-♣---♥-" +
                 "-♣-----" +
                 "-♣-----" +
                 "-♣-----" +
-                "-♣♣♣♣--" +
-                "-------", PLAYER1);
-
-        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#00A-=#\n" +
-                "-=#00A-=#-=#-=#-=#-=#\n" +
-                "-=#014-=#-=#-=#-=#-=#\n" +
-                "-=#014-=#-=#-=#-=#-=#\n" +
-                "-=#01E01401400A-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
-
-        hero(PLAYER3, 4, 1).right();
-        tickAll();
-
-        // move to another enemy
-        for (int i = 0; i < 20; i++) {
-            hero(PLAYER3, 5, 1).up();
-            tickAll();
-
-            hero(PLAYER3, 5, 2).up();
-            tickAll();
-
-            hero(PLAYER3, 5, 3).up();
-            tickAll();
-        }
-
-        assertE("-------" +
-                "-----♥-" +
-                "-♣---♣-" +
-                "-♣---♣-" +
-                "-♣---♣-" +
-                "-♣♣♣♣♣-" +
-                "-------", PLAYER1);
-
-        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#00A-=#\n" +
-                "-=#00A-=#-=#-=#00K-=#\n" +
-                "-=#014-=#-=#-=#014-=#\n" +
-                "-=#014-=#-=#-=#014-=#\n" +
-                "-=#01E01401400B00L-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
-
-        verifyNoMoreInteractions(PLAYER1);
-        verifyNoMoreInteractions(PLAYER2);
-        verifyNoMoreInteractions(PLAYER3);
-        verifyNoMoreInteractions(PLAYER4);
-
-        // kill this enemy
-        hero(PLAYER3).move(new ForcesMoves(pt(5, 4), 10, QDirection.UP));
-        tickAll();
-
-        verify(PLAYER1).event(Events.LOOSE());
-        verifyNoMoreInteractions(PLAYER2);
-        verify(PLAYER3).event(Events.WIN(1));
-        verifyNoMoreInteractions(PLAYER4);
-
-        assertE("-------" +
-                "-♠---♥-" +
-                "-------" +
-                "-------" +
-                "-------" +
                 "-♣---♦-" +
                 "-------", PLAYER1);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#-=#00A-=#\n" +
+                "-=#001-=#-=#-=#00A-=#\n" +
+                "-=#00B-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#014-=#-=#-=#-=#-=#\n" +
+                "-=#00U-=#-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-        tickAll();
+        // then
+        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+    }
 
-        verifyNoMoreInteractions(PLAYER1);
-        verifyNoMoreInteractions(PLAYER2);
-        verifyNoMoreInteractions(PLAYER3);
-        verifyNoMoreInteractions(PLAYER4);
+    @Test
+    public void shouldLosePlayersCanGetInfoAboutGameAfterRenew() {
+        // given
+        shouldOnlyOnePlayerWins();
+
+        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
     }
 
 }

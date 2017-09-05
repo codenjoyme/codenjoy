@@ -24,9 +24,11 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -264,5 +266,26 @@ public class ProgressBar {
 
     public Single getGameOwner() {
         return gameOwner;
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(getJsonState());
+    }
+
+    @NotNull
+    public JSONObject getJsonState() {
+        return new JSONObject(){{
+            put("id", "PB@" + Integer.toHexString(this.hashCode()));
+            put("player", "P@" + Integer.toHexString(player.hashCode()));
+            put("currentLevel", currentLevel);
+            put("lastPassedLevel", lastPassedLevel);
+            put("finished", finished);
+            put("nextLevel", nextLevel);
+            put("backToSingleLevel", backToSingleLevel);
+            put("single", "E@" + Integer.toHexString(single.hashCode()));
+            put("current", "E@" + Integer.toHexString(current.hashCode()));
+            put("gameOwner", "S@" + Integer.toHexString(gameOwner.hashCode()));
+        }};
     }
 }

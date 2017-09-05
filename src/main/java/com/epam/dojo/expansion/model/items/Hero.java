@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.client.Command;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
@@ -79,16 +80,30 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     public void setField(IField field) {
         this.field = field;
-        reset(field);
+        resetOn(field);
     }
 
-    private void reset(IField field) {
+    private void resetOn(IField field) {
         resetFlags();
-        setPosition();
+        position = occupyFreeBase();
         field.reset();
 
         HeroForces forces = field.tryIncreaseForces(this, position.getX(), position.getY(), INITIAL_FORCES);
         forces.increase();
+    }
+
+    private Point occupyFreeBase() {
+        Start start = field.getFreeBase();
+        if (start == null) {
+            // TODO this should never happen :)
+            System.out.println(String.format(
+                    "Hero %s wants to find new base for play on map %s, but cant do it",
+                    this, field));
+
+            return null;
+        }
+        start.setOwner(this);
+        return start.getCell().copy();
     }
 
     public void reset() {
@@ -185,7 +200,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
         if (resetToLevel != null) {
             resetToLevel = null;
-            reset(field);
+            resetOn(field);
             return;
         }
 
@@ -335,5 +350,24 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     public JSONObject getCurrentAction() {
         return currentAction;
+    }
+
+    public void destroy() {
+        field.removeFromCell(this);
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(new JSONObject(){{
+            put("id", "H@" + Integer.toHexString(this.hashCode()));
+            put("forcesPerTick", forcesPerTick);
+            put("alive", alive);
+            put("win", win);
+            put("goldCount", goldCount);
+            put("resetToLevel", resetToLevel);
+            put("position", position);
+            put("lastAction", lastAction);
+            put("field", "E@" + Integer.toHexString(field.hashCode()));
+        }});
     }
 }

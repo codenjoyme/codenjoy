@@ -73,7 +73,7 @@ public class Gold extends BaseItem {
         hidden = false;
     }
 
-    public boolean getHidden() {
+    public boolean isHidden() {
         return hidden;
     }
 }

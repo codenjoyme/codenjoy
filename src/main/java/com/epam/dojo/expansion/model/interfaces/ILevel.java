@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model.interfaces;
 
 
 import com.codenjoy.dojo.services.Point;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public interface ILevel {
 
     int getSize();
 
-    <T extends IItem> List<T> getItems(Class clazz);
+    <T> List<T> getItems(Class<T> clazz);
 
     ICell[] getCells();
 

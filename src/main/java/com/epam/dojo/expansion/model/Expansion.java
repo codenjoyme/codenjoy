@@ -25,17 +25,22 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.*;
 import com.epam.dojo.expansion.services.Events;
+import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -47,7 +52,6 @@ public class Expansion implements Tickable, IField {
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
-    private Dice dice;
     private List<ILevel> levels;
     private ILevel level;
 
@@ -59,7 +63,6 @@ public class Expansion implements Tickable, IField {
     private boolean waitingOthers = false;
 
     public Expansion(List<ILevel> levels, Dice dice, boolean multiple) {
-        this.dice = dice;
         this.levels = new LinkedList(levels);
 
         isMultiple = multiple;
@@ -88,12 +91,12 @@ public class Expansion implements Tickable, IField {
             player.tick();
         }
 
-        for (IItem item : level.getItems(Tickable.class)) {
+        for (Tickable item : level.getItems(Tickable.class)) {
             if (item instanceof  Hero) {
                 continue;
             }
 
-            ((Tickable) item).tick();
+            item.tick();
         }
 
         for (Player player : players.toArray(new Player[0])) {
@@ -176,19 +179,25 @@ public class Expansion implements Tickable, IField {
         return level.isBarrier(x, y);
     }
 
+    @Nullable
     @Override
     public Start getBaseOf(Hero hero) {
-        List<Start> items = level.getItems(Start.class);
+        List<Start> bases = level.getItems(Start.class);
 
-        // try to find my base
-        for (Start place : items) {
-            if (place.busyWith(hero)) {
-                return place;
+        for (Start base : bases) {
+            if (base.isOwnedBy(hero)) {
+                return base;
             }
         }
+        return null;
+    }
 
-        // if no - go to next free
-        Collections.sort(items, new Comparator<Start>() {
+    @Nullable
+    @Override
+    public Start getFreeBase() {
+        List<Start> bases = level.getItems(Start.class);
+
+        Collections.sort(bases, new Comparator<Start>() {
             @Override
             public int compare(Start o1, Start o2) {
                 return Integer.compare(o1.index(), o2.index());
@@ -196,17 +205,12 @@ public class Expansion implements Tickable, IField {
         });
 
         Start free = null;
-        for (Start place : items) {
+        for (Start place : bases) {
             if (place.isFree()) {
                 free = place;
                 break;
             }
         }
-
-        if (free == null) {
-            throw new IllegalStateException("No free space on this map!");
-        }
-
         return free;
     }
 
@@ -335,44 +339,8 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void reset() {
-        // если на карте пользователей больше одного, то ее ресетить не надо
-        if (players.size() > 1) return;
-
-        // TODO think about it
-        List<BaseItem> golds = level.getItems(Gold.class);
-
-        if (isMultiple) {
-            setRandomGold(golds); // TODO test me
-        }
-
-        for (BaseItem gold : golds) {
-            ((Gold) gold).reset();
-        }
-    }
-
-    private void setRandomGold(List<BaseItem> golds) {
-        List<BaseItem> floors = level.getItems(Floor.class);
-
-        for (int i = floors.size() - 1; i > -1; --i) {
-            if (floors.get(i).getCell().getItems().size() > 1) {
-                floors.remove(i);
-            }
-        }
-
-        Gold gold;
-        for (BaseItem item : golds) {
-            gold = (Gold) item;
-
-            if (gold.getHidden() && !floors.isEmpty()) {
-                int random = dice.next(floors.size());
-
-                Floor floor = (Floor) floors.get(random);
-                floors.remove(random);
-
-                ICell fromCell = gold.getCell();
-                floor.getCell().addItem(gold);
-                fromCell.addItem(floor);
-            }
+        for (Gold gold : level.getItems(Gold.class)) {
+            gold.reset();
         }
     }
 
@@ -393,18 +361,19 @@ public class Expansion implements Tickable, IField {
 
     public void remove(Player player) {
         players.remove(player);
-        Hero hero = player.getHero();
-        if (hero != null) {
-            removeFromCell(hero);
-        }
+        player.destroyHero();
     }
 
-    protected void removeFromCell(Hero hero) {
-        for (ICell cell : level.getCells()) {
-            for (HeroForces forces : cell.getItems(HeroForces.class)) {
-                if (forces.itsMe(hero)) {
-                    forces.removeFromCell();
-                }
+    @Override
+    public void removeFromCell(Hero hero) {
+        for (HeroForces forces : level.getItems(HeroForces.class)) {
+            if (forces.itsMe(hero)) {
+                forces.removeFromCell();
+            }
+        }
+        for (Start start : level.getItems(Start.class)) { // TODO test me
+            if (start.isOwnedBy(hero)) {
+                start.setOwner(null);
             }
         }
     }
@@ -436,5 +405,18 @@ public class Expansion implements Tickable, IField {
     public void waitingOthers() {
         if (!isMultiple) return;
         waitingOthers = true;
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(new JSONObject(){{
+            put("id", "E@" + Integer.toHexString(this.hashCode()));
+            put("players", players.stream().map(p -> "Player@" + Integer.toHexString(p.hashCode())).collect(toList()));
+            put("isMultiple", isMultiple);
+            put("losers", losers.stream().map(p -> "Player@" + Integer.toHexString(p.hashCode())).collect(toList()));
+            put("waitingOthers", waitingOthers);
+            put("ticks", ticks);
+            put("level", "L@" + Integer.toHexString(level.hashCode()));
+        }});
     }
 }

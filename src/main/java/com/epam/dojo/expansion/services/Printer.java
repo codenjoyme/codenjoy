@@ -69,13 +69,13 @@ public class Printer {
         centerPositionOnStart(player);
 
         StringBuilder[] builders = prepareLayers(layers + 1);
-        fillLayers(layers, player, builders);
+        fillLayers(player, builders);
         PrinterData result = getPrinterData(layers, builders);
 
         return result;
     }
 
-    private void fillLayers(int layers, Player player, StringBuilder[] builders) {
+    private void fillLayers(Player player, StringBuilder[] builders) {
         LengthToXY xy = new LengthToXY(size);
         ICell[] cells = game.getCurrentLevel().getCells();
         for (int y = vy + viewSize - 1; y >= vy; --y) {

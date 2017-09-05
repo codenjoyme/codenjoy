@@ -27,12 +27,16 @@ import com.epam.dojo.expansion.model.items.BaseItem;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.items.HeroForces;
 import com.epam.dojo.expansion.model.items.Start;
+import org.jetbrains.annotations.Nullable;
 
 public interface IField {
 
     boolean isBarrier(int x, int y);
 
     Start getBaseOf(Hero hero);
+
+    @Nullable
+    Start getFreeBase();
 
     ICell getEndPosition();
 
@@ -50,4 +54,5 @@ public interface IField {
     void reset();
 
 
+    void removeFromCell(Hero hero);
 }

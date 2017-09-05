@@ -31,6 +31,8 @@ import com.epam.dojo.expansion.model.Elements;
 
 public class Start extends BaseItem {
 
+    private Hero owner;
+
     public Start(Elements el) {
         super(el);
     }
@@ -50,5 +52,16 @@ public class Start extends BaseItem {
     public boolean busyWith(Hero hero) {
         HeroForces item = getCell().getItem(HeroForces.class);
         return (item != null && item.itsMe(hero));
+    }
+
+    public boolean isOwnedBy(Hero hero) {
+        if (owner == null) {
+            return false;
+        }
+        return owner.equals(hero);
+    }
+
+    public void setOwner(Hero owner) {
+        this.owner = owner;
     }
 }
