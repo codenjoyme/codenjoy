@@ -194,7 +194,7 @@ game.drawBoard = function(drawer) {
 
     var getColor = function(x, y) {
         var layer2 = board.layers[1];
-        var l = length(x ,y);
+        var l = length(x, y);
         var color = parseColor(layer2.substring(l, l + 1));
         return color;
     }
@@ -217,10 +217,11 @@ game.drawBoard = function(drawer) {
             fonts.forces.dy = fonts.forces.dyForce;
         }
         var color = getColor(x, y);
-        if (color == -1) return;
-        fonts.forces.fillStyle = fonts.forces.fillStyles[color];
-        fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
-        canvas.drawText(count, {'x':x - 1, 'y':y}, fonts.forces);
+        if (color != -1) {
+            fonts.forces.fillStyle = fonts.forces.fillStyles[color];
+            fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
+            canvas.drawText(count, {'x':x - 1, 'y':y}, fonts.forces);
+        }
     }
 
     try {
@@ -267,7 +268,10 @@ game.drawBoard = function(drawer) {
                 var pt = movement.region;
                 var direction = movement.direction;
 
-                drawArrow(getColor(pt.x, pt.y), direction, pt.x, pt.y);
+                var color = getColor(pt.x, pt.y);
+                if (color != -1) {
+                    drawArrow(color, direction, pt.x, pt.y);
+                }
             }
         }
     } catch (err) {
