@@ -58,9 +58,7 @@ public class HeroForces extends FieldItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        ICell base = hero.getBase().getCell();
-        HeroForces forces = base.getItem(HeroForces.class);
-        return forces.element;
+        return Elements.getForce(hero.getBase().index());
     }
 
     public int getCount() {

@@ -1420,4 +1420,184 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 
+    @Test
+    public void shouldAttackEachOther_stayOnBases() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.12│" +
+                "║...│" +
+                "└───┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        assertE("-----" +
+                "-----" +
+                "--♥♦-" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00A00A-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(2, 2), 10, QDirection.RIGHT));
+        hero(PLAYER2).move(new ForcesMoves(pt(3, 2), 10, QDirection.LEFT));
+        tickAll();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--♦♥-" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#008008-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldAttackEachOther_stayOnNeutralTerritories_exchange() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║1..2│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        assertE("------" +
+                "------" +
+                "-♥--♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(1, 3), 9, QDirection.RIGHT));
+        hero(PLAYER2).move(new ForcesMoves(pt(4, 3), 9, QDirection.LEFT));
+        tickAll();
+
+        // then
+        assertE("------" +
+                "------" +
+                "-♥♥♦♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001009009001-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(2, 3), 8, QDirection.RIGHT));
+        hero(PLAYER2).move(new ForcesMoves(pt(3, 3), 8, QDirection.LEFT));
+        tickAll();
+
+
+        // then
+        assertE("------" +
+                "------" +
+                "-♥♦♥♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001007007001-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+    }
+
+    @Test
+    public void shouldAttackEachOther_stayOnNeutralTerritories_attack() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║1..2│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        assertE("------" +
+                "------" +
+                "-♥--♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(1, 3), 9, QDirection.RIGHT));
+        hero(PLAYER2).move(new ForcesMoves(pt(4, 3), 9, QDirection.LEFT));
+        tickAll();
+
+        // then
+        assertE("------" +
+                "------" +
+                "-♥♥♦♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001009009001-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(2, 3), 5, QDirection.RIGHT));
+        hero(PLAYER2).move(new ForcesMoves(pt(3, 3), 5, QDirection.LEFT));
+        tickAll();
+
+
+        // then
+        assertE("------" +
+                "------" +
+                "-♥♦♥♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001001001001-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+    }
+
 }

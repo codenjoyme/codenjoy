@@ -984,6 +984,63 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
     }
 
+    @Test
+    public void shouldCantMoveMoreThanExisting_caseMultipleMovements() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.1.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n");
+
+        hero.move(
+                new ForcesMoves(pt(2, 2), 4, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 4, QDirection.RIGHT),
+                new ForcesMoves(pt(2, 2), 4, QDirection.UP),
+                new ForcesMoves(pt(2, 2), 4, QDirection.DOWN)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "--♥--" +
+                "-♥♥♥-" +
+                "-----" +
+                "-----");
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#001-=#-=#\n" +
+                "-=#004001004-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n");
+
+        // when
+        hero.move(
+                new ForcesMoves(pt(1, 2), 5, QDirection.UP),
+                new ForcesMoves(pt(2, 2), 5, QDirection.UP),
+                new ForcesMoves(pt(3, 2), 5, QDirection.UP)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-♥♥♥-" +
+                "-♥♥♥-" +
+                "-----" +
+                "-----");
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#003001003-=#\n" +
+                "-=#001001001-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n");
+    }
+
     // я могу переместить на то место где уже что-то есть, тогда армии сольются
     @Test
     public void shouldCantMergeForces() {
