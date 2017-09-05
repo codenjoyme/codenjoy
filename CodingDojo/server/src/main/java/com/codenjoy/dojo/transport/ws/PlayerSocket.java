@@ -72,7 +72,9 @@ public class PlayerSocket {
         }
         if (!requested) {
             requested = true;
-            session.getRemote().sendString(message);
+            if (session.isOpen()) {
+                session.getRemote().sendString(message);
+            }
         }
     }
 
