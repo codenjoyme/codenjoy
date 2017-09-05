@@ -1187,7 +1187,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     }
 
     @Test
-    public void shouldSeveralForcesGoOnOneCell_case4() {
+    public void shouldSeveralForcesGoOnOneCell_case4Attackers() {
         // given
         givenFl("╔═══┐" +
                 "║.1.│" +
@@ -1232,7 +1232,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     }
 
     @Test
-    public void shouldSeveralForcesGoOnOneCell_case3() {
+    public void shouldSeveralForcesGoOnOneCell_case3Attackers() {
         // given
         givenFl("╔═══┐" +
                 "║.1.│" +
@@ -1272,6 +1272,101 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#00B-=#-=#\n" +
                 "-=#00B-=#00B-=#\n" +
                 "-=#-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldSeveralForcesGoOnOneCell_goWhereSomeoneAlreadyIs_case4Attackers() {
+        // given
+        givenFl("╔═══┐" +
+                "║.1.│" +
+                "║3.2│" +
+                "║.4.│" +
+                "└───┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(4);
+
+        hero(PLAYER1, 2, 3).down();
+        tickAll();
+
+        assertE("-----" +
+                "--♥--" +
+                "-♣♥♦-" +
+                "--♠--" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00B-=#-=#\n" +
+                "-=#00A00100A-=#\n" +
+                "-=#-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1, 2, 3).down();
+        hero(PLAYER2, 3, 2).left();
+        hero(PLAYER3, 1, 2).right();
+        hero(PLAYER4, 2, 1).up();
+
+        tickAll();
+
+        // then
+        assertE("-----" +
+                "--♥--" +
+                "-♣♥♦-" +
+                "--♠--" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00C-=#-=#\n" +
+                "-=#00B00100B-=#\n" +
+                "-=#-=#00B-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldSeveralForcesGoOnOneCell_goWhereSomeoneAlreadyIs_case3Attackers() {
+        // given
+        givenFl("╔═══┐" +
+                "║.1.│" +
+                "║3.2│" +
+                "║.4.│" +
+                "└───┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(4);
+
+        hero(PLAYER1, 2, 3).down();
+        tickAll();
+
+        assertE("-----" +
+                "--♥--" +
+                "-♣♥♦-" +
+                "--♠--" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00B-=#-=#\n" +
+                "-=#00A00100A-=#\n" +
+                "-=#-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER2, 3, 2).left();
+        hero(PLAYER3, 1, 2).right();
+        hero(PLAYER4, 2, 1).up();
+
+        tickAll();
+
+        // then
+        assertE("-----" +
+                "--♥--" +
+                "-♣-♦-" +
+                "--♠--" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00B-=#-=#\n" +
+                "-=#00B-=#00B-=#\n" +
+                "-=#-=#00B-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 
