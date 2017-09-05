@@ -132,13 +132,15 @@ public class Printer {
         }
     }
 
-    private String makeForceState(IItem item, Player player) {
+    public static String makeForceState(IItem item, Player player) {
         if (item instanceof HeroForces) {
             HeroForces forces = (HeroForces) item;
             int count = forces.getForces().getCount();
             String result = Integer.toString(count, Character.MAX_RADIX).toUpperCase();
             if (result.length() < COUNT_NUMBERS) { // TODO оптимизировать
                 return StringUtils.leftPad(result, COUNT_NUMBERS, '0');
+            } else if (result.length() > COUNT_NUMBERS) {
+                return result.substring(result.length() - COUNT_NUMBERS, result.length());
             }
             return result;
         } else {
