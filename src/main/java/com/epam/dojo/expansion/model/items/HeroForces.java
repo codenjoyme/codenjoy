@@ -75,26 +75,27 @@ public class HeroForces extends FieldItem {
         return hero == this.hero;
     }
 
-    public int decrease(int count) {
+    public int leave(int count, int countToStay) {
         if (this.count == 0) {
             return 0;
         }
-        if (this.count - 1 < count) {
-            count = this.count - 1;
+        if (this.count - countToStay < count) {
+            count = this.count - countToStay;
         }
         this.count -= count;
         if (this.count < 0) {
-            throw new IllegalStateException("Forces is negative!");
+            this.count = 0;
+            System.out.println("Hero leave negative count on cell!");
         }
         return count;
     }
 
-    public void tryIncrease(int count) {
-        this.increase = count;
+    public void move() {
+        count += increase;
     }
 
-    public void increase() {
-        count += increase;
+    public void startMove(int increase) {
+        this.increase = increase;
     }
 
     public void setWin() {

@@ -26,7 +26,6 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.items.HeroForces;
@@ -62,7 +61,7 @@ public class ProgressBarTest {
         }
 
         @Override
-        public HeroForces tryIncreaseForces(Hero hero, int x, int y, int count) {
+        public HeroForces startMoveForces(Hero hero, int x, int y, int count) {
             // do nothing
             return HeroForces.EMPTY;
         }

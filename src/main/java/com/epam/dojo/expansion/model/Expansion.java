@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.interfaces.ICell;
@@ -91,8 +92,10 @@ public class Expansion implements Tickable, IField {
             player.tick();
         }
 
+        attack();
+
         for (Tickable item : level.getItems(Tickable.class)) {
-            if (item instanceof  Hero) {
+            if (item instanceof Hero) {
                 continue;
             }
 
@@ -133,6 +136,67 @@ public class Expansion implements Tickable, IField {
         }
     }
 
+    private void attack() {
+        for (ICell cell : level.getCellsWith(HeroForces.class)) {
+            List<HeroForces> forces = cell.getItems(HeroForces.class);
+            while (forces.size() > 1) {
+                int min = Integer.MAX_VALUE;
+                for (HeroForces force : forces) {
+                    min = Math.min(min, force.getCount());
+                }
+
+                for (HeroForces force : forces) {
+                    force.leave(min, 0);
+                }
+
+                for (HeroForces force : forces.toArray(new HeroForces[0])) {
+                    if (force.getCount() == 0) {
+                        forces.remove(force);
+                        force.removeFromCell();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void increase(Hero hero, List<ForcesMoves> increase) {
+        int total = hero.getForcesPerTick();
+        for (Forces forces : increase) {
+            Point to = forces.getRegion();
+
+            if (forces.getCount() < 0) continue;
+            if (isBarrier(to.getX(), to.getY())) continue;
+
+            int count = Math.min(total, forces.getCount());
+            int actual = countForces(hero, to.getX(), to.getY());
+            if (actual > 0) {
+                total -= count;
+                startMoveForces(hero, to.getX(), to.getY(), count).move();
+            }
+        }
+    }
+
+    @Override
+    public void move(Hero hero, List<ForcesMoves> movements) {
+        List<HeroForces> moved = new LinkedList<>();
+        for (ForcesMoves forces : movements) {
+            Point from = forces.getRegion();
+            Point to = forces.getDestination(from);
+
+            if (from.equals(to)) continue;
+            if (forces.getCount() < 0) continue;
+            if (isBarrier(to.getX(), to.getY())) continue;
+
+            int count = leaveForces(hero, from.getX(), from.getY(), forces.getCount());
+            moved.add(startMoveForces(hero, to.getX(), to.getY(), count));
+        }
+
+        for (HeroForces force : moved) {
+            force.move();
+        }
+    }
+
     private boolean checkStatus(Player player, Hero hero) {
         if (losers.contains(player)) return false;
 
@@ -153,17 +217,6 @@ public class Expansion implements Tickable, IField {
             // players.remove(player); TODO продолжить тут
         }
         return false;
-    }
-
-    private void checkIsWinner(Hero hero) {
-        List<HeroForces> allForces = level.getItems(HeroForces.class);
-        boolean alone = true;
-        for (HeroForces item : allForces) {
-            alone &= item.itsMe(hero);
-        }
-        if (alone) {
-            hero.setWin();
-        }
     }
 
     public boolean isWaiting() {
@@ -220,29 +273,32 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public HeroForces tryIncreaseForces(Hero hero, int x, int y, int count) {
+    public HeroForces startMoveForces(Hero hero, int x, int y, int count) {
         if (count == 0) return HeroForces.EMPTY;
 
         ICell cell = level.getCell(x, y);
+        HeroForces force = getHeroForces(hero, cell);
 
-        List<HeroForces> forces = cell.getItems(HeroForces.class);
-        if (forces.isEmpty()) {
+        if (force == null) {
             HeroForces income = new HeroForces(hero);
             capture(cell, income);
-            income.tryIncrease(count);
+            income.startMove(count);
             return income;
-        } else if (forces.size() == 1) {
-            HeroForces heroForces = forces.get(0);
-            if (heroForces.itsMe(hero)) {
-                heroForces.tryIncrease(count);
-                return heroForces;
-            } else {
-                HeroForces income = new HeroForces(hero, count);
-                return attack(heroForces, income);
-            }
         } else {
-            throw new IllegalStateException("There are more than 1 heroes on cell!");
+            force.startMove(count);
+            return force;
         }
+    }
+
+    @Nullable
+    private HeroForces getHeroForces(Hero hero, ICell cell) {
+        List<HeroForces> forces = cell.getItems(HeroForces.class);
+        for (HeroForces force : forces) {
+            if (force.itsMe(hero)) {
+                return force;
+            }
+        }
+        return null;
     }
 
     private void capture(ICell cell, HeroForces income) {
@@ -250,47 +306,25 @@ public class Expansion implements Tickable, IField {
         cell.comeIn(income);
     }
 
-    private HeroForces attack(HeroForces defender, HeroForces attacker) {
-        int defenciveCount = defender.getCount();
-        int attackCount = attacker.getCount();
-        int delta = defenciveCount - attackCount;
-        if (delta < 0) {
-            ICell cell = defender.removeFromCell();
-            attacker.decrease(Math.abs(delta));
-            capture(cell, attacker);
-            return attacker;
-        } else if (delta == 0) {
-            ICell cell = defender.removeFromCell();
-            attacker.decrease(attackCount);
-            return HeroForces.EMPTY;
-        } else { // if (delta > 0)
-            defender.decrease(Math.abs(delta));
-            attacker.decrease(attackCount);
-            return defender;
-        }
-    }
-
     @Override
     public void removeForces(Hero hero, int x, int y) {
         ICell cell = level.getCell(x, y);
-        HeroForces forces = cell.getItem(HeroForces.class);
-        if (forces != null && forces.itsMe(hero)) {
-            forces.removeFromCell();
+        HeroForces force = cell.getItem(HeroForces.class);
+        if (force != null && force.itsMe(hero)) {
+            force.removeFromCell();
         }
     }
 
     @Override
-    public int decreaseForces(Hero hero, int x, int y, int count) {
+    public int leaveForces(Hero hero, int x, int y, int count) {
         ICell cell = level.getCell(x, y);
-        if (cell.getItems(HeroForces.class).size() > 1) {
-            throw new IllegalStateException("There are more than 1 heroes on cell!");
-        }
-        HeroForces forces = cell.getItem(HeroForces.class);
-        if (forces != null && forces.itsMe(hero)) {
-            return forces.decrease(count);
-        } else {
+
+        HeroForces force = getHeroForces(hero, cell);
+        if (force == null) {
             return 0;
         }
+
+        return force.leave(count, 1);
     }
 
     @Override

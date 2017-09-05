@@ -42,5 +42,7 @@ public interface ILevel {
 
     boolean isBarrier(int x, int y);
 
+    List<ICell> getCellsWith(Class clazz);
+
     void setField(IField field);
 }

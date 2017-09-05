@@ -23,13 +23,20 @@ package com.epam.dojo.expansion.model.interfaces;
  */
 
 
+import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.items.BaseItem;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.items.HeroForces;
 import com.epam.dojo.expansion.model.items.Start;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public interface IField {
+
+    void increase(Hero hero, List<ForcesMoves> increase);
+
+    void move(Hero hero, List<ForcesMoves> movements);
 
     boolean isBarrier(int x, int y);
 
@@ -40,8 +47,8 @@ public interface IField {
 
     ICell getEndPosition();
 
-    HeroForces tryIncreaseForces(Hero item, int x, int y, int count);
-    int decreaseForces(Hero item, int x, int y, int count);
+    HeroForces startMoveForces(Hero item, int x, int y, int count);
+    int leaveForces(Hero item, int x, int y, int count);
     int countForces(Hero hero, int x, int y);
     void removeForces(Hero hero, int x, int y);
 

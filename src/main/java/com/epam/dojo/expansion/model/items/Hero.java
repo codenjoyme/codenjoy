@@ -88,8 +88,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         position = occupyFreeBase();
         field.reset();
 
-        HeroForces forces = field.tryIncreaseForces(this, position.getX(), position.getY(), INITIAL_FORCES);
-        forces.increase();
+        field.startMoveForces(this, position.getX(), position.getY(), INITIAL_FORCES)
+                .move();
     }
 
     private Point occupyFreeBase() {
@@ -205,56 +205,17 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         }
 
         if (increase != null) {
-            increase();
+            field.increase(this, increase);
         }
 
         if (movements != null) {
-            move();
+            field.move(this, movements);
         }
 
         setPosition();
 
         increase = null;
         movements = null;
-    }
-
-    private void move() {
-        List<HeroForces> toIncrease = new LinkedList<>();
-        for (ForcesMoves forces : movements) {
-            Point from = forces.getRegion();
-            Point to = forces.getDestination(from);
-
-            if (from.equals(to)) continue;
-            if (forces.getCount() < 0) continue;
-            if (field.isBarrier(to.getX(), to.getY())) continue;
-
-            int count = field.decreaseForces(this, from.getX(), from.getY(), forces.getCount());
-
-            HeroForces heroForces = field.tryIncreaseForces(this, to.getX(), to.getY(), count);
-            toIncrease.add(heroForces);
-        }
-
-        for (HeroForces forces : toIncrease) {
-            forces.increase();
-        }
-    }
-
-    private void increase() {
-        int total = forcesPerTick;
-        for (Forces forces : increase) {
-            Point to = forces.getRegion();
-
-            if (forces.getCount() < 0) continue;
-            if (field.isBarrier(to.getX(), to.getY())) continue;
-
-            int count = Math.min(total, forces.getCount());
-            int actual = field.countForces(this, to.getX(), to.getY());
-            if (actual > 0) {
-                total -= count;
-                HeroForces heroForces = field.tryIncreaseForces(this, to.getX(), to.getY(), count);
-                heroForces.increase();
-            }
-        }
     }
 
     private void setPosition() {
