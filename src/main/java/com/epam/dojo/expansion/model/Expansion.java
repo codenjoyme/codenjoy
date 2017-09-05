@@ -331,19 +331,12 @@ public class Expansion implements Tickable, IField {
     public int countForces(Hero hero, int x, int y) {
         ICell cell = level.getCell(x, y);
 
-        List<HeroForces> forces = cell.getItems(HeroForces.class);
-        if (forces.isEmpty()) {
+        HeroForces force = getHeroForces(hero, cell);
+        if (force == null) {
             return 0;
-        } else if (forces.size() == 1) {
-            HeroForces heroForces = forces.get(0);
-            if (heroForces.itsMe(hero)) {
-                return heroForces.getCount();
-            } else {
-                return 0;
-            }
-        } else {
-            throw new IllegalStateException("There are more than 1 heroes on cell!");
         }
+
+        return force.getCount();
     }
 
     @Override
