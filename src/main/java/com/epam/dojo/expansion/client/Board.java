@@ -367,4 +367,13 @@ public class Board extends AbstractBoard<Elements> {
         List<Direction> shortestWay = findWay.getShortestWay(size(), from, to, map);
         return shortestWay;
     }
+
+    public Forces forceAt(Point point) {
+        for (Forces force : getAllForces()) {
+            if (force.getRegion().itsMe(point)) {
+                return force;
+            }
+        }
+        return null;
+    }
 }
