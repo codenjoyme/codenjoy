@@ -160,6 +160,9 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            logger.info("==================================================================================");
+            logger.info("PlayerService.tick() starts");
+
             long time = System.currentTimeMillis();
 
             if (autoSaverEnable) {

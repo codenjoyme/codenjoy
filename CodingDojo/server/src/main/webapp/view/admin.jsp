@@ -104,20 +104,35 @@
         </tr>
     </table>
 
-     <table class="admin-table" id="recordGame">
-            <tr>
-                <td>
-                    <c:choose>
-                        <c:when test="${recording}">
-                            <b>The recording is active</b></br> <a href="${ctx}/admin31415?stopRecording&gameName=${gameName}">Stop recording</a>.
-                        </c:when>
-                        <c:otherwise>
-                            <b>The recording was suspended</b></br> <a href="${ctx}/admin31415?recording&gameName=${gameName}">Start recording</a>.
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-        </table>
+    <table class="admin-table" id="recordGame">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${recording}">
+                        <b>The recording is active</b></br> <a href="${ctx}/admin31415?stopRecording&gameName=${gameName}">Stop recording</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The recording was suspended</b></br> <a href="${ctx}/admin31415?recording&gameName=${gameName}">Start recording</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="debug">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${debug}">
+                        <b>The debug in progress</b></br> <a href="${ctx}/admin31415?stopDebug&gameName=${gameName}">Stop debug</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The debug was suspended</b></br> <a href="${ctx}/admin31415?startDebug&gameName=${gameName}">Start debug</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
 
     <table class="admin-table" id="closeRegistration">
         <tr>

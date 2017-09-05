@@ -53,6 +53,7 @@ public class AdminController {
     @Autowired private SaveService saveService;
     @Autowired private GameService gameService;
     @Autowired private ActionLogger actionLogger;
+    @Autowired private DebugService debugService;
 
     public AdminController() {
     }
@@ -135,9 +136,18 @@ public class AdminController {
         return "redirect:/";
     }
 
+    // ----------------
+
     @RequestMapping(params = "pause", method = RequestMethod.GET)
     public String pauseGame(Model model, HttpServletRequest request) {
         timerService.pause();
+        return getAdmin(request);
+    }
+
+
+    @RequestMapping(params = "resume", method = RequestMethod.GET)
+    public String resumeGame(Model model, HttpServletRequest request) {
+        timerService.resume();
         return getAdmin(request);
     }
 
@@ -145,15 +155,25 @@ public class AdminController {
         model.addAttribute("paused", timerService.isPaused());
     }
 
-    private void checkRecordingStatus(Model model) {
-        model.addAttribute("recording", actionLogger.isRecording());
-    }
+    // ----------------
 
-    @RequestMapping(params = "resume", method = RequestMethod.GET)
-    public String resumeGame(Model model, HttpServletRequest request) {
-        timerService.resume();
+    @RequestMapping(params = "stopDebug", method = RequestMethod.GET)
+    public String stopDebug(Model model, HttpServletRequest request) {
+        debugService.stop();
         return getAdmin(request);
     }
+
+    @RequestMapping(params = "startDebug", method = RequestMethod.GET)
+    public String startDebug(Model model, HttpServletRequest request) {
+        debugService.start();
+        return getAdmin(request);
+    }
+
+    private void checkDebugStatus(Model model) {
+        model.addAttribute("debug", debugService.isStarted());
+    }
+
+    // ----------------
 
     @RequestMapping(params = "recording", method = RequestMethod.GET)
     public String recordingGame(Model model, HttpServletRequest request) {
@@ -166,6 +186,12 @@ public class AdminController {
         actionLogger.pause();
         return getAdmin(request);
     }
+
+    private void checkRecordingStatus(Model model) {
+        model.addAttribute("recording", actionLogger.isRecording());
+    }
+
+    // ----------------
 
     @RequestMapping(method = RequestMethod.POST)
     public String saveSettings(AdminSettings settings, BindingResult result, Model model, HttpServletRequest request) {
@@ -258,6 +284,7 @@ public class AdminController {
 
         checkGameStatus(model);
         checkRecordingStatus(model);
+        checkDebugStatus(model);
         checkRegistrationClosed(model);
         prepareList(model, settings, gameName);
         return "admin";

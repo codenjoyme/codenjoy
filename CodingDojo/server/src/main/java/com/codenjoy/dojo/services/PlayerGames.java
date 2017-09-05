@@ -223,6 +223,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             playersMap.put(player, playersGroup);
         }
 
+        Map<String, JSONObject> heroesData = new HashMap<>();
+        for (PlayerGame playerGame : playerGames) {
+            heroesData.put(playerGame.getPlayer().getName(),
+                    new JSONObject(playerGame.getGame().getHero()));
+        }
+
         JSONObject result = new JSONObject();
         for (Map.Entry<Player, List<Player>> entry : playersMap.entrySet()) {
             Player player1 = entry.getKey();
@@ -231,15 +237,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             result.put(player1.getName(), map);
 
             for (Player player2 : entry.getValue()) {
-                int index = playerGames.indexOf(player2);
-                if (index != -1) {
-                    Game game2 = playerGames.get(index).getGame();
-                    HeroData data = game2.getHero();
-
-                    map.put(player2.getName(), new JSONObject(data));
-                } else {
-                    // TODO этого не должн случиться, но лучше порефакторить
-                }
+                String name = player2.getName();
+                map.put(name, heroesData.get(name));
             }
         }
         return result;

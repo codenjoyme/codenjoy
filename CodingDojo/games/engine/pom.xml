@@ -12,6 +12,7 @@
         <jetty.version>9.3.14.v20161028</jetty.version>
         <java.version>1.8</java.version>
 
+        <logback.version>1.1.7</logback.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <org.json.version>20160810</org.json.version>
@@ -70,6 +71,12 @@
             <groupId>com.cedarsoftware</groupId>
             <artifactId>json-io</artifactId>
             <version>${com.cedarsoftware.jsonio.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
