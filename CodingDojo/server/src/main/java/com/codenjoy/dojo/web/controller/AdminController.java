@@ -39,11 +39,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static com.codenjoy.dojo.web.controller.AdminController.PASS;
+
 @Controller
-@RequestMapping("/admin31415")
+@RequestMapping("/admin" + PASS)
 public class AdminController {
 
     public static final String GAME_NAME = "gameName";
+    public static final int PASS = 31415;
 
     @Autowired private TimerService timerService;
     @Autowired private PlayerService playerService;
@@ -121,6 +124,15 @@ public class AdminController {
     public String gameOverAllPlayers(Model model, HttpServletRequest request) {
         playerService.removeAll();
         return getAdmin(request);
+    }
+
+    @RequestMapping(params = "resetAll", method = RequestMethod.GET)
+    public String resetAllPlayers(Model model, HttpServletRequest request) {
+        saveService.removeAllSaves();
+        saveService.saveAll();
+        playerService.removeAll();
+        saveService.loadAll();
+        return "redirect:/";
     }
 
     @RequestMapping(params = "pause", method = RequestMethod.GET)
@@ -206,7 +218,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin31415?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin" + PASS + "?" + GAME_NAME + "=" + gameName;
     }
 
     private String getAdmin() {
