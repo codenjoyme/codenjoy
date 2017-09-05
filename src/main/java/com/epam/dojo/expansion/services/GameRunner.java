@@ -44,7 +44,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                 Levels.collectSingle(),
                 Levels.collectMultiple()
         );
-        gameFactory.setWaitingOthers(true);
+        gameFactory.setWaitingOthers(false);
     }
 
     @Override
