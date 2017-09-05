@@ -224,7 +224,7 @@ public class Expansion implements Tickable, IField {
         List<HeroForces> forces = cell.getItems(HeroForces.class);
         if (forces.isEmpty()) {
             HeroForces income = new HeroForces(hero);
-            income(cell, income);
+            capture(cell, income);
             income.tryIncrease(count);
             return income;
         } else if (forces.size() == 1) {
@@ -241,28 +241,28 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    private void income(ICell cell, HeroForces income) {
+    private void capture(ICell cell, HeroForces income) {
         cell.addItem(income);
         cell.comeIn(income);
     }
 
-    private HeroForces attack(HeroForces defensive, HeroForces attack) {
-        int defenciveCount = defensive.getCount();
-        int attackCount = attack.getCount();
+    private HeroForces attack(HeroForces defender, HeroForces attacker) {
+        int defenciveCount = defender.getCount();
+        int attackCount = attacker.getCount();
         int delta = defenciveCount - attackCount;
         if (delta < 0) {
-            ICell cell = defensive.removeFromCell();
-            attack.decrease(Math.abs(delta));
-            income(cell, attack);
-            return attack;
+            ICell cell = defender.removeFromCell();
+            attacker.decrease(Math.abs(delta));
+            capture(cell, attacker);
+            return attacker;
         } else if (delta == 0) {
-            ICell cell = defensive.removeFromCell();
-            attack.decrease(attackCount);
+            ICell cell = defender.removeFromCell();
+            attacker.decrease(attackCount);
             return HeroForces.EMPTY;
         } else { // if (delta > 0)
-            defensive.decrease(Math.abs(delta));
-            attack.decrease(attackCount);
-            return defensive;
+            defender.decrease(Math.abs(delta));
+            attacker.decrease(attackCount);
+            return defender;
         }
     }
 
