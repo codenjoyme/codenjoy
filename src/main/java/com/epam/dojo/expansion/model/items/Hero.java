@@ -153,6 +153,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     private void parseMoveMessage(String json) {
+        if (!alive) {
+            return;
+        }
+
         currentAction = new JSONObject(json);
         increase = parseForces(currentAction, INCREASE_KEY);
         movements = parseForces(currentAction, MOVEMENTS_KEY);

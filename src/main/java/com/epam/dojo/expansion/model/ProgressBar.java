@@ -103,7 +103,9 @@ public class ProgressBar {
         if (nextLevel) {
             nextLevel();
         } else if (!player.getHero().isAlive()) {
-            createHeroToPlayer();
+            if (!isMultiple()) {
+                createHeroToPlayer();
+            }
         } else if (player.getHero().isChangeLevel()) {
             changeLevel();
         }

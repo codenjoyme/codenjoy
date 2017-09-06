@@ -109,7 +109,6 @@ public class Expansion implements Tickable, IField {
 
             if (isWin) {
                 losers.clear();
-                losers.clear();
                 List<Player> renew = new LinkedList<>();
                 for (Player player : players.toArray(new Player[0])) {
                     remove(player);
@@ -139,10 +138,6 @@ public class Expansion implements Tickable, IField {
             Hero hero = player.getHero();
 
             hero.applyGold();
-
-            if (!hero.isAlive()) {
-                // TODO продолжить тут
-            }
 
             if (hero.isWin()) {
                 player.event(Events.WIN(0));
@@ -218,6 +213,7 @@ public class Expansion implements Tickable, IField {
 
     private Events checkStatus(Player player, Hero hero) {
         if (losers.contains(player)) return null;
+        if (players.size() == 1) return null;
 
         List<HeroForces> allForces = level.getItems(HeroForces.class);
         boolean alone = true;
@@ -226,11 +222,12 @@ public class Expansion implements Tickable, IField {
             alone &= item.itsMe(hero);
             exists |= item.itsMe(hero);
         }
-        if (alone && players.size() != 1) {
+        if (alone) {
             return Events.WIN(1);
         }
         if (!exists) {
             losers.add(player);
+            player.hero.die();
             return Events.LOOSE();
         }
         return null;
@@ -397,6 +394,10 @@ public class Expansion implements Tickable, IField {
     }
 
     public void newGame(Player player) {
+        if (losers.contains(player)) {
+            return;
+        }
+
         if (!players.contains(player)) {
             players.add(player);
         }
