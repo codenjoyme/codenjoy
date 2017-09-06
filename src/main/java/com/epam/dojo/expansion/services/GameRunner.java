@@ -41,9 +41,11 @@ public class GameRunner extends AbstractGameType implements GameType  {
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
     private MultipleGameFactory gameFactory;
+    private Ticker ticker;
 
     public GameRunner() {
         new Scores(0, settings);
+        ticker = new Ticker();
         gameFactory = new MultipleGameFactory(
                 Levels.collectSingle(),
                 Levels.collectMultiple()
@@ -66,7 +68,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
-        Game single = new Single(gameFactory, listener, factory, save);
+        Game single = new Single(gameFactory, listener, factory, ticker, save);
         single.newGame();
         return single;
     }

@@ -31,7 +31,6 @@ import com.epam.dojo.expansion.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -43,12 +42,14 @@ public class Single implements Game {
 
     private static Logger logger = DLoggerFactory.getLogger(Single.class);
 
+    private Ticker ticker;
     private ProgressBar progressBar;
     private Player player;
     private String save;
 
-    public Single(GameFactory gameFactory, EventListener listener, PrinterFactory factory, String save) {
+    public Single(GameFactory gameFactory, EventListener listener, PrinterFactory factory, Ticker ticker, String save) {
         this.save = save;
+        this.ticker = ticker;
         progressBar = new ProgressBar(gameFactory);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
@@ -97,6 +98,7 @@ public class Single implements Game {
         result.put("forces", data.getForces());
         result.put("myBase", new JSONObject(player.getBasePosition()));
         result.put("myColor", player.getForcesColor());
+        result.put("tick", ticker.get());
         result.put("available", player.getForcesPerTick());
         result.put("offset", data.getOffset());
         JSONObject progress = progressBar.printProgress();
@@ -167,9 +169,11 @@ public class Single implements Game {
 
     @Override
     public void tick() {
+        ticker.tick();
+
         if (logger.isDebugEnabled()) {
             logger.debug("----------------------------------------------------------------------------------------------------------------------");
-            logger.debug("Game start tick {}", toString());
+            logger.debug("Game start tick {}", ticker.get(), toString());
         }
 
         progressBar.tick();
@@ -191,6 +195,7 @@ public class Single implements Game {
         public JSONObject json() {
             return new JSONObject(){{
                 put("id", id());
+                put("tick", ticker.get());
                 put("progressBar", progressBar.lg.id());
                 put("player", player.lg.id());
                 put("save", save);

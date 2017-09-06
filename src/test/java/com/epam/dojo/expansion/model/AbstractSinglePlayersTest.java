@@ -33,7 +33,6 @@ import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
-import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -81,12 +80,14 @@ public abstract class AbstractSinglePlayersTest {
     private String multipleLevelsMaps;
 
     private GameFactory gameFactory;
+    private Ticker ticker;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
         listeners = new LinkedList<>();
         singles = new LinkedList<>();
+        ticker = new Ticker();
     }
 
     private void dice(int... ints) {
@@ -117,7 +118,7 @@ public abstract class AbstractSinglePlayersTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Single game = new Single(gameFactory, listener, null, null);
+        Single game = new Single(gameFactory, listener, null, ticker, null);
         singles.add(game);
         game.newGame();
     }

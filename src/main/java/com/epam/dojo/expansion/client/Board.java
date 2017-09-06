@@ -90,6 +90,13 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
+     * @return number of tick on server - for debug
+     */
+    public int getTick() {
+        return source.getInt("tick");
+    }
+
+    /**
      * @return My base base position
      */
     public Point getMyBasePosition() {
@@ -332,7 +339,7 @@ public class Board extends AbstractBoard<Elements> {
             }
         }
 
-        return firstPart + "\n" + builder.toString() + "\n" + numbersLine;
+        return firstPart + "\n" + builder.toString() + "\n" + numbersLine + " Tick#" + getTick();
     }
 
     private String listToString(List<? extends Object> list) {

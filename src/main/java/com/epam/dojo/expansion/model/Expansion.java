@@ -76,7 +76,7 @@ public class Expansion implements Tickable, IField {
     @Override
     public void tick() {
         if (logger.isDebugEnabled()) {
-            logger.debug("Expansion {} started tick", "E@" + Integer.toHexString(this.hashCode()));
+            logger.debug("Expansion {} started tick", lg.id());
         }
 
         if (isMultiple) {
@@ -91,7 +91,7 @@ public class Expansion implements Tickable, IField {
 
         if (logger.isDebugEnabled()) {
             logger.debug("Expansion processing board calculations. State before processing {}",
-                    this.toString());
+                    toString());
         }
 
         if (isMultiple) {
@@ -144,7 +144,7 @@ public class Expansion implements Tickable, IField {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Expansion finished tick. State after processing {}", this.toString());
+            logger.debug("Expansion finished tick. State after processing {}", toString());
         }
     }
 

@@ -57,6 +57,7 @@ public class YourSolverTest {
                 "{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#-=#" +
@@ -87,6 +88,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005-=#-=#-=#-=#" +
@@ -117,6 +119,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005-=#-=#-=#" +
@@ -147,6 +150,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005005-=#-=#" +
@@ -177,6 +181,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005005005-=#" +
@@ -207,6 +212,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005005005-=#" +
@@ -237,6 +243,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005005005-=#" +
@@ -267,6 +274,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005005005-=#" +
@@ -297,6 +305,7 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#00F005005005005-=#" +

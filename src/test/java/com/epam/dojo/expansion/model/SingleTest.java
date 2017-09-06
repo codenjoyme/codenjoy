@@ -1302,7 +1302,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'myColor':0," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
-                "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
+                "'showName':true," +
+                "'tick':6" +
+                "}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
 
         assertEquals("{" +
                 "'available':10," +
@@ -1314,7 +1316,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'myColor':1," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
-                "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
+                "'showName':true," +
+                "'tick':6" +
+                "}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
     }
 
     @Test
