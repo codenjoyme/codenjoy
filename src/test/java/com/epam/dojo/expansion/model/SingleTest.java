@@ -1292,7 +1292,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         // one more time with structure
-        assertEquals("{'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
+        assertEquals("{" +
+                "'available':10," +
+                "'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
@@ -1302,7 +1304,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
 
-        assertEquals("{'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
+        assertEquals("{" +
+                "'available':10," +
+                "'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +

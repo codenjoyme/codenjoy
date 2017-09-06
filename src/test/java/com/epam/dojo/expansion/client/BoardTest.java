@@ -50,6 +50,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':2,'y':8}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#-=#00B-=#-=#-=#-=#-=#-=#-=#-=#" +
@@ -131,6 +132,11 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldGetMyavailable() {
+        assertEquals(10, board.getForcesAvailable());
+    }
+
+    @Test
     public void shouldGetHoles() {
         assertEquals("[[1,1], [3,3], [9,3]]", board.getHoles().toString());
     }
@@ -193,6 +199,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':4,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +
@@ -224,6 +231,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +
@@ -259,6 +267,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +
@@ -294,6 +303,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +
@@ -329,6 +339,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +
@@ -364,6 +375,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +
@@ -400,6 +412,7 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
+                "'available':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
                         "-=#00A-=#-=#-=#-=#" +

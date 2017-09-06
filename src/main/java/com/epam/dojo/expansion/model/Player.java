@@ -33,7 +33,6 @@ import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Player {
 
@@ -102,6 +101,10 @@ public class Player {
 
     public JSONObject getCurrentAction() {
         return hero.getCurrentAction();
+    }
+
+    public int getForcesPerTick() {
+        return hero.getForcesPerTick();
     }
 
     public void destroyHero() {
