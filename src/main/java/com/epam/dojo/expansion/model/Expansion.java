@@ -211,7 +211,13 @@ public class Expansion implements Tickable, IField {
 
     private Events checkStatus(Player player, Hero hero) {
         if (losers.contains(player)) return null;
-        if (players.size() == 1) return null;
+        if (players.size() == 1) {
+            List<ICell> freeCells = level.getCellsWithWithout(Floor.class, HeroForces.class);
+            if (freeCells.isEmpty()) {
+                return Events.WIN(1);
+            }
+            return null;
+        }
 
         List<HeroForces> allForces = level.getItems(HeroForces.class);
         boolean alone = true;

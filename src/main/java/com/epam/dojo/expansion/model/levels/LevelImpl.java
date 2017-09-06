@@ -127,14 +127,50 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public List<ICell> getCellsWith(Class clazz) {
+    public List<ICell> getCellsWith(Class with) {
         List<ICell> result = new LinkedList<ICell>();
         for (ICell cell : cells) {
             for (IItem item : cell.getItems()) {
-                if (clazz.isInstance(item)) {
+                if (with.isInstance(item)) {
                     result.add(cell);
                     break;
                 }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<ICell> getCellsWithout(Class without) {
+        List<ICell> result = new LinkedList<ICell>();
+        for (ICell cell : cells) {
+            boolean bad = false;
+            for (IItem item : cell.getItems()) {
+                if (without.isInstance(item)) {
+                    bad = true;
+                    break;
+                }
+            }
+            if (!bad) {
+                result.add(cell);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<ICell> getCellsWithWithout(Class with, Class without) {
+        List<ICell> result = new LinkedList<ICell>();
+        for (ICell cell : cells) {
+            boolean bad = false;
+            for (IItem item : cell.getItems()) {
+                if (!with.isInstance(item) || without.isInstance(item)) {
+                    bad = true;
+                    break;
+                }
+            }
+            if (!bad) {
+                result.add(cell);
             }
         }
         return result;

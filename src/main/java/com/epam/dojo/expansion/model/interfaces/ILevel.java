@@ -24,7 +24,6 @@ package com.epam.dojo.expansion.model.interfaces;
 
 
 import com.codenjoy.dojo.services.Point;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -43,6 +42,10 @@ public interface ILevel {
     boolean isBarrier(int x, int y);
 
     List<ICell> getCellsWith(Class clazz);
+
+    List<ICell> getCellsWithout(Class without);
+
+    List<ICell> getCellsWithWithout(Class with, Class without);
 
     void setField(IField field);
 }
