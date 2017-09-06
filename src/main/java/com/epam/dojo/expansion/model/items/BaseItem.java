@@ -40,8 +40,6 @@ public abstract class BaseItem implements IItem {
     private FeatureItem[] features;
     protected Elements element;
 
-    //================================ Constructors ================================
-
     public BaseItem(Elements element) {
         this.element = element;
         this.features = new FeatureItem[0];
@@ -51,8 +49,6 @@ public abstract class BaseItem implements IItem {
         this.element = element;
         this.features = features.clone();
     }
-
-    //================================ Implements ================================
 
     @Override
     public void action(IItem item, boolean comeInOrLeave) {

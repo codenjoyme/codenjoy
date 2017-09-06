@@ -2135,4 +2135,68 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         verify(PLAYER1).event(Events.WIN(1));
     }
 
+    @Test
+    public void shouldContinueAfterWinIfSinglePlayerOnMultipleGame_caseWithOtherPassableCells() {
+        // given
+        givenFl("╔═══┐" +
+                "║1$2│" +
+                "└───┘" +
+                "     " +
+                "     ");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(1, 3), 5, QDirection.RIGHT));
+        tickAll();
+
+        // then
+        verifyNoMoreInteractions(PLAYER1);
+
+        assertE("-----" +
+                "-♥♥--" +
+                "-----" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#005005-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(2, 3), 2, QDirection.RIGHT));
+        tickAll();
+
+        // then
+        verifyNoMoreInteractions(PLAYER1);
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "-----" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#005003002-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+
+        // when
+        tickAll();
+
+        // then
+        verify(PLAYER1).event(Events.WIN(1));
+    }
+
 }

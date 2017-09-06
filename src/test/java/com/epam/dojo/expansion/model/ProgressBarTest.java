@@ -36,10 +36,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -98,6 +100,7 @@ public class ProgressBarTest {
         Start start = new Start(Elements.BASE1);
         start.setCell(new Cell(0, 0));
         when(result.getItems(Start.class)).thenReturn(Arrays.asList(start));
+        when(result.getCellsWith(any(Predicate.class))).thenReturn(Arrays.asList(start));
 
         return result;
     }

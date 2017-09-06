@@ -37,6 +37,7 @@ import com.epam.dojo.expansion.model.items.FieldItem;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.epam.dojo.expansion.model.Elements.Layers.LAYER1;
 import static org.fest.reflect.core.Reflection.constructor;
@@ -141,35 +142,10 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public List<ICell> getCellsWithout(Class without) {
+    public List<ICell> getCellsWith(Predicate<ICell> is) {
         List<ICell> result = new LinkedList<ICell>();
         for (ICell cell : cells) {
-            boolean bad = false;
-            for (IItem item : cell.getItems()) {
-                if (without.isInstance(item)) {
-                    bad = true;
-                    break;
-                }
-            }
-            if (!bad) {
-                result.add(cell);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public List<ICell> getCellsWithWithout(Class with, Class without) {
-        List<ICell> result = new LinkedList<ICell>();
-        for (ICell cell : cells) {
-            boolean bad = false;
-            for (IItem item : cell.getItems()) {
-                if (!with.isInstance(item) || without.isInstance(item)) {
-                    bad = true;
-                    break;
-                }
-            }
-            if (!bad) {
+            if (is.test(cell)) {
                 result.add(cell);
             }
         }

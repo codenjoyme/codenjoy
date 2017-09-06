@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model.interfaces;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface ILevel {
 
@@ -43,9 +44,7 @@ public interface ILevel {
 
     List<ICell> getCellsWith(Class clazz);
 
-    List<ICell> getCellsWithout(Class without);
-
-    List<ICell> getCellsWithWithout(Class with, Class without);
+    List<ICell> getCellsWith(Predicate<ICell> is);
 
     void setField(IField field);
 }
