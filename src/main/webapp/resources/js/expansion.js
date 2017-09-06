@@ -147,23 +147,27 @@ game.drawBoard = function(drawer) {
     var RED = 1;
     var GREEN = 2;
     var YELLOW = 3;
+    var WHITE = 10;
 
     var fonts = {};
     fonts.forces = {};
-    fonts.forces.dx = 24;
-    fonts.forces.dyForce = 30;
-    fonts.forces.dyBase = 35;
+    fonts.forces.dxForce = 24;
+    fonts.forces.dyForce = 35;
+    fonts.forces.dxBase = 21;
+    fonts.forces.dyBase = 27;
     fonts.forces.font = "23px 'verdana'";
     fonts.forces.fillStyles = {};
     fonts.forces.fillStyles[GREEN] = "#115e34";
     fonts.forces.fillStyles[RED] = "#681111";
     fonts.forces.fillStyles[BLUE] = "#306177";
     fonts.forces.fillStyles[YELLOW] = "#7f6c1b";
+    fonts.forces.fillStyles[WHITE] = "#FFFFFF";
     fonts.forces.shadowStyles = {};
     fonts.forces.shadowStyles[GREEN] = "#64d89b";
     fonts.forces.shadowStyles[RED] = "#d85e5b";
     fonts.forces.shadowStyles[BLUE] = "#6edff9";
     fonts.forces.shadowStyles[YELLOW] = "#f9ec91";
+    fonts.forces.fillStyles[WHITE] = "#FFFFFF";
     fonts.forces.textAlign = "center";
     fonts.forces.shadowOffsetX = 0;
     fonts.forces.shadowOffsetY = 0;
@@ -218,19 +222,26 @@ game.drawBoard = function(drawer) {
         return count;
     }
 
-    var drawForces = function(x, y, afterBase){
+    var drawForces = function(x, y, afterBase, afterForce){
         var count = getCount(x, y);
         if (count == 0) return;
 
         if (afterBase) {
+            fonts.forces.dx = fonts.forces.dxBase;
             fonts.forces.dy = fonts.forces.dyBase;
         } else {
+            fonts.forces.dx = fonts.forces.dxForce;
             fonts.forces.dy = fonts.forces.dyForce;
         }
         var color = getColor(x, y);
         if (color != -1) {
-            fonts.forces.fillStyle = fonts.forces.fillStyles[color];
-            fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
+            if (afterBase) {
+                fonts.forces.fillStyle = fonts.forces.fillStyles[WHITE];
+                fonts.forces.shadowColor = fonts.forces.shadowStyles[WHITE];
+            } else {
+                fonts.forces.fillStyle = fonts.forces.fillStyles[color];
+                fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
+            }
             canvas.drawText(count, {'x':x - 1, 'y':y}, fonts.forces);
         }
     }
@@ -253,7 +264,7 @@ game.drawBoard = function(drawer) {
                 }
 
                 if (afterForce || afterBase) {
-                    drawForces(x, y, afterForce);
+                    drawForces(x, y, afterBase, afterForce);
                 }
             } catch (err) {
                 console.log(err);
