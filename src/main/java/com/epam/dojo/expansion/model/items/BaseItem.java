@@ -55,7 +55,7 @@ public abstract class BaseItem implements IItem {
     //================================ Implements ================================
 
     @Override
-    public void action(IItem item) {
+    public void action(IItem item, boolean comeInOrLeave) {
         // do nothing
     }
 
@@ -93,8 +93,6 @@ public abstract class BaseItem implements IItem {
         return cell;
     }
 
-    //================================ Overrides ================================
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -122,7 +120,6 @@ public abstract class BaseItem implements IItem {
         } else {
             return element == baseItem.element && cell.equals(baseItem.cell);
         }
-
     }
 
     @Override

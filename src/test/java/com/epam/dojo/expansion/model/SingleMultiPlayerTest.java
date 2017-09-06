@@ -1830,4 +1830,132 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 
+    @Test
+    public void shouldGoldResetIfSomebodyKillMeOnCell() {
+        // given
+        givenFl("╔════┐" +
+                "║1$$2│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        // when
+        hero(PLAYER1, 1, 4).right();
+        tickAll();
+
+        // then
+        assertEquals(11, hero(PLAYER1).getForcesPerTick());
+        assertEquals(10, hero(PLAYER2).getForcesPerTick());
+
+        // when
+        hero(PLAYER1, 2, 4).right();
+        tickAll();
+
+        // then
+        assertEquals(12, hero(PLAYER1).getForcesPerTick());
+        assertEquals(10, hero(PLAYER2).getForcesPerTick());
+
+
+        assertE("------" +
+                "-♥♥♥♦-" +
+                "------" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00B00200100A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER2, 4, 4).left();
+        tickAll();
+
+        assertE("------" +
+                "-♥♥-♦-" +
+                "------" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00B002-=#00B-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        assertEquals(11, hero(PLAYER1).getForcesPerTick());
+        assertEquals(10, hero(PLAYER2).getForcesPerTick());
+
+        // when
+        hero(PLAYER2, 4, 4).left();
+        tickAll();
+
+        assertE("------" +
+                "-♥♥♦♦-" +
+                "------" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00B00200100C-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        assertEquals(11, hero(PLAYER1).getForcesPerTick());
+        assertEquals(11, hero(PLAYER2).getForcesPerTick());
+
+        // when
+        hero(PLAYER2).increaseAndMove(new Forces(pt(3, 4), 10),
+                new ForcesMoves(pt(3, 4), 5, QDirection.LEFT));
+        tickAll();
+
+        assertE("------" +
+                "-♥♦♦♦-" +
+                "------" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00B00300600C-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        assertEquals(10, hero(PLAYER1).getForcesPerTick());
+        assertEquals(12, hero(PLAYER2).getForcesPerTick());
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(1, 4), 3, QDirection.RIGHT));
+        tickAll();
+
+        assertE("------" +
+                "-♥-♦♦-" +
+                "------" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#008-=#00600C-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        assertEquals(10, hero(PLAYER1).getForcesPerTick());
+        assertEquals(11, hero(PLAYER2).getForcesPerTick());
+    }
 }

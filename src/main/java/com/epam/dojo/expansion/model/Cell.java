@@ -60,21 +60,27 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public void comeIn(IItem comingItem) {
-        for (int i = 0; i < items.size(); ++i) {
-            IItem cellItem = items.get(i);
+    public void comeIn(IItem item) {
+        preformAction(item, true);
+    }
 
-            if (!cellItem.equals(comingItem)) {
-                cellItem.action(comingItem);
-                comingItem.action(cellItem);
-            }
+    private void preformAction(IItem coming, boolean comeInOrLeave) {
+        for (IItem item : items) {
+            preformAction(coming, item, comeInOrLeave);
+        }
+    }
+
+    private void preformAction(IItem item1, IItem item2, boolean comeInOrLeave) {
+        if (!item2.equals(item1)) {
+            item2.action(item1, comeInOrLeave);
+            item1.action(item2, comeInOrLeave);
         }
     }
 
     @Override
     public boolean isPassable() {
-        for (int i = 0; i < items.size(); ++i) {
-            if (items.get(i).hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
+        for (IItem item : items) {
+            if (item.hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
                 return false;
             }
         }
@@ -84,13 +90,11 @@ public class Cell extends PointImpl implements ICell {
 
     @Override
     public <T extends IItem> T getItem(Class<T> type) {
-        for (int i = 0; i < items.size(); ++i) {
-
-            if (items.get(i).getClass() == type) {
-                return (T) items.get(i);
+        for (IItem item : items) {
+            if (item.getClass() == type) {
+                return (T)item;
             }
         }
-
         return null;
     }
 
@@ -106,14 +110,11 @@ public class Cell extends PointImpl implements ICell {
     @Override
     public <T extends IItem> List<T> getItems(Class<T> clazz) {
         List<T> result = new LinkedList<>();
-
-        for (int i = 0; i < items.size(); ++i) {
-
-            if (items.get(i).getClass() == clazz) {
-                result.add((T) items.get(i));
+        for (IItem item : items) {
+            if (item.getClass() == clazz) {
+                result.add((T)item);
             }
         }
-
         return result;
     }
 
@@ -124,16 +125,9 @@ public class Cell extends PointImpl implements ICell {
 
     @Override
     public void removeItem(IItem item) {
-        for (int i = 0; i < items.size(); ++i) {
-            if (items.get(i) == item) {
-                items.remove(i);
-                return;
-            }
-        }
         items.remove(item);
+        preformAction(item, false);
     }
-
-    //================================ Overrides ================================
 
     @Override
     public String toString() {

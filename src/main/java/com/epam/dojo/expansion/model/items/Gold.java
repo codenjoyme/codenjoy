@@ -59,13 +59,18 @@ public class Gold extends BaseItem {
     }
 
     @Override
-    public void action(IItem item) {
-        if (hidden) return;
-
+    public void action(IItem item, boolean comeInOrLeave) {
         if (item instanceof HeroForces) {
             HeroForces forces = (HeroForces) item;
-            forces.pickUpGold();
-            hidden = true;
+            if (comeInOrLeave) {
+                forces.pickUpGold(this);
+                hidden = true;
+            } else {
+                if (forces.ownGold(this)) {
+                    forces.forgotGold(this);
+                    hidden = false;
+                }
+            }
         }
     }
 

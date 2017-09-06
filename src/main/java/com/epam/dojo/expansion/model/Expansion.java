@@ -137,8 +137,6 @@ public class Expansion implements Tickable, IField {
         for (Player player : players) {
             Hero hero = player.getHero();
 
-            hero.applyGold();
-
             if (hero.isWin()) {
                 player.event(Events.WIN(0));
                 player.setNextLevel();
@@ -246,7 +244,6 @@ public class Expansion implements Tickable, IField {
         return level.isBarrier(x, y);
     }
 
-    @Nullable
     @Override
     public Start getBaseOf(Hero hero) {
         List<Start> bases = level.getItems(Start.class);
@@ -259,7 +256,6 @@ public class Expansion implements Tickable, IField {
         return hero.occupyFreeBase();
     }
 
-    @Nullable
     @Override
     public Start getFreeBase() {
         List<Start> bases = level.getItems(Start.class);
@@ -304,7 +300,6 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    @Nullable
     private HeroForces getHeroForces(Hero hero, ICell cell) {
         List<HeroForces> forces = cell.getItems(HeroForces.class);
         for (HeroForces force : forces) {
@@ -380,6 +375,10 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void reset() {
+        if (isMultiple && players.size() > 1) {
+            return;
+        }
+
         for (Gold gold : level.getItems(Gold.class)) {
             gold.reset();
         }

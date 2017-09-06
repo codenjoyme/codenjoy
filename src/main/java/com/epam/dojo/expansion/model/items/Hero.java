@@ -54,11 +54,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     public static final String MOVEMENTS_KEY = Command.MOVEMENTS_KEY;
     public static final String INCREASE_KEY = Command.INCREASE_KEY;
 
-    public int forcesPerTick;
     private boolean alive;
     private boolean win;
     private Integer resetToLevel;
-    private int goldCount;
+    private List<Gold> gold;
     private List<ForcesMoves> increase;
     private List<ForcesMoves> movements;
     private IField field;
@@ -73,11 +72,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private void resetFlags() {
         increase = null;
         movements = null;
-        forcesPerTick = INITIAL_FORCES;
         win = false;
         resetToLevel = null;
         alive = true;
-        goldCount = 0;
+        gold = new LinkedList<>();
         position = null;
         lastAction = null;
         currentAction = null;
@@ -265,8 +263,16 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return win;
     }
 
-    public void pickUpGold() {
-        goldCount++;
+    public void pickUpGold(Gold gold) {
+        this.gold.add(gold);
+    }
+
+    public void forgotGold(Gold gold) {
+        this.gold.remove(gold);
+    }
+
+    public boolean ownGold(Gold gold) {
+        return this.gold.contains(gold);
     }
 
     public boolean isChangeLevel() {
@@ -285,11 +291,6 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     public Point getBasePosition() {
         return getBase().getCell().copy();
-    }
-
-    public void applyGold() {
-        forcesPerTick += goldCount;
-        goldCount = 0;
     }
 
     // ----------- only for testing methods -------------
@@ -319,7 +320,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public int getForcesPerTick() {
-        return forcesPerTick;
+        return INITIAL_FORCES + gold.size();
     }
 
     public JSONObject getCurrentAction() {
@@ -334,10 +335,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         public JSONObject json() {
             return new JSONObject(){{
                 put("id", id());
-                put("forcesPerTick", forcesPerTick);
+                put("forcesPerTick", getForcesPerTick());
                 put("alive", alive);
                 put("win", win);
-                put("goldCount", goldCount);
+                put("gold", gold);
                 put("resetToLevel", resetToLevel);
                 put("position", position);
                 put("lastAction", lastAction);

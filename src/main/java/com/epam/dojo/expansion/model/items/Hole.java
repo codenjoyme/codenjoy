@@ -36,9 +36,11 @@ public class Hole extends BaseItem {
     }
 
     @Override
-    public void action(IItem item) {
-        if (item instanceof HeroForces) {
-            item.removeFromCell();
+    public void action(IItem item, boolean comeInOrLeave) {
+        if (comeInOrLeave) {
+            if (item instanceof HeroForces) {
+                item.removeFromCell();
+            }
         }
     }
 }

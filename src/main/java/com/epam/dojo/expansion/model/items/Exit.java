@@ -37,7 +37,7 @@ public class Exit extends BaseItem {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(IItem item, boolean comeInOrLeave) {
         if (item instanceof HeroForces) {
             ((HeroForces)item).setWin();
         }

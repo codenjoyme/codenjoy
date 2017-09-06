@@ -60,6 +60,5 @@ public interface IField {
 
     void reset();
 
-
     void removeFromCell(Hero hero);
 }

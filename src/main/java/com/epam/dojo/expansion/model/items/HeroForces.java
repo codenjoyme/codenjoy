@@ -100,7 +100,15 @@ public class HeroForces extends FieldItem {
         hero.setWin();
     }
 
-    public void pickUpGold() {
-        hero.pickUpGold();
+    public void pickUpGold(Gold gold) {
+        hero.pickUpGold(gold);
+    }
+
+    public void forgotGold(Gold gold) {
+        hero.forgotGold(gold);
+    }
+
+    public boolean ownGold(Gold gold) {
+        return hero.ownGold(gold);
     }
 }
