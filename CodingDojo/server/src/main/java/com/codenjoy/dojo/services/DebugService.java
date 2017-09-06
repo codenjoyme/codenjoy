@@ -34,17 +34,6 @@ import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
 @Component
 public class DebugService {
 
-    @Value("${debugEnable}")
-    private boolean debugEnable;
-
-    public DebugService() {
-        if (debugEnable) {
-            start();
-        } else {
-            stop();
-        }
-    }
-
     public void stop() {
         if (isStarted()) {
             DLoggerFactory.settings.remove(DEBUG_KEY);
@@ -58,6 +47,15 @@ public class DebugService {
     public void start() {
         if (!isStarted()) {
             DLoggerFactory.settings.put(DEBUG_KEY, true);
+        }
+    }
+
+    @Value("${debugEnable}")
+    public void setDebugEnable(boolean debugEnable) {
+        if (debugEnable) {
+            start();
+        } else {
+            stop();
         }
     }
 }
