@@ -1759,6 +1759,31 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#001-=#-=#-=#001-=#\n" +
                 "-=#00B-=#-=#-=#00B-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        // after that all heroes can go
+        hero(PLAYER1, 5, 5).left();
+        hero(PLAYER2, 5, 1).left();
+        hero(PLAYER3, 1, 1).right();
+        hero(PLAYER4, 1, 5).right();
+
+        tickAll();
+
+        assertE("-------" +
+                "-♠♠-♥♥-" +
+                "-♠-----" +
+                "-------" +
+                "-♣---♦-" +
+                "-♣♣-♦♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00C001-=#00100B-=#\n" +
+                "-=#001-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001-=#-=#-=#001-=#\n" +
+                "-=#00C001-=#00100C-=#\n" +
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
     }
 
 }
