@@ -206,7 +206,7 @@ public class ProgressBar {
         List<Player> players = current.getPlayers();
         if (!isMultiple()) {
             if (players.size() != 1) {
-                throw new IllegalArgumentException("Expected one player in single room!");
+                logger.warn("Expected one player in single room!");
             }
             return Arrays.asList(players.get(0).getGame());
         }
@@ -259,7 +259,7 @@ public class ProgressBar {
                 loadSingle(currentLevel);
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("Error during loadProgress from save {}", save, e);
         }
     }
 
