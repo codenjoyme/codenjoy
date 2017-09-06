@@ -38,7 +38,6 @@ import com.epam.dojo.expansion.services.PrinterData;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -95,6 +94,33 @@ public class Expansion implements Tickable, IField {
                     this.toString());
         }
 
+        if (isMultiple) {
+            boolean isWin = false;
+            for (Player player : players) {
+                Hero hero = player.getHero();
+
+                Events status = checkStatus(player, hero);
+                if (status != null) {
+                    player.event(status);
+                }
+
+                isWin |= (Events.WIN(1).equals(status));
+            }
+
+            if (isWin) {
+                losers.clear();
+                losers.clear();
+                List<Player> renew = new LinkedList<>();
+                for (Player player : players.toArray(new Player[0])) {
+                    remove(player);
+                    renew.add(player);
+                }
+                for (Player player : renew) {
+                    newGame(player);
+                }
+            }
+        }
+
         for (Player player : players.toArray(new Player[0])) {
             player.tick();
         }
@@ -109,28 +135,10 @@ public class Expansion implements Tickable, IField {
             item.tick();
         }
 
-        for (Player player : players.toArray(new Player[0])) {
+        for (Player player : players) {
             Hero hero = player.getHero();
 
             hero.applyGold();
-
-            if (isMultiple) {
-                boolean win = checkStatus(player, hero);
-                if (win) {
-                    List<Player> renew = new LinkedList<>();
-                    for (Player p : losers) {
-                        remove(p);
-                        renew.add(p);
-                    }
-                    remove(player);
-                    renew.add(player);
-                    losers.clear();
-                    for (Player p : renew) {
-                        newGame(p);
-                    }
-                    break;
-                }
-            }
 
             if (!hero.isAlive()) {
                 // TODO продолжить тут
@@ -208,8 +216,8 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    private boolean checkStatus(Player player, Hero hero) {
-        if (losers.contains(player)) return false;
+    private Events checkStatus(Player player, Hero hero) {
+        if (losers.contains(player)) return null;
 
         List<HeroForces> allForces = level.getItems(HeroForces.class);
         boolean alone = true;
@@ -219,15 +227,13 @@ public class Expansion implements Tickable, IField {
             exists |= item.itsMe(hero);
         }
         if (alone && players.size() != 1) {
-            player.event(Events.WIN(1));
-            return true;
+            return Events.WIN(1);
         }
         if (!exists) {
-            player.event(Events.LOOSE());
             losers.add(player);
-            // players.remove(player); TODO продолжить тут
+            return Events.LOOSE();
         }
-        return false;
+        return null;
     }
 
     public boolean isWaiting() {
@@ -253,7 +259,7 @@ public class Expansion implements Tickable, IField {
                 return base;
             }
         }
-        return null;
+        return hero.occupyFreeBase();
     }
 
     @Nullable

@@ -90,14 +90,14 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     private void resetOn(IField field) {
         resetFlags();
-        position = occupyFreeBase();
+        position = occupyFreeBase().getCell().copy();
         field.reset();
 
         field.startMoveForces(this, position.getX(), position.getY(), INITIAL_FORCES)
                 .move();
     }
 
-    private Point occupyFreeBase() {
+    public Start occupyFreeBase() {
         Start start = field.getFreeBase();
         if (start == null) {
             // TODO this should never happen :)
@@ -108,7 +108,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             return null;
         }
         start.setOwner(this);
-        return start.getCell().copy();
+        return start;
     }
 
     public void reset() {

@@ -964,6 +964,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // kill this enemy
         hero(PLAYER3).move(new ForcesMoves(pt(5, 4), 10, QDirection.UP));
         tickAll();
+        tickAll();
 
         verify(PLAYER1).event(Events.LOOSE());
         verifyNoMoreInteractions(PLAYER2);
@@ -1030,6 +1031,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
         // kill this enemy
         hero(PLAYER3).move(new ForcesMoves(pt(4, 1), 10, QDirection.RIGHT));
+        tickAll();
         tickAll();
 
         verifyNoMoreInteractions(PLAYER1);
@@ -1108,6 +1110,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // kill this enemy
         hero(PLAYER3).move(new ForcesMoves(pt(1, 4), 10, QDirection.UP));
         tickAll();
+        tickAll();
 
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
@@ -1180,10 +1183,10 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // given
         shouldOnlyOnePlayerWins();
 
-        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
         assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
-        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
-        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
+        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'onlyMyName':false,'showName':true}");
     }
 
     @Test
@@ -1598,6 +1601,89 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
+    }
+
+    @Test
+    public void shouldFirstPlayerWinWithoutErrors() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║1..2│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        assertE("------" +
+                "------" +
+                "-♥--♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when
+        hero(PLAYER1).move(new ForcesMoves(pt(1, 3), 9, QDirection.RIGHT));
+        tickAll();
+
+        hero(PLAYER1).move(new ForcesMoves(pt(2, 3), 8, QDirection.RIGHT));
+        tickAll();
+
+        hero(PLAYER1).increaseAndMove(
+                new Forces(pt(3, 3), 10),
+                new ForcesMoves(pt(3, 3), 17, QDirection.RIGHT));
+        tickAll();
+
+        // then
+        assertE("------" +
+                "------" +
+                "-♥♥♥♥-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001001001007-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+
+        tickAll();
+
+        // then
+        assertE("------" +
+                "------" +
+                "-♥--♦-" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verify(PLAYER1).event(Events.WIN(1));
+        verify(PLAYER2).event(Events.LOOSE());
+
+        // when
+        tickAll();
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
     }
 
 }
