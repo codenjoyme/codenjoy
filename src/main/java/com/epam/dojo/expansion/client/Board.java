@@ -194,7 +194,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all visible Breaks.
      */
     public List<Point> getBreaks() {
-        return get(LAYER2, BREAK);
+        return get(LAYER1, BREAK);
     }
 
     /**
