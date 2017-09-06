@@ -4139,4 +4139,118 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
     }
 
+    @Test
+    public void shouldCantCheatIncreaseOfForces() {
+        // given
+        givenFl("╔════┐" +
+                "║1...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n");
+
+        // when
+        hero.increaseAnd(
+                new Forces(pt(1, 4), 100)
+        ).move(
+                new ForcesMoves(pt(1, 4), 5, QDirection.DOWN),
+                new ForcesMoves(pt(1, 4), 9, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 4), 5, QDirection.RIGHT)
+        ).send();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-♥♥---" +
+                "-♥♥---" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#001005-=#-=#-=#\n" +
+                "-=#005009-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n");
+
+        // when
+        hero.increaseAnd(
+                new Forces(pt(1, 3), 3),
+                new Forces(pt(1, 4), 1),
+                new Forces(pt(2, 3), 3),
+                new Forces(pt(2, 4), 3)
+        ).move(
+                new ForcesMoves(pt(2, 4), 3, QDirection.RIGHT),
+                new ForcesMoves(pt(2, 4), 3, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 3), 3, QDirection.RIGHT),
+                new ForcesMoves(pt(2, 3), 3, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 3), 3, QDirection.DOWN),
+                new ForcesMoves(pt(1, 3), 3, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 3), 3, QDirection.DOWN)
+        ).send();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-♥♥♥--" +
+                "-♥♥♥--" +
+                "-♥♥♥--" +
+                "------" +
+                "------");
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#002002003-=#-=#\n" +
+                "-=#002003006-=#-=#\n" +
+                "-=#003006003-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n");
+
+        // when
+        hero.increaseAnd(
+                new Forces(pt(1, 2), 1),
+                new Forces(pt(1, 3), 1),
+                new Forces(pt(1, 4), 1),
+                new Forces(pt(2, 2), 1),
+                new Forces(pt(2, 3), 1),
+                new Forces(pt(2, 4), 1),
+                new Forces(pt(3, 2), 1),
+                new Forces(pt(3, 3), 1),
+                new Forces(pt(3, 4), 1)
+        ).move(
+                new ForcesMoves(pt(3, 4), 1, QDirection.RIGHT),
+                new ForcesMoves(pt(3, 4), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT),
+                new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(3, 2), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.DOWN),
+                new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 2), 1, QDirection.DOWN)
+        ).send();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-♥♥♥♥-" +
+                "-♥♥♥♥-" +
+                "-♥♥♥♥-" +
+                "-♥♥♥♥-" +
+                "------");
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#003003002001-=#\n" +
+                "-=#003004005002-=#\n" +
+                "-=#002005003001-=#\n" +
+                "-=#001002001001-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n");
+    }
+
 }

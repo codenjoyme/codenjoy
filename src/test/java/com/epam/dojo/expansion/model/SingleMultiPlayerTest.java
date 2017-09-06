@@ -1958,4 +1958,56 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         assertEquals(10, hero(PLAYER1).getForcesPerTick());
         assertEquals(11, hero(PLAYER2).getForcesPerTick());
     }
+
+    @Test // TODO continue with this test
+    public void shouldForcesPerTickIncreasedAlsoFromTerritoryOccupation() {
+        // given
+        givenFl("╔════┐" +
+                "║1...│" +
+                "║....│" +
+                "║....│" +
+                "║...2│" +
+                "└────┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        assertE("------" +
+                "-♥----" +
+                "------" +
+                "------" +
+                "----♦-" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        assertEquals(10, hero(PLAYER1).getForcesPerTick());
+        assertEquals(10, hero(PLAYER2).getForcesPerTick());
+
+        // when
+        hero(PLAYER1, 1, 4).right();
+        hero(PLAYER2, 4, 1).left();
+        tickAll();
+
+        assertE("------" +
+                "-♥♥---" +
+                "------" +
+                "------" +
+                "---♦♦-" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00B001-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#00100B-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        assertEquals(10, hero(PLAYER1).getForcesPerTick());
+        assertEquals(10, hero(PLAYER2).getForcesPerTick());
+    }
 }

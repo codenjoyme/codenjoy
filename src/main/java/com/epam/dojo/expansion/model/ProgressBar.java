@@ -286,6 +286,7 @@ public class ProgressBar {
             return new JSONObject(){{
                 put("id", id());
                 put("player", player.lg.id());
+                put("player.hero", player.hero.lg.id());
                 put("currentLevel", currentLevel);
                 put("lastPassedLevel", lastPassedLevel);
                 put("finished", finished);

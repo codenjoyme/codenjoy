@@ -301,22 +301,45 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public void increase(final Forces... forces) {
-        message(new JSONObject(){{
-            put(INCREASE_KEY, new JSONArray(forces));
-        }}.toString());
+        new Then().increase(forces).send();
+    }
+
+    public Then increaseAnd(final Forces... forces) {
+        return new Then().increase(forces);
+    }
+
+    public Then moveAnd(final Forces... forces) {
+        return new Then().move(forces);
     }
 
     public void move(final Forces... forces) {
-        message(new JSONObject(){{
-            put(MOVEMENTS_KEY, new JSONArray(forces));
-        }}.toString());
+        new Then().move(forces).send();
     }
 
-    public void increaseAndMove(final Forces forcesToIncrease, final Forces forcesToMove) {
-        message(new JSONObject(){{
-            put(INCREASE_KEY, new JSONArray(Arrays.asList(forcesToIncrease)));
-            put(MOVEMENTS_KEY, new JSONArray(Arrays.asList(forcesToMove)));
-        }}.toString());
+    public void increaseAndMove(Forces forcesToIncrease, Forces forcesToMove) {
+        new Then().increase(forcesToIncrease).move(forcesToMove).send();
+    }
+
+    public class Then {
+        private List<Forces> increase;
+        private List<Forces> move;
+
+        public void send() {
+            message(new JSONObject(){{
+                put(INCREASE_KEY, new JSONArray(increase));
+                put(MOVEMENTS_KEY, new JSONArray(move));
+            }}.toString());
+        }
+
+        public Then increase(Forces... increase) {
+            this.increase = Arrays.asList(increase);
+            return this;
+        }
+
+        public Then move(Forces... move) {
+            this.move = Arrays.asList(move);
+            return this;
+        }
     }
 
     public int getForcesPerTick() {
