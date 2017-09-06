@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
@@ -33,8 +34,21 @@ import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
 @Component
 public class DebugService {
 
+    @Value("${debugEnable}")
+    private boolean debugEnable;
+
+    public DebugService() {
+        if (debugEnable) {
+            start();
+        } else {
+            stop();
+        }
+    }
+
     public void stop() {
-        DLoggerFactory.settings.remove(DEBUG_KEY);
+        if (isStarted()) {
+            DLoggerFactory.settings.remove(DEBUG_KEY);
+        }
     }
 
     public boolean isStarted() {
@@ -42,6 +56,8 @@ public class DebugService {
     }
 
     public void start() {
-        DLoggerFactory.settings.put(DEBUG_KEY, true);
+        if (!isStarted()) {
+            DLoggerFactory.settings.put(DEBUG_KEY, true);
+        }
     }
 }
