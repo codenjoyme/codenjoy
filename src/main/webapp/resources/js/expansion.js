@@ -106,22 +106,28 @@ var loadStuff = function() {
     initAdditionalLink();
 }
 
-var arrows = {};
+var sprites = {};
 var directions = ['up', 'right_up', 'right', 'right_down', 'down', 'left_down', 'left', 'left_up'];
+var loadImage = function(name) {
+    var url = game.contextPath + 'resources/sprite/' + game.gameName + '/' + game.sprites + '/' + name + '.png';
+    var image = new Image();
+    image.onload = function() {
+        // do nothing
+    }
+    image.src = url;
+    return image;
+}
+
 var loadArrowImages = function() {
     for (var force = 0; force < 4; force++) {
-    	arrows[force] = {};
+    	sprites[force] = {};
     	for (var i in directions) {
     		var direction = directions[i];
-    		var url = game.contextPath + 'resources/sprite/' + game.gameName + '/' + game.sprites + '/force' + (force + 1) + '_' + direction + '.png';
-    		var image = new Image();
-    		image.onload = function() {
-    			// do nothing
-    		}
-    		image.src = url;
-    		arrows[force][direction] = image;
+            var image = loadImage('force' + (force + 1) + '_' + direction);
+    		sprites[force][direction] = image;
     	}
     }
+    sprites['base0'] = loadImage('base0');
 }
 
 game.drawBoard = function(drawer) {
@@ -229,6 +235,12 @@ game.drawBoard = function(drawer) {
             try {
                 var afterForce = (layerIndex == 1 && isForce(layers[layerIndex][charIndex]));
                 var afterBase = (layerIndex == 0 && isBase(layers[layerIndex][charIndex]));
+                if (afterBase) {
+                    if (getCount(x, y) == 0) {
+                        canvas.drawImage(sprites['base0'], x, y, 0, 0);
+                    }
+                }
+
                 if (afterForce || afterBase) {
                     drawForces(x, y, afterForce);
                 }
@@ -245,14 +257,14 @@ game.drawBoard = function(drawer) {
         var drawArrow = function(color, direction, x, y) {
             direction = direction.toLowerCase();
             switch (direction) {
-                case 'right':      canvas.drawImage(arrows[color]['right'], x, y, h, 0); break;
-                case 'up':         canvas.drawImage(arrows[color]['up'], x, y, 0, -h); break;
-                case 'down':       canvas.drawImage(arrows[color]['down'], x, y, 0, h); break;
-                case 'left':       canvas.drawImage(arrows[color]['left'], x, y, -h, 0); break;
-                case 'right_up':   canvas.drawImage(arrows[color]['right_up'], x, y, h, -h); break;
-                case 'right_down': canvas.drawImage(arrows[color]['right_down'], x, y, h, h); break;
-                case 'left_up':    canvas.drawImage(arrows[color]['left_up'], x, y, -h, -h); break;
-                case 'left_down':  canvas.drawImage(arrows[color]['left_down'], x, y, -h, h); break;
+                case 'right':      canvas.drawImage(sprites[color]['right'], x, y, h, 0); break;
+                case 'up':         canvas.drawImage(sprites[color]['up'], x, y, 0, -h); break;
+                case 'down':       canvas.drawImage(sprites[color]['down'], x, y, 0, h); break;
+                case 'left':       canvas.drawImage(sprites[color]['left'], x, y, -h, 0); break;
+                case 'right_up':   canvas.drawImage(sprites[color]['right_up'], x, y, h, -h); break;
+                case 'right_down': canvas.drawImage(sprites[color]['right_down'], x, y, h, h); break;
+                case 'left_up':    canvas.drawImage(sprites[color]['left_up'], x, y, -h, -h); break;
+                case 'left_down':  canvas.drawImage(sprites[color]['left_down'], x, y, -h, h); break;
                 default: break;
             }
         }
