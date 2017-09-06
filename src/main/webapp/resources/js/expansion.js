@@ -127,7 +127,10 @@ var loadArrowImages = function() {
     		sprites[force][direction] = image;
     	}
     }
-    sprites['base0'] = loadImage('base0');
+
+    for (var force = 0; force <= 4; force++) {
+        sprites['base' + force] = loadImage('base' + force);
+    }
 }
 
 game.drawBoard = function(drawer) {
@@ -174,10 +177,10 @@ game.drawBoard = function(drawer) {
     }
 
     var parseColor = function(char) {
-        if (char == 'P') return BLUE;
-        if (char == 'Q') return RED;
-        if (char == 'R') return GREEN;
-        if (char == 'S') return YELLOW;
+        if (char == 'P' || char == 'X') return BLUE;
+        if (char == 'Q' || char == 'Y') return RED;
+        if (char == 'R' || char == 'Z') return GREEN;
+        if (char == 'S' || char == 'a') return YELLOW;
         return -1;
     }
 
@@ -198,8 +201,10 @@ game.drawBoard = function(drawer) {
         return (size - 1 - y)*size + x;
     }
 
-    var getColor = function(x, y) {
-        var layer2 = board.layers[1];
+    var getColor = function(x, y, layerNumber) {
+        if (typeof layerNumber == 'undefined') layerNumber = 1;
+
+        var layer2 = board.layers[layerNumber];
         var l = length(x, y);
         var color = parseColor(layer2.substring(l, l + 1));
         return color;
@@ -238,6 +243,12 @@ game.drawBoard = function(drawer) {
                 if (afterBase) {
                     if (getCount(x, y) == 0) {
                         canvas.drawImage(sprites['base0'], x, y, 0, 0);
+                    } else {
+                        var colorForces = getColor(x, y, 1);
+                        var colorBase = getColor(x, y, 0);
+                        if (colorForces != colorBase) {
+                            canvas.drawImage(sprites['base' + (colorForces + 1)], x, y, 0, 0);
+                        }
                     }
                 }
 
