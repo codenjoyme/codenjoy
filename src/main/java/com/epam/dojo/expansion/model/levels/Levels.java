@@ -102,7 +102,7 @@ public final class Levels {
             " ###   #...$...#    ######### #...B.# " +
             "       #########              ####### ";
 
-    public static final String MULTI_LEVEL_SIMPLE =
+    public static final String MULTI_LEVEL1 =
             " #######    ####### " +
             "##.....##  ##.....##" +
             "#.1.....#  #.....2.#" +
@@ -123,6 +123,51 @@ public final class Levels {
             "#.4.....#  #.....3.#" +
             "##.....##  ##.....##" +
             " #######    ####### ";
+    public static final String MULTI_LEVEL_SIMPLE = MULTI_LEVEL1;
+
+    public static final String MULTI_LEVEL2 =
+            " ################## " +
+            "##$$$$........$$$$##" +
+            "#$$$$..........$$$$#" +
+            "#$$$............$$$#" +
+            "#$$..............$$#" +
+            "#$................$#" +
+            "#..................#" +
+            "#..................#" +
+            "#......1....2......#" +
+            "#..................#" +
+            "#..................#" +
+            "#......4....3......#" +
+            "#..................#" +
+            "#..................#" +
+            "#$................$#" +
+            "#$$..............$$#" +
+            "#$$$............$$$#" +
+            "#$$$$..........$$$$#" +
+            "##$$$$........$$$$##" +
+            " ################## ";
+
+    public static final String MULTI_LEVEL3 =
+            "####################" +
+            "#O$O$O$O$O$O$O$O$O$#" +
+            "#$O.O.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.O.O$#" +
+            "#$O.1.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.2.O$#" +
+            "#$O.O.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.O.O$#" +
+            "#$O.O.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.O.O$#" +
+            "#$O.O.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.O.O$#" +
+            "#$O.O.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.O.O$#" +
+            "#$O.4.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.3.O$#" +
+            "#$O.O.O.O.O.O.O.O.O#" +
+            "#O.O.O.O.O.O.O.O.O$#" +
+            "#$O$O$O$O$O$O$O$O$O#" +
+            "####################";
 
     public static final String MULTI_LEVEL_BIG =
             "                                        " +
@@ -329,11 +374,11 @@ public final class Levels {
         };
     }
 
-    public static LevelsFactory collectMultiple(int size) {
+    public static LevelsFactory collectMultiple(int boardSize, String... levels) {
         return new LevelsFactory() {
             @Override
             public List<ILevel> get() {
-                return collect(size, MULTI_LEVEL_SIMPLE);
+                return collect(boardSize, levels);
             }
         };
     }
