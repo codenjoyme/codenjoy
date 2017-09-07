@@ -33,10 +33,7 @@ import com.epam.dojo.expansion.services.GameRunner;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.LinkedList;
 
@@ -51,9 +48,9 @@ import static org.mockito.Mockito.when;
  */
 public class GameRunnerTest {
 
-    private static final int LEVEL1 = 1;
-    private static final int LEVEL2 = 2;
-    private static final int LEVEL3 = 3;
+    private static final int LEVEL1 = 0;
+    private static final int LEVEL2 = 1;
+    private static final int LEVEL3 = 2;
     private static final int LEVEL4 = 3;
 
     protected LinkedList<Game> games;
@@ -78,7 +75,7 @@ public class GameRunnerTest {
     }
 
     protected void givenLv(String level, int index) {
-        settings.getParameter("Multiple level " + index).update(level);
+        settings.getParameter("Multiple level " + (index + 1)).update(level);
         int size = (int) Math.sqrt(level.length());
         settings.getParameter("Board size").update(size);
         settings.changesReacted();
@@ -92,7 +89,8 @@ public class GameRunnerTest {
         return games.get(player);
     }
 
-    protected void createNewGame() {
+    protected void createNewGame(int levelOfRoom) {
+        when(dice.next(anyInt())).thenReturn(levelOfRoom);
         Game game = gameRunner.newGame(listener, factory, null);
         games.add(game);
     }
@@ -101,6 +99,12 @@ public class GameRunnerTest {
         Single single = (Single)game(index);
         assertEquals(expected,
                 TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
+    }
+
+    protected void assertL(String expected, int index) {
+        Single single = (Single)game(index);
+        assertEquals(expected,
+                TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
     }
 
     protected void assertF(String expected, int index) {
@@ -113,9 +117,7 @@ public class GameRunnerTest {
         return single.getPrinter().getBoardAsString(single.getPlayer());
     }
 
-    @Test
-    @Ignore // TODO continue
-    public void test() {
+    private void givenLevels() {
         givenLv("######" +
                 "#1..2#" +
                 "#....#" +
@@ -136,31 +138,59 @@ public class GameRunnerTest {
                 "#4...#" +
                 "#..3.#" +
                 "######", LEVEL3);
+    }
 
-        when(dice.next(anyInt())).thenAnswer(new Answer<Integer>() {
-            @Override
-            public Integer answer(InvocationOnMock invocationOnMock) throws Throwable {
-                return 1; // only for debug where this happens
-            }
-        });
-        createNewGame();
-        createNewGame();
-        createNewGame();
-        createNewGame();
-        createNewGame();
+    @Test
+    public void test() {
+        givenLevels();
 
-        assertE("------\n" +
+        createNewGame(LEVEL1); // LEVEL1
+        createNewGame(0); // first free room
+        createNewGame(0); // first free room
+        createNewGame(0); // first free room
+        createNewGame(LEVEL2);
+        createNewGame(0); // first free room
+
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "-♥--♦-\n" +
+                "------\n" +
+                "------\n" +
+                "-♠--♣-\n" +
+                "------\n";
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces2 =
+                "------\n" +
                 "---♥--\n" +
                 "------\n" +
+                "----♦-\n" +
                 "------\n" +
-                "------\n" +
-                "------\n", PLAYER1);
-
-        assertE("------\n" +
-                "---♥--\n" +
-                "------\n" +
-                "------\n" +
-                "------\n" +
-                "------\n", PLAYER2);
+                "------\n";
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
     }
 }
