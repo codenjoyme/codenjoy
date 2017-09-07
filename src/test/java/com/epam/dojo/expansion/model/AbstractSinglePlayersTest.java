@@ -72,7 +72,7 @@ public abstract class AbstractSinglePlayersTest {
 
     private Dice dice;
     private List<EventListener> listeners;
-    private List<Single> singles;
+    protected List<Single> singles;
     private List<Hero> heroes;
 
     private LinkedList<String> levelsMaps;
