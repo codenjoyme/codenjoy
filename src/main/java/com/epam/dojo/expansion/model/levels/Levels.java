@@ -28,386 +28,105 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * Created by oleksandr.baglai on 18.06.2016.
  */
-public final class Levels {
+public class Levels {
 
-    private Levels() {
-        throw new IllegalAccessError("Utility class");
+    private static Map<String, String> levels = new LinkedHashMap<>();
+
+    public static final String DEMO = make("DEMO");
+    public static final String BIG_MULTI1 = make("BIG_MULTI1");
+    public static final String BIG_MULTI2 = make("BIG_MULTI2");
+    public static final String MULTI1 = make("MULTI1");
+    public static final String MULTI2 = make("MULTI2");
+    public static final String MULTI3 = make("MULTI3");
+    public static final String SINGLE1 = make("SINGLE1");
+    public static final String SINGLE2 = make("SINGLE2");
+    public static final String SINGLE3 = make("SINGLE3");
+    public static final String SINGLE4 = make("SINGLE4");
+    public static final String SINGLE5 = make("SINGLE5");
+    public static final String SINGLE6 = make("SINGLE6");
+    public static final String SINGLE7 = make("SINGLE7");
+
+    private static String make(String name) {
+        String level = loadFromFile(name);
+        level = level.replace('-', ' ');
+        String result = decorate(level);
+        put(name, result);
+        return name;
     }
 
-    public static final String DEMO_LEVEL =
-            "                " +
-            " ############## " +
-            " #1...O......2# " +
-            " #......$O....# " +
-            " #....####....# " +
-            " #....#  #....# " +
-            " #.O###  ###.O# " +
-            " #.$#      #..# " +
-            " #..#      #$.# " +
-            " #O.###  ###O.# " +
-            " #....#  #....# " +
-            " #....####....# " +
-            " #....O$......# " +
-            " #4......O...3# " +
-            " ############## " +
-            "                ";
-
-    public static final String MULTI_LEVEL =
-            "                                      " +
-            "   ######      ###########            " +
-            "   #$...#      #......$..#            " +
-            "   #BB.O#      #.........# ########   " +
-            "   #B...#      #...B.BBBB# #..O..O#   " +
-            "   #.4..#  #####....$...O# #..$.BB#   " +
-            "   #....####......O......# #O.3.O.#   " +
-            "   #..$......###....$..OO# #O....B#   " +
-            "   #B...###### #.O.......# #B.#####   " +
-            "   #B..O#      #.........###B.#       " +
-            "   ##.### ######..BOO.........#       " +
-            "    #.#   #..$..B.B....B.B..BB#       " +
-            "    #.#   #$..###.B.#######B.B###     " +
-            "    #.#   #...# #BB.#     #O..BB#     " +
-            "    #.#   ##### #...#     #.$...#     " +
-            "   ##.###       #.B.#  ####.....#     " +
-            "   #..B.#  ######.BB#  #....BO.$#     " +
-            "   #...$#  #B.......####.BB.B...#     " +
-            "   #O...####O...O...$....######.#     " +
-            "   #..O............O######    #.##### " +
-            "   #....####.OB.E...#       ###.B...# " +
-            "   #BB..#  #BBB.....#  ######.....$.# " +
-            "   ###.##  #...O..$O#  #.......$....# " +
-            "     #.#   #####.####  ######.......# " +
-            " #####.###     #.#          #####..O# " +
-            " #..O....#  ####.##########     #.O.# " +
-            " #....O..#  #......$..B.BB#     #O..# " +
-            " #$#######  #.#####.BB..BB#######.### " +
-            " #.#        #.#   #....O..........#   " +
-            " #.# ########.##  ####....#####.B##   " +
-            " #.# #.........##### ###.##   #..#    " +
-            " #.# #B.O....O..$..#   #.#    #B.#### " +
-            " #.###..O.$....###.#####.#### #.$...# " +
-            " #.$.2..O..O.BB# #.BB....O..# #.....# " +
-            " #.#####BB.BBBB# #.....$....# #..1..# " +
-            " #.#   #.$.....# ####.BO..OB# #.....# " +
-            " ###   #...$...#    ######### #...B.# " +
-            "       #########              ####### ";
-
-    public static final String MULTI_LEVEL1 =
-            " #######    ####### " +
-            "##.....##  ##.....##" +
-            "#.1.....#  #.....2.#" +
-            "#.......####.......#" +
-            "#.....B............#" +
-            "#.......B..B.......#" +
-            "#.......B......B...#" +
-            "##................##" +
-            " ###.B...OO..BB.### " +
-            "   #....O$$O....#   " +
-            "   #....O$$O....#   " +
-            " ###.BB..OO...B.### " +
-            "##................##" +
-            "#...B......B.......#" +
-            "#.......B..B.......#" +
-            "#............B.....#" +
-            "#.......####.......#" +
-            "#.4.....#  #.....3.#" +
-            "##.....##  ##.....##" +
-            " #######    ####### ";
-    public static final String MULTI_LEVEL_SIMPLE = MULTI_LEVEL1;
-
-    public static final String MULTI_LEVEL2 =
-            " ################## " +
-            "##$$$$........$$$$##" +
-            "#$$$$..........$$$$#" +
-            "#$$$............$$$#" +
-            "#$$..............$$#" +
-            "#$................$#" +
-            "#..................#" +
-            "#..................#" +
-            "#......1....2......#" +
-            "#..................#" +
-            "#..................#" +
-            "#......4....3......#" +
-            "#..................#" +
-            "#..................#" +
-            "#$................$#" +
-            "#$$..............$$#" +
-            "#$$$............$$$#" +
-            "#$$$$..........$$$$#" +
-            "##$$$$........$$$$##" +
-            " ################## ";
-
-    public static final String MULTI_LEVEL3 =
-            "####################" +
-            "#O$O$O$O$O$O$O$O$O$#" +
-            "#$O.O.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.O.O$#" +
-            "#$O.1.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.2.O$#" +
-            "#$O.O.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.O.O$#" +
-            "#$O.O.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.O.O$#" +
-            "#$O.O.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.O.O$#" +
-            "#$O.O.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.O.O$#" +
-            "#$O.4.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.3.O$#" +
-            "#$O.O.O.O.O.O.O.O.O#" +
-            "#O.O.O.O.O.O.O.O.O$#" +
-            "#$O$O$O$O$O$O$O$O$O#" +
-            "####################";
-
-    public static final String MULTI_LEVEL_BIG =
-            "                                        " +
-            "   ##################################   " +
-            "  ##..............O$$O..............##  " +
-            " ##.....####.###..O$$O..###.####.....## " +
-            " #......#  #.# #...OO...# #.#  #......# " +
-            " #......## #.# ##......## #.# ##......# " +
-            " #....OO.# #.#  ##....##  #.# #.OO....# " +
-            " #....O$$# #.#   ##..##   #.# #$$O....# " +
-            " #.###.$$# #.#    ####    #.# #$$.###.# " +
-            " #.# ##### #.#            #.# ##### #.# " +
-            " #.#       #.#####    #####.#       #.# " +
-            " #.#########.....##  ##.....#########.# " +
-            " #..........1.....#  #.....2..........# " +
-            " #.########.......####.......########.# " +
-            " #.#      #.....B............#      #.# " +
-            " #.###    #.......B..B.......#    ###.# " +
-            " #...##   #.......B......B...#   ##...# " +
-            " #....##  ##.......OO.......##  ##....# " +
-            " #OO...##  ###.B..O$$O.BB.###  ##...OO# " +
-            " #$$O...#    #...O$$$$O...#    #...O$$# " +
-            " #$$O...#    #...O$$$$O...#    #...O$$# " +
-            " #OO...##  ###.BB.O$$O..B.###  ##...OO# " +
-            " #....##  ##.......OO.......##  ##....# " +
-            " #...##   #...B......B.......#   ##...# " +
-            " #.###    #.......B..B.......#    ###.# " +
-            " #.#      #............B.....#      #.# " +
-            " #.########.......####.......########.# " +
-            " #..........4.....#  #.....3..........# " +
-            " #.#########.....##  ##.....#########.# " +
-            " #.#       #.#####    #####.#       #.# " +
-            " #.# ##### #.#            #.# ##### #.# " +
-            " #.###.$$# #.#    ####    #.# #$$.###.# " +
-            " #....O$$# #.#   ##..##   #.# #$$O....# " +
-            " #....OO.# #.#  ##....##  #.# #.OO....# " +
-            " #......## #.# ##......## #.# ##......# " +
-            " #......#  #.# #...OO...# #.#  #......# " +
-            " ##.....####.###..O$$O..###.####.....## " +
-            "  ##..............O$$O..............##  " +
-            "   ##################################   " +
-            "                                        ";
-
-    public static final String LEVEL_1A =
-            "        " +
-            "        " +
-            " ###### " +
-            " #1..E# " +
-            " ###### " +
-            "        " +
-            "        " +
-            "        ";
-
-    public static final String LEVEL_2A =
-            "        " +
-            "   ###  " +
-            "   #1#  " +
-            "   #.#  " +
-            "   #.#  " +
-            "   #E#  " +
-            "   ###  " +
-            "        ";
-
-    public static final String LEVEL_3A =
-            "        " +
-            "        " +
-            " ###### " +
-            " #E..1# " +
-            " ###### " +
-            "        " +
-            "        " +
-            "        ";
-
-    public static final String LEVEL_4A =
-            "        " +
-            "   ###  " +
-            "   #E#  " +
-            "   #.#  " +
-            "   #.#  " +
-            "   #1#  " +
-            "   ###  " +
-            "        ";
-
-    public static final String LEVEL_5A =
-            "        " +
-            " ###### " +
-            " #1...# " +
-            " ####.# " +
-            "    #.# " +
-            "    #E# " +
-            "    ### " +
-            "        ";
-
-    public static final String LEVEL_6A =
-            "        " +
-            "    ### " +
-            "    #1# " +
-            "    #.# " +
-            " ####.# " +
-            " #E...# " +
-            " ###### " +
-            "        ";
-
-    public static final String LEVEL_7A =
-            "        " +
-            " ###    " +
-            " #E#    " +
-            " #.#    " +
-            " #.#### " +
-            " #...1# " +
-            " ###### " +
-            "        ";
-
-    public static final String LEVEL_8A =
-            "        " +
-            " ###### " +
-            " #...E# " +
-            " #.#### " +
-            " #.#    " +
-            " #1#    " +
-            " ###    " +
-            "        ";
-
-    public static final String LEVEL_9A =
-            "              " +
-            "              " +
-            " ############ " +
-            " #..........# " +
-            " #.########.# " +
-            " #.#      #.# " +
-            " #.# #### #.# " +
-            " #.# #.1# #.# " +
-            " #.# #.## #.# " +
-            " #.# #.#  #.# " +
-            " #.# #.####.# " +
-            " #E# #......# " +
-            " ### ######## " +
-            "              ";
-
-    public static final String LEVEL_1B =
-            "          " +
-            " ######## " +
-            " #1.....# " +
-            " #..###.# " +
-            " #..# #.# " +
-            " #.$###.# " +
-            " #......# " +
-            " #..$..E# " +
-            " ######## " +
-            "          ";
-
-    public static final String LEVEL_2B =
-            "          " +
-            " ######## " +
-            " #1.O..$# " +
-            " #......# " +
-            " ####...# " +
-            "    #..O# " +
-            " ####...# " +
-            " #...O.E# " +
-            " ######## " +
-            "          ";
-
-    public static final String LEVEL_3B =
-            "             " +
-            "   #######   " +
-            "   #1.O..#   " +
-            "   ####..#   " +
-            "      #..#   " +
-            "   ####..### " +
-            "   #$B.OO..# " +
-            "   #.###...# " +
-            "   #.# #...# " +
-            "   #.###..E# " +
-            "   #.......# " +
-            "   ######### " +
-            "             ";
-
-    public static final String LEVEL_1C =
-            "              " +
-            "   ########   " +
-            "   #1...B.#   " +
-            "   ###B...#   " +
-            "     #B...#   " +
-            "   ###$B..####" +
-            "   #$....B..B#" +
-            "   #.#####...#" +
-            "   #.#   #...#" +
-            "   #.#####.B.#" +
-            "   #.E.....B$#" +
-            "   ###########" +
-            "              " +
-            "              ";
-
-    public static LevelsFactory collectSingle(int size) {
-        return new LevelsFactory() {
-            @Override
-            public List<Level> get() {
-                return collect(size,
-                        LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
-                        LEVEL_7A, LEVEL_8A, LEVEL_9A,
-                        LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C);
-            }
-        };
+    public static void put(String name, String result) {
+        levels.put(name, result);
     }
 
-    public static LevelsFactory collectMultiple(int boardSize, String... levels) {
-        return new LevelsFactory() {
-            @Override
-            public List<Level> get() {
-                return collect(boardSize, levels);
+    public static String get(String name) {
+        return levels.get(name);
+    }
+
+    public static String loadFromFile(String name) {
+        StringBuffer buffer = loadLines(
+                "src/main/resources/expansion/levels/" + name + ".lev",
+                StringBuffer::new,
+                (container, line) -> container.append(line)
+        );
+        return buffer.toString();
+    }
+
+    public static <T> T loadLines(String filePath,
+                                Supplier<T> supplier,
+                                BiFunction<T, String, T> applier)
+    {
+        T result = supplier.get();
+        try (BufferedReader br = new BufferedReader(new FileReader(Paths.get(filePath).toFile()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                applier.apply(result, line);
             }
-        };
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static LevelsFactory collectSingle(int boardSize) {
+        return () -> collect(boardSize,
+                SINGLE1, SINGLE2, SINGLE3, SINGLE4,
+                SINGLE5, SINGLE6, SINGLE7);
+    }
+
+    public static LevelsFactory collectMultiple(int bozrdSize, String... levels) {
+        return () -> collect(bozrdSize, levels);
     }
 
     public static LevelsFactory none() {
-        return new LevelsFactory() {
-            @Override
-            public List<Level> get() {
-                return Arrays.asList();
-            }
-        };
+        return () -> Arrays.asList();
     }
 
     public static LevelsFactory collectYours(final int viewSize, final String... boards) {
-        return new LevelsFactory() {
-            @Override
-            public List<Level> get() {
-                List<Level> levels = new LinkedList<Level>();
-                for (String board : boards) {
-                    Level level = new LevelImpl(board, viewSize);
-                    levels.add(level);
-                }
-                return levels;
+        return () -> {
+            List<Level> result = new LinkedList<>();
+            for (String board : boards) {
+                Level level = new LevelImpl(board, viewSize);
+                result.add(level);
             }
+            return result;
         };
     }
 
-    private static List<Level> collect(int viewSize, String... levels) {
+    private static List<Level> collect(int viewSize, String... names) {
         List<Level> result = new LinkedList<>();
-        for (String level : levels) {
-            // TODO эта строчка выполняется часто при регистрации каждого юзера и занимает время, прооптимизировать!
-            String resize = resize(decorate(level), viewSize);
+        for (String name : names) {
+            String resize = resize(get(name), viewSize);
             result.add(new LevelImpl(resize, viewSize));
         }
         return result;
@@ -423,7 +142,7 @@ public final class Levels {
             return level;
         }
 
-        int before = (int)((toSize - currentSize)/2);
+        int before = (toSize - currentSize)/2;
         int after = (toSize - currentSize - before);
         String result = "";
         for (int i = 0; i < currentSize; i++) {
@@ -622,5 +341,4 @@ public final class Levels {
         String expected = TestUtils.injectN(mask);
         return actual.equals(expected);
     }
-
 }

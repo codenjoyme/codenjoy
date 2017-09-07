@@ -25,8 +25,10 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -2238,17 +2240,15 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         Map<String, Integer> playerHeroes = new HashMap<>();
         Map<String, Integer> heroes = new HashMap<>();
 
-        List<String> strings = new LinkedList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(Paths.get("src/test/resources/codenjoy.log").toFile()))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                strings.add(line);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<String> strings = Levels.loadLines(
+                "src/test/resources/codenjoy.log",
+                LinkedList::new,
+                (container, line) -> {
+                    container.add(line);
+                    return container;
+                }
+        );
+        assertEquals(false, strings.isEmpty());
 
         boolean firstRun = true;
         for (String string : strings) {

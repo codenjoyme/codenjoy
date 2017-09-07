@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.services.GameRunner;
 import com.epam.dojo.expansion.services.PrinterData;
@@ -75,7 +76,9 @@ public class GameRunnerTest {
     }
 
     protected void givenLv(String level, int index) {
-        settings.getParameter("Multiple level " + (index + 1)).update(level);
+        String name = "MULTI" + index + "_TEST";
+        settings.getParameter("Multiple level " + (index + 1)).update(name);
+        Levels.put(name, level);
         int size = (int) Math.sqrt(level.length());
         settings.getParameter("Board size").update(size);
         settings.changesReacted();
@@ -190,26 +193,26 @@ public class GameRunnerTest {
     }
 
     private void givenLevels() {
-        givenLv("######" +
-                "#1..2#" +
-                "#....#" +
-                "#....#" +
-                "#4..3#" +
-                "######", LEVEL1);
+        givenLv("╔════┐" +
+                "║1..2│" +
+                "║....│" +
+                "║....│" +
+                "║4..3│" +
+                "└────┘", LEVEL1);
 
-        givenLv("######" +
-                "#..1.#" +
-                "#4...#" +
-                "#...2#" +
-                "#.3..#" +
-                "######", LEVEL2);
+        givenLv("╔════┐" +
+                "║..1.│" +
+                "║4...│" +
+                "║...2│" +
+                "║.3..│" +
+                "└────┘", LEVEL2);
 
-        givenLv("######" +
-                "#.1..#" +
-                "#...2#" +
-                "#4...#" +
-                "#..3.#" +
-                "######", LEVEL3);
+        givenLv("╔════┐" +
+                "║.1..│" +
+                "║...2│" +
+                "║4...│" +
+                "║..3.│" +
+                "└────┘", LEVEL3);
     }
 
     @Test

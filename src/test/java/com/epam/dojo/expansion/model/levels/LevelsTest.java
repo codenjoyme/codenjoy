@@ -24,7 +24,6 @@ package com.epam.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.levels.Levels;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -38,27 +37,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel1() {
-        String map = getMap(Levels.LEVEL_1A);
-
-        asrtMap("                " +
-                "                " +
-                "                " +
-                "                " +
-                "                " +
-                "                " +
-                "     ######     " +
-                "     #1..E#     " +
-                "     ######     " +
-                "                " +
-                "                " +
-                "                " +
-                "                " +
-                "                " +
-                "                " +
-                "                ", map);
-
-        String decorate = Levels.decorate(map);
-
+        String map = getMap(Levels.SINGLE1);
         asrtMap("                " +
                 "                " +
                 "                " +
@@ -74,36 +53,16 @@ public class LevelsTest {
                 "                " +
                 "                " +
                 "                " +
-                "                ", decorate);
+                "                ", map);
     }
 
     private String getMap(String level) {
-        return Levels.resize(level, LEVEL_SIZE);
+        return Levels.resize(Levels.get(level), LEVEL_SIZE);
     }
 
     @Test
-    public void testLevel2() {
-        String map = getMap(Levels.LEVEL_1B);
-
-        asrtMap("                " +
-                "                " +
-                "                " +
-                "                " +
-                "    ########    " +
-                "    #1.....#    " +
-                "    #..###.#    " +
-                "    #..# #.#    " +
-                "    #.$###.#    " +
-                "    #......#    " +
-                "    #..$..E#    " +
-                "    ########    " +
-                "                " +
-                "                " +
-                "                " +
-                "                ", map);
-
-        String decorate = Levels.decorate(map);
-
+    public void testLevel5() {
+        String map = getMap(Levels.SINGLE5);
         asrtMap("                " +
                 "                " +
                 "                " +
@@ -119,155 +78,54 @@ public class LevelsTest {
                 "                " +
                 "                " +
                 "                " +
-                "                ", decorate);
+                "                ", map);
     }
 
     @Test
-    public void testLevel3() {
-        String map = getMap(Levels.LEVEL_2B);
-
-        asrtMap("                " +
-                "                " +
-                "                " +
-                "                " +
-                "    ########    " +
-                "    #1.O..$#    " +
-                "    #......#    " +
-                "    ####...#    " +
-                "       #..O#    " +
-                "    ####...#    " +
-                "    #...O.E#    " +
-                "    ########    " +
-                "                " +
-                "                " +
-                "                " +
-                "                ", map);
-
-        String decorate = Levels.decorate(map);
-
+    public void testLevel6() {
+        String map = getMap(Levels.SINGLE6);
         asrtMap("                " +
                 "                " +
                 "                " +
                 "                " +
                 "    ╔══════┐    " +
-                "    ║1.O..$│    " +
-                "    ║......│    " +
-                "    └──╗...│    " +
+                "    ║1.O..O│    " +
+                "    ║....O.│    " +
+                "    └──╗O..│    " +
                 "       ║..O│    " +
-                "    ╔══╝...│    " +
-                "    ║...O.E│    " +
+                "    ╔══╝.O.│    " +
+                "    ║E..O..│    " +
                 "    └──────┘    " +
                 "                " +
                 "                " +
                 "                " +
-                "                ", decorate);
+                "                ", map);
     }
 
     @Test
-    public void testLevel4() {
-        String map = getMap(Levels.LEVEL_3B);
-
+    public void testLevel7() {
+        String map = getMap(Levels.SINGLE7);
         asrtMap("                " +
                 "                " +
-                "    #######     " +
-                "    #1.O..#     " +
-                "    ####..#     " +
-                "       #..#     " +
-                "    ####..###   " +
-                "    #$B.OO..#   " +
-                "    #.###...#   " +
-                "    #.# #...#   " +
-                "    #.###..E#   " +
-                "    #.......#   " +
-                "    #########   " +
+                "  ╔══════┐      " +
+                "  ║1...B.│      " +
+                "  └─╗B...│      " +
+                "    ║B..B│      " +
+                "  ╔═╝$B..╚══┐   " +
+                "  ║$....B..B│   " +
+                "  ║.┌───╗B..│   " +
+                "  ║.│   ║...│   " +
+                "  ║.╚═══╝.B.│   " +
+                "  ║.E.....B$│   " +
+                "  └─────────┘   " +
                 "                " +
                 "                " +
                 "                ", map);
-
-        String decorate = Levels.decorate(map);
-
-        asrtMap("                " +
-                "                " +
-                "    ╔═════┐     " +
-                "    ║1.O..│     " +
-                "    └──╗..│     " +
-                "       ║..│     " +
-                "    ╔══╝..╚═┐   " +
-                "    ║$B.OO..│   " +
-                "    ║.┌─╗...│   " +
-                "    ║.│ ║...│   " +
-                "    ║.╚═╝..E│   " +
-                "    ║.......│   " +
-                "    └───────┘   " +
-                "                " +
-                "                " +
-                "                ", decorate);
-    }
-
-    @Test
-    public void testLevel5() {
-        String map = getMap(Levels.LEVEL_1C);
-
-        asrtMap("                " +
-                "                " +
-                "    ########    " +
-                "    #1...B.#    " +
-                "    ###B...#    " +
-                "      #B...#    " +
-                "    ###$B..#### " +
-                "    #$....B..B# " +
-                "    #.#####...# " +
-                "    #.#   #...# " +
-                "    #.#####.B.# " +
-                "    #.E.....B$# " +
-                "    ########### " +
-                "                " +
-                "                " +
-                "                ", map);
-
-        String decorate = Levels.decorate(map);
-
-        asrtMap("                " +
-                "                " +
-                "    ╔══════┐    " +
-                "    ║1...B.│    " +
-                "    └─╗B...│    " +
-                "      ║B...│    " +
-                "    ╔═╝$B..╚══┐ " +
-                "    ║$....B..B│ " +
-                "    ║.┌───╗...│ " +
-                "    ║.│   ║...│ " +
-                "    ║.╚═══╝.B.│ " +
-                "    ║.E.....B$│ " +
-                "    └─────────┘ " +
-                "                " +
-                "                " +
-                "                ", decorate);
     }
 
     @Test
     public void testDemoLevel() {
-        String map = getMap(Levels.DEMO_LEVEL);
-
-        asrtMap("                " +
-                " ############## " +
-                " #1...O......2# " +
-                " #......$O....# " +
-                " #....####....# " +
-                " #....#  #....# " +
-                " #.O###  ###.O# " +
-                " #.$#      #..# " +
-                " #..#      #$.# " +
-                " #O.###  ###O.# " +
-                " #....#  #....# " +
-                " #....####....# " +
-                " #....O$......# " +
-                " #4......O...3# " +
-                " ############## " +
-                "                ", map);
-
-        String decorate = Levels.decorate(map);
-
+        String map = getMap(Levels.DEMO);
         asrtMap("                " +
                 " ╔════════════┐ " +
                 " ║1...O......2│ " +
@@ -283,32 +141,12 @@ public class LevelsTest {
                 " ║....O$......│ " +
                 " ║4......O...3│ " +
                 " └────────────┘ " +
-                "                ", decorate);
+                "                ", map);
     }
 
     @Test
-    public void testLevel13() {
-        String map = getMap(Levels.LEVEL_9A);
-
-        asrtMap("                " +
-                "                " +
-                "                " +
-                "  ############  " +
-                "  #..........#  " +
-                "  #.########.#  " +
-                "  #.#      #.#  " +
-                "  #.# #### #.#  " +
-                "  #.# #.1# #.#  " +
-                "  #.# #.## #.#  " +
-                "  #.# #.#  #.#  " +
-                "  #.# #.####.#  " +
-                "  #E# #......#  " +
-                "  ### ########  " +
-                "                " +
-                "                ", map);
-
-        String decorate = Levels.decorate(map);
-
+    public void testLevel4() {
+        String map = getMap(Levels.SINGLE4);
         asrtMap("                " +
                 "                " +
                 "                " +
@@ -324,36 +162,12 @@ public class LevelsTest {
                 "  ║E│ ║......│  " +
                 "  └─┘ └──────┘  " +
                 "                " +
-                "                ", decorate);
+                "                ", map);
     }
 
     @Test
     public void testMultiLevel1() {
-        String map = getMap(Levels.MULTI_LEVEL1);
-
-        asrtMap(" #######    ####### " +
-                "##.....##  ##.....##" +
-                "#.1.....#  #.....2.#" +
-                "#.......####.......#" +
-                "#.....B............#" +
-                "#.......B..B.......#" +
-                "#.......B......B...#" +
-                "##................##" +
-                " ###.B...OO..BB.### " +
-                "   #....O$$O....#   " +
-                "   #....O$$O....#   " +
-                " ###.BB..OO...B.### " +
-                "##................##" +
-                "#...B......B.......#" +
-                "#.......B..B.......#" +
-                "#............B.....#" +
-                "#.......####.......#" +
-                "#.4.....#  #.....3.#" +
-                "##.....##  ##.....##" +
-                " #######    ####### ", map);
-
-        String decorate = Levels.decorate(map);
-
+        String map = getMap(Levels.MULTI1);
         asrtMap(" ╔═════┐    ╔═════┐ " +
                 "╔╝.....╚┐  ╔╝.....╚┐" +
                 "║.1.....│  ║.....2.│" +
@@ -373,36 +187,12 @@ public class LevelsTest {
                 "║.......┌──╗.......│" +
                 "║.4.....│  ║.....3.│" +
                 "└╗.....┌┘  └╗.....┌┘" +
-                " └─────┘    └─────┘ ", decorate);
+                " └─────┘    └─────┘ ", map);
     }
 
     @Test
     public void testMultiLevel2() {
-        String map = getMap(Levels.MULTI_LEVEL2);
-
-        asrtMap(" ################## " +
-                "##$$$$........$$$$##" +
-                "#$$$$..........$$$$#" +
-                "#$$$............$$$#" +
-                "#$$..............$$#" +
-                "#$................$#" +
-                "#..................#" +
-                "#..................#" +
-                "#......1....2......#" +
-                "#..................#" +
-                "#..................#" +
-                "#......4....3......#" +
-                "#..................#" +
-                "#..................#" +
-                "#$................$#" +
-                "#$$..............$$#" +
-                "#$$$............$$$#" +
-                "#$$$$..........$$$$#" +
-                "##$$$$........$$$$##" +
-                " ################## ", map);
-
-        String decorate = Levels.decorate(map);
-
+        String map = getMap(Levels.MULTI2);
         asrtMap(" ╔════════════════┐ " +
                 "╔╝$$$$........$$$$╚┐" +
                 "║$$$$..........$$$$│" +
@@ -422,36 +212,12 @@ public class LevelsTest {
                 "║$$$............$$$│" +
                 "║$$$$..........$$$$│" +
                 "└╗$$$$........$$$$┌┘" +
-                " └────────────────┘ ", decorate);
+                " └────────────────┘ ", map);
     }
 
     @Test
     public void testMultiLevel3() {
-        String map = getMap(Levels.MULTI_LEVEL3);
-
-        asrtMap("####################" +
-                "#O$O$O$O$O$O$O$O$O$#" +
-                "#$O.O.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.O.O$#" +
-                "#$O.1.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.2.O$#" +
-                "#$O.O.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.O.O$#" +
-                "#$O.O.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.O.O$#" +
-                "#$O.O.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.O.O$#" +
-                "#$O.O.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.O.O$#" +
-                "#$O.4.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.3.O$#" +
-                "#$O.O.O.O.O.O.O.O.O#" +
-                "#O.O.O.O.O.O.O.O.O$#" +
-                "#$O$O$O$O$O$O$O$O$O#" +
-                "####################", map);
-
-        String decorate = Levels.decorate(map);
-
+        String map = getMap(Levels.MULTI3);
         asrtMap("╔══════════════════┐" +
                 "║O$O$O$O$O$O$O$O$O$│" +
                 "║$O.O.O.O.O.O.O.O.O│" +
@@ -471,54 +237,12 @@ public class LevelsTest {
                 "║$O.O.O.O.O.O.O.O.O│" +
                 "║O.O.O.O.O.O.O.O.O$│" +
                 "║$O$O$O$O$O$O$O$O$O│" +
-                "└──────────────────┘", decorate);
+                "└──────────────────┘", map);
     }
 
     @Test
-    public void testMultiLevel() {
-        String map = getMap(Levels.MULTI_LEVEL);
-
-        asrtMap("                                      " +
-                "   ######      ###########            " +
-                "   #$...#      #......$..#            " +
-                "   #BB.O#      #.........# ########   " +
-                "   #B...#      #...B.BBBB# #..O..O#   " +
-                "   #.4..#  #####....$...O# #..$.BB#   " +
-                "   #....####......O......# #O.3.O.#   " +
-                "   #..$......###....$..OO# #O....B#   " +
-                "   #B...###### #.O.......# #B.#####   " +
-                "   #B..O#      #.........###B.#       " +
-                "   ##.### ######..BOO.........#       " +
-                "    #.#   #..$..B.B....B.B..BB#       " +
-                "    #.#   #$..###.B.#######B.B###     " +
-                "    #.#   #...# #BB.#     #O..BB#     " +
-                "    #.#   ##### #...#     #.$...#     " +
-                "   ##.###       #.B.#  ####.....#     " +
-                "   #..B.#  ######.BB#  #....BO.$#     " +
-                "   #...$#  #B.......####.BB.B...#     " +
-                "   #O...####O...O...$....######.#     " +
-                "   #..O............O######    #.##### " +
-                "   #....####.OB.E...#       ###.B...# " +
-                "   #BB..#  #BBB.....#  ######.....$.# " +
-                "   ###.##  #...O..$O#  #.......$....# " +
-                "     #.#   #####.####  ######.......# " +
-                " #####.###     #.#          #####..O# " +
-                " #..O....#  ####.##########     #.O.# " +
-                " #....O..#  #......$..B.BB#     #O..# " +
-                " #$#######  #.#####.BB..BB#######.### " +
-                " #.#        #.#   #....O..........#   " +
-                " #.# ########.##  ####....#####.B##   " +
-                " #.# #.........##### ###.##   #..#    " +
-                " #.# #B.O....O..$..#   #.#    #B.#### " +
-                " #.###..O.$....###.#####.#### #.$...# " +
-                " #.$.2..O..O.BB# #.BB....O..# #.....# " +
-                " #.#####BB.BBBB# #.....$....# #..1..# " +
-                " #.#   #.$.....# ####.BO..OB# #.....# " +
-                " ###   #...$...#    ######### #...B.# " +
-                "       #########              ####### ", map);
-
-        String decorate = Levels.decorate(map);
-
+    public void testBigMultiLevel1() {
+        String map = getMap(Levels.BIG_MULTI1);
         asrtMap("                                      " +
                 "   ╔════┐      ╔═════════┐            " +
                 "   ║$...│      ║......$..│            " +
@@ -556,7 +280,7 @@ public class LevelsTest {
                 " ║.┌───╗BB.BBBB│ ║.....$....│ ║..1..│ " +
                 " ║.│   ║.$.....│ └──╗.BO..OB│ ║.....│ " +
                 " └─┘   ║...$...│    └───────┘ ║...B.│ " +
-                "       └───────┘              └─────┘ ", decorate);
+                "       └───────┘              └─────┘ ", map);
     }
 
     private void asrtMap(String expected, String actual) {
@@ -727,5 +451,25 @@ public class LevelsTest {
                 " #.......O...E# " +
                 " ############## " +
                 "                ", resized);
+    }
+
+    @Test
+    public void shouldLoadFromFile() {
+        String s = Levels.loadFromFile(Levels.DEMO);
+        assertEquals(
+                "##############" +
+                "#1...O......2#" +
+                "#......$O....#" +
+                "#....####....#" +
+                "#....#  #....#" +
+                "#.O###  ###.O#" +
+                "#.$#      #..#" +
+                "#..#      #$.#" +
+                "#O.###  ###O.#" +
+                "#....#  #....#" +
+                "#....####....#" +
+                "#....O$......#" +
+                "#4......O...3#" +
+                "##############", s);
     }
 }

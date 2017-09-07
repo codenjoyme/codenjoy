@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.epam.dojo.expansion.model.levels.Levels.*;
 
 /**
  * Генератор игор - реализация {@see GameType}
@@ -57,9 +58,9 @@ public class GameRunner extends AbstractGameType implements GameType  {
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
 
-        levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(Levels.MULTI_LEVEL1));
-        levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(Levels.MULTI_LEVEL2));
-        levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(Levels.MULTI_LEVEL3));
+        levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
+        levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
+        levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(MULTI3));
 
         ticker = new Ticker();
         dice = new RandomDice();
