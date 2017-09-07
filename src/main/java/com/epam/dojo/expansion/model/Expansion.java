@@ -503,9 +503,12 @@ public class Expansion implements Tickable, IField {
         this.level = level;
     }
 
-    public boolean isNotBusy() {
-        return ((isMultiple && players.size() < 4)
-                || (!isMultiple && players.size() == 0));
+    public boolean isFree() {
+        if (isMultiple) {
+            return players.size() < 4;
+        } else {
+            return players.isEmpty();
+        }
     }
 
     public void waitingOthers() {
