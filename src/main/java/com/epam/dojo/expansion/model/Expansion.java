@@ -27,11 +27,10 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.interfaces.IField;
-import com.epam.dojo.expansion.model.interfaces.IItem;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.items.*;
+import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.Item;
+import com.epam.dojo.expansion.model.levels.Level;
+import com.epam.dojo.expansion.model.levels.items.*;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
@@ -43,15 +42,15 @@ import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
-public class Expansion implements Tickable, IField {
+public class Expansion implements Tickable, Field {
 
     private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
-    private List<ILevel> levels;
-    private ILevel level;
+    private List<Level> levels;
+    private Level level;
 
     private boolean isMultiple;
 
@@ -60,7 +59,7 @@ public class Expansion implements Tickable, IField {
     private List<Player> losers;
     private boolean waitingOthers = false;
 
-    public Expansion(List<ILevel> levels, Dice dice, boolean multiple) {
+    public Expansion(List<Level> levels, Dice dice, boolean multiple) {
         this.levels = new LinkedList(levels);
 
         isMultiple = multiple;
@@ -152,7 +151,7 @@ public class Expansion implements Tickable, IField {
             countChecker.before();
         }
 
-        for (ICell cell : level.getCellsWith(HeroForces.class)) {
+        for (Cell cell : level.getCellsWith(HeroForces.class)) {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
             while (forces.size() > 1) {
                 int min = Integer.MAX_VALUE;
@@ -282,7 +281,7 @@ public class Expansion implements Tickable, IField {
     private Events checkStatus(Player player, Hero hero) {
         if (losers.contains(player)) return null;
         if (players.size() == 1) {
-            List<ICell> freeCells = level.getCellsWith(
+            List<Cell> freeCells = level.getCellsWith(
                     cell -> cell.getItems(HeroForces.class).isEmpty() &&
                             cell.isPassable()
             );
@@ -358,7 +357,7 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public ICell getEndPosition() {
+    public Cell getEndPosition() {
         return level.getItems(Exit.class).get(0).getCell();
     }
 
@@ -366,7 +365,7 @@ public class Expansion implements Tickable, IField {
     public HeroForces startMoveForces(Hero hero, int x, int y, int count) {
         if (count == 0) return HeroForces.EMPTY;
 
-        ICell cell = level.getCell(x, y);
+        Cell cell = level.getCell(x, y);
         HeroForces force = getHeroForces(hero, cell);
 
         if (force == null) {
@@ -380,7 +379,7 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    private HeroForces getHeroForces(Hero hero, ICell cell) {
+    private HeroForces getHeroForces(Hero hero, Cell cell) {
         List<HeroForces> forces = cell.getItems(HeroForces.class);
         for (HeroForces force : forces) {
             if (force.itsMe(hero)) {
@@ -392,7 +391,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void removeForces(Hero hero, int x, int y) {
-        ICell cell = level.getCell(x, y);
+        Cell cell = level.getCell(x, y);
         HeroForces force = cell.getItem(HeroForces.class);
         if (force != null && force.itsMe(hero)) {
             force.removeFromCell();
@@ -401,7 +400,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int leaveForces(Hero hero, int x, int y, int count) {
-        ICell cell = level.getCell(x, y);
+        Cell cell = level.getCell(x, y);
 
         HeroForces force = getHeroForces(hero, cell);
         if (force == null) {
@@ -413,7 +412,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int countForces(Hero hero, int x, int y) {
-        ICell cell = level.getCell(x, y);
+        Cell cell = level.getCell(x, y);
 
         HeroForces force = getHeroForces(hero, cell);
         if (force == null) {
@@ -424,13 +423,13 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public ICell getCell(int x, int y) {
+    public Cell getCell(int x, int y) {
         return level.getCell(x, y);
     }
 
     @Override
-    public IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (IItem item : getCell(x, y).getItems()) {
+    public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
+        for (Item item : getCell(x, y).getItems()) {
             if (item.getClass().equals(clazz)) {
                 return item;
             }
@@ -497,7 +496,7 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    public ILevel getCurrentLevel() {
+    public Level getCurrentLevel() {
         return level;
     }
 

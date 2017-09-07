@@ -26,10 +26,6 @@ package com.epam.dojo.expansion.model.levels;
 import com.codenjoy.dojo.services.Dice;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.GameFactory;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.levels.LevelsFactory;
-
-import java.util.List;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-01.

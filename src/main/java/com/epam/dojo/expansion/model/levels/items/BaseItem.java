@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -25,8 +25,8 @@ package com.epam.dojo.expansion.model.items;
 
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.interfaces.IItem;
+import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.Item;
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,8 +34,8 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public abstract class BaseItem implements IItem {
-    private ICell cell;
+public abstract class BaseItem implements Item {
+    private Cell cell;
     private FeatureItem[] features;
     protected Elements element;
 
@@ -50,21 +50,21 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public void action(IItem item, boolean comeInOrLeave) {
+    public void action(Item item, boolean comeInOrLeave) {
         // do nothing
     }
 
     @Override
-    public ICell getCell() {
+    public Cell getCell() {
         return cell;
     }
 
     @Override
-    public List<IItem> getItemsInSameCell() {
+    public List<Item> getItemsInSameCell() {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<IItem> items = cell.getItems();
+        List<Item> items = cell.getItems();
         items.remove(this);
         return items;
     }
@@ -74,13 +74,13 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public void setCell(ICell value) {
+    public void setCell(Cell value) {
         cell = value;
     }
 
     @Override
-    public ICell removeFromCell() {
-        ICell cell = getCell();
+    public Cell removeFromCell() {
+        Cell cell = getCell();
         if (cell != null) {
             cell.removeItem(this);
             setCell(null);

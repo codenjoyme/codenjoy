@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.LevelsTest;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
 import com.epam.dojo.expansion.services.Events;

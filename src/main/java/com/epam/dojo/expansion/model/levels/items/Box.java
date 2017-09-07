@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -24,23 +24,19 @@ package com.epam.dojo.expansion.model.items;
 
 
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.interfaces.IItem;
+import com.epam.dojo.expansion.model.Player;
 
 /**
- * Created by Mikhail_Udalyi on 09.06.2016.
+ * Created by oleksandr.baglai on 24.06.2016.
  */
-public class Hole extends BaseItem {
+public class Box extends FieldItem {
 
-    public Hole(Elements el) {
-        super(el);
+    public Box(Elements el) {
+        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
     }
 
     @Override
-    public void action(IItem item, boolean comeInOrLeave) {
-        if (comeInOrLeave) {
-            if (item instanceof HeroForces) {
-                item.removeFromCell();
-            }
-        }
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.BREAK;
     }
 }

@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -23,20 +23,26 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
+import com.codenjoy.dojo.services.State;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Player;
+import com.epam.dojo.expansion.model.levels.items.FeatureItem;
+
+import java.util.List;
 
 /**
- * Created by oleksandr.baglai on 24.06.2016.
+ * Created by Mikhail_Udalyi on 01.07.2016.
  */
-public class Box extends FieldItem {
+public interface Item extends State<Elements, Player> {
+    void action(Item item, boolean comeInOrLeave);
 
-    public Box(Elements el) {
-        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
-    }
+    Cell getCell();
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BREAK;
-    }
+    List<Item> getItemsInSameCell();
+
+    void setCell(Cell value);
+
+    boolean hasFeatures(FeatureItem[] features);
+
+    Cell removeFromCell();
 }

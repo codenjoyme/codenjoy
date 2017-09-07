@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -23,35 +23,29 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
-import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.interfaces.IField;
+import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.expansion.model.levels.items.HeroForces;
+
+import java.util.List;
 
 /**
- * Created by Mikhail_Udalyi on 05.07.2016.
+ * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public class FieldItem extends BaseItem {
+public interface Cell extends Point {
 
-    protected IField field;
+    void captureBy(HeroForces income);
 
-    public FieldItem(Elements element) {
-        super(element);
-    }
+    void addItem(Item item);
 
-    public FieldItem(Elements element, FeatureItem[] features) {
-        super(element, features);
-    }
+    boolean isPassable();
 
-    public void setField(IField value) {
-        field = value;
-    }
+    <T extends Item> T getItem(Class<T> type);
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
+    <T extends Item> T getItem(int layer);
 
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+    <T extends Item> List<T> getItems(Class<T> clazz);
+
+    <T extends Item> List<T> getItems();
+
+    void removeItem(Item item);
 }

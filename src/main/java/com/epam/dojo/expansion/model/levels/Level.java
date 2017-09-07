@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -23,14 +23,32 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
-import com.epam.dojo.expansion.model.Elements;
+import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.expansion.model.Field;
 
-/**
- * Артефакт Стена на поле
- */
-public class Wall extends BaseItem {
+import java.util.List;
+import java.util.function.Predicate;
 
-    public Wall(Elements el) {
-        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
-    }
+public interface Level {
+
+    Cell getCell(int x, int y);
+
+    Cell getCell(Point point);
+
+    int getSize();
+
+    int getViewSize();
+
+    <T> List<T> getItems(Class<T> clazz);
+
+    Cell[] getCells();
+
+    boolean isBarrier(int x, int y);
+
+    List<Cell> getCellsWith(Class clazz);
+
+    List<Cell> getCellsWith(Predicate<Cell> is);
+
+    void setField(Field field);
+
 }

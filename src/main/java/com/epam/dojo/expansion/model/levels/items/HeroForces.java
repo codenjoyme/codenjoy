@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -26,7 +26,6 @@ package com.epam.dojo.expansion.model.items;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.interfaces.ICell;
 
 /**
  * Created by Oleksandr_Baglai on 2017-08-29.

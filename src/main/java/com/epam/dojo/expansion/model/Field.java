@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.interfaces;
+package com.epam.dojo.expansion.model;
 
 /*-
  * #%L
@@ -23,16 +23,17 @@ package com.epam.dojo.expansion.model.interfaces;
  */
 
 
-import com.epam.dojo.expansion.model.ForcesMoves;
-import com.epam.dojo.expansion.model.items.BaseItem;
-import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.model.items.HeroForces;
-import com.epam.dojo.expansion.model.items.Start;
+import com.epam.dojo.expansion.model.levels.items.BaseItem;
+import com.epam.dojo.expansion.model.levels.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.HeroForces;
+import com.epam.dojo.expansion.model.levels.items.Start;
+import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface IField {
+public interface Field {
 
     void increase(Hero hero, List<ForcesMoves> increase);
 
@@ -45,16 +46,16 @@ public interface IField {
     @Nullable
     Start getFreeBase();
 
-    ICell getEndPosition();
+    Cell getEndPosition();
 
     HeroForces startMoveForces(Hero item, int x, int y, int count);
     int leaveForces(Hero item, int x, int y, int count);
     int countForces(Hero hero, int x, int y);
     void removeForces(Hero hero, int x, int y);
 
-    ICell getCell(int x, int y);
+    Cell getCell(int x, int y);
 
-    IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
+    Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
 
     boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 

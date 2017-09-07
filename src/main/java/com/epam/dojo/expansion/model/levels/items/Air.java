@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -23,9 +23,15 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
+import com.epam.dojo.expansion.model.Elements;
+
 /**
- * Created by Mikhail_Udalyi on 01.07.2016.
+ * Created by Mikhail_Udalyi on 10.06.2016.
  */
-public enum FeatureItem {
-    IMPASSABLE
+public class Air extends BaseItem {
+
+    public Air() {
+        super(Elements.EMPTY);
+    }
+
 }

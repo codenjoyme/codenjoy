@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.interfaces;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -23,26 +23,35 @@ package com.epam.dojo.expansion.model.interfaces;
  */
 
 
-import com.codenjoy.dojo.services.State;
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.items.FeatureItem;
-
-import java.util.List;
+import com.epam.dojo.expansion.model.Field;
 
 /**
- * Created by Mikhail_Udalyi on 01.07.2016.
+ * Created by Mikhail_Udalyi on 05.07.2016.
  */
-public interface IItem extends State<Elements, Player> {
-    void action(IItem item, boolean comeInOrLeave);
+public class FieldItem extends BaseItem {
 
-    ICell getCell();
+    protected Field field;
 
-    List<IItem> getItemsInSameCell();
+    public FieldItem(Elements element) {
+        super(element);
+    }
 
-    void setCell(ICell value);
+    public FieldItem(Elements element, FeatureItem[] features) {
+        super(element, features);
+    }
 
-    boolean hasFeatures(FeatureItem[] features);
+    public void setField(Field value) {
+        field = value;
+    }
 
-    ICell removeFromCell();
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -25,11 +25,9 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.epam.dojo.expansion.model.items.FeatureItem;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.interfaces.IItem;
-import com.epam.dojo.expansion.model.items.Air;
-import com.epam.dojo.expansion.model.items.HeroForces;
+import com.epam.dojo.expansion.model.levels.items.FeatureItem;
+import com.epam.dojo.expansion.model.levels.items.Air;
+import com.epam.dojo.expansion.model.levels.items.HeroForces;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,15 +36,15 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public class Cell extends PointImpl implements ICell {
+public class CellImpl extends PointImpl implements Cell {
 
-    private List<IItem> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
-    public Cell(int x, int y) {
+    public CellImpl(int x, int y) {
         super(x, y);
     }
 
-    public Cell(Point point) {
+    public CellImpl(Point point) {
         super(point);
     }
 
@@ -57,18 +55,18 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public void addItem(IItem item) {
+    public void addItem(Item item) {
         items.add(item);
         item.setCell(this);
     }
 
-    private void preformAction(IItem coming, boolean comeInOrLeave) {
-        for (IItem item : items) {
+    private void preformAction(Item coming, boolean comeInOrLeave) {
+        for (Item item : items) {
             preformAction(coming, item, comeInOrLeave);
         }
     }
 
-    private void preformAction(IItem item1, IItem item2, boolean comeInOrLeave) {
+    private void preformAction(Item item1, Item item2, boolean comeInOrLeave) {
         if (item2.equals(item1)) {
             return;
         }
@@ -78,7 +76,7 @@ public class Cell extends PointImpl implements ICell {
 
     @Override
     public boolean isPassable() {
-        for (IItem item : items) {
+        for (Item item : items) {
             if (item.hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
                 return false;
             }
@@ -88,8 +86,8 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> T getItem(Class<T> type) {
-        for (IItem item : items) {
+    public <T extends Item> T getItem(Class<T> type) {
+        for (Item item : items) {
             if (item.getClass() == type) {
                 return (T)item;
             }
@@ -98,7 +96,7 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> T getItem(int layer) {
+    public <T extends Item> T getItem(int layer) {
         if (items.size() <= layer) {
             return (T) new Air();
         }
@@ -107,9 +105,9 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> List<T> getItems(Class<T> clazz) {
+    public <T extends Item> List<T> getItems(Class<T> clazz) {
         List<T> result = new LinkedList<>();
-        for (IItem item : items) {
+        for (Item item : items) {
             // TODO to replace on class == class
             if (clazz.isAssignableFrom(item.getClass()) || item.getClass().isAssignableFrom(clazz)) {
                 result.add((T)item);
@@ -119,12 +117,12 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> List<T> getItems() {
+    public <T extends Item> List<T> getItems() {
         return (List<T>) new LinkedList<>(items);
     }
 
     @Override
-    public void removeItem(IItem item) {
+    public void removeItem(Item item) {
         items.remove(item);
         preformAction(item, false);
     }

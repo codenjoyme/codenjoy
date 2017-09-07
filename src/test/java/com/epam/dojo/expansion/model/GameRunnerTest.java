@@ -26,7 +26,7 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.services.GameRunner;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.json.JSONObject;
@@ -35,8 +35,6 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;

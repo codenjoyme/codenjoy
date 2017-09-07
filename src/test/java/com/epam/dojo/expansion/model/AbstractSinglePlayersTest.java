@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.*;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.jetbrains.annotations.NotNull;

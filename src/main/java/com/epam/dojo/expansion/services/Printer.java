@@ -29,11 +29,10 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.interfaces.IItem;
-import com.epam.dojo.expansion.model.items.HeroForces;
+import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.Item;
+import com.epam.dojo.expansion.model.levels.items.HeroForces;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 public class Printer {
@@ -78,15 +77,15 @@ public class Printer {
 
     private void fillLayers(Player player, StringBuilder[] builders) {
         LengthToXY xy = new LengthToXY(size);
-        ICell[] cells = game.getCurrentLevel().getCells();
+        Cell[] cells = game.getCurrentLevel().getCells();
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
                 int index = xy.getLength(x, y);
 
-                IItem item1 = cells[index].getItem(0);
+                Item item1 = cells[index].getItem(0);
                 builders[0].append(makeState(item1, player));
 
-                IItem item2 = cells[index].getItem(1);
+                Item item2 = cells[index].getItem(1);
                 builders[1].append(makeState(item2, player));
                 builders[2].append(makeForceState(item2));
             }
@@ -125,7 +124,7 @@ public class Printer {
         adjustView(size);
     }
 
-    private String makeState(IItem item, Player player) {
+    private String makeState(Item item, Player player) {
         if (item != null) {
             return String.valueOf(item.state(player, item.getItemsInSameCell().toArray()).ch());
         } else {
@@ -133,7 +132,7 @@ public class Printer {
         }
     }
 
-    public static String makeForceState(IItem item) {
+    public static String makeForceState(Item item) {
         if (item instanceof HeroForces) {
             HeroForces forces = (HeroForces) item;
             int count = forces.getForces().getCount();

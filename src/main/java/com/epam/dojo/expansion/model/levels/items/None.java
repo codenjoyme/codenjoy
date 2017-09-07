@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -23,23 +23,15 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.interfaces.IItem;
 
 /**
- * Created by Mikhail_Udalyi on 08.06.2016.
+ * Created by Mikhail_Udalyi on 10.06.2016.
  */
+public class None extends BaseItem {
 
-public class Exit extends BaseItem {
-
-    public Exit(Elements el) {
-        super(el);
-    }
-
-    @Override
-    public void action(IItem item, boolean comeInOrLeave) {
-        if (item instanceof HeroForces) {
-            ((HeroForces)item).setWin();
-        }
+    public None(Point point) {
+        super(Elements.EMPTY);
     }
 }

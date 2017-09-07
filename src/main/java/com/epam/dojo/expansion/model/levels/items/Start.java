@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -26,12 +26,42 @@ package com.epam.dojo.expansion.model.items;
 import com.epam.dojo.expansion.model.Elements;
 
 /**
- * Created by Mikhail_Udalyi on 10.06.2016.
+ * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public class Air extends BaseItem {
 
-    public Air() {
-        super(Elements.EMPTY);
+public class Start extends BaseItem {
+
+    private Hero owner;
+
+    public Start(Elements el) {
+        super(el);
     }
 
+    public Elements element() {
+        return Elements.getForce(index());
+    }
+
+    public int index() {
+        return element.getIndex();
+    }
+
+    public boolean isFree() {
+        return getCell().getItems(HeroForces.class).isEmpty();
+    }
+
+    public boolean busyWith(Hero hero) {
+        HeroForces item = getCell().getItem(HeroForces.class);
+        return (item != null && item.itsMe(hero));
+    }
+
+    public boolean isOwnedBy(Hero hero) {
+        if (owner == null) {
+            return false;
+        }
+        return owner.equals(hero);
+    }
+
+    public void setOwner(Hero owner) {
+        this.owner = owner;
+    }
 }

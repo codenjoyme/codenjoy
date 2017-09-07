@@ -25,13 +25,9 @@ package com.epam.dojo.expansion.model.levels;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.expansion.model.Cell;
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.interfaces.IField;
-import com.epam.dojo.expansion.model.interfaces.IItem;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.items.*;
+import com.epam.dojo.expansion.model.Field;
+import com.epam.dojo.expansion.model.levels.items.*;
 import com.epam.dojo.expansion.services.Printer;
 
 import java.util.LinkedList;
@@ -42,15 +38,15 @@ import java.util.function.Predicate;
 import static com.epam.dojo.expansion.model.Elements.Layers.LAYER1;
 import static org.fest.reflect.core.Reflection.constructor;
 
-public class LevelImpl implements ILevel {
+public class LevelImpl implements Level {
     public static final int ONE_CHAR = 1;
-    private ICell[] cells;
+    private Cell[] cells;
     private int size;
     private int viewSize;
     private LengthToXY xy;
 
     public LevelImpl(String map, int viewSize) {
-        cells = new ICell[map.length()];
+        cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
         this.viewSize = viewSize;
         xy = new LengthToXY(size);
@@ -111,14 +107,14 @@ public class LevelImpl implements ILevel {
         });
     }
 
-    private void fill(String map, int len, BiConsumer<ICell, String> function) {
+    private void fill(String map, int len, BiConsumer<Cell, String> function) {
         int indexChar = 0;
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
                 int length = xy.getLength(x, y);
-                ICell cell = cells[length];
+                Cell cell = cells[length];
                 if (cell == null) {
-                    cell = new Cell(x, y);
+                    cell = new CellImpl(x, y);
                 }
                 String ch = map.substring(indexChar*len, (indexChar + 1)*len);
                 function.accept(cell, String.valueOf(ch));
@@ -146,17 +142,17 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public ICell getCell(int x, int y) {
+    public Cell getCell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
     @Override
-    public ICell getCell(Point point) {
+    public Cell getCell(Point point) {
         return getCell(point.getX(), point.getY());
     }
 
     @Override
-    public ICell[] getCells() {
+    public Cell[] getCells() {
         return cells.clone();
     }
 
@@ -170,8 +166,8 @@ public class LevelImpl implements ILevel {
     @Override
     public <T> List<T> getItems(Class<T> clazz) {
         List<T> result = new LinkedList<T>();
-        for (ICell cell : cells) {
-            for (IItem item : cell.getItems()) {
+        for (Cell cell : cells) {
+            for (Item item : cell.getItems()) {
                 if (clazz.isInstance(item)) {
                     result.add((T)item);
                 }
@@ -181,10 +177,10 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public List<ICell> getCellsWith(Class with) {
-        List<ICell> result = new LinkedList<ICell>();
-        for (ICell cell : cells) {
-            for (IItem item : cell.getItems()) {
+    public List<Cell> getCellsWith(Class with) {
+        List<Cell> result = new LinkedList<Cell>();
+        for (Cell cell : cells) {
+            for (Item item : cell.getItems()) {
                 if (with.isInstance(item)) {
                     result.add(cell);
                     break;
@@ -195,9 +191,9 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public List<ICell> getCellsWith(Predicate<ICell> is) {
-        List<ICell> result = new LinkedList<ICell>();
-        for (ICell cell : cells) {
+    public List<Cell> getCellsWith(Predicate<Cell> is) {
+        List<Cell> result = new LinkedList<Cell>();
+        for (Cell cell : cells) {
             if (is.test(cell)) {
                 result.add(cell);
             }
@@ -206,7 +202,7 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public void setField(IField field) {
+    public void setField(Field field) {
         List<FieldItem> items = getItems(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {

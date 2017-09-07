@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.interfaces;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -23,29 +23,24 @@ package com.epam.dojo.expansion.model.interfaces;
  */
 
 
-import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.expansion.model.items.HeroForces;
-
-import java.util.List;
+import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.levels.Item;
 
 /**
- * Created by Mikhail_Udalyi on 08.06.2016.
+ * Created by Mikhail_Udalyi on 09.06.2016.
  */
-public interface ICell extends Point {
+public class Hole extends BaseItem {
 
-    void captureBy(HeroForces income);
+    public Hole(Elements el) {
+        super(el);
+    }
 
-    void addItem(IItem item);
-
-    boolean isPassable();
-
-    <T extends IItem> T getItem(Class<T> type);
-
-    <T extends IItem> T getItem(int layer);
-
-    <T extends IItem> List<T> getItems(Class<T> clazz);
-
-    <T extends IItem> List<T> getItems();
-
-    void removeItem(IItem item);
+    @Override
+    public void action(Item item, boolean comeInOrLeave) {
+        if (comeInOrLeave) {
+            if (item instanceof HeroForces) {
+                item.removeFromCell();
+            }
+        }
+    }
 }

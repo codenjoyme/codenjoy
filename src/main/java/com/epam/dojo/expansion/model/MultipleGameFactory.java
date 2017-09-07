@@ -25,7 +25,7 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
+import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -97,7 +95,7 @@ public class MultipleGameFactory implements GameFactory {
 
     @NotNull
     private Expansion createNewMultiple() {
-        ILevel level = selectRandomLevelType();
+        Level level = selectRandomLevelType();
         Expansion game = new Expansion(Arrays.asList(level),
                 new RandomDice(), Expansion.MULTIPLE);
 
@@ -106,8 +104,8 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @NotNull
-    private ILevel selectRandomLevelType() {
-        List<ILevel> levels = multipleFactory.get();
+    private Level selectRandomLevelType() {
+        List<Level> levels = multipleFactory.get();
         return levels.get(dice.next(levels.size()));
     }
 

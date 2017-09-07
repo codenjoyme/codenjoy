@@ -26,12 +26,9 @@ package com.epam.dojo.expansion.model.levels;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.levels.LevelImpl;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -365,7 +362,7 @@ public final class Levels {
     public static LevelsFactory collectSingle(int size) {
         return new LevelsFactory() {
             @Override
-            public List<ILevel> get() {
+            public List<Level> get() {
                 return collect(size,
                         LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                         LEVEL_7A, LEVEL_8A, LEVEL_9A,
@@ -377,7 +374,7 @@ public final class Levels {
     public static LevelsFactory collectMultiple(int boardSize, String... levels) {
         return new LevelsFactory() {
             @Override
-            public List<ILevel> get() {
+            public List<Level> get() {
                 return collect(boardSize, levels);
             }
         };
@@ -386,7 +383,7 @@ public final class Levels {
     public static LevelsFactory none() {
         return new LevelsFactory() {
             @Override
-            public List<ILevel> get() {
+            public List<Level> get() {
                 return Arrays.asList();
             }
         };
@@ -395,10 +392,10 @@ public final class Levels {
     public static LevelsFactory collectYours(final int viewSize, final String... boards) {
         return new LevelsFactory() {
             @Override
-            public List<ILevel> get() {
-                List<ILevel> levels = new LinkedList<ILevel>();
+            public List<Level> get() {
+                List<Level> levels = new LinkedList<Level>();
                 for (String board : boards) {
-                    ILevel level = new LevelImpl(board, viewSize);
+                    Level level = new LevelImpl(board, viewSize);
                     levels.add(level);
                 }
                 return levels;
@@ -406,8 +403,8 @@ public final class Levels {
         };
     }
 
-    private static List<ILevel> collect(int viewSize, String... levels) {
-        List<ILevel> result = new LinkedList<>();
+    private static List<Level> collect(int viewSize, String... levels) {
+        List<Level> result = new LinkedList<>();
         for (String level : levels) {
             // TODO эта строчка выполняется часто при регистрации каждого юзера и занимает время, прооптимизировать!
             String resize = resize(decorate(level), viewSize);

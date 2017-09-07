@@ -23,12 +23,12 @@ package com.epam.dojo.expansion.services;
  */
 
 
-import com.epam.dojo.expansion.model.Cell;
+import com.epam.dojo.expansion.model.levels.CellImpl;
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.model.items.HeroForces;
-import com.epam.dojo.expansion.model.items.Start;
+import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.HeroForces;
+import com.epam.dojo.expansion.model.levels.items.Start;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -60,8 +60,8 @@ public class PrinterTest {
         };
         return new HeroForces(hero, count) {
             @Override
-            public ICell getCell() {
-                return new Cell(0, 0);
+            public Cell getCell() {
+                return new CellImpl(0, 0);
             }
         };
     }

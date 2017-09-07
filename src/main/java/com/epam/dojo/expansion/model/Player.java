@@ -28,8 +28,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.interfaces.IField;
-import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.services.Events;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -70,7 +69,7 @@ public class Player {
         return hero;
     }
 
-    public void newHero(IField field) {
+    public void newHero(Field field) {
         if (hero == null) {
             hero = new Hero();
         }

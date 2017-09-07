@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -34,7 +34,7 @@ import com.epam.dojo.expansion.model.BusyMapException;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
-import com.epam.dojo.expansion.model.interfaces.IField;
+import com.epam.dojo.expansion.model.Field;
 import com.epam.dojo.expansion.services.CodeSaver;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -61,7 +61,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private List<Gold> gold;
     private List<ForcesMoves> increase;
     private List<ForcesMoves> movements;
-    private IField field;
+    private Field field;
     private Point position;
     private JSONObject currentAction;
     private JSONObject lastAction;
@@ -82,12 +82,12 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         currentAction = null;
     }
 
-    public void setField(IField field) {
+    public void setField(Field field) {
         this.field = field;
         resetOn(field);
     }
 
-    private void resetOn(IField field) {
+    private void resetOn(Field field) {
         resetFlags();
         position = occupyFreeBase().getCell().copy();
         field.reset();

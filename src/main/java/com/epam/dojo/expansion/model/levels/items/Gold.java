@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.items;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -25,7 +25,7 @@ package com.epam.dojo.expansion.model.items;
 
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.interfaces.IItem;
+import com.epam.dojo.expansion.model.levels.Item;
 
 /**
  * Created by Mikhail_Udalyi on 09.06.2016.
@@ -59,7 +59,7 @@ public class Gold extends BaseItem {
     }
 
     @Override
-    public void action(IItem item, boolean comeInOrLeave) {
+    public void action(Item item, boolean comeInOrLeave) {
         if (item instanceof HeroForces) {
             HeroForces forces = (HeroForces) item;
             if (comeInOrLeave) {

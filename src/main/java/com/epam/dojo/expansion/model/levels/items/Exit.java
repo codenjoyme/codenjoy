@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.interfaces;
+package com.epam.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
@@ -23,31 +23,23 @@ package com.epam.dojo.expansion.model.interfaces;
  */
 
 
-import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.levels.Item;
 
-import java.util.List;
-import java.util.function.Predicate;
+/**
+ * Created by Mikhail_Udalyi on 08.06.2016.
+ */
 
-public interface ILevel {
+public class Exit extends BaseItem {
 
-    ICell getCell(int x, int y);
+    public Exit(Elements el) {
+        super(el);
+    }
 
-    ICell getCell(Point point);
-
-    int getSize();
-
-    int getViewSize();
-
-    <T> List<T> getItems(Class<T> clazz);
-
-    ICell[] getCells();
-
-    boolean isBarrier(int x, int y);
-
-    List<ICell> getCellsWith(Class clazz);
-
-    List<ICell> getCellsWith(Predicate<ICell> is);
-
-    void setField(IField field);
-
+    @Override
+    public void action(Item item, boolean comeInOrLeave) {
+        if (item instanceof HeroForces) {
+            ((HeroForces)item).setWin();
+        }
+    }
 }

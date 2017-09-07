@@ -26,11 +26,12 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.interfaces.ICell;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.model.items.HeroForces;
-import com.epam.dojo.expansion.model.items.Start;
+import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.Level;
+import com.epam.dojo.expansion.model.levels.items.Hero;
+import com.epam.dojo.expansion.model.levels.items.HeroForces;
+import com.epam.dojo.expansion.model.levels.items.Start;
+import com.epam.dojo.expansion.model.levels.CellImpl;
 import com.epam.dojo.expansion.model.levels.StubGamesGameFactory;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -59,7 +60,7 @@ public class ProgressBarTest {
     private Dice dice;
 
     static class DummyExpansion extends Expansion {
-        public DummyExpansion(List<ILevel> levels, Dice dice, boolean multiple) {
+        public DummyExpansion(List<Level> levels, Dice dice, boolean multiple) {
             super(levels, dice, multiple);
         }
 
@@ -81,11 +82,11 @@ public class ProgressBarTest {
         dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(0);
 
-        ILevel level1 = getLevel();
-        ILevel level2 = getLevel();
-        ILevel level3 = getLevel();
-        ILevel level4 = getLevel();
-        ILevel level5 = getLevel();
+        Level level1 = getLevel();
+        Level level2 = getLevel();
+        Level level3 = getLevel();
+        Level level4 = getLevel();
+        Level level5 = getLevel();
 
         single = new DummyExpansion(Arrays.asList(level1, level2, level3, level4), dice, false);
         multiple = new DummyExpansion(Arrays.asList(level5), dice, true);
@@ -95,15 +96,15 @@ public class ProgressBarTest {
         single.newGame(player);
     }
 
-    private ILevel getLevel() {
-        ILevel result = mock(ILevel.class);
+    private Level getLevel() {
+        Level result = mock(Level.class);
 
         Start start = new Start(Elements.BASE1);
-        Cell cell = new Cell(0, 0);
+        CellImpl cell = new CellImpl(0, 0);
         start.setCell(cell);
         when(result.getItems(Start.class)).thenReturn(Arrays.asList(start));
         when(result.getCellsWith(any(Predicate.class))).thenReturn(Arrays.asList(start));
-        when(result.getCells()).thenReturn(new ICell[]{cell});
+        when(result.getCells()).thenReturn(new Cell[]{cell});
 
         return result;
     }
