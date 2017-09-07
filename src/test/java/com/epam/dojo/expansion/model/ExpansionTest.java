@@ -4259,4 +4259,40 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#-=#\n");
     }
 
+    @Test
+    public void shouldCantCheatIncreaseOfForces_gotIt() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.1.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n");
+
+        // when
+        hero.move(
+                new ForcesMoves(pt(2, 2), 1, QDirection.DOWN),
+                new ForcesMoves(pt(2, 2), 1000, QDirection.DOWN)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--♥--" +
+                "--♥--" +
+                "-----");
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#001-=#-=#\n" +
+                "-=#-=#009-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n");
+    }
+
 }

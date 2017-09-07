@@ -90,11 +90,11 @@ public class HeroForces extends FieldItem {
 
     public void move() {
         count += increase;
-//        increase = 0;
+        increase = 0;
     }
 
     public void startMove(int increase) {
-        this.increase = increase;
+        this.increase += increase;
     }
 
     public void setWin() {
