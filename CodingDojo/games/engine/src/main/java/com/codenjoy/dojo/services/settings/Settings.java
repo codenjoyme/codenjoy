@@ -58,7 +58,7 @@ public interface Settings {
     Parameter<Boolean> addCheckBox(String name);
 
 
-    Parameter<?> getParameter(String name);
+    <T> Parameter<T> getParameter(String name);
 
     /**
      * @return true - если были изменения настроек

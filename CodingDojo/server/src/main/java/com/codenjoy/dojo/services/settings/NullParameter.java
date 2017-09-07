@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.settings;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.function.Function;
+
 public class NullParameter<T> implements Parameter<T> {
 
     public static final Parameter INSTANCE = new NullParameter();
@@ -60,6 +62,11 @@ public class NullParameter<T> implements Parameter<T> {
 
     @Override
     public <V> Parameter<V> type(Class<V> integerClass) {
+        return INSTANCE;
+    }
+
+    @Override
+    public Parameter<T> parser(Function<String, T> parser) {
         return INSTANCE;
     }
 

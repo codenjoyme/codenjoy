@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.settings;
 
 
 import java.util.List;
+import java.util.function.Function;
 
 public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
@@ -77,6 +78,11 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     public <V> Parameter<V> type(Class<V> integerClass) {
         return (Parameter<V>) this;
+    }
+
+    @Override
+    public Parameter<T> parser(Function<String, T> parser) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

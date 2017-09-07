@@ -23,11 +23,14 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.function.Function;
+
 public class EditBox<T> extends Updatable<T> implements Parameter<T> {
 
     private String name;
     private T def;
     private Class<?> type;
+    private Function<String, T> parser;
 
     public EditBox(String name) {
         this.name = name;
@@ -50,6 +53,17 @@ public class EditBox<T> extends Updatable<T> implements Parameter<T> {
                 set((T) Integer.valueOf((String) value));
             } else if (Boolean.class.equals(type)) {
                 set((T) Boolean.valueOf((String) value));
+            } else if (String.class.equals(type)) {
+                set(value);
+            } else {
+                if (parser != null) {
+                    set(parser.apply(String.valueOf(value)));
+                } else {
+                    throw new IllegalArgumentException(
+                            String.format("Unsupported format [%s] " +
+                                    "for parameter of type %s",
+                                    value.getClass(), value));
+                }
             }
         } else {
             set(value);
@@ -71,6 +85,12 @@ public class EditBox<T> extends Updatable<T> implements Parameter<T> {
     public <V> Parameter<V> type(Class<V> type) {
         this.type = type; // TODO сделать это же с другими элементами
         return (Parameter<V>) this;
+    }
+
+    @Override
+    public Parameter<T> parser(Function<String, T> parser) {
+        this.parser = parser;
+        return this;
     }
 
     @Override

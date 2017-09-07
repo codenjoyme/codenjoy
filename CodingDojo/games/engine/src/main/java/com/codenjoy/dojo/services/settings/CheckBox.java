@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.function.Function;
+
 public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
     private Boolean def;
     private String name;
@@ -59,6 +61,11 @@ public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
 
     public <V> Parameter<V> type(Class<V> integerClass) {
         return (Parameter<V>)this;
+    }
+
+    @Override
+    public Parameter<Boolean> parser(Function<String, Boolean> parser) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

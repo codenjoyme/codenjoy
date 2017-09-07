@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services.settings;
 import junit.framework.Assert;
 import org.junit.Test;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -192,10 +193,11 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStingToBooleanEditBox() {
+    public void shouldSetStringToBooleanEditBox() {
         Settings settings = new SettingsImpl();
 
-        Parameter<Boolean> edit = settings.addEditBox("check").type(Boolean.class).def(true);
+        Parameter<Boolean> edit = settings.addEditBox("edit")
+                .type(Boolean.class).def(true);
 
         assertEquals(true, edit.getValue());
 
@@ -206,10 +208,11 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStingToIntegerEditBox() {
+    public void shouldSetStringToIntegerEditBox() {
         Settings settings = new SettingsImpl();
 
-        Parameter<Integer> edit = settings.addEditBox("check").type(Integer.class).def(21);
+        Parameter<Integer> edit = settings.addEditBox("edit")
+                .type(Integer.class).def(21);
 
         assertEquals(21, edit.getValue().intValue());
 
@@ -217,5 +220,55 @@ public class SettingsTest {
         parameters.get(0).update("42");
 
         assertEquals(42, edit.getValue().intValue());
+    }
+
+    @Test
+    public void shouldSetStringToStringEditBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<String> edit = settings.addEditBox("edit")
+                .type(String.class).def("default");
+
+        assertEquals("default", edit.getValue());
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        parameters.get(0).update("updated");
+
+        assertEquals("updated", edit.getValue());
+    }
+
+    public static class Foo {
+        int a;
+        int b;
+
+        public Foo(int a, int b) {
+            this.a = a;
+            this.b = b;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%s,%s]", a, b);
+        }
+    }
+
+    @Test
+    public void shouldSetStringToObjectEditBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Foo> edit = settings.addEditBox("edit")
+                .type(Foo.class).def(new Foo(1, 2))
+                .parser(string -> new Foo(
+                        Integer.valueOf("" + string.charAt(1)),
+                        Integer.valueOf("" + string.charAt(3))));
+
+        assertEquals(1, edit.getValue().a);
+        assertEquals(2, edit.getValue().b);
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        parameters.get(0).update("[3,4]");
+
+        assertEquals(3, edit.getValue().a);
+        assertEquals(4, edit.getValue().b);
     }
 }

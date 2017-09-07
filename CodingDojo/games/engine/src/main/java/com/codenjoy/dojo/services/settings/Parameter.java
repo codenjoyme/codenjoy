@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.function.Function;
+
 /**
  * Изменяемый параметр. Фишка его в том, чтобы на админке можно было в рантайме менять параметры игры,
  * которые иначе тебе пришлось бы тебе захардкодить в твоей игре.
@@ -51,6 +53,8 @@ public interface Parameter<T> {
     boolean itsMe(String name);
 
     <V> Parameter<V> type(Class<V> integerClass);
+
+    Parameter<T> parser(Function<String, T> parser);
 
     void select(int index);
 

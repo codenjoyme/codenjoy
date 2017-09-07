@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.function.Function;
+
 public class SimpleParameter<T> implements Parameter<T> {
 
     private T value;
@@ -57,6 +59,11 @@ public class SimpleParameter<T> implements Parameter<T> {
 
     @Override
     public boolean itsMe(String name) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Parameter<T> parser(Function<String, T> parser) {
         throw new UnsupportedOperationException();
     }
 
