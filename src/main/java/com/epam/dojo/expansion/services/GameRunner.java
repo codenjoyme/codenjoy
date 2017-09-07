@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.Levels;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -39,22 +38,33 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
-    private final int boardSize;
+
+    private Parameter<Boolean> waitingOthers;
+    private Parameter<Integer> boardSize;
+    private int size;
 
     private MultipleGameFactory gameFactory;
     private Ticker ticker;
 
     public GameRunner() {
         new Scores(0, settings);
-        ticker = new Ticker();
+        boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
+        waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
 
-        // TODO move this constants to settings
-        boardSize = 20;
-        gameFactory = new MultipleGameFactory(
-                Levels.collectSingle(boardSize),
-                Levels.collectMultiple(boardSize)
-        );
-        gameFactory.setWaitingOthers(false);
+        ticker = new Ticker();
+    }
+
+    private void initGameFactory() {
+        if (gameFactory == null || settings.changed()) {
+            settings.changesReacted();
+
+            size = boardSize.getValue();
+            gameFactory = new MultipleGameFactory(
+                    Levels.collectSingle(boardSize.getValue()),
+                    Levels.collectMultiple(boardSize.getValue())
+            );
+            gameFactory.setWaitingOthers(waitingOthers.getValue());
+        }
     }
 
     @Override
@@ -66,9 +76,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
-            int total = Levels.collectSingle(boardSize).get().size();
+            int total = Levels.collectSingle(boardSize.getValue()).get().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
+
+        initGameFactory();
+
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
@@ -79,7 +92,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(boardSize);
+        return v(size);
     }
 
     @Override
