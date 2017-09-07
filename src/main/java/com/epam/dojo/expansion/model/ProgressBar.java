@@ -27,12 +27,9 @@ import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -66,7 +63,7 @@ public class ProgressBar {
         single = factory.get(Expansion.SINGLE);
         this.dice = dice;
 
-        if (!single.getLevels().isEmpty()) {
+        if (single.levelsCount() != 0) {
             current = single;
             finished = false;
             backToSingleLevel = null;
@@ -75,7 +72,7 @@ public class ProgressBar {
             current = factory.get(Expansion.MULTIPLE);
         }
         currentLevel = 0;
-        loadLevel();
+        current.loadLevel(currentLevel);
         buildPrinter();
     }
 
@@ -91,15 +88,6 @@ public class ProgressBar {
         Integer result = backToSingleLevel;
         backToSingleLevel = null;
         return result;
-    }
-
-    private void loadLevel() {
-        ILevel level = current.getLevels().get(currentLevel);
-        current.setLevel(level);
-
-        if (current.isNew()) {
-            level.setField(current);
-        }
     }
 
     void checkLevel() {
@@ -123,30 +111,30 @@ public class ProgressBar {
             if (level > lastPassedLevel + 1) {
                 return;
             }
-            if (level >= current.getLevels().size()) {
+            if (level >= current.levelsCount()) {
                 finished = true;
                 return;
             }
             currentLevel = level;
-            loadLevel();
+            current.loadLevel(currentLevel);
             createHeroToPlayer();
-        } else if (level < single.getLevels().size()) {
+        } else if (level < single.levelsCount()) {
             if (level != -1) {
                 backToSingleLevel = level;
             } else {
-                loadLevel();
+                current.loadLevel(currentLevel);
                 createHeroToPlayer();
             }
         }
     }
 
     protected void nextLevel() {
-        if (currentLevel < current.getLevels().size() - 1) {
+        if (currentLevel < current.levelsCount() - 1) {
             if (lastPassedLevel < currentLevel) {
                 lastPassedLevel = currentLevel;
             }
             currentLevel++;
-            loadLevel();
+            current.loadLevel(currentLevel);
         } else if (!current.isMultiple()) {
             if (lastPassedLevel < currentLevel) {
                 lastPassedLevel = currentLevel;
@@ -171,7 +159,7 @@ public class ProgressBar {
         if (isMultiple()) {
             Integer level = getBackToSingleLevel();
             if (level != null) {
-                if (level > single.getLevels().size()) {
+                if (level > single.levelsCount()) {
                     return;
                 }
                 loadSingle(level);
@@ -191,7 +179,7 @@ public class ProgressBar {
         remove(player);
         current = factory.get(Expansion.MULTIPLE);
         currentLevel = 0; // only one multiple level we have
-        loadLevel();
+        current.loadLevel(currentLevel);
         buildPrinter();
         try {
             newGame(player);
@@ -246,7 +234,7 @@ public class ProgressBar {
         JSONObject object = new JSONObject();
         object.put("current", currentLevel);
         object.put("lastPassed", lastPassedLevel);
-        object.put("total", single.getLevels().size());
+        object.put("total", single.levelsCount());
         object.put("multiple", isMultiple());
         object.put("scores", enableWinScore());
         return object;

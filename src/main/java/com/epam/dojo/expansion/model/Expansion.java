@@ -186,6 +186,13 @@ public class Expansion implements Tickable, IField {
         return !isMultiple || (isMultiple && players.isEmpty());
     }
 
+    public void loadLevel(int index) {
+        level = levels.get(index);
+        if (isNew()) {
+            level.setField(this);
+        }
+    }
+
     class LawOfEnergyConservationChecker {
         private int count;
 
@@ -496,16 +503,12 @@ public class Expansion implements Tickable, IField {
         return new LinkedList(players);
     }
 
-    public List<ILevel> getLevels() {
-        return new LinkedList<>(levels);
+    public int levelsCount() {
+        return levels.size();
     }
 
     public boolean isMultiple() {
         return isMultiple;
-    }
-
-    public void setLevel(ILevel level) {
-        this.level = level;
     }
 
     public boolean isFree() {
