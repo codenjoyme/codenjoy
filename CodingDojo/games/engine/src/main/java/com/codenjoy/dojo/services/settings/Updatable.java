@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services.settings;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2017 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,49 +23,28 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-import java.util.LinkedList;
-import java.util.List;
+/**
+ * Created by Oleksandr_Baglai on 2017-09-07.
+ */
+public abstract class Updatable<T> {
 
-public class NullSettings implements Settings {
+    private T value;
+    private boolean changed = false;
 
-    public static final Settings INSTANCE = new NullSettings();
-
-    private NullSettings() {
-        // do nothing
+    protected T get() {
+        return value;
     }
 
-    @Override
-    public List<Parameter<?>> getParameters() {
-        return new LinkedList<Parameter<?>>();
+    protected void set(T value) {
+        changed = true;
+        this.value = value;
     }
 
-    @Override
-    public Parameter<?> addEditBox(String name) {
-        return null;
-    }
-
-    @Override
-    public Parameter<?> addSelect(String name, List<Object> strings) {
-        return null;
-    }
-
-    @Override
-    public Parameter<Boolean> addCheckBox(String name) {
-        return null;
-    }
-
-    @Override
-    public Parameter<?> getParameter(String name) {
-        return null;
-    }
-
-    @Override
     public boolean changed() {
-        return false;
+        return changed;
     }
 
-    @Override
     public void changesReacted() {
-        // do nothing
+        changed = false;
     }
 }

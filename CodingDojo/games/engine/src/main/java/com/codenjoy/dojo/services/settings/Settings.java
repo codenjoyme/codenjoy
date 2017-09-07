@@ -30,6 +30,7 @@ import java.util.List;
  * Для каждой константы (отличаются они по имени) будет создан враппер, который ты сможешь
  * проинитить значением по-умолчанию и в дальнейшем пользоваться в коде игры, заместь
  * непосредственного захардкодженного значения. Магия в том, что они отображатся на адмике после выбора твоей игры.
+ *
  * @see Parameter
  */
 public interface Settings {
@@ -51,10 +52,21 @@ public interface Settings {
     Parameter<?> addSelect(String name, List<Object> strings);
 
     /**
-     * @deprecated Пока не реализовано
+     * @param name имя константы
+     * @return враппер над константой boolean типа
      */
     Parameter<Boolean> addCheckBox(String name);
 
 
     Parameter<?> getParameter(String name);
+
+    /**
+     * @return true - если были изменения настроек
+     */
+    boolean changed();
+
+    /**
+     * Так ты сообщаешь что отреагировал на все изменения.
+     */
+    void changesReacted();
 }

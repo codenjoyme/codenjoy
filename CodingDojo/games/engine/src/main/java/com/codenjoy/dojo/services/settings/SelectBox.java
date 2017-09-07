@@ -25,11 +25,10 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.List;
 
-public class SelectBox<T> implements Parameter<T> {
+public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     private String name;
     private List<T> options;
-    private Integer selected;
     private Integer def;
 
     public SelectBox(String name, List<T> options) {
@@ -39,7 +38,11 @@ public class SelectBox<T> implements Parameter<T> {
 
     @Override
     public T getValue() {
-        return (selected == null)?(def == null)?null:options.get(def):options.get(selected);
+        return (get() == null) ?
+                ((def == null) ?
+                        null :
+                        options.get(def)) :
+                options.get(get());
     }
 
     @Override
@@ -50,7 +53,7 @@ public class SelectBox<T> implements Parameter<T> {
     @Override
     public void update(T value) {
         checkIsPresent(value);
-        this.selected = options.indexOf(value);
+        set(options.indexOf(value));
 
     }
 
@@ -73,11 +76,11 @@ public class SelectBox<T> implements Parameter<T> {
     }
 
     public <V> Parameter<V> type(Class<V> integerClass) {
-        return (Parameter<V>)this;
+        return (Parameter<V>) this;
     }
 
     @Override
     public void select(int index) {
-        this.selected = index;
+        set(index);
     }
 }

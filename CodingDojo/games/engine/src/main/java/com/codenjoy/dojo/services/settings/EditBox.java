@@ -23,11 +23,10 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-public class EditBox<T> implements Parameter<T> {
+public class EditBox<T> extends Updatable<T> implements Parameter<T> {
 
     private String name;
     private T def;
-    private T value;
     private Class<?> type;
 
     public EditBox(String name) {
@@ -36,7 +35,7 @@ public class EditBox<T> implements Parameter<T> {
 
     @Override
     public T getValue() {
-        return (value == null)?def:value;
+        return (get() == null) ? def : get();
     }
 
     @Override
@@ -48,10 +47,12 @@ public class EditBox<T> implements Parameter<T> {
     public void update(T value) {
         if (value instanceof String) {
             if (Integer.class.equals(type)) {
-                this.value = (T)Integer.valueOf((String)value);  // TODO потестить это
+                set((T) Integer.valueOf((String) value));
+            } else if (Boolean.class.equals(type)) {
+                set((T) Boolean.valueOf((String) value));
             }
         } else {
-            this.value = value;
+            set(value);
         }
     }
 
@@ -69,7 +70,7 @@ public class EditBox<T> implements Parameter<T> {
     @Override
     public <V> Parameter<V> type(Class<V> type) {
         this.type = type; // TODO сделать это же с другими элементами
-        return (Parameter<V>)this;
+        return (Parameter<V>) this;
     }
 
     @Override

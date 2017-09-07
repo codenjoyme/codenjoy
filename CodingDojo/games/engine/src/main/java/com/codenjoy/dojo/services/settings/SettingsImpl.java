@@ -77,4 +77,20 @@ public class SettingsImpl implements Settings {
         }
         throw new IllegalArgumentException(String.format("Parameter with name '%s' not found", name));
     }
+
+    @Override
+    public boolean changed() {
+        boolean result = false;
+        for (Parameter<?> parameter : parameters) {
+            result |= parameter.changed();
+        }
+        return result;
+    }
+
+    @Override
+    public void changesReacted() {
+        for (Parameter<?> parameter : parameters) {
+            parameter.changesReacted();
+        }
+    }
 }

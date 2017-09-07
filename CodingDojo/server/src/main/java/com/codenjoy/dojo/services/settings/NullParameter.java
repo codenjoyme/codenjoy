@@ -67,4 +67,14 @@ public class NullParameter<T> implements Parameter<T> {
     public void select(int index) {
         // do nothing
     }
+
+    @Override
+    public boolean changed() {
+        return false;
+    }
+
+    @Override
+    public void changesReacted() {
+        // do nothing
+    }
 }
