@@ -345,4 +345,106 @@ public class GameRunnerTest {
         assertL(level2, PLAYER6);
         assertE(forces2, PLAYER6);
     }
+
+    @Test
+    public void shouldNewUserCanGoToAnyFreeRoomAtThisMoment_oneOneRoom() {
+        shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom();
+
+        createNewGame(0); // first free room (PLAYER2, PLAYER3, PLAYER4)
+
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "-♥--♦-\n" +
+                "------\n" +
+                "------\n" +
+                "-♠--♣-\n" +
+                "------\n";
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+        assertL(level1, PLAYER7);
+        assertE(forces1, PLAYER7);
+
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces2 =
+                "------\n" +
+                "---♥--\n" +
+                "------\n" +
+                "----♦-\n" +
+                "--♣---\n" +
+                "------\n";
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
+        assertL(level2, PLAYER1);
+        assertE(forces2, PLAYER1);
+    }
+
+    @Test
+    public void shouldNewUserCanGoToAnyFreeRoomAtThisMoment_anotherOneRoom() {
+        shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom();
+
+        createNewGame(1); // second free room (PLAYER5, PLAYER6, PLAYER1)
+
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "----♦-\n" +
+                "------\n" +
+                "------\n" +
+                "-♠--♣-\n" +
+                "------\n";
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces2 =
+                "------\n" +
+                "---♥--\n" +
+                "-♠----\n" +
+                "----♦-\n" +
+                "--♣---\n" +
+                "------\n";
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
+        assertL(level2, PLAYER1);
+        assertE(forces2, PLAYER1);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
+    }
 }
