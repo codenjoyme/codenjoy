@@ -151,8 +151,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     var getBoardDrawer = function(canvas, playerName, playerData) {
-        var board = playerData.board;
-        var heroesData = playerData.heroesData[playerName];
+        var getBoard = function() {
+            return playerData.board;
+        }
+        var getHeroesData = function () {
+            return playerData.heroesData[playerName];
+        }
 
         var drawAllLayers = function(layers, onDrawItem){
             var isDrawByOrder = true;
@@ -209,6 +213,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawLayers = function(onDrawItem) {
+            var board = getBoard();
             try {
                 drawAllLayers(board.layers, onDrawItem);
             } catch (err) {
@@ -222,9 +227,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawPlayerNames = function(font) {
             try {
+                var board = getBoard();
                 if (singleBoardGame || !!board.showName) {
                     var currentPoint = null;
-                    $.each(heroesData, function(name, heroData) {
+                    $.each(getHeroesData(), function(name, heroData) {
                         var point = heroData.coordinate;
                         if (!point) return; // TODO why this can happen?
                         if (!!board.offset) {
