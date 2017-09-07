@@ -118,12 +118,11 @@ public class ProgressBar {
             currentLevel = level;
             current.loadLevel(currentLevel);
             createHeroToPlayer();
-        } else if (level < single.levelsCount()) {
-            if (level != -1) {
+        } else {
+            if (level == -1) {
+                loadMultiple();
+            } else if (level < single.levelsCount()) {
                 backToSingleLevel = level;
-            } else {
-                current.loadLevel(currentLevel);
-                createHeroToPlayer();
             }
         }
     }
