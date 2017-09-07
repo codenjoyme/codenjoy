@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.DLoggerFactory;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
@@ -58,10 +59,12 @@ public class ProgressBar {
     private Expansion current;
     private Printer printer;
     private Single gameOwner;
+    private Dice dice;
 
-    public ProgressBar(GameFactory factory) {
+    public ProgressBar(GameFactory factory, Dice dice) {
         this.factory = factory;
         single = factory.get(Expansion.SINGLE);
+        this.dice = dice;
 
         if (!single.getLevels().isEmpty()) {
             current = single;
@@ -94,7 +97,7 @@ public class ProgressBar {
         ILevel level = current.getLevels().get(currentLevel);
         current.setLevel(level);
 
-        if (!current.isMultiple() || (current.isMultiple() && current.getPlayers().isEmpty())) {
+        if (current.isNew()) {
             level.setField(current);
         }
     }
@@ -187,10 +190,14 @@ public class ProgressBar {
     private void loadMultiple() {
         remove(player);
         current = factory.get(Expansion.MULTIPLE);
-        currentLevel = 0;
+        currentLevel = 0; // only one multiple level we have
         loadLevel();
         buildPrinter();
-        newGame(player);
+        try {
+            newGame(player);
+        } catch (BusyMapException e) {
+            remove(player); // TODO и что дальше?
+        }
     }
 
     private void loadSingle(Integer level) {

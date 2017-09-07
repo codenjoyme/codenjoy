@@ -29,6 +29,10 @@ import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.Levels;
 import org.slf4j.Logger;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
@@ -38,9 +42,11 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
+    private Dice dice;
 
     private Parameter<Boolean> waitingOthers;
     private Parameter<Integer> boardSize;
+    private List<Parameter<String>> levels = new LinkedList<>();
     private int size;
 
     private MultipleGameFactory gameFactory;
@@ -51,7 +57,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
 
+        levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(Levels.MULTI_LEVEL1));
+        levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(Levels.MULTI_LEVEL2));
+        levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(Levels.MULTI_LEVEL3));
+
         ticker = new Ticker();
+        dice = new RandomDice();
     }
 
     private void initGameFactory() {
@@ -59,9 +70,15 @@ public class GameRunner extends AbstractGameType implements GameType  {
             settings.changesReacted();
 
             size = boardSize.getValue();
-            gameFactory = new MultipleGameFactory(
+            List<String> list = Arrays.asList(
+                    levels.get(0).getValue(),
+                    levels.get(1).getValue(),
+                    levels.get(2).getValue()
+            );
+            gameFactory = new MultipleGameFactory(dice,
                     Levels.collectSingle(boardSize.getValue()),
-                    Levels.collectMultiple(boardSize.getValue())
+                    Levels.collectMultiple(boardSize.getValue(),
+                            list.toArray(new String[0]))
             );
             gameFactory.setWaitingOthers(waitingOthers.getValue());
         }
@@ -85,7 +102,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
-        Game single = new Single(gameFactory, listener, factory, ticker, save);
+        Game single = new Single(gameFactory, listener, factory, ticker, dice, save);
         single.newGame();
         return single;
     }
@@ -103,6 +120,10 @@ public class GameRunner extends AbstractGameType implements GameType  {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
+    }
+
+    public void setDice(Dice dice) {
+        this.dice = dice;
     }
 
 }

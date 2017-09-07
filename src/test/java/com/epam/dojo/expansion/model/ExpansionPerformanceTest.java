@@ -39,20 +39,14 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by Sanja on 15.02.14.
  */
-public class ExpansionPerformanceTest {
+public class ExpansionPerformanceTest extends GameRunnerTest {
 
     public static final int COUNT_USERS = 100;
 
-    @Test // TODO закончить как будет настроение :)
+    @Test
     public void test() {
-        GameRunner gameRunner = new GameRunner();
-
-        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
-
-        PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < COUNT_USERS; index++) {
-            Game game = gameRunner.newGame(mock(EventListener.class), factory, null);
-            games.add(game);
+            createNewGame();
         }
 
         Profiler profiler = new Profiler();

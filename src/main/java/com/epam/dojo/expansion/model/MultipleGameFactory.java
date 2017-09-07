@@ -23,13 +23,20 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
-import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-01.
@@ -43,18 +50,22 @@ public class MultipleGameFactory implements GameFactory {
     private LevelsFactory multipleFactory;
 
     private boolean waitingOthers = false;
+    private Dice dice;
 
-    public MultipleGameFactory(LevelsFactory singleFactory,
+    public MultipleGameFactory(Dice dice,
+                               LevelsFactory singleFactory,
                                LevelsFactory multipleFactory)
     {
+        this.dice = dice;
         this.singleFactory = singleFactory;
         this.multipleFactory = multipleFactory;
     }
 
     @Override
+    @NotNull
     public Expansion get(boolean isMultiple) {
         if (isMultiple) {
-            Expansion game = findFreeMultiple();
+            Expansion game = findFreeRandomMultiple();
             if (game == null) {
                 game = createNewMultiple();
             }
@@ -68,21 +79,36 @@ public class MultipleGameFactory implements GameFactory {
         }
     }
 
-    private Expansion findFreeMultiple() {
-        for (Expansion game : rooms) {
-            if (game.isNotBusy()) {
-                return game;
-            }
+    @Nullable
+    private Expansion findFreeRandomMultiple() {
+        List<Expansion> free = getFreeMultipleRooms();
+        if (free.isEmpty()) {
+            return null;
         }
-        return null;
+        return free.get(dice.next(free.size()));
+    }
+
+    @NotNull
+    private List<Expansion> getFreeMultipleRooms() {
+        return rooms.stream()
+                .filter(Expansion::isFree)
+                .collect(toList());
     }
 
     @NotNull
     private Expansion createNewMultiple() {
-        Expansion game = new Expansion(multipleFactory.get(),
+        ILevel level = selectRandomLevelType();
+        Expansion game = new Expansion(Arrays.asList(level),
                 new RandomDice(), Expansion.MULTIPLE);
+
         rooms.add(game);
         return game;
+    }
+
+    @NotNull
+    private ILevel selectRandomLevelType() {
+        List<ILevel> levels = multipleFactory.get();
+        return levels.get(dice.next(levels.size()));
     }
 
     // это опция сеттинговая, она раз на всю игру

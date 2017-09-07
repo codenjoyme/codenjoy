@@ -181,6 +181,11 @@ public class Expansion implements Tickable, IField {
     }
 
     private LawOfEnergyConservationChecker countChecker = new LawOfEnergyConservationChecker();
+
+    public boolean isNew() {
+        return !isMultiple || (isMultiple && players.isEmpty());
+    }
+
     class LawOfEnergyConservationChecker {
         private int count;
 
@@ -507,7 +512,7 @@ public class Expansion implements Tickable, IField {
         if (isMultiple) {
             return players.size() < 4;
         } else {
-            return players.isEmpty();
+            return players.size() == 0;
         }
     }
 

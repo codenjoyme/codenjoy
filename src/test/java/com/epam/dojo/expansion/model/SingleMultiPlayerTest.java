@@ -27,22 +27,20 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
-import org.json.JSONObject;
 import org.junit.Test;
 
-import java.io.*;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
-import java.nio.charset.MalformedInputException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.when;
 
 /**
  * User: sanja
@@ -72,7 +70,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
     @Override
     protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
-        gameFactory = new MultipleGameFactory(single, multiple);
+        gameFactory = new MultipleGameFactory(dice, single, multiple);
         return gameFactory;
     }
 
@@ -340,6 +338,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
         // when
         // another player6 registered
+        when(dice.next(anyInt())).thenReturn(0, 0); // first empty multiple, then first level on it
         createOneMorePlayer();
         tickAll();
 
