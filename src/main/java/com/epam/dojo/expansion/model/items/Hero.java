@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.client.Command;
+import com.epam.dojo.expansion.model.BusyMapException;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
@@ -98,12 +99,11 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     public Start occupyFreeBase() {
         Start start = field.getFreeBase();
         if (start == null) {
-            // TODO this should never happen :)
             System.out.println(String.format(
-                    "Hero %s wants to find new base for play on map %s, but cant do it",
-                    this, field));
+                    "Hero %s wants to find new base for play on map %s, but cant do it {}",
+                    lg.id(), field, lg.json()));
 
-            return null;
+            throw new BusyMapException("Hero wants to find new base for play on map, but cant do it");
         }
         start.setOwner(this);
         return start;
