@@ -409,7 +409,9 @@ public final class Levels {
     private static List<ILevel> collect(int viewSize, String... levels) {
         List<ILevel> result = new LinkedList<>();
         for (String level : levels) {
-            result.add(new LevelImpl(resize(decorate(level), viewSize), viewSize));
+            // TODO эта строчка выполняется часто при регистрации каждого юзера и занимает время, прооптимизировать!
+            String resize = resize(decorate(level), viewSize);
+            result.add(new LevelImpl(resize, viewSize));
         }
         return result;
     }
