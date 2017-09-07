@@ -39,7 +39,8 @@ public class DLoggerFactory {
     public static final String DEBUG_KEY = "debug";
     static Map<String, Boolean> settings = new ConcurrentHashMap<>();
 
-    public static Logger getLogger(Class<?> clazz) {
+    public static Logger getLogger(Class<?> clazz, boolean... sout) {
+        boolean printToConsole = sout != null && sout.length == 1 && sout[0];
         final Logger logger = LoggerFactory.getLogger(clazz);
         return new Logger() { // TODO to use DuckTyping
             @Override
@@ -109,31 +110,46 @@ public class DLoggerFactory {
 
             @Override
             public boolean isDebugEnabled() {
-                return settings.containsKey(DEBUG_KEY);
+                return printToConsole || settings.containsKey(DEBUG_KEY);
             }
 
             @Override
             public void debug(String s) {
+                if (printToConsole) {
+                    System.out.printf(s.replaceAll("\\{\\}", "%s") + "\n");
+                }
                 logger.debug(s);
             }
 
             @Override
             public void debug(String s, Object o) {
+                if (printToConsole) {
+                    System.out.printf(s.replaceAll("\\{\\}", "%s") + "\n", o);
+                }
                 logger.debug(s, o);
             }
 
             @Override
             public void debug(String s, Object o, Object o1) {
+                if (printToConsole) {
+                    System.out.printf(s.replaceAll("\\{\\}", "%s") + "\n", o, o1);
+                }
                 logger.debug(s, o, o1);
             }
 
             @Override
             public void debug(String s, Object... objects) {
+                if (printToConsole) {
+                    System.out.printf(s.replaceAll("\\{\\}", "%s") + "\n", objects);
+                }
                 logger.debug(s, objects);
             }
 
             @Override
             public void debug(String s, Throwable throwable) {
+                if (printToConsole) {
+                    System.out.printf(s.replaceAll("\\{\\}", "%s") + "\n", throwable);
+                }
                 logger.debug(s, throwable);
             }
 
