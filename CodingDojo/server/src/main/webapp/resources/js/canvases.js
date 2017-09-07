@@ -212,7 +212,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
             try {
                 drawAllLayers(board.layers, onDrawItem);
             } catch (err) {
-                drawAllLayers([board], onDrawItem);
+                try {
+                    drawAllLayers([board], onDrawItem);
+                } catch (err) {
+                    console.log(err);
+                }
             }
         }
 
