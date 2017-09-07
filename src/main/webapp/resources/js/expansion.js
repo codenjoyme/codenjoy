@@ -133,9 +133,16 @@ var loadArrowImages = function() {
     }
 }
 
+var previousBoard = null;
 game.drawBoard = function(drawer) {
+    var board = previousBoard;
+    previousBoard = drawer.playerData.board;
+    drawer.playerData.board = board;
+    if (!board) {
+        return;
+    }
+
     var canvas = drawer.canvas;
-    var board = drawer.playerData.board;
     var heroesData = drawer.playerData.heroesData;
     var forces = board.forces;
     var size = canvas.boardSize;
