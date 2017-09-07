@@ -23,12 +23,10 @@ package com.epam.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.GameRunner;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.json.JSONObject;
@@ -36,7 +34,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -133,6 +135,60 @@ public class GameRunnerTest {
         for (Game game : games) {
             game.tick();
         }
+    }
+
+    private void doit(int times, Runnable whatToDo) {
+        for (int i = 0; i < times; i++) {
+            whatToDo.run();
+            tickAll();
+        }
+    }
+
+    private Joystick goTimes(int player, Point pt, int times) {
+        Hero hero = (Hero) joystick(player);
+        BiConsumer<Hero, QDirection> command =
+                (h, d) -> {
+                    // increase and go to
+                    h.increaseAndMove(new Forces(pt, 1), new ForcesMoves(pt, 1, d));
+                    // change point so next turn from new place
+                    pt.change(d);
+                };
+
+        return new Joystick() {
+            @Override
+            public void down() {
+                doit(times, () -> command.accept(hero, QDirection.DOWN));
+            }
+
+            @Override
+            public void up() {
+                doit(times, () -> command.accept(hero, QDirection.UP));
+            }
+
+            @Override
+            public void left() {
+                doit(times, () -> command.accept(hero, QDirection.LEFT));
+            }
+
+            @Override
+            public void right() {
+                doit(times, () -> command.accept(hero, QDirection.RIGHT));
+            }
+
+            @Override
+            public void act(int... p) {
+                // do nothing
+            }
+
+            @Override
+            public void message(String command) {
+                // do nothing
+            }
+        };
+    }
+
+    private Joystick joystick(int player) {
+        return games.get(player).getJoystick();
     }
 
     private void givenLevels() {
@@ -447,4 +503,60 @@ public class GameRunnerTest {
         assertL(level2, PLAYER7);
         assertE(forces2, PLAYER7);
     }
+
+    @Test
+    public void shouldNewUserCanGoToAnyFreeRoomAtThisMoment_caseWhenBaseIsBusyInFRoomWith3Players() {
+        shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom();
+
+        goTimes(PLAYER2, pt(4, 4), 4).left();
+
+        createNewGame(0); // first free room is (PLAYER5, PLAYER6, PLAYER1)
+        // because base in first room is busy by another player
+
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "-♦♦♦♦-\n" +
+                "------\n" +
+                "------\n" +
+                "-♠--♣-\n" +
+                "------\n";
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces2 =
+                "------\n" +
+                "---♥--\n" +
+                "-♠----\n" +
+                "----♦-\n" +
+                "--♣---\n" +
+                "------\n";
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
+        assertL(level2, PLAYER1);
+        assertE(forces2, PLAYER1);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
+    }
+
+
 }

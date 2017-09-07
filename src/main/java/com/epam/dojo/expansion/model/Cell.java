@@ -42,8 +42,6 @@ public class Cell extends PointImpl implements ICell {
 
     private List<IItem> items = new ArrayList<>();
 
-    //================================ Constructors ================================
-
     public Cell(int x, int y) {
         super(x, y);
     }
@@ -51,8 +49,6 @@ public class Cell extends PointImpl implements ICell {
     public Cell(Point point) {
         super(point);
     }
-
-    //================================ Implements ================================
 
     @Override
     public void captureBy(HeroForces income) {

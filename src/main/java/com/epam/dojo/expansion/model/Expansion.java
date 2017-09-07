@@ -35,6 +35,7 @@ import com.epam.dojo.expansion.model.items.*;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
@@ -335,6 +336,7 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
+    @Nullable
     public Start getFreeBase() {
         List<Start> bases = level.getItems(Start.class);
 
@@ -513,7 +515,7 @@ public class Expansion implements Tickable, IField {
 
     public boolean isFree() {
         if (isMultiple) {
-            return players.size() < 4;
+            return players.size() < 4 && getFreeBase() != null;
         } else {
             return players.size() == 0;
         }
