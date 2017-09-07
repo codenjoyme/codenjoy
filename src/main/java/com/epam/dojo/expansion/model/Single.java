@@ -128,6 +128,10 @@ public class Single implements Game {
         return new GameHeroData();
     }
 
+    ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
     public class GameHeroData implements HeroData {
         @Override
         public Point getCoordinate() {

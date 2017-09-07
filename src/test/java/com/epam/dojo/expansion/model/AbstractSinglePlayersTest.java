@@ -30,9 +30,7 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.model.levels.Levels;
-import com.epam.dojo.expansion.model.levels.LevelsFactory;
-import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
+import com.epam.dojo.expansion.model.levels.*;
 import com.epam.dojo.expansion.services.PrinterData;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -75,18 +73,21 @@ public abstract class AbstractSinglePlayersTest {
     private Dice dice;
     private List<EventListener> listeners;
     private List<Single> singles;
+    private List<Hero> heroes;
 
     private LinkedList<String> levelsMaps;
-    private String multipleLevelsMaps;
 
+    private String multipleLevelsMaps;
     private GameFactory gameFactory;
-    private Ticker ticker;
+    protected Ticker ticker;
+    private int size = LevelsTest.LEVEL_SIZE;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
         listeners = new LinkedList<>();
         singles = new LinkedList<>();
+        heroes = new LinkedList<>();
         ticker = new Ticker();
     }
 
@@ -97,10 +98,20 @@ public abstract class AbstractSinglePlayersTest {
         }
     }
 
+    protected void givenSize(int size) {
+        this.size = size;
+    }
+
     protected void givenFl(String... boards) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
         setupMaps(boards);
         gameFactory = getGameFactory();
+    }
+
+    protected void givenForces(String forces, String layer2) {
+        Expansion current = singles.get(PLAYER1).getProgressBar().getCurrent();
+        LevelImpl level = (LevelImpl)current.getCurrentLevel();
+        level.fillForces(layer2, heroes.toArray(new Hero[0]));
+        level.fillForcesCount(forces);
     }
 
     protected void createPlayers(int count) {
@@ -121,11 +132,12 @@ public abstract class AbstractSinglePlayersTest {
         Single game = new Single(gameFactory, listener, null, ticker, null);
         singles.add(game);
         game.newGame();
+        heroes.add(game.getPlayer().getHero());
     }
 
     private GameFactory getGameFactory() {
-        LevelsFactory single = Levels.collectYours(levelsMaps.toArray(new String[0]));
-        LevelsFactory multiple = Levels.collectYours(multipleLevelsMaps);
+        LevelsFactory single = Levels.collectYours(size, levelsMaps.toArray(new String[0]));
+        LevelsFactory multiple = Levels.collectYours(size, multipleLevelsMaps);
         return getGameFactory(single, multiple);
     }
 

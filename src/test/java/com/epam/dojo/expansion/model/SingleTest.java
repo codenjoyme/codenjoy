@@ -25,6 +25,8 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.levels.LevelsTest;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
 
@@ -1438,6 +1440,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void testGetBoardAsString_whenBigFrame() {
         // given
+        givenSize(LevelsTest.LEVEL_SIZE);
         String field =
                 "╔══════════════════┐" +
                 "║1.................│" +

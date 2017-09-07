@@ -39,6 +39,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
+    private final int boardSize;
 
     private MultipleGameFactory gameFactory;
     private Ticker ticker;
@@ -46,9 +47,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public GameRunner() {
         new Scores(0, settings);
         ticker = new Ticker();
+
+        // TODO move this constants to settings
+        boardSize = 20;
         gameFactory = new MultipleGameFactory(
-                Levels.collectSingle(),
-                Levels.collectMultiple()
+                Levels.collectSingle(boardSize),
+                Levels.collectMultiple(boardSize)
         );
         gameFactory.setWaitingOthers(false);
     }
@@ -62,7 +66,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
-            int total = Levels.collectSingle().get().size();
+            int total = Levels.collectSingle(boardSize).get().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
         if (logger.isDebugEnabled()) {
@@ -75,7 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(Levels.size());
+        return v(boardSize);
     }
 
     @Override

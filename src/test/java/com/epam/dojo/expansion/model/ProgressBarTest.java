@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.items.HeroForces;
@@ -98,9 +99,11 @@ public class ProgressBarTest {
         ILevel result = mock(ILevel.class);
 
         Start start = new Start(Elements.BASE1);
-        start.setCell(new Cell(0, 0));
+        Cell cell = new Cell(0, 0);
+        start.setCell(cell);
         when(result.getItems(Start.class)).thenReturn(Arrays.asList(start));
         when(result.getCellsWith(any(Predicate.class))).thenReturn(Arrays.asList(start));
+        when(result.getCells()).thenReturn(new ICell[]{cell});
 
         return result;
     }

@@ -41,13 +41,13 @@ public class PrinterTest {
 
     @Test
     public void shouldCountNotMoreThan() {
-        assertEquals("-=#", Printer.makeForceState(new Start(Elements.BASE1), null));
-        assertEquals("000", Printer.makeForceState(forces(0), null));
-        assertEquals("001", Printer.makeForceState(forces(1), null));
-        assertEquals("ZZZ", Printer.makeForceState(forces(46655), null));
-        assertEquals("000", Printer.makeForceState(forces(46656), null));
-        assertEquals("001", Printer.makeForceState(forces(46657), null));
-        assertEquals("GIF", Printer.makeForceState(forces(1234455), null));
+        assertEquals("-=#", Printer.makeForceState(new Start(Elements.BASE1)));
+        assertEquals("000", Printer.makeForceState(forces(0)));
+        assertEquals("001", Printer.makeForceState(forces(1)));
+        assertEquals("ZZZ", Printer.makeForceState(forces(46655)));
+        assertEquals("000", Printer.makeForceState(forces(46656)));
+        assertEquals("001", Printer.makeForceState(forces(46657)));
+        assertEquals("GIF", Printer.makeForceState(forces(1234455)));
     }
 
     @NotNull

@@ -31,25 +31,28 @@ import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.items.BaseItem;
-import com.epam.dojo.expansion.model.items.ElementsMapper;
-import com.epam.dojo.expansion.model.items.FieldItem;
+import com.epam.dojo.expansion.model.items.*;
+import com.epam.dojo.expansion.services.Printer;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import static com.epam.dojo.expansion.model.Elements.Layers.LAYER1;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class LevelImpl implements ILevel {
+    public static final int ONE_CHAR = 1;
     private ICell[] cells;
     private int size;
+    private int viewSize;
     private LengthToXY xy;
 
-    public LevelImpl(String map) {
+    public LevelImpl(String map, int viewSize) {
         cells = new ICell[map.length()];
         size = (int) Math.sqrt(map.length());
+        this.viewSize = viewSize;
         xy = new LengthToXY(size);
         if (size*size != map.length()) {
             throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
@@ -59,22 +62,67 @@ public class LevelImpl implements ILevel {
     }
 
     private void fillMap(String map) {
-        int indexChar = 0;
+        fill(map, 1, (cell, ch) -> {
+            Elements element = Elements.valueOf(ch.charAt(0));
+            BaseItem item = getBaseItem(element);
 
+            if (element.getLayer() != LAYER1) {
+                Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
+                cell.addItem(getBaseItem(atBottom));
+            }
+            cell.addItem(item);
+        });
+    }
+
+
+
+    public class ChHeroForces extends HeroForces {
+        public ChHeroForces(Hero hero) {
+            super(hero, 0);
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+    }
+
+    public void fillForces(String forcesMap, Hero... heroes) {
+        fill(forcesMap, ONE_CHAR, (cell, ch) -> {
+            int index = Elements.valueOf(ch.charAt(0)).getIndex();
+            if (index == -1) {
+                return;
+            }
+            Hero hero = heroes[index];
+            HeroForces oldItem = cell.getItem(HeroForces.class);
+            if (oldItem != null) {
+                oldItem.removeFromCell();
+            }
+            cell.captureBy(new ChHeroForces(hero));
+        });
+    }
+
+    public void fillForcesCount(String forcesCountMap) {
+        fill(forcesCountMap, Printer.COUNT_NUMBERS, (cell, countString) -> {
+            int count = Printer.parseCount(countString);
+            if (count == 0) {
+                return;
+            }
+            cell.getItem(ChHeroForces.class).setCount(count);
+        });
+    }
+
+    private void fill(String map, int len, BiConsumer<ICell, String> function) {
+        int indexChar = 0;
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
-
-                Cell cell = new Cell(x, y);
-                Elements element = Elements.valueOf(map.charAt(indexChar));
-                BaseItem item = getBaseItem(element);
-
-                if (element.getLayer() != LAYER1) {
-                    Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
-                    cell.addItem(getBaseItem(atBottom));
+                int length = xy.getLength(x, y);
+                ICell cell = cells[length];
+                if (cell == null) {
+                    cell = new Cell(x, y);
                 }
-
-                cell.addItem(item);
-                cells[xy.getLength(x, y)] = cell;
+                String ch = map.substring(indexChar*len, (indexChar + 1)*len);
+                function.accept(cell, String.valueOf(ch));
+                cells[length] = cell;
                 ++indexChar;
             }
         }
@@ -90,6 +138,11 @@ public class LevelImpl implements ILevel {
     @Override
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public int getViewSize() {
+        return viewSize;
     }
 
     @Override

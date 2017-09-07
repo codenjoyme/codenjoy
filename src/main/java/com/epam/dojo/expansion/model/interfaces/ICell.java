@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model.interfaces;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.expansion.model.items.HeroForces;
 
 import java.util.List;
 
@@ -32,9 +33,9 @@ import java.util.List;
  */
 public interface ICell extends Point {
 
-    void addItem(IItem item);
+    void captureBy(HeroForces income);
 
-    void comeIn(IItem item);
+    void addItem(IItem item);
 
     boolean isPassable();
 

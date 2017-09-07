@@ -35,14 +35,10 @@ import com.epam.dojo.expansion.model.items.*;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
-import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -90,7 +86,8 @@ public class Expansion implements Tickable, IField {
         if (isWaiting()) return;
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Expansion processing board calculations. State before processing {}",
+            logger.debug("Expansion processing board calculations. " +
+                            "State before processing {}",
                     toString());
         }
 
@@ -144,11 +141,16 @@ public class Expansion implements Tickable, IField {
         }
 
         if (logger.isDebugEnabled()) {
-            logger.debug("Expansion finished tick. State after processing {}", toString());
+            logger.debug("Expansion finished tick. " +
+                    "State after processing {}", toString());
         }
     }
 
     private void attack() {
+        if (logger.isDebugEnabled()) {
+            countChecker.before();
+        }
+
         for (ICell cell : level.getCellsWith(HeroForces.class)) {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
             while (forces.size() > 1) {
@@ -169,10 +171,43 @@ public class Expansion implements Tickable, IField {
                 }
             }
         }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("During call attack() method for game {} found this " +
+                            "forces count delta {} (it should be <= 0!)",
+                    lg.id(),
+                    countChecker.after());
+        }
+    }
+
+    private LawOfEnergyConservationChecker countChecker = new LawOfEnergyConservationChecker();
+    class LawOfEnergyConservationChecker {
+        private int count;
+
+        public int count() {
+            return Arrays.asList(level.getCells()).stream()
+                    .mapToInt(cell -> {
+                        List<HeroForces> items = cell.getItems(HeroForces.class);
+                        if (items.isEmpty()) return 0;
+                        return items.stream().mapToInt((heroForces) -> heroForces.getCount()).sum();
+                    }).sum();
+        }
+
+        public void before(){
+            this.count = count();
+        }
+
+        public int after(){
+            return count() - this.count;
+        }
     }
 
     @Override
     public void increase(Hero hero, List<ForcesMoves> increase) {
+        if (logger.isDebugEnabled()) {
+            countChecker.before();
+        }
+
         int total = hero.getForcesPerTick();
         for (Forces forces : increase) {
             Point to = forces.getRegion();
@@ -187,10 +222,22 @@ public class Expansion implements Tickable, IField {
                 startMoveForces(hero, to.getX(), to.getY(), count).move();
             }
         }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("During call increase() method for hero {} found " +
+                            "this forces count delta {} (hero can only {}!)",
+                    hero.lg.id(),
+                    countChecker.after(),
+                    hero.getForcesPerTick());
+        }
     }
 
     @Override
     public void move(Hero hero, List<ForcesMoves> movements) {
+        if (logger.isDebugEnabled()) {
+            countChecker.before();
+        }
+
         List<HeroForces> moved = new LinkedList<>();
         for (ForcesMoves forces : movements) {
             Point from = forces.getRegion();
@@ -206,6 +253,16 @@ public class Expansion implements Tickable, IField {
 
         for (HeroForces force : moved) {
             force.move();
+        }
+
+        if (logger.isDebugEnabled()) {
+            if (countChecker.after() != 0) {
+                System.out.println();
+            }
+            logger.debug("During call move() method for hero {} found this " +
+                            "forces count delta {} (it should be 0!)",
+                    hero.lg.id(),
+                    countChecker.after());
         }
     }
 
@@ -300,7 +357,7 @@ public class Expansion implements Tickable, IField {
 
         if (force == null) {
             HeroForces income = new HeroForces(hero);
-            capture(cell, income);
+            cell.captureBy(income);
             income.startMove(count);
             return income;
         } else {
@@ -317,11 +374,6 @@ public class Expansion implements Tickable, IField {
             }
         }
         return null;
-    }
-
-    private void capture(ICell cell, HeroForces income) {
-        cell.addItem(income);
-        cell.comeIn(income);
     }
 
     @Override
@@ -452,12 +504,17 @@ public class Expansion implements Tickable, IField {
     }
 
     public boolean isNotBusy() {
-        return ((isMultiple && players.size() < 4) || (!isMultiple && players.size() == 0));
+        return ((isMultiple && players.size() < 4)
+                || (!isMultiple && players.size() == 0));
     }
 
     public void waitingOthers() {
         if (!isMultiple) return;
         waitingOthers = true;
+    }
+
+    public int getViewSize() {
+        return level.getViewSize();
     }
 
     public class LogState {

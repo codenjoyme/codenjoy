@@ -88,7 +88,7 @@ public class Printer {
 
                 IItem item2 = cells[index].getItem(1);
                 builders[1].append(makeState(item2, player));
-                builders[2].append(makeForceState(item2, player));
+                builders[2].append(makeForceState(item2));
             }
         }
     }
@@ -133,7 +133,7 @@ public class Printer {
         }
     }
 
-    public static String makeForceState(IItem item, Player player) {
+    public static String makeForceState(IItem item) {
         if (item instanceof HeroForces) {
             HeroForces forces = (HeroForces) item;
             int count = forces.getForces().getCount();
@@ -146,6 +146,14 @@ public class Printer {
             return result;
         } else {
             return "-=#";
+        }
+    }
+
+    public static int parseCount(String sub) {
+        if (sub.equals("-=#")) {
+            return 0;
+        } else {
+            return Integer.parseInt(sub, Character.MAX_RADIX);
         }
     }
 

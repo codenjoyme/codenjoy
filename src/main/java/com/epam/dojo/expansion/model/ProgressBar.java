@@ -81,7 +81,7 @@ public class ProgressBar {
     }
 
     private void buildPrinter() {
-        printer = new Printer(current, Levels.size());
+        printer = new Printer(current, current.getViewSize());
     }
 
     public Integer getBackToSingleLevel() {

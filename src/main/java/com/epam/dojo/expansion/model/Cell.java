@@ -29,6 +29,7 @@ import com.epam.dojo.expansion.model.enums.FeatureItem;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.items.Air;
+import com.epam.dojo.expansion.model.items.HeroForces;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -54,14 +55,15 @@ public class Cell extends PointImpl implements ICell {
     //================================ Implements ================================
 
     @Override
-    public void addItem(IItem item) {
-        items.add(item);
-        item.setCell(this);
+    public void captureBy(HeroForces income) {
+        addItem(income);
+        preformAction(income, true);
     }
 
     @Override
-    public void comeIn(IItem item) {
-        preformAction(item, true);
+    public void addItem(IItem item) {
+        items.add(item);
+        item.setCell(this);
     }
 
     private void preformAction(IItem coming, boolean comeInOrLeave) {
@@ -71,10 +73,11 @@ public class Cell extends PointImpl implements ICell {
     }
 
     private void preformAction(IItem item1, IItem item2, boolean comeInOrLeave) {
-        if (!item2.equals(item1)) {
-            item2.action(item1, comeInOrLeave);
-            item1.action(item2, comeInOrLeave);
+        if (item2.equals(item1)) {
+            return;
         }
+        item2.action(item1, comeInOrLeave);
+        item1.action(item2, comeInOrLeave);
     }
 
     @Override
@@ -111,7 +114,8 @@ public class Cell extends PointImpl implements ICell {
     public <T extends IItem> List<T> getItems(Class<T> clazz) {
         List<T> result = new LinkedList<>();
         for (IItem item : items) {
-            if (item.getClass() == clazz) {
+            // TODO to replace on class == class
+            if (clazz.isAssignableFrom(item.getClass()) || item.getClass().isAssignableFrom(clazz)) {
                 result.add((T)item);
             }
         }

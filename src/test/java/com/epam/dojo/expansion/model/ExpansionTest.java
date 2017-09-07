@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.levels.LevelsTest;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.model.levels.Levels;
@@ -58,6 +59,7 @@ public class ExpansionTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
+    private int size = LevelsTest.LEVEL_SIZE;
 
     @Before
     public void setup() {
@@ -71,11 +73,13 @@ public class ExpansionTest {
         }
     }
 
-    private void givenFl(String... boards) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
+    private void givenSize(int size) {
+        this.size = size;
+    }
 
+    private void givenFl(String... boards) {
         GameFactory factory = new OneMultipleGameFactory(dice,
-                Levels.collectYours(boards),
+                Levels.collectYours(size, boards),
                 Levels.none());
         listener = mock(EventListener.class);
         ProgressBar progressBar = new ProgressBar(factory);
@@ -84,7 +88,7 @@ public class ExpansionTest {
         game = progressBar.getCurrent();
         hero = game.getHeroes().get(0);
 
-        printer = new Printer(game, Levels.size());
+        printer = new Printer(game, size);
     }
 
 
@@ -3367,6 +3371,7 @@ public class ExpansionTest {
     @Test
     public void shouldScrollingView() {
         //given
+        givenSize(LevelsTest.LEVEL_SIZE);
         givenFl("╔══════════════════┐" +
                 "║1.................│" +
                 "║..................│" +
@@ -3801,7 +3806,8 @@ public class ExpansionTest {
 
     @Test
     public void shouldStartOnCenter() {
-        //given
+        // given
+        givenSize(LevelsTest.LEVEL_SIZE);
         givenFl("╔════════════════════════════════════┐" +
                 "║....................................│" +
                 "║....................................│" +

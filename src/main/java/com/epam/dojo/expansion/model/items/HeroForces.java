@@ -35,7 +35,7 @@ public class HeroForces extends FieldItem {
 
     public static final HeroForces EMPTY = new HeroForces();
     private Hero hero;
-    private int count;
+    protected int count;
     private int increase;
 
     private HeroForces() {
@@ -90,6 +90,7 @@ public class HeroForces extends FieldItem {
 
     public void move() {
         count += increase;
+//        increase = 0;
     }
 
     public void startMove(int increase) {

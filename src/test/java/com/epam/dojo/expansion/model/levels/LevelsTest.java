@@ -33,6 +33,9 @@ import static org.junit.Assert.assertEquals;
  * Created by oleksandr.baglai on 24.06.2016.
  */
 public class LevelsTest {
+
+    public static final int LEVEL_SIZE = 16;
+
     @Test
     public void testLevel1() {
         String map = getMap(Levels.LEVEL_1A);
@@ -75,7 +78,7 @@ public class LevelsTest {
     }
 
     private String getMap(String level) {
-        return Levels.resize(level, Levels.VIEW_SIZE_TESTING);
+        return Levels.resize(level, LEVEL_SIZE);
     }
 
     @Test

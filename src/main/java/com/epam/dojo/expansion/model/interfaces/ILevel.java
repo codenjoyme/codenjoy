@@ -36,6 +36,8 @@ public interface ILevel {
 
     int getSize();
 
+    int getViewSize();
+
     <T> List<T> getItems(Class<T> clazz);
 
     ICell[] getCells();
@@ -47,4 +49,5 @@ public interface ILevel {
     List<ICell> getCellsWith(Predicate<ICell> is);
 
     void setField(IField field);
+
 }

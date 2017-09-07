@@ -293,6 +293,19 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return getBase().getCell().copy();
     }
 
+    public int getForcesPerTick() {
+        return INITIAL_FORCES + gold.size();
+    }
+
+    public JSONObject getCurrentAction() {
+        return (currentAction != null) ? currentAction : new JSONObject();
+    }
+
+    public void destroy() {
+        field.removeFromCell(this);
+    }
+
+
     // ----------- only for testing methods -------------
 
     public void remove(Forces forces) {
@@ -342,17 +355,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         }
     }
 
-    public int getForcesPerTick() {
-        return INITIAL_FORCES + gold.size();
-    }
-
-    public JSONObject getCurrentAction() {
-        return (currentAction != null) ? currentAction : new JSONObject();
-    }
-
-    public void destroy() {
-        field.removeFromCell(this);
-    }
+    // --------------- only for logging -------------------
 
     public class LogState {
         public JSONObject json() {

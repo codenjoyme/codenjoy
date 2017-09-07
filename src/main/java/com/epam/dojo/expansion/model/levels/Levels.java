@@ -40,9 +40,6 @@ import java.util.List;
  */
 public final class Levels {
 
-    public static int VIEW_SIZE = 20;
-    public static final int VIEW_SIZE_TESTING = 16;
-
     private Levels() {
         throw new IllegalAccessError("Utility class");
     }
@@ -320,22 +317,23 @@ public final class Levels {
             "              " +
             "              ";
 
-    public static LevelsFactory collectSingle() {
+    public static LevelsFactory collectSingle(int size) {
         return new LevelsFactory() {
             @Override
             public List<ILevel> get() {
-                return collect(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
+                return collect(size,
+                        LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                         LEVEL_7A, LEVEL_8A, LEVEL_9A,
                         LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C);
             }
         };
     }
 
-    public static LevelsFactory collectMultiple() {
+    public static LevelsFactory collectMultiple(int size) {
         return new LevelsFactory() {
             @Override
             public List<ILevel> get() {
-                return collect(MULTI_LEVEL_SIMPLE);
+                return collect(size, MULTI_LEVEL_SIMPLE);
             }
         };
     }
@@ -349,13 +347,13 @@ public final class Levels {
         };
     }
 
-    public static LevelsFactory collectYours(final String... boards) {
+    public static LevelsFactory collectYours(final int viewSize, final String... boards) {
         return new LevelsFactory() {
             @Override
             public List<ILevel> get() {
                 List<ILevel> levels = new LinkedList<ILevel>();
                 for (String board : boards) {
-                    ILevel level = new LevelImpl(board);
+                    ILevel level = new LevelImpl(board, viewSize);
                     levels.add(level);
                 }
                 return levels;
@@ -363,10 +361,10 @@ public final class Levels {
         };
     }
 
-    private static List<ILevel> collect(String... levels) {
+    private static List<ILevel> collect(int viewSize, String... levels) {
         List<ILevel> result = new LinkedList<>();
         for (String level : levels) {
-            result.add(new LevelImpl(resize(decorate(level), size())));
+            result.add(new LevelImpl(resize(decorate(level), viewSize), viewSize));
         }
         return result;
     }
@@ -578,13 +576,7 @@ public final class Levels {
         }
         String actual = TestUtils.injectN(out.getMap());
         String expected = TestUtils.injectN(mask);
-//        System.out.print(actual);
-//        System.out.println("-----------");
         return actual.equals(expected);
-    }
-
-    public static int size() {
-        return VIEW_SIZE; // TODO think about it
     }
 
 }
