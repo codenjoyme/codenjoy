@@ -88,4 +88,16 @@ public interface Point extends Comparable<Point> {
      * @param delta Increment.
      */
     void change(Point delta);
+
+    /**
+     * Changes current point in given direction
+     * @param direction one of 8 directions
+     */
+    void change(QDirection direction);
+
+    /**
+     * Changes current point in given direction
+     * @param direction one of 4 directions
+     */
+    void change(Direction direction);
 }
