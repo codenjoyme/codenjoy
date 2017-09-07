@@ -141,7 +141,7 @@ public class GameRunnerTest {
     }
 
     @Test
-    public void test() {
+    public void shouldCreateSixPlayersInTwoDifferentRooms() {
         givenLevels();
 
         createNewGame(LEVEL1); // LEVEL1
@@ -192,5 +192,36 @@ public class GameRunnerTest {
         assertE(forces2, PLAYER5);
         assertL(level2, PLAYER6);
         assertE(forces2, PLAYER6);
+    }
+
+    @Test
+    public void shouldNextTwoPlayersGoToSecondRoom() {
+        shouldCreateSixPlayersInTwoDifferentRooms();
+
+        createNewGame(0); // first free room
+        createNewGame(0); // first free room
+
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces2 =
+                "------\n" +
+                "---♥--\n" +
+                "-♠----\n" +
+                "----♦-\n" +
+                "--♣---\n" +
+                "------\n";
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
+        assertL(level2, PLAYER8);
+        assertE(forces2, PLAYER8);
     }
 }
