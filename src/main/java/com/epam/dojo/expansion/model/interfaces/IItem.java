@@ -26,7 +26,7 @@ package com.epam.dojo.expansion.model.interfaces;
 import com.codenjoy.dojo.services.State;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.enums.FeatureItem;
+import com.epam.dojo.expansion.model.items.FeatureItem;
 
 import java.util.List;
 

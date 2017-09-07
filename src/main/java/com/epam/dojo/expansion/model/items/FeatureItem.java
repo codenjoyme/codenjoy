@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model.enums;
+package com.epam.dojo.expansion.model.items;
 
 /*-
  * #%L

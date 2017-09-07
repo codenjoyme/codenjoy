@@ -25,7 +25,7 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.epam.dojo.expansion.model.enums.FeatureItem;
+import com.epam.dojo.expansion.model.items.FeatureItem;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.items.Air;

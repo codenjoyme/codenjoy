@@ -24,7 +24,6 @@ package com.epam.dojo.expansion.model.items;
 
 
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.enums.FeatureItem;
 import com.epam.dojo.expansion.model.interfaces.IField;
 
 /**

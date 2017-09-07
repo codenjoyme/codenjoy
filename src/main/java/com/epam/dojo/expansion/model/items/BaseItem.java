@@ -25,7 +25,6 @@ package com.epam.dojo.expansion.model.items;
 
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.enums.FeatureItem;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 
