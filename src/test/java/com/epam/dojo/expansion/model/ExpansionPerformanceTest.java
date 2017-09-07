@@ -41,6 +41,8 @@ import static org.mockito.Mockito.mock;
  */
 public class ExpansionPerformanceTest {
 
+    public static final int COUNT_USERS = 100;
+
     @Test // TODO закончить как будет настроение :)
     public void test() {
         GameRunner gameRunner = new GameRunner();
@@ -48,7 +50,7 @@ public class ExpansionPerformanceTest {
         List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
 
         PrinterFactory factory = new PrinterFactoryImpl();
-        for (int index = 0; index < 4; index++) {
+        for (int index = 0; index < COUNT_USERS; index++) {
             Game game = gameRunner.newGame(mock(EventListener.class), factory, null);
             games.add(game);
         }
@@ -56,7 +58,7 @@ public class ExpansionPerformanceTest {
         Profiler profiler = new Profiler();
 
         profiler.start();
-        for (int i = 0; i < 100; i++) {
+        for (int index = 0; index < 10; index++) {
             for (Game game : games) {
                 game.getBoardAsString();
                 profiler.done("getBoardAsString");
