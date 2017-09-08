@@ -128,9 +128,13 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             if (p.length == 2) {
                 resetToLevel = p[1];
             } else {
-                resetToLevel = -1;
+                wantsReset();
             }
         }
+    }
+
+    public void wantsReset() {
+        resetToLevel = -1;
     }
 
     @Override

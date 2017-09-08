@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -100,6 +101,8 @@ public class Single implements Game {
         result.put("myBase", new JSONObject(player.getBasePosition()));
         result.put("myColor", player.getForcesColor());
         result.put("tick", ticker.get());
+        result.put("round", progressBar.getRoundTicks());
+        result.put("rounds", SettingsWrapper.data.roundTicks());
         result.put("available", player.getForcesPerTick());
         result.put("offset", data.getOffset());
         JSONObject progress = progressBar.printProgress();

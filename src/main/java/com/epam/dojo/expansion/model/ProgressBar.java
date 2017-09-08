@@ -275,6 +275,10 @@ public class ProgressBar {
         return gameOwner;
     }
 
+    public int getRoundTicks() {
+        return current.getRoundTicks();
+    }
+
     public class LogState {
         public JSONObject json() {
             return new JSONObject(){{

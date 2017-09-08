@@ -34,6 +34,8 @@ import com.epam.dojo.expansion.model.levels.items.*;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
+import com.epam.dojo.expansion.services.SettingsWrapper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -44,6 +46,9 @@ import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static java.util.stream.Collectors.toList;
 
 public class Expansion implements Tickable, Field {
+
+    public static final Events WIN_MULTIPLE = Events.WIN(data.winScore());
+    public static final Events WIN_SINGLE = Events.WIN(0);
 
     private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
 
@@ -59,12 +64,14 @@ public class Expansion implements Tickable, Field {
     private List<Player> players;
     private List<Player> losers;
     private boolean waitingOthers = false;
+    private int roundTicks;
 
     public Expansion(List<Level> levels, Dice dice, boolean multiple) {
         this.levels = new LinkedList(levels);
 
         isMultiple = multiple;
         ticks = 0;
+        roundTicks = 0;
 
         players = new LinkedList();
         losers = new LinkedList();
@@ -86,6 +93,10 @@ public class Expansion implements Tickable, Field {
 
         if (isWaiting()) return;
 
+        if (data.roundLimitedInTime()) {
+            roundTicks++;
+        }
+
         if (logger.isDebugEnabled()) {
             logger.debug("Expansion processing board calculations. " +
                             "State before processing {}",
@@ -102,19 +113,27 @@ public class Expansion implements Tickable, Field {
                     player.event(status);
                 }
 
-                isWin |= (Events.WIN(1).equals(status));
+                isWin |= (WIN_MULTIPLE.equals(status));
             }
 
             if (isWin) {
                 losers.clear();
-                List<Player> renew = new LinkedList<>();
-                for (Player player : players.toArray(new Player[0])) {
-                    remove(player);
-                    renew.add(player);
-                }
+                List<Player> renew = removeAllPlayers();
                 for (Player player : renew) {
                     newGame(player);
                 }
+            }
+        }
+
+        System.out.printf("%s = %s\n", lg.id(), roundTicks);
+        if (data.roundLimitedInTime()) {
+            if (roundTicks >= data.roundTicks()) {
+                roundTicks = 0;
+                for (Player player : players) {
+                    player.getHero().wantsReset();
+                }
+                logger.debug("Expansion round is out. All players will be removed! {}",
+                        toString());
             }
         }
 
@@ -136,7 +155,7 @@ public class Expansion implements Tickable, Field {
             Hero hero = player.getHero();
 
             if (hero.isWin()) {
-                player.event(Events.WIN(0));
+                player.event(WIN_SINGLE);
                 player.setNextLevel();
             }
         }
@@ -145,6 +164,16 @@ public class Expansion implements Tickable, Field {
             logger.debug("Expansion finished tick. " +
                     "State after processing {}", toString());
         }
+    }
+
+    @NotNull
+    private List<Player> removeAllPlayers() {
+        List<Player> renew = new LinkedList<>();
+        for (Player player : players.toArray(new Player[0])) {
+            remove(player);
+            renew.add(player);
+        }
+        return renew;
     }
 
     private void attack() {
@@ -287,7 +316,7 @@ public class Expansion implements Tickable, Field {
                             cell.isPassable()
             );
             if (freeCells.isEmpty()) {
-                return Events.WIN(1);
+                return WIN_MULTIPLE;
             }
             return null;
         }
@@ -300,7 +329,7 @@ public class Expansion implements Tickable, Field {
             exists |= item.itsMe(hero);
         }
         if (alone) {
-            return Events.WIN(1);
+            return WIN_MULTIPLE;
         }
         if (!exists) {
             losers.add(player);
@@ -537,6 +566,13 @@ public class Expansion implements Tickable, Field {
         waitingOthers = true;
     }
 
+    public int getRoundTicks() {
+        if (!data.roundLimitedInTime()) {
+            return SettingsWrapper.UNLIMITED;
+        }
+        return roundTicks;
+    }
+
     public int getViewSize() {
         return level.getViewSize();
     }
@@ -550,7 +586,7 @@ public class Expansion implements Tickable, Field {
                 put("losers", players(losers));
                 put("waitingOthers", waitingOthers);
                 put("ticks", ticks);
-
+                put("roundTicks", roundTicks);
                 put("level", printer());
             }};
         }

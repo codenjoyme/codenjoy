@@ -92,7 +92,8 @@ public abstract class AbstractSinglePlayersTest {
         ticker = new Ticker();
         SettingsWrapper.setup()
                 .leaveForceCount(1)
-                .regionsScores(0);
+                .regionsScores(0)
+                .roundTicks(10000);
     }
 
     private void dice(int... ints) {

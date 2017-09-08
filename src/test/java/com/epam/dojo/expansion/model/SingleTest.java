@@ -31,6 +31,7 @@ import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -1304,6 +1305,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'myColor':0," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
+                "'round':1," +
+                "'rounds':10000," +
                 "'showName':true," +
                 "'tick':6" +
                 "}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
@@ -1318,9 +1321,31 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'myColor':1," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
+                "'round':1," +
+                "'rounds':10000," +
                 "'showName':true," +
                 "'tick':6" +
                 "}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
+    }
+
+    @Test
+    public void testGetBoardAsString_structure_roundTicksDisabled() {
+        int old = data.roundTicks();
+        try {
+            data.roundUnlimited();
+
+            // given
+            testGetBoardAsString();
+
+            // when then
+            String json = JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\'');
+            assertEquals(json, true, json.contains("'round':-1,'rounds':-1,"));
+
+            json = JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\'');
+            assertEquals(json, true, json.contains("'round':-1,'rounds':-1,"));
+        } finally {
+            data.roundTicks(old);
+        }
     }
 
     @Test

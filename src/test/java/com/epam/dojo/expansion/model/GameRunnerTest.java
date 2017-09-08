@@ -33,12 +33,14 @@ import com.epam.dojo.expansion.services.PrinterData;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -76,7 +78,7 @@ public class GameRunnerTest {
     }
 
     protected void givenLv(String level, int index) {
-        String name = "MULTI" + index + "_TEST";
+        String name = "MULTI" + index + "_TEST"; // TODO to use StringWrapper
         settings.getParameter("Multiple level " + (index + 1)).update(name);
         Levels.put(name, level);
         int size = (int) Math.sqrt(level.length());
@@ -98,15 +100,18 @@ public class GameRunnerTest {
         games.add(game);
     }
 
-    private void levelOrFreeRoom(int levelOfRoom) {
-        when(dice.next(anyInt())).thenReturn(levelOfRoom);
+    private void levelOrFreeRoom(int... levelOfRoom) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : levelOfRoom) {
+            when = when.thenReturn(i);
+        }
     }
 
-    private void gotoLevel(int level) {
+    private void gotoLevel(int... level) {
         levelOrFreeRoom(level);
     }
 
-    private void gotoFreeRoom(int room) {
+    private void gotoFreeRoom(int... room) {
         levelOrFreeRoom(room);
     }
 
@@ -133,6 +138,7 @@ public class GameRunnerTest {
     }
 
     protected void tickAll() {
+        System.out.println("tick all");
         for (Game game : games) {
             game.tick();
         }
@@ -559,5 +565,83 @@ public class GameRunnerTest {
         assertE(forces2, PLAYER7);
     }
 
+    @Test
+    public void shouldResetAllUsersAfterRoundTicksIsUp() {
+        int old = data.roundTicks();
+        try {
+            data.roundTicks(10);
+            shouldCreateSixPlayersInTwoDifferentRooms();
+
+            game(PLAYER1).destroy();
+            game(PLAYER2).destroy();
+
+            String level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces1 =
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "-♠--♣-\n" +
+                    "------\n";
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+
+            for (int i = 0; i < 9; i++) {
+                tickAll();
+            }
+
+            gotoFreeRoom(1, 0, 0, 1);
+            tickAll();
+
+            level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            forces1 =
+                    "------\n" +
+                    "-♥----\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "--♣---\n" +
+                    "------\n";
+            assertL(level2, PLAYER3);
+            assertE(forces2, PLAYER3);
+            assertL(level2, PLAYER5);
+            assertE(forces2, PLAYER5);
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
+        } finally {
+            data.roundTicks(old);
+        }
+    }
 
 }

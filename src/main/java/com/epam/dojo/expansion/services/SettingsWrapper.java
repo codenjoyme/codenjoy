@@ -1,5 +1,28 @@
 package com.epam.dojo.expansion.services;
 
+/*-
+ * #%L
+ * expansion - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2016 - 2017 EPAM
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -16,9 +39,13 @@ import static java.util.stream.Collectors.toList;
  */
 public final class SettingsWrapper {
 
+    public static final int UNLIMITED = -1;
+
     public static SettingsWrapper data;
 
     private final Parameter<Integer> increasePerTick;
+    private final Parameter<Integer> winScore;
+    private final Parameter<Integer> roundTicks;
     private final Parameter<Integer> initialForce;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> regionsScores;
@@ -41,6 +68,8 @@ public final class SettingsWrapper {
 
         levels = new LinkedList<>();
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
+        winScore = settings.addEditBox("Win multiple score").type(Integer.class).def(1);
+        roundTicks = settings.addEditBox("Ticks per round").type(Integer.class).def(600);
         leaveForceCount = settings.addEditBox("Leave forces count").type(Integer.class).def(0);
         initialForce = settings.addEditBox("Initial forces count").type(Integer.class).def(10);
         increasePerTick = settings.addEditBox("Increase forces per tick count").type(Integer.class).def(10);
@@ -89,6 +118,18 @@ public final class SettingsWrapper {
         return goldScore.getValue();
     }
 
+    public int roundTicks() {
+        return roundTicks.getValue();
+    }
+
+    public boolean roundLimitedInTime() {
+        return roundTicks() != UNLIMITED;
+    }
+
+    public int winScore() {
+        return winScore.getValue();
+    }
+
     // setters for testing
 
     public SettingsWrapper leaveForceCount(int value) {
@@ -106,4 +147,12 @@ public final class SettingsWrapper {
         return this;
     }
 
+    public SettingsWrapper roundUnlimited() {
+        return roundTicks(UNLIMITED);
+    }
+
+    public SettingsWrapper roundTicks(int value) {
+        roundTicks.update(value);
+        return this;
+    }
 }
