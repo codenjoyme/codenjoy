@@ -73,7 +73,7 @@ public class Levels {
 
     public static String loadFromFile(String name) {
         StringBuffer buffer = loadLines(
-                "src/main/resources/expansion/levels/" + name + ".lev",
+                "expansion/levels/" + name + ".lev",
                 StringBuffer::new,
                 (container, line) -> container.append(line)
         );
@@ -85,7 +85,11 @@ public class Levels {
                                 BiFunction<T, String, T> applier)
     {
         T result = supplier.get();
-        try (BufferedReader br = new BufferedReader(new FileReader(Paths.get(filePath).toFile()))) {
+        ClassLoader classLoader = Levels.class.getClassLoader();
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        classLoader.getResourceAsStream(filePath))))
+        {
             String line;
             while ((line = br.readLine()) != null) {
                 applier.apply(result, line);

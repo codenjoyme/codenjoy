@@ -2241,7 +2241,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         Map<String, Integer> heroes = new HashMap<>();
 
         List<String> strings = Levels.loadLines(
-                "src/test/resources/codenjoy.log",
+                "codenjoy.log",
                 LinkedList::new,
                 (container, line) -> {
                     container.add(line);
