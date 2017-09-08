@@ -25,18 +25,15 @@ package com.epam.dojo.expansion.services;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.epam.dojo.expansion.model.*;
-import com.epam.dojo.expansion.model.levels.Level;
+import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.MultipleGameFactory;
+import com.epam.dojo.expansion.model.Single;
+import com.epam.dojo.expansion.model.Ticker;
 import com.epam.dojo.expansion.model.levels.Levels;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static com.epam.dojo.expansion.model.levels.Levels.*;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 
 /**
  * Генератор игор - реализация {@see GameType}
@@ -47,13 +44,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
     private Dice dice;
-    public static SettingsWrapper s;
     private MultipleGameFactory gameFactory;
     private Ticker ticker;
     private int size;
 
     public GameRunner() {
-        s = new SettingsWrapper(settings);
+        SettingsWrapper.setup(settings);
         new Scores(0, settings);
 
         ticker = new Ticker();
@@ -64,13 +60,13 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (gameFactory == null || settings.changed()) {
             settings.changesReacted();
 
-            size = s.boardSize();
+            size = data.boardSize();
             gameFactory = new MultipleGameFactory(dice,
-                    Levels.collectSingle(s.boardSize()),
-                    Levels.collectMultiple(s.boardSize(),
-                            s.levels().toArray(new String[0]))
+                    Levels.collectSingle(data.boardSize()),
+                    Levels.collectMultiple(data.boardSize(),
+                            data.levels().toArray(new String[0]))
             );
-            gameFactory.setWaitingOthers(s.waitingOthers());
+            gameFactory.setWaitingOthers(data.waitingOthers());
         }
     }
 
@@ -83,7 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
-            int total = s.totalSingleLevels();
+            int total = data.totalSingleLevels();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
 

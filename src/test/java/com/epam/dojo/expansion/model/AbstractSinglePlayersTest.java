@@ -32,6 +32,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.*;
 import com.epam.dojo.expansion.services.PrinterData;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -89,6 +90,7 @@ public abstract class AbstractSinglePlayersTest {
         singles = new LinkedList<>();
         heroes = new LinkedList<>();
         ticker = new Ticker();
+        SettingsWrapper.setup().leaveForceCount(1);
     }
 
     private void dice(int... ints) {

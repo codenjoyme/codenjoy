@@ -28,7 +28,9 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;

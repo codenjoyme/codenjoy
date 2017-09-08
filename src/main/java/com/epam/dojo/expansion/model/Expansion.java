@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 
 import java.util.*;
 
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static java.util.stream.Collectors.toList;
 
 public class Expansion implements Tickable, Field {
@@ -407,7 +408,7 @@ public class Expansion implements Tickable, Field {
             return 0;
         }
 
-        return force.leave(count, 1);
+        return force.leave(count, data.leaveForceCount());
     }
 
     @Override

@@ -27,14 +27,13 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.LevelsTest;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
-import com.epam.dojo.expansion.services.Events;
+import com.epam.dojo.expansion.services.*;
 import com.epam.dojo.expansion.model.levels.Levels;
-import com.epam.dojo.expansion.services.Printer;
-import com.epam.dojo.expansion.services.PrinterData;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -64,6 +63,7 @@ public class ExpansionTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        SettingsWrapper.setup().leaveForceCount(1);
     }
 
     private void dice(int... ints) {
