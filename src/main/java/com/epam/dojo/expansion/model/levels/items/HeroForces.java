@@ -84,6 +84,9 @@ public class HeroForces extends FieldItem {
             this.count = 0;
             System.out.println("Hero leave negative count on cell!");
         }
+        if (this.count == 0) {
+            removeFromCell();
+        }
         return count;
     }
 

@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -931,6 +932,45 @@ public class ExpansionTest {
                 "-=#-=#001-=#-=#\n" +
                 "-=#-=#009-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n");
+    }
+
+    @Test
+    public void shouldCantMoveMoreThanExistingSoOneMustBeLeaved_disableOnSettings() {
+        try {
+            // given
+            data.leaveForceCount(0);
+
+            givenFl("╔═══┐" +
+                    "║...│" +
+                    "║.1.│" +
+                    "║...│" +
+                    "└───┘");
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#00A-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n");
+
+            // when
+            hero.move(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN));
+            game.tick();
+
+            // then
+            assertE("-----" +
+                    "-----" +
+                    "-----" +
+                    "--♥--" +
+                    "-----");
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#00A-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n");
+        } finally {
+            data.leaveForceCount(1);
+        }
     }
 
     @Test
