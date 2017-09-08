@@ -36,6 +36,7 @@ import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.Field;
 import com.epam.dojo.expansion.services.CodeSaver;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,12 +46,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
+
 public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     private static Logger logger = DLoggerFactory.getLogger(Hero.class);
-
-    // TODO move to constant
-    public static final int INITIAL_FORCES = 10;
 
     public static final String MOVEMENTS_KEY = Command.MOVEMENTS_KEY;
     public static final String INCREASE_KEY = Command.INCREASE_KEY;
@@ -92,7 +92,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         position = occupyFreeBase().getCell().copy();
         field.reset();
 
-        field.startMoveForces(this, position.getX(), position.getY(), INITIAL_FORCES)
+        field.startMoveForces(this, position.getX(), position.getY(), data.initialForce())
                 .move();
     }
 
@@ -294,7 +294,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public int getForcesPerTick() {
-        return INITIAL_FORCES + gold.size();
+        return data.increasePerTick() + gold.size();
     }
 
     public JSONObject getCurrentAction() {

@@ -18,6 +18,8 @@ public final class SettingsWrapper {
 
     public static SettingsWrapper data;
 
+    private final Parameter<Integer> increasePerTick;
+    private final Parameter<Integer> initialForce;
     private final Parameter<Integer> boardSize;
     private final Parameter<Boolean> waitingOthers;
     private final List<Parameter<String>> levels;
@@ -37,7 +39,9 @@ public final class SettingsWrapper {
 
         levels = new LinkedList<>();
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
-        leaveForceCount = settings.addEditBox("Leave force count").type(Integer.class).def(0);
+        leaveForceCount = settings.addEditBox("Leave forces count").type(Integer.class).def(0);
+        initialForce = settings.addEditBox("Initial forces count").type(Integer.class).def(10);
+        increasePerTick = settings.addEditBox("Increase forces per tick count").type(Integer.class).def(10);
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
         levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
         levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
@@ -63,6 +67,14 @@ public final class SettingsWrapper {
 
     public int leaveForceCount() {
         return leaveForceCount.getValue();
+    }
+
+    public int initialForce() {
+        return initialForce.getValue();
+    }
+
+    public int increasePerTick() {
+        return increasePerTick.getValue();
     }
 
     // setters for testing
