@@ -31,6 +31,7 @@ import com.epam.dojo.expansion.model.Elements;
 public class Wall extends BaseItem {
 
     public Wall(Elements el) {
-        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
+        super(el);
+        impassable();
     }
 }

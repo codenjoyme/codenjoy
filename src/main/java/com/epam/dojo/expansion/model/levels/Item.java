@@ -42,7 +42,7 @@ public interface Item extends State<Elements, Player> {
 
     void setCell(Cell value);
 
-    boolean hasFeatures(FeatureItem[] features);
+    boolean hasFeature(FeatureItem feature);
 
     Cell removeFromCell();
 }

@@ -27,11 +27,14 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.expansion.model.levels.items.FeatureItem;
 import com.epam.dojo.expansion.model.levels.items.Air;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.items.HeroForces;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.epam.dojo.expansion.model.levels.items.FeatureItem.IMPASSABLE;
 
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
@@ -77,7 +80,7 @@ public class CellImpl extends PointImpl implements Cell {
     @Override
     public boolean isPassable() {
         for (Item item : items) {
-            if (item.hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
+            if (item.hasFeature(IMPASSABLE)) {
                 return false;
             }
         }
@@ -125,6 +128,12 @@ public class CellImpl extends PointImpl implements Cell {
     public void removeItem(Item item) {
         items.remove(item);
         preformAction(item, false);
+    }
+
+    @Override
+    public boolean busy(Hero hero) {
+        HeroForces item = getItem(HeroForces.class);
+        return (item != null) && item.itsMe(hero);
     }
 
     @Override

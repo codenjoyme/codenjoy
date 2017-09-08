@@ -36,7 +36,6 @@ import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.Field;
 import com.epam.dojo.expansion.services.CodeSaver;
-import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -294,7 +293,12 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public int getForcesPerTick() {
-        return data.increasePerTick() + gold.size()*data.goldScore();
+        int result = data.increasePerTick() +
+                data.goldScore() * gold.size();
+        if (data.regionsScores() != 0) {
+            result += data.regionsScores() * field.regionsCount(this) / field.totalRegions();
+        }
+        return result;
     }
 
     public JSONObject getCurrentAction() {

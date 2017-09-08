@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.items.HeroForces;
 
 import java.util.List;
@@ -48,4 +49,6 @@ public interface Cell extends Point {
     <T extends Item> List<T> getItems();
 
     void removeItem(Item item);
+
+    boolean busy(Hero hero);
 }

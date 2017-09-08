@@ -31,7 +31,7 @@ import com.epam.dojo.expansion.model.Elements;
  */
 public class None extends BaseItem {
 
-    public None(Point point) {
+    public None() {
         super(Elements.EMPTY);
     }
 }

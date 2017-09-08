@@ -32,7 +32,8 @@ import com.epam.dojo.expansion.model.Player;
 public class Box extends FieldItem {
 
     public Box(Elements el) {
-        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
+        super(el);
+        impassable();
     }
 
     @Override

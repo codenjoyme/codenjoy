@@ -64,7 +64,9 @@ public class ExpansionTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        SettingsWrapper.setup().leaveForceCount(1);
+        SettingsWrapper.setup()
+                .leaveForceCount(1)
+                .regionsScores(0);
     }
 
     private void dice(int... ints) {
@@ -4432,4 +4434,164 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
     }
 
+    @Test
+    public void shouldIncreaseScoreDependsOnRegionsOccupations() {
+        try {
+            // given
+            data.regionsScores(100);
+
+            givenFl("       " +
+                    " ╔═══┐ " +
+                    " ║...│ " +
+                    " ║.1.│ " +
+                    " ║...│ " +
+                    " └───┘ " +
+                    "       ");
+
+            assertEquals(10 + 100*1/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.LEFT));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "-------" +
+                    "--♥♥---" +
+                    "-------" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*2/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.LEFT_UP));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥----" +
+                    "--♥♥---" +
+                    "-------" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*3/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.UP));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥♥---" +
+                    "--♥♥---" +
+                    "-------" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*4/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT_UP));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥♥♥--" +
+                    "--♥♥---" +
+                    "-------" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*5/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥♥♥--" +
+                    "--♥♥♥--" +
+                    "-------" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*6/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT_DOWN));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥♥♥--" +
+                    "--♥♥♥--" +
+                    "----♥--" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*7/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.DOWN));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥♥♥--" +
+                    "--♥♥♥--" +
+                    "---♥♥--" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*8/9, hero.getForcesPerTick());
+
+            // when
+            hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.LEFT_DOWN));
+            game.tick();
+
+            // then
+            assertE("-------" +
+                    "-------" +
+                    "--♥♥♥--" +
+                    "--♥♥♥--" +
+                    "--♥♥♥--" +
+                    "-------" +
+                    "-------");
+
+            assertEquals(10 + 100*9/9, hero.getForcesPerTick());
+        } finally {
+            data.regionsScores(0);
+        }
+    }
+
+    @Test
+    public void shouldIncreaseScoreDependsOnRegionsOccupations_holesAndBreaksIsNotARegion() {
+        try {
+            // given
+            data.regionsScores(100);
+
+            givenFl("       " +
+                    " ╔════┐" +
+                    " ║...O│" +
+                    " ║.1.B│" +
+                    " ║...O│" +
+                    " └────┘" +
+                    "       ");
+
+            // then
+            assertEquals(10 + 100 * 1 / 9, hero.getForcesPerTick());
+        } finally {
+            data.regionsScores(0);
+        }
+    }
 }

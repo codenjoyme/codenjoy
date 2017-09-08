@@ -459,6 +459,17 @@ public class Expansion implements Tickable, Field {
         }
     }
 
+    @Override
+    public int totalRegions(){
+        return level.getCellsWith(cell -> cell.isPassable()
+                && cell.getItem(Hole.class) == null).size();
+    }
+
+    @Override
+    public int regionsCount(Hero hero) {
+        return level.getCellsWith(cell -> cell.busy(hero)).size();
+    }
+
     public List<Hero> getHeroes() {
         List<Hero> result = new LinkedList();
         for (Player player : players) {

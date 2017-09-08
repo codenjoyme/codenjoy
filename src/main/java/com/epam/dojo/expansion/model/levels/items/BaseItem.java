@@ -36,17 +36,15 @@ import java.util.List;
  */
 public abstract class BaseItem implements Item {
     private Cell cell;
-    private FeatureItem[] features;
+    private FeatureItem feature;
     protected Elements element;
 
     public BaseItem(Elements element) {
         this.element = element;
-        this.features = new FeatureItem[0];
     }
 
-    public BaseItem(Elements element, FeatureItem[] features) {
-        this.element = element;
-        this.features = features.clone();
+    protected void impassable() {
+        feature = FeatureItem.IMPASSABLE;
     }
 
     @Override
@@ -128,16 +126,8 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public boolean hasFeatures(FeatureItem[] features) {
-        for (int i = 0; i < this.features.length; ++i) {
-            for (int j = 0; j < features.length; ++j) {
-                if (this.features[i] == features[j]) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    public boolean hasFeature(FeatureItem feature) {
+        return feature != null && feature.equals(this.feature);
     }
 
     @Override

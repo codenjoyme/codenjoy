@@ -37,10 +37,6 @@ public class FieldItem extends BaseItem {
         super(element);
     }
 
-    public FieldItem(Elements element, FeatureItem[] features) {
-        super(element, features);
-    }
-
     public void setField(Field value) {
         field = value;
     }

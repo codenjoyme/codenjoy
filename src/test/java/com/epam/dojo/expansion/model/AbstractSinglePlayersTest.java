@@ -90,7 +90,9 @@ public abstract class AbstractSinglePlayersTest {
         singles = new LinkedList<>();
         heroes = new LinkedList<>();
         ticker = new Ticker();
-        SettingsWrapper.setup().leaveForceCount(1);
+        SettingsWrapper.setup()
+                .leaveForceCount(1)
+                .regionsScores(0);
     }
 
     private void dice(int... ints) {

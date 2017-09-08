@@ -62,4 +62,7 @@ public interface Field {
     void reset();
 
     void removeFromCell(Hero hero);
+
+    int totalRegions();
+    int regionsCount(Hero hero);
 }
