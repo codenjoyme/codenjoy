@@ -294,7 +294,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public int getForcesPerTick() {
-        return data.increasePerTick() + gold.size();
+        return data.increasePerTick() + gold.size()*data.goldScore();
     }
 
     public JSONObject getCurrentAction() {

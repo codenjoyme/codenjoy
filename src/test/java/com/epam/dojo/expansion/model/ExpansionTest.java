@@ -935,7 +935,7 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldCantMoveMoreThanExistingSoOneMustBeLeaved_disableOnSettings() {
+    public void shouldCantMoveMoreThanExistingSoOneMustBeLeaved_changeOnSettings() {
         try {
             // given
             data.leaveForceCount(0);
@@ -2987,6 +2987,103 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
 
         assertEquals(11, hero.getForcesPerTick());
+    }
+
+    @Test
+    public void shouldOneMoreArmyToTheMaxCountWhenGetGold_changeOnSettings() {
+        try {
+            // given
+            data.goldScore(10);
+
+            givenFl("╔═══┐" +
+                    "║...│" +
+                    "║1$E│" +
+                    "└───┘" +
+                    "     ");
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n");
+
+            assertEquals(10, hero.getForcesPerTick());
+
+            hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT)); // pick up gold
+            game.tick();
+
+            assertL("╔═══┐" +
+                    "║...│" +
+                    "║1$E│" +
+                    "└───┘" +
+                    "     ");
+
+            assertE("-----" +
+                    "-----" +
+                    "-♥♥--" +
+                    "-----" +
+                    "-----");
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#009001-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n");
+
+            assertEquals(20, hero.getForcesPerTick());
+
+            // when
+            hero.increase(new Forces(pt(2, 2), 25)); // only 20 can increase
+            game.tick();
+
+            // then
+            assertL("╔═══┐" +
+                    "║...│" +
+                    "║1$E│" +
+                    "└───┘" +
+                    "     ");
+
+            assertE("-----" +
+                    "-----" +
+                    "-♥♥--" +
+                    "-----" +
+                    "-----");
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#00900L-=#-=#\n" + // 1+20
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n");
+
+            assertEquals(20, hero.getForcesPerTick());
+
+            // when
+            hero.increase(new Forces(pt(2, 2), 25)); // only 20 can increase
+            game.tick();
+
+            // then
+            assertL("╔═══┐" +
+                    "║...│" +
+                    "║1$E│" +
+                    "└───┘" +
+                    "     ");
+
+            assertE("-----" +
+                    "-----" +
+                    "-♥♥--" +
+                    "-----" +
+                    "-----");
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#009015-=#-=#\n" + // 21+20
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n");
+
+            assertEquals(20, hero.getForcesPerTick());
+        } finally {
+            data.goldScore(1);
+        }
     }
 
     @Test

@@ -20,6 +20,7 @@ public final class SettingsWrapper {
 
     private final Parameter<Integer> increasePerTick;
     private final Parameter<Integer> initialForce;
+    private final Parameter<Integer> goldScore;
     private final Parameter<Integer> boardSize;
     private final Parameter<Boolean> waitingOthers;
     private final List<Parameter<String>> levels;
@@ -42,6 +43,7 @@ public final class SettingsWrapper {
         leaveForceCount = settings.addEditBox("Leave forces count").type(Integer.class).def(0);
         initialForce = settings.addEditBox("Initial forces count").type(Integer.class).def(10);
         increasePerTick = settings.addEditBox("Increase forces per tick count").type(Integer.class).def(10);
+        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(1);
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
         levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
         levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
@@ -77,10 +79,20 @@ public final class SettingsWrapper {
         return increasePerTick.getValue();
     }
 
+    public int goldScore() {
+        return goldScore.getValue();
+    }
+
     // setters for testing
 
-    public SettingsWrapper leaveForceCount(int count) {
-        leaveForceCount.update(count);
+    public SettingsWrapper leaveForceCount(int value) {
+        leaveForceCount.update(value);
         return this;
     }
+
+    public SettingsWrapper goldScore(int value) {
+        goldScore.update(value);
+        return this;
+    }
+
 }
