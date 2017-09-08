@@ -32,11 +32,11 @@ import com.epam.dojo.expansion.model.levels.Item;
  */
 public class Gold extends BaseItem {
 
-    private boolean hidden;
+    private boolean picked;
 
     public Gold(Elements el) {
         super(el);
-        hidden = false;
+        picked = false;
     }
 
     @Override
@@ -51,11 +51,11 @@ public class Gold extends BaseItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (hidden) {
-            return Elements.FLOOR;
-        } else {
+//        if (picked) {
+//            return Elements.FLOOR;
+//        } else {
             return super.state(player, alsoAtPoint);
-        }
+//        }
     }
 
     @Override
@@ -64,21 +64,21 @@ public class Gold extends BaseItem {
             HeroForces forces = (HeroForces) item;
             if (comeInOrLeave) {
                 forces.pickUpGold(this);
-                hidden = true;
+                picked = true;
             } else {
                 if (forces.ownGold(this)) {
                     forces.forgotGold(this);
-                    hidden = false;
+                    picked = false;
                 }
             }
         }
     }
 
     public void reset() {
-        hidden = false;
+        picked = false;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public boolean isPicked() {
+        return picked;
     }
 }

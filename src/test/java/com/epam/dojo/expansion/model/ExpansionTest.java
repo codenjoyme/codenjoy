@@ -2880,7 +2880,7 @@ public class ExpansionTest {
 
         assertL("╔═══┐" +
                 "║...│" +
-                "║1.E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2905,7 +2905,7 @@ public class ExpansionTest {
         // then
         assertL("╔═══┐" +
                 "║...│" +
-                "║1.E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2930,7 +2930,7 @@ public class ExpansionTest {
         // then
         assertL("╔═══┐" +
                 "║...│" +
-                "║1.E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -3076,7 +3076,7 @@ public class ExpansionTest {
 
         assertL("      " +
                 "╔════┐" +
-                "║1..E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -3108,7 +3108,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║1..E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -3136,7 +3136,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║1..E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -3188,7 +3188,7 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldHideGoldWhenGet() {
+    public void shouldDontHideGoldWhenGet() {
         // given
         givenFl("      " +
                 "╔════┐" +
@@ -3211,7 +3211,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║1.$E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -3237,7 +3237,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║1..E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -3260,11 +3260,11 @@ public class ExpansionTest {
     @Test
     public void shouldHiddenGoldCantGetAgain() {
         // given
-        shouldHideGoldWhenGet();
+        shouldDontHideGoldWhenGet();
 
         assertL("      " +
                 "╔════┐" +
-                "║1..E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -3312,11 +3312,11 @@ public class ExpansionTest {
     @Test
     public void shouldReNewGoldWhenReset() {
         // given
-        shouldHideGoldWhenGet();
+        shouldDontHideGoldWhenGet();
 
         assertL("      " +
                 "╔════┐" +
-                "║1..E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
