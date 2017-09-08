@@ -33,6 +33,7 @@
         <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
         <maven-license.version>1.9</maven-license.version>
         <kotlin.version>1.0.4</kotlin.version>
+        <buildDateTime>${maven.build.timestamp}</buildDateTime>
     </properties>
 
     <groupId>com.codenjoy</groupId>
