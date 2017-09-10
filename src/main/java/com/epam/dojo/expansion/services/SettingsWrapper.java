@@ -79,6 +79,7 @@ public final class SettingsWrapper {
         levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
         levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
         levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(MULTI3));
+        levels.add(settings.addEditBox("Multiple level 4").type(String.class).def(MULTI4));
         total = Levels.collectSingle(boardSize()).get().size();
     }
 

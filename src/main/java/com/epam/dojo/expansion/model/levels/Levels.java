@@ -23,13 +23,15 @@ package com.epam.dojo.expansion.model.levels;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 
-import java.io.*;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -39,6 +41,8 @@ import java.util.function.Supplier;
  */
 public class Levels {
 
+    private static Logger logger = DLoggerFactory.getLogger(Levels.class);
+
     private static Map<String, String> levels = new LinkedHashMap<>();
 
     public static final String DEMO = make("DEMO");
@@ -47,6 +51,7 @@ public class Levels {
     public static final String MULTI1 = make("MULTI1");
     public static final String MULTI2 = make("MULTI2");
     public static final String MULTI3 = make("MULTI3");
+    public static final String MULTI4 = make("MULTI4");
     public static final String SINGLE1 = make("SINGLE1");
     public static final String SINGLE2 = make("SINGLE2");
     public static final String SINGLE3 = make("SINGLE3");
@@ -94,10 +99,8 @@ public class Levels {
             while ((line = br.readLine()) != null) {
                 applier.apply(result, line);
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Error durring loading file {}", filePath, e);
         }
         return result;
     }
