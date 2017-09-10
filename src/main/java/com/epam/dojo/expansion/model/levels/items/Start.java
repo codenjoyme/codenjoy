@@ -49,11 +49,6 @@ public class Start extends BaseItem {
         return getCell().getItems(HeroForces.class).isEmpty();
     }
 
-    public boolean busyWith(Hero hero) {
-        HeroForces item = getCell().getItem(HeroForces.class);
-        return (item != null && item.itsMe(hero));
-    }
-
     public boolean isOwnedBy(Hero hero) {
         if (owner == null) {
             return false;
