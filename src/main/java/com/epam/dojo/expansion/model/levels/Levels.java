@@ -111,8 +111,8 @@ public class Levels {
                 SINGLE5, SINGLE6, SINGLE7);
     }
 
-    public static LevelsFactory collectMultiple(int bozrdSize, String... levels) {
-        return () -> collect(bozrdSize, levels);
+    public static LevelsFactory collectMultiple(int boardSize, String... levels) {
+        return () -> collect(boardSize, levels);
     }
 
     public static LevelsFactory none() {
@@ -133,7 +133,11 @@ public class Levels {
     private static List<Level> collect(int viewSize, String... names) {
         List<Level> result = new LinkedList<>();
         for (String name : names) {
-            String resize = resize(get(name), viewSize);
+            String level = get(name);
+            if (level == null) {
+                level = get(make(name));
+            }
+            String resize = resize(level, viewSize);
             result.add(new LevelImpl(resize, viewSize));
         }
         return result;

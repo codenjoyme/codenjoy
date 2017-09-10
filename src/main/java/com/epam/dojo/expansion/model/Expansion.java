@@ -125,7 +125,7 @@ public class Expansion implements Tickable, Field {
             }
         }
 
-        System.out.printf("%s = %s\n", lg.id(), roundTicks);
+//        System.out.printf("%s = %s\n", lg.id(), roundTicks);
         if (data.roundLimitedInTime()) {
             if (roundTicks >= data.roundTicks()) {
                 roundTicks = 0;

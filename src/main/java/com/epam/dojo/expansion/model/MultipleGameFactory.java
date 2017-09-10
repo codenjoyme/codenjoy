@@ -23,12 +23,15 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.epam.dojo.expansion.model.levels.Level;
+import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -41,6 +44,8 @@ import static java.util.stream.Collectors.toList;
  */
 // TODO test me
 public class MultipleGameFactory implements GameFactory {
+
+    private static Logger logger = DLoggerFactory.getLogger(MultipleGameFactory.class);
 
     private List<Expansion> rooms = new LinkedList<>();
 
@@ -95,7 +100,15 @@ public class MultipleGameFactory implements GameFactory {
 
     @NotNull
     private Expansion createNewMultiple() {
-        Level level = selectRandomLevelType();
+        Level level = null;
+        int counter = 10;
+        while (level == null) {
+            level = selectRandomLevelType();
+            if (level == null && ++counter > 10) { //TODO think about it
+                logger.error("Something wrong with levels. There are no levels loaded from *.lev. Used default!");
+                level = Levels.collectMultiple(20, "MULTI1").get().get(0);
+            }
+        }
         Expansion game = new Expansion(Arrays.asList(level),
                 new RandomDice(), Expansion.MULTIPLE);
 
@@ -106,7 +119,8 @@ public class MultipleGameFactory implements GameFactory {
     @NotNull
     private Level selectRandomLevelType() {
         List<Level> levels = multipleFactory.get();
-        return levels.get(dice.next(levels.size()));
+        Level level = levels.get(dice.next(levels.size()));
+        return level;
     }
 
     // это опция сеттинговая, она раз на всю игру
