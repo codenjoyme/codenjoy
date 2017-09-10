@@ -592,8 +592,12 @@ public class Expansion implements Tickable, Field {
         }
 
         private PrinterData printer() {
-            Printer printer = new Printer(Expansion.this, size());
-            return printer.getBoardAsString(Expansion.this.players.get(0));
+            try {
+                Printer printer = new Printer(Expansion.this, size());
+                return printer.getBoardAsString(Expansion.this.players.get(0));
+            } catch (Exception e) {
+                return null;
+            }
         }
 
         private List<String> players(List<Player> players) {
