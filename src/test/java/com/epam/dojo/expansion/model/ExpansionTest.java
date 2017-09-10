@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.LevelsTest;
@@ -88,7 +87,7 @@ public class ExpansionTest {
         listener = mock(EventListener.class);
         ProgressBar progressBar = new ProgressBar(factory, dice);
         player = new Player(listener, progressBar);
-        progressBar.newGame(player);
+        progressBar.start(null, player);
         game = progressBar.getCurrent();
         hero = game.getHeroes().get(0);
 

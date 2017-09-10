@@ -29,7 +29,6 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
 import com.epam.dojo.expansion.services.SettingsWrapper;
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
@@ -55,7 +54,6 @@ public class Single implements Game {
         progressBar = new ProgressBar(gameFactory, dice);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
-        progressBar.setPlayer(player);
     }
 
     @Override
@@ -84,11 +82,7 @@ public class Single implements Game {
             logger.debug("Starts new game for {}", lg.id());
         }
 
-        if (!StringUtils.isEmpty(save)) {
-            progressBar.loadProgress(save);
-        } else {
-            progressBar.newGame(player);
-        }
+        progressBar.start(save, player);
     }
 
     @Override

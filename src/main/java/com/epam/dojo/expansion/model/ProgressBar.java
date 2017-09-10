@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.services.Printer;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
@@ -62,18 +63,6 @@ public class ProgressBar {
         this.factory = factory;
         single = factory.get(Expansion.SINGLE);
         this.dice = dice;
-
-        if (single.levelsCount() != 0) {
-            current = single;
-            finished = false;
-            backToSingleLevel = null;
-            lastPassedLevel = -1;
-        } else {
-            current = factory.get(Expansion.MULTIPLE);
-        }
-        currentLevel = 0;
-        current.loadLevel(currentLevel);
-        buildPrinter();
     }
 
     public void setNextLevel() {
@@ -115,8 +104,7 @@ public class ProgressBar {
                 finished = true;
                 return;
             }
-            currentLevel = level;
-            current.loadLevel(currentLevel);
+            loadLevel(level);
             createHeroToPlayer();
         } else {
             if (level == -1) {
@@ -132,8 +120,7 @@ public class ProgressBar {
             if (lastPassedLevel < currentLevel) {
                 lastPassedLevel = currentLevel;
             }
-            currentLevel++;
-            current.loadLevel(currentLevel);
+            loadLevel(currentLevel + 1);
         } else if (!current.isMultiple()) {
             if (lastPassedLevel < currentLevel) {
                 lastPassedLevel = currentLevel;
@@ -145,8 +132,20 @@ public class ProgressBar {
 
     protected void createHeroToPlayer() {
         remove(player);
-        newGame(player);
+        start(player);
         nextLevel = false;
+    }
+
+    private void start(Player player) {
+        if (current != null) {
+            current.newGame(player);
+        }
+    }
+
+    public void remove(Player player) {
+        if (current != null) {
+            current.remove(player);
+        }
     }
 
     public void tick() {
@@ -177,11 +176,11 @@ public class ProgressBar {
     private void loadMultiple() {
         remove(player);
         current = factory.get(Expansion.MULTIPLE);
-        currentLevel = 0; // only one multiple level we have
-        current.loadLevel(currentLevel);
+
+        loadLevel(0); // only one multiple level we have
         buildPrinter();
         try {
-            newGame(player);
+            start(player);
         } catch (BusyMapException e) {
             remove(player); // TODO и что дальше?
         }
@@ -190,11 +189,16 @@ public class ProgressBar {
     private void loadSingle(Integer level) {
         remove(player);
         current = single;
+        loadLevel(level);
         finished = false;
         buildPrinter();
-        newGame(player);
-        player.getHero().loadLevel(level);
-        checkLevel();
+        start(player);
+    }
+
+    private void loadLevel(Integer level) {
+        currentLevel = level;
+        player.destroyHero();
+        current.loadLevel(level);
     }
 
     // TODO test me
@@ -213,16 +217,19 @@ public class ProgressBar {
         return result;
     }
 
-    public void setPlayer(Player player) {
+    protected void setPlayer(Player player) {
         this.player = player;
     }
 
-    public void newGame(Player player) {
-        current.newGame(player);
-    }
-
-    public void remove(Player player) {
-        current.remove(player);
+    public void start(String save, Player player) {
+        this.player = player;
+        if (!StringUtils.isEmpty(save)) {
+            loadProgress(save);
+        } else {
+            load(single.levelsCount() == 0, 0);
+            backToSingleLevel = null;
+            lastPassedLevel = -1;
+        }
     }
 
     public Printer getPrinter() {
@@ -249,13 +256,17 @@ public class ProgressBar {
             currentLevel = object.getInt("current");
             lastPassedLevel = object.getInt("lastPassed");
             boolean isMultiple = object.getBoolean("multiple");
-            if (isMultiple) {
-                loadMultiple();
-            } else {
-                loadSingle(currentLevel);
-            }
+            load(isMultiple, currentLevel);
         } catch (Exception e) {
             logger.error("Error during loadProgress from save {}", save, e);
+        }
+    }
+
+    private void load(boolean isMultiple, int currentLevel) {
+        if (isMultiple) {
+            loadMultiple();
+        } else {
+            loadSingle(currentLevel);
         }
     }
 

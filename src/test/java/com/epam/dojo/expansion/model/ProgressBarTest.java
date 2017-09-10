@@ -33,6 +33,7 @@ import com.epam.dojo.expansion.model.levels.items.HeroForces;
 import com.epam.dojo.expansion.model.levels.items.Start;
 import com.epam.dojo.expansion.model.levels.CellImpl;
 import com.epam.dojo.expansion.model.levels.StubGamesGameFactory;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -82,6 +83,11 @@ public class ProgressBarTest {
         dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(0);
 
+        SettingsWrapper.setup()
+                .leaveForceCount(1)
+                .regionsScores(0)
+                .roundTicks(10000);
+
         Level level1 = getLevel();
         Level level2 = getLevel();
         Level level3 = getLevel();
@@ -93,7 +99,7 @@ public class ProgressBarTest {
         progressBar = new ProgressBar(new StubGamesGameFactory(single, multiple), dice);
 
         player = new Player(mock(EventListener.class), progressBar);
-        single.newGame(player);
+        progressBar.start(null, player);
     }
 
     private Level getLevel() {
