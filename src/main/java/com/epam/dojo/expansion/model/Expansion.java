@@ -313,7 +313,7 @@ public class Expansion implements Tickable, Field {
         if (players.size() == 1) {
             List<Cell> freeCells = level.getCellsWith(
                     cell -> cell.getItems(HeroForces.class).isEmpty() &&
-                            cell.isPassable()
+                            cell.isPassable() && cell.getItem(Hole.class) == null
             );
             if (freeCells.isEmpty()) {
                 return WIN_MULTIPLE;
