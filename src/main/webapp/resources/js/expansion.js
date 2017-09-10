@@ -131,6 +131,9 @@ var loadArrowImages = function() {
     for (var force = 0; force <= 4; force++) {
         sprites['base' + force] = loadImage('base' + force);
     }
+    // TODO эти спрайты уже загружались ранее в canvases.js надо их оттуда сюда прокинуть
+    sprites['gold'] = loadImage('gold');
+    sprites['floor'] = loadImage('floor');
 }
 
 var previousBoard = null;
@@ -187,6 +190,8 @@ game.drawBoard = function(drawer) {
         return RED;
     }
 
+    // TODO завязываться на буквы не очень ок, потому что любое пермещение в Elevemnts
+    // приведет к поломке UI, надо привязываться к названиям спрайтов
     var parseColor = function(char) {
         if (char == 'P' || char == 'X') return BLUE;
         if (char == 'Q' || char == 'Y') return RED;
@@ -201,6 +206,10 @@ game.drawBoard = function(drawer) {
 
     var isForce = function(char) {
         return (char == 'P') || (char == 'Q') || (char == 'R') || (char == 'S');
+    }
+
+    var isGold = function(char) {
+        return (char == 'W');
     }
 
     var parseCount = function(code) {
@@ -256,8 +265,13 @@ game.drawBoard = function(drawer) {
     try {
         drawer.drawLayers(function(layers, layerIndex, charIndex, x, y) {
             try {
-                var afterForce = (layerIndex == 1 && isForce(layers[layerIndex][charIndex]));
-                var afterBase = (layerIndex == 0 && isBase(layers[layerIndex][charIndex]));
+                var hasGold = isGold(layers[0][charIndex]);
+                var hasForce = isForce(layers[1][charIndex]);
+                var hasBase = isBase(layers[0][charIndex]);
+
+                var afterGold = (layerIndex == 0 && hasGold);
+                var afterForce = (layerIndex == 1 && hasForce);
+                var afterBase = (layerIndex == 0 && hasBase);
                 if (afterBase) {
                     if (getCount(x, y) == 0) {
                         canvas.drawImage(sprites['base0'], x, y, 0, 0);
@@ -270,8 +284,18 @@ game.drawBoard = function(drawer) {
                     }
                 }
 
-                if (afterForce || afterBase) {
-                    drawForces(x, y, afterBase, afterForce);
+                if (afterGold) {
+                    if (!hasForce) {
+                        canvas.drawImage(sprites['floor'], x, y, 0, 0);
+                    }
+                    canvas.drawImage(sprites['gold'], x, y, 0, 0);
+                    if (hasForce) {
+                        drawForces(x, y, afterBase, afterForce);
+                    }
+                } else if (afterForce || afterBase) {
+                    if (!hasGold) {
+                        drawForces(x, y, afterBase, afterForce);
+                    }
                 }
             } catch (err) {
                 console.log(err);
