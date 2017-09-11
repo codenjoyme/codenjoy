@@ -233,6 +233,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                     $.each(getHeroesData(), function(name, heroData) {
                         var point = heroData.coordinate;
                         if (!point) return; // TODO why this can happen?
+                        if (point.x == -1 || point.y == -1) return;
                         if (!!board.offset) {
                             point.x -= board.offset.x;
                             point.y -= board.offset.y;
@@ -391,8 +392,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
             var x = (pt.x + 1) * plotSize;
             var y = (boardSize - pt.y - 1) * plotSize - 5;
-            if (!!font.dx && !!font.dy) {
+            if (!!font.dx) {
                 x += font.dx;
+            }
+            if (!!font.dy) {
                 y += font.dy;
             }
             for (var i = 0; i < 10; i++) {
