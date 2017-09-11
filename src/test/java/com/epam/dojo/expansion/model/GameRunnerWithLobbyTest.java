@@ -249,4 +249,56 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(LOBBY_FORCES, PLAYER1);
     }
 
+    @Test
+    public void shouldNewUserCanGoToLobby() {
+        shouldWhenOneUserShouldResetLevelThenGoToLobby();
+
+        createNewGame();
+
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "----♦-\n" +
+                "------\n" +
+                "------\n" +
+                "-♠--♣-\n" +
+                "------\n";
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces2 =
+                "------\n" +
+                "---♥--\n" +
+                "------\n" +
+                "----♦-\n" +
+                "------\n" +
+                "------\n";
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
+
+        assertL(LOBBY_LEVEL, PLAYER1);
+        assertE(LOBBY_FORCES, PLAYER1);
+        assertL(LOBBY_LEVEL, PLAYER7);
+        assertE(LOBBY_FORCES, PLAYER7);
+    }
+
 }
