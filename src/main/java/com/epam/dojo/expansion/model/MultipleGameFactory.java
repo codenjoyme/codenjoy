@@ -70,8 +70,15 @@ public class MultipleGameFactory implements GameFactory {
     public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
         if (isMultiple) {
             Expansion game = findFreeRandomMultiple(choseLevel);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Try find free random multiple room {}", game);
+            }
+
             if (game == null) {
                 game = createNewMultiple(choseLevel);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Create new random multiple room {}", game);
+                }
             }
             if (waitingOthers) {
                 game.waitingOthers();
@@ -90,7 +97,8 @@ public class MultipleGameFactory implements GameFactory {
             return null;
         }
         int index = dice.next(free.size());
-        return free.get(index);
+        Expansion expansion = free.get(index);
+        return expansion;
     }
 
     @NotNull

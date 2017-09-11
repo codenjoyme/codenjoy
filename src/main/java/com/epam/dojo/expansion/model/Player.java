@@ -33,6 +33,10 @@ import com.epam.dojo.expansion.services.Events;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public class Player {
 
     private static Logger logger = DLoggerFactory.getLogger(Player.class);
@@ -132,6 +136,10 @@ public class Player {
         public String id() {
             return "P@" + Integer.toHexString(Player.this.hashCode());
         }
+    }
+
+    public static List<String> lg(List<Player> players) {
+        return players.stream().map(p -> (p != null) ? p.lg.id() : "null").collect(toList());
     }
 
     public LogState lg = new LogState();

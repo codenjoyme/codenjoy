@@ -136,8 +136,10 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                 for (Player player : players) {
                     player.getHero().wantsReset();
                 }
-                logger.debug("Expansion round is out. All players will be removed! {}",
-                        toString());
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Expansion round is out. All players will be removed! {}",
+                            toString());
+                }
             }
         }
 
@@ -562,7 +564,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                 put("players", players());
                 put("id", id());
                 put("isMultiple", isMultiple);
-                put("losers", players(losers));
+                put("losers", Player.lg(losers));
                 put("waitingOthers", waitingOthers);
                 put("ticks", ticks);
                 put("roundTicks", roundTicks);
@@ -571,7 +573,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
 
         private List<String> players() {
-            return players(Expansion.this.players);
+            return Player.lg(Expansion.this.players);
         }
 
         private PrinterData printer() {
@@ -581,10 +583,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             } catch (Exception e) {
                 return null;
             }
-        }
-
-        private List<String> players(List<Player> players) {
-            return players.stream().map(p -> (p != null) ? p.lg.id() : "null").collect(toList());
         }
 
         public String id() {

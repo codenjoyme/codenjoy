@@ -23,9 +23,11 @@ package com.epam.dojo.expansion.model.lobby;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.PlayerBoard;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -36,22 +38,34 @@ import static com.epam.dojo.expansion.services.SettingsWrapper.data;
  * Created by Oleksandr_Baglai on 2017-09-11.
  */
 public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
+
+    private static Logger logger = DLoggerFactory.getLogger(WaitForAllPlayerLobby.class);
+
     private List<Player> all = new LinkedList<>();
     private List<Player> waiting = new LinkedList<>();
     private Map<Player, Supplier<PlayerBoard>> loaders = new HashMap<>();
 
     @Override
     public void remove(Player player) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Removed player {} from Lobby", player.lg.id());
+        }
         all.remove(player);
     }
 
     @Override
     public void addPlayer(Player player) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Registered player {} on Lobby", player.lg.id());
+        }
         all.add(player);
     }
 
     @Override
     public PlayerBoard start(Player player, Supplier<PlayerBoard> loader) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Player {} waits on Lobby", player.lg.id());
+        }
         waiting.add(player);
         loaders.put(player, loader);
         return new LobbyPlayerBoard(waiting) {
@@ -68,6 +82,9 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             waiting.clear();
             if (data.shufflePlayers()) {
                 Collections.shuffle(all);
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("Players on Lobby will start new game {}", Player.lg(all));
             }
             for (Player p : all) {
                 p.setPlayerBoard(loaders.get(p).get());
