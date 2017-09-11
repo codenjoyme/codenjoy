@@ -231,10 +231,9 @@
                             <target>
                                 <delete dir="libs"/>
 
-                                <copy file="../engine/target/engine-${codenjoy.version}.jar" tofile="libs/engine-${codenjoy.version}.jar" failonerror="false"/>
-                                <copy file="../engine/target/engine-${codenjoy.version}-sources.jar" tofile="libs/engine-${codenjoy.version}-sources.jar" failonerror="false"/>
-                                <copy file="../engine/pom.xml" tofile="libs/engine-${codenjoy.version}-pom.xml" failonerror="false"/>
-                                <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
+                                <copy todir="libs/">
+                                    <fileset dir="../engine/target/libs/"/>
+                                </copy>
 
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
 
