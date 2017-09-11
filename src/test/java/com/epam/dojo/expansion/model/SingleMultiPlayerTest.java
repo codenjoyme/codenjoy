@@ -30,6 +30,7 @@ import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,6 +43,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
+import static com.epam.dojo.expansion.services.Events.WIN;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -532,7 +534,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", player);
 
-        verify(player).event(Events.WIN(0));
+        verify(player).event(WIN(0));
         reset(player);
         verifyNoMoreInteractions(player);
 
@@ -983,7 +985,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
         verify(PLAYER1).event(Events.LOOSE());
         verifyNoMoreInteractions(PLAYER2);
-        verify(PLAYER3).event(Events.WIN(1));
+        verify(PLAYER3).event(WIN(1));
         verifyNoMoreInteractions(PLAYER4);
 
         assertE("-------" +
@@ -1198,10 +1200,10 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // given
         shouldOnlyOnePlayerWins();
 
-        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'onlyMyName':false,'round':188,'rounds':10000,'showName':true,'tick':752}");
-        assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'onlyMyName':false,'round':188,'rounds':10000,'showName':true,'tick':752}");
-        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'onlyMyName':false,'round':188,'rounds':10000,'showName':true,'tick':752}");
-        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'onlyMyName':false,'round':188,'rounds':10000,'showName':true,'tick':752}");
+        assertBoardData(PLAYER1, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':5},'myColor':0,'offset':{'x':0,'y':0},'onlyMyName':false,'round':1,'rounds':10000,'showName':true,'tick':752}");
+        assertBoardData(PLAYER2, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':5,'y':1},'myColor':1,'offset':{'x':0,'y':0},'onlyMyName':false,'round':1,'rounds':10000,'showName':true,'tick':752}");
+        assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'onlyMyName':false,'round':1,'rounds':10000,'showName':true,'tick':752}");
+        assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♠---♥-----------------------♣---♦--------'],'levelProgress':{'current':0,'lastPassed':-1,'multiple':true,'scores':true,'total':0},'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'onlyMyName':false,'round':1,'rounds':10000,'showName':true,'tick':752}");
     }
 
     @Test
@@ -1691,7 +1693,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-        verify(PLAYER1).event(Events.WIN(1));
+        verify(PLAYER1).event(WIN(1));
         verify(PLAYER2).event(Events.LOOSE());
 
         // when
@@ -2147,7 +2149,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(Events.WIN(1));
+        verify(PLAYER1).event(WIN(1));
     }
 
     @Test
@@ -2211,7 +2213,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(Events.WIN(1));
+        verify(PLAYER1).event(WIN(1));
     }
 
     @Test
@@ -2275,7 +2277,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(Events.WIN(1));
+        verify(PLAYER1).event(WIN(1));
     }
 
     @Test
@@ -2409,6 +2411,196 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         String layer2 = line.substring(line.indexOf(s3) + s3.length(), line.indexOf(s4));
 
         return Arrays.asList(layer2, forcesCount);
+    }
+
+    @Test
+    public void shouldCalculateRoundTicks_andResetWhenFinish() {
+        int old = SettingsWrapper.data.roundTicks();
+        int count = 50;
+        SettingsWrapper.data.roundTicks(count);
+        try {
+            // given
+            givenFl("╔═════┐" +
+                    "║4...1│" +
+                    "║.....│" +
+                    "║.....│" +
+                    "║.....│" +
+                    "║3...2│" +
+                    "└─────┘");
+            gameFactory.setWaitingOthers(false);
+            createPlayers(4);
+
+            assertE("-------" +
+                    "-♠---♥-" +
+                    "-------" +
+                    "-------" +
+                    "-------" +
+                    "-♣---♦-" +
+                    "-------", PLAYER1);
+
+            assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#-=#-=#00A-=#\n" +
+                    "-=#-=#-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#-=#-=#00A-=#\n" +
+                    "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+            // then
+            assertRound("[0,50]", PLAYER1);
+            assertRound("[0,50]", PLAYER2);
+            assertRound("[0,50]", PLAYER3);
+            assertRound("[0,50]", PLAYER4);
+
+            // when
+            hero(PLAYER1, 5, 5).down();
+            tickAll();
+
+            // then
+            assertE("-------" +
+                    "-♠---♥-" +
+                    "-----♥-" +
+                    "-------" +
+                    "-------" +
+                    "-♣---♦-" +
+                    "-------", PLAYER1);
+
+            assertRound("[1,50]", PLAYER1);
+            assertRound("[1,50]", PLAYER2);
+            assertRound("[1,50]", PLAYER3);
+            assertRound("[1,50]", PLAYER4);
+
+            // when
+            tickAll();
+
+            // then
+            assertRound("[2,50]", PLAYER1);
+            assertRound("[2,50]", PLAYER2);
+            assertRound("[2,50]", PLAYER3);
+            assertRound("[2,50]", PLAYER4);
+
+            // when
+            for (int i = 0; i < count - 3; i++) {
+                tickAll();
+            }
+
+            // then
+            assertE("-------" +
+                    "-♠---♥-" +
+                    "-----♥-" +
+                    "-------" +
+                    "-------" +
+                    "-♣---♦-" +
+                    "-------", PLAYER1);
+
+            assertRound("[49,50]", PLAYER1);
+            assertRound("[49,50]", PLAYER2);
+            assertRound("[49,50]", PLAYER3);
+            assertRound("[49,50]", PLAYER4);
+
+            verifyNoMoreInteractions(PLAYER1);
+            verifyNoMoreInteractions(PLAYER2);
+            verifyNoMoreInteractions(PLAYER3);
+            verifyNoMoreInteractions(PLAYER4);
+
+            // when
+            tickAll();
+
+            // then
+            assertE("-------" +
+                    "-♠---♥-" +
+                    "-------" +
+                    "-------" +
+                    "-------" +
+                    "-♣---♦-" +
+                    "-------", PLAYER1);
+
+            assertRound("[0,50]", PLAYER1);
+            assertRound("[0,50]", PLAYER2);
+            assertRound("[0,50]", PLAYER3);
+            assertRound("[0,50]", PLAYER4);
+
+            verifyNoMoreInteractions(PLAYER1);
+            verifyNoMoreInteractions(PLAYER2);
+            verifyNoMoreInteractions(PLAYER3);
+            verifyNoMoreInteractions(PLAYER4);
+
+            // when
+            tickAll();
+
+            // then
+            assertRound("[1,50]", PLAYER1);
+            assertRound("[1,50]", PLAYER2);
+            assertRound("[1,50]", PLAYER3);
+            assertRound("[1,50]", PLAYER4);
+
+            verifyNoMoreInteractions(PLAYER1);
+            verifyNoMoreInteractions(PLAYER2);
+            verifyNoMoreInteractions(PLAYER3);
+            verifyNoMoreInteractions(PLAYER4);
+        } finally {
+            SettingsWrapper.data.roundTicks(old);
+        }
+    }
+
+    @Test
+    public void shouldClearRoundTicksCounterWhenAllPlayersLeaveRoom() {
+        // given
+        givenFl("╔═════┐" +
+                "║4...1│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║3...2│" +
+                "└─────┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        tickAll();
+        tickAll();
+        tickAll();
+
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-------", PLAYER1);
+
+        // then
+        assertRound("[3,10000]", PLAYER1);
+        assertRound("[3,10000]", PLAYER2);
+
+        // when
+        destroy(PLAYER1);
+        destroy(PLAYER2);
+        singles.clear();
+        heroes.clear();
+        listeners.clear();
+        createPlayers(1);
+
+        // then
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------", PLAYER1);
+
+        assertRound("[0,10000]", PLAYER1);
+
+        // when
+        tickAll();
+
+        // then
+        assertRound("[1,10000]", PLAYER1);
+    }
+
+    private void assertRound(String expected, int player) {
+        JSONObject json = getBoardAsString(player);
+        assertEquals(expected, pt(json.getInt("round"), json.getInt("rounds")).toString());
     }
 
 }

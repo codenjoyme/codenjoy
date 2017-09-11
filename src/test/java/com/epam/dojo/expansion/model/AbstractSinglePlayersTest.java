@@ -75,9 +75,9 @@ public abstract class AbstractSinglePlayersTest {
     public static final int PLAYER16 = 15;
 
     protected Dice dice;
-    private List<EventListener> listeners;
+    protected List<EventListener> listeners;
     protected List<Single> singles;
-    private List<Hero> heroes;
+    protected List<Hero> heroes;
 
     private LinkedList<String> levelsMaps;
 

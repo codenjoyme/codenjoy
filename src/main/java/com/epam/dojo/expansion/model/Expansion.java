@@ -70,11 +70,15 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         this.levels = new LinkedList(levels);
 
         isMultiple = multiple;
-        ticks = 0;
-        roundTicks = 0;
+        clearTicks();
 
         players = new LinkedList();
         losers = new LinkedList();
+    }
+
+    private void clearTicks() {
+        ticks = 0;
+        roundTicks = 0;
     }
 
     @Override
@@ -487,6 +491,9 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         losers.remove(player); // TODO test me
         players.remove(player);
         player.destroyHero();
+        if (players.isEmpty()) {
+            clearTicks();
+        }
     }
 
     @Override
