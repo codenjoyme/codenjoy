@@ -86,12 +86,12 @@ public class ProgressBar {
     protected void checkLevel() {
         if (nextLevel) {
             nextLevel();
+        } else if (player.getHero().isChangeLevel()) {
+            changeLevel();
         } else if (!player.getHero().isAlive()) {
             if (!isMultiple()) {
                 createHeroToPlayer();
             }
-        } else if (player.getHero().isChangeLevel()) {
-            changeLevel();
         }
     }
 

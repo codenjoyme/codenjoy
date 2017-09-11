@@ -43,6 +43,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
+import static com.epam.dojo.expansion.services.Events.LOOSE;
 import static com.epam.dojo.expansion.services.Events.WIN;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -983,7 +984,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
         tickAll();
 
-        verify(PLAYER1).event(Events.LOOSE());
+        verify(PLAYER1).event(LOOSE());
         verifyNoMoreInteractions(PLAYER2);
         verify(PLAYER3).event(WIN(1));
         verifyNoMoreInteractions(PLAYER4);
@@ -1052,7 +1053,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         verifyNoMoreInteractions(PLAYER1);
-        verify(PLAYER2).event(Events.LOOSE());
+        verify(PLAYER2).event(LOOSE());
         verifyNoMoreInteractions(PLAYER3);
         verifyNoMoreInteractions(PLAYER4);
 
@@ -1132,7 +1133,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
         verifyNoMoreInteractions(PLAYER3);
-        verify(PLAYER4).event(Events.LOOSE());
+        verify(PLAYER4).event(LOOSE());
 
         assertE("-------" +
                 "-----♥-" +
@@ -1694,7 +1695,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         verify(PLAYER1).event(WIN(1));
-        verify(PLAYER2).event(Events.LOOSE());
+        verify(PLAYER2).event(LOOSE());
 
         // when
         tickAll();
@@ -2603,4 +2604,189 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         assertEquals(expected, pt(json.getInt("round"), json.getInt("rounds")).toString());
     }
 
+    @Test
+    public void shouldCanResetOnThisBoardIfLoose_player1KillPlayer2() {
+        // given
+        givenFl("╔═══┐" +
+                "║1.2│" +
+                "║...│" +
+                "║...│" +
+                "└───┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        // when then
+        for (int i = 0; i < 2; i++) {
+            hero(PLAYER1).increaseAndMove(
+                    new Forces(pt(1, 3), 10),
+                    new ForcesMoves(pt(1, 3), 9, QDirection.RIGHT)
+            );
+            hero(PLAYER2, 3, 3).down();
+            tickAll();
+        }
+
+        assertE("-----" +
+                "-♥♥♦-" +
+                "---♦-" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00C00I00C-=#\n" +
+                "-=#-=#-=#002-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when then
+        hero(PLAYER1).increaseAndMove(
+                new Forces(pt(2, 3), 10),
+                new ForcesMoves(pt(2, 3), 15, QDirection.RIGHT)
+        );
+        tickAll();
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "---♦-" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00C00D003-=#\n" +
+                "-=#-=#-=#002-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when then
+        hero(PLAYER1).increaseAndMove(
+                new Forces(pt(3, 3), 10),
+                new ForcesMoves(pt(3, 3), 10, QDirection.DOWN)
+        );
+        tickAll();
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "---♥-" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00C00D003-=#\n" +
+                "-=#-=#-=#008-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+        verifyNoMoreInteractions(PLAYER2);
+
+        // when
+        tickAll();
+
+        verify(PLAYER1).event(WIN(1));
+        verify(PLAYER2).event(LOOSE());
+
+        assertE("-----" +
+                "-♥-♦-" +
+                "-----" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldCanResetOnThisBoardIfLoose_player2KillPlayer1() {
+        // given
+        givenFl("╔═══┐" +
+                "║2.1│" +
+                "║...│" +
+                "║...│" +
+                "└───┘");
+        gameFactory.setWaitingOthers(false);
+        createPlayers(2);
+
+        // when then
+        for (int i = 0; i < 2; i++) {
+            hero(PLAYER2).increaseAndMove(
+                    new Forces(pt(1, 3), 10),
+                    new ForcesMoves(pt(1, 3), 9, QDirection.RIGHT)
+            );
+            hero(PLAYER1, 3, 3).down();
+            tickAll();
+        }
+
+        assertE("-----" +
+                "-♦♦♥-" +
+                "---♥-" +
+                "-----" +
+                "-----", PLAYER2);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00C00I00C-=#\n" +
+                "-=#-=#-=#002-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER2);
+
+        // when then
+        hero(PLAYER2).increaseAndMove(
+                new Forces(pt(2, 3), 10),
+                new ForcesMoves(pt(2, 3), 15, QDirection.RIGHT)
+        );
+        tickAll();
+
+        assertE("-----" +
+                "-♦♦♦-" +
+                "---♥-" +
+                "-----" +
+                "-----", PLAYER2);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00C00D003-=#\n" +
+                "-=#-=#-=#002-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER2);
+
+        // when then
+        hero(PLAYER2).increaseAndMove(
+                new Forces(pt(3, 3), 10),
+                new ForcesMoves(pt(3, 3), 10, QDirection.DOWN)
+        );
+        tickAll();
+
+        assertE("-----" +
+                "-♦♦♦-" +
+                "---♦-" +
+                "-----" +
+                "-----", PLAYER2);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00C00D003-=#\n" +
+                "-=#-=#-=#008-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER2);
+
+        verifyNoMoreInteractions(PLAYER2);
+        verifyNoMoreInteractions(PLAYER1);
+
+        // when
+        tickAll();
+
+        verify(PLAYER2).event(WIN(1));
+        verify(PLAYER1).event(LOOSE());
+
+        assertE("-----" +
+                "-♦-♥-" +
+                "-----" +
+                "-----" +
+                "-----", PLAYER2);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
 }

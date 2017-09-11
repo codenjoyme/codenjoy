@@ -455,72 +455,72 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         tickAll();
 
         // then
-        String level1 =
+        String level =
                 "╔════┐\n" +
                 "║1..2│\n" +
                 "║....│\n" +
                 "║....│\n" +
                 "║4..3│\n" +
                 "└────┘\n";
-        String forces1 =
+        String forces =
                 "------\n" +
                 "-♥--♦-\n" +
                 "------\n" +
                 "------\n" +
                 "------\n" +
                 "------\n";
-        assertL(level1, PLAYER1);
-        assertE(forces1, PLAYER1);
-        assertL(level1, PLAYER2);
-        assertE(forces1, PLAYER2);
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
     }
 
     @Test
     public void shouldPlayersCanGoAfterLobby() {
         shouldPutFirstPlayerToLobby();
 
-        String level1 =
+        String level =
                 "╔════┐\n" +
                 "║1..2│\n" +
                 "║....│\n" +
                 "║....│\n" +
                 "║4..3│\n" +
                 "└────┘\n";
-        String forces1 =
+        String forces =
                 "------\n" +
                 "-♥--♦-\n" +
                 "------\n" +
                 "------\n" +
                 "------\n" +
                 "------\n";
-        assertL(level1, PLAYER1);
-        assertE(forces1, PLAYER1);
-        assertL(level1, PLAYER2);
-        assertE(forces1, PLAYER2);
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
 
         // when
         goTimes(PLAYER1, pt(1, 4), 2).down();
         goTimes(PLAYER2, pt(4, 4), 2).left();
 
         // then
-        level1 =
+        level =
                 "╔════┐\n" +
                 "║1..2│\n" +
                 "║....│\n" +
                 "║....│\n" +
                 "║4..3│\n" +
                 "└────┘\n";
-        forces1 =
+        forces =
                 "------\n" +
                 "-♥♦♦♦-\n" +
                 "-♥----\n" +
                 "-♥----\n" +
                 "------\n" +
                 "------\n";
-        assertL(level1, PLAYER1);
-        assertE(forces1, PLAYER1);
-        assertL(level1, PLAYER2);
-        assertE(forces1, PLAYER2);
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
 
     }
 
@@ -568,24 +568,24 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
     public void shouldNextOnePlayersCantGoBecauseOfLobby_butOtherCanDo() {
         shouldNextOnePlayersCantGoBecauseOfLobby();
 
-        String level1 =
+        String level =
                 "╔════┐\n" +
                 "║1..2│\n" +
                 "║....│\n" +
                 "║....│\n" +
                 "║4..3│\n" +
                 "└────┘\n";
-        String forces1 =
+        String forces =
                 "------\n" +
                 "-♥♦♦♦-\n" +
                 "-♥----\n" +
                 "-♥----\n" +
                 "------\n" +
                 "------\n";
-        assertL(level1, PLAYER1);
-        assertE(forces1, PLAYER1);
-        assertL(level1, PLAYER2);
-        assertE(forces1, PLAYER2);
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
         assertL(LOBBY_LEVEL, PLAYER3);
         assertE(LOBBY_FORCES, PLAYER3);
 
@@ -593,25 +593,145 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         goTimes(PLAYER1, pt(1, 2), 1).down();
         goTimes(PLAYER2, pt(2, 4), 1).down();
 
-        level1 =
+        level =
                 "╔════┐\n" +
                 "║1..2│\n" +
                 "║....│\n" +
                 "║....│\n" +
                 "║4..3│\n" +
                 "└────┘\n";
-        forces1 =
+        forces =
                 "------\n" +
                 "-♥♦♦♦-\n" +
                 "-♥♦---\n" +
                 "-♥----\n" +
                 "-♥----\n" +
                 "------\n";
-        assertL(level1, PLAYER1);
-        assertE(forces1, PLAYER1);
-        assertL(level1, PLAYER2);
-        assertE(forces1, PLAYER2);
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
         assertL(LOBBY_LEVEL, PLAYER3);
         assertE(LOBBY_FORCES, PLAYER3);
     }
+
+    @Test
+    public void shouldRenewPlayerOnLobbyWhenCurrentFinished() {
+        shouldPutFirstPlayerToLobby();
+
+        String level =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces =
+                "------\n" +
+                "-♥--♦-\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n";
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
+
+        goTimes(PLAYER1, pt(1, 4), 2).right();
+
+        createNewGame();
+        tickAll();
+
+        forces =
+                "------\n" +
+                "-♥♥♥♦-\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n";
+        String forcesCount =
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A00100100A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n";
+
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertF(forcesCount, PLAYER1);
+
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
+        assertF(forcesCount, PLAYER2);
+
+        assertL(LOBBY_LEVEL, PLAYER3);
+        assertE(LOBBY_FORCES, PLAYER3);
+
+        // when
+        for (int i = 0; i < 10; i++) { // because of 0A armies we should attack with 01
+            goTimes(PLAYER1, pt(3, 4), 1).right();
+        }
+
+        forces =
+                "------\n" +
+                "-♥♥♥--\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n";
+
+        forcesCount =
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A001001-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n";
+
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertF(forcesCount, PLAYER1);
+
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
+        assertF(forcesCount, PLAYER2);
+
+        assertL(LOBBY_LEVEL, PLAYER3);
+        assertE(LOBBY_FORCES, PLAYER3);
+
+        // when
+        tickAll();
+
+        // then
+        forces =
+                "------\n" +
+                "-♥--♦-\n" +
+                "------\n" +
+                "------\n" +
+                "----♣-\n" +
+                "------\n";
+
+        forcesCount =
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n";
+
+        assertL(level, PLAYER1);
+        assertE(forces, PLAYER1);
+        assertF(forcesCount, PLAYER1);
+
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
+        assertF(forcesCount, PLAYER2);
+
+        assertL(level, PLAYER3);
+        assertE(forces, PLAYER3);
+        assertF(forcesCount, PLAYER3);
+    }
 }
+

@@ -123,10 +123,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
             if (isWin) {
                 losers.clear();
-                List<Player> renew = removeAllPlayers();
-                for (Player player : renew) {
-                    newGame(player);
-                }
+                resetAllPlayers();
             }
         }
 
@@ -143,6 +140,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             }
         }
 
+        // there player level be changed
         for (Player player : players.toArray(new Player[0])) {
             player.tick();
         }
@@ -172,6 +170,23 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             logger.debug("Expansion finished tick. " +
                     "State after processing {}", toString());
         }
+    }
+
+    private void resetAllPlayers() {
+        if (data.lobbyEnable()) {
+            // all players goes on lobby
+            for (Player player : players) {
+                player.getHero().wantsReset();
+            }
+        } else {
+            // fist time remove all players
+            List<Player> reset = removeAllPlayers();
+            // then add they to this board
+            for (Player player : reset) {
+                newGame(player);
+            }
+        }
+        clearTicks();
     }
 
     @NotNull
