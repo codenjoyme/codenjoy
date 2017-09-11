@@ -355,6 +355,21 @@ game.drawBoard = function(drawer) {
     fonts.userName.shadowBlur = 5;
     drawer.drawPlayerNames(fonts.userName);
 
+    if (board.round != -1) {
+        fonts.round = {};
+        fonts.round.dx = 20;
+        fonts.round.dy = 0;
+        fonts.round.font = "50px 'verdana'";
+        fonts.round.fillStyle = "#F0F";
+        fonts.round.textAlign = "center";
+        fonts.round.shadowColor = "#000";
+        fonts.round.shadowOffsetX = 0;
+        fonts.round.shadowOffsetY = 0;
+        fonts.round.shadowBlur = 5;
+        var text = board.rounds - board.round;
+        canvas.drawText(text, {'x':9, 'y':18}, fonts.round);
+    }
+
     drawer.drawFog();
 }
 
