@@ -23,18 +23,12 @@ package com.epam.dojo.expansion.model;
  */
 
 
-import com.epam.dojo.expansion.model.lobby.PlayerLobby;
-import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.SettingsWrapper;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
-import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.PLAYER6;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 /**
  * Created by Sanja on 15.02.14.
@@ -47,7 +41,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
         SettingsWrapper.data
                 .lobbyEnable(true)
-                .lobbyCapacity(6)
+                .lobbyCapacity(-1)
                 .shufflePlayers(false);
     }
 
