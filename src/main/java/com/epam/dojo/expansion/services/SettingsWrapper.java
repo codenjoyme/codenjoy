@@ -72,17 +72,21 @@ public final class SettingsWrapper {
 
         levels = new LinkedList<>();
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
-        lobbyCapacity = settings.addEditBox("Lobby capacity").type(Integer.class).def(6);
-        winScore = settings.addEditBox("Win multiple score").type(Integer.class).def(1);
+
+        waitingOthers = settings.addEditBox("Waiting others (works only if lobby disabled)").type(Boolean.class).def(false);
+        lobbyEnable = settings.addEditBox("Lobby enable (special waiting room)").type(Boolean.class).def(true);
+        shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
+        lobbyCapacity = settings.addEditBox("Lobby capacity (-1 if disable)").type(Integer.class).def(6);
+
+        winScore = settings.addEditBox("Win on multiple score").type(Integer.class).def(1);
         roundTicks = settings.addEditBox("Ticks per round").type(Integer.class).def(600);
+
         leaveForceCount = settings.addEditBox("Leave forces count").type(Integer.class).def(0);
         initialForce = settings.addEditBox("Initial forces count").type(Integer.class).def(10);
         increasePerTick = settings.addEditBox("Increase forces per tick count").type(Integer.class).def(10);
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
-        waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
-        shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
-        lobbyEnable = settings.addEditBox("Lobby enable").type(Boolean.class).def(true);
+
         levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
         levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
         levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(MULTI3));
