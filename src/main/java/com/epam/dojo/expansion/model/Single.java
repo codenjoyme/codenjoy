@@ -203,8 +203,8 @@ public class Single implements Game {
             return new JSONObject(){{
                 put("id", id());
                 put("tick", ticker.get());
-                put("progressBar", progressBar.lg.id());
-                put("player", player.lg.id());
+                put("progressBar", (progressBar != null) ? progressBar.lg.id() : "null");
+                put("player", (player != null) ? player.lg.id() : "null");
                 put("save", save);
             }};
         }
