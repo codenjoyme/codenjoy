@@ -305,7 +305,7 @@ public class ProgressBar {
     }
 
     public void setCurrent(PlayerBoard current) {
-        this.current.remove(player); // TODO test me
+        this.current.remove(player);
         this.current = current;
         if (current != null) {
             processCurrent(0);

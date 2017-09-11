@@ -534,11 +534,84 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
         // then
         assertL(LOBBY_LEVEL, PLAYER1);
+        assertE(LOBBY_FORCES, PLAYER1);
 
         // when
         goTimes(PLAYER1, pt(1, 4), 2).down();
 
         // then
         assertL(LOBBY_LEVEL, PLAYER1);
+        assertE(LOBBY_FORCES, PLAYER1);
+    }
+
+    @Test
+    public void shouldNextOnePlayersCantGoBecauseOfLobby() {
+        shouldPlayersCanGoAfterLobby();
+
+        // when
+        createNewGame();
+        tickAll();
+
+        // then
+        assertL(LOBBY_LEVEL, PLAYER3);
+        assertE(LOBBY_FORCES, PLAYER3);
+
+        // when
+        goTimes(PLAYER3, pt(1, 4), 2).down();
+
+        // then
+        assertL(LOBBY_LEVEL, PLAYER3);
+        assertE(LOBBY_FORCES, PLAYER3);
+    }
+
+    @Test
+    public void shouldNextOnePlayersCantGoBecauseOfLobby_butOtherCanDo() {
+        shouldNextOnePlayersCantGoBecauseOfLobby();
+
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "-♥♦♦♦-\n" +
+                "-♥----\n" +
+                "-♥----\n" +
+                "------\n" +
+                "------\n";
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(LOBBY_LEVEL, PLAYER3);
+        assertE(LOBBY_FORCES, PLAYER3);
+
+        // when
+        goTimes(PLAYER1, pt(1, 2), 1).down();
+        goTimes(PLAYER2, pt(2, 4), 1).down();
+
+        level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        forces1 =
+                "------\n" +
+                "-♥♦♦♦-\n" +
+                "-♥♦---\n" +
+                "-♥----\n" +
+                "-♥----\n" +
+                "------\n";
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(LOBBY_LEVEL, PLAYER3);
+        assertE(LOBBY_FORCES, PLAYER3);
     }
 }
