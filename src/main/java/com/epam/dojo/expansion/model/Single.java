@@ -51,7 +51,7 @@ public class Single implements Game {
                   PrinterFactory factory, Ticker ticker, Dice dice, String save) {
         this.save = save;
         this.ticker = ticker;
-        progressBar = new ProgressBar(gameFactory, dice);
+        progressBar = new ProgressBar(gameFactory);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
     }

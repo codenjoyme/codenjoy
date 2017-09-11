@@ -44,8 +44,10 @@ public class LevelImpl implements Level {
     private int size;
     private int viewSize;
     private LengthToXY xy;
+    private String name;
 
-    public LevelImpl(String map, int viewSize) {
+    public LevelImpl(String name, String map, int viewSize) {
+        this.name = name;
         cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
         this.viewSize = viewSize;
@@ -208,5 +210,10 @@ public class LevelImpl implements Level {
         for (int i = 0; i < items.size(); ++i) {
             items.get(i).setField(field);
         }
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

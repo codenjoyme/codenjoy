@@ -122,8 +122,10 @@ public class Levels {
     public static LevelsFactory collectYours(final int viewSize, final String... boards) {
         return () -> {
             List<Level> result = new LinkedList<>();
-            for (String board : boards) {
-                Level level = new LevelImpl(board, viewSize);
+            List<String> list = Arrays.asList(boards);
+            for (String board : list) {
+                String name = "level_" + Integer.toHexString(board.hashCode());
+                Level level = new LevelImpl(name, board, viewSize);
                 result.add(level);
             }
             return result;
@@ -138,7 +140,7 @@ public class Levels {
                 level = get(make(name));
             }
             String resize = resize(level, viewSize);
-            result.add(new LevelImpl(resize, viewSize));
+            result.add(new LevelImpl(name, resize, viewSize));
         }
         return result;
     }

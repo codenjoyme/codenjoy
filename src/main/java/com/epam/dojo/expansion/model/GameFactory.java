@@ -23,9 +23,13 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.epam.dojo.expansion.model.levels.Level;
+
+import java.util.function.Predicate;
+
 /**
  * Created by Oleksandr_Baglai on 2017-09-01.
  */
 public interface GameFactory {
-    Expansion get(boolean isMultiple);
+    Expansion get(boolean isMultiple, Predicate<? super Level> choseLevel);
 }

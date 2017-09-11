@@ -28,6 +28,8 @@ import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.GameFactory;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 
+import java.util.function.Predicate;
+
 /**
  * Created by Oleksandr_Baglai on 2017-09-01.
  */
@@ -42,7 +44,7 @@ public class StubGamesGameFactory implements GameFactory {
     }
 
     @Override
-    public Expansion get(boolean isMultiple) {
+    public Expansion get(boolean isMultiple, Predicate<? super Level> choseLevel) {
         return isMultiple ? multiple : single;
     }
 }

@@ -51,4 +51,5 @@ public interface Level {
 
     void setField(Field field);
 
+    String getName();
 }

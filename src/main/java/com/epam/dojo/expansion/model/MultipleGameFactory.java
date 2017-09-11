@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -66,11 +67,11 @@ public class MultipleGameFactory implements GameFactory {
 
     @Override
     @NotNull
-    public Expansion get(boolean isMultiple) {
+    public Expansion get(boolean isMultiple, Predicate<? super Level> choseLevel) {
         if (isMultiple) {
-            Expansion game = findFreeRandomMultiple();
+            Expansion game = findFreeRandomMultiple(choseLevel);
             if (game == null) {
-                game = createNewMultiple();
+                game = createNewMultiple(choseLevel);
             }
             if (waitingOthers) {
                 game.waitingOthers();
@@ -83,8 +84,8 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @Nullable
-    private Expansion findFreeRandomMultiple() {
-        List<Expansion> free = getFreeMultipleRooms();
+    private Expansion findFreeRandomMultiple(Predicate<? super Level> choseLevel) {
+        List<Expansion> free = getFreeMultipleRooms(choseLevel);
         if (free.isEmpty()) {
             return null;
         }
@@ -92,14 +93,15 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @NotNull
-    private List<Expansion> getFreeMultipleRooms() {
+    private List<Expansion> getFreeMultipleRooms(Predicate<? super Level> choseLevel) {
         return rooms.stream()
                 .filter(Expansion::isFree)
+                .filter(expansion -> choseLevel.test(expansion.getCurrentLevel()))
                 .collect(toList());
     }
 
     @NotNull
-    private Expansion createNewMultiple() {
+    private Expansion createNewMultiple(Predicate<? super Level> choseLevel) {
         Level level = null;
         int counter = 10;
         while (level == null) {

@@ -27,14 +27,17 @@ import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.services.Printer;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Created by oleksandr.baglai on 27.06.2016.
@@ -57,12 +60,10 @@ public class ProgressBar {
     private Expansion current;
     private Printer printer;
     private Single gameOwner;
-    private Dice dice;
 
-    public ProgressBar(GameFactory factory, Dice dice) {
+    public ProgressBar(GameFactory factory) {
         this.factory = factory;
-        single = factory.get(Expansion.SINGLE);
-        this.dice = dice;
+        single = factory.get(Expansion.SINGLE, level -> true);
     }
 
     public void setNextLevel() {
@@ -175,7 +176,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = factory.get(Expansion.MULTIPLE);
+        current = factory.get(Expansion.MULTIPLE, getLevelChose());
 
         loadLevel(0); // only one multiple level we have
         buildPrinter();
@@ -184,6 +185,13 @@ public class ProgressBar {
         } catch (BusyMapException e) {
             remove(player); // TODO и что дальше?
         }
+    }
+
+    @NotNull
+    private Predicate<Level> getLevelChose() {
+//        String levelName = (current != null) ? current.getCurrentLevel().getName() : null;
+//        return level -> !level.getName().equals(levelName);
+        return level -> true; // TODO продолжить тут
     }
 
     private void loadSingle(Integer level) {
@@ -226,7 +234,8 @@ public class ProgressBar {
         if (!StringUtils.isEmpty(save)) {
             loadProgress(save);
         } else {
-            load(single.levelsCount() == 0, 0);
+            boolean isMultiple = single.levelsCount() == 0;
+            load(isMultiple, 0);
             backToSingleLevel = null;
             lastPassedLevel = -1;
         }
