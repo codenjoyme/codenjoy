@@ -78,8 +78,8 @@ public final class SettingsWrapper {
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
-        shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(false);
-        lobbyEnable = settings.addEditBox("Lobby enable").type(Boolean.class).def(false);
+        shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
+        lobbyEnable = settings.addEditBox("Lobby enable").type(Boolean.class).def(true);
         levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
         levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
         levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(MULTI3));
