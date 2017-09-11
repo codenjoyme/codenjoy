@@ -33,6 +33,9 @@ import com.epam.dojo.expansion.model.levels.items.HeroForces;
 import com.epam.dojo.expansion.model.levels.items.Start;
 import com.epam.dojo.expansion.model.levels.CellImpl;
 import com.epam.dojo.expansion.model.levels.StubGamesGameFactory;
+import com.epam.dojo.expansion.model.lobby.NoPlayerLobby;
+import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -54,8 +57,8 @@ import static org.mockito.Mockito.when;
  */
 public class ProgressBarTest {
 
-    private Expansion single;
-    private Expansion multiple;
+    private PlayerBoard single;
+    private PlayerBoard multiple;
     private ProgressBar progressBar;
     private Player player;
     private Dice dice;
@@ -96,7 +99,7 @@ public class ProgressBarTest {
 
         single = new DummyExpansion(Arrays.asList(level1, level2, level3, level4), dice, false);
         multiple = new DummyExpansion(Arrays.asList(level5), dice, true);
-        PlayerLobby lobby = new PlayerLobby();
+        PlayerLobby lobby = new NoPlayerLobby();
         progressBar = new ProgressBar(new StubGamesGameFactory(single, multiple), lobby);
 
         player = new Player(mock(EventListener.class), progressBar);

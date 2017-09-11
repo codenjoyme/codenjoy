@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model.levels;
 import com.codenjoy.dojo.services.Dice;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.GameFactory;
+import com.epam.dojo.expansion.model.PlayerBoard;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 
 import java.util.function.Predicate;
@@ -35,16 +36,16 @@ import java.util.function.Predicate;
  */
 public class StubGamesGameFactory implements GameFactory {
 
-    private Expansion multiple;
-    private Expansion single;
+    private PlayerBoard multiple;
+    private PlayerBoard single;
 
-    public StubGamesGameFactory(Expansion single, Expansion multiple) {
+    public StubGamesGameFactory(PlayerBoard single, PlayerBoard multiple) {
         this.single = single;
         this.multiple = multiple;
     }
 
     @Override
-    public Expansion get(boolean isMultiple, Predicate<? super Level> choseLevel) {
+    public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
         return isMultiple ? multiple : single;
     }
 }

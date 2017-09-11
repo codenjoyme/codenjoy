@@ -31,6 +31,9 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.*;
+import com.epam.dojo.expansion.model.lobby.NoPlayerLobby;
+import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.PrinterData;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -111,7 +114,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void givenFl(String... boards) {
         setupMaps(boards);
         gameFactory = getGameFactory();
-        lobby = new PlayerLobby();
+        lobby = new NoPlayerLobby();
     }
 
     protected void givenForces(String forces, String layer2) {

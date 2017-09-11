@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model.levels;
 import com.codenjoy.dojo.services.Dice;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.GameFactory;
+import com.epam.dojo.expansion.model.PlayerBoard;
 
 import java.util.function.Predicate;
 
@@ -39,8 +40,8 @@ public class OneMultipleGameFactory implements GameFactory {
     private LevelsFactory singleFactory;
     private LevelsFactory multipleFactory;
 
-    private Expansion multiple;
-    private Expansion single;
+    private PlayerBoard multiple;
+    private PlayerBoard single;
 
     public OneMultipleGameFactory(Dice dice,
                                   LevelsFactory singleFactory,
@@ -51,18 +52,18 @@ public class OneMultipleGameFactory implements GameFactory {
     }
 
     @Override
-    public Expansion get(boolean isMultiple, Predicate<? super Level> choseLevel) {
+    public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
         return isMultiple ? multiple() : single();
     }
 
-    private Expansion multiple() {
+    private PlayerBoard multiple() {
         if (multiple == null) {
             multiple = new Expansion(multipleFactory.get(), dice, Expansion.MULTIPLE);
         }
         return multiple;
     }
 
-    private Expansion single() {
+    private PlayerBoard single() {
         return new Expansion(singleFactory.get(), dice, Expansion.SINGLE);
     }
 }

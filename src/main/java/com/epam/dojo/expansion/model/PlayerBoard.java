@@ -30,7 +30,5 @@ public interface PlayerBoard extends Tickable {
 
     int getRoundTicks();
 
-    Expansion.LogState lg();
-
-    List<Hero> getHeroes();
+    String id();
 }

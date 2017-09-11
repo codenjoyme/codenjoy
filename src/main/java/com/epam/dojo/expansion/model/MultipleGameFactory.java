@@ -67,7 +67,7 @@ public class MultipleGameFactory implements GameFactory {
 
     @Override
     @NotNull
-    public Expansion get(boolean isMultiple, Predicate<? super Level> choseLevel) {
+    public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
         if (isMultiple) {
             Expansion game = findFreeRandomMultiple(choseLevel);
             if (game == null) {

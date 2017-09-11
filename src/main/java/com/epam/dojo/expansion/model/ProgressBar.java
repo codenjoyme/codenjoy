@@ -24,10 +24,11 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Level;
+import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.Printer;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -146,6 +147,7 @@ public class ProgressBar {
     }
 
     public void remove(Player player) {
+        lobby.remove(player);
         if (current != null) {
             current.remove(player);
         }
@@ -156,6 +158,7 @@ public class ProgressBar {
             logger.debug("ProgressBar before tick {}", this.toString());
         }
 
+        lobby.tick();
         current.tick();
         if (isMultiple()) {
             Integer level = getBackToSingleLevel();
@@ -178,7 +181,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = lobby.start(() -> factory.get(Expansion.MULTIPLE, getLevelChose()));
+        current = lobby.start(player, () -> factory.get(Expansion.MULTIPLE, getLevelChose()));
 
         loadLevel(0); // only one multiple level we have
         buildPrinter();
@@ -301,20 +304,25 @@ public class ProgressBar {
         return current.getRoundTicks();
     }
 
+    public void setCurrent(PlayerBoard current) {
+        this.current = current;
+        setNextLevel();
+    }
+
     public class LogState {
         public JSONObject json() {
             return new JSONObject(){{
                 put("id", id());
-                put("player", player.lg.id());
-                put("player.hero", player.hero.lg.id());
+                put("player", (player != null) ? player.lg.id() : "null");
+                put("player.hero", (player != null && player.hero != null) ? player.hero.lg.id() : "null");
                 put("currentLevel", currentLevel);
                 put("lastPassedLevel", lastPassedLevel);
                 put("finished", finished);
                 put("nextLevel", nextLevel);
                 put("backToSingleLevel", backToSingleLevel);
-                put("single", single.lg().id());
-                put("current", current.lg().id());
-                put("gameOwner", gameOwner.lg.id());
+                put("single", (single != null) ? single.id() : "null");
+                put("current", (current != null) ? current.id() : "null");
+                put("gameOwner", (gameOwner != null) ? gameOwner.lg.id() : "null");
             }};
         }
 

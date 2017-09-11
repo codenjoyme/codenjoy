@@ -112,12 +112,21 @@ public class Player {
         }
     }
 
+    public void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
+    public void setPlayerBoard(PlayerBoard playerBoard) {
+        destroyHero();
+        progressBar.setCurrent(playerBoard);
+    }
+
     public class LogState {
         public JSONObject json() {
             return new JSONObject(){{
                 put("id", id());
-                put("hero", hero.lg.json());
-                put("progressBar", progressBar.lg.json());
+                put("hero", (hero != null) ? hero.lg.json() : "null");
+                put("progressBar", (progressBar != null) ? progressBar.lg.json() : "null");
             }};
         }
 

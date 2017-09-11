@@ -31,6 +31,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.LevelsTest;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.*;
 import com.epam.dojo.expansion.model.levels.Levels;
 import org.junit.Before;
@@ -85,12 +86,12 @@ public class ExpansionTest {
                 Levels.collectYours(size, boards),
                 Levels.none());
         listener = mock(EventListener.class);
-        PlayerLobby lobby = mock(PlayerLobby.class);
+        WaitForAllPlayerLobby lobby = mock(WaitForAllPlayerLobby.class);
         ProgressBar progressBar = new ProgressBar(factory, lobby);
         player = new Player(listener, progressBar);
         progressBar.start(null);
         game = progressBar.getCurrent();
-        hero = game.getHeroes().get(0);
+        hero = game.getPlayers().get(0).getHero();
 
         printer = new Printer(game, size);
     }

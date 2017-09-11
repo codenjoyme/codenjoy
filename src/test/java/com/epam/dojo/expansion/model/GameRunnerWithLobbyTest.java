@@ -23,42 +23,27 @@ package com.epam.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.services.Game;
-import com.epam.dojo.expansion.services.GameRunner;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
  * Created by Sanja on 15.02.14.
  */
-public class ExpansionPerformanceTest extends AbstractGameRunnerTest {
+public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
-    public static final int COUNT_USERS = 100;
-    private static final int LEVEL1 = 0;
+    @NotNull
+    protected PlayerLobby getLobby() {
+        return new WaitForAllPlayerLobby();
+    }
 
     @Test
-    public void test() {
-        for (int index = 0; index < COUNT_USERS; index++) {
-            createNewGame(LEVEL1);
-        }
+    public void shouldCreatePlayers() {
 
-        Profiler profiler = new Profiler();
-
-        profiler.start();
-        for (int index = 0; index < 10; index++) {
-            for (Game game : games) {
-                game.getBoardAsString();
-                profiler.done("getBoardAsString");
-            }
-        }
-        profiler.print();
     }
+
 }

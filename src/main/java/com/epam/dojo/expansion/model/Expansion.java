@@ -349,8 +349,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         return level.getSize();
     }
 
-    @Override
-    public boolean isBarrier(int x, int y) {
+    private boolean isBarrier(int x, int y) {
         return level.isBarrier(x, y);
     }
 
@@ -386,11 +385,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             }
         }
         return free;
-    }
-
-    @Override
-    public Cell getEndPosition() {
-        return level.getItems(Exit.class).get(0).getCell();
     }
 
     @Override
@@ -430,8 +424,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
     }
 
-    @Override
-    public int leaveForces(Hero hero, int x, int y, int count) {
+    private int leaveForces(Hero hero, int x, int y, int count) {
         Cell cell = level.getCell(x, y);
 
         HeroForces force = getHeroForces(hero, cell);
@@ -442,8 +435,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         return force.leave(count, data.leaveForceCount());
     }
 
-    @Override
-    public int countForces(Hero hero, int x, int y) {
+    private int countForces(Hero hero, int x, int y) {
         Cell cell = level.getCell(x, y);
 
         HeroForces force = getHeroForces(hero, cell);
@@ -452,31 +444,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
 
         return force.getCount();
-    }
-
-    @Override
-    public Cell getCell(int x, int y) {
-        return level.getCell(x, y);
-    }
-
-    @Override
-    public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (Item item : getCell(x, y).getItems()) {
-            if (item.getClass().equals(clazz)) {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public boolean isAt(int x, int y, Class<? extends BaseItem>... classes) {
-        for (Class clazz : classes) {
-            if (getIfPresent(clazz, x, y) != null) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -499,15 +466,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     @Override
     public int regionsCount(Hero hero) {
         return level.getCellsWith(cell -> cell.busy(hero)).size();
-    }
-
-    @Override
-    public List<Hero> getHeroes() {
-        List<Hero> result = new LinkedList();
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
     }
 
     @Override
@@ -612,7 +570,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
 
         private List<String> players(List<Player> players) {
-            return players.stream().map(p -> p.lg.id()).collect(toList());
+            return players.stream().map(p -> (p != null) ? p.lg.id() : "null").collect(toList());
         }
 
         public String id() {
@@ -620,12 +578,12 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
     }
 
-    @Override
-    public LogState lg() {
-        return lg;
-    }
-
     public LogState lg = new LogState();
+
+    @Override
+    public String id() {
+        return lg.id();
+    }
 
     @Override
     public String toString() {

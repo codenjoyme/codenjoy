@@ -36,28 +36,15 @@ import java.util.List;
 public interface Field {
 
     void increase(Hero hero, List<ForcesMoves> increase);
-
     void move(Hero hero, List<ForcesMoves> movements);
-
-    boolean isBarrier(int x, int y);
 
     Start getBaseOf(Hero hero);
 
     @Nullable
     Start getFreeBase();
 
-    Cell getEndPosition();
-
     HeroForces startMoveForces(Hero item, int x, int y, int count);
-    int leaveForces(Hero item, int x, int y, int count);
-    int countForces(Hero hero, int x, int y);
     void removeForces(Hero hero, int x, int y);
-
-    Cell getCell(int x, int y);
-
-    Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
-
-    boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 
     void reset();
 

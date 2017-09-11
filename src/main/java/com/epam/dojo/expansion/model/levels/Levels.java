@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
@@ -135,14 +136,19 @@ public class Levels {
     private static List<Level> collect(int viewSize, String... names) {
         List<Level> result = new LinkedList<>();
         for (String name : names) {
-            String level = get(name);
-            if (level == null) {
-                level = get(make(name));
-            }
-            String resize = resize(level, viewSize);
-            result.add(new LevelImpl(name, resize, viewSize));
+            result.add(getLevel(viewSize, name));
         }
         return result;
+    }
+
+    @NotNull
+    public static LevelImpl getLevel(int viewSize, String name) {
+        String level = get(name);
+        if (level == null) {
+            level = get(make(name));
+        }
+        String resize = resize(level, viewSize);
+        return new LevelImpl(name, resize, viewSize);
     }
 
     static String resize(String level, int toSize) {
