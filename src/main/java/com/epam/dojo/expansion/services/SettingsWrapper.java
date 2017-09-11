@@ -51,6 +51,8 @@ public final class SettingsWrapper {
     private final Parameter<Integer> regionsScores;
     private final Parameter<Integer> boardSize;
     private final Parameter<Boolean> waitingOthers;
+    private final Parameter<Boolean> shufflePlayers;
+    private final Parameter<Boolean> lobbyEnable;
     private final List<Parameter<String>> levels;
     private final int total;
     private final Parameter<Integer> leaveForceCount;
@@ -76,6 +78,8 @@ public final class SettingsWrapper {
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(false);
+        shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(false);
+        lobbyEnable = settings.addEditBox("Lobby enable").type(Boolean.class).def(false);
         levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
         levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
         levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(MULTI3));
@@ -123,6 +127,14 @@ public final class SettingsWrapper {
         return roundTicks.getValue();
     }
 
+    public boolean shufflePlayers() {
+        return shufflePlayers.getValue();
+    }
+
+    public boolean lobbyEnable() {
+        return lobbyEnable.getValue();
+    }
+
     public boolean roundLimitedInTime() {
         return roundTicks() != UNLIMITED;
     }
@@ -156,4 +168,15 @@ public final class SettingsWrapper {
         roundTicks.update(value);
         return this;
     }
+
+    public SettingsWrapper lobbyEnable(boolean value) {
+        lobbyEnable.update(value);
+        return this;
+    }
+
+    public SettingsWrapper shufflePlayers(boolean value) {
+        shufflePlayers.update(value);
+        return this;
+    }
+
 }

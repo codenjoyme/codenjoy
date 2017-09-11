@@ -28,22 +28,16 @@ import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.items.Hero;
-import com.epam.dojo.expansion.model.lobby.NoPlayerLobby;
-import com.epam.dojo.expansion.model.lobby.PlayerLobby;
 import com.epam.dojo.expansion.services.GameRunner;
 import com.epam.dojo.expansion.services.PrinterData;
-import org.jetbrains.annotations.NotNull;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
-import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -73,18 +67,16 @@ public class AbstractGameRunnerTest {
 
         gameRunner = new GameRunner();
         gameRunner.setDice(dice);
-        gameRunner.setPlayerLobby(getLobby());
 
         games = new LinkedList<Game>();
         factory = new PrinterFactoryImpl();
 
         settings = gameRunner.getSettings();
+        SettingsWrapper.data
+                .lobbyEnable(false)
+                .shufflePlayers(false);
     }
 
-    @NotNull
-    protected PlayerLobby getLobby() {
-        return new NoPlayerLobby();
-    }
 
     protected void givenLv(String level, int index) {
         String name = "MULTI" + index + "_TEST"; // TODO to use StringWrapper

@@ -97,7 +97,9 @@ public abstract class AbstractSinglePlayersTest {
         SettingsWrapper.setup()
                 .leaveForceCount(1)
                 .regionsScores(0)
-                .roundTicks(10000);
+                .roundTicks(10000)
+                .lobbyEnable(false)
+                .shufflePlayers(false);
     }
 
     private void dice(int... ints) {

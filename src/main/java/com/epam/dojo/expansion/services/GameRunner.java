@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.lobby.NoPlayerLobby;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
 import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import org.slf4j.Logger;
@@ -54,7 +55,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
         ticker = new Ticker();
         dice = new RandomDice();
-        lobby = new WaitForAllPlayerLobby();
     }
 
     private void initGameFactory() {
@@ -68,6 +68,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                             data.levels().toArray(new String[0]))
             );
             gameFactory.setWaitingOthers(data.waitingOthers());
+            lobby = (data.lobbyEnable()) ? new WaitForAllPlayerLobby() : new NoPlayerLobby();
         }
     }
 
@@ -111,10 +112,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     public void setDice(Dice dice) {
         this.dice = dice;
-    }
-
-    public void setPlayerLobby(PlayerLobby lobby) {
-        this.lobby = lobby;
     }
 
 }

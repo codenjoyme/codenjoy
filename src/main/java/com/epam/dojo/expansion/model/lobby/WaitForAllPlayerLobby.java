@@ -27,11 +27,10 @@ import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.PlayerBoard;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
+
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-11.
@@ -67,6 +66,9 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
     public void tick() {
         if (all.size() == waiting.size()) {
             waiting.clear();
+            if (data.shufflePlayers()) {
+                Collections.shuffle(all);
+            }
             for (Player p : all) {
                 p.setPlayerBoard(loaders.get(p).get());
             }

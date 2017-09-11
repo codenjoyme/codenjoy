@@ -89,7 +89,9 @@ public class ProgressBarTest {
         SettingsWrapper.setup()
                 .leaveForceCount(1)
                 .regionsScores(0)
-                .roundTicks(10000);
+                .roundTicks(10000)
+                .lobbyEnable(false)
+                .shufflePlayers(false);
 
         Level level1 = getLevel();
         Level level2 = getLevel();

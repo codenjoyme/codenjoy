@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.model;
 
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
 import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
@@ -38,6 +39,15 @@ import static org.mockito.Mockito.mock;
  * Created by Sanja on 15.02.14.
  */
 public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
+
+    @Override
+    public void setup() {
+        super.setup();
+
+        SettingsWrapper.data
+                .lobbyEnable(true)
+                .shufflePlayers(false);
+    }
 
     public static final String LOBBY_LEVEL =
             "╔══════════════════┐\n" +
@@ -81,11 +91,6 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             "--------------------\n" +
             "--------------------\n" +
             "--------------------\n";
-
-    @NotNull
-    protected PlayerLobby getLobby() {
-        return new WaitForAllPlayerLobby();
-    }
 
     @Test
     public void shouldCreateSixPlayersInTwoDifferentRooms() {
