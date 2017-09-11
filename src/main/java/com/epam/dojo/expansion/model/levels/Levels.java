@@ -101,7 +101,7 @@ public class Levels {
                 applier.apply(result, line);
             }
         } catch (Exception e) {
-            logger.error("Error durring loading file {}", filePath, e);
+            logger.error("Error during loading file {}", filePath, e);
         }
         return result;
     }
