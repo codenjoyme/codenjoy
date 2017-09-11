@@ -229,6 +229,7 @@ public class ProgressBar {
 
     protected void setPlayer(Player player) {
         this.player = player;
+        lobby.addPlayer(player);
     }
 
     public void start(String save) {

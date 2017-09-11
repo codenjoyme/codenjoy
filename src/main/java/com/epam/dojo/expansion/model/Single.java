@@ -47,11 +47,11 @@ public class Single implements Game {
     private Player player;
     private String save;
 
-    public Single(GameFactory gameFactory, EventListener listener,
+    public Single(GameFactory gameFactory, PlayerLobby lobby, EventListener listener,
                   PrinterFactory factory, Ticker ticker, Dice dice, String save) {
         this.save = save;
         this.ticker = ticker;
-        progressBar = new ProgressBar(gameFactory, null);
+        progressBar = new ProgressBar(gameFactory, lobby);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
     }

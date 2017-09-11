@@ -25,10 +25,7 @@ package com.epam.dojo.expansion.services;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.MultipleGameFactory;
-import com.epam.dojo.expansion.model.Single;
-import com.epam.dojo.expansion.model.Ticker;
+import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.Levels;
 import org.slf4j.Logger;
 
@@ -47,6 +44,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     private MultipleGameFactory gameFactory;
     private Ticker ticker;
     private int size;
+    private PlayerLobby lobby;
 
     public GameRunner() {
         SettingsWrapper.setup(settings);
@@ -67,6 +65,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                             data.levels().toArray(new String[0]))
             );
             gameFactory.setWaitingOthers(data.waitingOthers());
+            lobby = new PlayerLobby();
         }
     }
 
@@ -88,7 +87,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
-        Game single = new Single(gameFactory, listener, factory, ticker, dice, save);
+        Game single = new Single(gameFactory, lobby, listener, factory, ticker, dice, save);
         single.newGame();
         return single;
     }

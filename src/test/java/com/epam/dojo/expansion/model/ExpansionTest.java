@@ -85,7 +85,8 @@ public class ExpansionTest {
                 Levels.collectYours(size, boards),
                 Levels.none());
         listener = mock(EventListener.class);
-        ProgressBar progressBar = new ProgressBar(factory, null);
+        PlayerLobby lobby = mock(PlayerLobby.class);
+        ProgressBar progressBar = new ProgressBar(factory, lobby);
         player = new Player(listener, progressBar);
         progressBar.start(null);
         game = progressBar.getCurrent();

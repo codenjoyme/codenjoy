@@ -82,6 +82,7 @@ public abstract class AbstractSinglePlayersTest {
     private GameFactory gameFactory;
     protected Ticker ticker;
     private int size = LevelsTest.LEVEL_SIZE;
+    private PlayerLobby lobby;
 
     @Before
     public void setup() {
@@ -110,6 +111,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void givenFl(String... boards) {
         setupMaps(boards);
         gameFactory = getGameFactory();
+        lobby = new PlayerLobby();
     }
 
     protected void givenForces(String forces, String layer2) {
@@ -134,7 +136,7 @@ public abstract class AbstractSinglePlayersTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Single game = new Single(gameFactory, listener, null, ticker, dice, null);
+        Single game = new Single(gameFactory, lobby, listener, null, ticker, dice, null);
         singles.add(game);
         game.newGame();
         heroes.add(game.getPlayer().getHero());
