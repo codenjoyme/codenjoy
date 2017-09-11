@@ -150,12 +150,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         for (final PlayerGame playerGame : playerGames) {
             final Game game = playerGame.getGame();
             if (game.isGameOver()) {
-                quietTick(new Tickable() {
-                    @Override
-                    public void tick() {
-                        game.newGame();
-                    }
-                });
+                quietTick(() -> game.newGame());
             }
         }
 
