@@ -139,6 +139,7 @@ var loadArrowImages = function() {
 var previousBoard = null;
 game.drawBoard = function(drawer) {
     var board = previousBoard;
+    var playerName = drawer.playerName;
     previousBoard = drawer.playerData.board;
     drawer.playerData.board = board;
     if (!board) {
@@ -321,8 +322,8 @@ game.drawBoard = function(drawer) {
                 default: break;
             }
         }
-        for (var name in heroesData) {
-            var additionalData = heroesData[name][name].additionalData;
+        for (var name in heroesData[playerName]) {
+            var additionalData = heroesData[playerName][name].additionalData;
             var lastAction = additionalData.lastAction;
             if (!lastAction) continue;
             var movements = lastAction.movements;
