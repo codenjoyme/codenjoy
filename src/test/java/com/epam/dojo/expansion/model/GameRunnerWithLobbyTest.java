@@ -442,10 +442,36 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
     public void shouldPutFirstPlayerToLobby() {
         givenLevels();
 
+        // when
         createNewGame();
         tickAll();
 
+        // then
         assertL(LOBBY_LEVEL, PLAYER1);
+
+        // when
+        createNewGame();
+        tickAll();
+
+        // then
+        String level1 =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "-♥--♦-\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n";
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
     }
 
 }
