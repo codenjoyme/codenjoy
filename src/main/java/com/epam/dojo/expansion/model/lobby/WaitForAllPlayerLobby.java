@@ -24,9 +24,11 @@ package com.epam.dojo.expansion.model.lobby;
 
 
 import com.codenjoy.dojo.services.DLoggerFactory;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.PlayerBoard;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -68,10 +70,42 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
         }
         waiting.add(player);
         loaders.put(player, loader);
-        return new LobbyPlayerBoard(waiting) {
+        return new LobbyPlayerBoard(waiting) { // there are all important methods
             @Override
-            public void tick() {
+            public void remove(Player player) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Player {} removed from lobby", player.lg.id());
+                }
+                player.destroyHero();
+                // because of after finish level we don't want
+                // to null Hero, just destroy, but there we
+                // should renew lobby Hero instance
+                player.setHero(null);
+            }
 
+            @Override
+            public void newGame(Player player) {
+                Hero hero = new Hero() {
+                    @Override
+                    public Point getPosition() {
+                        return NULL_POINT;
+                    }
+
+                    @Override
+                    public void tick() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void message(String command) {
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Player {} lobby hero wants to execute command {}",
+                                    player.lg.id(), command);
+                        }
+                    }
+                };
+                player.setHero(hero);
+                hero.setField(this);
             }
         };
     }

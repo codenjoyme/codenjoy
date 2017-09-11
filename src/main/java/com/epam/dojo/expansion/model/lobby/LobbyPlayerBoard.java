@@ -23,6 +23,7 @@ package com.epam.dojo.expansion.model.lobby;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.CellImpl;
@@ -35,6 +36,7 @@ import com.epam.dojo.expansion.model.levels.items.Start;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -43,7 +45,10 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 /**
  * Created by Oleksandr_Baglai on 2017-09-11.
  */
-public class LobbyPlayerBoard implements PlayerBoard, Field {
+public abstract class LobbyPlayerBoard implements PlayerBoard, Field {
+
+    private static Logger logger = DLoggerFactory.getLogger(LobbyPlayerBoard.class);
+
     public static final int BOARD_SIZE = 20;
     public static final Point NULL_POINT = pt(-1, -1);
     private List<Player> waiting;
@@ -80,28 +85,6 @@ public class LobbyPlayerBoard implements PlayerBoard, Field {
     }
 
     @Override
-    public void newGame(Player player) {
-        Hero hero = new Hero() {
-            @Override
-            public Point getPosition() {
-                return NULL_POINT;
-            }
-
-            @Override
-            public void tick() {
-                // do nothing
-            }
-        };
-        player.setHero(hero);
-        hero.setField(this);
-    }
-
-    @Override
-    public void remove(Player player) {
-        // do nothing
-    }
-
-    @Override
     public void loadLevel(int level) {
         // do nothing
     }
@@ -119,11 +102,6 @@ public class LobbyPlayerBoard implements PlayerBoard, Field {
     @Override
     public String id() {
         return "ELB@" + Integer.toHexString(this.hashCode());
-    }
-
-    @Override
-    public void tick() {
-        // do nothing
     }
 
     @Override
@@ -182,5 +160,10 @@ public class LobbyPlayerBoard implements PlayerBoard, Field {
     @Override
     public int regionsCount(Hero hero) {
         return 0;
+    }
+
+    @Override
+    public void tick() {
+        // do nothing
     }
 }
