@@ -50,7 +50,11 @@ public class BoardTest {
         board = board(
                 "{'myBase':{'x':2,'y':8}," +
                 "'myColor':0," +
-                "'available':10," + "'tick':10," +
+                "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
+                "'tick':10," +
                 "'forces':'-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#" +
                         "-=#-=#00B-=#-=#-=#-=#-=#-=#-=#-=#" +
@@ -112,8 +116,18 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldGetRound() {
+        assertEquals("[1,10]", board.getRound().toString());
+    }
+
+    @Test
     public void shouldGetMyForces() {
         assertEquals("[[2,8]=11]", board.getMyForces().toString());
+    }
+
+    @Test
+    public void shouldGetMyBasePosition() {
+        assertEquals("[2,8]", board.getMyBasePosition().toString());
     }
 
     @Test
@@ -137,7 +151,12 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldGetMyavailable() {
+    public void shouldIsInLobby() {
+        assertEquals(false, board.isInLobby());
+    }
+
+    @Test
+    public void shouldGetMyAvailable() {
         assertEquals(10, board.getForcesAvailable());
     }
 
@@ -205,6 +224,9 @@ public class BoardTest {
                 "{'myBase':{'x':4,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
@@ -238,6 +260,9 @@ public class BoardTest {
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
@@ -275,6 +300,9 @@ public class BoardTest {
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
@@ -312,6 +340,9 @@ public class BoardTest {
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
@@ -349,6 +380,9 @@ public class BoardTest {
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
@@ -386,6 +420,9 @@ public class BoardTest {
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +
@@ -424,6 +461,9 @@ public class BoardTest {
                 "{'myBase':{'x':1,'y':4}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#" +

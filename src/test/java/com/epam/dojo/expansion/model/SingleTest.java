@@ -1298,6 +1298,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertEquals("{" +
                 "'available':10," +
                 "'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
+                "'inLobby':false," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
@@ -1314,6 +1315,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertEquals("{" +
                 "'available':10," +
                 "'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
+                "'inLobby':false," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +

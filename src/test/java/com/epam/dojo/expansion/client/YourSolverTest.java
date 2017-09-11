@@ -57,6 +57,9 @@ public class YourSolverTest {
                 "{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -88,6 +91,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -119,6 +125,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -150,6 +159,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -181,6 +193,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -212,6 +227,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -243,6 +261,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -274,6 +295,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +
@@ -305,6 +329,9 @@ public class YourSolverTest {
         assertL("{'myBase':{'x':1,'y':5}," +
                 "'myColor':0," +
                 "'available':10," +
+                "'inLobby':false," +
+                "'round':1," +
+                "'rounds':10," +
                 "'tick':10," +
                 "'forces':'" +
                         "-=#-=#-=#-=#-=#-=#-=#" +

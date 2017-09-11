@@ -107,6 +107,7 @@ public class Single implements Game {
         result.put("showName", true);
         result.put("onlyMyName", !progress.getBoolean("multiple"));
         result.put("levelProgress", progress);
+        result.put("inLobby", progressBar.inLobby());
 
         if (logger.isDebugEnabled()) {
             logger.debug("getBoardAsString for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));

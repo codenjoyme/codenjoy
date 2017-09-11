@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Level;
+import com.epam.dojo.expansion.model.lobby.LobbyPlayerBoard;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
 import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.Printer;
@@ -310,6 +311,10 @@ public class ProgressBar {
         if (current != null) {
             processCurrent(0);
         }
+    }
+
+    public boolean inLobby() {
+        return current instanceof LobbyPlayerBoard;
     }
 
     public class LogState {

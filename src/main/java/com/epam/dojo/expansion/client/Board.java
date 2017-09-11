@@ -32,6 +32,7 @@ import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -94,6 +95,20 @@ public class Board extends AbstractBoard<Elements> {
      */
     public int getTick() {
         return source.getInt("tick");
+    }
+
+    /*
+     * @return true if you are in lobby wait for another users
+     */
+    public boolean isInLobby() {
+        return source.getBoolean("inLobby");
+    }
+
+    /*
+     * @return pt.x - current round tick, pt.y - total ticks per round
+     */
+    public Point getRound() {
+        return pt(source.getInt("round"), source.getInt("rounds"));
     }
 
     /**
