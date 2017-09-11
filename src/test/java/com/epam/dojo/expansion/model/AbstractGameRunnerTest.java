@@ -152,7 +152,9 @@ public class AbstractGameRunnerTest {
 
     protected void tickAll() {
         for (Game game : games) {
-            game.tick();
+            if (game != null) {
+                game.tick();
+            }
         }
     }
 
@@ -161,6 +163,11 @@ public class AbstractGameRunnerTest {
             whatToDo.run();
             tickAll();
         }
+    }
+
+    protected void destroy(int player) {
+        game(player).destroy();
+        games.set(player, null);
     }
 
     protected Joystick goTimes(int player, Point pt, int times) {

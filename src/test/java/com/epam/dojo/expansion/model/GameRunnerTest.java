@@ -405,8 +405,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
             data.roundTicks(10);
             shouldCreateSixPlayersInTwoDifferentRooms();
 
-            game(PLAYER1).destroy();
-            game(PLAYER2).destroy();
+            destroy(PLAYER1);
+            destroy(PLAYER2);
 
             String level1 =
                     "╔════┐\n" +
@@ -426,6 +426,25 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
             assertE(forces1, PLAYER3);
             assertL(level1, PLAYER4);
             assertE(forces1, PLAYER4);
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level2, PLAYER5);
+            assertE(forces2, PLAYER5);
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
 
             for (int i = 0; i < 9; i++) {
                 tickAll();
@@ -452,14 +471,14 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
             assertE(forces1, PLAYER4);
 
 
-            String level2 =
+            level2 =
                     "╔════┐\n" +
                     "║..1.│\n" +
                     "║4...│\n" +
                     "║...2│\n" +
                     "║.3..│\n" +
                     "└────┘\n";
-            String forces2 =
+            forces2 =
                     "------\n" +
                     "---♥--\n" +
                     "------\n" +

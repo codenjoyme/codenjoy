@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.PLAYER6;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -38,7 +39,8 @@ import static org.mockito.Mockito.mock;
  */
 public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
-    public static final String LOBBY_LEVEL = "╔══════════════════┐\n" +
+    public static final String LOBBY_LEVEL =
+            "╔══════════════════┐\n" +
             "║..................│\n" +
             "║..................│\n" +
             "║..................│\n" +
@@ -58,7 +60,8 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             "║..................│\n" +
             "║..................│\n" +
             "└──────────────────┘\n";
-    public static final String LOBBY_FORCES = "--------------------\n" +
+    public static final String LOBBY_FORCES =
+            "--------------------\n" +
             "--------------------\n" +
             "--------------------\n" +
             "--------------------\n" +
@@ -299,6 +302,117 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(LOBBY_FORCES, PLAYER1);
         assertL(LOBBY_LEVEL, PLAYER7);
         assertE(LOBBY_FORCES, PLAYER7);
+    }
+
+    @Test
+    public void shouldResetAllUsersAfterRoundTicksIsUp() {
+        int old = data.roundTicks();
+        try {
+            int ROUND_TICKS = 10;
+            data.roundTicks(ROUND_TICKS);
+            shouldCreateSixPlayersInTwoDifferentRooms();
+
+            destroy(PLAYER1);
+            destroy(PLAYER2);
+
+            String level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces1 =
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "-♠--♣-\n" +
+                    "------\n";
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level2, PLAYER5);
+            assertE(forces2, PLAYER5);
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
+
+            for (int i = 0; i < ROUND_TICKS - 1; i++) {
+                tickAll();
+            }
+
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+            assertL(LOBBY_LEVEL, PLAYER4);
+            assertE(LOBBY_FORCES, PLAYER4);
+            assertL(LOBBY_LEVEL, PLAYER5);
+            assertE(LOBBY_FORCES, PLAYER5);
+            assertL(LOBBY_LEVEL, PLAYER6);
+            assertE(LOBBY_FORCES, PLAYER6);
+
+            gotoFreeRoom(1, // PLAYER3
+                    0, // PLAYER4
+                    0, // PLAYER5
+                    1); // PLAYER6
+            tickAll();
+
+            level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            forces1 =
+                    "------\n" +
+                    "-♥--♦-\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+            assertL(level1, PLAYER5);
+            assertE(forces1, PLAYER5);
+
+            level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level2, PLAYER3);
+            assertE(forces2, PLAYER3);
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
+
+        } finally {
+            data.roundTicks(old);
+        }
     }
 
 }

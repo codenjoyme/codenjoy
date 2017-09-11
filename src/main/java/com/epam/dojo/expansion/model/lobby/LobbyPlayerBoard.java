@@ -57,6 +57,11 @@ public class LobbyPlayerBoard implements PlayerBoard {
             public Point getPosition() {
                 return pt(0, 0);
             }
+
+            @Override
+            public void tick() {
+                // do nothing
+            }
         };
         player.setHero(hero);
         hero.setField(new Lobby());

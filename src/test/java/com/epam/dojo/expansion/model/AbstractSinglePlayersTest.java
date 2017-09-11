@@ -157,7 +157,9 @@ public abstract class AbstractSinglePlayersTest {
 
     protected void tickAll() {
         for (Single single : singles) {
-            single.tick();
+            if (single != null) {
+                single.tick();
+            }
         }
     }
 
@@ -232,6 +234,7 @@ public abstract class AbstractSinglePlayersTest {
 
     protected void destroy(int index) {
         single(index).destroy();
+        singles.set(index, null);
     }
 
     protected void assertL(String expected, int index) {

@@ -119,6 +119,7 @@ public class Single implements Game {
     public void destroy() {
         lobby.remove(player);
         progressBar.remove(player);
+        progressBar.setCurrent(null);
     }
 
     @Override

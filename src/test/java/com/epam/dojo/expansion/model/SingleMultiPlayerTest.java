@@ -567,37 +567,37 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#00B001-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-        assertE("-------" +
-                "-♠♠----" +
-                "-------" +
-                "-------" +
-                "-♣-----" +
-                "-♣--♦♦-" +
-                "-------", PLAYER5);
-
-        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#00B001-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#001-=#-=#-=#-=#-=#\n" +
-                "-=#00B-=#-=#00100B-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER5);
-
-        assertE("-------" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-----♦-" +
-                "-----♦-" +
-                "-------", PLAYER9);
-
-        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#001-=#\n" +
-                "-=#-=#-=#-=#-=#00B-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER9);
+//        assertE("-------" +
+//                "-♠♠----" +
+//                "-------" +
+//                "-------" +
+//                "-♣-----" +
+//                "-♣--♦♦-" +
+//                "-------", PLAYER5);
+//
+//        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#00B001-=#-=#-=#-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#001-=#-=#-=#-=#-=#\n" +
+//                "-=#00B-=#-=#00100B-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER5);
+//
+//        assertE("-------" +
+//                "-------" +
+//                "-------" +
+//                "-------" +
+//                "-----♦-" +
+//                "-----♦-" +
+//                "-------", PLAYER9);
+//
+//        assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n" +
+//                "-=#-=#-=#-=#-=#001-=#\n" +
+//                "-=#-=#-=#-=#-=#00B-=#\n" +
+//                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER9);
 
         // when
         // another player11 registered
@@ -639,7 +639,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-♣-----" +
                 "-♣--♦♦-" +
-                "-------", PLAYER5);
+                "-------", PLAYER12);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#00B001-=#-=#00A-=#\n" +
@@ -647,7 +647,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#001-=#-=#-=#-=#-=#\n" +
                 "-=#00B-=#-=#00100B-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER5);
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER12);
 
         // when
         // another player13 registered
@@ -664,7 +664,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-----♦-" +
                 "-----♦-" +
-                "-------", PLAYER9);
+                "-------", PLAYER13);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#00A-=#\n" +
@@ -672,7 +672,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#001-=#\n" +
                 "-=#-=#-=#-=#-=#00B-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER9);
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER13);
 
         // when
         // another player14 registered
@@ -689,7 +689,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-----♦-" +
                 "-♣---♦-" +
-                "-------", PLAYER9);
+                "-------", PLAYER14);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#00A-=#\n" +
@@ -697,7 +697,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#001-=#\n" +
                 "-=#00A-=#-=#-=#00B-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER9);
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER14);
 
         // when
         // another player15 registered
@@ -714,7 +714,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-----♦-" +
                 "-♣---♦-" +
-                "-------", PLAYER9);
+                "-------", PLAYER15);
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#00A-=#-=#-=#00A-=#\n" +
@@ -722,7 +722,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#001-=#\n" +
                 "-=#00A-=#-=#-=#00B-=#\n" +
-                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER9);
+                "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER15);
 
         // when
         // another player15 registered

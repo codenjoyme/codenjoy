@@ -83,6 +83,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             logger.debug("Expansion {} started tick", lg.id());
         }
 
+        // System.out.printf("tick #%s, roundTicks %s, on game %s with players %s\n", ticks, roundTicks, lg.id(), lg.players());
         if (isMultiple) {
             ticks++;
             if (ticks % players.size() != 0) {
@@ -125,7 +126,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             }
         }
 
-//        System.out.printf("%s = %s\n", lg.id(), roundTicks);
         if (data.roundLimitedInTime()) {
             if (roundTicks >= data.roundTicks()) {
                 roundTicks = 0;
@@ -141,22 +141,24 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             player.tick();
         }
 
-        attack();
+        if (!players.isEmpty()) {
+            attack();
 
-        for (Tickable item : level.getItems(Tickable.class)) {
-            if (item instanceof Hero) {
-                continue;
+            for (Tickable item : level.getItems(Tickable.class)) {
+                if (item instanceof Hero) {
+                    continue;
+                }
+
+                item.tick();
             }
 
-            item.tick();
-        }
+            for (Player player : players) {
+                Hero hero = player.getHero();
 
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (hero.isWin()) {
-                player.event(WIN_SINGLE);
-                player.setNextLevel();
+                if (hero.isWin()) {
+                    player.event(WIN_SINGLE);
+                    player.setNextLevel();
+                }
             }
         }
 
@@ -482,6 +484,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
     @Override
     public void remove(Player player) {
+        losers.remove(player); // TODO test me
         players.remove(player);
         player.destroyHero();
     }
@@ -549,8 +552,8 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     public class LogState {
         public JSONObject json() {
             return new JSONObject(){{
+                put("players", players());
                 put("id", id());
-                put("players", players(Expansion.this.players));
                 put("isMultiple", isMultiple);
                 put("losers", players(losers));
                 put("waitingOthers", waitingOthers);
@@ -558,6 +561,10 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                 put("roundTicks", roundTicks);
                 put("level", printer());
             }};
+        }
+
+        private List<String> players() {
+            return players(Expansion.this.players);
         }
 
         private PrinterData printer() {

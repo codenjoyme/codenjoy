@@ -306,7 +306,9 @@ public class ProgressBar {
 
     public void setCurrent(PlayerBoard current) {
         this.current = current;
-        processCurrent(0);
+        if (current != null) {
+            processCurrent(0);
+        }
     }
 
     public class LogState {
