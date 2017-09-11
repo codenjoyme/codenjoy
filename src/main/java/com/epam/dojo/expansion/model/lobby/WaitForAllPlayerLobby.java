@@ -32,12 +32,6 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
     public PlayerBoard start(Player player, Supplier<PlayerBoard> loader) {
         waiting.add(player);
         loaders.put(player, loader);
-        if (all.size() == waiting.size()) {
-            waiting.clear();
-            for (Player p : all) {
-                p.setPlayerBoard(loaders.get(p).get());
-            }
-        }
         return new LobbyPlayerBoard(waiting) {
             @Override
             public void tick() {
@@ -48,6 +42,11 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     @Override
     public void tick() {
-
+        if (all.size() == waiting.size()) {
+            waiting.clear();
+            for (Player p : all) {
+                p.setPlayerBoard(loaders.get(p).get());
+            }
+        }
     }
 }

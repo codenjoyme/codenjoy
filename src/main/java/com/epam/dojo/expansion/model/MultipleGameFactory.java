@@ -89,7 +89,8 @@ public class MultipleGameFactory implements GameFactory {
         if (free.isEmpty()) {
             return null;
         }
-        return free.get(dice.next(free.size()));
+        int index = dice.next(free.size());
+        return free.get(index);
     }
 
     @NotNull
@@ -121,7 +122,8 @@ public class MultipleGameFactory implements GameFactory {
     @NotNull
     private Level selectRandomLevelType() {
         List<Level> levels = multipleFactory.get();
-        Level level = levels.get(dice.next(levels.size()));
+        int index = dice.next(levels.size());
+        Level level = levels.get(index);
         return level;
     }
 

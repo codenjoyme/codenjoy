@@ -116,9 +116,8 @@ public class Player {
         this.hero = hero;
     }
 
-    public void setPlayerBoard(PlayerBoard playerBoard) {
-        destroyHero();
-        progressBar.setCurrent(playerBoard);
+    public void setPlayerBoard(PlayerBoard current) {
+        progressBar.setCurrent(current);
     }
 
     public class LogState {

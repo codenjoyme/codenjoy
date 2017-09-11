@@ -57,7 +57,7 @@ public class AbstractGameRunnerTest {
     public static final int LEVEL1 = 0;
     public static final int LEVEL2 = 1;
     public static final int LEVEL3 = 2;
-    private static final int LEVEL4 = 3;
+    public static final int LEVEL4 = 3;
 
     protected LinkedList<Game> games;
     private GameRunner gameRunner;
@@ -105,6 +105,10 @@ public class AbstractGameRunnerTest {
 
     protected void createNewGame(int levelOfRoom) {
         levelOrFreeRoom(levelOfRoom);
+        createNewGame();
+    }
+
+    protected void createNewGame() {
         Game game = gameRunner.newGame(listener, factory, null);
         games.add(game);
     }
@@ -147,7 +151,6 @@ public class AbstractGameRunnerTest {
     }
 
     protected void tickAll() {
-        System.out.println("tick all");
         for (Game game : games) {
             game.tick();
         }
@@ -207,4 +210,33 @@ public class AbstractGameRunnerTest {
         return games.get(player).getJoystick();
     }
 
+    protected void givenLevels() {
+        givenLv("╔════┐" +
+                "║1..2│" +
+                "║....│" +
+                "║....│" +
+                "║4..3│" +
+                "└────┘", LEVEL1);
+
+        givenLv("╔════┐" +
+                "║..1.│" +
+                "║4...│" +
+                "║...2│" +
+                "║.3..│" +
+                "└────┘", LEVEL2);
+
+        givenLv("╔════┐" +
+                "║.1..│" +
+                "║...2│" +
+                "║4...│" +
+                "║..3.│" +
+                "└────┘", LEVEL3);
+
+        givenLv("╔════┐" +
+                "║....│" +
+                "║.12.│" +
+                "║.43.│" +
+                "║....│" +
+                "└────┘", LEVEL4);
+    }
 }

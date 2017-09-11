@@ -54,29 +54,6 @@ import static org.mockito.Mockito.when;
  */
 public class GameRunnerTest extends AbstractGameRunnerTest {
 
-    private void givenLevels() {
-        givenLv("╔════┐" +
-                "║1..2│" +
-                "║....│" +
-                "║....│" +
-                "║4..3│" +
-                "└────┘", LEVEL1);
-
-        givenLv("╔════┐" +
-                "║..1.│" +
-                "║4...│" +
-                "║...2│" +
-                "║.3..│" +
-                "└────┘", LEVEL2);
-
-        givenLv("╔════┐" +
-                "║.1..│" +
-                "║...2│" +
-                "║4...│" +
-                "║..3.│" +
-                "└────┘", LEVEL3);
-    }
-
     @Test
     public void shouldCreateSixPlayersInTwoDifferentRooms() {
         givenLevels();

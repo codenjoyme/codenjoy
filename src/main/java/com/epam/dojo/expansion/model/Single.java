@@ -46,6 +46,7 @@ public class Single implements Game {
 
     private Ticker ticker;
     private ProgressBar progressBar;
+    private final PlayerLobby lobby;
     private Player player;
     private String save;
 
@@ -53,6 +54,7 @@ public class Single implements Game {
                   PrinterFactory factory, Ticker ticker, Dice dice, String save) {
         this.save = save;
         this.ticker = ticker;
+        this.lobby = lobby;
         progressBar = new ProgressBar(gameFactory, lobby);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
@@ -115,6 +117,7 @@ public class Single implements Game {
 
     @Override
     public void destroy() {
+        lobby.remove(player);
         progressBar.remove(player);
     }
 

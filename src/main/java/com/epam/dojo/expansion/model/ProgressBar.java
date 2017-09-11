@@ -147,7 +147,6 @@ public class ProgressBar {
     }
 
     public void remove(Player player) {
-        lobby.remove(player);
         if (current != null) {
             current.remove(player);
         }
@@ -182,8 +181,12 @@ public class ProgressBar {
     private void loadMultiple() {
         remove(player);
         current = lobby.start(player, () -> factory.get(Expansion.MULTIPLE, getLevelChose()));
+        processCurrent(0);
+    }
 
-        loadLevel(0); // only one multiple level we have
+    private void processCurrent(int level) {
+        loadLevel(level);
+        finished = false;
         buildPrinter();
         try {
             start(player);
@@ -202,10 +205,7 @@ public class ProgressBar {
     private void loadSingle(Integer level) {
         remove(player);
         current = single;
-        loadLevel(level);
-        finished = false;
-        buildPrinter();
-        start(player);
+        processCurrent(level);
     }
 
     private void loadLevel(Integer level) {
@@ -306,7 +306,7 @@ public class ProgressBar {
 
     public void setCurrent(PlayerBoard current) {
         this.current = current;
-        setNextLevel();
+        processCurrent(0);
     }
 
     public class LogState {
