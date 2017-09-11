@@ -112,7 +112,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     @Override
     public void tick() {
-        if (all.size() != 1 && all.size() == waiting.size()) {
+        if (isLetThemGo()) {
             waiting.clear();
             if (data.shufflePlayers()) {
                 Collections.shuffle(all);
@@ -123,6 +123,14 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             for (Player p : all) {
                 p.setPlayerBoard(loaders.get(p).get());
             }
+        }
+    }
+
+    private boolean isLetThemGo() {
+        if (data.lobbyCapacity() == -1) {
+            return all.size() != 1 && all.size() == waiting.size();
+        } else {
+            return waiting.size() >= data.lobbyCapacity();
         }
     }
 }

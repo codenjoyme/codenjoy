@@ -50,6 +50,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> regionsScores;
     private final Parameter<Integer> boardSize;
+    private final Parameter<Integer> lobbyCapacity;
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
     private final Parameter<Boolean> lobbyEnable;
@@ -61,6 +62,7 @@ public final class SettingsWrapper {
         return new SettingsWrapper(settings);
     }
 
+    // for testing
     public static SettingsWrapper setup() {
         return setup(new SettingsImpl());
     }
@@ -70,6 +72,7 @@ public final class SettingsWrapper {
 
         levels = new LinkedList<>();
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
+        lobbyCapacity = settings.addEditBox("Lobby capacity").type(Integer.class).def(6);
         winScore = settings.addEditBox("Win multiple score").type(Integer.class).def(1);
         roundTicks = settings.addEditBox("Ticks per round").type(Integer.class).def(600);
         leaveForceCount = settings.addEditBox("Leave forces count").type(Integer.class).def(0);
@@ -143,6 +146,10 @@ public final class SettingsWrapper {
         return winScore.getValue();
     }
 
+    public int lobbyCapacity() {
+        return lobbyCapacity.getValue();
+    }
+
     // setters for testing
 
     public SettingsWrapper leaveForceCount(int value) {
@@ -179,4 +186,8 @@ public final class SettingsWrapper {
         return this;
     }
 
+    public SettingsWrapper lobbyCapacity(int value) {
+        lobbyCapacity.update(value);
+        return this;
+    }
 }
