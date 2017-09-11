@@ -476,7 +476,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
     }
 
     @Test
-    public void shouldPlayersCantGoAfterLobby() {
+    public void shouldPlayersCanGoAfterLobby() {
         shouldPutFirstPlayerToLobby();
 
         String level1 =
@@ -524,4 +524,21 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
     }
 
+    @Test
+    public void shouldPlayersCantGoOnLobby() {
+        givenLevels();
+
+        // when
+        createNewGame();
+        tickAll();
+
+        // then
+        assertL(LOBBY_LEVEL, PLAYER1);
+
+        // when
+        goTimes(PLAYER1, pt(1, 4), 2).down();
+
+        // then
+        assertL(LOBBY_LEVEL, PLAYER1);
+    }
 }
