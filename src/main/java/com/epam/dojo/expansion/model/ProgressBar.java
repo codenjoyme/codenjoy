@@ -46,6 +46,7 @@ public class ProgressBar {
 
     private static Logger logger = DLoggerFactory.getLogger(ProgressBar.class);
 
+    private PlayerLobby lobby;
     private GameFactory factory;
     private Player player;
 
@@ -61,8 +62,9 @@ public class ProgressBar {
     private Printer printer;
     private Single gameOwner;
 
-    public ProgressBar(GameFactory factory) {
+    public ProgressBar(GameFactory factory, PlayerLobby lobby) {
         this.factory = factory;
+        this.lobby = lobby;
         single = factory.get(Expansion.SINGLE, level -> true);
     }
 
@@ -74,13 +76,13 @@ public class ProgressBar {
         printer = new Printer(current, current.getViewSize());
     }
 
-    public Integer getBackToSingleLevel() {
+    private Integer getBackToSingleLevel() {
         Integer result = backToSingleLevel;
         backToSingleLevel = null;
         return result;
     }
 
-    void checkLevel() {
+    protected void checkLevel() {
         if (nextLevel) {
             nextLevel();
         } else if (!player.getHero().isAlive()) {
@@ -92,7 +94,7 @@ public class ProgressBar {
         }
     }
 
-    protected void changeLevel() {
+    private void changeLevel() {
         int level = player.getHero().getLevel();
         if (!current.isMultiple()) {
             if (level == -1) {
@@ -116,7 +118,7 @@ public class ProgressBar {
         }
     }
 
-    protected void nextLevel() {
+    private void nextLevel() {
         if (currentLevel < current.levelsCount() - 1) {
             if (lastPassedLevel < currentLevel) {
                 lastPassedLevel = currentLevel;
@@ -131,7 +133,7 @@ public class ProgressBar {
         createHeroToPlayer();
     }
 
-    protected void createHeroToPlayer() {
+    private void createHeroToPlayer() {
         remove(player);
         start(player);
         nextLevel = false;
@@ -229,8 +231,7 @@ public class ProgressBar {
         this.player = player;
     }
 
-    public void start(String save, Player player) {
-        this.player = player;
+    public void start(String save) {
         if (!StringUtils.isEmpty(save)) {
             loadProgress(save);
         } else {
@@ -259,7 +260,7 @@ public class ProgressBar {
         return current != single;
     }
 
-    public void loadProgress(String save) {
+    private void loadProgress(String save) {
         try {
             JSONObject object = new JSONObject(save);
             currentLevel = object.getInt("current");

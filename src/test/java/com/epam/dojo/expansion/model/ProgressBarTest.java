@@ -96,10 +96,10 @@ public class ProgressBarTest {
 
         single = new DummyExpansion(Arrays.asList(level1, level2, level3, level4), dice, false);
         multiple = new DummyExpansion(Arrays.asList(level5), dice, true);
-        progressBar = new ProgressBar(new StubGamesGameFactory(single, multiple));
+        progressBar = new ProgressBar(new StubGamesGameFactory(single, multiple), null);
 
         player = new Player(mock(EventListener.class), progressBar);
-        progressBar.start(null, player);
+        progressBar.start(null);
     }
 
     private Level getLevel() {
@@ -459,7 +459,7 @@ public class ProgressBarTest {
         assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
-        progressBar.loadProgress("{'total':4,'current':1,'lastPassed':1,'scores':true,'multiple':false}");
+        progressBar.start("{'total':4,'current':1,'lastPassed':1,'scores':true,'multiple':false}");
 
         // then
         assertState("{'total':4,'current':1,'lastPassed':1,'scores':false,'multiple':false}");
@@ -472,7 +472,7 @@ public class ProgressBarTest {
         assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
-        progressBar.loadProgress("{'total':4,'current':3,'lastPassed':1,'scores':true,'multiple':false}");
+        progressBar.start("{'total':4,'current':3,'lastPassed':1,'scores':true,'multiple':false}");
 
         // then
         assertState("{'total':4,'current':3,'lastPassed':1,'scores':true,'multiple':false}");
@@ -485,7 +485,7 @@ public class ProgressBarTest {
         assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
-        progressBar.loadProgress("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
+        progressBar.start("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // then
         assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");

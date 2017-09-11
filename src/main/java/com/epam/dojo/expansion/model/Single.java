@@ -51,7 +51,7 @@ public class Single implements Game {
                   PrinterFactory factory, Ticker ticker, Dice dice, String save) {
         this.save = save;
         this.ticker = ticker;
-        progressBar = new ProgressBar(gameFactory);
+        progressBar = new ProgressBar(gameFactory, null);
         progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
     }
@@ -82,7 +82,7 @@ public class Single implements Game {
             logger.debug("Starts new game for {}", lg.id());
         }
 
-        progressBar.start(save, player);
+        progressBar.start(save);
     }
 
     @Override
