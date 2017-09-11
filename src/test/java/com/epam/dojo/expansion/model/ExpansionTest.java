@@ -51,7 +51,7 @@ import static org.mockito.Mockito.*;
 public class ExpansionTest {
 
     public static final int FIRE_TICKS = 6;
-    private Expansion game;
+    private PlayerBoard game;
     private Printer printer;
 
     private Hero hero;

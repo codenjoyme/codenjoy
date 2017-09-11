@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Player;
+import com.epam.dojo.expansion.model.PlayerBoard;
 import com.epam.dojo.expansion.model.levels.Cell;
 import com.epam.dojo.expansion.model.levels.Item;
 import com.epam.dojo.expansion.model.levels.items.HeroForces;
@@ -42,7 +43,7 @@ public class Printer {
     public static final int COUNT_NUMBERS = TestUtils.COUNT_NUMBERS;
 
     private int size;
-    private Expansion game;
+    private PlayerBoard game;
 
     private int viewSize;
     private int vx;
@@ -51,7 +52,7 @@ public class Printer {
 
     private boolean needToCenter;
 
-    public Printer(Expansion game, int viewSize) {
+    public Printer(PlayerBoard game, int viewSize) {
         this.game = game;
         this.viewSize = Math.min(game.size(), viewSize);
 

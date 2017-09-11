@@ -57,8 +57,8 @@ public class ProgressBar {
 
     private Integer backToSingleLevel;
 
-    private Expansion single;
-    private Expansion current;
+    private PlayerBoard single;
+    private PlayerBoard current;
     private Printer printer;
     private Single gameOwner;
 
@@ -68,7 +68,7 @@ public class ProgressBar {
         single = factory.get(Expansion.SINGLE, level -> true);
     }
 
-    public void setNextLevel() {
+    protected void setNextLevel() {
         nextLevel = true;
     }
 
@@ -284,7 +284,7 @@ public class ProgressBar {
         return isMultiple() || (currentLevel > lastPassedLevel);
     }
 
-    public Expansion getCurrent() {
+    public PlayerBoard getCurrent() {
         return current;
     }
 
@@ -311,8 +311,8 @@ public class ProgressBar {
                 put("finished", finished);
                 put("nextLevel", nextLevel);
                 put("backToSingleLevel", backToSingleLevel);
-                put("single", single.lg.id());
-                put("current", current.lg.id());
+                put("single", single.lg().id());
+                put("current", current.lg().id());
                 put("gameOwner", gameOwner.lg.id());
             }};
         }

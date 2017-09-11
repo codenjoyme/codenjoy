@@ -113,7 +113,7 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void givenForces(String forces, String layer2) {
-        Expansion current = singles.get(PLAYER1).getProgressBar().getCurrent();
+        PlayerBoard current = singles.get(PLAYER1).getProgressBar().getCurrent();
         LevelImpl level = (LevelImpl)current.getCurrentLevel();
         level.fillForces(layer2, heroes.toArray(new Hero[0]));
         level.fillForcesCount(forces);

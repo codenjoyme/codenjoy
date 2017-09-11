@@ -45,7 +45,7 @@ import java.util.*;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static java.util.stream.Collectors.toList;
 
-public class Expansion implements Tickable, Field {
+public class Expansion implements Tickable, Field, PlayerBoard {
 
     public static final Events WIN_MULTIPLE = Events.WIN(data.winScore());
     public static final Events WIN_SINGLE = Events.WIN(0);
@@ -216,6 +216,7 @@ public class Expansion implements Tickable, Field {
         return !isMultiple || (isMultiple && players.isEmpty());
     }
 
+    @Override
     public void loadLevel(int index) {
         level = levels.get(index);
         if (isNew()) {
@@ -343,6 +344,7 @@ public class Expansion implements Tickable, Field {
         return waitingOthers && players.size() != 4;
     }
 
+    @Override
     public int size() {
         return level.getSize();
     }
@@ -499,6 +501,7 @@ public class Expansion implements Tickable, Field {
         return level.getCellsWith(cell -> cell.busy(hero)).size();
     }
 
+    @Override
     public List<Hero> getHeroes() {
         List<Hero> result = new LinkedList();
         for (Player player : players) {
@@ -507,6 +510,7 @@ public class Expansion implements Tickable, Field {
         return result;
     }
 
+    @Override
     public void newGame(Player player) {
         if (losers.contains(player)) {
             return;
@@ -518,6 +522,7 @@ public class Expansion implements Tickable, Field {
         player.newHero(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
         player.destroyHero();
@@ -537,18 +542,22 @@ public class Expansion implements Tickable, Field {
         }
     }
 
+    @Override
     public Level getCurrentLevel() {
         return level;
     }
 
+    @Override
     public List<Player> getPlayers() {
         return new LinkedList(players);
     }
 
+    @Override
     public int levelsCount() {
         return levels.size();
     }
 
+    @Override
     public boolean isMultiple() {
         return isMultiple;
     }
@@ -566,6 +575,7 @@ public class Expansion implements Tickable, Field {
         waitingOthers = true;
     }
 
+    @Override
     public int getRoundTicks() {
         if (!data.roundLimitedInTime()) {
             return SettingsWrapper.UNLIMITED;
@@ -573,6 +583,7 @@ public class Expansion implements Tickable, Field {
         return roundTicks;
     }
 
+    @Override
     public int getViewSize() {
         return level.getViewSize();
     }
@@ -607,6 +618,11 @@ public class Expansion implements Tickable, Field {
         public String id() {
             return "E@" + Integer.toHexString(Expansion.this.hashCode());
         }
+    }
+
+    @Override
+    public LogState lg() {
+        return lg;
     }
 
     public LogState lg = new LogState();
