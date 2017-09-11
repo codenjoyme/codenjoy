@@ -178,7 +178,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = factory.get(Expansion.MULTIPLE, getLevelChose());
+        current = lobby.start(() -> factory.get(Expansion.MULTIPLE, getLevelChose()));
 
         loadLevel(0); // only one multiple level we have
         buildPrinter();
