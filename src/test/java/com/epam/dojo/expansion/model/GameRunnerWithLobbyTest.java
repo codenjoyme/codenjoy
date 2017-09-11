@@ -247,6 +247,24 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertL(level2, PLAYER6);
         assertE(forces2, PLAYER6);
 
+        assertL(LOBBY_LEVEL, PLAYER1);
+        assertE(LOBBY_FORCES, PLAYER1);
+
+        // when
+        tickAll();
+
+        // then nothing changed
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+
+        assertL(level2, PLAYER5);
+        assertE(forces2, PLAYER5);
+        assertL(level2, PLAYER6);
+        assertE(forces2, PLAYER6);
 
         assertL(LOBBY_LEVEL, PLAYER1);
         assertE(LOBBY_FORCES, PLAYER1);
