@@ -438,4 +438,14 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         }
     }
 
+    @Test
+    public void shouldPutFirstPlayerToLobby() {
+        givenLevels();
+
+        createNewGame();
+        tickAll();
+
+        assertL(LOBBY_LEVEL, PLAYER1);
+    }
+
 }

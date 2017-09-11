@@ -64,7 +64,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     @Override
     public void tick() {
-        if (all.size() == waiting.size()) {
+        if (all.size() != 1 && all.size() == waiting.size()) {
             waiting.clear();
             if (data.shufflePlayers()) {
                 Collections.shuffle(all);
