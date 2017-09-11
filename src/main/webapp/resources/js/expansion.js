@@ -344,17 +344,19 @@ game.drawBoard = function(drawer) {
         console.log(err);
     }
 
-    fonts.userName = {};
-    fonts.userName.dx = -15;
-    fonts.userName.dy = -45;
-    fonts.userName.font = "22px 'verdana'";
-    fonts.userName.fillStyle = "#0FF";
-    fonts.userName.textAlign = "left";
-    fonts.userName.shadowColor = "#000";
-    fonts.userName.shadowOffsetX = 0;
-    fonts.userName.shadowOffsetY = 0;
-    fonts.userName.shadowBlur = 5;
-    drawer.drawPlayerNames(fonts.userName);
+    if (!board.inLobby) {
+        fonts.userName = {};
+        fonts.userName.dx = -15;
+        fonts.userName.dy = -45;
+        fonts.userName.font = "22px 'verdana'";
+        fonts.userName.fillStyle = "#0FF";
+        fonts.userName.textAlign = "left";
+        fonts.userName.shadowColor = "#000";
+        fonts.userName.shadowOffsetX = 0;
+        fonts.userName.shadowOffsetY = 0;
+        fonts.userName.shadowBlur = 5;
+        drawer.drawPlayerNames(fonts.userName);
+    }
 
     if (board.round != -1) {
         fonts.round = {};
