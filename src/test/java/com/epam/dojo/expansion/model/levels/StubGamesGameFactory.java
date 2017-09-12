@@ -45,7 +45,7 @@ public class StubGamesGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
+    public PlayerBoard get(boolean isMultiple) {
         return isMultiple ? multiple : single;
     }
 }

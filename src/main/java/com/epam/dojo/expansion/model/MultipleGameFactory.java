@@ -67,15 +67,15 @@ public class MultipleGameFactory implements GameFactory {
 
     @Override
     @NotNull
-    public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
+    public PlayerBoard get(boolean isMultiple) {
         if (isMultiple) {
-            Expansion game = findFreeRandomMultiple(choseLevel);
+            Expansion game = findFreeRandomMultiple();
             if (logger.isDebugEnabled()) {
                 logger.debug("Try find free random multiple room {}", game);
             }
 
             if (game == null) {
-                game = createNewMultiple(choseLevel);
+                game = createNewMultiple();
                 if (logger.isDebugEnabled()) {
                     logger.debug("Create new random multiple room {}", game);
                 }
@@ -91,8 +91,8 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @Nullable
-    private Expansion findFreeRandomMultiple(Predicate<? super Level> choseLevel) {
-        List<Expansion> free = getFreeMultipleRooms(choseLevel);
+    private Expansion findFreeRandomMultiple() {
+        List<Expansion> free = getFreeMultipleRooms();
         if (free.isEmpty()) {
             return null;
         }
@@ -102,15 +102,14 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @NotNull
-    private List<Expansion> getFreeMultipleRooms(Predicate<? super Level> choseLevel) {
+    private List<Expansion> getFreeMultipleRooms() {
         return rooms.stream()
                 .filter(Expansion::isFree)
-                .filter(expansion -> choseLevel.test(expansion.getCurrentLevel()))
                 .collect(toList());
     }
 
     @NotNull
-    private Expansion createNewMultiple(Predicate<? super Level> choseLevel) {
+    private Expansion createNewMultiple() {
         Level level = null;
         int counter = 10;
         while (level == null) {

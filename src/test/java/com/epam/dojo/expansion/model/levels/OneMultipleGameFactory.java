@@ -52,7 +52,7 @@ public class OneMultipleGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard get(boolean isMultiple, Predicate<? super Level> choseLevel) {
+    public PlayerBoard get(boolean isMultiple) {
         return isMultiple ? multiple() : single();
     }
 

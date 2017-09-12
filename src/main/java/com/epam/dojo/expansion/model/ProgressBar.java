@@ -67,7 +67,7 @@ public class ProgressBar {
     public ProgressBar(GameFactory factory, PlayerLobby lobby) {
         this.factory = factory;
         this.lobby = lobby;
-        single = factory.get(Expansion.SINGLE, level -> true);
+        single = factory.get(Expansion.SINGLE);
     }
 
     protected void setNextLevel() {
@@ -181,7 +181,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = lobby.start(player, () -> factory.get(Expansion.MULTIPLE, getLevelChose()));
+        current = lobby.start(player, () -> factory.get(Expansion.MULTIPLE));
         processCurrent(0);
     }
 
@@ -194,13 +194,6 @@ public class ProgressBar {
         } catch (BusyMapException e) {
             remove(player); // TODO и что дальше?
         }
-    }
-
-    @NotNull
-    private Predicate<Level> getLevelChose() {
-//        String levelName = (current != null) ? current.getCurrentLevel().getName() : null;
-//        return level -> !level.getName().equals(levelName);
-        return level -> true; // TODO продолжить тут
     }
 
     private void loadSingle(Integer level) {
