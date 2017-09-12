@@ -127,7 +127,11 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
                 logger.debug("Players on Lobby will start new game {}", Player.lg(all));
             }
             for (Player p : all) {
-                p.setPlayerBoard(loaders.get(p).get());
+                PlayerBoard current = loaders.get(p).get();
+                current.loadLevel(0);
+                int count = current.freeBases();
+                System.out.printf("All = %s, free = %s\n", all.size(), count);
+                p.setPlayerBoard(current);
             }
         }
     }

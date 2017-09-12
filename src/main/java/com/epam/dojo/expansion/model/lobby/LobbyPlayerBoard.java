@@ -166,4 +166,14 @@ public abstract class LobbyPlayerBoard implements PlayerBoard, Field {
     public void tick() {
         // do nothing
     }
+
+    @Override
+    public boolean isFree() {
+        return true;
+    }
+
+    @Override
+    public int freeBases() {
+        return Integer.MAX_VALUE;
+    }
 }

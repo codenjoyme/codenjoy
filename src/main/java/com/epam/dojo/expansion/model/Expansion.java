@@ -536,11 +536,17 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         return isMultiple;
     }
 
+    @Override
     public boolean isFree() {
+        return freeBases() > 0;
+    }
+
+    @Override
+    public int freeBases() {
         if (isMultiple) {
-            return players.size() < 4 && getFreeBase() != null;
+            return (getFreeBase() == null) ? 0 : 4 - players.size();
         } else {
-            return players.size() == 0;
+            return (players.isEmpty()) ? 1 : 0;
         }
     }
 

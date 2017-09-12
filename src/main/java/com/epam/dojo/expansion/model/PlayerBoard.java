@@ -51,6 +51,10 @@ public interface PlayerBoard extends Tickable {
 
     List<Player> getPlayers();
 
+    boolean isFree();
+
+    int freeBases();
+
     int getRoundTicks();
 
     String id();
