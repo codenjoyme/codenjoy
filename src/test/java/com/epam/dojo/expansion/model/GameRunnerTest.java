@@ -40,11 +40,11 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
     public void shouldCreateSixPlayersInTwoDifferentRooms() {
         givenLevels();
 
-        createNewGame(LEVEL1); // LEVEL1
+        createNewGame(); // LEVEL1
         createNewGame(0); // first free room
         createNewGame(0); // first free room
         createNewGame(0); // first free room
-        createNewGame(LEVEL2);
+        createNewGame(); // Next level is LEVEL2
         createNewGame(0); // first free room
 
         String level1 =

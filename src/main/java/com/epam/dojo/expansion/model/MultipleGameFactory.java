@@ -47,6 +47,7 @@ public class MultipleGameFactory implements GameFactory {
     private static Logger logger = DLoggerFactory.getLogger(MultipleGameFactory.class);
 
     private List<Expansion> rooms = new LinkedList<>();
+    private LinkedList<Level> levelsPool = new LinkedList<>();
 
     private LevelsFactory singleFactory;
     private LevelsFactory multipleFactory;
@@ -106,12 +107,9 @@ public class MultipleGameFactory implements GameFactory {
 
     @NotNull
     private Level randomLevel() {
-        List<Level> levels = multipleFactory.get();
-        int index = dice.next(levels.size());
-        try {
-            return levels.get(index);
-        } catch (IndexOutOfBoundsException e) {
-            return levels.get(0);
+        if (levelsPool.isEmpty()) {
+            levelsPool.addAll(multipleFactory.get());
         }
+        return levelsPool.remove(0);
     }
 }

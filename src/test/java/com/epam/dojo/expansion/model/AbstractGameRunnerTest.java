@@ -112,10 +112,6 @@ public class AbstractGameRunnerTest {
         }
     }
 
-    protected void gotoLevel(int... level) {
-        levelOrFreeRoom(level);
-    }
-
     protected void gotoFreeRoom(int... room) {
         levelOrFreeRoom(room);
     }

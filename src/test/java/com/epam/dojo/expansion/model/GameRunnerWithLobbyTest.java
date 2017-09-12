@@ -535,16 +535,16 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             String level2 =
                     "╔════┐\n" +
-                    "║1..2│\n" +
-                    "║....│\n" +
-                    "║....│\n" +
-                    "║4..3│\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
                     "└────┘\n";
             String forces2 =
                     "------\n" +
-                    "-♥--♦-\n" +
+                    "---♥--\n" +
                     "------\n" +
-                    "------\n" +
+                    "----♦-\n" +
                     "------\n" +
                     "------\n";
             assertL(level2, PLAYER5);
@@ -572,6 +572,171 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             assertL(LOBBY_LEVEL, PLAYER7);
             assertE(LOBBY_FORCES, PLAYER7);
+        } finally {
+            data.lobbyCapacity(old);
+        }
+    }
+
+    @Test
+    public void shouldFillAllLevelsThenStartAgain() {
+        int old = data.lobbyCapacity();
+        try {
+            data.lobbyCapacity(33);
+            givenLevels();
+
+            // when
+            for (int i = 0; i < 34; i++) {
+                createNewGame();
+                tickAll();
+            }
+
+            // then
+            String level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces1 =
+                    "------\n" +
+                    "-♥--♦-\n" +
+                    "------\n" +
+                    "------\n" +
+                    "-♠--♣-\n" +
+                    "------\n";
+            assertL(level1, PLAYER1);
+            assertE(forces1, PLAYER1);
+            assertL(level1, PLAYER2);
+            assertE(forces1, PLAYER2);
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "-♠----\n" +
+                    "----♦-\n" +
+                    "--♣---\n" +
+                    "------\n";
+            assertL(level2, PLAYER5);
+            assertE(forces2, PLAYER5);
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
+            assertL(level2, PLAYER7);
+            assertE(forces2, PLAYER7);
+            assertL(level2, PLAYER8);
+            assertE(forces2, PLAYER8);
+
+            String level3 =
+                    "╔════┐\n" +
+                    "║.1..│\n" +
+                    "║...2│\n" +
+                    "║4...│\n" +
+                    "║..3.│\n" +
+                    "└────┘\n";
+            String forces3 =
+                    "------\n" +
+                    "--♥---\n" +
+                    "----♦-\n" +
+                    "-♠----\n" +
+                    "---♣--\n" +
+                    "------\n";
+            assertL(level3, PLAYER9);
+            assertE(forces3, PLAYER9);
+            assertL(level3, PLAYER10);
+            assertE(forces3, PLAYER10);
+            assertL(level3, PLAYER11);
+            assertE(forces3, PLAYER11);
+            assertL(level3, PLAYER12);
+            assertE(forces3, PLAYER12);
+
+            String level4 =
+                    "╔════┐\n" +
+                    "║....│\n" +
+                    "║.12.│\n" +
+                    "║.43.│\n" +
+                    "║....│\n" +
+                    "└────┘\n";
+            String forces4 =
+                    "------\n" +
+                    "------\n" +
+                    "--♥♦--\n" +
+                    "--♠♣--\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level4, PLAYER13);
+            assertE(forces4, PLAYER13);
+            assertL(level4, PLAYER14);
+            assertE(forces4, PLAYER14);
+            assertL(level4, PLAYER15);
+            assertE(forces4, PLAYER15);
+            assertL(level4, PLAYER16);
+            assertE(forces4, PLAYER16);
+
+            String level5 = level1;
+            String forces5 = forces1;
+            assertL(level5, PLAYER17);
+            assertE(forces5, PLAYER17);
+            assertL(level5, PLAYER18);
+            assertE(forces5, PLAYER18);
+            assertL(level5, PLAYER19);
+            assertE(forces5, PLAYER19);
+            assertL(level5, PLAYER20);
+            assertE(forces5, PLAYER20);
+
+            String level6 = level2;
+            String forces6 = forces2;
+            assertL(level6, PLAYER21);
+            assertE(forces6, PLAYER21);
+            assertL(level6, PLAYER22);
+            assertE(forces6, PLAYER22);
+            assertL(level6, PLAYER23);
+            assertE(forces6, PLAYER23);
+            assertL(level6, PLAYER24);
+            assertE(forces6, PLAYER24);
+
+            String level7 = level3;
+            String forces7 = forces3;
+            assertL(level7, PLAYER25);
+            assertE(forces7, PLAYER25);
+            assertL(level7, PLAYER26);
+            assertE(forces7, PLAYER26);
+            assertL(level7, PLAYER27);
+            assertE(forces7, PLAYER27);
+            assertL(level7, PLAYER28);
+            assertE(forces7, PLAYER28);
+
+            String level8 = level4;
+            String forces8 = forces4;
+            assertL(level8, PLAYER29);
+            assertE(forces8, PLAYER29);
+            assertL(level8, PLAYER30);
+            assertE(forces8, PLAYER30);
+            assertL(level8, PLAYER31);
+            assertE(forces8, PLAYER31);
+            assertL(level8, PLAYER32);
+            assertE(forces8, PLAYER32);
+
+            String level9 = level1;
+            String forces9 =
+                    "------\n" +
+                    "-♥----\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level9, PLAYER33);
+            assertE(forces9, PLAYER33);
         } finally {
             data.lobbyCapacity(old);
         }
