@@ -45,6 +45,7 @@ public final class SettingsWrapper {
 
     private final Parameter<Integer> increasePerTick;
     private final Parameter<Integer> winScore;
+    private final Parameter<Integer> drawScore;
     private final Parameter<Integer> roundTicks;
     private final Parameter<Integer> initialForce;
     private final Parameter<Integer> goldScore;
@@ -78,7 +79,8 @@ public final class SettingsWrapper {
         shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
         lobbyCapacity = settings.addEditBox("Lobby capacity (-1 if disable)").type(Integer.class).def(6);
 
-        winScore = settings.addEditBox("Win on multiple score").type(Integer.class).def(1);
+        winScore = settings.addEditBox("Win on multiple score").type(Integer.class).def(4);
+        drawScore = settings.addEditBox("Draw on multiple score").type(Integer.class).def(1);
         roundTicks = settings.addEditBox("Ticks per round").type(Integer.class).def(600);
 
         leaveForceCount = settings.addEditBox("Leave forces count").type(Integer.class).def(0);
@@ -148,6 +150,10 @@ public final class SettingsWrapper {
 
     public int winScore() {
         return winScore.getValue();
+    }
+
+    public int drawScore() {
+        return drawScore.getValue();
     }
 
     public int lobbyCapacity() {

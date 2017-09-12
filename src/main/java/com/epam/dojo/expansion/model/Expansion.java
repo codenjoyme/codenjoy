@@ -48,6 +48,7 @@ import static java.util.stream.Collectors.toList;
 public class Expansion implements Tickable, Field, PlayerBoard {
 
     public static final Events WIN_MULTIPLE = Events.WIN(data.winScore());
+    public static final Events DRAW_MULTIPLE = Events.WIN(data.drawScore());
     public static final Events WIN_SINGLE = Events.WIN(0);
 
     private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
@@ -109,7 +110,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
 
         if (isMultiple) {
-            boolean isWin = false;
+            Player winner = null;
             for (Player player : players) {
                 Hero hero = player.getHero();
 
@@ -118,12 +119,14 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                     player.event(status);
                 }
 
-                isWin |= (WIN_MULTIPLE.equals(status));
+                if (WIN_MULTIPLE.equals(status)) {
+                    winner = player;
+                }
             }
 
-            if (isWin) {
-                losers.clear();
+            if (winner != null) {
                 resetAllPlayers();
+                losers.clear();
             }
         }
 

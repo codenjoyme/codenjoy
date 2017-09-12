@@ -45,6 +45,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
 import static com.epam.dojo.expansion.services.Events.LOOSE;
 import static com.epam.dojo.expansion.services.Events.WIN;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -72,6 +73,9 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             "║.....│" +
             "║3.E.2│" +
             "└─────┘";
+
+    public final Events WIN = WIN(data.winScore());
+    public final Events DRAW = WIN(data.drawScore());
 
     private MultipleGameFactory gameFactory;
 
@@ -986,7 +990,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
         verify(PLAYER1).event(LOOSE());
         verifyNoMoreInteractions(PLAYER2);
-        verify(PLAYER3).event(WIN(1));
+        verify(PLAYER3).event(WIN);
         verifyNoMoreInteractions(PLAYER4);
 
         assertE("-------" +
@@ -1694,7 +1698,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-        verify(PLAYER1).event(WIN(1));
+        verify(PLAYER1).event(WIN);
         verify(PLAYER2).event(LOOSE());
 
         // when
@@ -2150,7 +2154,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(WIN(1));
+        verify(PLAYER1).event(WIN);
     }
 
     @Test
@@ -2214,7 +2218,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(WIN(1));
+        verify(PLAYER1).event(WIN);
     }
 
     @Test
@@ -2278,7 +2282,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(WIN(1));
+        verify(PLAYER1).event(WIN);
     }
 
     @Test
@@ -2416,9 +2420,9 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
     @Test
     public void shouldCalculateRoundTicks_andResetWhenFinish() {
-        int old = SettingsWrapper.data.roundTicks();
+        int old = data.roundTicks();
         int count = 50;
-        SettingsWrapper.data.roundTicks(count);
+        data.roundTicks(count);
         try {
             // given
             givenFl("╔═════┐" +
@@ -2540,7 +2544,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             verifyNoMoreInteractions(PLAYER3);
             verifyNoMoreInteractions(PLAYER4);
         } finally {
-            SettingsWrapper.data.roundTicks(old);
+            data.roundTicks(old);
         }
     }
 
@@ -2681,7 +2685,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // when
         tickAll();
 
-        verify(PLAYER1).event(WIN(1));
+        verify(PLAYER1).event(WIN);
         verify(PLAYER2).event(LOOSE());
 
         assertE("-----" +
@@ -2774,7 +2778,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // when
         tickAll();
 
-        verify(PLAYER2).event(WIN(1));
+        verify(PLAYER2).event(WIN);
         verify(PLAYER1).event(LOOSE());
 
         assertE("-----" +
