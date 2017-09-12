@@ -52,8 +52,6 @@ public class MultipleGameFactory implements GameFactory {
 
     private LevelsFactory singleFactory;
     private LevelsFactory multipleFactory;
-
-    private boolean waitingOthers = false;
     private Dice dice;
 
     public MultipleGameFactory(Dice dice,
@@ -85,15 +83,12 @@ public class MultipleGameFactory implements GameFactory {
     @Override
     @NotNull
     public PlayerBoard newMultiple() {
-        Expansion game = createNewMultiple();
+        Expansion result = createNewMultiple();
         if (logger.isDebugEnabled()) {
-            logger.debug("Create new random multiple room {}", game);
+            logger.debug("Create new random multiple room {}", result);
         }
 
-        if (waitingOthers) { // TODO remove this from here to settings
-            game.waitingOthers();
-        }
-        return game;
+        return result;
     }
 
     @Nullable
@@ -138,10 +133,5 @@ public class MultipleGameFactory implements GameFactory {
         int index = dice.next(levels.size());
         Level level = levels.get(index);
         return level;
-    }
-
-    // это опция сеттинговая, она раз на всю игру
-    public void setWaitingOthers(boolean waitingOthers) {
-        this.waitingOthers = waitingOthers;
     }
 }

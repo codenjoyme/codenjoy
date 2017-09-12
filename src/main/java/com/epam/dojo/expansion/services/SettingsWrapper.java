@@ -200,4 +200,9 @@ public final class SettingsWrapper {
         lobbyCapacity.update(value);
         return this;
     }
+
+    public SettingsWrapper waitingOthers(boolean value) {
+        waitingOthers.update(value);
+        return this;
+    }
 }

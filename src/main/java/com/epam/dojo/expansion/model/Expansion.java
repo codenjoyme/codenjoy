@@ -64,7 +64,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     private int ticks;
     private List<Player> players;
     private List<Player> losers;
-    private boolean waitingOthers = false;
     private int roundTicks;
 
     public Expansion(List<Level> levels, Dice dice, boolean multiple) {
@@ -96,7 +95,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             ticks = 0;
         }
 
-        if (isWaiting()) return;
+        if (isWaitingOthers()) return;
 
         if (data.roundLimitedInTime()) {
             roundTicks++;
@@ -352,8 +351,8 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         return null;
     }
 
-    public boolean isWaiting() {
-        return waitingOthers && players.size() != 4;
+    private boolean isWaitingOthers() {
+        return isMultiple && data.waitingOthers() && players.size() != 4;
     }
 
     @Override
@@ -550,11 +549,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         }
     }
 
-    public void waitingOthers() {
-        if (!isMultiple) return;
-        waitingOthers = true;
-    }
-
     @Override
     public int getRoundTicks() {
         if (!data.roundLimitedInTime()) {
@@ -575,7 +569,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                 put("id", id());
                 put("isMultiple", isMultiple);
                 put("losers", Player.lg(losers));
-                put("waitingOthers", waitingOthers);
+                put("waitingOthers", isWaitingOthers());
                 put("ticks", ticks);
                 put("roundTicks", roundTicks);
                 put("level", printer());

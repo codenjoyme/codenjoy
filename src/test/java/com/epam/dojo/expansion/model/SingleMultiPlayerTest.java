@@ -784,7 +784,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     public void shouldNoWaitTillAllPlayersCollectedTogether_ifNoSpecialMode() {
         // given
         givenFl(MULTIPLE_LEVEL);
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(3);
 
         assertE("-------" +
@@ -832,7 +832,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     public void shouldWaitTillAllPlayersCollectedTogether_ifSpecialMode() {
         // given
         givenFl(MULTIPLE_LEVEL);
-        gameFactory.setWaitingOthers(true);
+        data.waitingOthers(true);
         createPlayers(3);
 
         assertE("-------" +
@@ -936,7 +936,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        gameFactory.setWaitingOthers(true);
+        data.waitingOthers(true);
         createPlayers(4);
 
         // when then
@@ -1165,7 +1165,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        gameFactory.setWaitingOthers(true);
+        data.waitingOthers(true);
         createPlayers(4);
 
 
@@ -1218,7 +1218,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(4);
 
         assertE("-----" +
@@ -1263,7 +1263,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(4);
 
         assertE("-----" +
@@ -1307,7 +1307,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -1355,7 +1355,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -1402,7 +1402,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -1452,7 +1452,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║.12│" +
                 "║...│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         assertE("-----" +
@@ -1495,7 +1495,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1564,7 +1564,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1633,7 +1633,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1717,7 +1717,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        gameFactory.setWaitingOthers(true);
+        data.waitingOthers(true);
         createPlayers(4);
 
         hero(PLAYER1, 5, 5).down();
@@ -1860,7 +1860,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         // when
@@ -1989,7 +1989,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║....│" +
                 "║...2│" +
                 "└────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -2041,7 +2041,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#-=#\n" +
@@ -2164,7 +2164,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "└───┘" +
                 "     " +
                 "     ");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -2228,7 +2228,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║OOO│" +
                 "└───┘" +
                 "     ");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -2307,7 +2307,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║.4.....│  ║.....3.│" +
                 "└╗.....┌┘  └╗.....┌┘" +
                 " └─────┘    └─────┘ ");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
 
         Map<String, Integer> playerHeroes = new HashMap<>();
         Map<String, Integer> heroes = new HashMap<>();
@@ -2431,7 +2431,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                     "║.....│" +
                     "║3...2│" +
                     "└─────┘");
-            gameFactory.setWaitingOthers(false);
+            data.waitingOthers(false);
             createPlayers(4);
 
             assertE("-------" +
@@ -2557,7 +2557,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         tickAll();
@@ -2615,7 +2615,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║...│" +
                 "║...│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         // when then
@@ -2708,7 +2708,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "║...│" +
                 "║...│" +
                 "└───┘");
-        gameFactory.setWaitingOthers(false);
+        data.waitingOthers(false);
         createPlayers(2);
 
         // when then
@@ -2804,7 +2804,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                     "║...│" +
                     "║...│" +
                     "└───┘");
-            gameFactory.setWaitingOthers(false);
+            data.waitingOthers(false);
             createPlayers(2);
 
             // when then
@@ -2872,7 +2872,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                     "║...│" +
                     "║...│" +
                     "└───┘");
-            gameFactory.setWaitingOthers(false);
+            data.waitingOthers(false);
             createPlayers(2);
 
             // when then
