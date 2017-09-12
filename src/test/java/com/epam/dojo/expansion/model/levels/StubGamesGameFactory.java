@@ -45,7 +45,12 @@ public class StubGamesGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard multiple() {
+    public PlayerBoard newMultiple() {
+        return multiple;
+    }
+
+    @Override
+    public PlayerBoard existMultiple() {
         return multiple;
     }
 

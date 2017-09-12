@@ -35,7 +35,6 @@ import java.util.function.Predicate;
  */
 public class OneMultipleGameFactory implements GameFactory {
 
-
     private Dice dice;
     private LevelsFactory singleFactory;
     private LevelsFactory multipleFactory;
@@ -51,11 +50,13 @@ public class OneMultipleGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard multiple() {
-        if (multiple == null) {
-            multiple = new Expansion(multipleFactory.get(), dice, Expansion.MULTIPLE);
-        }
+    public PlayerBoard existMultiple() {
         return multiple;
+    }
+
+    @Override
+    public PlayerBoard newMultiple() {
+        return multiple = new Expansion(multipleFactory.get(), dice, Expansion.MULTIPLE);
     }
 
     @Override

@@ -32,5 +32,6 @@ import java.util.function.Predicate;
  */
 public interface GameFactory {
     PlayerBoard single();
-    PlayerBoard multiple ();
+    PlayerBoard newMultiple();
+    PlayerBoard existMultiple();
 }

@@ -73,20 +73,24 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @Override
-    @NotNull
-    public PlayerBoard multiple() {
+    @Nullable
+    public PlayerBoard existMultiple() {
         Expansion game = findFreeRandomMultiple();
         if (logger.isDebugEnabled()) {
             logger.debug("Try find free random multiple room {}", game);
         }
+        return game;
+    }
 
-        if (game == null) {
-            game = createNewMultiple();
-            if (logger.isDebugEnabled()) {
-                logger.debug("Create new random multiple room {}", game);
-            }
+    @Override
+    @NotNull
+    public PlayerBoard newMultiple() {
+        Expansion game = createNewMultiple();
+        if (logger.isDebugEnabled()) {
+            logger.debug("Create new random multiple room {}", game);
         }
-        if (waitingOthers) {
+
+        if (waitingOthers) { // TODO remove this from here to settings
             game.waitingOthers();
         }
         return game;
