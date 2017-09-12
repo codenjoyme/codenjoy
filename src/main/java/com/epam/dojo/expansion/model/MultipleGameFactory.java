@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.epam.dojo.expansion.model.levels.Level;
-import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +35,6 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -94,15 +92,7 @@ public class MultipleGameFactory implements GameFactory {
     @Override
     @NotNull
     public PlayerBoard newMultiple() {
-        Level level = null;
-        int counter = 10;
-        while (level == null) {
-            level = selectRandomLevelType();
-            if (level == null && ++counter > 10) { //TODO think about it
-                logger.error("Something wrong with levels. There are no levels loaded from *.lev. Used default!");
-                level = Levels.collectMultiple(20, "MULTI1").get().get(0);
-            }
-        }
+        Level level = randomLevel();
         Expansion result = new Expansion(Arrays.asList(level),
                 new RandomDice(), Expansion.MULTIPLE);
 
@@ -115,10 +105,13 @@ public class MultipleGameFactory implements GameFactory {
     }
 
     @NotNull
-    private Level selectRandomLevelType() {
+    private Level randomLevel() {
         List<Level> levels = multipleFactory.get();
         int index = dice.next(levels.size());
-        Level level = levels.get(index);
-        return level;
+        try {
+            return levels.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            return levels.get(0);
+        }
     }
 }
