@@ -28,23 +28,15 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
-import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
 import static com.epam.dojo.expansion.services.Events.LOOSE;
-import static com.epam.dojo.expansion.services.Events.WIN;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -74,10 +66,17 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             "║3.E.2│" +
             "└─────┘";
 
-    public final Events WIN = WIN(data.winScore());
-    public final Events DRAW = WIN(data.drawScore());
-
     private MultipleGameFactory gameFactory;
+
+    @NotNull
+    private Events WIN() {
+        return Events.WIN(data.winScore());
+    }
+
+    @NotNull
+    private Events DRAW() {
+        return Events.WIN(data.drawScore());
+    }
 
     @Override
     protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
@@ -539,7 +538,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", player);
 
-        verify(player).event(WIN(0));
+        verify(player).event(Events.WIN(0));
         reset(player);
         verifyNoMoreInteractions(player);
 
@@ -990,7 +989,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
         verify(PLAYER1).event(LOOSE());
         verifyNoMoreInteractions(PLAYER2);
-        verify(PLAYER3).event(WIN);
+        verify(PLAYER3).event(WIN());
         verifyNoMoreInteractions(PLAYER4);
 
         assertE("-------" +
@@ -1698,7 +1697,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
-        verify(PLAYER1).event(WIN);
+        verify(PLAYER1).event(WIN());
         verify(PLAYER2).event(LOOSE());
 
         // when
@@ -2154,7 +2153,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(DRAW);
+        verify(PLAYER1).event(DRAW());
     }
 
     @Test
@@ -2218,7 +2217,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(DRAW);
+        verify(PLAYER1).event(DRAW());
     }
 
     @Test
@@ -2282,7 +2281,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(DRAW);
+        verify(PLAYER1).event(DRAW());
     }
 
     @Test
@@ -2685,7 +2684,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // when
         tickAll();
 
-        verify(PLAYER1).event(WIN);
+        verify(PLAYER1).event(WIN());
         verify(PLAYER2).event(LOOSE());
 
         assertE("-----" +
@@ -2778,7 +2777,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // when
         tickAll();
 
-        verify(PLAYER2).event(WIN);
+        verify(PLAYER2).event(WIN());
         verify(PLAYER1).event(LOOSE());
 
         assertE("-----" +
@@ -2792,5 +2791,141 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldCanResetOnThisBoardIfTimeout_player2OnBaseOfPlayer1() {
+        int old = data.roundTicks();
+        try {
+            // given
+            data.roundTicks(10);
+            givenFl("╔═══┐" +
+                    "║2.1│" +
+                    "║...│" +
+                    "║...│" +
+                    "└───┘");
+            gameFactory.setWaitingOthers(false);
+            createPlayers(2);
+
+            // when then
+            hero(PLAYER1).move(new ForcesMoves(pt(3, 3), 10, QDirection.DOWN));
+            hero(PLAYER2).move(new ForcesMoves(pt(1, 3), 5, QDirection.RIGHT));
+            tickAll();
+
+            hero(PLAYER2).move(new ForcesMoves(pt(2, 3), 5, QDirection.RIGHT));
+            tickAll();
+
+            assertE("-----" +
+                    "-♦♦♦-" +
+                    "---♥-" +
+                    "-----" +
+                    "-----", PLAYER2);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#005001003-=#\n" +
+                    "-=#-=#-=#009-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER2);
+
+            // when
+            for (int i = 0; i < 10 - 2; i++) {
+                tickAll();
+            }
+
+            assertE("-----" +
+                    "-♦-♥-" +
+                    "-----" +
+                    "-----" +
+                    "-----", PLAYER1);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#00A-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+            assertE("-----" +
+                    "-♦-♥-" +
+                    "-----" +
+                    "-----" +
+                    "-----", PLAYER2);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#00A-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER2);
+
+        } finally {
+            data.roundTicks(old);
+        }
+    }
+
+    @Test
+    public void shouldCanResetOnThisBoardIfTimeout_player1OnBaseOfPlayer2() {
+        int old = data.roundTicks();
+        try {
+            // given
+            data.roundTicks(10);
+            givenFl("╔═══┐" +
+                    "║1.2│" +
+                    "║...│" +
+                    "║...│" +
+                    "└───┘");
+            gameFactory.setWaitingOthers(false);
+            createPlayers(2);
+
+            // when then
+            hero(PLAYER2).move(new ForcesMoves(pt(3, 3), 10, QDirection.DOWN));
+            hero(PLAYER1).move(new ForcesMoves(pt(1, 3), 5, QDirection.RIGHT));
+            tickAll();
+
+            hero(PLAYER1).move(new ForcesMoves(pt(2, 3), 5, QDirection.RIGHT));
+            tickAll();
+
+            assertE("-----" +
+                    "-♥♥♥-" +
+                    "---♦-" +
+                    "-----" +
+                    "-----", PLAYER1);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#005001003-=#\n" +
+                    "-=#-=#-=#009-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+            // when
+            for (int i = 0; i < 10 - 2; i++) {
+                tickAll();
+            }
+
+            assertE("-----" +
+                    "-♥-♦-" +
+                    "-----" +
+                    "-----" +
+                    "-----", PLAYER1);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#00A-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+            assertE("-----" +
+                    "-♥-♦-" +
+                    "-----" +
+                    "-----" +
+                    "-----", PLAYER2);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#00A-=#00A-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER2);
+
+        } finally {
+            data.roundTicks(old);
+        }
     }
 }

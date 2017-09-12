@@ -50,6 +50,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     public static final Events WIN_MULTIPLE = Events.WIN(data.winScore());
     public static final Events DRAW_MULTIPLE = Events.WIN(data.drawScore());
     public static final Events WIN_SINGLE = Events.WIN(0);
+    public static final Events LOOSE = Events.LOOSE();
 
     private static Logger logger = DLoggerFactory.getLogger(Expansion.class);
 
@@ -88,7 +89,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             logger.debug("Expansion {} started tick", lg.id());
         }
 
-        // System.out.printf("tick #%s, roundTicks %s, on game %s with players %s\n", ticks, roundTicks, lg.id(), lg.players());
         if (isMultiple) {
             ticks++;
             if (ticks % players.size() != 0) {
@@ -125,17 +125,15 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             }
 
             if (winner != null) {
-                resetAllPlayers();
                 losers.clear();
+                resetAllPlayers();
             }
         }
 
         if (data.roundLimitedInTime()) {
             if (roundTicks >= data.roundTicks()) {
                 roundTicks = 0;
-                for (Player player : players) {
-                    player.getHero().wantsReset();
-                }
+                resetAllPlayers();
                 if (logger.isDebugEnabled()) {
                     logger.debug("Expansion round is out. All players will be removed! {}",
                             toString());
@@ -361,7 +359,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         if (!exists) {
             losers.add(player);
             player.hero.die();
-            return Events.LOOSE();
+            return LOOSE;
         }
         return null;
     }

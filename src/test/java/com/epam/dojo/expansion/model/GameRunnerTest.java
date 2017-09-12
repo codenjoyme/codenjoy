@@ -450,7 +450,6 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                 tickAll();
             }
 
-            gotoFreeRoom(1, 0, 0, 1);
             tickAll();
 
             level1 =
@@ -462,14 +461,15 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                     "└────┘\n";
             forces1 =
                     "------\n" +
-                    "-♥----\n" +
+                    "-♥--♦-\n" +
                     "------\n" +
                     "------\n" +
                     "------\n" +
                     "------\n";
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
             assertL(level1, PLAYER4);
             assertE(forces1, PLAYER4);
-
 
             level2 =
                     "╔════┐\n" +
@@ -483,10 +483,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                     "---♥--\n" +
                     "------\n" +
                     "----♦-\n" +
-                    "--♣---\n" +
+                    "------\n" +
                     "------\n";
-            assertL(level2, PLAYER3);
-            assertE(forces2, PLAYER3);
             assertL(level2, PLAYER5);
             assertE(forces2, PLAYER5);
             assertL(level2, PLAYER6);
