@@ -140,6 +140,7 @@ var previousBoard = {};
 game.drawBoard = function(drawer) {
     // so we see past tick on board with current arrows
     var playerName = drawer.playerName;
+    var allPlayersScreen = drawer.allPlayersScreen;
     var board = previousBoard[playerName];
     previousBoard[playerName] = drawer.playerData.board;
     drawer.playerData.board = board;
@@ -372,6 +373,21 @@ game.drawBoard = function(drawer) {
         fonts.round.shadowBlur = 5;
         var text = board.rounds - board.round;
         canvas.drawText(text, {'x':9, 'y':18}, fonts.round);
+    }
+
+    if (!!allPlayersScreen) {
+        fonts.userBoard = {};
+        fonts.userBoard.dy = 45;
+        fonts.userBoard.dx = -40;
+        fonts.userBoard.font = "40px 'verdana'";
+        fonts.userBoard.fillStyle = "#FFF";
+        fonts.userBoard.textAlign = "left";
+        fonts.userBoard.shadowColor = "#000";
+        fonts.userBoard.shadowOffsetX = 0;
+        fonts.userBoard.shadowOffsetY = 0;
+        fonts.userBoard.shadowBlur = 5;
+        var text = playerName;
+        canvas.drawText(text, {'x':12, 'y':18}, fonts.userBoard);
     }
 
     drawer.drawFog();
