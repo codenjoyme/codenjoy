@@ -134,6 +134,11 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             if (roundTicks >= data.roundTicks()) {
                 roundTicks = 0;
                 resetAllPlayers();
+                for (Player player : players) {
+                    if (losers.contains(player)) continue;
+                    player.event(DRAW_MULTIPLE);
+                }
+
                 if (logger.isDebugEnabled()) {
                     logger.debug("Expansion round is out. All players will be removed! {}",
                             toString());

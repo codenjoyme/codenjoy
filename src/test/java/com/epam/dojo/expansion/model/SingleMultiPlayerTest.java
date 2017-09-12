@@ -2524,10 +2524,10 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             assertRound("[0,50]", PLAYER3);
             assertRound("[0,50]", PLAYER4);
 
-            verifyNoMoreInteractions(PLAYER1);
-            verifyNoMoreInteractions(PLAYER2);
-            verifyNoMoreInteractions(PLAYER3);
-            verifyNoMoreInteractions(PLAYER4);
+            verify(PLAYER1).event(DRAW());
+            verify(PLAYER2).event(DRAW());
+            verify(PLAYER3).event(DRAW());
+            verify(PLAYER4).event(DRAW());
 
             // when
             tickAll();
