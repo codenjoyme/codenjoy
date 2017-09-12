@@ -45,7 +45,12 @@ public class StubGamesGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard get(boolean isMultiple) {
-        return isMultiple ? multiple : single;
+    public PlayerBoard multiple() {
+        return multiple;
+    }
+
+    @Override
+    public PlayerBoard single() {
+        return single;
     }
 }

@@ -67,7 +67,7 @@ public class ProgressBar {
     public ProgressBar(GameFactory factory, PlayerLobby lobby) {
         this.factory = factory;
         this.lobby = lobby;
-        single = factory.get(Expansion.SINGLE);
+        single = factory.single();
     }
 
     protected void setNextLevel() {
@@ -181,7 +181,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = lobby.start(player, () -> factory.get(Expansion.MULTIPLE));
+        current = lobby.start(player, () -> factory.multiple());
         processCurrent(0);
     }
 

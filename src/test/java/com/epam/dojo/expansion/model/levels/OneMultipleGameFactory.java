@@ -41,7 +41,6 @@ public class OneMultipleGameFactory implements GameFactory {
     private LevelsFactory multipleFactory;
 
     private PlayerBoard multiple;
-    private PlayerBoard single;
 
     public OneMultipleGameFactory(Dice dice,
                                   LevelsFactory singleFactory,
@@ -52,18 +51,15 @@ public class OneMultipleGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard get(boolean isMultiple) {
-        return isMultiple ? multiple() : single();
-    }
-
-    private PlayerBoard multiple() {
+    public PlayerBoard multiple() {
         if (multiple == null) {
             multiple = new Expansion(multipleFactory.get(), dice, Expansion.MULTIPLE);
         }
         return multiple;
     }
 
-    private PlayerBoard single() {
+    @Override
+    public PlayerBoard single() {
         return new Expansion(singleFactory.get(), dice, Expansion.SINGLE);
     }
 }

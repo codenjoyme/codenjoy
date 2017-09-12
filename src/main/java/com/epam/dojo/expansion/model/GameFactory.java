@@ -31,5 +31,6 @@ import java.util.function.Predicate;
  * Created by Oleksandr_Baglai on 2017-09-01.
  */
 public interface GameFactory {
-    PlayerBoard get(boolean isMultiple);
+    PlayerBoard single();
+    PlayerBoard multiple ();
 }
