@@ -37,7 +37,7 @@ public class HeroForces extends FieldItem {
     protected int count;
     private int increase;
 
-    private HeroForces() {
+    protected HeroForces() {
         super(Elements.FORCE1);
     }
 
