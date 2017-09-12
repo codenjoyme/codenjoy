@@ -73,44 +73,27 @@ public class MultipleGameFactory implements GameFactory {
     @Override
     @Nullable
     public PlayerBoard existMultiple() {
-        Expansion game = findFreeRandomMultiple();
-        if (logger.isDebugEnabled()) {
-            logger.debug("Try find free random multiple room {}", game);
-        }
-        return game;
-    }
+        List<Expansion> free = rooms.stream()
+                .filter(Expansion::isFree)
+                .collect(toList());
 
-    @Override
-    @NotNull
-    public PlayerBoard newMultiple() {
-        Expansion result = createNewMultiple();
+        if (free.isEmpty()) {
+            return null;
+        }
+
+        int index = dice.next(free.size());
+        Expansion result = free.get(index);
+
         if (logger.isDebugEnabled()) {
-            logger.debug("Create new random multiple room {}", result);
+            logger.debug("Try find free random multiple room {}", result);
         }
 
         return result;
     }
 
-    @Nullable
-    private Expansion findFreeRandomMultiple() {
-        List<Expansion> free = getFreeMultipleRooms();
-        if (free.isEmpty()) {
-            return null;
-        }
-        int index = dice.next(free.size());
-        Expansion expansion = free.get(index);
-        return expansion;
-    }
-
+    @Override
     @NotNull
-    private List<Expansion> getFreeMultipleRooms() {
-        return rooms.stream()
-                .filter(Expansion::isFree)
-                .collect(toList());
-    }
-
-    @NotNull
-    private Expansion createNewMultiple() {
+    public PlayerBoard newMultiple() {
         Level level = null;
         int counter = 10;
         while (level == null) {
@@ -120,11 +103,15 @@ public class MultipleGameFactory implements GameFactory {
                 level = Levels.collectMultiple(20, "MULTI1").get().get(0);
             }
         }
-        Expansion game = new Expansion(Arrays.asList(level),
+        Expansion result = new Expansion(Arrays.asList(level),
                 new RandomDice(), Expansion.MULTIPLE);
 
-        rooms.add(game);
-        return game;
+        if (logger.isDebugEnabled()) {
+            logger.debug("Create new random multiple room {}", result);
+        }
+
+        rooms.add(result);
+        return result;
     }
 
     @NotNull
