@@ -1044,5 +1044,103 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertL(level, PLAYER3);
         assertE(forces, PLAYER3);
     }
+
+    @Test
+    public void shouldNotResetOtherPlayersWhenLobbyPlayersWillStart() {
+        int old = data.lobbyCapacity();
+        try {
+            data.lobbyCapacity(2);
+            givenLevels();
+
+            createNewGame();
+            createNewGame();
+
+            assertL(LOBBY_LEVEL, PLAYER1);
+            assertE(LOBBY_FORCES, PLAYER1);
+            assertL(LOBBY_LEVEL, PLAYER2);
+            assertE(LOBBY_FORCES, PLAYER2);
+
+            // when
+            gotoFreeRoom(0); // first free room
+            tickAll();
+
+            // then
+            String level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces1 =
+                    "------\n" +
+                    "-♥--♦-\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level1, PLAYER1);
+            assertE(forces1, PLAYER1);
+            assertL(level1, PLAYER2);
+            assertE(forces1, PLAYER2);
+
+            // when
+            createNewGame();
+
+            // then
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+
+            // when
+            goTimes(PLAYER1, pt(1, 4), 2).down();
+            goTimes(PLAYER2, pt(4, 4), 2).left();
+            tickAll();
+
+            // then
+            forces1 =
+                    "------\n" +
+                    "-♥♦♦♦-\n" +
+                    "-♥----\n" +
+                    "-♥----\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level1, PLAYER1);
+            assertE(forces1, PLAYER1);
+            assertL(level1, PLAYER2);
+            assertE(forces1, PLAYER2);
+
+            // when
+            createNewGame();
+            tickAll();
+
+            // then
+            assertL(level1, PLAYER1);
+            assertE(forces1, PLAYER1);
+            assertL(level1, PLAYER2);
+            assertE(forces1, PLAYER2);
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level2, PLAYER3);
+            assertE(forces2, PLAYER3);
+            assertL(level2, PLAYER4);
+            assertE(forces2, PLAYER4);
+        } finally {
+            data.lobbyCapacity(old);
+        }
+    }
 }
+
 

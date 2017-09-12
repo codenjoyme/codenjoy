@@ -33,8 +33,8 @@ import java.util.List;
 public class OneByOneAttack implements Attack {
 
     @Override
-    public void calculate(List<HeroForces> forces) {
-        if (forces.size() <= 1) return;
+    public boolean calculate(List<HeroForces> forces) {
+        if (forces.size() <= 1) return false;
 
         forces.sort((f1, f2) -> Integer.compare(f2.getCount(), f1.getCount()));
         HeroForces max = forces.get(0);
@@ -46,6 +46,8 @@ public class OneByOneAttack implements Attack {
         if (max.getCount() == 0) {
             remove(forces, max);
         }
+
+        return true;
     }
 
     private void remove(List<HeroForces> forces, HeroForces force) {

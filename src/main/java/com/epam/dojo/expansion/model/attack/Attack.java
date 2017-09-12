@@ -31,5 +31,5 @@ import java.util.List;
  * Created by Oleksandr_Baglai on 2017-09-12.
  */
 public interface Attack {
-    void calculate(List<HeroForces> forces);
+    boolean calculate(List<HeroForces> forces);
 }

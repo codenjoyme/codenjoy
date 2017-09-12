@@ -123,14 +123,13 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
     @Override
     public void tick() {
         if (isLetThemGo()) {
-            waiting.clear();
             if (data.shufflePlayers()) {
                 Collections.shuffle(all);
             }
             if (logger.isDebugEnabled()) {
                 logger.debug("Players on Lobby will start new game {}", Player.lg(all));
             }
-            for (Player p : all) {
+            for (Player p : waiting) {
                 PlayerBoard result = factory.existMultiple();
                 if (result == null) {
                     result = factory.newMultiple();
@@ -141,6 +140,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 //                System.out.printf("All = %s, free = %s\n", all.size(), count);
                 p.setPlayerBoard(result);
             }
+            waiting.clear();
         }
     }
 

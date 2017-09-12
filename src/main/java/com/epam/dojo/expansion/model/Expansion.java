@@ -205,7 +205,9 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
         for (Cell cell : level.getCellsWith(HeroForces.class)) {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
-            new OneByOneAttack().calculate(forces);
+            if (forces.size() <= 1) continue;
+
+            nothingChanged &= !new OneByOneAttack().calculate(forces);
         }
 
         if (logger.isDebugEnabled()) {
@@ -256,6 +258,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         if (logger.isDebugEnabled()) {
             countChecker.before();
         }
+        nothingChanged = false;
 
         int total = hero.getForcesPerTick();
         for (Forces forces : increase) {
@@ -286,6 +289,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         if (logger.isDebugEnabled()) {
             countChecker.before();
         }
+        nothingChanged = false;
 
         List<HeroForces> moved = new LinkedList<>();
         for (ForcesMoves forces : movements) {
