@@ -150,7 +150,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return email.substring(0, email.indexOf('@'));
     }
 
-    var getBoardDrawer = function(canvas, playerName, playerData) {
+    var getBoardDrawer = function(canvas, playerName, playerData, allPlayersScreen) {
         var getBoard = function() {
             return playerData.board;
         }
@@ -260,7 +260,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawFog : drawFog,
             canvas : canvas,
             playerName : playerName,
-            playerData : playerData
+            playerData : playerData,
+            allPlayersScreen : allPlayersScreen
         };
     };
 
@@ -474,23 +475,25 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         if (allPlayersScreen) {
-            $.each(data, drawUserCanvas);
+            for (var player in data) {
+                drawUserCanvas(player, data[player], true);
+            }
         } else {
             for (var i in players) {
                 var player = players[i].name;
-                drawUserCanvas(player, data[player]);
+                drawUserCanvas(player, data[player], false);
             }
         }
     }
 
-    function drawUserCanvas(playerName, data) {
+    function drawUserCanvas(playerName, data, allPlayersScreen) {
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
             reloadCanvasesData();
         }
 
         var canvas = canvases[playerName];
         canvas.boardSize = boardSize;
-        drawBoard(getBoardDrawer(canvas, playerName, data));
+        drawBoard(getBoardDrawer(canvas, playerName, data, allPlayersScreen));
 
         $("#score_" + toId(playerName)).text(data.score);
 
