@@ -23,8 +23,10 @@
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>codenjoy.log</file>
         <append>true</append>
-        <!-- encoders are assigned the type
-     ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>300MB</maxFileSize>
+        </triggeringPolicy>
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
