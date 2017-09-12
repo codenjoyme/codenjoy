@@ -123,20 +123,9 @@ ul {
   white-space: nowrap;
 }
 
-.main {
-  transition: padding 1s;
-  margin-top: 15px;
-  padding: 0 15px 0 565px;
-  position: relative;
-}
 
 .main.editor-fullscreen {
   padding-left: 15px;
-}
-
-.game {
-  position: absolute;
-  left: 15px;
 }
 
 .main-block {
@@ -163,13 +152,6 @@ ul {
   background-color: #323132;
   border: 1px solid #5c5b5d;
   padding-left: 20px;
-}
-
-.board {
-  position: relative;
-  width: 100%;
-  box-sizing: border-box;
-  color: #fff;
 }
 
 .board-title {
@@ -735,11 +717,6 @@ a.modalCloseImg {
   vertical-align: middle;
 }
 
-.player-canvas {
-  height: 550px;
-  float: none;
-}
-
 .player-canvas table {
   margin: 0 auto;
 }
@@ -845,11 +822,6 @@ canvas {
 
 .modal-bg.close {
   display: none;
-}
-
-.leader {
-  transition: none;
-  padding-left: 600px;
 }
 
 .admin-main {
