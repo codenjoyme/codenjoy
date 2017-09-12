@@ -343,7 +343,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                             cell.isPassable() && cell.getItem(Hole.class) == null
             );
             if (freeCells.isEmpty()) {
-                return WIN_MULTIPLE;
+                return DRAW_MULTIPLE;
             }
             return null;
         }

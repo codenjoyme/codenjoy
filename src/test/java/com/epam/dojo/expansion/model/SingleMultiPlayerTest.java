@@ -2154,7 +2154,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(WIN);
+        verify(PLAYER1).event(DRAW);
     }
 
     @Test
@@ -2218,7 +2218,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(WIN);
+        verify(PLAYER1).event(DRAW);
     }
 
     @Test
@@ -2282,7 +2282,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        verify(PLAYER1).event(WIN);
+        verify(PLAYER1).event(DRAW);
     }
 
     @Test
