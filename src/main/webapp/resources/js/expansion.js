@@ -387,7 +387,7 @@ game.drawBoard = function(drawer) {
         fonts.userBoard.shadowOffsetY = 0;
         fonts.userBoard.shadowBlur = 5;
         var text = playerName;
-        canvas.drawText(text, {'x':12, 'y':18}, fonts.userBoard);
+        canvas.drawText(text, {'x':1, 'y':0}, fonts.userBoard);
     }
 
     drawer.drawFog();
