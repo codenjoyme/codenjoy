@@ -53,6 +53,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             logger.debug("Removed player {} from Lobby", player.lg.id());
         }
         all.remove(player);
+        waiting.remove(player);
     }
 
     @Override
@@ -102,6 +103,11 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
                             logger.debug("Player {} lobby hero wants to execute command {}",
                                     player.lg.id(), command);
                         }
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "HLB@" + Integer.toHexString(this.hashCode());
                     }
                 };
                 player.setHero(hero);

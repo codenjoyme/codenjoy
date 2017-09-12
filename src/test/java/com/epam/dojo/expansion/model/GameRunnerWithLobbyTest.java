@@ -835,5 +835,48 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(forces, PLAYER3);
         assertF(forcesCount, PLAYER3);
     }
+
+    @Test
+    public void shouldRenewFromLobbyWhenAnotherRemovedFromGame() {
+        givenLevels();
+
+        // when
+        createNewGame();
+        tickAll();
+
+        destroy(PLAYER1);
+
+        // when
+        createNewGame();
+        tickAll();
+
+        // then
+        assertL(LOBBY_LEVEL, PLAYER2);
+        assertE(LOBBY_FORCES, PLAYER2);
+
+        // when
+        createNewGame();
+        tickAll();
+
+        // then
+        String level =
+                "╔════┐\n" +
+                "║1..2│\n" +
+                "║....│\n" +
+                "║....│\n" +
+                "║4..3│\n" +
+                "└────┘\n";
+        String forces =
+                "------\n" +
+                "-♥--♦-\n" +
+                "------\n" +
+                "------\n" +
+                "------\n" +
+                "------\n";
+        assertL(level, PLAYER2);
+        assertE(forces, PLAYER2);
+        assertL(level, PLAYER3);
+        assertE(forces, PLAYER3);
+    }
 }
 
