@@ -191,12 +191,11 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
     @NotNull
     private List<Player> removeAllPlayers() {
-        List<Player> renew = new LinkedList<>();
-        for (Player player : players.toArray(new Player[0])) {
+        List<Player> result = new LinkedList<>(players);
+        for (Player player : result) {
             remove(player);
-            renew.add(player);
         }
-        return renew;
+        return result;
     }
 
     private void attack() {
