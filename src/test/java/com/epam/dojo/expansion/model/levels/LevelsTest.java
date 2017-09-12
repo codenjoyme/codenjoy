@@ -167,7 +167,7 @@ public class LevelsTest {
 
     @Test
     public void testMultiLevel1() {
-        String map = getMap(Levels.MULTI1);
+        String map = getMap(Levels.MULTI.get(0));
         asrtMap(" ╔═════┐    ╔═════┐ " +
                 "╔╝.....╚┐  ╔╝.....╚┐" +
                 "║.1.....│  ║.....2.│" +
@@ -192,7 +192,7 @@ public class LevelsTest {
 
     @Test
     public void testMultiLevel2() {
-        String map = getMap(Levels.MULTI2);
+        String map = getMap(Levels.MULTI.get(1));
         asrtMap(" ╔════════════════┐ " +
                 "╔╝$$$$........$$$$╚┐" +
                 "║$$$$..........$$$$│" +
@@ -217,7 +217,7 @@ public class LevelsTest {
 
     @Test
     public void testMultiLevel3() {
-        String map = getMap(Levels.MULTI3);
+        String map = getMap(Levels.MULTI.get(2));
         asrtMap("╔══════════════════┐" +
                 "║O$O$O$O$O$O$O$O$O$│" +
                 "║$O.O.O.O.O.O.O.O.O│" +
@@ -238,6 +238,81 @@ public class LevelsTest {
                 "║O.O.O.O.O.O.O.O.O$│" +
                 "║$O$O$O$O$O$O$O$O$O│" +
                 "└──────────────────┘", map);
+    }
+
+    @Test
+    public void testMultiLevel4() {
+        String map = getMap(Levels.MULTI.get(3));
+        asrtMap("╔══════┐    ╔══════┐" +
+                "║B$....╚┐  ╔╝....$B│" +
+                "║$......╚══╝......$│" +
+                "║..1.....BB.....2..│" +
+                "║.....B......B.....│" +
+                "║....B..B..B..B....│" +
+                "║...B..........B...│" +
+                "└╗.....BB..BB.....┌┘" +
+                " └╗..B.B┌──╗B.B..┌┘ " +
+                "  ║B....│  ║....B│  " +
+                "  ║B....│  ║....B│  " +
+                " ╔╝..B.B╚══╝B.B..╚┐ " +
+                "╔╝.....BB..BB.....╚┐" +
+                "║...B..........B...│" +
+                "║....B..B..B..B....│" +
+                "║.....B......B.....│" +
+                "║..4.....BB.....3..│" +
+                "║$......┌──╗......$│" +
+                "║B$....┌┘  └╗....$B│" +
+                "└──────┘    └──────┘", map);
+    }
+
+    @Test
+    public void testMultiLevel5() {
+        String map = getMap(Levels.MULTI.get(4));
+        asrtMap("╔══════════════════┐" +
+                "║$......$..$......$│" +
+                "║BBBBB........BBBBB│" +
+                "║....BB......BB....│" +
+                "║.1..B.B....B.B..2.│" +
+                "║....BB.B..B.BB....│" +
+                "║....B.BBBBBB.B....│" +
+                "║....B.B....B.B....│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║....B.B....B.B....│" +
+                "║....B.BBBBBB.B....│" +
+                "║....BB.B..B.BB....│" +
+                "║.4..B.B....B.B..3.│" +
+                "║....BB......BB....│" +
+                "║BBBBB........BBBBB│" +
+                "║$......$..$......$│" +
+                "└──────────────────┘", map);
+    }
+
+    @Test
+    public void testMultiLevel6() {
+        String map = getMap(Levels.MULTI.get(5));
+        asrtMap("       ╔════┐       " +
+                "     ╔═╝....╚═┐     " +
+                "   ╔═╝........╚═┐   " +
+                "  ╔╝............╚┐  " +
+                "  ║......B.......│  " +
+                " ╔╝......B.......╚┐ " +
+                " ║.......B...2....│ " +
+                "╔╝...1...BB.......╚┐" +
+                "║.......$OB$.......│" +
+                "║......BBOOOBBBB...│" +
+                "║...BBBBOOOBB......│" +
+                "║.......$BO$.......│" +
+                "└╗.......BB...3...┌┘" +
+                " ║....4...B.......│ " +
+                " └╗.......B......┌┘ " +
+                "  ║.......B......│  " +
+                "  └╗............┌┘  " +
+                "   └─╗........┌─┘   " +
+                "     └─╗....┌─┘     " +
+                "       └────┘       ", map);
     }
 
     @Test

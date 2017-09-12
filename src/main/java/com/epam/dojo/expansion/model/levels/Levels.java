@@ -49,10 +49,7 @@ public class Levels {
     public static final String DEMO = make("DEMO");
     public static final String BIG_MULTI1 = make("BIG_MULTI1");
     public static final String BIG_MULTI2 = make("BIG_MULTI2");
-    public static final String MULTI1 = make("MULTI1");
-    public static final String MULTI2 = make("MULTI2");
-    public static final String MULTI3 = make("MULTI3");
-    public static final String MULTI4 = make("MULTI4");
+    public static final List<String> MULTI = makeAll("MULTI%s");
     public static final String SINGLE1 = make("SINGLE1");
     public static final String SINGLE2 = make("SINGLE2");
     public static final String SINGLE3 = make("SINGLE3");
@@ -63,10 +60,29 @@ public class Levels {
 
     private static String make(String name) {
         String level = loadFromFile(name);
+        if (StringUtils.isEmpty(level)) {
+            return null;
+        }
         level = level.replace('-', ' ');
         String result = decorate(level);
         put(name, result);
         return name;
+    }
+
+    private static List<String> makeAll(String namePattern) {
+        List<String> result = new LinkedList<>();
+
+        int index = 0;
+        while (true) {
+            String fileName = String.format(namePattern, ++index);
+            String levelName = make(fileName);
+            if (levelName == null) {
+                break;
+            }
+            result.add(levelName);
+        }
+
+        return result;
     }
 
     public static void put(String name, String result) {
@@ -101,7 +117,7 @@ public class Levels {
                 applier.apply(result, line);
             }
         } catch (Exception e) {
-            logger.error("Error during loading file {}", filePath, e);
+            logger.debug("Error during loading file {}", filePath, e);
         }
         return result;
     }

@@ -38,6 +38,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -72,19 +73,14 @@ public class AbstractGameRunnerTest {
         factory = new PrinterFactoryImpl();
 
         settings = gameRunner.getSettings();
-        SettingsWrapper.data
+        data
                 .lobbyEnable(false)
                 .shufflePlayers(false);
     }
 
 
     protected void givenLv(String level, int index) {
-        String name = "MULTI" + index + "_TEST"; // TODO to use StringWrapper
-        settings.getParameter("Multiple level " + (index + 1)).update(name);
-        Levels.put(name, level);
-        int size = (int) Math.sqrt(level.length());
-        settings.getParameter("Board size").update(size);
-        settings.changesReacted();
+        SettingsWrapper.multi(index, level);
     }
 
     protected JSONObject board(int player) {
@@ -233,5 +229,7 @@ public class AbstractGameRunnerTest {
                 "║.43.│" +
                 "║....│" +
                 "└────┘", LEVEL4);
+
+        data.cleanMulti(LEVEL4);
     }
 }

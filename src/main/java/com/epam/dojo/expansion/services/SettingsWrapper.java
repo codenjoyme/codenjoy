@@ -56,8 +56,9 @@ public final class SettingsWrapper {
     private final Parameter<Boolean> shufflePlayers;
     private final Parameter<Boolean> lobbyEnable;
     private final List<Parameter<String>> levels;
-    private final int total;
+    private final int totalSingleLevels;
     private final Parameter<Integer> leaveForceCount;
+    private final Settings settings;
 
     public static SettingsWrapper setup(Settings settings) {
         return new SettingsWrapper(settings);
@@ -70,6 +71,7 @@ public final class SettingsWrapper {
 
     private SettingsWrapper(Settings settings) {
         data = this;
+        this.settings = settings;
 
         levels = new LinkedList<>();
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
@@ -89,11 +91,12 @@ public final class SettingsWrapper {
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
 
-        levels.add(settings.addEditBox("Multiple level 1").type(String.class).def(MULTI1));
-        levels.add(settings.addEditBox("Multiple level 2").type(String.class).def(MULTI2));
-        levels.add(settings.addEditBox("Multiple level 3").type(String.class).def(MULTI3));
-        levels.add(settings.addEditBox("Multiple level 4").type(String.class).def(MULTI4));
-        total = Levels.collectSingle(boardSize()).get().size();
+        for (int index = 0; index < MULTI.size(); index++) {
+            String name = MULTI.get(index);
+            levels.add(settings.addEditBox("Multiple level " + (index + 1)).type(String.class).def(name));
+        }
+
+        totalSingleLevels = Levels.collectSingle(boardSize()).get().size();
     }
 
     public int boardSize() {
@@ -109,7 +112,7 @@ public final class SettingsWrapper {
     }
 
     public int totalSingleLevels() {
-        return total;
+        return totalSingleLevels;
     }
 
     public int leaveForceCount() {
@@ -204,5 +207,29 @@ public final class SettingsWrapper {
     public SettingsWrapper waitingOthers(boolean value) {
         waitingOthers.update(value);
         return this;
+    }
+
+    public SettingsWrapper boardSize(int value) {
+        boardSize.update(value);
+        return this;
+    }
+
+    public static void cleanMulti(int afterIndex) {
+        int index = 0;
+        for (Parameter parameter : data.levels.toArray(new Parameter[0])) {
+            if (index > afterIndex) {
+                data.settings.removeParameter(parameter.getName());
+                data.levels.remove(data.levels.size() - 1);
+            }
+            index++;
+        }
+    }
+
+    public static void multi(int index, String value) {
+        String name = "MULTI" + index + "_TEST";
+        data.settings.getParameter("Multiple level " + (index + 1)).update(name);
+        Levels.put(name, value);
+        int size = (int) Math.sqrt(value.length());
+        data.boardSize(size);
     }
 }
