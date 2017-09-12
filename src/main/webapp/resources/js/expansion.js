@@ -136,11 +136,12 @@ var loadArrowImages = function() {
     sprites['floor'] = loadImage('floor');
 }
 
-var previousBoard = null;
+var previousBoard = {};
 game.drawBoard = function(drawer) {
-    var board = previousBoard;
+    // so we see past tick on board with current arrows
     var playerName = drawer.playerName;
-    previousBoard = drawer.playerData.board;
+    var board = previousBoard[playerName];
+    previousBoard[playerName] = drawer.playerData.board;
     drawer.playerData.board = board;
     if (!board) {
         return;
