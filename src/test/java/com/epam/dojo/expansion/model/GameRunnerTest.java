@@ -23,31 +23,13 @@ package com.epam.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.levels.Levels;
-import com.epam.dojo.expansion.model.levels.items.Hero;
-import com.epam.dojo.expansion.model.lobby.NoPlayerLobby;
-import com.epam.dojo.expansion.model.lobby.PlayerLobby;
-import com.epam.dojo.expansion.services.GameRunner;
-import com.epam.dojo.expansion.services.PrinterData;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.LinkedList;
-import java.util.function.BiConsumer;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Sanja on 15.02.14.

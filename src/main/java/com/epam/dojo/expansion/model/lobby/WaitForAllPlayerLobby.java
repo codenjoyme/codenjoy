@@ -39,15 +39,17 @@ import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 /**
  * Created by Oleksandr_Baglai on 2017-09-11.
  */
-public class WaitForAllPlayerLobby extends NoPlayerLobby implements PlayerLobby, Tickable {
+public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     private static Logger logger = DLoggerFactory.getLogger(WaitForAllPlayerLobby.class);
+
+    private GameFactory factory;
 
     private List<Player> all = new LinkedList<>();
     private List<Player> waiting = new LinkedList<>();
 
     public WaitForAllPlayerLobby(GameFactory factory) {
-        super(factory);
+        this.factory = factory;
     }
 
     @Override
@@ -129,11 +131,15 @@ public class WaitForAllPlayerLobby extends NoPlayerLobby implements PlayerLobby,
                 logger.debug("Players on Lobby will start new game {}", Player.lg(all));
             }
             for (Player p : all) {
-                PlayerBoard current = get();
+                PlayerBoard result = factory.existMultiple();
+                if (result == null) {
+                    result = factory.newMultiple();
+                }
+
 //                current.loadLevel(0);
 //                int count = current.freeBases();
 //                System.out.printf("All = %s, free = %s\n", all.size(), count);
-                p.setPlayerBoard(current);
+                p.setPlayerBoard(result);
             }
         }
     }

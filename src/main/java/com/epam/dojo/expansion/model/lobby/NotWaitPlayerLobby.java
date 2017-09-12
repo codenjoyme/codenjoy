@@ -34,11 +34,11 @@ import java.util.function.Supplier;
 /**
  * Created by Oleksandr_Baglai on 2017-09-11.
  */
-public class NoPlayerLobby implements PlayerLobby {
+public class NotWaitPlayerLobby implements PlayerLobby {
 
-    private GameFactory factory;
+    protected GameFactory factory;
 
-    public NoPlayerLobby(GameFactory factory) {
+    public NotWaitPlayerLobby(GameFactory factory) {
         this.factory = factory;
     }
 
@@ -54,10 +54,6 @@ public class NoPlayerLobby implements PlayerLobby {
 
     @Override
     public PlayerBoard start(Player player) {
-        return get();
-    }
-
-    protected PlayerBoard get() {
         PlayerBoard result = factory.existMultiple();
         if (result == null) {
             result = factory.newMultiple();
