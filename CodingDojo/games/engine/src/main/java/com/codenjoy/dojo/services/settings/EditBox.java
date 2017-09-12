@@ -97,4 +97,13 @@ public class EditBox<T> extends Updatable<T> implements Parameter<T> {
     public void select(int index) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public String toString() { // TODO test me and add this method to all classes
+        return String.format("%s:%s = def[%s] val[%s]",
+                name,
+                type.getSimpleName(),
+                def,
+                get());
+    }
 }

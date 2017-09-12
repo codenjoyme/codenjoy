@@ -55,6 +55,11 @@ public class NullSettings implements Settings {
     }
 
     @Override
+    public void removeParameter(String name) {
+        // do nothing
+    }
+
+    @Override
     public Parameter<?> getParameter(String name) {
         return null;
     }

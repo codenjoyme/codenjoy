@@ -60,6 +60,8 @@ public interface Settings {
 
     <T> Parameter<T> getParameter(String name);
 
+    void removeParameter(String name);
+
     /**
      * @return true - если были изменения настроек
      */

@@ -79,6 +79,17 @@ public class SettingsImpl implements Settings {
     }
 
     @Override
+    public void removeParameter(String name) { // TODO test me
+        for (Parameter<?> p : parameters.toArray(new Parameter[0])) {
+            if (p.itsMe(name)) {
+                parameters.remove(p);
+                return;
+            }
+        }
+        throw new IllegalArgumentException(String.format("Parameter with name '%s' not found", name));
+    }
+
+    @Override
     public boolean changed() {
         boolean result = false;
         for (Parameter<?> parameter : parameters) {
