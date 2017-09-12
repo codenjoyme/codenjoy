@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -116,8 +117,11 @@ public class Levels {
             while ((line = br.readLine()) != null) {
                 applier.apply(result, line);
             }
-        } catch (Exception e) {
-            logger.debug("Error during loading file {}", filePath, e);
+        } catch (NullPointerException e) {
+            // file not found
+            return result;
+        } catch (IOException e) {
+            logger.error("Error during loading file {}", filePath, e);
         }
         return result;
     }
