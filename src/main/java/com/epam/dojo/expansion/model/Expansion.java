@@ -27,8 +27,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.attack.OneByOneAttack;
 import com.epam.dojo.expansion.model.levels.Cell;
-import com.epam.dojo.expansion.model.levels.Item;
 import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.items.*;
 import com.epam.dojo.expansion.services.Events;
@@ -43,7 +43,6 @@ import org.slf4j.Logger;
 import java.util.*;
 
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
-import static java.util.stream.Collectors.toList;
 
 public class Expansion implements Tickable, Field, PlayerBoard {
 
@@ -212,23 +211,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
         for (Cell cell : level.getCellsWith(HeroForces.class)) {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
-            while (forces.size() > 1) {
-                int min = Integer.MAX_VALUE;
-                for (HeroForces force : forces) {
-                    min = Math.min(min, force.getCount());
-                }
-
-                for (HeroForces force : forces) {
-                    force.leave(min, 0);
-                }
-
-                for (HeroForces force : forces.toArray(new HeroForces[0])) {
-                    if (force.getCount() == 0) {
-                        forces.remove(force);
-                        force.removeFromCell();
-                    }
-                }
-            }
+            new OneByOneAttack().calculate(forces);
         }
 
         if (logger.isDebugEnabled()) {
