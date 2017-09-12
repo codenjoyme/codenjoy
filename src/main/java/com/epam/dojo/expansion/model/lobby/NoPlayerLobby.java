@@ -23,6 +23,7 @@ package com.epam.dojo.expansion.model.lobby;
  */
 
 
+import com.epam.dojo.expansion.model.GameFactory;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.PlayerBoard;
 
@@ -34,6 +35,13 @@ import java.util.function.Supplier;
  * Created by Oleksandr_Baglai on 2017-09-11.
  */
 public class NoPlayerLobby implements PlayerLobby {
+
+    private GameFactory factory;
+
+    public NoPlayerLobby(GameFactory factory) {
+        this.factory = factory;
+    }
+
     @Override
     public void remove(Player player) {
         // do nothing
@@ -45,8 +53,16 @@ public class NoPlayerLobby implements PlayerLobby {
     }
 
     @Override
-    public PlayerBoard start(Player player, Supplier<PlayerBoard> loader) {
-        return loader.get();
+    public PlayerBoard start(Player player) {
+        return get();
+    }
+
+    protected PlayerBoard get() {
+        PlayerBoard result = factory.existMultiple();
+        if (result == null) {
+            result = factory.newMultiple();
+        }
+        return result;
     }
 
     @Override

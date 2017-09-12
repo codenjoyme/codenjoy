@@ -68,7 +68,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                             data.levels().toArray(new String[0]))
             );
             gameFactory.setWaitingOthers(data.waitingOthers());
-            lobby = (data.lobbyEnable()) ? new WaitForAllPlayerLobby() : new NoPlayerLobby();
+            lobby = (data.lobbyEnable()) ? new WaitForAllPlayerLobby(gameFactory) : new NoPlayerLobby(gameFactory);
         }
     }
 

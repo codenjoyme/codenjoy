@@ -37,5 +37,5 @@ public interface PlayerLobby extends Tickable {
 
     void addPlayer(Player player);
 
-    PlayerBoard start(Player player, Supplier<PlayerBoard> loader);
+    PlayerBoard start(Player player);
 }

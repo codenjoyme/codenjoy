@@ -181,13 +181,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = lobby.start(player, () -> {
-            PlayerBoard board = factory.existMultiple();
-            if (board == null) {
-                board = factory.newMultiple();
-            }
-            return board;
-        });
+        current = lobby.start(player);
         processCurrent(0);
     }
 

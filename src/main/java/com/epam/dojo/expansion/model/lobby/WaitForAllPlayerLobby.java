@@ -26,26 +26,29 @@ package com.epam.dojo.expansion.model.lobby;
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.epam.dojo.expansion.model.GameFactory;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.PlayerBoard;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import org.slf4j.Logger;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-11.
  */
-public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
+public class WaitForAllPlayerLobby extends NoPlayerLobby implements PlayerLobby, Tickable {
 
     private static Logger logger = DLoggerFactory.getLogger(WaitForAllPlayerLobby.class);
 
     private List<Player> all = new LinkedList<>();
     private List<Player> waiting = new LinkedList<>();
-    private Map<Player, Supplier<PlayerBoard>> loaders = new HashMap<>();
+
+    public WaitForAllPlayerLobby(GameFactory factory) {
+        super(factory);
+    }
 
     @Override
     public void remove(Player player) {
@@ -65,12 +68,11 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
     }
 
     @Override
-    public PlayerBoard start(Player player, Supplier<PlayerBoard> loader) {
+    public PlayerBoard start(Player player) {
         if (logger.isDebugEnabled()) {
             logger.debug("Player {} waits on Lobby", player.lg.id());
         }
         waiting.add(player);
-        loaders.put(player, loader);
         return new LobbyPlayerBoard(waiting) { // there are all important methods
             @Override
             public void remove(Player player) {
@@ -127,10 +129,10 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
                 logger.debug("Players on Lobby will start new game {}", Player.lg(all));
             }
             for (Player p : all) {
-                PlayerBoard current = loaders.get(p).get();
-                current.loadLevel(0);
-                int count = current.freeBases();
-                System.out.printf("All = %s, free = %s\n", all.size(), count);
+                PlayerBoard current = get();
+//                current.loadLevel(0);
+//                int count = current.freeBases();
+//                System.out.printf("All = %s, free = %s\n", all.size(), count);
                 p.setPlayerBoard(current);
             }
         }

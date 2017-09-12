@@ -116,7 +116,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void givenFl(String... boards) {
         setupMaps(boards);
         gameFactory = getGameFactory();
-        lobby = new NoPlayerLobby();
+        lobby = new NoPlayerLobby(gameFactory);
     }
 
     protected void givenForces(String forces, String layer2) {
