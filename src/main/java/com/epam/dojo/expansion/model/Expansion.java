@@ -60,6 +60,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     private Level level;
 
     private boolean isMultiple;
+    private boolean nothingChanged;
 
     private int ticks;
     private List<Player> players;
@@ -68,17 +69,16 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
     public Expansion(List<Level> levels, Dice dice, boolean multiple) {
         this.levels = new LinkedList(levels);
-
         isMultiple = multiple;
-        clearTicks();
-
         players = new LinkedList();
-        losers = new LinkedList();
+        cleanAfterGame();
     }
 
-    private void clearTicks() {
+    private void cleanAfterGame() {
         ticks = 0;
         roundTicks = 0;
+        nothingChanged = true;
+        losers = new LinkedList();
     }
 
     @Override
@@ -97,9 +97,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
         if (isWaitingOthers()) return;
 
-        if (data.roundLimitedInTime()) {
-            roundTicks++;
-        }
+        roundTicks++;
 
         if (logger.isDebugEnabled()) {
             logger.debug("Expansion processing board calculations. " +
@@ -123,19 +121,17 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             }
 
             if (winner != null) {
-                losers.clear();
                 resetAllPlayers();
             }
         }
 
         if (data.roundLimitedInTime()) {
             if (roundTicks >= data.roundTicks()) {
-                roundTicks = 0;
-                resetAllPlayers();
                 for (Player player : players) {
                     if (losers.contains(player)) continue;
                     player.event(DRAW_MULTIPLE);
                 }
+                resetAllPlayers();
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("Expansion round is out. All players will be removed! {}",
@@ -190,7 +186,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                 newGame(player);
             }
         }
-        clearTicks();
+        cleanAfterGame();
     }
 
     @NotNull
@@ -497,7 +493,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         players.remove(player);
         player.destroyHero();
         if (players.isEmpty()) {
-            clearTicks();
+            cleanAfterGame();
         }
     }
 
@@ -537,7 +533,11 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
     @Override
     public boolean isFree() {
-        return freeBases() > 0;
+        return nothingChanged() && freeBases() > 0;
+    }
+
+    private boolean nothingChanged() {
+        return nothingChanged;
     }
 
     @Override
