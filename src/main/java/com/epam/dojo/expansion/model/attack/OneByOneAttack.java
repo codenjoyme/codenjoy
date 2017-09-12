@@ -11,22 +11,22 @@ public class OneByOneAttack implements Attack {
 
     @Override
     public void calculate(List<HeroForces> forces) {
-        while (forces.size() > 1) {
-            int min = Integer.MAX_VALUE;
-            for (HeroForces force : forces) {
-                min = Math.min(min, force.getCount());
-            }
+        if (forces.size() <= 1) return;
 
-            for (HeroForces force : forces) {
-                force.leave(min, 0);
-            }
-
-            for (HeroForces force : forces.toArray(new HeroForces[0])) {
-                if (force.getCount() == 0) {
-                    forces.remove(force);
-                    force.removeFromCell();
-                }
-            }
+        forces.sort((f1, f2) -> Integer.compare(f2.getCount(), f1.getCount()));
+        HeroForces max = forces.get(0);
+        HeroForces next = forces.get(1);
+        max.leave(next.getCount(), 0);
+        for (HeroForces force : forces.subList(1, forces.size()).toArray(new HeroForces[0])) {
+            remove(forces, force);
         }
+        if (max.getCount() == 0) {
+            remove(forces, max);
+        }
+    }
+
+    private void remove(List<HeroForces> forces, HeroForces force) {
+        forces.remove(force);
+        force.removeFromCell();
     }
 }
