@@ -26,7 +26,6 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.services.GameRunner;
 import com.epam.dojo.expansion.services.PrinterData;
@@ -92,7 +91,7 @@ public class AbstractGameRunnerTest {
     }
 
     protected void createNewGame(int levelOfRoom) {
-        levelOrFreeRoom(levelOfRoom);
+        gotoFreeRoom(levelOfRoom);
         createNewGame();
     }
 
@@ -101,15 +100,11 @@ public class AbstractGameRunnerTest {
         games.add(game);
     }
 
-    protected void levelOrFreeRoom(int... levelOfRoom) {
+    protected void gotoFreeRoom(int... levelOfRoom) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : levelOfRoom) {
             when = when.thenReturn(i);
         }
-    }
-
-    protected void gotoFreeRoom(int... room) {
-        levelOrFreeRoom(room);
     }
 
     protected void assertE(String expected, int index) {

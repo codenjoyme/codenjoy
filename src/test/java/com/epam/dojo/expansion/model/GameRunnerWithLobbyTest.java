@@ -113,11 +113,12 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(LOBBY_FORCES, PLAYER6);
 
         // when
-        levelOrFreeRoom(LEVEL1,  // LEVEL1
+        gotoFreeRoom(
+                // LEVEL1
                 0, // first free room
                 0, // first free room
                 0, // first free room
-                LEVEL2,
+                // LEVEL2
                 0); // first free room
 
         tickAll();
