@@ -2,7 +2,6 @@ package com.epam.dojo.expansion.model.attack;
 
 import com.epam.dojo.expansion.model.levels.items.HeroForces;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
@@ -16,44 +15,55 @@ public class DefenderHasAdvantageAttack implements Attack {
     public boolean calculate(List<HeroForces> forces) {
         if (forces.size() <= 1) return false;
 
-        HeroForces defender = forces.get(0);
-
-        forces.remove(defender);
+        HeroForces defender = forces.remove(0);
         // now we have only attackers in forces. So it is shorter on 1 element.
         forces.sort((f1, f2) -> Integer.compare(f2.getCount(), f1.getCount()));
 
-        HeroForces maxAttacker1 = forces.get(0);
-        int maxAttacker2 = 0;
+        HeroForces max1 = forces.get(0);
+        int max2 = 0;
         if (forces.size() >= 2) {
-            maxAttacker2 = forces.get(1).getCount();
+            max2 = forces.get(1).getCount();
         }
-        int allOtherAttackers = 0;
+        int other = 0;
         if (forces.size() == 3) {
-            allOtherAttackers = forces.get(2).getCount();
+            other = forces.get(2).getCount();
         }
 
-        // please round this down; i.e. 5.7 -> 5; 5->5. I think just (int) cast should do this
-        int temp1 = (int) Math.floor((maxAttacker1.getCount() + maxAttacker2 + allOtherAttackers) / A());
-        if (temp1 <= defender.getCount()) {
-            defender.leave(temp1, 0);
+        int temp = roundDown((max1.getCount() + max2 + other) / advantage());
+        if (temp <= defender.getCount()) {
+            defender.leave(temp, 0);
             setWinner(forces, defender);
-        } else {
-            // please round this down; i.e. 5.7 -> 5; 5->5. I think just (int) cast should do this
-            double temp3 = (int) Math.floor((maxAttacker2 + maxAttacker2 + allOtherAttackers) / A());
-            if (temp3 > defender.getCount()) {
-                maxAttacker1.leave(maxAttacker2, 0);
-            } else {
-                //  please round this up; i.e. 5.1 -> 6; 5->5. I think (int)Math.ceil() should do this
-                int temp2 = (int) Math.ceil(defender.getCount() * A());
-                maxAttacker1.leave(temp2 - maxAttacker2 - allOtherAttackers, 0);
-            }
-            setWinner(forces, maxAttacker1);
+            return true;
         }
 
+        temp = roundDown((max2 + max2 + other) / advantage());
+        if (temp > defender.getCount()) {
+            max1.leave(max2, 0);
+            setWinner(forces, max1);
+            return true;
+        }
+
+        temp = roundUp(defender.getCount() * advantage());
+        max1.leave(temp - max2 - other, 0);
+        setWinner(forces, max1);
         return true;
     }
 
-    private double A() {
+    /**
+     * round this up; i.e. 5.1 -> 6; 5->5
+     */
+    private int roundUp(double a) {
+        return (int) Math.ceil(a);
+    }
+
+    /**
+     * round this down; i.e. 5.7 -> 5; 5->5
+     */
+    private int roundDown(double a) {
+        return (int) Math.floor(a);
+    }
+
+    private double advantage() {
         return data.defenderAdvantage();
     }
 
