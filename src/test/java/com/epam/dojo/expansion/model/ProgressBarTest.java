@@ -89,6 +89,7 @@ public class ProgressBarTest {
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
+                .waitingOthers(false)
                 .lobbyEnable(false)
                 .defenderHasAdvantage(false)
                 .shufflePlayers(false);

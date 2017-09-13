@@ -74,6 +74,7 @@ public class AbstractGameRunnerTest {
         settings = gameRunner.getSettings();
         SettingsWrapper.data
                 .lobbyEnable(false)
+                .waitingOthers(false)
                 .shufflePlayers(false);
     }
 
