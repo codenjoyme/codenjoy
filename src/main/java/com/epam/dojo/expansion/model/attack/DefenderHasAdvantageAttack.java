@@ -55,20 +55,20 @@ public class DefenderHasAdvantageAttack implements Attack {
         int temp = roundDown((max1.getCount() + max2 + other) / advantage());
         if (temp <= defender.getCount()) {
             defender.leave(temp, 0);
-            setWinner(forces, defender);
+            setWinner(forces, defender, defender);
             return true;
         }
 
         temp = roundDown((max2 + max2 + other) / advantage());
         if (temp > defender.getCount()) {
             max1.leave(max2, 0);
-            setWinner(forces, max1);
+            setWinner(forces, max1, defender);
             return true;
         }
 
         temp = roundUp(defender.getCount() * advantage());
         max1.leave(temp - max2 - other, 0);
-        setWinner(forces, max1);
+        setWinner(forces, max1, defender);
         return true;
     }
 
@@ -90,16 +90,22 @@ public class DefenderHasAdvantageAttack implements Attack {
         return data.defenderAdvantage();
     }
 
-    private void setWinner(List<HeroForces> forces, HeroForces winner) {
+    private void setWinner(List<HeroForces> forces, HeroForces winner, HeroForces defender) {
         for (HeroForces force : forces.toArray(new HeroForces[0])) {
-            if (forces == winner) continue;
+            if (force == winner) {
+                continue;
+            }
             remove(forces, force);
+        }
+
+        if (winner != defender) {
+            remove(forces, defender);
+        } else {
+            forces.add(defender);
         }
 
         if (winner.getCount() == 0) {
             remove(forces, winner);
-        } else {
-            forces.add(winner);
         }
     }
 

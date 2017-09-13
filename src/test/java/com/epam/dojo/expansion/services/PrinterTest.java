@@ -48,6 +48,8 @@ public class PrinterTest {
         assertEquals("000", Printer.makeForceState(forces(46656)));
         assertEquals("001", Printer.makeForceState(forces(46657)));
         assertEquals("GIF", Printer.makeForceState(forces(1234455)));
+        assertEquals("046", Printer.makeForceState(forces(150)));
+        assertEquals("03W", Printer.makeForceState(forces(140)));
     }
 
     @NotNull

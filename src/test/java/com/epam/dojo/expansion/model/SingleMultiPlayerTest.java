@@ -3052,4 +3052,174 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             data.roundTicks(old);
         }
     }
+
+    @Test
+    public void shouldAttackFromDifferentPositions_withoutAdvantage() {
+        collectForcesNearAndAttack();
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "-♥♥♥-" +
+                "-♥♥♥-" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00E004004-=#\n" +
+                "-=#003046004-=#\n" +
+                "-=#004003015-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldAttackFromDifferentPositions_withAdvantage() {
+        boolean old = data.defenderHasAdvantage();
+        try {
+            // given
+            data.defenderHasAdvantage(true)
+                .defenderAdvantage(2.0);
+
+            collectForcesNearAndAttack();
+
+            assertE("-----" +
+                    "-♥♥♥-" +
+                    "-♥♥♥-" +
+                    "-♥♥♥-" +
+                    "-----", PLAYER1);
+
+            assertF("-=#-=#-=#-=#-=#\n" +
+                    "-=#00E004004-=#\n" +
+                    "-=#00303W004-=#\n" +
+                    "-=#004003015-=#\n" +
+                    "-=#-=#-=#-=#-=#\n", PLAYER1);
+        } finally {
+            data.defenderHasAdvantage(old);
+        }
+    }
+
+    private void collectForcesNearAndAttack() {
+        givenFl("╔═══┐" +
+                "║1..│" +
+                "║.2.│" +
+                "║...│" +
+                "└───┘");
+        data.waitingOthers(false);
+        createPlayers(2);
+
+        // when then
+        hero(PLAYER1)
+                .increaseAnd(
+                        new Forces(pt(1, 3), 10))
+                .move(
+                        new ForcesMoves(pt(1, 3), 5, QDirection.RIGHT),
+                        new ForcesMoves(pt(1, 3), 5, QDirection.DOWN))
+                .send();
+        tickAll();
+
+        assertE("-----" +
+                "-♥♥--" +
+                "-♥♦--" +
+                "-----" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00A005-=#-=#\n" +
+                "-=#00500A-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when then
+        hero(PLAYER1)
+                .increaseAnd(
+                        new Forces(pt(1, 3), 3),
+                        new Forces(pt(1, 2), 3),
+                        new Forces(pt(2, 3), 4))
+                .move(
+                        new ForcesMoves(pt(1, 2), 3, QDirection.DOWN),
+                        new ForcesMoves(pt(1, 2), 3, QDirection.RIGHT_DOWN),
+                        new ForcesMoves(pt(2, 3), 3, QDirection.RIGHT),
+                        new ForcesMoves(pt(2, 3), 3, QDirection.RIGHT_DOWN))
+                .send();
+        tickAll();
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "-♥♦♥-" +
+                "-♥♥--" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00D003003-=#\n" +
+                "-=#00200A003-=#\n" +
+                "-=#003003-=#-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when then
+        hero(PLAYER1)
+                .increaseAnd(
+                        new Forces(pt(1, 3), 1),
+                        new Forces(pt(1, 2), 1),
+                        new Forces(pt(1, 1), 1),
+                        new Forces(pt(2, 3), 1),
+                        new Forces(pt(2, 1), 1),
+                        new Forces(pt(3, 3), 1),
+                        new Forces(pt(3, 2), 1))
+                .move(
+                        new ForcesMoves(pt(2, 1), 1, QDirection.RIGHT))
+                .send();
+        tickAll();
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "-♥♦♥-" +
+                "-♥♥♥-" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00E004004-=#\n" +
+                "-=#00300A004-=#\n" +
+                "-=#004003001-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when then
+        for (int i = 0; i < 20; i++) {
+            hero(PLAYER1)
+                    .increaseAnd(
+                            new Forces(pt(1, 3), 1),
+                            new Forces(pt(1, 2), 1),
+                            new Forces(pt(1, 1), 1),
+                            new Forces(pt(2, 3), 1),
+                            new Forces(pt(2, 1), 1),
+                            new Forces(pt(3, 3), 1),
+                            new Forces(pt(3, 2), 1),
+                            new Forces(pt(3, 1), 3))
+                    .send();
+            tickAll();
+        }
+
+        assertE("-----" +
+                "-♥♥♥-" +
+                "-♥♦♥-" +
+                "-♥♥♥-" +
+                "-----", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#\n" +
+                "-=#00Y00O00O-=#\n" +
+                "-=#00N00A00O-=#\n" +
+                "-=#00O00N01P-=#\n" +
+                "-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        // when then
+        hero(PLAYER1)
+                .moveAnd(
+                        new ForcesMoves(pt(1, 1), 20, QDirection.RIGHT_UP),
+                        new ForcesMoves(pt(1, 2), 20, QDirection.RIGHT),
+                        new ForcesMoves(pt(1, 3), 20, QDirection.RIGHT_DOWN),
+                        new ForcesMoves(pt(2, 1), 20, QDirection.UP),
+                        new ForcesMoves(pt(2, 3), 20, QDirection.DOWN),
+                        new ForcesMoves(pt(3, 1), 20, QDirection.LEFT_UP),
+                        new ForcesMoves(pt(3, 2), 20, QDirection.LEFT),
+                        new ForcesMoves(pt(3, 3), 20, QDirection.LEFT_DOWN))
+                .send();
+        tickAll();
+    }
 }
