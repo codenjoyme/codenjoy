@@ -43,6 +43,11 @@ public class NotWaitPlayerLobby implements PlayerLobby {
     }
 
     @Override
+    public void saveStateTo(PlayerLobby lobby) {
+        // no state - do nothing
+    }
+
+    @Override
     public void remove(Player player) {
         // do nothing
     }

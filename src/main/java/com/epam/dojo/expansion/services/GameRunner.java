@@ -27,9 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.epam.dojo.expansion.model.*;
 import com.epam.dojo.expansion.model.levels.Levels;
-import com.epam.dojo.expansion.model.lobby.NotWaitPlayerLobby;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
-import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import org.slf4j.Logger;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -66,8 +64,16 @@ public class GameRunner extends AbstractGameType implements GameType  {
                     Levels.collectMultiple(data.boardSize(),
                             data.levels().toArray(new String[0]))
             );
-            lobby = (data.lobbyEnable()) ? new WaitForAllPlayerLobby(gameFactory) : new NotWaitPlayerLobby(gameFactory);
+            loadAnotherLobby();
         }
+    }
+
+    private void loadAnotherLobby() {
+        PlayerLobby newLobby = data.getPlayerLobby(gameFactory);
+        if (lobby != null) {
+            lobby.saveStateTo(newLobby);
+        }
+        lobby = newLobby;
     }
 
     @Override
@@ -114,6 +120,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public void tick() {
+        initGameFactory();
         lobby.tick();
     }
 }

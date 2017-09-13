@@ -53,6 +53,20 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
     }
 
     @Override
+    public void saveStateTo(PlayerLobby lobby) { // TODO this code smells
+        if (lobby instanceof WaitForAllPlayerLobby) {
+            WaitForAllPlayerLobby another = (WaitForAllPlayerLobby) lobby;
+            another.all = new LinkedList<>(all);
+            another.waiting = new LinkedList<>(waiting);
+        } else if (lobby instanceof NotWaitPlayerLobby) {
+            NotWaitPlayerLobby another = (NotWaitPlayerLobby) lobby;
+            this.factory = another.factory;
+            this.letThemGo();
+            all.clear();
+        }
+    }
+
+    @Override
     public void remove(Player player) {
         if (logger.isDebugEnabled()) {
             logger.debug("Removed player {} from Lobby", player.lg.id());
@@ -122,23 +136,29 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     @Override
     public void tick() {
-        if (isLetThemGo()) {
-            if (data.shufflePlayers()) {
-                Collections.shuffle(waiting);
-            }
-            if (logger.isDebugEnabled()) {
-                logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
-            }
-            PlayerBoard room = factory.newMultiple();
-            for (Player p : waiting) {
-                room.loadLevel(0);
-                if (!room.isFree()) {
-                    room = factory.newMultiple();
-                }
-                p.setPlayerBoard(room);
-            }
-            waiting.clear();
+        if (!isLetThemGo()) {
+            return;
         }
+
+        letThemGo();
+    }
+
+    private void letThemGo() {
+        if (data.shufflePlayers()) {
+            Collections.shuffle(waiting);
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
+        }
+        PlayerBoard room = factory.newMultiple();
+        for (Player p : waiting) {
+            room.loadLevel(0);
+            if (!room.isFree()) {
+                room = factory.newMultiple();
+            }
+            p.setPlayerBoard(room);
+        }
+        waiting.clear();
     }
 
     private boolean isLetThemGo() {

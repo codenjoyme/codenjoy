@@ -3243,7 +3243,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     }
 
     @Test
-    public void shouldContinueWorkingWhenWaitForAndOnePlayerGouOutDuringTheGame() {
+    public void shouldContinueWorkingWhenWaitForAndOnePlayerGoOutDuringTheGame() {
         boolean old = data.waitingOthers();
         try {
             // given

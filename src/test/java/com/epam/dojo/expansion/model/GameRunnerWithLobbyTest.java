@@ -1168,6 +1168,264 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             data.lobbyCapacity(old);
         }
     }
+
+    @Test
+    public void shouldCopyAllLobbyStateToAnotherDuringChangeSettingsIfSomebodyAtLobby() {
+        final int LOBBY_CAPACITY = 8;
+        final int ROUNDS = 10;
+
+        boolean old1 = data.waitingOthers();
+        int old2 = data.lobbyCapacity();
+        int old3 = data.roundTicks();
+        try {
+            data.waitingOthers(true);
+            data.lobbyCapacity(LOBBY_CAPACITY);
+            data.roundTicks(ROUNDS);
+
+            givenLevels();
+
+            for (int i = 0; i < LOBBY_CAPACITY; i++) {
+                createNewGame();
+            }
+
+            // when then
+            // first tick so all go to lobby and start new game
+            tickAll();
+
+            // second tick is for round = 1
+            tickAll();
+
+            // remove player and wait till all goes to lobby again
+            destroy(PLAYER1);
+            for (int i = 0; i < ROUNDS; i++) {
+                tickAll();
+            }
+
+            assertL(LOBBY_LEVEL, PLAYER2);
+            assertE(LOBBY_FORCES, PLAYER2);
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+            assertL(LOBBY_LEVEL, PLAYER4);
+            assertE(LOBBY_FORCES, PLAYER4);
+            assertL(LOBBY_LEVEL, PLAYER5);
+            assertE(LOBBY_FORCES, PLAYER5);
+            assertL(LOBBY_LEVEL, PLAYER6);
+            assertE(LOBBY_FORCES, PLAYER6);
+            assertL(LOBBY_LEVEL, PLAYER7);
+            assertE(LOBBY_FORCES, PLAYER7);
+            assertL(LOBBY_LEVEL, PLAYER8);
+            assertE(LOBBY_FORCES, PLAYER8);
+
+            // when then
+            // try to leave lobby but cant do it
+            tickAll();
+
+            assertL(LOBBY_LEVEL, PLAYER2);
+            assertE(LOBBY_FORCES, PLAYER2);
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+            assertL(LOBBY_LEVEL, PLAYER4);
+            assertE(LOBBY_FORCES, PLAYER4);
+            assertL(LOBBY_LEVEL, PLAYER5);
+            assertE(LOBBY_FORCES, PLAYER5);
+            assertL(LOBBY_LEVEL, PLAYER6);
+            assertE(LOBBY_FORCES, PLAYER6);
+            assertL(LOBBY_LEVEL, PLAYER7);
+            assertE(LOBBY_FORCES, PLAYER7);
+            assertL(LOBBY_LEVEL, PLAYER8);
+            assertE(LOBBY_FORCES, PLAYER8);
+
+            // when
+            // change some settings so lobby recreates
+            data.lobbyCapacity(LOBBY_CAPACITY); // just simulation
+
+            // when then
+            // create new player so count players = 8 = current lobby capacity
+            createNewGame();
+
+            tickAll();
+
+            // all players on boards (if lobby doesn't copy state - then it will be LOBBY for all)
+            // we starts from LEVEL1 because factory reset also
+            String level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces1 =
+                    "------\n" +
+                    "-♥--♦-\n" +
+                    "------\n" +
+                    "------\n" +
+                    "-♠--♣-\n" +
+                    "------\n";
+            assertL(level1, PLAYER2);
+            assertE(forces1, PLAYER2);
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+            assertL(level1, PLAYER5);
+            assertE(forces1, PLAYER5);
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "-♠----\n" +
+                    "----♦-\n" +
+                    "--♣---\n" +
+                    "------\n";
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
+            assertL(level2, PLAYER7);
+            assertE(forces2, PLAYER7);
+            assertL(level2, PLAYER8);
+            assertE(forces2, PLAYER8);
+            assertL(level2, PLAYER9);
+            assertE(forces2, PLAYER9);
+        } finally {
+            data.waitingOthers(old1);
+            data.lobbyCapacity(old2);
+            data.roundTicks(old3);
+        }
+    }
+
+    @Test
+    public void shouldLetThemGoFromLobbyIfDisableLobbyDuringTheGame() {
+        final int LOBBY_CAPACITY = 8;
+        final int ROUNDS = 10;
+
+        boolean old1 = data.waitingOthers();
+        int old2 = data.lobbyCapacity();
+        int old3 = data.roundTicks();
+        boolean old4 = data.lobbyEnable();
+        try {
+            data.lobbyEnable(true);
+            data.waitingOthers(true);
+            data.lobbyCapacity(LOBBY_CAPACITY);
+            data.roundTicks(ROUNDS);
+
+            givenLevels();
+
+            for (int i = 0; i < LOBBY_CAPACITY; i++) {
+                createNewGame();
+            }
+
+            // when then
+            // first tick so all go to lobby and start new game
+            tickAll();
+
+            // second tick is for round = 1
+            tickAll();
+
+            // remove player and wait till all goes to lobby again
+            destroy(PLAYER1);
+            for (int i = 0; i < ROUNDS; i++) {
+                tickAll();
+            }
+
+            assertL(LOBBY_LEVEL, PLAYER2);
+            assertE(LOBBY_FORCES, PLAYER2);
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+            assertL(LOBBY_LEVEL, PLAYER4);
+            assertE(LOBBY_FORCES, PLAYER4);
+            assertL(LOBBY_LEVEL, PLAYER5);
+            assertE(LOBBY_FORCES, PLAYER5);
+            assertL(LOBBY_LEVEL, PLAYER6);
+            assertE(LOBBY_FORCES, PLAYER6);
+            assertL(LOBBY_LEVEL, PLAYER7);
+            assertE(LOBBY_FORCES, PLAYER7);
+            assertL(LOBBY_LEVEL, PLAYER8);
+            assertE(LOBBY_FORCES, PLAYER8);
+
+            // when then
+            // try to leave lobby but cant do it
+            tickAll();
+
+            assertL(LOBBY_LEVEL, PLAYER2);
+            assertE(LOBBY_FORCES, PLAYER2);
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+            assertL(LOBBY_LEVEL, PLAYER4);
+            assertE(LOBBY_FORCES, PLAYER4);
+            assertL(LOBBY_LEVEL, PLAYER5);
+            assertE(LOBBY_FORCES, PLAYER5);
+            assertL(LOBBY_LEVEL, PLAYER6);
+            assertE(LOBBY_FORCES, PLAYER6);
+            assertL(LOBBY_LEVEL, PLAYER7);
+            assertE(LOBBY_FORCES, PLAYER7);
+            assertL(LOBBY_LEVEL, PLAYER8);
+            assertE(LOBBY_FORCES, PLAYER8);
+
+            // when
+            // disable lobby with players inside
+            data.lobbyEnable(false);
+
+            tickAll();
+
+            // then
+            // all players on boards (if lobby doesn't letThemGo during change settings there sill be lobby for all)
+            // we starts from LEVEL1 because factory reset also
+            String level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces1 =
+                    "------\n" +
+                    "-♥--♦-\n" +
+                    "------\n" +
+                    "------\n" +
+                    "-♠--♣-\n" +
+                    "------\n";
+            assertL(level1, PLAYER2);
+            assertE(forces1, PLAYER2);
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+            assertL(level1, PLAYER5);
+            assertE(forces1, PLAYER5);
+
+            String level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            String forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "--♣---\n" +
+                    "------\n";
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
+            assertL(level2, PLAYER7);
+            assertE(forces2, PLAYER7);
+            assertL(level2, PLAYER8);
+            assertE(forces2, PLAYER8);
+        } finally {
+            data.waitingOthers(old1);
+            data.lobbyCapacity(old2);
+            data.roundTicks(old3);
+            data.lobbyEnable(old4);
+        }
+    }
 }
 
 

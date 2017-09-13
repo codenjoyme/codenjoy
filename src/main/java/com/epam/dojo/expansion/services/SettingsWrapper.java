@@ -26,10 +26,14 @@ package com.epam.dojo.expansion.services;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.epam.dojo.expansion.model.GameFactory;
 import com.epam.dojo.expansion.model.attack.Attack;
 import com.epam.dojo.expansion.model.attack.DefenderHasAdvantageAttack;
 import com.epam.dojo.expansion.model.attack.OneByOneAttack;
 import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.lobby.NotWaitPlayerLobby;
+import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -264,5 +268,13 @@ public final class SettingsWrapper {
         Levels.put(name, value);
         int size = (int) Math.sqrt(value.length());
         data.boardSize(size);
+    }
+
+    public PlayerLobby getPlayerLobby(GameFactory factory) {
+        if (data.lobbyEnable()) {
+            return new WaitForAllPlayerLobby(factory);
+        } else {
+            return new NotWaitPlayerLobby(factory);
+        }
     }
 }

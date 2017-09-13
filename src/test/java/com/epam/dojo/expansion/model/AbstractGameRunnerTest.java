@@ -39,6 +39,7 @@ import java.util.function.BiConsumer;
 
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -88,7 +89,14 @@ public class AbstractGameRunnerTest {
     }
 
     protected Game game(int player) {
-        return games.get(player);
+        if (player >= games.size()) {
+            fail("There is no PLAYER" + (player + 1));
+        }
+        Game game = games.get(player);
+        if (game == null) {
+            fail("You just destroyed PLAYER" + (player + 1));
+        }
+        return game;
     }
 
     protected void createNewGame(int levelOfRoom) {

@@ -38,4 +38,6 @@ public interface PlayerLobby extends Tickable {
     void addPlayer(Player player);
 
     PlayerBoard start(Player player);
+
+    void saveStateTo(PlayerLobby lobby);
 }
