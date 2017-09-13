@@ -96,8 +96,8 @@ public final class SettingsWrapper {
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
 
-        defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
         defenderHasAdvantage = settings.addEditBox("Defender has advantage").type(Boolean.class).def(true);
+        defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
 
         for (int index = 0; index < MULTI.size(); index++) {
             String name = MULTI.get(index);
