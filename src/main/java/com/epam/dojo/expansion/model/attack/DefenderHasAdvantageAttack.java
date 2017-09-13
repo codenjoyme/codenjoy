@@ -60,7 +60,7 @@ public class DefenderHasAdvantageAttack implements Attack {
         }
 
         temp = roundDown((max2 + max2 + other) / advantage());
-        if (temp > defender.getCount()) {
+        if (temp >= defender.getCount()) {
             max1.leave(max2, 0);
             setWinner(forces, max1, defender);
             return true;
