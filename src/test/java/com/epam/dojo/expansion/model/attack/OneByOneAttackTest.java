@@ -63,15 +63,21 @@ public class OneByOneAttackTest {
     @Test
     public void test() {
         assertAttack("[5♠]", "2♥", "5♦", "7♣", "12♠");
+        assertAttack("[]", "2♥", "5♦", "12♣", "12♠");
         assertAttack("[5♥]", "5♥");
         assertAttack("[3♥]", "7♥", "4♦");
         assertAttack("[5♥]", "2♦", "5♠", "7♣", "12♥");
         assertAttack("[1♥]", "1♥");
         assertAttack("[7♦]", "7♦");
         assertAttack("[]", "1♦", "1♥");
+        assertAttack("[1♥]", "1♦", "2♥");
+        assertAttack("[1♦]", "2♦", "1♥");
         assertAttack("[]", "12♦", "12♠");
+        assertAttack("[1♠]", "12♦", "13♠");
+        assertAttack("[1♦]", "13♦", "12♠");
         assertAttack("[]", "12♦", "12♠", "12♣");
         assertAttack("[]", "12♦", "12♠", "12♣", "12♥");
+        assertAttack("[1♣]", "12♦", "12♠", "13♣", "12♥");
         assertAttack("[]");
     }
 

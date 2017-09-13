@@ -43,7 +43,30 @@ public class DefenderHasAdvantageAttackTest {
     }
 
     @Test
-    public void test() {
+    public void testAdvantage1() {
+        data.defenderAdvantage(1);
+
+        assertAttack("[]");
+        assertAttack("[5♠]", "2♥", "5♦", "7♣", "12♠");
+        assertAttack("[]", "2♥", "5♦", "12♣", "12♠");
+        assertAttack("[5♥]", "5♥");
+        assertAttack("[3♥]", "7♥", "4♦");
+        assertAttack("[5♥]", "2♦", "5♠", "7♣", "12♥");
+        assertAttack("[1♥]", "1♥");
+        assertAttack("[7♦]", "7♦");
+        assertAttack("[]", "1♦", "1♥");
+        assertAttack("[1♥]", "1♦", "2♥");
+        assertAttack("[1♦]", "2♦", "1♥");
+        assertAttack("[]", "12♦", "12♠");
+        assertAttack("[1♠]", "12♦", "13♠");
+        assertAttack("[1♦]", "13♦", "12♠");
+        assertAttack("[]", "12♦", "12♠", "12♣");
+        assertAttack("[]", "12♦", "12♠", "12♣", "12♥");
+        assertAttack("[1♣]", "12♦", "12♠", "13♣", "12♥");
+    }
+
+    @Test
+    public void testAdvantage1_3() {
         data.defenderAdvantage(1.3);
 
         assertAttack("[]");
@@ -67,6 +90,56 @@ public class DefenderHasAdvantageAttackTest {
         assertAttack("[6♥]", "10♦", "17♥", "2♣");
 
         assertAttack("[]", "10♦", "13♥");
+        assertAttack("[]", "10♦", "100♠", "100♣");
+        assertAttack("[]", "10♦", "100♠", "100♣", "20♥");
+    }
+
+    @Test
+    public void testAdvantage2() {
+        data.defenderAdvantage(2.0);
+
+        assertAttack("[]");
+
+        assertAttack("[5♣]", "5♣");
+        assertAttack("[5♥]", "5♥");
+        assertAttack("[1♥]", "1♥");
+        assertAttack("[7♦]", "7♦");
+
+        assertAttack("[6♥]", "12♥", "13♦");
+        assertAttack("[6♥]", "12♥", "6♦", "7♣");
+        assertAttack("[6♥]", "12♥", "6♦", "5♣", "2♠");
+
+        assertAttack("[5♥]", "10♥", "10♦");
+        assertAttack("[]", "10♥", "10♦", "10♣");
+        assertAttack("[]", "10♥", "10♦", "10♣", "10♠");
+
+        assertAttack("[]", "10♥", "20♦");
+        assertAttack("[10♣]", "10♥", "10♦", "20♣");
+        assertAttack("[10♠]", "10♥", "10♦", "10♣", "20♠");
+
+        assertAttack("[20♦]", "10♥", "40♦");
+        assertAttack("[30♣]", "10♥", "10♦", "40♣");
+        assertAttack("[20♠]", "10♥", "10♦", "20♣", "40♠");
+        assertAttack("[21♠]", "10♥", "10♦", "19♣", "40♠");
+        assertAttack("[29♠]", "10♥", "10♦", "11♣", "40♠");
+        assertAttack("[30♠]", "10♥", "10♦", "10♣", "40♠");
+        assertAttack("[30♠]", "10♥", "10♦", "9♣", "40♠");
+        assertAttack("[30♠]", "10♥", "10♦", "5♣", "40♠");
+
+        assertAttack("[]", "10♥", "10♦", "40♣", "40♠");
+        assertAttack("[]", "10♥", "20♦", "40♣", "40♠");
+        assertAttack("[]", "10♥", "40♦", "40♣", "40♠");
+
+        assertAttack("[5♦]", "10♥", "20♦", "15♣");
+        assertAttack("[5♦]", "10♥", "20♦", "15♣", "7♠");
+        assertAttack("[5♠]", "10♥", "5♦", "15♣", "20♠");
+
+        assertAttack("[]", "10♦", "20♠");
+        assertAttack("[2♠]", "10♦", "19♠", "1♣", "2♥");
+        assertAttack("[2♠]", "10♦", "2♥", "1♣", "19♠");
+        assertAttack("[1♦]", "10♦", "17♥", "2♣");
+
+        assertAttack("[4♦]", "10♦", "13♥");
         assertAttack("[]", "10♦", "100♠", "100♣");
         assertAttack("[]", "10♦", "100♠", "100♣", "20♥");
     }
