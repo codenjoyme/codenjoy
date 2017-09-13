@@ -116,14 +116,6 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(LOBBY_FORCES, PLAYER6);
 
         // when
-        gotoFreeRoom(
-                // LEVEL1
-                0, // first free room
-                0, // first free room
-                0, // first free room
-                // LEVEL2
-                0); // first free room
-
         tickAll();
 
         // then
@@ -428,10 +420,6 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertL(level2, PLAYER6);
             assertE(forces2, PLAYER6);
 
-            gotoFreeRoom(1, // PLAYER3
-                    0, // PLAYER4
-                    0, // PLAYER5
-                    1); // PLAYER6
             tickAll();
 
             assertEquals(0, getRound(PLAYER3));
@@ -441,41 +429,26 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             level1 =
                     "╔════┐\n" +
-                    "║1..2│\n" +
-                    "║....│\n" +
-                    "║....│\n" +
-                    "║4..3│\n" +
+                    "║.1..│\n" +
+                    "║...2│\n" +
+                    "║4...│\n" +
+                    "║..3.│\n" +
                     "└────┘\n";
             forces1 =
                     "------\n" +
-                    "-♥--♦-\n" +
-                    "------\n" +
-                    "------\n" +
-                    "------\n" +
+                    "--♥---\n" +
+                    "----♦-\n" +
+                    "-♠----\n" +
+                    "---♣--\n" +
                     "------\n";
             assertL(level1, PLAYER4);
             assertE(forces1, PLAYER4);
             assertL(level1, PLAYER5);
             assertE(forces1, PLAYER5);
-
-            level2 =
-                    "╔════┐\n" +
-                    "║..1.│\n" +
-                    "║4...│\n" +
-                    "║...2│\n" +
-                    "║.3..│\n" +
-                    "└────┘\n";
-            forces2 =
-                    "------\n" +
-                    "---♥--\n" +
-                    "------\n" +
-                    "----♦-\n" +
-                    "------\n" +
-                    "------\n";
-            assertL(level2, PLAYER3);
-            assertE(forces2, PLAYER3);
-            assertL(level2, PLAYER6);
-            assertE(forces2, PLAYER6);
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER6);
+            assertE(forces1, PLAYER6);
 
         } finally {
             data.roundTicks(old);
@@ -1020,31 +993,39 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         tickAll();
 
         // then
+        String level2 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+
         forces =
                 "------\n" +
-                "-♥--♦-\n" +
+                "---♥--\n" +
                 "------\n" +
-                "------\n" +
-                "----♣-\n" +
+                "----♦-\n" +
+                "--♣---\n" +
                 "------\n";
 
         forcesCount =
                 "-=#-=#-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#00A-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#00A-=#\n" +
+                "-=#-=#00A-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n";
 
-        assertL(level, PLAYER1);
+        assertL(level2, PLAYER1);
         assertE(forces, PLAYER1);
         assertF(forcesCount, PLAYER1);
 
-        assertL(level, PLAYER2);
+        assertL(level2, PLAYER2);
         assertE(forces, PLAYER2);
         assertF(forcesCount, PLAYER2);
 
-        assertL(level, PLAYER3);
+        assertL(level2, PLAYER3);
         assertE(forces, PLAYER3);
         assertF(forcesCount, PLAYER3);
     }
@@ -1108,7 +1089,6 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertE(LOBBY_FORCES, PLAYER2);
 
             // when
-            gotoFreeRoom(0); // first free room
             tickAll();
 
             // then

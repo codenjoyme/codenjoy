@@ -129,16 +129,13 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             if (logger.isDebugEnabled()) {
                 logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
             }
+            PlayerBoard room = factory.newMultiple();
             for (Player p : waiting) {
-                PlayerBoard result = factory.existMultiple();
-                if (result == null) {
-                    result = factory.newMultiple();
+                room.loadLevel(0);
+                if (!room.isFree()) {
+                    room = factory.newMultiple();
                 }
-
-//                current.loadLevel(0);
-//                int count = current.freeBases();
-//                System.out.printf("All = %s, free = %s\n", all.size(), count);
-                p.setPlayerBoard(result);
+                p.setPlayerBoard(room);
             }
             waiting.clear();
         }

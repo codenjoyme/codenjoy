@@ -72,7 +72,7 @@ public class AbstractGameRunnerTest {
         factory = new PrinterFactoryImpl();
 
         settings = gameRunner.getSettings();
-        data
+        SettingsWrapper.data
                 .lobbyEnable(false)
                 .shufflePlayers(false);
     }

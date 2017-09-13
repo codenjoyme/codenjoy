@@ -42,12 +42,11 @@ import static org.mockito.Mockito.mock;
 public class ExpansionPerformanceTest extends AbstractGameRunnerTest {
 
     public static final int COUNT_USERS = 100;
-    private static final int LEVEL1 = 0;
 
     @Test
     public void test() {
         for (int index = 0; index < COUNT_USERS; index++) {
-            createNewGame(LEVEL1);
+            createNewGame();
         }
 
         Profiler profiler = new Profiler();
