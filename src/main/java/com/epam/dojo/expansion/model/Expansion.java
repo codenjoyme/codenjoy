@@ -351,7 +351,11 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     }
 
     private boolean isWaitingOthers() {
-        return isMultiple && data.waitingOthers() && players.size() != 4;
+        return isMultiple && data.waitingOthers() && gameNotStarted() && players.size() != 4;
+    }
+
+    private boolean gameNotStarted() {
+        return roundTicks == 0;
     }
 
     @Override
