@@ -62,9 +62,9 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             "                    \n" +
             "         OOO  O  O  \n" +
             "         O  O O  O  \n" +
-            "    O    O  O O  O  \n" +
-            "   OOO   OOO   OOO  \n" +
-            "    O    O  O    O  \n" +
+            "    $    O  O O  O  \n" +
+            "   $O$   OOO   OOO  \n" +
+            "    $    O  O    O  \n" +
             "         O  O   O   \n" +
             "         OOO  OO    \n" +
             "                    \n" +
