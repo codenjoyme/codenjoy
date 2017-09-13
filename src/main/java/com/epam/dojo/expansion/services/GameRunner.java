@@ -51,7 +51,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     public GameRunner() {
         SettingsWrapper.setup(settings);
-        new Scores(0, settings);
 
         ticker = new Ticker();
         dice = new RandomDice();
@@ -73,7 +72,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new Scores(score, settings);
+        return new Scores(score);
     }
 
     @Override

@@ -40,25 +40,8 @@ import static junit.framework.Assert.assertEquals;
 public class ScoresTest {
     private PlayerScores scores;
 
-    private Settings settings;
-    private Integer loosePenalty;
-    private Integer winScore;
-
     public void loose() {
-        scores.event(new Events());
-    }
-
-    public void win() {
-        scores.event(Events.WIN(0));
-    }
-
-    @Before
-    public void setup() {
-        settings = new SettingsImpl();
-        scores = new Scores(0, settings);
-
-        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
+        scores.event(Events.LOOSE());
     }
 
     public void win(int goldCount) {
@@ -67,20 +50,22 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = new Scores(140);
 
-        win();  //+
-        win();  //+
-        win();  //+
-        win();  //+
+        win(1);  //+
+        win(1);  //+
+        win(1);  //+
+        win(1);  //+
 
         loose(); //-
 
-        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        assertEquals(140 + 4 - 0, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
+        scores = new Scores(0);
+
         loose();   //-
 
         assertEquals(0, scores.getScore());
@@ -88,7 +73,9 @@ public class ScoresTest {
 
     @Test
     public void shouldClearScore() {
-        win();    // +
+        scores = new Scores(0);
+
+        win(1);    // +
 
         scores.clear();
 
