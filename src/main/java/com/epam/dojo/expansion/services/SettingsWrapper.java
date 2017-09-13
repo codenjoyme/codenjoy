@@ -52,6 +52,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> regionsScores;
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> lobbyCapacity;
+    private final Parameter<Double> defenderAdvantage;
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
     private final Parameter<Boolean> lobbyEnable;
@@ -90,6 +91,8 @@ public final class SettingsWrapper {
         increasePerTick = settings.addEditBox("Increase forces per tick count").type(Integer.class).def(10);
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
+
+        defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
 
         for (int index = 0; index < MULTI.size(); index++) {
             String name = MULTI.get(index);
@@ -163,6 +166,10 @@ public final class SettingsWrapper {
         return lobbyCapacity.getValue();
     }
 
+    public double defenderAdvantage() {
+        return defenderAdvantage.getValue();
+    }
+
     // setters for testing
 
     public SettingsWrapper leaveForceCount(int value) {
@@ -211,6 +218,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper boardSize(int value) {
         boardSize.update(value);
+        return this;
+    }
+
+    public SettingsWrapper defenderAdvantage(double value) {
+        defenderAdvantage.update(value);
         return this;
     }
 
