@@ -115,6 +115,7 @@ public abstract class AbstractSinglePlayersTest {
                 .regionsScores(0)
                 .roundTicks(10000)
                 .lobbyEnable(false)
+                .defenderHasAdvantage(false)
                 .shufflePlayers(false);
     }
 

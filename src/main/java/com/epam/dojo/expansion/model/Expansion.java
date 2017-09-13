@@ -207,7 +207,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             List<HeroForces> forces = cell.getItems(HeroForces.class);
             if (forces.size() <= 1) continue;
 
-            nothingChanged &= !new OneByOneAttack().calculate(forces);
+            nothingChanged &= !data.attack().calculate(forces);
         }
 
         if (logger.isDebugEnabled()) {

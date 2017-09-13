@@ -42,6 +42,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         SettingsWrapper.data
                 .lobbyEnable(true)
                 .lobbyCapacity(-1)
+                .defenderHasAdvantage(false)
                 .shufflePlayers(false);
     }
 

@@ -90,6 +90,7 @@ public class ProgressBarTest {
                 .regionsScores(0)
                 .roundTicks(10000)
                 .lobbyEnable(false)
+                .defenderHasAdvantage(false)
                 .shufflePlayers(false);
 
         Level level1 = getLevel();

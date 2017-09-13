@@ -26,6 +26,9 @@ package com.epam.dojo.expansion.services;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.epam.dojo.expansion.model.attack.Attack;
+import com.epam.dojo.expansion.model.attack.DefenderHasAdvantageAttack;
+import com.epam.dojo.expansion.model.attack.OneByOneAttack;
 import com.epam.dojo.expansion.model.levels.Levels;
 
 import java.util.LinkedList;
@@ -52,6 +55,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> regionsScores;
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> lobbyCapacity;
+    private final Parameter<Boolean> defenderHasAdvantage;
     private final Parameter<Double> defenderAdvantage;
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
@@ -93,6 +97,7 @@ public final class SettingsWrapper {
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
 
         defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
+        defenderHasAdvantage = settings.addEditBox("Defender has advantage").type(Boolean.class).def(true);
 
         for (int index = 0; index < MULTI.size(); index++) {
             String name = MULTI.get(index);
@@ -170,6 +175,17 @@ public final class SettingsWrapper {
         return defenderAdvantage.getValue();
     }
 
+    public boolean defenderHasAdvantage() {
+        return defenderHasAdvantage.getValue();
+    }
+
+    private static final DefenderHasAdvantageAttack DEFENDER_HAS_ADVANTAGE_ATTACK = new DefenderHasAdvantageAttack();
+    private static final OneByOneAttack ONE_BY_ONE_ATTACK = new OneByOneAttack();
+
+    public Attack attack() {
+        return defenderHasAdvantage() ? DEFENDER_HAS_ADVANTAGE_ATTACK : ONE_BY_ONE_ATTACK;
+    }
+
     // setters for testing
 
     public SettingsWrapper leaveForceCount(int value) {
@@ -223,6 +239,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper defenderAdvantage(double value) {
         defenderAdvantage.update(value);
+        return this;
+    }
+
+    public SettingsWrapper defenderHasAdvantage(boolean value) {
+        defenderHasAdvantage.update(value);
         return this;
     }
 
