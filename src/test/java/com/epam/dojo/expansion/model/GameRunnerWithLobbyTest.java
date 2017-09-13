@@ -51,22 +51,22 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
     public static final String LOBBY_LEVEL =
             "                    \n" +
             "                    \n" +
-            " $      OO   EEE    \n" +
-            " $     O  O  E  E   \n" +
-            " $     O  O  E  E   \n" +
-            " $     O  O  EEE    \n" +
-            " $     O  O  E  E   \n" +
-            " $     O  O  E  E   \n" +
-            " $$$$   OO   EEE    \n" +
+            "   O     OO  OOO    \n" +
+            "   O    O  O O  O   \n" +
+            "   O    O  O O  O   \n" +
+            "   O    O  O OOO    \n" +
+            "   O    O  O O  O   \n" +
+            "   O    O  O O  O   \n" +
+            "   OOOO  OO  OOO    \n" +
             "                    \n" +
             "                    \n" +
-            "         BBB   .  . \n" +
-            "         B  B  .  . \n" +
-            "    $    B  B  .  . \n" +
-            "   $O$   BBB    ... \n" +
-            "    $    B  B     . \n" +
-            "         B  B    .  \n" +
-            "         BBB   ..   \n" +
+            "         OOO  O  O  \n" +
+            "         O  O O  O  \n" +
+            "    O    O  O O  O  \n" +
+            "   OOO   OOO   OOO  \n" +
+            "    O    O  O    O  \n" +
+            "         O  O   O   \n" +
+            "         OOO  OO    \n" +
             "                    \n" +
             "                    \n";
     public static final String LOBBY_FORCES =
