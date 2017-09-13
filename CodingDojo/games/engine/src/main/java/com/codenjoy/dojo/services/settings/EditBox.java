@@ -53,6 +53,8 @@ public class EditBox<T> extends Updatable<T> implements Parameter<T> {
                 set((T) Integer.valueOf((String) value));
             } else if (Boolean.class.equals(type)) {
                 set((T) Boolean.valueOf((String) value));
+            } else if (Double.class.equals(type)) {
+                set((T) Double.valueOf((String) value));
             } else if (String.class.equals(type)) {
                 set(value);
             } else {

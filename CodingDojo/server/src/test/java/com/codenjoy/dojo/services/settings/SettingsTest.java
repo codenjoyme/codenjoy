@@ -223,6 +223,21 @@ public class SettingsTest {
     }
 
     @Test
+    public void shouldSetStringToDoubleEditBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Double> edit = settings.addEditBox("edit")
+                .type(Double.class).def(2.1);
+
+        assertEquals(2.1, edit.getValue(), 0);
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        parameters.get(0).update("4.2");
+
+        assertEquals(4.2, edit.getValue(), 0);
+    }
+
+    @Test
     public void shouldSetStringToStringEditBox() {
         Settings settings = new SettingsImpl();
 

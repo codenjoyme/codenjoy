@@ -210,12 +210,20 @@ public class AdminController {
             }
         }
 
+        List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
             List<Parameter> parameters = (List) gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
-                parameters.get(index).update(settings.getParameters().get(index));
+                try {
+                    parameters.get(index).update(settings.getParameters().get(index));
+                } catch (Exception e) {
+                    errors.add(e);
+                }
             }
+        }
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
         }
 
         if (settings.getGenerateNameMask() != null) {
