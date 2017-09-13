@@ -50,6 +50,11 @@ public class SecondGameType implements GameType {
         return "second";
     }
 
+    @Override
+    public void tick() {
+        // do nothing
+    }
+
     public enum Elements implements CharElements {
 
         NONE(' '),

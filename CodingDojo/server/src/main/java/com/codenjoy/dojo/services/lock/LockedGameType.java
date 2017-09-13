@@ -107,4 +107,9 @@ public class LockedGameType implements GameType {
     public String toString() {
         return gameType.getClass().toString();
     }
+
+    @Override
+    public void tick() {
+        gameType.tick();
+    }
 }

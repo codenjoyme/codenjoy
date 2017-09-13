@@ -60,4 +60,12 @@ public abstract class AbstractGameType implements GameType {
     public String getVersion() {
         return VersionReader.getCurrentVersion(name());
     }
+
+    /**
+     * Этот метод будет дергаться после всех тиков всех игор
+     */
+    @Override
+    public void tick() {
+        // do nothing
+    }
 }

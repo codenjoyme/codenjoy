@@ -82,4 +82,9 @@ public class NullGameType implements GameType {
     public String getVersion() {
         throw exception();
     }
+
+    @Override
+    public void tick() {
+        // do nothing
+    }
 }

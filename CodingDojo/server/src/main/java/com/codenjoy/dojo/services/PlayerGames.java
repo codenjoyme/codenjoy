@@ -168,6 +168,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             }
         }
 
+        getGameTypes().forEach(gameType -> gameType.tick());
+
 //        if (logger.isDebugEnabled()) {
 //            time = System.currentTimeMillis() - time;
 //            logger.debug("PlayerGames.tick() is {} ms", time);
