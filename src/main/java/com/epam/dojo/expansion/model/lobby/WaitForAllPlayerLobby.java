@@ -124,10 +124,10 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
     public void tick() {
         if (isLetThemGo()) {
             if (data.shufflePlayers()) {
-                Collections.shuffle(all);
+                Collections.shuffle(waiting);
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("Players on Lobby will start new game {}", Player.lg(all));
+                logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
             }
             for (Player p : waiting) {
                 PlayerBoard result = factory.existMultiple();

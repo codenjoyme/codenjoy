@@ -95,6 +95,10 @@ public class AbstractGameRunnerTest {
         createNewGame();
     }
 
+    protected int getRound(int player) {
+        return ((JSONObject) game(player).getBoardAsString()).getInt("round");
+    }
+
     protected void createNewGame() {
         Game game = gameRunner.newGame(listener, factory, null);
         games.add(game);
@@ -135,6 +139,7 @@ public class AbstractGameRunnerTest {
                 game.tick();
             }
         }
+        gameRunner.tick(); // this codenjoy server will do after all game ticks
     }
 
     protected void doit(int times, Runnable whatToDo) {

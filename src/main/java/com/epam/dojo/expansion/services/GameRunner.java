@@ -112,4 +112,8 @@ public class GameRunner extends AbstractGameType implements GameType  {
         this.dice = dice;
     }
 
+    @Override
+    public void tick() {
+        lobby.tick();
+    }
 }

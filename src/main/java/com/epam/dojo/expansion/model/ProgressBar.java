@@ -26,20 +26,16 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.lobby.LobbyPlayerBoard;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
-import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.Printer;
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Created by oleksandr.baglai on 27.06.2016.
@@ -158,7 +154,6 @@ public class ProgressBar {
             logger.debug("ProgressBar before tick {}", this.toString());
         }
 
-        lobby.tick();
         current.tick();
         if (isMultiple()) {
             Integer level = getBackToSingleLevel();

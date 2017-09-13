@@ -24,11 +24,13 @@ package com.epam.dojo.expansion.model;
 
 
 import com.epam.dojo.expansion.services.SettingsWrapper;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.AbstractSinglePlayersTest.*;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Sanja on 15.02.14.
@@ -374,24 +376,68 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertL(level2, PLAYER6);
             assertE(forces2, PLAYER6);
 
+            assertEquals(0, getRound(PLAYER3));
+            assertEquals(0, getRound(PLAYER4));
+            assertEquals(0, getRound(PLAYER5));
+            assertEquals(0, getRound(PLAYER6));
+
             for (int i = 0; i < ROUND_TICKS - 1; i++) {
                 tickAll();
             }
 
-            assertL(LOBBY_LEVEL, PLAYER3);
-            assertE(LOBBY_FORCES, PLAYER3);
-            assertL(LOBBY_LEVEL, PLAYER4);
-            assertE(LOBBY_FORCES, PLAYER4);
-            assertL(LOBBY_LEVEL, PLAYER5);
-            assertE(LOBBY_FORCES, PLAYER5);
-            assertL(LOBBY_LEVEL, PLAYER6);
-            assertE(LOBBY_FORCES, PLAYER6);
+            assertEquals(9, getRound(PLAYER3));
+            assertEquals(9, getRound(PLAYER4));
+            assertEquals(9, getRound(PLAYER5));
+            assertEquals(9, getRound(PLAYER6));
+
+            level1 =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            forces1 =
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "------\n" +
+                    "-♠--♣-\n" +
+                    "------\n";
+            assertL(level1, PLAYER3);
+            assertE(forces1, PLAYER3);
+            assertL(level1, PLAYER4);
+            assertE(forces1, PLAYER4);
+
+            level2 =
+                    "╔════┐\n" +
+                    "║..1.│\n" +
+                    "║4...│\n" +
+                    "║...2│\n" +
+                    "║.3..│\n" +
+                    "└────┘\n";
+            forces2 =
+                    "------\n" +
+                    "---♥--\n" +
+                    "------\n" +
+                    "----♦-\n" +
+                    "------\n" +
+                    "------\n";
+            assertL(level2, PLAYER5);
+            assertE(forces2, PLAYER5);
+            assertL(level2, PLAYER6);
+            assertE(forces2, PLAYER6);
 
             gotoFreeRoom(1, // PLAYER3
                     0, // PLAYER4
                     0, // PLAYER5
                     1); // PLAYER6
             tickAll();
+
+            assertEquals(0, getRound(PLAYER3));
+            assertEquals(0, getRound(PLAYER4));
+            assertEquals(0, getRound(PLAYER5));
+            assertEquals(0, getRound(PLAYER6));
 
             level1 =
                     "╔════┐\n" +
