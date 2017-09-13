@@ -58,7 +58,8 @@ game.debug = false;
 
 var initHelpLink = function() {
     var pageName = gameName.split(' ').join('-').toLowerCase();
-    $('#help-link').attr('href', '/codenjoy-contest/resources/expansion/landing-' + pageName + '.html')
+//    $('#help-link').attr('href', '/codenjoy-contest/resources/expansion/landing-' + pageName + '.html')
+    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
 }
 var initAdditionalLink = function() {
     if (game.onlyLeaderBoard) {
