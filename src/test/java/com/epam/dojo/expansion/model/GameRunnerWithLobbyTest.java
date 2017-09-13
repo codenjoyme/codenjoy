@@ -59,12 +59,12 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             "                    \n" +
             "                    \n" +
             "         BBB   .  . \n" +
-            "         B  B   . . \n" +
-            "    $    B  B   . . \n" +
-            "   $O$   BBB     .  \n" +
-            "    $    B  B    .  \n" +
-            "         B  B   .   \n" +
-            "         BBB    .   \n" +
+            "         B  B  .  . \n" +
+            "    $    B  B  .  . \n" +
+            "   $O$   BBB    ... \n" +
+            "    $    B  B     . \n" +
+            "         B  B    .  \n" +
+            "         BBB   ..   \n" +
             "                    \n" +
             "                    \n";
     public static final String LOBBY_FORCES =
