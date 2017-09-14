@@ -84,8 +84,10 @@ var boardAllPageLoad = function() {
             return '<tr>' +
                 '<td><span class="' + star + ' star">' + count + '<span></td>' +
                 '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
-                '<td class="left">' + averageString + '(∑' + scoreAmount + ')' +
-                    '<span class="small-round">' + '[' + roundCount + ']' + rounds1 + '</span>' +
+                '<td class="left">' +
+                    '<span>' + averageString + '<span class="small-round">%</span>' +
+                    '(∑' + scoreAmount + ')</span>' +
+                    '<span class="small-round">' + '[i' + roundCount + ']' + rounds1 + '</span>' +
                     '<span class="smaller-round">' + rounds2 + '</span>' +
                     '</td>' +
                 '</tr>';
@@ -93,7 +95,7 @@ var boardAllPageLoad = function() {
         function(score) {
             var scoreAmount = score.score;
             var roundCount = score.rounds.length;
-            var average = scoreAmount/roundCount;
+            var average = (roundCount == 0) ? 0 : (scoreAmount/roundCount);
             return average;
         });
     $('#table-logs').removeClass('table');
