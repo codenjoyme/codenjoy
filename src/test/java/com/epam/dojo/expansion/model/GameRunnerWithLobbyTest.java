@@ -1237,7 +1237,8 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             // when
             // change some settings so lobby recreates
-            data.lobbyCapacity(LOBBY_CAPACITY); // just simulation
+            data.lobbyCapacity(LOBBY_CAPACITY - 1); // just simulation
+            data.lobbyCapacity(LOBBY_CAPACITY);
 
             // when then
             // create new player so count players = 8 = current lobby capacity
