@@ -61,7 +61,11 @@ var boardAllPageLoad = function() {
                 star = 'second';
             }
 
+            var scoreAmount = score.score;
             var roundCount = score.rounds.length;
+            var average = scoreAmount/roundCount;
+            var averageRound = parseFloat(Math.round(average * 100) / 100).toFixed(2);
+            var averageString = ("" + averageRound).padStart(4, ' ').replaceAll(' ', '&nbsp;');
             var l1 = 10;
             var l2 = l1 + 20;
             var rounds = score.rounds.reverse().join('');
@@ -75,19 +79,21 @@ var boardAllPageLoad = function() {
             } else {
                 rounds2 = '';
             }
-            var score = ("" + score.score).padStart(4, ' ').replaceAll(' ', '&nbsp;');
 
             return '<tr>' +
                 '<td><span class="' + star + ' star">' + count + '<span></td>' +
                 '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
-                '<td class="left">' + score +
+                '<td class="left">' + averageString + '(∑' + scoreAmount + ')' +
                     '<span class="small-round">' + '[' + roundCount + ']' + rounds1 + '</span>' +
                     '<span class="smaller-round">' + rounds2 + '</span>' +
                     '</td>' +
                 '</tr>';
         },
-        function(scoreJson) {
-            return scoreJson.score;
+        function(score) {
+            var scoreAmount = score.score;
+            var roundCount = score.rounds.length;
+            var average = scoreAmount/roundCount;
+            return average;
         });
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');
