@@ -115,7 +115,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                     player.event(status);
                 }
 
-                if (WIN_MULTIPLE.equals(status)) {
+                if (Arrays.asList(WIN_MULTIPLE, DRAW_MULTIPLE).contains(status)) {
                     winner = player;
                 }
             }

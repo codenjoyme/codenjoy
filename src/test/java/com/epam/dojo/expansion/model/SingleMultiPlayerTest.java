@@ -2301,6 +2301,31 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     }
 
     @Test
+    public void shouldContinueAfterWinIfSinglePlayerOnMultipleGame_whatsNext() {
+        shouldContinueAfterWinIfSinglePlayerOnMultipleGame();
+
+        // when
+        tickAll();
+
+        // then
+        assertE("------" +
+                "-♥----" +
+                "------" +
+                "------" +
+                "------" +
+                "------", PLAYER1);
+
+        assertF("-=#-=#-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#-=#-=#\n", PLAYER1);
+
+        verifyNoMoreInteractions(PLAYER1);
+    }
+
+    @Test
     public void shouldContinueAfterWinIfSinglePlayerOnMultipleGame_caseWithOtherPassableCells() {
         // given
         givenFl("╔═══┐" +
