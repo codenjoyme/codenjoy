@@ -190,8 +190,60 @@ public class SettingsTest {
         assertEquals(false, select.changed());
         assertEquals(false, check.changed());
         assertEquals(false, settings.changed());
+    }
 
-        assertEquals("", settings.whatChanged().toString());
+    @Test
+    public void shouldSetFlagChangedOnlyWhenChangeValue() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+
+        edit.update(1);
+        select.update("option1");
+        check.update(true);
+        settings.changesReacted();
+
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        // when then
+        edit.update(1);
+        select.update("option1");
+        check.update(true);
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+    }
+
+    @Test
+    public void shouldSetFlagChangedOnlyWhenChangeValue_nullCases() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+
+        edit.update(null);
+        check.update(null);
+        settings.changesReacted();
+
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
+
+        // when then
+        edit.update(null);
+        check.update(null);
+        assertEquals(false, edit.changed());
+        assertEquals(false, select.changed());
+        assertEquals(false, check.changed());
+        assertEquals(false, settings.changed());
     }
 
     @Test
@@ -312,6 +364,13 @@ public class SettingsTest {
 
         // when then
         settings.changesReacted();
+        assertEquals("[]", settings.whatChanged().toString());
+
+        // when then
+        // same value
+        edit.update(1);
+        select.update("option1");
+        check.update(true);
         assertEquals("[]", settings.whatChanged().toString());
     }
 }

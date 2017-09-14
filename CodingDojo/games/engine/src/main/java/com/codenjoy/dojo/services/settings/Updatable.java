@@ -36,7 +36,7 @@ public abstract class Updatable<T> {
     }
 
     protected void set(T value) {
-        changed = true;
+        changed = ((this.value == null && value != null) || (this.value != null && !this.value.equals(value)));
         this.value = value;
     }
 
