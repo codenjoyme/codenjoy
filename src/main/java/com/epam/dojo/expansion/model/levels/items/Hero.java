@@ -372,7 +372,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
                 put("resetToLevel", resetToLevel);
                 put("position", position);
                 put("lastAction", lastAction);
-                put("field", ((Expansion)field).lg.id());
+                put("field", (field instanceof Expansion) ? ((Expansion)field).lg.id() : field.toString());
             }};
         }
 
