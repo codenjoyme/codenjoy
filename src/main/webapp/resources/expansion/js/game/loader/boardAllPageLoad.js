@@ -63,7 +63,8 @@ var boardAllPageLoad = function() {
 
             var scoreAmount = score.score;
             var roundCount = score.rounds.length;
-            var average = scoreAmount/roundCount;
+            var average = (roundCount == 0) ? 0 : (scoreAmount/roundCount);
+            average = 100*average/4.0;
             var averageRound = parseFloat(Math.round(average * 100) / 100).toFixed(2);
             var averageString = ("" + averageRound).padStart(4, ' ').replaceAll(' ', '&nbsp;');
             var l1 = 10;
