@@ -88,6 +88,9 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
         if (logger.isDebugEnabled()) {
             logger.debug("Player {} waits on Lobby", player.lg.id());
         }
+        if (waiting.contains(player)) {
+            waiting.remove(player);
+        }
         waiting.add(player);
         return new LobbyPlayerBoard(waiting) { // there are all important methods
             @Override
@@ -100,6 +103,11 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
                 // to null Hero, just destroy, but there we
                 // should renew lobby Hero instance
                 player.setHero(null);
+            }
+
+            @Override
+            public String toString() {
+                return "LB@" + Integer.toHexString(this.hashCode());
             }
 
             @Override

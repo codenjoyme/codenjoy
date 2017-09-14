@@ -225,6 +225,11 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(LOBBY_FORCES, PLAYER5);
         assertL(LOBBY_LEVEL, PLAYER6);
         assertE(LOBBY_FORCES, PLAYER6);
+    }
+
+    @Test
+    public void shouldCreateSixPlayersInTwoDifferentRooms_twoWillBeOnLobby_thenCreateTwoAndAllStartsGame() {
+        shouldCreateSixPlayersInTwoDifferentRooms_twoWillBeOnLobby();
 
         // when
         // total users = 8
@@ -256,7 +261,6 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         assertE(forces2, PLAYER7);
         assertL(level2, PLAYER8);
         assertE(forces2, PLAYER8);
-
     }
 
     @Test
@@ -1713,7 +1717,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
     }
 
     @Test
-    public void shouldWhenRunCommandLobbyHerIt() {
+    public void shouldRunCommandLobbyFromSettings() {
         int old = data.lobbyCapacity();
         try {
             data.lobbyCapacity(5);
@@ -1767,6 +1771,46 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         } finally {
             data.lobbyCapacity(old);
         }
+    }
+
+    @Test
+    public void shouldClearPlayersScoresWhenTheyOnLobby() {
+        shouldCreateSixPlayersInTwoDifferentRooms_twoWillBeOnLobby();
+
+        for (int player = PLAYER1; player <= PLAYER6; player++) {
+            game(player).newGame();
+        }
+
+        tickAll();
+
+        // then
+        String level1 =
+                "╔════┐\n" +
+                "║..1.│\n" +
+                "║4...│\n" +
+                "║...2│\n" +
+                "║.3..│\n" +
+                "└────┘\n";
+        String forces1 =
+                "------\n" +
+                "---♥--\n" +
+                "-♠----\n" +
+                "----♦-\n" +
+                "--♣---\n" +
+                "------\n";
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
+        assertL(level1, PLAYER3);
+        assertE(forces1, PLAYER3);
+        assertL(level1, PLAYER4);
+        assertE(forces1, PLAYER4);
+
+        assertL(LOBBY_LEVEL, PLAYER5);
+        assertE(LOBBY_FORCES, PLAYER5);
+        assertL(LOBBY_LEVEL, PLAYER6);
+        assertE(LOBBY_FORCES, PLAYER6);
     }
 }
 
