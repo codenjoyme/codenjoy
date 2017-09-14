@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import java.io.*;
 import java.util.Calendar;
 
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
+
 /**
  * Created by Oleksandr_Baglai on 2017-09-14.
  */
@@ -46,10 +48,14 @@ public class GameLogger {
     }
 
     public void start() {
+        if (!data.gameLoggingEnable()) return;
+
         if (writer != null) {
             stop();
         }
-        File file = new File("game-" + expansion.id() + "-" + Calendar.getInstance().getTimeInMillis() + ".txt");
+
+        new File("gameData").mkdirs();
+        File file = new File("gameData\\game-" + expansion.id() + "-" + Calendar.getInstance().getTimeInMillis() + ".txt");
         try {
             FileOutputStream fos = new FileOutputStream(file);
             writer = new BufferedWriter(new OutputStreamWriter(fos));
@@ -60,6 +66,8 @@ public class GameLogger {
     }
 
     public void logState() {
+        if (!data.gameLoggingEnable()) return;
+
         try {
             expansion.getPlayers().forEach(player -> {
                 try {
@@ -87,12 +95,16 @@ public class GameLogger {
     }
 
     private void write(String format) throws IOException {
+        if (!data.gameLoggingEnable()) return;
+
         writer.write(format);
         writer.newLine();
         writer.flush();
     }
 
     public void stop() {
+        if (!data.gameLoggingEnable()) return;
+
         try {
             write("Game finished");
             writer.close();

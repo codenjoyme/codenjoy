@@ -30,6 +30,7 @@ import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.*;
@@ -2453,6 +2454,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         verify(PLAYER1).event(DRAW());
     }
 
+    @Ignore
     @Test
     public void testBug() {
         givenSize(20);

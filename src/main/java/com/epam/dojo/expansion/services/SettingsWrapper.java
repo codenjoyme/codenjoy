@@ -64,6 +64,7 @@ public final class SettingsWrapper {
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
     private final Parameter<Boolean> lobbyEnable;
+    private final Parameter<Boolean> gameLoggingEnable;
     private final List<Parameter<String>> levels;
     private final int totalSingleLevels;
     private final Parameter<Integer> leaveForceCount;
@@ -105,6 +106,7 @@ public final class SettingsWrapper {
         defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
 
         command = settings.addEditBox("Command").type(String.class).def("");
+        gameLoggingEnable = settings.addEditBox("Game logging enable").type(Boolean.class).def(false);
 
         for (int index = 0; index < MULTI.size(); index++) {
             String name = MULTI.get(index);
@@ -156,6 +158,10 @@ public final class SettingsWrapper {
 
     public boolean shufflePlayers() {
         return shufflePlayers.getValue();
+    }
+
+    public boolean gameLoggingEnable() {
+        return gameLoggingEnable.getValue();
     }
 
     public boolean lobbyEnable() {
