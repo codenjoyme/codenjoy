@@ -61,6 +61,7 @@ var boardAllPageLoad = function() {
                 star = 'second';
             }
 
+            var roundCount = score.rounds.length;
             var l1 = 10;
             var l2 = l1 + 20;
             var rounds = score.rounds.reverse().join('');
@@ -80,7 +81,7 @@ var boardAllPageLoad = function() {
                 '<td><span class="' + star + ' star">' + count + '<span></td>' +
                 '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
                 '<td class="left">' + score +
-                    '<span class="small-round">' + rounds1 + '</span>' +
+                    '<span class="small-round">' + '[' + roundCount + ']' + rounds1 + '</span>' +
                     '<span class="smaller-round">' + rounds2 + '</span>' +
                     '</td>' +
                 '</tr>';
