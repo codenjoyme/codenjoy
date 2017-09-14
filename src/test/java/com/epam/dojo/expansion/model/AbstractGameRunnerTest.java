@@ -207,7 +207,7 @@ public class AbstractGameRunnerTest {
     }
 
     private Joystick joystick(int player) {
-        return games.get(player).getJoystick();
+        return game(player).getJoystick();
     }
 
     protected void givenLevels() {

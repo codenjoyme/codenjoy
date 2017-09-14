@@ -118,10 +118,6 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     @Override
     public void act(int... p) {
-        if (!alive) {
-            return;
-        }
-
         if (p.length == 0) return;
 
         if (p[0] == 0) {

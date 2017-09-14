@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Created by oleksandr.baglai on 27.06.2016.
@@ -44,7 +45,7 @@ public class ProgressBar {
 
     private static Logger logger = DLoggerFactory.getLogger(ProgressBar.class);
 
-    private PlayerLobby lobby;
+    private Supplier<PlayerLobby> lobby;
     private GameFactory factory;
     private Player player;
 
@@ -60,7 +61,7 @@ public class ProgressBar {
     private Printer printer;
     private Single gameOwner;
 
-    public ProgressBar(GameFactory factory, PlayerLobby lobby) {
+    public ProgressBar(GameFactory factory, Supplier<PlayerLobby> lobby) {
         this.factory = factory;
         this.lobby = lobby;
         single = factory.single();
@@ -176,7 +177,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = lobby.start(player);
+        current = lobby.get().start(player);
         processCurrent(0);
     }
 
@@ -221,7 +222,7 @@ public class ProgressBar {
 
     protected void setPlayer(Player player) {
         this.player = player;
-        lobby.addPlayer(player);
+        lobby.get().addPlayer(player);
     }
 
     public void start(String save) {

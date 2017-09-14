@@ -104,7 +104,7 @@ public class ProgressBarTest {
         multiple = new DummyExpansion(Arrays.asList(level5), dice, true);
         StubGamesGameFactory factory = new StubGamesGameFactory(single, multiple);
         PlayerLobby lobby = new NotWaitPlayerLobby(factory);
-        progressBar = new ProgressBar(factory, lobby);
+        progressBar = new ProgressBar(factory, () -> lobby);
 
         player = new Player(mock(EventListener.class), progressBar);
         progressBar.start(null);

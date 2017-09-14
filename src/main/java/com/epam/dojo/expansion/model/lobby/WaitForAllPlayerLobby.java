@@ -61,7 +61,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
         } else if (lobby instanceof NotWaitPlayerLobby) {
             NotWaitPlayerLobby another = (NotWaitPlayerLobby) lobby;
             this.factory = another.factory;
-            this.letThemGo();
+            this.letThemGo(true);
             all.clear();
         }
     }
@@ -140,10 +140,10 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             return;
         }
 
-        letThemGo();
+        letThemGo(false);
     }
 
-    public void letThemGo() {
+    public void letThemGo(boolean all) {
         if (data.shufflePlayers()) {
             Collections.shuffle(waiting);
         }
@@ -151,21 +151,21 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
         }
         PlayerBoard room = factory.newMultiple();
-        for (Player p : waiting) {
+        for (Player p : waiting.toArray(new Player[0])) {
             room.loadLevel(0);
             if (!room.isFree()) {
+                if (!all && waiting.size() < 4) {
+                    break;
+                }
                 room = factory.newMultiple();
             }
             p.setPlayerBoard(room);
+            waiting.remove(p);
         }
-        waiting.clear();
+
     }
 
     private boolean isLetThemGo() {
-        if (data.lobbyCapacity() == -1) {
-            return all.size() != 1 && all.size() == waiting.size();
-        } else {
-            return waiting.size() >= data.lobbyCapacity();
-        }
+        return waiting.size() >= data.lobbyCapacity();
     }
 }

@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -45,11 +46,11 @@ public class Single implements Game {
 
     private Ticker ticker;
     private ProgressBar progressBar;
-    private final PlayerLobby lobby;
+    private Supplier<PlayerLobby> lobby;
     private Player player;
     private String save;
 
-    public Single(GameFactory gameFactory, PlayerLobby lobby, EventListener listener,
+    public Single(GameFactory gameFactory, Supplier<PlayerLobby> lobby, EventListener listener,
                   PrinterFactory factory, Ticker ticker, Dice dice, String save) {
         this.save = save;
         this.ticker = ticker;
@@ -117,7 +118,7 @@ public class Single implements Game {
 
     @Override
     public void destroy() {
-        lobby.remove(player);
+        lobby.get().remove(player);
         progressBar.remove(player);
         progressBar.setCurrent(null);
     }

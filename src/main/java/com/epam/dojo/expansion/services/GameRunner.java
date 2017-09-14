@@ -102,10 +102,10 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
-        Game result = new Single(gameFactory, lobby, listener, factory, ticker, dice, save);
-        result.newGame();
-        games.add(result);
-        return result;
+        Game single = new Single(gameFactory, () -> lobby, listener, factory, ticker, dice, save);
+        single.newGame();
+        games.add(single);
+        return single;
     }
 
     @Override

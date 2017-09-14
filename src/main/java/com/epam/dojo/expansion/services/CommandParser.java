@@ -45,7 +45,7 @@ public class CommandParser { // TODO test this monster
             String command = data.command();
             if (command.equals("lobby.letThemGo()")) {
                 if (runner.lobby instanceof WaitForAllPlayerLobby) {
-                    ((WaitForAllPlayerLobby) runner.lobby).letThemGo();
+                    ((WaitForAllPlayerLobby) runner.lobby).letThemGo(false);
                 }
             }
 //            else if (command.equals("any command that you want to run from admin")) {

@@ -89,6 +89,9 @@ public abstract class AbstractSinglePlayersTest {
     public static final int PLAYER31 = 30;
     public static final int PLAYER32 = 31;
     public static final int PLAYER33 = 32;
+    public static final int PLAYER34 = 33;
+    public static final int PLAYER35 = 34;
+    public static final int PLAYER36 = 35;
 
     protected Dice dice;
     protected List<EventListener> listeners;
@@ -159,7 +162,7 @@ public abstract class AbstractSinglePlayersTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Single game = new Single(gameFactory, lobby, listener, null, ticker, dice, null);
+        Single game = new Single(gameFactory, () -> lobby, listener, null, ticker, dice, null);
         singles.add(game);
         game.newGame();
         heroes.add(game.getPlayer().getHero());
