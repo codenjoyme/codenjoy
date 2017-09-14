@@ -30,13 +30,13 @@ public class PlayerSave {
     public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY, StringUtils.EMPTY);
 
     private String protocol;
-    private int score;
+    private Object score;
     private String callbackUrl;
     private String gameName;
     private String name;
     private String save;
 
-    public PlayerSave(String name, String callbackUrl, String gameName, int score, String protocol, String save) {
+    public PlayerSave(String name, String callbackUrl, String gameName, Object score, String protocol, String save) {
         this.name = name;
         this.gameName = gameName;
         this.callbackUrl = callbackUrl;
@@ -58,7 +58,7 @@ public class PlayerSave {
         return protocol;
     }
 
-    public int getScore() {
+    public Object getScore() {
         return score;
     }
 

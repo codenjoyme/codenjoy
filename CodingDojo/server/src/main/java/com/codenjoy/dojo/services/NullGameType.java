@@ -35,7 +35,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
+    public PlayerScores getPlayerScores(Object score) {
         throw exception();
     }
 

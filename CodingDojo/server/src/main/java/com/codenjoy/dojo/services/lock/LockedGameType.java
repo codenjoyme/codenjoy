@@ -42,7 +42,7 @@ public class LockedGameType implements GameType {
     }
     
     @Override
-    public PlayerScores getPlayerScores(int score) {
+    public PlayerScores getPlayerScores(Object score) {
         return gameType.getPlayerScores(score);
     }
 

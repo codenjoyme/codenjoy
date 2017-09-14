@@ -108,7 +108,7 @@ public class Player implements ScreenRecipient {
         return scores.clear();
     }
 
-    public int getScore() {
+    public Object getScore() {
         return scores.getScore();
     }
 

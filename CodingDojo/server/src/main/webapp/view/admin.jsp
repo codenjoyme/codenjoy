@@ -219,7 +219,7 @@
                     <td>
                         <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll&nbsp;&nbsp;</a>
                     </td>
-                    <td class="header">ViewPlayerGame&nbsp;&nbsp;</td>
+                    <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame&nbsp;&nbsp;</a></td>
                     <td class="header">LoadAI&nbsp;&nbsp;</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">

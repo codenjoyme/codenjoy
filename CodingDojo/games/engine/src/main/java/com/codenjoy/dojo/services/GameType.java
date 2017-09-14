@@ -37,7 +37,7 @@ public interface GameType extends Tickable {
      * @param score значения очков перед началом игры (используется например при загрузке игры из save)
      * @return Возвращается объект который умеет в зависимости от типа события на карте подчитывать очки игроков
      */
-    PlayerScores getPlayerScores(int score);
+    PlayerScores getPlayerScores(Object score);
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя

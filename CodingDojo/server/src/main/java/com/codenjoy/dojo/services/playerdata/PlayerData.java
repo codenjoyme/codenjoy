@@ -31,7 +31,7 @@ public class PlayerData implements ScreenData {
 
     private Object board;
     private String gameName;
-    private int score;
+    private Object score;
     private int maxLength;
     private int length;
     private int boardSize;
@@ -39,7 +39,7 @@ public class PlayerData implements ScreenData {
     private JSONObject scores;
     private JSONObject heroesData;
 
-    public PlayerData(int boardSize, Object board, String gameName, int score,
+    public PlayerData(int boardSize, Object board, String gameName, Object score,
                       int maxLength, int length,
                       String info, JSONObject scores, JSONObject heroesData) {
         this.board = board;
@@ -73,7 +73,7 @@ public class PlayerData implements ScreenData {
         return board;
     }
 
-    public int getScore() {
+    public Object getScore() {
         return score;
     }
 

@@ -130,7 +130,7 @@ public class PlayerServiceImpl implements PlayerService {
         return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getProtocol(), save.getSave());
     }
 
-    private Player register(String name, String callbackUrl, String gameName, int score, String protocol, String data) {
+    private Player register(String name, String callbackUrl, String gameName, Object score, String protocol, String data) {
         Player player = get(name);
         GameType gameType = gameService.getGame(gameName);
 

@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem){
+function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem, onParseValue){
 
     var leaderboard = $("#leaderboard");
     leaderboard.show();
@@ -32,7 +32,11 @@ function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem){
         var vals = new Array();
 
         for (i in data) {
-            vals.push([i, data[i]])
+            var score = data[i];
+            if (!!onParseValue) {
+                score = onParseValue(score);
+            }
+            vals.push([i, score])
         }
         vals = vals.sort(function(a, b) {
             return b[1] - a[1];

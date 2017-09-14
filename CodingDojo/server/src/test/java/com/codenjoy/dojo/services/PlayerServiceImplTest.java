@@ -116,8 +116,13 @@ public class PlayerServiceImplTest {
         boardCaptor = ArgumentCaptor.forClass(String.class);
 
         playerScores1 = mock(PlayerScores.class);
+        when(playerScores1.getScore()).thenReturn(0);
+
         playerScores2 = mock(PlayerScores.class);
+        when(playerScores2.getScore()).thenReturn(0);
+
         playerScores3 = mock(PlayerScores.class);
+        when(playerScores3.getScore()).thenReturn(0);
 
         when(chatService.getChatLog()).thenReturn("chat");
 

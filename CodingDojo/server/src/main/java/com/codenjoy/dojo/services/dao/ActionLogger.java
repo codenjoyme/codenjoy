@@ -56,7 +56,7 @@ public class ActionLogger {
                     "time varchar(255), " +
                     "player_name varchar(255), " +
                     "game_type varchar(255), " +
-                    "score int, " +
+                    "score varchar(255), " +
                     "board varchar(10000));");
         active = false;
         count = 0;
@@ -98,7 +98,7 @@ public class ActionLogger {
                         stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
                         stmt.setString(2, data.getPlayerName());
                         stmt.setString(3, data.getGameType());
-                        stmt.setInt(4, data.getScore());
+                        stmt.setString(4, data.getScore().toString());
                         stmt.setString(5, data.getBoard());
                         stmt.addBatch();
                     }

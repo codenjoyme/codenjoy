@@ -58,7 +58,7 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 

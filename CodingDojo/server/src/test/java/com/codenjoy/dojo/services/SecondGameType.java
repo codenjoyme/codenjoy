@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.settings.Settings;
  */
 public class SecondGameType implements GameType {
     @Override
-    public PlayerScores getPlayerScores(int score) {
+    public PlayerScores getPlayerScores(Object score) {
         return null;
     }
 

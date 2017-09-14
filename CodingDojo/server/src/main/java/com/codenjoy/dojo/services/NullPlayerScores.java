@@ -32,7 +32,7 @@ public class NullPlayerScores implements PlayerScores {
     }
 
     @Override
-    public int getScore() {
+    public Integer getScore() {
         return 0;
     }
 
