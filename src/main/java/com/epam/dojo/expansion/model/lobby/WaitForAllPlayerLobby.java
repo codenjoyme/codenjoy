@@ -158,11 +158,12 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
         if (logger.isDebugEnabled()) {
             logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
         }
+        if (notEnough(all)) return;
         PlayerBoard room = factory.newMultiple();
         for (Player p : waiting.toArray(new Player[0])) {
             room.loadLevel(0);
             if (!room.isFree()) {
-                if (!all && waiting.size() < 4) {
+                if (notEnough(all)) {
                     break;
                 }
                 room = factory.newMultiple();
@@ -171,6 +172,10 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             waiting.remove(p);
         }
 
+    }
+
+    private boolean notEnough(boolean all) {
+        return !all && waiting.size() < 4;
     }
 
     private boolean isLetThemGo() {
