@@ -68,6 +68,11 @@ public interface Settings {
     boolean changed();
 
     /**
+     * @return Список имен параметров, которые поменялись
+     */
+    List<String> whatChanged();
+
+    /**
      * Так ты сообщаешь что отреагировал на все изменения.
      */
     void changesReacted();

@@ -99,6 +99,17 @@ public class SettingsImpl implements Settings {
     }
 
     @Override
+    public List<String> whatChanged() {
+        List<String> result = new LinkedList<>();
+        for (Parameter<?> parameter : parameters) {
+            if (parameter.changed()) {
+                result.add(parameter.getName());
+            }
+        }
+        return result;
+    }
+
+    @Override
     public void changesReacted() {
         for (Parameter<?> parameter : parameters) {
             parameter.changesReacted();

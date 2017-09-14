@@ -190,6 +190,8 @@ public class SettingsTest {
         assertEquals(false, select.changed());
         assertEquals(false, check.changed());
         assertEquals(false, settings.changed());
+
+        assertEquals("", settings.whatChanged().toString());
     }
 
     @Test
@@ -285,5 +287,31 @@ public class SettingsTest {
 
         assertEquals(3, edit.getValue().a);
         assertEquals(4, edit.getValue().b);
+    }
+
+    @Test
+    public void shouldWhatChanged() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+
+        // when then
+        edit.update(1);
+        assertEquals("[edit]", settings.whatChanged().toString());
+
+        // when then
+        select.update("option1");
+        assertEquals("[edit, select]", settings.whatChanged().toString());
+
+        // when then
+        settings.changesReacted();
+        check.update(true);
+        assertEquals("[check]", settings.whatChanged().toString());
+
+        // when then
+        settings.changesReacted();
+        assertEquals("[]", settings.whatChanged().toString());
     }
 }

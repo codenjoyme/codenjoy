@@ -70,6 +70,11 @@ public class NullSettings implements Settings {
     }
 
     @Override
+    public List<String> whatChanged() {
+        return new LinkedList<>();
+    }
+
+    @Override
     public void changesReacted() {
         // do nothing
     }
