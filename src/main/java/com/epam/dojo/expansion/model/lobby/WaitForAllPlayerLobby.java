@@ -47,6 +47,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     private List<Player> all = new LinkedList<>();
     private List<Player> waiting = new LinkedList<>();
+    private List<Player> waitingALot = new LinkedList<>();
 
     public WaitForAllPlayerLobby(GameFactory factory) {
         this.factory = factory;
@@ -73,6 +74,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
         }
         all.remove(player);
         waiting.remove(player);
+        waitingALot.remove(player);
     }
 
     @Override
@@ -153,7 +155,9 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
 
     public void letThemGo(boolean all) {
         if (data.shufflePlayers()) {
+            waiting.removeAll(waitingALot);
             Collections.shuffle(waiting);
+            waiting.addAll(0, waitingALot);
         }
         if (logger.isDebugEnabled()) {
             logger.debug("Players on Lobby will start new game {}", Player.lg(waiting));
@@ -171,7 +175,8 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
             p.setPlayerBoard(room);
             waiting.remove(p);
         }
-
+        waitingALot.clear();
+        waitingALot.addAll(waiting);
     }
 
     private boolean notEnough(boolean all) {
