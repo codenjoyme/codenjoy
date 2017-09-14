@@ -1426,6 +1426,63 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             data.lobbyEnable(old4);
         }
     }
+
+    @Test
+    public void shouldWhenRunCommandLobbyHerIt() {
+        int old = data.lobbyCapacity();
+        try {
+            data.lobbyCapacity(5);
+
+            givenLevels();
+
+            createNewGame();
+            createNewGame();
+            createNewGame();
+
+            // when then
+            // first tick so all go to lobby and start new game
+            tickAll();
+
+            assertL(LOBBY_LEVEL, PLAYER1);
+            assertE(LOBBY_FORCES, PLAYER1);
+            assertL(LOBBY_LEVEL, PLAYER2);
+            assertE(LOBBY_FORCES, PLAYER2);
+            assertL(LOBBY_LEVEL, PLAYER3);
+            assertE(LOBBY_FORCES, PLAYER3);
+
+            // when
+            data.command("lobby.letThemGo()");
+            tickAll();
+
+            // then
+            // clear settings
+            assertEquals("", data.command());
+
+            // all players go to boards
+            String level =
+                    "╔════┐\n" +
+                    "║1..2│\n" +
+                    "║....│\n" +
+                    "║....│\n" +
+                    "║4..3│\n" +
+                    "└────┘\n";
+            String forces =
+                    "------\n" +
+                    "-♥--♦-\n" +
+                    "------\n" +
+                    "------\n" +
+                    "----♣-\n" +
+                    "------\n";
+            assertL(level, PLAYER1);
+            assertE(forces, PLAYER1);
+            assertL(level, PLAYER2);
+            assertE(forces, PLAYER2);
+            assertL(level, PLAYER3);
+            assertE(forces, PLAYER3);
+        } finally {
+            data.lobbyCapacity(old);
+        }
+    }
 }
 
 

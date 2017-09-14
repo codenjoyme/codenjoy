@@ -143,7 +143,7 @@ public class WaitForAllPlayerLobby implements PlayerLobby, Tickable {
         letThemGo();
     }
 
-    private void letThemGo() {
+    public void letThemGo() {
         if (data.shufflePlayers()) {
             Collections.shuffle(waiting);
         }

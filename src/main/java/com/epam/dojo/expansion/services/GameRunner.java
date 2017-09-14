@@ -25,10 +25,16 @@ package com.epam.dojo.expansion.services;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.epam.dojo.expansion.model.*;
+import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.MultipleGameFactory;
+import com.epam.dojo.expansion.model.Single;
+import com.epam.dojo.expansion.model.Ticker;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
 import org.slf4j.Logger;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
@@ -45,13 +51,15 @@ public class GameRunner extends AbstractGameType implements GameType  {
     private MultipleGameFactory gameFactory;
     private Ticker ticker;
     private int size;
-    private PlayerLobby lobby;
+    protected PlayerLobby lobby;
+    protected List<Game> games;
 
     public GameRunner() {
         SettingsWrapper.setup(settings);
 
         ticker = new Ticker();
         dice = new RandomDice();
+        games = new LinkedList<>();
     }
 
     private void initGameFactory() {
@@ -94,9 +102,10 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
-        Game single = new Single(gameFactory, lobby, listener, factory, ticker, dice, save);
-        single.newGame();
-        return single;
+        Game result = new Single(gameFactory, lobby, listener, factory, ticker, dice, save);
+        result.newGame();
+        games.add(result);
+        return result;
     }
 
     @Override
@@ -120,7 +129,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public void tick() {
+        processAdminCommands();
         initGameFactory();
         lobby.tick();
+    }
+
+    private void processAdminCommands() {
+        new CommandParser(this).parse(settings);
     }
 }

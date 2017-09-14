@@ -68,6 +68,7 @@ public final class SettingsWrapper {
     private final int totalSingleLevels;
     private final Parameter<Integer> leaveForceCount;
     private final Settings settings;
+    private final Parameter<String> command;
 
     public static SettingsWrapper setup(Settings settings) {
         return new SettingsWrapper(settings);
@@ -102,6 +103,8 @@ public final class SettingsWrapper {
 
         defenderHasAdvantage = settings.addEditBox("Defender has advantage").type(Boolean.class).def(true);
         defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
+
+        command = settings.addEditBox("Command").type(String.class).def("");
 
         for (int index = 0; index < MULTI.size(); index++) {
             String name = MULTI.get(index);
@@ -183,6 +186,10 @@ public final class SettingsWrapper {
         return defenderHasAdvantage.getValue();
     }
 
+    public String command() {
+        return command.getValue();
+    }
+
     private static final DefenderHasAdvantageAttack DEFENDER_HAS_ADVANTAGE_ATTACK = new DefenderHasAdvantageAttack();
     private static final OneByOneAttack ONE_BY_ONE_ATTACK = new OneByOneAttack();
 
@@ -251,6 +258,11 @@ public final class SettingsWrapper {
         return this;
     }
 
+    public SettingsWrapper command(String value) {
+        command.update(value);
+        return this;
+    }
+
     public static void cleanMulti(int afterIndex) {
         int index = 0;
         for (Parameter parameter : data.levels.toArray(new Parameter[0])) {
@@ -277,4 +289,5 @@ public final class SettingsWrapper {
             return new NotWaitPlayerLobby(factory);
         }
     }
+
 }
