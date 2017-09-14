@@ -30,14 +30,14 @@
 }
 
 .board {
-  width: 450px;
+  width: 500px;
   float: right;
   box-sizing: border-box;
   color: #fff;
 }
 
 .player-canvas {
-  height: 550px;
+  height: 400px;
 }
 
 .leader {
@@ -54,4 +54,8 @@
 
 .smaller-round {
     font-size: 30%;
+}
+
+canvas {
+    width:400px!important;
 }
