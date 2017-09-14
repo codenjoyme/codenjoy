@@ -48,6 +48,10 @@
     text-align: left;
 }
 
-#table-logs td span.small {
-    font-size: 16px!important;
+.small-round {
+    font-size: 60%;
+}
+
+.smaller-round {
+    font-size: 30%;
 }

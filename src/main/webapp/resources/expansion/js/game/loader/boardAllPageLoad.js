@@ -61,14 +61,28 @@ var boardAllPageLoad = function() {
                 star = 'second';
             }
 
-            var rounds = score.rounds.reverse().join('&nbsp;');
-            var score = ("" + score.score).padStart(5, ' ').replaceAll(' ', '&nbsp;');
+            var l1 = 10;
+            var l2 = l1 + 20;
+            var rounds = score.rounds.reverse().join('');
+            var rounds1 = rounds.substring(0, l1);
+            var dots = '...';
+            if (rounds.length > l1) {
+                var rounds2 = rounds.substring(l1, l2);
+                if (rounds.length > l2) {
+                    rounds2 = rounds2 + dots;
+                }
+            } else {
+                rounds2 = '';
+            }
+            var score = ("" + score.score).padStart(4, ' ').replaceAll(' ', '&nbsp;');
 
             return '<tr>' +
                 '<td><span class="' + star + ' star">' + count + '<span></td>' +
                 '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
-                '<td class="left">' + score + '&nbsp;' +
-                    '<span class="small">(' + rounds + ')</span></td>' +
+                '<td class="left">' + score +
+                    '<span class="small-round">' + rounds1 + '</span>' +
+                    '<span class="smaller-round">' + rounds2 + '</span>' +
+                    '</td>' +
                 '</tr>';
         },
         function(scoreJson) {
