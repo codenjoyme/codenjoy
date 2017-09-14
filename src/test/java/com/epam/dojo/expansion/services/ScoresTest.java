@@ -38,7 +38,7 @@ import static junit.framework.Assert.assertEquals;
  * Time: 20:35
  */
 public class ScoresTest {
-    private PlayerScores scores;
+    private Scores scores;
 
     public void loose() {
         scores.event(Events.LOOSE());
@@ -50,7 +50,7 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140);
+        scores = new Scores("{'score':140}");
 
         win(1);  //+
         win(1);  //+
@@ -59,27 +59,31 @@ public class ScoresTest {
 
         loose(); //-
 
-        assertEquals(140 + 4 - 0, scores.getScore());
+        assertEquals(140 + 4 - 0, score());
+    }
+
+    private int score() {
+        return scores.getScore().getInt("score");
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new Scores(0);
+        scores = new Scores("{'score':0}");
 
         loose();   //-
 
-        assertEquals(0, scores.getScore());
+        assertEquals(0, score());
     }
 
     @Test
     public void shouldClearScore() {
-        scores = new Scores(0);
+        scores = new Scores("{'score':0}");
 
         win(1);    // +
 
         scores.clear();
 
-        assertEquals(0, scores.getScore());
+        assertEquals(0, score());
     }
 
 

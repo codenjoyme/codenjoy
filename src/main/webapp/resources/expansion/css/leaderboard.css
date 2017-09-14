@@ -43,3 +43,11 @@
 .leader {
   transition: none;
 }
+
+#table-logs th.left, #table-logs td.left  {
+    text-align: left;
+}
+
+#table-logs td span.small {
+    font-size: 16px!important;
+}

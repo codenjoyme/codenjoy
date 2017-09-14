@@ -52,6 +52,7 @@ public class Events {
 
     public Events() {
         type = Type.LOOSE;
+        this.score = 0;
     }
 
     public int getScore() {

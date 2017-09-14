@@ -24,6 +24,32 @@
  */
 
 var boardAllPageLoad = function() {
+
+    // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+    if (!String.prototype.padStart) {
+        String.prototype.padStart = function padStart(targetLength,padString) {
+            targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+            padString = String(padString || ' ');
+            if (this.length > targetLength) {
+                return String(this);
+            }
+            else {
+                targetLength = targetLength-this.length;
+                if (targetLength > padString.length) {
+                    padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+                }
+                return padString.slice(0,targetLength) + String(this);
+            }
+        };
+    }
+
+    // https://stackoverflow.com/a/17606289
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.split(search).join(replacement);
+    };
+
     initLeadersTable(game.contextPath, game.playerName, game.code,
         function() {
         },
@@ -34,11 +60,19 @@ var boardAllPageLoad = function() {
             } else if (count <= 3) {
                 star = 'second';
             }
+
+            var rounds = score.rounds.reverse().join('&nbsp;');
+            var score = ("" + score.score).padStart(5, ' ').replaceAll(' ', '&nbsp;');
+
             return '<tr>' +
                 '<td><span class="' + star + ' star">' + count + '<span></td>' +
                 '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
-                '<td class="center">' + score + '</td>' +
+                '<td class="left">' + score + '&nbsp;' +
+                    '<span class="small">(' + rounds + ')</span></td>' +
                 '</tr>';
+        },
+        function(scoreJson) {
+            return scoreJson.score;
         });
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');

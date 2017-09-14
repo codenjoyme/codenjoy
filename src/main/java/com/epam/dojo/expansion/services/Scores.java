@@ -24,37 +24,59 @@ package com.epam.dojo.expansion.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Scores implements PlayerScores {
 
-    private volatile int score;
+    private final static String SCORE = "score";
+    public static final String ROUNDS = "rounds";
 
-    public Scores(int startScore) {
-        this.score = startScore;
+    private volatile int current;
+    private JSONObject log;
+
+    public Scores(Object startScore) {
+        if (startScore instanceof Integer) {
+            this.current = (Integer)startScore;
+        } else if (startScore instanceof String) {
+            JSONObject object = new JSONObject((String) startScore);
+            this.current = object.getInt(SCORE);
+        }
+        log = new JSONObject();
+        clearRounds();
+    }
+
+    private void clearRounds() {
+        log.put(ROUNDS, new JSONArray());
     }
 
     @Override
     public int clear() {
-        score = 0;
-        return 0;
+        clearRounds();
+        return current = 0;
     }
 
     @Override
-    public int getScore() {
-        return score;
+    public JSONObject getScore() {
+        log.put(SCORE, current);
+        return log;
     }
-
     @Override
     public void event(Object input) {
         Events events = (Events)input;
 
+        int score = events.getScore();
+        rounds().put(score);
+
         if (events.getType() == Events.Type.WIN) {
-            score += events.getScore();
+            current += score;
         } else if (events.getType() == Events.Type.LOOSE) {
-            score -= events.getScore();
+            current -= score;
         }
-        score = Math.max(0, score);
+        current = Math.max(0, current);
+    }
+
+    private JSONArray rounds() {
+        return log.getJSONArray(ROUNDS);
     }
 }
