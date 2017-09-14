@@ -36,7 +36,7 @@ function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem, on
             if (!!onParseValue) {
                 score = onParseValue(score);
             }
-            vals.push([i, score])
+            vals.push([i, score, data[i]])
         }
         vals = vals.sort(function(a, b) {
             return b[1] - a[1];
@@ -45,7 +45,7 @@ function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem, on
         var result = new Object();
 
         for (i in vals) {
-            result[vals[i][0]] = vals[i][1];
+            result[vals[i][0]] = vals[i][2];
         }
 
         return result;
