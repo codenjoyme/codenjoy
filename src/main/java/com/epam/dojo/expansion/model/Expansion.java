@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.epam.dojo.expansion.model.attack.OneByOneAttack;
 import com.epam.dojo.expansion.model.levels.Cell;
 import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.items.*;
@@ -55,6 +54,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
+    private final GameLogger gameLogger;
 
     private List<Level> levels;
     private Level level;
@@ -71,6 +71,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         this.levels = new LinkedList(levels);
         isMultiple = multiple;
         players = new LinkedList();
+        gameLogger = new GameLogger(this);
         cleanAfterGame();
     }
 
@@ -79,6 +80,9 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         roundTicks = 0;
         nothingChanged = true;
         losers = new LinkedList();
+        if (isMultiple) {
+            gameLogger.start();
+        }
     }
 
     @Override
@@ -103,6 +107,10 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             logger.debug("Expansion processing board calculations. " +
                             "State before processing {}",
                     toString());
+        }
+
+        if (isMultiple) {
+            gameLogger.logState();
         }
 
         if (isMultiple) {
@@ -587,7 +595,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             return Player.lg(Expansion.this.players);
         }
 
-        private PrinterData printer() {
+        public PrinterData printer() {
             try {
                 Printer printer = new Printer(Expansion.this, size());
                 return printer.getBoardAsString(Expansion.this.players.get(0));
