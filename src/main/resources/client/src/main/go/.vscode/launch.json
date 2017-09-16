@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Server",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2345,
+            "host": "127.0.0.1",
+            "program": "${workspaceRoot}",
+            "env": {},
+            "args": ["-url",
+                "ws://ecsc00104eef.epam.com:8080/codenjoy-contest/ws?user=nikita_smelov3@epam.com"],
+            "showLog": true
+        },
+        {
+            "name": "Launch",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "remotePath": "",
+            "port": 2345,
+            "host": "127.0.0.1",
+            "program": "${workspaceRoot}",
+            "env": {},
+            "args": ["-url",
+                "ws://127.0.0.1:8080/codenjoy-contest/ws?user=1@a.com"],
+            "showLog": true
+        }
+    ]
+}
