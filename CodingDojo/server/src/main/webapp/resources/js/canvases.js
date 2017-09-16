@@ -225,11 +225,24 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
         }
 
-        var drawPlayerNames = function(font) {
+        var drawPlayerNames = function(font, beforeDraw) {
             try {
+                var drawName = function(name, point, font, heroData) {
+                    var name = getNameFromEmail(name);
+                    var data = {
+                        'name':name,
+                        'point':point,
+                        'font':font,
+                        'heroData':heroData
+                    }
+                    if (!!beforeDraw) data = beforeDraw(data);
+                    canvas.drawText(data.name, data.point, data.font);
+                }
+
                 var board = getBoard();
                 if (singleBoardGame || !!board.showName) {
                     var currentPoint = null;
+                    var currentHeroData = null;
                     $.each(getHeroesData(), function(name, heroData) {
                         var point = heroData.coordinate;
                         if (!point) return; // TODO why this can happen?
@@ -240,12 +253,13 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         }
                         if (playerName == name) {
                             currentPoint = point;
+                            currentHeroData = heroData;
                         }
                         if (!board.onlyMyName && !!heroData.singleBoardGame) {
-                            canvas.drawText(getNameFromEmail(name), point, font);
+                            drawName(name, point, font, heroData);
                         }
                     });
-                    canvas.drawText(getNameFromEmail(playerName), currentPoint, font);
+                    drawName(playerName, currentPoint, font, currentHeroData);
                 }
             } catch (err) {
                 console.log(err);
