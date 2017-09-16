@@ -32,11 +32,11 @@
         </encoder>
     </appender>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <!--appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
-    </appender>
+    </appender-->
 
     <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
     <logger name="com.epam.dojo" level="DEBUG" additivity="true"/>
