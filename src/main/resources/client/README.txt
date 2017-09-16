@@ -1,6 +1,6 @@
-Codenjoy steps:
-
-- install Java - JDK 8 (
+For other clients please go to ./src/main/* and read readme
+For java client:
+- install Java - JDK 8
 - create JAVA_HOME environment variable
 - install Maven3
 - create M2_HOME environment variable
