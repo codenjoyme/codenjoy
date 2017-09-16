@@ -347,51 +347,68 @@ game.drawBoard = function(drawer) {
         console.log(err);
     }
 
-    if (!board.inLobby) {
-        fonts.userName = {};
-        fonts.userName.dx = -15;
-        fonts.userName.dy = -45;
-        fonts.userName.font = "22px 'verdana'";
-        fonts.userName.fillStyle = "#0FF";
-        fonts.userName.textAlign = "left";
-        fonts.userName.shadowColor = "#000";
-        fonts.userName.shadowOffsetX = 0;
-        fonts.userName.shadowOffsetY = 0;
-        fonts.userName.shadowBlur = 5;
-        drawer.drawPlayerNames(fonts.userName);
-    }
-
-    if (board.round != -1) {
-        fonts.round = {};
-        fonts.round.dx = 20;
-        fonts.round.dy = 0;
-        fonts.round.font = "50px 'verdana'";
-        fonts.round.fillStyle = "#F0F";
-        fonts.round.textAlign = "center";
-        fonts.round.shadowColor = "#000";
-        fonts.round.shadowOffsetX = 0;
-        fonts.round.shadowOffsetY = 0;
-        fonts.round.shadowBlur = 5;
-        var text = board.rounds - board.round;
-        canvas.drawText(text, {'x':9, 'y':18}, fonts.round);
-    }
-
-    if (!!allPlayersScreen) {
-        fonts.userBoard = {};
-        fonts.userBoard.dy = 45;
-        fonts.userBoard.dx = -40;
-        fonts.userBoard.font = "40px 'verdana'";
-        fonts.userBoard.fillStyle = "#FFF";
-        fonts.userBoard.textAlign = "left";
-        fonts.userBoard.shadowColor = "#000";
-        fonts.userBoard.shadowOffsetX = 0;
-        fonts.userBoard.shadowOffsetY = 0;
-        fonts.userBoard.shadowBlur = 5;
-        var text = playerName;
-        canvas.drawText(text, {'x':1, 'y':0}, fonts.userBoard);
-    }
-
     drawer.drawFog();
+
+    try {
+        if (!board.inLobby) {
+            fonts.userName = {};
+            fonts.userName.dx = -110;
+            fonts.userName.dy = -45;
+            fonts.userName.font = "30px 'verdana'";
+            fonts.userName.textAlign = "left";
+            fonts.userName.shadowColor = "#000";
+            fonts.userName.shadowOffsetX = 0;
+            fonts.userName.shadowOffsetY = 0;
+            fonts.userName.shadowBlur = 5;
+            drawer.drawPlayerNames(fonts.userName, function(data) {
+                var base = data.heroData.coordinate;
+                var colorBase = getColor(base.x, base.y, 0);
+                data.font.fillStyle = fonts.forces.fillStyles[colorBase];
+                data.font.shadowColor = fonts.forces.shadowStyles[colorBase];
+                return data;
+            });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
+    try {
+        if (board.round != -1) {
+            fonts.round = {};
+            fonts.round.dx = 20;
+            fonts.round.dy = 0;
+            fonts.round.font = "50px 'verdana'";
+            fonts.round.fillStyle = "#F0F";
+            fonts.round.textAlign = "center";
+            fonts.round.shadowColor = "#000";
+            fonts.round.shadowOffsetX = 0;
+            fonts.round.shadowOffsetY = 0;
+            fonts.round.shadowBlur = 5;
+            var text = board.rounds - board.round;
+            canvas.drawText(text, {'x':9, 'y':18}, fonts.round);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
+    try {
+        if (!!allPlayersScreen) {
+            fonts.userBoard = {};
+            fonts.userBoard.dy = 45;
+            fonts.userBoard.dx = -40;
+            fonts.userBoard.font = "40px 'verdana'";
+            fonts.userBoard.fillStyle = "#FFF";
+            fonts.userBoard.textAlign = "left";
+            fonts.userBoard.shadowColor = "#000";
+            fonts.userBoard.shadowOffsetX = 0;
+            fonts.userBoard.shadowOffsetY = 0;
+            fonts.userBoard.shadowBlur = 5;
+            var text = playerName;
+            canvas.drawText(text, {'x':1, 'y':0}, fonts.userBoard);
+        }
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 // ========================== demo stuff ==========================
