@@ -23,11 +23,15 @@ package com.epam.dojo.expansion.services;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.PlayerScores;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
 
 public class Scores implements PlayerScores {
+
+    private static Logger logger = DLoggerFactory.getLogger(Scores.class);
 
     private final static String SCORE = "score";
     public static final String ROUNDS = "rounds";
@@ -74,6 +78,10 @@ public class Scores implements PlayerScores {
             current -= score;
         }
         current = Math.max(0, current);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Scores after event {} is {}", input, getScore());
+        }
     }
 
     private JSONArray rounds() {
