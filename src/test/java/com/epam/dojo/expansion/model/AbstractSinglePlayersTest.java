@@ -93,6 +93,9 @@ public abstract class AbstractSinglePlayersTest {
     public static final int PLAYER35 = 34;
     public static final int PLAYER36 = 35;
 
+    public int INCREASE = 2;
+    public int MOVE = 1;
+
     protected Dice dice;
     protected List<EventListener> listeners;
     protected List<Single> singles;
@@ -191,8 +194,6 @@ public abstract class AbstractSinglePlayersTest {
     private Hero getOnlyMovingJoystick(Single single, final int x, final int y) {
         final Hero hero = (Hero) single.getJoystick();
         final Point pt = pt(x, y);
-        final int INCREASE = 2;
-        final int MOVE = 1;
         return new Hero() {
             @Override
             public void down() {
