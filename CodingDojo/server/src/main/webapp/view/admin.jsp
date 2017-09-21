@@ -208,19 +208,19 @@
                     <td class="header">IP</td>
                     <td class="header">Game name</td>
                     <td>
-                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
-                    <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame&nbsp;&nbsp;</a></td>
-                    <td class="header">LoadAI&nbsp;&nbsp;</td>
+                    <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;</td>
+                    <td class="header">LoadAI</td>&nbsp;&nbsp;
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
