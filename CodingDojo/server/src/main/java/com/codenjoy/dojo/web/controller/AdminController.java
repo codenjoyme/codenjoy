@@ -91,6 +91,15 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @RequestMapping(params = {"player", "data"}, method = RequestMethod.GET)
+    public String loadPlayerGameFromSave(@RequestParam("player") String name,
+                                         @RequestParam("data") String save,
+                                         Model model, HttpServletRequest request)
+    {
+        saveService.load(name, getGameName(request), save);
+        return "redirect:/board/player/" + name;
+    }
+
     @RequestMapping(params = "reloadAI", method = RequestMethod.GET)
     public String reloadAI(@RequestParam("reloadAI") String name, Model model, HttpServletRequest request) {
         playerService.reloadAI(name);

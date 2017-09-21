@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.lang.model.util.Types;
 import java.io.IOException;
 import java.util.*;
 
@@ -125,6 +127,27 @@ public class SaveServiceImplTest {
 
         // then
         verify(playerService).register(save);
+    }
+
+    @Test
+    public void shouldLoadPlayerWithExternalSave() {
+        // given
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "ws", "{'save':'data'}");
+
+        // when
+        saveService.load("vasia", "game", "{'save':'data'}");
+
+        // then
+        verifyNoMoreInteractions(saver);
+
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+        verify(playerService).register(captor.capture());
+        assertEquals("{'callbackUrl':'127.0.0.1'," +
+                "'gameName':'game'," +
+                "'name':'vasia'," +
+                "'protocol':'ws'," +
+                "'save':'{'save':'data'}'," +
+                "'score':0}", JsonUtils.cleanSorted(save));
     }
 
     @Test

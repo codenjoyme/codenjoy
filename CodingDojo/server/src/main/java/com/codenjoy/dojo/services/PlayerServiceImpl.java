@@ -118,6 +118,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    // TODO тут получается, что игра не загрузится, если ее подгрузить в момент когда игрок уже играет. Может это и ок. Его сперва надо отрубить
     public Player register(PlayerSave save) {
         String name = save.getName();
         String gameName = save.getGameName();

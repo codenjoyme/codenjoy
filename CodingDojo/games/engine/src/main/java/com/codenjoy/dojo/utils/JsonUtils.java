@@ -46,6 +46,11 @@ public class JsonUtils {
         return result;
     }
 
+    public static String cleanSorted(Object object) {
+        String json = toStringSorted(object);
+        return clean(json);
+    }
+
     public static String prettyPrint(Object object) {
         String json = toStringSorted(object);
         return clean(JsonWriter.formatJson(json));

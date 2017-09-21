@@ -71,7 +71,14 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void load(String name) {
         PlayerSave save = saver.loadGame(name);
-        playerService.register(save); // TODO тут получается, что игра не загрузится, если ее подгрузить в момент когда игрок уже играет. Может это и ок. Его сперва надо отрубить
+        playerService.register(save);
+    }
+
+    @Override
+    public void load(String name, String gameName, String save) {
+        PlayerSave playerSave = new PlayerSave(name, "127.0.0.1", gameName,
+                0, Protocol.WS.name(), save);
+        playerService.register(playerSave);
     }
 
     @Override
