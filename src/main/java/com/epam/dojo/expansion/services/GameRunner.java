@@ -31,6 +31,8 @@ import com.epam.dojo.expansion.model.Single;
 import com.epam.dojo.expansion.model.Ticker;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.replay.ReplayGame;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.util.LinkedList;
@@ -91,21 +93,27 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
-        boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
-        if (!isTrainingMode) {
-            int total = data.totalSingleLevels();
-            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
-        }
-
-        initGameFactory();
-
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
-        Game single = new Single(gameFactory, () -> lobby, listener, factory, ticker, dice, save);
-        single.newGame();
-        games.add(single);
-        return single;
+        initGameFactory();
+
+        Game game = null;
+        if (!ReplayGame.isReplay(save)) {
+            boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
+            if (!isTrainingMode) {
+                int total = data.totalSingleLevels();
+                save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+            }
+
+            game = new Single(gameFactory, () -> lobby, listener, factory, ticker, dice, save);
+            game.newGame();
+        } else {
+            game = new ReplayGame(new JSONObject(save));
+        }
+
+        games.add(game);
+        return game;
     }
 
     @Override

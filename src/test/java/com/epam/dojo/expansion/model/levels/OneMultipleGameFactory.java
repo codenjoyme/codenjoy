@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.GameFactory;
 import com.epam.dojo.expansion.model.PlayerBoard;
+import com.epam.dojo.expansion.model.replay.GameLoggerImpl;
 
 import java.util.function.Predicate;
 
@@ -56,11 +57,11 @@ public class OneMultipleGameFactory implements GameFactory {
 
     @Override
     public PlayerBoard newMultiple() {
-        return multiple = new Expansion(multipleFactory.get(), dice, Expansion.MULTIPLE);
+        return multiple = new Expansion(multipleFactory.get(), dice, new GameLoggerImpl(), Expansion.MULTIPLE);
     }
 
     @Override
     public PlayerBoard single() {
-        return new Expansion(singleFactory.get(), dice, Expansion.SINGLE);
+        return new Expansion(singleFactory.get(), dice, new GameLoggerImpl(), Expansion.SINGLE);
     }
 }

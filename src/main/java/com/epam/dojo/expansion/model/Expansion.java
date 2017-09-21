@@ -30,6 +30,7 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Cell;
 import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.items.*;
+import com.epam.dojo.expansion.model.replay.GameLogger;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Printer;
 import com.epam.dojo.expansion.services.PrinterData;
@@ -54,7 +55,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
-    private final GameLogger gameLogger;
+    private GameLogger gameLogger;
 
     private List<Level> levels;
     private Level level;
@@ -67,11 +68,11 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     private List<Player> losers;
     private int roundTicks;
 
-    public Expansion(List<Level> levels, Dice dice, boolean multiple) {
+    public Expansion(List<Level> levels, Dice dice, GameLogger gameLogger, boolean multiple) {
         this.levels = new LinkedList(levels);
         isMultiple = multiple;
         players = new LinkedList();
-        gameLogger = new GameLogger(this);
+        this.gameLogger = gameLogger;
         cleanAfterGame();
     }
 
@@ -81,7 +82,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
         nothingChanged = true;
         losers = new LinkedList();
         if (isMultiple) {
-            gameLogger.start();
+            gameLogger.start(this);
         }
     }
 
@@ -186,6 +187,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             for (Player player : players) {
                 player.getHero().wantsReset();
             }
+            cleanAfterGame();
         } else {
             // fist time remove all players
             List<Player> reset = removeAllPlayers();
@@ -194,7 +196,6 @@ public class Expansion implements Tickable, Field, PlayerBoard {
                 newGame(player);
             }
         }
-        cleanAfterGame();
     }
 
     @NotNull
@@ -500,6 +501,9 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             players.add(player);
         }
         player.newHero(this);
+        if (isMultiple) {
+            gameLogger.register(player);
+        }
     }
 
     @Override

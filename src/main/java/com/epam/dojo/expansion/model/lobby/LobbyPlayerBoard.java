@@ -49,14 +49,14 @@ public abstract class LobbyPlayerBoard implements PlayerBoard, Field {
 
     private static Logger logger = DLoggerFactory.getLogger(LobbyPlayerBoard.class);
 
-    public static final int BOARD_SIZE = 20;
+    public static final int BOARD_SIZE = 20; // TODO move to settings and fix in test
     public static final Point NULL_POINT = pt(-1, -1);
     private List<Player> waiting;
     private LevelImpl level;
 
     public LobbyPlayerBoard(List<Player> waiting) {
         this.waiting = waiting;
-        level = Levels.getLevel(size(), "MULTILOBBY");
+        level = Levels.getLevel(size(), Levels.MULTILOBBY);
     }
 
     @Override

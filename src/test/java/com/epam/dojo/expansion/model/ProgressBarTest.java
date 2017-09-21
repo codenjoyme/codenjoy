@@ -35,6 +35,7 @@ import com.epam.dojo.expansion.model.levels.CellImpl;
 import com.epam.dojo.expansion.model.levels.StubGamesGameFactory;
 import com.epam.dojo.expansion.model.lobby.NotWaitPlayerLobby;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.replay.GameLogger;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -64,7 +65,7 @@ public class ProgressBarTest {
 
     static class DummyExpansion extends Expansion {
         public DummyExpansion(List<Level> levels, Dice dice, boolean multiple) {
-            super(levels, dice, multiple);
+            super(levels, dice, mock(GameLogger.class), multiple);
         }
 
         @Override

@@ -305,6 +305,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return (currentAction != null) ? currentAction : new JSONObject();
     }
 
+    public JSONObject getLastAction() {
+        return (lastAction != null) ? lastAction : new JSONObject();
+    }
+
     public void destroy() {
         field.removeFromCell(this);
     }

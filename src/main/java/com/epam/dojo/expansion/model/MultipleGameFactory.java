@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
+import com.epam.dojo.expansion.model.replay.GameLoggerImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -66,7 +67,7 @@ public class MultipleGameFactory implements GameFactory {
     @NotNull
     public PlayerBoard single() {
         return new Expansion(singleFactory.get(),
-                new RandomDice(), Expansion.SINGLE);
+                new RandomDice(), new GameLoggerImpl(), Expansion.SINGLE);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class MultipleGameFactory implements GameFactory {
     public PlayerBoard newMultiple() {
         Level level = randomLevel();
         Expansion result = new Expansion(Arrays.asList(level),
-                new RandomDice(), Expansion.MULTIPLE);
+                new RandomDice(), new GameLoggerImpl(), Expansion.MULTIPLE);
 
         if (logger.isDebugEnabled()) {
             logger.debug("Create new random multiple room {}", result);

@@ -269,6 +269,11 @@ public final class SettingsWrapper {
         return this;
     }
 
+    public SettingsWrapper gameLoggingEnable(boolean value) {
+        gameLoggingEnable.update(value);
+        return this;
+    }
+
     public static void cleanMulti(int afterIndex) {
         int index = 0;
         for (Parameter parameter : data.levels.toArray(new Parameter[0])) {
@@ -295,5 +300,4 @@ public final class SettingsWrapper {
             return new NotWaitPlayerLobby(factory);
         }
     }
-
 }

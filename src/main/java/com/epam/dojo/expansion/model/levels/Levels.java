@@ -31,9 +31,8 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
@@ -48,6 +47,7 @@ public class Levels {
     private static Map<String, String> levels = new LinkedHashMap<>();
 
     public static final String DEMO = make("DEMO");
+    public static final String MULTILOBBY = make("MULTILOBBY");
     public static final String BIG_MULTI1 = make("BIG_MULTI1");
     public static final String BIG_MULTI2 = make("BIG_MULTI2");
     public static final List<String> MULTI = makeAll("MULTI%s");
@@ -108,10 +108,8 @@ public class Levels {
                                 BiFunction<T, String, T> applier)
     {
         T result = supplier.get();
-        ClassLoader classLoader = Levels.class.getClassLoader();
         try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(
-                        classLoader.getResourceAsStream(filePath))))
+                new InputStreamReader(open(filePath))))
         {
             String line;
             while ((line = br.readLine()) != null) {
@@ -124,6 +122,15 @@ public class Levels {
             logger.error("Error during loading file {}", filePath, e);
         }
         return result;
+    }
+
+    private static InputStream open(String filePath) throws IOException {
+        ClassLoader classLoader = Levels.class.getClassLoader();
+        InputStream stream = classLoader.getResourceAsStream(filePath);
+        if (stream != null) {
+            return stream;
+        }
+        return Files.newInputStream(new File(filePath).toPath());
     }
 
     public static LevelsFactory collectSingle(int boardSize) {

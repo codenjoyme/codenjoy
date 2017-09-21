@@ -124,6 +124,10 @@ public class Player {
         progressBar.setCurrent(current);
     }
 
+    public PlayerBoard getCurrent() {
+        return progressBar.getCurrent();
+    }
+
     public class LogState {
         public JSONObject json() {
             return new JSONObject(){{

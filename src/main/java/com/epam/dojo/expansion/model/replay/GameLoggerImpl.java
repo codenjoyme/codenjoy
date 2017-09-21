@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model;
+package com.epam.dojo.expansion.model.replay;
 
 /*-
  * #%L
@@ -25,37 +25,40 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.Expansion;
+import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.levels.items.Hero;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.io.*;
-import java.util.Calendar;
 
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-14.
  */
-public class GameLogger {
+public class GameLoggerImpl implements GameLogger {
 
-    private static Logger logger = DLoggerFactory.getLogger(GameLogger.class);
+    private static Logger logger = DLoggerFactory.getLogger(GameLoggerImpl.class);
 
     private BufferedWriter writer;
     private Expansion expansion;
+    private String replayName;
 
-    public GameLogger(Expansion expansion) {
-        this.expansion = expansion;
-    }
-
-    public void start() {
+    @Override
+    public void start(Expansion expansion) {
         if (!data.gameLoggingEnable()) return;
+
+        this.expansion = expansion;
 
         if (writer != null) {
             stop();
         }
 
-        new File("gameData").mkdirs();
-        File file = new File("gameData\\game-" + expansion.id() + "-" + Calendar.getInstance().getTimeInMillis() + ".txt");
+        File file = getEmptyFile(expansion);
+
         try {
             FileOutputStream fos = new FileOutputStream(file);
             writer = new BufferedWriter(new OutputStreamWriter(fos));
@@ -65,8 +68,51 @@ public class GameLogger {
         }
     }
 
+    @NotNull
+    private File getEmptyFile(Expansion expansion) {
+        File file;
+        int index = 0;
+        do {
+            replayName = "game-" + expansion.id() + "-" + (++index);
+            file = new File("gameData\\" + replayName + ".txt");
+        } while (file.exists());
+
+        file.getParentFile().mkdirs();
+
+        return file;
+    }
+
+    @Override
+    public void register(Player player) {
+        if (doNotRecord()) return;
+
+        try {
+            try {
+                Hero hero = player.getHero();
+                if (hero == null) return;
+                write(String.format("New player %s registered with hero %s with base at '%s' and color '%s'",
+                        player.lg.id(),
+                        hero.lg.id(),
+                        new JSONObject(hero.getBasePosition()),
+                        hero.getBase().element().getIndex()));
+                write(String.format("// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'%s','playerName':'%s'}\"",
+                        replayName,
+                        player.lg.id()));
+            } catch (Exception e) {
+                logger.error("Error printing hero game state", e);
+            }
+        } catch (Exception e) {
+            logger.error("Error printing logging game state", e);
+        }
+    }
+
+    private boolean doNotRecord() {
+        return !data.gameLoggingEnable() || expansion == null;
+    }
+
+    @Override
     public void logState() {
-        if (!data.gameLoggingEnable()) return;
+        if (doNotRecord()) return;
 
         try {
             expansion.getPlayers().forEach(player -> {
@@ -78,7 +124,7 @@ public class GameLogger {
                                 hero.lg.id(),
                                 player.lg.id()));
                     }
-                    String command = JsonUtils.toStringSorted(hero.getCurrentAction());
+                    String command = JsonUtils.toStringSorted(hero.getLastAction());
                     write(String.format("Hero %s of player %s received command:'%s'",
                             hero.lg.id(),
                             player.lg.id(),
@@ -95,15 +141,15 @@ public class GameLogger {
     }
 
     private void write(String format) throws IOException {
-        if (!data.gameLoggingEnable()) return;
+        if (doNotRecord()) return;
 
         writer.write(format);
         writer.newLine();
         writer.flush();
     }
 
-    public void stop() {
-        if (!data.gameLoggingEnable()) return;
+    private void stop() {
+        if (doNotRecord()) return;
 
         try {
             write("Game finished");

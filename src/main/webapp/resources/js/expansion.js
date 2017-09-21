@@ -325,10 +325,8 @@ game.drawBoard = function(drawer) {
                 default: break;
             }
         }
-        for (var name in heroesData[playerName]) {
-            var additionalData = heroesData[playerName][name].additionalData;
-            var lastAction = additionalData.lastAction;
-            if (!lastAction) continue;
+        var drawLastAction = function(lastAction) {
+            if (!lastAction) return;
             var movements = lastAction.movements;
             var increase = lastAction.increase;
 
@@ -340,6 +338,17 @@ game.drawBoard = function(drawer) {
                 var color = getColor(pt.x, pt.y);
                 if (color != -1) {
                     drawArrow(color, direction, pt.x, pt.y);
+                }
+            }
+        }
+        for (var name in heroesData[playerName]) {
+            var additionalData = heroesData[playerName][name].additionalData;
+            drawLastAction(additionalData.lastAction);
+            var otherLastActions = additionalData.otherLastActions;
+            if (!!otherLastActions) {
+                for (var index in otherLastActions) {
+                    var otherLastAction = otherLastActions[index];
+                    drawLastAction(otherLastAction);
                 }
             }
         }
