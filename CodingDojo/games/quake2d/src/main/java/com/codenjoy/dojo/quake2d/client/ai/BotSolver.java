@@ -95,7 +95,7 @@ public class BotSolver implements Solver<Board> {
     }
 
     private String moveWithAction(Direction direction){
-        for (Direction elemDirection : Direction.values()){
+        for (Direction elemDirection : Direction.getValues()){
             if (direction == elemDirection){
                 return Direction.ACT(elemDirection.ordinal() + SHIFT_COMMAND);
             }

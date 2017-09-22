@@ -34,6 +34,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
+import java.util.List;
+
 public class RandomSolver implements Solver<Board> {
     private Dice dice;
 
@@ -47,7 +49,7 @@ public class RandomSolver implements Solver<Board> {
         int toX = 0;
         int toY = 0;
         do {
-            direction = Direction.values()[dice.next(5)];
+            direction = Direction.random(dice);
 
             Point bomberman = board.getBomberman();
             toX = direction.changeX(bomberman.getX());

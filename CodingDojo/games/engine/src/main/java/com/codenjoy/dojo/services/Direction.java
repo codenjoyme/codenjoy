@@ -46,6 +46,10 @@ public enum Direction {
         this.dy = dy;
     }
 
+    public static List<Direction> getValues() {
+        return Arrays.asList(LEFT, RIGHT, UP, DOWN);
+    }
+
     public static Direction valueOf(int i) {
         for (Direction d : Direction.values()) {
             if (d.value == i) {
