@@ -1564,8 +1564,8 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
-                "{x=0, y=0}",
+        assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
                 true,
                 "['╔═══┐" +
                 "║SE.│" +
@@ -1579,8 +1579,8 @@ public class SingleTest {
                 "-----']", single1);
 
         // when then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
-                "{x=0, y=0}",
+        assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
                 true,
                 "['╔═══┐" +
                 "║SE.│" +
@@ -1639,8 +1639,8 @@ public class SingleTest {
                 "-----");
 
         // when then
-        assertBoardData("{current=0, lastPassed=0, multiple=true, scores=true, total=1}",
-                "{x=0, y=0}",
+        assertBoardData("{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
                 false,
                 "['╔═══┐" +
                 "║S..│" +
@@ -1655,8 +1655,8 @@ public class SingleTest {
                 single1);
 
         // when then
-        assertBoardData("{current=0, lastPassed=0, multiple=true, scores=true, total=1}",
-                "{x=0, y=0}",
+        assertBoardData("{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
                 false,
                 "['╔═══┐" +
                 "║S..│" +
@@ -1698,8 +1698,8 @@ public class SingleTest {
         givenFl(field, field);
 
         // when then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
-                "{x=0, y=4}",
+        assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':4}",
                 true,
                 "['╔═══════════════" +
                 "║S.............." +
@@ -1734,8 +1734,8 @@ public class SingleTest {
                 "----------------" +
                 "--B-------------']", single1);
 
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
-                "{x=0, y=4}",
+        assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':4}",
                 true,
                 "['╔═══════════════" +
                 "║S.............." +
@@ -1779,8 +1779,8 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
-                "{x=4, y=4}",
+        assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':4,'y':4}",
                 true,
                 "['═══════════════┐" +
                 "...............│" +
@@ -1815,8 +1815,8 @@ public class SingleTest {
                 "----------------" +
                 "----------------']", single1);
 
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
-                "{x=0, y=0}",
+        assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
                 true,
                 "['║....│  ║......." +
                 "║..┌─┘  └─╗....." +
@@ -1856,13 +1856,13 @@ public class SingleTest {
         JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
-                JsonUtils.prettyPrint(json.get("levelProgress")));
+                JsonUtils.cleanSorted(json.get("levelProgress")));
 
         assertEquals(heroes,
-                JsonUtils.prettyPrint(json.get("offset")));
+                JsonUtils.cleanSorted(json.get("offset")));
 
         assertEquals(levels,
-                JsonUtils.prettyPrint(json.get("layers")));
+                JsonUtils.cleanSorted(json.get("layers")));
 
         assertEquals(true,
                 json.getBoolean("showName"));
