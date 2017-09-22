@@ -2,7 +2,7 @@
  * #%L
  * Autofill event polyfill ##version:1.0.0##
  * %%
- * (c) 2014 Google, Inc.
+ * Copyright (C) 2014 Google, Inc.
  * %%
  * License: MIT
  * #L%

@@ -6,7 +6,7 @@
  * Includes Sizzle.js
  * https://sizzlejs.com/
  * %%
- * Copyright jQuery Foundation and other contributors
+ * Copyright (C) 2017 jQuery Foundation and other contributors
  * %%
  * Released under the MIT license
  * https://jquery.org/license
