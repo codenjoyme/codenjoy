@@ -128,12 +128,8 @@ public class ReplayGameTest {
         // replay not started, tick=-1 and we are at "replays lobby"
         assertAtLobby(game);
 
-        // new game, tick = -1, because need clearScore()
+        // new game, tick = 0, clearScore() run inside
         game.newGame();
-        assertAtLobby(game);
-
-        // clearScore, tick = 0
-        game.clearScore();
         assertTick(game, 0);
 
         // tick++ = 1
@@ -182,12 +178,8 @@ public class ReplayGameTest {
         // replay not started, tick=-1 and we are at "replays lobby"
         assertAtLobby(game);
 
-        // new game, tick = -1, because need clearScore()
+        // new game, tick = 2, clearScore() run inside
         game.newGame();
-        assertAtLobby(game);
-
-        // clearScore, tick = 2
-        game.clearScore();
         assertTick(game, 2);
 
         // tick++ = 3
@@ -233,12 +225,8 @@ public class ReplayGameTest {
         // replay not started, tick=-1 and we are at "replays lobby"
         assertAtLobby(game);
 
-        // new game, tick = -1, because need clearScore()
+        // new game, tick = 3, clearScore() run inside
         game.newGame();
-        assertAtLobby(game);
-
-        // clearScore, tick = 3
-        game.clearScore();
         assertTick(game, 3);
 
         // tick++ is out of, so we go to lobby

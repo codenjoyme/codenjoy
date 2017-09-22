@@ -93,6 +93,7 @@ public class ReplayGame implements Game {
     @Override
     public void newGame() {
         start = false;
+        clearScore();
     }
 
     @Override
@@ -157,12 +158,12 @@ public class ReplayGame implements Game {
 
     @Override
     public void tick() {
-        if (!start) { // TODO test me
+        if (!start) {
             return;
         }
-        if (noMoreTicks()) { // TODO test me
+        if (noMoreTicks()) {
             return;
         }
-        tick++; // TODO test me
+        tick++;
     }
 }
