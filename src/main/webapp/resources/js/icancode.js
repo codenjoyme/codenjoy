@@ -59,17 +59,6 @@ game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
 
-game.heroInfo = {};
-game.heroInfo.dx = -15;
-game.heroInfo.dy = -45;
-game.heroInfo.font = "20px 'Verdana, sans-serif'";
-game.heroInfo.fillStyle = "#0FF";
-game.heroInfo.textAlign = "left";
-game.heroInfo.shadowColor = "#000";
-game.heroInfo.shadowOffsetX = 0;
-game.heroInfo.shadowOffsetY = 0;
-game.heroInfo.shadowBlur = 5;
-
 // ========================== leaderboard page ==========================
 
 var initHelpLink = function() {
@@ -92,6 +81,27 @@ game.onBoardAllPageLoad = function() {
             initHelpLink();
             initAdditionalLink();
         });
+}
+
+game.drawBoard = function(drawer) {
+    drawer.clear();
+    drawer.drawBack();
+    drawer.drawLayers();
+
+    var fonts = {};
+    fonts.userName = {};
+    fonts.userName.dx = -15;
+    fonts.userName.dy = -45;
+    fonts.userName.font = "20px 'Verdana, sans-serif'";
+    fonts.userName.fillStyle = "#0FF";
+    fonts.userName.textAlign = "left";
+    fonts.userName.shadowColor = "#000";
+    fonts.userName.shadowOffsetX = 0;
+    fonts.userName.shadowOffsetY = 0;
+    fonts.userName.shadowBlur = 5;
+    drawer.drawPlayerNames(fonts.userName);
+
+    drawer.drawFog();
 }
 
 // ========================== user page ==========================
