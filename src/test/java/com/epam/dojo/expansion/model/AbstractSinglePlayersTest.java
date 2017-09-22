@@ -33,6 +33,7 @@ import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.*;
 import com.epam.dojo.expansion.model.lobby.NotWaitPlayerLobby;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
+import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.epam.dojo.expansion.services.PrinterData;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -142,6 +143,13 @@ public abstract class AbstractSinglePlayersTest {
         gameFactory = getGameFactory();
         lobby = new NotWaitPlayerLobby(gameFactory);
     }
+
+    protected void givenFlWithWaitForAllLobby(String... boards) {
+        setupMaps(boards);
+        gameFactory = getGameFactory();
+        lobby = new WaitForAllPlayerLobby(gameFactory);
+    }
+
 
     protected void givenForces(String forces, String layer2) {
         PlayerBoard current = singles.get(PLAYER1).getProgressBar().getCurrent();

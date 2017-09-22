@@ -187,7 +187,7 @@ public class Expansion implements Tickable, Field, PlayerBoard {
             for (Player player : players) {
                 player.getHero().wantsReset();
             }
-            cleanAfterGame();
+            cleanAfterGame(); // TODO подозреваю, что из за этого создается по два файла дщгов игры, но тест написать не могу
         } else {
             // fist time remove all players
             List<Player> reset = removeAllPlayers();

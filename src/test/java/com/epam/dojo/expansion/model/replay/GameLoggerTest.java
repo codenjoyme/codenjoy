@@ -24,9 +24,14 @@ package com.epam.dojo.expansion.model.replay;
 
 
 import com.epam.dojo.expansion.model.AbstractSinglePlayersTest;
+import com.epam.dojo.expansion.model.GameFactory;
+import com.epam.dojo.expansion.model.GameRunnerWithLobbyTest;
+import com.epam.dojo.expansion.model.MultipleGameFactory;
 import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -43,6 +48,14 @@ import static org.junit.Assert.fail;
 public class GameLoggerTest extends AbstractSinglePlayersTest {
 
     private File gameDataFolder;
+
+    private MultipleGameFactory gameFactory;
+
+    @Override
+    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
+        gameFactory = new MultipleGameFactory(dice, single, multiple);
+        return gameFactory;
+    }
 
     @Before
     public void setup() {
@@ -586,5 +599,200 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         }
         fail("File not found " + fileName);
         return null;
+    }
+
+    @Ignore
+    @Test
+    public void shouldCreateNewFileWhenGoToAnotherGameAfterLobby() {
+        // given
+        data.gameLoggingEnable(true)
+                .lobbyCapacity(4)
+                .lobbyEnable(true);
+
+        String single =
+                "╔══┐" +
+                "║1E│" +
+                "║..│" +
+                "└──┘";
+        String multiple =
+                "╔══┐" +
+                "║12│" +
+                "║34│" +
+                "└──┘";
+        givenFlWithWaitForAllLobby(single, multiple);
+        createPlayers(4);
+
+        // when
+        // players go to next level
+        hero(PLAYER1, 1, 2).right();
+        hero(PLAYER2, 1, 2).right();
+        hero(PLAYER3, 1, 2).right();
+        hero(PLAYER4, 1, 2).right();
+        tickAll();
+
+        tickAll();
+        // TODO что-то непонятное с этим тестои, либо я перемудрил... Тут не переходим на multiple
+
+        // then
+        String layer2 =
+                "----" +
+                "-♥♦-" +
+                "-♣♠-" +
+                "----";
+        assertE(layer2, PLAYER1);
+        assertE(layer2, PLAYER2);
+        assertE(layer2, PLAYER3);
+        assertE(layer2, PLAYER4);
+
+        String forces =
+                "-=#-=#-=#-=#\n" +
+                "-=#00A00A-=#\n" +
+                "-=#00A00A-=#\n" +
+                "-=#-=#-=#-=#\n";
+        assertF(forces, PLAYER1);
+        assertF(forces, PLAYER2);
+        assertF(forces, PLAYER3);
+        assertF(forces, PLAYER4);
+
+        // when select different way
+        INCREASE = 10;
+        MOVE = 10;
+        hero(PLAYER1, 1, 2).right();
+        hero(PLAYER3, 1, 1).right();
+        tickAll();
+
+        // then
+        layer2 =
+                "----" +
+                "-♥--" +
+                "-♣--" +
+                "----";
+        assertE(layer2, PLAYER1);
+        assertE(layer2, PLAYER2);
+        assertE(layer2, PLAYER3);
+        assertE(layer2, PLAYER4);
+
+        forces =
+                "-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#\n" +
+                "-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#\n";
+        assertF(forces, PLAYER1);
+        assertF(forces, PLAYER2);
+        assertF(forces, PLAYER3);
+        assertF(forces, PLAYER4);
+
+        // when
+        INCREASE = 10;
+        MOVE = 10;
+        hero(PLAYER1, 1, 2).down();
+        tickAll();
+
+        // then
+        layer2 =
+                "----" +
+                "-♥--" +
+                "----" +
+                "----";
+        assertE(layer2, PLAYER1);
+        assertE(layer2, PLAYER2);
+        assertE(layer2, PLAYER3);
+        assertE(layer2, PLAYER4);
+
+        forces =
+                "-=#-=#-=#-=#\n" +
+                "-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#\n" +
+                "-=#-=#-=#-=#\n";
+        assertF(forces, PLAYER1);
+        assertF(forces, PLAYER2);
+        assertF(forces, PLAYER3);
+        assertF(forces, PLAYER4);
+
+        // when
+        // new game
+        tickAll();
+
+        layer2 =
+                "----" +
+                "-♥♦-" +
+                "-♣♠-" +
+                "----";
+        assertE(layer2, PLAYER1);
+        assertE(layer2, PLAYER2);
+        assertE(layer2, PLAYER3);
+        assertE(layer2, PLAYER4);
+
+        forces =
+                "-=#-=#-=#-=#\n" +
+                "-=#00A00A-=#\n" +
+                "-=#00A00A-=#\n" +
+                "-=#-=#-=#-=#\n";
+        assertF(forces, PLAYER1);
+        assertF(forces, PLAYER2);
+        assertF(forces, PLAYER3);
+        assertF(forces, PLAYER4);
+
+        // when
+        tickAll();
+
+        // then
+        String game1 = single(PLAYER1).getPlayer().getCurrent().id();
+
+        File file1 = getFile("game-" + game1 + "-1.txt");
+        String result1 = loadFromFile(file1);
+
+        String player1 = singles.get(PLAYER1).getPlayer().lg.id();
+        String player2 = singles.get(PLAYER2).getPlayer().lg.id();
+        String hero1 = hero(PLAYER1).lg.id();
+        String hero2 = hero(PLAYER2).lg.id();
+
+        assertEquals(("Game started\n" +
+                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
+                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
+                        "Hero H@12405818 of player P@6c3f5566 received command:'{}'\n" +
+                        "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
+                        "Board:'{\"forces\":\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\",\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥-♦-----------\"],\"offset\":{\"x\":0,\"y\":0}}'\n" +
+                        "--------------------------------------------------------------\n" +
+                        "Hero H@12405818 of player P@6c3f5566 received command:'{\"increase\":[{\"count\":10,\"region\":{\"x\":1,\"y\":2}}],\"movements\":[{\"count\":10,\"direction\":\"RIGHT\",\"region\":{\"x\":1,\"y\":2}}]}'\n" +
+                        "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
+                        "Board:'{\"forces\":\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A00A00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\",\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥♥♦-----------\"],\"offset\":{\"x\":0,\"y\":0}}'\n" +
+                        "--------------------------------------------------------------\n" +
+                        "Hero H@12405818 of player P@6c3f5566 received command:'{\"increase\":[{\"count\":10,\"region\":{\"x\":2,\"y\":2}}],\"movements\":[{\"count\":10,\"direction\":\"RIGHT\",\"region\":{\"x\":2,\"y\":2}}]}'\n" +
+                        "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
+                        "Board:'{\"forces\":\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\",\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥♥------------\"],\"offset\":{\"x\":0,\"y\":0}}'\n" +
+                        "--------------------------------------------------------------\n" +
+                        "Game finished\n")
+                        .replace("P@6c3f5566", player1)
+                        .replace("P@314c508a", player2)
+                        .replace("H@12405818", hero1)
+                        .replace("H@10b48321", hero2)
+                        .replace("E@6a396c1e", game1),
+                result1);
+
+        File file2 = getFile("game-" + game1 + "-2.txt");
+        String result2 = loadFromFile(file2);
+
+        assertEquals(("Game started\n" +
+                        "New player P@7e07db1f registered with hero H@1189dd52 with base at '{\"x\":1,\"y\":2}' and color '0'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@35cabb2a-2','playerName':'P@7e07db1f'}\"\n" +
+                        "New player P@36bc55de registered with hero H@564fabc8 with base at '{\"x\":3,\"y\":2}' and color '1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@35cabb2a-2','playerName':'P@36bc55de'}\"\n" +
+                        "Hero H@1189dd52 of player P@7e07db1f received command:'{}'\n" +
+                        "Hero H@564fabc8 of player P@36bc55de received command:'{}'\n" +
+                        "Board:'{\"forces\":\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\",\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥-♦-----------\"],\"offset\":{\"x\":0,\"y\":0}}'\n" +
+                        "--------------------------------------------------------------\n" +
+                        "Hero H@1189dd52 of player P@7e07db1f received command:'{}'\n" +
+                        "Hero H@564fabc8 of player P@36bc55de received command:'{\"increase\":[{\"count\":2,\"region\":{\"x\":3,\"y\":2}}],\"movements\":[{\"count\":2,\"direction\":\"LEFT\",\"region\":{\"x\":3,\"y\":2}}]}'\n" +
+                        "Board:'{\"forces\":\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A00200A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\",\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥♦♦-----------\"],\"offset\":{\"x\":0,\"y\":0}}'\n" +
+                        "--------------------------------------------------------------\n")
+                        .replace("P@7e07db1f", player1)
+                        .replace("P@36bc55de", player2)
+                        .replace("H@1189dd52", hero1)
+                        .replace("H@564fabc8", hero2)
+                        .replace("E@35cabb2a", game1),
+                result2);
     }
 }
