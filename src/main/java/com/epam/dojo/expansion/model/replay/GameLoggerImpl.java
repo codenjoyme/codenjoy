@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 
@@ -61,7 +62,7 @@ public class GameLoggerImpl implements GameLogger {
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
-            writer = new BufferedWriter(new OutputStreamWriter(fos));
+            writer = new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
             write("Game started");
         } catch (Exception e) {
             logger.error("Error printing logging game state", e);
