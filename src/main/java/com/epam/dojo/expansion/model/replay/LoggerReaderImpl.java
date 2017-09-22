@@ -53,7 +53,7 @@ public class LoggerReaderImpl implements LoggerReader {
     public LoggerReaderImpl(String replayName, String playerName) {
         this.playerName = playerName;
 
-        File file = new File("gameData\\" + replayName + ".txt");
+        File file = GameLoggerImpl.getReplayFile(replayName);
         List<String> strings = Levels.loadLines(
                 file.getAbsolutePath(),
                 LinkedList::new,

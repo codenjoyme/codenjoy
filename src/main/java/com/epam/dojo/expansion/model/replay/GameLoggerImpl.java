@@ -74,12 +74,17 @@ public class GameLoggerImpl implements GameLogger {
         int index = 0;
         do {
             replayName = "game-" + expansion.id() + "-" + (++index);
-            file = new File("gameData\\" + replayName + ".txt");
+            file = getReplayFile(replayName);
         } while (file.exists());
 
         file.getParentFile().mkdirs();
 
         return file;
+    }
+
+    @NotNull
+    public static File getReplayFile(String replayName) {
+        return new File("gameData/" + replayName + ".txt");
     }
 
     @Override
