@@ -32,6 +32,8 @@ import org.json.JSONObject;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
+
 /**
  * Created by Oleksandr_Baglai on 2017-09-21.
  */
@@ -63,6 +65,9 @@ public class ReplayGame implements Game {
         this.loggerReader = getLoggerReader(replayName, playerName);
         start = false;
         tick = -1;
+        if (!data.delayReplay()) {
+            clearScore();
+        }
     }
 
     @NotNull
@@ -92,8 +97,7 @@ public class ReplayGame implements Game {
 
     @Override
     public void newGame() {
-        start = false;
-        clearScore();
+        // do nothing
     }
 
     @Override

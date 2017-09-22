@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model.replay;
 import com.codenjoy.dojo.services.NullJoystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -34,6 +35,7 @@ import org.junit.Test;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -91,6 +93,8 @@ public class ReplayGameTest {
 
     @Before
     public void setup() {
+        SettingsWrapper.setup().delayReplay(true);
+
         currentActions = new LinkedList<>();
         lastActions = new LinkedList<>();
         basePositions = new LinkedList<>();
@@ -128,8 +132,8 @@ public class ReplayGameTest {
         // replay not started, tick=-1 and we are at "replays lobby"
         assertAtLobby(game);
 
-        // new game, tick = 0, clearScore() run inside
-        game.newGame();
+        // clearScore, tick = 0
+        game.clearScore();
         assertTick(game, 0);
 
         // tick++ = 1
@@ -178,8 +182,8 @@ public class ReplayGameTest {
         // replay not started, tick=-1 and we are at "replays lobby"
         assertAtLobby(game);
 
-        // new game, tick = 2, clearScore() run inside
-        game.newGame();
+        // clearScore, tick = 2
+        game.clearScore();
         assertTick(game, 2);
 
         // tick++ = 3
@@ -225,8 +229,8 @@ public class ReplayGameTest {
         // replay not started, tick=-1 and we are at "replays lobby"
         assertAtLobby(game);
 
-        // new game, tick = 3, clearScore() run inside
-        game.newGame();
+        // clearScore, tick = 3
+        game.clearScore();
         assertTick(game, 3);
 
         // tick++ is out of, so we go to lobby
@@ -236,6 +240,31 @@ public class ReplayGameTest {
         // tick++ is out of, so we go to lobby
         game.tick();
         assertAtLobby(game);
+    }
+
+    @Test
+    public void shouldNotTickWhenNoMoreTicks_whenDelayReplay() {
+        boolean old = data.delayReplay();
+        try {
+            data.delayReplay(false);
+
+            // given
+            ReplayGame game = createGame(3);
+
+            // without clearScore, tick = 3
+            // game.clearScore();
+            assertTick(game, 3);
+
+            // tick++ is out of, so we go to lobby
+            game.tick();
+            assertAtLobby(game);
+
+            // tick++ is out of, so we go to lobby
+            game.tick();
+            assertAtLobby(game);
+        } finally {
+            data.delayReplay(old);
+        }
     }
 
     @NotNull

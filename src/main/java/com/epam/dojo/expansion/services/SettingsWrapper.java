@@ -60,6 +60,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> lobbyCapacity;
     private final Parameter<Boolean> defenderHasAdvantage;
+    private final Parameter<Boolean> delayReplay;
     private final Parameter<Double> defenderAdvantage;
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
@@ -107,6 +108,7 @@ public final class SettingsWrapper {
 
         command = settings.addEditBox("Command").type(String.class).def("");
         gameLoggingEnable = settings.addEditBox("Game logging enable").type(Boolean.class).def(false);
+        delayReplay = settings.addEditBox("Clean scores to run all replays").type(Boolean.class).def(false);
 
         for (int index = 0; index < MULTI.size(); index++) {
             String name = MULTI.get(index);
@@ -203,6 +205,10 @@ public final class SettingsWrapper {
         return defenderHasAdvantage() ? DEFENDER_HAS_ADVANTAGE_ATTACK : ONE_BY_ONE_ATTACK;
     }
 
+    public boolean delayReplay() {
+        return delayReplay.getValue();
+    }
+
     // setters for testing
 
     public SettingsWrapper leaveForceCount(int value) {
@@ -274,6 +280,11 @@ public final class SettingsWrapper {
         return this;
     }
 
+    public SettingsWrapper delayReplay(boolean value) {
+        delayReplay.update(value);
+        return this;
+    }
+
     public static void cleanMulti(int afterIndex) {
         int index = 0;
         for (Parameter parameter : data.levels.toArray(new Parameter[0])) {
@@ -300,4 +311,5 @@ public final class SettingsWrapper {
             return new NotWaitPlayerLobby(factory);
         }
     }
+
 }
