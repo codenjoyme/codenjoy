@@ -107,7 +107,7 @@ public class LoggerReaderTest {
         String replayName = saveToFile(data);
 
         String playerName = "P@53ff5eb9";
-        LoggerReader loggerReader = new LoggerReader(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
 
         assertEquals(4, loggerReader.size());
 
@@ -203,7 +203,7 @@ public class LoggerReaderTest {
         String replayName = saveToFile(data);
 
         String playerName = "P@314c508a";
-        LoggerReader loggerReader = new LoggerReader(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
 
         assertEquals(5, loggerReader.size());
 
@@ -255,7 +255,7 @@ public class LoggerReaderTest {
         String replayName = saveToFile(data);
 
         String playerName = "P@6c3f5566";
-        LoggerReader loggerReader = new LoggerReader(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
 
         assertEquals(5, loggerReader.size());
 
@@ -305,7 +305,7 @@ public class LoggerReaderTest {
         String replayName = saveToFile(data);
 
         String playerName = "P@6b67034";
-        LoggerReader loggerReader = new LoggerReader(replayName, playerName);
+        LoggerReader loggerReader = new LoggerReaderImpl(replayName, playerName);
 
         assertEquals(5, loggerReader.size());
 

@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model.replay;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -59,9 +60,14 @@ public class ReplayGame implements Game {
         startFrom = save.optInt(START_FROM_TICK, 0);
         String playerName = save.getString(PLAYER_NAME);
 
-        this.loggerReader = new LoggerReader(replayName, playerName);
+        this.loggerReader = getLoggerReader(replayName, playerName);
         start = false;
         tick = -1;
+    }
+
+    @NotNull
+    protected LoggerReader getLoggerReader(String replayName, String playerName) {
+        return new LoggerReaderImpl(replayName, playerName);
     }
 
     @Override
@@ -86,7 +92,6 @@ public class ReplayGame implements Game {
 
     @Override
     public void newGame() {
-        tick = startFrom;
         start = false;
     }
 
@@ -103,6 +108,7 @@ public class ReplayGame implements Game {
     @Override
     public void clearScore() {
         start = true;
+        tick = startFrom;
     }
 
     @Override
@@ -129,8 +135,8 @@ public class ReplayGame implements Game {
         @Override
         public Object getAdditionalData() {
             JSONObject result = new JSONObject();
-            result.put("lastAction", loggerReader.getCurrentAction(tick - 1)); // TODO test me
-            result.put("otherLastActions", loggerReader.getOtherCurrentActions(tick - 1)); // TODO test me
+            result.put("lastAction", loggerReader.getCurrentAction(tick));
+            result.put("otherLastActions", loggerReader.getOtherCurrentActions(tick));
             return result;
         }
 
@@ -140,14 +146,13 @@ public class ReplayGame implements Game {
         }
     };
 
-
     @Override
     public String getSave() {
         return StringUtils.EMPTY;
     }
 
     public boolean noMoreTicks() {
-        return tick >= loggerReader.size();
+        return tick == -1 || tick >= loggerReader.size();
     }
 
     @Override
