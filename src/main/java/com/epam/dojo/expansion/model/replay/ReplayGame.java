@@ -135,8 +135,8 @@ public class ReplayGame implements Game {
         @Override
         public Object getAdditionalData() {
             JSONObject result = new JSONObject();
-            result.put("lastAction", loggerReader.getCurrentAction(tick));
-            result.put("otherLastActions", loggerReader.getOtherCurrentActions(tick));
+            result.put("allLastActions", loggerReader.getAllLastActions(tick));
+            result.put("heroesData", loggerReader.getAllBasePositions());
             return result;
         }
 

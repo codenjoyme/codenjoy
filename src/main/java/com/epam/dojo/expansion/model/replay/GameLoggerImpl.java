@@ -90,12 +90,17 @@ public class GameLoggerImpl implements GameLogger {
             try {
                 Hero hero = player.getHero();
                 if (hero == null) return;
-                write(String.format("New player %s registered with hero %s with base at '%s' and color '%s'",
+                write(String.format("New player %s registered with hero %s with " +
+                                "base at '%s' and color '%s' for user '%s'",
                         player.lg.id(),
                         hero.lg.id(),
                         new JSONObject(hero.getBasePosition()),
-                        hero.getBase().element().getIndex()));
-                write(String.format("// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'%s','playerName':'%s'}\"",
+                        hero.getBase().element().getIndex(),
+                        player.getName()));
+                write(String.format("// Please run \"http://127.0.0.1:8080/codenjoy-contest" +
+                                "/admin31415?player=%s&gameName=expansion&data=" +
+                                "{'startFromTick':0,'replayName':'%s','playerName':'%s'}\"",
+                        player.getName(),
                         replayName,
                         player.lg.id()));
             } catch (Exception e) {

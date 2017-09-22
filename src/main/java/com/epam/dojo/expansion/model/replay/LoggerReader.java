@@ -26,15 +26,15 @@ package com.epam.dojo.expansion.model.replay;
 import com.codenjoy.dojo.services.Point;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-22.
  */
 public interface LoggerReader {
-    JSONObject getCurrentAction(int tick);
+    Map<String, JSONObject> getAllLastActions(int tick);
 
-    List<JSONObject> getOtherCurrentActions(int tick);
+    Map<String, JSONObject> getAllBasePositions();
 
     Point getBasePosition(int tick);
 

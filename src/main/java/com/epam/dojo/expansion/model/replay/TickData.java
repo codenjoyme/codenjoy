@@ -25,11 +25,8 @@ package com.epam.dojo.expansion.model.replay;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-21.
@@ -72,7 +69,7 @@ public class TickData {
         }
     };
 
-    private Map<String, JSONObject> heroes = new HashMap<>();
+    private Map<String, JSONObject> heroes = new LinkedHashMap<>();
     private JSONObject board;
 
     public void heroAct(String player, String command) {
@@ -87,15 +84,11 @@ public class TickData {
         return heroes.get(playerName);
     }
 
-    public List<JSONObject> getActs(String exceptPlayerName) {
-        return heroes.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals(exceptPlayerName))
-                .map(entry -> entry.getValue())
-                .collect(toList());
+    public Map<String, JSONObject> getActs() {
+        return heroes;
     }
 
     public JSONObject getBoard() {
         return new JSONObject(board.toString());
     }
-
 }

@@ -30,8 +30,7 @@ import com.epam.dojo.expansion.model.levels.Levels;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +47,8 @@ public class LoggerReaderImpl implements LoggerReader {
     private String hero;
     private Point basePosition;
     private Elements baseColor;
+    private Map<String, String> playerNames = new LinkedHashMap<>();
+    private Map<String, JSONObject> bases = new LinkedHashMap<>();
 
     public LoggerReaderImpl(String replayName, String playerName) {
         this.playerName = playerName;
@@ -74,21 +75,24 @@ public class LoggerReaderImpl implements LoggerReader {
                 board = new TickData();
             }
 
-            if (line.startsWith("New player")) { // TODO test me
-                List<String> parts = values("New player (.*) registered with hero (.*) with base at '(.*)' and color '(.*)'", line);
+            if (line.startsWith("New player")) {
+                List<String> parts = values("New player (.*) registered with hero (.*) with base at '(.*)' and color '(.*)' for user '(.*)'", line);
                 String player = parts.get(0);
                 String hero = parts.get(1);
                 String base = parts.get(2);
                 String color = parts.get(3);
-                newPlayer(player, hero, base, color);
+                String name = parts.get(4);
+                newPlayer(player, hero, base, color, name);
             }
 
             if (line.startsWith("Hero")) {
                 List<String> parts = values("Hero (.*) of player (.*) received command:'(.*)'", line);
                 if (!parts.isEmpty()) {
-                    board.heroAct(parts.get(1), parts.get(2));
+                    String player = playerNames.get(parts.get(1));
+                    String command = parts.get(2);
+                    board.heroAct(player, command);
                 } else {
-                    if (line.endsWith("is not alive")) { // TODO test me
+                    if (line.endsWith("is not alive")) {
                         // do nothing
                     }
                 }
@@ -102,12 +106,23 @@ public class LoggerReaderImpl implements LoggerReader {
         }
     }
 
-    private void newPlayer(String player, String hero, String base, String color) {
+    private void newPlayer(String player, String hero, String base, String color, String name) {
+        playerNames.put(player, name);
+
+        bases.put(name, getCoordinateJSON(base));
+
         if (player.equals(playerName)) {
             this.hero = hero;
             basePosition = new PointImpl(new JSONObject(base));
             baseColor = Elements.getForce(Integer.valueOf(color));
         }
+    }
+
+    private JSONObject getCoordinateJSON(String base) {
+        JSONObject result = new JSONObject();
+        result.put("coordinate", new JSONObject(base));
+        result.put("singleBoardGame", true);
+        return result;
     }
 
     private List<String> values(String patternString, String data) {
@@ -123,13 +138,13 @@ public class LoggerReaderImpl implements LoggerReader {
     }
 
     @Override
-    public JSONObject getCurrentAction(int tick) {
-        return getTickData(tick).getAct(playerName);
+    public Map<String, JSONObject> getAllLastActions(int tick) {
+        return getTickData(tick).getActs();
     }
 
     @Override
-    public List<JSONObject> getOtherCurrentActions(int tick) {
-        return getTickData(tick).getActs(playerName);
+    public Map<String, JSONObject> getAllBasePositions() {
+        return bases;
     }
 
     @Override

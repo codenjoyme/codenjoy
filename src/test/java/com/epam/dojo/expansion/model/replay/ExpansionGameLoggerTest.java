@@ -144,7 +144,7 @@ public class ExpansionGameLoggerTest {
 
     @NotNull
     private Player createPlayer() {
-        return new Player(mock(EventListener.class), mock(ProgressBar.class)) {
+        return new Player(mock(EventListener.class), mock(ProgressBar.class), null) {
             @Override
             public void newHero(Field field) {
                 setHero(new Hero(){

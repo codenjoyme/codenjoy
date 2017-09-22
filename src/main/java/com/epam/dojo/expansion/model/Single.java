@@ -51,13 +51,13 @@ public class Single implements Game {
     private String save;
 
     public Single(GameFactory gameFactory, Supplier<PlayerLobby> lobby, EventListener listener,
-                  PrinterFactory factory, Ticker ticker, Dice dice, String save) {
+                  PrinterFactory factory, Ticker ticker, Dice dice, String save, String playerName) {
         this.save = save;
         this.ticker = ticker;
         this.lobby = lobby;
         progressBar = new ProgressBar(gameFactory, lobby);
         progressBar.setGameOwner(this);
-        player = new Player(listener, progressBar);
+        player = new Player(listener, progressBar, playerName);
     }
 
     @Override

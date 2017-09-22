@@ -309,6 +309,16 @@ game.drawBoard = function(drawer) {
         console.log(err);
     }
 
+    var playerHeroesData = heroesData[playerName];
+    var allHeroesData = playerHeroesData[playerName].additionalData.heroesData;
+    if (!!allHeroesData) {
+        for (var otherPlayerName in allHeroesData) {
+            if (!playerHeroesData.hasOwnProperty(otherPlayerName)) {
+                playerHeroesData[otherPlayerName] = allHeroesData[otherPlayerName];
+            }
+        }
+    }
+
     try {
         var h = canvas.getPlotSize()/2;
         var drawArrow = function(color, direction, x, y) {
@@ -341,14 +351,16 @@ game.drawBoard = function(drawer) {
                 }
             }
         }
-        for (var name in heroesData[playerName]) {
-            var additionalData = heroesData[playerName][name].additionalData;
-            drawLastAction(additionalData.lastAction);
-            var otherLastActions = additionalData.otherLastActions;
-            if (!!otherLastActions) {
-                for (var index in otherLastActions) {
-                    var otherLastAction = otherLastActions[index];
-                    drawLastAction(otherLastAction);
+        for (var name in playerHeroesData) {
+            var additionalData = playerHeroesData[name].additionalData;
+            if (!!additionalData) {
+                drawLastAction(additionalData.lastAction);
+                var allLastActions = additionalData.allLastActions;
+                if (!!allLastActions) {
+                    for (var otherPlayerName in allLastActions) {
+                        var lastAction = allLastActions[otherPlayerName];
+                        drawLastAction(lastAction);
+                    }
                 }
             }
         }

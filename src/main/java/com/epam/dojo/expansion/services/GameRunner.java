@@ -106,7 +106,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                 save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
             }
 
-            game = new Single(gameFactory, () -> lobby, listener, factory, ticker, dice, save);
+            game = new Single(gameFactory, () -> lobby, listener, factory, ticker, dice, save, playerName);
             game.newGame();
         } else {
             game = new ReplayGame(new JSONObject(save));

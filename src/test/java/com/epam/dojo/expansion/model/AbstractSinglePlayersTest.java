@@ -173,7 +173,8 @@ public abstract class AbstractSinglePlayersTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Single game = new Single(gameFactory, () -> lobby, listener, null, ticker, dice, null);
+        String playerName = String.format("demo%s@codenjoy.com", singles.size() + 1);
+        Single game = new Single(gameFactory, () -> lobby, listener, null, ticker, dice, null, playerName);
         singles.add(game);
         game.newGame();
         heroes.add(game.getPlayer().getHero());

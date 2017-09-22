@@ -31,9 +31,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -83,34 +81,40 @@ public class ReplayGameTest {
 
 
     private JSONObject lobbyBoard;
-    private JSONObject lobbyCurrentAction;
-    private List<JSONObject> lobbyOtherCurrentActions;
+    private Map<String, JSONObject> lobbyLastActions;
+    private Map<String, JSONObject> allBasePosition;
     private Point lobbyPt;
     private List<JSONObject> currentActions;
-    private List<List<JSONObject>> otherCurrentActions;
+    private List<Map<String, JSONObject>> lastActions;
     private List<Point> basePositions;
     private List<JSONObject> boards;
 
     @Before
     public void setup() {
         currentActions = new LinkedList<>();
-        otherCurrentActions = new LinkedList<>();
+        lastActions = new LinkedList<>();
         basePositions = new LinkedList<>();
         boards = new LinkedList<>();
 
         lobbyBoard = new JSONObject("{'lb':0}");
-        lobbyCurrentAction = new JSONObject("{'lca':0}");
-        lobbyOtherCurrentActions = Arrays.asList(
-                new JSONObject("{'loca':10}"),
-                new JSONObject("{'loca':20}"));
+        lobbyLastActions = new HashMap<String, JSONObject>(){{
+                put("user1", new JSONObject("{'loca':10}"));
+                put("user2", new JSONObject("{'loca':20}"));
+        }};
+        allBasePosition = new HashMap<String, JSONObject>(){{
+            put("user1", new JSONObject("{'abp':30}"));
+            put("user2", new JSONObject("{'abp':40}"));
+        }};
         lobbyPt = pt(-1, -1);
 
         // It is important that there are different objects, but not their contents
         for (int i = 0; i < 4; i++) {
             currentActions.add(new JSONObject("{'ca':" + i + "}"));
-            otherCurrentActions.add(Arrays.asList(
-                    new JSONObject("{'oca':" + (10 + i) + "}"),
-                    new JSONObject("{'oca':" + (20 + i) + "}")));
+            int finalI = i;
+            lastActions.add(new HashMap<String, JSONObject>(){{
+                    put("user1", new JSONObject("{'oca':" + (10 + finalI) + "}"));
+                    put("user2", new JSONObject("{'oca':" + (20 + finalI) + "}"));
+                }});
             basePositions.add(pt(i, i));
             boards.add(new JSONObject("{'b':" + i + "}"));
         }
@@ -257,19 +261,16 @@ public class ReplayGameTest {
                         }
 
                         @Override
-                        public JSONObject getCurrentAction(int tick) {
+                        public Map<String, JSONObject> getAllLastActions(int tick) {
                             if (isOutOf(tick)) {
-                                return lobbyCurrentAction;
+                                return lobbyLastActions;
                             }
-                            return currentActions.get(tick);
+                            return lastActions.get(tick);
                         }
 
                         @Override
-                        public List<JSONObject> getOtherCurrentActions(int tick) {
-                            if (isOutOf(tick)) {
-                                return lobbyOtherCurrentActions;
-                            }
-                            return otherCurrentActions.get(tick);
+                        public Map<String, JSONObject> getAllBasePositions() {
+                            return allBasePosition;
                         }
 
                         @Override
@@ -303,7 +304,8 @@ public class ReplayGameTest {
         assertEquals("{'b':" + tick + "}",
                 JsonUtils.cleanSorted(game.getBoardAsString()));
 
-        assertEquals("{'lastAction':{'ca':" + tick + "},'otherLastActions':[{'oca':1" + tick + "},{'oca':2" + tick + "}]}",
+        assertEquals("{'allLastActions':{'user1':{'oca':1" + tick + "},'user2':{'oca':2" + tick + "}}," +
+                        "'heroesData':{'user1':{'abp':30},'user2':{'abp':40}}}",
                 JsonUtils.cleanSorted(game.getHero().getAdditionalData()));
 
         assertEquals(pt(tick, tick).toString(),
@@ -316,7 +318,8 @@ public class ReplayGameTest {
         assertEquals("{'lb':0}",
                 JsonUtils.cleanSorted(game.getBoardAsString()));
 
-        assertEquals("{'lastAction':{'lca':0},'otherLastActions':[{'loca':10},{'loca':20}]}",
+        assertEquals("{'allLastActions':{'user1':{'loca':10},'user2':{'loca':20}}," +
+                        "'heroesData':{'user1':{'abp':30},'user2':{'abp':40}}}",
                 JsonUtils.cleanSorted(game.getHero().getAdditionalData()));
 
         assertEquals("[-1,-1]",

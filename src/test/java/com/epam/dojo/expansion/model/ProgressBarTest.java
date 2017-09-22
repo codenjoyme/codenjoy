@@ -107,7 +107,7 @@ public class ProgressBarTest {
         PlayerLobby lobby = new NotWaitPlayerLobby(factory);
         progressBar = new ProgressBar(factory, () -> lobby);
 
-        player = new Player(mock(EventListener.class), progressBar);
+        player = new Player(mock(EventListener.class), progressBar, null);
         progressBar.start(null);
     }
 

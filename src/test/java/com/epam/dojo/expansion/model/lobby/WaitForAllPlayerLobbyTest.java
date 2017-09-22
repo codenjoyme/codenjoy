@@ -34,7 +34,6 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NoInteractionsWanted;
-import org.mockito.exceptions.verification.VerificationInOrderFailure;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -345,7 +344,7 @@ public class WaitForAllPlayerLobbyTest {
 
     private Player createPlayer() {
         ProgressBar progressBar = createProgressBar();
-        Player player = new Player(mock(EventListener.class), progressBar);
+        Player player = new Player(mock(EventListener.class), progressBar, null);
         reset(progressBar);
         players.add(player);
         lobby.addPlayer(player);

@@ -44,10 +44,12 @@ public class Player {
     private EventListener listener;
     Hero hero;
     private ProgressBar progressBar;
+    private String name;
 
-    public Player(EventListener listener, ProgressBar progressBar) {
+    public Player(EventListener listener, ProgressBar progressBar, String name) {
         this.listener = listener;
         this.progressBar = progressBar;
+        this.name = name;
         progressBar.setPlayer(this);
     }
 
@@ -128,10 +130,15 @@ public class Player {
         return progressBar.getCurrent();
     }
 
+    public String getName() {
+        return name;
+    }
+
     public class LogState {
         public JSONObject json() {
             return new JSONObject(){{
                 put("id", id());
+                put("name", name);
                 put("hero", (hero != null) ? hero.lg.json() : "null");
                 put("progressBar", (progressBar != null) ? progressBar.lg.json() : "null");
             }};
