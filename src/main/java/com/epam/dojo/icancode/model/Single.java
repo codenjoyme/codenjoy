@@ -30,6 +30,10 @@ import com.epam.dojo.icancode.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
  * пришлось сделать этот декоратор. Борда (@see Sample) - одна на всех, а игры (@see Single) у каждого своя. Кода тут не много.
@@ -123,6 +127,13 @@ public class Single implements Game {
             JSONObject result = new JSONObject();
             result.put("hello", "world"); // TODO remove me :)
             return result;
+        }
+
+        @Override
+        public List<Game> playersGroup() {
+            return new LinkedList<Game>(){{
+                add(Single.this);
+            }};
         }
     };
 
