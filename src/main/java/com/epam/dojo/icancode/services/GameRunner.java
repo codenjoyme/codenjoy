@@ -51,12 +51,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
-        return new Scores(score, settings);
+    public PlayerScores getPlayerScores(Object score) {
+        return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
             int total = Levels.collectSingle().size();
