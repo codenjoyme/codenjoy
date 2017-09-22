@@ -2,8 +2,7 @@
  * #%L
  * Ace (Ajax.org Cloud9 Editor)
  * %%
- * Copyright (c) 2010, Ajax.org B.V.
- * All rights reserved.
+ * Copyright (C) 2010 Ajax.org B.V. All rights reserved.
  * %%
  * Distributed under the BSD license:
  * Redistribution and use in source and binary forms, with or without
