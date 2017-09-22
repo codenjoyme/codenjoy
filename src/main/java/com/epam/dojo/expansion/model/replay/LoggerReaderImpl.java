@@ -173,6 +173,11 @@ public class LoggerReaderImpl implements LoggerReader {
         result.put("showName", true);
         result.put("onlyMyName", false);
         result.put("levelProgress", new JSONObject()); // TODO implement me
+        // TODO почему-то по завершению риплея перед самим выходом в риплей-лобби в скрипте возникает ошибка
+        // TypeError: Cannot read property 'coordinate' of null
+        // at expansion.js:385
+        // at drawName (canvases.js:238)
+        // at Object.drawPlayerNames (
         result.put("inLobby", inLobby);
 
         return result;
