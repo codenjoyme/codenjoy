@@ -23,12 +23,12 @@ package com.epam.dojo.icancode.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.client.Direction.*;
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.epam.dojo.icancode.client.Command.*;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

@@ -23,7 +23,7 @@ package com.epam.dojo.icancode.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,94 +71,95 @@ public class BoardTest {
     @Test
     public void shouldWorkToString() {
         assertEquals(" Layer1        Layer2\n" +
-                    "  01234567890   01234567890\n" +
-                    " 0╔═════════┐  0╔═════════┐ Robots: [2,2],[6,9], [7,9], [9,7], [9,9]\n" +
-                    " 1║....◄...S│  1║-----↑---│ Gold: [3,9], [9,3], [9,6]\n" +
-                    " 2║.S.┌─╗...│  2║-☺-┌─╗---│ Starts: [2,2], [9,1]\n" +
-                    " 3║...│ ║˄.$│  3║---│ ║---│ Exits: [1,5], [9,9]\n" +
-                    " 4║.┌─┘ └─╗&│  4║-┌─┘ └─╗←│ Boxes: [2,9], [7,7], [9,9]\n" +
-                    " 5║E│     ║.│  5║-│     ║-│ Holes: [1,9], [3,7], [9,7]\n" +
-                    " 6║.╚═┐ ╔═╝$│  6║-╚═┐ ╔═╝→│ LaserMachine: [5,1], [7,3]\n" +
-                    " 7║..O│ ║..O│  7║---│ ║B-x│ Lasers: [6,1], [8,8], [9,4], [9,6]\n" +
-                    " 8║...╚═╝...│  8║---╚═╝-↓-│\n" +
-                    " 9║O.$.....E│  9║-B---X^-%│\n" +
-                    "10└─────────┘ 10└─────────┘",
+                        "  01234567890   01234567890\n" +
+                        "10╔═════════┐ 10╔═════════┐ Robots: [2,8],[6,1], [7,1], [9,1], [9,3]\n" +
+                        " 9║....◄...S│  9║-----↑---│ Gold: [3,1], [9,4], [9,7]\n" +
+                        " 8║.S.┌─╗...│  8║-☺-┌─╗---│ Starts: [2,8], [9,9]\n" +
+                        " 7║...│ ║˄.$│  7║---│ ║---│ Exits: [1,5], [9,1]\n" +
+                        " 6║.┌─┘ └─╗&│  6║-┌─┘ └─╗←│ Boxes: [2,1], [7,3], [9,1]\n" +
+                        " 5║E│     ║.│  5║-│     ║-│ Holes: [1,1], [3,3], [9,3]\n" +
+                        " 4║.╚═┐ ╔═╝$│  4║-╚═┐ ╔═╝→│ LaserMachine: [5,9], [7,7]\n" +
+                        " 3║..O│ ║..O│  3║---│ ║B-x│ Lasers: [6,9], [8,2], [9,4], [9,6]\n" +
+                        " 2║...╚═╝...│  2║---╚═╝-↓-│\n" +
+                        " 1║O.$.....E│  1║-B---X^-%│\n" +
+                        " 0└─────────┘  0└─────────┘\n" +
+                        "  01234567890   01234567890",
                 board.toString());
     }
 
     @Test
     public void shouldGetMe() {
-        assertEquals("[2,2]", board.getMe().toString());
+        assertEquals("[2,8]", board.getMe().toString());
     }
 
     @Test
     public void shouldGetOtherHeroes() {
-        assertEquals("[[6,9], [7,9], [9,7], [9,9]]", board.getOtherHeroes().toString());
+        assertEquals("[[6,1], [7,1], [9,1], [9,3]]", board.getOtherHeroes().toString());
     }
 
     @Test
     public void shouldGetExit() {
-        assertEquals("[[1,5], [9,9]]", board.getExits().toString());
+        assertEquals("[[1,5], [9,1]]", board.getExits().toString());
     }
 
     @Test
     public void shouldGetStart() {
-        assertEquals("[[2,2], [9,1]]", board.getStarts().toString());
+        assertEquals("[[2,8], [9,9]]", board.getStarts().toString());
     }
 
     @Test
     public void shouldGetGold() {
-        assertEquals("[[3,9], [9,3], [9,6]]", board.getGold().toString());
+        assertEquals("[[3,1], [9,4], [9,7]]", board.getGold().toString());
     }
 
     @Test
     public void shouldGetHoles() {
-        assertEquals("[[1,9], [3,7], [9,7]]", board.getHoles().toString());
+        assertEquals("[[1,1], [3,3], [9,3]]", board.getHoles().toString());
     }
 
     @Test
     public void shouldGetBoxes() {
-        assertEquals("[[2,9], [7,7], [9,9]]", board.getBoxes().toString());
+        assertEquals("[[2,1], [7,3], [9,1]]", board.getBoxes().toString());
     }
 
     @Test
     public void shouldGetLaser() {
-        assertEquals("[[6,1], [8,8], [9,4], [9,6]]", board.getLasers().toString());
+        assertEquals("[[6,9], [8,2], [9,4], [9,6]]", board.getLasers().toString());
     }
 
     @Test
     public void shouldGetLaserMashines() {
-        assertEquals("[[5,1], [7,3]]", board.getLaserMachines().toString());
+        assertEquals("[[5,9], [7,7]]", board.getLaserMachines().toString());
     }
 
     @Test
     public void shouldBeBarriers() {
-        assertEquals(true, board.isBarrierAt(0, 0));
-        assertEquals(true, board.isBarrierAt(1, 0));
-        assertEquals(true, board.isBarrierAt(0, 1));
+        assertEquals(true, board.isBarrierAt(0, 10));
+        assertEquals(true, board.isBarrierAt(1, 10));
+        assertEquals(true, board.isBarrierAt(0, 9));
 
-        assertEquals(true, board.isBarrierAt(4, 4));
-        assertEquals(true, board.isBarrierAt(5, 4));
+        assertEquals(true, board.isBarrierAt(4, 6));
+        assertEquals(true, board.isBarrierAt(5, 6));
         assertEquals(true, board.isBarrierAt(4, 5));
 
-        assertEquals(true, board.isBarrierAt(5, 8));
-        assertEquals(true, board.isBarrierAt(6, 8));
-        assertEquals(true, board.isBarrierAt(6, 7));
+        assertEquals(true, board.isBarrierAt(5, 2));
+        assertEquals(true, board.isBarrierAt(6, 2));
+        assertEquals(true, board.isBarrierAt(6, 3));
 
-        assertEquals(true, board.isBarrierAt(10, 10));
-        assertEquals(true, board.isBarrierAt(9, 10));
-        assertEquals(true, board.isBarrierAt(10, 9));
+        assertEquals(true, board.isBarrierAt(10, 0));
+        assertEquals(true, board.isBarrierAt(9, 0));
+        assertEquals(true, board.isBarrierAt(10, 1));
 
         assertEquals(true, board.isBarrierAt(5, 5));
 
-        assertEquals(false, board.isBarrierAt(2, 2));//there is my robot
-
-        assertEquals(false, board.isBarrierAt(1, 1));
-        assertEquals(true, board.isBarrierAt(9, 9));
+        assertEquals(false, board.isBarrierAt(2, 8));//there is my robot
 
         assertEquals(false, board.isBarrierAt(1, 9));
-        assertEquals(true, board.isBarrierAt(2, 9));
-        assertEquals(false, board.isBarrierAt(3, 9));
+        assertEquals(true, board.isBarrierAt(9, 1));
+
+        assertEquals(false, board.isBarrierAt(1, 1));
+        assertEquals(true, board.isBarrierAt(2, 1));
+        assertEquals(false, board.isBarrierAt(3, 1));
     }
 
     @Test
@@ -274,9 +275,9 @@ public class BoardTest {
                 "└────┘",
                 "------" +
                 "-☺----" +
-                "-☺----" +
-                "------" +
-                "-*-☻--" +
+                "-X----" +
+                "-x----" +
+                "-^&---" +
                 "------");
 
         // when
@@ -299,8 +300,8 @@ public class BoardTest {
                 "------" +
                 "-☺----" +
                 "-x----" +
-                "-o----" +
-                "-xox--" +
+                "-x----" +
+                "-xxx--" +
                 "------");
 
         // when

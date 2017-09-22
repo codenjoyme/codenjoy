@@ -24,7 +24,7 @@ package com.epam.dojo.icancode.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.model.Elements;
@@ -40,6 +40,11 @@ public class Board extends AbstractBoard<Elements> {
     @Override
     public Elements valueOf(char ch) {
         return Elements.valueOf(ch);
+    }
+
+    @Override
+    protected int inversionY(int y) {
+        return size - 1 - y;
     }
 
     /**
@@ -220,10 +225,13 @@ public class Board extends AbstractBoard<Elements> {
 
         String numbers = temp.substring(0, layer1.length);
         String space = StringUtils.leftPad("", layer1.length - 5);
-        String firstPart = " Layer1 " + space + " Layer2\n  " + numbers + "   " + numbers + "";
+        String numbersLine = numbers + "   " + numbers;
+        String firstPart = " Layer1 " + space + " Layer2\n  " + numbersLine;
 
         for (int i = 0; i < layer1.length; ++i) {
-            builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + maskOverlay(layer2[i], layer1[i]));
+            int ii = size - 1 - i;
+            String index = (ii < 10 ? " " : "") + ii;
+            builder.append(index + layer1[i] + " " + index + maskOverlay(layer2[i], layer1[i]));
 
             switch (i) {
                 case 0:
@@ -257,7 +265,7 @@ public class Board extends AbstractBoard<Elements> {
             }
         }
 
-        return firstPart + "\n" + builder.toString();
+        return firstPart + "\n" + builder.toString()+ "\n  " + numbersLine;
     }
 
     private String listToString(List<? extends Object> list) {

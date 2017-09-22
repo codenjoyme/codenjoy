@@ -23,7 +23,7 @@ package com.epam.dojo.icancode.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.client.AbstractSolver;
 import com.epam.dojo.icancode.client.Board;

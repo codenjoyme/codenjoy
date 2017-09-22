@@ -23,7 +23,7 @@ package com.epam.dojo.icancode.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 
 /**
  * Created by indigo on 2016-10-13.

@@ -23,14 +23,14 @@ package com.epam.dojo.icancode.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.icancode.model.Elements;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.client.Direction.*;
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
 import static com.epam.dojo.icancode.model.Elements.*;
 import static com.epam.dojo.icancode.model.Elements.Layers.*;
