@@ -42,7 +42,7 @@ public class GameRunnerTest {
         GameType gameType = new GameRunner();
         assertEquals(34, gameType.getBoardSize().getValue().intValue());
 
-        gameType.newGame(mock(EventListener.class), new PrinterFactoryImpl(), null);
+        gameType.newGame(mock(EventListener.class), new PrinterFactoryImpl(), null, null);
         assertEquals(34, gameType.getBoardSize().getValue().intValue());
     }
 }

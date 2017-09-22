@@ -48,7 +48,7 @@ public class StartAndJumpPerormanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null);
+            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null, null);
             games.add(game);
         }
 

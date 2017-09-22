@@ -36,7 +36,7 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         return null;
     }
 

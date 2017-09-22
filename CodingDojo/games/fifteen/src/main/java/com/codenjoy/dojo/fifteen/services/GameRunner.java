@@ -56,7 +56,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         if (!SINGLE || game == null) {
             game = newGame();
         }

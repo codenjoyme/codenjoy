@@ -55,7 +55,7 @@ public class BombermanPerformanceTest {
 
         List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
         for (int i = 0; i < players; i++) {
-            games.add(bomberman.newGame(mock(EventListener.class), factory, null));
+            games.add(bomberman.newGame(mock(EventListener.class), factory, null, null));
         }
 
         p.done("creation");

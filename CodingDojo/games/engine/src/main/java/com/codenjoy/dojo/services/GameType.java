@@ -44,9 +44,10 @@ public interface GameType extends Tickable {
      * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
      * @param factory Через этот интерфейс фреймворк будет инджектить принтер для отрисовки поля
      * @param save Если игре надо передать что-то чтобы ее настроить, например сейв игрока - это то самое место
+     * @param playerName Имейл игровка зарегавшегося на сервере
      * @return Экземпляр игры пользователя
      */
-    Game newGame(EventListener listener, PrinterFactory factory, String save);
+    Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName);
 
     /**
      * @return Размер доски. Важно, чтобы у всех пользователей были одинаковые по размеру поля

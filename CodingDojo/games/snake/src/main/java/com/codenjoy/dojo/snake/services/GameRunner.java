@@ -54,7 +54,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(final EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(final EventListener listener, PrinterFactory factory, String save, String playerName) {
         return new Snake(new RandomArtifactGenerator(), new HeroFactory() {
             @Override
             public Hero create(int x, int y) {

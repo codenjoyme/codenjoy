@@ -141,7 +141,8 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerScores playerScores = gameType.getPlayerScores(score);
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Game game = gameType.newGame(informationCollector, printer, data);
+            Game game = gameType.newGame(informationCollector, printer, data, name);
+
             if (logger.isDebugEnabled()) {
                 logger.info("Player {} starting new game {}", name, game);
             }

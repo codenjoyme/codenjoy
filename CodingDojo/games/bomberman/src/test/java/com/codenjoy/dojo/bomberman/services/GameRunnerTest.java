@@ -56,7 +56,7 @@ public class GameRunnerTest {
         int meatChoppersCount = 15;
         bombermanGame.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
 
-        com.codenjoy.dojo.services.Game game = bombermanGame.newGame(listener, printerFactory, null);
+        com.codenjoy.dojo.services.Game game = bombermanGame.newGame(listener, printerFactory, null, null);
         game.tick();
 
         PlayerScores scores = bombermanGame.getPlayerScores(10);
@@ -93,8 +93,8 @@ public class GameRunnerTest {
     public void shouldOneBoardForAllGames() {
         EventListener listener = mock(EventListener.class);
         GameType bombermanGame = new GameRunner();
-        com.codenjoy.dojo.services.Game game1 = bombermanGame.newGame(listener, printerFactory, null);
-        com.codenjoy.dojo.services.Game game2 = bombermanGame.newGame(listener, printerFactory, null);
+        com.codenjoy.dojo.services.Game game1 = bombermanGame.newGame(listener, printerFactory, null, null);
+        com.codenjoy.dojo.services.Game game2 = bombermanGame.newGame(listener, printerFactory, null, null);
         assertSame(getBoard(game1), getBoard(game2));
     }
 
