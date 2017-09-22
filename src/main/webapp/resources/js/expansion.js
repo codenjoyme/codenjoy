@@ -310,13 +310,17 @@ game.drawBoard = function(drawer) {
     }
 
     var playerHeroesData = heroesData[playerName];
-    var allHeroesData = playerHeroesData[playerName].additionalData.heroesData;
-    if (!!allHeroesData) {
-        for (var otherPlayerName in allHeroesData) {
-            if (!playerHeroesData.hasOwnProperty(otherPlayerName)) {
-                playerHeroesData[otherPlayerName] = allHeroesData[otherPlayerName];
+    try {
+        var allHeroesData = playerHeroesData[playerName].additionalData.heroesData;
+        if (!!allHeroesData) {
+            for (var otherPlayerName in allHeroesData) {
+                if (!playerHeroesData.hasOwnProperty(otherPlayerName)) {
+                    playerHeroesData[otherPlayerName] = allHeroesData[otherPlayerName];
+                }
             }
         }
+    } catch (err) {
+        console.log(err);
     }
 
     try {
