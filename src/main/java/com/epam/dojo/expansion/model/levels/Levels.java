@@ -32,6 +32,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.function.BiFunction;
@@ -109,7 +111,7 @@ public class Levels {
     {
         T result = supplier.get();
         try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(open(filePath))))
+                new InputStreamReader(open(filePath), StandardCharsets.UTF_8)))
         {
             String line;
             while ((line = br.readLine()) != null) {
