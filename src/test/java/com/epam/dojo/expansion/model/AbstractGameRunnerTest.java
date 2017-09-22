@@ -109,7 +109,7 @@ public class AbstractGameRunnerTest {
     }
 
     protected void createNewGame() {
-        Game game = gameRunner.newGame(listener, factory, null);
+        Game game = gameRunner.newGame(listener, factory, null, null);
         games.add(game);
     }
 

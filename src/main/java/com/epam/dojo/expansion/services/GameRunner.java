@@ -92,7 +92,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         if (logger.isDebugEnabled()) {
             logger.debug("Starting new game with save {}", save);
         }
