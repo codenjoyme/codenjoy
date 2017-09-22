@@ -45,11 +45,11 @@ public class ICanCodePerformanceTest {
     public void test() {
         GameRunner iCanCode = new GameRunner();
 
-        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
+        List<com.codenjoy.dojo.services.Game> games = new LinkedList<>();
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            Game game = iCanCode.newGame(mock(EventListener.class), factory, null);
+            Game game = iCanCode.newGame(mock(EventListener.class), factory, null, null);
             games.add(game);
         }
 
