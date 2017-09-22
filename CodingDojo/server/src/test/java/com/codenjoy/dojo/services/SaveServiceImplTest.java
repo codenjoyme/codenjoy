@@ -35,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.lang.model.util.Types;
 import java.io.IOException;
 import java.util.*;
 
@@ -117,22 +116,43 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayer() {
+    public void shouldLoadPlayer_forNotRegistered() {
         // given
         PlayerSave save = new PlayerSave("vasia", "url", "game", 100, "http", null);
         when(saver.loadGame("vasia")).thenReturn(save);
+        allPlayersNotRegistered();
 
         // when
         saveService.load("vasia");
 
         // then
+        verify(playerService).contains("vasia");
         verify(playerService).register(save);
+        verifyNoMoreInteractions(playerService);
     }
 
     @Test
-    public void shouldLoadPlayerWithExternalSave() {
+    public void shouldLoadPlayer_forRegistered() {
+        // given
+        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, "http", null);
+        when(saver.loadGame("vasia")).thenReturn(save);
+        allPlayersRegistered();
+
+        // when
+        saveService.load("vasia");
+
+        // then
+        verify(playerService).contains("vasia");
+        verify(playerService).remove("vasia");
+        verify(playerService).register(save);
+        verifyNoMoreInteractions(playerService);
+    }
+
+    @Test
+    public void shouldLoadPlayerWithExternalSave_forNotRegistered() {
         // given
         PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "ws", "{'save':'data'}");
+        allPlayersNotRegistered();
 
         // when
         saveService.load("vasia", "game", "{'save':'data'}");
@@ -140,6 +160,7 @@ public class SaveServiceImplTest {
         // then
         verifyNoMoreInteractions(saver);
 
+        verify(playerService).contains("vasia");
         ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
         verify(playerService).register(captor.capture());
         assertEquals("{'callbackUrl':'127.0.0.1'," +
@@ -148,6 +169,32 @@ public class SaveServiceImplTest {
                 "'protocol':'ws'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(save));
+        verifyNoMoreInteractions(playerService);
+    }
+
+    @Test
+    public void shouldLoadPlayerWithExternalSave_forRegistered() {
+        // given
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "ws", "{'save':'data'}");
+        allPlayersRegistered();
+
+        // when
+        saveService.load("vasia", "game", "{'save':'data'}");
+
+        // then
+        verifyNoMoreInteractions(saver);
+
+        verify(playerService).contains("vasia");
+        verify(playerService).remove("vasia");
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+        verify(playerService).register(captor.capture());
+        assertEquals("{'callbackUrl':'127.0.0.1'," +
+                "'gameName':'game'," +
+                "'name':'vasia'," +
+                "'protocol':'ws'," +
+                "'save':'{'save':'data'}'," +
+                "'score':0}", JsonUtils.cleanSorted(save));
+        verifyNoMoreInteractions(playerService);
     }
 
     @Test
@@ -229,6 +276,7 @@ public class SaveServiceImplTest {
     @Test
     public void testLoadAll() {
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
+        allPlayersNotRegistered();
 
         PlayerSave first = mock(PlayerSave.class);
         PlayerSave second = mock(PlayerSave.class);
@@ -240,12 +288,51 @@ public class SaveServiceImplTest {
 
         saveService.loadAll();
 
+        verify(playerService).contains("first");
         verify(playerService).register(first);
+        verify(playerService).contains("second");
         verify(playerService).register(second);
         verifyNoMoreInteractions(playerService);
 
         verify(saver).loadChat();
         verify(chat).setMessages(list);
+    }
+
+    private void allPlayersNotRegistered() {
+        boolean NOT_REGISTERED = false;
+        when(playerService.contains(anyString())).thenReturn(NOT_REGISTERED);
+    }
+
+    @Test
+    public void testLoadAll_whenRegistered() {
+        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
+        allPlayersRegistered();
+
+        PlayerSave first = mock(PlayerSave.class);
+        PlayerSave second = mock(PlayerSave.class);
+        when(saver.loadGame("first")).thenReturn(first);
+        when(saver.loadGame("second")).thenReturn(second);
+
+        List<ChatMessage> list = new LinkedList<ChatMessage>();
+        when(saver.loadChat()).thenReturn(list);
+
+        saveService.loadAll();
+
+        verify(playerService).contains("first");
+        verify(playerService).remove("first");
+        verify(playerService).register(first);
+        verify(playerService).contains("second");
+        verify(playerService).remove("second");
+        verify(playerService).register(second);
+        verifyNoMoreInteractions(playerService);
+
+        verify(saver).loadChat();
+        verify(chat).setMessages(list);
+    }
+
+    private void allPlayersRegistered() {
+        boolean REGISTERED = true;
+        when(playerService.contains(anyString())).thenReturn(REGISTERED);
     }
 
     @Test
