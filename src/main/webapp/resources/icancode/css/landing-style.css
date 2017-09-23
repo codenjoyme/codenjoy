@@ -49,7 +49,16 @@ ul {margin: 0;}
 
 .nav-item { line-height: 100px; }
 
-.logo-epam { margin-right: 50px; }
+.logo-container {
+  overflow: hidden;
+}
+.logo-epam {
+  float: left;
+  width: 115px;
+}
+.logo-dojo {
+  padding-top: 10px;
+}
 .logo-dojo:hover { text-decoration: none; }
 .logo-title { 
   font-family: sans-serif;
