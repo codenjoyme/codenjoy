@@ -6,12 +6,12 @@
 
     <properties>
         <module.name>icancode</module.name>
-        <codenjoy.version>1.0.18</codenjoy.version>
+        <codenjoy.version>1.0.23</codenjoy.version>
 
         <java.version>1.7</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <org.json.version>20160212</org.json.version>
+        <org.json.version>20160810</org.json.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
