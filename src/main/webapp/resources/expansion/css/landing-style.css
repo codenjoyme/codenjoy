@@ -49,8 +49,16 @@ ul {margin: 0;}
 
 .nav-item { line-height: 100px; }
 
-.logo-epam { margin-right: 50px; }
-.logo-engx:hover { text-decoration: none; }
+.logo-container {
+  overflow: hidden;
+}
+.logo-epam {
+  float: left;
+  width: 115px;
+}
+.logo-dojo {
+  padding-top: 10px;
+}
 .logo-title { 
   font-family: sans-serif;
   font-size: 24px;
