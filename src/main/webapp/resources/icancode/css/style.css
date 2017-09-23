@@ -19,25 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-@font-face {font-family: "Source Sans Pro";
-  src: url("../fonts/Source Sans Pro/Source Sans Pro.eot"); 
-  src: url("../fonts/Source Sans Pro/Source Sans Pro.eot?#iefix") format("embedded-opentype"), 
-  url("../fonts/Source Sans Pro/Source Sans Pro.woff") format("woff"), 
-  url("../fonts/Source Sans Pro/Source Sans Pro.ttf") format("truetype"), 
-  url("../fonts/Source Sans Pro/Source Sans Pro.svg#Source Sans Pro") format("svg"); 
-}
-
-@font-face {font-family: "Oswald";
-  src: url("../fonts/Oswald/Oswald-Regular.ttf") format("truetype"); 
-}
-
-@font-face {font-family: "Source Sans Pro Light";
-  src: url("../fonts/SourceSansPro-ExtraLight.ttf") format("truetype");
-}
-
-@font-face {font-family: "Oswald Light";
-  src: url("../fonts/Oswald-Light.ttf") format("truetype");
-}
 
 input {
   outline: none;
@@ -66,7 +47,7 @@ body {
 }
 
 .admin-title {
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
   float: right;
   margin-right: 15px;
   line-height: 55px;
@@ -123,7 +104,7 @@ ul {
   margin-left: 5px;
   text-transform: uppercase;
   vertical-align: middle;
-  font-family: "Oswald Light", sans-serif;
+  font-family: sans-serif;
   font-size: 20px;
   font-weight: 300;
 }
@@ -133,7 +114,7 @@ ul {
 .icancode-title { text-transform: none; }
 
 .nav-item {
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   line-height: 50px;
   font-weight: 300;
   font-size: 14px;
@@ -194,7 +175,7 @@ ul {
 
 .board-title {
   box-sizing: border-box;
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
   margin-top: 0;
   margin-bottom: 10px;
   padding-bottom: 10px;
@@ -214,7 +195,7 @@ ul {
 }
 
 .leaderboard-table {
-  font-family: "Oswald Light", sans-serif;
+  font-family: sans-serif;
   font-size: 28px;
   box-sizing: border-box;
   padding: 10px 0;
@@ -233,7 +214,7 @@ a:visited {
 }
 
 .star {
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
   font-size: 24px;
   line-height: 55px;
   display: block;
@@ -294,7 +275,7 @@ button:focus {
   border: none;
   color: #fff;
   text-transform: uppercase;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: sans-serif;
   font-size: 14px;
   padding: 0;
   transition: background .5s;
@@ -411,7 +392,7 @@ a.modalCloseImg {
 }
 
 .modal-window .modal-description {
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
   font-size: 25px;
   text-align: center;
   padding: 80px 0;
@@ -562,7 +543,7 @@ a.modalCloseImg {
 
 .autocomplete {
   position: relative;
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
   font-size: 14px;
   color: #fff;
   opacity: .5;
@@ -602,7 +583,7 @@ a.modalCloseImg {
   border-left: 3px solid #464547;
   border-right: 3px solid #464547;
   background-color: #323132;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: sans-serif;
   font-weight: 300;
   font-size: 16px;
   transition: background .5s;
@@ -646,7 +627,7 @@ a.modalCloseImg {
 }
 
 .tooltip {
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
 }
 
 .level-done {
@@ -727,7 +708,7 @@ a.modalCloseImg {
   transition: color .5s;
   color: rgba(255, 255, 255, .5);
   font-size: 14px;
-  font-family: "Source Sans Pro Light", sans-serif;
+  font-family: sans-serif;
 }
 
 .footer-item:hover a {
@@ -801,7 +782,7 @@ canvas {
   padding: 0 25px;
   height: 60px;
   line-height: 60px;
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   font-size: 18px;
   text-transform: uppercase;
 }
@@ -813,7 +794,7 @@ canvas {
   padding: 0 25px;
   height: 60px;
   line-height: 60px;
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   font-size: 18px;
   text-transform: uppercase;
   background-color: #464547;
@@ -823,7 +804,7 @@ canvas {
 }
 
 .modal-description {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: sans-serif;
   text-align: justify;
   padding: 25px 25px 40px 25px;
   border: 1px solid #5c5b5d;
@@ -895,7 +876,7 @@ canvas {
 }
 
 .nav-tabs {
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   text-transform: uppercase;
   border-bottom: 1px solid #ecc134;
   background-color: #666;
