@@ -42,7 +42,7 @@ if (gameName == 'iCanCode Training') {
 } else if (gameName == 'eKids') {
     game.enableBefunge = true;
     game.sprites = 'ekids';
-} else if (gameName == 'iCanCode Contest') {
+} else { // if (gameName == 'iCanCode Contest') { by default
     game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
