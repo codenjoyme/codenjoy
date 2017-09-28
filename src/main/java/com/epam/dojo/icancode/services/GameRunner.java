@@ -57,7 +57,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
-        boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
+        boolean isTrainingMode = true; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
             int total = Levels.collectSingle().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
