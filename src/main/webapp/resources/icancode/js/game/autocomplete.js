@@ -37,7 +37,7 @@ String.prototype.isAlphanumeric = function(){
 
 var autocomplete = {
     getCompletions: function(editor, session, pos, prefix, callback) {
-        var line = editor.session.getLine(pos.row).trim();
+        var line = editor.session.getLine(pos.row).substring(0, pos.column).trim();
 
         var found = [];
         for(var template in autocompleteMaps) {
