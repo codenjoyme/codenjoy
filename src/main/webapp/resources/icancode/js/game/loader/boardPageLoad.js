@@ -177,7 +177,8 @@ var boardPageLoad = function() {
     var oldLastPassed = -1;
     var onUpdate = function(level, multiple, lastPassed) {
         if (oldLastPassed < lastPassed) {
-            if (oldLastPassed != -1) {
+            var isFirstWin = (lastPassed == 0 && level == 1 && oldLastPassed == -1);
+            if (isFirstWin || oldLastPassed != -1) {
                 showWinWindow();
             }
             oldLastPassed = lastPassed;
