@@ -41,11 +41,13 @@ function initRunnerJs(game, libs, getLevelInfo) {
     var editor = initEditor(libs, 'ide-block', autocomplete);
 
     editor.on('focus', function() {
+        game.savedEnableJoystick = game.enableJoystick;
         game.enableJoystick = false;
     });
 
     editor.on('blur', function() {
-        game.enableJoystick = true;
+        game.enableJoystick = !!game.savedEnableJoystick;
+        game.savedEnableJoystick = null;
     });
 
     var typeCounter = 0;
