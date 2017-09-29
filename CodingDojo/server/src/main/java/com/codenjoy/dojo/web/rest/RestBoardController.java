@@ -70,6 +70,7 @@ public class RestBoardController {
     @RequestMapping(value = "/context", method = RequestMethod.GET)
     @ResponseBody
     public String getContext() {
+        // TODO to use there same logic as in icancode version
         String contextPath = servletContext.getContextPath();
         if (contextPath.charAt(contextPath.length() - 1) != '/') {
             contextPath += '/';
