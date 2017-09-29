@@ -23,12 +23,33 @@
  * Created by Mikhail_Udalyi on 08.08.2016.
  */
 
-var el = function (char, type, direction) {
-    return {
+var elements = [];
+var elementsTypes = [];
+var elementsByChar = {};
+var elementsByType = {};
+
+var el = function(char, type, direction) {
+    var result = {
         char: char,
         type: type,
         direction: direction
+    };
+
+    elementsByChar[char] = result;
+
+    if (!elementsByType[type]) {
+        elementsByType[type] = [];
+    } else {
+        elementsByType[type].push(result);
     }
+
+    elements.push(result);
+
+    if (elementsTypes.indexOf(type) == -1) {
+        elementsTypes.push(type);
+    }
+
+    return result;
 }
 
 var Element = {
@@ -59,48 +80,20 @@ var Element = {
     HOLE: el('O', 'HOLE'),
     BOX: el('B', 'BOX'),
 
-    getElements: function (char) {
-        var result = [];
-        for (name in this) {
-            if (typeof this[name] === 'function') {
-                continue;
-            }
-            result.push(this[name]);
-        }
-        return result;
+    getElements: function () {
+        return elements.slice(0);
     },
 
     getElement: function (char) {
-        var elements = this.getElements();
-        for (name in elements) {
-            if (elements[name].char == char) {
-                return elements[name];
-            }
-        }
-        return null;
+        return elementsByChar[char];
     },
 
     getElementsTypes: function () {
-        var result = [];
-        var elements = this.getElements();
-        for (name in elements) {
-            var type = elements[name].type;
-            if (result.indexOf(type) == -1) {
-                result.push(type);
-            }
-        }
-        return result;
+        return elementsTypes.slice(0);
     },
 
     getElementsOfType: function (type) {
-        var result = [];
-        var elements = this.getElements();
-        for (name in elements) {
-            if (elements[name].type == type) {
-                result.push(elements[name]);
-            }
-        }
-        return result;
+        return elementsByType[type];
     }
 
 };

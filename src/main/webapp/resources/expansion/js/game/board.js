@@ -47,9 +47,9 @@ var Board = function (boardString) {
     var board = eval(boardString);
     var layers = board.layers;
     var size = Math.sqrt(layers[LAYER1].length);
+    var xyl = new LengthToXY(size);
 
     var parseLayer = function (layer) {
-        var xyl = new LengthToXY(size);
         var map = [];
         for (var x = 0; x < size; x++) {
             map[x] = [];
