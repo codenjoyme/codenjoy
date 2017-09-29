@@ -73,14 +73,6 @@ var initLevelInfo = function() {
             'robot.':{
                 'synonyms':[],
                 'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
-            },
-            'scanner.':{
-                'synonyms':['robot.getScanner().'],
-                'values':[]
-            },
-            ' == ':{
-                'synonyms':[' != '],
-                'values':[]
             }
         }
     };
@@ -180,6 +172,10 @@ var initLevelInfo = function() {
             ' == ':{
                 'synonyms':[' != '],
                 'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'', 'null']
+            },
+            '.at(':{
+                'synonyms':['.go('],
+                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
             }
         }
     };
@@ -211,14 +207,6 @@ var initLevelInfo = function() {
             'robot.':{
                 'synonyms':[],
                 'values':['log()']
-            },
-            'scanner.':{
-                'synonyms':['robot.getScanner().'],
-                'values':[]
-            },
-            ' == ':{
-                'synonyms':[' != '],
-                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'', 'null']
             }
         }
     };
@@ -282,10 +270,7 @@ var initLevelInfo = function() {
 
     levelInfo[7] = {
         'help':'It is too hard to solve this issue without refactoring.<br>' +
-        'You can use new methods for refactoring:<br>' +
-        '<pre>scanner.at("RIGHT");\n' +
-        'robot.go("LEFT");</pre>' +
-        'Also you can use new FOR construction:<br>' +
+        'You can use new FOR construction:<br>' +
         '<pre>var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
         'for (var index in directions) {\n' +
         '    var direction = directions[index];\n' +
@@ -374,18 +359,10 @@ var initLevelInfo = function() {
         '    }\n' +
         '}',
         'autocomplete':{
-            'robot.':{
-                'synonyms':[],
-                'values':[]
-            },
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
-                'values':['getGold()', 'getExit()', 'getExit()', 'getShortestWay()', 'getMe()']
-            },
-            ' == ':{
-                'synonyms':[' != '],
-                'values':[]
-            },
+                'values':['getGold()', 'getExit()', 'getShortestWay()', 'getMe()']
+            }
         }
     };
 
@@ -440,16 +417,16 @@ var initLevelInfo = function() {
         'autocomplete':{
             'robot.':{
                 'synonyms':[],
-                'values':['goOverHole()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
+                'values':['goOverHole()', 'jump()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
             },
-            'scanner.':{
-                'synonyms':['robot.getScanner().'],
-                'values':[]
+            '.jump(':{
+                'synonyms':[],
+                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
             },
             ' == ':{
                 'synonyms':[' != '],
                 'values':['\'HOLE\'']
-            },
+            }
         }
     };
 
@@ -511,7 +488,13 @@ var initLevelInfo = function() {
         '    } else if (dy < 0) {\n' +
         '        robot.goOverHole("UP");\n' +
         '    }\n' +
-        '}'
+        '}',
+        'autocomplete':{
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':['atNearRobot()']
+            }
+        }
     }
 
     levelInfo[13] = { // LEVEL C
@@ -532,7 +515,17 @@ var initLevelInfo = function() {
         'defaultCode':levelInfo[12].winCode,
         'winCode':'function program(robot) {\n' +
         '    robot.nextLevel();\n' +
-        '}'
+        '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['pull()', 'pullLeft()', 'pullRight()', 'pullUp()', 'pullDown()']
+            },
+            '.pull(':{
+                'synonyms':[],
+                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
+            }
+        }
     }
 
     levelInfo[14] = { // LEVEL D
@@ -547,11 +540,16 @@ var initLevelInfo = function() {
         '<pre>robot.jump();\n' +
         'robot.jumpLeft();\n' +
         'robot.pullLeft();</pre>' +
-        'robot.pullLeft();</pre>' +
 
         'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[13].winCode,
-        'winCode':levelInfo[13].winCode
+        'winCode':levelInfo[13].winCode,
+        'autocomplete':{
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'LASER_UP\'', '\'LASER_DOWN\'', '\'LASER_LEFT\'', '\'LASER_RIGHT\'', '\'LASER_MACHINE\'', '\'LASER_MACHINE_READY\'']
+            }
+        }
     }
 
     return {
