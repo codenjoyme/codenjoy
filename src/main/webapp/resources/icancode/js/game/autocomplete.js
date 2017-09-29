@@ -85,8 +85,6 @@ var autocomplete = {
     }
 }
 
-debugger;
-
 var initAutocomplete = function(level, levelInfo) {
     autocompleteMaps = {};
 
