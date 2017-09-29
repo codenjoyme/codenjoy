@@ -154,12 +154,12 @@
     }
 
     function fillFormFromLocalStorage() {
-        var gameName = localStorage.getItem(LOCAL_STORAGE_KEYS.gameName),
-            player = localStorage.getItem(LOCAL_STORAGE_KEYS.userData.key);
-        if (gameName) {
+        var gameName = localStorage.getItem(LOCAL_STORAGE_KEYS.gameName);
+        var player = localStorage.getItem(LOCAL_STORAGE_KEYS.userData.key);
+        if (!!gameName && !$("#game").attr('hidden')) {
             $("#game").find("select").val(gameName);
         }
-        if (player) {
+        if (!!player) {
             player = JSON.parse(player);
             $('#email').find('input').val(player[LOCAL_STORAGE_KEYS.userData.email]);
         }
