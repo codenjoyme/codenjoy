@@ -1871,6 +1871,7 @@ public class SingleTest {
                 json.getBoolean("onlyMyName"));
     }
 
+    // TODO to remove when updated codenjoy version
     private static String clean(String json) {
         return json.replace('\"', '\'').replaceAll("\\r\\n", "\n");
     }
