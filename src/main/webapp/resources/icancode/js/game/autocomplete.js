@@ -31,6 +31,9 @@ String.prototype.ltrim = function() {
 String.prototype.rtrim = function() {
 	return this.replace(/\s+$/,"");
 }
+String.prototype.isAlphanumeric = function(){
+    return /^[0-9a-zA-Z]+$/.test(this);
+}
 
 var autocomplete = {
     getCompletions: function(editor, session, pos, prefix, callback) {
@@ -40,9 +43,17 @@ var autocomplete = {
         for(var template in autocompleteMaps) {
             var templateTrim = template.trim();
 
-            if (line.indexOf(templateTrim) != -1) {
-                found.push(template);
+            if (line.indexOf(templateTrim) == -1) {
+                continue;
             }
+
+            var between = line.substring(line.indexOf(templateTrim) + templateTrim.length);
+
+            if (!!between && !between.isAlphanumeric()) {
+                continue;
+            }
+
+            found.push(template);
         }
 
 
