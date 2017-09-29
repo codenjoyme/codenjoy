@@ -55,15 +55,14 @@ var autocomplete = {
 }
 
 var initAutocomplete = function(level, levelInfo) {
-    var data;
     autocompleteMaps = {};
 
-    for (var index = 0; index <= level; ++index) {
-        if (!levelInfo.getInfo || !levelInfo.getInfo(index).hasOwnProperty('autocomplete')) {
+    for (var levelIndex = 0; levelIndex <= level; levelIndex++) {
+        if (!levelInfo.getInfo || !levelInfo.getInfo(levelIndex).hasOwnProperty('autocomplete')) {
             continue;
         }
 
-        data = levelInfo.getInfo(index).autocomplete;
+        var data = levelInfo.getInfo(levelIndex).autocomplete;
 
         for(var index in data) {
             if (!data.hasOwnProperty(index)) {
@@ -76,7 +75,7 @@ var initAutocomplete = function(level, levelInfo) {
                 autocompleteMaps[index] = data[index].values;
             }
 
-            for(var isynonym = 0; isynonym < data[index].synonyms.length; ++isynonym) {
+            for(var isynonym = 0; isynonym < data[index].synonyms.length; isynonym++) {
                 autocompleteMaps[data[index].synonyms[isynonym]] = autocompleteMaps[index];
             }
         }
