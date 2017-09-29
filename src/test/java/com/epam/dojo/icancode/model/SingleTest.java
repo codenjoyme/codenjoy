@@ -1856,24 +1856,19 @@ public class SingleTest {
         JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
-                clean(JsonUtils.toStringSorted(json.get("levelProgress").toString())));
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress").toString())));
 
         assertEquals(heroes,
-                clean(JsonUtils.toStringSorted(json.get("offset").toString())));
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("offset").toString())));
 
         assertEquals(levels,
-                clean(json.get("layers").toString()));
+                JsonUtils.clean(json.get("layers").toString()));
 
         assertEquals(true,
                 json.getBoolean("showName"));
 
         assertEquals(onlyMyName,
                 json.getBoolean("onlyMyName"));
-    }
-
-    // TODO to remove when updated codenjoy version
-    private static String clean(String json) {
-        return json.replace('\"', '\'').replaceAll("\\r\\n", "\n");
     }
 
     @Test
