@@ -24,26 +24,34 @@
  */
 
 var autocompleteMaps = {};
+
+String.prototype.ltrim = function() {
+	return this.replace(/^\s+/,"");
+}
+String.prototype.rtrim = function() {
+	return this.replace(/\s+$/,"");
+}
+
 var autocomplete = {
     getCompletions: function(editor, session, pos, prefix, callback) {
-        var line = editor.session.getLine(pos.row);
-        var isFind = false;
+        var line = editor.session.getLine(pos.row).trim();
 
-        for(var index in autocompleteMaps) {
-            var startFindIndex = pos.column - index.length;
+        var found;
+        for(var template in autocompleteMaps) {
+            var templateTrim = template.trim();
+            var startFindIndex = pos.column - templateTrim.length;
 
-            var part = line.substring(startFindIndex, pos.column);
-            if (startFindIndex >= 0 && part == index) {
-                isFind = true;
+            if (startFindIndex >= 0 && line.endsWith(templateTrim)) {
+                found = template;
                 break;
             }
         }
 
-        if (!isFind) {
+        if (!found) {
             return;
         }
 
-        callback(null, autocompleteMaps[index].map(function(word) {
+        callback(null, autocompleteMaps[found].map(function(word) {
             return {
                 caption: word,
                 value: word,
