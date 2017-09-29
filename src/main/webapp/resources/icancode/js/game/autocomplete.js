@@ -32,7 +32,8 @@ var autocomplete = {
         for(var index in autocompleteMaps) {
             var startFindIndex = pos.column - index.length;
 
-            if (startFindIndex >= 0 && line.substring(startFindIndex, pos.column) == index) {
+            var part = line.substring(startFindIndex, pos.column);
+            if (startFindIndex >= 0 && part == index) {
                 isFind = true;
                 break;
             }
@@ -54,29 +55,37 @@ var autocomplete = {
     }
 }
 
+debugger;
+
 var initAutocomplete = function(level, levelInfo) {
     autocompleteMaps = {};
 
     for (var levelIndex = 0; levelIndex <= level; levelIndex++) {
-        if (!levelInfo.getInfo || !levelInfo.getInfo(levelIndex).hasOwnProperty('autocomplete')) {
+        if (!levelInfo.getInfo) {
             continue;
         }
 
-        var data = levelInfo.getInfo(levelIndex).autocomplete;
+        var data = levelInfo.getInfo(levelIndex + 1).autocomplete;
 
-        for(var index in data) {
-            if (!data.hasOwnProperty(index)) {
+        if (!data) {
+            continue;
+        }
+
+        for(var template in data) {
+            if (!data.hasOwnProperty(template)) {
                 continue;
             }
 
-            if (autocompleteMaps.hasOwnProperty(index)) {
-                autocompleteMaps[index] = autocompleteMaps[index].concat(data[index].values);
+            var values = data[template].values.slice(0);
+            if (autocompleteMaps.hasOwnProperty(template)) {
+                autocompleteMaps[template] = autocompleteMaps[template].concat(values);
             } else {
-                autocompleteMaps[index] = data[index].values;
+                autocompleteMaps[template] = values;
             }
 
-            for(var isynonym = 0; isynonym < data[index].synonyms.length; isynonym++) {
-                autocompleteMaps[data[index].synonyms[isynonym]] = autocompleteMaps[index];
+            for(var index = 0; index < data[template].synonyms.length; index++) {
+                var synonym = data[template].synonyms[index];
+                autocompleteMaps[synonym] = autocompleteMaps[template];
             }
         }
     }
