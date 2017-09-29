@@ -144,7 +144,7 @@
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #skills').keypress(function (e) {
+        $('#email, #password, #game, #skills, #data1, #data2, #data3').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();
