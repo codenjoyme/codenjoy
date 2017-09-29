@@ -905,11 +905,9 @@ canvas {
   margin-right: 15px;
 }
 
-/*
-#ide-content {
-  padding: 5px;
+#ide-console {
+  word-wrap: break-word;
 }
-*/
 
 
 @media screen and (max-width: 1330px) {
