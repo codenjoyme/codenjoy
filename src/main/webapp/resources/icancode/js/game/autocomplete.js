@@ -39,9 +39,8 @@ var autocomplete = {
         var found;
         for(var template in autocompleteMaps) {
             var templateTrim = template.trim();
-            var startFindIndex = pos.column - templateTrim.length;
 
-            if (startFindIndex >= 0 && line.endsWith(templateTrim)) {
+            if (line.endsWith(templateTrim)) {
                 found = template;
                 break;
             }
