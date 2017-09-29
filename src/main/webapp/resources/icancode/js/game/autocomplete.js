@@ -36,21 +36,33 @@ var autocomplete = {
     getCompletions: function(editor, session, pos, prefix, callback) {
         var line = editor.session.getLine(pos.row).trim();
 
-        var found;
+        var found = [];
         for(var template in autocompleteMaps) {
             var templateTrim = template.trim();
 
-            if (line.endsWith(templateTrim)) {
-                found = template;
-                break;
+            if (line.indexOf(templateTrim) != -1) {
+                found.push(template);
             }
         }
 
-        if (!found) {
+
+        if (found.length == 0) {
             return;
         }
 
-        callback(null, autocompleteMaps[found].map(function(word) {
+        var result = '';
+        for (var index in found) {
+            var template = found[index];
+            if (template.length > result.length) {
+                result = template;
+            }
+        }
+
+        if (!result) {
+            return;
+        }
+
+        callback(null, autocompleteMaps[result].map(function(word) {
             return {
                 caption: word,
                 value: word,
