@@ -934,10 +934,9 @@ canvas {
   margin-right: 15px;
 }
 
-#ide-content {
+#ide-console {
   word-wrap: break-word;
 }
-
 
 @media screen and (max-width: 1330px) {
   .button {
