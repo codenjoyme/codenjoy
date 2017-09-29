@@ -29,9 +29,9 @@ function initEditor(libs, container, completer) {
     editor.setTheme('ace/theme/monokai');
     editor.session.setMode('ace/mode/javascript');
     editor.setOptions({
-        fontSize: '14pt',
+        fontSize: '12pt',
         enableBasicAutocompletion: true,
-        enableSnippets: true,
+        enableSnippets: false,
         enableLiveAutocompletion: true
     });
     return editor;
