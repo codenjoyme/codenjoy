@@ -28,7 +28,7 @@ function initDonate(contextPath) {
     donate.show();
 
     want.click( function() {
-        $.ajax({ url:contextPath + "donate",
+        $.ajax({ url:contextPath + "/donate",
             success:function (data) {
                 donate.append('<div id="donate-container"></div>');
                 $("#payment").remove();

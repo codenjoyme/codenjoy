@@ -23,7 +23,7 @@
 var game = game || {};
 
 function loadData(url, onLoad) {
-    var pathFromUrl = '/' + location.pathname.split('/')[1] + '/';
+    var pathFromUrl = '/' + location.pathname.split('/')[1];
     var ctx = (!!game.contextPath) ? game.contextPath : pathFromUrl;
     $.get(ctx + url, {}, function (data) {
         onLoad(data);
@@ -31,10 +31,10 @@ function loadData(url, onLoad) {
 }
 
 function loadContext(onLoad) {
-    loadData('rest/context', function(ctx) {
-        game.contextPath = ctx;
+    loadData('/rest/context', function(contextPath) {
+        game.contextPath = contextPath;
         if (!!onLoad) {
-            onLoad();
+            onLoad(game.contextPath);
         }
     });
 }

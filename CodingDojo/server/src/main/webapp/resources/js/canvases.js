@@ -76,14 +76,14 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     function loadCanvasesData() {
-        loadData('rest/sprites/alphabet', function(alphabet) {
-            loadData('rest/sprites/' + gameName, function(elements) {
+        loadData('/rest/sprites/alphabet', function(alphabet) {
+            loadData('/rest/sprites/' + gameName, function(elements) {
                 for (var index in elements) {
                     var char = alphabet[index];
                     var color = elements[index];
                     plots[char] = color;
                     var subFolder = (!!sprites) ? sprites + '/' : '';
-                    plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + subFolder + color + '.png';
+                    plotsUrls[color] = contextPath + '/resources/sprite/' + gameName + '/' + subFolder + color + '.png';
                 }
 
                 buildHtml(players);

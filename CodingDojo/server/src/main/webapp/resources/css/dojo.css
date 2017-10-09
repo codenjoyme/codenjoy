@@ -19,6 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+#settings {
+    display: none;
+}
+
 .score-info {
     color:yellow;
     text-shadow: 6px 6px 10px black, 4px 4px 4px red;

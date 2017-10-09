@@ -34,9 +34,9 @@ function initChat(playerName, registered, code, contextPath, gameName) {
 
     if (!registered) {
         if (!!code) {
-            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '">login</a></h3>');
+            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + '/register?name=' + playerName + '&gameName=' + gameName + '">login</a></h3>');
         } else {
-            chatInfo.html('<h3>Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '">register</a></h3>');
+            chatInfo.html('<h3>Please <a href="' + contextPath + '/register?name=' + playerName + '&gameName=' + gameName + '">register</a></h3>');
         }
         chatMessage.hide();
         sendButton.hide();
@@ -72,7 +72,7 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     }
 
     function send(message) {
-        $.ajax({ url:encodeURI(contextPath + "chat?playerName=" + playerName + "&code=" + code + "&message=" + message),
+        $.ajax({ url:encodeURI(contextPath + "/chat?playerName=" + playerName + "&code=" + code + "&message=" + message),
             data:{},
             dataType:"json",
             cache:false,

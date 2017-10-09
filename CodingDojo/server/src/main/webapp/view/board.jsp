@@ -54,8 +54,11 @@
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 </head>
 <body style="display:none;">
+    <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+
     <%@include file="forkMe.jsp"%>
-    <div id="board_page" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}">
+
+    <div id="board_page">
         <%@include file="canvases.jsp"%>
         <%@include file="chat.jsp"%>
         <%@include file="advertisement.jsp"%>

@@ -32,3 +32,21 @@ game.enableAdvertisement = false;
 game.showBody = true;
 game.sprites = null;
 game.heroInfo= null;
+
+var getSettings = function(name) {
+    var value = $('#settings').attr(name);
+
+    if (typeof(value) === 'undefined') {
+        return null
+    }
+
+    if (value === '') {
+        return null;
+    }
+
+    if (value === 'true' || value === 'false'){
+        return (value === 'true');
+    }
+
+    return value;
+}

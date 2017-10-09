@@ -25,7 +25,7 @@
 <div id="leaderboard" style="display:none;">
     <table id="table-logs" class="table table-striped leaderboard-table">
         <thead>
-            <th class="center" width="5%">
+            <th width="5%">
                 <c:choose>
                     <c:when test="${code != null}">
                         <a href="${ctx}/board?code=${code}">#</a>
@@ -36,7 +36,7 @@
                 </c:choose>
             </th>
             <th width="55%">Player</th>
-            <th width="25%" class="left">Score</th>
+            <th width="25%" class="center">Score</th>
             <!-- th width="25%" class="center">Max</th -->
             <!-- th width="15%" class="center">Level</th -->
         </thead>

@@ -35,7 +35,7 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     }
 
     $(container + " #player_name").click(function(){
-        if (!enableJoystick) return;
+        if (!game.enableJoystick) return;
 
         if (visible()) {
             joystick.hide();
@@ -50,7 +50,7 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     function sendCommand(command) {
         if (!game.enableJoystick || !(enableAlways || visible())) return;
 
-        $.ajax({ url:contextPath + "joystick",
+        $.ajax({ url:contextPath + "/joystick",
                 data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",
                 cache:false,

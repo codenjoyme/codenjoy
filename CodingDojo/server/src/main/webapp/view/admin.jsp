@@ -33,20 +33,15 @@
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
 
+    <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/ajax-loader.js"></script>
     <script src="${ctx}/resources/js/validation.js"></script>
     <script src="${ctx}/resources/js/admin.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
-    <script>
-        $(document).ready(function () {
-            game.contextPath = '${ctx}';
-            game.gameName = '${gameName}';
-
-            initHotkeys(game.gameName, game.contextPath);
-        });
-    </script>
 </head>
 <body>
+    <div id="settings" contextPath="${ctx}" gameName="${gameName}"></div>
+
     <%@include file="forkMe.jsp"%>
     <div class="page-header">
         <h1>Admin page</h1>

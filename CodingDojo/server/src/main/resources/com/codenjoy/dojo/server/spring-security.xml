@@ -22,9 +22,9 @@
   -->
 
 <bean:beans xmlns="http://www.springframework.org/schema/security"
-            xmlns:bean="http://www.springframework.org/schema/beans"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="
+       xmlns:bean="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
@@ -35,11 +35,11 @@
             <content-type-options/>
             <header name="Content-Security-Policy"
                     value="default-src 'self';
-                    script-src 'self' http://www.google-analytics.com;
-                    img-src 'self' http://www.google-analytics.com;
-                    connect-src 'self';
+                    script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;
+                    img-src 'self' data: http://www.google-analytics.com;
+                    connect-src 'self' ws:;
                     font-src 'self';
-                    style-src 'self';"/>
+                    style-src 'self' 'unsafe-inline';"/>
             <xss-protection enabled="true" block="false"/>
             <cache-control/>
         </headers>

@@ -21,7 +21,7 @@
  */
 
 function loadPlayers(onLoad) {
-    loadData('rest/game/' + game.gameName + '/players', function(players) {
+    loadData('/rest/game/' + game.gameName + '/players', function(players) {
         if (game.allPlayersScreen) {
             game.players = players;
         } else {
@@ -37,15 +37,15 @@ function loadPlayers(onLoad) {
 }
 
 function initBoardPage(game) {
-    loadContext(function(events, ctx) {
-        loadData('rest/game/' + game.gameName + '/type', function(playerGameInfo) {
+    loadContext(function(ctx) {
+        loadData('/rest/game/' + game.gameName + '/type', function(playerGameInfo) {
             game.singleBoardGame = playerGameInfo.singleBoard;
             game.boardSize = playerGameInfo.boardSize;
 
-            loadData('rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
+            loadData('/rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
                 game.registered = registered;
 
-                loadData('rest/sprites/' + game.gameName + '/exists', function(isGraphicOrTextGame) {
+                loadData('/rest/sprites/' + game.gameName + '/exists', function(isGraphicOrTextGame) {
                     game.isGraphicOrTextGame = isGraphicOrTextGame;
 
                     loadPlayers(function(players) {
@@ -102,7 +102,7 @@ function initBoardComponents(game) {
                 });
     }
 
-    var gameInfo = '<h3><a href="' + game.contextPath + 'resources/help/' + game.gameName + '.html" target="_blank">How to play ' + game.gameName + '</a></h3>';
+    var gameInfo = '<h3><a href="' + game.contextPath + '/resources/help/' + game.gameName + '.html" target="_blank">How to play ' + game.gameName + '</a></h3>';
 
     if (game.enableChat) {
         initChat(game.playerName, game.registered,
@@ -122,7 +122,7 @@ function initBoardComponents(game) {
     }
 
     if (game.enableHotkeys) {
-        initHotkeys(game.gameName, game.contextPath);
+        // do nothing because hotkeys init itself
     }
 
     if (game.enableAdvertisement) {
@@ -145,13 +145,11 @@ function initBoardComponents(game) {
 }
 
 $(document).ready(function() {
-    var get = function(name) {
-        return $('#board_page').attr(name) || null;
-    }
-    game.gameName = get('gameName');
-    game.playerName = get('playerName');
-    game.code = get('code');
-    game.allPlayersScreen = get('allPlayersScreen');
+    game.gameName = getSettings('gameName');
+    game.playerName = getSettings('playerName');
+    game.code = getSettings('code');
+    game.allPlayersScreen = getSettings('allPlayersScreen');
+    game.contextPath = getSettings('contextPath');
 
     initBoardPage(game);
 });
