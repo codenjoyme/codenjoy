@@ -154,8 +154,16 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var getBoard = function() {
             return playerData.board;
         }
-        var getHeroesData = function () {
-            return playerData.heroesData[playerName];
+        var getHeroesData = function(isAll) {
+            if (isAll) {
+                var result = {};
+                for (var name in playerData.heroesData) {
+                    result[name] = playerData.heroesData[name][name];
+                }
+                return result;
+            } else {
+                return playerData.heroesData[playerName];
+            }
         }
 
         var drawAllLayers = function(layers, onDrawItem){
@@ -243,7 +251,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 if (singleBoardGame || !!board.showName) {
                     var currentPoint = null;
                     var currentHeroData = null;
-                    $.each(getHeroesData(), function(name, heroData) {
+                    var heroesData = getHeroesData(singleBoardGame);
+                    for (var name in heroesData) {
+                        var heroData = heroesData[name];
                         var point = heroData.coordinate;
                         if (!point) return; // TODO why this can happen?
                         if (point.x == -1 || point.y == -1) return;
@@ -258,7 +268,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         if (!board.onlyMyName && !!heroData.singleBoardGame) {
                             drawName(name, point, font, heroData);
                         }
-                    });
+                    }
                     drawName(playerName, currentPoint, font, currentHeroData);
                 }
             } catch (err) {
