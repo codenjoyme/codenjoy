@@ -281,10 +281,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function defaultDrawBoard(drawer) {
         drawer.clear();
-        drawer.back();
-        drawer.layers();
-        drawer.playerNames();
-        drawer.fog();
+        drawer.drawBack();
+        drawer.drawLayers();
+        drawer.drawPlayerNames();
+        drawer.drawFog();
     }
 
     drawBoard = (!!drawBoard) ? drawBoard : defaultDrawBoard;
