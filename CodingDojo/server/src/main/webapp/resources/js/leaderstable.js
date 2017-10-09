@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem, onParseValue){
+function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValue){
 
     var leaderboard = $("#leaderboard");
     leaderboard.show();
@@ -109,8 +109,4 @@ function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem, on
             drawLeaderTable(data);
         }
     });
-
-    if (!!onSetup) {
-        onSetup(leaderboard);
-    }
 };

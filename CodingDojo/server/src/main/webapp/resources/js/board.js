@@ -78,44 +78,16 @@ function initBoardComponents(game) {
     }
 
     initJoystick(game.playerName, game.registered,
-            game.code, game.contextPath,
-            game.enableAlways);
+            game.code, game.contextPath);
 
     if (game.enableLeadersTable) {
-        initLeadersTable(game.contextPath, game.playerName, game.code,
-                function(leaderboard) {
-                    if (!!$("#glasses")) {
-                        $(window).resize(resize);
-                        resize();
-                    }
-                    function resize() {
-                        var width = leaderboard.width();
-                        var margin = 30;
-
-                        $("#glasses").width($(window).width() - width - 3*margin)
-                                .css({ marginLeft: margin, marginTop: margin });
-
-                        leaderboard.width(width).css({ position: "absolute",
-                                        marginLeft: 0, marginTop: margin,
-                                        top: 0, left: $("#glasses").width()});
-                    }
-                });
+        initLeadersTable(game.contextPath, game.playerName, game.code);
     }
-
-    var gameInfo = '<h3><a href="' + game.contextPath + '/resources/help/' + game.gameName + '.html" target="_blank">How to play ' + game.gameName + '</a></h3>';
 
     if (game.enableChat) {
         initChat(game.playerName, game.registered,
                 game.code, game.contextPath,
                 game.gameName);
-
-        if (game.enableInfo) {
-            $("#chat-container").prepend(gameInfo);
-        }
-    } else {
-        if (game.enableInfo) {
-            $("#leaderboard").append(gameInfo);
-        }
     }
     if (!game.enableInfo) {
         $("#fork-me").hide(gameInfo);

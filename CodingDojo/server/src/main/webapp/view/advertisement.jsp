@@ -25,8 +25,10 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <div id="advertisement" style="display:none;">
-    <h4>Our friends</h4>
-    <a href="http://www.jetbrains.com" target="blank">
-        <img src="${ctx}/resources/advertisement/logo_intellij_idea.png"/>
-    </a>
+    <h3>
+        Our friends&nbsp;&nbsp;
+        <a href="http://www.jetbrains.com" target="blank">
+            <img src="${ctx}/resources/advertisement/logo_intellij_idea.png"/>
+        </a>
+    </h3>
 </div>

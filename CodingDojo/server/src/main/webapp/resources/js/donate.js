@@ -24,7 +24,6 @@ function initDonate(contextPath) {
     var want = $('#want-donate');
     var payment = $('#payment');
 
-    donate.css({position: 'absolute', left: 300});
     donate.show();
 
     want.click( function() {
