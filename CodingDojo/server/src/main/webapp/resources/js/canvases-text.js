@@ -96,7 +96,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             var playerName = player.name;
             var id = toId(playerName);
             var name = playerName.split('@')[0];
-            var visible = (allPlayersScreen || !enablePlayerInfo) ? 'none' : '';
+            var visible = (allPlayersScreen || !enablePlayerInfo) ? 'none' : 'block';
             templateData.push({name : name, id : id, visible : visible })
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
