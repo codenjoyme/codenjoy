@@ -52,21 +52,10 @@
     <script src="${ctx}/resources/js/advertisement.js"></script>
     <script src="${ctx}/resources/js/board.js"></script>
     <script src="${ctx}/resources/js/${gameName}.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            game.gameName = '${gameName}' || null;
-            game.playerName = '${playerName}' || null;
-            game.code = '${code}' || null;
-            game.allPlayersScreen = ${allPlayersScreen};
-
-            initBoardPage(game);
-        });
-    </script>
 </head>
 <body style="display:none;">
     <%@include file="forkMe.jsp"%>
-    <div id="board_page">
+    <div id="board_page" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}">
         <%@include file="canvases.jsp"%>
         <%@include file="chat.jsp"%>
         <%@include file="advertisement.jsp"%>

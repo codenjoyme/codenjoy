@@ -143,3 +143,15 @@ function initBoardComponents(game) {
         }
     }
 }
+
+$(document).ready(function() {
+    var get = function(name) {
+        return $('#board_page').attr(name) || null;
+    }
+    game.gameName = get('gameName');
+    game.playerName = get('playerName');
+    game.code = get('code');
+    game.allPlayersScreen = get('allPlayersScreen');
+
+    initBoardPage(game);
+});
