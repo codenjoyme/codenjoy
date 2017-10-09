@@ -49,7 +49,6 @@ if (gameName == 'iCanCode Training') {
 }
 game.enableDonate = false;
 game.enableJoystick = false;
-game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
 game.enableChat = false;
