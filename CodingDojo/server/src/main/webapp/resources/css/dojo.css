@@ -96,6 +96,8 @@ label.error {
 #leaderboard {
     width: 500px;
     float: right;
+    padding-right: 75px;
+    padding-top: 25px;
 }
 
 #glasses {
