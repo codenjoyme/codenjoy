@@ -26,7 +26,8 @@
 }
 
 .game {
-  width: calc(100% - 500px); float: left;
+  width: calc(100% - 500px);
+  float: left;
 }
 
 .board {
