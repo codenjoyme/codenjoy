@@ -33,7 +33,13 @@
         <headers>
             <hsts max-age-seconds="31536000"/>
             <content-type-options/>
-            <header name="X-Content-Security-Policy" value="default-src 'self'"/>
+            <header name="Content-Security-Policy"
+                    value="default-src 'self';
+                    script-src 'self' http://www.google-analytics.com;
+                    img-src 'self' http://www.google-analytics.com;
+                    connect-src 'self';
+                    font-src 'self';
+                    style-src 'self';"/>
             <xss-protection enabled="true" block="false"/>
             <cache-control/>
         </headers>
