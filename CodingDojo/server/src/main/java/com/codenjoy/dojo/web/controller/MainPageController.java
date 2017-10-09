@@ -49,6 +49,9 @@ public class MainPageController {
     @Value("${page.main}")
     private String mainPage;
 
+    @Value("${language}")
+    private String language;
+
     public MainPageController() {
     }
 
@@ -61,6 +64,12 @@ public class MainPageController {
     public String help(Model model) {
         model.addAttribute("gameNames", gameService.getGameNames());
         return "help";
+    }
+
+    @RequestMapping(value = "/help", params = "gameName", method = RequestMethod.GET)
+    public String helpForGame(Model model, @RequestParam("gameName") String gameName) {
+        String suffix = (StringUtils.isEmpty(language)) ? "" : ("-" + language);
+        return "redirect:resources/help/" + gameName + suffix + ".html";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

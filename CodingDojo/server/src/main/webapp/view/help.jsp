@@ -51,7 +51,7 @@
             </select>
         <li>Setup project according to instruction in README.txt for your developing language</li>
         <li>If no internet, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library (check setup.bat inside)</li>
-        <li>Read game instructions: <c:forEach items="${gameNames}" var="gameName"><a href="${ctx}/resources/help/${gameName}.html">${gameName}</a>&nbsp;&nbsp;</c:forEach></li>
+        <li>Read game instructions: <c:forEach items="${gameNames}" var="gameName"><a href="${ctx}/help?gameName=${gameName}">${gameName}</a>&nbsp;&nbsp;</c:forEach></li>
         <li>Open <a href="${ctx}/register">registration page</a></li>
         <li>Enter your name/password and codenjoy!</li>
     </ol>
