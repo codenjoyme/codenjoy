@@ -2,7 +2,7 @@
  * #%L
  * jCanvas v16.06.06
  * %%
- * Copyright 2016 Caleb Evans
+ * Copyright (C) 2016 Caleb Evans
  * %%
  * Released under the MIT license
  * #L%
