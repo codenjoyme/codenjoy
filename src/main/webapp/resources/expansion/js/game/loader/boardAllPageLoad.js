@@ -51,8 +51,6 @@ var boardAllPageLoad = function() {
     };
 
     initLeadersTable(game.contextPath, game.playerName, game.code,
-        function() {
-        },
         function(count, you, link, name, score, maxLength, level) {
             var star = '';
             if (count == 1) {
