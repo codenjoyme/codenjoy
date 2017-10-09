@@ -1,0 +1,140 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2016 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>2048 Extreme Codenjoy — How to play? | Games at work</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<a target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+                <header class="entry-header">
+                    <h1 class="entry-title">2048 Extreme Codenjoy — how to play?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output">
+                        <p>The game is based on
+                            <a href="http://gabrielecirulli.github.io/2048/">
+                                http://gabrielecirulli.github.io/2048/</a>. Thank Authors for the idea.</p>
+                        <p>Игровой сервер доступен сейчас в целях ознакомления
+                            <a href="/codenjoy-contest">
+                                http://codenjoy.com/codenjoy-contest</a></p>
+
+                        <p>What is the gist of the game?</p>
+                        <p>You should get to 2048 (or even further). How to do it? With each your
+                            move, the “2” digit will appear in the empty angle cells. By using one
+                            of the commands (LEFT, RIGHT, UP, DOWN), you can approach all digits to
+                            one of the sides. At this, two similar adjacent digits convert into one
+                            what is the sum of these two digits.</p>
+                        <p>Points are calculated as a maximum sum of digits on the board for the whole game.</p>
+                        <p>The player with the largest number of points is considered to
+                            be a winner (prior to the due date).</p>
+
+                        <p>Then the player <a href="/codenjoy-contest/register?gameName=a2048-extreme" target="_blank">
+                            registers on the server</a>, by indicating her/his Email.</p>
+                        <p>Then you should connect <a href="/codenjoy-contest/resources/user/a2048-extreme-servers.zip">from code</a>
+                            to the server via Web Sockets. This is the Maven project and it will suit for
+                            playing in JVM languages. To know how to launch it, refer to the root of README.txt</p>
+                        <p>For the other languages, you should write a native client (and then to share it with us by Email: apofig@gmail.com)</p>
+                        <p>Address to connect to the game on the http://codenjoy.com server:</p>
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=email</pre>
+                        <p>Address to connect the game on the server deployed in the local area network (LAN):</p>
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=email</pre>
+                        <p>email here is the email indicated at the registration on the server.</p>
+
+                        <p>After connection, the client will regularly (every second) receive a line of
+                            characters with the encoded state of the field. The format:</p>
+
+                        <pre>^board=(.*)$</pre>
+
+                        <p>With the help of regexp you can obtain a board line. Example of the line from the server:</p>
+
+                        <pre>board=8A4AA2BB88488848442222222</pre>
+
+                        <p>The line length is equal to the field square (N*N). If to insert a
+                            wrapping character (carriage return) every N characters, we obtain
+                            the readable image of the field. The [0,0] coordinate corresponds to
+                            the left upper corner.</p>
+
+                        <pre>8A4AA
+2BB88
+48884
+84422
+22222</pre>
+                        <p>Interpretation of characters</p>
+
+                        <pre>_x('x') - barrier, across which the digit will not step over
+_2('2')
+_4('4')
+_8('8')
+_16('A')
+_32('B')
+_64('C')
+_128('D')
+_256('E')
+_512('F')
+_1024('G')
+_2048('H')
+_4096('I')
+_8192('J')
+_16384('K')
+_32768('L')
+_65536('M')
+_131072('N')
+_262144('O')
+_524288('P')
+_1048576('Q')
+_2097152('R')
+_4194304('S')
+NONE(' ')</pre>
+                        <p>The game is turn-based, every second the server sends to its
+                            client (bot) the state of the updated field at the moment and
+                            expects a response of the team. Within the next second, the
+                            player should give a command. If the player lost his/her chance,
+                            nothing changes</p>
+                        <p>The first task is to write a client’s WebSocket which will
+                            connect to the server. Then you should “force” digits on the
+                            field to listen to the commands. This is the way the gamer
+                            will prepare herself/himself to the main game. The primary
+                            goal is to play meaningfully and win.</p>
+
+                        <p>This is the open source game. To realize your game, correct errors in the current
+                            version and make the other corrections, you should
+                            <a href="https://github.com/codenjoyme">fork the project</a> at first.
+                            There is the description in the Readme.md file in the repository root.
+                            It is specified in the description what to do next.</p>
+                        <p> If any questions, please write in <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            or Email <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
