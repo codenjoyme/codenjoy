@@ -25,7 +25,14 @@ namespace Bomberman.Api
 {
     public abstract class BombermanBase
     {
-        protected readonly string Server = @"ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+        // to use for local server
+        protected readonly string Server =
+                @"ws://192.168.1.1:8080/codenjoy-contest/ws";
+
+        // to use for codenjoy.com server
+        // protected readonly string Server =
+        //        @"ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+
         private const string ResponsePrefix = "board=";
 
         public BombermanBase(string userName)

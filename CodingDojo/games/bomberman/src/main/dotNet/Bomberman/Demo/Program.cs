@@ -29,7 +29,7 @@ namespace Demo
         static void Main(string[] args)
         {
             // creating custom bomberman's Ai client
-            var bomber = new MyCustomBombermanAI("ApiDotNet");
+            var bomber = new MyCustomBombermanAI("user@gmail.com");
             
             // starting thread with playing bomberman
             (new Thread(bomber.Play)).Start();

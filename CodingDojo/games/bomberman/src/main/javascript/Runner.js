@@ -33,15 +33,21 @@ var printArray = function (array) {
 };
 var util = require('util');
 
-//var hostIp = '127.0.0.1';
-var hostIp = 'tetrisj.jvmhost.net';
+// to use for local server
+var hostIP = '192.168.1.1';
 
-var userName = 'apofig';
+// to use for codenjoy.com server
+// var hostIP = 'tetrisj.jvmhost.net';
+
+var userName = 'user@gmail.com';
 var protocol = 'WS';
 
 var processBoard = function(boardString) {
     var board = new Board(boardString);
     log("Board: " + board);
+    if (!!printBoardOnTextArea) {
+        printBoardOnTextArea(board.boardAsString());
+    }
 
     var answer = new DirectionSolver(board).get().toString();
     log("Answer: " + answer);
@@ -51,28 +57,15 @@ var processBoard = function(boardString) {
 };
 
 if (protocol == 'HTTP') {
-    var http = require('http');
-    var url = require('url');
-
-    http.createServer(function (request, response) {
-        var parameters = url.parse(request.url, true).query;
-        var boardString = parameters.board;
-
-        var answer = processBoard(boardString);
-
-        response.writeHead(200, {'Content-Type': 'text/plain'});
-        response.end(answer);
-    }).listen(8888, hostIp);
-
-    log('Server running at http://' + hostIp + ':8888/');
+    // unsupported
 } else {
     var port = 8080;
-    if (hostIp == 'tetrisj.jvmhost.net') {
+    if (hostIP == 'tetrisj.jvmhost.net') {
         port = 12270;
     }
-    var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
-    var WebSocket = require('ws');
-    var ws = new WebSocket(server + '?user=' + userName);
+    var server = 'ws://' + hostIP + ':' + port + '/codenjoy-contest/ws';
+    var WSocket = require('ws');
+    var ws = new WSocket(server + '?user=' + userName);
 
     ws.on('open', function() {
         log('Opened');
@@ -83,7 +76,7 @@ if (protocol == 'HTTP') {
     });
 
     ws.on('message', function(message) {
-        log('received: %s', message);
+        log('Received: %s', message);
 
         var pattern = new RegExp(/^board=(.*)$/);
         var parameters = message.match(pattern);
@@ -141,7 +134,7 @@ var D = function(index, dx, dy, name){
     };
 
     var changeY = function(y) {
-        return y - dy;
+        return y + dy;
     };
 
     var inverted = function() {
@@ -174,12 +167,12 @@ var D = function(index, dx, dy, name){
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'up'),        // направления движения бомбермена
+    UP : D(2, 0, -1, 'up'),                 // you can move
     DOWN : D(3, 0, 1, 'down'),
     LEFT : D(0, -1, 0, 'left'),
     RIGHT : D(1, 1, 0, 'right'),
-    ACT : D(4, 0, 0, 'act'),       // поставить бомбу
-    STOP : D(5, 0, 0, '')         // стоять на месте
+    ACT : D(4, 0, 0, 'act'),                // drop bomb
+    STOP : D(5, 0, 0, '')                   // stay
 };
 
 Direction.values = function() {
@@ -465,65 +458,14 @@ var direction;
 
 var DirectionSolver = function(board){
 
-    var tryToMove = function(x, y) {
-        var count = 0;
-        var result = null;
-        var again = false;
-        var newX = x;
-        var newY = y;
-        do {
-            var count1 = 0;
-            do {
-                result = Direction.valueOf(random(4));
-            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.NONE) > 1));
-
-            newX = result.changeX(x);
-            newY = result.changeY(y);
-
-            var bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
-            var barrierAtWay = board.isBarrierAt(newX, newY);
-            var meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
-//            var deadEndAtWay = board.countNear(newX, newY, Element.NONE) == 0;   // TODO продолжить но с тестами
-//            if (deadEndAtWay) {
-//                bomb = null;
-//            }
-
-            again = bombAtWay || barrierAtWay || meatChopperNearWay;
-        } while (count++ < 20 && again);
-
-        if (count < 20) {
-            return result;
-        }
-        return Direction.ACT;
-    };
-
-    function mergeCommands(bomb, direction) {
-        return "" + ((bomb != null) ? Direction.ACT + "," : "") + ((direction != null) ? direction : "");
-    }
-
     return {
-        get : function() {
+        /**
+         * @return next hero action
+         */
+        get : function(board) {
             var bomberman = board.getBomberman();
-
-            var nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);
-            var bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN);
-
-            bomb = null;
-            if (nearDestroyWall && bombNotDropped) {
-                bomb = new Point(bomberman.getX(), bomberman.getY());
-            }
-
-            direction = tryToMove(bomberman.getX(), bomberman.getY(), bomb);
-
-            return mergeCommands(bomb, direction);
+            return Direction.ACT;
         }
-
-//        /**
-//         * @return next bot action
-//         */
-//        get : function(board) {
-//            return Direction.ACT;
-//        }
     };
 };
 

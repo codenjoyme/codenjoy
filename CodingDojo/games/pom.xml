@@ -211,7 +211,7 @@
                                          includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                               README.txt,
+                                               README.*,
                                                src/license/**,
                                                **/pom.xml"
                                          excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,

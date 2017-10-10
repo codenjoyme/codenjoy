@@ -43,7 +43,7 @@ namespace Demo
             Console.SetCursorPosition(0, 0);
             gameBoard.PrintBoard();
 
-			return BombermanActionToString(BombermanAction.GoDown);
+			return BombermanActionToString(BombermanAction.PlaceBomb);
         }
 
         /// <summary>
