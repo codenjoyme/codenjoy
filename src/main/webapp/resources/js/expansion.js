@@ -45,6 +45,7 @@ if (gameName == 'Expansion Training') {
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enablePlayerInfo = false;
+game.enablePlayerInfoLevel = false;
 game.enableLeadersTable = false;
 game.enableChat = false;
 game.enableInfo = false;
