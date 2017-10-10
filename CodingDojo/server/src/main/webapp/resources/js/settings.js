@@ -24,6 +24,7 @@ game.enableDonate = false;
 game.enableJoystick = false;
 game.enableAlways = false;
 game.enablePlayerInfo = true;
+game.enablePlayerInfoLevel = true;
 game.enableLeadersTable = true;
 game.enableChat = false;
 game.enableInfo = true;
