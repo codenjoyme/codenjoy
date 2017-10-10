@@ -20,7 +20,18 @@
  * #L%
  */
 var printBoardOnTextArea = function(data) {
-    document.getElementById("board").value = data;
+    var textarea = document.getElementById("board");
+    if (!textarea) return;
+    var size = data.split('\n')[0].length;
+    textarea.cols = size;
+    textarea.rows = size + 1;
+    textarea.value = data;
+}
+
+var printLogOnTextArea = function(data) {
+    var textarea = document.getElementById("log-area");
+    if (!textarea) return;
+    textarea.value += data + "\n";
 }
 
 var require = function(string) {

@@ -21,6 +21,9 @@
  */
 var log = function(string) {
     console.log(string);
+    if (!!printBoardOnTextArea) {
+        printLogOnTextArea(string);
+    }
 };
 
 var printArray = function (array) {
@@ -35,6 +38,7 @@ var util = require('util');
 
 // to use for local server
 var hostIP = '192.168.1.1';
+//var hostIP = '127.0.0.1';
 
 // to use for codenjoy.com server
 // var hostIP = 'tetrisj.jvmhost.net';
@@ -76,7 +80,7 @@ if (protocol == 'HTTP') {
     });
 
     ws.on('message', function(message) {
-        log('Received: %s', message);
+        log('Received message');
 
         var pattern = new RegExp(/^board=(.*)$/);
         var parameters = message.match(pattern);
@@ -134,7 +138,7 @@ var D = function(index, dx, dy, name){
     };
 
     var changeY = function(y) {
-        return y + dy;
+        return y - dy;
     };
 
     var inverted = function() {
@@ -167,8 +171,8 @@ var D = function(index, dx, dy, name){
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'up'),                 // you can move
-    DOWN : D(3, 0, 1, 'down'),
+    UP : D(2, 0, 1, 'up'),                 // you can move
+    DOWN : D(3, 0, -1, 'down'),
     LEFT : D(0, -1, 0, 'left'),
     RIGHT : D(1, 1, 0, 'right'),
     ACT : D(4, 0, 0, 'act'),                // drop bomb
@@ -219,16 +223,28 @@ var pt = function(x, y) {
 };
 
 var LengthToXY = function(boardSize) {
+    function inversionY(y) {
+        return boardSize - 1 - y;
+    }
+
+    function inversionX(x) {
+        return x;
+    }
+
     return {
         getXY : function(length) {
             if (length == -1) {
                 return null;
             }
-            return new Point(length % boardSize, Math.ceil(length / boardSize));
+            var x = inversionX(length % boardSize);
+            var y = inversionY(Math.ceil(length / boardSize))
+            return new Point(x, y);
         },
 
         getLength : function(x, y) {
-            return y*boardSize + x;
+            var xx = inversionX(x);
+            var yy = inversionY(y)
+            return yy*boardSize + xx;
         }
     };
 };
@@ -462,7 +478,7 @@ var DirectionSolver = function(board){
         /**
          * @return next hero action
          */
-        get : function(board) {
+        get : function() {
             var bomberman = board.getBomberman();
             return Direction.ACT;
         }
