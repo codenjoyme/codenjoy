@@ -65,16 +65,13 @@ namespace Bomberman.Api
 
         public string Recv()
         {
-            ArraySegment<byte> bytesReceived = new ArraySegment<byte>(new byte[1024]);
+            ArraySegment<byte> bytesReceived = new ArraySegment<byte>(new byte[10240]);
             Task<WebSocketReceiveResult> task = ws.ReceiveAsync(
                 bytesReceived, CancellationToken.None);
             task.Wait();
-            WebSocketReceiveResult result = task.Result;
+            WebSocketReceiveResult result = task.Result;            
 
-            Console.WriteLine(Encoding.UTF8.GetString(
-                bytesReceived.Array, 0, result.Count));
-
-            return Encoding.UTF8.GetString(bytesReceived.Array);
+            return Encoding.UTF8.GetString(bytesReceived.Array, 0, result.Count);
         }
 
         public void Close()

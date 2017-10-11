@@ -42,8 +42,9 @@ namespace Demo
             //Just print current state (gameBoard) to console
             Console.SetCursorPosition(0, 0);
             gameBoard.PrintBoard();
-
-			return BombermanActionToString(BombermanAction.PlaceBomb);
+			var action = BombermanActionToString(BombermanAction.PlaceBomb);
+            Console.WriteLine("Answer: " + action);
+            return action;
         }
 
         /// <summary>

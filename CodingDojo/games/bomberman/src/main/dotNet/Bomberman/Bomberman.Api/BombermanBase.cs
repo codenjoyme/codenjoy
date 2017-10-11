@@ -63,9 +63,8 @@ namespace Bomberman.Api
                     else
                     {
                         var boardString = response.Substring(ResponsePrefix.Length);
-
-                        var action = DoMove(new GameBoard(boardString));
-
+                        var board = new GameBoard(boardString);
+                        var action = DoMove(board);                        
                         socket.Send(action);
                     }
                 }
