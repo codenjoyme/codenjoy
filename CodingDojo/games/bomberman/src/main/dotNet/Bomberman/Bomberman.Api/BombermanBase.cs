@@ -47,7 +47,7 @@ namespace Bomberman.Api
             var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}", 
                 Server, Uri.EscapeDataString(UserName)));
 
-            using (var socket = new WebSocket2(uri))
+            using (var socket = new WebSocket(uri))
             {
                 socket.Connect();
 
