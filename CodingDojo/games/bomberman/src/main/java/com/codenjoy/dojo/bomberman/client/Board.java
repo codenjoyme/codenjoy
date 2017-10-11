@@ -55,7 +55,7 @@ public class Board extends AbstractBoard<Elements> {
         return size - 1 - y;
     }
 
-    public boolean isGameOver() {
+    public boolean isMyBombermanDead() {
         return !get(DEAD_BOMBERMAN).isEmpty();
     }
 

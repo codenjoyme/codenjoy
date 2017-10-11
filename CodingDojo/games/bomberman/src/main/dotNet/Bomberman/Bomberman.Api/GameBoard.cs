@@ -45,26 +45,15 @@ namespace Bomberman.Api
             }
         }
 
-        public BoardPoint MyBombermanPosition
+        public BoardPoint GetBomberman()
         {
-            get
-            {
-                return FindAllElements(BoardElement.Bomberman)
+            return FindAllElements(BoardElement.Bomberman)
                     .Concat(FindAllElements(BoardElement.BombBomberman))
                     .Concat(FindAllElements(BoardElement.DeadBomberman))
                     .Single();
-            }
         }
 
-        public bool MyBombermanDead
-        {
-            get
-            {
-                return BoardString.Contains((char)BoardElement.DeadBomberman);
-            }
-        }
-
-        public List<BoardPoint> GetOtherBombermanPositions()
+        public List<BoardPoint> GetOtherBombermans()
         {
             return FindAllElements(BoardElement.OtherBomberman)
                 .Concat(FindAllElements(BoardElement.OtherBombBomberman))
@@ -72,19 +61,37 @@ namespace Bomberman.Api
                 .ToList();
         }
 
-        public bool HasElementAt(BoardPoint point, BoardElement element)
+        public bool isMyBombermanDead
         {
-            if (point.IsOutOfBoard(Size))
+            get
+            {
+                return BoardString.Contains((char)BoardElement.DeadBomberman);
+            }
+        }
+
+        public BoardElement GetAt(int x, int y)
+        {
+            if (Pt(x, y).IsOutOf(Size))
+            {
+                return BoardElement.Wall;
+            }
+            return (BoardElement)BoardString[GetShiftByPoint(x, y)];
+        }
+
+        public bool IsAt(int x, int y, BoardElement element)
+        {
+            var point = new BoardPoint(x, y);
+            return IsAt(point, element);
+        }
+
+        public bool IsAt(BoardPoint point, BoardElement element)
+        {
+            if (point.IsOutOf(Size))
             {
                 return false;
             }
 
-            return GetElementAt(point) == element;
-        }
-
-        public BoardElement GetElementAt(BoardPoint point)
-        {
-            return (BoardElement)BoardString[GetShiftByPoint(point)];
+            return GetAt(point.X, point.Y) == element;
         }
 
         /// <summary>
@@ -92,24 +99,51 @@ namespace Bomberman.Api
         /// </summary>
         public void PrintBoard()
         {
+            Console.Clear();
             for (int i = 0; i < Size; i++)
             {
                 Console.WriteLine(BoardString.Substring(i * Size, Size));
             }
+
+            var data = string.Format("Bomberman at: {0}\n" +
+                    "Other bombermans at: {1}\n" +
+                    "Meat choppers at: {2}\n" +
+                    "Destroy walls at: {3}\n" +
+                    "Bombs at: {4}\n" +
+                    "Blasts: {5}\n" +
+                    "Expected blasts at: {6}",
+                    GetBomberman(),
+                    ListToString(GetOtherBombermans()),
+                    ListToString(GetMeatChoppers()),
+                    ListToString(GetDestroyWalls()),
+                    ListToString(GetBombs()),
+                    ListToString(GetBlasts()),
+                    ListToString(GetFutureBlasts()));
+            Console.WriteLine(data);
         }
 
-        public List<BoardPoint> GetBarrierPositions()
+        private string ListToString(List<BoardPoint> list)
         {
-            return GetMeatChopperPositions()
-                .Concat(GetWallPositions())
-                .Concat(GetBombPositions())
-                .Concat(GetWallDestroyablePositions())
-                .Concat(GetOtherBombermanPositions())
+            return string.Join(",", list.ToArray());
+        }
+
+        private string PrintArray(object[] array)
+        {
+            return string.Join(",", array); ;
+        }
+
+        public List<BoardPoint> GetBarrier()
+        {
+            return GetMeatChoppers()
+                .Concat(GetWalls())
+                .Concat(GetBombs())
+                .Concat(GetDestroyWalls())
+                .Concat(GetOtherBombermans())
                 .Distinct()
                 .ToList();
         }
 
-        public List<BoardPoint> GetMeatChopperPositions()
+        public List<BoardPoint> GetMeatChoppers()
         {
             return FindAllElements(BoardElement.MeatChopper);
         }
@@ -122,7 +156,7 @@ namespace Bomberman.Api
             {
                 BoardPoint pt = GetPointByShift(i);
 
-                if (HasElementAt(pt, element))
+                if (IsAt(pt, element))
                 {
                     result.Add(pt);
                 }
@@ -131,17 +165,17 @@ namespace Bomberman.Api
             return result;
         }
 
-        public List<BoardPoint> GetWallPositions()
+        public List<BoardPoint> GetWalls()
         {
             return FindAllElements(BoardElement.Wall);
         }
 
-        public List<BoardPoint> GetWallDestroyablePositions()
+        public List<BoardPoint> GetDestroyWalls()
         {
             return FindAllElements(BoardElement.WallDestroyable);
         }
 
-        public List<BoardPoint> GetBombPositions()
+        public List<BoardPoint> GetBombs()
         {
             return FindAllElements(BoardElement.BombTimer1)
                 .Concat(FindAllElements(BoardElement.BombTimer2))
@@ -152,14 +186,14 @@ namespace Bomberman.Api
                 .ToList();
         }
 
-        public List<BoardPoint> GetBlastPositions()
+        public List<BoardPoint> GetBlasts()
         {
             return FindAllElements(BoardElement.Boom);
         }
 
-        public List<BoardPoint> GetFutureBlastPositions()
+        public List<BoardPoint> GetFutureBlasts()
         {
-            var bombs = GetBombPositions()
+            var bombs = GetBombs()
                 .Concat(FindAllElements(BoardElement.OtherBombBomberman))
                 .Concat(FindAllElements(BoardElement.BombBomberman));
 
@@ -174,45 +208,51 @@ namespace Bomberman.Api
                 result.Add(bomb.ShiftBottom());
             }
 
-            return result.Where(blast => !blast.IsOutOfBoard(Size) && !GetWallPositions().Contains(blast)).Distinct().ToList();
+            return result.Where(blast => !blast.IsOutOf(Size) && !GetWalls().Contains(blast)).Distinct().ToList();
         }
 
         public bool HasElementAt(BoardPoint point, params BoardElement[] elements)
         {
-            return elements.Any(elem => HasElementAt(point, elem));
+            return elements.Any(elem => IsAt(point, elem));
         }
 
-        public bool IsNearToElement(BoardPoint point, BoardElement element)
+        private static BoardPoint Pt(int x, int y)
         {
-            if (point.IsOutOfBoard(Size))
+            return new BoardPoint(x, y);
+        }
+
+        public bool IsNearToElement(int x, int y, BoardElement element)
+        {
+            var point = Pt(x, y);
+            if (point.IsOutOf(Size))
                 return false;
 
-            return HasElementAt(point.ShiftBottom(), element)
-                   || HasElementAt(point.ShiftTop(), element)
-                   || HasElementAt(point.ShiftLeft(), element)
-                   || HasElementAt(point.ShiftRight(), element);
+            return IsAt(point.ShiftLeft(), element) ||
+                   IsAt(point.ShiftRight(), element) ||
+                   IsAt(point.ShiftTop(), element) ||
+                   IsAt(point.ShiftBottom(), element);
         }
 
-        public bool HasBarrierAt(BoardPoint point)
+        public bool HasBarrierAt(int x, int y)
         {
-            return GetBarrierPositions().Contains(point);
+            return GetBarrier().Contains(Pt(x, y));
         }
 
         public int GetCountElementsNearToPoint(BoardPoint point, BoardElement element)
         {
-            if (point.IsOutOfBoard(Size))
+            if (point.IsOutOf(Size))
                 return 0;
 
             //GetHashCode() in classic MS.NET for bool returns 1 for true and 0 for false;
-            return HasElementAt(point.ShiftLeft(), element).GetHashCode() +
-                   HasElementAt(point.ShiftRight(), element).GetHashCode() +
-                   HasElementAt(point.ShiftTop(), element).GetHashCode() +
-                   HasElementAt(point.ShiftBottom(), element).GetHashCode();
+            return IsAt(point.ShiftLeft(), element).GetHashCode() +
+                   IsAt(point.ShiftRight(), element).GetHashCode() +
+                   IsAt(point.ShiftTop(), element).GetHashCode() +
+                   IsAt(point.ShiftBottom(), element).GetHashCode();
         }
 
-        private int GetShiftByPoint(BoardPoint point)
+        private int GetShiftByPoint(int x, int y)
         {
-            return point.Y * Size + point.X;
+            return x * Size + y;
         }
 
         private BoardPoint GetPointByShift(int shift)

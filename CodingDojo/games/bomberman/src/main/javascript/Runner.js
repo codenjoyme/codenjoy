@@ -204,7 +204,7 @@ var Point = function (x, y) {
             return '[' + x + ',' + y + ']';
         },
 
-        isBad : function(boardSize) {
+        isOutOf : function(boardSize) {
             return x >= boardSize || y >= boardSize || x < 0 || y < 0;
         },
 
@@ -299,13 +299,16 @@ var Board = function(board){
     };
 
     var isAt = function(x, y, element) {
-       if (pt(x, y).isBad(size)) {
+       if (pt(x, y).isOutOf(size)) {
            return false;
        }
        return getAt(x, y) == element;
     };
 
     var getAt = function(x, y) {
+		if (pt(x, y).isOutOf(size)) {
+           return Element.WALL;
+        }
         return board.charAt(xyl.getLength(x, y));
     };
 
@@ -394,7 +397,7 @@ var Board = function(board){
        for (var index in bombs) {
            var bomb = bombs[index];
            result.push(bomb);
-           result.push(new Point(bomb.getX() - 1, bomb.getY()));
+           result.push(new Point(bomb.getX() - 1, bomb.getY())); // TODO to remove duplicate
            result.push(new Point(bomb.getX() + 1, bomb.getY()));
            result.push(new Point(bomb.getX()    , bomb.getY() - 1));
            result.push(new Point(bomb.getX()    , bomb.getY() + 1));
@@ -402,7 +405,7 @@ var Board = function(board){
        var copy = result.slice();
        for (var index in copy) {
            var blast = copy[index];
-           if (blast.isBad(size) || contains(getWalls(), blast)) {
+           if (blast.isOutOf(size) || contains(getWalls(), blast)) {
                result.splice(index, 1);
            }
        }
@@ -420,10 +423,13 @@ var Board = function(board){
    };
 
    var isNear = function(x, y, element) {
-       if (pt(x, y).isBad(size)) {
+       if (pt(x, y).isOutOf(size)) {
            return false;
        }
-       return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
+       return isAt(x + 1, y, element) || // TODO to remove duplicate
+			  isAt(x - 1, y, element) || 
+			  isAt(x, y + 1, element) || 
+			  isAt(x, y - 1, element);
    };
 
    var isBarrierAt = function(x, y) {
@@ -431,11 +437,11 @@ var Board = function(board){
    };
 
    var countNear = function(x, y, element) {
-       if (pt(x, y).isBad(size)) {
+       if (pt(x, y).isOutOf(size)) {
            return 0;
        }
        var count = 0;
-       if (isAt(x - 1, y    , element)) count ++;
+       if (isAt(x - 1, y    , element)) count ++; // TODO to remove duplicate
        if (isAt(x + 1, y    , element)) count ++;
        if (isAt(x    , y - 1, element)) count ++;
        if (isAt(x    , y + 1, element)) count ++;

@@ -37,10 +37,10 @@ namespace Bomberman.Api
         /// <summary>
         /// Checks is current point on board or out of range.
         /// </summary>
-        /// <param name="boardSize">Board size to comapre</param>
-        public bool IsOutOfBoard(int boardSize)
+        /// <param name="size">Board size to comapre</param>
+        public bool IsOutOf(int size)
         {
-            return X >= boardSize || Y >= boardSize || X < 0 || Y < 0;
+            return X >= size || Y >= size || X < 0 || Y < 0;
         }
 
         /// <summary>
