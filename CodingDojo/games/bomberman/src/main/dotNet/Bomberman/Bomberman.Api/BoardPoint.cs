@@ -99,7 +99,7 @@ namespace Bomberman.Api
 
         public override bool Equals(object obj)
         {
-            return (obj as BoardPoint) == this;
+            return Object.ReferenceEquals(obj, this);
         }
 
         public override int GetHashCode()
