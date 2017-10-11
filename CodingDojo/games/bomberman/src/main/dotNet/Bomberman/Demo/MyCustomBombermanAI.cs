@@ -21,6 +21,7 @@
  */
 using System;
 using Bomberman.Api;
+using System.Text;
 
 namespace Demo
 {
@@ -32,6 +33,7 @@ namespace Demo
         public MyCustomBombermanAI(string name, string server)
             : base(name, server)
         {
+            Console.OutputEncoding = Encoding.UTF8;
         }
 
         /// <summary>
