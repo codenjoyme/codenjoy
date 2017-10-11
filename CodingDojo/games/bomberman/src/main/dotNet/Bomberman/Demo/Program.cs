@@ -30,7 +30,7 @@ namespace Demo
         // static string Server = "127.0.0.1:8080";             // to use for localhost server
         // static string Server = "tetrisj.jvmhost.net:12270";  // to use for codenjoy.com server
 
-        static string UserName = "oleksandr_baglai@epam.com";
+        static string UserName = "user@email.com";
 
         static void Main(string[] args)
         {
