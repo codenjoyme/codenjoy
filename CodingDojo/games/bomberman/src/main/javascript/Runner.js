@@ -37,13 +37,15 @@ var printArray = function (array) {
 var util = require('util');
 
 // to use for local server
-var hostIP = '192.168.1.1';
+// var hostIP = '192.168.1.1';
+var hostIP = 'ecsc00104eef.epam.com';
 //var hostIP = '127.0.0.1';
 
 // to use for codenjoy.com server
 // var hostIP = 'tetrisj.jvmhost.net';
 
-var userName = 'user@gmail.com';
+//var userName = 'user@gmail.com';
+var userName = 'oleksandr_baglai@epam.com';
 var protocol = 'WS';
 
 var processBoard = function(boardString) {
@@ -237,13 +239,13 @@ var LengthToXY = function(boardSize) {
                 return null;
             }
             var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize))
+            var y = inversionY(Math.ceil(length / boardSize));
             return new Point(x, y);
         },
 
         getLength : function(x, y) {
             var xx = inversionX(x);
-            var yy = inversionY(y)
+            var yy = inversionY(y);
             return yy*boardSize + xx;
         }
     };

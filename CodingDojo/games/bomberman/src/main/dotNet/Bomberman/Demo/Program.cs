@@ -34,17 +34,21 @@ namespace Demo
 
         static void Main(string[] args)
         {
+            Console.SetWindowSize(Console.LargestWindowWidth - 4, Console.LargestWindowHeight - 4);
+
             // creating custom bomberman's Ai client
             var bomber = new MyCustomBombermanAI(UserName, Server);
-            
+
             // starting thread with playing bomberman
-            (new Thread(bomber.Play)).Start();
-            
+            Thread thread = new Thread(bomber.Play);
+            thread.Start();
+            thread.Join();
+
             // waiting for "anykey"
-            Console.ReadKey();
+            // Console.ReadKey();
 
             // on "anykey" - asking bomberman's Ai client to stop. 
-            bomber.InitiateExit();
+            // bomber.InitiateExit();
         }
     }
 }

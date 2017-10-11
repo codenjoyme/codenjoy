@@ -30,8 +30,13 @@ var printBoardOnTextArea = function(data) {
 
 var printLogOnTextArea = function(data) {
     var textarea = document.getElementById("log-area");
+	var addToEnd = document.getElementById("add-to-end");
     if (!textarea) return;
-    textarea.value += data + "\n";
+    if (addToEnd.checked) {
+		textarea.value = textarea.value + "\n" + data;
+	} else {
+		textarea.value = data + "\n" + textarea.value;
+	}
 }
 
 var require = function(string) {

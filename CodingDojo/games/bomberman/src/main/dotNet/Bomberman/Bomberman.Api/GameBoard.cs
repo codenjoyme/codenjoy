@@ -80,8 +80,7 @@ namespace Bomberman.Api
 
         public bool IsAt(int x, int y, BoardElement element)
         {
-            var point = new BoardPoint(x, y);
-            return IsAt(point, element);
+            return IsAt(Pt(x, y), element);
         }
 
         public bool IsAt(BoardPoint point, BoardElement element)
@@ -95,17 +94,17 @@ namespace Bomberman.Api
         }
 
         /// <summary>
-        /// Writes board view to the console window
+        /// gets board view as string
         /// </summary>
-        public void PrintBoard()
+        public string ToString()
         {
-            Console.Clear();
+            string result = "";
             for (int i = 0; i < Size; i++)
             {
-                Console.WriteLine(BoardString.Substring(i * Size, Size));
+                result += BoardString.Substring(i * Size, Size) + "\n";
             }
 
-            var data = string.Format("Bomberman at: {0}\n" +
+           result += string.Format("Bomberman at: {0}\n" +
                     "Other bombermans at: {1}\n" +
                     "Meat choppers at: {2}\n" +
                     "Destroy walls at: {3}\n" +
@@ -119,7 +118,7 @@ namespace Bomberman.Api
                     ListToString(GetBombs()),
                     ListToString(GetBlasts()),
                     ListToString(GetFutureBlasts()));
-            Console.WriteLine(data);
+            return result;            
         }
 
         private string ListToString(List<BoardPoint> list)
@@ -250,14 +249,28 @@ namespace Bomberman.Api
                    IsAt(point.ShiftBottom(), element).GetHashCode();
         }
 
-        private int GetShiftByPoint(int x, int y)
+        private int InversionY(int y)
         {
-            return x * Size + y;
+            return Size - 1 - y;
         }
 
-        private BoardPoint GetPointByShift(int shift)
+        private int InversionX(int x)
         {
-            return new BoardPoint(shift % Size, shift / Size);
+            return x;
+        }
+
+        private int GetShiftByPoint(int x, int y)
+        {
+            int xx = InversionX(x);
+            int yy = InversionY(y);
+            return yy*Size + xx;
+        }
+
+        private BoardPoint GetPointByShift(int length)
+        {            
+            int x = InversionX(length % Size);
+            int y = InversionY(length / Size);
+            return Pt(x, y);
         }
     }
 }

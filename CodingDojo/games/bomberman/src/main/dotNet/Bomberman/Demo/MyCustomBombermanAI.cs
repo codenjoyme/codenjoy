@@ -19,9 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
 using Bomberman.Api;
-using System.Text;
 
 namespace Demo
 {
@@ -32,8 +30,7 @@ namespace Demo
     {
         public MyCustomBombermanAI(string name, string server)
             : base(name, server)
-        {
-            Console.OutputEncoding = Encoding.UTF8;
+        {            
         }
 
         /// <summary>
@@ -41,20 +38,8 @@ namespace Demo
         /// </summary>
         protected override string DoMove(GameBoard gameBoard)
         {
-            //Just print current state (gameBoard) to console
-            Console.SetCursorPosition(0, 0);
-            gameBoard.PrintBoard();
-            var action = BombermanActionToString(BombermanAction.PlaceBomb);
-            Console.WriteLine("Answer: " + action);
+            var action = BombermanActionToString(BombermanAction.PlaceBomb);            
             return action;
-        }
-
-        /// <summary>
-        /// Starts bomberman's client shutdown.
-        /// </summary>
-        public void InitiateExit()
-        {
-            ShouldExit = true;
         }
     }
 }

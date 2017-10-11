@@ -20,6 +20,7 @@
  * #L%
  */
 using System;
+using System.Text;
 
 namespace Bomberman.Api
 {
@@ -29,6 +30,7 @@ namespace Bomberman.Api
 
         public BombermanBase(string userName, string server)
         {
+            Console.OutputEncoding = Encoding.UTF8;
             UserName = userName;
             Server = server;
         }
@@ -64,7 +66,16 @@ namespace Bomberman.Api
                     {
                         var boardString = response.Substring(ResponsePrefix.Length);
                         var board = new GameBoard(boardString);
-                        var action = DoMove(board);                        
+
+                        //Just print current state (gameBoard) to console
+                        Console.Clear();
+                        Console.SetCursorPosition(0, 0);
+                        Console.WriteLine(board.ToString());
+
+                        var action = DoMove(board);
+
+                        Console.WriteLine("Answer: " + action);
+
                         socket.Send(action);
                     }
                 }
@@ -84,6 +95,14 @@ namespace Bomberman.Api
                 case BombermanAction.PlaceBomb: return "act";
                 default: return "stop";
             }
+        }
+
+        /// <summary>
+        /// Starts bomberman's client shutdown.
+        /// </summary>
+        public void InitiateExit()
+        {
+            ShouldExit = true;
         }
     }
 }
