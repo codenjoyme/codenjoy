@@ -25,22 +25,17 @@ namespace Bomberman.Api
 {
     public abstract class BombermanBase
     {
-        // to use for local server
-        protected readonly string Server =
-                @"ws://192.168.1.1:8080/codenjoy-contest/ws";
-
-        // to use for codenjoy.com server
-        // protected readonly string Server =
-        //        @"ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
-
         private const string ResponsePrefix = "board=";
 
-        public BombermanBase(string userName)
+        public BombermanBase(string userName, string server)
         {
             UserName = userName;
+            Server = server;
         }
 
         public string UserName { get; private set; }
+
+        public string Server { get; private set; }
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -49,9 +44,10 @@ namespace Bomberman.Api
 
         public void Play()
         {
-            var uri = new Uri(Server + "?user=" + Uri.EscapeDataString(UserName));
+            var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}", 
+                Server, Uri.EscapeDataString(UserName)));
 
-            using (var socket = new WebSocket(uri))
+            using (var socket = new WebSocket2(uri))
             {
                 socket.Connect();
 

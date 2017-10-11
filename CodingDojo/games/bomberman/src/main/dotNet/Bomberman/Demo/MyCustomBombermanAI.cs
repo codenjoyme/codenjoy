@@ -29,8 +29,8 @@ namespace Demo
     /// </summary>
     internal class MyCustomBombermanAI : BombermanBase
     {
-        public MyCustomBombermanAI(string name)
-            : base(name)
+        public MyCustomBombermanAI(string name, string server)
+            : base(name, server)
         {
         }
 

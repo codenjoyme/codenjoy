@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
+using System;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 using System.Threading;
@@ -33,14 +33,14 @@ namespace Bomberman.Api
     /// </summary>
     public class WebSocket2 : IDisposable
     {
-        private Uri mUrl;
+        private Uri serverUri;
         private ClientWebSocket ws;
 
         public WebSocket2(Uri url)
         {
-            mUrl = url;
+            serverUri = url;
 
-            string protocol = mUrl.Scheme;
+            string protocol = serverUri.Scheme;
             if (!protocol.Equals("ws") && !protocol.Equals("wss"))
                 throw new ArgumentException("Unsupported protocol: " + protocol);
 
@@ -49,10 +49,6 @@ namespace Bomberman.Api
 
         public void Connect()
         {
-            string wsUri = string.Format(
-                     "ws://ecsc00104eef.epam.com:8080/codenjoy-contest/ws?user={0}",
-                     Uri.EscapeDataString("oleksandr_baglai@epam.com"));
-            Uri serverUri = new Uri(wsUri);
             Task task = ws.ConnectAsync(serverUri, CancellationToken.None);
             task.Wait();
         }

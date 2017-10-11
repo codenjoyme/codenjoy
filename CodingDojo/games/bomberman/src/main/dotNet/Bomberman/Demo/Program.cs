@@ -26,10 +26,21 @@ namespace Demo
 {
     class Program
     {
+        // to use for server on LAN
+        public static readonly string Server = "ecsc00104eef.epam.com:8080";
+
+        // to use for localhost server
+        // readonly string Server = "127.0.0.1:8080";
+
+        // to use for codenjoy.com server
+        // readonly string Server = "tetrisj.jvmhost.net:12270";
+
+        public static readonly string UserName = "oleksandr_baglai@epam.com";
+
         static void Main(string[] args)
         {
             // creating custom bomberman's Ai client
-            var bomber = new MyCustomBombermanAI("user@gmail.com");
+            var bomber = new MyCustomBombermanAI(UserName, Server);
             
             // starting thread with playing bomberman
             (new Thread(bomber.Play)).Start();
