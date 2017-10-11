@@ -19,27 +19,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using Bomberman.Api;
-
-namespace Demo
+namespace Bomberman.Api
 {
-    /// <summary>
-    /// This is BombermanAI client demo.
-    /// </summary>
-    internal class MyCustomBombermanAI : BombermanBase
+    public enum Direction
     {
-        public MyCustomBombermanAI(string name, string server)
-            : base(name, server)
-        {            
-        }
-
-        /// <summary>
-        /// Calls each move to make decision what to do (next move)
-        /// </summary>
-        protected override string DoMove(GameBoard gameBoard)
-        {
-            var action = BombermanActionToString(BombermanAction.PlaceBomb);            
-            return action;
-        }
+        Left,
+        Right,
+        Up,
+        Down,
+        Act,
+        Stop
     }
 }

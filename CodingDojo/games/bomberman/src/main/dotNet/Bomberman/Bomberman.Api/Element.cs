@@ -21,7 +21,7 @@
  */
 namespace Bomberman.Api
 {
-    public enum BoardElement : short
+    public enum Element : short
     {
         /// <summary>
         /// This is your Bomberman. This is what he usually looks like :)

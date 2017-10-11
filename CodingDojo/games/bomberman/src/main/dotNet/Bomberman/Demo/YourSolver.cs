@@ -19,15 +19,27 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-namespace Bomberman.Api
+using Bomberman.Api;
+
+namespace Demo
 {
-    public enum BombermanAction
+    /// <summary>
+    /// This is BombermanAI client demo.
+    /// </summary>
+    internal class YourSolver : AbstractSolver
     {
-        GoLeft,
-        GoRight,
-        GoUp,
-        GoDown,
-        PlaceBomb,
-        DoNothing
+        public YourSolver(string name, string server)
+            : base(name, server)
+        {            
+        }
+
+        /// <summary>
+        /// Calls each move to make decision what to do (next move)
+        /// </summary>
+        protected override string Get(Board board)
+        {
+            var action = Direction.Act.ToString();            
+            return action;
+        }
     }
 }

@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardElement.cs" />
-    <Compile Include="BoardPoint.cs" />
-    <Compile Include="BombermanAction.cs" />
-    <Compile Include="BombermanBase.cs" />
-    <Compile Include="GameBoard.cs" />
+    <Compile Include="Element.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="AbstractSolver.cs" />
+    <Compile Include="Board.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebSocket.cs" />
   </ItemGroup>

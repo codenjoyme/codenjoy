@@ -24,11 +24,11 @@ using System.Text;
 
 namespace Bomberman.Api
 {
-    public abstract class BombermanBase
+    public abstract class AbstractSolver
     {
         private const string ResponsePrefix = "board=";
 
-        public BombermanBase(string userName, string server)
+        public AbstractSolver(string userName, string server)
         {
             Console.OutputEncoding = Encoding.UTF8;
             UserName = userName;
@@ -65,14 +65,14 @@ namespace Bomberman.Api
                     else
                     {
                         var boardString = response.Substring(ResponsePrefix.Length);
-                        var board = new GameBoard(boardString);
+                        var board = new Board(boardString);
 
                         //Just print current state (gameBoard) to console
                         Console.Clear();
                         Console.SetCursorPosition(0, 0);
                         Console.WriteLine(board.ToString());
 
-                        var action = DoMove(board);
+                        var action = Get(board);
 
                         Console.WriteLine("Answer: " + action);
 
@@ -82,21 +82,8 @@ namespace Bomberman.Api
             }
         }
 
-        protected abstract string DoMove(GameBoard gameBoard);
-
-        protected static string BombermanActionToString(BombermanAction action)
-        {
-            switch (action)
-            {
-                case BombermanAction.GoLeft: return "left";
-                case BombermanAction.GoRight: return "right";
-                case BombermanAction.GoUp: return "up";
-                case BombermanAction.GoDown: return "down";
-                case BombermanAction.PlaceBomb: return "act";
-                default: return "stop";
-            }
-        }
-
+        protected abstract string Get(Board gameBoard);
+        
         /// <summary>
         /// Starts bomberman's client shutdown.
         /// </summary>
