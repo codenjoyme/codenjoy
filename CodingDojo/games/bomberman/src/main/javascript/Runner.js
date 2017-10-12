@@ -37,15 +37,13 @@ var printArray = function (array) {
 var util = require('util');
 
 // to use for local server
-// var hostIP = '192.168.1.1';
-var hostIP = 'ecsc00104eef.epam.com';
+var hostIP = '192.168.1.1';
 //var hostIP = '127.0.0.1';
 
 // to use for codenjoy.com server
 // var hostIP = 'tetrisj.jvmhost.net';
 
-//var userName = 'user@gmail.com';
-var userName = 'oleksandr_baglai@epam.com';
+var userName = 'user@gmail.com';
 var protocol = 'WS';
 
 var processBoard = function(boardString) {

@@ -26,7 +26,7 @@ namespace Demo
 {
     class Program
     {        
-        static string Server = "ecsc00104eef.epam.com:8080";    // to use for server on LAN        
+        static string Server = "192.168.1.1:8080";              // to use for server on LAN
         // static string Server = "127.0.0.1:8080";             // to use for localhost server
         // static string Server = "tetrisj.jvmhost.net:12270";  // to use for codenjoy.com server
 
