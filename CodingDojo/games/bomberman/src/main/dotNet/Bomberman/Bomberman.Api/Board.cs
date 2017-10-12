@@ -50,17 +50,17 @@ namespace Bomberman.Api
 
         public Point GetBomberman()
         {
-            return FindAllElements(Element.Bomberman)
-                    .Concat(FindAllElements(Element.BombBomberman))
-                    .Concat(FindAllElements(Element.DeadBomberman))
+            return Get(Element.BOMBERMAN)
+                    .Concat(Get(Element.BOMB_BOMBERMAN))
+                    .Concat(Get(Element.DEAD_BOMBERMAN))
                     .Single();
         }
 
         public List<Point> GetOtherBombermans()
         {
-            return FindAllElements(Element.OtherBomberman)
-                .Concat(FindAllElements(Element.OtherBombBomberman))
-                .Concat(FindAllElements(Element.OtherDeadBomberman))
+            return Get(Element.OTHER_BOMBERMAN)
+                .Concat(Get(Element.OTHER_BOMB_BOMBERMAN))
+                .Concat(Get(Element.OTHER_DEAD_BOMBERMAN))
                 .ToList();
         }
 
@@ -68,22 +68,17 @@ namespace Bomberman.Api
         {
             get
             {
-                return BoardString.Contains((char)Element.DeadBomberman);
+                return BoardString.Contains((char)Element.DEAD_BOMBERMAN);
             }
         }
 
-        public Element GetAt(int x, int y)
+        public Element GetAt(Point point)
         {
-            if (Pt(x, y).IsOutOf(Size))
+            if (point.IsOutOf(Size))
             {
-                return Element.Wall;
+                return Element.WALL;
             }
-            return (Element)BoardString[LengthXY.GetLength(x, y)];
-        }
-
-        public bool IsAt(int x, int y, Element element)
-        {
-            return IsAt(Pt(x, y), element);
+            return (Element)BoardString[LengthXY.GetLength(point.X, point.Y)];
         }
 
         public bool IsAt(Point point, Element element)
@@ -93,7 +88,18 @@ namespace Bomberman.Api
                 return false;
             }
 
-            return GetAt(point.X, point.Y) == element;
+            return GetAt(point) == element;
+        }
+
+        public string BoardAsAtring()
+        {
+            string result = "";
+            for (int i = 0; i < Size; i++)
+            {
+                result += BoardString.Substring(i * Size, Size);
+                result += "\n";
+            }
+            return result;
         }
 
         /// <summary>
@@ -101,27 +107,22 @@ namespace Bomberman.Api
         /// </summary>
         public string ToString()
         {
-            string result = "";
-            for (int i = 0; i < Size; i++)
-            {
-                result += BoardString.Substring(i * Size, Size) + "\n";
-            }
-
-           result += string.Format("Bomberman at: {0}\n" +
-                    "Other bombermans at: {1}\n" +
-                    "Meat choppers at: {2}\n" +
-                    "Destroy walls at: {3}\n" +
-                    "Bombs at: {4}\n" +
-                    "Blasts: {5}\n" +
-                    "Expected blasts at: {6}",
+           return string.Format("{0}\n" +
+                    "Bomberman at: {1}\n" +
+                    "Other bombermans at: {2}\n" +
+                    "Meat choppers at: {3}\n" +
+                    "Destroy walls at: {4}\n" +
+                    "Bombs at: {5}\n" +
+                    "Blasts: {6}\n" +
+                    "Expected blasts at: {7}",
+                    BoardAsAtring(),
                     GetBomberman(),
                     ListToString(GetOtherBombermans()),
                     ListToString(GetMeatChoppers()),
-                    ListToString(GetDestroyWalls()),
+                    ListToString(GetDestroyableWalls()),
                     ListToString(GetBombs()),
                     ListToString(GetBlasts()),
                     ListToString(GetFutureBlasts()));
-            return result;            
         }
 
         private string ListToString(List<Point> list)
@@ -129,17 +130,12 @@ namespace Bomberman.Api
             return string.Join(",", list.ToArray());
         }
 
-        private string PrintArray(object[] array)
-        {
-            return string.Join(",", array); ;
-        }
-
         public List<Point> GetBarrier()
         {
             return GetMeatChoppers()
                 .Concat(GetWalls())
                 .Concat(GetBombs())
-                .Concat(GetDestroyWalls())
+                .Concat(GetDestroyableWalls())
                 .Concat(GetOtherBombermans())
                 .Distinct()
                 .ToList();
@@ -147,10 +143,10 @@ namespace Bomberman.Api
 
         public List<Point> GetMeatChoppers()
         {
-            return FindAllElements(Element.MeatChopper);
+            return Get(Element.MEAT_CHOPPER);
         }
 
-        public List<Point> FindAllElements(Element element)
+        public List<Point> Get(Element element)
         {
             List<Point> result = new List<Point>();
 
@@ -169,38 +165,35 @@ namespace Bomberman.Api
 
         public List<Point> GetWalls()
         {
-            return FindAllElements(Element.Wall);
+            return Get(Element.WALL);
         }
 
-        public List<Point> GetDestroyWalls()
+        public List<Point> GetDestroyableWalls()
         {
-            return FindAllElements(Element.WallDestroyable);
+            return Get(Element.DESTROYABLE_WALL);
         }
 
         public List<Point> GetBombs()
         {
-            return FindAllElements(Element.BombTimer1)
-                .Concat(FindAllElements(Element.BombTimer2))
-                .Concat(FindAllElements(Element.BombTimer3))
-                .Concat(FindAllElements(Element.BombTimer4))
-                .Concat(FindAllElements(Element.BombTimer5))
-                .Concat(FindAllElements(Element.BombBomberman))
+            return Get(Element.BOMB_TIMER_1)
+                .Concat(Get(Element.BOMB_TIMER_2))
+                .Concat(Get(Element.BOMB_TIMER_3))
+                .Concat(Get(Element.BOMB_TIMER_4))
+                .Concat(Get(Element.BOMB_TIMER_5))
+                .Concat(Get(Element.BOMB_BOMBERMAN))
+                .Concat(Get(Element.OTHER_BOMB_BOMBERMAN))
                 .ToList();
         }
 
         public List<Point> GetBlasts()
         {
-            return FindAllElements(Element.Boom);
+            return Get(Element.BOOM);
         }
 
         public List<Point> GetFutureBlasts()
         {
-            var bombs = GetBombs()
-                .Concat(FindAllElements(Element.OtherBombBomberman))
-                .Concat(FindAllElements(Element.BombBomberman));
-
+            var bombs = GetBombs();
             var result = new List<Point>();
-
             foreach (var bomb in bombs)
             {
                 result.Add(bomb);
@@ -213,43 +206,38 @@ namespace Bomberman.Api
             return result.Where(blast => !blast.IsOutOf(Size) && !GetWalls().Contains(blast)).Distinct().ToList();
         }
 
-        public bool HasElementAt(Point point, params Element[] elements)
+        public bool IsAnyOfAt(Point point, params Element[] elements)
         {
             return elements.Any(elem => IsAt(point, elem));
         }
 
-        private static Point Pt(int x, int y)
+        public bool IsNear(Point point, Element element)
         {
-            return new Point(x, y);
-        }
-
-        public bool IsNearToElement(int x, int y, Element element)
-        {
-            var point = Pt(x, y);
             if (point.IsOutOf(Size))
                 return false;
 
-            return IsAt(point.ShiftLeft(), element) ||
-                   IsAt(point.ShiftRight(), element) ||
-                   IsAt(point.ShiftTop(), element) ||
+            return IsAt(point.ShiftLeft(),   element) ||
+                   IsAt(point.ShiftRight(),  element) ||
+                   IsAt(point.ShiftTop(),    element) ||
                    IsAt(point.ShiftBottom(), element);
         }
 
-        public bool HasBarrierAt(int x, int y)
+        public bool IsBarrierAt(Point point)
         {
-            return GetBarrier().Contains(Pt(x, y));
+            return GetBarrier().Contains(point);
         }
 
-        public int GetCountElementsNearToPoint(Point point, Element element)
+        public int CountNear(Point point, Element element)
         {
             if (point.IsOutOf(Size))
                 return 0;
 
-            //GetHashCode() in classic MS.NET for bool returns 1 for true and 0 for false;
-            return IsAt(point.ShiftLeft(), element).GetHashCode() +
-                   IsAt(point.ShiftRight(), element).GetHashCode() +
-                   IsAt(point.ShiftTop(), element).GetHashCode() +
-                   IsAt(point.ShiftBottom(), element).GetHashCode();
+            int count = 0;
+            if (IsAt(point.ShiftLeft(),   element)) count++;
+            if (IsAt(point.ShiftRight(),  element)) count++;
+            if (IsAt(point.ShiftTop(),    element)) count++;
+            if (IsAt(point.ShiftBottom(), element)) count++;
+            return count;
         }
     }
 }

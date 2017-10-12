@@ -119,7 +119,7 @@ var Element = {
 
     /// walls
     WALL : '☼',                  // indestructible wall - it will not fall from bomb
-    DESTROY_WALL : '#',          // this wall could be blowed up
+    DESTROYABLE_WALL : '#',      // this wall could be blowed up
     DESTROYED_WALL : 'H',        // this is how broken wall looks like, it will dissapear on next move
                                  // if it's you did it - you'll get +10 points.
 
@@ -316,7 +316,7 @@ var Board = function(board){
 
     var boardAsString = function() {
         var result = "";
-        for (var i = 0; i <= size - 1; i++) {
+        for (var i = 0; i < size; i++) {
             result += board.substring(i * size, (i + 1) * size);
             result += "\n";
         }
@@ -334,7 +334,7 @@ var Board = function(board){
     };
 
     var toString = function() {
-        return util.format("Board:\n%s\n" +
+        return util.format("%s\n" +
             "Bomberman at: %s\n" +
             "Other bombermans at: %s\n" +
             "Meat choppers at: %s\n" +
@@ -372,7 +372,7 @@ var Board = function(board){
    };
 
    var getDestroyWalls = function() {
-       return findAll(Element.DESTROY_WALL);
+       return findAll(Element.DESTROYABLE_WALL);
    };
 
    var getBombs = function() {
@@ -383,6 +383,7 @@ var Board = function(board){
        result = result.concat(findAll(Element.BOMB_TIMER_4));
        result = result.concat(findAll(Element.BOMB_TIMER_5));
        result = result.concat(findAll(Element.BOMB_BOMBERMAN));
+	   result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));	   
        return result;
    };
 
@@ -391,11 +392,8 @@ var Board = function(board){
    };
 
    var getFutureBlasts = function() {
-       var result = [];
        var bombs = getBombs();
-       bombs = bombs.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
-       bombs = bombs.concat(findAll(Element.BOMB_BOMBERMAN));
-
+       var result = [];
        for (var index in bombs) {
            var bomb = bombs[index];
            result.push(bomb);

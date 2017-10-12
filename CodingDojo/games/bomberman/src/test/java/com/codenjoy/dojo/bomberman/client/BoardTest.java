@@ -60,7 +60,6 @@ public class BoardTest {
     @Test
     public void shouldWorkToString() {
         assertEquals(
-                "Board:\n" +
            /*8*/"☼☼☼☼☼☼☼☼☼\n" +
            /*7*/"☼1 ♣   ♠☼\n" +
            /*6*/"☼#2  &  ☼\n" +
@@ -76,7 +75,7 @@ public class BoardTest {
                 "Other bombermans at: [[3,7], [4,3], [5,5], [7,5], [7,7]]\n" +
                         "Meat choppers at: [[1,1], [3,1], [5,6]]\n" +
                         "Destroy walls at: [[1,5], [1,6]]\n" +
-                        "Bombs at: [[1,7], [2,6], [3,5], [4,4], [7,3]]\n" +
+                        "Bombs at: [[1,7], [2,6], [3,5], [4,4], [7,3], [7,5], [7,7]]\n" +
                         "Blasts: [[5,2], [6,2], [7,2]]\n" +
                         "Expected blasts at: [[1,6], [1,7], [2,5], [2,6], " +
                                 "[2,7], [3,4], [3,5], [3,6], [4,3], [4,4], [4,5], " +
@@ -128,12 +127,12 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getBombs() {
-        assertEquals("[[1,7], [2,6], [3,5], [4,4], [7,3]]", board.getBombs().toString());
+        assertEquals("[[1,7], [2,6], [3,5], [4,4], [7,3], [7,5], [7,7]]", board.getBombs().toString());
     }
 
     @Test
     public void shouldWork_getDestroyWalls() {
-        assertEquals("[[1,5], [1,6]]", board.getDestroyWalls().toString());
+        assertEquals("[[1,5], [1,6]]", board.getDestroyableWalls().toString());
     }
 
     @Test
@@ -186,7 +185,7 @@ public class BoardTest {
 
     @Test
     public void shouldWork_isMyBombermanDead() {
-        assertEquals(false, board.isGameOver());
-        assertEquals(true, board("Ѡ").isGameOver());
+        assertEquals(false, board.isMyBombermanDead());
+        assertEquals(true, board("Ѡ").isMyBombermanDead());
     }
 }

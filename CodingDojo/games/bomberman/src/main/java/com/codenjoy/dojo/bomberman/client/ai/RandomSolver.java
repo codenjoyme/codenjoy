@@ -55,7 +55,7 @@ public class RandomSolver implements Solver<Board> {
             toX = direction.changeX(bomberman.getX());
             toY = direction.changeY(bomberman.getY());
 
-        } while (board.isAt(toX, toY, Elements.WALL) || board.isAt(toX, toY, Elements.DESTROY_WALL));
+        } while (board.isAt(toX, toY, Elements.WALL) || board.isAt(toX, toY, Elements.DESTROYABLE_WALL));
 
         String command = direction.toString();
         if (!command.equalsIgnoreCase("act") && !command.equalsIgnoreCase("stop")) {

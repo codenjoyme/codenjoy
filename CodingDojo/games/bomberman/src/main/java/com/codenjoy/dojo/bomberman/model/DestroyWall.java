@@ -26,7 +26,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.State;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYED_WALL;
-import static com.codenjoy.dojo.bomberman.model.Elements.DESTROY_WALL;
+import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYABLE_WALL;
 
 /**
  * User: oleksandr.baglai
@@ -56,7 +56,7 @@ public class DestroyWall extends Wall implements State<Elements, Player> {
         if (blast != null) {
             return DESTROYED_WALL;
         } else {
-            return DESTROY_WALL;
+            return DESTROYABLE_WALL;
         }
     }
 }

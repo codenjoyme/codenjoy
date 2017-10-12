@@ -53,13 +53,13 @@ public class ApofigSolver implements Solver<Board> {
         this.board = board;
         Point bomberman = board.getBomberman();
 
-        boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Elements.DESTROY_WALL);
+        boolean nearDestroyableWall = board.isNear(bomberman.getX(), bomberman.getY(), Elements.DESTROYABLE_WALL);
         boolean nearBomberman = board.isNear(bomberman.getX(), bomberman.getY(), Elements.OTHER_BOMBERMAN);
         boolean nearMeatchopper = board.isNear(bomberman.getX(), bomberman.getY(), Elements.MEAT_CHOPPER);
         boolean bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Elements.BOMB_BOMBERMAN);
 
         bomb = null;
-        if ((nearDestroyWall || nearBomberman || nearMeatchopper) && bombNotDropped) {
+        if ((nearDestroyableWall || nearBomberman || nearMeatchopper) && bombNotDropped) {
             bomb = new PointImpl(bomberman);
         }
 

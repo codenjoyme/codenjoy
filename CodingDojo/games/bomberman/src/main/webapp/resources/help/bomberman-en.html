@@ -1,4 +1,4 @@
-<!--
+﻿<!--
   #%L
   Codenjoy - it's a dojo-like platform from developers to developers.
   %%
@@ -170,7 +170,7 @@
 
     /// walls
     WALL('☼'),                  // undestroyable wall - it will not fall from bomb
-    DESTROY_WALL('#'),          // this wall could be blown up
+    DESTROYABLE_WALL('#'),      // this wall could be blown up
     DESTROYED_WALL('H'),        // this is how broken wall looks like, it will disappear on next move
                                 // if it's you did it - you'll get +10 points.
 
@@ -211,26 +211,28 @@
                             to note that the logic of communication with the server plus some high
                             level API for working with the board are implemented already.</p>
 
-                        <pre>Point getBomberman() — position of my bomber on the board
-Collection&lt;Point&gt; getOtherBombermans() — positions of all other bombers (enemies) on the board
-boolean isMyBombermanDead() — whether my bomber is alive
-boolean isAt(int x, int y, Element element) — whether the given element has x, y position?
-boolean isAt(int x, int y, Collection&lt;Element&gt; elements) — whether any object from the given set is located in x, y position
-boolean isNear(int x, int y, Element element) — whether the given element is located near the cell with the x,y coordinate
-boolean isBarrierAt(int x, int y) — whether any obstacle in the x, y cell exists
-int countNear(int x, int y, Element element) — how many elements of the given type exist around the x, y cell
-Element getAt(int x, int y) — returns the element in the current cell
-int boardSize() — returns the size of the board
-Collection&lt;Point&gt; getBarriers() — the coordinates of all objects that hinder the movements
-Collection&lt;Point&gt; getMeatChoppers() — coordinates of all dangers that can destroy the bomber
-Collection&lt;Point&gt; getWalls() — coordinates of all concrete walls
-Collection&lt;Point&gt; getDestroyWalls() — coordinates of all brick walls (they can be destroyed)
-Collection&lt;Point&gt; getBombs() — coordinates of all bombs
-Collection&lt;Point&gt; getFutureBlasts() — coordinates of all potential hazardous places where the bomb can explode (the bomb explodes on N {N will be arranged before the game starts} cell to the directions: up, down, right, left)
+                        <pre>Point getBomberman()                          // position of my bomber on the board
+Collection&lt;Point&gt; getOtherBombermans()        // positions of all other bombers (enemies) on the board
+boolean isMyBombermanDead()                   // whether my bomber is alive
+boolean isAt(Point point, Element element)    // whether the given element has given coordinate?
+boolean isAt(Point point, Collection&lt;Element&gt; elements)   // whether any object from the given set is located in given coordinate
+boolean isNear(Point point, Element element)  // whether the given element is located near the cell with the given coordinate
+boolean isBarrierAt(Point point)              // whether any obstacle in the cell with given coordinate exists
+int countNear(Point point, Element element)   // how many elements of the given type exist around the cell with given coordinate
+Element getAt(Point point)                    // returns the element in the current cell
+int boardSize()                               // returns the size of the board
+Collection&lt;Point&gt; getBarriers()               // the coordinates of all objects that hinder the movements
+Collection&lt;Point&gt; getMeatChoppers()           // coordinates of all dangers that can destroy the bomber
+Collection&lt;Point&gt; getWalls()                  // coordinates of all concrete walls
+Collection&lt;Point&gt; getDestroyableWalls()       // coordinates of all brick walls (they can be destroyed)
+Collection&lt;Point&gt; getBombs()                  // coordinates of all bombs
+Collection&lt;Point&gt; getFutureBlasts()           // coordinates of all potential hazardous places where the bomb 
+                                                  // can explode (the bomb explodes on N {N will be arranged 
+                                                  // before the game starts} cell to the directions: up, down, right, left)
 Тут:
-Point  - x, y coordinate
-Collection — a set of several objects
-Element — type of the element on the board </pre>
+Point       // x, y coordinate
+Collection  // a set of several objects
+Element     // type of the element on the board </pre>
 
                         <p>This is the open source game. To realize your game, correct errors in the current
                             version and make the other corrections, you should

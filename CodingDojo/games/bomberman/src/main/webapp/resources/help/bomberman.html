@@ -1,4 +1,4 @@
-<!--
+﻿<!--
   #%L
   Codenjoy - it's a dojo-like platform from developers to developers.
   %%
@@ -165,7 +165,7 @@
 
     /// walls
     WALL('☼'),                  // неразрушаемые стены - им взрывы бомб не страшны
-    DESTROY_WALL('#'),          // а эта стенка может быть разрушена
+    DESTROYABLE_WALL('#'),      // а эта стенка может быть разрушена
     DESTROYED_WALL('H'),        // это как разрушенная стенка выглядит, она пропадет в следующую секунду
                                 // если это ты сделал - ты получишь бонусные очки
 
@@ -203,26 +203,28 @@
                             еще надо разобраться, но там реализована логика общения с сервером +
                             некоторое высокоуровневое API для работы с доской (что уже приятно)</p>
 
-                        <pre>Point getBomberman() — позиция моего бомбера на доске
-Collection&lt;Point&gt; getOtherBombermans() — позиции всех остальных бомберов (противников) на доске
-boolean isMyBombermanDead() — жив ли мой бомбер
-boolean isAt(int x, int y, Element element) — находится ли в позиции  x, y заданный элемент?
-boolean isAt(int x, int y, Collection&lt;Element&gt; elements) — находится ли в позиции  x, y что-нибудь из заданного набора
-boolean isNear(int x, int y, Element element) — есть ли вокруг клеточки с координатой x,y заданный элемент
-boolean isBarrierAt(int x, int y) — есть ли препятствие в клеточке x, y
-int countNear(int x, int y, Element element) — сколько элементов заданного типа есть вокруг клетки с x, y
-Element getAt(int x, int y) — возвращает элемент в текущей клетке
-int boardSize() — возвращает размер доски
-Collection&lt;Point&gt; getBarriers() — координаты всех объектов препятствующих движению
-Collection&lt;Point&gt; getMeatChoppers() — координаты всех чудиков которые могут убить бомбера
-Collection&lt;Point&gt; getWalls() — координаты всех бетонных стен
-Collection&lt;Point&gt; getDestroyWalls() — координаты всех кирпичных стен (их можно разрушать)
-Collection&lt;Point&gt; getBombs() — координаты всех бомб
-Collection&lt;Point&gt; getFutureBlasts() — координаты потенциально опасных мест, где бомба может разорваться. (бомба взрывается на N {решим перед началом игры} клеточек в стороны: вверх, вниз, вправо, влево)
+                        <pre>Point getBomberman()                          // позиция моего бомбера на доске
+Collection&lt;Point&gt; getOtherBombermans()        // позиции всех остальных бомберов (противников) на доске
+boolean isMyBombermanDead()                   // жив ли мой бомбер
+boolean isAt(Point point, Element element)    // находится ли в позиции point заданный элемент?
+boolean isAt(Point point, Collection&lt;Element&gt; elements)   // находится ли в позиции point что-нибудь из заданного набора
+boolean isNear(Point point, Element element)  // есть ли вокруг клеточки с координатой point заданный элемент
+boolean isBarrierAt(Point point)              // есть ли препятствие в клеточке point
+int countNear(Point point, Element element)   // сколько элементов заданного типа есть вокруг клетки с point
+Element getAt(Point point)                    // возвращает элемент в текущей клетке
+int boardSize()                               // возвращает размер доски
+Collection&lt;Point&gt; getBarriers()               // координаты всех объектов препятствующих движению
+Collection&lt;Point&gt; getMeatChoppers()           // координаты всех чудиков которые могут убить бомбера
+Collection&lt;Point&gt; getWalls()                  // координаты всех бетонных стен
+Collection&lt;Point&gt; getDestroyableWalls()       // координаты всех кирпичных стен (их можно разрушать)
+Collection&lt;Point&gt; getBombs()                  // координаты всех бомб
+Collection&lt;Point&gt; getFutureBlasts()           // координаты потенциально опасных мест, где бомба может разорваться. 
+                                                  // (бомба взрывается на N {решим перед началом игры} клеточек 
+                                                  // в стороны: вверх, вниз, вправо, влево)
 Тут:
-Point  - координата x, y
-Collection — набор нескольких объектов
-Element — тип элемента на доске </pre>
+Point       // координата x, y
+Collection  // набор нескольких объектов
+Element     // тип элемента на доске </pre>
 
                         <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
                             ошибок в текущей и внесения других правок необходимо для начала

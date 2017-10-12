@@ -26,12 +26,12 @@ namespace Bomberman.Api
         /// <summary>
         /// This is your Bomberman. This is what he usually looks like :)
         /// </summary>
-        Bomberman = (short)'☺',          
+        BOMBERMAN = (short)'☺',          
    
         /// <summary>
         /// Your bomberman is sitting on own bomb
         /// </summary>
-        BombBomberman = (short)'☻',        
+        BOMB_BOMBERMAN = (short)'☻',        
 
         /// <summary>
         /// Your dead Bomberman 
@@ -40,17 +40,17 @@ namespace Bomberman.Api
         /// Don't worry, he will appear somewhere in next move. 
         /// You're getting -200 for each death
         /// </remarks>
-        DeadBomberman = (short)'Ѡ',        
+        DEAD_BOMBERMAN = (short)'Ѡ',        
 
         /// <summary>
         /// This is other players alive Bomberman
         /// </summary>
-        OtherBomberman = (short)'♥',
+        OTHER_BOMBERMAN = (short)'♥',
 
         /// <summary>
         /// This is other players Bomberman -  just set the bomb
         /// </summary>
-        OtherBombBomberman = (short)'♠',  
+        OTHER_BOMB_BOMBERMAN = (short)'♠',  
 
         /// <summary>
         /// Other players Bomberman's corpse 
@@ -58,7 +58,7 @@ namespace Bomberman.Api
         /// <remarks>
         /// It will disappear shortly, right on the next move. If you've done it you'll get +1000
         /// </remarks>
-        OtherDeadBomberman = (short)'♣',  
+        OTHER_DEAD_BOMBERMAN = (short)'♣',  
 
         /// <summary>
         /// Bomb with timer "5 tacts to boo-o-o-m!"
@@ -66,43 +66,43 @@ namespace Bomberman.Api
         /// <remarks>
         /// After bomberman set the bomb, the timer starts (5 tacts)
         /// </remarks>
-        BombTimer5 = (short)'5',          
+        BOMB_TIMER_5 = (short)'5',          
 
         /// <summary>
         /// Bomb with timer "4 tacts to boom"
         /// </summary>
-        BombTimer4 = (short)'4',     
+        BOMB_TIMER_4 = (short)'4',     
 
         /// <summary>
         /// Bomb with timer "3 tacts to boom"
         /// </summary>
-        BombTimer3 = (short)'3',
+        BOMB_TIMER_3 = (short)'3',
 
         /// <summary>
         /// Bomb with timer "2 tacts to boom"
         /// </summary>
-        BombTimer2 = (short)'2',
+        BOMB_TIMER_2 = (short)'2',
         
         /// <summary>
         /// Bomb with timer "1 tact to boom"
         /// </summary>
-        BombTimer1 = (short)'1',
+        BOMB_TIMER_1 = (short)'1',
         
         /// <summary>
         /// Boom! This is what is bomb does, everything that is destroyable got destroyed
         /// </summary>
-        Boom = (short)'҉',                  
+        BOOM = (short)'҉',                  
 
         /// <summary>
         /// Wall that can't be destroyed.
         /// Indestructible wall will not fall from bomb.
         /// </summary>
-        Wall = (short)'☼',                  
+        WALL = (short)'☼',                  
 
         /// <summary>
         /// Destroyable wall. It can be blowed up with a bomb (+10 points)
         /// </summary>
-        WallDestroyable = (short)'#',          
+        DESTROYABLE_WALL = (short)'#',          
 
         /// <summary>
         /// Walls ruins. This is how broken wall looks like, it will dissapear on next move.
@@ -112,7 +112,7 @@ namespace Bomberman.Api
         /// <summary>
         /// Meat chopper. This guys runs over the board randomly and gets in the way all the time. If it will touch bomberman - bomberman dies.
         /// </summary>
-        MeatChopper = (short)'&',          
+        MEAT_CHOPPER = (short)'&',          
 
         /// <summary>
         /// Dead meat chopper. +100 point for killing.
