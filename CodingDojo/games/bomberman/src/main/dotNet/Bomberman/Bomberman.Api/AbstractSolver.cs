@@ -75,6 +75,7 @@ namespace Bomberman.Api
                         var action = Get(board);
 
                         Console.WriteLine("Answer: " + action);
+                        Console.SetCursorPosition(0, 0);
 
                         socket.Send(action);
                     }
