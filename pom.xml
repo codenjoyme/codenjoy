@@ -13,6 +13,7 @@
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <org.json.version>20160810</org.json.version>
+        <json-io.version>4.10.0</json-io.version>
 
         <java.version>1.8</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
@@ -79,6 +80,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${org.json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cedarsoftware</groupId>
+            <artifactId>json-io</artifactId>
+            <version>${json-io.version}/version>
         </dependency>
 
         <dependency>
