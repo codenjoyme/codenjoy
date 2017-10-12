@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Element.cs" />
+    <Compile Include="LengthToXY.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="AbstractSolver.cs" />

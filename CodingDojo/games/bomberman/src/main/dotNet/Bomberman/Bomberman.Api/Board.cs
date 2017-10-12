@@ -27,12 +27,15 @@ namespace Bomberman.Api
 {
     public class Board
     {
+
+        private String BoardString { get; }
+        private LengthToXY LengthXY;
+
         public Board(String boardString)
         {
             BoardString = boardString.Replace("\n", "");
-        }
-
-        public String BoardString { get; private set; }
+            LengthXY = new LengthToXY(Size);
+        }        
 
         /// <summary>
         /// GameBoard size (actual board size is Size x Size cells)
@@ -75,7 +78,7 @@ namespace Bomberman.Api
             {
                 return Element.Wall;
             }
-            return (Element)BoardString[GetShiftByPoint(x, y)];
+            return (Element)BoardString[LengthXY.GetLength(x, y)];
         }
 
         public bool IsAt(int x, int y, Element element)
@@ -153,7 +156,7 @@ namespace Bomberman.Api
 
             for (int i = 0; i < Size * Size; i++)
             {
-                Point pt = GetPointByShift(i);
+                Point pt = LengthXY.GetXY(i);
 
                 if (IsAt(pt, element))
                 {
@@ -247,30 +250,6 @@ namespace Bomberman.Api
                    IsAt(point.ShiftRight(), element).GetHashCode() +
                    IsAt(point.ShiftTop(), element).GetHashCode() +
                    IsAt(point.ShiftBottom(), element).GetHashCode();
-        }
-
-        private int InversionY(int y)
-        {
-            return Size - 1 - y;
-        }
-
-        private int InversionX(int x)
-        {
-            return x;
-        }
-
-        private int GetShiftByPoint(int x, int y)
-        {
-            int xx = InversionX(x);
-            int yy = InversionY(y);
-            return yy*Size + xx;
-        }
-
-        private Point GetPointByShift(int length)
-        {            
-            int x = InversionX(length % Size);
-            int y = InversionY(length / Size);
-            return Pt(x, y);
         }
     }
 }
