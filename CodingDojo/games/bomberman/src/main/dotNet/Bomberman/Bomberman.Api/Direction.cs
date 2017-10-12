@@ -27,7 +27,7 @@ namespace Bomberman.Api
         Right,
         Up,
         Down,
-        Act,
-        Stop
+        Act,  // drop bomb
+        Stop  // do nothing
     }
 }

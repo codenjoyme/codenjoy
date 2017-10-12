@@ -56,7 +56,7 @@ namespace Bomberman.Api
         /// Other players Bomberman's corpse 
         /// </summary>
         /// <remarks>
-        /// It will disappear shortly, right on the next move. If you've done it you'll get +1000
+        /// It will disappear shortly, right on the next move. If you've done it you'll get score points
         /// </remarks>
         OTHER_DEAD_BOMBERMAN = (short)'♣',  
 
@@ -64,7 +64,7 @@ namespace Bomberman.Api
         /// Bomb with timer "5 tacts to boo-o-o-m!"
         /// </summary>
         /// <remarks>
-        /// After bomberman set the bomb, the timer starts (5 tacts)
+        /// After bomberman set the bomb, the timer starts (5 ticks)
         /// </remarks>
         BOMB_TIMER_5 = (short)'5',          
 
@@ -100,7 +100,7 @@ namespace Bomberman.Api
         WALL = (short)'☼',                  
 
         /// <summary>
-        /// Destroyable wall. It can be blowed up with a bomb (+10 points)
+        /// Destroyable wall. It can be blowed up with a bomb (with score points)
         /// </summary>
         DESTROYABLE_WALL = (short)'#',          
 
@@ -115,7 +115,7 @@ namespace Bomberman.Api
         MEAT_CHOPPER = (short)'&',          
 
         /// <summary>
-        /// Dead meat chopper. +100 point for killing.
+        /// Dead meat chopper. score point for killing.
         /// </summary>
         DeadMeatChopper = (short)'x',     
 

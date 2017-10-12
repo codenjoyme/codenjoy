@@ -26,12 +26,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Bomberman.Api")]
-[assembly: AssemblyDescription("Created by Evgen Rezoglazov (evgen.rezoglazov@globallogic.com). Updated by Fedorenko Stanislav.")]
+[assembly: AssemblyTitle("Bomberman C# Client Api")]
+[assembly: AssemblyDescription("Created by Evgen Rezoglazov (evgen.rezoglazov@globallogic.com). Updated by Fedorenko Stanislav. Updated by Oleksandr Baglai.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Bomberman.Api")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("Codenjoy")]
+[assembly: AssemblyProduct("Codenjoy Bomberman C# Client Api")]
+[assembly: AssemblyCopyright("Copyright © 2016 Codenjoy")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
