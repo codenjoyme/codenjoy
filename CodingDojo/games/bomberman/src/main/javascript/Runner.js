@@ -402,14 +402,15 @@ var Board = function(board){
            result.push(new Point(bomb.getX()    , bomb.getY() - 1));
            result.push(new Point(bomb.getX()    , bomb.getY() + 1));
        }
-       var copy = result.slice();
-       for (var index in copy) {
-           var blast = copy[index];
+       var result2 = [];
+       for (var index in result) {
+           var blast = result[index];
            if (blast.isOutOf(size) || contains(getWalls(), blast)) {
-               result.splice(index, 1);
+               continue;
            }
+		   result2.push(blast);
        }
-       return removeDuplicates(result);
+       return removeDuplicates(result2);
    };
 
    var isAnyOfAt = function(x, y, elements) {

@@ -23,11 +23,11 @@ package com.codenjoy.dojo.bomberman.client;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -91,6 +91,40 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldWork_getAt_point() {
+        assertEquals(Elements.BOMB_BOMBERMAN, board.getAt(pt(7, 3)));
+        assertEquals(Elements.WALL, board.getAt(pt(0, 8)));
+        assertEquals(Elements.MEAT_CHOPPER, board.getAt(pt(5, 6)));
+    }
+
+    @Test
+    public void shouldWork_getNear() {
+        assertEquals("[҉, H,  , ҉, ☻,  , ☼, ☼, ☼]", board.getNear(7, 3).toString());
+        assertEquals("[☼, ☼, 1, ☼]", board.getNear(0, 8).toString());
+        assertEquals("[ ,  ,  , ♣, &,  ,  ,  ,  ]", board.getNear(5, 6).toString());
+    }
+
+    @Test
+    public void shouldWork_getNear_point() {
+        assertEquals("[҉, H,  , ҉, ☻,  , ☼, ☼, ☼]", board.getNear(pt(7, 3)).toString());
+        assertEquals("[☼, ☼, 1, ☼]", board.getNear(pt(0, 8)).toString());
+        assertEquals("[ ,  ,  , ♣, &,  ,  ,  ,  ]", board.getNear(pt(5, 6)).toString());
+    }
+
+    @Test
+    public void shouldWork_getAt_outOfBoard() {
+        assertEquals(Elements.WALL, board.getAt(-1, 1));
+        assertEquals(Elements.WALL, board.getAt(1, -1));
+        assertEquals(Elements.WALL, board.getAt(100, 1));
+        assertEquals(Elements.WALL, board.getAt(1, 100));
+
+        assertEquals(Elements.WALL, board.getAt(pt(-1, 1)));
+        assertEquals(Elements.WALL, board.getAt(pt(1, -1)));
+        assertEquals(Elements.WALL, board.getAt(pt(100, 1)));
+        assertEquals(Elements.WALL, board.getAt(pt(1, 100)));
+    }
+
+    @Test
     public void shouldWork_getOtherBombermans() {
         assertEquals("[[3,7], [4,3], [5,5], [7,5], [7,7]]", board.getOtherBombermans().toString());
     }
@@ -110,6 +144,12 @@ public class BoardTest {
     public void shouldWork_isBarrierAt() {
         assertEquals(true, board.isBarrierAt(1, 1));
         assertEquals(false, board.isBarrierAt(5, 1));
+    }
+
+    @Test
+    public void shouldWork_isBarrierAt_point() {
+        assertEquals(true, board.isBarrierAt(pt(1, 1)));
+        assertEquals(false, board.isBarrierAt(pt(5, 1)));
     }
 
     @Test
@@ -161,6 +201,19 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldWork_countNear_point() {
+        assertEquals(0, board.countNear(pt(0, 0), Elements.MEAT_CHOPPER));
+        assertEquals(2, board.countNear(pt(2, 1), Elements.MEAT_CHOPPER));
+        assertEquals(1, board.countNear(pt(4, 1), Elements.MEAT_CHOPPER));
+
+        assertEquals(2, board.countNear(pt(1, 7), Elements.WALL));
+        assertEquals(2, board.countNear(pt(1, 1), Elements.WALL));
+        assertEquals(2, board.countNear(pt(7, 7), Elements.WALL));
+        assertEquals(2, board.countNear(pt(7, 1), Elements.WALL));
+        assertEquals(1, board.countNear(pt(1, 6), Elements.WALL));
+    }
+
+    @Test
     public void shouldWork_isAt() {
         assertEquals(true, board.isAt(3, 1, Elements.MEAT_CHOPPER));
         assertEquals(false, board.isAt(2, 1, Elements.MEAT_CHOPPER));
@@ -170,9 +223,24 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldWork_isAt_point() {
+        assertEquals(true, board.isAt(pt(3, 1), Elements.MEAT_CHOPPER));
+        assertEquals(false, board.isAt(pt(2, 1), Elements.MEAT_CHOPPER));
+
+        assertEquals(true, board.isAt(pt(3, 1), Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
+        assertEquals(false, board.isAt(pt(2, 1), Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
+    }
+
+    @Test
     public void shouldWork_isNear() {
         assertEquals(true, board.isNear(1, 1, Elements.WALL));
         assertEquals(false, board.isNear(5, 5, Elements.WALL));
+    }
+
+    @Test
+    public void shouldWork_isNear_point() {
+        assertEquals(true, board.isNear(pt(1, 1), Elements.WALL));
+        assertEquals(false, board.isNear(pt(5, 5), Elements.WALL));
     }
 
     @Test

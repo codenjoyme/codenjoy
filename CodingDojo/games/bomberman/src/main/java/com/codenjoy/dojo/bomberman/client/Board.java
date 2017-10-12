@@ -42,21 +42,9 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public Point getBomberman() {
-        return get(BOMBERMAN, BOMB_BOMBERMAN, DEAD_BOMBERMAN).get(0);
-    }
-
-    public Collection<Point> getOtherBombermans() {
-        return get(OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN, OTHER_DEAD_BOMBERMAN);
-    }
-
     @Override
     protected int inversionY(int y) {
         return size - 1 - y;
-    }
-
-    public boolean isMyBombermanDead() {
-        return !get(DEAD_BOMBERMAN).isEmpty();
     }
 
     public Elements getAt(int x, int y) {
@@ -94,6 +82,18 @@ public class Board extends AbstractBoard<Elements> {
                 getBombs(),
                 getBlasts(),
                 getFutureBlasts());
+    }
+
+    public Point getBomberman() {
+        return get(BOMBERMAN, BOMB_BOMBERMAN, DEAD_BOMBERMAN).get(0);
+    }
+
+    public Collection<Point> getOtherBombermans() {
+        return get(OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN, OTHER_DEAD_BOMBERMAN);
+    }
+
+    public boolean isMyBombermanDead() {
+        return !get(DEAD_BOMBERMAN).isEmpty();
     }
 
     public Collection<Point> getMeatChoppers() {
@@ -135,16 +135,22 @@ public class Board extends AbstractBoard<Elements> {
             result.add(new PointImpl(bomb.getX()    , bomb.getY() - 1));
             result.add(new PointImpl(bomb.getX()    , bomb.getY() + 1));
         }
-        for (Point blast : result.toArray(new Point[0])) {
+		Collection<Point> result2 = new LinkedList<Point>();
+        for (Point blast : result) {
             if (blast.isOutOf(size) || getWalls().contains(blast)) {
-                result.remove(blast);
-            }
+				continue;
+			}
+            result2.add(blast);
         }
-        return removeDuplicates(result);
+        return removeDuplicates(result2);
     }
 
     public boolean isBarrierAt(int x, int y) {
         return getBarriers().contains(pt(x, y));
+    }
+
+    public boolean isBarrierAt(Point point) {
+        return isBarrierAt(point.getX(), point.getY());
     }
 
 }
