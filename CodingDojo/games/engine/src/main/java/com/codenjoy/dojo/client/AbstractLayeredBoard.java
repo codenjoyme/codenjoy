@@ -194,6 +194,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         if (pt(x, y).isOutOf(size)) {
             return false;
         }
+		// TODO remove duplicate with countNear method
         return isAt(numLayer, x + 1, y, element) ||
                 isAt(numLayer, x - 1, y, element) ||
                 isAt(numLayer, x, y + 1, element) ||
@@ -213,10 +214,10 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
             return 0;
         }
         int count = 0;
-        if (isAt(numLayer, x - 1, y, element)) count++;
         if (isAt(numLayer, x + 1, y, element)) count++;
-        if (isAt(numLayer, x, y - 1, element)) count++;
+        if (isAt(numLayer, x - 1, y, element)) count++;
         if (isAt(numLayer, x, y + 1, element)) count++;
+        if (isAt(numLayer, x, y - 1, element)) count++;
         return count;
     }
 
