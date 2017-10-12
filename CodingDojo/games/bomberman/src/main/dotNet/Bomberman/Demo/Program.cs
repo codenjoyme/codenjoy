@@ -34,7 +34,7 @@ namespace Demo
 
         static void Main(string[] args)
         {
-            Console.SetWindowSize(Console.LargestWindowWidth - 4, Console.LargestWindowHeight - 4);
+            Console.SetWindowSize(Console.LargestWindowWidth - 3, Console.LargestWindowHeight - 3);
 
             // creating custom bomberman's Ai client
             var bomber = new YourSolver(UserName, Server);
