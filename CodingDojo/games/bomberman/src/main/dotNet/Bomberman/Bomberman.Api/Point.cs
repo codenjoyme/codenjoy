@@ -99,7 +99,12 @@ namespace Bomberman.Api
 
         public override bool Equals(object obj)
         {
-            return Object.ReferenceEquals(obj, this);
+            if (obj == null) return false;
+            if (!(obj is Point)) return false;
+
+            Point that = (Point)obj;
+
+            return that.X == this.X && that.Y == this.Y;
         }
 
         public override int GetHashCode()
