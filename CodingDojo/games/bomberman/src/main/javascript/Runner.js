@@ -50,14 +50,16 @@ var protocol = 'WS';
 
 var processBoard = function(boardString) {
     var board = new Board(boardString);
-    log("Board: " + board);
-    if (!!printBoardOnTextArea) {
+        if (!!printBoardOnTextArea) {
         printBoardOnTextArea(board.boardAsString());
     }
 
+    var logMessage = board + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
-    log("Answer: " + answer);
-    log("-----------------------------------");
+	logMessage += "Answer: " + answer + "\n";
+    logMessage += "-----------------------------------\n";
+	
+	log(logMessage);
 
     return answer;
 };
@@ -82,14 +84,10 @@ if (protocol == 'HTTP') {
     });
 
     ws.on('message', function(message) {
-        log('Received message');
-
         var pattern = new RegExp(/^board=(.*)$/);
         var parameters = message.match(pattern);
         var boardString = parameters[1];
-
         var answer = processBoard(boardString);
-
         ws.send(answer);
     });
 
