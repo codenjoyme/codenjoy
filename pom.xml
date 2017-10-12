@@ -84,7 +84,7 @@
         <dependency>
             <groupId>com.cedarsoftware</groupId>
             <artifactId>json-io</artifactId>
-            <version>${json-io.version}/version>
+            <version>${json-io.version}</version>
         </dependency>
 
         <dependency>
