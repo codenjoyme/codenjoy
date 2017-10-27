@@ -39,7 +39,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType  {
 
-    private Parameter<Boolean> isTrainingMode;
+    private Parameter<Integer> isTrainingMode;
     private ICanCode multiple;
 
     public GameRunner() {
@@ -49,7 +49,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     private void setupSettings() {
         new Scores(0, settings);
-        isTrainingMode = settings.addEditBox("Is training mode").type(Boolean.class).def(true);
+        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(1);
     }
 
     private ICanCode newSingleGame() {
@@ -63,7 +63,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
-        if (!isTrainingMode.getValue()) {
+        if (isTrainingMode.getValue() == 0) {
             int total = Levels.collectSingle().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
