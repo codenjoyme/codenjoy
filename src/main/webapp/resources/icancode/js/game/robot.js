@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initRobot(console, controller) {
+function initRobot(logger, controller) {
     
     if (game.debug) {
         debugger;
@@ -48,7 +48,7 @@ function initRobot(console, controller) {
 	var validateDirection = function(direction) {
 		var d = Direction.get(direction);
 		if (!d) {				
-			console.print('Bad value for command. Expected Direction but was: "' + direction + '"');
+			logger.print('Bad value for command. Expected Direction but was: "' + direction + '"');
 			return false;
 		}
 		return true;
@@ -66,7 +66,7 @@ function initRobot(console, controller) {
             if (typeof message == 'object') {
                 message = JSON.stringify(message);
             }
-            console.print("Robot says: " + message);
+            logger.print("Robot says: " + message);
         },
         invert : function(direction) {
             if (direction == "LEFT") return "RIGHT"; // TODO to use Direction.inverted()

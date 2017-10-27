@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initConsole() {
+function initLogger() {
     // ----------------------- init console -------------------
     var console = $('#ide-console');
     console.empty();
@@ -29,8 +29,13 @@ function initConsole() {
         console.animate({scrollTop: console.prop('scrollHeight')});
     }
 
-    var error = function(message) {
-        print('Error: ' + message);
+    var error = function(error, functionName) {
+        console.log(e);
+        print('Error: ' + e.message);
+        print('For details check browser console.');
+        print('For debug open /resouces/js/icancode.js and ' +
+                    'set breakpoint into "' + functionName + '" function.');
+        print('Fix your bug then try again.');
     }
 
     var clean = function() {

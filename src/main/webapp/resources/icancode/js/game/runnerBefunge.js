@@ -24,7 +24,7 @@
  * Based on work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
  * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
  **/
-function initRunnerBefunge(console, storage) {
+function initRunnerBefunge(logger, storage) {
 
     if (game.debug) {
         debugger;
@@ -65,7 +65,7 @@ function initRunnerBefunge(console, storage) {
 
     var popFromStack = function() {
         if (stack.length == 0) {
-            console.print('Не указано значение для команды. Укажите значение!');
+            logger.print('Не указано значение для команды. Укажите значение!');
             forceFinish();
             return;
         }
@@ -147,7 +147,7 @@ function initRunnerBefunge(console, storage) {
     }
 
     var printStackCommand = function(x, y) {
-        console.print('Stack [' + stack + ']');
+        logger.print('Stack [' + stack + ']');
     }
 
     var activateProcedure1Command = function(x, y) {
@@ -167,7 +167,7 @@ function initRunnerBefunge(console, storage) {
         try {
             var value = robot.getScanner().at(oldValue);
         } catch (error) {
-            console.print('Неправильно значение для сканнера: "' + oldValue + '"');
+            logger.print('Неправильно значение для сканнера: "' + oldValue + '"');
             forceFinish();
             return;
         }
@@ -1097,14 +1097,14 @@ function initRunnerBefunge(console, storage) {
                     return pt(x, y);
                 }
             }
-            console.print('Команда "' + id + '" не найдена');
+            logger.print('Команда "' + id + '" не найдена');
             return null;
         }
 
         var start = function() {
             var point = find('start');
             if (!point) {
-                console.print("Ошибка: Укажите точку старта выполнения программы!");
+                logger.print("Ошибка: Укажите точку старта выполнения программы!");
                 return;
             }
             animate(point.getX(), point.getY(), true);

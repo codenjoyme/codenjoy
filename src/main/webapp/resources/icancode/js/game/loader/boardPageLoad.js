@@ -54,14 +54,14 @@ var boardPageLoad = function() {
     // ----------------------- init tooltip -------------------
     $('[data-toggle="tooltip"]').tooltip();
 
-    // ----------------------- init console -------------------
-    var console = initConsole();
-    console.printCongrats = function() {
-        console.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
+    // ----------------------- init logger -------------------
+    var logger = initLogger();
+    logger.printCongrats = function() {
+        logger.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
     }
 
-    console.printHello = function() {
-        console.print('Hello ' + game.playerName + ', I am Hero! Waiting for your command...');
+    logger.printHello = function() {
+        logger.print('Hello ' + game.playerName + ', I am Hero! Waiting for your command...');
     }
 
     // ----------------------- init slider -------------------
@@ -169,7 +169,7 @@ var boardPageLoad = function() {
     // ----------------------- init runner -------------------
     var runner = null;
     if (game.enableBefunge) {
-        runner = initRunnerBefunge(console, storage);
+        runner = initRunnerBefunge(logger, storage);
     } else {
         var getCurrentLevelInfo = function(){
             return levelInfo.getInfo(levelProgress.getCurrentLevel());
@@ -184,7 +184,7 @@ var boardPageLoad = function() {
     var onSocketClose = function() {
         controller.reconnect();
     }
-    var socket = initSocket(game, buttons, console, onSocketMessage, onSocketClose);
+    var socket = initSocket(game, buttons, logger, onSocketMessage, onSocketClose);
 
     // ----------------------- init progressbar -------------------
     var oldLastPassed = -1;
@@ -209,13 +209,13 @@ var boardPageLoad = function() {
 
     // ------------------------ init controller ----------------------
 
-    var controller = initController(socket, runner, console, buttons, levelProgress, function() {
+    var controller = initController(socket, runner, logger, buttons, levelProgress, function() {
         return robot;
     });
 
     var robot = null;
     var resetRobot = function() {
-        robot = initRobot(console, controller);
+        robot = initRobot(logger, controller);
     }
     resetRobot();
 
@@ -240,7 +240,7 @@ var boardPageLoad = function() {
         buttons.enable(helpButton, false);
 
         var link = $('#register-link').attr('href');
-        console.print('<a href="' + link + '">Please register</a>');
+        logger.print('<a href="' + link + '">Please register</a>');
 
         runner.setStubValue();
     }
