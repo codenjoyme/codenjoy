@@ -24,10 +24,15 @@ function initLogger() {
     var container = $('#ide-console');
     container.empty();
 
+    container.mCustomScrollbar({
+        theme:'dark-2',
+        axis: 'yx',
+        mouseWheel : { enable : true }
+    });
+
     var print = function(message) {
         container.append('> ' + message + '<br>')
-        var scrollable = container.parent().parent();
-        scrollable.scrollTop(scrollable.prop('scrollHeight') - 5);
+        container.mCustomScrollbar('scroll', 'bottom');
     }
 
     var error = function(error, functionName) {

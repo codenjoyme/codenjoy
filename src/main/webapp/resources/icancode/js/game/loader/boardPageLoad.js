@@ -44,13 +44,6 @@ var boardPageLoad = function() {
             e.preventDefault();
         }
     });
-    // ----------------------- init scrollbar -------------------
-    $(".content").mCustomScrollbar({
-        theme:'dark-2',
-        axis: 'yx',
-        mouseWheel : { enable : true }
-    });
-
     // ----------------------- init tooltip -------------------
     $('[data-toggle="tooltip"]').tooltip();
 
