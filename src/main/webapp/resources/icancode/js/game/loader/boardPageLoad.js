@@ -153,15 +153,28 @@ var boardPageLoad = function() {
     };
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
 
+    // ----------------------- init storage -------------------
+    var storage = {
+        getKey : function(property) {
+            return property + '[' + game.playerName + ']';
+        },
+        load : function(property) {
+            return JSON.parse(localStorage.getItem(getKey(property)));
+        },
+        save : function(property, data) {
+            localStorage.setItem(getKey(property), JSON.stringify(data));
+        }
+    };
+
     // ----------------------- init runner -------------------
     var runner = null;
     if (game.enableBefunge) {
-        runner = initRunnerBefunge(console);
+        runner = initRunnerBefunge(console, storage);
     } else {
         var getCurrentLevelInfo = function(){
             return levelInfo.getInfo(levelProgress.getCurrentLevel());
         };
-        runner = initRunnerJs(game, libs, getCurrentLevelInfo);
+        runner = initRunnerJs(game, libs, getCurrentLevelInfo, storage);
     }
 
     // ------------------------ init socket ----------------------

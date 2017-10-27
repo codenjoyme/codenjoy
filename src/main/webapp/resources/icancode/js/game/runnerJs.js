@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initRunnerJs(game, libs, getLevelInfo) {
+function initRunnerJs(game, libs, getLevelInfo, storage) {
     
     if (game.debug) {
         debugger;
@@ -107,22 +107,20 @@ function initRunnerJs(game, libs, getLevelInfo) {
     var saveSettings = function() {
         var text = editor.getValue();
         if (!!text && text != '') {
-            localStorage.setItem('editor.code', editor.getValue());
-            var position =  editor.selection.getCursor();
-            localStorage.setItem('editor.cursor.position.column', position.column);
-            localStorage.setItem('editor.cursor.position.row', position.row);
-            editor.selection.getCursor()
+            var data = {
+                code : text,
+                position : editor.selection.getCursor()
+            }
+            storage.save('editor', data);
         }
     }
     var loadSettings = function() {
         try {
-            var text = localStorage.getItem('editor.code');
-            if (!!text && text != '') {
-                editor.setValue(text);
-                var column = localStorage.getItem('editor.cursor.position.column');
-                var row = localStorage.getItem('editor.cursor.position.row');
+            var data = storage.load('editor');
+            if (!!data) {
+                editor.setValue(data.code);
                 editor.focus();
-                editor.selection.moveTo(row, column);
+                editor.selection.moveTo(data.position.row, data.position.column);
             } else {
                 editor.setValue(getDefaultEditorValue());
             }

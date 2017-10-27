@@ -24,7 +24,7 @@
  * Based on work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
  * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
  **/
-function initRunnerBefunge(console) {
+function initRunnerBefunge(console, storage) {
 
     if (game.debug) {
         debugger;
@@ -712,14 +712,14 @@ function initRunnerBefunge(console) {
             }
         }
 
-        localStorage.setItem('editor.cardcode', JSON.stringify(data));
+        storage.save('editor', data);
     };
 
     // -------------------------------------- load state -----------------------------------
     var loadState = function() {
         readyForSaving = false;
         try {
-            var data = JSON.parse(localStorage.getItem('editor.cardcode'));
+            var data = storage.load('editor');
         } catch (err) {
             readyForSaving = true;
             return;
