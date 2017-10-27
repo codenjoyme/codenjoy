@@ -159,10 +159,10 @@ var boardPageLoad = function() {
             return property + '[' + game.playerName + ']';
         },
         load : function(property) {
-            return JSON.parse(localStorage.getItem(getKey(property)));
+            return JSON.parse(localStorage.getItem(this.getKey(property)));
         },
         save : function(property, data) {
-            localStorage.setItem(getKey(property), JSON.stringify(data));
+            localStorage.setItem(this.getKey(property), JSON.stringify(data));
         }
     };
 
