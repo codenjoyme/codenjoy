@@ -20,15 +20,15 @@
  * #L%
  */
 function initLogger() {
-    // ----------------------- init logger -------------------
-    var container = $('#ide-console');
-    container.empty();
-
-    container.mCustomScrollbar({
+    $(".content").mCustomScrollbar({
         theme:'dark-2',
         axis: 'yx',
         mouseWheel : { enable : true }
     });
+
+    // ----------------------- init logger -------------------
+    var container = $('#ide-console');
+    container.empty();
 
     var print = function(message) {
         container.append('> ' + message + '<br>')
