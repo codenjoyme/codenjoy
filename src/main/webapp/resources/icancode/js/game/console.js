@@ -33,10 +33,10 @@ function initLogger() {
     var print = function(message) {
         container.append('> ' + message + '<br>')
 
-        var scroll = $(".content");
-        scroll.mCustomScrollbar({
-            setTop: scroll.height() + "px"
-        });
+        //var scroll = $(".content"); // TODO разобраться со скролом
+        //scroll.mCustomScrollbar({
+        //    setTop: scroll.height() + "px"
+        //});
     }
 
     var error = function(error, functionName) {
