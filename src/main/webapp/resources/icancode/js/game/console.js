@@ -27,7 +27,7 @@ function initLogger() {
     var print = function(message) {
         container.append('> ' + message + '<br>')
         var scrollable = container.parent().parent();
-        scrollable.animate({scrollTop: scrollable.prop('scrollHeight')});
+        scrollable.scrollTop(scrollable.prop('scrollHeight') - 5);
     }
 
     var error = function(error, functionName) {
