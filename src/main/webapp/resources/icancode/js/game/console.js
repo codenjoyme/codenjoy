@@ -32,8 +32,10 @@ function initLogger() {
 
     var print = function(message) {
         container.append('> ' + message + '<br>')
-        $(".content").mCustomScrollbar({
-            setTop: d.height() + "px"
+
+        var scroll = $(".content");
+        scroll.mCustomScrollbar({
+            setTop: scroll.height() + "px"
         });
     }
 
