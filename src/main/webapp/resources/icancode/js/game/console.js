@@ -22,12 +22,12 @@
 function initLogger() {
     // ----------------------- init logger -------------------
     var container = $('#ide-console');
-    var scrollable = container.parent().parent();
     container.empty();
 
     var print = function(message) {
         container.append('> ' + message + '<br>')
-        scrollable.stop().animate({scrollTop: scrollable.prop('scrollHeight')});
+        var scrollable = container.parent().parent();
+        scrollable.animate({scrollTop: scrollable.prop('scrollHeight')});
     }
 
     var error = function(error, functionName) {
