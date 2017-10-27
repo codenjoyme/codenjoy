@@ -20,13 +20,13 @@
  * #L%
  */
 function initLogger() {
-    // ----------------------- init console -------------------
-    var console = $('#ide-console');
-    console.empty();
+    // ----------------------- init logger -------------------
+    var container = $('#ide-console');
+    container.empty();
 
     var print = function(message) {
-        console.append('> ' + message + '<br>')
-        console.animate({scrollTop: console.prop('scrollHeight')});
+        container.append('> ' + message + '<br>')
+        container.animate({scrollTop: container.prop('scrollHeight')});
     }
 
     var error = function(error, functionName) {
@@ -39,7 +39,7 @@ function initLogger() {
     }
 
     var clean = function() {
-        console.empty();
+        container.empty();
     }
 
     return {
