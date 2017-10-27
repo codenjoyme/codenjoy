@@ -24,13 +24,14 @@
  * This script is used for registration page
  * */
 (function () {
-    var LOCAL_STORAGE_KEYS = {
+    var KEYS = {
         gameName: "gameName",
         userData: {
-            key: "icancodeGamer",
-            email: "email",
-            id: "id", //first name, last name
-            techSkills: "techSkills"
+            email: "registration-email",
+            data: "registration-data",
+            data1: "registration-data1",
+            data2: "registration-data2",
+            data3: "registration-data3"
         }
     };
 
@@ -38,22 +39,6 @@
 
     function loadRegistrationPage() {
         fillFormFromLocalStorage();
-        var data = localStorage.getItem('registration-data');
-        if (!!data) {
-            $('#data input').val(data);
-        }
-        var data1 = localStorage.getItem('registration-data1');
-        if (!!data1) {
-            $('#data1 input').val(data1);
-        }
-        var data2 = localStorage.getItem('registration-data2');
-        if (!!data2) {
-            $('#data2 input').val(data2);
-        }
-        var data3 = localStorage.getItem('registration-data3');
-        if (!!data3) {
-            $('#data3 input').val(data3);
-        }
 
         var checkEls = {};
 
@@ -153,23 +138,33 @@
         });
     }
 
-    function fillFormFromLocalStorage() {
-        var gameName = localStorage.getItem(LOCAL_STORAGE_KEYS.gameName);
-        var player = localStorage.getItem(LOCAL_STORAGE_KEYS.userData.key);
-        if (!!gameName && !$("#game").attr('hidden')) {
-            $("#game").find("select").val(gameName);
-        }
-        if (!!player) {
-            player = JSON.parse(player);
-            $('#email').find('input').val(player[LOCAL_STORAGE_KEYS.userData.email]);
+    function loadInput(key, selector) {
+        var value = localStorage.getItem(key);
+        if (!!value) {
+            $(selector).val(value);
         }
     }
 
+    function fillFormFromLocalStorage() {
+        var gameName = localStorage.getItem(KEYS.gameName);
+        if (!!gameName && !$('#game').attr('hidden')) {
+            $('#game select').val(gameName);
+        } else {
+            var def = $('#game select option[default]').attr('value');
+            $('#game select').val(def);
+        }
+
+        loadInput(KEYS.userData.email, '#email input');
+        loadInput(KEYS.userData.data1, '#data1 input');
+        loadInput(KEYS.userData.data2, '#data2 input');
+        loadInput(KEYS.userData.data3, '#data3 input');
+    }
+
     function saveDataToLocalStorage() {
-        localStorage.setItem(LOCAL_STORAGE_KEYS.gameName, $("#game").find("option:selected").text());
-        var saveData = {};
-        saveData[LOCAL_STORAGE_KEYS.userData.email] = $('#email').find('input').val();
-        saveData[LOCAL_STORAGE_KEYS.userData.techSkills] = $('#skills').find('input').val();
-        localStorage.setItem(LOCAL_STORAGE_KEYS.userData.key, JSON.stringify(saveData));
+        localStorage.setItem(KEYS.gameName, $('#game').find('option:selected').text());
+        localStorage.setItem(KEYS.userData.email, $('#email input').val());
+        localStorage.setItem(KEYS.userData.data1, $('#data1 input').val());
+        localStorage.setItem(KEYS.userData.data2, $('#data2 input').val());
+        localStorage.setItem(KEYS.userData.data3, $('#data3 input').val());
     }
 })();
