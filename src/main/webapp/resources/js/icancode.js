@@ -24,6 +24,7 @@
 function compileProgram(code) {
     try {
         eval(code);
+        return program;
     } catch (e) {
         throw e;
     }
