@@ -19,8 +19,22 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+// ========================== for debugging ==========================
+
+function compileProgram(code) {
+    try {
+        eval(code);
+    } catch (e) {
+        throw e;
+    }
+}
+
 function runProgram(program, robot) {
-    program(robot);
+    try {
+        program(robot);
+    } catch (e) {
+        throw e;
+    }
 }
 
 // ========================== game setup ==========================

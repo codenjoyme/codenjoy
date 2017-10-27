@@ -83,7 +83,6 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
             commands = ['WAIT'];
         } else {
             if (runner.isProgramCompiled()) {
-// TODO for debug
                 try {
                     runner.runProgram(getRobot());
                 } catch (e) {
@@ -110,16 +109,15 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
 
     var compileCommands = function(onSuccess) {
         console.print('Uploading program...');
-// TODO for debug
-//        try {
+        try {
             var robot = getRobot();
             runner.compileProgram(robot);
-//        } catch (e) {
-//            console.error(e.message);
-//            console.print('Please try again.');
-//            buttons.enableAll();
-//            return;
-//        }
+        } catch (e) {
+            console.error(e.message);
+            console.print('Please try again.');
+            buttons.enableAll();
+            return;
+        }
         onSuccess();
     }
 

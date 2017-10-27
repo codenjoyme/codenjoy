@@ -147,7 +147,7 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
         },
         compileProgram : function(robot) {
             var code = editor.getValue();
-            eval(code);
+            compileProgram(code);
             functionToRun = program;
         },
         cleanProgram : function() {
