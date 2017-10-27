@@ -32,10 +32,10 @@ function initLogger() {
     var error = function(error, functionName) {
         console.log(error);
         print('Error: ' + error.message);
-        print('For details check browser console.');
-        print('For debug open /resouces/js/icancode.js and ' +
-                    'set breakpoint into "' + functionName + '" function.');
-        print('Fix your bug then try again.');
+        print('For details check browser console. ' +
+                'For debug open /resouces/js/icancode.js and ' +
+                'set breakpoint into "' + functionName + '" function.' +
+                'Fix your bug then try again.');
     }
 
     var clean = function() {
