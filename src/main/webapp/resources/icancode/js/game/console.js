@@ -32,7 +32,7 @@ function initLogger() {
 
     var print = function(message) {
         container.append('> ' + message + '<br>')
-        container.mCustomScrollbar('scrollTo', 'bottom');
+        $(".content").mCustomScrollbar('scrollTo', 'bottom');
     }
 
     var error = function(error, functionName) {
