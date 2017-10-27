@@ -22,11 +22,12 @@
 function initLogger() {
     // ----------------------- init logger -------------------
     var container = $('#ide-console');
+    var scrollable = container.parent().parent();
     container.empty();
 
     var print = function(message) {
         container.append('> ' + message + '<br>')
-        container.animate({scrollTop: container.prop('scrollHeight')});
+        scrollable.stop().animate({scrollTop: scrollable.prop('scrollHeight')});
     }
 
     var error = function(error, functionName) {
@@ -34,7 +35,7 @@ function initLogger() {
         print('Error: ' + error.message);
         print('For details check browser console. ' +
                 'For debug open /resouces/js/icancode.js and ' +
-                'set breakpoint into "' + functionName + '" function.' +
+                'set breakpoint into "' + functionName + '" function. ' +
                 'Fix your bug then try again.');
     }
 
