@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.services;
+﻿package com.epam.dojo.icancode.services;
 
 /*-
  * #%L
@@ -49,7 +49,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     private void setupSettings() {
         new Scores(0, settings);
-        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(1);
+        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(0);
     }
 
     private ICanCode newSingleGame() {
