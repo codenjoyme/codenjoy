@@ -1,4 +1,4 @@
-﻿package com.epam.dojo.icancode.services;
+package com.epam.dojo.icancode.services;
 
 /*-
  * #%L
