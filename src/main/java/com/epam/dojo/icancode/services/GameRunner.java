@@ -49,7 +49,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     private void setupSettings() {
         new Scores(0, settings);
-        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(0);
+        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(1);
     }
 
     private ICanCode newSingleGame() {
