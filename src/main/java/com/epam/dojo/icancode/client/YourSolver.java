@@ -53,12 +53,10 @@ public class YourSolver extends AbstractSolver {
         if (goals.isEmpty()) {
             goals = board.getExits();
         }
-        List<Direction> shortestWay = board.getShortestWay(goals);
-        if (shortestWay.isEmpty()) {
-            return doNothing();
-        }
 
-        Direction direction = shortestWay.get(0);
+        // TODO your code here
+        Direction direction = Direction.ACT;
+
         return go(direction);
     }
 
@@ -66,7 +64,7 @@ public class YourSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "dojo.lab.epam.com:80", new YourSolver());
+        start("your@email.com", "192.168.1.1:8080", new YourSolver());
     }
 
 }

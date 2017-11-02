@@ -25,6 +25,7 @@ package com.epam.dojo.icancode.client.ai;
 
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.client.AbstractSolver;
 import com.epam.dojo.icancode.client.Board;
 import com.epam.dojo.icancode.client.Command;
@@ -51,7 +52,7 @@ public class ApofigBotSolver extends AbstractSolver {
         if (destination.isEmpty()) {
             destination = board.getExits();
         }
-        List<Direction> shortestWay = board.getShortestWay(destination);
+        List<Direction> shortestWay = getShortestWay(board, destination);
         if (shortestWay.isEmpty()) {
             return doNothing();
         }
@@ -67,6 +68,43 @@ public class ApofigBotSolver extends AbstractSolver {
         }
 
         return go(nextStep);
+    }
+
+    private DeikstraFindWay.Possible possible(final Board board) {
+        return new DeikstraFindWay.Possible() {
+            @Override
+            public boolean possible(Point from, Direction where) {
+                int x = from.getX();
+                int y = from.getY();
+                if (board.isBarrierAt(x, y)) return false;
+
+                Point newPt = where.change(from);
+                int nx = newPt.getX();
+                int ny = newPt.getY();
+
+                if (board.isOutOfField(nx, ny)) return false;
+
+                if (board.isBarrierAt(nx, ny)) return false;
+
+                return true;
+            }
+
+            @Override
+            public boolean possible(Point atWay) {
+                return true;
+            }
+        };
+    }
+
+    /**
+     * @param to Destination point.
+     * @return Shortest path (list of directions where to move) from your robot location to coordinates specified.
+     */
+    public List<Direction> getShortestWay(Board board, List<Point> to) {
+        DeikstraFindWay.Possible map = possible(board);
+        DeikstraFindWay findWay = new DeikstraFindWay();
+        List<Direction> shortestWay = findWay.getShortestWay(board.size(), board.getMe(), to, map);
+        return shortestWay;
     }
 
     /**

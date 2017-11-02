@@ -170,7 +170,7 @@ Send program to Robot by running the YourSolver class as Main Application.
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "server:8080", new YourSolver());
+        start("your@email.com", "server_ip:8080", new YourSolver());
     }</pre>
 
           <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
@@ -188,12 +188,10 @@ Send program to Robot by running the YourSolver class as Main Application.
         if (goals.isEmpty()) {
             goals = board.getExits();
         }
-        List&lt;Direction&gt; shortestWay = board.getShortestWay(goals);
-        if (shortestWay.isEmpty()) {
-            return doNothing();
-        }
 
-        Direction direction = shortestWay.get(0);
+        // TODO your code here
+        Direction direction = Direction.ACT;
+
         return go(direction);
     }</pre>
 
@@ -399,11 +397,6 @@ assert heroes.get(0).equals(pt(1, 2));</pre>
           <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStarts,  getExits, getHoles</p>
           <pre>List&lt;Point&gt; points = board.getOtherRobots();
 assert points.get(0).equals(pt(1, 2));</pre>
-          
-          <p><span class="func">List&lt;Direction&gt; getShortestWay(List&lt;Point&gt; to)</span> - Return shortest path (list of directions where to move) from your robot location to coordinates specified.</p>
-          <pre>Point destination = pt(2, 4);
-List&lt;Direction&gt; path = board.getShortestWay(Arrays.asList(destination));
-assert path.equals(Arrays.asList(UP, DOWN, DOWN, LEFT));</pre>
         </div>    
       </section>
       
