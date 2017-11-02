@@ -100,7 +100,7 @@ public class ApofigBotSolver extends AbstractSolver {
      * @param to Destination point.
      * @return Shortest path (list of directions where to move) from your robot location to coordinates specified.
      */
-    public List<Direction> getShortestWay(Board board, List<Point> to) {
+    List<Direction> getShortestWay(Board board, List<Point> to) {
         DeikstraFindWay.Possible map = possible(board);
         DeikstraFindWay findWay = new DeikstraFindWay();
         List<Direction> shortestWay = findWay.getShortestWay(board.size(), board.getMe(), to, map);

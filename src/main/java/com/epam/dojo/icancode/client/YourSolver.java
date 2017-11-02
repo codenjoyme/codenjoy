@@ -55,9 +55,7 @@ public class YourSolver extends AbstractSolver {
         }
 
         // TODO your code here
-        Direction direction = Direction.ACT;
-
-        return go(direction);
+        return jump();
     }
 
     /**

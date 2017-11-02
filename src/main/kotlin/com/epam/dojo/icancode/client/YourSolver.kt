@@ -42,9 +42,7 @@ class YourKotlinSolver() : AbstractSolver() {
             }
 
             // TODO your code here
-            val direction = ACT
-
-            return Command.go(direction)
+            return Command.jump()
         }
     }
 }
