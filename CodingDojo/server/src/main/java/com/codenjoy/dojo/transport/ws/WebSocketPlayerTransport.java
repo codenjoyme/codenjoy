@@ -57,6 +57,12 @@ public class WebSocketPlayerTransport implements PlayerTransport {
         }
     }
 
+    /**
+     * Случается, когда игрок зарегистрировался в игре на страничке регистрации
+     * @param id идентификатор пользователя - его email
+     * @param responseHandler обработчик
+     * @param o дополнительные данные
+     */
     @Override
     public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object o) {
         lock.writeLock().lock();
@@ -87,6 +93,11 @@ public class WebSocketPlayerTransport implements PlayerTransport {
         }
     }
 
+    /**
+     * Случается, когда игрок подключился по вебсокетам к серверу
+     * @param id идентификатор пользователя - его email
+     * @param playerSocket вебсокет
+     */
     public void registerPlayerSocket(String id, PlayerSocket playerSocket) {
         lock.writeLock().lock();
         try {

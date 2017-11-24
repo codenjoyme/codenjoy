@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "user@gmail.com";
+    private static final String USER_NAME = "apofig@gmail.com";
 
     private Dice dice;
     private Board board;
@@ -51,7 +51,7 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
+        WebSocketRunner.runOnServer("127.0.0.1:8080", // to use for local server
 //        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
                 USER_NAME,
                 new YourSolver(new RandomDice()),

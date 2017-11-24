@@ -47,12 +47,6 @@
       HttpRequestHandlerServlet servlet-name as defined in web.xml. -->
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
 
-    <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
-
-    <bean name="playerController" class="com.codenjoy.dojo.services.PlayerControllerImpl" >
-        <property name="transport" ref="playerTransport"/>
-    </bean>
-
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
         <constructor-arg index="0" value="100" type="int"/>
     </bean>

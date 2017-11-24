@@ -24,11 +24,15 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.transport.PlayerTransport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component("playerController")
 public class PlayerControllerImpl implements PlayerController {
 
+    @Autowired
     private PlayerTransport transport;
 
     public void requestControl(final Player player, final String board) throws IOException {
