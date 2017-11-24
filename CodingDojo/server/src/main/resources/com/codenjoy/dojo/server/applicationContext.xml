@@ -50,7 +50,7 @@
     <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
 
     <bean name="playerController" class="com.codenjoy.dojo.services.PlayerControllerImpl" >
-        <property name="transport" ref="wsPlayerTransport"/>
+        <property name="transport" ref="playerTransport"/>
     </bean>
 
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
