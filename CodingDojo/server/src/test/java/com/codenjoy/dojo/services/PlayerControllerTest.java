@@ -95,7 +95,7 @@ public class PlayerControllerTest {
         };
 
         player = new Player(USER_NAME, "127.0.0.1", PlayerTest.mockGameType("game"),
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE, Protocol.WS);
+                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
 
         controller.registerPlayerTransport(player, joystick);
 

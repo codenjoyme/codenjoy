@@ -26,7 +26,6 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
-import com.codenjoy.dojo.services.Protocol;
 import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
@@ -87,8 +86,7 @@ public class PlayerGameSaver implements GameSaver {
                             int score = resultSet.getInt("score");
                             String gameName = resultSet.getString("gameName");
                             String save = resultSet.getString("save");
-                            String protocol = Protocol.WS.name();
-                            return new PlayerSave(name, callbackUrl, gameName, score, protocol, save);
+                            return new PlayerSave(name, callbackUrl, gameName, score, save);
                         } else {
                             return PlayerSave.NULL;
                         }

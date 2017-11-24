@@ -291,7 +291,7 @@ public class PlayerGamesAdditionalDataTest {
         PlayerScores gameScore = mock(PlayerScores.class);
         when(gameScore.getScore()).thenReturn(scores);
 
-        Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null, Protocol.WS);
+        Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null);
         players.add(player);
 
         Game game = LockedGameTest.getLockedGame().wrap(new DummyGame(heroData));

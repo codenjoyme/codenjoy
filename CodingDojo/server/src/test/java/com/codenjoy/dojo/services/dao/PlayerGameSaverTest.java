@@ -64,7 +64,7 @@ public class PlayerGameSaverTest {
         PlayerScores scores = getScores(10);
         Information info = getInfo("Some info");
         GameService gameService = getGameService(scores);
-        Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info, Protocol.HTTP);
+        Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
 
         saver.saveGame(player, "{'key':'value'}");
 
@@ -207,8 +207,8 @@ public class PlayerGameSaverTest {
 
     @Test
     public void shouldWorks_getSavedList() {
-        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"), Protocol.HTTP);
-        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"), Protocol.WS);
+        Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
+        Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
 
         saver.saveGame(player1, "{'key':'value'}");
         saver.saveGame(player2, "{'key':'value'}");

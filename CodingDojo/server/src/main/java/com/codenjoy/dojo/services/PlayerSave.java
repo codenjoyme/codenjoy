@@ -27,21 +27,19 @@ import org.apache.commons.lang.StringUtils;
 
 public class PlayerSave {
 
-    public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY, StringUtils.EMPTY);
+    public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
 
-    private String protocol;
     private Object score;
     private String callbackUrl;
     private String gameName;
     private String name;
     private String save;
 
-    public PlayerSave(String name, String callbackUrl, String gameName, Object score, String protocol, String save) {
+    public PlayerSave(String name, String callbackUrl, String gameName, Object score, String save) {
         this.name = name;
         this.gameName = gameName;
         this.callbackUrl = callbackUrl;
         this.score = score;
-        this.protocol = protocol;
         this.save = save;
     }
 
@@ -50,12 +48,7 @@ public class PlayerSave {
         this.gameName = save.getGameName();
         this.callbackUrl = save.getCallbackUrl();
         this.score = save.getScore();
-        this.protocol = save.getProtocol().name();
         this.save = save.getData();
-    }
-
-    public String getProtocol() {
-        return protocol;
     }
 
     public Object getScore() {

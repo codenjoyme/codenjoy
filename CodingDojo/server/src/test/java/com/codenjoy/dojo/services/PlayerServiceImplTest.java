@@ -181,7 +181,6 @@ public class PlayerServiceImplTest {
         assertNull(player.getCode());
         assertEquals(VASYA_URL, player.getCallbackUrl());
         assertSame(gameType, player.getGameType());
-        assertEquals(Protocol.WS, player.getProtocol());
         assertNull(player.getMessage());
         assertEquals(0, player.getScore());
     }
@@ -458,7 +457,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
         // given
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 100, "http", null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 100, null);
 
         // when
         playerService.register(save);
@@ -480,7 +479,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer(VASYA);
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", 200, "http", null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", 200, null);
 
         // when
         playerService.register(save);
@@ -503,7 +502,7 @@ public class PlayerServiceImplTest {
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 200, "http", null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 200, null);
 
         // when
         playerService.register(save);
@@ -1150,7 +1149,7 @@ public class PlayerServiceImplTest {
     public void testLoadPlayersFromSaveAndLoadAI() {
         // given
         when(gameType.newAI(anyString())).thenReturn(true);
-        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", 100, "http", null);
+        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", 100, null);
 
         // when
         playerService.register(save);

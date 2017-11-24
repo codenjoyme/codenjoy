@@ -41,7 +41,7 @@ public class PlayerGameTest {
     @Before
     public void setup() {
         player = new Player("player", "url", PlayerTest.mockGameType("game"), 
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE, Protocol.WS);
+                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
         game = mock(Game.class);
         lazyJoystick = mock(Tickable.class);
         controller = mock(PlayerController.class);
@@ -59,7 +59,7 @@ public class PlayerGameTest {
         assertTrue(NullPlayerGame.INSTANCE.equals(NullPlayer.INSTANCE));
 
         Player otherPlayer = new Player("other player", "other url", PlayerTest.mockGameType("game"),
-                NullPlayerScores.INSTANCE, NullInformation.INSTANCE, Protocol.WS);
+                NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
         assertFalse(playerGame.equals(otherPlayer));
         assertTrue(playerGame.equals(player));
 

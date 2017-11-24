@@ -77,7 +77,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             registerAIFor(name, gameName);
 
-            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, Protocol.WS.name(), null));
+            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, null));
 
             return player;
         } finally {
@@ -113,7 +113,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
         if (gameType.newAI(aiName)) {
-            Player player = register(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name(), null);
+            Player player = register(aiName, "127.0.0.1", gameName, 0, null);
         }
     }
 
@@ -127,10 +127,10 @@ public class PlayerServiceImpl implements PlayerService {
             gameType.newAI(name);
         }
 
-        return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getProtocol(), save.getSave());
+        return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getSave());
     }
 
-    private Player register(String name, String callbackUrl, String gameName, Object score, String protocol, String data) {
+    private Player register(String name, String callbackUrl, String gameName, Object score, String data) {
         Player player = get(name);
         GameType gameType = gameService.getGame(gameName);
 
@@ -148,8 +148,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             player = new Player(name, callbackUrl,
-                    gameType, playerScores, informationCollector,
-                    Protocol.valueOf(protocol.toUpperCase()));
+                    gameType, playerScores, informationCollector);
 
             playerGames.add(player, game, playerController);
         } else {

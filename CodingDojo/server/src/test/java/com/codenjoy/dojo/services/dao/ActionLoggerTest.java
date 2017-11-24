@@ -82,7 +82,7 @@ public class ActionLoggerTest {
         Game game = getBoard(board);
         PlayerScores score = getScore(value);
 
-        Player player = new Player(name, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null, Protocol.WS);
+        Player player = new Player(name, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null);
         playerGames.add(player, game, mock(PlayerController.class));
     }
 

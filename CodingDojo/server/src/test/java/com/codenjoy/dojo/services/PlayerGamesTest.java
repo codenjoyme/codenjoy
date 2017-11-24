@@ -151,7 +151,7 @@ public class PlayerGamesTest {
         when(gameType.name()).thenReturn(game);
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
-        return new Player(name, "url", gameType, scores, mock(Information.class), Protocol.WS);
+        return new Player(name, "url", gameType, scores, mock(Information.class));
     }
 
     @Test

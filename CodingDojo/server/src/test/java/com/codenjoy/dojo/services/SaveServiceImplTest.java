@@ -96,7 +96,6 @@ public class SaveServiceImplTest {
         when(player.getData()).thenReturn("data for " + name);
         when(player.getGameName()).thenReturn(name + " game");
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
-        when(player.getProtocol()).thenReturn(Protocol.WS);
         when(playerService.get(name)).thenReturn(player);
         players.add(player);
 
@@ -118,7 +117,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_forNotRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, "http", null);
+        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
@@ -134,7 +133,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, "http", null);
+        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
@@ -151,7 +150,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayerWithExternalSave_forNotRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "ws", "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "{'save':'data'}");
         allPlayersNotRegistered();
 
         // when
@@ -166,7 +165,6 @@ public class SaveServiceImplTest {
         assertEquals("{'callbackUrl':'127.0.0.1'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
-                "'protocol':'ws'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(save));
         verifyNoMoreInteractions(playerService);
@@ -175,7 +173,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayerWithExternalSave_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "ws", "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "{'save':'data'}");
         allPlayersRegistered();
 
         // when
@@ -191,7 +189,6 @@ public class SaveServiceImplTest {
         assertEquals("{'callbackUrl':'127.0.0.1'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
-                "'protocol':'ws'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(save));
         verifyNoMoreInteractions(playerService);
@@ -205,7 +202,7 @@ public class SaveServiceImplTest {
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
-        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "saved game", 15, Protocol.HTTP.name(), "data for saved");
+        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "saved game", 15, "data for saved");
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
         when(saver.loadGame("activeSaved")).thenReturn(save1);
@@ -226,7 +223,6 @@ public class SaveServiceImplTest {
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("active game", active.getGameName());
         assertNull(active.getData());
-        assertNull(active.getProtocol());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
@@ -234,7 +230,6 @@ public class SaveServiceImplTest {
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("activeSaved game", activeSaved.getGameName());
         assertNull(activeSaved.getData());
-        assertNull(activeSaved.getProtocol());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
@@ -242,7 +237,6 @@ public class SaveServiceImplTest {
         assertEquals("http://saved:1234", saved.getCallbackUrl());
         assertEquals("saved game", saved.getGameName());
         assertNull(saved.getData());
-        assertNull(activeSaved.getProtocol());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
     }

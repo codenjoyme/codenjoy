@@ -38,7 +38,7 @@ public class PlayerTest {
 
         Information info = mock(Information.class);
         String game1 = "game";
-        Player player = new Player("vasia", "http://valia:8888/", mockGameType(game1), scores, info, null);
+        Player player = new Player("vasia", "http://valia:8888/", mockGameType(game1), scores, info);
 
         assertEquals("vasia", player.toString());
 

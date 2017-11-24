@@ -31,7 +31,6 @@ public class Player implements ScreenRecipient {
     private String code;
     private String data;
     private String callbackUrl;
-    private Protocol protocol;
     private String gameName;
     private String password;
     private PlayerScores scores;
@@ -41,13 +40,12 @@ public class Player implements ScreenRecipient {
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, GameType gameType, PlayerScores scores, Information info, Protocol protocol) {
+    public Player(String name, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {
         this.name = name;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
-        this.protocol = protocol;
     }
 
     public GameType getGameType() {
@@ -118,14 +116,6 @@ public class Player implements ScreenRecipient {
 
     public void setCode(String code) {
         this.code = code;
-    }
-
-    public Protocol getProtocol() {
-        return protocol;
-    }
-
-    public void setProtocol(Protocol protocol) {
-        this.protocol = protocol;
     }
 
     public String getCode() {
