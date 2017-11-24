@@ -49,7 +49,7 @@
 
     <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
 
-    <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
+    <bean name="playerController" class="com.codenjoy.dojo.services.PlayerControllerImpl" >
         <property name="transport" ref="wsPlayerTransport"/>
     </bean>
 

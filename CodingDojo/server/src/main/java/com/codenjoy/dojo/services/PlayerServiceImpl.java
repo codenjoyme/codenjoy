@@ -54,7 +54,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired private PlayerGames playerGames;
     @Autowired private ScreenSender<ScreenRecipient, ScreenData> screenSender;
-    @Autowired private PlayerControllerFactory playerControllerFactory;
+    @Autowired private PlayerController playerController;
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
@@ -151,9 +151,7 @@ public class PlayerServiceImpl implements PlayerService {
                     gameType, playerScores, informationCollector,
                     Protocol.valueOf(protocol.toUpperCase()));
 
-            PlayerController controller = playerControllerFactory.get(player.getProtocol());
-
-            playerGames.add(player, game, controller);
+            playerGames.add(player, game, playerController);
         } else {
           // do nothing
         }

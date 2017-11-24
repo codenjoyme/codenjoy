@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
@@ -23,6 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
-public interface PlayerControllerFactory {
-    PlayerController get(Protocol protocol);
+import com.codenjoy.dojo.services.PlayerController;
+import org.springframework.context.annotation.Bean;
+
+import static org.mockito.Mockito.mock;
+
+public class MockPlayerController {
+    @Bean(name = "playerController")
+    public PlayerController bean() throws Exception {
+        return mock(PlayerController.class);
+    }
 }

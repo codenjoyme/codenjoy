@@ -27,7 +27,7 @@ import com.codenjoy.dojo.transport.PlayerTransport;
 
 import java.io.IOException;
 
-public class WsPlayerController implements PlayerController {
+public class PlayerControllerImpl implements PlayerController {
 
     private PlayerTransport transport;
 

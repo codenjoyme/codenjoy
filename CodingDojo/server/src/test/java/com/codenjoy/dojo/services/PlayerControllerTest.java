@@ -42,7 +42,7 @@ public class PlayerControllerTest {
 
     private static String url;
 
-    private static WsPlayerController controller;
+    private static PlayerControllerImpl controller;
     private static TimerService timer;
     private static SpringMockerJettyRunner runner;
 
@@ -63,7 +63,7 @@ public class PlayerControllerTest {
         System.out.println("web application started at: " + url);
 
         timer = runner.getBean(TimerService.class, "timerService");
-        controller = runner.getBean(WsPlayerController.class, "wsPlayerController");
+        controller = runner.getBean(PlayerControllerImpl.class, "playerController");
 
         timer.pause();
 

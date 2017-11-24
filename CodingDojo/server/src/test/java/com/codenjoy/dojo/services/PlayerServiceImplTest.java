@@ -58,7 +58,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
         MockChatService.class,
-        MockPlayerControllerFactory.class,
+        MockPlayerController.class,
         MockAutoSaver.class,
         MockSaveService.class,
         MockGameService.class,
@@ -85,7 +85,7 @@ public class PlayerServiceImplTest {
 
     @Autowired private PlayerServiceImpl playerService;
     @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
-    @Autowired private PlayerControllerFactory playerControllerFactory;
+    @Autowired private PlayerController playerController;
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
@@ -100,13 +100,12 @@ public class PlayerServiceImplTest {
     private Game game;
     private Joystick joystick;
     private InformationCollector informationCollector;
-    private PlayerController playerController;
     private PlayerSpy playerSpy;
 
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
-        Mockito.reset(actionLogger, autoSaver, chatService, gameService, playerControllerFactory, statistics);
+        Mockito.reset(actionLogger, autoSaver, chatService, gameService, playerController, statistics);
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
@@ -125,9 +124,6 @@ public class PlayerServiceImplTest {
         when(playerScores3.getScore()).thenReturn(0);
 
         when(chatService.getChatLog()).thenReturn("chat");
-
-        playerController = mock(PlayerController.class);
-        when(playerControllerFactory.get(any(Protocol.class))).thenReturn(playerController);
 
         joystick = mock(Joystick.class);
 
