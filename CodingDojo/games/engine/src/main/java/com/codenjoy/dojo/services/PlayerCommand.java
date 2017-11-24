@@ -33,7 +33,11 @@ public class PlayerCommand {
 
     public PlayerCommand(Joystick joystick, String commandString) {
         this.joystick = joystick;
-        this.commandString = commandString.replaceAll(", +", ",").replaceAll(" +,", ",");
+        if (!commandString.startsWith("message('")) {
+            this.commandString = commandString.replaceAll(", +", ",").replaceAll(" +,", ",");
+        } else {
+            this.commandString = commandString.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
+        }
     }
 
     public void execute(){
@@ -72,7 +76,7 @@ public class PlayerCommand {
                     if (p == null) {
                         joystick.message("");
                     } else {
-                        joystick.message(p);
+                        joystick.message(p.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r"));
                     }
                 } else {
                     System.out.println(commandString);

@@ -44,7 +44,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Component("playerService")
 public class PlayerServiceImpl implements PlayerService {
     public static final String CHAT = "#CHAT";
-    private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
+    private static Logger logger = DLoggerFactory.getLogger(PlayerServiceImpl.class);
     private static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
@@ -67,7 +67,9 @@ public class PlayerServiceImpl implements PlayerService {
     public Player register(String name, String callbackUrl, String gameName) {
         lock.writeLock().lock();
         try {
-            logger.debug("Registered user {} in game {}", name, gameName);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Registered user {} in game {}", name, gameName);
+            }
 
             if (!registration) {
                 return NullPlayer.INSTANCE;
@@ -128,7 +130,7 @@ public class PlayerServiceImpl implements PlayerService {
         return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getProtocol(), save.getSave());
     }
 
-    private Player register(String name, String callbackUrl, String gameName, int score, String protocol, String data) {
+    private Player register(String name, String callbackUrl, String gameName, Object score, String protocol, String data) {
         Player player = get(name);
         GameType gameType = gameService.getGame(gameName);
 
@@ -139,8 +141,11 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerScores playerScores = gameType.getPlayerScores(score);
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Game game = gameType.newGame(informationCollector, printer, data);
-            logger.info("Player {} starting new game {}", name, game);
+            Game game = gameType.newGame(informationCollector, printer, data, name);
+
+            if (logger.isDebugEnabled()) {
+                logger.info("Player {} starting new game {}", name, game);
+            }
 
             player = new Player(name, callbackUrl,
                     gameType, playerScores, informationCollector,
@@ -160,6 +165,11 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            if (logger.isDebugEnabled()) {
+                logger.info("==================================================================================");
+                logger.info("PlayerService.tick() starts");
+            }
+
             long time = System.currentTimeMillis();
 
             if (autoSaverEnable) {
@@ -293,8 +303,10 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             Player player = get(name);
 
-            logger.debug("Unregistered user {} from game {}",
-                    player.getName(), player.getGameName());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Unregistered user {} from game {}",
+                        player.getName(), player.getGameName());
+            }
 
             playerGames.remove(player);
         } finally {

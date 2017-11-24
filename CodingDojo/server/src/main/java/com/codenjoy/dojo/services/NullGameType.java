@@ -35,7 +35,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
+    public PlayerScores getPlayerScores(Object score) {
         throw exception();
     }
 
@@ -44,7 +44,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         throw exception();
     }
 
@@ -81,5 +81,10 @@ public class NullGameType implements GameType {
     @Override
     public String getVersion() {
         throw exception();
+    }
+
+    @Override
+    public void tick() {
+        // do nothing
     }
 }

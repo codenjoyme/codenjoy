@@ -62,12 +62,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return NullPlayerGame.INSTANCE;
     }
 
-    public void add(Player player, Game game, PlayerController controller) {
+    public PlayerGame add(Player player, Game game, PlayerController controller) {
         PlayerSpy spy = statistics.newPlayer(player);
 
         LazyJoystick joystick = new LazyJoystick(game, spy);
         controller.registerPlayerTransport(player, joystick);
-        playerGames.add(new PlayerGame(player, game, controller, joystick));
+        PlayerGame result = new PlayerGame(player, game, controller, joystick);
+        playerGames.add(result);
+        return result;
     }
 
     public boolean isEmpty() {
@@ -148,12 +150,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         for (final PlayerGame playerGame : playerGames) {
             final Game game = playerGame.getGame();
             if (game.isGameOver()) {
-                quietTick(new Tickable() {
-                    @Override
-                    public void tick() {
-                        game.newGame();
-                    }
-                });
+                quietTick(() -> game.newGame());
             }
         }
 
@@ -171,6 +168,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             }
         }
 
+        getGameTypes().forEach(gameType -> gameType.tick());
+
 //        if (logger.isDebugEnabled()) {
 //            time = System.currentTimeMillis() - time;
 //            logger.debug("PlayerGames.tick() is {} ms", time);
@@ -183,39 +182,71 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    // TODO test me
     public Map<String, GameData> getGamesDataMap() {
-        Map<String, GameData> additionalData = new HashMap<>();
+        Map<String, GameData> result = new LinkedHashMap<>();
         for (GameType gameType : getGameTypes()) {
             int boardSize = gameType.getBoardSize().getValue();
             GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
             JSONObject scores = getScoresJSON(gameType.name());
             JSONObject heroesData = getCoordinatesJSON(gameType.name());
 
-            additionalData.put(gameType.name(), new GameData(boardSize, decoder, scores, heroesData));
-        }
-        return additionalData;
-    }
-
-    // TODO test me
-    private JSONObject getCoordinatesJSON(String gameType) {
-        JSONObject result = new JSONObject();
-        for (PlayerGame playerGame : getAll(gameType)) {
-            Player player = playerGame.getPlayer();
-            Game game = playerGame.getGame();
-            HeroData data = game.getHero();
-            result.put(player.getName(), new JSONObject(data));
+            result.put(gameType.name(), new GameData(boardSize, decoder, scores, heroesData));
         }
         return result;
     }
 
-    // TODO test me
+    private JSONObject getCoordinatesJSON(String gameType) {
+        List<PlayerGame> playerGames = getAll(gameType);
+
+        Map<Player, List<Player>> playersMap = new HashMap<>();
+        for (PlayerGame playerGame : playerGames) {
+            Player player = playerGame.getPlayer();
+            Game game = playerGame.getGame();
+            HeroData heroData = game.getHero();
+            List<Game> gamesGroup = heroData.playersGroup();
+            List<Player> playersGroup = new LinkedList<>();
+            if (gamesGroup == null) {
+                playersGroup.add(player);
+            } else {
+                for (Game game2 : gamesGroup) {
+                    int index = playerGames.indexOf(PlayerGame.by(game2));
+                    if (index != -1) {
+                        playersGroup.add(playerGames.get(index).getPlayer());
+                    } else {
+                        // TODO этого не должн случиться, но лучше порефакторить
+                    }
+                }
+            }
+            playersMap.put(player, playersGroup);
+        }
+
+        Map<String, JSONObject> heroesData = new HashMap<>();
+        for (PlayerGame playerGame : playerGames) {
+            heroesData.put(playerGame.getPlayer().getName(),
+                    new JSONObject(playerGame.getGame().getHero()));
+        }
+
+        JSONObject result = new JSONObject();
+        for (Map.Entry<Player, List<Player>> entry : playersMap.entrySet()) {
+            Player player1 = entry.getKey();
+
+            JSONObject map = new JSONObject();
+            result.put(player1.getName(), map);
+
+            for (Player player2 : entry.getValue()) {
+                String name = player2.getName();
+                map.put(name, heroesData.get(name));
+            }
+        }
+        return result;
+    }
+
     private JSONObject getScoresJSON(String gameType) {
-        JSONObject scores = new JSONObject();
+        JSONObject result = new JSONObject();
         for (PlayerGame playerGame : getAll(gameType)) {
             Player player = playerGame.getPlayer();
-            scores.put(player.getName(), player.getScore());
+            result.put(player.getName(), player.getScore());
         }
-        return scores;
+        return result;
     }
 }

@@ -39,17 +39,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static com.codenjoy.dojo.web.controller.AdminController.PASS;
+
 @Controller
-@RequestMapping("/admin31415")
+@RequestMapping("/admin" + PASS)
 public class AdminController {
 
     public static final String GAME_NAME = "gameName";
+    public static final int PASS = 31415;
 
     @Autowired private TimerService timerService;
     @Autowired private PlayerService playerService;
     @Autowired private SaveService saveService;
     @Autowired private GameService gameService;
     @Autowired private ActionLogger actionLogger;
+    @Autowired private DebugService debugService;
 
     public AdminController() {
     }
@@ -85,6 +89,15 @@ public class AdminController {
     public String loadPlayerGame(@RequestParam("load") String name, Model model, HttpServletRequest request) {
         saveService.load(name);
         return getAdmin(request);
+    }
+
+    @RequestMapping(params = {"player", "data"}, method = RequestMethod.GET)
+    public String loadPlayerGameFromSave(@RequestParam("player") String name,
+                                         @RequestParam("data") String save,
+                                         Model model, HttpServletRequest request)
+    {
+        saveService.load(name, getGameName(request), save);
+        return "redirect:/board/player/" + name;
     }
 
     @RequestMapping(params = "reloadAI", method = RequestMethod.GET)
@@ -123,9 +136,27 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @RequestMapping(params = "resetAll", method = RequestMethod.GET)
+    public String resetAllPlayers(Model model, HttpServletRequest request) {
+        saveService.removeAllSaves();
+        saveService.saveAll();
+        playerService.removeAll();
+        saveService.loadAll();
+        return "redirect:/";
+    }
+
+    // ----------------
+
     @RequestMapping(params = "pause", method = RequestMethod.GET)
     public String pauseGame(Model model, HttpServletRequest request) {
         timerService.pause();
+        return getAdmin(request);
+    }
+
+
+    @RequestMapping(params = "resume", method = RequestMethod.GET)
+    public String resumeGame(Model model, HttpServletRequest request) {
+        timerService.resume();
         return getAdmin(request);
     }
 
@@ -133,15 +164,25 @@ public class AdminController {
         model.addAttribute("paused", timerService.isPaused());
     }
 
-    private void checkRecordingStatus(Model model) {
-        model.addAttribute("recording", actionLogger.isRecording());
-    }
+    // ----------------
 
-    @RequestMapping(params = "resume", method = RequestMethod.GET)
-    public String resumeGame(Model model, HttpServletRequest request) {
-        timerService.resume();
+    @RequestMapping(params = "stopDebug", method = RequestMethod.GET)
+    public String stopDebug(Model model, HttpServletRequest request) {
+        debugService.stop();
         return getAdmin(request);
     }
+
+    @RequestMapping(params = "startDebug", method = RequestMethod.GET)
+    public String startDebug(Model model, HttpServletRequest request) {
+        debugService.start();
+        return getAdmin(request);
+    }
+
+    private void checkDebugStatus(Model model) {
+        model.addAttribute("debug", debugService.isStarted());
+    }
+
+    // ----------------
 
     @RequestMapping(params = "recording", method = RequestMethod.GET)
     public String recordingGame(Model model, HttpServletRequest request) {
@@ -154,6 +195,12 @@ public class AdminController {
         actionLogger.pause();
         return getAdmin(request);
     }
+
+    private void checkRecordingStatus(Model model) {
+        model.addAttribute("recording", actionLogger.isRecording());
+    }
+
+    // ----------------
 
     @RequestMapping(method = RequestMethod.POST)
     public String saveSettings(AdminSettings settings, BindingResult result, Model model, HttpServletRequest request) {
@@ -172,12 +219,20 @@ public class AdminController {
             }
         }
 
+        List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
             List<Parameter> parameters = (List) gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
-                parameters.get(index).update(settings.getParameters().get(index));
+                try {
+                    parameters.get(index).update(settings.getParameters().get(index));
+                } catch (Exception e) {
+                    errors.add(e);
+                }
             }
+        }
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
         }
 
         if (settings.getGenerateNameMask() != null) {
@@ -206,7 +261,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin31415?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin" + PASS + "?" + GAME_NAME + "=" + gameName;
     }
 
     private String getAdmin() {
@@ -246,6 +301,7 @@ public class AdminController {
 
         checkGameStatus(model);
         checkRecordingStatus(model);
+        checkDebugStatus(model);
         checkRegistrationClosed(model);
         prepareList(model, settings, gameName);
         return "admin";

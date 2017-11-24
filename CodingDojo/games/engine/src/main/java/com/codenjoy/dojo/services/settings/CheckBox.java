@@ -23,9 +23,10 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-public class CheckBox implements Parameter<Boolean> {
+import java.util.function.Function;
+
+public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
     private Boolean def;
-    private Boolean value;
     private String name;
 
     public CheckBox(String name) {
@@ -34,7 +35,7 @@ public class CheckBox implements Parameter<Boolean> {
 
     @Override
     public Boolean getValue() {
-        return (value == null) ? def : value;
+        return (get() == null) ? def : get();
     }
 
     @Override
@@ -44,7 +45,7 @@ public class CheckBox implements Parameter<Boolean> {
 
     @Override
     public void update(Boolean value) {
-        this.value = value;
+        set(value);
     }
 
     @Override
@@ -63,7 +64,14 @@ public class CheckBox implements Parameter<Boolean> {
     }
 
     @Override
-    public void select(int index) {
-        value = index == 1;
+    public Parameter<Boolean> parser(Function<String, Boolean> parser) {
+        throw new UnsupportedOperationException();
     }
+
+    @Override
+    public void select(int index) {
+        set(index == 1);
+    }
+
+
 }

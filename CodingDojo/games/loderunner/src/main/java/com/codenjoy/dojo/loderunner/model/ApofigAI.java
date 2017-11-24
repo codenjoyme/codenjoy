@@ -101,7 +101,7 @@ public class ApofigAI implements EnemyAI {
                 for (int y = 0; y < field.size(); y++) {
                     Point pt = pt(x, y);
                     List<Direction> directions = new LinkedList<Direction>();
-                    for (Direction direction : Direction.values()) {
+                    for (Direction direction : Direction.onlyDirections()) {
                         if (isPossible(field, pt, direction)) {
                             directions.add(direction);
                         }

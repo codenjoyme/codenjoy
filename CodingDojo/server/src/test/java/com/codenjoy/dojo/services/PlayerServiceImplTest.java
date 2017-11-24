@@ -116,8 +116,13 @@ public class PlayerServiceImplTest {
         boardCaptor = ArgumentCaptor.forClass(String.class);
 
         playerScores1 = mock(PlayerScores.class);
+        when(playerScores1.getScore()).thenReturn(0);
+
         playerScores2 = mock(PlayerScores.class);
+        when(playerScores2.getScore()).thenReturn(0);
+
         playerScores3 = mock(PlayerScores.class);
+        when(playerScores3.getScore()).thenReturn(0);
 
         when(chatService.getChatLog()).thenReturn("chat");
 
@@ -136,7 +141,7 @@ public class PlayerServiceImplTest {
 
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
-        when(gameType.newGame(any(InformationCollector.class), any(PrinterFactory.class), any(String.class))).thenReturn(game);
+        when(gameType.newGame(any(InformationCollector.class), any(PrinterFactory.class), anyString(), anyString())).thenReturn(game);
         when(gameType.name()).thenReturn("game");
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
@@ -283,10 +288,11 @@ public class PlayerServiceImplTest {
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         Map<String, String> expected = new TreeMap<String, String>();
-        String heroesData = "HeroesData:'{" +
-                "\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"level\":0,\"singleBoardGame\":false}," +
-                "\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"level\":0,\"singleBoardGame\":false}" +
-                "}'";
+        String heroesData = "HeroesData:'" +
+                "{\"petya@mail.com\":" +
+                    "{\"petya@mail.com\":{\"coordinate\":{\"x\":7,\"y\":8},\"level\":0,\"singleBoardGame\":false}}," +
+                "\"vasya@mail.com\":" +
+                    "{\"vasya@mail.com\":{\"coordinate\":{\"x\":5,\"y\":6},\"level\":0,\"singleBoardGame\":false}}}'";
         String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, Info:'', " +
@@ -405,7 +411,7 @@ public class PlayerServiceImplTest {
 
         if (player != NullPlayer.INSTANCE) {
             ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
-            verify(gameType, atLeastOnce()).newGame(captor.capture(), any(PrinterFactory.class), any(String.class));
+            verify(gameType, atLeastOnce()).newGame(captor.capture(), any(PrinterFactory.class), anyString(), anyString());
             informationCollector = captor.getValue();
         }
 
@@ -1012,6 +1018,12 @@ public class PlayerServiceImplTest {
 
         List<Player> all = playerService.getAll();
         assertUpdatedVasyaAndPetya(all);
+    }
+
+    @Test
+    public void shouldSendPlayerNameToGame() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
     }
 
     private void assertUpdatedVasyaAndPetya(List<Player> all) {

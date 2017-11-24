@@ -55,7 +55,27 @@ public class NullSettings implements Settings {
     }
 
     @Override
+    public void removeParameter(String name) {
+        // do nothing
+    }
+
+    @Override
     public Parameter<?> getParameter(String name) {
         return null;
+    }
+
+    @Override
+    public boolean changed() {
+        return false;
+    }
+
+    @Override
+    public List<String> whatChanged() {
+        return new LinkedList<>();
+    }
+
+    @Override
+    public void changesReacted() {
+        // do nothing
     }
 }

@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-public class EditBox<T> implements Parameter<T> {
+import java.util.function.Function;
+
+public class EditBox<T> extends Updatable<T> implements Parameter<T> {
 
     private String name;
     private T def;
-    private T value;
     private Class<?> type;
+    private Function<String, T> parser;
 
     public EditBox(String name) {
         this.name = name;
@@ -36,7 +38,7 @@ public class EditBox<T> implements Parameter<T> {
 
     @Override
     public T getValue() {
-        return (value == null)?def:value;
+        return (get() == null) ? def : get();
     }
 
     @Override
@@ -48,10 +50,25 @@ public class EditBox<T> implements Parameter<T> {
     public void update(T value) {
         if (value instanceof String) {
             if (Integer.class.equals(type)) {
-                this.value = (T)Integer.valueOf((String)value);  // TODO потестить это
+                set((T) Integer.valueOf((String) value));
+            } else if (Boolean.class.equals(type)) {
+                set((T) Boolean.valueOf((String) value));
+            } else if (Double.class.equals(type)) {
+                set((T) Double.valueOf((String) value));
+            } else if (String.class.equals(type)) {
+                set(value);
+            } else {
+                if (parser != null) {
+                    set(parser.apply(String.valueOf(value)));
+                } else {
+                    throw new IllegalArgumentException(
+                            String.format("Unsupported format [%s] " +
+                                    "for parameter of type %s",
+                                    value.getClass(), value));
+                }
             }
         } else {
-            this.value = value;
+            set(value);
         }
     }
 
@@ -69,11 +86,26 @@ public class EditBox<T> implements Parameter<T> {
     @Override
     public <V> Parameter<V> type(Class<V> type) {
         this.type = type; // TODO сделать это же с другими элементами
-        return (Parameter<V>)this;
+        return (Parameter<V>) this;
+    }
+
+    @Override
+    public Parameter<T> parser(Function<String, T> parser) {
+        this.parser = parser;
+        return this;
     }
 
     @Override
     public void select(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String toString() { // TODO test me and add this method to all classes
+        return String.format("%s:%s = def[%s] val[%s]",
+                name,
+                type.getSimpleName(),
+                def,
+                get());
     }
 }

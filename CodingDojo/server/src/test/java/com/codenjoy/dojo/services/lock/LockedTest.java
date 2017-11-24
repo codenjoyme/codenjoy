@@ -50,7 +50,7 @@ public class LockedTest {
         Game game = mock(Game.class);
         Joystick joystick = mock(Joystick.class);
 
-        when(gameType.newGame(any(EventListener.class), any(PrinterFactory.class), any(String.class))).thenReturn(game);
+        when(gameType.newGame(any(EventListener.class), any(PrinterFactory.class), anyString(), anyString())).thenReturn(game);
         when(game.getJoystick()).thenReturn(joystick);
 
         doAnswer(new Answer<Object>() {
@@ -74,7 +74,7 @@ public class LockedTest {
 
     @Test
     public void testRealObject() {
-        final Game game = gameType.newGame(null, null, null);
+        final Game game = gameType.newGame(null, null, null, null);
 
         run(new Runnable() {
             @Override
@@ -91,7 +91,7 @@ public class LockedTest {
 
     @Test
     public void testLockedObject() {
-        final Game game = new LockedGameType(gameType).newGame(null, null, null);
+        final Game game = new LockedGameType(gameType).newGame(null, null, null, null);
 
         run(new Runnable() {
             @Override

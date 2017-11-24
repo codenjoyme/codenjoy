@@ -162,4 +162,18 @@ public class LockedGame implements Game {
             lock.writeLock().unlock();
         }
     }
+
+    public Game getWrapped() {
+        return game;
+    }
+
+    public static boolean equals(Game game1, Game game2) {
+        if (game1 instanceof LockedGame) {
+            game1 = ((LockedGame)game1).getWrapped();
+        }
+        if (game2 instanceof LockedGame) {
+            game2 = ((LockedGame)game2).getWrapped();
+        }
+        return game1 == game2;
+    }
 }

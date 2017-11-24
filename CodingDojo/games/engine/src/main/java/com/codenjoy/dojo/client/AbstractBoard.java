@@ -69,6 +69,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return false;
     }
 
+    public boolean isAt(Point point, E element) {
+        return isAt(point.getX(), point.getY(), element);
+    }
+
     public E getAt(int x, int y) {
         List<E> at = getAllAt(x, y);
         if (at.isEmpty()) {
@@ -78,12 +82,20 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         }
     }
 
+    public E getAt(Point point) {
+        return getAt(point.getX(), point.getY());
+    }
+
     public List<E> getAllAt(int x, int y) {
         List<E> result = new LinkedList<>();
         for (int layer = 0; layer < countLayers(); ++layer) {
             result.add(getAt(layer, x, y));
         }
         return result;
+    }
+
+    public List<E> getAllAt(Point point) {
+        return getAllAt(point.getX(), point.getY());
     }
 
     public String boardAsString() {
@@ -113,6 +125,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return false;
     }
 
+    public boolean isAt(Point point, E... elements) {
+        return isAt(point.getX(), point.getY(), elements);
+    }
+
     /**
      * Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.
      * @param x X coordinate.
@@ -127,6 +143,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
             }
         }
         return false;
+    }
+
+    public boolean isNear(Point point, E element) {
+        return isNear(point.getX(), point.getY(), element);
     }
 
     /**
@@ -145,6 +165,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return count;
     }
 
+    public int countNear(Point point, E element){
+        return countNear(point.getX(), point.getY(), element);
+    }
+
     /**
      * @param x X coordinate.
      * @param y Y coordinate.
@@ -158,6 +182,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         }
 
         return result;
+    }
+
+    public List<E> getNear(Point point) {
+        return getNear(point.getX(), point.getY());
     }
 
     public void set(int x, int y, char ch) {

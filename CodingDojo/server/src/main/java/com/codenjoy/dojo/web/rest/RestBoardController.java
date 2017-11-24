@@ -71,8 +71,8 @@ public class RestBoardController {
     @ResponseBody
     public String getContext() {
         String contextPath = servletContext.getContextPath();
-        if (contextPath.charAt(contextPath.length() - 1) != '/') {
-            contextPath += '/';
+        if (contextPath.charAt(contextPath.length() - 1) == '/') {
+            contextPath += contextPath.substring(0, contextPath.length() - 1);
         }
         return contextPath;
     }

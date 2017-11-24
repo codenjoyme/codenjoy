@@ -41,7 +41,7 @@ public class Cell extends PointImpl implements State<Elements, Player> {
 
     @Override
     public String toString() {
-        return String.format("pt%s=%s%s", super.toString(), number);
+        return String.format("pt%s=%s", super.toString(), number);
     }
 
     @Override

@@ -28,37 +28,34 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Help</title>
-    <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#games").change(function () {
-                var val = $("#games").val();
-                if (val == '') return;
-                window.location.href = "${ctx}/resources/user/" + val + "-servers.zip";
-            });
-        });
-    </script>
+    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
+
+    <script src="${ctx}/resources/js/settings.js"></script>
+    <script src="${ctx}/resources/js/help.js"></script>
 </head>
 <body>
-<%@include file="forkMe.jsp"%>
-<div class="page-header">
-    <h1>Help</h1>
-</div>
-<h3>Environment setup and registration</h3>
-<ol>
-    <li>Download client templates for your game
-        <select id="games">
-        <option value="">(select your game)</option>
-        <c:forEach items="${gameNames}" var="gameName">
-            <option value="${gameName}">${gameName}</option>
-        </c:forEach>
-        </select>
-    <li>Setup project according to instruction in README.txt for your developing language</li>
-    <li>If no internet, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library (check setup.bat inside)</li>
-    <li>Read game instructions: <c:forEach items="${gameNames}" var="gameName"><a href="${ctx}/resources/help/${gameName}.html">${gameName}</a>&nbsp;&nbsp;</c:forEach></li>
-    <li>Open <a href="${ctx}/register">registration page</a></li>
-    <li>Enter your name/password and codenjoy!</li>
-</ol>
+    <div id="settings" contextPath="${ctx}"></div>
+    <%@include file="forkMe.jsp"%>
+    <div class="page-header">
+        <h1>Help</h1>
+    </div>
+    <h3>Environment setup and registration</h3>
+    <ol>
+        <li>Download client templates for your game
+            <select id="games">
+            <option value="">(select your game)</option>
+            <c:forEach items="${gameNames}" var="gameName">
+                <option value="${gameName}">${gameName}</option>
+            </c:forEach>
+            </select>
+        <li>Setup project according to instruction in README.txt for your developing language</li>
+        <ul>
+            <li>For Java, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library before (run setup.bat inside)</li>
+        </ul>
+        <li>Read game instructions: <c:forEach items="${gameNames}" var="gameName"><a href="${ctx}/help?gameName=${gameName}">${gameName}</a>&nbsp;&nbsp;</c:forEach></li>
+        <li>Open <a href="${ctx}/register">registration page</a></li>
+        <li>Enter your name/password and codenjoy!</li>
+    </ol>
 </body>
 </html>

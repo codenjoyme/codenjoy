@@ -19,6 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+#settings {
+    display: none;
+}
+
 .score-info {
     color:yellow;
     text-shadow: 6px 6px 10px black, 4px 4px 4px red;
@@ -80,12 +85,25 @@ label.error {
 }
 
 #chat-container {
-    left: 850px;
-    width: 450px;
+    float: right;
+    width: 500px;
+}
+
+#chat-send {
+    vertical-align: top;
 }
 
 #leaderboard {
-    width: 450px;
+    width: 500px;
+    float: right;
+    padding-right: 75px;
+    padding-top: 25px;
+}
+
+#glasses {
+    width: calc(100% - 500px);
+    float: left;
+    padding-left: 20px;
 }
 
 #want-donate {
@@ -102,6 +120,9 @@ label.error {
 
 #donate {
     text-align: center;
+    position: absolute;
+    left: 300px;
+    top: 20px;
 }
 
 #donate-container {
@@ -118,13 +139,14 @@ label.error {
 }
 
 #advertisement {
-    text-align:center;
-    width:250px;
-    margin-left: 104px;
-    margin-bottom: 13px;
-    margin-top: -26px;
+    width:500px;
+}
+
+#advertisement img {
+    width: 200px;
 }
 
 .player-canvas {
     float: left;
 }
+

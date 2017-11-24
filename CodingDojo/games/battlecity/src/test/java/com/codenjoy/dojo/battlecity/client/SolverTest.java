@@ -22,7 +22,7 @@ package com.codenjoy.dojo.battlecity.client;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;

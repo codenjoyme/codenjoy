@@ -34,45 +34,16 @@ function initChat(playerName, registered, code, contextPath, gameName) {
 
     if (!registered) {
         if (!!code) {
-            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '">login</a></h3>');
+            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + '/register?name=' + playerName + '&gameName=' + gameName + '">login</a></h3>');
         } else {
-            chatInfo.html('<h3>Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '">register</a></h3>');
+            chatInfo.html('<h3>Please <a href="' + contextPath + '/register?name=' + playerName + '&gameName=' + gameName + '">register</a></h3>');
         }
         chatMessage.hide();
         sendButton.hide();
     }
 
-    function chatStyle() {
-        var minGlassesWidth = 830;
-        var width = container.width();
-        var margin = 20;
-        var newGlassesWidth = $(window).width() - width - 2*margin - $("#leaderboard").width();
-
-        container.css({ position: "absolute",
-            marginLeft: 0, marginTop: margin});
-
-        if (newGlassesWidth > minGlassesWidth) {
-            container.show();
-            leaderboard.show();
-
-            $("#glasses").width(newGlassesWidth);
-
-            container.css({ height: $(window).height() - 150, top: 0, left: $("#glasses").width()});
-        } else if ($(window).width() - width - 3*margin < $("canvas").width()) {
-            container.hide();
-            leaderboard.hide();
-        } else {
-            container.show();
-            leaderboard.show();
-
-            container.css({ height: $(window).height() - 150 - $("#leaderboard").height(),
-                top: $("#leaderboard").height(), left: $("#glasses").width()});
-        }
-        chat.height(container.height());
-    }
-
     function send(message) {
-        $.ajax({ url:encodeURI(contextPath + "chat?playerName=" + playerName + "&code=" + code + "&message=" + message),
+        $.ajax({ url:encodeURI(contextPath + "/chat?playerName=" + playerName + "&code=" + code + "&message=" + message),
             data:{},
             dataType:"json",
             cache:false,
@@ -206,10 +177,4 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     }
 
     updateChat();
-
-    $(window).resize(chatStyle);
-    $("#leaderboard").bind('resize', function() {
-        chatStyle();
-    });
-    chatStyle();
 }

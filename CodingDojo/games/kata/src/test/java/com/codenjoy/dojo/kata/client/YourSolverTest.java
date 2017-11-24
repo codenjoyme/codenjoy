@@ -24,7 +24,7 @@ package com.codenjoy.dojo.kata.client;
 
 
 import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.services.Dice;

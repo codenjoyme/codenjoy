@@ -50,7 +50,7 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
     }
 
     private static String createDirs(String databaseFile) {
-        new File(new File(databaseFile).getParent()).mkdirs();
+        new File(databaseFile).getParentFile().mkdirs();
         return databaseFile;
     }
 

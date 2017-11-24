@@ -66,7 +66,7 @@ class Direction:
         return x + self._dir[1]
 
     def change_y(self, y):
-        return y + self._dir[2]
+        return y - self._dir[2]
         
     def inverted(self):
         _inv_dir = None

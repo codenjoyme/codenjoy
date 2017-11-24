@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import org.json.JSONObject;
+
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,16 +40,25 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void event(Object event) {
-        int before = playerScores.getScore();
+        Object before = playerScores.getScore();
         playerScores.event(event);
         add(before);
     }
 
-    private void add(int before) {
-        int delta = playerScores.getScore() - before;
+    private void add(Object before) {
+        int delta = delta(playerScores.getScore(), before);
         if (delta != 0) {
             pool.add(showSign(delta));
         }
+    }
+
+    private int delta(Object score, Object before) {
+        if (score instanceof Integer) {
+            return (Integer)score - (Integer)before;
+        } else if (score instanceof JSONObject) {
+            return ((JSONObject)score).getInt("score") - ((JSONObject)before).getInt("score");
+        }
+        throw new UnsupportedOperationException("Unknown type: " + score.getClass());
     }
 
     private String showSign(int integer) {

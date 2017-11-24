@@ -112,7 +112,7 @@ public class Collapse implements Tickable, Field {
         while (!toCheck.isEmpty()) {
             Cell current = toCheck.removeLast();
 
-            for (Direction dir : Direction.values()) {
+            for (Direction dir : Direction.getValues()) {
                 Point pt = dir.change(current);
                 Cell next = cells.get(pt);
                 if (next == null) continue;

@@ -21,36 +21,21 @@
  */
 var currentCommand = null;
 
-function initJoystick(playerName, registered, code, contextPath, enableJoystick, enableAlways) {
+function initJoystick(playerName, registered, code, contextPath) {
     if (!registered) {
         return;
     }
 
     var container = "#div_" + playerName.replace(/[@.]/gi, "_");
-    var joystick = $(container + " #joystick");
     var actParams = $("#act_params");
-
-    function visible() {
-        return joystick.is(":visible");
-    }
-
-    $(container + " #player_name").click(function(){
-        if (!enableJoystick) return;
-
-        if (visible()) {
-            joystick.hide();
-        } else {
-            joystick.show();
-        }
-    });
 
     function ok() {
     }
 
     function sendCommand(command) {
-        if (!enableJoystick || !(enableAlways || visible())) return;
+        if (!game.enableJoystick) return;
 
-        $.ajax({ url:contextPath + "joystick",
+        $.ajax({ url:contextPath + "/joystick",
                 data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",
                 cache:false,
@@ -75,7 +60,9 @@ function initJoystick(playerName, registered, code, contextPath, enableJoystick,
 
     function registerCommand(command) {
         $("#" + command).click(function() {
-            var params = (actParams.val() == '')?"":("(" + actParams.val() + ")");
+            // TODO сделать через хоткеи
+            // var params = (actParams.val() == '')?"":("(" + actParams.val() + ")");
+            var params = '';
             var result = command + params;
             if (currentCommand != null) { // TODO тут кажется ошибка
                 if (currentCommand != "act") {
@@ -88,8 +75,15 @@ function initJoystick(playerName, registered, code, contextPath, enableJoystick,
         });
     }
 
+    function isFocusOnChat() {
+        return $("#chat-message").is(":focus");
+    }
+
     function registerKeys() {
-        $("body").keydown(function(event) { // TODO из за этого чат не работает +  event.preventDefault();
+        $("body").keydown(function(event) {
+            if (isFocusOnChat()) {
+                return;
+            }
             var command = parseCommand(event);
             if (!command) {
                 return;
@@ -103,8 +97,14 @@ function initJoystick(playerName, registered, code, contextPath, enableJoystick,
                 }
             }
             currentCommand = command;
+
+            event.preventDefault();
         });
         $("body").keyup(function(event) {
+            if (isFocusOnChat()) {
+                return;
+            }
+
             var command = parseCommand(event);
             if (!!currentCommand) {
                 sendCommand(currentCommand);
@@ -112,6 +112,8 @@ function initJoystick(playerName, registered, code, contextPath, enableJoystick,
                 sendCommand(command);
             }
             currentCommand = null;
+
+            event.preventDefault();
         });
     }
 
@@ -121,6 +123,4 @@ function initJoystick(playerName, registered, code, contextPath, enableJoystick,
     registerCommand("right");
     registerCommand("act");
     registerKeys();
-
-
 }

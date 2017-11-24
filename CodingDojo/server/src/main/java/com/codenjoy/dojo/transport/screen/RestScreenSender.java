@@ -33,11 +33,14 @@ import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPOutputStream;
 
 @Component
 public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenData>, AsyncListener {
@@ -90,13 +93,21 @@ public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenDat
         AsyncContext asyncContext = updateRequest.getAsyncContext();
         ServletResponse response = asyncContext.getResponse();
         try {
-            PrintWriter writer = response.getWriter();
+            PrintWriter writer = getPrintWriter(response);
             serializer.writeValue(writer, playerScreens);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             asyncContext.complete();
         }
+    }
+
+    private PrintWriter getPrintWriter(ServletResponse response) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException, IOException {
+        // return response.getWriter();
+        // TODO обманом сделал все ответы серверу сжатыми в формате gzip
+        response.getClass().getDeclaredMethod("addHeader", String.class, String.class).invoke(response, "Content-Encoding", "gzip");
+        OutputStream outputStream = response.getOutputStream();
+        return new PrintWriter(new MyCollectOutputStream(new GZIPOutputStream(outputStream)));
     }
 
     @Override

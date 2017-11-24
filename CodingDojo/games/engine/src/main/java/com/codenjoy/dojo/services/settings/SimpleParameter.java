@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.function.Function;
+
 public class SimpleParameter<T> implements Parameter<T> {
 
     private T value;
@@ -47,7 +49,7 @@ public class SimpleParameter<T> implements Parameter<T> {
 
     @Override
     public void update(Object value) {
-        this.value = (T)value;
+        this.value = (T) value;
     }
 
     @Override
@@ -61,8 +63,23 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public Parameter<T> parser(Function<String, T> parser) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void select(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean changed() {
+        return false;
+    }
+
+    @Override
+    public void changesReacted() {
+        // do nothing
     }
 
     @Override

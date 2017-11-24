@@ -29,7 +29,7 @@ function initLayout(gameName, pageName, contextPath, transformations, scriptSour
     }
 
     var loadLayout = function(onLoad) {
-        var resource = "resources/" + gameName + "/";
+        var resource = "/resources/" + gameName + "/";
         $.ajax({ url:contextPath + resource + pageName,
             success:function (data) {
                 var found = ['<link href="', '<img src="', '<script src="'];
@@ -65,7 +65,7 @@ function initLayout(gameName, pageName, contextPath, transformations, scriptSour
             }
             $.each(scriptSources, function(index, script) {
                 $("head").append('<script type="text/javascript" src="' +
-                        game.contextPath + 'resources/' + gameName + '/' + script +
+                        game.contextPath + '/resources/' + gameName + '/' + script +
                         '"></script>');
             });
             if (!!onPageLoad) {

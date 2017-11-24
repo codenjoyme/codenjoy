@@ -23,7 +23,7 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 import com.codenjoy.dojo.client.*;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
 import com.codenjoy.dojo.services.*;
 
@@ -72,14 +72,14 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     public void down() {
         if (!alive) return;
 
-        direction = Direction.DOWN;
+        direction = Direction.UP; // TODO continue flip up/down
     }
 
     @Override
     public void up() {
         if (!alive) return;
 
-        direction = Direction.UP;
+        direction = Direction.DOWN; // TODO continue flip up/down
     }
 
     @Override
@@ -104,7 +104,7 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     public void act(int... p) {
         if (!alive) return;
         if (p.length != 0 && p[0] >= BotSolver.SHIFT_COMMAND){
-            direction = Direction.values()[p[0] - BotSolver.SHIFT_COMMAND];
+            direction = Direction.getValues().get(p[0] - BotSolver.SHIFT_COMMAND);
             tick();
         }
         if (counterBeetwenShut == 0){

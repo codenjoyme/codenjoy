@@ -35,7 +35,7 @@ public class LocalGameRunner {
             public void event(Object event) {
                 System.out.println("Fire Event: " + event.toString());
             }
-        }, new PrinterFactoryImpl(), null);
+        }, new PrinterFactoryImpl(), null, null);
 
         game.newGame();
         while (true) {

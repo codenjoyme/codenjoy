@@ -24,7 +24,7 @@ package com.codenjoy.dojo.snake.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.model.Elements;
 
@@ -45,6 +45,11 @@ public class Board extends AbstractBoard<Elements> {
 
     public List<Point> getApples() {
         return get(Elements.GOOD_APPLE);
+    }
+
+    @Override
+    protected int inversionY(int y) {
+        return size - 1 - y;
     }
 
     public Direction getSnakeDirection() {

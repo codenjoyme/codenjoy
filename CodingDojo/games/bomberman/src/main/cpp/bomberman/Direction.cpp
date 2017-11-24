@@ -68,7 +68,7 @@ int Direction::changeX(int x) const {
 }
 
 int Direction::changeY(int y) const {
-	return y + std::get<2>(dir.second);
+	return y - std::get<2>(dir.second);
 }
 
 Direction Direction::inverted() const {

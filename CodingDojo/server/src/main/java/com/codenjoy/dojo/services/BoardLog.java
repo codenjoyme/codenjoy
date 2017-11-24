@@ -34,9 +34,9 @@ public class BoardLog {
     private String playerName;
     private String board;
     private String gameType;
-    private int score;
+    private Object score;
 
-    public BoardLog(long time, String playerName, String gameType, int score, String board) {
+    public BoardLog(long time, String playerName, String gameType, Object score, String board) {
         this.time = time;
         this.playerName = playerName;
         this.gameType = gameType;
@@ -74,7 +74,7 @@ public class BoardLog {
                 '}';
     }
 
-    public int getScore() {
+    public Object getScore() {
         return score;
     }
 

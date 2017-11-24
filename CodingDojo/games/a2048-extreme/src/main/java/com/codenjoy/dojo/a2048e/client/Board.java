@@ -25,7 +25,7 @@ package com.codenjoy.dojo.a2048e.client;
 
 import com.codenjoy.dojo.a2048e.model.Elements;
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 
 public class Board extends AbstractBoard<Elements> {
 

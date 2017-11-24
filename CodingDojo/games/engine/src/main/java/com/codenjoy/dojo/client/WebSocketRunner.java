@@ -23,11 +23,15 @@ package com.codenjoy.dojo.client;
  */
 
 
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketClient;
-import org.eclipse.jetty.websocket.WebSocketClientFactory;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,7 +46,7 @@ public class WebSocketRunner {
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
     public static final String WS_URI_PATTERN = "ws://%s/codenjoy-contest/ws";
 
-    private static boolean printToConsole = true;
+    public static boolean printToConsole = true;
     private static Map<String, WebSocketRunner> clients = new ConcurrentHashMap<>();
 
     private static String getUrl() {
@@ -68,10 +72,10 @@ public class WebSocketRunner {
         }
     }
 
-    private WebSocket.Connection connection;
+    private Session session;
+    private WebSocketClient wsClient;
     private Solver solver;
     private ClientBoard board;
-    private WebSocketClientFactory factory;
     private Runnable onClose;
 
     public WebSocketRunner(Solver solver, ClientBoard board) {
@@ -138,8 +142,7 @@ public class WebSocketRunner {
 
     private void stop() {
         try {
-            connection.close();
-            factory.stop();
+            session.close();
         } catch (Exception e) {
             print(e);
         }
@@ -148,10 +151,8 @@ public class WebSocketRunner {
     private void start(final String server, final String userName) throws Exception {
         final Pattern urlPattern = Pattern.compile("^board=(.*)$");
 
-        factory = new WebSocketClientFactory();
-        factory.start();
-
-        final WebSocketClient client = factory.newWebSocketClient();
+        wsClient = new WebSocketClient();
+        wsClient.start();
 
         onClose = new Runnable() {
             @Override
@@ -160,17 +161,62 @@ public class WebSocketRunner {
                     return;
                 }
                 printReconnect();
-                connectLoop(server, userName, urlPattern, client);
+                connectLoop(server, userName, urlPattern);
             }
         };
 
-        connectLoop(server, userName, urlPattern, client);
+        connectLoop(server, userName, urlPattern);
     }
 
-    private void connectLoop(String server, String userName, Pattern urlPattern, WebSocketClient client) {
+    @WebSocket
+    public class ClientSocket {
+
+        private Pattern pattern;
+
+        public ClientSocket(Pattern pattern) {
+            this.pattern = pattern;
+        }
+
+        @OnWebSocketConnect
+        public void onConnect(Session session) {
+            print("Opened connection " + session.toString());
+        }
+
+        @OnWebSocketClose
+        public void onClose(int closeCode, String message) {
+            if (onClose != null) {
+                onClose.run();
+            }
+            print("Closed with message: '" + message + "' and code: " + closeCode);
+        }
+
+        @OnWebSocketMessage
+        public void onMessage(String data) {
+            print("Data from server: " + data);
+            try {
+                Matcher matcher = pattern.matcher(data);
+                if (!matcher.matches()) {
+                    throw new RuntimeException("Error parsing data: " + data);
+                }
+
+                board.forString(matcher.group(1));
+                print("Board: " + board);
+
+                String answer = solver.get(board);
+                print("Answer: " + answer);
+
+                session.getRemote().sendString(answer);
+            } catch (Exception e) {
+                print(e);
+            }
+            printBreak();
+        }
+    }
+
+    private void connectLoop(String server, String userName, Pattern urlPattern) {
         while (true) {
             try {
-                tryToConnect(server, userName, urlPattern, client);
+                tryToConnect(server, userName, urlPattern);
                 break;
             } catch (Exception e) {
                 print(e);
@@ -185,47 +231,15 @@ public class WebSocketRunner {
         sleep(5000);
     }
 
-    private void tryToConnect(String server, String userName, final Pattern urlPattern, WebSocketClient client) throws Exception {
+    private void tryToConnect(String server, String userName, Pattern pattern) throws Exception {
         URI uri = new URI(server + "?user=" + userName);
         print(String.format("Connecting '%s' to '%s'...", userName, uri));
 
-        if (connection != null) {
-            connection.close();
+        if (session != null) {
+            session.close();
         }
 
-        connection = client.open(uri, new WebSocket.OnTextMessage() {
-            public void onOpen(Connection connection) {
-                print("Opened connection " + connection.toString());
-            }
-
-            public void onClose(int closeCode, String message) {
-                if (onClose != null) {
-                    onClose.run();
-                }
-                print("Closed with message: '" + message + "' and code: " + closeCode);
-            }
-
-            public void onMessage(String data) {
-                print("Data from server: " + data);
-                try {
-                    Matcher matcher = urlPattern.matcher(data);
-                    if (!matcher.matches()) {
-                        throw new RuntimeException("Error parsing data: " + data);
-                    }
-
-                    board.forString(matcher.group(1));
-                    print("Board: " + board);
-
-                    String answer = solver.get(board);
-                    print("Answer: " + answer);
-
-                    connection.sendMessage(answer);
-                } catch (Exception e) {
-                    print(e);
-                }
-                printBreak();
-            }
-        }).get(5000, TimeUnit.MILLISECONDS);
+        session = wsClient.connect(new ClientSocket(pattern), uri).get(5000, TimeUnit.MILLISECONDS);
     }
 
     private void sleep(int mills) {

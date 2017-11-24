@@ -22,7 +22,7 @@
 function initBoards(players, allPlayersScreen, gameName, contextPath){
 
     var constructUrl = function() {
-        var url = contextPath + "screen?";
+        var url = contextPath + "/screen?";
 
         var playersPresent = players.length > 0;
         if (!playersPresent) {
@@ -38,6 +38,7 @@ function initBoards(players, allPlayersScreen, gameName, contextPath){
         $.ajax({ url:constructUrl(),
                 error:function(data) {
                     $('body').css('background-color', 'bisque');
+                    // TODO после этого сразу же отправляется второй запрос, и если серчер отключен то мы имеем купу ошибок js в консоли. Надо сделать так, чтобы при ошибке повторный запро отправлялся через секунду
                 },
                 success:function (data) {
                     $('body').css('background-color', 'white');

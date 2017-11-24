@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import org.json.JSONObject;
+
 /**
  * Каждый объект на поле имеет свои координаты. Этот класс обычно используется дял указания координат или как родитель.
  * Может использоваться в коллекциях.
@@ -38,6 +40,10 @@ public class PointImpl implements Point, Comparable<Point> {
 
     public PointImpl(Point point) {
         this(point.getX(), point.getY());
+    }
+
+    public PointImpl(JSONObject json) {
+        this(json.getInt("x"), json.getInt("y"));
     }
 
     @Override
@@ -86,6 +92,10 @@ public class PointImpl implements Point, Comparable<Point> {
 
     @Override
     public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
         if (o == null) {
             return false;
         }
@@ -120,6 +130,16 @@ public class PointImpl implements Point, Comparable<Point> {
     public void change(Point delta) {
         x += delta.getX();
         y += delta.getY();
+    }
+
+    @Override
+    public void change(QDirection direction) {
+        this.move(direction.change(this));
+    }
+
+    @Override
+    public void change(Direction direction) {
+        this.move(direction.change(this));
     }
 
     public static Point pt(int x, int y) {

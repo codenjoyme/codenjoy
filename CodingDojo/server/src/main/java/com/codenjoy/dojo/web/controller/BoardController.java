@@ -67,6 +67,16 @@ public class BoardController {
         return boardPlayer(model, playerName, null);
     }
 
+    @RequestMapping(value = "/board/player/{playerName:.+}", params = {"code", "remove"}, method = RequestMethod.GET)
+    public String removePlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+        Player player = playerService.get(registration.getEmail(code));
+        if (player == NullPlayer.INSTANCE) {
+            return "redirect:/register?name=" + playerName;
+        }
+        playerService.remove(player.getName());
+        return "redirect:/";
+    }
+
     @RequestMapping(value = "/board/player/{playerName:.+}", params = "code", method = RequestMethod.GET)
     public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         Player player = playerService.get(playerName);

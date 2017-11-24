@@ -23,7 +23,7 @@ package com.codenjoy.dojo.loderunner.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -377,7 +377,7 @@ public class ApofigSolverTest {
         StringBuffer buffer = new StringBuffer();
         for (int x = 0; x < chars.length; x++) {
             for (int y = 0; y < chars.length; y++) {
-                buffer.append(chars[y][x]);
+                buffer.append(chars[y][chars.length - 1 - x]);
             }
             buffer.append('\n');
         }

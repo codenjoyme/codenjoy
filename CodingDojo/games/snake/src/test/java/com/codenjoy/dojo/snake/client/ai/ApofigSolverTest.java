@@ -23,9 +23,9 @@ package com.codenjoy.dojo.snake.client.ai;
  */
 
 
-import static com.codenjoy.dojo.client.Direction.*;
+import static com.codenjoy.dojo.services.Direction.*;
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.client.Board;

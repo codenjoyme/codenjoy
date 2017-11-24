@@ -1,14 +1,19 @@
-Basic framework and DumbBot for Bomberman codenjoy: http://codenjoy.com/portal/?page_id=421
+For C++:
+- install Visual Studio 2012 (Express)
+    = used third party libs:
+        ~ boost: http://www.boost.org
+        ~ websocketpp: https://github.com/zaphoyd/websocketpp
+- on page http://<server>/codenjoy-contest/help
+    ~ you can read game instructions
+        # server = ip:8080 server ip inside your LAN
+        # server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
+- register your hero on server http://<server>/codenjoy-contest/register
+- open bomberman.sln in Visual Studio
+- change yourName in main.cpp from "_bot_" to your one
+- implement your bot in YourDirectionSolver class.
+    = you can use our DumbDirectionSolver implementation as an example
+- compile solution and launch
+- Codenjoy!
 
 
-1. Install Visual Studio 2012 (Express);
-2. Open bomberman.sln;
-3. Change yourName in main.cpp from "_bot_" to your one;
-4. Implement your bot in YourDirectionSolver class. You can use our DumbDirectionSolver implementation as an example;
-5. Compile solution and launch;
-6. Have fun !!!
 
-
-Used third party libs:
-boost: http://www.boost.org
-websocketpp: https://github.com/zaphoyd/websocketpp

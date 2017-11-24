@@ -31,12 +31,12 @@ import com.codenjoy.dojo.services.settings.Settings;
  */
 public class SecondGameType implements GameType {
     @Override
-    public PlayerScores getPlayerScores(int score) {
+    public PlayerScores getPlayerScores(Object score) {
         return null;
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         return null;
     }
 
@@ -48,6 +48,11 @@ public class SecondGameType implements GameType {
     @Override
     public String name() {
         return "second";
+    }
+
+    @Override
+    public void tick() {
+        // do nothing
     }
 
     public enum Elements implements CharElements {

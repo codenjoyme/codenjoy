@@ -23,7 +23,7 @@ package com.codenjoy.dojo.bomberman.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 

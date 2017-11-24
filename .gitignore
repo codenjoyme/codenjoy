@@ -1,4 +1,8 @@
 **/.idea
+**/.vs
+**/bin
+**/obj
+**/Gemfile.lock
 /CodingDojo/repo/**
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game
@@ -17,3 +21,13 @@
 /CodingDojo/builder/.git
 /CodingDojo/builder/.git_
 /CodingDojo/games/**/webapp/resources/user/*.zip
+/CodingDojo/games/icancode
+/CodingDojo/games/expansion
+/CodingDojo/icancode-builder
+/CodingDojo/expansion-builder
+/CodingDojo/expansion-builder/gameData/*.*
+/CodingDojo/bomberman-builder
+/CodingDojo/expansion-bots
+/CodingDojo/expansion-clients
+/CodingDojo/*-portable
+/CodingDojo/stuff

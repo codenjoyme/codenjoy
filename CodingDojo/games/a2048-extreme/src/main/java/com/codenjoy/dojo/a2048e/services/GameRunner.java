@@ -43,12 +43,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
-        return new Scores(score);
+    public PlayerScores getPlayerScores(Object score) {
+        return new Scores((Integer) score);
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         game = new A2048(level, new RandomDice());
 
         Game game = new Single(this.game, listener, factory);

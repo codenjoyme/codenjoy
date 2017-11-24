@@ -25,6 +25,7 @@ package com.codenjoy.dojo.utils;
 
 import com.cedarsoftware.util.io.JsonWriter;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.SortedJSONArray;
 import org.json.SortedJSONObject;
 
@@ -45,15 +46,21 @@ public class JsonUtils {
         return result;
     }
 
+    public static String cleanSorted(Object object) {
+        String json = toStringSorted(object);
+        return clean(json);
+    }
+
     public static String prettyPrint(Object object) {
         String json = toStringSorted(object);
         return clean(JsonWriter.formatJson(json));
     }
 
-    private static String clean(String json) {
+    public static String clean(String json) {
         return json.replace('\"', '\'').replaceAll("\\r\\n", "\n");
     }
 
+    // TODO почему-то этот малый слетает в MVN при билде из консоли для символов борды expansion
     public static String prettyPrint(String jsonString) {
         String json = toStringSorted(jsonString);
         return clean(JsonWriter.formatJson(json));
@@ -66,6 +73,10 @@ public class JsonUtils {
     public static String toStringSorted(Object object) {
         if (object instanceof Collection) {
             return new SortedJSONArray((Collection) object).toString();
+        } else if (object instanceof JSONArray) {
+            return object.toString();
+        } else if (object instanceof JSONObject) {
+            return new SortedJSONObject(object.toString()).toString();
         } else {
             return new SortedJSONObject(object).toString();
         }

@@ -28,25 +28,20 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Admin page</title>
-    <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
 
+    <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/ajax-loader.js"></script>
     <script src="${ctx}/resources/js/validation.js"></script>
     <script src="${ctx}/resources/js/admin.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
-    <script>
-        $(document).ready(function () {
-            game.contextPath = '${ctx}';
-            game.gameName = '${gameName}';
-
-            initHotkeys(game.gameName, game.contextPath);
-        });
-    </script>
 </head>
 <body>
+    <div id="settings" contextPath="${ctx}" gameName="${gameName}"></div>
+
     <%@include file="forkMe.jsp"%>
     <div class="page-header">
         <h1>Admin page</h1>
@@ -104,20 +99,35 @@
         </tr>
     </table>
 
-     <table class="admin-table" id="recordGame">
-            <tr>
-                <td>
-                    <c:choose>
-                        <c:when test="${recording}">
-                            <b>The recording is active</b></br> <a href="${ctx}/admin31415?stopRecording&gameName=${gameName}">Stop recording</a>.
-                        </c:when>
-                        <c:otherwise>
-                            <b>The recording was suspended</b></br> <a href="${ctx}/admin31415?recording&gameName=${gameName}">Start recording</a>.
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-        </table>
+    <table class="admin-table" id="recordGame">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${recording}">
+                        <b>The recording is active</b></br> <a href="${ctx}/admin31415?stopRecording&gameName=${gameName}">Stop recording</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The recording was suspended</b></br> <a href="${ctx}/admin31415?recording&gameName=${gameName}">Start recording</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="debug">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${debug}">
+                        <b>The debug in progress</b></br> <a href="${ctx}/admin31415?stopDebug&gameName=${gameName}">Stop debug</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The debug was suspended</b></br> <a href="${ctx}/admin31415?startDebug&gameName=${gameName}">Start debug</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
 
     <table class="admin-table" id="closeRegistration">
         <tr>
@@ -193,19 +203,19 @@
                     <td class="header">IP</td>
                     <td class="header">Game name</td>
                     <td>
-                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll&nbsp;&nbsp;</a>
+                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
-                    <td class="header">ViewPlayerGame&nbsp;&nbsp;</td>
-                    <td class="header">LoadAI&nbsp;&nbsp;</td>
+                    <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;</td>
+                    <td class="header">LoadAI</td>&nbsp;&nbsp;
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>

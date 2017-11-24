@@ -22,7 +22,7 @@ package com.codenjoy.dojo.quake2d.client.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -95,7 +95,7 @@ public class BotSolver implements Solver<Board> {
     }
 
     private String moveWithAction(Direction direction){
-        for (Direction elemDirection : Direction.values()){
+        for (Direction elemDirection : Direction.getValues()){
             if (direction == elemDirection){
                 return Direction.ACT(elemDirection.ordinal() + SHIFT_COMMAND);
             }

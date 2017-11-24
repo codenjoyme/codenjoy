@@ -34,6 +34,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -53,14 +56,14 @@ public class RestRegistrationController {
         private final String gameType;
         private final String callbackUrl;
         private final String name;
-        private final int score;
+        private final String score;
         private final String code;
 
         PlayerInfo(Player player) {
             gameType = player.getGameType().name();
             callbackUrl = player.getCallbackUrl();
             name = player.getName();
-            score = player.getScore();
+            score = String.valueOf(player.getScore());
             code = player.getCode();
         }
 
@@ -76,7 +79,7 @@ public class RestRegistrationController {
             return name;
         }
 
-        public int getScore() {
+        public String getScore() {
             return score;
         }
 
@@ -88,11 +91,8 @@ public class RestRegistrationController {
     @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
     @ResponseBody
     public List<PlayerInfo> getPlayerForGame(@PathVariable("gameName") String gameName) {
-        List<Player> players = playerService.getAll(gameName);
-        List<PlayerInfo> result = new LinkedList<>();
-        for (Player player : players) {
-            result.add(new PlayerInfo(player));
-        }
-        return result;
+        return playerService.getAll(gameName).stream()
+                .map(PlayerInfo::new)
+                .collect(toList());
     }
 }

@@ -25,13 +25,11 @@ package com.codenjoy.dojo.services;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -50,12 +48,16 @@ public class PlayerGamesTest {
     private Joystick joystick;
     private PlayerSpy playerSpy;
     private Statistics statistics;
+    private List<GameType> gameTypes = new LinkedList<>();
+    private List<Game> games = new LinkedList<>();
 
     @Before
     public void setUp() throws Exception {
         player = createPlayer("game", "player");
 
         game = mock(Game.class);
+        games.add(game);
+
         joystick = mock(Joystick.class);
         when(game.getJoystick()).thenReturn(joystick);
 
@@ -132,13 +134,18 @@ public class PlayerGamesTest {
 
     private Player addOtherPlayer(String game) {
         Player otherPlayer = createPlayer(game, "player" + Calendar.getInstance().getTimeInMillis());
-        playerGames.add(otherPlayer, mock(Game.class), mock(PlayerController.class));
+
+        Game anotherGame = mock(Game.class);
+        games.add(anotherGame);
+
+        playerGames.add(otherPlayer, anotherGame, mock(PlayerController.class));
         return otherPlayer;
     }
 
     private Player createPlayer(String game, String name) {
         GameService gameService = mock(GameService.class);
         GameType gameType = mock(GameType.class);
+        gameTypes.add(gameType);
         PlayerScores scores = mock(PlayerScores.class);
         when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
         when(gameType.name()).thenReturn(game);
@@ -319,6 +326,28 @@ public class PlayerGamesTest {
 
         // then
         assertEquals(1, playerGames.size());
+    }
+
+    @Test
+    public void shouldTickGameTypeAfterAllGames() {
+        // given
+        addOtherPlayer();
+        addOtherPlayer();
+
+        // when
+        playerGames.tick();
+
+        // then
+
+        InOrder order = inOrder(games.get(0), games.get(1), games.get(2),
+                gameTypes.get(0), gameTypes.get(1), gameTypes.get(2));
+
+        order.verify(games.get(0)).tick();
+        order.verify(games.get(1)).tick();
+        order.verify(games.get(2)).tick();
+        order.verify(gameTypes.get(0)).tick();
+        order.verify(gameTypes.get(1)).tick();
+        order.verify(gameTypes.get(2)).tick();
     }
 
 

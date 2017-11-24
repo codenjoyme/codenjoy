@@ -42,13 +42,13 @@ public class LockedGameType implements GameType {
     }
     
     @Override
-    public PlayerScores getPlayerScores(int score) {
+    public PlayerScores getPlayerScores(Object score) {
         return gameType.getPlayerScores(score);
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
-        return game.wrap(gameType.newGame(listener, factory, save));
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
+        return game.wrap(gameType.newGame(listener, factory, save, playerName));
     }
 
     @Override
@@ -106,5 +106,10 @@ public class LockedGameType implements GameType {
     @Override
     public String toString() {
         return gameType.getClass().toString();
+    }
+
+    @Override
+    public void tick() {
+        gameType.tick();
     }
 }

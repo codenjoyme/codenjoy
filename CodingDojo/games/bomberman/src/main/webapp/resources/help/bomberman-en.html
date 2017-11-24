@@ -1,0 +1,252 @@
+﻿<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2016 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Bomberman Codenjoy — How to play? | Games at work</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<a target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+                <header class="entry-header">
+                    <h1 class="entry-title">Bomberman Codenjoy — how to play?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output">
+                        <p>The game server is available for familiarization reasons
+                            <a href="/codenjoy-contest">
+                                http://codenjoy.com/codenjoy-contest</a></p>
+
+                        <p>What is the gist of the game?</p>
+
+                        <p>You should write your bot for the hero who will beat the other
+                            bots by the score it gets. All bots play on the same field of play.
+                            The hero can move by idle cells to all four directions.</p>
+
+                        <p>The hero can plant a bomb. The bomb will explode in 5 ticks (seconds).
+                            The blast wave can affect inhabitants of the field.
+                            All affected by the blast wave disappear. You can decline by
+                            both your and someone else's bomb.</p>
+
+                        <p>On her/his way, the hero can meet a meatchopper – red air-ballon
+                            that destroys all bombermen on its way.</p>
+
+                        <p>Each destroyed object on the field (bomberman, meatchopper,
+                            destroyed walls) is restored in an instant in the other place.
+                            If the bomberman is damaged, the penalty points (-50*)
+                            are allocated to him.</p>
+
+                        <p>The bomberman whose bomb destroyed something on the map receives
+                            bonus points as follows: +10* – for the destroyed walls,
+                            +100* – for the meatchopper, +1000* – for the enemy bomberman.</p>
+
+                        <p>*Please ask Sensei about scores on this game.</p>
+
+                        <p>All points are summed up. The player with the largest number of points
+                            is considered to be a winner (prior to the due date).</p>
+
+                        <p>So, the player <a href="/codenjoy-contest/register?gameName=bomberman" target="_blank">
+                            registers on the server</a> by indicating her/his Email.</p>
+                        <p>Then you should connect <a href="/codenjoy-contest/resources/user/bomberman-servers.zip">from code</a>
+                            to the server via Web Sockets. This is the Maven project and it will suit for
+                            playing in JVM languages. Inside this archive you can find also another languages.
+                            To know how to launch it, refer to the root of the README.txt.</p>
+
+                        <p>For the other languages, you should write a native client
+                            (and then to share it with us by using Email: apofig@gmail.com)</p>
+                        <p>Address to connect the game on the http://codenjoy.com server:</p>
+
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=email</pre>
+
+                        <p>Address to connect the game on the server deployed in the local area network (LAN):</p>
+
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=email</pre>
+
+                        <p>email here is the email indicated at the registration on the server.</p>
+
+                        <p>After connection, the client will regularly (every second) receive
+                            a line of characters with the encoded state of the field. The format:</p>
+
+                        <pre>^board=(.*)$</pre>
+
+                        <p>With the help of regexp you can obtain a board line.
+                            Example of the line from the server:</p>
+
+                        <pre>board=☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼ #   # #  #♥#  #  #  &        #☼☼♥☼♥☼♥☼#☼ ☼ ☼ ☼ ☼♥☼ ☼ ☼#☼#☼♥☼#☼#☼☼#♥♥  ♥#   # #♥   # ♥#          ☼☼ ☼ ☼#☼ ☼♥☼ ☼ ☼#☼ ☼ ☼ ☼ ☼&☼ ☼ ☼ ☼☼     ♥          # #            ☼☼ ☼ ☼ ☼ ☼♥☼ ☼ ☼♥☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼☼#       # #       ☺& 2  #  #  #☼☼#☼♥☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼☼#  # ♥#               # ♥   #  ☼☼ ☼ ☼#☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼☼   #♥ #      #                 ☼☼ ☼ ☼ ☼ ☼♥☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼☼     ## #     #   # #   ♥      ☼☼ ☼ ☼♥☼ ☼ ☼#☼ ☼#☼ ☼ ☼♥☼ ☼ ☼ ☼ ☼ ☼☼       #♥       #      ## # ###☼☼ ☼ ☼ ☼#☼ ☼ ☼#☼ ☼ ☼#☼#☼&☼ ☼ ☼ ☼ ☼☼       #       #    ♣# #     ♥ ☼☼ ☼ ☼ ☼♥☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼☼        ## ## ♥             # #☼☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼☼                   &    ###  ##☼☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼☼                   ♥ ##        ☼☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼♥☼#☼ ☼ ☼ ☼☼     ##         &#         #   ☼☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼☼   #   #         #     # &     ☼☼♥☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼#☼ ☼☼  #                    ##   &  ☼☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼#☼ ☼☼ #    # &        #       #     ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+
+                        <p>The line length is equal to the field square. If to insert a wrapping
+                            character (carriage return) every sqrt(length(string)) characters, you
+                            obtain the readable image of the field. </p>
+
+                        <pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
+☼ #   # #  #♥#  #  #  &        #☼
+☼♥☼♥☼♥☼#☼ ☼ ☼ ☼ ☼♥☼ ☼ ☼#☼#☼♥☼#☼#☼
+☼#♥♥  ♥#   # #♥   # ♥#          ☼
+☼ ☼ ☼#☼ ☼♥☼ ☼ ☼#☼ ☼ ☼ ☼ ☼&☼ ☼ ☼ ☼
+☼     ♥          # #            ☼
+☼ ☼ ☼ ☼ ☼♥☼ ☼ ☼♥☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼
+☼#       # #       ☺& 2  #  #  #☼
+☼#☼♥☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼
+☼#  # ♥#               # ♥   #  ☼
+☼ ☼ ☼#☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼
+☼   #♥ #      #                 ☼
+☼ ☼ ☼ ☼ ☼♥☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼
+☼     ## #     #   # #   ♥      ☼
+☼ ☼ ☼♥☼ ☼ ☼#☼ ☼#☼ ☼ ☼♥☼ ☼ ☼ ☼ ☼ ☼
+☼       #♥       #      ## # ###☼
+☼ ☼ ☼ ☼#☼ ☼ ☼#☼ ☼ ☼#☼#☼&☼ ☼ ☼ ☼ ☼
+☼       #       #    ♣# #     ♥ ☼
+☼ ☼ ☼ ☼♥☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼
+☼        ## ## ♥             # #☼
+☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼
+☼                   &    ###  ##☼
+☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼
+☼                   ♥ ##        ☼
+☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼♥☼#☼ ☼ ☼ ☼
+☼     ##         &#         #   ☼
+☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼
+☼   #   #         #     # &     ☼
+☼♥☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼#☼#☼ ☼
+☼  #                    ##   &  ☼
+☼ ☼ ☼ ☼ ☼ ☼#☼ ☼ ☼ ☼ ☼ ☼ ☼#☼ ☼#☼ ☼
+☼ #    # &        #       #     ☼
+☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+
+                        <p>The first character of the line corresponds to a cell located on
+                            the left-top corner and has the [0, 32] coordinate. The following
+                            example shows the position of the bomberman (the ☺ character) – [19,25].
+                            left-bottom corner has the [0, 0] coordinate.</p>
+
+                        <p>Interpretation of characters is on the figure below.</p>
+
+                        <pre>public enum Element {
+
+    /// This is your Bomberman
+    BOMBERMAN('☺'),             // this is what he usually looks like
+    BOMB_BOMBERMAN('☻'),        // this is if he is sitting on own bomb
+    DEAD_BOMBERMAN('Ѡ'),        // oops, your Bomberman is dead (don't worry, he will appear
+                                // somewhere in next move)
+                                // you're getting penalty points for each death
+
+    /// this is other players Bombermans
+    OTHER_BOMBERMAN('♥'),       // this is what other Bombermans looks like
+    OTHER_BOMB_BOMBERMAN('♠'),  // this is if player just set the bomb
+    OTHER_DEAD_BOMBERMAN('♣'),  // enemy corpse (it will disappear shortly, right on the next move)
+                                // if you've done it you'll get score points
+
+    /// the bombs
+    BOMB_TIMER_5('5'),          // after bomberman set the bomb, the timer starts (5 tacts)
+    BOMB_TIMER_4('4'),          // this will blow up after 4 tacts
+    BOMB_TIMER_3('3'),          // this after 3
+    BOMB_TIMER_2('2'),          // two
+    BOMB_TIMER_1('1'),          // one
+    BOOM('҉'),                  // Boom! this is what is bomb does, everything that is destroyable
+                                // got destroyed
+
+    /// walls
+    WALL('☼'),                  // undestroyable wall - it will not fall from bomb
+    DESTROYABLE_WALL('#'),      // this wall could be blown up
+    DESTROYED_WALL('H'),        // this is how broken wall looks like, it will disappear on next move
+                                // if it's you did it - you'll get score points points.
+
+    /// meatchoppers
+    MEAT_CHOPPER('&'),          // these guys run over the board randomly and get in the way all the time
+                                // if it will touch bomberman - it will die
+                                // you'd better kill this piece of ... meat, you'll get score points for it
+    DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
+
+    /// a void
+    NONE(' ');                 // this is the only place where you can move your Bomberman</pre>
+                        <p>The game is turn-based, every second the server sends to your client
+                            (bot) the state of the updated field at the moment and expects a
+                            response of the team to the hero. Within the next second, the player
+                            should give a command to the hero. If the player lost his/her chance,
+                            the hero remains in place.</p>
+
+                        <p>The commands (UP, DOWN, LEFT, RIGHT) move the hero to the given direction
+                            in one cell; ACT – leave a bomb on hero’s position. You can combine
+                            movement commands with the ACT command by separating them by a comma.
+                            The order (LEFT, ACT) or (ACT, LEFT) matters: either we move to the
+                            left and plant a bomb there or we plant a bomb and run away to the left.
+                            If a player uses the ACT command only, the bomb will be planted under
+                            the hero without her/his move on the field.</p>
+
+                        <p>The first task is to write a client’s WebSocket which will connect to the
+                            server. Then you should “force” the hero to listen to the commands. This
+                            is the way the gamer will prepare herself/himself to the main game. The
+                            main goal is to play meaningfully and win.</p>
+
+                        <p>Up to now, several clients for playing are implemented, for the following
+                            programming languages: Java, JavaScript, Objective-C, Python, C#).
+                            The clients in the other languages are in the process of creation
+                            (thanks to the active gamers!).</p>
+
+                        <p>The client code does not give a considerable handicap to gamers because
+                            you should spend time to puzzle out the code. However, it is pleasant
+                            to note that the logic of communication with the server plus some high
+                            level API for working with the board are implemented already.</p>
+
+                        <pre>Point getBomberman()                          // position of my bomber on the board
+Collection&lt;Point&gt; getOtherBombermans()        // positions of all other bombers (enemies) on the board
+boolean isMyBombermanDead()                   // whether my bomber is alive
+boolean isAt(Point point, Element element)    // whether the given element has given coordinate?
+boolean isAt(Point point, Collection&lt;Element&gt; elements)   // whether any object from the given set is located in given coordinate
+boolean isNear(Point point, Element element)  // whether the given element is located near the cell with the given coordinate
+boolean isBarrierAt(Point point)              // whether any obstacle in the cell with given coordinate exists
+int countNear(Point point, Element element)   // how many elements of the given type exist around the cell with given coordinate
+Element getAt(Point point)                    // returns the element in the current cell
+int boardSize()                               // returns the size of the board
+Collection&lt;Point&gt; getBarriers()               // the coordinates of all objects that hinder the movements
+Collection&lt;Point&gt; getMeatChoppers()           // coordinates of all dangers that can destroy the bomber
+Collection&lt;Point&gt; getWalls()                  // coordinates of all concrete walls
+Collection&lt;Point&gt; getDestroyableWalls()       // coordinates of all brick walls (they can be destroyed)
+Collection&lt;Point&gt; getBombs()                  // coordinates of all bombs
+Collection&lt;Point&gt; getFutureBlasts()           // coordinates of all potential hazardous places where the bomb 
+                                                  // can explode (the bomb explodes on N {N will be arranged 
+                                                  // before the game starts} cell to the directions: up, down, right, left)
+Тут:
+Point       // x, y coordinate
+Collection  // a set of several objects
+Element     // type of the element on the board </pre>
+
+                        <p>This is the open source game. To realize your game, correct errors in the current
+                            version and make the other corrections, you should
+                            <a href="https://github.com/codenjoyme">fork the project</a> at first.
+                            There is the description in the Readme.md file in the repository root.
+                            It is specified in the description what to do next.</p>
+
+                        <p> If any questions, please write in <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            or Email <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -24,6 +24,7 @@ game.enableDonate = false;
 game.enableJoystick = false;
 game.enableAlways = false;
 game.enablePlayerInfo = true;
+game.enablePlayerInfoLevel = true;
 game.enableLeadersTable = true;
 game.enableChat = false;
 game.enableInfo = true;
@@ -32,3 +33,21 @@ game.enableAdvertisement = false;
 game.showBody = true;
 game.sprites = null;
 game.heroInfo= null;
+
+var getSettings = function(name) {
+    var value = $('#settings').attr(name);
+
+    if (typeof(value) === 'undefined') {
+        return null
+    }
+
+    if (value === '') {
+        return null;
+    }
+
+    if (value === 'true' || value === 'false'){
+        return (value === 'true');
+    }
+
+    return value;
+}

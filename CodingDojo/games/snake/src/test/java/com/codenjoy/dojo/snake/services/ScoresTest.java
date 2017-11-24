@@ -82,7 +82,7 @@ public class ScoresTest {
         snakeIsDead();    //-50
 
         assertEquals(140 + 3 + 4 + 5 + 6 - eatStonePenalty - gameOverPenalty,
-                scores.getScore());
+                score());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class ScoresTest {
         snakeEatApple();  //+4
 
         assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
-                - eatStonePenalty + 3 + 4, scores.getScore());
+                - eatStonePenalty + 3 + 4, score());
     }
 
     @Test
@@ -118,7 +118,11 @@ public class ScoresTest {
         snakeEatApple();  //+3
         snakeEatApple();  //+4
 
-        assertEquals(100 - gameOverPenalty + 3 + 4, scores.getScore());
+        assertEquals(100 - gameOverPenalty + 3 + 4, score());
+    }
+
+    private int score() {
+        return scores.getScore().intValue();
     }
 
     @Test
@@ -127,7 +131,7 @@ public class ScoresTest {
 
         snakeIsDead();    //-5
 
-        assertEquals(0, scores.getScore());
+        assertEquals(0, score());
     }
 
     @Test
@@ -136,7 +140,7 @@ public class ScoresTest {
 
         snakeEatStone();    //-10
 
-        assertEquals(0, scores.getScore());
+        assertEquals(0, score());
     }
 
     @Test
@@ -147,6 +151,6 @@ public class ScoresTest {
 
         scores.clear();
 
-        assertEquals(0, scores.getScore());
+        assertEquals(0, score());
     }
 }

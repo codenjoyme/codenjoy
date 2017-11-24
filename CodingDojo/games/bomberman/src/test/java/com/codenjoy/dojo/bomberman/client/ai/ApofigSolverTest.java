@@ -24,7 +24,7 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 
 import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;

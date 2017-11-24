@@ -35,17 +35,20 @@
                     <tr>
                         <td>
                             <div class="player_info">
-                                <span id="player_name" class="label label-info big">{%= name %}</span> :
-                                <span class="label label-info big" id="score_{%= id %}"></span>
+                                <h2>
+                                    <span id="player_name" class="label label-primary">{%= name %}</span> :
+                                    <span class="label label-primary" id="score_{%= id %}"></span>
+                                </h2>
                             </div>
-                            <%@include file="joystick.jsp"%>
                         </td>
                     </tr>
                     <tr style="display: {%= visible %}">
                         <td>
                             <div class="player_info">
-                                <span class="label small">Level</span> :
-                                <span class="label small" id="level_{%= id %}"></span>
+                                <h4>
+                                    <span class="label label-default">Level</span> :
+                                    <span class="label label-default" id="level_{%= id %}"></span>
+                                </h4>
                             </div>
                         </td>
                     </tr>

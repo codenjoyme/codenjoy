@@ -24,6 +24,7 @@ package com.codenjoy.dojo.client;
 
 
 import com.codenjoy.dojo.services.Point;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,6 +41,8 @@ public class AbstractLayeredBoardTest {
 
     public static final int LAYER_1 = 0;
     public static final int LAYER_2 = 1;
+    public static final int LAYER_3 = 2;
+    public static final int LAYER_4 = 3;
 
     private AbstractLayeredBoard board;
 
@@ -83,6 +86,47 @@ public class AbstractLayeredBoardTest {
     }
 
     @Test
+    public void shouldWork_toString_whenThreeLayers() {
+        board = board("{\"layers\":[\"" +
+                "1111" +
+                "1221" +
+                "1331" +
+                "1111" +
+                "\", \"" +
+                "    " +
+                " 4  " +
+                "  4 " +
+                "    " +
+                "\", \"" +
+                "    " +
+                "  5 " +
+                " 5  " +
+                "    " +
+                "\"]}");
+
+        assertEquals(
+                "[[1, 1, 1, 1], " +
+                "[1, 2, 3, 1], " +
+                "[1, 2, 3, 1], " +
+                "[1, 1, 1, 1]]",
+                Arrays.deepToString(board.getField(LAYER_1)));
+
+        assertEquals(
+                "[[ ,  ,  ,  ], " +
+                "[ , 4,  ,  ], " +
+                "[ ,  , 4,  ], " +
+                "[ ,  ,  ,  ]]",
+                Arrays.deepToString(board.getField(LAYER_2)));
+
+        assertEquals(
+                "[[ ,  ,  ,  ], " +
+                "[ ,  , 5,  ], " +
+                "[ , 5,  ,  ], " +
+                "[ ,  ,  ,  ]]",
+                Arrays.deepToString(board.getField(LAYER_3)));
+    }
+
+    @Test
     public void shouldWork_toString_whenOneLayer() {
         board = board(
                 "1111" +
@@ -96,6 +140,24 @@ public class AbstractLayeredBoardTest {
                 "1221\n" +
                 "1331\n" +
                 "1111\n", board.toString());
+    }
+
+    @Test
+    public void shouldWork_canGetSourceJson() {
+        board = board("{\"layers\":[\"" +
+                "1111" +
+                "1221" +
+                "1331" +
+                "1111" +
+                "\", \"" +
+                "    " +
+                " 4  " +
+                "  4 " +
+                "    " +
+                "\"], \"key\":\"value\"}");
+
+        assertEquals("value", board.source.get("key"));
+        assertEquals("[\"1111122113311111\",\"     4    4     \"]", board.source.getJSONArray("layers").toString());
     }
 
     @Test

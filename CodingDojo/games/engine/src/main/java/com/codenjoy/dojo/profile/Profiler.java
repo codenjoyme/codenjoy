@@ -23,16 +23,31 @@ package com.codenjoy.dojo.profile;
  */
 
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Profiler {
 
-    Map<String, Long> phasesAll = new HashMap<String, Long>();
-    Map<String, Long> phases = new HashMap<String, Long>();
+    static class AverageTime {
+        int count;
+        long time;
+
+        public void add(long delta) {
+            time += delta;
+            count++;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("AverageTime{%s times, total %s ms, average %s ms}", count, time, ((double)time)/count);
+        }
+    }
+
+    private Map<String, AverageTime> phasesAll = new ConcurrentHashMap<>();
+    private Map<String, Long> phases = new ConcurrentHashMap<String, Long>();
     private long time;
 
-    public void start() {
+    public synchronized void start() {
         time = now();
     }
 
@@ -40,15 +55,15 @@ public class Profiler {
         return System.currentTimeMillis();
     }
 
-    public void done(String phase) {
+    public synchronized void done(String phase) {
         long delta = now() - time;
 
         phases.put(phase, delta);
 
-        if (phasesAll.containsKey(phase)) {
-            delta += phasesAll.get(phase);
+        if (!phasesAll.containsKey(phase)) {
+            phasesAll.put(phase, new AverageTime());
         }
-        phasesAll.put(phase, delta);
+        phasesAll.get(phase).add(delta);
 
         start();
     }
@@ -65,11 +80,14 @@ public class Profiler {
 
     public void print(String phase) {
         System.out.println("--------------------------------------------------");
-        System.out.println(phase + " = " + phases.get(phase) + "ms");
+        System.out.println(phase + " = " + phases.get(phase));
         System.out.println("--------------------------------------------------");
     }
 
-    public long get(String phase) {
-        return phasesAll.get(phase);
+    public String get(String phase) {
+        if (!phasesAll.containsKey(phase)) {
+            return "phase not found: " + phase;
+        }
+        return phasesAll.get(phase).toString();
     }
 }

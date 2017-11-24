@@ -26,7 +26,7 @@ package com.codenjoy.dojo.bomberman.client.ai;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -53,13 +53,13 @@ public class ApofigSolver implements Solver<Board> {
         this.board = board;
         Point bomberman = board.getBomberman();
 
-        boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Elements.DESTROY_WALL);
+        boolean nearDestroyableWall = board.isNear(bomberman.getX(), bomberman.getY(), Elements.DESTROYABLE_WALL);
         boolean nearBomberman = board.isNear(bomberman.getX(), bomberman.getY(), Elements.OTHER_BOMBERMAN);
         boolean nearMeatchopper = board.isNear(bomberman.getX(), bomberman.getY(), Elements.MEAT_CHOPPER);
         boolean bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Elements.BOMB_BOMBERMAN);
 
         bomb = null;
-        if ((nearDestroyWall || nearBomberman || nearMeatchopper) && bombNotDropped) {
+        if ((nearDestroyableWall || nearBomberman || nearMeatchopper) && bombNotDropped) {
             bomb = new PointImpl(bomberman);
         }
 

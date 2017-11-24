@@ -26,7 +26,7 @@
          xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          id="WebApp_ID" version="3.0">
-    <display-name>Snake</display-name>
+    <display-name>Codenjoy</display-name>
 
     <context-param>
         <param-name>contextClass</param-name>
@@ -35,13 +35,30 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/com/codenjoy/dojo/server/applicationContext.xml</param-value>
+        <param-value>
+            classpath:/com/codenjoy/dojo/server/applicationContext.xml
+            classpath:/com/codenjoy/dojo/server/spring-security.xml
+        </param-value>
     </context-param>
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!-- https://docs.spring.io/spring-security/site/docs/3.1.x/reference/ns-config.html#ns-web-xml -->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ASYNC</dispatcher>
+    </filter-mapping>
+
+    <!-- main servlet -->
     <servlet>
         <servlet-name>appServlet</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -52,33 +69,31 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <servlet>
-        <servlet-name>wsTransportServlet</servlet-name>
-        <servlet-class>com.codenjoy.dojo.transport.ws.TransportWebSocketServlet</servlet-class>
-        <load-on-startup>100</load-on-startup>
-    </servlet>
-
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!-- web services servlet -->
+    <servlet>
+        <servlet-name>wsTransportServlet</servlet-name>
+        <servlet-class>com.codenjoy.dojo.transport.ws.TransportWebSocketServlet</servlet-class>
+        <load-on-startup>100</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>wsTransportServlet</servlet-name>
         <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
 
+    <!-- async screen controller servlet -->
     <servlet>
         <servlet-name>screenControllerServlet</servlet-name>
         <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
         <async-supported>true</async-supported>
     </servlet>
-
-
     <servlet-mapping>
         <servlet-name>screenControllerServlet</servlet-name>
         <url-pattern>/screen</url-pattern>
     </servlet-mapping>
-
 
 </web-app>

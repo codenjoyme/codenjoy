@@ -24,11 +24,10 @@ function initDonate(contextPath) {
     var want = $('#want-donate');
     var payment = $('#payment');
 
-    donate.css({position: 'absolute', left: 300});
     donate.show();
 
     want.click( function() {
-        $.ajax({ url:contextPath + "donate",
+        $.ajax({ url:contextPath + "/donate",
             success:function (data) {
                 donate.append('<div id="donate-container"></div>');
                 $("#payment").remove();

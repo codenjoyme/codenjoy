@@ -25,7 +25,7 @@ package com.codenjoy.dojo.a2048.client.ai;
 
 import com.codenjoy.dojo.a2048.model.Elements;
 import com.codenjoy.dojo.a2048.model.Numbers;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 
 public class CharNumbers {
 

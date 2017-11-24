@@ -25,7 +25,7 @@ package com.codenjoy.dojo.a2048e.client.ai;
 
 import com.codenjoy.dojo.a2048e.client.Board;
 import com.codenjoy.dojo.a2048e.services.GameRunner;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;

@@ -22,7 +22,7 @@ package com.codenjoy.dojo.bomberman.client;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
@@ -45,14 +45,14 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        if (board.isGameOver()) return "";
+        if (board.isMyBombermanDead()) return "";
 
         return Direction.ACT.toString();
     }
 
     public static void main(String[] args) {
-//        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
-        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
+        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
+//        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
                 USER_NAME,
                 new YourSolver(new RandomDice()),
                 new Board());

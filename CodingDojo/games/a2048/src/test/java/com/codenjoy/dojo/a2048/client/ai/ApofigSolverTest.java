@@ -24,7 +24,7 @@ package com.codenjoy.dojo.a2048.client.ai;
 
 
 import com.codenjoy.dojo.a2048.client.Board;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
@@ -57,6 +57,27 @@ public class ApofigSolverTest {
                 "8  CC" +
                 "A   G" +
                 "B   8", Direction.DOWN);
+
+        asertAI("2   4" +
+                "4   A" +
+                "8  IC" +
+                "A  HG" +
+                "B  C8", Direction.UP); // TODO вот мы и зависли :)
+    }
+
+    @Test
+    public void should3() {
+        asertAI("A4  A" +
+                "B2  B" +
+                "C   C" +
+                "4   4" +
+                "2   2", Direction.DOWN);
+
+        asertAI("A   A" +
+                "B   B" +
+                "C   C" +
+                "44  4" +
+                "22  2", Direction.RIGHT);
     }
 
     @Test
