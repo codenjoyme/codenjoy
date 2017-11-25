@@ -23,10 +23,6 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import com.codenjoy.dojo.transport.GameState;
-import com.codenjoy.dojo.transport.PlayerResponseHandler;
-import com.codenjoy.dojo.transport.PlayerTransport;
-import com.codenjoy.dojo.transport.TransportErrorType;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

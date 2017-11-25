@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.transport.PlayerTransport;
+import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

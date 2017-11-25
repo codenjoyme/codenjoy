@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport;
+package com.codenjoy.dojo.transport.ws;
 
 /*-
  * #%L
@@ -23,6 +23,6 @@ package com.codenjoy.dojo.transport;
  */
 
 
-public interface GameState {
-    String asString();
+public enum TransportErrorType {
+    EXPIRED
 }

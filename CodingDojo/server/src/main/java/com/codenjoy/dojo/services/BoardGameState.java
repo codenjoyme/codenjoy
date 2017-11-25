@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.transport.GameState;
+import com.codenjoy.dojo.transport.ws.GameState;
 
 public class BoardGameState implements GameState {
 

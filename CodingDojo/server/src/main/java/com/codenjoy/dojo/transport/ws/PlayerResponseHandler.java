@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport;
+package com.codenjoy.dojo.transport.ws;
 
 /*-
  * #%L

@@ -23,8 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.transport.PlayerResponseHandler;
-import com.codenjoy.dojo.transport.TransportErrorType;
+import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
+import com.codenjoy.dojo.transport.ws.TransportErrorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
