@@ -55,10 +55,12 @@
 
     <bean id="authenticationService" class="com.codenjoy.dojo.transport.auth.DefaultAuthenticationService"/>
 
+    <bean name="controlPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
     <bean name="playerController" class="com.codenjoy.dojo.services.PlayerControllerImpl" >
         <property name="transport" ref="controlPlayerTransport"/>
     </bean>
 
+    <bean name="screenPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
     <bean name="screenController" class="com.codenjoy.dojo.services.ScreenControllerImpl" >
         <property name="transport" ref="screenPlayerTransport"/>
     </bean>

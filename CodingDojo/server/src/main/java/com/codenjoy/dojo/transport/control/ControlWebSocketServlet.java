@@ -38,7 +38,7 @@ public class ControlWebSocketServlet extends WebSocketServlet{
     }
 
     private PlayerTransport getPlayerTransport() {
-        return ApplicationContextListener.getContext().getBean(ControlPlayerTransport.class);
+        return ApplicationContextListener.getContext().getBean("controlPlayerTransport", PlayerTransport.class);
     }
 
     public AuthenticationService getAuthenticationService() {

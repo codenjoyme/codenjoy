@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.control;
+package com.codenjoy.dojo.transport.ws;
 
 /*-
  * #%L
@@ -23,16 +23,12 @@ package com.codenjoy.dojo.transport.control;
  */
 
 
-import com.codenjoy.dojo.transport.ws.*;
-import org.springframework.stereotype.Service;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@Service("controlPlayerTransport")
-public class ControlPlayerTransport implements PlayerTransport {
+public class PlayerTransportImpl implements PlayerTransport {
 
     private final PlayerSocket DUMMY_SOCKET = new PlayerSocket();
 
@@ -55,7 +51,7 @@ public class ControlPlayerTransport implements PlayerTransport {
     }
 
     @Override
-    public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object o) {
+    public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object endpointSettings) {
         lock.writeLock().lock();
         try {
             SocketHandlerPair pair = endpoints.get(id);
@@ -116,7 +112,6 @@ public class ControlPlayerTransport implements PlayerTransport {
 
     private class SocketHandlerPair {
         private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
-        //dummy player socket
         private PlayerSocket playerSocket = DUMMY_SOCKET;
     }
 }

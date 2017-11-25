@@ -27,6 +27,7 @@ import com.codenjoy.dojo.transport.ApplicationContextListener;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
@@ -39,7 +40,7 @@ public class ScreenWebSocketServlet extends WebSocketServlet{
     }
 
     private PlayerTransport getPlayerTransport() {
-        return ApplicationContextListener.getContext().getBean(ScreenPlayerTransport.class);
+        return ApplicationContextListener.getContext().getBean("screenPlayerTransport", PlayerTransport.class);
     }
 
     public AuthenticationService getAuthenticationService() {
