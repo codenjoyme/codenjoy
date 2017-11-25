@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.transport.screen;
 
 
 import com.codenjoy.dojo.services.PlayerServiceImpl;
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.AsyncContext;

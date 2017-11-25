@@ -23,6 +23,9 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
+import com.codenjoy.dojo.transport.screen.async.PlayerScreenUpdateRequest;
+import com.codenjoy.dojo.transport.screen.async.RestScreenSender;
+import com.codenjoy.dojo.transport.screen.async.ScreenController;
 import org.fest.assertions.CollectionAssert;
 import org.junit.Before;
 import org.junit.Test;

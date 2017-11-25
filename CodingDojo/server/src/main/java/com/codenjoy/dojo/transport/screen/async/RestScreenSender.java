@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -23,6 +23,9 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
+import com.codenjoy.dojo.transport.screen.ScreenData;
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

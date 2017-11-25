@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -23,18 +23,13 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-import javax.servlet.AsyncContext;
+import com.codenjoy.dojo.transport.screen.ScreenData;
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 
-public abstract class UpdateRequest {
-    protected AsyncContext asyncContext;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
 
-    public UpdateRequest(AsyncContext asyncContext) {
-        this.asyncContext = asyncContext;
-    }
-
-    public AsyncContext getAsyncContext() {
-        return asyncContext;
-    }
-
-    public abstract boolean isApplicableFor(ScreenRecipient recipient);
+public interface PlayerDataSerializer<TPlayer extends ScreenRecipient, TData extends ScreenData> {
+    void writeValue(Writer writer, Map<TPlayer, TData> playerScreens) throws IOException;
 }
