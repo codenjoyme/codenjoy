@@ -23,6 +23,8 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import org.eclipse.jetty.websocket.api.Session;
+
 /**
  * Created by indigo on 2000-11-25.
  */
@@ -31,10 +33,22 @@ public class NullPlayerResponseHandler implements PlayerResponseHandler {
     public static PlayerResponseHandler NULL = new NullPlayerResponseHandler();
 
     @Override
-    public void onResponseComplete(String responseContent, Object o) {
+    public void onResponseComplete(String responseContent) {
+        // do nothing
     }
 
     @Override
-    public void onError(TransportErrorType type, Object o) {
+    public void onClose(int statusCode, String reason) {
+        // do nothing
+    }
+
+    @Override
+    public void onError(Throwable error) {
+        // do nothing
+    }
+
+    @Override
+    public void onConnect(Session session) {
+        // do nothing
     }
 }

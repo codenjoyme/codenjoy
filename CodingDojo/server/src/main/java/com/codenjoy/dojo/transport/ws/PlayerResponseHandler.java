@@ -23,8 +23,15 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-public interface PlayerResponseHandler<TResponseContext> {
-    void onResponseComplete(String responseContent, TResponseContext responseContext);
+import org.eclipse.jetty.websocket.api.Session;
 
-    void onError(TransportErrorType type, TResponseContext responseContext);
+public interface PlayerResponseHandler {
+
+    void onResponseComplete(String responseContent);
+
+    void onClose(int statusCode, String reason);
+
+    void onError(Throwable error);
+
+    void onConnect(Session session);
 }

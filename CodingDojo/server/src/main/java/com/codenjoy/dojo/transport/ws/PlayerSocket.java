@@ -24,18 +24,15 @@ package com.codenjoy.dojo.transport.ws;
 
 
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.annotations.*;
 
 import java.io.IOException;
 
 @WebSocket
 public class PlayerSocket {
 
-    private Session session;
     private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
+    private Session session;
     private boolean requested;
 
     public PlayerSocket() {
@@ -46,13 +43,14 @@ public class PlayerSocket {
     public void onWebSocketText(String message) {
         if (requested) {
             requested = false;
-            handler.onResponseComplete(message, null);
+            handler.onResponseComplete(message);
         }
     }
 
     @OnWebSocketClose
-    public void onWebSocketClose(int i, String s) {
+    public void onWebSocketClose(int statusCode, String reason) {
         requested = false;
+        handler.onClose(statusCode, reason);
         if (session == null) {
             return;
         }
@@ -62,6 +60,12 @@ public class PlayerSocket {
     @OnWebSocketConnect
     public void onWebSocketConnect(Session session) {
         this.session = session;
+        handler.onConnect(session);
+    }
+
+    @OnWebSocketError
+    public void onWebSocketError(Throwable cause) {
+        handler.onError(cause);
     }
 
     public void sendMessage(String message) throws IOException {
@@ -80,4 +84,7 @@ public class PlayerSocket {
         this.handler = handler;
     }
 
+    public boolean isOpen() {
+        return session != null && session.isOpen();
+    }
 }

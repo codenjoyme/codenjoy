@@ -30,21 +30,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PlayerTransportImpl implements PlayerTransport {
 
-    private final PlayerSocket DUMMY_SOCKET = new PlayerSocket();
-
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-    private Map<String, SocketHandlerPair> endpoints = new HashMap<>();
+    private Map<String, SocketsHandlerPair> endpoints = new HashMap<>();
 
     @Override
     public void sendState(String id, GameState state) throws IOException {
         lock.readLock().lock();
-        SocketHandlerPair pair;
+        SocketsHandlerPair pair;
         try {
             pair = endpoints.get(id);
-            if (pair == null || pair.playerSocket == null) {
+            if (pair == null || pair.noSockets()) {
                 return;
             }
-            pair.playerSocket.sendMessage(state.asString());
+            pair.sendMessage(state.asString());
         } finally {
             lock.readLock().unlock();
         }
@@ -54,12 +52,11 @@ public class PlayerTransportImpl implements PlayerTransport {
     public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object endpointSettings) {
         lock.writeLock().lock();
         try {
-            SocketHandlerPair pair = endpoints.get(id);
+            SocketsHandlerPair pair = endpoints.get(id);
             if (pair == null) {
-                pair = new SocketHandlerPair();
+                pair = new SocketsHandlerPair(id);
             }
-            pair.handler = responseHandler;
-            pair.playerSocket.setHandler(responseHandler);
+            pair.setHandler(responseHandler);
             endpoints.put(id, pair);
         } finally {
             lock.writeLock().unlock();
@@ -70,8 +67,8 @@ public class PlayerTransportImpl implements PlayerTransport {
     public void unregisterPlayerEndpoint(String id) {
         lock.writeLock().lock();
         try {
-            SocketHandlerPair pair = endpoints.get(id);
-            if (pair == null || pair.playerSocket == null) {
+            SocketsHandlerPair pair = endpoints.get(id);
+            if (pair == null || pair.noSockets()) {
                 return;
             }
             endpoints.remove(id);
@@ -84,12 +81,11 @@ public class PlayerTransportImpl implements PlayerTransport {
     public void registerPlayerSocket(String id, PlayerSocket playerSocket) {
         lock.writeLock().lock();
         try {
-            SocketHandlerPair pair = endpoints.get(id);
+            SocketsHandlerPair pair = endpoints.get(id);
             if (pair == null) {
-                pair = new SocketHandlerPair();
+                pair = new SocketsHandlerPair(id);
             }
-            pair.playerSocket = playerSocket;
-            pair.playerSocket.setHandler(pair.handler);
+            pair.addSocket(playerSocket);
             endpoints.put(id, pair);
         } finally {
             lock.writeLock().unlock();
@@ -100,18 +96,15 @@ public class PlayerTransportImpl implements PlayerTransport {
     public void unregisterPlayerSocket(String id) {
         lock.writeLock().lock();
         try {
-            SocketHandlerPair pair = endpoints.get(id);
-            if (pair == null || pair.playerSocket == null) {
+            SocketsHandlerPair pair = endpoints.get(id);
+            if (pair == null || pair.noSockets()) {
                 return;
             }
-            pair.playerSocket = DUMMY_SOCKET;
+            // TODO кто и когда вызывает этот метод, и как понять какой сокет удален? Может задекорировать обработчик и на onclose/onerror вставить удаление. Только тут надо чтобы небыло многопоточных гонок
+            pair.removeClosedSockets();
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private class SocketHandlerPair {
-        private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
-        private PlayerSocket playerSocket = DUMMY_SOCKET;
-    }
 }

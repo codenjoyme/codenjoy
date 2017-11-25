@@ -25,7 +25,7 @@ package com.codenjoy.dojo.transport.ws;
 
 import java.io.IOException;
 
-public interface PlayerTransport<TEndpointSettings, TResponseContext> {
+public interface PlayerTransport {
     /**
      * Send game state to the player by given player id.
      * @param id registered player id
@@ -41,8 +41,12 @@ public interface PlayerTransport<TEndpointSettings, TResponseContext> {
      * @param responseHandler обработчик
      * @param endpointSettings дополнительные данные
      */
-    void registerPlayerEndpoint(String id, PlayerResponseHandler<TResponseContext> responseHandler, TEndpointSettings endpointSettings);
+    void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object endpointSettings);
 
+    /**
+     * Случается, когда игрока удалили на админке
+     * @param id идентификатор пользователя - его email
+     */
     void unregisterPlayerEndpoint(String id);
 
     /**
@@ -52,5 +56,9 @@ public interface PlayerTransport<TEndpointSettings, TResponseContext> {
      */
     void registerPlayerSocket(String id, PlayerSocket playerSocket);
 
+    /**
+     * Случается, когда игрок отключился вебсокет-клиентом от сервера
+     * @param id идентификатор пользователя - его email
+     */
     void unregisterPlayerSocket(String id);
 }

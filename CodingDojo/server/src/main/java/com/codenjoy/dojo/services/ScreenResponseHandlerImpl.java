@@ -24,8 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
-import com.codenjoy.dojo.transport.ws.TransportErrorType;
-import org.json.JSONArray;
+import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +43,7 @@ public class ScreenResponseHandlerImpl implements PlayerResponseHandler {
     }
 
     @Override
-    public void onResponseComplete(String responseContent, Object context) {
+    public void onResponseComplete(String responseContent) {
         JSONObject request = new JSONObject(responseContent);
         if (request.getString("name").equals("getScreen")) {
             boolean allPlayersScreen = request.getBoolean("allPlayersScreen");
@@ -55,10 +54,20 @@ public class ScreenResponseHandlerImpl implements PlayerResponseHandler {
     }
 
     @Override
-    public void onError(TransportErrorType type, Object context) {
-        if (type == TransportErrorType.EXPIRED) {
-            logger.warn("Request expired: player: {}, context: {}",
-                    new Object[]{player.getName(), context});
-        }
+    public void onClose(int statusCode, String reason) {
+        logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
+                new Object[]{player.getName(), statusCode, reason});
+    }
+
+    @Override
+    public void onError(Throwable error) {
+        logger.error("Request error: player: {}, error: {}",
+                new Object[]{player.getName(), error});
+    }
+
+    @Override
+    public void onConnect(Session session) {
+        logger.error("Connected: player: {}, session: {}",
+                new Object[]{player.getName(), session});
     }
 }
