@@ -47,6 +47,8 @@
       HttpRequestHandlerServlet servlet-name as defined in web.xml. -->
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.async.ScreenController"/>
 
+    <bean id="screenSender" class="com.codenjoy.dojo.transport.screen.async.RestScreenSender"/>
+
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
         <constructor-arg index="0" value="100" type="int"/>
     </bean>

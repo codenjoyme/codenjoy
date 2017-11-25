@@ -45,7 +45,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPOutputStream;
 
-@Component
 public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenData>, AsyncListener {
     private List<UpdateRequest> requests = new ArrayList<UpdateRequest>();
     private Set<AsyncContext> timedOutRequests = Collections.synchronizedSet(new HashSet<AsyncContext>());
