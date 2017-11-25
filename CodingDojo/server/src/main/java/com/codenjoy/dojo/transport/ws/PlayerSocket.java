@@ -23,6 +23,7 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.transport.control.ControlPlayerTransport;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -35,7 +36,7 @@ import java.io.IOException;
 public class PlayerSocket {
 
     private Session session;
-    private PlayerResponseHandler handler = WebSocketPlayerTransport.NULL_HANDLER;
+    private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
     private boolean requested;
 
     public PlayerSocket() {
@@ -49,7 +50,6 @@ public class PlayerSocket {
             handler.onResponseComplete(message, null);
         }
     }
-
 
     @OnWebSocketClose
     public void onWebSocketClose(int i, String s) {

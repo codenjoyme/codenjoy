@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
@@ -23,11 +23,14 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import javax.servlet.http.HttpServletRequest;
+import com.codenjoy.dojo.services.PlayerController;
+import org.springframework.context.annotation.Bean;
 
-public class DefaultAuthenticationService implements AuthenticationService {
-    @Override
-    public String authenticate(HttpServletRequest request) {
-        return request.getParameter("user");
+import static org.mockito.Mockito.mock;
+
+public class MockScreenController {
+    @Bean(name = "screenController")
+    public PlayerController bean() throws Exception {
+        return mock(PlayerController.class);
     }
 }

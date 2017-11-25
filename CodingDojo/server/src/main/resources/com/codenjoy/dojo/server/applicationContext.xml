@@ -53,6 +53,14 @@
         <constructor-arg index="0" value="100" type="int"/>
     </bean>
 
-    <bean id="authenticationService" class="com.codenjoy.dojo.transport.ws.DefaultAuthenticationService"/>
+    <bean id="authenticationService" class="com.codenjoy.dojo.transport.auth.DefaultAuthenticationService"/>
+
+    <bean name="playerController" class="com.codenjoy.dojo.services.PlayerControllerImpl" >
+        <property name="transport" ref="controlPlayerTransport"/>
+    </bean>
+
+    <bean name="screenController" class="com.codenjoy.dojo.services.ScreenControllerImpl" >
+        <property name="transport" ref="screenPlayerTransport"/>
+    </bean>
 
 </beans>

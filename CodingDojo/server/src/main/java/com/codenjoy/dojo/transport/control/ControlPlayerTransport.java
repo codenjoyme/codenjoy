@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.transport.control;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.transport.ws.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,9 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@Service("playerTransport")
-public class WebSocketPlayerTransport implements PlayerTransport {
-    static PlayerResponseHandler NULL_HANDLER = new NullPlayerResponseHandler();
+@Service("controlPlayerTransport")
+public class ControlPlayerTransport implements PlayerTransport {
+
     private final PlayerSocket DUMMY_SOCKET = new PlayerSocket();
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -53,12 +54,6 @@ public class WebSocketPlayerTransport implements PlayerTransport {
         }
     }
 
-    /**
-     * Случается, когда игрок зарегистрировался в игре на страничке регистрации
-     * @param id идентификатор пользователя - его email
-     * @param responseHandler обработчик
-     * @param o дополнительные данные
-     */
     @Override
     public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object o) {
         lock.writeLock().lock();
@@ -89,11 +84,7 @@ public class WebSocketPlayerTransport implements PlayerTransport {
         }
     }
 
-    /**
-     * Случается, когда игрок подключился по вебсокетам к серверу
-     * @param id идентификатор пользователя - его email
-     * @param playerSocket вебсокет
-     */
+    @Override
     public void registerPlayerSocket(String id, PlayerSocket playerSocket) {
         lock.writeLock().lock();
         try {
@@ -109,6 +100,7 @@ public class WebSocketPlayerTransport implements PlayerTransport {
         }
     }
 
+    @Override
     public void unregisterPlayerSocket(String id) {
         lock.writeLock().lock();
         try {
@@ -122,18 +114,8 @@ public class WebSocketPlayerTransport implements PlayerTransport {
         }
     }
 
-    private static class NullPlayerResponseHandler implements PlayerResponseHandler {
-        @Override
-        public void onResponseComplete(String responseContent, Object o) {
-        }
-
-        @Override
-        public void onError(TransportErrorType type, Object o) {
-        }
-    }
-
     private class SocketHandlerPair {
-        private PlayerResponseHandler handler = NULL_HANDLER;
+        private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
         //dummy player socket
         private PlayerSocket playerSocket = DUMMY_SOCKET;
     }

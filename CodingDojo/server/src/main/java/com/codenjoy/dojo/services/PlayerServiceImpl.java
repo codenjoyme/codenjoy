@@ -31,8 +31,8 @@ import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -52,13 +52,31 @@ public class PlayerServiceImpl implements PlayerService {
     private boolean registration = true;
     private PrinterFactory printer = new PrinterFactoryImpl();
 
-    @Autowired private PlayerGames playerGames;
-    @Autowired private ScreenSender<ScreenRecipient, ScreenData> screenSender;
-    @Autowired private PlayerController playerController;
-    @Autowired private GameService gameService;
-    @Autowired private ChatService chatService;
-    @Autowired private AutoSaver autoSaver;
-    @Autowired private ActionLogger actionLogger;
+    @Autowired
+    private PlayerGames playerGames;
+
+    @Autowired
+    private ScreenSender<ScreenRecipient, ScreenData> screenSender;
+
+    @Autowired
+    @Qualifier("playerController")
+    private PlayerController playerController;
+
+    @Autowired
+    @Qualifier("screenController")
+    private PlayerController screenController;
+
+    @Autowired
+    private GameService gameService;
+
+    @Autowired
+    private ChatService chatService;
+
+    @Autowired
+    private AutoSaver autoSaver;
+
+    @Autowired
+    private ActionLogger actionLogger;
 
     @Value("${autoSaverEnable}")
     private boolean autoSaverEnable;
@@ -150,7 +168,7 @@ public class PlayerServiceImpl implements PlayerService {
             player = new Player(name, callbackUrl,
                     gameType, playerScores, informationCollector);
 
-            playerGames.add(player, game, playerController);
+            playerGames.add(player, game, playerController, screenController);
         } else {
           // do nothing
         }
@@ -212,6 +230,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void sendScreenUpdates() {
+        HashMap<ScreenRecipient, ScreenData> map = buildScreenData();
+        sendScreenForAsync(map);
+        sendScreenForWebsockets(map);
+    }
+
+    private HashMap<ScreenRecipient, ScreenData> buildScreenData() {
         HashMap<ScreenRecipient, ScreenData> map = new HashMap<ScreenRecipient, ScreenData>();
         cacheBoards.clear();
 
@@ -259,8 +283,25 @@ public class PlayerServiceImpl implements PlayerService {
                 return getName();
             }
         }, new ChatLog(chatLog));
+        return map;
+    }
 
+    private void sendScreenForAsync(HashMap<ScreenRecipient, ScreenData> map) {
         screenSender.sendUpdates(map);
+    }
+
+    private void sendScreenForWebsockets(HashMap<ScreenRecipient, ScreenData> map) {
+        for (PlayerGame playerGame : playerGames) {
+            Player player = playerGame.getPlayer();
+            PlayerController screen = playerGame.getScreen();
+            try {
+                screen.requestControl(player, map);
+            } catch (Exception e) {
+                logger.error("Unable to send screen updates to player " + player.getName() +
+                        " URL: " + player.getCallbackUrl(), e);
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

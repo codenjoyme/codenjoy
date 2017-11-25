@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.transport.auth;
 
 /*-
  * #%L
@@ -23,21 +23,11 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import javax.servlet.http.HttpServletRequest;
 
-@Component("wsContextListener")
-public class ApplicationContextListener implements ApplicationContextAware {
-    private static ApplicationContext applicationContext;
-
+public class DefaultAuthenticationService implements AuthenticationService {
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    public static ApplicationContext getContext() {
-        return applicationContext;
+    public String authenticate(HttpServletRequest request) {
+        return request.getParameter("user");
     }
 }

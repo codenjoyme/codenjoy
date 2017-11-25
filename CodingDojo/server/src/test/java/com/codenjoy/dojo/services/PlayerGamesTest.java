@@ -44,6 +44,7 @@ public class PlayerGamesTest {
     private Player player;
     private Game game;
     private PlayerController controller;
+    private PlayerController screen;
     private LazyJoystick lazyJoystick;
     private Joystick joystick;
     private PlayerSpy playerSpy;
@@ -62,6 +63,7 @@ public class PlayerGamesTest {
         when(game.getJoystick()).thenReturn(joystick);
 
         controller = mock(PlayerController.class);
+        screen = mock(PlayerController.class);
 
         doAnswer(new Answer<Object>() {
             @Override
@@ -77,7 +79,7 @@ public class PlayerGamesTest {
         when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
         playerGames = new PlayerGames(statistics);
 
-        playerGames.add(player, game, controller);
+        playerGames.add(player, game, controller, screen);
     }
 
     @Test
@@ -138,7 +140,9 @@ public class PlayerGamesTest {
         Game anotherGame = mock(Game.class);
         games.add(anotherGame);
 
-        playerGames.add(otherPlayer, anotherGame, mock(PlayerController.class));
+        playerGames.add(otherPlayer, anotherGame,
+                mock(PlayerController.class),
+                mock(PlayerController.class));
         return otherPlayer;
     }
 
@@ -197,7 +201,9 @@ public class PlayerGamesTest {
     @Test
     public void testGetGameTypes() {
         Player player2 = addOtherPlayer("game2");
-        playerGames.add(player2, mock(Game.class), mock(PlayerController.class));
+        playerGames.add(player2, mock(Game.class),
+                mock(PlayerController.class),
+                mock(PlayerController.class));
 
         List<GameType> gameTypes = playerGames.getGameTypes();
 

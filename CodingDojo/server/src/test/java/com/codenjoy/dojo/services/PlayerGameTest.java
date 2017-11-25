@@ -35,6 +35,7 @@ public class PlayerGameTest {
     private Player player;
     private Game game;
     private PlayerController controller;
+    private PlayerController screen;
     private PlayerGame playerGame;
     private Tickable lazyJoystick;
 
@@ -45,8 +46,9 @@ public class PlayerGameTest {
         game = mock(Game.class);
         lazyJoystick = mock(Tickable.class);
         controller = mock(PlayerController.class);
+        screen = mock(PlayerController.class);
 
-        playerGame = new PlayerGame(player, game, controller, lazyJoystick);
+        playerGame = new PlayerGame(player, game, controller, screen, lazyJoystick);
     }
 
     @Test
@@ -63,7 +65,9 @@ public class PlayerGameTest {
         assertFalse(playerGame.equals(otherPlayer));
         assertTrue(playerGame.equals(player));
 
-        PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, NullGame.INSTANCE, NullPlayerController.INSTANCE, lazyJoystick);
+        PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, NullGame.INSTANCE,
+                NullPlayerController.INSTANCE, NullPlayerController.INSTANCE,
+                lazyJoystick);
         assertFalse(playerGame.equals(otherPlayerGame));
         assertTrue(playerGame.equals(playerGame));
     }
@@ -98,9 +102,10 @@ public class PlayerGameTest {
 
     @Test
     public void testToString() throws Exception {
-        assertEquals(String.format("PlayerGame[player=player, game=%s, controller=%s]",
+        assertEquals(String.format("PlayerGame[player=player, game=%s, controller=%s, screen=%s]",
                 game.getClass().getSimpleName(),
-                controller.getClass().getSimpleName()),
+                controller.getClass().getSimpleName(),
+                screen.getClass().getSimpleName()),
                 playerGame.toString());
     }
 }

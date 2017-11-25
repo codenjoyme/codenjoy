@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.transport.auth;
 
 /*-
  * #%L
@@ -23,8 +23,5 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import javax.servlet.http.HttpServletRequest;
-
-public interface AuthenticationService {
-    String authenticate(HttpServletRequest request);
+public class AuthenticationException extends RuntimeException {
 }

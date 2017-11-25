@@ -59,6 +59,7 @@ import static org.mockito.Mockito.*;
         MockScreenSenderConfiguration.class,
         MockChatService.class,
         MockPlayerController.class,
+        MockScreenController.class,
         MockAutoSaver.class,
         MockSaveService.class,
         MockGameService.class,

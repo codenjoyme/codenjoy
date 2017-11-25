@@ -299,7 +299,7 @@ public class PlayerGamesAdditionalDataTest {
 
         PlayerController controller = mock(PlayerController.class);
         controllers.add(controller);
-        return playerGames.add(player, game, controller);
+        return playerGames.add(player, game, controller, mock(PlayerController.class));
     }
 
     private String getNextName() {

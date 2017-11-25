@@ -23,6 +23,8 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.transport.ApplicationContextListener;
+import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -33,14 +35,15 @@ import java.io.IOException;
 
 public class PlayerSocketCreator implements WebSocketCreator {
 
-    private Logger LOGGER = LoggerFactory.getLogger(TransportWebSocketServlet.class);
+    private Logger LOGGER = LoggerFactory.getLogger(PlayerSocketCreator.class);
 
+    private PlayerTransport transport;
     private AuthenticationService authenticationService;
-    private WebSocketPlayerTransport transport;
 
-    public PlayerSocketCreator() {
-        authenticationService = ApplicationContextListener.getContext().getBean(AuthenticationService.class);
-        transport = ApplicationContextListener.getContext().getBean(WebSocketPlayerTransport.class);
+    public PlayerSocketCreator(PlayerTransport transport,
+                               AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+        this.transport = transport;
     }
 
     @Override

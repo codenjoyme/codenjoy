@@ -40,7 +40,7 @@
 
     <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/ajax-loader.js"></script>
-    <script src="${ctx}/resources/js/board-data.js"></script>
+    <script src="${ctx}/resources/js/board-data-ws.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
     <script src="${ctx}/resources/js/canvases-text.js"></script>
     <script src="${ctx}/resources/js/layout.js"></script>

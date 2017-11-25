@@ -28,18 +28,29 @@ import java.io.IOException;
 public interface PlayerTransport<TEndpointSettings, TResponseContext> {
     /**
      * Send game state to the player by given player id.
-     * @param id - registered player id
-     * @param state - GameState instance
+     * @param id registered player id
+     * @param state GameState instance
      * @throws IOException
      */
     void sendState(String id, GameState state) throws IOException;
 
     /**
+     * Случается, когда игрок зарегистрировался в игре на страничке регистрации
      * Only one endpoint per player is allowed
-     * @param id player unique identifier
-     * @param endpointSettings specific endpoint settings
+     * @param id идентификатор пользователя - его email
+     * @param responseHandler обработчик
+     * @param endpointSettings дополнительные данные
      */
     void registerPlayerEndpoint(String id, PlayerResponseHandler<TResponseContext> responseHandler, TEndpointSettings endpointSettings);
 
     void unregisterPlayerEndpoint(String id);
+
+    /**
+     * Случается, когда игрок подключился по вебсокетам к серверу
+     * @param id идентификатор пользователя - его email
+     * @param playerSocket вебсокет
+     */
+    void registerPlayerSocket(String id, PlayerSocket playerSocket);
+
+    void unregisterPlayerSocket(String id);
 }

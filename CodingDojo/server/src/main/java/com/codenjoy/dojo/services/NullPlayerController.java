@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services;
 
 import java.io.IOException;
 
-public class NullPlayerController implements PlayerController {
+public class NullPlayerController implements PlayerController<Void, Void> {
 
     public static final PlayerController INSTANCE = new NullPlayerController();
 
@@ -34,12 +34,12 @@ public class NullPlayerController implements PlayerController {
     }
 
     @Override
-    public void requestControl(Player player, String board) throws IOException {
+    public void requestControl(Player player, Void nothing) throws IOException {
         // do nothing
     }
 
     @Override
-    public void registerPlayerTransport(Player player, Joystick joystick) {
+    public void registerPlayerTransport(Player player, Void nothing) {
         // do nothing
     }
 

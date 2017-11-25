@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.transport.screen.ws;
 
 /*-
  * #%L
@@ -23,12 +23,26 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.transport.ApplicationContextListener;
+import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
+import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-public class TransportWebSocketServlet extends WebSocketServlet{
+public class ScreenWebSocketServlet extends WebSocketServlet{
+
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        webSocketServletFactory.setCreator(new PlayerSocketCreator());
+        PlayerSocketCreator creator = new PlayerSocketCreator(getPlayerTransport(), getAuthenticationService());
+        webSocketServletFactory.setCreator(creator);
+    }
+
+    private PlayerTransport getPlayerTransport() {
+        return ApplicationContextListener.getContext().getBean(ScreenPlayerTransport.class);
+    }
+
+    public AuthenticationService getAuthenticationService() {
+        return ApplicationContextListener.getContext().getBean(AuthenticationService.class);
     }
 }

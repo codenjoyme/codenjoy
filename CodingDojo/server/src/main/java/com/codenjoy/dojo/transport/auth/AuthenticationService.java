@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.transport.auth;
 
 /*-
  * #%L
@@ -23,13 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
-public class NullPlayerGame extends PlayerGame {
+import javax.servlet.http.HttpServletRequest;
 
-    public static final PlayerGame INSTANCE = new NullPlayerGame();
-
-    private NullPlayerGame() {
-        super(NullPlayer.INSTANCE, NullGame.INSTANCE,
-                NullPlayerController.INSTANCE, NullPlayerController.INSTANCE,
-                null);
-    }
+public interface AuthenticationService {
+    String authenticate(HttpServletRequest request);
 }

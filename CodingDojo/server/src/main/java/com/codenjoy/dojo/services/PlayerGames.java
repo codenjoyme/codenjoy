@@ -62,12 +62,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return NullPlayerGame.INSTANCE;
     }
 
-    public PlayerGame add(Player player, Game game, PlayerController controller) {
+    public PlayerGame add(Player player, Game game, PlayerController userController, PlayerController screenController) {
         PlayerSpy spy = statistics.newPlayer(player);
 
         LazyJoystick joystick = new LazyJoystick(game, spy);
-        controller.registerPlayerTransport(player, joystick);
-        PlayerGame result = new PlayerGame(player, game, controller, joystick);
+        userController.registerPlayerTransport(player, joystick);
+        screenController.registerPlayerTransport(player, null);
+        PlayerGame result = new PlayerGame(player, game, userController, screenController, joystick);
         playerGames.add(result);
         return result;
     }

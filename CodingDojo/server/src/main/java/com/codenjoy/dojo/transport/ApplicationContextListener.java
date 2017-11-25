@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.transport;
 
 /*-
  * #%L
@@ -23,5 +23,21 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-public class AuthenticationException extends RuntimeException {
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+
+@Component("wsContextListener")
+public class ApplicationContextListener implements ApplicationContextAware {
+    private static ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    public static ApplicationContext getContext() {
+        return applicationContext;
+    }
 }

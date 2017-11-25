@@ -25,24 +25,24 @@ package com.codenjoy.dojo.services;
 
 import java.io.IOException;
 
-public interface PlayerController {
+public interface PlayerController<TData, TControl> {
 
     /**
-     * С помощью этого метода PlayerServiceImpl отправляет ws
-     * клиенту текстовое представление борды.
+     * С помощью этого метода PlayerServiceImpl отправляет через ws
+     * клиентам информацию об игре
      * @param player Плеер, которому отправляется ответ
-     * @param board Борда в текстовом виде
+     * @param data Данные к отправке
      * @throws IOException если что не так
      */
-    void requestControl(final Player player, final String board) throws IOException;
+    void requestControl(final Player player, final TData data) throws IOException;
 
     /**
      * В момент регистрации пользователя для него создается канал связи
      * к которому потом можно будет подключиться по ws и управлять игрой
      * @param player Новозарегистрированный пользователь
-     * @param joystick Джойстик, которым пользователь может управлять
+     * @param control Джойстик, которым пользователь может управлять или дргой контрол
      */
-    void registerPlayerTransport(Player player, Joystick joystick);
+    void registerPlayerTransport(Player player, TControl control);
 
     /**
      * В случае, если пользователь не хочет больше играть, то и канал связи

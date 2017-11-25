@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.transport.ws;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2017 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,13 +23,18 @@ package com.codenjoy.dojo.services;
  */
 
 
-public class NullPlayerGame extends PlayerGame {
+/**
+ * Created by indigo on 2000-11-25.
+ */
+public class NullPlayerResponseHandler implements PlayerResponseHandler {
 
-    public static final PlayerGame INSTANCE = new NullPlayerGame();
+    public static PlayerResponseHandler NULL = new NullPlayerResponseHandler();
 
-    private NullPlayerGame() {
-        super(NullPlayer.INSTANCE, NullGame.INSTANCE,
-                NullPlayerController.INSTANCE, NullPlayerController.INSTANCE,
-                null);
+    @Override
+    public void onResponseComplete(String responseContent, Object o) {
+    }
+
+    @Override
+    public void onError(TransportErrorType type, Object o) {
     }
 }
