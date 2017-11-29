@@ -29,6 +29,7 @@
     text-shadow: 6px 6px 10px black, 4px 4px 4px red;
     font-size:90px;
     display:none;
+    line-height:0.8;
 }
 
 .width-calculator{

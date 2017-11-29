@@ -326,7 +326,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             return;
         }
 
-        var text = '<center>' + infoPool.join('<br><br>') + '</center>';
+        var text = '<center>' + infoPool.join('<br>') + '</center>';
         infoPool.splice(0, infoPool.length);
 
         var canvas = $("#" + toId(playerName));
