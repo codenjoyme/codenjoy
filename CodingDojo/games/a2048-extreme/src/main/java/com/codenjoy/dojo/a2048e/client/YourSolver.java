@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "apofig@gmail.com";
+    private static final String USER_NAME = "your@email.com";
 
     private Dice dice;
     private Board board;
@@ -47,7 +47,7 @@ public class YourSolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        return Direction.random().toString();
+        return Direction.UP.toString();
     }
 
     public static void main(String[] args) {

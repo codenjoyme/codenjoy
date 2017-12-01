@@ -50,32 +50,31 @@ public class SolverTest {
         return (Board)new Board().forString(board);
     }
 
-    @Ignore
     @Test
     public void should() {
         asertAI(" 2   " +
                 "     " +
                 "  2  " +
                 "     " +
-                "     ", Direction.DOWN);
+                "     ", Direction.UP);
 
         asertAI(" 22  " +
                 "     " +
                 "     " +
                 "  2  " +
-                "   2 ", Direction.DOWN);
+                "   2 ", Direction.UP);
 
         asertAI(" 222 " +
                 "2 4  " +
                 "     " +
                 "2    " +
-                "     ", Direction.DOWN);
+                "     ", Direction.UP);
 
         asertAI("4222 " +
                 "  4  " +
                 "     " +
                 "   2 " +
-                "2    ", Direction.DOWN);
+                "2    ", Direction.UP);
     }
 
 
