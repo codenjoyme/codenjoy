@@ -34,6 +34,11 @@ public class NullPlayerController implements PlayerController<Void, Void> {
     }
 
     @Override
+    public void requestControlToAll(Void aVoid) throws IOException {
+        // do nothing
+    }
+
+    @Override
     public void requestControl(Player player, Void nothing) throws IOException {
         // do nothing
     }

@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -284,5 +285,80 @@ public class PlayerTransportTest {
         verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
         verifyNoMoreInteractions(webSocket2.getSession().getRemote());
         verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
+
+    @Test
+    public void shouldAllClientsGetMessage_whenSendDataToAllWebSocketClients() throws IOException {
+        // given
+        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+
+        createServerWebSocket("id1");
+        createServerWebSocket("id2");
+        createServerWebSocket("id3");
+
+        PlayerSocket webSocket1 = connectWebSocketClient("id1");
+        PlayerSocket webSocket2 = connectWebSocketClient("id2");
+        PlayerSocket webSocket3 = connectWebSocketClient("id1");
+
+        // when client answer
+        answerClient(webSocket1);
+        answerClient(webSocket2);
+        answerClient(webSocket3);
+
+        // when send state
+        transport.sendStateToAll(new LinkedHashMap<String, Integer>(){{
+            put("one", 1);
+            put("two", 2);
+            put("three", 3);
+        }});
+
+        // then
+        verify(webSocket1.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(webSocket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
+
+    @Test
+    public void shouldCollectErrors_whenSendDataToAllWebSocketClients() throws IOException {
+        // given
+        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+
+        createServerWebSocket("id1");
+        createServerWebSocket("id2");
+        createServerWebSocket("id3");
+
+        PlayerSocket webSocket1 = connectWebSocketClient("id1");
+        PlayerSocket webSocket2 = connectWebSocketClient("id2");
+        PlayerSocket webSocket3 = connectWebSocketClient("id3");
+
+        // when client answer
+        answerClient(webSocket1);
+        answerClient(webSocket2);
+        answerClient(webSocket3);
+
+        // simulate errors
+        RemoteEndpoint remote1 = webSocket1.getSession().getRemote();
+        doThrow(new IOException("Error1")).when(remote1).sendString(anyString());
+
+        RemoteEndpoint remote2 = webSocket2.getSession().getRemote();
+        doThrow(new IOException("Error2")).when(remote2).sendString(anyString());
+
+        RemoteEndpoint remote3 = webSocket3.getSession().getRemote();
+        doThrow(new IOException("Error3")).when(remote3).sendString(anyString());
+
+        // when send state
+        try {
+            transport.sendStateToAll(new LinkedHashMap<String, Integer>() {{
+                put("one", 1);
+                put("two", 2);
+                put("three", 3);
+            }});
+
+            fail("Expected exception");
+        } catch (IOException e) {
+            // then
+            assertEquals("Error during send state to all players: [Error1, Error2, Error3]",
+                    e.getMessage());
+        }
     }
 }

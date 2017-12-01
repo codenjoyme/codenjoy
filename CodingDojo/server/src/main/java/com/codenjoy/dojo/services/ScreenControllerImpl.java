@@ -42,15 +42,23 @@ public class ScreenControllerImpl implements PlayerController<Map<ScreenRecipien
         registerPlayerTransport(Player.ANONYMOUS, null);
     }
 
+    @Override
+    public void requestControlToAll(Map<ScreenRecipient, ScreenData> data) throws IOException {
+        transport.sendStateToAll(data);
+    }
+
+    @Override
     public void requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
         transport.sendState(player.getName(), data);
     }
 
+    @Override
     public void registerPlayerTransport(Player player, Void nothing) {
         transport.registerPlayerEndpoint(player.getName(),
                 new ScreenResponseHandlerImpl(transport, player));
     }
 
+    @Override
     public void unregisterPlayerTransport(Player player) {
         transport.unregisterPlayerEndpoint(player.getName());
     }

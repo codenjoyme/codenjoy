@@ -30,6 +30,14 @@ import java.io.IOException;
 import java.util.function.Function;
 
 public interface PlayerTransport {
+
+    /**
+     * Send game state to the all players
+     * @param state state
+     * @throws IOException
+     */
+    void sendStateToAll(Object state) throws IOException;
+
     /**
      * Send game state to the player by given player id.
      * @param id registered player id

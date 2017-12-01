@@ -273,21 +273,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
-        for (PlayerGame playerGame : playerGames) {
-            Player player = playerGame.getPlayer();
-            PlayerController screen = playerGame.getScreen();
-            try {
-                screen.requestControl(player, map);
-            } catch (Exception e) {
-                logger.error("Unable to send screen updates to player " + player.getName() +
-                        " URL: " + player.getCallbackUrl(), e);
-                e.printStackTrace();
-            }
-        }
         try {
-            screenController.requestControl(Player.ANONYMOUS, map);
+            screenController.requestControlToAll(map);
         } catch (Exception e) {
-            logger.error("Unable to send screen updates to anonymous players", e);
+            logger.error("Unable to send screen updates to all players", e);
             e.printStackTrace();
         }
     }

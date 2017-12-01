@@ -29,6 +29,14 @@ public interface PlayerController<TData, TControl> {
 
     /**
      * С помощью этого метода PlayerServiceImpl отправляет через ws
+     * всем клиентам информацию об игре
+     * @param data Данные к отправке
+     * @throws IOException если что не так
+     */
+    void requestControlToAll(TData data) throws IOException;
+
+    /**
+     * С помощью этого метода PlayerServiceImpl отправляет через ws
      * клиентам информацию об игре
      * @param player Плеер, которому отправляется ответ
      * @param data Данные к отправке

@@ -24,17 +24,40 @@ package com.codenjoy.dojo.transport.ws;
 
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 
 public class PlayerTransportImpl implements PlayerTransport {
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-    private Map<String, SocketsHandlerPair> endpoints = new HashMap<>();
+    private Map<String, SocketsHandlerPair> endpoints = new LinkedHashMap<>();
     private Map<PlayerSocket, Function<Object, Object>> filters = new HashMap<>();
     private Function<Object, Object> defaultFilter;
+
+    @Override
+    public void sendStateToAll(Object state) throws IOException {
+        lock.readLock().lock();
+        try {
+            List<String> messages = new LinkedList<>();
+            for (SocketsHandlerPair pair : endpoints.values()) {
+                if (pair == null || pair.noSockets()) {
+                    continue;
+                }
+                try {
+                    pair.sendMessage(state);
+                } catch (IOException e) {
+                    messages.add(e.getMessage());
+                }
+            }
+            if (!messages.isEmpty()) {
+                throw new IOException("Error during send state to all players: " +
+                        messages.toString());
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
 
     @Override
     public void sendState(String id, Object state) throws IOException {

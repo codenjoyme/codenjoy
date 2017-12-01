@@ -31,15 +31,23 @@ public class PlayerControllerImpl implements PlayerController<String, Joystick> 
 
     private PlayerTransport transport;
 
+    @Override
+    public void requestControlToAll(String board) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void requestControl(Player player, String board) throws IOException {
         transport.sendState(player.getName(), new BoardGameState(board));
     }
 
+    @Override
     public void registerPlayerTransport(Player player, Joystick joystick) {
         transport.registerPlayerEndpoint(player.getName(),
                 new PlayerResponseHandlerImpl(player, joystick));
     }
 
+    @Override
     public void unregisterPlayerTransport(Player player) {
         transport.unregisterPlayerEndpoint(player.getName());
     }
