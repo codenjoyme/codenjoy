@@ -37,4 +37,9 @@ public class BoardGameState implements GameState {
     public String asString() {
         return "board=" + board;
     }
+
+    @Override
+    public String toString() {
+        return asString();
+    }
 }

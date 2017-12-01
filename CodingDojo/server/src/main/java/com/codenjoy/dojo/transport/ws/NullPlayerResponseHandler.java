@@ -33,22 +33,22 @@ public class NullPlayerResponseHandler implements PlayerResponseHandler {
     public static PlayerResponseHandler NULL = new NullPlayerResponseHandler();
 
     @Override
-    public void onResponseComplete(String responseContent) {
+    public void onResponseComplete(PlayerSocket socket, String responseContent) {
         // do nothing
     }
 
     @Override
-    public void onClose(int statusCode, String reason) {
+    public void onClose(PlayerSocket socket, int statusCode, String reason) {
         // do nothing
     }
 
     @Override
-    public void onError(Throwable error) {
+    public void onError(PlayerSocket socket, Throwable error) {
         // do nothing
     }
 
     @Override
-    public void onConnect(Session session) {
+    public void onConnect(PlayerSocket socket, Session session) {
         // do nothing
     }
 }

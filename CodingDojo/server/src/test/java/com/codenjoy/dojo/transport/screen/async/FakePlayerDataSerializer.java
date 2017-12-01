@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -23,7 +23,6 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-import com.codenjoy.dojo.transport.screen.async.PlayerDataSerializer;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;

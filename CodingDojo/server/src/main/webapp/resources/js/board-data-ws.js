@@ -47,23 +47,6 @@ function initBoards(players, allPlayersScreen, gameName, contextPath){
 
             $('body').css('background-color', 'white');
 
-            // TODO:1 Вот тут надо вообще другим запросом чат брать из другого скрина, чтобы тут им и не пахло
-            if (chatLog == null) { // uses for chat.js
-                chatLog = data['#CHAT'].messages;
-            }
-            delete data['#CHAT'];
-
-            if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
-                var filtered = {};
-                for (var key in data) {
-                    if (data[key].gameName == gameName) {
-                        filtered[key] = data[key];
-                    }
-                }
-
-                data = filtered;
-            }
-
             $('body').trigger('board-updated', data);
 
             updatePlayersInfo();
@@ -83,8 +66,9 @@ function initBoards(players, allPlayersScreen, gameName, contextPath){
 
         var request = {
             'name':'getScreen',
-            'allPlayersScreen' : players.length == 0,
-            'players' : playerNames
+            'allPlayersScreen' : allPlayersScreen,
+            'players' : playerNames,
+            'gameName' : gameName
         }
 
         socket.send(JSON.stringify(request));

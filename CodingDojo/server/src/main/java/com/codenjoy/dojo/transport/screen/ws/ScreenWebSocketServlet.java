@@ -25,9 +25,9 @@ package com.codenjoy.dojo.transport.screen.ws;
 
 import com.codenjoy.dojo.transport.ApplicationContextListener;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
@@ -35,7 +35,10 @@ public class ScreenWebSocketServlet extends WebSocketServlet{
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        PlayerSocketCreator creator = new PlayerSocketCreator(getPlayerTransport(), getAuthenticationService());
+        PlayerSocketCreator creator =
+                new PlayerSocketCreator(getPlayerTransport(),
+                        getAuthenticationService(),
+                        PlayerSocket.CLIENT_SEND_FIRST);
         webSocketServletFactory.setCreator(creator);
     }
 

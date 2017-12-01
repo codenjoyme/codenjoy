@@ -19,8 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var chatLog = null;
-
 function initChat(playerName, registered, code, contextPath, gameName) {
 
     var chatInfo = $("#chat-info");
@@ -112,7 +110,7 @@ function initChat(playerName, registered, code, contextPath, gameName) {
         return '<span style="color:silver;">' + string + '</span></br>';
     }
 
-    function uncodeLog(value) {
+    function encodeLog(value) {
         var log = unescapeUnicode(value);
         var lines = log.split('\\n');
         var result = "";
@@ -168,12 +166,10 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     }
 
     function updateChat() {
-        if (chatLog != null) {
-            chat.html(uncodeLog(chatLog));
-
-            chatLog = null;
-        }
-        setTimeout(updateChat, 1000);
+        loadData('rest/chat/' + game.gameName + '/log', function(log) {
+            chat.html(encodeLog(log));
+            setTimeout(updateChat, 2000);
+        });
     }
 
     updateChat();

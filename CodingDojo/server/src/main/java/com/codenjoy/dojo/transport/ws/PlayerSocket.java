@@ -31,26 +31,31 @@ import java.io.IOException;
 @WebSocket
 public class PlayerSocket {
 
+    public static final boolean CLIENT_SEND_FIRST = true;
+    public static final boolean SERVER_SEND_FIRST = !CLIENT_SEND_FIRST;
+
     private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
     private Session session;
+    private String id;
     private boolean requested;
 
-    public PlayerSocket() {
-        requested = false;
+    public PlayerSocket(String id, boolean whoFirst) {
+        this.id = id;
+        requested = whoFirst;
     }
 
     @OnWebSocketMessage
     public void onWebSocketText(String message) {
         if (requested) {
             requested = false;
-            handler.onResponseComplete(message);
+            handler.onResponseComplete(this, message);
         }
     }
 
     @OnWebSocketClose
     public void onWebSocketClose(int statusCode, String reason) {
         requested = false;
-        handler.onClose(statusCode, reason);
+        handler.onClose(this, statusCode, reason);
         if (session == null) {
             return;
         }
@@ -60,12 +65,12 @@ public class PlayerSocket {
     @OnWebSocketConnect
     public void onWebSocketConnect(Session session) {
         this.session = session;
-        handler.onConnect(session);
+        handler.onConnect(this, session);
     }
 
     @OnWebSocketError
     public void onWebSocketError(Throwable cause) {
-        handler.onError(cause);
+        handler.onError(this, cause);
     }
 
     public void sendMessage(String message) throws IOException {
@@ -86,5 +91,13 @@ public class PlayerSocket {
 
     public boolean isOpen() {
         return session != null && session.isOpen();
+    }
+
+    Session getSession() {
+        return session;
+    }
+
+    public String getId() {
+        return id;
     }
 }

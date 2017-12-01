@@ -31,14 +31,13 @@ public class PlayerControllerImpl implements PlayerController<String, Joystick> 
 
     private PlayerTransport transport;
 
-    public void requestControl(final Player player, final String board) throws IOException {
+    public void requestControl(Player player, String board) throws IOException {
         transport.sendState(player.getName(), new BoardGameState(board));
     }
 
     public void registerPlayerTransport(Player player, Joystick joystick) {
         transport.registerPlayerEndpoint(player.getName(),
-                new PlayerResponseHandlerImpl(player, joystick),
-                player.getCallbackUrl());
+                new PlayerResponseHandlerImpl(player, joystick));
     }
 
     public void unregisterPlayerTransport(Player player) {
@@ -47,5 +46,6 @@ public class PlayerControllerImpl implements PlayerController<String, Joystick> 
 
     public void setTransport(PlayerTransport transport) {
         this.transport = transport;
+        transport.setDefaultFilter(data -> data.toString());
     }
 }

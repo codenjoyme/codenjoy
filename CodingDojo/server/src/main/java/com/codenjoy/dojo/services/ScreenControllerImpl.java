@@ -38,14 +38,13 @@ public class ScreenControllerImpl implements PlayerController<Map<ScreenRecipien
 
     private PlayerTransport transport;
 
-    public void requestControl(final Player player, final Map<ScreenRecipient, ScreenData> data) throws IOException {
-        transport.sendState(player.getName(), () -> new JSONObject(data).toString());
+    public void requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
+        transport.sendState(player.getName(), data);
     }
 
     public void registerPlayerTransport(Player player, Void nothing) {
         transport.registerPlayerEndpoint(player.getName(),
-                new ScreenResponseHandlerImpl(player),
-                player.getCallbackUrl());
+                new ScreenResponseHandlerImpl(transport, player));
     }
 
     public void unregisterPlayerTransport(Player player) {

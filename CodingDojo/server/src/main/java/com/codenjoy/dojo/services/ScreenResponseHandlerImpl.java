@@ -23,51 +23,81 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
+import com.codenjoy.dojo.transport.ws.PlayerSocket;
+import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class ScreenResponseHandlerImpl implements PlayerResponseHandler {
 
     private static Logger logger = LoggerFactory.getLogger(ScreenResponseHandlerImpl.class);
 
+    private PlayerTransport transport;
     private Player player;
 
-    public ScreenResponseHandlerImpl(Player player) {
+    public ScreenResponseHandlerImpl(PlayerTransport transport, Player player) {
+        this.transport = transport;
         this.player = player;
     }
 
     @Override
-    public void onResponseComplete(String responseContent) {
+    public void onResponseComplete(PlayerSocket socket, String responseContent) {
         JSONObject request = new JSONObject(responseContent);
         if (request.getString("name").equals("getScreen")) {
             boolean allPlayersScreen = request.getBoolean("allPlayersScreen");
+
             List<String> players = new LinkedList<>();
             request.getJSONArray("players").forEach(player -> players.add((String) player));
-            System.out.printf("allPlayersScreen = %s, players = %s\n", allPlayersScreen, players);
+
+            String gameName = request.getString("gameName");
+
+            transport.setFilterFor(socket,
+                    data -> new JSONObject(filter((Map<Player, PlayerData>) data,
+                            allPlayersScreen, players, gameName)));
         }
     }
 
+    private Map<Player, PlayerData> filter(Map<Player, PlayerData> data, boolean allPlayersScreen, List<String> players, String gameName) {
+        Map<Player, PlayerData> result = new HashMap<>();
+        for (Map.Entry<Player, PlayerData> entry : data.entrySet()) {
+            Player player = entry.getKey();
+            if (!player.getGameName().equals(gameName)) {
+                continue;
+            }
+
+            if (!allPlayersScreen && !players.contains(player.getName())) {
+                continue;
+            }
+
+            result.put(player, entry.getValue());
+        }
+        return result;
+    }
+
     @Override
-    public void onClose(int statusCode, String reason) {
+    public void onClose(PlayerSocket socket, int statusCode, String reason) {
         logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
                 new Object[]{player.getName(), statusCode, reason});
     }
 
     @Override
-    public void onError(Throwable error) {
+    public void onError(PlayerSocket socket, Throwable error) {
         logger.error("Request error: player: {}, error: {}",
                 new Object[]{player.getName(), error});
     }
 
     @Override
-    public void onConnect(Session session) {
-        logger.error("Connected: player: {}, session: {}",
+    public void onConnect(PlayerSocket socket, Session session) {
+        logger.debug("Connected: player: {}, session: {}",
                 new Object[]{player.getName(), session});
     }
 }

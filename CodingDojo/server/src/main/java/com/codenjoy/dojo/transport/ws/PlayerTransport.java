@@ -23,25 +23,28 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.transport.screen.ScreenData;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.function.Function;
 
 public interface PlayerTransport {
     /**
      * Send game state to the player by given player id.
      * @param id registered player id
-     * @param state GameState instance
+     * @param state state
      * @throws IOException
      */
-    void sendState(String id, GameState state) throws IOException;
+    void sendState(String id, Object state) throws IOException;
 
     /**
      * Случается, когда игрок зарегистрировался в игре на страничке регистрации
      * Only one endpoint per player is allowed
      * @param id идентификатор пользователя - его email
      * @param responseHandler обработчик
-     * @param endpointSettings дополнительные данные
      */
-    void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object endpointSettings);
+    void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler);
 
     /**
      * Случается, когда игрока удалили на админке
@@ -58,7 +61,11 @@ public interface PlayerTransport {
 
     /**
      * Случается, когда игрок отключился вебсокет-клиентом от сервера
-     * @param id идентификатор пользователя - его email
+     * @param socket
      */
-    void unregisterPlayerSocket(String id);
+    void unregisterPlayerSocket(PlayerSocket socket);
+
+    void setFilterFor(PlayerSocket socket, Function<Object, Object> filter);
+
+    void setDefaultFilter(Function<Object, Object> filter);
 }

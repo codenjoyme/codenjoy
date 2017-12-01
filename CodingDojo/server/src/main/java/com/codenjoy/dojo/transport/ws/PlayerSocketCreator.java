@@ -23,7 +23,6 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import com.codenjoy.dojo.transport.ApplicationContextListener;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
@@ -39,17 +38,21 @@ public class PlayerSocketCreator implements WebSocketCreator {
 
     private PlayerTransport transport;
     private AuthenticationService authenticationService;
+    private boolean waitForClient;
 
     public PlayerSocketCreator(PlayerTransport transport,
-                               AuthenticationService authenticationService) {
+                               AuthenticationService authenticationService,
+                               boolean waitForClient)
+    {
         this.authenticationService = authenticationService;
         this.transport = transport;
+        this.waitForClient = waitForClient;
     }
 
     @Override
-    public Object createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse response) {
+    public PlayerSocket createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse response) {
         String authId = authenticationService.authenticate(servletUpgradeRequest.getHttpServletRequest());
-        PlayerSocket playerSocket = new PlayerSocket();
+        PlayerSocket playerSocket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
             try {
                 LOGGER.warn("Unregistered user {}", authId);

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -23,35 +23,22 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-public class SomePlot {
-    private int x;
-    private int y;
-    private SomePlotColor color;
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 
-    public SomePlot(int x, int y, SomePlotColor color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-    }
+public class FakePlayer implements ScreenRecipient {
+    private String name;
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public SomePlotColor getColor() {
-        return color;
+    public FakePlayer(String name) {
+        this.name = name;
     }
 
     @Override
-    public String toString() {
-        return "SomePlot{" +
-                "x=" + x +
-                ", y=" + y +
-                ", color=" + color +
-                '}';
+    public String getName() {
+        return name;
     }
+
+    public String toString() {
+        return name;
+    }
+
 }

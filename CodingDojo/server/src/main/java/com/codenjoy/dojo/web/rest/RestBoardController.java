@@ -24,6 +24,8 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,7 @@ public class RestBoardController {
 
     @Autowired private GameService gameService;
     @Autowired private ServletContext servletContext;
+    @Autowired private ChatService chatService;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -122,6 +125,13 @@ public class RestBoardController {
         GameType game = gameService.getGame(gameName);
 
         return new GameTypeInfo(game);
+    }
+
+    @RequestMapping(value = "/chat/{gameName}/log", method = RequestMethod.GET)
+    @ResponseBody
+    public ChatLog getChatLog(@PathVariable("gameName") String gameName) {
+        String log = chatService.getChatLog();
+        return new ChatLog(log);
     }
 
 }

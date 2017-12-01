@@ -25,15 +25,20 @@ package com.codenjoy.dojo.transport.control;
 
 import com.codenjoy.dojo.transport.ApplicationContextListener;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-public class ControlWebSocketServlet extends WebSocketServlet{
+public class ControlWebSocketServlet extends WebSocketServlet {
+
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        PlayerSocketCreator creator = new PlayerSocketCreator(getPlayerTransport(), getAuthenticationService());
+        PlayerSocketCreator creator =
+                new PlayerSocketCreator(getPlayerTransport(),
+                        getAuthenticationService(),
+                        PlayerSocket.SERVER_SEND_FIRST);
         webSocketServletFactory.setCreator(creator);
     }
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L

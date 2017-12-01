@@ -300,9 +300,7 @@ public class PlayerServiceImplTest {
                 scores + ", " +
                 heroesData + "]");
 
-        expected.put(PlayerServiceImpl.CHAT, "ChatLog:chat");
-
-        assertEquals(3, data.size());
+        assertEquals(2, data.size());
 
         for (Map.Entry<ScreenRecipient, Object> entry : data.entrySet()) {
             assertEquals(

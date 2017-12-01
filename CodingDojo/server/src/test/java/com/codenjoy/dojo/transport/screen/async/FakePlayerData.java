@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -22,6 +22,8 @@ package com.codenjoy.dojo.transport.screen;
  * #L%
  */
 
+
+import com.codenjoy.dojo.transport.screen.ScreenData;
 
 import java.util.List;
 

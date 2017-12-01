@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
+import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,27 +40,27 @@ public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
     }
 
     @Override
-    public void onResponseComplete(String responseContent) {
+    public void onResponseComplete(PlayerSocket socket, String responseContent) {
         logger.debug("Received response: {} from player: {}",
                 responseContent, player.getName());
         new PlayerCommand(joystick, responseContent).execute();
     }
 
     @Override
-    public void onClose(int statusCode, String reason) {
+    public void onClose(PlayerSocket socket, int statusCode, String reason) {
         logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
                 new Object[]{player.getName(), statusCode, reason});
     }
 
     @Override
-    public void onError(Throwable error) {
+    public void onError(PlayerSocket socket, Throwable error) {
         logger.error("Request error: player: {}, error: {}",
                     new Object[]{player.getName(), error});
     }
 
     @Override
-    public void onConnect(Session session) {
-        logger.error("Connected: player: {}, session: {}",
+    public void onConnect(PlayerSocket socket, Session session) {
+        logger.debug("Connected: player: {}, session: {}",
                 new Object[]{player.getName(), session});
     }
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -23,10 +23,35 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-public enum SomePlotColor {
-    BLUE, CYAN, ORANGE, YELLOW, GREEN, PURPLE, RED;
+public class SomePlot {
+    private int x;
+    private int y;
+    private SomePlotColor color;
 
-    public String getName() {
-        return this.name().toLowerCase();
+    public SomePlot(int x, int y, SomePlotColor color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public SomePlotColor getColor() {
+        return color;
+    }
+
+    @Override
+    public String toString() {
+        return "SomePlot{" +
+                "x=" + x +
+                ", y=" + y +
+                ", color=" + color +
+                '}';
     }
 }

@@ -43,12 +43,6 @@ function initBoards(players, allPlayersScreen, gameName, contextPath){
                 success:function (data) {
                     $('body').css('background-color', 'white');
 
-                    // TODO:1 Вот тут надо вообще другим запросом чат брать из другого скрина, чтобы тут им и не пахло
-                    if (chatLog == null) { // uses for chat.js
-                        chatLog = data['#CHAT'].messages;
-                    }
-                    delete data['#CHAT'];
-
                     if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
                         var filtered = {};
                         for (var key in data) {

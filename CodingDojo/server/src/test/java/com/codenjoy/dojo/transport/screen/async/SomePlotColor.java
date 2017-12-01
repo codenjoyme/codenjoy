@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 Codenjoy
+ * Copyright (C) 2016 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,14 +23,10 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-import org.junit.Test;
+public enum SomePlotColor {
+    BLUE, CYAN, ORANGE, YELLOW, GREEN, PURPLE, RED;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-02.
- */
-public class JsonPlayerDataSerializerTest {
-    @Test
-    public void testPerformance() {
-
+    public String getName() {
+        return this.name().toLowerCase();
     }
 }

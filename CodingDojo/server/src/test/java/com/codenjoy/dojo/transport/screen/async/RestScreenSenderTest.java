@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
@@ -23,9 +23,8 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-import com.codenjoy.dojo.transport.MockAsyncContext;
-import com.codenjoy.dojo.transport.screen.async.PlayerScreenUpdateRequest;
-import com.codenjoy.dojo.transport.screen.async.RestScreenSender;
+import com.codenjoy.dojo.transport.screen.ScreenData;
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.jayway.restassured.path.json.JsonPath;
 import org.junit.Before;
 import org.junit.Ignore;

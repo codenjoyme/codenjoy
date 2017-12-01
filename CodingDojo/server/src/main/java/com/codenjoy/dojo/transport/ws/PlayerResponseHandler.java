@@ -27,11 +27,11 @@ import org.eclipse.jetty.websocket.api.Session;
 
 public interface PlayerResponseHandler {
 
-    void onResponseComplete(String responseContent);
+    void onResponseComplete(PlayerSocket socket, String responseContent);
 
-    void onClose(int statusCode, String reason);
+    void onClose(PlayerSocket socket, int statusCode, String reason);
 
-    void onError(Throwable error);
+    void onError(PlayerSocket socket, Throwable error);
 
-    void onConnect(Session session);
+    void onConnect(PlayerSocket socket, Session session);
 }

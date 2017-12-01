@@ -43,7 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component("playerService")
 public class PlayerServiceImpl implements PlayerService {
-    public static final String CHAT = "#CHAT";
+
     private static Logger logger = DLoggerFactory.getLogger(PlayerServiceImpl.class);
     private static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
@@ -68,9 +68,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     private GameService gameService;
-
-    @Autowired
-    private ChatService chatService;
 
     @Autowired
     private AutoSaver autoSaver;
@@ -230,13 +227,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void sendScreenUpdates() {
-        HashMap<ScreenRecipient, ScreenData> map = buildScreenData();
+        Map<ScreenRecipient, ScreenData> map = buildScreenData();
         sendScreenForAsync(map);
         sendScreenForWebsockets(map);
     }
 
-    private HashMap<ScreenRecipient, ScreenData> buildScreenData() {
-        HashMap<ScreenRecipient, ScreenData> map = new HashMap<ScreenRecipient, ScreenData>();
+    private Map<ScreenRecipient, ScreenData> buildScreenData() {
+        Map<ScreenRecipient, ScreenData> map = new HashMap<>();
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = playerGames.getGamesDataMap();
@@ -270,27 +267,14 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
 
-        // TODO:1 сделать вообще получение чата отдельным запросом, оно надо там каждую секунду?
-        String chatLog = chatService.getChatLog();
-        map.put(new ScreenRecipient() {
-            @Override
-            public String getName() {
-                return CHAT;
-            }
-
-            @Override
-            public String toString() {
-                return getName();
-            }
-        }, new ChatLog(chatLog));
         return map;
     }
 
-    private void sendScreenForAsync(HashMap<ScreenRecipient, ScreenData> map) {
+    private void sendScreenForAsync(Map<ScreenRecipient, ScreenData> map) {
         screenSender.sendUpdates(map);
     }
 
-    private void sendScreenForWebsockets(HashMap<ScreenRecipient, ScreenData> map) {
+    private void sendScreenForWebsockets(Map<ScreenRecipient, ScreenData> map) {
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             PlayerController screen = playerGame.getScreen();

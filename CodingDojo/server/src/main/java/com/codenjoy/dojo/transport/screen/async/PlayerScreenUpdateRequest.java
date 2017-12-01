@@ -65,8 +65,6 @@ public class PlayerScreenUpdateRequest extends UpdateRequest {
 
     @Override
     public boolean isApplicableFor(ScreenRecipient recipient) {
-        return isForAllPlayers() || getPlayersToUpdate().contains(recipient.getName())
-                // TODO:1 вот это очень большой хак, надо придумать другой способ отправки
-                || recipient.getName().equals(PlayerServiceImpl.CHAT);
+        return isForAllPlayers() || getPlayersToUpdate().contains(recipient.getName());
     }
 }

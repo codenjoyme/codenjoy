@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.transport.screen;
+package com.codenjoy.dojo.transport.screen.async;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2017 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,20 +23,14 @@ package com.codenjoy.dojo.transport.screen;
  */
 
 
-public class FakePlayer implements ScreenRecipient {
-    private String name;
+import org.junit.Test;
 
-    public FakePlayer(String name) {
-        this.name = name;
+/**
+ * Created by Oleksandr_Baglai on 2017-09-02.
+ */
+public class JsonPlayerDataSerializerTest {
+    @Test
+    public void testPerformance() {
+
     }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    public String toString() {
-        return name;
-    }
-
 }

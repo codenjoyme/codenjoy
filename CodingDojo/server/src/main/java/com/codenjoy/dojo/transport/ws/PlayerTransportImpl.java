@@ -27,14 +27,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Function;
 
 public class PlayerTransportImpl implements PlayerTransport {
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private Map<String, SocketsHandlerPair> endpoints = new HashMap<>();
+    private Map<PlayerSocket, Function<Object, Object>> filters = new HashMap<>();
+    private Function<Object, Object> defaultFilter;
 
     @Override
-    public void sendState(String id, GameState state) throws IOException {
+    public void sendState(String id, Object state) throws IOException {
         lock.readLock().lock();
         SocketsHandlerPair pair;
         try {
@@ -42,19 +45,19 @@ public class PlayerTransportImpl implements PlayerTransport {
             if (pair == null || pair.noSockets()) {
                 return;
             }
-            pair.sendMessage(state.asString());
+            pair.sendMessage(state);
         } finally {
             lock.readLock().unlock();
         }
     }
 
     @Override
-    public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler, Object endpointSettings) {
+    public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler) {
         lock.writeLock().lock();
         try {
             SocketsHandlerPair pair = endpoints.get(id);
             if (pair == null) {
-                pair = new SocketsHandlerPair(id);
+                pair = new SocketsHandlerPair(id, this::getFilter);
             }
             pair.setHandler(responseHandler);
             endpoints.put(id, pair);
@@ -71,32 +74,44 @@ public class PlayerTransportImpl implements PlayerTransport {
             if (pair == null || pair.noSockets()) {
                 return;
             }
-            endpoints.remove(id);
+            SocketsHandlerPair removed = endpoints.remove(id);
+            if (removed != null) {
+                for (PlayerSocket socket : removed.getSockets()) {
+                    filters.remove(socket);
+                }
+            }
         } finally {
             lock.writeLock().unlock();
         }
     }
 
     @Override
-    public void registerPlayerSocket(String id, PlayerSocket playerSocket) {
+    public void registerPlayerSocket(String id, PlayerSocket socket) {
         lock.writeLock().lock();
         try {
             SocketsHandlerPair pair = endpoints.get(id);
             if (pair == null) {
-                pair = new SocketsHandlerPair(id);
+                pair = new SocketsHandlerPair(id, this::getFilter);
             }
-            pair.addSocket(playerSocket);
+            pair.addSocket(socket);
             endpoints.put(id, pair);
         } finally {
             lock.writeLock().unlock();
         }
     }
 
+    private Function<Object, Object> getFilter(PlayerSocket socket) {
+        if (defaultFilter != null) {
+            return defaultFilter;
+        }
+        return filters.get(socket);
+    }
+
     @Override
-    public void unregisterPlayerSocket(String id) {
+    public void unregisterPlayerSocket(PlayerSocket socket) {
         lock.writeLock().lock();
         try {
-            SocketsHandlerPair pair = endpoints.get(id);
+            SocketsHandlerPair pair = endpoints.get(socket.getId());
             if (pair == null || pair.noSockets()) {
                 return;
             }
@@ -105,6 +120,21 @@ public class PlayerTransportImpl implements PlayerTransport {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public void setFilterFor(PlayerSocket socket, Function<Object, Object> filter) {
+        lock.writeLock().lock();
+        try {
+            filters.put(socket, filter);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void setDefaultFilter(Function<Object, Object> filter) {
+        this.defaultFilter = filter;
     }
 
 }
