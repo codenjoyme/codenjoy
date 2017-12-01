@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initBoards(players, allPlayersScreen, gameName, contextPath){
+function initBoards(players, allPlayersScreen, gameName, playerName, contextPath){
 
     var constructUrl = function() {
         var url = contextPath + "/screen?";

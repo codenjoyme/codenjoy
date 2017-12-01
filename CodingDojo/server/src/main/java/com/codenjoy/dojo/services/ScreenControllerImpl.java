@@ -38,6 +38,10 @@ public class ScreenControllerImpl implements PlayerController<Map<ScreenRecipien
 
     private PlayerTransport transport;
 
+    public void init() {
+        registerPlayerTransport(Player.ANONYMOUS, null);
+    }
+
     public void requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
         transport.sendState(player.getName(), data);
     }

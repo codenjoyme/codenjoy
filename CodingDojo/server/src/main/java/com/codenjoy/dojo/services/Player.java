@@ -27,6 +27,8 @@ import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 
 public class Player implements ScreenRecipient {
 
+    public static final Player ANONYMOUS = new Player("anonymous");
+
     private String name;
     private String code;
     private String data;
@@ -38,6 +40,10 @@ public class Player implements ScreenRecipient {
     private GameType gameType;
 
     public Player() {
+    }
+
+    Player(String name) {
+        this.name = name;
     }
 
     public Player(String name, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {

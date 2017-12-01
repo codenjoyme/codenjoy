@@ -23,9 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -229,7 +227,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void sendScreenUpdates() {
         Map<ScreenRecipient, ScreenData> map = buildScreenData();
         sendScreenForAsync(map);
-        sendScreenForWebsockets(map);
+        sendScreenForWebSockets(map);
     }
 
     private Map<ScreenRecipient, ScreenData> buildScreenData() {
@@ -274,7 +272,7 @@ public class PlayerServiceImpl implements PlayerService {
         screenSender.sendUpdates(map);
     }
 
-    private void sendScreenForWebsockets(Map<ScreenRecipient, ScreenData> map) {
+    private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             PlayerController screen = playerGame.getScreen();
@@ -285,6 +283,12 @@ public class PlayerServiceImpl implements PlayerService {
                         " URL: " + player.getCallbackUrl(), e);
                 e.printStackTrace();
             }
+        }
+        try {
+            screenController.requestControl(Player.ANONYMOUS, map);
+        } catch (Exception e) {
+            logger.error("Unable to send screen updates to anonymous players", e);
+            e.printStackTrace();
         }
     }
 

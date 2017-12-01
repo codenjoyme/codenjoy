@@ -59,7 +59,7 @@ function initBoardPage(game) {
 
 function initBoardComponents(game) {
     initBoards(game.players, game.allPlayersScreen,
-            game.gameName, game.contextPath);
+            game.gameName, game.playerName, game.contextPath);
 
     if (game.isGraphicOrTextGame) {
         initCanvases(game.contextPath, game.players, game.allPlayersScreen,

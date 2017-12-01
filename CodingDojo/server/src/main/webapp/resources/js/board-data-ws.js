@@ -19,12 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initBoards(players, allPlayersScreen, gameName, contextPath){
+function initBoards(players, allPlayersScreen, gameName, playerName, contextPath){
 
     var constructUrl = function() {
         var link = document.createElement('a');
         link.setAttribute('href', window.location.href);
-        return "ws://" + link.hostname + ':' + link.port + contextPath + "/screen-ws?user=apofig@gmail.com";
+        var user = (playerName == null) ? "anonymous" : playerName;
+        return "ws://" + link.hostname + ':' + link.port + contextPath + "/screen-ws?user=" + user;
     }
 
     var socket = null;

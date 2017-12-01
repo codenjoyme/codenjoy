@@ -61,7 +61,7 @@
     </bean>
 
     <bean name="screenPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
-    <bean name="screenController" class="com.codenjoy.dojo.services.ScreenControllerImpl" >
+    <bean name="screenController" class="com.codenjoy.dojo.services.ScreenControllerImpl" init-method="init">
         <property name="transport" ref="screenPlayerTransport"/>
     </bean>
 
