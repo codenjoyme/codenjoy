@@ -211,12 +211,9 @@ public class PlayerServiceImpl implements PlayerService {
     private void requestControls() {
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
-            PlayerController controller = playerGame.getController();
-
             try {
                 String board = cacheBoards.get(player);
-
-                controller.requestControl(player, board);
+                playerController.requestControl(player, board);
             } catch (IOException e) {
                 logger.error("Unable to send control request to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);

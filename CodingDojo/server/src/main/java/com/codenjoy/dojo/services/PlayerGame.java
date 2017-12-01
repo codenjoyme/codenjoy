@@ -29,25 +29,19 @@ public class PlayerGame implements Tickable {
 
     private Player player;
     private Game game;
-    private PlayerController screen;
-    private PlayerController controller;
     private Tickable lazyJoystick;
+    private Runnable onRemove;
 
-    public PlayerGame(Player player, Game game,
-                      PlayerController controller,
-                      PlayerController screen,
-                      Tickable lazyJoystick)
-    {
+    public PlayerGame(Player player, Game game, Tickable lazyJoystick, Runnable onRemove) {
         this.player = player;
         this.game = game;
-        this.controller = controller;
-        this.screen = screen;
         this.lazyJoystick = lazyJoystick;
+        this.onRemove = onRemove;
     }
 
     // only for searching
     public static PlayerGame by(Game game) {
-        return new PlayerGame(null, game, null, null, null);
+        return new PlayerGame(null, game, null, null);
     }
 
     @Override
@@ -79,8 +73,9 @@ public class PlayerGame implements Tickable {
     }
 
     public void remove() {
-        controller.unregisterPlayerTransport(player);
-        screen.unregisterPlayerTransport(player);
+        if (onRemove != null) {
+            onRemove.run();
+        }
         game.destroy();
     }
 
@@ -92,21 +87,11 @@ public class PlayerGame implements Tickable {
         return game;
     }
 
-    public PlayerController getController() {
-        return controller;
-    }
-
-    public PlayerController getScreen() {
-        return screen;
-    }
-
     @Override
     public String toString() {
-        return String.format("PlayerGame[player=%s, game=%s, controller=%s, screen=%s]",
+        return String.format("PlayerGame[player=%s, game=%s]",
                 player,
-                game.getClass().getSimpleName(),
-                controller.getClass().getSimpleName(),
-                screen.getClass().getSimpleName());
+                game.getClass().getSimpleName());
     }
 
     @Override

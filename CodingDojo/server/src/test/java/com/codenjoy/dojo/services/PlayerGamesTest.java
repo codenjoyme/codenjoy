@@ -104,7 +104,6 @@ public class PlayerGamesTest {
 
         assertSame(player, playerGame.getPlayer());
         assertSame(game, playerGame.getGame());
-        assertSame(controller, playerGame.getController());
 
     }
 
@@ -140,9 +139,7 @@ public class PlayerGamesTest {
         Game anotherGame = mock(Game.class);
         games.add(anotherGame);
 
-        playerGames.add(otherPlayer, anotherGame,
-                mock(PlayerController.class),
-                mock(PlayerController.class));
+        playerGames.add(otherPlayer, anotherGame, controller, screen);
         return otherPlayer;
     }
 
@@ -193,9 +190,10 @@ public class PlayerGamesTest {
         verifyRemove(playerGame3);
     }
 
-    private void verifyRemove(PlayerGame playerGame2) {
-        verify(playerGame2.getGame()).destroy();
-        verify(playerGame2.getController()).unregisterPlayerTransport(playerGame2.getPlayer());
+    private void verifyRemove(PlayerGame playerGame) {
+        verify(playerGame.getGame()).destroy();
+        verify(controller).unregisterPlayerTransport(playerGame.getPlayer());
+        verify(screen).unregisterPlayerTransport(playerGame.getPlayer());
     }
 
     @Test

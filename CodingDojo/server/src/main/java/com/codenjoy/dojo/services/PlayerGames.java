@@ -62,13 +62,18 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return NullPlayerGame.INSTANCE;
     }
 
-    public PlayerGame add(Player player, Game game, PlayerController userController, PlayerController screenController) {
+    public PlayerGame add(Player player, Game game,
+                          PlayerController playerController, PlayerController screenController)
+    {
         PlayerSpy spy = statistics.newPlayer(player);
 
         LazyJoystick joystick = new LazyJoystick(game, spy);
-        userController.registerPlayerTransport(player, joystick);
+        playerController.registerPlayerTransport(player, joystick);
         screenController.registerPlayerTransport(player, null);
-        PlayerGame result = new PlayerGame(player, game, userController, screenController, joystick);
+        PlayerGame result = new PlayerGame(player, game, joystick, () -> {
+            playerController.unregisterPlayerTransport(player);
+            screenController.unregisterPlayerTransport(player);
+        });
         playerGames.add(result);
         return result;
     }
@@ -97,10 +102,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public void clear() {
-        for (PlayerGame playerGame : playerGames) {
-            playerGame.remove();
+        for (Player player : players()) {
+            remove(player);
         }
-        playerGames.clear();
     }
 
     public List<PlayerGame> getAll(String gameType) {

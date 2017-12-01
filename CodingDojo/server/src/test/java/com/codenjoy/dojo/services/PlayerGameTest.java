@@ -48,7 +48,11 @@ public class PlayerGameTest {
         controller = mock(PlayerController.class);
         screen = mock(PlayerController.class);
 
-        playerGame = new PlayerGame(player, game, controller, screen, lazyJoystick);
+        playerGame = new PlayerGame(player, game, lazyJoystick,
+                () -> {
+                    screen.unregisterPlayerTransport(player);
+                    controller.unregisterPlayerTransport(player);
+                });
     }
 
     @Test
@@ -66,8 +70,7 @@ public class PlayerGameTest {
         assertTrue(playerGame.equals(player));
 
         PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, NullGame.INSTANCE,
-                NullPlayerController.INSTANCE, NullPlayerController.INSTANCE,
-                lazyJoystick);
+                lazyJoystick, null);
         assertFalse(playerGame.equals(otherPlayerGame));
         assertTrue(playerGame.equals(playerGame));
     }
@@ -83,6 +86,7 @@ public class PlayerGameTest {
 
         verify(game).destroy();
         verify(controller).unregisterPlayerTransport(player);
+        verify(screen).unregisterPlayerTransport(player);
     }
 
     @Test
@@ -96,16 +100,9 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testGetController() throws Exception {
-        assertSame(controller, playerGame.getController());
-    }
-
-    @Test
     public void testToString() throws Exception {
-        assertEquals(String.format("PlayerGame[player=player, game=%s, controller=%s, screen=%s]",
-                game.getClass().getSimpleName(),
-                controller.getClass().getSimpleName(),
-                screen.getClass().getSimpleName()),
+        assertEquals(String.format("PlayerGame[player=player, game=%s]",
+                game.getClass().getSimpleName()),
                 playerGame.toString());
     }
 }

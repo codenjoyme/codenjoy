@@ -1107,8 +1107,7 @@ public class PlayerServiceImplTest {
     public void shouldActPlayerSpyWhenActAtJoystick() {
         // given
         createPlayer(VASYA);
-        PlayerController controller = playerGames.get(VASYA).getController();
-        Joystick j = getJoystick(controller);
+        Joystick j = getJoystick(playerController);
 
         // when
         j.down();
@@ -1139,7 +1138,6 @@ public class PlayerServiceImplTest {
 
         PlayerGame playerGame = playerGames.get(VASYA);
         assertSame(game, playerGame.getGame());
-        assertSame(playerController, playerGame.getController());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA, player.getName());
     }
@@ -1158,7 +1156,6 @@ public class PlayerServiceImplTest {
 
         PlayerGame playerGame = playerGames.get(VASYA_AI);
         assertSame(game, playerGame.getGame());
-        assertSame(playerController, playerGame.getController());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getName());
 
