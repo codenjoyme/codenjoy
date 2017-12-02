@@ -361,4 +361,37 @@ public class PlayerTransportTest {
                     e.getMessage());
         }
     }
+
+    @Test
+    public void shouldUnregisterPlayerSocket_whenClientClose() throws IOException {
+        // given
+        createServices(PlayerSocket.CLIENT_SEND_FIRST);
+
+        createServerWebSocket("id");
+
+        PlayerSocket webSocket1 = connectWebSocketClient("id");
+        PlayerSocket webSocket2 = connectWebSocketClient("id");
+        PlayerSocket webSocket3 = connectWebSocketClient("id");
+
+        // when client answer
+        answerClient(webSocket1);
+        answerClient(webSocket2);
+        answerClient(webSocket3);
+
+        // when close websocket
+        webSocket1.onWebSocketClose(123, "close reason");
+        when(webSocket1.getSession().isOpen()).thenReturn(false);
+
+        // when send state
+        transport.sendState("id", new LinkedHashMap<String, Integer>(){{
+            put("one", 1);
+            put("two", 2);
+            put("three", 3);
+        }});
+
+        // then
+        verifyNoMoreInteractions(webSocket1.getSession().getRemote());
+        verify(webSocket2.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+        verify(webSocket3.getSession().getRemote()).sendString("{ONE=1, TWO=2, THREE=3}");
+    }
 }

@@ -138,7 +138,6 @@ public class PlayerTransportImpl implements PlayerTransport {
             if (pair == null || pair.noSockets()) {
                 return;
             }
-            // TODO кто и когда вызывает этот метод, и как понять какой сокет удален? Может задекорировать обработчик и на onclose/onerror вставить удаление. Только тут надо чтобы небыло многопоточных гонок
             pair.removeClosedSockets();
         } finally {
             lock.writeLock().unlock();

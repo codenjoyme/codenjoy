@@ -38,6 +38,7 @@ public class PlayerSocket {
     private Session session;
     private String id;
     private boolean requested;
+    private Runnable onClose;
 
     public PlayerSocket(String id, boolean whoFirst) {
         this.id = id;
@@ -56,10 +57,12 @@ public class PlayerSocket {
     public void onWebSocketClose(int statusCode, String reason) {
         requested = false;
         handler.onClose(this, statusCode, reason);
-        if (session == null) {
-            return;
+        if (session != null) {
+            session.close();
         }
-        session.close();
+        if (onClose != null) {
+            onClose.run();
+        }
     }
 
     @OnWebSocketConnect
@@ -99,5 +102,9 @@ public class PlayerSocket {
 
     public String getId() {
         return id;
+    }
+
+    public void onClose(Runnable onClose) {
+        this.onClose = onClose;
     }
 }

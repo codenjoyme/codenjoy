@@ -64,7 +64,6 @@ public class SocketsHandlerPair {
     }
 
     public void sendMessage(Object data) throws IOException {
-        removeClosedSockets();
         for (PlayerSocket socket : sockets) {
             Function<Object, Object> filter = filters.apply(socket);
             if (filter != null) {

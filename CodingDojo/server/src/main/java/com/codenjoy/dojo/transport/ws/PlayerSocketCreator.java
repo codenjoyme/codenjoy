@@ -62,6 +62,7 @@ public class PlayerSocketCreator implements WebSocketCreator {
             }
             return null;
         }
+        playerSocket.onClose(() -> transport.unregisterPlayerSocket(playerSocket));
         transport.registerPlayerSocket(authId, playerSocket);
         return playerSocket;
     }
