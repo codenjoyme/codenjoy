@@ -25,14 +25,12 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.RandomDice;
 
 public class AITank extends Tank {
 
-    private final static Dice dice = new RandomDice();
     private int act;
 
-    public AITank(int x, int y, Direction direction) {
+    public AITank(int x, int y, Dice dice, Direction direction) {
         super(x, y, direction, dice, 1);
     }
 

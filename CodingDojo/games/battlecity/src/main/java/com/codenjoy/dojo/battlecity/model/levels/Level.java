@@ -24,10 +24,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 
 import com.codenjoy.dojo.battlecity.model.*;
-import com.codenjoy.dojo.services.BoardReader;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -147,7 +144,7 @@ public class Level implements Field {
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {
                 Point pt = xy.getXY(index);
-                result.add(new AITank(pt.getX(), pt.getY(), Direction.DOWN));
+                result.add(new AITank(pt.getX(), pt.getY(), new RandomDice(), Direction.DOWN));
             }
         }
         return result;

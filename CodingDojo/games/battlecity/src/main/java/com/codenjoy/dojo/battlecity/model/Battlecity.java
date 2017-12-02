@@ -33,7 +33,7 @@ import java.util.List;
 
 public class Battlecity implements Tickable, ITanks, Field {
 
-    private final Dice dice;
+    private Dice dice;
     private LinkedList<Tank> aiTanks;
     private int aiCount;
 
@@ -49,7 +49,7 @@ public class Battlecity implements Tickable, ITanks, Field {
 
     public Battlecity(int size, List<Construction> constructions,
                       List<Border> borders, Tank... aiTanks) {
-        dice = new RandomDice();
+        setDice(new RandomDice()); // TODO вынести это чудо за пределы конструктора
         aiCount = aiTanks.length;
         this.size = size;
         this.aiTanks = new LinkedList<Tank>();
@@ -111,7 +111,7 @@ public class Battlecity implements Tickable, ITanks, Field {
             } while (isBarrier(x, y) & c < size);
 
             if (!isBarrier(x, y)) {
-                addAI(new AITank(x, y, Direction.DOWN));
+                addAI(new AITank(x, y, dice, Direction.DOWN));
             }
         }
     }
@@ -320,4 +320,9 @@ public class Battlecity implements Tickable, ITanks, Field {
     public List<Border> getBorders() {
         return borders;
     }
+
+    public void setDice(Dice dice) {
+        this.dice = dice;
+    }
+
 }
