@@ -32,9 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -48,8 +46,7 @@ public class RestRegistrationController {
     @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
     public boolean checkUserLogin(@PathVariable("playerName") String playerName, @PathVariable("code") String code) {
-        String actualName = registration.getEmail(code);
-        return actualName != null && actualName.equals(playerName);
+        return registration.checkUser(playerName, code);
     }
 
     static class PlayerInfo {

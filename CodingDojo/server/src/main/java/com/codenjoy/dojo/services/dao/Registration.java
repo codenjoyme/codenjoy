@@ -27,9 +27,7 @@ import com.codenjoy.dojo.services.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPool;
 import org.springframework.stereotype.Component;
-import org.springframework.util.DigestUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -115,6 +113,11 @@ public class Registration {
 
     public static String makeCode(String email, String password) {
         return "" + Math.abs(email.hashCode()) + Math.abs(password.hashCode());
+    }
+
+    public boolean checkUser(String email, String code) {
+        String actualName = getEmail(code);
+        return actualName != null && actualName.equals(email);
     }
 
     public String getEmail(final String code) {
