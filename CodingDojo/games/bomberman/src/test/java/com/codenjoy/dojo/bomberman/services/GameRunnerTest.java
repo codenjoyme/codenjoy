@@ -73,7 +73,7 @@ public class GameRunnerTest {
         String actual = (String)game.getBoardAsString();
         assertCharCount(actual, "☼", countWall);
         assertCharCount(actual, "#", countDestroyWalls);
-        assertCharCount(actual, "☺", 1);
+        assertCharCount(actual, "☺", 1); // TODO почему тут скачет тест?
         assertCharCount(actual, "&", meatChoppersCount);  // TODO тут ошибка опять появилась
         assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
 
