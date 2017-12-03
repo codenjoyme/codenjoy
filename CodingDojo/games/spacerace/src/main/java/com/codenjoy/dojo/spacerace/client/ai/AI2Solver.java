@@ -42,8 +42,6 @@ import java.util.List;
  */
 public class AI2Solver implements Solver<Board> {
 
-    private static final String USER_NAME = "kudriavtsev.oleksii@gmail.com";
-
     private Dice dice;
     private Board board;
     private int bullets = 0;
@@ -299,6 +297,7 @@ public class AI2Solver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new AI2Solver(new RandomDice()),
                 new Board());
     }

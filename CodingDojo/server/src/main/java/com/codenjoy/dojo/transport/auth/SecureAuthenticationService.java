@@ -23,15 +23,30 @@ package com.codenjoy.dojo.transport.auth;
  */
 
 
+import com.codenjoy.dojo.services.PlayerServiceImpl;
+import com.codenjoy.dojo.services.dao.Registration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Component
-public class DefaultAuthenticationService implements AuthenticationService {
+public class SecureAuthenticationService implements AuthenticationService {
+
+    @Autowired
+    private Registration registration;
 
     @Override
     public String authenticate(HttpServletRequest request) {
-        return request.getParameter("user");
+        String user = request.getParameter("user");
+        if (user.endsWith(PlayerServiceImpl.BOT_EMAIL_SUFFIX)) {
+            return user;
+        }
+        String code = request.getParameter("code");
+        if (registration.checkUser(user, code)) {
+            return user;
+        } else {
+            return null;
+        }
     }
 }

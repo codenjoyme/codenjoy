@@ -30,6 +30,7 @@ import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class PlayerSocketCreator implements WebSocketCreator {
@@ -50,20 +51,21 @@ public class PlayerSocketCreator implements WebSocketCreator {
     }
 
     @Override
-    public PlayerSocket createWebSocket(ServletUpgradeRequest servletUpgradeRequest, ServletUpgradeResponse response) {
-        String authId = authenticationService.authenticate(servletUpgradeRequest.getHttpServletRequest());
-        PlayerSocket playerSocket = new PlayerSocket(authId, waitForClient);
+    public PlayerSocket createWebSocket(ServletUpgradeRequest servletRequest, ServletUpgradeResponse response) {
+        HttpServletRequest request = servletRequest.getHttpServletRequest();
+        String authId = authenticationService.authenticate(request);
+        PlayerSocket socket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
+            LOGGER.warn("Unauthorized access {}", request.getParameterMap().toString());
             try {
-                LOGGER.warn("Unregistered user {}", authId);
-                playerSocket.sendMessage("Unregistered user");
+                response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
             } catch (IOException e) {
-                LOGGER.warn("Some exception when kicking unregistered user", e);
+                LOGGER.warn("Error sending status {}", e.getMessage());
             }
             return null;
         }
-        playerSocket.onClose(() -> transport.unregisterPlayerSocket(playerSocket));
-        transport.registerPlayerSocket(authId, playerSocket);
-        return playerSocket;
+        socket.onClose(() -> transport.unregisterPlayerSocket(socket));
+        transport.registerPlayerSocket(authId, socket);
+        return socket;
     }
 }

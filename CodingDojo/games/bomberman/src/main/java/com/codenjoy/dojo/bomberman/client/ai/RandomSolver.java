@@ -76,6 +76,7 @@ public class RandomSolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new RandomSolver(new RandomDice()),
                 new Board());
     }

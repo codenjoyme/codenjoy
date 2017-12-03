@@ -157,6 +157,7 @@ public class AISolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new AISolver(new RandomDice()),
                 new Board());
     }

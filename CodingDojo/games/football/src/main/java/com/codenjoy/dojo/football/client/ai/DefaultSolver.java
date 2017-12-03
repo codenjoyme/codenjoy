@@ -151,6 +151,7 @@ public class DefaultSolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new DefaultSolver(new RandomDice()),
                 new Board());
     }

@@ -51,6 +51,7 @@ public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new Vaa25Solver(name),
                 new Board());
     }

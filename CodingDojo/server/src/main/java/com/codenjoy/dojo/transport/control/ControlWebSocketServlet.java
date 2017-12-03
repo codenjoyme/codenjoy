@@ -25,6 +25,7 @@ package com.codenjoy.dojo.transport.control;
 
 import com.codenjoy.dojo.transport.ApplicationContextListener;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.auth.SecureAuthenticationService;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
@@ -47,6 +48,6 @@ public class ControlWebSocketServlet extends WebSocketServlet {
     }
 
     public AuthenticationService getAuthenticationService() {
-        return ApplicationContextListener.getContext().getBean(AuthenticationService.class);
+        return ApplicationContextListener.getContext().getBean(SecureAuthenticationService.class);
     }
 }

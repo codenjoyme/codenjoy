@@ -40,7 +40,6 @@ import java.util.concurrent.Executors;
  */
 public class ApofigSolver2 implements Solver<Board> {
 
-    private static final String USER_NAME = "apofig@gmail.com";
     static ExecutorService excecutor = Executors.newFixedThreadPool(1);
 
     private static Step[] path = new Step[102400];
@@ -223,6 +222,7 @@ public class ApofigSolver2 implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new ApofigSolver2(),
                 new Board());
     }

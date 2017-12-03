@@ -39,33 +39,32 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
  */
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "user@mail.ru"; // TODO вписать свой ник (с которым регистрировался)
-
-    DeikstraFindWay way; // TODO можно воспользоваться нахождением кратчайшего пути при помощи getShortestWay()
-    // или использовать любой другой свой способ.
+    // this is your email
+    private static final String USER_NAME = "your@email.com";
+    // you can get this code after registration on the server with your email
+    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+    private static final String CODE = "12345678901234567890";
 
     private Dice dice;
     private Board board;
 
     YourSolver(Dice dice) {
         this.dice = dice;
-        way = new DeikstraFindWay();
     }
 
-    // TODO Необходимо изменить данный метод. Он должен возвращать осмысленное направление для дальнейшего движения змейки.
     @Override
     public String get(Board board) {
         this.board = board;
         if (board.isGameOver()) return "";
 
         return Direction.RIGHT.toString();
-//      return Direction.random().toString();
     }
 
     public static void main(String[] args) {
 //        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
         WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
                 USER_NAME,
+                CODE,
                 new YourSolver(new RandomDice()),
                 new Board());
     }

@@ -244,6 +244,7 @@ public class Apofig2Solver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new ApofigSolver(new RandomDice()),
                 new Board());
     }

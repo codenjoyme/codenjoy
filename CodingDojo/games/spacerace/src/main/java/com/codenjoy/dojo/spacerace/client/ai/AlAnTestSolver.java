@@ -56,7 +56,11 @@ public class AlAnTestSolver implements Solver<Board> {
 
 	public static void start(String name, WebSocketRunner.Host server) {
 		try {
-			WebSocketRunner.run(server, name, new AlAnTestSolver(new RandomDice()), new Board());
+			WebSocketRunner.run(server,
+                    name,
+                    null,
+                    new AlAnTestSolver(new RandomDice()),
+                    new Board());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -24,17 +24,15 @@ package com.codenjoy.dojo.client;
 
 
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
-import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
-import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.api.UpgradeException;
+import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -86,9 +84,11 @@ public class WebSocketRunner {
     /**
      * @param host Servers enum
      * @see Host
-     * @see WebSocketRunner#run(String, String, Solver, ClientBoard)
+     * @see WebSocketRunner#run(String, String, String, Solver, ClientBoard)
      */
-    public static WebSocketRunner run(Host host, String userName, Solver solver, ClientBoard board) {
+    public static WebSocketRunner run(Host host, String userName, String code,
+                                      Solver solver, ClientBoard board)
+    {
         // если запускаем на серваке бота, то в консоль не принтим
         printToConsole = (host != Host.REMOTE_LOCAL);
 
@@ -97,16 +97,18 @@ public class WebSocketRunner {
             host = Host.LOCAL;
         }
 
-        return run(host.uri, userName, solver, board);
+        return run(host.uri, userName, code, solver, board);
     }
 
     /**
      * To connect on server in your LAN.
      * @param server String server and port. Format 192.168.0.1:8080
-     * @see WebSocketRunner#run(String, String, Solver, ClientBoard)
+     * @see WebSocketRunner#run(String, String, String, Solver, ClientBoard)
      */
-    public static WebSocketRunner runOnServer(String server, String userName, Solver solver, ClientBoard board) {
-         return run(String.format(WS_URI_PATTERN, server), userName, solver, board);
+    public static WebSocketRunner runOnServer(String server, String userName, String code,
+                                              Solver solver, ClientBoard board)
+    {
+         return run(String.format(WS_URI_PATTERN, server), userName, code, solver, board);
     }
 
      /**
@@ -119,13 +121,15 @@ public class WebSocketRunner {
      * @param board Board class
      * @return WebSocketRunner intance
      */
-    public static WebSocketRunner run(String uri, String userName, Solver solver, ClientBoard board) {
+    public static WebSocketRunner run(String uri, String userName, String code,
+                                      Solver solver, ClientBoard board)
+    {
         try {
             if (clients.containsKey(userName)) {
                 return clients.get(userName);
             }
             final WebSocketRunner client = new WebSocketRunner(solver, board);
-            client.start(uri, userName);
+            client.start(uri, userName, code);
             Runtime.getRuntime().addShutdownHook(new Thread(){
                 @Override
                 public void run() {
@@ -148,24 +152,21 @@ public class WebSocketRunner {
         }
     }
 
-    private void start(final String server, final String userName) throws Exception {
+    private void start(final String server, final String userName, final String code) throws Exception {
         final Pattern urlPattern = Pattern.compile("^board=(.*)$");
 
         wsClient = new WebSocketClient();
         wsClient.start();
 
-        onClose = new Runnable() {
-            @Override
-            public void run() {
-                if (solver instanceof OneCommandSolver) {
-                    return;
-                }
-                printReconnect();
-                connectLoop(server, userName, urlPattern);
+        onClose = () -> {
+            if (solver instanceof OneCommandSolver) {
+                return;
             }
+            printReconnect();
+            connectLoop(server, userName, code, urlPattern);
         };
 
-        connectLoop(server, userName, urlPattern);
+        connectLoop(server, userName, code, urlPattern);
     }
 
     @WebSocket
@@ -188,6 +189,15 @@ public class WebSocketRunner {
                 onClose.run();
             }
             print("Closed with message: '" + message + "' and code: " + closeCode);
+        }
+
+        @OnWebSocketError
+        public void onError(Session session, Throwable reason) {
+            if (isUnauthorizedAccess(reason)) {
+                print("Connection error: Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
+            } else {
+                print("Error with message: '" + reason.toString());
+            }
         }
 
         @OnWebSocketMessage
@@ -213,11 +223,20 @@ public class WebSocketRunner {
         }
     }
 
-    private void connectLoop(String server, String userName, Pattern urlPattern) {
+    private boolean isUnauthorizedAccess(Throwable exception) {
+        return exception instanceof UpgradeException && ((UpgradeException)exception).getResponseStatusCode() == 401;
+    }
+
+    private void connectLoop(String server, String userName, String code, Pattern urlPattern) {
         while (true) {
             try {
-                tryToConnect(server, userName, urlPattern);
+                tryToConnect(server, userName, code, urlPattern);
                 break;
+            } catch (ExecutionException e) {
+                if (!isUnauthorizedAccess(e.getCause())) {
+                    print(e);
+                }
+                printReconnect();
             } catch (Exception e) {
                 print(e);
                 printReconnect();
@@ -231,8 +250,8 @@ public class WebSocketRunner {
         sleep(5000);
     }
 
-    private void tryToConnect(String server, String userName, Pattern pattern) throws Exception {
-        URI uri = new URI(server + "?user=" + userName);
+    private void tryToConnect(String server, String userName, String code, Pattern pattern) throws Exception {
+        URI uri = new URI(String.format("%s?user=%s&code=%s", server, userName, code));
         print(String.format("Connecting '%s' to '%s'...", userName, uri));
 
         if (session != null) {

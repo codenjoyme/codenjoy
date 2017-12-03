@@ -85,6 +85,7 @@ public class ApofigSolver extends AbstractTextSolver {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new ApofigSolver(),
                 new Board());
     }

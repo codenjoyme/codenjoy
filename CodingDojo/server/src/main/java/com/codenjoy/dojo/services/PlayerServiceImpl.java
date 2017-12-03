@@ -43,7 +43,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
 
     private static Logger logger = DLoggerFactory.getLogger(PlayerServiceImpl.class);
-    private static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
+    public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<Player, String>();
