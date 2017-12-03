@@ -101,13 +101,14 @@
 
                         <p>Address to connect the game on the http://codenjoy.com server:</p>
 
-                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=email</pre>
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
 
                         <p>Address to connect the game on the server deployed in the local area network (LAN):</p>
 
-                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=email</pre>
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
 
-                        <p>email here is the email indicated at the registration on the server.</p>
+                        <p>your@email.com here is the email indicated at the registration on the server,
+                            code is your security token, you can get it from browser address bar after registration/login.</p>
 
                         <p>After connection, the client will regularly (every second) receive JSON
                             with information on the actions performed. The format:</p>
