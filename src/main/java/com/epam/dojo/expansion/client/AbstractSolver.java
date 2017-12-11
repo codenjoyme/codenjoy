@@ -50,9 +50,11 @@ public abstract class AbstractSolver implements Solver<Board>  {
      * @param host Server url
      * @param userName Your email entered at http://dojo.lab.epam.com/codenjoy-contest/resources/expansion/registration.html
      */
-    public static void start(String userName, String host, Solver solver) {
+    public static void start(String userName, String code, String host, Solver solver) {
         try {
-            WebSocketRunner.run("ws://" + host + "/codenjoy-contest/ws", userName,
+            WebSocketRunner.run("ws://" + host + "/codenjoy-contest/ws",
+                    userName,
+                    code,
                     solver,
                     new Board());
         } catch (Exception e) {

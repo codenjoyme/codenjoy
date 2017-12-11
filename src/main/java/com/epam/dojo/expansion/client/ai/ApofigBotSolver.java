@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.RandomDice;
 import com.epam.dojo.expansion.client.*;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
@@ -110,14 +111,20 @@ public class ApofigBotSolver extends AbstractSolver {
         return String.format("message('%s')", super.buildAnswer(board));
     }
 
-    /**
-     * Run this method for connect to Server
-     */
     public static void main(String[] args) {
-        for (int i = 1; i <= 10; i++) {
-            WebSocketRunner.printToConsole = false;
-            start("demo" + i + "@codenjoy.com", "127.0.0.1:8080", new ApofigBotSolver(new Random().nextInt(7)));
-        }
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.printToConsole = false;
+        WebSocketRunner.run(host,
+                name,
+                null,
+                new ApofigBotSolver(new Random().nextInt(7)),
+                new Board());
     }
 
 }

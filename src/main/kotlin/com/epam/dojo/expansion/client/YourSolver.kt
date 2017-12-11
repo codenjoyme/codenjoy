@@ -31,6 +31,7 @@ import com.epam.dojo.expansion.model.ForcesMoves
  * Your AI
  */
 class YourKotlinSolver() : AbstractSolver() {
+
     override fun whatToDo(board: Board): Command {
         with(board) {
             if (!board.isMeAlive) return Command.doNothing()
@@ -58,9 +59,18 @@ class YourKotlinSolver() : AbstractSolver() {
     }
 }
 
+// this is your email
+val USER_NAME = "your@email.com"
+// you can get this code after registration on the server with your email
+// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+val CODE = "12345678901234567890"
+
 /**
  * Run this method for connect to the server and start the game
  */
 fun main(args: Array<String>) {
-    AbstractSolver.start("your@email.com", "ecsc00104eef.epam.com:8080", YourKotlinSolver())
+    AbstractSolver.start(USER_NAME,
+            CODE,
+            "ecsc00104eef.epam.com:8080",
+            YourKotlinSolver())
 }
