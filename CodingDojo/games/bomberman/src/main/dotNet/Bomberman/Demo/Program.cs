@@ -30,14 +30,18 @@ namespace Demo
         // static string Server = "127.0.0.1:8080";             // to use for localhost server
         // static string Server = "tetrisj.jvmhost.net:12270";  // to use for codenjoy.com server
 
-        static string UserName = "user@email.com";
+        // this is your email
+		static string UserName = "user@email.com";
+		// you can get this code after registration on the server with your email
+		// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890    
+        static string Code = "01234567890123456789";
 
         static void Main(string[] args)
         {
             Console.SetWindowSize(Console.LargestWindowWidth - 3, Console.LargestWindowHeight - 3);
 
             // creating custom bomberman's Ai client
-            var bomber = new YourSolver(UserName, Server);
+            var bomber = new YourSolver(UserName, Code, Server);
 
             // starting thread with playing bomberman
             Thread thread = new Thread(bomber.Play);
