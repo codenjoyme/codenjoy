@@ -41,11 +41,14 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     }
 
     function send(message) {
-        $.ajax({ url:encodeURI(contextPath + "/chat?playerName=" + playerName + "&code=" + code + "&message=" + message),
-            data:{},
-            dataType:"json",
-            cache:false,
-           timeout:30000});
+        sendData('/rest/chat/' + game.gameName + '/player/' + game.playerName + '/post',
+        {
+            'message' : message,
+            'code' : game.code
+        },
+        function(data) {
+            // do nothing
+        });
     };
 
     function removeEOL(string) {
@@ -166,8 +169,8 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     }
 
     function updateChat() {
-        loadData('rest/chat/' + game.gameName + '/log', function(log) {
-            chat.html(encodeLog(log));
+        loadData('/rest/chat/' + game.gameName + '/log', function(log) {
+            chat.html(encodeLog(log.messages));
             setTimeout(updateChat, 2000);
         });
     }

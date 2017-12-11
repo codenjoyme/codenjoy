@@ -156,16 +156,4 @@ public class BoardController {
     public String help() {
         return "help";
     }
-
-    @RequestMapping(value = "/chat", method = RequestMethod.GET)
-    public String chat(@RequestParam("playerName") String name,
-                       @RequestParam("code") String code,
-                       @RequestParam("message") String message)
-    {
-        Player player = playerService.get(registration.getEmail(code));
-        if (player != NullPlayer.INSTANCE && player.getName().equals(name)) {
-            chatService.chat(player.getName(), message);
-        }
-        return "ok";
-    }
 }

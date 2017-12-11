@@ -22,11 +22,21 @@
 
 var game = game || {};
 
-function loadData(url, onLoad) {
+function getContext() {
     var pathFromUrl = '/' + location.pathname.split('/')[1];
     var ctx = (!!game.contextPath) ? game.contextPath : pathFromUrl;
-    $.get(ctx + url, {}, function (data) {
+    return ctx;
+}
+
+function loadData(url, onLoad) {
+    $.get(getContext() + url, {}, function (data) {
         onLoad(data);
+    });
+}
+
+function sendData(url, jsonData, onSend) {
+    $.post(getContext() + url, jsonData, function (data) {
+        onSend(data);
     });
 }
 
