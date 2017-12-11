@@ -52,6 +52,7 @@ public class PlayerTransportTest {
     private List<PlayerResponseHandler> handlers = new LinkedList<>();
     private AuthenticationService authentication;
     private PlayerSocketCreator creator;
+    private LinkedList<ServletUpgradeResponse> responses = new LinkedList<>();
 
     @Test
     public void shouldSendDataToWebSocketClient_caseClientSendFirst_withUniqueSocketFilter() throws IOException {
@@ -105,7 +106,8 @@ public class PlayerTransportTest {
         ServletUpgradeRequest request = mock(ServletUpgradeRequest.class);
         HttpServletRequest httpRequest = mock(HttpServletRequest.class);
         when(request.getHttpServletRequest()).thenReturn(httpRequest);
-        ServletUpgradeResponse response = null;
+        ServletUpgradeResponse response = mock(ServletUpgradeResponse.class);
+        responses.add(response);
         return creator.createWebSocket(request, response);
     }
 
@@ -178,6 +180,7 @@ public class PlayerTransportTest {
         // then
         // verify(webSocket.getSession().getRemote()).sendString("Unregistered user");
         assertEquals(null, webSocket);
+        verify(responses.get(0)).sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
     }
 
     @Test
