@@ -51,9 +51,18 @@ class YourKotlinSolver() : AbstractSolver() {
     }
 }
 
+// this is your email
+val USER_NAME = "your@email.com"
+// you can get this code after registration on the server with your email
+// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+val CODE = "12345678901234567890"
+
 /**
  * Run this method for connect to the server and start the game
  */
 fun main(args: Array<String>) {
-    AbstractSolver.start("your@email.com", "dojo.lab.epam.com:80", YourKotlinSolver())
+    AbstractSolver.start(USER_NAME,
+            CODE,
+            "dojo.lab.epam.com:80",
+            YourKotlinSolver())
 }

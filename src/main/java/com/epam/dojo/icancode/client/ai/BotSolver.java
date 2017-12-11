@@ -23,6 +23,7 @@ package com.epam.dojo.icancode.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -31,6 +32,7 @@ import com.epam.dojo.icancode.client.Board;
 import com.epam.dojo.icancode.client.Command;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.codenjoy.dojo.services.Direction.*;
 
@@ -210,11 +212,20 @@ public class BotSolver extends AbstractSolver {
         return result;
     }
 
-    /**
-     * Run this method for connect to Server
-     */
     public static void main(String[] args) {
-        start("user@gmail.com", "127.0.0.1:8080", new BotSolver());
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.printToConsole = false;
+        WebSocketRunner.run(host,
+                name,
+                null,
+                new BotSolver(),
+                new Board());
     }
 
 }

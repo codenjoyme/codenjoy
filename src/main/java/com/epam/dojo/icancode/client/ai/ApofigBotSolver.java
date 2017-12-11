@@ -23,8 +23,10 @@ package com.epam.dojo.icancode.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.RandomDice;
 import com.epam.dojo.icancode.client.AbstractSolver;
 import com.epam.dojo.icancode.client.Board;
 import com.epam.dojo.icancode.client.Command;
@@ -69,11 +71,19 @@ public class ApofigBotSolver extends AbstractSolver {
         return go(nextStep);
     }
 
-    /**
-     * Run this method for connect to Server
-     */
     public static void main(String[] args) {
-        start("user@gmail.com", "127.0.0.1:8080", new ApofigBotSolver());
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                null,
+                new ApofigBotSolver(),
+                new Board());
     }
 
 }
