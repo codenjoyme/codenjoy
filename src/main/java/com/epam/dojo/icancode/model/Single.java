@@ -25,8 +25,9 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.epam.dojo.icancode.services.printer.LayeredViewPrinter;
-import com.epam.dojo.icancode.services.printer.PrinterData;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
@@ -150,7 +151,7 @@ public class Single implements Game {
         return player;
     }
 
-    public LayeredViewPrinter getPrinter() {
+    public Printer<PrinterData> getPrinter() {
         return progressBar.getPrinter();
     }
 }

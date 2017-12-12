@@ -25,12 +25,14 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
 import com.epam.dojo.icancode.services.Levels;
-import com.epam.dojo.icancode.services.printer.LayeredViewPrinter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -52,7 +54,7 @@ public class ICanCodeTest {
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 2;
     private ICanCode game;
-    private LayeredViewPrinter printer;
+    private Printer<PrinterData> printer;
 
     private Hero hero;
     private Dice dice;

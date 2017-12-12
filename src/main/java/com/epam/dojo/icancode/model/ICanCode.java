@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
@@ -38,7 +39,6 @@ import com.epam.dojo.icancode.model.items.Gold;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.model.items.Start;
 import com.epam.dojo.icancode.services.Events;
-import com.epam.dojo.icancode.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -248,8 +248,8 @@ public class ICanCode implements Tickable, IField {
         this.level = level;
     }
 
-    public BoardReader<State> reader() {
-        return new BoardReader<State>() {
+    public BoardReader reader() {
+        return new BoardReader() {
             @Override
             public int size() {
                 return ICanCode.this.size();

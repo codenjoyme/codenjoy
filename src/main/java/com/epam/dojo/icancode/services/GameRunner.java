@@ -24,9 +24,8 @@ package com.epam.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.Single;
