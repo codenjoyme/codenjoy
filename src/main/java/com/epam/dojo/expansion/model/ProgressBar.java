@@ -25,10 +25,12 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.lobby.LobbyPlayerBoard;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
-import com.epam.dojo.expansion.services.Printer;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -73,7 +75,7 @@ public class ProgressBar {
     }
 
     private void buildPrinter() {
-        printer = new Printer(current.reader(), () -> player, current.getViewSize(), COUNT_LAYERS);
+        printer = new LayeredViewPrinter(current.reader(), () -> player, current.getViewSize(), COUNT_LAYERS);
     }
 
     private Integer getBackToSingleLevel() {

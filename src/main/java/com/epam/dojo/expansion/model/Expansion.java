@@ -23,7 +23,10 @@ package com.epam.dojo.expansion.model;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Cell;
 import com.epam.dojo.expansion.model.levels.Item;
@@ -31,8 +34,6 @@ import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.items.*;
 import com.epam.dojo.expansion.model.replay.GameLogger;
 import com.epam.dojo.expansion.services.Events;
-import com.epam.dojo.expansion.services.Printer;
-import com.epam.dojo.expansion.services.PrinterData;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -604,10 +605,9 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
         public PrinterData printer() {
             try {
-                Printer printer = new Printer(Expansion.this.reader(),
+                return new LayeredViewPrinter(Expansion.this.reader(),
                         () -> Expansion.this.players.get(0),
-                        size(), COUNT_LAYERS);
-                return printer.print();
+                        size(), COUNT_LAYERS).print();
             } catch (Exception e) {
                 return null;
             }

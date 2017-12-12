@@ -24,16 +24,20 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.levels.items.Hero;
+import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsTest;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
+import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
-import com.epam.dojo.expansion.services.*;
-import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.services.Events;
+import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -53,7 +57,7 @@ public class ExpansionTest {
 
     public static final int FIRE_TICKS = 6;
     private PlayerBoard game;
-    private Printer printer;
+    private Printer<PrinterData> printer;
 
     private Hero hero;
     private Dice dice;
@@ -96,7 +100,7 @@ public class ExpansionTest {
         game = progressBar.getCurrent();
         hero = game.getPlayers().get(0).getHero();
 
-        printer = new Printer(game.reader(), () -> player, size, ProgressBar.COUNT_LAYERS);
+        printer = new LayeredViewPrinter(game.reader(), () -> player, size, ProgressBar.COUNT_LAYERS);
     }
 
 

@@ -25,11 +25,11 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
-import com.epam.dojo.expansion.services.Printer;
-import com.epam.dojo.expansion.services.PrinterData;
 import com.epam.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -199,7 +199,7 @@ public class Single implements Game {
         return player;
     }
 
-    public Printer getPrinter() {
+    public Printer<PrinterData> getPrinter() {
         return progressBar.getPrinter();
     }
 
