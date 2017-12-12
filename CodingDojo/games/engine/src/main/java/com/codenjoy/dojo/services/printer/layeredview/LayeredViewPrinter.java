@@ -84,10 +84,6 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
                     State item = elements.apply(index, j);
                     Object[] inSameCell = reader.itemsInSameCell(item);
                     builders[j].append(makeState(item, player, inSameCell));
-
-                    if (x - vx == viewSize - 1) {
-                        builders[j].append('\n');
-                    }
                 }
             }
         }
