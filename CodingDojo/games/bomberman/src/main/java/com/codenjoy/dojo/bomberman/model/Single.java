@@ -37,7 +37,7 @@ public class Single implements Game {
     private Player player;
     private Bomberman game;
 
-    private Printer printer;
+    private Printer<String> printer;
 
     public Single(Bomberman game, EventListener listener, PrinterFactory factory) {
         this.game = game;

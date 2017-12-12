@@ -31,7 +31,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Single implements Game {
 
-    private Printer printer;
+    private Printer<String> printer;
     private Player player;
     private Hex game;
 

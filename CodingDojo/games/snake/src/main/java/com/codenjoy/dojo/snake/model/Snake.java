@@ -41,7 +41,7 @@ public class Snake implements Field, Game {
     private HeroFactory factory;
     private ArtifactGenerator generator;
     private int maxLength;
-    private Printer printer;
+    private Printer<String> printer;
 
     public Snake(ArtifactGenerator generator, Walls walls, int size, PrinterFactory factory) {
         this(generator, new HeroFactory() {

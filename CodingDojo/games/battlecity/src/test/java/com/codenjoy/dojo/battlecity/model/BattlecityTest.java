@@ -136,7 +136,7 @@ public class BattlecityTest {
         assertEquals(field, getPrinter().print());
     }
 
-    private Printer getPrinter() {
+    private Printer<String> getPrinter() {
         return printerFactory.getPrinter(
                 game.reader(), players.get(0));
     }
@@ -1970,7 +1970,7 @@ public class BattlecityTest {
     }
 
     private void assertW(String expected) {
-        Printer printer = getPrinter();
+        Printer<String> printer = getPrinter();
         assertEquals(expected, printer.print().replaceAll("[«¿»?•]", " "));
     }
 

@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.hero.HeroData;
  */
 public class Single implements Game {
 
-    private Printer printer;
+    private Printer<String> printer;
     private Player player;
     private Loderunner game;
 

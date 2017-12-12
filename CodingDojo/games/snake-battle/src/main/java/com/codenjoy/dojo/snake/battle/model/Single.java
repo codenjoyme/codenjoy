@@ -33,7 +33,7 @@ import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
  */
 public class Single implements Game {
 
-    private Printer printer;
+    private Printer<String> printer;
     private Player player;
     private SnakeBoard game;
 

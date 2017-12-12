@@ -33,7 +33,7 @@ public class Single implements Game { // TODO потести меня
     private final EventListener listener;
     private final Settings settings;
 
-    private Printer printer;
+    private Printer<String> printer;
     private Player player;
     private Collapse game;
 

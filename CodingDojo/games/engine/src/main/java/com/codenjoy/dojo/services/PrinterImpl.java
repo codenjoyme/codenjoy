@@ -27,7 +27,7 @@ package com.codenjoy.dojo.services;
  * Этот малый умеет печатать состояние борды на экране.
  * @see com.codenjoy.dojo.services.PrinterImpl#print()
  */
-class PrinterImpl implements Printer {
+class PrinterImpl implements Printer<String> {
     public static final String ERROR_SYMBOL = "Ъ";
     private char[][] field;
     private final int size;

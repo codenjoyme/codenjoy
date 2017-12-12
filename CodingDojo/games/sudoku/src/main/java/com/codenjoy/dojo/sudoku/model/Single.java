@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.hero.HeroData;
 
 public class Single implements Game { // TODO потести меня
 
-    private Printer printer;
+    private Printer<String> printer;
     private Player player;
     private Sudoku game;
 

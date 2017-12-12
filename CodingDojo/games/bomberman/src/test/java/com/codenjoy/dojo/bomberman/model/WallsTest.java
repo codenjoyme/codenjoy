@@ -78,7 +78,7 @@ public class WallsTest {
     }
 
     private String print(final Walls walls) {
-        return printerFactory.getPrinter(new BoardReader() {
+        Printer<String> printer = printerFactory.getPrinter(new BoardReader() {
             @Override
             public int size() {
                 return SIZE;
@@ -88,7 +88,8 @@ public class WallsTest {
             public Iterable<? extends Point> elements() {
                 return walls;
             }
-        }, null).print();
+        }, null);
+        return printer.print();
     }
 
     @Test

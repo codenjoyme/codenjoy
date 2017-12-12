@@ -51,7 +51,7 @@ public class Minesweeper implements Field {
     private Parameter<Integer> detectorCharge;
     private Parameter<Integer> minesCount;
 
-    private Printer printer;
+    private Printer<String> printer;
     private List<Flag> flags;
     private Map<Point, Integer> walkAt;
     private com.codenjoy.dojo.minesweeper.model.Direction nextStep;
