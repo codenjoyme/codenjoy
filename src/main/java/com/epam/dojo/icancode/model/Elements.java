@@ -23,7 +23,7 @@ package com.epam.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.Arrays;
 import java.util.Dictionary;
