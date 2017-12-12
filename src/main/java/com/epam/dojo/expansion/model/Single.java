@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.lobby.PlayerLobby;
 import com.epam.dojo.expansion.services.Printer;

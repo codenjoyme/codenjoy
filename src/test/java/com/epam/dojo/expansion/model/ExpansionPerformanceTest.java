@@ -25,14 +25,7 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.Game;
-import com.epam.dojo.expansion.services.GameRunner;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.junit.Test;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
