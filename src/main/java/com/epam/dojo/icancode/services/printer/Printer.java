@@ -76,15 +76,12 @@ public class Printer {
             builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
         }
 
-        int index;
-        IItem item;
-
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
-                index = xy.getLength(x, y);
+                int index = xy.getLength(x, y);
 
                 for (int j = 0; j < numLayers; ++j) {
-                    item = cells[index].getItem(j);
+                    IItem item = cells[index].getItem(j);
                     builders[j].append(makeState(item, player, x));
                 }
             }
