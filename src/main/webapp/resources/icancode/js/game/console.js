@@ -19,22 +19,38 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initConsole() {
-    // ----------------------- init console -------------------
-    var console = $('#ide-console');
-    console.empty();
+function initLogger() {
+    $(".content").mCustomScrollbar({
+        theme:'dark-2',
+        axis: 'yx',
+        mouseWheel : { enable : true }
+    });
+
+    // ----------------------- init logger -------------------
+    var container = $('#ide-console');
+    container.empty();
 
     var print = function(message) {
-        console.append('> ' + message + '<br>');
-        console.animate({scrollTop: console.prop('scrollHeight')});
+
+    container.append('> ' + message + '<br>');
+
+    //var scroll = $(".content"); // TODO разобраться со скролом
+    //scroll.mCustomScrollbar({
+    //    setTop: scroll.height() + "px"
+    //});
     }
 
-    var error = function(message) {
-        print('Error: ' + message);
+    var error = function(error, functionName) {
+        console.log(error);
+        print('Error: ' + error.message);
+        print('For details check browser console. ' +
+                'For debug open /resouces/js/icancode.js and ' +
+                'set breakpoint into "' + functionName + '" function. ' +
+                'Fix your bug then try again.');
     }
 
     var clean = function() {
-        console.empty();
+        container.empty();
     }
 
     return {

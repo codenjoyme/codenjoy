@@ -25,14 +25,14 @@
   <head>
     <title>I can code | contest: Rules</title>
     <link href="css/reset.css" rel="stylesheet" />
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="css/landing-style.css" rel="stylesheet" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <script src="js/jquery/jquery-3.1.0.js"></script>
+    <script src="js/jquery/jquery-3.1.0.min.js"></script>
     <script src="js/plugins-scroll.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="../css/bootstrap/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
           $('.dropdown-toggle').dropdown();
@@ -111,9 +111,9 @@
       <div class="header-wrap">
         <div class="container">
 		<header class="header row">
-          <div class="col-md-6 col-xs-12">
-            <a class="logo-epam inline" target="_blank" href="https://www.epam.com/" title="Epam"><img src="img/epam_logo.jpg"></a>
-            <div class="logo-engx inline" href="#" title="EngX" title="Home page"><img id="logo" src="img/engx_logo.jpg"><span class="logo-title"><span class="text-uppercase after-line">EPAM EngX</span>iCanCode</span></div>
+          <div class="logo-container col-md-6 col-xs-12">
+            <div class="logo-epam inline" href="#" title="EPAM"><a target="_blank" href="https://www.epam.com/"><img src="img/epam_logo.jpg"></a></div>
+            <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo_logo.png"><span class="logo-title"><span class="text-uppercase after-line">EPAM DOJO</span>iCanCode</span></div>
           </div>
           <h1 class="nav col-md-6 col-xs-12 text-right rules-title">
             <div class="dropdown navbar-right" id="nav">
@@ -170,7 +170,7 @@ Send program to Robot by running the YourSolver class as Main Application.
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "server:8080", new YourSolver());
+        start("your@email.com", "server_ip:8080", new YourSolver());
     }</pre>
 
           <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
@@ -188,12 +188,10 @@ Send program to Robot by running the YourSolver class as Main Application.
         if (goals.isEmpty()) {
             goals = board.getExits();
         }
-        List&lt;Direction&gt; shortestWay = board.getShortestWay(goals);
-        if (shortestWay.isEmpty()) {
-            return doNothing();
-        }
 
-        Direction direction = shortestWay.get(0);
+        // TODO your code here
+        Direction direction = Direction.ACT;
+
         return go(direction);
     }</pre>
 
@@ -399,11 +397,6 @@ assert heroes.get(0).equals(pt(1, 2));</pre>
           <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStarts,  getExits, getHoles</p>
           <pre>List&lt;Point&gt; points = board.getOtherRobots();
 assert points.get(0).equals(pt(1, 2));</pre>
-          
-          <p><span class="func">List&lt;Direction&gt; getShortestWay(List&lt;Point&gt; to)</span> - Return shortest path (list of directions where to move) from your robot location to coordinates specified.</p>
-          <pre>Point destination = pt(2, 4);
-List&lt;Direction&gt; path = board.getShortestWay(Arrays.asList(destination));
-assert path.equals(Arrays.asList(UP, DOWN, DOWN, LEFT));</pre>
         </div>    
       </section>
       
@@ -411,7 +404,9 @@ assert path.equals(Arrays.asList(UP, DOWN, DOWN, LEFT));</pre>
         <div class="container">
           <nav class="footer-nav">
             <ul class="footer-list inline">
-                <li class="footer-item inline"><a href="https://epa.ms/dojo-habr" target="blank">About EPAM-DOJO</a></li>
+                <li class="footer-item inline"><a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a></li>
+                <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
+                <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
                 <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a></li>
                 <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
             </ul>

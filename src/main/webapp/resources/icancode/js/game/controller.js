@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initController(socket, runner, console, buttons, levelProgress, getRobot) {
+function initController(socket, runner, logger, buttons, levelProgress, getRobot) {
     
     if (game.debug) {
         debugger;
@@ -65,11 +65,11 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
         if (!controlling || stopped || finished) {
             finish();
             if (finished) {
-                console.clean();
-                console.printCongrats();
+                logger.clean();
+                logger.printCongrats();
             } else if (stopped) {
-                console.clean();
-                console.printHello();
+                logger.clean();
+                logger.printHello();
             }
             return;
         }
@@ -86,11 +86,13 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
                 try {
                     runner.runProgram(getRobot());
                 } catch (e) {
-                    printError(e);
+                    logger.error(e, 'runProgram');
+                    buttons.enableAll();
+                    return;
                 }
             } else {
-                console.error('function program(robot) not implemented!');
-                console.print('Info: if you clean your code you will get info about commands')
+                logger.print('function program(robot) not implemented!');
+                logger.print('Info: if you clean your code you will get info about commands')
             }
         }
         if (commands.length == 0) {
@@ -112,14 +114,14 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
     }
 
     var compileCommands = function(onSuccess) {
-        console.print('Uploading program...');
+        logger.print('Uploading program...');
         try {
             var robot = getRobot();
             runner.compileProgram(robot);
-
-            sendCode();
         } catch (e) {
-            printError(e);
+            logger.error(e, 'compileProgram');
+            buttons.enableAll();
+            return;
         }
         onSuccess();
     }
@@ -245,14 +247,14 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
 
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
-            console.print('Hero do "' + command + '"');
+            logger.print('Hero do "' + command + '"');
 			if (game.demo) {
 				if (command == 'RESET') {
 					runner.cleanProgram();
 				}
 			}
         } else {
-			// console.print('Waiting for next command...');
+			// logger.print('Waiting for next command...');
 		}
         processCommands(data);
     }

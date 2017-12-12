@@ -1856,13 +1856,13 @@ public class SingleTest {
         JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
-                JsonUtils.cleanSorted(json.get("levelProgress")));
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress").toString())));
 
         assertEquals(heroes,
-                JsonUtils.cleanSorted(json.get("offset")));
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("offset").toString())));
 
         assertEquals(levels,
-                JsonUtils.cleanSorted(json.get("layers")));
+                JsonUtils.clean(json.get("layers").toString()));
 
         assertEquals(true,
                 json.getBoolean("showName"));

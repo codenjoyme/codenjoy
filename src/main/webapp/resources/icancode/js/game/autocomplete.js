@@ -24,25 +24,56 @@
  */
 
 var autocompleteMaps = {};
+
+String.prototype.ltrim = function() {
+	return this.replace(/^\s+/,"");
+}
+String.prototype.rtrim = function() {
+	return this.replace(/\s+$/,"");
+}
+String.prototype.isAlphanumeric = function(){
+    return /^[0-9a-zA-Z]+$/.test(this);
+}
+
 var autocomplete = {
     getCompletions: function(editor, session, pos, prefix, callback) {
-        var line = editor.session.getLine(pos.row);
-        var isFind = false;
+        var line = editor.session.getLine(pos.row).substring(0, pos.column).trim();
 
-        for(var index in autocompleteMaps) {
-            var startFindIndex = pos.column - index.length;
+        var found = [];
+        for(var template in autocompleteMaps) {
+            var templateTrim = template.trim();
 
-            if (startFindIndex >= 0 && line.substring(startFindIndex, pos.column) == index) {
-                isFind = true;
-                break;
+            if (line.indexOf(templateTrim) == -1) {
+                continue;
             }
+
+            var between = line.substring(line.indexOf(templateTrim) + templateTrim.length);
+
+            if (!!between && !between.isAlphanumeric()) {
+                continue;
+            }
+
+            found.push(template);
         }
 
-        if (!isFind) {
+
+        if (found.length == 0) {
             return;
         }
 
-        callback(null, autocompleteMaps[index].map(function(word) {
+        var result = '';
+        for (var index in found) {
+            var template = found[index];
+            if (template.length > result.length) {
+                result = template;
+            }
+        }
+
+        if (!result) {
+            return;
+        }
+
+        callback(null, autocompleteMaps[result].map(function(word) {
             return {
                 caption: word,
                 value: word,
@@ -55,29 +86,34 @@ var autocomplete = {
 }
 
 var initAutocomplete = function(level, levelInfo) {
-    var data;
     autocompleteMaps = {};
 
-    for (var index = 0; index <= level; ++index) {
-        if (!levelInfo.getInfo || !levelInfo.getInfo(index).hasOwnProperty('autocomplete')) {
+    for (var levelIndex = 0; levelIndex <= level; levelIndex++) {
+        if (!levelInfo.getInfo) {
             continue;
         }
 
-        data = levelInfo.getInfo(index).autocomplete;
+        var data = levelInfo.getInfo(levelIndex + 1).autocomplete;
 
-        for(var index in data) {
-            if (!data.hasOwnProperty(index)) {
+        if (!data) {
+            continue;
+        }
+
+        for(var template in data) {
+            if (!data.hasOwnProperty(template)) {
                 continue;
             }
 
-            if (autocompleteMaps.hasOwnProperty(index)) {
-                autocompleteMaps[index] = autocompleteMaps[index].concat(data[index].values);
+            var values = data[template].values.slice(0);
+            if (autocompleteMaps.hasOwnProperty(template)) {
+                autocompleteMaps[template] = autocompleteMaps[template].concat(values);
             } else {
-                autocompleteMaps[index] = data[index].values;
+                autocompleteMaps[template] = values;
             }
 
-            for(var isynonym = 0; isynonym < data[index].synonyms.length; ++isynonym) {
-                autocompleteMaps[data[index].synonyms[isynonym]] = autocompleteMaps[index];
+            for(var index = 0; index < data[template].synonyms.length; index++) {
+                var synonym = data[template].synonyms[index];
+                autocompleteMaps[synonym] = autocompleteMaps[template];
             }
         }
     }

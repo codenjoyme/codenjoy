@@ -19,8 +19,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+// ========================== for debugging ==========================
+
+function compileProgram(code) {
+    try {
+        eval(code);
+        return program;
+    } catch (e) {
+        throw e;
+    }
+}
+
 function runProgram(program, robot) {
-    program(robot);
+    try {
+        program(robot);
+    } catch (e) {
+        throw e;
+    }
 }
 
 // ========================== game setup ==========================
@@ -42,7 +57,7 @@ if (gameName == 'iCanCode Training') {
 } else if (gameName == 'eKids') {
     game.enableBefunge = true;
     game.sprites = 'ekids';
-} else if (gameName == 'iCanCode Contest') {
+} else { // if (gameName == 'iCanCode Contest') { by default
     game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;

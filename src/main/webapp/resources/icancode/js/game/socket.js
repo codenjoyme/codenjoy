@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
+function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
 
     if (game.debug) {
         debugger;
@@ -63,12 +63,12 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
         var port = window.location.port;
         var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
-        console.print('Connecting to Hero...');
+        logger.print('Connecting to Hero...');
         socket = createSocket(server + '?user=' + game.playerName);
 
         socket.onopen = function() {
-            console.print('...connected successfully!');
-            console.printHello();
+            logger.print('...connected successfully!');
+            logger.printHello();
             if (!!onSuccess) {
                 onSuccess();
             }
@@ -76,7 +76,7 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
 
         socket.onclose = function(event) {
             var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
-            console.print('Signal lost! Code: ' + event.code + reason);
+            logger.print('Signal lost! Code: ' + event.code + reason);
             socket = null;
 
             onSocketClose();

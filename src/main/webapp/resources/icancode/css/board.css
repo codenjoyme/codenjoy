@@ -8,31 +8,45 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initEditor(libs, container, completer) {
-    ace.config.set('basePath', libs + '/ace/src/');
-    if (!!completer) {
-        var tools = ace.require("ace/ext/language_tools");
-        tools.addCompleter(completer);
-    }
-    var editor = ace.edit(container);
-    editor.setTheme('ace/theme/monokai');
-    editor.session.setMode('ace/mode/javascript');
-    editor.setOptions({
-        fontSize: '12pt',
-        enableBasicAutocompletion: true,
-        enableSnippets: false,
-        enableLiveAutocompletion: true
-    });
-    return editor;
+
+.main {
+  transition: padding 1s;
+  margin-top: 15px;
+  padding: 0 15px 0 565px;
+  position: relative;
+}
+
+.game {
+  background-position: center;
+  position: absolute;
+  left: 15px;
+}
+
+
+.board {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+.player-canvas {
+  height: 550px;
+  float: none;
+}
+
+.leader {
+  transition: none;
+  padding-left: 600px;
 }

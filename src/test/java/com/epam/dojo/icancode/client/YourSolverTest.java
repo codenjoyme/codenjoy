@@ -62,7 +62,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                jump());
 
         assertL("╔═════┐" +
                 "║S...$│" +
@@ -78,7 +78,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                jump());
 
         assertL("╔═════┐" +
                 "║S...$│" +
@@ -94,7 +94,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                jump());
 
         assertL("╔═════┐" +
                 "║S...$│" +
@@ -110,7 +110,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                jump());
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -126,7 +126,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(DOWN));
+                jump());
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -142,7 +142,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(DOWN));
+                jump());
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -158,7 +158,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(DOWN));
+                jump());
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -174,7 +174,7 @@ public class YourSolverTest {
                 "-----☺-" +
                 "-------" +
                 "-------",
-                go(DOWN));
+                jump());
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -190,7 +190,7 @@ public class YourSolverTest {
                 "-------" +
                 "-----☺-" +
                 "-------",
-                doNothing());
+                jump());
     }
 
     private void assertL(String layer1, String layer2, Command expected) {

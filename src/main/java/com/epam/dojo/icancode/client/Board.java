@@ -273,41 +273,4 @@ public class Board extends AbstractBoard<Elements> {
 
         return result.substring(1, result.length() - 1);
     }
-
-    private DeikstraFindWay.Possible possible() {
-        return new DeikstraFindWay.Possible() {
-            @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (isBarrierAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (isOutOfField(nx, ny)) return false;
-
-                if (isBarrierAt(nx, ny)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
-            }
-        };
-    }
-
-    /**
-     * @param to Destination point.
-     * @return Shortest path (list of directions where to move) from your robot location to coordinates specified.
-     */
-    public List<Direction> getShortestWay(List<Point> to) {
-        DeikstraFindWay.Possible map = possible();
-        DeikstraFindWay findWay = new DeikstraFindWay();
-        List<Direction> shortestWay = findWay.getShortestWay(size(), getMe(), to, map);
-        return shortestWay;
-    }
 }

@@ -84,7 +84,7 @@ public class ProgressBarTest {
     }
 
     private void assertState(String expected) {
-        assertEquals(JsonUtils.prettyPrint(new JSONObject(expected)), JsonUtils.prettyPrint(progressBar.printProgress()));
+        assertEquals(JsonUtils.toStringSorted(expected), JsonUtils.toStringSorted(progressBar.printProgress().toString()));
     }
 
     @Test

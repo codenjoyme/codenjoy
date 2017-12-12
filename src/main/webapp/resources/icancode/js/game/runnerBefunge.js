@@ -24,7 +24,7 @@
  * Based on work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
  * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
  **/
-function initRunnerBefunge(console) {
+function initRunnerBefunge(logger, storage) {
 
     if (game.debug) {
         debugger;
@@ -65,7 +65,7 @@ function initRunnerBefunge(console) {
 
     var popFromStack = function() {
         if (stack.length == 0) {
-            console.print('Не указано значение для команды. Укажите значение!');
+            logger.print('Не указано значение для команды. Укажите значение!');
             forceFinish();
             return;
         }
@@ -147,7 +147,7 @@ function initRunnerBefunge(console) {
     }
 
     var printStackCommand = function(x, y) {
-        console.print('Stack [' + stack + ']');
+        logger.print('Stack [' + stack + ']');
     }
 
     var activateProcedure1Command = function(x, y) {
@@ -167,7 +167,7 @@ function initRunnerBefunge(console) {
         try {
             var value = robot.getScanner().at(oldValue);
         } catch (error) {
-            console.print('Неправильно значение для сканнера: "' + oldValue + '"');
+            logger.print('Неправильно значение для сканнера: "' + oldValue + '"');
             forceFinish();
             return;
         }
@@ -712,14 +712,14 @@ function initRunnerBefunge(console) {
             }
         }
 
-        localStorage.setItem('editor.cardcode', JSON.stringify(data));
+        storage.save('editor', data);
     };
 
     // -------------------------------------- load state -----------------------------------
     var loadState = function() {
         readyForSaving = false;
         try {
-            var data = JSON.parse(localStorage.getItem('editor.cardcode'));
+            var data = storage.load('editor');
         } catch (err) {
             readyForSaving = true;
             return;
@@ -1097,14 +1097,14 @@ function initRunnerBefunge(console) {
                     return pt(x, y);
                 }
             }
-            console.print('Команда "' + id + '" не найдена');
+            logger.print('Команда "' + id + '" не найдена');
             return null;
         }
 
         var start = function() {
             var point = find('start');
             if (!point) {
-                console.print("Ошибка: Укажите точку старта выполнения программы!");
+                logger.print("Ошибка: Укажите точку старта выполнения программы!");
                 return;
             }
             animate(point.getX(), point.getY(), true);

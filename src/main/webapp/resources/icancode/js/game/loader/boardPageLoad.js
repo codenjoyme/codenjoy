@@ -24,7 +24,12 @@
  */
 
 var boardPageLoad = function() {
-    var libs = game.contextPath + 'resources/' + game.gameName + '/js';
+
+    if (game.debug) {
+        debugger;
+    }
+
+    var libs = game.contextPath + '/resources/' + game.gameName + '/js';
     if (game.demo) {
         libs = 'js';
     }
@@ -39,24 +44,17 @@ var boardPageLoad = function() {
             e.preventDefault();
         }
     });
-    // ----------------------- init scrollbar -------------------
-    $(".content").mCustomScrollbar({
-        theme:'dark-2',
-        axis: 'yx',
-        mouseWheel : { enable : true }
-    });
-
     // ----------------------- init tooltip -------------------
     $('[data-toggle="tooltip"]').tooltip();
 
-    // ----------------------- init console -------------------
-    var console = initConsole();
-    console.printCongrats = function() {
-        console.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
+    // ----------------------- init logger -------------------
+    var logger = initLogger();
+    logger.printCongrats = function() {
+        logger.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
     }
 
-    console.printHello = function() {
-        console.print('Hello ' + game.playerName + ', I am Hero! Waiting for your command...');
+    logger.printHello = function() {
+        logger.print('Hello ' + game.playerName + ', I am Hero! Waiting for your command...');
     }
 
     // ----------------------- init slider -------------------
@@ -148,15 +146,28 @@ var boardPageLoad = function() {
     };
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
 
+    // ----------------------- init storage -------------------
+    var storage = {
+        getKey : function(property) {
+            return property + '[' + game.playerName + ']';
+        },
+        load : function(property) {
+            return JSON.parse(localStorage.getItem(this.getKey(property)));
+        },
+        save : function(property, data) {
+            localStorage.setItem(this.getKey(property), JSON.stringify(data));
+        }
+    };
+
     // ----------------------- init runner -------------------
     var runner = null;
     if (game.enableBefunge) {
-        runner = initRunnerBefunge(console);
+        runner = initRunnerBefunge(logger, storage);
     } else {
         var getCurrentLevelInfo = function(){
             return levelInfo.getInfo(levelProgress.getCurrentLevel());
         };
-        runner = initRunnerJs(game, libs, getCurrentLevelInfo);
+        runner = initRunnerJs(game, libs, getCurrentLevelInfo, storage);
     }
 
     // ------------------------ init socket ----------------------
@@ -166,13 +177,14 @@ var boardPageLoad = function() {
     var onSocketClose = function() {
         controller.reconnect();
     }
-    var socket = initSocket(game, buttons, console, onSocketMessage, onSocketClose);
+    var socket = initSocket(game, buttons, logger, onSocketMessage, onSocketClose);
 
     // ----------------------- init progressbar -------------------
     var oldLastPassed = -1;
     var onUpdate = function(level, multiple, lastPassed) {
         if (oldLastPassed < lastPassed) {
-            if (oldLastPassed != -1) {
+            var isFirstWin = (lastPassed == 0 && level == 1 && oldLastPassed == -1);
+            if (isFirstWin || oldLastPassed != -1) {
                 showWinWindow();
             }
             oldLastPassed = lastPassed;
@@ -190,13 +202,13 @@ var boardPageLoad = function() {
 
     // ------------------------ init controller ----------------------
 
-    var controller = initController(socket, runner, console, buttons, levelProgress, function() {
+    var controller = initController(socket, runner, logger, buttons, levelProgress, function() {
         return robot;
     });
 
     var robot = null;
     var resetRobot = function() {
-        robot = initRobot(console, controller);
+        robot = initRobot(logger, controller);
     }
     resetRobot();
 
@@ -221,7 +233,7 @@ var boardPageLoad = function() {
         buttons.enable(helpButton, false);
 
         var link = $('#register-link').attr('href');
-        console.print('<a href="' + link + '">Please register</a>');
+        logger.print('<a href="' + link + '">Please register</a>');
 
         runner.setStubValue();
     }
