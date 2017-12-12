@@ -26,6 +26,8 @@ package com.epam.dojo.icancode.services.printer;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
+import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.ICell;
@@ -82,7 +84,8 @@ public class Printer {
 
                 for (int j = 0; j < numLayers; ++j) {
                     IItem item = cells[index].getItem(j);
-                    builders[j].append(makeState(item, player, x));
+                    Object[] elements = item.getItemsInSameCell().toArray();
+                    builders[j].append(makeState(item, player, x, elements));
                 }
             }
         }
@@ -96,11 +99,11 @@ public class Printer {
         return result;
     }
 
-    private String makeState(IItem item, Player player, int x) {
+    private String makeState(State<Elements, Player> item, Player player, int x, Object[] elements) {
         char result;
 
         if (item != null) {
-            result = item.state(player, item.getItemsInSameCell().toArray()).ch();
+            result = item.state(player, elements).ch();
         } else {
             result = '-';
         }
