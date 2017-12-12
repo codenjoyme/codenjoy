@@ -113,7 +113,6 @@ public class Printer {
         return builders;
     }
 
-    // If it is the first start that we will must to center position
     private void centerPositionOnStart(Player player) {
         Point pivot = player.getHero().getPosition();
         if (needToCenter) {
