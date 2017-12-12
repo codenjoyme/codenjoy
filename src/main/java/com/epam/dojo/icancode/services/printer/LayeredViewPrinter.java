@@ -28,14 +28,12 @@ import com.codenjoy.dojo.services.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import com.epam.dojo.icancode.model.Player;
-
 public class LayeredViewPrinter implements Printer<PrinterData> {
 
     private static final int BOUND_DEFAULT = 4;
 
     private BoardReader<State> reader;
-    private Supplier<Player> player;
+    private Supplier<Object> player;
     private int countLayers;
 
     private int viewSize;
@@ -46,7 +44,7 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
     private boolean needToCenter;
     private int size;
 
-    public LayeredViewPrinter(BoardReader<State> reader, Supplier<Player> player, int viewSize, int countLayers) {
+    public LayeredViewPrinter(BoardReader<State> reader, Supplier<Object> player, int viewSize, int countLayers) {
         this.reader = reader;
         this.player = player;
         this.countLayers = countLayers;
@@ -65,7 +63,8 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
         BiFunction<Integer, Integer, State> elements = reader.elements();
         size = reader.size();
         LengthToXY xy = new LengthToXY(size);
-        Point pivot = player.get().getHero().getPosition();
+        Object player = this.player.get();
+        Point pivot = reader.viewCenter(player);
 
         //If it is the first start that we will must to center position
         if (needToCenter) {
@@ -86,8 +85,8 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
 
                 for (int j = 0; j < countLayers; ++j) {
                     State item = elements.apply(index, j);
-                    Object[] inSameCell = reader.getItemsInSameCell(item);
-                    builders[j].append(makeState(item, player.get(), inSameCell));
+                    Object[] inSameCell = reader.itemsInSameCell(item);
+                    builders[j].append(makeState(item, player, inSameCell));
 
                     if (x - vx == viewSize - 1) {
                         builders[j].append('\n');
@@ -105,7 +104,7 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
         return result;
     }
 
-    private String makeState(State item, Player player, Object[] elements) {
+    private String makeState(State item, Object player, Object[] elements) {
         return (item == null) ? "-" : item.state(player, elements).toString();
     }
 

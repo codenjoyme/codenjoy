@@ -1,4 +1,6 @@
 package com.epam.dojo.icancode.services.printer;
+import com.codenjoy.dojo.services.Point;
+
 import java.util.function.BiFunction;
 
 /**
@@ -10,5 +12,7 @@ public interface BoardReader<T> {
 
     BiFunction<Integer, Integer, T> elements();
 
-    Object[] getItemsInSameCell(T item);
+    Point viewCenter(Object player);
+
+    Object[] itemsInSameCell(T item);
 }

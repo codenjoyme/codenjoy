@@ -24,6 +24,7 @@ package com.epam.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.interfaces.ICell;
@@ -261,7 +262,12 @@ public class ICanCode implements Tickable, IField {
             }
 
             @Override
-            public Object[] getItemsInSameCell(State item) {
+            public Point viewCenter(Object player) {
+                return ((Player)player).getHero().getPosition();
+            }
+
+            @Override
+            public Object[] itemsInSameCell(State item) {
                 return ((IItem) item).getItemsInSameCell().toArray();
             }
         };
