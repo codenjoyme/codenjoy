@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.printer.layeredview;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -44,7 +45,7 @@ public class PrinterData {
     }
 
     public void addLayer(String layer) {
-        layers.add(layer.replaceAll("\n", ""));
+        layers.add(layer);
     }
 
     public List<String> getLayers() {
@@ -56,5 +57,10 @@ public class PrinterData {
         result.put("x", offset.getX());
         result.put("y", offset.getY());
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(this);
     }
 }
