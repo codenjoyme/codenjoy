@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Player;
 
 public class LayeredViewPrinter implements Printer<PrinterData> {
@@ -88,7 +87,11 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
                 for (int j = 0; j < countLayers; ++j) {
                     State item = elements.apply(index, j);
                     Object[] inSameCell = reader.getItemsInSameCell(item);
-                    builders[j].append(makeState(item, player.get(), x, inSameCell));
+                    builders[j].append(makeState(item, player.get(), inSameCell));
+
+                    if (x - vx == viewSize - 1) {
+                        builders[j].append('\n');
+                    }
                 }
             }
         }
@@ -102,20 +105,8 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
         return result;
     }
 
-    private String makeState(State<Elements, Player> item, Player player, int x, Object[] elements) {
-        char result;
-
-        if (item != null) {
-            result = item.state(player, elements).ch();
-        } else {
-            result = '-';
-        }
-
-        if (x - vx == viewSize - 1) {
-            return new String(new char[]{result, '\n'});
-        }
-
-        return String.valueOf(result);
+    private String makeState(State item, Player player, Object[] elements) {
+        return (item == null) ? "-" : item.state(player, elements).toString();
     }
 
     private void moveTo(Point point) {
