@@ -61,26 +61,21 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
 
     @Override
     public PrinterData print() {
-        StringBuilder[] builders = new StringBuilder[countLayers];
-        BiFunction<Integer, Integer, State> elements = reader.elements();
         size = reader.size();
-        LengthToXY xy = new LengthToXY(size);
         Object player = this.player.get();
-        Point pivot = reader.viewCenter(player);
 
-        //If it is the first start that we will must to center position
-        if (needToCenter) {
-            needToCenter = false;
-            moveToCenter(pivot);
-        } else if (pivot != null) {
-            moveTo(pivot);
-        }
-        adjustView(size);
+        centerPositionOnStart(player);
 
-        for (int i = 0; i < countLayers; ++i) {
-            builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
-        }
+        StringBuilder[] builders = prepareLayers();
+        fillLayers(player, builders);
+        PrinterData result = getPrinterData(builders);
 
+        return result;
+    }
+
+    private void fillLayers(Object player, StringBuilder[] builders) {
+        BiFunction<Integer, Integer, State> elements = reader.elements();
+        LengthToXY xy = new LengthToXY(size);
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
                 int index = xy.getLength(x, y);
@@ -96,14 +91,34 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
                 }
             }
         }
+    }
 
+    private PrinterData getPrinterData(StringBuilder[] builders) {
         PrinterData result = new PrinterData();
         result.setOffset(new PointImpl(vx, vy));
         for (int i = 0; i < countLayers; ++i) {
             result.addLayer(builders[i].toString());
         }
-
         return result;
+    }
+
+    private StringBuilder[] prepareLayers() {
+        StringBuilder[] builders = new StringBuilder[countLayers];
+        for (int i = 0; i < countLayers; ++i) {
+            builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
+        }
+        return builders;
+    }
+
+    private void centerPositionOnStart(Object player) {
+        Point pivot = reader.viewCenter(player);
+        if (needToCenter) {
+            needToCenter = false;
+            moveToCenter(pivot);
+        } else if (pivot != null) {
+            moveTo(pivot);
+        }
+        adjustView(size);
     }
 
     private String makeState(State item, Object player, Object[] elements) {
