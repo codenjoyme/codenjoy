@@ -82,7 +82,7 @@ public class ICanCodeTest {
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
-        printer = new LayeredViewPrinter(game, () -> player, Levels.size(), COUNT_LAYERS);
+        printer = new LayeredViewPrinter(game.reader(), () -> player, Levels.size(), COUNT_LAYERS);
     }
 
     private void givenFlWithOnePlayer(String... boards) {
@@ -97,7 +97,7 @@ public class ICanCodeTest {
         game.newGame(otherPlayer);
         this.hero = game.getHeroes().get(0);
 
-        printer = new LayeredViewPrinter(game, () -> player, Levels.size(), COUNT_LAYERS);
+        printer = new LayeredViewPrinter(game.reader(), () -> player, Levels.size(), COUNT_LAYERS);
     }
 
     private List<ILevel> createLevels(String[] boards) {

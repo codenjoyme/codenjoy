@@ -24,19 +24,18 @@ package com.epam.dojo.icancode.services.printer;
 
 
 import com.codenjoy.dojo.services.*;
-import com.epam.dojo.icancode.model.Elements;
-import com.epam.dojo.icancode.model.ICanCode;
-import com.epam.dojo.icancode.model.Player;
-import com.epam.dojo.icancode.model.interfaces.ICell;
-import com.epam.dojo.icancode.model.interfaces.IItem;
+
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
+
+import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Player;
 
 public class LayeredViewPrinter implements Printer<PrinterData> {
 
     private static final int BOUND_DEFAULT = 4;
 
-    private int size;
-    private ICanCode game;
+    private BoardReader<State> reader;
     private Supplier<Player> player;
     private int countLayers;
 
@@ -46,12 +45,13 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
     private int bound;
 
     private boolean needToCenter;
+    private int size;
 
-    public LayeredViewPrinter(ICanCode game, Supplier<Player> player, int viewSize, int countLayers) {
-        this.game = game;
+    public LayeredViewPrinter(BoardReader<State> reader, Supplier<Player> player, int viewSize, int countLayers) {
+        this.reader = reader;
         this.player = player;
         this.countLayers = countLayers;
-        this.viewSize = Math.min(game.size(), viewSize);
+        this.viewSize = Math.min(reader.size(), viewSize);
 
         if (this.viewSize == viewSize) {
             bound = BOUND_DEFAULT;
@@ -63,8 +63,8 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
     @Override
     public PrinterData print() {
         StringBuilder[] builders = new StringBuilder[countLayers];
-        ICell[] cells = game.getCurrentLevel().getCells();
-        size = game.size();
+        BiFunction<Integer, Integer, State> elements = reader.elements();
+        size = reader.size();
         LengthToXY xy = new LengthToXY(size);
         Point pivot = player.get().getHero().getPosition();
 
@@ -86,9 +86,9 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
                 int index = xy.getLength(x, y);
 
                 for (int j = 0; j < countLayers; ++j) {
-                    IItem item = cells[index].getItem(j);
-                    Object[] elements = item.getItemsInSameCell().toArray();
-                    builders[j].append(makeState(item, player.get(), x, elements));
+                    State item = elements.apply(index, j);
+                    Object[] inSameCell = reader.getItemsInSameCell(item);
+                    builders[j].append(makeState(item, player.get(), x, inSameCell));
                 }
             }
         }

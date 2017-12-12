@@ -1,13 +1,14 @@
 package com.epam.dojo.icancode.services.printer;
-
-import com.codenjoy.dojo.services.Point;
+import java.util.function.BiFunction;
 
 /**
  * Created by Oleksandr_Baglai on 2017-12-12.
  */
-public interface BoardReader {
+public interface BoardReader<T> {
 
     int size();
 
-    Iterable<? extends Point> elements();
+    BiFunction<Integer, Integer, T> elements();
+
+    Object[] getItemsInSameCell(T item);
 }

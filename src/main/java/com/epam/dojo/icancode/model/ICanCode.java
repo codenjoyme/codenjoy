@@ -24,6 +24,7 @@ package com.epam.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
@@ -36,10 +37,11 @@ import com.epam.dojo.icancode.model.items.Gold;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.model.items.Start;
 import com.epam.dojo.icancode.services.Events;
+import com.epam.dojo.icancode.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.function.BiFunction;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -243,5 +245,25 @@ public class ICanCode implements Tickable, IField {
 
     public void setLevel(ILevel level) {
         this.level = level;
+    }
+
+    public BoardReader<State> reader() {
+        return new BoardReader<State>() {
+            @Override
+            public int size() {
+                return ICanCode.this.size();
+            }
+
+            @Override
+            public BiFunction<Integer, Integer, State> elements() {
+                ICell[] cells = ICanCode.this.getCurrentLevel().getCells();
+                return (index, layer) -> cells[index].getItem(layer);
+            }
+
+            @Override
+            public Object[] getItemsInSameCell(State item) {
+                return ((IItem) item).getItemsInSameCell().toArray();
+            }
+        };
     }
 }

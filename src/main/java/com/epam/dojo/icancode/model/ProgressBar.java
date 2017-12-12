@@ -66,7 +66,7 @@ public class ProgressBar {
 
     private void buildPrinter() {
         // TODO "() -> player" !ok, refactoring this
-        printer = new LayeredViewPrinter(current, () -> player, Levels.size(), 2);
+        printer = new LayeredViewPrinter(current.reader(), () -> player, Levels.size(), 2);
     }
 
     public Integer getBackToSingleLevel() {
