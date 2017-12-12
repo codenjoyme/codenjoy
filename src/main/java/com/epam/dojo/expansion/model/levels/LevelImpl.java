@@ -27,8 +27,9 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Field;
+import com.epam.dojo.expansion.model.levels.items.ForcesState;
+import com.epam.dojo.expansion.model.ProgressBar;
 import com.epam.dojo.expansion.model.levels.items.*;
-import com.epam.dojo.expansion.services.Printer;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -100,8 +101,8 @@ public class LevelImpl implements Level {
     }
 
     public void fillForcesCount(String forcesCountMap) {
-        fill(forcesCountMap, Printer.COUNT_NUMBERS, (cell, countString) -> {
-            int count = Printer.parseCount(countString);
+        fill(forcesCountMap, ForcesState.COUNT_NUMBERS, (cell, countString) -> {
+            int count = ForcesState.parseCount(countString);
             if (count == 0) {
                 return;
             }

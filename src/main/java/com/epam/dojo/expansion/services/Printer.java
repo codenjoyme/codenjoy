@@ -26,6 +26,8 @@ package com.epam.dojo.expansion.services;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Player;
@@ -36,14 +38,18 @@ import com.epam.dojo.expansion.model.levels.items.HeroForces;
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class Printer {
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
+
+public class Printer implements com.codenjoy.dojo.services.printer.Printer<PrinterData> {
 
     private static final int BOUND_DEFAULT = 4;
-    public static final int LAYERS_TOTAL = 2;
-    public static final int COUNT_NUMBERS = TestUtils.COUNT_NUMBERS;
 
+    private BoardReader reader;
+    private Supplier<Object> player;
+
+    private int countLayers;
     private int size;
-    private PlayerBoard game;
 
     private int viewSize;
     private int vx;
@@ -52,9 +58,11 @@ public class Printer {
 
     private boolean needToCenter;
 
-    public Printer(PlayerBoard game, int viewSize) {
-        this.game = game;
-        this.viewSize = Math.min(game.size(), viewSize);
+    public Printer(BoardReader reader, Supplier<Object> player, int viewSize, int countLayers) {
+        this.reader = reader;
+        this.player = player;
+        this.countLayers = countLayers;
+        this.viewSize = Math.min(reader.size(), viewSize);
 
         if (this.viewSize == viewSize) {
             bound = BOUND_DEFAULT;
@@ -63,58 +71,57 @@ public class Printer {
         needToCenter = bound != 0;
     }
 
-    public PrinterData getBoardAsString(Player player) {
-        int layers = LAYERS_TOTAL;
-        size = game.size();
+    @Override
+    public PrinterData print() {
+        size = reader.size();
+        Object player = this.player.get();
 
         centerPositionOnStart(player);
 
-        StringBuilder[] builders = prepareLayers(layers + 1);
+        StringBuilder[] builders = prepareLayers();
         fillLayers(player, builders);
-        PrinterData result = getPrinterData(layers, builders);
+        PrinterData result = getPrinterData(builders);
 
         return result;
     }
 
-    private void fillLayers(Player player, StringBuilder[] builders) {
+    private void fillLayers(Object player, StringBuilder[] builders) {
         LengthToXY xy = new LengthToXY(size);
-        Cell[] cells = game.getCurrentLevel().getCells();
+        BiFunction<Integer, Integer, State> cells = reader.elements();
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
                 int index = xy.getLength(x, y);
 
-                Item item1 = cells[index].getItem(0);
-                builders[0].append(makeState(item1, player));
-
-                Item item2 = cells[index].getItem(1);
-                builders[1].append(makeState(item2, player));
-                builders[2].append(makeForceState(item2));
+                for (int j = 0; j < countLayers; ++j) {
+                    State item = cells.apply(index, j);
+                    Object[] inSameCell = reader.itemsInSameCell(item);
+                    builders[j].append(makeState(item, player, inSameCell));
+                }
             }
         }
     }
 
     @NotNull
-    private PrinterData getPrinterData(int layers, StringBuilder[] builders) {
+    private PrinterData getPrinterData(StringBuilder[] builders) {
         PrinterData result = new PrinterData();
         result.setOffset(new PointImpl(vx, vy));
-        for (int i = 0; i < layers; ++i) {
+        for (int i = 0; i < countLayers; ++i) {
             result.addLayer(builders[i].toString());
         }
-        result.setForces(builders[layers].toString());
         return result;
     }
 
     @NotNull
-    private StringBuilder[] prepareLayers(int layers) {
-        StringBuilder[] builders = new StringBuilder[layers];
-        for (int i = 0; i < layers; ++i) {
+    private StringBuilder[] prepareLayers() {
+        StringBuilder[] builders = new StringBuilder[countLayers];
+        for (int i = 0; i < countLayers; ++i) {
             builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
         }
         return builders;
     }
 
-    private void centerPositionOnStart(Player player) {
-        Point pivot = player.getHero().getPosition();
+    private void centerPositionOnStart(Object player) {
+        Point pivot = reader.viewCenter(player);
         if (needToCenter) {
             needToCenter = false;
             moveToCenter(pivot);
@@ -124,36 +131,8 @@ public class Printer {
         adjustView(size);
     }
 
-    private String makeState(Item item, Player player) {
-        if (item != null) {
-            return String.valueOf(item.state(player, item.getItemsInSameCell().toArray()).ch());
-        } else {
-            return "-";
-        }
-    }
-
-    public static String makeForceState(Item item) {
-        if (item instanceof HeroForces) {
-            HeroForces forces = (HeroForces) item;
-            int count = forces.getForces().getCount();
-            String result = Integer.toString(count, Character.MAX_RADIX).toUpperCase();
-            if (result.length() < COUNT_NUMBERS) { // TODO оптимизировать
-                return StringUtils.leftPad(result, COUNT_NUMBERS, '0');
-            } else if (result.length() > COUNT_NUMBERS) {
-                return result.substring(result.length() - COUNT_NUMBERS, result.length());
-            }
-            return result;
-        } else {
-            return "-=#";
-        }
-    }
-
-    public static int parseCount(String sub) {
-        if (sub.equals("-=#")) {
-            return 0;
-        } else {
-            return Integer.parseInt(sub, Character.MAX_RADIX);
-        }
+    private String makeState(State item, Object player, Object[] elements) {
+        return (item == null) ? "-" : item.state(player, elements).toString();
     }
 
     private void moveTo(Point point) {

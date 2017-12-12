@@ -43,6 +43,7 @@ import java.util.function.Supplier;
  */
 public class ProgressBar {
 
+    public static final int COUNT_LAYERS = 3;
     private static Logger logger = DLoggerFactory.getLogger(ProgressBar.class);
 
     private Supplier<PlayerLobby> lobby;
@@ -72,7 +73,7 @@ public class ProgressBar {
     }
 
     private void buildPrinter() {
-        printer = new Printer(current, current.getViewSize());
+        printer = new Printer(current.reader(), () -> player, current.getViewSize(), COUNT_LAYERS);
     }
 
     private Integer getBackToSingleLevel() {

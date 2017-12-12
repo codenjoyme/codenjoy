@@ -96,7 +96,7 @@ public class ExpansionTest {
         game = progressBar.getCurrent();
         hero = game.getPlayers().get(0).getHero();
 
-        printer = new Printer(game, size);
+        printer = new Printer(game.reader(), () -> player, size, ProgressBar.COUNT_LAYERS);
     }
 
 
@@ -106,7 +106,7 @@ public class ExpansionTest {
     }
 
     private PrinterData getBoardAsString() {
-        return printer.getBoardAsString(player);
+        return printer.print();
     }
 
     private void assertE(String expected) {
@@ -116,7 +116,7 @@ public class ExpansionTest {
 
     private void assertF(String expected) {
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString().getForces()));
+                TestUtils.injectNN(getBoardAsString().getLayers().get(2)));
     }
 
     @Test

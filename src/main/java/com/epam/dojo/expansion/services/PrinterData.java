@@ -40,7 +40,6 @@ public class PrinterData {
 
     private List<String> layers;
     private Point offset;
-    private String forces;
 
     public PrinterData() {
         this.layers = new LinkedList<>();
@@ -63,14 +62,6 @@ public class PrinterData {
         result.put("x", offset.getX());
         result.put("y", offset.getY());
         return result;
-    }
-
-    public String getForces() {
-        return forces;
-    }
-
-    public void setForces(String forces) {
-        this.forces = forces;
     }
 
     @Override

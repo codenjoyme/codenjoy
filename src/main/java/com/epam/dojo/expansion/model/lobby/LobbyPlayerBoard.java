@@ -25,11 +25,10 @@ package com.epam.dojo.expansion.model.lobby;
 
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
 import com.epam.dojo.expansion.model.*;
-import com.epam.dojo.expansion.model.levels.CellImpl;
-import com.epam.dojo.expansion.model.levels.Level;
-import com.epam.dojo.expansion.model.levels.LevelImpl;
-import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.levels.*;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.items.HeroForces;
 import com.epam.dojo.expansion.model.levels.items.Start;
@@ -39,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.List;
+import java.util.function.BiFunction;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -175,5 +175,32 @@ public abstract class LobbyPlayerBoard implements PlayerBoard, Field {
     @Override
     public int freeBases() {
         return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public BoardReader reader() {
+        return new BoardReader() {
+
+            @Override
+            public int size() {
+                return LobbyPlayerBoard.this.size();
+            }
+
+            @Override
+            public BiFunction<Integer, Integer, State> elements() {
+                Cell[] cells = level.getCells();
+                return (index, layer) -> cells[index].getItem(layer);
+            }
+
+            @Override
+            public Point viewCenter(Object player) {
+                return ((Player)player).getHero().getPosition();
+            }
+
+            @Override
+            public Object[] itemsInSameCell(State item) {
+                return ((Item) item).getItemsInSameCell().toArray();
+            }
+        };
     }
 }

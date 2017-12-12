@@ -277,7 +277,7 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     private PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().getBoardAsString(single.getPlayer());
+        return single.getPrinter().print();
     }
 
     protected void assertE(String expected, int index) {
@@ -289,7 +289,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void assertF(String expected, int index) {
         Single single = single(index);
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString(single).getForces()));
+                TestUtils.injectNN(getBoardAsString(single).getLayers().get(2)));
     }
 
     protected EventListener verify(int index) {

@@ -136,11 +136,11 @@ public class AbstractGameRunnerTest {
     protected void assertF(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString(single).getForces()));
+                TestUtils.injectNN(getBoardAsString(single).getLayers().get(2)));
     }
 
     protected PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().getBoardAsString(single.getPlayer());
+        return single.getPrinter().print();
     }
 
     protected void tickAll() {

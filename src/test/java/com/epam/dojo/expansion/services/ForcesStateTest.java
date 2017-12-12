@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.services;
 import com.epam.dojo.expansion.model.levels.CellImpl;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.items.ForcesState;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 import com.epam.dojo.expansion.model.levels.items.HeroForces;
 import com.epam.dojo.expansion.model.levels.items.Start;
@@ -37,19 +38,19 @@ import static org.junit.Assert.*;
 /**
  * Created by Oleksandr_Baglai on 2017-09-05.
  */
-public class PrinterTest {
+public class ForcesStateTest {
 
     @Test
     public void shouldCountNotMoreThan() {
-        assertEquals("-=#", Printer.makeForceState(new Start(Elements.BASE1)));
-        assertEquals("000", Printer.makeForceState(forces(0)));
-        assertEquals("001", Printer.makeForceState(forces(1)));
-        assertEquals("ZZZ", Printer.makeForceState(forces(46655)));
-        assertEquals("000", Printer.makeForceState(forces(46656)));
-        assertEquals("001", Printer.makeForceState(forces(46657)));
-        assertEquals("GIF", Printer.makeForceState(forces(1234455)));
-        assertEquals("046", Printer.makeForceState(forces(150)));
-        assertEquals("03W", Printer.makeForceState(forces(140)));
+        assertEquals("-=#", new ForcesState(new Start(Elements.BASE1)).state(null, null));
+        assertEquals("000", new ForcesState(forces(0)).state(null, null));
+        assertEquals("001", new ForcesState(forces(1)).state(null, null));
+        assertEquals("ZZZ", new ForcesState(forces(46655)).state(null, null));
+        assertEquals("000", new ForcesState(forces(46656)).state(null, null));
+        assertEquals("001", new ForcesState(forces(46657)).state(null, null));
+        assertEquals("GIF", new ForcesState(forces(1234455)).state(null, null));
+        assertEquals("046", new ForcesState(forces(150)).state(null, null));
+        assertEquals("03W", new ForcesState(forces(140)).state(null, null));
     }
 
     @NotNull

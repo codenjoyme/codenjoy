@@ -22,12 +22,11 @@ package com.epam.dojo.expansion.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.levels.Cell;
+import com.epam.dojo.expansion.model.levels.Item;
 import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.items.*;
 import com.epam.dojo.expansion.model.replay.GameLogger;
@@ -41,7 +40,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
+import static com.epam.dojo.expansion.model.ProgressBar.COUNT_LAYERS;
 import static com.epam.dojo.expansion.services.SettingsWrapper.data;
 
 public class Expansion implements Tickable, Field, PlayerBoard {
@@ -603,8 +604,10 @@ public class Expansion implements Tickable, Field, PlayerBoard {
 
         public PrinterData printer() {
             try {
-                Printer printer = new Printer(Expansion.this, size());
-                return printer.getBoardAsString(Expansion.this.players.get(0));
+                Printer printer = new Printer(Expansion.this.reader(),
+                        () -> Expansion.this.players.get(0),
+                        size(), COUNT_LAYERS);
+                return printer.print();
             } catch (Exception e) {
                 return null;
             }
@@ -620,6 +623,42 @@ public class Expansion implements Tickable, Field, PlayerBoard {
     @Override
     public String id() {
         return lg.id();
+    }
+
+    @Override
+    public BoardReader reader() {
+        return new BoardReader() {
+            @Override
+            public int size() {
+                return Expansion.this.size();
+            }
+
+            @Override
+            public BiFunction<Integer, Integer, State> elements() {
+                Cell[] cells = Expansion.this.getCurrentLevel().getCells();
+                return (index, layer) -> {
+                    if (layer == 2) {
+                        return new ForcesState(cells[index].getItem(HeroForces.class));
+                    } else {
+                        return cells[index].getItem(layer);
+                    }
+                };
+            }
+
+            @Override
+            public Point viewCenter(Object player) {
+                return ((Player)player).getHero().getPosition();
+            }
+
+            @Override
+            public Object[] itemsInSameCell(State item) {
+                if (item instanceof Item) {
+                    return ((Item) item).getItemsInSameCell().toArray();
+                } else {
+                    return new Object[0];
+                }
+            }
+        };
     }
 
     @Override

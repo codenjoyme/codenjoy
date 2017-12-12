@@ -92,11 +92,13 @@ public class Single implements Game {
 
     @Override
     public JSONObject getBoardAsString() {
-        PrinterData data = getPrinter().getBoardAsString(player);
+        PrinterData data = getPrinter().print();
 
         JSONObject result = new JSONObject();
-        result.put("layers", data.getLayers());
-        result.put("forces", data.getForces());
+        List<String> layers = data.getLayers();
+        String forces = layers.remove(2);
+        result.put("layers", layers);
+        result.put("forces", forces);
         result.put("myBase", new JSONObject(player.getBasePosition()));
         result.put("myColor", player.getForcesColor());
         result.put("tick", ticker.get());

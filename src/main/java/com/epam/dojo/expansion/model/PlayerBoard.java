@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
 import com.epam.dojo.expansion.model.levels.Level;
 import com.epam.dojo.expansion.model.levels.items.Hero;
 
@@ -58,4 +59,6 @@ public interface PlayerBoard extends Tickable {
     int getRoundTicks();
 
     String id();
+
+    BoardReader reader();
 }
