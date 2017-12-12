@@ -25,7 +25,7 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.epam.dojo.icancode.services.printer.Printer;
+import com.epam.dojo.icancode.services.printer.LayeredViewPrinter;
 import com.epam.dojo.icancode.services.printer.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
@@ -78,7 +78,7 @@ public class Single implements Game {
 
     @Override
     public JSONObject getBoardAsString() {
-        PrinterData data = getPrinter().getBoardAsString(2, player);
+        PrinterData data = getPrinter().print();
 
         JSONObject result = new JSONObject();
         result.put("layers", data.getLayers());
@@ -150,7 +150,7 @@ public class Single implements Game {
         return player;
     }
 
-    public Printer getPrinter() {
+    public LayeredViewPrinter getPrinter() {
         return progressBar.getPrinter();
     }
 }

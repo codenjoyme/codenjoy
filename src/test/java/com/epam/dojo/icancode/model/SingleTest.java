@@ -107,12 +107,12 @@ public class SingleTest {
 
     private void assertL(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0)));
+                TestUtils.injectN(single.getPrinter().print().getLayers().get(0)));
     }
 
     private void assertE(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1)));
+                TestUtils.injectN(single.getPrinter().print().getLayers().get(1)));
     }
 
     @Test

@@ -30,7 +30,7 @@ import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
 import com.epam.dojo.icancode.services.Levels;
-import com.epam.dojo.icancode.services.printer.Printer;
+import com.epam.dojo.icancode.services.printer.LayeredViewPrinter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -50,8 +50,9 @@ import static org.mockito.Mockito.*;
 public class ICanCodeTest {
 
     public static final int FIRE_TICKS = 6;
+    private static final int COUNT_LAYERS = 2;
     private ICanCode game;
-    private Printer printer;
+    private LayeredViewPrinter printer;
 
     private Hero hero;
     private Dice dice;
@@ -81,7 +82,7 @@ public class ICanCodeTest {
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
-        printer = new Printer(game, Levels.size());
+        printer = new LayeredViewPrinter(game, () -> player, Levels.size(), COUNT_LAYERS);
     }
 
     private void givenFlWithOnePlayer(String... boards) {
@@ -96,7 +97,7 @@ public class ICanCodeTest {
         game.newGame(otherPlayer);
         this.hero = game.getHeroes().get(0);
 
-        printer = new Printer(game, Levels.size());
+        printer = new LayeredViewPrinter(game, () -> player, Levels.size(), COUNT_LAYERS);
     }
 
     private List<ILevel> createLevels(String[] boards) {
@@ -110,12 +111,12 @@ public class ICanCodeTest {
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(printer.getBoardAsString(1, player).getLayers().get(0)));
+                TestUtils.injectN(printer.print().getLayers().get(0)));
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(printer.getBoardAsString(2, player).getLayers().get(1)));
+                TestUtils.injectN(printer.print().getLayers().get(1)));
     }
 
     @Test

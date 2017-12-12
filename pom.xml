@@ -156,8 +156,8 @@
                 <version>${maven-compiler.version}</version>
                 <configuration>
                     <encoding>utf8</encoding>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

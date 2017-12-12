@@ -25,7 +25,7 @@ package com.epam.dojo.icancode.model;
 
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.services.Levels;
-import com.epam.dojo.icancode.services.printer.Printer;
+import com.epam.dojo.icancode.services.printer.LayeredViewPrinter;
 import org.json.JSONObject;
 
 /**
@@ -45,7 +45,7 @@ public class ProgressBar {
     private ICanCode single;
     private ICanCode multiple;
     private ICanCode current;
-    private Printer printer;
+    private LayeredViewPrinter printer;
 
     public ProgressBar(ICanCode single, ICanCode multiple) {
         this.single = single;
@@ -65,7 +65,8 @@ public class ProgressBar {
     }
 
     private void buildPrinter() {
-        printer = new Printer(current, Levels.size());
+        // TODO "() -> player" !ok, refactoring this
+        printer = new LayeredViewPrinter(current, () -> player, Levels.size(), 2);
     }
 
     public Integer getBackToSingleLevel() {
@@ -190,7 +191,7 @@ public class ProgressBar {
         current.remove(player);
     }
 
-    public Printer getPrinter() {
+    public LayeredViewPrinter getPrinter() {
         return printer;
     }
 

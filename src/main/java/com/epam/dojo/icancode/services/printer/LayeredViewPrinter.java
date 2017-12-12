@@ -23,22 +23,22 @@ package com.epam.dojo.icancode.services.printer;
  */
 
 
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
+import java.util.function.Supplier;
 
-public class Printer {
+public class LayeredViewPrinter implements Printer<PrinterData> {
 
     private static final int BOUND_DEFAULT = 4;
 
     private int size;
     private ICanCode game;
+    private Supplier<Player> player;
+    private int countLayers;
 
     private int viewSize;
     private int vx;
@@ -47,8 +47,10 @@ public class Printer {
 
     private boolean needToCenter;
 
-    public Printer(ICanCode game, int viewSize) {
+    public LayeredViewPrinter(ICanCode game, Supplier<Player> player, int viewSize, int countLayers) {
         this.game = game;
+        this.player = player;
+        this.countLayers = countLayers;
         this.viewSize = Math.min(game.size(), viewSize);
 
         if (this.viewSize == viewSize) {
@@ -58,12 +60,13 @@ public class Printer {
         needToCenter = bound != 0;
     }
 
-    public PrinterData getBoardAsString(int numLayers, Player player) {
-        StringBuilder[] builders = new StringBuilder[numLayers];
+    @Override
+    public PrinterData print() {
+        StringBuilder[] builders = new StringBuilder[countLayers];
         ICell[] cells = game.getCurrentLevel().getCells();
         size = game.size();
         LengthToXY xy = new LengthToXY(size);
-        Point pivot = player.getHero().getPosition();
+        Point pivot = player.get().getHero().getPosition();
 
         //If it is the first start that we will must to center position
         if (needToCenter) {
@@ -74,7 +77,7 @@ public class Printer {
         }
         adjustView(size);
 
-        for (int i = 0; i < numLayers; ++i) {
+        for (int i = 0; i < countLayers; ++i) {
             builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
         }
 
@@ -82,17 +85,17 @@ public class Printer {
             for (int x = vx; x < vx + viewSize; ++x) {
                 int index = xy.getLength(x, y);
 
-                for (int j = 0; j < numLayers; ++j) {
+                for (int j = 0; j < countLayers; ++j) {
                     IItem item = cells[index].getItem(j);
                     Object[] elements = item.getItemsInSameCell().toArray();
-                    builders[j].append(makeState(item, player, x, elements));
+                    builders[j].append(makeState(item, player.get(), x, elements));
                 }
             }
         }
 
         PrinterData result = new PrinterData();
         result.setOffset(new PointImpl(vx, vy));
-        for (int i = 0; i < numLayers; ++i) {
+        for (int i = 0; i < countLayers; ++i) {
             result.addLayer(builders[i].toString());
         }
 
@@ -164,4 +167,5 @@ public class Printer {
             vy = size - viewSize;
         }
     }
+
 }
