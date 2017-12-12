@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

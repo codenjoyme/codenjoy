@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer.layeredview;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2017 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,12 +23,21 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+
+import java.util.function.BiFunction;
+
 /**
- * Этот абстракция над доской для Printer
+ * Created by Oleksandr_Baglai on 2017-12-12.
  */
 public interface BoardReader {
 
     int size();
 
-    Iterable<? extends Point> elements();
+    BiFunction<Integer, Integer, State> elements();
+
+    Point viewCenter(Object player);
+
+    Object[] itemsInSameCell(State item);
 }

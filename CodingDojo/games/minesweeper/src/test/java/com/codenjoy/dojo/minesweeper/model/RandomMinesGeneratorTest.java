@@ -24,7 +24,7 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
 import java.util.Arrays;

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.startandjump.model;
  */
 
 
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.startandjump.services.Events;
 import com.codenjoy.dojo.startandjump.services.HeroStatus;
 import com.codenjoy.dojo.services.*;

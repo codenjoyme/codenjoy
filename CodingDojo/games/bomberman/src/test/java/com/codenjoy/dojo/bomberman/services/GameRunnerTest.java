@@ -25,6 +25,8 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.Bomberman;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.fest.reflect.core.Reflection;
 import org.junit.Ignore;
 import org.junit.Test;

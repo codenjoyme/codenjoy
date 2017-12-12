@@ -26,6 +26,7 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Collection;
 import java.util.LinkedList;

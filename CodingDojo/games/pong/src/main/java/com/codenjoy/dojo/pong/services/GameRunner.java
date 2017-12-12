@@ -27,9 +27,8 @@ import com.codenjoy.dojo.pong.client.ai.PongSolver;
 import com.codenjoy.dojo.pong.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 

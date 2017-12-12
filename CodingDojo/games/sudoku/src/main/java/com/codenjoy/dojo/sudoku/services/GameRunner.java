@@ -26,9 +26,8 @@ package com.codenjoy.dojo.sudoku.services;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.sudoku.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sudoku.model.*;
 

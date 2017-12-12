@@ -25,6 +25,8 @@ package com.codenjoy.dojo.a2048e.model;
 
 import com.codenjoy.dojo.a2048e.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer;
 
 /*-
  * #%L
@@ -24,9 +24,11 @@ package com.codenjoy.dojo.services;
 
 
 /**
- * Этот интерфейс расширяют все енумы, содержащие перечень символов кодирующих
- * живность на поле.
+ * Фектори для PrinterImpl
  */
-public interface CharElements {
-    char ch();
+public class PrinterFactoryImpl implements PrinterFactory {
+    @Override
+    public <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player) {
+        return PrinterImpl.getPrinter(reader, player);
+    }
 }

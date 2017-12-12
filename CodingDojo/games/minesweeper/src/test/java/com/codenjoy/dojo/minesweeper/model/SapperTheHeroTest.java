@@ -24,8 +24,9 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.junit.Test;
 

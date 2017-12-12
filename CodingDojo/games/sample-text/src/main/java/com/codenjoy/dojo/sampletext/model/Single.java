@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sampletext.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import org.json.JSONObject;
 
 /**

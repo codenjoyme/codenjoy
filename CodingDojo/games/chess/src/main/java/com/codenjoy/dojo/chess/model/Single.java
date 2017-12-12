@@ -28,7 +28,8 @@ import com.codenjoy.dojo.chess.model.figures.Korol;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.hero.NullHeroData;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 
 public class Single implements Game {
 

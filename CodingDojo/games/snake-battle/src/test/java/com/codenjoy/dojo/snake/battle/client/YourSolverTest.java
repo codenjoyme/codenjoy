@@ -26,8 +26,6 @@ package com.codenjoy.dojo.snake.battle.client;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,8 +46,6 @@ public class YourSolverTest {
     Board b;
 
     private Dice dice;
-
-    private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void setup() {

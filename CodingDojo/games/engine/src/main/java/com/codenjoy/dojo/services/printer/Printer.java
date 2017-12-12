@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer;
 
 /*-
  * #%L
@@ -24,11 +24,10 @@ package com.codenjoy.dojo.services;
 
 
 /**
- * Фектори для PrinterImpl
+ * Реализация этого класса овтечает за представление борды в виде строки, которая потом передастся играющему клиенту.
  */
-public class PrinterFactoryImpl implements PrinterFactory {
-    @Override
-    public <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player) {
-        return PrinterImpl.getPrinter(reader, player);
-    }
+public interface Printer<T> {
+
+    T print();
+
 }

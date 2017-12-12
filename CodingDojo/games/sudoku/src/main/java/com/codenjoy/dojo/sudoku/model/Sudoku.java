@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sudoku.services.Events;
 
 import java.util.LinkedList;

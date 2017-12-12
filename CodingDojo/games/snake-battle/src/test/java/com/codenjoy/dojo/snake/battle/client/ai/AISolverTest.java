@@ -25,6 +25,8 @@ package com.codenjoy.dojo.snake.battle.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snake.battle.client.Board;
 import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;

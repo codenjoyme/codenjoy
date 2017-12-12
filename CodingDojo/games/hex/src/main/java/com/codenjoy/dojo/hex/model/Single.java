@@ -26,8 +26,8 @@ package com.codenjoy.dojo.hex.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 
 public class Single implements Game {
 

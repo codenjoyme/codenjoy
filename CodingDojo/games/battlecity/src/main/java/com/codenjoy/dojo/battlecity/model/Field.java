@@ -23,7 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.List;
 

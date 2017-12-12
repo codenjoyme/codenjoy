@@ -22,6 +22,7 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.services.*;
 

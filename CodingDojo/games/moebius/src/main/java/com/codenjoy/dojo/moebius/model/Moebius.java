@@ -26,6 +26,7 @@ package com.codenjoy.dojo.moebius.model;
 import com.codenjoy.dojo.moebius.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Arrays;
 import java.util.LinkedList;

@@ -23,6 +23,8 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;

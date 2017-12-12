@@ -22,7 +22,7 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 
 /**
  * Тут указана легенда всех возможных объектов на поле и их состояний.

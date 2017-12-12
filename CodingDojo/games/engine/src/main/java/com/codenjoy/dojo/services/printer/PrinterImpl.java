@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer;
 
 /*-
  * #%L
@@ -23,9 +23,13 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.GamePrinter;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+
 /**
  * Этот малый умеет печатать состояние борды на экране.
- * @see com.codenjoy.dojo.services.PrinterImpl#print()
+ * @see PrinterImpl#print()
  */
 class PrinterImpl implements Printer<String> {
     public static final String ERROR_SYMBOL = "Ъ";

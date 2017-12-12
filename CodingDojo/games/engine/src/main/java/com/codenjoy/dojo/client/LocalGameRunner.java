@@ -24,6 +24,7 @@ package com.codenjoy.dojo.client;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 
 public class LocalGameRunner {
 

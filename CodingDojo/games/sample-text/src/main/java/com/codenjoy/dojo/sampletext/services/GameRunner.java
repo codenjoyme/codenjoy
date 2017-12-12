@@ -31,6 +31,7 @@ import com.codenjoy.dojo.sampletext.model.SampleText;
 import com.codenjoy.dojo.sampletext.model.Single;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;

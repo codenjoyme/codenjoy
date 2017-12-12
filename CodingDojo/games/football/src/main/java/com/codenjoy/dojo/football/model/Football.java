@@ -28,6 +28,7 @@ import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.model.elements.Wall;
 import com.codenjoy.dojo.football.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

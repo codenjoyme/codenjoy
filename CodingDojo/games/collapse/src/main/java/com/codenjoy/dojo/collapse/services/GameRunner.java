@@ -28,6 +28,7 @@ import com.codenjoy.dojo.collapse.client.ai.ApofigSolver;
 import com.codenjoy.dojo.collapse.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public class GameRunner extends AbstractGameType implements GameType {

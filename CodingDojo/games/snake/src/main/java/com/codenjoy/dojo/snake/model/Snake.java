@@ -26,6 +26,9 @@ package com.codenjoy.dojo.snake.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 
 import java.util.LinkedList;

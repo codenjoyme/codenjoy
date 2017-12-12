@@ -26,7 +26,8 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.hero.NullHeroData;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Settings;
 
 public class Single implements Game { // TODO потести меня

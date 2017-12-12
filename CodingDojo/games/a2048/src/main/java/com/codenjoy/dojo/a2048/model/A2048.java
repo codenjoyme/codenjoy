@@ -28,6 +28,7 @@ import com.codenjoy.dojo.a2048.model.generator.Factory;
 import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Iterator;
 import java.util.LinkedList;

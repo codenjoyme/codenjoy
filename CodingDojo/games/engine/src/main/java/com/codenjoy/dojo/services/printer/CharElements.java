@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer;
 
 /*-
  * #%L
@@ -23,6 +23,10 @@ package com.codenjoy.dojo.services;
  */
 
 
-public interface PrinterFactory {
-    <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player);
+/**
+ * Этот интерфейс расширяют все енумы, содержащие перечень символов кодирующих
+ * живность на поле.
+ */
+public interface CharElements {
+    char ch();
 }

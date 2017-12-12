@@ -27,6 +27,7 @@ import com.codenjoy.dojo.fifteen.client.ai.FifteenSolver;
 import com.codenjoy.dojo.fifteen.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;

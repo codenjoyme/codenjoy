@@ -25,7 +25,7 @@ package com.codenjoy.dojo.battlecity.services;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
