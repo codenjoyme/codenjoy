@@ -30,7 +30,7 @@ import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
 import com.epam.dojo.icancode.services.Levels;
-import com.epam.dojo.icancode.services.Printer;
+import com.epam.dojo.icancode.services.printer.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;

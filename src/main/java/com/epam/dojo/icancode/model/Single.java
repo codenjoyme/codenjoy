@@ -25,12 +25,11 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.epam.dojo.icancode.services.Printer;
-import com.epam.dojo.icancode.services.PrinterData;
+import com.epam.dojo.icancode.services.printer.Printer;
+import com.epam.dojo.icancode.services.printer.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 

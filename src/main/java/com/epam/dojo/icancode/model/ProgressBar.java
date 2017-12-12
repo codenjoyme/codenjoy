@@ -25,7 +25,7 @@ package com.epam.dojo.icancode.model;
 
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.services.Levels;
-import com.epam.dojo.icancode.services.Printer;
+import com.epam.dojo.icancode.services.printer.Printer;
 import org.json.JSONObject;
 
 /**
