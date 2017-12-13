@@ -1,80 +1,93 @@
-Create your own Codenjoy game
+Создай свою Codenjoy игру
 ==============
 
-Introduction
+Вступление
 --------------
-[Codenjoy](http://codenjoy.com) - CodingDojo framework for developers. Its goal is to organize fun teambuilding activities and/or train how to code.
-Already now [you have some games on board](http://codenjoy.com/codenjoy-contest). 
-And you can write one that will be your own.
+[Codenjoy](http://codenjoy.com) - это CodingDojo фреймворк для разработчиков. Цель его fun'овые
+тимбилдинговые мероприятия и/или обучение кодингу.
+Уже сейчас [на борту есть ряд игрушек](http://codenjoy.com/codenjoy-contest). 
+И ты можешь написать еще одну свою.
 
-Set up a development environment
+Установка окружения для разработки
 --------------
-All you need to develop a game is jdk7, maven3, git client, and IDE Idea.
+Все, что тебе понадобится для разработки игры - jdk7, maven3, git-клиент и IDE Idea.
 
-- install a git client locally, for example, [tortoise git](https://code.google.com/p/tortoisegit/)
-- create an account on [github](http://github.com) or [bitbucket](http://bitbucket.org)
-- make a fork (or copy the sample project) from [the current repository](https://github.com/codenjoyme/codenjoy-game)
-- pull the project to your computer
-- install [maven3](https://maven.apache.org/download.cgi) (download the archive and unzip it to `c:\java`)
-- add the `M2_HOME` environment variable that points to the root of `c:\java\apache-maven-3.x.x`
-- add the `;%M2_HOME%\bin` string at the end of the `Path` variable
-- install jdk7, if necessary (also to the folder `c:\java`)
-- add the `JAVA_HOME` environment variable that points to the root of `c:\java\jdk1.7.x_xx`
-- add the `;%JAVA_HOME%\bin` string at the end of the Path variable
-- check by running cmd.exe with the `mvn -version` command.
-If installation is successful, you will see the command output the version of maven and java, rather than "command not found"
+- установи себе git клиент, например [tortoise git](https://code.google.com/p/tortoisegit/)
+- зарегай себе аккаунт на [github](http://github.com) или [bitbucket](http://bitbucket.org)
+- сделай fork (или просто копию проекта sample) из [текущего репозитория](https://github.com/codenjoyme/codenjoy-game)
+- затем сделай pull проекта на компьютер
+- установи [maven3](https://maven.apache.org/download.cgi) (скачай архив и распакуй его в `c:\java`)
+- пропиши переменную окружения `M2_HOME`, указывающую на корень папки `c:\java\apache-maven-3.x.x`
+- добавь в конец переменной `Path` строчку `;%M2_HOME%\bin`
+- установи jdk7 если не установлена (тоже в папку `c:\java`)
+- пропиши переменную окружения `JAVA_HOME`, указывающую на корень папки `c:\java\jdk1.8.x_xx`
+- добавь в конец переменной Path строчку `;%JAVA_HOME%\bin`
+- проверь что все сделано правильно выполнив cmd.exe а в нем команду `mvn -version`.
+Если установилось - ты будешь видеть вывод команды: версию maven и java, а не что "команда не найдена"
 ```
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
 Maven home: C:\java\apache-maven-3.x.x
-Java version: 1.7.x_x, vendor: Oracle Corporation
-Java home: C:\java\jdk1.7.x_xx\jre
+Java version: 1.8.x_x, vendor: Oracle Corporation
+Java home: C:\java\jdk1.8.x_xx\jre
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
 ```
-- download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
+- скачай и установи [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
 
-Install the codenjoy engine
+Установка codenjoy engine
 --------------
 
-You have to install the `engine` dependency located in the `engine` folder. Watch out: its version may be updated, so you will have to update it and your game's source code. To do this:
+Для нормальной работы тебе необходимо установить зависимость `engine`. Она расположена
+в одноименной папке `engine`. Будь внимателен, ее версия может поменяться и тебе прийдется
+обновить и ее и исходники своей игры. Для этого:
 
-- open the 'engine' folder
-- run 'setup.bat'
-- make sure installation is successful - the dependency should be installed under `C:\Users\<Твой_юзер>\.m2\repository\com\codenjoy\engine`
+- зайди в папку 'engine'
+- запусти 'setup.bat'
+- проследи, чтобы все установилось успешно - зависимость должна быть
+установлена в `C:\Users\<Твой_юзер>\.m2\repository\com\codenjoy\engine`
 
-Develop a game
+Рабработка игры
 --------------
 
-Invent/recall a game that might interest others, does not involve following complicated rules, and people played it in childhood. The game might have the same rules as the original, or might provide some variation. For example, you can turn a two-player game, such as the battleship, into a multiplayer game. Make sure the gamer will enjoy writing the AI algorithm (the challenges should be reasonably tough).
-Do not hesitate to [contact us](http://codenjoy.com/portal/?page_id=51)
-If stumped, get in touch and we'll help you.
+Придумай/вспомни игру, которая была бы интересна (но не сложная по правилам) и
+знакома всем из детства. Игра может быть идентичной оригинальной по правилам, а может
+и отличаться от оригинала в большей или меньшей мере. Например - в морской бой обычно
+играют двое, но ты можешь реализовать морской бой для неограниченного количества игроков.
+Тут стоит проверить, чтобы писать алгоритм AI был интересно играющему (не очень просто
+и не очень сложно). Смело [пиши нам](http://codenjoy.com/portal/?page_id=51)
+если затрудняешься с выбором - поможем.
 
-Then proceed to writing a model of the game you selected. The following section contains the required how-to.
-[Here is an example](http://apofig.blogspot.com/2011/10/9-tdd.html) of how a snake model was written. Unit testing coverage is  expected. It'd be still better to write the code following TDD, and if you don't know how [watch this video](https://vimeo.com/54862036)
-and then write us. We'll arrange for code review if necessary. And once the model is ready, we'll integrate it to our framework, and help your arrange your first codenjoy event.
+После этого приступай к написанию модельки выбранной тобой игры. В следующем разделе описано подробно,
+как это сделать. [Вот пример](http://apofig.blogspot.com/2011/10/9-tdd.html) того, как была
+написана моделька змейки. Очень желательно чтобы она была покрыта юнит тестами.
+Еще лучше, чтобы код был написан по TDD, если не знаешь как [посмотри это видео](https://vimeo.com/54862036)
+а потом напиши нам. Code review если надо организуем. А после того, как моделька
+будет готова интегрируем ее в наш фреймворк и поможем с организацией твоего первого
+codenjoy-ивента.
 
-Here is the repository [https://github.com/codenjoyme/codenjoy-game](https://github.com/codenjoyme/codenjoy-game).
-You should find out how to fork a project, how to commit in git.
+Вот репозиторий [https://github.com/codenjoyme/codenjoy-game](https://github.com/codenjoyme/codenjoy-game).
+Тебе предстоит разобраться в том, как форкнуть себе проект, как происходит коммит в git.
 
-Sample
+Пример игры - Sample
 --------------
 
-Sample is a sample of a one-board game with all requisite artefacts. Learn how a project operates.
+Sample - это пример однобордовой игры со всеми необходимыми артефактами. Изучи как работает проект.
 
-- import the `sample` project as `maven project` to idea
-- run all tests; as they progress, you should observe the green bar
-- access [sample/src/test/java/com/codenjoy/dojo/sample/model/SampleTest.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/test/java/com/codenjoy/dojo/sample/model/SampleTest.java)
-and see how tests for games are written.
-- access [sample/src/main/java/com/codenjoy/dojo/sample](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample)
-and see what are the minimum code requirements for a new game.
-- the package here [sample/src/main/java/com/codenjoy/dojo/sample/client](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client)
-has client code, with a part of it to be sent to the player as a game template
-- the package [sample/src/main/java/com/codenjoy/dojo/sample/client/ai](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client/ai)
-has your AI algorithm that will automatically connect to the player and play with him or her.
-- all the rest is the game engine.
-- before you can implement your new game, take some time to familiarize yourself with the main interfaces and framework classes. All of them are located in the dependency engine. You should be interested in these:
+- импортируй проект `sample` как `maven project` в idea
+- запусти все тесты, они должны проходить - ты должен наблюдать зеленую полосу
+- зайди на [sample/src/test/java/com/codenjoy/dojo/sample/model/SampleTest.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/test/java/com/codenjoy/dojo/sample/model/SampleTest.java)
+и посмотри, как пишутся тесты для игры.
+- зайди на [sample/src/main/java/com/codenjoy/dojo/sample](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample)
+и посмотри что надо написать минимально для новой игры.
+- тут в пакете [sample/src/main/java/com/codenjoy/dojo/sample/client](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client)
+расположен клиенсткий код, часть из которого будет отправлен игроку как шаблон для игры
+- в пакете [sample/src/main/java/com/codenjoy/dojo/sample/client/ai](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client/ai)
+расположен твой AI алгоритм, который будет автоматически подключаться к игроку и играть с ним
+- все остальное - движок игры.
+- для реализации новой игры стоит разобраться с основными интерфейсами и классами фреймворка.
+Все они расположены в engine зависимости. Тебя должны интересовать такие:
 * `src/main/java/com/codenjoy/dojo/services/Game.java`
 * `src/main/java/com/codenjoy/dojo/services/Joystick.java`
 * `src/main/java/com/codenjoy/dojo/services/Printer.java`
@@ -92,28 +105,34 @@ has your AI algorithm that will automatically connect to the player and play wit
 * `src/main/java/com/codenjoy/dojo/client/AbstractBoard.java`
 * `src/main/java/com/codenjoy/dojo/client/Solver.java`
 * `src/main/java/com/codenjoy/dojo/client/Direction.java`
-- all of these are basic interfaces/classes that you use to integrate the new game into the main framework (like inserting a cartridge into a Dendy console).
-- explore their description in java docs for the interfaces and classes of the dependency engine and the project sample.
+- все это базовые интерфейсы/классы, с их помощью происходит интеграция новой игры в
+основной фреймворк (как картридж в приставку dendy).
+- изучи их опсиание в джавадоках к интерфейсам и классам engine зависимости и sample проекта
 
-Develop a new game
+Разработка новой игры
 --------------
 
-To develop your game, you don't have to write all classes from scratch - just base it off the `sample` project.
+Для разработки своей игры писать все классы с нуля не надо - возьми за основу `sample` проект.
 
-- copy the contents of the `sample` folder into the `mygame` folder (any name) and rename the `Sample` classes to `MyGame` classes.
-- your goal is to have your code well covered with tests, so that we can trust it. That's why you should develop the game using TDD. If this is an unfamiliar concept, [we recommend this book by Ken Beck](http://www.ozon.ru/context/detail/id/1501671/).
-- maven will automatically assemble the game source for the client in a zip file, as shown here
+- скопируй содержимое `sample` папки в `mygame` папку (имя любое) и переименуй классы `Sample` в `MyGame`.
+- твоя цель - хорошее покрытие кода тестами, которому мы сможем доверять,
+потому игру стоит разрабатывать по TDD, если не знаком с ним -
+[рекомендуем книгу Кента Бека](http://www.ozon.ru/context/detail/id/1501671/).
+- исходники для игры для клиента maven соберет автоматически в zip, как это сделано тут
 [sample/src/main/webapp/resources/user/sample-servers.zip](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/user)
-Note that the `pom.xml` file has a `maven-antrun-plugin` section, where ant assembles this zip. It includes the pom.xml file, the `Elements` class from the model package, and everything from the `client` package except the `ai` package.
-- write a manual for the game, see an example here
+Обрати внимание, что в `pom.xml` файле есть раздел `maven-antrun-plugin`,
+где ant'ом собирается этот zip. В него попадают сам `pom.xml`,
+класс `Elements` из пакета model и все из пакета `client` за исключением пакета `ai`.
+- напиши мануал к игре, подобно тому как мы сделали вот тут
 [sample/src/main/webapp/resources/help/sample.html](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/help/sample.html)
-- draw sprites - square-like pictures that will serve as the basis for rendering the game in the browser. Normally, they are freely available on the net.
-Png files with sprites can be found in the folder [sample/src/main/webapp/resources/sprite/sample/](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sprite/sample).
-Important! Sprite names are not random, they should be associated with enum fields
+- нарисуй спрайты - это такие квадратненькие рисунки, на основе которых будет
+рисоваться игра в браузере. Обычно они есть в свободном доступе в сети.
+Png файлы со спрайтами содержатся в папке [sample/src/main/webapp/resources/sprite/sample/](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/webapp/resources/sprite/sample).
+Важно! Имена спрайтов выбираются не произвольно, а в связке с полями enum
 [sample/src/main/java/com/codenjoy/dojo/sample/model/Elements.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/model/Elements.java).
-All names should be lowercase
-- then implement your bot by analogy with [sample/src/main/java/com/codenjoy/dojo/sample/client/ai/ApofigSolver.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client/ai/ApofigSolver.java)
-- run this code to see how your bot plays the game
+Все имена должны быть lover case
+- далее реализуй своего бота по аналогии с [sample/src/main/java/com/codenjoy/dojo/sample/client/ai/ApofigSolver.java](https://github.com/codenjoyme/codenjoy-game/blob/master/sample/src/main/java/com/codenjoy/dojo/sample/client/ai/ApofigSolver.java)
+- запусти этот код, чтобы проверить как твой бот играет в игру
 ```
     public static void main(String[] args) {
         LocalGameRunner.run(new GameRunner(),
@@ -121,15 +140,15 @@ All names should be lowercase
                 new Board());
     }
 ```
-- assemble a jar file by running the `mvn package` command in the sample folder root
-- the jar file will be `sample\target\sample-engine.jar`
-- email it to us at [apofig@gmail.com](mailto:apofig@gmail.com) with the `New game for codenjoy` subject
+- собери jar-file, для этого выполни команду `mvn package` в корне папки sample
+- jar будет находиться в `sample\target\sample-engine.jar`
+- вышли его нам на [apofig@gmail.com](mailto:apofig@gmail.com) с темой `Новая игра для codenjoy`
 
-Thanks!
+Спасибо!
 
-Other materials
+Другие материалы
 --------------
-For [more details, click here](https://github.com/codenjoyme/codenjoy)
+Больше [деталей тут](https://github.com/codenjoyme/codenjoy)
 
-[Codenjoy team](http://codenjoy.com/portal/?page_id=51)
+[Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
 ===========

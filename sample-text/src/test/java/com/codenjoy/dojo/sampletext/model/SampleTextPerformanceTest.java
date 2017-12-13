@@ -26,9 +26,8 @@ package com.codenjoy.dojo.sampletext.model;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
-import org.junit.Ignore;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -49,7 +48,7 @@ public class SampleTextPerformanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null);
+            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null, null);
             games.add(game);
         }
 

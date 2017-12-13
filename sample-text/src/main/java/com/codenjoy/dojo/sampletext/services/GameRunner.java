@@ -31,6 +31,7 @@ import com.codenjoy.dojo.sampletext.model.SampleText;
 import com.codenjoy.dojo.sampletext.model.Single;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -76,12 +77,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
-        return new Scores(score, settings);
+    public PlayerScores getPlayerScores(Object score) {
+        return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         if (!SINGLE || game == null) {
             game = newGame();
         }

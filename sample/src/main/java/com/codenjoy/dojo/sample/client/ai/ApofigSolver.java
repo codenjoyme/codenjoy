@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sample.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -133,6 +133,7 @@ public class ApofigSolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
+                null,
                 new ApofigSolver(new RandomDice()),
                 new Board());
     }
