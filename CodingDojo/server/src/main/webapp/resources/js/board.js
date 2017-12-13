@@ -92,6 +92,7 @@ function initBoardComponents(game) {
     }
     if (!game.enableInfo) {
         $("#fork-me").hide();
+        $("#how-to-play").hide();
     }
 
     if (game.enableHotkeys) {
