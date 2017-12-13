@@ -91,7 +91,7 @@ function initBoardComponents(game) {
                 game.gameName);
     }
     if (!game.enableInfo) {
-        $("#fork-me").hide(gameInfo);
+        $("#fork-me").hide();
     }
 
     if (game.enableHotkeys) {
