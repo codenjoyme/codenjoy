@@ -6,7 +6,7 @@
 
     <properties>
         <module.name>expansion</module.name>
-        <codenjoy.version>1.0.23</codenjoy.version>
+        <codenjoy.version>1.0.24</codenjoy.version>
         <jetty.version>9.3.14.v20161028</jetty.version>
 
         <logback.version>1.1.7</logback.version>
@@ -52,7 +52,7 @@
             <artifactId>engine</artifactId>
             <version>${codenjoy.version}</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/engine-1.0.23.jar</systemPath>
+            <systemPath>${project.basedir}/libs/engine-1.0.24.jar</systemPath>
         </dependency>
 
         <dependency>
