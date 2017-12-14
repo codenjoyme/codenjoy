@@ -110,7 +110,7 @@ var loadStuff = function() {
 var sprites = {};
 var directions = ['up', 'right_up', 'right', 'right_down', 'down', 'left_down', 'left', 'left_up'];
 var loadImage = function(name) {
-    var url = game.contextPath + 'resources/sprite/' + game.gameName + '/' + game.sprites + '/' + name + '.png';
+    var url = game.contextPath + '/resources/sprite/' + game.gameName + '/' + game.sprites + '/' + name + '.png';
     var image = new Image();
     image.onload = function() {
         // do nothing
