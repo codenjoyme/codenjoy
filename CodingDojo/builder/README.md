@@ -1,10 +1,10 @@
 Codenjoy builder
 ==============
 
-Конфигурация
+Configuration
 --------------
-Проект, собирающий воедино сервер Codenjoy и одну или несколько игор на выбор.
-Для подключения своей игры (game-name-engine) необходимо добавить зависимость
+A project that brings together the Codenjoy server and several games of your choice.
+To connect your game (game-name-engine), add the dependency
 ```
     <properties>
         <codenjoy.version>1.0.24</codenjoy.version>
@@ -19,7 +19,7 @@ Codenjoy builder
         ...
      </dependencies>  
 ``` 
-А так же artifactItem ссылающийся на эту же зависимость (для извлечения ресурсов игры)
+And artifactItem that refers to the same dependency (to retrieve the game resources)
 ```
     <build>
       ...
@@ -52,16 +52,16 @@ Codenjoy builder
       </plugins>
     </build>
 ```
-Возможно добвление сразу нескольких игрушек, а так же удаление существующих
+You can add multiple games at the same time, and remove existing ones
 
-Запуск проекта
+Launch your project
 --------------
-Запуск проекта по команде `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war` из корня builder проекта
-Если ты создаешь свою игру, то она должна быть предварительно установлена по команде `mvn clean install` из корня проекта. Если же ты используешь существующий набор игор, тогда тебе делать дополнительно ничего не надо builder сам подтянет игры из удаленного репозитория.
+To launch your project, run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war` from the project builder's root
+If you create your own game, you should have it pre-installed by running `mvn clean install` from the project root. If you use a game kit that already exists, you don't have to do anything - the builder will retrieve the games from the remote repository for you.
 
-Другие материалы
+Other materials
 --------------
-Больше [деталей тут](https://github.com/codenjoyme/codenjoy)
+Fore [more details, click here](https://github.com/codenjoyme/codenjoy)
 
-[Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
+[Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========
