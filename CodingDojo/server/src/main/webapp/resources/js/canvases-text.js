@@ -149,8 +149,8 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         return {
             clear : clear,
             drawLines : drawLines,
-            drawText : canvas.drawText,
             canvas : canvas,
+            drawText: canvas.drawText,
             playerName : playerName,
             playerData : playerData
         };
