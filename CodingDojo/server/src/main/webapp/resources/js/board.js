@@ -71,7 +71,7 @@ function initBoardComponents(game) {
         initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
                         game.singleBoardGame, game.boardSize,
                         game.gameName, game.enablePlayerInfo,
-                        game.enablePlayerInfoLevel, game.drawBoard);
+                        game.enablePlayerInfoLevel, game.playerDrawer);
     }
 
     if (game.enableDonate) {
