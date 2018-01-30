@@ -85,7 +85,6 @@ game.onBoardAllPageLoad = function() {
 game.playerDrawer = function (canvas, playerName, gameName,
         data, heroesData, defaultPlayerDrawer)
 {
-    canvas.resizeHeight(data.history.length + 1);
     canvas.clear();
 
     description = unescapeUnicode(data.description);

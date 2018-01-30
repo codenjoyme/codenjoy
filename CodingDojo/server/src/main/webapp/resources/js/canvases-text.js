@@ -124,7 +124,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
     }
 
     var getBoardDrawer = function(canvas, playerName, playerData) {
-        var board = playerData.board;
+        var data = playerData.board;
         var heroesData = playerData.heroesData[playerName];
 
         var clear = function() {
@@ -148,13 +148,14 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             clear : clear,
             drawLines : drawLines,
             canvas : canvas,
+            drawText: canvas.drawText,
             playerName : playerName,
             playerData : playerData
         };
     }
 
     function defaultDrawBoard(drawer) {
-        drawer.clean();
+        drawer.clear();
         drawer.drawLines();
     }
 
@@ -317,7 +318,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
 
        var canvas = canvases[playerName];
        canvas.boardSize = boardSize;
-       drawBoard(getBoardDrawer(canvas, playerName, data));
+       drawBoard(getBoardDrawer(canvas, playerName, data), playerName, data.gameName, data.board, data.heroesData);
 
         $("#score_" + toId(playerName)).text(data.score);
 
