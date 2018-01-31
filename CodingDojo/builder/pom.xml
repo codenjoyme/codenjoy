@@ -30,7 +30,7 @@
 
     <dependencies>
         <!-- Games dependencies (put your game here) -->
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>sample-engine</artifactId>
             <version>${project.version}</version>
@@ -74,13 +74,13 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>hex-engine</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>kata-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>loderunner-engine</artifactId>
             <version>${project.version}</version>
@@ -149,7 +149,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>spacerace-engine</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency-->
     </dependencies>
 
     <build>
@@ -250,7 +250,7 @@
                                 </artifactItem>
 
                                 <!-- Games resources (put your game here) -->
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>sample-engine</artifactId>
                                     <version>${project.version}</version>
@@ -330,7 +330,7 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
-                                </artifactItem>
+                                </artifactItem-->
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>kata-engine</artifactId>
@@ -340,7 +340,7 @@
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>loderunner-engine</artifactId>
                                     <version>${project.version}</version>
@@ -465,7 +465,7 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
-                                </artifactItem>
+                                </artifactItem-->
                             </artifactItems>
                         </configuration>
                     </execution>

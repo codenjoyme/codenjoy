@@ -39,7 +39,7 @@
     </repositories>
 
     <modules>
-        <module>engine</module>
+        <!--module>engine</module>
         <module>sample</module>
         <module>sample-text</module>
         <module>a2048</module>
@@ -62,7 +62,7 @@
         <module>pong</module>
         <module>fifteen</module>
         <module>puzzlebox</module>
-        <module>spacerace</module>
+        <module>spacerace</module-->
         <module>kata</module>
     </modules>
 
