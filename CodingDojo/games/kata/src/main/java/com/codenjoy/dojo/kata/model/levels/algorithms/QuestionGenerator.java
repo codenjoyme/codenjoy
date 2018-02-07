@@ -4,7 +4,7 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,24 +23,26 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
  */
 
 
-import org.junit.Test;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 11:42 PM
- */
-public class PowerDigitSumAlgorithmTest {
+import java.util.List;
+import java.util.stream.IntStream;
 
-    @Test
-    public void shouldWork() {
-        int[] primes = new int[]{1, 2, 4, 8, 7, 5, 10, 11, 13, 8, 7, 14, 19, 20, 22, 26, 25, 14, 19, 29, 31, 26, 25};
-        PowerDigitSumAlgorithm algorithm = new PowerDigitSumAlgorithm();
-        Assertions.assertAlgorithm(primes, algorithm);
-        for (int i = 26; i < 36; i++) {
-            System.out.println(algorithm.get(String.valueOf(i)));
-        }
+import static java.util.stream.Collectors.toList;
+
+public class QuestionGenerator {
+    private int from;
+    private final int count;
+
+    public QuestionGenerator(int from, int count) {
+        this.from = from;
+        this.count = count;
     }
 
-
+    public List<String> generate() {
+        return IntStream.generate(() -> from++)
+                .limit(count)
+                .boxed()
+                .map(String::valueOf)
+                .collect(toList());
+    }
 }

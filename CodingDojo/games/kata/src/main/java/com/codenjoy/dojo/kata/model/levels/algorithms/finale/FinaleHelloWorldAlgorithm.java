@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model.levels.algorithms;
+package com.codenjoy.dojo.kata.model.levels.algorithms.finale;
 
 /*-
  * #%L
@@ -23,24 +23,20 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
  */
 
 
-import org.junit.Test;
+import com.codenjoy.dojo.kata.model.levels.algorithms.HelloWorldAlgorithm;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 11:42 PM
- */
-public class PowerDigitSumAlgorithmTest {
+import java.util.Arrays;
+import java.util.List;
 
-    @Test
-    public void shouldWork() {
-        int[] primes = new int[]{1, 2, 4, 8, 7, 5, 10, 11, 13, 8, 7, 14, 19, 20, 22, 26, 25, 14, 19, 29, 31, 26, 25};
-        PowerDigitSumAlgorithm algorithm = new PowerDigitSumAlgorithm();
-        Assertions.assertAlgorithm(primes, algorithm);
-        for (int i = 26; i < 36; i++) {
-            System.out.println(algorithm.get(String.valueOf(i)));
-        }
+public class FinaleHelloWorldAlgorithm extends HelloWorldAlgorithm {
+
+    @Override
+    public List<String> getQuestions() {
+        return Arrays.asList(
+                HELLO,
+                WORLD,
+                "sad",
+                "but",
+                "true");
     }
-
-
 }

@@ -46,5 +46,8 @@ public class Sequence1AlgorithmTest {
         assertEquals("627", algorithm.get("12"));
         assertEquals("282", algorithm.get("13"));
         assertEquals("930", algorithm.get("14"));
+        for (int i = 29; i < 47; i++) {
+            System.out.println(algorithm.get(String.valueOf(i)));
+        }
     }
 }
