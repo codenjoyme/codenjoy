@@ -46,37 +46,43 @@ public class LevelsLoader {
 
     private static List<Level> getFinaleAlgorithms() {
         return new LinkedList<Level>() {{
-            add(new FinaleHelloWorldAlgorithm()); // 0
-            add(new FinaleFizzBuzzAlgorithm()); // 1
-            add(new FinaleSumSquareDifferenceAlgorithm()); // 2
-            add(new FinaleSequence1Algorithm()); // 3
-            add(new FibonacciNumbersAlgorithm()); // 4
-            add(new FinalePrimeFactoryAlgorithm()); // 5
-            add(new FinalePowerDigitSumAlgorithm()); // 6
-            add(new FinaleFactorialAlgorithm()); // 7
-            add(new FinaleReverseAddPalindromeAlgorithm()); // 8
-            add(new FinaleSequence2Algorithm()); // 9
-            add(new FinaleXthPrimeAlgorithm()); // 10
-            add(new FinaleLongDivisionAlgorithm()); // 11
+            add(new FinaleHelloWorldAlgorithm());              // 0
+            add(new FinaleFizzBuzzAlgorithm());                // 1
+            add(new FinaleSumSquareDifferenceAlgorithm());     // 2
+            add(new FinaleSequence1Algorithm());               // 3
+            add(new FibonacciNumbersAlgorithm());              // 4
+            add(new FinalePrimeFactoryAlgorithm());            // 5
+            add(new FinalePowerDigitSumAlgorithm());           // 6
+            add(new FinaleFactorialAlgorithm());               // 7
+            add(new FinaleReverseAddPalindromeAlgorithm());    // 8
+            add(new FinaleSequence2Algorithm());               // 9
+            add(new FinaleXthPrimeAlgorithm());                // 10
+            add(new FinaleLongDivisionAlgorithm());            // 11
+            add(new FinaleSquareUpAlgorithm());                // 12
+            add(new FinaleCountTrippleAlgorithm());            // 13
+            add(new FinalePackageGiftBoxesAlgorithm());        // 14
         }}; // TODO: add finale algorithms set here
     }
 
     // TODO На админке можно менять порядок задач местами для играющих, а это убрать
     private static List<Level> getDefaultAlgorithms() {
         return new LinkedList<Level>(){{
-            add(new HelloWorldAlgorithm());
-            add(new FizzBuzzAlgorithm());
-            add(new SumSquareDifferenceAlgorithm());
-            add(new Sequence1Algorithm());
-            add(new FibonacciNumbersAlgorithm());
-            add(new PrimeFactoryAlgorithm());
-            add(new PowerDigitSumAlgorithm());
+            add(new HelloWorldAlgorithm());             // 0
+            add(new FizzBuzzAlgorithm());               // 1
+            add(new SumSquareDifferenceAlgorithm());    // 2
+            add(new Sequence1Algorithm());              // 3
+            add(new FibonacciNumbersAlgorithm());       // 4
+            add(new PrimeFactoryAlgorithm());           // 5
+            add(new PowerDigitSumAlgorithm());          // 6
 //            add(new MakeBricksAlgorithm());
-            add(new FactorialAlgorithm());
-            add(new ReverseAddPalindromeAlgorithm());
-            add(new Sequence2Algorithm());
-            add(new XthPrimeAlgorithm());
-            add(new LongDivisionAlgorithm());
+            add(new FactorialAlgorithm());              // 7
+            add(new ReverseAddPalindromeAlgorithm());   // 8
+            add(new Sequence2Algorithm());              // 9
+            add(new XthPrimeAlgorithm());               // 10
+            add(new LongDivisionAlgorithm());           // 11
+            add(new SquareUpAlgorithm());               // 12
+            add(new CountTrippleAlgorithm());           // 13
+            add(new PackageGiftBoxesAlgorithm());       // 14
         }};
     }
 

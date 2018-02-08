@@ -27,6 +27,9 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 //import org.approvaltests.legacycode.Range;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -71,6 +74,40 @@ public class LongDivisionAlgorithmTest {
 
         // TODO вернуть тест без approvals
         // LegacyApprovals.LockDown(this, "get", Range.get(-100, 100), Range.get(-100, 100));
+
+        List<String> tasks = Arrays.asList(
+                "1, 2",
+                "1, 1",
+                "5, 5",
+                "55, 5",
+                "55, 44",
+                "0, 56",
+                "56, 1",
+                "1, -2",
+                "-1, 2",
+                "-1, -2",
+                "1, 1000",
+                "56, 45",
+                "111, 110",
+                "111, 11",
+                "11111, 11",
+                "-11, -222",
+                "111, -22",
+                "1, 3000",
+                "87, 78",
+                "45, 56",
+                "212, 133",
+                "11111, 115",
+                "123, 345",
+                "66666666, 77727777",
+                "666666660, 77727777",
+                "666666660, 7772777",
+                "100, 97",
+                "999, 0");
+
+        for (String task : tasks) {
+            System.out.printf("%s\t\t\t%s\n", task, algorithm.get(task));
+        }
     }
 
     public String get(Integer i1, Integer i2) {

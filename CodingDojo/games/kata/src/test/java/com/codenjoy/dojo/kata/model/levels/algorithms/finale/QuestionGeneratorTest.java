@@ -43,6 +43,8 @@ public class QuestionGeneratorTest {
 
         List<String> generated = new QuestionGenerator(from, count).generate();
         Assert.assertTrue(isEqualCollection(expected, generated));
+
+        System.out.println(new QuestionGenerator(10, 10).generate());
     }
 
     private List<String> calculateExpectations(int from, int count) {
