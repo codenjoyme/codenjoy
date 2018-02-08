@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.kata.model.levels.algorithms;
+package com.codenjoy.dojo.kata.model.levels.algorithms.finale;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,24 +23,16 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
  */
 
 
-import org.junit.Test;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 11:42 PM
- */
-public class PowerDigitSumAlgorithmTest {
+import com.codenjoy.dojo.kata.model.levels.algorithms.FactorialAlgorithm;
+import com.codenjoy.dojo.kata.model.levels.algorithms.QuestionGenerator;
 
-    @Test
-    public void shouldWork() {
-        int[] primes = new int[]{1, 2, 4, 8, 7, 5, 10, 11, 13, 8, 7, 14, 19, 20, 22, 26, 25, 14, 19, 29, 31, 26, 25};
-        PowerDigitSumAlgorithm algorithm = new PowerDigitSumAlgorithm();
-        Assertions.assertAlgorithm(primes, algorithm);
-        for (int i = 26; i < 36; i++) {
-            System.out.println(algorithm.get(String.valueOf(i)));
-        }
+import java.util.List;
+
+public class FinaleFactorialAlgorithm extends FactorialAlgorithm {
+
+    @Override
+    public List<String> getQuestions() {
+        return new QuestionGenerator(26, 15).generate();
     }
-
-
 }

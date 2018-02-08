@@ -28,7 +28,6 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ReverseAddPalindromeAlgorithm extends AlgorithmLevelImpl {
 
@@ -81,21 +80,7 @@ public class ReverseAddPalindromeAlgorithm extends AlgorithmLevelImpl {
                 "345",
                 "456",
                 "567",
-                "678",
-                "789",
-                "1234",
-                "2345",
-                "3456",
-                "4567",
-                "5678",
-                "6789",
-                "7890",
-                "12345",
-                "123456",
-                "1234567",
-                "12345678",
-                "123456789",
-                "1234567890"
+                "678"
         );
     }
 
