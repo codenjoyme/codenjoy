@@ -34,7 +34,6 @@ public class FinaleLongDivisionAlgorithm extends LongDivisionAlgorithm {
     @Override
     public List<String> getQuestions() {
         return Arrays.asList(
-                "111, 110",
                 "111, 11",
                 "11111, 11",
                 "-11, -222",
