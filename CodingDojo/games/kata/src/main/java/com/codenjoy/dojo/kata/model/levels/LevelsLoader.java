@@ -61,6 +61,7 @@ public class LevelsLoader {
             add(new FinaleSquareUpAlgorithm());                // 12
             add(new FinaleCountTrippleAlgorithm());            // 13
             add(new FinalePackageGiftBoxesAlgorithm());        // 14
+            add(new FinaleArabicToRomanNumbersAlgorithm());    // 15
         }}; // TODO: add finale algorithms set here
     }
 
@@ -83,6 +84,7 @@ public class LevelsLoader {
             add(new SquareUpAlgorithm());               // 12
             add(new CountTrippleAlgorithm());           // 13
             add(new PackageGiftBoxesAlgorithm());       // 14
+            add(new ArabicToRomanNumbersAlgorithm());   // 15
         }};
     }
 
