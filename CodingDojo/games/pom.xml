@@ -39,8 +39,8 @@
     </repositories>
 
     <modules>
-        <!--module>engine</module>
-        <module>sample</module>
+        <module>engine</module>
+        <!--module>sample</module>
         <module>sample-text</module>
         <module>a2048</module>
         <module>a2048-extreme</module-->
