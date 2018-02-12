@@ -54,13 +54,13 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>battlecity-engine</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>bomberman-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>chess-engine</artifactId>
             <version>${project.version}</version>
@@ -74,13 +74,13 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>hex-engine</artifactId>
             <version>${project.version}</version>
-        </dependency-->
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>kata-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>loderunner-engine</artifactId>
             <version>${project.version}</version>
@@ -294,7 +294,7 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
-                                </artifactItem>
+                                </artifactItem-->
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>bomberman-engine</artifactId>
@@ -304,7 +304,7 @@
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>chess-engine</artifactId>
                                     <version>${project.version}</version>
@@ -330,7 +330,7 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
-                                </artifactItem-->
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>kata-engine</artifactId>
@@ -340,7 +340,7 @@
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
-                                <!--artifactItem>
+                                <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>loderunner-engine</artifactId>
                                     <version>${project.version}</version>
