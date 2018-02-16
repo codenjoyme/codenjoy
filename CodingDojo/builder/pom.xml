@@ -174,8 +174,8 @@
                     <webApp>
                         <contextPath>/${war.name}</contextPath>
                     </webApp>
-                    <stopPort>9998</stopPort>
-					<port>8081</port>
+                    <stopPort>9999</stopPort>
+					<port>8080</port>
                     <stopKey>foo</stopKey>
                 </configuration>
             </plugin>
