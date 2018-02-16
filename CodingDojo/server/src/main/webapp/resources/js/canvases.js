@@ -236,7 +236,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawPlayerNames = function(font, beforeDraw) {
             try {
-                var drawName = function(name, point, font, heroData) {
+                var drawName = function(name, point, font, heroData, isHero) {
                     var name = getNameFromEmail(name);
                     var data = {
                         'name':name,
@@ -245,7 +245,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         'heroData':heroData
                     }
                     if (!!beforeDraw) data = beforeDraw(data);
-                    canvas.drawText(data.name, data.point, data.font);
+                    canvas.drawText(data.name, data.point, data.font, isHero === true ? '#FFFB00' : null);
                 }
 
                 var board = getBoard();
@@ -267,10 +267,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             currentHeroData = heroData;
                         }
                         if (!board.onlyMyName && !!heroData.singleBoardGame) {
-                            drawName(name, point, font, heroData);
+                            drawName(name, point, font, heroData, playerName === name);
                         }
                     }
-                    drawName(playerName, currentPoint, font, currentHeroData);
+                    drawName(playerName, currentPoint, font, currentHeroData, true);
                 }
             } catch (err) {
                 console.log(err);
@@ -393,14 +393,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
             );
         };
 
-        var drawText = function(text, pt, font) {
+        var drawText = function(text, pt, font, style) {
+
             if (pt.x == -1 || pt.y == -1) return;
 
             var ctx = canvas[0].getContext("2d");
             if (!font) {
                 font = {
                     font: "15px 'Verdana, sans-serif'",
-                    fillStyle: "#0FF",
+                    fillStyle: style || "#0FF",
                     textAlign: "left",
                     shadowColor: "#000",
                     shadowOffsetX: 0,
