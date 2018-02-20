@@ -32,14 +32,32 @@ public class Player {
     private int maxScore;
     private int score;
     private GameSettings settings;
+    private boolean bot;
 
     public Player(EventListener listener) {
         this.listener = listener;
         clearScore();
     }
 
+    public Player(EventListener listener, boolean bot) {
+        this(listener);
+        this.bot = bot;
+    }
+
+    public boolean isHero() {
+        return !bot;
+    }
+
     public Hero getBomberman() {
         return bomberman;
+    }
+
+    public boolean isBot() {
+        return bot;
+    }
+
+    public void setBot(boolean bot) {
+        this.bot = bot;
     }
 
     private void increaseScore() {

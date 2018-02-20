@@ -24,14 +24,15 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * User: oleksandr.baglai
@@ -40,7 +41,7 @@ import java.util.List;
  */
 public class Bomberman implements Tickable, Field {
 
-    private List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<>();
 
     private Walls walls;
     private Parameter<Integer> size;
@@ -81,7 +82,11 @@ public class Bomberman implements Tickable, Field {
 
     private void tactAllBombermans() {
         for (Player player : players) {
-            player.getBomberman().apply();
+            if (player.isHero()) {
+                player.getBomberman().apply();
+            } else {
+                // TODO: propagate direction to linked meat-chopper
+            }
         }
     }
 
@@ -106,8 +111,19 @@ public class Bomberman implements Tickable, Field {
     }
 
     private void meatChopperEatBombermans() {
-        for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
+        List<Point> meatChoppers = walls.subList(MeatChopper.class);
+        List<Point> botPlayers = players.stream()
+                .filter(Player::isBot)
+                .map(Player::getBomberman)
+                .collect(Collectors.toCollection(LinkedList::new));
+        meatChoppers.addAll(botPlayers);
+
+        for (Point chopper : meatChoppers) {
             for (Player player : players) {
+                if (player.isBot()) {
+                    continue;
+                }
+
                 Hero bomberman = player.getBomberman();
                 if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
                     player.event(Events.KILL_BOMBERMAN);
@@ -234,11 +250,10 @@ public class Bomberman implements Tickable, Field {
 
     @Override
     public List<Hero> getBombermans() {
-        List<Hero> result = new LinkedList<Hero>();
-        for (Player player : players) {
-            result.add(player.getBomberman());
-        }
-        return result;
+        return players.stream()
+                .filter(Player::isHero)
+                .map(Player::getBomberman)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

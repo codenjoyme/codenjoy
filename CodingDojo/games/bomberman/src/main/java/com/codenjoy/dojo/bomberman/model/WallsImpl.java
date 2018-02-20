@@ -23,6 +23,8 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,7 +71,7 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
+    public <T extends Point> List<T> subList(Class<?> filter) {
         List<Wall> result = new LinkedList<Wall>();
         for (Wall input: walls) {
             if (filter.isAssignableFrom(input.getClass())) {

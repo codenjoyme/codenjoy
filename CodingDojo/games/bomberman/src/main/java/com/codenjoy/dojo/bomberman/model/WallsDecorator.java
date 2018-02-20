@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.Iterator;
@@ -56,7 +57,7 @@ public class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
+    public <T extends Point> List<T> subList(Class<?> filter) {
         return walls.subList(filter);
     }
 

@@ -4,7 +4,7 @@ package com.codenjoy.dojo.transport.auth;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,15 +23,21 @@ package com.codenjoy.dojo.transport.auth;
  */
 
 
-import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
+public class PlayerAuth {
+    private final String authId;
+    private final boolean bot;
 
-@Component
-public class DefaultAuthenticationService implements AuthenticationService {
+    public PlayerAuth(String authId, boolean bot) {
+        this.authId = authId;
+        this.bot = bot;
+    }
 
-    @Override
-    public PlayerAuth authenticate(HttpServletRequest request) {
-        return new PlayerAuth(request.getParameter("user"), false);
+    public String getAuthId() {
+        return authId;
+    }
+
+    public boolean isBot() {
+        return bot;
     }
 }

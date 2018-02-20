@@ -47,6 +47,12 @@ public class Single implements Game {
         printer = factory.getPrinter(game.reader(), player);
     }
 
+    public Single(Bomberman game, EventListener listener, PrinterFactory factory, boolean bot) {
+        this.game = game;
+        player = new Player(listener, bot);
+        printer = factory.getPrinter(game.reader(), player);
+    }
+
     public Player getPlayer() {
         return player;
     }

@@ -53,6 +53,11 @@ public class LockedGameType implements GameType {
     }
 
     @Override
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName, boolean bot) {
+        return game.wrap(gameType.newGame(listener, factory, save, playerName, bot));
+    }
+
+    @Override
     public Parameter<Integer> getBoardSize() {
         return gameType.getBoardSize();
     }

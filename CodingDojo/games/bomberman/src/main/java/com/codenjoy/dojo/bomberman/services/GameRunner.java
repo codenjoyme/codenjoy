@@ -70,6 +70,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName, boolean bot) {
+        if (board == null) {
+            board = newGame();
+        }
+        Game game = new Single(board, listener, factory, bot);
+        game.newGame();
+        return game;
+    }
+
+    @Override
     public Parameter<Integer> getBoardSize() {
         return gameSettings.getBoardSize();
     }

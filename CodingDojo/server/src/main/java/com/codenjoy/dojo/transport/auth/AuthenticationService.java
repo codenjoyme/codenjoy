@@ -26,5 +26,5 @@ package com.codenjoy.dojo.transport.auth;
 import javax.servlet.http.HttpServletRequest;
 
 public interface AuthenticationService {
-    String authenticate(HttpServletRequest request);
+    PlayerAuth authenticate(HttpServletRequest request);
 }
