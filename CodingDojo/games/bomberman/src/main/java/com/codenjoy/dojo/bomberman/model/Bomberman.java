@@ -41,6 +41,8 @@ import java.util.List;
 public class Bomberman implements Tickable, Field {
 
     private List<Player> players = new LinkedList<>();
+    private List<Player> botPlayers = new LinkedList<>();
+    private List<Player> nonBotPlayers = new LinkedList<>();
 
     private Walls walls;
     private Parameter<Integer> size;
@@ -109,8 +111,18 @@ public class Bomberman implements Tickable, Field {
         for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
             for (Player player : players) {
                 Hero bomberman = player.getBomberman();
-                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
+                if (bomberman.isAlive() && chopper.itsMe(bomberman) && !bomberman.isBot()) {
                     player.event(Events.KILL_BOMBERMAN);
+                }
+            }
+        }
+
+        for (Player botPlayer : botPlayers) {
+            for (Player player : nonBotPlayers) {
+                Hero bomberman = player.getBomberman();
+                if (bomberman.isAlive() && botPlayer.getBomberman().itsMe(bomberman)) {
+                    player.event(Events.KILL_BOMBERMAN);
+                    botPlayer.event(Events.KILL_OTHER_BOMBERMAN);
                 }
             }
         }
@@ -252,6 +264,19 @@ public class Bomberman implements Tickable, Field {
     }
 
     @Override
+    public boolean isAnotherBomberman(Point currentPos, int newX, int newY) {
+        for (Hero bomberman : getBombermans()) {
+            if (bomberman.itsMe(currentPos)) {
+                continue;
+            }
+            if (bomberman.itsMe(PointImpl.pt(newX, newY))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public List<Hero> getBombermans() {
         List<Hero> result = new LinkedList<Hero>();
         for (Player player : players) {
@@ -263,13 +288,23 @@ public class Bomberman implements Tickable, Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+        getRelevantPlayersRegistry(player).remove(player);
     }
 
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
         }
+
+        List<Player> relevantPlayersRegistry = getRelevantPlayersRegistry(player);
+        if (!relevantPlayersRegistry.contains(player)) {
+            relevantPlayersRegistry.add(player);
+        }
         player.newHero(this);
+    }
+
+    private List<Player> getRelevantPlayersRegistry(Player player) {
+        return player.isBot() ? botPlayers : nonBotPlayers;
     }
 
     public BoardReader reader() {

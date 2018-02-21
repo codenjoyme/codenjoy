@@ -147,7 +147,7 @@ public class HeroImpl extends PointImpl implements Hero {
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
 
-        if (!board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
+        if (!board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER) || (bot && board.isAnotherBomberman(PointImpl.pt(x, y), newX, newY))) {
             move(newX, newY);
         }
         direction = null;

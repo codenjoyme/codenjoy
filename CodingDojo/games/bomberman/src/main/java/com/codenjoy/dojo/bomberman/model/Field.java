@@ -23,6 +23,8 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
+
 import java.util.List;
 
 /**
@@ -42,6 +44,8 @@ public interface Field {  // TODO применить тут ISP (все ли м�
     Walls getWalls();
 
     boolean isBarrier(int x, int y, boolean isWithMeatChopper);
+
+    boolean isAnotherBomberman(Point currentPos, int newX, int newY);
 
     void remove(Player player);
 
