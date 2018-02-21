@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User: oleksandr.baglai
@@ -48,6 +49,7 @@ public class Bomberman implements Tickable, Field {
     private Parameter<Integer> size;
     private List<Bomb> bombs;
     private List<Blast> blasts;
+    private List<MeatChopper> choppers;
     private GameSettings settings;
     private List<PointImpl> destroyedWalls;
     private List<Bomb> destroyedBombs;
@@ -60,6 +62,7 @@ public class Bomberman implements Tickable, Field {
         destroyedBombs = new LinkedList<Bomb>();
         size = settings.getBoardSize();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
+        findChoppers();
     }
 
     public GameSettings getSettings() {
@@ -73,12 +76,22 @@ public class Bomberman implements Tickable, Field {
 
     @Override
     public void tick() {
+        findChoppers();
         removeBlasts();
         tactAllBombermans();
         meatChopperEatBombermans();
         walls.tick();
         meatChopperEatBombermans();
         tactAllBombs();
+        cleanupChoppers();
+    }
+
+    private void findChoppers() {
+        choppers = walls.subList(MeatChopper.class);
+    }
+
+    private void cleanupChoppers() {
+        choppers.clear();
     }
 
     private void tactAllBombermans() {
@@ -117,15 +130,7 @@ public class Bomberman implements Tickable, Field {
             }
         }
 
-        for (Player botPlayer : botPlayers) {
-            for (Player player : nonBotPlayers) {
-                Hero bomberman = player.getBomberman();
-                if (bomberman.isAlive() && botPlayer.getBomberman().itsMe(bomberman)) {
-                    player.event(Events.KILL_BOMBERMAN);
-                    botPlayer.event(Events.KILL_OTHER_BOMBERMAN);
-                }
-            }
-        }
+        botPlayersEatPlayers();
 //        List<Point> meatChoppers = walls.subList(MeatChopper.class);
 //        List<Point> botPlayers = players.stream()
 //                .filter(Player::isBot)
@@ -145,6 +150,18 @@ public class Bomberman implements Tickable, Field {
 //                }
 //            }
 //        }
+    }
+
+    private void botPlayersEatPlayers() {
+        for (Player botPlayer : botPlayers) {
+            for (Player player : nonBotPlayers) {
+                Hero bomberman = player.getBomberman();
+                if (!bomberman.isBot() && bomberman.isAlive() && botPlayer.getBomberman().itsMe(bomberman)) {
+                    player.event(Events.KILL_BOMBERMAN);
+                    botPlayer.event(Events.KILL_OTHER_BOMBERMAN);
+                }
+            }
+        }
     }
 
     private void tactAllBombs() {
@@ -241,6 +258,35 @@ public class Bomberman implements Tickable, Field {
     }
 
     @Override
+    public boolean isBarrier(Point botPos, int newX, int newY, boolean isWithMeatChopper) {
+        if (botPos != null && isAnotherBomberman(botPos, newX, newY)) {
+            return false;
+        }
+        if (botPos != null && isMeetChopper(PointImpl.pt(newX, newY))) {
+            return true;
+        }
+        for (Hero bomberman : getBombermans()) {
+            if (bomberman.itsMe(new PointImpl(newX, newY))) {
+                return true;
+            }
+        }
+        for (Bomb bomb : bombs) {
+            if (bomb.itsMe(newX, newY)) {
+                return true;
+            }
+        }
+        for (Wall wall : walls) {
+            if (wall instanceof MeatChopper && !isWithMeatChopper) {
+                continue;
+            }
+            if (wall.itsMe(newX, newY)) {
+                return true;
+            }
+        }
+        return newX < 0 || newY < 0 || newX > size() - 1 || newY > size() - 1;
+    }
+
+    @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
         for (Hero bomberman : getBombermans()) {
             if (bomberman.itsMe(new PointImpl(x, y))) {
@@ -263,6 +309,18 @@ public class Bomberman implements Tickable, Field {
         return x < 0 || y < 0 || x > size() - 1 || y > size() - 1;
     }
 
+    public Optional<Hero> getAnotherHero(int x, int y) {
+        for (Hero bomberman : getBombermans()) {
+            if (bomberman.itsMe(x, y)) {
+                continue;
+            }
+            if (bomberman.itsMe(x, y)) {
+                return Optional.of(bomberman);
+            }
+        }
+        return Optional.empty();
+    }
+
     @Override
     public boolean isAnotherBomberman(Point currentPos, int newX, int newY) {
         for (Hero bomberman : getBombermans()) {
@@ -270,6 +328,16 @@ public class Bomberman implements Tickable, Field {
                 continue;
             }
             if (bomberman.itsMe(PointImpl.pt(newX, newY))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isMeetChopper(Point pos) {
+        for (MeatChopper chopper : choppers) {
+            if (chopper.itsMe(pos)) {
                 return true;
             }
         }

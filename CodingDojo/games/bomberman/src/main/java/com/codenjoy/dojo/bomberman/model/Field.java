@@ -45,7 +45,11 @@ public interface Field {  // TODO применить тут ISP (все ли м�
 
     boolean isBarrier(int x, int y, boolean isWithMeatChopper);
 
+    boolean isBarrier(Point botPos, int x, int y, boolean isWithMeatChopper);
+
     boolean isAnotherBomberman(Point currentPos, int newX, int newY);
+
+    boolean isMeetChopper(Point pos);
 
     void remove(Player player);
 
