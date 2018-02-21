@@ -99,6 +99,6 @@ public class Player {
         score = 0;
         settings = board.getSettings();
         bomberman = settings.getBomberman(settings.getLevel());
-        bomberman.init(board);
+        bomberman.init(board, bot);
     }
 }

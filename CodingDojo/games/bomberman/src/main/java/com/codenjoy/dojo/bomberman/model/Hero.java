@@ -41,5 +41,7 @@ public interface Hero extends Joystick, Point, State<Elements,Player> {
 
     boolean isAlive();
 
-    void init(Bomberman board);
+    void init(Bomberman board, boolean bot);
+
+    boolean isBot();
 }

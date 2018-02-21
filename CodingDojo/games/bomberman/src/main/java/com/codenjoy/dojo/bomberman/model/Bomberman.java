@@ -32,7 +32,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * User: oleksandr.baglai
@@ -82,11 +81,7 @@ public class Bomberman implements Tickable, Field {
 
     private void tactAllBombermans() {
         for (Player player : players) {
-            if (player.isHero()) {
-                player.getBomberman().apply();
-            } else {
-                // TODO: propagate direction to linked meat-chopper
-            }
+            player.getBomberman().apply();
         }
     }
 
@@ -111,25 +106,33 @@ public class Bomberman implements Tickable, Field {
     }
 
     private void meatChopperEatBombermans() {
-        List<Point> meatChoppers = walls.subList(MeatChopper.class);
-        List<Point> botPlayers = players.stream()
-                .filter(Player::isBot)
-                .map(Player::getBomberman)
-                .collect(Collectors.toCollection(LinkedList::new));
-        meatChoppers.addAll(botPlayers);
-
-        for (Point chopper : meatChoppers) {
+        for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
             for (Player player : players) {
-                if (player.isBot()) {
-                    continue;
-                }
-
                 Hero bomberman = player.getBomberman();
                 if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
                     player.event(Events.KILL_BOMBERMAN);
                 }
             }
         }
+//        List<Point> meatChoppers = walls.subList(MeatChopper.class);
+//        List<Point> botPlayers = players.stream()
+//                .filter(Player::isBot)
+//                .map(Player::getBomberman)
+//                .collect(Collectors.toCollection(LinkedList::new));
+//        meatChoppers.addAll(botPlayers);
+//
+//        for (Point chopper : meatChoppers) {
+//            for (Player player : players) {
+//                if (player.isBot()) {
+//                    continue;
+//                }
+//
+//                Hero bomberman = player.getBomberman();
+//                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
+//                    player.event(Events.KILL_BOMBERMAN);
+//                }
+//            }
+//        }
     }
 
     private void tactAllBombs() {
@@ -250,10 +253,11 @@ public class Bomberman implements Tickable, Field {
 
     @Override
     public List<Hero> getBombermans() {
-        return players.stream()
-                .filter(Player::isHero)
-                .map(Player::getBomberman)
-                .collect(Collectors.toCollection(LinkedList::new));
+        List<Hero> result = new LinkedList<Hero>();
+        for (Player player : players) {
+            result.add(player.getBomberman());
+        }
+        return result;
     }
 
     @Override

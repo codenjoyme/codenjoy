@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public interface Walls extends Iterable<Wall>, Tickable {
 
     boolean itsMe(int x, int y);
 
-    <T extends Point> List<T> subList(Class<?> filter);
+    <T extends Wall> List<T> subList(Class<T> filter);
 
     void add(Wall wall);
 
