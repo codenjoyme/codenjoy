@@ -122,7 +122,7 @@ public class HeroImpl extends PointImpl implements Hero {
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!alive || bot) return;
 
         if (direction != null) {
             bomb = true;
@@ -152,7 +152,7 @@ public class HeroImpl extends PointImpl implements Hero {
         }
         direction = null;
 
-        if (bomb) {
+        if (bomb && !bot) {
             setBomb(x, y);
             bomb = false;
         }
