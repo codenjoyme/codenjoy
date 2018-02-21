@@ -38,17 +38,18 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> bombPower;
     private final Parameter<Integer> bombsCount;
     private final Parameter<Integer> destroyWallCount;
-    private final Parameter<Integer> boardSize;
+    //private final Parameter<Integer> boardSize;
     private final Parameter<Integer> meatChoppersCount;
 
     public OptionGameSettings(Settings settings) {
-        bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
+        bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(DefaultGameSettings.BOMBS_COUNT);
         bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
-        destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue()*boardSize.getValue()/10);
+//        boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
+        destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(DefaultGameSettings.DESTROY_WALL_COUNT);
         meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
     }
 
+/*
     @Override
     public Level getLevel() {
         return new Level() {
@@ -56,7 +57,6 @@ public class OptionGameSettings implements GameSettings {
             public int bombsCount() {
                 return bombsCount.getValue();
             }
-
             @Override
             public int bombsPower() {
                 return bombPower.getValue();
@@ -68,18 +68,18 @@ public class OptionGameSettings implements GameSettings {
     public Walls getWalls(Bomberman board) {
         OriginalWalls originalWalls = new OriginalWalls(boardSize);
         MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, meatChoppersCount, new RandomDice());
-
         EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, destroyWallCount, new RandomDice());
         return eatWalls;
-    }
-
-    @Override
-    public Hero getBomberman(Level level) {
-        return new HeroImpl(level, new RandomDice());
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
         return boardSize;
     }
+*/
+    @Override
+    public Hero getBomberman(Level level) {
+        return new HeroImpl(level, new RandomDice());
+    }
+
 }

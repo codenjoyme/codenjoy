@@ -41,20 +41,10 @@ public class DefaultGameSettings implements GameSettings {
     public static final int BOMBS_COUNT = 1;
     public static final int BOARD_SIZE = 33;
     public static final int DESTROY_WALL_COUNT = BOARD_SIZE * BOARD_SIZE / 10;
-
+/*
     @Override
     public Level getLevel() {
-        return new Level() {
-            @Override
-            public int bombsCount() {
-                return BOMBS_COUNT;
-            }
-
-            @Override
-            public int bombsPower() {
-                return BOMB_POWER;
-            }
-        };
+        return null;
     }
 
     @Override
@@ -66,12 +56,15 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
+    public Parameter<Integer> getBoardSize() {
+        return v(BOARD_SIZE);
+    }
+
+*/
+
+    @Override
     public Hero getBomberman(Level level) {
         return new HeroImpl(level, new RandomDice());
     }
 
-    @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(BOARD_SIZE);
-    }
 }

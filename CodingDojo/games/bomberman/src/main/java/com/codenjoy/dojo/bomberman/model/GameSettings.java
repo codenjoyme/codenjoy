@@ -31,11 +31,9 @@ import com.codenjoy.dojo.services.settings.Parameter;
  * Time: 6:28 PM
  */
 public interface GameSettings {
-    Level getLevel();
-
-    Walls getWalls(Bomberman board);
+//    Level getLevel();
+//    Walls getWalls(Bomberman board);
+//    Parameter<Integer> getBoardSize();
 
     Hero getBomberman(Level level);
-
-    Parameter<Integer> getBoardSize();
 }

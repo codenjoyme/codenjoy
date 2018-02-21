@@ -34,18 +34,14 @@ public interface Field {  // TODO применить тут ISP (все ли м�
     int size();
 
     List<Hero> getBombermans();
-
     List<Bomb> getBombs();
-
     List<Bomb> getBombs(HeroImpl bomberman);
-
+    List<Blast> getBlasts();
     Walls getWalls();
 
     boolean isBarrier(int x, int y, boolean isWithMeatChopper);
 
     void remove(Player player);
-
-    List<Blast> getBlasts();
 
     void drop(Bomb bomb);
 

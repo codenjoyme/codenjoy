@@ -53,11 +53,11 @@ public class HeroImpl extends PointImpl implements Hero {
 
     @Override
     public void init(Bomberman board) {
-        this.board = board;
+        this.board = board.getLevel();
         int count = 0;
         do {
-            x = dice.next(board.size());
-            y = dice.next(board.size());
+            x = dice.next(this.board.size());
+            y = dice.next(this.board.size());
             while (isBusy(x, y) && !isOutOfBoard(x, y)) {
                 x++;
                 if (isBusy(x, y)) {
@@ -152,8 +152,8 @@ public class HeroImpl extends PointImpl implements Hero {
     }
 
     private void setBomb(int bombX, int bombY) {
-        if (board.getBombs(this).size() < level.bombsCount()) {
-            board.drop(new Bomb(this, bombX, bombY, level.bombsPower(), board));
+        if (board.getBombs(this).size() < level.bombsCount().getValue()) {
+            board.drop(new Bomb(this, bombX, bombY, level.bombsPower().getValue(), board));
         }
     }
 

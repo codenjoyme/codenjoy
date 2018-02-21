@@ -65,7 +65,8 @@ public enum Elements implements CharElements {
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
     /// a void
-    NONE(' ');                 // this is the only place where you can move your Bomberman
+    NONE(' ');                  // this is the only place where you can move your Bomberman
+
 
     public final static String BOMBS = "12345";
 
@@ -77,6 +78,10 @@ public enum Elements implements CharElements {
 
     @Override
     public char ch() {
+        return ch;
+    }
+
+    public char getChar() {
         return ch;
     }
 

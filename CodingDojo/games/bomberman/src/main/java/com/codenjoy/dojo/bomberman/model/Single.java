@@ -83,7 +83,7 @@ public class Single implements Game {
 
     @Override
     public void destroy() {
-        game.remove(player);
+        game.getLevel().remove(player);
     }
 
     @Override

@@ -23,13 +23,27 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.settings.Parameter;
+
+import java.util.List;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
  * Time: 1:48 PM
  */
-public interface Level {
-    int bombsCount();
+public interface Level extends Field, Tickable {
 
-    int bombsPower();
+    Parameter<Integer> bombsCount(); //настройка для каждой карты своя
+    Parameter<Integer> bombsPower(); //настройка для каждой карты своя
+    Parameter<Integer> getSize();    //настройка для каждой карты своя
+
+    List<Player> getPlayers();
+
+    List<PointImpl> getDestroyedWalls();
+    List<Bomb> getDestroyedBombs();
+
+
 }

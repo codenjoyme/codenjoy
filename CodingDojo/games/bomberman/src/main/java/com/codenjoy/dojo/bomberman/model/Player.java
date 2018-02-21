@@ -80,7 +80,7 @@ public class Player {
     public void newHero(Bomberman board) {
         score = 0;
         settings = board.getSettings();
-        bomberman = settings.getBomberman(settings.getLevel());
+        bomberman = settings.getBomberman(board.getLevel());
         bomberman.init(board);
     }
 }
