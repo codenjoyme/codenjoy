@@ -55,12 +55,17 @@ public class Player implements ScreenRecipient {
         this.info = info;
     }
 
-    public boolean isBot() {
-        return bot;
+    public Player(String name, String callbackUrl, GameType gameType, PlayerScores scores, Information info, boolean bot) {
+        this.name = name;
+        this.callbackUrl = callbackUrl;
+        this.gameType = gameType;
+        this.scores = scores;
+        this.info = info;
+        this.bot = bot;
     }
 
-    public void setBot(boolean bot) {
-        this.bot = bot;
+    public boolean isBot() {
+        return bot;
     }
 
     public GameType getGameType() {

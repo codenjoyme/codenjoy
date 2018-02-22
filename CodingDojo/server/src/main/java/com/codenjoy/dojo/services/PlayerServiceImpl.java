@@ -168,8 +168,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             player = new Player(name, callbackUrl,
-                    gameType, playerScores, informationCollector);
-            player.setBot(bot);
+                    gameType, playerScores, informationCollector, bot);
 
             playerGames.add(player, game, playerController, screenController);
         } else {
@@ -252,7 +251,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 GuiPlotColorDecoder decoder = gameData.getDecoder();
                 cacheBoards.put(player, decoder.encodeForClient(board));
-                Object encoded = decoder.encodeForBrowser(board);
+                Object encoded = decoder.encodeForBrowser(game.wrapScreen(board));
 
                 map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,

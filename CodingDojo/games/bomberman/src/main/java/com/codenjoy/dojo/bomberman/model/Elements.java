@@ -65,7 +65,8 @@ public enum Elements implements CharElements {
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
     /// a void
-    NONE(' ');                 // this is the only place where you can move your Bomberman
+    NONE(' '),                 // this is the only place where you can move your Bomberman
+    MEAT_CHOPPER_PLAYER('☿');  // Screen-only-used element for meat-chopper Player
 
     public final static String BOMBS = "12345";
 

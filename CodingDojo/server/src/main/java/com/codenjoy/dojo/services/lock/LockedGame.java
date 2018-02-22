@@ -25,7 +25,6 @@ package com.codenjoy.dojo.services.lock;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.hero.HeroData;
 
 import java.util.concurrent.locks.ReadWriteLock;
@@ -151,6 +150,11 @@ public class LockedGame implements Game {
                 lock.writeLock().unlock();
             }
         }
+    }
+
+    @Override
+    public Object wrapScreen(Object map) {
+        return game.wrapScreen(map);
     }
 
     @Override
