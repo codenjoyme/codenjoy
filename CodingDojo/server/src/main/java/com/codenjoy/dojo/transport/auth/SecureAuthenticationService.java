@@ -39,7 +39,7 @@ public class SecureAuthenticationService implements AuthenticationService {
     @Override
     public PlayerAuth authenticate(HttpServletRequest request) {
         String user = request.getParameter("user");
-        if (user.endsWith(PlayerServiceImpl.BOT_EMAIL_SUFFIX)) {
+        if (user.endsWith(PlayerServiceImpl.AI_EMAIL_SUFFIX)) {
             return new PlayerAuth(user, false);
         }
         String code = request.getParameter("code");
