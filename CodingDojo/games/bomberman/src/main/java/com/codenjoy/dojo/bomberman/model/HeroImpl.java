@@ -38,7 +38,7 @@ public class HeroImpl extends PointImpl implements Hero {
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private Level level;
     private Dice dice;
-    private Bomberman board;
+    private Field board;
     private boolean alive;
     private boolean bomb;
     private Direction direction;
@@ -147,7 +147,6 @@ public class HeroImpl extends PointImpl implements Hero {
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
 
-//        Optional<Hero> anotherHero = board.getAnotherHero(newX, newY);
         if (!board.isBarrier(iAmBot() ? PointImpl.pt(x, y) : null, newX, newY, WITHOUT_MEAT_CHOPPER)) {
             move(newX, newY);
         }

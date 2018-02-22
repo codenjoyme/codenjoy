@@ -25,16 +25,13 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.bomberman.services.Level1;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * User: oleksandr.baglai
@@ -59,22 +56,14 @@ public class Bomberman implements Tickable {
 
     @Override
     public void tick() {
-        findChoppers();
+        level.prepareChoppers();
         removeBlasts();
         tactAllPlayers();
         meatChopperEatBombermans();
         level.tick();
         meatChopperEatBombermans();
         tactAllBombs();
-        cleanupChoppers();
-    }
-
-    private void findChoppers() {
-        choppers = walls.subList(MeatChopper.class);
-    }
-
-    private void cleanupChoppers() {
-        choppers.clear();
+        level.cleanupChoppers();
     }
 
     private void tactAllPlayers() {
@@ -114,30 +103,11 @@ public class Bomberman implements Tickable {
         }
 
         botPlayersEatPlayers();
-//        List<Point> meatChoppers = walls.subList(MeatChopper.class);
-//        List<Point> botPlayers = players.stream()
-//                .filter(Player::isBot)
-//                .map(Player::getBomberman)
-//                .collect(Collectors.toCollection(LinkedList::new));
-//        meatChoppers.addAll(botPlayers);
-//
-//        for (Point chopper : meatChoppers) {
-//            for (Player player : players) {
-//                if (player.isBot()) {
-//                    continue;
-//                }
-//
-//                Hero bomberman = player.getBomberman();
-//                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
-//                    player.event(Events.KILL_BOMBERMAN);
-//                }
-//            }
-//        }
     }
 
     private void botPlayersEatPlayers() {
-        for (Player botPlayer : botPlayers) {
-            for (Player player : nonBotPlayers) {
+        for (Player botPlayer : level.getBotPlayers()) {
+            for (Player player : level.getNonBotPlayers()) {
                 Hero bomberman = player.getBomberman();
                 if (!bomberman.isBot() && bomberman.isAlive() && botPlayer.getBomberman().itsMe(bomberman)) {
                     player.event(Events.KILL_BOMBERMAN);
@@ -194,7 +164,6 @@ public class Bomberman implements Tickable {
         }
     }
 
-
     public void newGame(Player player) {
         if (!level.getPlayers().contains(player)) {
             level.getPlayers().add(player);
@@ -208,7 +177,7 @@ public class Bomberman implements Tickable {
     }
 
     private List<Player> getRelevantPlayersRegistry(Player player) {
-        return player.isBot() ? botPlayers : nonBotPlayers;
+        return player.isBot() ? level.getBotPlayers() : level.getNonBotPlayers();
     }
 
     public BoardReader reader() {

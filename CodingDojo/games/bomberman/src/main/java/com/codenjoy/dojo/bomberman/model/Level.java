@@ -41,9 +41,11 @@ public interface Level extends Field, Tickable {
     Parameter<Integer> getSize();    //настройка для каждой карты своя
 
     List<Player> getPlayers();
+    List<Player> getBotPlayers();
+    List<Player> getNonBotPlayers();
+    void prepareChoppers();
+    void cleanupChoppers();
 
     List<PointImpl> getDestroyedWalls();
     List<Bomb> getDestroyedBombs();
-
-
 }

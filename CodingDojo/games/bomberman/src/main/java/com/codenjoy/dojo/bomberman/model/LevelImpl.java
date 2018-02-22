@@ -22,12 +22,16 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * User: sanja
@@ -43,11 +47,14 @@ public class LevelImpl implements Level {
     private Parameter<Integer> bombs;
     private Parameter<Integer> size;
 
-    private LinkedList<PointImpl> destroyedWalls;
-    private LinkedList<Bomb> destroyedBombs;
-    private LinkedList<Bomb> listBombs;
-    private LinkedList<Blast> listBlast;
-    private LinkedList<Player> listPlayers;
+    private List<PointImpl> destroyedWalls;
+    private List<Bomb> destroyedBombs;
+    private List<Bomb> listBombs;
+    private List<Blast> listBlast;
+    private List<Player> listPlayers;
+    private List<Player> botPlayers;
+    private List<Player> nonBotPlayers;
+    private List<MeatChopper> choppers;
 
     private OriginalWalls originalWalls;
     private EatSpaceWalls eatWalls;
@@ -58,11 +65,14 @@ public class LevelImpl implements Level {
         this.size = v((int)Math.sqrt(map.length()));
         this.xy = new LengthToXY(this.size.getValue());
         this.bombs = v(getPointsOf(Elements.BOOM).size());
-        this.destroyedWalls = new LinkedList<PointImpl>();
-        this.destroyedBombs = new LinkedList<Bomb>();
-        this.listBombs = new LinkedList<Bomb>();
-        this.listBlast = new LinkedList<Blast>();
-        this.listPlayers = new LinkedList<Player>();
+        this.destroyedWalls = new LinkedList<>();
+        this.destroyedBombs = new LinkedList<>();
+        this.listBombs = new LinkedList<>();
+        this.listBlast = new LinkedList<>();
+        this.listPlayers = new LinkedList<>();
+        this.botPlayers = new LinkedList<>();
+        this.nonBotPlayers = new LinkedList<>();
+        this.choppers = new LinkedList<>();
 
         //выставляем стены
         List<Point> points = getPointsOf(Elements.WALL);
@@ -128,6 +138,16 @@ public class LevelImpl implements Level {
     }
 
     @Override
+    public void prepareChoppers() {
+        this.choppers = walls.subList(MeatChopper.class);
+    }
+
+    @Override
+    public void cleanupChoppers() {
+        this.choppers.clear();
+    }
+
+    @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
         for (Player bomberman : getPlayers()) {
             if (bomberman.getBomberman().itsMe(new PointImpl(x, y))) {
@@ -148,6 +168,58 @@ public class LevelImpl implements Level {
             }
         }
         return x < 0 || y < 0 || x > size.getValue() - 1 || y > size.getValue() - 1;
+    }
+
+    @Override
+    public boolean isBarrier(Point botPos, int newX, int newY, boolean isWithMeatChopper) {
+        if (botPos != null && isAnotherBomberman(botPos, newX, newY)) {
+            return false;
+        }
+        if (botPos != null && isMeetChopper(PointImpl.pt(newX, newY))) {
+            return true;
+        }
+        for (Hero bomberman : getBombermans()) {
+            if (bomberman.itsMe(new PointImpl(newX, newY))) {
+                return true;
+            }
+        }
+        for (Bomb bomb : getBombs()) {
+            if (bomb.itsMe(newX, newY)) {
+                return true;
+            }
+        }
+        for (Wall wall : walls) {
+            if (wall instanceof MeatChopper && !isWithMeatChopper) {
+                continue;
+            }
+            if (wall.itsMe(newX, newY)) {
+                return true;
+            }
+        }
+        return newX < 0 || newY < 0 || newX > size() - 1 || newY > size() - 1;
+    }
+
+    @Override
+    public boolean isAnotherBomberman(Point currentPos, int newX, int newY) {
+        for (Hero bomberman : getBombermans()) {
+            if (bomberman.itsMe(currentPos)) {
+                continue;
+            }
+            if (bomberman.itsMe(PointImpl.pt(newX, newY))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isMeetChopper(Point pos) {
+        for (MeatChopper chopper : choppers) {
+            if (chopper.itsMe(pos)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //Blast Section
@@ -174,6 +246,16 @@ public class LevelImpl implements Level {
         return this.listPlayers;
     }
 
+    @Override
+    public List<Player> getBotPlayers() {
+        return this.botPlayers;
+    }
+
+    @Override
+    public List<Player> getNonBotPlayers() {
+        return this.nonBotPlayers;
+    }
+
     //Wall Section
     @Override
     public Walls getWalls() {
@@ -198,6 +280,7 @@ public class LevelImpl implements Level {
     @Override
     public void remove(Player player) {
         this.listPlayers.remove(player);
+        (player.isBot() ? botPlayers : nonBotPlayers).remove(player);
     }
 
     // Private methods
