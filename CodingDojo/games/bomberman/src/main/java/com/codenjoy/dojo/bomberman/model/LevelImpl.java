@@ -22,10 +22,6 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
@@ -35,16 +31,10 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
-import java.util.List;
-
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -56,7 +46,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class LevelImpl implements Level {
 
-    private final LengthToXY xy;
+    private LengthToXY xy;
     private final GameSettings settings;
     private String map;
     private Walls walls;
@@ -76,7 +66,6 @@ public class LevelImpl implements Level {
     private EatSpaceWalls eatWalls;
     private MeatChoppers meatChoppers;
 
-    private GameSettings settings;
     private String mapName;
     private final static Charset ENCODING = StandardCharsets.UTF_8;
 
@@ -337,8 +326,22 @@ public class LevelImpl implements Level {
         for (MeatChopper chopper : getWalls().subList(MeatChopper.class)) {
             for (Player player : getPlayers()) {
                 Hero bomberman = player.getBomberman();
-                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
+                if (bomberman.isAlive() && chopper.itsMe(bomberman) && !bomberman.isBot()) {
                     player.event(Events.KILL_BOMBERMAN);
+                }
+            }
+        }
+
+        botPlayersEatPlayers();
+    }
+
+    private void botPlayersEatPlayers() {
+        for (Player botPlayer : getBotPlayers()) {
+            for (Player player : getNonBotPlayers()) {
+                Hero bomberman = player.getBomberman();
+                if (!bomberman.isBot() && bomberman.isAlive() && botPlayer.getBomberman().itsMe(bomberman)) {
+                    player.event(Events.KILL_BOMBERMAN);
+                    botPlayer.event(Events.KILL_OTHER_BOMBERMAN);
                 }
             }
         }
@@ -454,6 +457,7 @@ public class LevelImpl implements Level {
 
     @Override
     public void tick() {
+        prepareChoppers();
         removeBlasts();
         tactAllPlayers();
         meatChopperEatBombermans();
