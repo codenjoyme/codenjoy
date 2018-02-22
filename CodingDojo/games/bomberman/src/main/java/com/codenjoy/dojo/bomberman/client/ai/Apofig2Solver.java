@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.client.ai;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,8 +25,6 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.bomberman.services.GameRunner;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Point;
@@ -84,9 +82,8 @@ public class Apofig2Solver implements Solver<Board> {
             for (HistoryPoint point : this) {
                 if (point.itsMe(near)) {
                     if (point.prev != null &&
-                        point.prev.command != null &&
-                        point.prev.command.equals(oldDirection))
-                    {
+                            point.prev.command != null &&
+                            point.prev.command.equals(oldDirection)) {
                         equalsPoint.add(point);
                     }
                 }
@@ -187,7 +184,7 @@ public class Apofig2Solver implements Solver<Board> {
             int count = 0;
             for (Elements el : near) {
                 result += el.ch();
-                count ++;
+                count++;
                 if (count % 3 == 0) {
                     result += "\n";
                 }

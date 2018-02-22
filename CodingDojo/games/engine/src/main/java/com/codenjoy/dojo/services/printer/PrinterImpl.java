@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.State;
 class PrinterImpl implements Printer<String> {
     public static final String ERROR_SYMBOL = "Ъ";
     private char[][] field;
-    private final int size;
+    private int size;
     private GamePrinter printer;
 
     public static <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player) {
@@ -72,8 +72,9 @@ class PrinterImpl implements Printer<String> {
     }
 
     private void fillField() {
-        field = new char[size][size];
         printer.init();
+        size = printer.getSize();
+        field = new char[size][size];
 
         printer.printAll(new GamePrinter.Filler() {
             @Override
@@ -151,6 +152,11 @@ class PrinterImpl implements Printer<String> {
                     }
                 }
             }
+        }
+
+        @Override
+        public int getSize() {
+            return board.size();
         }
     }
 }
