@@ -23,11 +23,17 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+
+import static com.codenjoy.dojo.bomberman.model.Elements.BOMBERMAN;
+import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER_PLAYER;
+import static java.lang.String.valueOf;
 
 /**
  * User: sanja
@@ -44,6 +50,12 @@ public class Single implements Game {
     public Single(Bomberman game, EventListener listener, PrinterFactory factory) {
         this.game = game;
         player = new Player(listener);
+        printer = factory.getPrinter(game.reader(), player);
+    }
+
+    public Single(Bomberman game, EventListener listener, PrinterFactory factory, boolean bot) {
+        this.game = game;
+        player = new Player(listener, bot);
         printer = factory.getPrinter(game.reader(), player);
     }
 
@@ -82,6 +94,14 @@ public class Single implements Game {
     }
 
     @Override
+    public Object wrapScreen(Object map) {
+        if (!player.isBot() || !(map instanceof String)) {
+            return map;
+        }
+        return ((String) map).replace(valueOf(BOMBERMAN.ch()), valueOf(MEAT_CHOPPER_PLAYER.ch()));
+    }
+
+    @Override
     public void destroy() {
         game.getLevel().remove(player);
     }
@@ -105,5 +125,4 @@ public class Single implements Game {
     public void tick() {
         game.tick();
     }
-
 }

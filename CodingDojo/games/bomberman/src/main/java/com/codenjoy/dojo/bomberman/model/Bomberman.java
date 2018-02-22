@@ -29,9 +29,12 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * User: oleksandr.baglai
@@ -56,12 +59,22 @@ public class Bomberman implements Tickable {
 
     @Override
     public void tick() {
+        findChoppers();
         removeBlasts();
         tactAllPlayers();
         meatChopperEatBombermans();
         level.tick();
         meatChopperEatBombermans();
         tactAllBombs();
+        cleanupChoppers();
+    }
+
+    private void findChoppers() {
+        choppers = walls.subList(MeatChopper.class);
+    }
+
+    private void cleanupChoppers() {
+        choppers.clear();
     }
 
     private void tactAllPlayers() {
@@ -94,8 +107,41 @@ public class Bomberman implements Tickable {
         for (MeatChopper chopper : level.getWalls().subList(MeatChopper.class)) {
             for (Player player : level.getPlayers()) {
                 Hero bomberman = player.getBomberman();
-                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
+                if (bomberman.isAlive() && chopper.itsMe(bomberman) && !bomberman.isBot()) {
                     player.event(Events.KILL_BOMBERMAN);
+                }
+            }
+        }
+
+        botPlayersEatPlayers();
+//        List<Point> meatChoppers = walls.subList(MeatChopper.class);
+//        List<Point> botPlayers = players.stream()
+//                .filter(Player::isBot)
+//                .map(Player::getBomberman)
+//                .collect(Collectors.toCollection(LinkedList::new));
+//        meatChoppers.addAll(botPlayers);
+//
+//        for (Point chopper : meatChoppers) {
+//            for (Player player : players) {
+//                if (player.isBot()) {
+//                    continue;
+//                }
+//
+//                Hero bomberman = player.getBomberman();
+//                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
+//                    player.event(Events.KILL_BOMBERMAN);
+//                }
+//            }
+//        }
+    }
+
+    private void botPlayersEatPlayers() {
+        for (Player botPlayer : botPlayers) {
+            for (Player player : nonBotPlayers) {
+                Hero bomberman = player.getBomberman();
+                if (!bomberman.isBot() && bomberman.isAlive() && botPlayer.getBomberman().itsMe(bomberman)) {
+                    player.event(Events.KILL_BOMBERMAN);
+                    botPlayer.event(Events.KILL_OTHER_BOMBERMAN);
                 }
             }
         }
@@ -153,7 +199,16 @@ public class Bomberman implements Tickable {
         if (!level.getPlayers().contains(player)) {
             level.getPlayers().add(player);
         }
+
+        List<Player> relevantPlayersRegistry = getRelevantPlayersRegistry(player);
+        if (!relevantPlayersRegistry.contains(player)) {
+            relevantPlayersRegistry.add(player);
+        }
         player.newHero(this);
+    }
+
+    private List<Player> getRelevantPlayersRegistry(Player player) {
+        return player.isBot() ? botPlayers : nonBotPlayers;
     }
 
     public BoardReader reader() {

@@ -38,10 +38,11 @@ public class HeroImpl extends PointImpl implements Hero {
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private Level level;
     private Dice dice;
-    private Field board;
+    private Bomberman board;
     private boolean alive;
     private boolean bomb;
     private Direction direction;
+    private boolean bot;
 
     public HeroImpl(Level level, Dice dice) {
         super(-1, -1);
@@ -52,8 +53,9 @@ public class HeroImpl extends PointImpl implements Hero {
     }
 
     @Override
-    public void init(Bomberman board) {
+    public void init(Bomberman board, boolean bot) {
         this.board = board.getLevel();
+        this.bot = bot;
         int count = 0;
         do {
             x = dice.next(this.board.size());
@@ -69,6 +71,11 @@ public class HeroImpl extends PointImpl implements Hero {
         if (count >= 1000) {
             throw new  RuntimeException("Dead loop at MyBomberman.init(Board)!");
         }
+    }
+
+    @Override
+    public boolean isBot() {
+        return bot;
     }
 
     private boolean isBusy(int x, int y) {
@@ -115,7 +122,7 @@ public class HeroImpl extends PointImpl implements Hero {
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!alive || bot) return;
 
         if (direction != null) {
             bomb = true;
@@ -140,15 +147,20 @@ public class HeroImpl extends PointImpl implements Hero {
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
 
-        if (!board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
+//        Optional<Hero> anotherHero = board.getAnotherHero(newX, newY);
+        if (!board.isBarrier(iAmBot() ? PointImpl.pt(x, y) : null, newX, newY, WITHOUT_MEAT_CHOPPER)) {
             move(newX, newY);
         }
         direction = null;
 
-        if (bomb) {
+        if (bomb && !bot) {
             setBomb(x, y);
             bomb = false;
         }
+    }
+
+    private boolean iAmBot() {
+        return bot;
     }
 
     private void setBomb(int bombX, int bombY) {
@@ -185,6 +197,9 @@ public class HeroImpl extends PointImpl implements Hero {
                     return BOMBERMAN;
                 }
             } else {
+                if (bot) {
+                    return MEAT_CHOPPER;
+                }
                 if (bomb != null) {
                     return OTHER_BOMB_BOMBERMAN;
                 } else {
@@ -195,6 +210,9 @@ public class HeroImpl extends PointImpl implements Hero {
             if (this == player.getBomberman()) {
                 return DEAD_BOMBERMAN;
             } else {
+                if (bot) {
+                    return DEAD_MEAT_CHOPPER;
+                }
                 return OTHER_DEAD_BOMBERMAN;
             }
         }

@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-parent</artifactId>
-    <version>1.0.25</version>
+    <version>1.0.26-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <distributionManagement>

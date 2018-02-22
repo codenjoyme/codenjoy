@@ -30,6 +30,7 @@ public class PlayerCommand {
 
     private Joystick joystick;
     private String commandString;
+    private boolean botJoystick;
 
     public PlayerCommand(Joystick joystick, String commandString) {
         this.joystick = joystick;
@@ -38,6 +39,11 @@ public class PlayerCommand {
         } else {
             this.commandString = commandString.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
         }
+    }
+
+    public PlayerCommand(Joystick joystick, String commandString, boolean botJoystick) { // FIXME: check another constructor usage for single game
+        this(joystick, commandString);
+        this.botJoystick = botJoystick;
     }
 
     public void execute(){
