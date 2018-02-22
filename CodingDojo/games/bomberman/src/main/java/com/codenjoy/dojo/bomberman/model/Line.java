@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,6 +32,7 @@ import java.util.List;
  * User: oleksandr.baglai
  * Date: 3/7/13
  * Time: 9:26 PM
+ *
  * @author http://ru.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D0%91%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%85%D1%8D%D0%BC%D0%B0
  */
 public class Line {
@@ -74,11 +75,11 @@ public class Line {
         //определяем наклон отрезка:
         {
             /*
-            * Если dx > dy, то значит отрезок "вытянут" вдоль оси икс, т.е. он скорее длинный, чем высокий.
-            * Значит в цикле нужно будет идти по икс (строчка el = dx;), значит "протягивать" прямую по иксу
-            * надо в соответствии с тем, слева направо и справа налево она идёт (pdx = incx;), при этом
-            * по y сдвиг такой отсутствует.
-            */
+             * Если dx > dy, то значит отрезок "вытянут" вдоль оси икс, т.е. он скорее длинный, чем высокий.
+             * Значит в цикле нужно будет идти по икс (строчка el = dx;), значит "протягивать" прямую по иксу
+             * надо в соответствии с тем, слева направо и справа налево она идёт (pdx = incx;), при этом
+             * по y сдвиг такой отсутствует.
+             */
             pdx = incx;
             pdy = 0;
             es = dy;

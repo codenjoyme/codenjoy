@@ -40,6 +40,12 @@ public interface GamePrinter {
      */
     void printAll(Filler filler);
 
+    /**
+     * Возвращает размер поля - полезно в случае динамического изменения размера поля
+     * @return
+     */
+    int getSize();
+
     interface Filler {
         void set(int x, int y, char ch);
     }

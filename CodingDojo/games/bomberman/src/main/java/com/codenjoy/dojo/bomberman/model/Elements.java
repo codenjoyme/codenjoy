@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,13 +35,13 @@ public enum Elements implements CharElements {
     BOMBERMAN('☺'),             // this is what he usually looks like
     BOMB_BOMBERMAN('☻'),        // this is if he is sitting on own bomb
     DEAD_BOMBERMAN('Ѡ'),        // oops, your Bomberman is dead (don't worry, he will appear somewhere in next move)
-                                // you're getting penalty points for each death
+    // you're getting penalty points for each death
 
     /// this is other players Bombermans
     OTHER_BOMBERMAN('♥'),       // this is what other Bombermans looks like
     OTHER_BOMB_BOMBERMAN('♠'),  // this is if player just set the bomb
     OTHER_DEAD_BOMBERMAN('♣'),  // enemy corpse (it will disappear shortly, right on the next move)
-                                // if you've done it you'll get score points
+    // if you've done it you'll get score points
 
     /// the bombs
     BOMB_TIMER_5('5'),          // after bomberman set the bomb, the timer starts (5 ticks)
@@ -56,12 +56,12 @@ public enum Elements implements CharElements {
     WALL('☼'),                  // indestructible wall - it will not fall from bomb
     DESTROYABLE_WALL('#'),      // this wall could be blowed up
     DESTROYED_WALL('H'),        // this is how broken wall looks like, it will dissapear on next move
-                                // if it's you did it - you'll get score points.
+    // if it's you did it - you'll get score points.
 
     /// meatchoppers
     MEAT_CHOPPER('&'),          // this guys runs over the board randomly and gets in the way all the time
-                                // if it will touch bomberman - it will die
-                                // you'd better kill this piece of ... meat, you'll get score points for it
+    // if it will touch bomberman - it will die
+    // you'd better kill this piece of ... meat, you'll get score points for it
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
     /// a void
@@ -106,8 +106,8 @@ public enum Elements implements CharElements {
 
     public boolean isBomberman() {
         return this == Elements.BOMBERMAN ||
-               this == Elements.BOMB_BOMBERMAN ||
-               this == Elements.DEAD_BOMBERMAN;
+                this == Elements.BOMB_BOMBERMAN ||
+                this == Elements.DEAD_BOMBERMAN;
     }
 
 }

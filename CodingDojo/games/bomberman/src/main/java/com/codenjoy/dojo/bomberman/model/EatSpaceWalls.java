@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,7 +25,6 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
                 walls.destroy(meatChopper.getX(), meatChopper.getY());
             }
             return;
-        }else{
+        } else {
             int c = 0;
             int maxc = 10000;
             while (count < size && c < maxc) {  // TODO и это
@@ -80,7 +79,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
                 c++;
             }
             if (c == maxc) {
-                throw new  RuntimeException("Dead loop at Deatroyed Wall generate!");
+                throw new RuntimeException("Dead loop at Deatroyed Wall generate!");
             }
         }
     }
