@@ -36,4 +36,6 @@ public interface GameSettings {
 //    Parameter<Integer> getBoardSize();
 
     Hero getBomberman(Level level);
+    Parameter<Integer> getBombPower();
+    Parameter<Integer> getBombCountPerPlayer();
 }

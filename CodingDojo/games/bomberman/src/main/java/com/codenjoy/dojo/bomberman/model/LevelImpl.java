@@ -41,6 +41,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class LevelImpl implements Level {
 
     private final LengthToXY xy;
+    private final GameSettings settings;
     private String map;
     private Field board;
     private Walls walls;
@@ -60,7 +61,8 @@ public class LevelImpl implements Level {
     private EatSpaceWalls eatWalls;
     private MeatChoppers meatChoppers;
 
-    public LevelImpl(String map) {
+    public LevelImpl(GameSettings settings, String map) {
+        this.settings = settings;
         this.map = map;
         this.size = v((int)Math.sqrt(map.length()));
         this.xy = new LengthToXY(this.size.getValue());
@@ -103,12 +105,12 @@ public class LevelImpl implements Level {
     //Bombs Section
     @Override
     public Parameter<Integer> bombsCount() {
-        return this.bombs;
+        return settings.getBombCountPerPlayer();
     }
 
     @Override
     public Parameter<Integer> bombsPower() {
-        return v(3);
+        return settings.getBombPower();
     }
 
     @Override

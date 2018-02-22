@@ -46,7 +46,7 @@ public class Bomberman implements Tickable {
 
     public Bomberman(GameSettings settings) {
         this.settings = settings;
-        level = new LevelImpl(Level1.get());
+        level = new LevelImpl(settings, Level1.get());
     }
 
     public GameSettings getSettings() {

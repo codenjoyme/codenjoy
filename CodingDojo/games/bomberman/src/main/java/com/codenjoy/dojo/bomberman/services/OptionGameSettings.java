@@ -82,4 +82,14 @@ public class OptionGameSettings implements GameSettings {
         return new HeroImpl(level, new RandomDice());
     }
 
+    @Override
+    public Parameter<Integer> getBombPower() {
+        return bombPower;
+    }
+
+    @Override
+    public Parameter<Integer> getBombCountPerPlayer() {
+        return bombsCount;
+    }
+
 }

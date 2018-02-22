@@ -23,7 +23,10 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.model.GameSettings;
+import com.codenjoy.dojo.bomberman.model.Hero;
+import com.codenjoy.dojo.bomberman.model.HeroImpl;
+import com.codenjoy.dojo.bomberman.model.Level;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
 
@@ -65,6 +68,16 @@ public class DefaultGameSettings implements GameSettings {
     @Override
     public Hero getBomberman(Level level) {
         return new HeroImpl(level, new RandomDice());
+    }
+
+    @Override
+    public Parameter<Integer> getBombPower() {
+        return v(BOMB_POWER);
+    }
+
+    @Override
+    public Parameter<Integer> getBombCountPerPlayer() {
+        return v(BOMBS_COUNT);
     }
 
 }
