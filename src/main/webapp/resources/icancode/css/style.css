@@ -872,6 +872,9 @@ canvas {
   color: #666;
 }
 
+.method span.white {
+  color:#fff;
+}
 
 .method input[type="checkbox"] { display: none; }
 

@@ -56,7 +56,7 @@
 
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="general">
-                    <p class="message">Select enabled methods for this level</p>
+                    <p class="message">Registration settings</p>
                     <div class="method">
                         <input id="show-games-on-registration" type="checkbox">
                         <label class="check-label" for="show-games-on-registration"></label>
@@ -75,7 +75,15 @@
                     <div class="method">
                         <input id="show-university-on-registration" type="checkbox">
                         <label class="check-label" for="show-university-on-registration"></label>
-                        <span>Show tech skills on registration</span>
+                        <span>Show university on registration</span>
+                    </div>
+                    <div class="method">
+                        <span class="white">Default game</span>
+                        <select placeholder="Select default game" id="default-game-on-registration">
+                            <option value="iCanCode Contest">iCanCode Contest</option>
+                            <option value="iCanCode Training">iCanCode Training</option>
+                            <option value="eKids">eKids</option>
+                        </select>
                     </div>
                 </div>
 

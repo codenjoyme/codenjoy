@@ -46,7 +46,9 @@
             data = data || {
                 showGamesOnRegistration : true,
                 showNamesOnRegistration : false,
-                showTechSkillsOnRegistration : false
+                showTechSkillsOnRegistration : false,
+                showUniversityOnRegistration : false,
+                defaultGameOnRegistration : 'iCanCode Training'
             };
 
             if (data.showGamesOnRegistration) {
@@ -69,6 +71,7 @@
             } else {
                 $('#data3').hide();
             }
+            $('#game select').val(data.defaultGameOnRegistration);
         });
     }
 
@@ -188,7 +191,9 @@
             $('#game select').val(gameName);
         } else {
             var def = $('#game select option[default]').attr('value');
-            $('#game select').val(def);
+            if (!!def) {
+                $('#game select').val(def);
+            }
         }
 
         loadInput(KEYS.userData.email, '#email input');

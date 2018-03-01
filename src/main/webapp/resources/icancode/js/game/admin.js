@@ -144,7 +144,8 @@ function initAdmin(contextPath) {
             showGamesOnRegistration : $('#show-games-on-registration').prop('checked'),
             showNamesOnRegistration : $('#show-names-on-registration').prop('checked'),
             showTechSkillsOnRegistration : $('#show-tech-on-registration').prop('checked'),
-            showUniversityOnRegistration : $('show-university-on-registration').prop('checked')
+            showUniversityOnRegistration : $('#show-university-on-registration').prop('checked'),
+            defaultGameOnRegistration : $('#default-game-on-registration').find('option:selected').text()
         };
 
         generalInfo = updated;
@@ -159,6 +160,7 @@ function initAdmin(contextPath) {
         $('#show-names-on-registration').prop('checked', generalInfo.showNamesOnRegistration);
         $('#show-tech-on-registration').prop('checked', generalInfo.showTechSkillsOnRegistration);
         $('#show-university-on-registration').prop('checked', generalInfo.showUniversityOnRegistration);
+        $('#default-game-on-registration').val(generalInfo.defaultGameOnRegistration);
     }
 
     var generalSaveButton = $('#general-save-button');
