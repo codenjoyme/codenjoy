@@ -44,13 +44,19 @@
 
         general.load(function(data) {
             data = data || {
-                showGamesOnRegistration : true
+                showGamesOnRegistration : true,
+                showNamesOnRegistration : false
             };
 
             if (data.showGamesOnRegistration) {
                 $('#game').show();
             } else {
                 $('#game').hide();
+            }
+            if (data.showNamesOnRegistration) {
+                $('#data1').show();
+            } else {
+                $('#data1').hide();
             }
         });
     }

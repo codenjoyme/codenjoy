@@ -141,7 +141,8 @@ function initAdmin(contextPath) {
     // ------------------------ collected general data ----------------------
     var updateGeneralData = function() {
         var updated = {
-            showGamesOnRegistration : $('#show-games-on-registration').prop('checked')
+            showGamesOnRegistration : $('#show-games-on-registration').prop('checked'),
+            showNamesOnRegistration : $('#show-names-on-registration').prop('checked')
         };
 
         generalInfo = updated;
