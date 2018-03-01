@@ -142,7 +142,8 @@ function initAdmin(contextPath) {
     var updateGeneralData = function() {
         var updated = {
             showGamesOnRegistration : $('#show-games-on-registration').prop('checked'),
-            showNamesOnRegistration : $('#show-names-on-registration').prop('checked')
+            showNamesOnRegistration : $('#show-names-on-registration').prop('checked'),
+            showTechSkillsOnRegistration : $('#show-tech-on-registration').prop('checked')
         };
 
         generalInfo = updated;

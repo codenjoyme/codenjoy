@@ -45,7 +45,8 @@
         general.load(function(data) {
             data = data || {
                 showGamesOnRegistration : true,
-                showNamesOnRegistration : false
+                showNamesOnRegistration : false,
+                showTechSkillsOnRegistration : false
             };
 
             if (data.showGamesOnRegistration) {
@@ -57,6 +58,11 @@
                 $('#data1').show();
             } else {
                 $('#data1').hide();
+            }
+            if (data.showTechSkillsOnRegistration) {
+                $('#data2').show();
+            } else {
+                $('#data2').hide();
             }
         });
     }
