@@ -61,32 +61,52 @@ function initAdmin(contextPath) {
         }
 
         var level = element.attr('level');
-        updateData();
+        updateLevelsData();
         progressBar.select(level - 1);
-        loadData();
+        loadLevelsData();
     });
 
     // ------------------------ communicate with server -----------------------
+    // ------------------------ levels settings -----------------------
     var levelsInfo = [];
-    var levels = new Levels(contextPath);
+    var levels = new AdminSettings(contextPath, 'levels');
 
-    var load = function() {
+    var loadLevels = function() {
         levels.load(function(data) {
-            loadData(data);
+            loadLevelsData(data);
         });
     }
 
-    var save = function() {
+    var saveLevels = function() {
         levels.save(levelsInfo,
             function() {
-                load();
+                loadLevels();
             }, function(errMsg) {
                 console.log(errMsg);
             });
     }
 
-    // ------------------------ collection data ----------------------
-    var updateData = function() {
+    // ------------------------ general settings -----------------------
+    var generalInfo = [];
+    var general = new AdminSettings(contextPath, 'general');
+    
+    var loadGeneral = function() {
+        general.load(function(data) {
+            loadGeneralData(data);
+        });
+    }
+    
+    var saveGeneral = function() {
+        general.save(generalInfo,
+            function() {
+                loadGeneral();
+            }, function(errMsg) {
+                console.log(errMsg);
+            });
+    }
+
+    // ------------------------ collected levels data ----------------------
+    var updateLevelsData = function() {
         var updated = {
             level : progressBar.selected + 1,
             init : defaultEditor.getValue(),
@@ -99,7 +119,7 @@ function initAdmin(contextPath) {
         levelsInfo[progressBar.selected] = updated;
     }
 
-    var loadData = function(data) {
+    var loadLevelsData = function(data) {
         if (!!data) {
             levelsInfo = data;
         }
@@ -112,14 +132,37 @@ function initAdmin(contextPath) {
         mapEditor.setValue(info.map);
     }
 
-    var saveButton = $('#save-button');
-    saveButton.click(function() {
-        updateData();
-        save();
+    var levelsSaveButton = $('#levels-save-button');
+    levelsSaveButton.click(function() {
+        updateLevelsData();
+        saveLevels();
+    });
+
+    // ------------------------ collected general data ----------------------
+    var updateGeneralData = function() {
+        var updated = {
+            showGamesOnRegistration : $('#show-games-on-registration').prop('checked')
+        };
+
+        generalInfo = updated;
+    }
+
+    var loadGeneralData = function(data) {
+        if (!!data) {
+            generalInfo = data;
+        }
+
+        $('#show-games-on-registration').prop('checked', generalInfo.showGamesOnRegistration);
+    }
+
+    var generalSaveButton = $('#general-save-button');
+    generalSaveButton.click(function() {
+        updateGeneralData();
+        saveGeneral();
     });
 
     // --------------------- starting -------------------------
     progressBar.select(0);
-    load();
-
+    loadLevels();
+    loadGeneral();
 };

@@ -19,10 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var Levels = function(contextPath) {
-    var levelsInfo = [];
-
-    var url = '/' + contextPath + '/settings/icancode/levels';
+var AdminSettings = function(contextPath, settingsName) {
+    var url = '/' + contextPath + '/settings/icancode/' + settingsName;
 
     var load = function(onSuccess) {
         $.get(url, null, onSuccess, 'json');

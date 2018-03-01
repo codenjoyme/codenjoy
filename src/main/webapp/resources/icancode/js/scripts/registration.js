@@ -24,6 +24,8 @@
  * This script is used for registration page
  * */
 (function () {
+    var contextPath = 'codenjoy-contest';
+
     var KEYS = {
         gameName: "gameName",
         userData: {
@@ -37,7 +39,25 @@
 
     $(document).ready(loadRegistrationPage);
 
+    function configureFormFromAdminSettings() {
+        var general = new AdminSettings(contextPath, 'general');
+
+        general.load(function(data) {
+            data = data || {
+                showGamesOnRegistration : true
+            };
+
+            if (data.showGamesOnRegistration) {
+                $('#game').show();
+            } else {
+                $('#game').hide();
+            }
+        });
+    }
+
     function loadRegistrationPage() {
+        configureFormFromAdminSettings();
+
         fillFormFromLocalStorage();
 
         var checkEls = {};

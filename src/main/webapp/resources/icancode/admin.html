@@ -20,190 +20,236 @@
   #L%
   -->
 <head>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
 </head>
 <div id="layout" class="wrapper">
-	<link href="css/reset.css" rel="stylesheet"/>
+    <link href="css/reset.css" rel="stylesheet"/>
     <link href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
-    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
     <link href="js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <div class="header-container">
-      <div class="container-fluid">
-        <header class="header row">
-          <div class="col-xs-6">
-            <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
-            <span class="title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
-            <span class="title">I can code</span>
-            </div>
-            <span class="admin-title">
-              Admin page
-            </span>
-		  </header>
-		</div>
-    </div>
-    <div class="container-fluid">
-        <div class="row train mCustomScrollbar">
-			<ul id="progress-bar" class="trainings">
-              <li class="training level-current" level="1">Level 1A</li>
-              <li class="training level-done" level="2">Level 2A</li>
-              <li class="training level-done" level="3">Level 3A</li>
-              <li class="training level-done" level="4">Level 4A</li>
-              <li class="training level-done" level="5">Level 5A</li>
-              <li class="training level-done" level="6">Level 6A</li>
-              <li class="training level-done" level="7">Level 7A</li>
-              <li class="training level-done" level="8">Level 8A</li>
-              <li class="training level-done" level="9">Level 9A</li>
-              <li class="training level-done" level="10">Level 1B</li>
-              <li class="training level-done" level="11">Level 2B</li>
-              <li class="training level-done" level="12">Level 3B</li>
-              <li class="training level-done" level="13">Level C</li>
-              <li class="training level-done" level="14">Level D</li>
-			</ul>
+        <div class="container-fluid">
+            <header class="header row">
+                <div class="col-xs-6">
+                    <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+                    <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
+                    <span class="title icancode-title">ICanCode</span>
+                </div>
+                <span class="admin-title">
+                    Admin page
+                </span>
+            </header>
         </div>
-        <div class="row admin-main" id="main">
-          <div>
-
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#default" aria-controls="default" role="tab" data-toggle="tab">Default code</a></li>
-    <li role="presentation"><a href="#win" aria-controls="win" role="tab" data-toggle="tab">Win code</a></li>
-    <li role="presentation"><a href="#refactored" aria-controls="refactored" role="tab" data-toggle="tab">Refactored code</a></li>
-    <li role="presentation"><a href="#help" aria-controls="help" role="tab" data-toggle="tab">Help code</a></li>
-    <li role="presentation"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Level Map</a></li>
-    <li role="presentation"><a href="#methods" aria-controls="methods" role="tab" data-toggle="tab">Methods</a></li>
-  </ul>
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="default" placeholder="// Enter default code"></div>
-    <div role="tabpanel" class="tab-pane" id="win" placeholder="// Enter win code"></div>
-    <div role="tabpanel" class="tab-pane" id="refactored" placeholder="// Enter refactored code"></div>
-    <div role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></div>
-    <div role="tabpanel" class="tab-pane" id="map" placeholder="// Enter level map"></div>
-    <div role="tabpanel" class="tab-pane mCustomScrollbar" id="methods">
-      <p class="message">Select enabled methods for this level</p>
-      <div class="method">
-        <input id="method1" type="checkbox">
-        <label class="check-label" for="method1"></label>
-        <span>robot.log();</span>
-      </div>
-      <div class="method">
-        <input id="method2" type="checkbox">
-        <label class="check-label" for="method2"></label>
-        <span>robot.getScanner()</span>
-      </div>
-      <div class="method">
-        <input id="method3" type="checkbox">
-        <label class="check-label" for="method3"></label>
-        <span>robot.goUp();</span>
-      </div>
-      <div class="method">
-        <input id="method4" type="checkbox">
-        <label class="check-label" for="method4"></label>
-        <span>robot.goDown();</span>
-      </div>
-      <div class="method">
-        <input id="method5" type="checkbox">
-        <label class="check-label" for="method5"></label>
-        <span>robot.goLeft();</span>
-      </div>
-      <div class="method">
-        <input id="method6" type="checkbox">
-        <label class="check-label" for="method6"></label>
-        <span>robot.goRight();</span>
-      </div>
-      <div class="method">
-        <input id="method7" type="checkbox">
-        <label class="check-label" for="method7"></label>
-        <span>scanner.atUp();</span>
-      </div>
-      <div class="method">
-        <input id="method8" type="checkbox">
-        <label class="check-label" for="method8"></label>
-        <span>scanner.atDown();</span>
-      </div>
-      <div class="method">
-        <input id="method9" type="checkbox">
-        <label class="check-label" for="method9"></label>
-        <span>scanner.atLeft();</span>
-      </div>
-      <div class="method">
-        <input id="method10" type="checkbox">
-        <label class="check-label" for="method10"></label>
-        <span>scanner.atRight();</span>
-      </div>
-      <div class="method">
-        <input id="method11" type="checkbox">
-        <label class="check-label" for="method11"></label>
-        <span>robot.cameFrom();</span>
-      </div>
-      <div class="method">
-        <input id="method12" type="checkbox">
-        <label class="check-label" for="method12"></label>
-        <span>robot.previousDirection();</span>
-      </div>
-      <div class="method">
-        <input id="method13" type="checkbox">
-        <label class="check-label" for="method13"></label>
-        <span>robot.at();</span>
-      </div>
-      <div class="method">
-        <input id="method14" type="checkbox">
-        <label class="check-label" for="method14"></label>
-        <span>scanner.go();</span>
-      </div>
-      <div class="method">
-        <input id="method15" type="checkbox">
-        <label class="check-label" for="method15"></label>
-        <span>scanner.jumpUp();</span>
-      </div>
-      <div class="method">
-        <input id="method16" type="checkbox">
-        <label class="check-label" for="method16"></label>
-        <span>scanner.jumpDown();</span>
-      </div>
-      <div class="method">
-        <input id="method17" type="checkbox">
-        <label class="check-label" for="method17"></label>
-        <span>scanner.jumpLeft();</span>
-      </div>
-      <div class="method">
-        <input id="method18" type="checkbox">
-        <label class="check-label" for="method18"></label>
-        <span>scanner.jumpRight();</span>
-      </div>
-      <div class="method">
-        <input id="method19" type="checkbox">
-        <label class="check-label" for="method19"></label>
-        <span>scanner.jump();</span>
-      </div>
-      
     </div>
-  </div>
-  <div class="tab-bottom-panel">
-    <button id="save-button" class="button save">Save level</button>
-  </div>
-
-</div>
-  </div>
-	</div>
-      <footer class="footer">
     <div class="container-fluid">
-      <nav class="footer-nav">
-        <ul class="footer-list">
-          <li class="footer-item inline"><a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a></li>
-          <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
-          <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
-          <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a></li>
-          <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
-        </ul>
-      </nav>
+        <div class="row admin-main" id="general-settings">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#general" aria-controls="general" role="tab"
+                       data-toggle="tab">General settings</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="general">
+                    <p class="message">Select enabled methods for this level</p>
+                    <div class="method">
+                        <input id="show-games-on-registration" type="checkbox">
+                        <label class="check-label" for="show-games-on-registration"></label>
+                        <span>Show games list on registration</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-bottom-panel">
+                <button id="general-save-button" class="button save">Save settings</button>
+            </div>
+        </div>
+
+        <div class="row train mCustomScrollbar">
+            <ul id="progress-bar" class="trainings">
+                <li class="training level-current" level="1">Level 1A</li>
+                <li class="training level-done" level="2">Level 2A</li>
+                <li class="training level-done" level="3">Level 3A</li>
+                <li class="training level-done" level="4">Level 4A</li>
+                <li class="training level-done" level="5">Level 5A</li>
+                <li class="training level-done" level="6">Level 6A</li>
+                <li class="training level-done" level="7">Level 7A</li>
+                <li class="training level-done" level="8">Level 8A</li>
+                <li class="training level-done" level="9">Level 9A</li>
+                <li class="training level-done" level="10">Level 1B</li>
+                <li class="training level-done" level="11">Level 2B</li>
+                <li class="training level-done" level="12">Level 3B</li>
+                <li class="training level-done" level="13">Level C</li>
+                <li class="training level-done" level="14">Level D</li>
+            </ul>
+        </div>
+        <div class="row admin-main" id="levels-settings">
+            <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#default" aria-controls="default" role="tab"
+                           data-toggle="tab">Default code</a></li>
+                    <li role="presentation">
+                        <a href="#win" aria-controls="win" role="tab"
+                           data-toggle="tab">Win code</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#refactored" aria-controls="refactored" role="tab"
+                           data-toggle="tab">Refactored code</a></li>
+                    <li role="presentation">
+                        <a href="#help" aria-controls="help" role="tab"
+                           data-toggle="tab">Help code</a></li>
+                    <li role="presentation">
+                        <a href="#map" aria-controls="map" role="tab"
+                           data-toggle="tab">Level Map</a></li>
+                    <li role="presentation">
+                        <a href="#methods" aria-controls="methods" role="tab"
+                           data-toggle="tab">Methods</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="default" placeholder="// Enter default code"></div>
+                    <div role="tabpanel" class="tab-pane" id="win" placeholder="// Enter win code"></div>
+                    <div role="tabpanel" class="tab-pane" id="refactored" placeholder="// Enter refactored code"></div>
+                    <div role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></div>
+                    <div role="tabpanel" class="tab-pane" id="map" placeholder="// Enter level map"></div>
+                    <div role="tabpanel" class="tab-pane mCustomScrollbar" id="methods">
+                        <p class="message">Select enabled methods for this level</p>
+                        <div class="method">
+                            <input id="method1" type="checkbox">
+                            <label class="check-label" for="method1"></label>
+                            <span>robot.log();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method2" type="checkbox">
+                            <label class="check-label" for="method2"></label>
+                            <span>robot.getScanner()</span>
+                        </div>
+                        <div class="method">
+                            <input id="method3" type="checkbox">
+                            <label class="check-label" for="method3"></label>
+                            <span>robot.goUp();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method4" type="checkbox">
+                            <label class="check-label" for="method4"></label>
+                            <span>robot.goDown();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method5" type="checkbox">
+                            <label class="check-label" for="method5"></label>
+                            <span>robot.goLeft();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method6" type="checkbox">
+                            <label class="check-label" for="method6"></label>
+                            <span>robot.goRight();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method7" type="checkbox">
+                            <label class="check-label" for="method7"></label>
+                            <span>scanner.atUp();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method8" type="checkbox">
+                            <label class="check-label" for="method8"></label>
+                            <span>scanner.atDown();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method9" type="checkbox">
+                            <label class="check-label" for="method9"></label>
+                            <span>scanner.atLeft();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method10" type="checkbox">
+                            <label class="check-label" for="method10"></label>
+                            <span>scanner.atRight();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method11" type="checkbox">
+                            <label class="check-label" for="method11"></label>
+                            <span>robot.cameFrom();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method12" type="checkbox">
+                            <label class="check-label" for="method12"></label>
+                            <span>robot.previousDirection();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method13" type="checkbox">
+                            <label class="check-label" for="method13"></label>
+                            <span>robot.at();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method14" type="checkbox">
+                            <label class="check-label" for="method14"></label>
+                            <span>scanner.go();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method15" type="checkbox">
+                            <label class="check-label" for="method15"></label>
+                            <span>scanner.jumpUp();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method16" type="checkbox">
+                            <label class="check-label" for="method16"></label>
+                            <span>scanner.jumpDown();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method17" type="checkbox">
+                            <label class="check-label" for="method17"></label>
+                            <span>scanner.jumpLeft();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method18" type="checkbox">
+                            <label class="check-label" for="method18"></label>
+                            <span>scanner.jumpRight();</span>
+                        </div>
+                        <div class="method">
+                            <input id="method19" type="checkbox">
+                            <label class="check-label" for="method19"></label>
+                            <span>scanner.jump();</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-bottom-panel">
+                    <button id="levels-save-button" class="button save">Save levels</button>
+                </div>
+
+            </div>
+        </div>
     </div>
-  </footer>
+    <footer class="footer">
+        <div class="container-fluid">
+            <nav class="footer-nav">
+                <ul class="footer-list">
+                    <li class="footer-item inline">
+                        <a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a>
+                    </li>
+                    <li class="footer-item inline">
+                        <a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a>
+                    </li>
+                    <li class="footer-item inline">
+                        <a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a>
+                    </li>
+                    <li class="footer-item inline">
+                        <a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a>
+                    </li>
+                    <li class="footer-item inline">
+                        <a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 </div>
 
 <script src="js/jquery/jquery-3.1.0.min.js"></script>
@@ -213,10 +259,11 @@
 <script src="../css/bootstrap/js/bootstrap.min.js"></script>
 <script src="js/game/editor.js"></script>
 <script src="js/game/progressbar.js"></script>
-<script src="js/game/levels.js"></script>
+<script src="js/game/admin-settings.js"></script>
 <script src="js/game/admin.js"></script>
 <script>
     $(document).ready(function () {
         initAdmin('codenjoy-contest');
     });
+
 </script>
