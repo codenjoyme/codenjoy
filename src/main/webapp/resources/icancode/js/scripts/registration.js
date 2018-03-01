@@ -64,6 +64,11 @@
             } else {
                 $('#data2').hide();
             }
+            if (data.showUniversityOnRegistration) {
+                $('#data3').show();
+            } else {
+                $('#data3').hide();
+            }
         });
     }
 

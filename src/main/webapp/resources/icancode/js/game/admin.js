@@ -143,7 +143,8 @@ function initAdmin(contextPath) {
         var updated = {
             showGamesOnRegistration : $('#show-games-on-registration').prop('checked'),
             showNamesOnRegistration : $('#show-names-on-registration').prop('checked'),
-            showTechSkillsOnRegistration : $('#show-tech-on-registration').prop('checked')
+            showTechSkillsOnRegistration : $('#show-tech-on-registration').prop('checked'),
+            showUniversityOnRegistration : $('show-university-on-registration').prop('checked')
         };
 
         generalInfo = updated;
@@ -155,6 +156,9 @@ function initAdmin(contextPath) {
         }
 
         $('#show-games-on-registration').prop('checked', generalInfo.showGamesOnRegistration);
+        $('#show-names-on-registration').prop('checked', generalInfo.showNamesOnRegistration);
+        $('#show-tech-on-registration').prop('checked', generalInfo.showTechSkillsOnRegistration);
+        $('#show-university-on-registration').prop('checked', generalInfo.showUniversityOnRegistration);
     }
 
     var generalSaveButton = $('#general-save-button');
