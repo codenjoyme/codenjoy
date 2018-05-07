@@ -40,11 +40,15 @@
                     connect-src 'self' ws:;
                     font-src 'self';
                     style-src 'self' 'unsafe-inline';"/>
+            <header name="Access-Control-Allow-Origin"  value="*"/>
+            <header name="Access-Control-Allow-Methods"  value="OPTIONS, POST, GET"/>
+            <header name="Access-Control-Max-Age"  value="1728000"/>
+            <header name="Access-Control-Allow-Credentials"  value="true"/>
+            <header name="Access-Control-Allow-Headers"  value="Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"/>
             <xss-protection enabled="true" block="false"/>
             <cache-control/>
         </headers>
     </http>
-
     <authentication-manager/>
 
 </bean:beans>
