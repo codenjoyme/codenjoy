@@ -81,7 +81,7 @@ function initJoystick(playerName, registered, code, contextPath) {
 
     function registerKeys() {
         $("body").keydown(function(event) {
-            if (isFocusOnChat()) {
+            if (!game.enableJoystick || isFocusOnChat()) {
                 return;
             }
             var command = parseCommand(event);
@@ -101,7 +101,7 @@ function initJoystick(playerName, registered, code, contextPath) {
             event.preventDefault();
         });
         $("body").keyup(function(event) {
-            if (isFocusOnChat()) {
+            if (!game.enableJoystick || isFocusOnChat()) {
                 return;
             }
 
