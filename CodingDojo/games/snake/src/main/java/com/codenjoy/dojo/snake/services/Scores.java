@@ -55,6 +55,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
+        length = 0;
         return score = 0;
     }
 
