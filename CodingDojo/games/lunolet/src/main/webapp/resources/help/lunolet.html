@@ -1,0 +1,86 @@
+﻿<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2016 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Lunolet — как играть? | Игры на работе</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<a target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+                <header class="entry-header">
+                    <h1 class="entry-title">Lunolet — как играть?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output">
+
+                        <p>В чем суть игры?</p>
+
+                        <p>TODO</p>
+
+                        <p>Итак, игрок <a href="/codenjoy-contest/register?gameName=lunolet" target="_blank">
+                            регистрируется на сервере</a>, указывая свой email</p>
+
+                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/lunolet-servers.zip">из кода</a>
+                            к серверу через вебсокеты. Это Maven-проект и подойдет он для игры на JVM-языках.
+                            Так же в архиве находятся исходники заготовок клиентов для других языков.
+                            Как их запустить смотри в корне README.txt</p>
+
+                        <p>Если ты не можешь найти свой язык - придется написать свой клиент.</p>
+
+                        <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
+
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
+
+                        <p>Адрес для подключения к игре на сервере, развернутом в локальной сети:</p>
+
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
+
+                        <p>Здесь your@email.com — имейл, указанный при регистрации на сервере,
+                            a code — твой security token, его ты можешь получить из адресной
+                            строки браузера после регистрации/логина.</p>
+
+                        <p>После подключения клиент будет регулярно (каждую секунду) получать строку
+                            символов — с закодированным состоянием поля. Формат таков:</p>
+
+                        <pre>TODO</pre>
+
+                        <p>Первая задача – написать websocket клиента, который подключится к серверу.
+                            Затем заставить героя слушаться команды. Таким образом, игрок подготовится
+                            к основной игре. Основная цель – вести осмысленную игру и победить.</p>
+
+                        <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
