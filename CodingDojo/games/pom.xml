@@ -64,6 +64,7 @@
         <module>puzzlebox</module>
         <module>spacerace</module>
         <module>kata</module>
+        <module>lunolet</module>
     </modules>
 
     <dependencyManagement>
