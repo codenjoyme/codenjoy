@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lunolet.model;
 
 
 import com.codenjoy.dojo.services.printer.Printer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.geom.Point2D;
@@ -46,7 +47,25 @@ public class LunoletPrinter implements Printer<JSONObject> {
         Point2D.Double vesselPoint = player.getHero().getVesselPoint();
 
         JSONObject result = new JSONObject();
-        //TODO
+        result.put("vesselPoint", getJsonPoint(vesselPoint));
+        result.put("relief", getJsonPointArray(relief));
+        result.put("history", getJsonPointArray(history));
+
+        return result;
+    }
+
+    private JSONObject getJsonPoint(Point2D.Double point) {
+        JSONObject result = new JSONObject();
+        result.put("x", point.getX());
+        result.put("y", point.getY());
+        return result;
+    }
+
+    private JSONArray getJsonPointArray(List<Point2D.Double> list) {
+        JSONArray result = new JSONArray();
+        for (int i = 0; i < list.size(); i++) {
+            result.put(getJsonPoint(list.get(i)));
+        }
         return result;
     }
 }
