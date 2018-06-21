@@ -59,7 +59,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(0);
+        return v(20);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Enum[] getPlots() {
-        return new Enum[0];
+        return Elements.values();
     }
 
     @Override
