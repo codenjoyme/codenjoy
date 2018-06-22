@@ -53,6 +53,7 @@ public class SimulatorTest {
     public void takeOff2_5seconds()
     {
         Simulator sut = new Simulator();
+        sut.Status.State = VesselState.START;
 
         sut.simulate(0, 1, 5);
         assertVesselStatus(sut.Status, 4.116, 10.274, 0.0, 0.0, 49.0, 5.0, VesselState.FLIGHT);
@@ -64,6 +65,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 1.0;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.simulate(0, 0, 1);
         assertVesselStatus(sut.Status, -1.62, 0.19, 0.0, 0.0, 50.0, 1.0, VesselState.FLIGHT);
@@ -75,6 +77,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 0.2;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.simulate(0, 0, 1);
         assertVesselStatus(sut.Status, -0.805, 0.0, 0.0, 0.0, 50.0, 0.497, VesselState.LANDED);
@@ -86,6 +89,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 1.0;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.simulate(0, 0, 2);
         assertVesselStatus(sut.Status, -1.8, 0.0, 0.0, 0.0, 50.0, 1.111, VesselState.LANDED);
@@ -97,6 +101,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 0.2;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.simulate(0, 0.1, 1);
         assertVesselStatus(sut.Status, -0.4, 0.0, 0.0, 0.0, 49.9, 1.0, VesselState.LANDED);
@@ -108,6 +113,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 0.1;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.simulate(0, 0.1, 1);
         assertVesselStatus(sut.Status, -0.283, 0.0, 0.0, 0.0, 49.929, 0.707, VesselState.LANDED);
@@ -119,6 +125,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 10.2;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, 10));
@@ -134,6 +141,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 10.2;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, 10));
@@ -149,6 +157,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = -9.8;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, -10));
@@ -164,7 +173,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 0.2;
-
+        sut.Status.State = VesselState.FLIGHT;
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, -50));
         sut.Relief.add(new Point2D.Double(50, 50));
@@ -175,6 +184,7 @@ public class SimulatorTest {
 
         sut.reset();
         sut.Status.Y = 0.2;
+        sut.Status.State = VesselState.FLIGHT;
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, 50));
         sut.Relief.add(new Point2D.Double(50, -50));
@@ -189,6 +199,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 0.2;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, -50));
@@ -205,6 +216,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 0.2;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.Relief.clear();
         sut.Relief.add(new Point2D.Double(-50, 50));
@@ -221,6 +233,7 @@ public class SimulatorTest {
     {
         Simulator sut = new Simulator();
         sut.Status.Y = 1.0;
+        sut.Status.State = VesselState.FLIGHT;
 
         sut.simulate(10, 0.1, 1);
         assertVesselStatus(sut.Status, -0.419, 0.791, 0.212, 0.106, 49.9, 1.0, VesselState.FLIGHT);
@@ -233,6 +246,7 @@ public class SimulatorTest {
         Simulator sut = new Simulator();
         sut.DryMass = 2150;
         sut.Status.FuelMass = 400;
+        sut.Status.State = VesselState.START;
 
         sut.simulate(0, 20, 10);
         assertVesselStatus(sut.Status, 12.608, 62.851, 0.0, 0.0, 380, 10.0, VesselState.FLIGHT);
@@ -263,6 +277,7 @@ public class SimulatorTest {
     public void takeOffAndLanding2_FlightFor100m()
     {
         Simulator sut = new Simulator();
+        sut.Status.State = VesselState.START;
 
         sut.simulate(0, 0.2, 1);
         assertVesselStatus(sut.Status, 0.82, 0.41, 0.0, 0.0, 49.8, 1.0, VesselState.FLIGHT);
@@ -301,6 +316,7 @@ public class SimulatorTest {
     public void takeOff_TooMuchAcceleration_PilotUnconscious_FreeFlight()
     {
         Simulator sut = new Simulator();
+        sut.Status.State = VesselState.START;
 
         sut.simulate(33.825683069334218, 4.5, 0.25);
 
