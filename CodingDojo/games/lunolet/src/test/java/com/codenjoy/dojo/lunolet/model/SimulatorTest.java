@@ -32,6 +32,15 @@ import static org.junit.Assert.*;
 public class SimulatorTest {
 
     @Test
+    public void takeOff_smallThrust_failedToTakeOff() {
+        Simulator sut = new Simulator();
+
+        sut.simulate(0, 0.1, 1);
+        assertVesselStatus(sut.Status, 0.0, 0.0, 0.0, 0.0, 50.0, 0.0, VesselState.START);
+        assertEquals(1, sut.History.size());
+    }
+
+    @Test
     public void takeOff1_1second() {
         Simulator sut = new Simulator();
 

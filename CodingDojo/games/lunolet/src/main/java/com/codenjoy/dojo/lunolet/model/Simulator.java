@@ -222,6 +222,10 @@ public class Simulator {
             }
         }
 
+        // Special case: on take-off make sure the vessel was lifted up
+        if (Status.State == VesselState.START && (newstatus.Y - Status.Y) < Eps)
+            return;
+
         Status = newstatus;
 
         History.add(newstatus.getPoint());
