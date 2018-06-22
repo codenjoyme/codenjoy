@@ -42,5 +42,8 @@ public class Level {
 
         Relief.add(new Point2D.Double(-10000, 0));
         Relief.add(new Point2D.Double(10000, 0));
+
+        VesselStatus.FuelMass = 50.0;
+        VesselStatus.State = VesselState.START;
     }
 }

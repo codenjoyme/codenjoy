@@ -34,6 +34,7 @@ public class SimulatorTest {
     @Test
     public void takeOff_smallThrust_failedToTakeOff() {
         Simulator sut = new Simulator();
+        sut.Status.State = VesselState.START;
 
         sut.simulate(0, 0.1, 1);
         assertVesselStatus(sut.Status, 0.0, 0.0, 0.0, 0.0, 50.0, 0.0, VesselState.START);
@@ -44,6 +45,7 @@ public class SimulatorTest {
     @Test
     public void takeOff1_1second() {
         Simulator sut = new Simulator();
+        sut.Status.State = VesselState.START;
 
         sut.simulate(0, 0.2, 1);
         assertVesselStatus(sut.Status, 0.82, 0.41, 0.0, 0.0, 49.8, 1.0, VesselState.FLIGHT);
