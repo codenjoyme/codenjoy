@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lunolet.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -44,11 +44,22 @@ public class LunoletPrinter implements Printer<JSONObject> {
     public JSONObject print() {
         List<Point2D.Double> relief = player.getHero().getLevelRelief();
         List<Point2D.Double> history = player.getHero().getVesselHistory();
-        Point2D.Double vesselPoint = player.getHero().getVesselPoint();
+        VesselStatus vesselStatus = player.getHero().getVesselStatus();
+        double lastAngle = player.getHero().getLastAngle();
 
         JSONObject result = new JSONObject();
-        result.put("vesselPoint", getJsonPoint(vesselPoint));
+
+        result.put("time", round3(vesselStatus.Time));
+        result.put("x", round3(vesselStatus.X));
+        result.put("y", round3(vesselStatus.Y));
+        result.put("hspeed", round3(vesselStatus.HSpeed));
+        result.put("vspeed", round3(vesselStatus.VSpeed));
+        result.put("fuelmass", round3(vesselStatus.FuelMass));
+        result.put("state", vesselStatus.State);
+        result.put("angle", round3(lastAngle));
+
         result.put("relief", getJsonPointArray(relief));
+
         result.put("history", getJsonPointArray(history));
 
         return result;
@@ -56,8 +67,8 @@ public class LunoletPrinter implements Printer<JSONObject> {
 
     private JSONObject getJsonPoint(Point2D.Double point) {
         JSONObject result = new JSONObject();
-        result.put("x", point.getX());
-        result.put("y", point.getY());
+        result.put("x", round3(point.getX()));
+        result.put("y", round3(point.getY()));
         return result;
     }
 
@@ -67,5 +78,9 @@ public class LunoletPrinter implements Printer<JSONObject> {
             result.put(getJsonPoint(list.get(i)));
         }
         return result;
+    }
+
+    private static double round3(double v) {
+        return Math.round(v * 1000.0) / 1000.0;
     }
 }

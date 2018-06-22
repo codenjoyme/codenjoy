@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lunolet.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -43,6 +43,8 @@ public class Simulator {
 
     public List<Point2D.Double> History;
 
+    public double LastAngle;
+
     private double unconsciousTime;
 
     public Simulator() {
@@ -59,8 +61,6 @@ public class Simulator {
         AccelLimit = 3 * 9.81;
         LandSpeedLimit = 5.0;
 
-        unconsciousTime = 0.0;
-
         reset();
     }
 
@@ -73,7 +73,11 @@ public class Simulator {
         Status.FuelMass = 50;
         Status.State = VesselState.START;
 
+        unconsciousTime = 0.0;
+
         History.clear();
+
+        LastAngle = 0.0;
     }
 
     public void setVesselStatus(VesselStatus status) {
@@ -102,8 +106,9 @@ public class Simulator {
         if (Status.State == VesselState.CRASHED || Status.State == VesselState.LANDED)
             return;
 
-        if (History.isEmpty())
-            History.add(Status.getPoint());
+        // the History shows the last simulate() call history only
+        History.clear();
+        History.add(Status.getPoint());
 
         simulateBlock(angle, mass, duration);
 
@@ -111,6 +116,8 @@ public class Simulator {
             simulateBlock(0, 0, unconsciousTime);
             unconsciousTime = 0.0;
         }
+
+        LastAngle = angle;
     }
 
     private void simulateBlock(double angle, double mass, double duration) {
