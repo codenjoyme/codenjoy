@@ -225,7 +225,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
             var monofont = {
                 font: "13px monospace",
-                fillStyle: "#888",
+                fillStyle: "#444",
                 textAlign: "left",
                 shadowColor: "#EEE",
                 shadowOffsetX: 0,

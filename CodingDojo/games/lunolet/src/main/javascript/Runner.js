@@ -50,8 +50,10 @@ var code = '1889919902398150091';
 var processBoard = function(boardString) {
     var board = new Board(boardString);
         if (!!printBoardOnTextArea) {
-        printBoardOnTextArea(board.boardAsString());
+        printBoardOnTextArea(boardString);
     }
+
+    drawTelemetry(board);
 
     var logMessage = board.getLogString() + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
@@ -86,6 +88,44 @@ ws.on('message', function(message) {
 });
 
 log('Web socket client running at ' + server);
+
+var canvas;
+var ctx;
+
+var drawText = function(text, pt) {
+    ctx.fillText(text, pt.x, pt.y);
+}
+
+function drawTelemetry(board) {
+    if (!canvas) {
+        canvas = document.getElementById("mycanvas");
+        ctx = canvas.getContext("2d");
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = "bold 13px monospace";
+    ctx.fillStyle = "#444";
+
+    drawText("STATE " + board.getState(), {"x": 50, "y": 30});
+    drawText("FUEL  " + board.getFuelMass(), {"x": 50, "y": 45});
+    drawText("XPOS " + board.getX(), {"x": 200, "y": 30});
+    drawText("YPOS " + board.getY(), {"x": 200, "y": 45});
+    drawText("HSPEED " + board.getHSpeed(), {"x": 350, "y": 30});
+    drawText("VSPEED " + board.getVSpeed(), {"x": 350, "y": 45});
+    if (board.getHSpeed() >= 0.001) {
+        drawText("→", {"x": 500, "y": 30});
+    }
+    else if (board.getHSpeed() <= -0.001) {
+        drawText("←", {"x": 500, "y": 30});
+    }
+    if (board.getVSpeed() >= 0.001) {
+        drawText("↑", {"x": 500, "y": 45});
+    }
+    else if (board.getVSpeed() <= -0.001) {
+        drawText("↓", {"x": 500, "y": 45});
+    }
+}
 
 var D = function(index, dx, dy, name){
 
@@ -148,16 +188,23 @@ Direction.valueOf = function(index) {
 var Board = function(board) {
     var boardObj = JSON.parse(board);
 
-    var boardAsString = function() {
-        return board;
-    };
-
     var getState = function() {
         return boardObj.state;
     };
-
+    var getFuelMass = function() {
+        return parseFloat(boardObj.fuelmass);
+    };
+    var getX = function() {
+        return parseFloat(boardObj.x);
+    };
     var getY = function() {
         return parseFloat(boardObj.y);
+    };
+    var getHSpeed = function() {
+        return parseFloat(boardObj.hspeed);
+    };
+    var getVSpeed = function() {
+        return parseFloat(boardObj.vspeed);
     };
 
     var getLogString = function() {
@@ -165,9 +212,12 @@ var Board = function(board) {
     };
 
     return {
-        boardAsString : boardAsString,
         getState : getState,
+        getFuelMass : getFuelMass,
+        getX : getX,
         getY : getY,
+        getHSpeed : getHSpeed,
+        getVSpeed : getVSpeed,
         getLogString : getLogString
    };
 };
