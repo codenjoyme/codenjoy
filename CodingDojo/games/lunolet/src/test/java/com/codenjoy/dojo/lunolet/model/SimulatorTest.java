@@ -329,6 +329,32 @@ public class SimulatorTest {
     }
 
     @Test
+    public void takeOffAndLanding3_UpUpDownDown() {
+        Simulator sut = new Simulator();
+        sut.Status.State = VesselState.START;
+
+        sut.simulate(0, 0.2, 1);
+        assertVesselStatus(sut.Status, 0.82, 0.41, 0.0, 0.0, 49.8, 1.0, VesselState.FLIGHT);
+        assertEquals(2, sut.History.size());
+        assertEquals(0.0, sut.LastAngle, 1e-5);
+
+        sut.simulate(0, 0.2, 1);
+        assertVesselStatus(sut.Status, 1.642, 1.641, 0.0, 0.0, 49.6, 2.0, VesselState.FLIGHT);
+        assertEquals(2, sut.History.size());
+        assertEquals(0.0, sut.LastAngle, 1e-5);
+
+        sut.simulate(180, 0.1, 1);
+        assertVesselStatus(sut.Status, -1.2, 1.862, 0.0, 0.0, 49.5, 3.0, VesselState.FLIGHT);
+        assertEquals(2, sut.History.size());
+        assertEquals(180.0, sut.LastAngle, 1e-5);
+
+        sut.simulate(180, 0.1, 1);
+        assertVesselStatus(sut.Status, -3.467, 0.0, 0.0, 0.0, 49.42, 3.798, VesselState.LANDED);
+        assertEquals(2, sut.History.size());
+        assertEquals(180.0, sut.LastAngle, 1e-5);
+    }
+
+    @Test
     public void takeOff_TooMuchAcceleration_PilotUnconscious_FreeFlight() {
         Simulator sut = new Simulator();
         sut.Status.State = VesselState.START;

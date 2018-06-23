@@ -129,17 +129,17 @@ public class LineIntersection {
 
         //x,y can intersect outside the line segment since line is infinitely long
         //so finally check if x, y is within both the line segments
-        if (IsInsideLine(lineA, round3(x), round3(y)) &&
-                IsInsideLine(lineB, round3(x), round3(y))) {
-            return new Point2D.Double(round3(x), round3(y));
+        if (IsInsideLine(round5(x1), round5(y1), round5(x2), round5(y2), round5(x), round5(y)) &&
+                IsInsideLine(round5(x3), round5(y3), round5(x4), round5(y4), round5(x), round5(y))) {
+            return new Point2D.Double(round5(x), round5(y));
         }
 
         //return default null (no intersection)
         return null;
     }
 
-    private static double round3(double v) {
-        return Math.round(v * 1000.0) / 1000.0;
+    private static double round5(double v) {
+        return Math.round(v * 100000.0) / 100000.0;
     }
 
     /// <summary>
@@ -149,10 +149,8 @@ public class LineIntersection {
     /// <param name="x"></param>
     /// <param name="y"></param>
     /// <returns></returns>
-    private static boolean IsInsideLine(Line2D line, double x, double y) {
-        return (x >= line.getX1() && x <= line.getX2()
-                || x >= line.getX2() && x <= line.getX1())
-                && (y >= line.getY1() && y <= line.getY2()
-                || y >= line.getY2() && y <= line.getY1());
+    private static boolean IsInsideLine(double x1, double y1, double x2, double y2, double x, double y) {
+        return (x >= x1 && x <= x2 || x >= x2 && x <= x1) &&
+                (y >= y1 && y <= y2 || y >= y2 && y <= y1);
     }
 }

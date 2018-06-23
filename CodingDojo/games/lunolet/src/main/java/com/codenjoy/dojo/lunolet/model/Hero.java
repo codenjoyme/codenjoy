@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.*;
 
 import java.awt.geom.Point2D;
@@ -32,16 +33,20 @@ import java.util.regex.Pattern;
 
 public class Hero implements Joystick, Tickable {
 
+    private Player player;
     private Level level;
     private Simulator simulator;
 
-    public Hero() {
+    public Hero(Player player) {
+        this.player = player;
+
         simulator = new Simulator();
     }
 
     public void init(Level level) {
         this.level = level;
 
+        simulator.reset();
         simulator.DryMass = level.DryMass;
         simulator.setRelief(level.Relief);
         simulator.setVesselStatus(level.VesselStatus);
@@ -52,7 +57,7 @@ public class Hero implements Joystick, Tickable {
     }
 
     public List<Point2D.Double> getLevelRelief() {
-        return level.Relief;
+        return simulator.Relief;
     }
 
     public List<Point2D.Double> getVesselHistory() {
@@ -126,6 +131,10 @@ public class Hero implements Joystick, Tickable {
     private void simulate(double angle, double mass, double duration) {
         if (simulator.Status.isAlive()) {
             simulator.simulate(angle, mass, duration);
+
+            if (simulator.Status.State == VesselState.LANDED) {
+                player.event(Events.LANDED);
+            }
         }
     }
 }

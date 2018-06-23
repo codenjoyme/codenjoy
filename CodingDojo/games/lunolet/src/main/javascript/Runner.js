@@ -53,12 +53,12 @@ var processBoard = function(boardString) {
         printBoardOnTextArea(board.boardAsString());
     }
 
-    var logMessage = board + "\n\n";
+    var logMessage = board.getLogString() + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
-	logMessage += "Answer: " + answer + "\n";
+    logMessage += "Answer: " + answer + "\n";
     logMessage += "-----------------------------------\n";
 	
-	log(logMessage);
+    log(logMessage);
 
     return answer;
 };
@@ -86,24 +86,6 @@ ws.on('message', function(message) {
 });
 
 log('Web socket client running at ' + server);
-
-// Board elements
-var Element = {
-    GOOD_APPLE : '☺',            // an apple to eat
-    BAD_APPLE : '☻',             // a poisoned apple to avoid
-    WALL : '☼',                  // a wall to avoid
-    NONE : ' ',                  // empty space
-
-    /// this is the Snake
-    SNAKE_HEAD_LEFT  : '◄',      // four variants for the snake head
-    SNAKE_HEAD_RIGHT : '►',
-    SNAKE_HEAD_UP    : '▲',
-    SNAKE_HEAD_DOWN  : '▼',
-};
-
-Element.snakeHeads = function() {
-   return [Element.SNAKE_HEAD_LEFT, Element.SNAKE_HEAD_RIGHT, Element.SNAKE_HEAD_UP, Element.SNAKE_HEAD_DOWN];
-};
 
 var D = function(index, dx, dy, name){
 
@@ -163,191 +145,30 @@ Direction.valueOf = function(index) {
     return Direction.STOP;
 };
 
-var Point = function (x, y) {
-    return {
-        equals : function (o) {
-            return o.getX() == x && o.getY() == y;
-        },
-
-        toString : function() {
-            return '[' + x + ',' + y + ']';
-        },
-
-        isOutOf : function(boardSize) {
-            return x >= boardSize || y >= boardSize || x < 0 || y < 0;
-        },
-
-        getX : function() {
-            return x;
-        },
-
-        getY : function() {
-            return y;
-        }
-    }
-};
-
-var pt = function(x, y) {
-    return new Point(x, y);
-};
-
-var LengthToXY = function(boardSize) {
-    function inversionY(y) {
-        return boardSize - 1 - y;
-    }
-
-    function inversionX(x) {
-        return x;
-    }
-
-    return {
-        getXY : function(length) {
-            if (length == -1) {
-                return null;
-            }
-            var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize));
-            return new Point(x, y);
-        },
-
-        getLength : function(x, y) {
-            var xx = inversionX(x);
-            var yy = inversionY(y);
-            return yy*boardSize + xx;
-        }
-    };
-};
-
-var Board = function(board){
-    var contains  = function(a, obj) {
-        var i = a.length;
-        while (i--) {
-           if (a[i].equals(obj)) {
-               return true;
-           }
-        }
-        return false;
-    };
-
-    var removeDuplicates = function(all) {
-        var result = [];
-        for (var index in all) {
-            var point = all[index];
-            if (!contains(result, point)) {
-                result.push(point);
-            }
-        }
-        return result;
-    };
-
-    var boardSize = function() {
-        return Math.sqrt(board.length);
-    };
-
-    var size = boardSize();
-    var xyl = new LengthToXY(size);
-
-    var getSnakeHead = function() {
-        var result = findAllOf(Element.snakeHeads());
-        return result[0];
-    };
-
-    var isAt = function(x, y, element) {
-       if (pt(x, y).isOutOf(size)) {
-           return false;
-       }
-       return getAt(x, y) == element;
-    };
-
-    var getAt = function(x, y) {
-		if (pt(x, y).isOutOf(size)) {
-           return Element.WALL;
-        }
-        return board.charAt(xyl.getLength(x, y));
-    };
+var Board = function(board) {
+    var boardObj = JSON.parse(board);
 
     var boardAsString = function() {
-        var result = "";
-        for (var i = 0; i < size; i++) {
-            result += board.substring(i * size, (i + 1) * size);
-            result += "\n";
-        }
-        return result;
+        return board;
     };
 
-    var getApples = function() {
-       return findAll(Element.GOOD_APPLE);
+    var getState = function() {
+        return boardObj.state;
     };
 
-    var findAll = function(element) {
-       var result = [];
-       for (var i = 0; i < size*size; i++) {
-           var point = xyl.getXY(i);
-           if (isAt(point.getX(), point.getY(), element)) {
-               result.push(point);
-           }
-       }
-       return result;
-   };
+    var getY = function() {
+        return parseFloat(boardObj.y);
+    };
 
-    var findAllOf = function(elements) {
-       var result = [];
-       for (var i = 0; i < size*size; i++) {
-           var point = xyl.getXY(i);
-           if (isAnyOfAt(point.getX(), point.getY(), elements)) {
-               result.push(point);
-           }
-       }
-       return result;
-   };
+    var getLogString = function() {
+        return getState() + " y:" + getY();
+    };
 
-   var getWalls = function() {
-       return findAll(Element.WALL);
-   };
-
-   var isAnyOfAt = function(x, y, elements) {
-       for (var index in elements) {
-           var element = elements[index];
-           if (isAt(x, y,element)) {
-               return true;
-           }
-       }
-       return false;
-   };
-
-   var isNear = function(x, y, element) {
-       if (pt(x, y).isOutOf(size)) {
-           return false;
-       }
-       return isAt(x + 1, y, element) || // TODO to remove duplicate
-			  isAt(x - 1, y, element) || 
-			  isAt(x, y + 1, element) || 
-			  isAt(x, y - 1, element);
-   };
-
-   var countNear = function(x, y, element) {
-       if (pt(x, y).isOutOf(size)) {
-           return 0;
-       }
-       var count = 0;
-       if (isAt(x - 1, y    , element)) count ++; // TODO to remove duplicate
-       if (isAt(x + 1, y    , element)) count ++;
-       if (isAt(x    , y - 1, element)) count ++;
-       if (isAt(x    , y + 1, element)) count ++;
-       return count;
-   };
-
-   return {
-        size : boardSize,
-        isAt : isAt,
+    return {
         boardAsString : boardAsString,
-        findAll : findAll,
-        getSnakeHead : getSnakeHead,
-        getWalls : getWalls,
-        isAnyOfAt : isAnyOfAt,
-        isNear : isNear,
-        countNear : countNear,
-        getAt : getAt
+        getState : getState,
+        getY : getY,
+        getLogString : getLogString
    };
 };
 
@@ -357,7 +178,7 @@ var random = function(n){
 
 var direction;
 
-var DirectionSolver = function(board){
+var DirectionSolver = function(board) {
 
     return {
         /**
@@ -365,7 +186,14 @@ var DirectionSolver = function(board){
          */
         get : function() {
 
-        	//TODO: Code your logic here and return direction
+            if (board.getY() < 1.0) {
+                return Direction.UP;
+            }
+            else {
+                return Direction.DOWN;
+            }
+
+            //TODO: Code your logic here and return direction
             return Direction.UP;
         }
     };

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lunolet.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
 public class Player {
@@ -54,9 +55,24 @@ public class Player {
         score = 0;
     }
 
+    private void increaseScore() {
+        score = score + 10;
+        maxScore = Math.max(maxScore, score);
+    }
+
     public void newHero(Level level) {
-        hero = new Hero();
+        hero = new Hero(this);
         this.level = level;
         hero.init(level);
+    }
+
+    public void event(Events event) {
+        if (event == Events.LANDED) {
+            increaseScore();
+        }
+
+        if (listener != null) {
+            listener.event(event);
+        }
     }
 }
