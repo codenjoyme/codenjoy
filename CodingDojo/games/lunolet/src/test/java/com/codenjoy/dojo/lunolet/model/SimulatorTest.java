@@ -234,7 +234,7 @@ public class SimulatorTest {
     }
 
     @Test
-    public void flight1_10degreeThrust_1second() {
+    public void flight_10degreeThrust_1second() {
         Simulator sut = new Simulator();
         sut.Status.Y = 1.0;
         sut.Status.State = VesselState.FLIGHT;
@@ -243,6 +243,19 @@ public class SimulatorTest {
         assertVesselStatus(sut.Status, -0.419, 0.791, 0.212, 0.106, 49.9, 1.0, VesselState.FLIGHT);
         assertEquals(2, sut.History.size());
         assertEquals(10.0, sut.LastAngle, 1e-5);
+    }
+
+    @Test
+    public void flight_askingMoreFuelThanFuelMass() {
+        Simulator sut = new Simulator();
+        sut.Status.Y = 1.0;
+        sut.Status.State = VesselState.FLIGHT;
+        sut.Status.FuelMass = 0.1;
+
+        sut.simulate(0, 0.2, 1);
+        assertVesselStatus(sut.Status, 0.653, 1.163, 0.0, 0.0, 0.0, 0.5, VesselState.FLIGHT);
+        assertEquals(2, sut.History.size());
+        assertEquals(0.0, sut.LastAngle, 1e-5);
     }
 
     @Test
@@ -362,7 +375,7 @@ public class SimulatorTest {
         double angle = 33.825683069334218;
         sut.simulate(angle, 4.5, 0.25);
 
-        assertVesselStatus(sut.Status, -45.404, 0, 30.561, 1713.104, 45.5, 56.18, VesselState.LANDED);
+        assertVesselStatus(sut.Status, -45.404, 0, 30.561, 1713.104, 45.5, 56.18, VesselState.CRASHED);
         assertEquals(58, sut.History.size());
         assertEquals(angle, sut.LastAngle, 1e-5);
     }

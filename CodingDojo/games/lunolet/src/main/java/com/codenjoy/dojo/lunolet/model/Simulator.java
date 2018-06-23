@@ -81,11 +81,14 @@ public class Simulator {
     }
 
     public void setVesselStatus(VesselStatus status) {
+        if (status == null)
+            throw new IllegalArgumentException("status should not be null.");
+
         Status.Time = 0;
         Status.VSpeed = status.VSpeed;
         Status.HSpeed = status.HSpeed;
-        Status.Y = status.X;
-        Status.X = status.Y;
+        Status.X = status.X;
+        Status.Y = status.Y;
         Status.FuelMass = status.FuelMass;
         Status.State = status.State;
 
@@ -93,15 +96,18 @@ public class Simulator {
     }
 
     public void setRelief(List<Point2D.Double> relief) {
+        if (relief == null || relief.size() < 2)
+            throw new IllegalArgumentException("relief should be non-null, at least two points.");
+
         Relief.clear();
         Relief.addAll(relief);
     }
 
     public void simulate(double angle, double mass, double duration) {
         if (mass < 0.0)
-            throw new IllegalArgumentException("Mass should be positive number or zero.");
+            throw new IllegalArgumentException("mass should be positive number or zero.");
         if (duration <= 0.0)
-            throw new IllegalArgumentException("Duration should be positive number.");
+            throw new IllegalArgumentException("duration should be positive number.");
 
         if (Status.State == VesselState.CRASHED || Status.State == VesselState.LANDED)
             return;
@@ -141,8 +147,7 @@ public class Simulator {
 
     private void simulateStep(double angle, double mass, double duration) {
         if (mass > Status.FuelMass) {
-            if (Status.FuelMass < Eps)  // Out of fuel
-            {
+            if (Status.FuelMass < Eps) { // Out of fuel
                 mass = 0;
             } else {
                 duration *= Status.FuelMass / mass;
@@ -188,8 +193,8 @@ public class Simulator {
             double distance = point1.distance(pointHit);
             if (distance > Eps) // Hit point is NOT almost the start point
             {
-                newstatus.State = VesselState.LANDED;
-                //TODO: Check on intersection with goal, Landed or Crashed
+                double speed = newstatus.getSpeed();
+                newstatus.State = speed < LandSpeedLimit ? VesselState.LANDED : VesselState.CRASHED;
 
                 double distanceFull = point1.distance(point2);
                 if (distanceFull <= Eps)
@@ -223,7 +228,8 @@ public class Simulator {
                     if (durationMiddle > Eps) {
                         double masscorr = mass == 0.0 ? 0.0 : mass * durationMiddle / duration;
                         newstatus = advance(Status, masscorr, durationMiddle, accel, angle);
-                        newstatus.State = VesselState.LANDED; //TODO: Landed or Crashed
+                        speed = newstatus.getSpeed();
+                        newstatus.State = speed < LandSpeedLimit ? VesselState.LANDED : VesselState.CRASHED;
                     }
                 }
             }

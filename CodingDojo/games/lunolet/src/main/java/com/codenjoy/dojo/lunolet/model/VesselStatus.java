@@ -48,4 +48,8 @@ public class VesselStatus {
     public Point2D.Double getPoint() {
         return new Point2D.Double(X, Y);
     }
+
+    public double getSpeed() {
+        return Math.sqrt(HSpeed * HSpeed + VSpeed * VSpeed);
+    }
 }
