@@ -107,8 +107,9 @@ function drawTelemetry(board) {
     ctx.font = "bold 13px monospace";
     ctx.fillStyle = "#444";
 
-    drawText("STATE " + board.getState(), {"x": 50, "y": 30});
+    drawText("TIME  " + board.getTime(), {"x": 50, "y": 30});
     drawText("FUEL  " + board.getFuelMass(), {"x": 50, "y": 45});
+    drawText("STATE " + board.getState(), {"x": 50, "y": 60});
     drawText("XPOS " + board.getX(), {"x": 200, "y": 30});
     drawText("YPOS " + board.getY(), {"x": 200, "y": 45});
     drawText("HSPEED " + board.getHSpeed(), {"x": 350, "y": 30});
@@ -125,6 +126,52 @@ function drawTelemetry(board) {
     else if (board.getVSpeed() <= -0.001) {
         drawText("↓", {"x": 500, "y": 45});
     }
+
+    // scale, move center to (300, 300), and flip vertically
+    var scale = 8;
+    ctx.setTransform(scale, 0, 0, -scale, 300, 300);
+    ctx.lineWidth = 0.1;
+
+    var relief = board.getRelief();
+    var reliefLen = relief.length;
+    if (reliefLen > 1) {
+        var ptstart = relief[0];
+        ctx.strokeStyle = "#313";
+        ctx.beginPath();
+        ctx.moveTo(ptstart.x, ptstart.y);
+        for (i = 1; i < reliefLen; i++) {
+            var pt = relief[i];
+            ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.stroke();
+    }
+
+    var history = board.getHistory();
+    var historyLen = history.length;
+    if (historyLen > 1) {
+        var ptstart = history[0];
+        ctx.strokeStyle = "#282";
+        ctx.beginPath();
+        ctx.moveTo(ptstart.x, ptstart.y);
+        for (i = 1; i < historyLen; i++) {
+            var pt = history[i];
+            ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.stroke();
+    }
+
+    var radian = board.getAngle() / 180 * Math.PI;
+    var sin = Math.sin(radian);
+    var cos = Math.cos(radian);
+    ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, 300 + board.getX() * scale, 300 - board.getY() * scale);
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
+    ctx.lineTo(0, 1.6);
+    ctx.lineTo(0.7, 1.1);  ctx.lineTo(1, -0.2);  ctx.lineTo(0, 0.0);
+    ctx.stroke();
+
+    ctx.resetTransform();
 }
 
 var D = function(index, dx, dy, name){
@@ -194,6 +241,9 @@ var Board = function(board) {
     var getFuelMass = function() {
         return parseFloat(boardObj.fuelmass);
     };
+    var getTime = function() {
+        return parseFloat(boardObj.time);
+    };
     var getX = function() {
         return parseFloat(boardObj.x);
     };
@@ -206,6 +256,15 @@ var Board = function(board) {
     var getVSpeed = function() {
         return parseFloat(boardObj.vspeed);
     };
+    var getAngle = function() {
+        return parseFloat(boardObj.angle);
+    };
+    var getRelief = function() {
+        return boardObj.relief;
+    };
+    var getHistory = function() {
+        return boardObj.history;
+    };
 
     var getLogString = function() {
         return getState() + " y:" + getY();
@@ -214,10 +273,14 @@ var Board = function(board) {
     return {
         getState : getState,
         getFuelMass : getFuelMass,
+        getTime : getTime,
         getX : getX,
         getY : getY,
         getHSpeed : getHSpeed,
         getVSpeed : getVSpeed,
+        getAngle : getAngle,
+        getRelief : getRelief,
+        getHistory : getHistory,
         getLogString : getLogString
    };
 };
@@ -236,8 +299,14 @@ var DirectionSolver = function(board) {
          */
         get : function() {
 
-            if (board.getY() < 1.0) {
+            if (board.getY() < 8.0 || board.getVSpeed() < -1.5) {
                 return Direction.UP;
+            }
+            else if (board.getX() < 1.0 && board.getHSpeed() < 3.0) {
+                return Direction.RIGHT;
+            }
+            else if (board.getX() > 1.0 && board.getHSpeed() > -3.0) {
+                return Direction.LEFT;
             }
             else {
                 return Direction.DOWN;

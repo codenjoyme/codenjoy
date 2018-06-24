@@ -232,23 +232,24 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 shadowOffsetY: 0,
                 shadowBlur: 7
             }
-            canvas.drawText("STATE " + board.state, {"x": 0, "y": 17}, monofont);
-            canvas.drawText("FUEL  " + board.fuelmass, {"x": 0, "y": 16}, monofont);
-            canvas.drawText("XPOS " + board.x, {"x": 6, "y": 17}, monofont);
-            canvas.drawText("YPOS " + board.y, {"x": 6, "y": 16}, monofont);
-            canvas.drawText("HSPEED " + board.hspeed, {"x": 12, "y": 17}, monofont);
-            canvas.drawText("VSPEED " + board.vspeed, {"x": 12, "y": 16}, monofont);
+            canvas.drawText("TIME  " + board.time, {"x": 0, "y": 17.2}, monofont);
+            canvas.drawText("FUEL  " + board.fuelmass, {"x": 0, "y": 16.4}, monofont);
+            canvas.drawText("STATE " + board.state, {"x": 0, "y": 15.6}, monofont);
+            canvas.drawText("XPOS " + board.x, {"x": 6, "y": 17.2}, monofont);
+            canvas.drawText("YPOS " + board.y, {"x": 6, "y": 16.4}, monofont);
+            canvas.drawText("HSPEED " + board.hspeed, {"x": 12, "y": 17.2}, monofont);
+            canvas.drawText("VSPEED " + board.vspeed, {"x": 12, "y": 16.4}, monofont);
             if (board.hspeed >= 0.001) {
-                canvas.drawText("→", {"x": 17, "y": 17}, monofont);
+                canvas.drawText("→", {"x": 17, "y": 17.2}, monofont);
             }
             else if (board.hspeed <= -0.001) {
-                canvas.drawText("←", {"x": 17, "y": 17}, monofont);
+                canvas.drawText("←", {"x": 17, "y": 17.2}, monofont);
             }
             if (board.vspeed >= 0.001) {
-                canvas.drawText("↑", {"x": 18, "y": 16}, monofont);
+                canvas.drawText("↑", {"x": 18, "y": 16.4}, monofont);
             }
             else if (board.vspeed <= -0.001) {
-                canvas.drawText("↓", {"x": 18, "y": 16}, monofont);
+                canvas.drawText("↓", {"x": 18, "y": 16.4}, monofont);
             }
 
 //            try {
