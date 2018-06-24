@@ -50,15 +50,17 @@ var code = '1889919902398150091';
 var processBoard = function(boardString) {
     var board = new Board(boardString);
         if (!!printBoardOnTextArea) {
-        printBoardOnTextArea(board.boardAsString());
+        printBoardOnTextArea(boardString);
     }
 
-    var logMessage = board + "\n\n";
+    drawTelemetry(board);
+
+    var logMessage = board.getLogString() + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
-	logMessage += "Answer: " + answer + "\n";
+    logMessage += "Answer: " + answer + "\n";
     logMessage += "-----------------------------------\n";
 	
-	log(logMessage);
+    log(logMessage);
 
     return answer;
 };
@@ -87,23 +89,126 @@ ws.on('message', function(message) {
 
 log('Web socket client running at ' + server);
 
-// Board elements
-var Element = {
-    GOOD_APPLE : '☺',            // an apple to eat
-    BAD_APPLE : '☻',             // a poisoned apple to avoid
-    WALL : '☼',                  // a wall to avoid
-    NONE : ' ',                  // empty space
+var canvas;
+var ctx;
 
-    /// this is the Snake
-    SNAKE_HEAD_LEFT  : '◄',      // four variants for the snake head
-    SNAKE_HEAD_RIGHT : '►',
-    SNAKE_HEAD_UP    : '▲',
-    SNAKE_HEAD_DOWN  : '▼',
-};
+var drawText = function(text, pt) {
+    ctx.fillText(text, pt.x, pt.y);
+}
 
-Element.snakeHeads = function() {
-   return [Element.SNAKE_HEAD_LEFT, Element.SNAKE_HEAD_RIGHT, Element.SNAKE_HEAD_UP, Element.SNAKE_HEAD_DOWN];
-};
+function drawTelemetry(board) {
+    if (!canvas) {
+        canvas = document.getElementById("mycanvas");
+        ctx = canvas.getContext("2d");
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = "bold 13px monospace";
+    ctx.fillStyle = "#444";
+
+    drawText("TIME  " + board.getTime(), {"x": 50, "y": 30});
+    drawText("FUEL  " + board.getFuelMass(), {"x": 50, "y": 45});
+    drawText("STATE " + board.getState(), {"x": 50, "y": 60});
+    drawText("XPOS " + board.getX(), {"x": 200, "y": 30});
+    drawText("YPOS " + board.getY(), {"x": 200, "y": 45});
+    drawText("HSPEED " + board.getHSpeed(), {"x": 350, "y": 30});
+    drawText("VSPEED " + board.getVSpeed(), {"x": 350, "y": 45});
+    if (board.getHSpeed() >= 0.001) {
+        drawText("→", {"x": 500, "y": 30});
+    }
+    else if (board.getHSpeed() <= -0.001) {
+        drawText("←", {"x": 500, "y": 30});
+    }
+    if (board.getVSpeed() >= 0.001) {
+        drawText("↑", {"x": 500, "y": 45});
+    }
+    else if (board.getVSpeed() <= -0.001) {
+        drawText("↓", {"x": 500, "y": 45});
+    }
+
+    // scale, move center to (300, 300), and flip vertically
+    var scale = 6;
+    var xshift = 300 - board.getX() * scale;
+    var yshift = 200 + board.getY() * scale;
+    ctx.setTransform(scale, 0, 0, -scale, xshift, yshift);
+    ctx.lineWidth = 1 / scale;
+
+    // draw relief
+    var relief = board.getRelief();
+    var reliefLen = relief.length;
+    if (reliefLen > 1) {
+        var ptstart = relief[0];
+        ctx.strokeStyle = "#313";
+        ctx.beginPath();
+        ctx.moveTo(ptstart.x, ptstart.y);
+        for (i = 1; i < reliefLen; i++) {
+            var pt = relief[i];
+            ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.stroke();
+    }
+
+    // draw history for the last step
+    var history = board.getHistory();
+    var historyLen = history.length;
+    if (historyLen > 1) {
+        var ptstart = history[0];
+        ctx.strokeStyle = "#282";
+        ctx.beginPath();
+        ctx.moveTo(ptstart.x, ptstart.y);
+        for (i = 1; i < historyLen; i++) {
+            var pt = history[i];
+            ctx.lineTo(pt.x, pt.y);
+        }
+        ctx.stroke();
+    }
+
+    // draw target (same transform)
+    var target = board.getTarget();
+    if (target) {
+        ctx.strokeStyle = "#F44";
+        ctx.beginPath();
+        ctx.moveTo(target.x, target.y - 8/scale);  ctx.lineTo(target.x, target.y + 8/scale);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(target.x - 8/scale, target.y);  ctx.lineTo(target.x + 8/scale, target.y);
+        ctx.stroke();
+    }
+
+    // draw the ship
+    var radian = board.getAngle() / 180 * Math.PI;
+    var sin = Math.sin(radian);
+    var cos = Math.cos(radian);
+    ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.getX() * scale, yshift - board.getY() * scale);
+    ctx.strokeStyle = "#008";
+    ctx.beginPath();
+    ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
+    ctx.lineTo(0, 1.6);
+    ctx.lineTo(0.7, 1.1);  ctx.lineTo(1, -0.2);  ctx.lineTo(0, 0.0);
+    ctx.stroke();
+
+    // draw arrow pointing to target
+    if (target) {
+        var deltaX = target.x - board.getX();
+        var deltaY = target.y - board.getY();
+        var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance > 1) {
+            var radian = Math.atan2(deltaY, deltaX); // In radians
+            var sin = Math.sin(radian);
+            var cos = Math.cos(radian);
+            ctx.setTransform(cos, -sin, sin, cos, 300, 100);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#F44";
+            ctx.beginPath();
+            ctx.moveTo(-30, 0);  ctx.lineTo(0, 0);  ctx.moveTo(30, 0);
+            ctx.lineTo(0, 5);  ctx.lineTo(0, -5);  ctx.lineTo(30, 0);
+            ctx.stroke();
+        }
+    }
+
+    ctx.resetTransform();
+}
 
 var D = function(index, dx, dy, name){
 
@@ -163,191 +268,60 @@ Direction.valueOf = function(index) {
     return Direction.STOP;
 };
 
-var Point = function (x, y) {
+var Board = function(board) {
+    var boardObj = JSON.parse(board);
+
+    var getState = function() {
+        return boardObj.state;
+    };
+    var getFuelMass = function() {
+        return parseFloat(boardObj.fuelmass);
+    };
+    var getTime = function() {
+        return parseFloat(boardObj.time);
+    };
+    var getX = function() {
+        return parseFloat(boardObj.x);
+    };
+    var getY = function() {
+        return parseFloat(boardObj.y);
+    };
+    var getHSpeed = function() {
+        return parseFloat(boardObj.hspeed);
+    };
+    var getVSpeed = function() {
+        return parseFloat(boardObj.vspeed);
+    };
+    var getAngle = function() {
+        return parseFloat(boardObj.angle);
+    };
+    var getRelief = function() {
+        return boardObj.relief;
+    };
+    var getHistory = function() {
+        return boardObj.history;
+    };
+    var getTarget = function() {
+        return boardObj.target;
+    };
+
+    var getLogString = function() {
+        return getState() + " y:" + getY();
+    };
+
     return {
-        equals : function (o) {
-            return o.getX() == x && o.getY() == y;
-        },
-
-        toString : function() {
-            return '[' + x + ',' + y + ']';
-        },
-
-        isOutOf : function(boardSize) {
-            return x >= boardSize || y >= boardSize || x < 0 || y < 0;
-        },
-
-        getX : function() {
-            return x;
-        },
-
-        getY : function() {
-            return y;
-        }
-    }
-};
-
-var pt = function(x, y) {
-    return new Point(x, y);
-};
-
-var LengthToXY = function(boardSize) {
-    function inversionY(y) {
-        return boardSize - 1 - y;
-    }
-
-    function inversionX(x) {
-        return x;
-    }
-
-    return {
-        getXY : function(length) {
-            if (length == -1) {
-                return null;
-            }
-            var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize));
-            return new Point(x, y);
-        },
-
-        getLength : function(x, y) {
-            var xx = inversionX(x);
-            var yy = inversionY(y);
-            return yy*boardSize + xx;
-        }
-    };
-};
-
-var Board = function(board){
-    var contains  = function(a, obj) {
-        var i = a.length;
-        while (i--) {
-           if (a[i].equals(obj)) {
-               return true;
-           }
-        }
-        return false;
-    };
-
-    var removeDuplicates = function(all) {
-        var result = [];
-        for (var index in all) {
-            var point = all[index];
-            if (!contains(result, point)) {
-                result.push(point);
-            }
-        }
-        return result;
-    };
-
-    var boardSize = function() {
-        return Math.sqrt(board.length);
-    };
-
-    var size = boardSize();
-    var xyl = new LengthToXY(size);
-
-    var getSnakeHead = function() {
-        var result = findAllOf(Element.snakeHeads());
-        return result[0];
-    };
-
-    var isAt = function(x, y, element) {
-       if (pt(x, y).isOutOf(size)) {
-           return false;
-       }
-       return getAt(x, y) == element;
-    };
-
-    var getAt = function(x, y) {
-		if (pt(x, y).isOutOf(size)) {
-           return Element.WALL;
-        }
-        return board.charAt(xyl.getLength(x, y));
-    };
-
-    var boardAsString = function() {
-        var result = "";
-        for (var i = 0; i < size; i++) {
-            result += board.substring(i * size, (i + 1) * size);
-            result += "\n";
-        }
-        return result;
-    };
-
-    var getApples = function() {
-       return findAll(Element.GOOD_APPLE);
-    };
-
-    var findAll = function(element) {
-       var result = [];
-       for (var i = 0; i < size*size; i++) {
-           var point = xyl.getXY(i);
-           if (isAt(point.getX(), point.getY(), element)) {
-               result.push(point);
-           }
-       }
-       return result;
-   };
-
-    var findAllOf = function(elements) {
-       var result = [];
-       for (var i = 0; i < size*size; i++) {
-           var point = xyl.getXY(i);
-           if (isAnyOfAt(point.getX(), point.getY(), elements)) {
-               result.push(point);
-           }
-       }
-       return result;
-   };
-
-   var getWalls = function() {
-       return findAll(Element.WALL);
-   };
-
-   var isAnyOfAt = function(x, y, elements) {
-       for (var index in elements) {
-           var element = elements[index];
-           if (isAt(x, y,element)) {
-               return true;
-           }
-       }
-       return false;
-   };
-
-   var isNear = function(x, y, element) {
-       if (pt(x, y).isOutOf(size)) {
-           return false;
-       }
-       return isAt(x + 1, y, element) || // TODO to remove duplicate
-			  isAt(x - 1, y, element) || 
-			  isAt(x, y + 1, element) || 
-			  isAt(x, y - 1, element);
-   };
-
-   var countNear = function(x, y, element) {
-       if (pt(x, y).isOutOf(size)) {
-           return 0;
-       }
-       var count = 0;
-       if (isAt(x - 1, y    , element)) count ++; // TODO to remove duplicate
-       if (isAt(x + 1, y    , element)) count ++;
-       if (isAt(x    , y - 1, element)) count ++;
-       if (isAt(x    , y + 1, element)) count ++;
-       return count;
-   };
-
-   return {
-        size : boardSize,
-        isAt : isAt,
-        boardAsString : boardAsString,
-        findAll : findAll,
-        getSnakeHead : getSnakeHead,
-        getWalls : getWalls,
-        isAnyOfAt : isAnyOfAt,
-        isNear : isNear,
-        countNear : countNear,
-        getAt : getAt
+        getState : getState,
+        getFuelMass : getFuelMass,
+        getTime : getTime,
+        getX : getX,
+        getY : getY,
+        getHSpeed : getHSpeed,
+        getVSpeed : getVSpeed,
+        getAngle : getAngle,
+        getRelief : getRelief,
+        getHistory : getHistory,
+        getTarget : getTarget,
+        getLogString : getLogString
    };
 };
 
@@ -357,15 +331,29 @@ var random = function(n){
 
 var direction;
 
-var DirectionSolver = function(board){
+var DirectionSolver = function(board) {
 
     return {
         /**
          * @return next action
          */
         get : function() {
+            var target = board.getTarget();
 
-        	//TODO: Code your logic here and return direction
+            if (board.getY() < 8.0 || board.getVSpeed() < -1.5) {
+                return Direction.UP;
+            }
+            else if (board.getX() < target.x && board.getHSpeed() < 3.0) {
+                return Direction.RIGHT;
+            }
+            else if (board.getX() > target.x && board.getHSpeed() > -3.0) {
+                return Direction.LEFT;
+            }
+            else {
+                return Direction.DOWN;
+            }
+
+            //TODO: Code your logic here and return direction
             return Direction.UP;
         }
     };

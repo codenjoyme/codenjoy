@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lunolet.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -43,6 +43,8 @@ public class Simulator {
 
     public List<Point2D.Double> History;
 
+    public double LastAngle;
+
     private double unconsciousTime;
 
     public Simulator() {
@@ -59,8 +61,6 @@ public class Simulator {
         AccelLimit = 3 * 9.81;
         LandSpeedLimit = 5.0;
 
-        unconsciousTime = 0.0;
-
         reset();
     }
 
@@ -73,15 +73,22 @@ public class Simulator {
         Status.FuelMass = 50;
         Status.State = VesselState.START;
 
+        unconsciousTime = 0.0;
+
         History.clear();
+
+        LastAngle = 0.0;
     }
 
     public void setVesselStatus(VesselStatus status) {
+        if (status == null)
+            throw new IllegalArgumentException("status should not be null.");
+
         Status.Time = 0;
         Status.VSpeed = status.VSpeed;
         Status.HSpeed = status.HSpeed;
-        Status.Y = status.X;
-        Status.X = status.Y;
+        Status.X = status.X;
+        Status.Y = status.Y;
         Status.FuelMass = status.FuelMass;
         Status.State = status.State;
 
@@ -89,21 +96,25 @@ public class Simulator {
     }
 
     public void setRelief(List<Point2D.Double> relief) {
+        if (relief == null || relief.size() < 2)
+            throw new IllegalArgumentException("relief should be non-null, at least two points.");
+
         Relief.clear();
         Relief.addAll(relief);
     }
 
     public void simulate(double angle, double mass, double duration) {
         if (mass < 0.0)
-            throw new IllegalArgumentException("Mass should be positive number or zero.");
+            throw new IllegalArgumentException("mass should be positive number or zero.");
         if (duration <= 0.0)
-            throw new IllegalArgumentException("Duration should be positive number.");
+            throw new IllegalArgumentException("duration should be positive number.");
 
         if (Status.State == VesselState.CRASHED || Status.State == VesselState.LANDED)
             return;
 
-        if (History.isEmpty())
-            History.add(Status.getPoint());
+        // the History shows the last simulate() call history only
+        History.clear();
+        History.add(Status.getPoint());
 
         simulateBlock(angle, mass, duration);
 
@@ -111,6 +122,8 @@ public class Simulator {
             simulateBlock(0, 0, unconsciousTime);
             unconsciousTime = 0.0;
         }
+
+        LastAngle = angle;
     }
 
     private void simulateBlock(double angle, double mass, double duration) {
@@ -134,8 +147,7 @@ public class Simulator {
 
     private void simulateStep(double angle, double mass, double duration) {
         if (mass > Status.FuelMass) {
-            if (Status.FuelMass < Eps)  // Out of fuel
-            {
+            if (Status.FuelMass < Eps) { // Out of fuel
                 mass = 0;
             } else {
                 duration *= Status.FuelMass / mass;
@@ -181,8 +193,8 @@ public class Simulator {
             double distance = point1.distance(pointHit);
             if (distance > Eps) // Hit point is NOT almost the start point
             {
-                newstatus.State = VesselState.LANDED;
-                //TODO: Check on intersection with goal, Landed or Crashed
+                double speed = newstatus.getSpeed();
+                newstatus.State = speed < LandSpeedLimit ? VesselState.LANDED : VesselState.CRASHED;
 
                 double distanceFull = point1.distance(point2);
                 if (distanceFull <= Eps)
@@ -216,11 +228,16 @@ public class Simulator {
                     if (durationMiddle > Eps) {
                         double masscorr = mass == 0.0 ? 0.0 : mass * durationMiddle / duration;
                         newstatus = advance(Status, masscorr, durationMiddle, accel, angle);
-                        newstatus.State = VesselState.LANDED; //TODO: Landed or Crashed
+                        speed = newstatus.getSpeed();
+                        newstatus.State = speed < LandSpeedLimit ? VesselState.LANDED : VesselState.CRASHED;
                     }
                 }
             }
         }
+
+        // Special case: on take-off make sure the vessel was lifted up
+        if (Status.State == VesselState.START && (newstatus.Y - Status.Y) < Eps)
+            return;
 
         Status = newstatus;
 

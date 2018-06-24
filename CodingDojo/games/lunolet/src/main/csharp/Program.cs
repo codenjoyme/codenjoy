@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.lunolet.model;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -10,46 +8,35 @@ package com.codenjoy.dojo.lunolet.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
+namespace LunoletClient
+{
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-import java.awt.geom.Point2D;
-
-public class VesselStatus {
-
-    public double Time;
-
-    public double X;
-
-    public double Y;
-
-    public double HSpeed;
-
-    public double VSpeed;
-
-    public double FuelMass;
-
-    public VesselState State;
-
-    public boolean isAlive() {
-        return State != VesselState.CRASHED && State != VesselState.LANDED;
-    }
-
-    public Point2D.Double getPoint() {
-        return new Point2D.Double(X, Y);
-    }
-
-    public double getSpeed() {
-        return Math.sqrt(HSpeed * HSpeed + VSpeed * VSpeed);
+            Application.Run(new Form1());
+        }
     }
 }
