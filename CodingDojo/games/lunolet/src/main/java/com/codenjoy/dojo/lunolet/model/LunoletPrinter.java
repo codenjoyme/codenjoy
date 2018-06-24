@@ -46,6 +46,7 @@ public class LunoletPrinter implements Printer<JSONObject> {
         List<Point2D.Double> history = player.getHero().getVesselHistory();
         VesselStatus vesselStatus = player.getHero().getVesselStatus();
         double lastAngle = player.getHero().getLastAngle();
+        Point2D.Double target = player.getHero().getTarget();
 
         JSONObject result = new JSONObject();
 
@@ -57,6 +58,8 @@ public class LunoletPrinter implements Printer<JSONObject> {
         result.put("fuelmass", round3(vesselStatus.FuelMass));
         result.put("state", vesselStatus.State);
         result.put("angle", round3(lastAngle));
+
+        result.put("target", getJsonPoint(target));
 
         result.put("relief", getJsonPointArray(relief));
 

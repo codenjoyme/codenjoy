@@ -26,6 +26,7 @@ package com.codenjoy.dojo.lunolet.model;
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.*;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,6 +37,7 @@ public class Hero implements Joystick, Tickable {
     private Player player;
     private Level level;
     private Simulator simulator;
+    private Point2D.Double target;
 
     public Hero(Player player) {
         this.player = player;
@@ -50,6 +52,21 @@ public class Hero implements Joystick, Tickable {
         simulator.DryMass = level.DryMass;
         simulator.setRelief(level.Relief);
         simulator.setVesselStatus(level.VesselStatus);
+
+        // find out target point using TargetX
+        List<Point2D.Double> relief = level.Relief;
+        double targetX = level.TargetX;
+        for (int i = 0; i < relief.size() - 1; i++) {
+            Point2D.Double pt1 = relief.get(i);
+            Point2D.Double pt2 = relief.get(i + 1);
+            if (pt1.x < targetX && pt2.x > targetX &&
+                    Math.abs(pt2.y - pt1.y) < 1e-5)
+            {
+                target = new Point2D.Double(targetX, pt1.y);
+                break;
+            }
+        }
+        //TODO: if target == null then something wrong with this level
     }
 
     public boolean isAlive() {
@@ -70,6 +87,10 @@ public class Hero implements Joystick, Tickable {
 
     public double getLastAngle() {
         return simulator.LastAngle;
+    }
+
+    public Point2D.Double getTarget() {
+        return target;
     }
 
     @Override

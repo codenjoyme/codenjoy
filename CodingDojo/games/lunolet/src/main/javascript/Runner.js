@@ -128,10 +128,13 @@ function drawTelemetry(board) {
     }
 
     // scale, move center to (300, 300), and flip vertically
-    var scale = 8;
-    ctx.setTransform(scale, 0, 0, -scale, 300, 300);
-    ctx.lineWidth = 0.1;
+    var scale = 6;
+    var xshift = 300 - board.getX() * scale;
+    var yshift = 200 + board.getY() * scale;
+    ctx.setTransform(scale, 0, 0, -scale, xshift, yshift);
+    ctx.lineWidth = 1 / scale;
 
+    // draw relief
     var relief = board.getRelief();
     var reliefLen = relief.length;
     if (reliefLen > 1) {
@@ -146,6 +149,7 @@ function drawTelemetry(board) {
         ctx.stroke();
     }
 
+    // draw history for the last step
     var history = board.getHistory();
     var historyLen = history.length;
     if (historyLen > 1) {
@@ -160,16 +164,48 @@ function drawTelemetry(board) {
         ctx.stroke();
     }
 
+    // draw target (same transform)
+    var target = board.getTarget();
+    if (target) {
+        ctx.strokeStyle = "#F44";
+        ctx.beginPath();
+        ctx.moveTo(target.x, target.y - 8/scale);  ctx.lineTo(target.x, target.y + 8/scale);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(target.x - 8/scale, target.y);  ctx.lineTo(target.x + 8/scale, target.y);
+        ctx.stroke();
+    }
+
+    // draw the ship
     var radian = board.getAngle() / 180 * Math.PI;
     var sin = Math.sin(radian);
     var cos = Math.cos(radian);
-    ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, 300 + board.getX() * scale, 300 - board.getY() * scale);
-    ctx.strokeStyle = "#000";
+    ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.getX() * scale, yshift - board.getY() * scale);
+    ctx.strokeStyle = "#008";
     ctx.beginPath();
     ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
     ctx.lineTo(0, 1.6);
     ctx.lineTo(0.7, 1.1);  ctx.lineTo(1, -0.2);  ctx.lineTo(0, 0.0);
     ctx.stroke();
+
+    // draw arrow pointing to target
+    if (target) {
+        var deltaX = target.x - board.getX();
+        var deltaY = target.y - board.getY();
+        var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance > 1) {
+            var radian = Math.atan2(deltaY, deltaX); // In radians
+            var sin = Math.sin(radian);
+            var cos = Math.cos(radian);
+            ctx.setTransform(cos, -sin, sin, cos, 300, 100);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#F44";
+            ctx.beginPath();
+            ctx.moveTo(-30, 0);  ctx.lineTo(0, 0);  ctx.moveTo(30, 0);
+            ctx.lineTo(0, 5);  ctx.lineTo(0, -5);  ctx.lineTo(30, 0);
+            ctx.stroke();
+        }
+    }
 
     ctx.resetTransform();
 }
@@ -265,6 +301,9 @@ var Board = function(board) {
     var getHistory = function() {
         return boardObj.history;
     };
+    var getTarget = function() {
+        return boardObj.target;
+    };
 
     var getLogString = function() {
         return getState() + " y:" + getY();
@@ -281,6 +320,7 @@ var Board = function(board) {
         getAngle : getAngle,
         getRelief : getRelief,
         getHistory : getHistory,
+        getTarget : getTarget,
         getLogString : getLogString
    };
 };
@@ -298,14 +338,15 @@ var DirectionSolver = function(board) {
          * @return next action
          */
         get : function() {
+            var target = board.getTarget();
 
             if (board.getY() < 8.0 || board.getVSpeed() < -1.5) {
                 return Direction.UP;
             }
-            else if (board.getX() < 1.0 && board.getHSpeed() < 3.0) {
+            else if (board.getX() < target.x && board.getHSpeed() < 3.0) {
                 return Direction.RIGHT;
             }
-            else if (board.getX() > 1.0 && board.getHSpeed() > -3.0) {
+            else if (board.getX() > target.x && board.getHSpeed() > -3.0) {
                 return Direction.LEFT;
             }
             else {

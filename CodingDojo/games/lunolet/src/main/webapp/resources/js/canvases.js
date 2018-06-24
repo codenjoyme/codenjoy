@@ -240,10 +240,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
             canvas.drawText("HSPEED " + board.hspeed, {"x": 12, "y": 17.2}, monofont);
             canvas.drawText("VSPEED " + board.vspeed, {"x": 12, "y": 16.4}, monofont);
             if (board.hspeed >= 0.001) {
-                canvas.drawText("→", {"x": 17, "y": 17.2}, monofont);
+                canvas.drawText("→", {"x": 18, "y": 17.2}, monofont);
             }
             else if (board.hspeed <= -0.001) {
-                canvas.drawText("←", {"x": 17, "y": 17.2}, monofont);
+                canvas.drawText("←", {"x": 18, "y": 17.2}, monofont);
             }
             if (board.vspeed >= 0.001) {
                 canvas.drawText("↑", {"x": 18, "y": 16.4}, monofont);

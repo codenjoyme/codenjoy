@@ -24,8 +24,10 @@ package com.codenjoy.dojo.lunolet.model;
 
 
 import java.awt.geom.Point2D;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Level {
 
@@ -35,13 +37,33 @@ public class Level {
 
     List<Point2D.Double> Relief;
 
+    double TargetX;
+
     public Level(){
         DryMass = 250.0;
         VesselStatus = new VesselStatus();
         Relief = new LinkedList<Point2D.Double>();
 
-        Relief.add(new Point2D.Double(-10000, 0));
-        Relief.add(new Point2D.Double(10000, 0));
+//        Relief.add(new Point2D.Double(-10000, 0));
+//        Relief.add(new Point2D.Double(10000, 0));
+
+        Random random = new Random();
+        Point2D.Double[] array = new Point2D.Double[21];
+        array[0] = new Point2D.Double(-10000, 0);
+        array[9] = new Point2D.Double(-5, 0);
+        array[10] = new Point2D.Double(5, 0);
+        double y1 = 0;
+        double y2 = 0;
+        for (int i = 0; i < 8; i++) {
+            y1 += random.nextInt(11) - 5;
+            y2 += random.nextInt(11) - 5;
+            array[8 - i] = new Point2D.Double(-10 - 5 * i, y1);
+            array[11 + i] = new Point2D.Double(10 + 5 * i, y2);
+        }
+        array[19] = new Point2D.Double(array[18].x + 10, array[18].y);  // target
+        array[20] = new Point2D.Double(10000, 0);
+        Relief = Arrays.asList(array);
+        TargetX = array[18].x + 5;
 
         VesselStatus.FuelMass = 50.0;
         VesselStatus.State = VesselState.START;
