@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,9 +24,6 @@ package com.codenjoy.dojo.bomberman.client;
 
 
 import com.codenjoy.dojo.bomberman.model.Elements;
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -34,6 +31,9 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 
@@ -67,13 +67,13 @@ public class Board extends AbstractBoard<Elements> {
     @Override
     public String toString() {
         return String.format("%s\n" +
-            "Bomberman at: %s\n" +
-            "Other bombermans at: %s\n" +
-            "Meat choppers at: %s\n" +
-            "Destroy walls at: %s\n" +
-            "Bombs at: %s\n" +
-            "Blasts: %s\n" +
-            "Expected blasts at: %s",
+                        "Bomberman at: %s\n" +
+                        "Other bombermans at: %s\n" +
+                        "Meat choppers at: %s\n" +
+                        "Destroy walls at: %s\n" +
+                        "Bombs at: %s\n" +
+                        "Blasts: %s\n" +
+                        "Expected blasts at: %s",
                 boardAsString(),
                 getBomberman(),
                 getOtherBombermans(),
@@ -124,22 +124,22 @@ public class Board extends AbstractBoard<Elements> {
         return get(BOOM);
     }
 
-    public Collection<Point> getFutureBlasts() {        
+    public Collection<Point> getFutureBlasts() {
         Collection<Point> bombs = getBombs();
-		Collection<Point> result = new LinkedList<Point>();
+        Collection<Point> result = new LinkedList<Point>();
         for (Point bomb : bombs) {
             result.add(bomb);
-			// TODO remove duplicate (check same logic inside parrent isNear for example)
-            result.add(new PointImpl(bomb.getX() - 1, bomb.getY()));  
+            // TODO remove duplicate (check same logic inside parrent isNear for example)
+            result.add(new PointImpl(bomb.getX() - 1, bomb.getY()));
             result.add(new PointImpl(bomb.getX() + 1, bomb.getY()));
-            result.add(new PointImpl(bomb.getX()    , bomb.getY() - 1));
-            result.add(new PointImpl(bomb.getX()    , bomb.getY() + 1));
+            result.add(new PointImpl(bomb.getX(), bomb.getY() - 1));
+            result.add(new PointImpl(bomb.getX(), bomb.getY() + 1));
         }
-		Collection<Point> result2 = new LinkedList<Point>();
+        Collection<Point> result2 = new LinkedList<Point>();
         for (Point blast : result) {
             if (blast.isOutOf(size) || getWalls().contains(blast)) {
-				continue;
-			}
+                continue;
+            }
             result2.add(blast);
         }
         return removeDuplicates(result2);

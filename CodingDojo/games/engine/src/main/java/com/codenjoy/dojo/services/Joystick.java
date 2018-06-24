@@ -48,4 +48,8 @@ public interface Joystick {
      * @param command любая строка в формате "message('текстовое сообщение')"
      */
     void message(String command);
+
+    default boolean bot() {
+        return false;
+    }
 }

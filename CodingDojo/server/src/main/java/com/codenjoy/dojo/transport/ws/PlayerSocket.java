@@ -38,10 +38,12 @@ public class PlayerSocket {
     private Session session;
     private String id;
     private boolean requested;
+    private boolean bot;
     private Runnable onClose;
 
-    public PlayerSocket(String id, boolean whoFirst) {
+    public PlayerSocket(String id, boolean bot, boolean whoFirst) {
         this.id = id;
+        this.bot = bot;
         requested = whoFirst;
     }
 
@@ -106,5 +108,9 @@ public class PlayerSocket {
 
     public void onClose(Runnable onClose) {
         this.onClose = onClose;
+    }
+
+    public boolean isBot() {
+        return bot;
     }
 }

@@ -63,5 +63,8 @@ public class PrimeFactoryAlgorithmTest {
         assertEquals("[2,2,2,3]", algorithm.get("24"));
         assertEquals("[5,5]", algorithm.get("25"));
         assertEquals("[2,13]", algorithm.get("26"));
+        for (int i = 26; i < 36; i++) {
+            System.out.println("i = " + i + "; primes = " + algorithm.get(String.valueOf(i)));
+        }
     }
 }

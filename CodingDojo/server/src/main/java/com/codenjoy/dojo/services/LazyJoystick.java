@@ -46,10 +46,21 @@ public class LazyJoystick implements Joystick, Tickable {
     private String message;
     private int[] parameters;
     private boolean firstAct;
+    private boolean bot;
 
     public LazyJoystick(Game game, PlayerSpy player) {
         this.game = game;
         this.player = player;
+    }
+
+    public LazyJoystick(Game game, PlayerSpy player, boolean bot) {
+        this(game, player);
+        this.bot = bot;
+    }
+
+    @Override
+    public boolean bot() {
+        return bot;
     }
 
     @Override

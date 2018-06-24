@@ -43,7 +43,11 @@ public class FactorialAlgorithmTest {
                 "263130836933693530167218012160000000", "8683317618811886495518194401280000000",
                 "295232799039604140847618609643520000000", "10333147966386144929666651337523200000000"};
 
-        Assertions.assertAlgorithm(expected, new FactorialAlgorithm());
+        FactorialAlgorithm algorithm = new FactorialAlgorithm();
+        Assertions.assertAlgorithm(expected, algorithm);
+        for (int i = 26; i < 26 + 15; i++) {
+            System.out.println(algorithm.get(String.valueOf(i)));
+        }
     }
 
 

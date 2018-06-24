@@ -24,5 +24,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-
-<a id="fork-me" target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="${ctx}/resources/img/fork-me.png"></a>
+<div class="e-logo">
+    <a id="company-logo" target="_blank" href="https://www.epam.com/"><img style="position: absolute; top: 0; border: 0;z-index: 100;" src="${ctx}/resources/img/epam-logo.png"></a>
+</div>
+<a id="fork-me" target="_blank" href="https://github.com/IzhevskCodeBattle/BombermanClients"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="${ctx}/resources/img/fork-me.png"></a>

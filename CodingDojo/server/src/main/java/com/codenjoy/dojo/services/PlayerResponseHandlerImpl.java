@@ -43,7 +43,7 @@ public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
     public void onResponseComplete(PlayerSocket socket, String responseContent) {
         logger.debug("Received response: {} from player: {}",
                 responseContent, player.getName());
-        new PlayerCommand(joystick, responseContent).execute();
+        new PlayerCommand(joystick, responseContent, socket.isBot()).execute();
     }
 
     @Override

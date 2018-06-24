@@ -37,14 +37,14 @@ public class SecureAuthenticationService implements AuthenticationService {
     private Registration registration;
 
     @Override
-    public String authenticate(HttpServletRequest request) {
+    public PlayerAuth authenticate(HttpServletRequest request) {
         String user = request.getParameter("user");
-        if (user.endsWith(PlayerServiceImpl.BOT_EMAIL_SUFFIX)) {
-            return user;
+        if (user.endsWith(PlayerServiceImpl.AI_EMAIL_SUFFIX)) {
+            return new PlayerAuth(user, false);
         }
         String code = request.getParameter("code");
         if (registration.checkUser(user, code)) {
-            return user;
+            return new PlayerAuth(user, user.endsWith(PlayerServiceImpl.BOT_EMAIL_SUFFIX));
         } else {
             return null;
         }

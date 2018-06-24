@@ -36,6 +36,9 @@ public class SimpleParameter<T> implements Parameter<T> {
     public static Parameter<Integer> v(int value) {
         return new SimpleParameter<Integer>(value);
     }
+    public static Parameter<String> s(String value) {
+        return new SimpleParameter<String>(value);
+    }
 
     @Override
     public T getValue() {

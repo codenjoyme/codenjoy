@@ -68,6 +68,8 @@ public interface Game extends Tickable {
      */
     Object getBoardAsString();
 
+    default Object wrapScreen(Object map) {return map;}
+
     /**
      * Если вдруг пользователь передумает играть и уйдет, от при выходе из игры фреймворк дернет этот метод.
      * Мало ли, вдруг ты хранишь всех игроков у себя (актуально для игры типа много игроков на одном поле).

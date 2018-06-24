@@ -24,6 +24,8 @@ package com.codenjoy.dojo.kata.model.levels;
 
 
 import com.codenjoy.dojo.kata.model.levels.algorithms.*;
+import com.codenjoy.dojo.kata.model.levels.algorithms.finale.*;
+import org.apache.commons.lang.StringUtils;
 import org.reflections.Reflections;
 
 import java.util.*;
@@ -33,23 +35,65 @@ import java.util.*;
  */
 public class LevelsLoader {
 
+    private static final String DEFAULT_KATA_PROFILE = "default";
+
+    private static final Map<String, List<Level>> ALGORITHMS = Collections.unmodifiableMap(
+            new HashMap<String, List<Level>>() {{
+                put(DEFAULT_KATA_PROFILE, getDefaultAlgorithms());
+                put("finale", getFinaleAlgorithms());
+            }}
+    );
+
+    private static List<Level> getFinaleAlgorithms() {
+        return new LinkedList<Level>() {{
+            add(new FinaleHelloWorldAlgorithm());              // 0
+            add(new FinaleFizzBuzzAlgorithm());                // 1
+            add(new FinaleSumSquareDifferenceAlgorithm());     // 2
+            add(new FinaleSequence1Algorithm());               // 3
+            add(new FibonacciNumbersAlgorithm());              // 4
+            add(new FinalePrimeFactoryAlgorithm());            // 5
+            add(new FinalePowerDigitSumAlgorithm());           // 6
+            add(new FinaleFactorialAlgorithm());               // 7
+            add(new FinaleReverseAddPalindromeAlgorithm());    // 8
+            add(new FinaleSequence2Algorithm());               // 9
+            add(new FinaleXthPrimeAlgorithm());                // 10
+            add(new FinaleLongDivisionAlgorithm());            // 11
+            add(new FinaleSquareUpAlgorithm());                // 12
+            add(new FinaleCountTrippleAlgorithm());            // 13
+            add(new FinalePackageGiftBoxesAlgorithm());        // 14
+            add(new FinaleArabicToRomanNumbersAlgorithm());    // 15
+        }}; // TODO: add finale algorithms set here
+    }
+
     // TODO На админке можно менять порядок задач местами для играющих, а это убрать
-    public static List<Level> getAlgorithms() {
+    private static List<Level> getDefaultAlgorithms() {
         return new LinkedList<Level>(){{
-            add(new HelloWorldAlgorithm());
-            add(new FizzBuzzAlgorithm());
-            add(new SumSquareDifferenceAlgorithm());
-            add(new Sequence1Algorithm());
-            add(new FibonacciNumbersAlgorithm());
-            add(new PrimeFactoryAlgorithm());
-            add(new PowerDigitSumAlgorithm());
-            add(new MakeBricksAlgorithm());
-            add(new FactorialAlgorithm());
-            add(new ReverseAddPalindromeAlgorithm());
-            add(new Sequence2Algorithm());
-            add(new XthPrimeAlgorithm());
-            add(new LongDivisionAlgorithm());
+            add(new HelloWorldAlgorithm());             // 0
+            add(new FizzBuzzAlgorithm());               // 1
+            add(new SumSquareDifferenceAlgorithm());    // 2
+            add(new Sequence1Algorithm());              // 3
+            add(new FibonacciNumbersAlgorithm());       // 4
+            add(new PrimeFactoryAlgorithm());           // 5
+            add(new PowerDigitSumAlgorithm());          // 6
+//            add(new MakeBricksAlgorithm());
+            add(new FactorialAlgorithm());              // 7
+            add(new ReverseAddPalindromeAlgorithm());   // 8
+            add(new Sequence2Algorithm());              // 9
+            add(new XthPrimeAlgorithm());               // 10
+            add(new LongDivisionAlgorithm());           // 11
+            add(new SquareUpAlgorithm());               // 12
+            add(new CountTrippleAlgorithm());           // 13
+            add(new PackageGiftBoxesAlgorithm());       // 14
+            add(new ArabicToRomanNumbersAlgorithm());   // 15
         }};
+    }
+
+    public static List<Level> getAlgorithms() {
+        String kataProfile = System.getenv("KATA_PROFILE");
+        List<Level> levels = ALGORITHMS.getOrDefault(kataProfile, getDefaultAlgorithms());
+        System.out.println("===> Using Kata algorithms for profile: " + kataProfile);
+        System.out.println("===> Levels: \n" + StringUtils.join(levels, "\n"));
+        return levels;
     }
 
     public static List<Level> getAlgorithmsOrderedByComplexity() {

@@ -171,6 +171,7 @@ public class Registration {
         String password;
         String code;
         String data;
+        String bot;
 
         @Override
         public String toString() {
@@ -180,6 +181,7 @@ public class Registration {
                     ", password='" + password + '\'' +
                     ", code='" + code + '\'' +
                     ", data='" + data + '\'' +
+                    ", bot='" + bot + '\'' +
                     '}';
         }
     }

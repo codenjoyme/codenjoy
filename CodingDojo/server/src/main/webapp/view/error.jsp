@@ -37,7 +37,7 @@
     </script>
 </head>
 <body>
-    <div class="page-header">
+    <div class="game-header">
         <h1>WTF! Something wrong...</h1>
     </div>
         <div>${message}</div></br>

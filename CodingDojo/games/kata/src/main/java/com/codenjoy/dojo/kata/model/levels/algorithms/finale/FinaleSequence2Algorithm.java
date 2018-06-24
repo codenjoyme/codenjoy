@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.kata.model.levels.algorithms.finale;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,18 +23,16 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-/**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 8:17 PM
- */
-public class DestroyWalls extends WallsDecorator implements Walls {
+import com.codenjoy.dojo.kata.model.levels.algorithms.QuestionGenerator;
+import com.codenjoy.dojo.kata.model.levels.algorithms.Sequence2Algorithm;
 
-    public DestroyWalls(Walls walls) {
-        super(new WallsImpl());
-        for (Wall wall : walls) {
-            this.walls.add(new DestroyWall(wall.getX(), wall.getY()));
-        }
+import java.util.List;
+
+
+public class FinaleSequence2Algorithm extends Sequence2Algorithm {
+
+    @Override
+    public List<String> getQuestions() {
+        return new QuestionGenerator(1, 40).generate();
     }
-
 }

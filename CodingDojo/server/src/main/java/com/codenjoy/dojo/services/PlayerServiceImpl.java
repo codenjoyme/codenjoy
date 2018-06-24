@@ -45,7 +45,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
 
     private static Logger logger = DLoggerFactory.getLogger(PlayerServiceImpl.class);
-    public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
+    public static String AI_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
+    public static String BOT_EMAIL_SUFFIX = "@bot.secret";
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<Player, String>();
@@ -113,12 +114,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAIFor(String forPlayer, String gameName) {
-        if (forPlayer.endsWith(BOT_EMAIL_SUFFIX)) return;
+        if (forPlayer.endsWith(AI_EMAIL_SUFFIX)) return;
 
         GameType gameType = gameService.getGame(gameName);
 
         // если в эту игру ai еще не играет
-        String aiName = gameName + BOT_EMAIL_SUFFIX;
+        String aiName = gameName + AI_EMAIL_SUFFIX;
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
@@ -138,14 +139,18 @@ public class PlayerServiceImpl implements PlayerService {
         String gameName = save.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
-        if (name.endsWith(BOT_EMAIL_SUFFIX)) {
+        if (name.endsWith(AI_EMAIL_SUFFIX)) {
             gameType.newAI(name);
         }
 
-        return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getSave());
+        return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getSave(), name.endsWith(BOT_EMAIL_SUFFIX));
     }
 
     private Player register(String name, String callbackUrl, String gameName, Object score, String data) {
+        return register(name, callbackUrl, gameName, score, data, false);
+    }
+
+    private Player register(String name, String callbackUrl, String gameName, Object score, String data, boolean bot) {
         Player player = get(name);
         GameType gameType = gameService.getGame(gameName);
 
@@ -156,14 +161,14 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerScores playerScores = gameType.getPlayerScores(score);
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Game game = gameType.newGame(informationCollector, printer, data, name);
+            Game game = gameType.newGame(informationCollector, printer, data, name, bot);
 
             if (logger.isDebugEnabled()) {
                 logger.info("Player {} starting new game {}", name, game);
             }
 
             player = new Player(name, callbackUrl,
-                    gameType, playerScores, informationCollector);
+                    gameType, playerScores, informationCollector, bot);
 
             playerGames.add(player, game, playerController, screenController);
         } else {
@@ -246,7 +251,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 GuiPlotColorDecoder decoder = gameData.getDecoder();
                 cacheBoards.put(player, decoder.encodeForClient(board));
-                Object encoded = decoder.encodeForBrowser(board);
+                Object encoded = decoder.encodeForBrowser(game.wrapScreen(board));
 
                 map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,

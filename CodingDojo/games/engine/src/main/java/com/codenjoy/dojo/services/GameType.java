@@ -50,6 +50,10 @@ public interface GameType extends Tickable {
      */
     Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName);
 
+    default Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName, boolean bot) {
+        return newGame(listener, factory, save, playerName);
+    }
+
     /**
      * @return Размер доски. Важно, чтобы у всех пользователей были одинаковые по размеру поля
      */

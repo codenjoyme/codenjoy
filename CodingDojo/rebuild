@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export MAVEN_OPTS=
+mvn clean install -DskipTests

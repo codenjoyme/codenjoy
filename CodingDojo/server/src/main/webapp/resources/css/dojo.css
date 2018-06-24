@@ -151,3 +151,11 @@ label.error {
     float: left;
 }
 
+.game-header {
+    padding-bottom: 9px;
+    margin: 40px 0 20px;
+}
+
+.e-logo {
+    margin-left: 40%;
+}

@@ -37,10 +37,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang.StringUtils.defaultIfBlank;
+
 public class WebSocketRunner {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
-    private static final String LOCAL = "127.0.0.1:8080";
+    private static final String LOCAL = "127.0.0.1:%s";
+    private static final String DEFAULT_HTTP_PORT = "8080";
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
     public static final String WS_URI_PATTERN = "ws://%s/codenjoy-contest/ws";
 
@@ -59,7 +62,7 @@ public class WebSocketRunner {
         REMOTE_LOCAL(WebSocketRunner.getUrl()),
 
         // работа клиента с локальным серваком
-        LOCAL(WebSocketRunner.LOCAL);
+        LOCAL(String.format(WebSocketRunner.LOCAL, defaultIfBlank(System.getProperty("jetty.http.port"), DEFAULT_HTTP_PORT)));
 
         public String host;
         public String uri;

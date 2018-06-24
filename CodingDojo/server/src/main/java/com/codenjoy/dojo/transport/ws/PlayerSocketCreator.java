@@ -24,6 +24,7 @@ package com.codenjoy.dojo.transport.ws;
 
 
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.auth.PlayerAuth;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -53,9 +54,9 @@ public class PlayerSocketCreator implements WebSocketCreator {
     @Override
     public PlayerSocket createWebSocket(ServletUpgradeRequest servletRequest, ServletUpgradeResponse response) {
         HttpServletRequest request = servletRequest.getHttpServletRequest();
-        String authId = authenticationService.authenticate(request);
-        PlayerSocket socket = new PlayerSocket(authId, waitForClient);
-        if (authId == null) {
+        PlayerAuth auth = authenticationService.authenticate(request);
+        PlayerSocket socket = new PlayerSocket(auth.getAuthId(), auth.isBot(), waitForClient);
+        if (auth.getAuthId() == null) {
             LOGGER.warn("Unauthorized access {}", request.getParameterMap().toString());
             try {
                 response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
@@ -65,7 +66,7 @@ public class PlayerSocketCreator implements WebSocketCreator {
             return null;
         }
         socket.onClose(() -> transport.unregisterPlayerSocket(socket));
-        transport.registerPlayerSocket(authId, socket);
+        transport.registerPlayerSocket(auth.getAuthId(), socket);
         return socket;
     }
 }
