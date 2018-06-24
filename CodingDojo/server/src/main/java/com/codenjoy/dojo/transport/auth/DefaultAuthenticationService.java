@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 public class DefaultAuthenticationService implements AuthenticationService {
 
     @Override
-    public String authenticate(HttpServletRequest request) {
-        return request.getParameter("user");
+    public PlayerAuth authenticate(HttpServletRequest request) {
+        return new PlayerAuth(request.getParameter("user"), false);
     }
 }

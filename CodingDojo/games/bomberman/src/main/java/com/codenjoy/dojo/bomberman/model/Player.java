@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,14 +32,32 @@ public class Player {
     private int maxScore;
     private int score;
     private GameSettings settings;
+    private boolean bot;
 
     public Player(EventListener listener) {
         this.listener = listener;
         clearScore();
     }
 
+    public Player(EventListener listener, boolean bot) {
+        this(listener);
+        this.bot = bot;
+    }
+
+    public boolean isHero() {
+        return !bot;
+    }
+
     public Hero getBomberman() {
         return bomberman;
+    }
+
+    public boolean isBot() {
+        return bot;
+    }
+
+    public void setBot(boolean bot) {
+        this.bot = bot;
     }
 
     private void increaseScore() {
@@ -57,9 +75,15 @@ public class Player {
 
     public void event(Events event) {
         switch (event) {
-            case KILL_MEAT_CHOPPER : increaseScore(); break;
-            case KILL_DESTROY_WALL : increaseScore(); break;
-            case KILL_BOMBERMAN: gameOver(); break;
+            case KILL_MEAT_CHOPPER:
+                increaseScore();
+                break;
+            case KILL_DESTROY_WALL:
+                increaseScore();
+                break;
+            case KILL_BOMBERMAN:
+                gameOver();
+                break;
         }
 
         if (listener != null) {
@@ -80,7 +104,7 @@ public class Player {
     public void newHero(Bomberman board) {
         score = 0;
         settings = board.getSettings();
-        bomberman = settings.getBomberman(settings.getLevel());
-        bomberman.init(board);
+        bomberman = settings.getBomberman(board.getLevel());
+        bomberman.init(board, bot);
     }
 }

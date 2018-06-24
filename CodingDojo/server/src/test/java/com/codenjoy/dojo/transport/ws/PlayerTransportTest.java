@@ -24,6 +24,7 @@ package com.codenjoy.dojo.transport.ws;
 
 
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.transport.auth.PlayerAuth;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
@@ -88,7 +89,7 @@ public class PlayerTransportTest {
     }
 
     private PlayerSocket connectWebSocketClient(String authId) {
-        when(authentication.authenticate(any(HttpServletRequest.class))).thenReturn(authId);
+        when(authentication.authenticate(any(HttpServletRequest.class))).thenReturn(new PlayerAuth(authId, false));
 
         PlayerSocket webSocket = createWebSocket();
 

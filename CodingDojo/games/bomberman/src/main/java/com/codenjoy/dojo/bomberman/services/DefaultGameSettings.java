@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,10 +23,14 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.model.GameSettings;
+import com.codenjoy.dojo.bomberman.model.Hero;
+import com.codenjoy.dojo.bomberman.model.HeroImpl;
+import com.codenjoy.dojo.bomberman.model.Level;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.s;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
@@ -39,30 +43,12 @@ public class DefaultGameSettings implements GameSettings {
     public static final int MEAT_CHOPPERS_COUNT = 10;
     public static final int BOMB_POWER = 3;
     public static final int BOMBS_COUNT = 1;
-    public static final int BOARD_SIZE = 33;
-    public static final int DESTROY_WALL_COUNT = BOARD_SIZE * BOARD_SIZE / 10;
+    public static final int DESTROY_WALL_COUNT = 10;
+    public static final String MAP_FILE = "level1";
 
     @Override
-    public Level getLevel() {
-        return new Level() {
-            @Override
-            public int bombsCount() {
-                return BOMBS_COUNT;
-            }
-
-            @Override
-            public int bombsPower() {
-                return BOMB_POWER;
-            }
-        };
-    }
-
-    @Override
-    public Walls getWalls(Bomberman board) {
-        OriginalWalls originalWalls = new OriginalWalls(v(BOARD_SIZE));
-        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, v(MEAT_CHOPPERS_COUNT), new RandomDice());
-        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, v(DESTROY_WALL_COUNT), new RandomDice());
-        return eatWalls;
+    public Parameter<String> getMapFile() {
+        return s("level1");
     }
 
     @Override
@@ -71,7 +57,23 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(BOARD_SIZE);
+    public Parameter<Integer> getBombsCount() {
+        return v(BOMBS_COUNT);
     }
+
+    @Override
+    public Parameter<Integer> getBombsPower() {
+        return v(BOMB_POWER);
+    }
+
+    @Override
+    public Parameter<Integer> getDestroyableWalls() {
+        return v(DESTROY_WALL_COUNT);
+    }
+
+    @Override
+    public Parameter<Integer> getMeatChoppersCount() {
+        return v(MEAT_CHOPPERS_COUNT);
+    }
+
 }

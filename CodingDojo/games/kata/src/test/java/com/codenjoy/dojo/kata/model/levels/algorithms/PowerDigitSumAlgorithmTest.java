@@ -35,7 +35,11 @@ public class PowerDigitSumAlgorithmTest {
     @Test
     public void shouldWork() {
         int[] primes = new int[]{1, 2, 4, 8, 7, 5, 10, 11, 13, 8, 7, 14, 19, 20, 22, 26, 25, 14, 19, 29, 31, 26, 25};
-        Assertions.assertAlgorithm(primes, new PowerDigitSumAlgorithm());
+        PowerDigitSumAlgorithm algorithm = new PowerDigitSumAlgorithm();
+        Assertions.assertAlgorithm(primes, algorithm);
+        for (int i = 26; i < 36; i++) {
+            System.out.println(algorithm.get(String.valueOf(i)));
+        }
     }
 
 

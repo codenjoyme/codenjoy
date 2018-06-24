@@ -38,6 +38,7 @@ public class Player implements ScreenRecipient {
     private PlayerScores scores;
     private Information info;
     private GameType gameType;
+    private boolean bot;
 
     public Player() {
     }
@@ -52,6 +53,19 @@ public class Player implements ScreenRecipient {
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
+    }
+
+    public Player(String name, String callbackUrl, GameType gameType, PlayerScores scores, Information info, boolean bot) {
+        this.name = name;
+        this.callbackUrl = callbackUrl;
+        this.gameType = gameType;
+        this.scores = scores;
+        this.info = info;
+        this.bot = bot;
+    }
+
+    public boolean isBot() {
+        return bot;
     }
 
     public GameType getGameType() {

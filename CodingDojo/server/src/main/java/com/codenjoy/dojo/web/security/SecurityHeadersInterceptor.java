@@ -41,7 +41,11 @@ public class SecurityHeadersInterceptor extends HandlerInterceptorAdapter {
 //        response.setHeader("X-Frame-Options", "DENY");
 //        response.setHeader("X-XSS-Protection", "1; mode=block");
 //        response.setHeader("Content-Security-Policy", "default-src 'self'");
-
+//        response.setHeader("Access-Control-Allow-Methods", "OPTIONS, POST, GET");
+//        response.setHeader("Access-Control-Max-Age", "1728000");
+//        response.setHeader("Access-Control-Allow-Origin", "*");
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+//        response.setHeader("Access-Control-Allow-Headers"," Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
         super.postHandle(request, response, handler, modelAndView);
     }
 }

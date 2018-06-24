@@ -1,0 +1,2 @@
+#!/bin/bash
+mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war -Dshellcode=bomber -Djetty.http.port=8080

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,8 +25,8 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
@@ -38,33 +38,33 @@ import java.util.List;
 public class MeatChoppers extends WallsDecorator implements Walls {
 
     private static final boolean WITH_MEATCHOPPERS = true;
-    private Parameter<Integer> count;
-    private Field board;
+    private int size;
+    private Level board;
     private Dice dice;
 
-    public MeatChoppers(Walls walls, Field board, Parameter<Integer> count, Dice dice) {
+    public MeatChoppers(Walls walls, Level board, List<Point> points, Dice dice) {
         super(walls);
         this.board = board;
         this.dice = dice;
-        this.count = count;
+        this.size = points.size();
+
+        for (Point pt : points) {
+            add(new MeatChopper(pt.getX(), pt.getY()));
+        }
     }
 
 
     public void regenerate() {     // TODO потестить
-        if (count.getValue() < 0) {
-            count.update(0);
-        }
-
         int count = walls.subList(MeatChopper.class).size();
 
         int c = 0;
         int maxc = 100;
-        while (count < this.count.getValue() && c < maxc) {
-            int x = dice.next(board.size());
-            int y = dice.next(board.size());
+        while (count < this.size && c < maxc) {
+            int x = dice.next(board.getSize().getValue());
+            int y = dice.next(board.getSize().getValue());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.getBombermans().contains(PointImpl.pt(x, y))) {
+            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.getPlayers().contains(PointImpl.pt(x, y))) {
                 walls.add(new MeatChopper(x, y));
                 count++;
             }
@@ -122,7 +122,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
     }
 
     private boolean isOutOfBorder(int x, int y) {
-        return x >= board.size() || y >= board.size() || x < 0 || y < 0;
+        return x >= board.getSize().getValue() || y >= board.getSize().getValue() || x < 0 || y < 0;
     }
 
 }

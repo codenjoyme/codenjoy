@@ -67,7 +67,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     {
         PlayerSpy spy = statistics.newPlayer(player);
 
-        LazyJoystick joystick = new LazyJoystick(game, spy);
+        LazyJoystick joystick = new LazyJoystick(game, spy, player.isBot());
         playerController.registerPlayerTransport(player, joystick);
         screenController.registerPlayerTransport(player, null);
         PlayerGame result = new PlayerGame(player, game, joystick, () -> {

@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-builder</artifactId>
-    <version>1.0.24</version>
+    <version>1.0.27-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <properties>
@@ -30,7 +30,7 @@
 
     <dependencies>
         <!-- Games dependencies (put your game here) -->
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>sample-engine</artifactId>
             <version>${project.version}</version>
@@ -54,13 +54,13 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>battlecity-engine</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>bomberman-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>chess-engine</artifactId>
             <version>${project.version}</version>
@@ -149,7 +149,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>spacerace-engine</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency-->
     </dependencies>
 
     <build>
@@ -175,6 +175,7 @@
                         <contextPath>/${war.name}</contextPath>
                     </webApp>
                     <stopPort>9999</stopPort>
+					<port>8080</port>
                     <stopKey>foo</stopKey>
                 </configuration>
             </plugin>
@@ -250,7 +251,7 @@
                                 </artifactItem>
 
                                 <!-- Games resources (put your game here) -->
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>sample-engine</artifactId>
                                     <version>${project.version}</version>
@@ -294,7 +295,7 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
-                                </artifactItem>
+                                </artifactItem-->
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>bomberman-engine</artifactId>
@@ -304,7 +305,7 @@
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>chess-engine</artifactId>
                                     <version>${project.version}</version>
@@ -465,7 +466,7 @@
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
-                                </artifactItem>
+                                </artifactItem-->
                             </artifactItems>
                         </configuration>
                     </execution>
