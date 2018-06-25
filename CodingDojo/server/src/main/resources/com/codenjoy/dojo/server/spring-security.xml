@@ -43,6 +43,7 @@
             <xss-protection enabled="true" block="false"/>
             <cache-control/>
         </headers>
+        <csrf disabled="true"/>
     </http>
 
     <authentication-manager/>

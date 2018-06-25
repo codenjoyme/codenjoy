@@ -54,6 +54,7 @@
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/view/"/>
         <property name="suffix" value=".jsp"/>
+        <property name="redirectHttp10Compatible" value="false" />
     </bean>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
