@@ -26,7 +26,7 @@
 var boardPageLoad = function() {
 
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
 
     var libs = game.contextPath + '/resources/' + game.gameName + '/js';

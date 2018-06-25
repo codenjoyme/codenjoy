@@ -22,7 +22,7 @@
 function initRunnerJs(game, libs, getLevelInfo, storage) {
     
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
     
     var starting = true;

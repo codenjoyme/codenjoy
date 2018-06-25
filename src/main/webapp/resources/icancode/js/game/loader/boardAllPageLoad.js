@@ -26,7 +26,7 @@
 var boardAllPageLoad = function() {
 
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
 
     initLeadersTable(game.contextPath, game.playerName, game.code,

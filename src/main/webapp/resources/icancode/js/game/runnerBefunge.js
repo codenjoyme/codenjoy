@@ -27,7 +27,7 @@
 function initRunnerBefunge(logger, storage) {
 
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
 
     var defaultSize = 11;
