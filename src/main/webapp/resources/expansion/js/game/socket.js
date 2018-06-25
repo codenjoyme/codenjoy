@@ -61,7 +61,7 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
     var connect = function(onSuccess) {
         var hostIp = window.location.hostname;
         var port = window.location.port;
-        var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
+        var server = getWSProtocol() + '://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
         console.print('Connecting to Hero...');
         socket = createSocket(server + '?user=' + game.playerName + "&code=" + game.code);
