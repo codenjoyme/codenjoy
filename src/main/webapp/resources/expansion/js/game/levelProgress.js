@@ -22,7 +22,7 @@
 function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
 
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
 
     var currentLevel = -1;

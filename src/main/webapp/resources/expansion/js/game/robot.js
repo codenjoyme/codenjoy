@@ -22,7 +22,7 @@
 function initRobot(console, controller) {
     
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
     
     var memory = null;

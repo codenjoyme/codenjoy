@@ -22,7 +22,7 @@
 function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
 
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
 
     var createSocket = function(url) {

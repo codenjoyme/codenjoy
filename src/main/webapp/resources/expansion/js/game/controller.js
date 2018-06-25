@@ -22,7 +22,7 @@
 function initController(socket, runner, console, buttons, levelProgress, getRobot) {
     
     if (game.debug) {
-        debugger;
+        game.debugger();
     }
     
     var controlling = false;
