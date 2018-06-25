@@ -58,6 +58,7 @@ if (gameName == 'iCanCode Training') {
     game.enableBefunge = true;
     game.sprites = 'ekids';
 } else { // if (gameName == 'iCanCode Contest') { by default
+    gameName = 'iCanCode Contest'; // TODO because gameName can be null if go to app without registration page
     game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
