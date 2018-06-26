@@ -40,8 +40,8 @@
     <!--Among others, enables support for reading and writing JSON, if Jackson is present on the classpath (at least, the Doc affirms it)-->
     <mvc:annotation-driven/>
 
-    <mvc:resources cache-period="600" mapping="/resources/**" location="/resources/" />
-    <mvc:resources cache-period="600" mapping="/favicon.ico" location="/resources/favicon.ico" />
+    <mvc:resources cache-period="259200" mapping="/resources/**" location="/resources/" />
+    <mvc:resources cache-period="259200" mapping="/favicon.ico" location="/resources/favicon.ico" />
 
     <!--mvc:interceptors>
         <mvc:interceptor>
