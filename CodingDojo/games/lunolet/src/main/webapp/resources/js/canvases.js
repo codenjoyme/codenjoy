@@ -251,6 +251,89 @@ function initCanvases(contextPath, players, allPlayersScreen,
             else if (board.vspeed <= -0.001) {
                 canvas.drawText("↓", {"x": 18, "y": 16.4}, monofont);
             }
+			
+			let ctx = canvas.getCanvasContext();
+			// scale, move center to (300, 300), and flip vertically
+			var scale = 6;
+			var xshift = 300 - board.x * scale;
+			var yshift = 200 + board.y * scale;
+			ctx.setTransform(scale, 0, 0, -scale, xshift, yshift);
+			ctx.lineWidth = 1 / scale;
+
+			// draw relief
+			var relief = board.relief;
+			var reliefLen = relief.length;
+			if (reliefLen > 1) {
+				var ptstart = relief[0];
+				ctx.strokeStyle = "#313";
+				ctx.beginPath();
+				ctx.moveTo(ptstart.x, ptstart.y);
+				for (i = 1; i < reliefLen; i++) {
+					var pt = relief[i];
+					ctx.lineTo(pt.x, pt.y);
+				}
+				ctx.stroke();
+			}
+
+			// draw history for the last step
+			var history = board.history;
+			var historyLen = history.length;
+			if (historyLen > 1) {
+				var ptstart = history[0];
+				ctx.strokeStyle = "#282";
+				ctx.beginPath();
+				ctx.moveTo(ptstart.x, ptstart.y);
+				for (i = 1; i < historyLen; i++) {
+					var pt = history[i];
+					ctx.lineTo(pt.x, pt.y);
+				}
+				ctx.stroke();
+			}
+
+			// draw target (same transform)
+			var target = board.target;
+			if (target) {
+				ctx.strokeStyle = "#F44";
+				ctx.beginPath();
+				ctx.moveTo(target.x, target.y - 8/scale);  ctx.lineTo(target.x, target.y + 8/scale);
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.moveTo(target.x - 8/scale, target.y);  ctx.lineTo(target.x + 8/scale, target.y);
+				ctx.stroke();
+			}
+
+			// draw the ship
+			var radian = board.angle / 180 * Math.PI;
+			var sin = Math.sin(radian);
+			var cos = Math.cos(radian);
+			ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.x * scale, yshift - board.y * scale);
+			ctx.strokeStyle = "#008";
+			ctx.beginPath();
+			ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
+			ctx.lineTo(0, 1.6);
+			ctx.lineTo(0.7, 1.1);  ctx.lineTo(1, -0.2);  ctx.lineTo(0, 0.0);
+			ctx.stroke();
+
+			// draw arrow pointing to target
+			if (target) {
+				var deltaX = target.x - board.x;
+				var deltaY = target.y - board.y;
+				var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+				if (distance > 1) {
+					var radian = Math.atan2(deltaY, deltaX); // In radians
+					var sin = Math.sin(radian);
+					var cos = Math.cos(radian);
+					ctx.setTransform(cos, -sin, sin, cos, 300, 100);
+					ctx.lineWidth = 1;
+					ctx.strokeStyle = "#F44";
+					ctx.beginPath();
+					ctx.moveTo(-30, 0);  ctx.lineTo(0, 0);  ctx.moveTo(30, 0);
+					ctx.lineTo(0, 5);  ctx.lineTo(0, -5);  ctx.lineTo(30, 0);
+					ctx.stroke();
+				}
+			}
+
+			ctx.resetTransform();
 
 //            try {
 //                drawAllLayers(board.layers, onDrawItem);
@@ -340,15 +423,16 @@ function initCanvases(contextPath, players, allPlayersScreen,
     function createCanvas(canvasName) {
         var canvas = $("#" + canvasName);
 
-        var plotSize = 0;
+        var plotSize = {};
         var canvasSize = 0;
         var firstSprite = null;
         var calcSize = function(image) {
-            plotSize = image.width;
-            canvasSize = plotSize * boardSize;
-            if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
-                canvas[0].width = canvasSize;
-                canvas[0].height = canvasSize;
+            plotSize = {width: image.width, height: image.height};
+            canvasSize = canvasWidth = plotSize.width * boardSize;
+            canvasHeight = plotSize.height * boardSize;
+            if (canvas[0].width != canvasWidth || canvas[0].height != canvasHeight) {
+                canvas[0].width = canvasWidth;
+                canvas[0].height = canvasHeight;
             }
         }
 
@@ -405,8 +489,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             ctx.shadowOffsetY = font.shadowOffsetY;
             ctx.shadowBlur = font.shadowBlur;
 
-            var x = (pt.x + 1) * plotSize;
-            var y = (boardSize - pt.y - 1) * plotSize - 5;
+            var x = (pt.x + 1) * plotSize.width;
+            var y = (boardSize - pt.y - 1) * plotSize.height - 5;
             if (!!font.dx) {
                 x += font.dx;
             }
@@ -422,10 +506,22 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var drawPolyline = function(color, points) {
             var ctx = canvas[0].getContext("2d");
             //TODO
+			ctx.strokeStyle = color;
+			
+			ctx.beginPath();
+			ctx.moveTo(points[0].x, points[0].y);
+			points.forEach(function(point){
+				ctx.lineTo(point.x,point.y);
+			});
+			ctx.stroke();
         }
 
         var clear = function() {
             canvas.clearCanvas();
+        }
+
+        var getCanvasContext = function() {
+            return canvas[0].getContext("2d");
         }
 
         var getCanvasSize = function() {
@@ -440,6 +536,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             drawImage : drawImage,
             drawPlot : drawPlot,
             drawText: drawText,
+			drawPolyline: drawPolyline,
+			getCanvasContext : getCanvasContext,
             clear : clear,
             getCanvasSize : getCanvasSize,
             getPlotSize : getPlotSize
