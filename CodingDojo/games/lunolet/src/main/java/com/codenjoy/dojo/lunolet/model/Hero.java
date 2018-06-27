@@ -26,7 +26,6 @@ package com.codenjoy.dojo.lunolet.model;
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.*;
 
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -38,11 +37,13 @@ public class Hero implements Joystick, Tickable {
     private Level level;
     private Simulator simulator;
     private Point2D.Double target;
+    private boolean isalive;
 
     public Hero(Player player) {
         this.player = player;
 
         simulator = new Simulator();
+        isalive = true;
     }
 
     public void init(Level level) {
@@ -70,7 +71,7 @@ public class Hero implements Joystick, Tickable {
     }
 
     public boolean isAlive() {
-        return simulator.Status.isAlive();
+        return isalive;
     }
 
     public List<Point2D.Double> getLevelRelief() {
@@ -96,6 +97,9 @@ public class Hero implements Joystick, Tickable {
     @Override
     public void tick() {
         //do nothing: no actions driven by real time
+
+        if (!simulator.Status.isNotFinalState())
+            isalive = false;
     }
 
     @Override
@@ -150,7 +154,7 @@ public class Hero implements Joystick, Tickable {
     }
 
     private void simulate(double angle, double mass, double duration) {
-        if (simulator.Status.isAlive()) {
+        if (simulator.Status.isNotFinalState()) {
             simulator.simulate(angle, mass, duration);
 
             if (simulator.Status.State == VesselState.LANDED) {

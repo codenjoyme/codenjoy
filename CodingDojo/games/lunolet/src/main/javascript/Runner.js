@@ -127,7 +127,7 @@ function drawTelemetry(board) {
         drawText("↓", {"x": 500, "y": 45});
     }
 
-    // scale, move center to (300, 300), and flip vertically
+    // scale, move center to (300, 200), and flip vertically
     var scale = 6;
     var xshift = 300 - board.getX() * scale;
     var yshift = 200 + board.getY() * scale;
