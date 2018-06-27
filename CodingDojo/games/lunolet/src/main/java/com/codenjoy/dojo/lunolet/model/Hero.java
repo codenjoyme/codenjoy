@@ -94,6 +94,10 @@ public class Hero implements Joystick, Tickable {
         return target;
     }
 
+    public int getLevelNumber() {
+        return level.getLevelNumber();
+    }
+
     @Override
     public void tick() {
         //do nothing: no actions driven by real time

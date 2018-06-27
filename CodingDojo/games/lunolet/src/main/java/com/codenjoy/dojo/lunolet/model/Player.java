@@ -69,6 +69,7 @@ public class Player {
     public void event(Events event) {
         if (event == Events.LANDED) {
             increaseScore();
+            level.levelUp();
         }
 
         if (listener != null) {
