@@ -39,8 +39,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = GameMode.SINGLE_MODE;
-
     private Battlecity tanks;
     private Level level;
 
@@ -64,7 +62,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (!SINGLE || tanks == null) {
+        if (getMultiplayerType().isSingle() || tanks == null) {
             tanks = newTank();
         }
         Game game = new Single(tanks, listener, factory, new RandomDice());

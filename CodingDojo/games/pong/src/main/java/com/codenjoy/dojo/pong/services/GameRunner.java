@@ -36,7 +36,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private Pong game;
 
@@ -86,7 +85,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (!SINGLE || game == null) {
+        if (getMultiplayerType().isSingle() || game == null) {
             game = newGame();
         }
 

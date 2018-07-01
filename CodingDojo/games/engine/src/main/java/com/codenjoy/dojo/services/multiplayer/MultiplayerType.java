@@ -62,5 +62,25 @@ public enum MultiplayerType {
      * трое других игроков, с которыми он еще не играл.
      * Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    QUADRO,
+    QUADRO;
+
+    public boolean isSingle() {
+        return this == SINGLE;
+    }
+
+    public boolean isMultiple() {
+        return this == MULTIPLE;
+    }
+
+    public boolean isTriple() {
+        return this == TRIPLE;
+    }
+
+    public boolean isTournament() {
+        return this == TOURNAMENT;
+    }
+
+    public boolean isQuadro() {
+        return this == QUADRO;
+    }
 }

@@ -29,6 +29,6 @@ package com.codenjoy.dojo.services.hero;
 public class NullHeroData extends HeroDataImpl {
 
     public NullHeroData() {
-        super(GameMode.NOT_SINGLE_MODE);
+        super(GameMode.SINGLEPLAYER);
     }
 }

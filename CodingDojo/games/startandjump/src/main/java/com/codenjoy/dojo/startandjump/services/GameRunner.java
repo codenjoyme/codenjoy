@@ -30,8 +30,6 @@ import com.codenjoy.dojo.startandjump.client.ai.VladKvadratSolver;
 import com.codenjoy.dojo.startandjump.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -41,7 +39,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = GameMode.NOT_SINGLE_MODE;
     private final Level level;
     private StartAndJump game;
 
@@ -81,7 +78,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (!SINGLE || game == null) {
+        if (getMultiplayerType().isSingle() || game == null) {
             game = newGame();
         }
 

@@ -45,7 +45,6 @@ public class GameRunner extends AbstractGameType implements GameType {
 
 	private static final String NUM_OF_PLAYERS = "Num of players";
 	private static final String IS_NEED_AI_PARAMETR = "Is need AI";
-	public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private Football game;
     private List<Football> games;
@@ -104,7 +103,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (!SINGLE || game == null) {
+        if (getMultiplayerType().isSingle() || game == null) {
             game = newGame();
         } else if (game != null) {
         	if (game.getPlayersCount() >= numberOfPlayers.getValue() ) {
