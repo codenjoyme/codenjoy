@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -52,6 +53,9 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     private PlayerGames playerGames;
+
+    @Autowired
+    private MultiplayerService multiplayer;
 
     @Autowired
     private ScreenSender<ScreenRecipient, ScreenData> screenSender;
@@ -151,24 +155,31 @@ public class PlayerServiceImpl implements PlayerService {
         if (newPlayer) {
             playerGames.remove(player);
 
-            PlayerScores playerScores = gameType.getPlayerScores(score);
-            InformationCollector informationCollector = new InformationCollector(playerScores);
+            // TODO multiplayer.playerWantsToPlay(name, callbackUrl, score, data, gameType);
 
-            Game game = gameType.newGame(informationCollector, printer, data, name);
+            PlayerGame playerGame = playerWantsToPlay(name, callbackUrl, score, data, gameType);
+
+            player = playerGame.getPlayer();
 
             if (logger.isDebugEnabled()) {
-                logger.info("Player {} starting new game {}", name, game);
+                logger.info("Player {} starting new game {}", name, playerGame.getGame());
             }
-
-            player = new Player(name, callbackUrl,
-                    gameType, playerScores, informationCollector);
-
-            playerGames.add(player, game, playerController, screenController);
         } else {
           // do nothing
         }
 
         return player;
+    }
+
+    private PlayerGame playerWantsToPlay(String name, String callbackUrl, Object score, String data, GameType gameType) {
+        PlayerScores playerScores = gameType.getPlayerScores(score);
+        InformationCollector informationCollector = new InformationCollector(playerScores);
+
+        Player player = new Player(name, callbackUrl,
+                gameType, playerScores, informationCollector);
+
+        Game game = gameType.newGame(informationCollector, printer, data, name);
+        return playerGames.add(player, game, playerController, screenController);
     }
 
     @Override

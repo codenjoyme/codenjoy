@@ -28,11 +28,11 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
-import com.codenjoy.dojo.utils.JsonUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -63,6 +63,7 @@ import static org.mockito.Mockito.*;
         MockAutoSaver.class,
         MockSaveService.class,
         MockGameService.class,
+        MockMultiplayerService.class,
         MockActionLogger.class,
         SpyPlayerGames.class,
         MockStatistics.class,
@@ -93,6 +94,7 @@ public class PlayerServiceImplTest {
     @Autowired private ActionLogger actionLogger;
     @Autowired private PlayerGames playerGames;
     @Autowired private Statistics statistics;
+    @Autowired private MultiplayerService multiplayer;
 
     private GameType gameType;
     private PlayerScores playerScores1;
