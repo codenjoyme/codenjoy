@@ -144,13 +144,7 @@ public class PlayerServiceImpl implements PlayerService {
             gameType.newAI(name);
         }
 
-        return register2(save);
-    }
-
-    private Player register2(PlayerSave save) {
         Player player = get(save.getName());
-        String gameName = save.getGameName();
-        GameType gameType = gameService.getGame(gameName);
 
         boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
         if (newPlayer) {
