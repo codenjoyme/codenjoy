@@ -68,7 +68,7 @@ public class PlayerGamesTest {
         doAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
-                lazyJoystick = (LazyJoystick)invocation.getArguments()[1];
+                lazyJoystick = invocation.getArgumentAt(1, LazyJoystick.class);
                 return null;
             }
         }).when(controller).registerPlayerTransport(eq(player), any(LazyJoystick.class));
@@ -79,7 +79,16 @@ public class PlayerGamesTest {
         when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
         playerGames = new PlayerGames(statistics);
 
-        playerGames.add(player, game, controller, screen);
+        playerGames.onAddPlayer((player, joystick) -> {
+            controller.registerPlayerTransport(player, joystick);
+            screen.registerPlayerTransport(player, null);
+        });
+        playerGames.onRemovePlayer((player, joystick) -> {
+            controller.unregisterPlayerTransport(player);
+            screen.unregisterPlayerTransport(player);
+        });
+
+        playerGames.add(player, game);
     }
 
     @Test
@@ -139,7 +148,7 @@ public class PlayerGamesTest {
         Game anotherGame = mock(Game.class);
         games.add(anotherGame);
 
-        playerGames.add(otherPlayer, anotherGame, controller, screen);
+        playerGames.add(otherPlayer, anotherGame);
         return otherPlayer;
     }
 
@@ -199,9 +208,7 @@ public class PlayerGamesTest {
     @Test
     public void testGetGameTypes() {
         Player player2 = addOtherPlayer("game2");
-        playerGames.add(player2, mock(Game.class),
-                mock(PlayerController.class),
-                mock(PlayerController.class));
+        playerGames.add(player2, mock(Game.class));
 
         List<GameType> gameTypes = playerGames.getGameTypes();
 

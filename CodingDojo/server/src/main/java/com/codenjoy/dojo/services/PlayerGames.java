@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -39,6 +40,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public static final int TICKS_FOR_REMOVE = 60*30; // 15 минут без игры - дисквалификация
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
+
+    private BiConsumer<Player, Joystick> onAddPlayer;
+    private BiConsumer<Player, Joystick> onRemovePlayer;
 
     public PlayerGames() {}
     public PlayerGames(Statistics statistics) { // TODO
@@ -62,19 +66,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return NullPlayerGame.INSTANCE;
     }
 
-    public PlayerGame add(Player player, Game game,
-                          PlayerController playerController,
-                          PlayerController screenController)
-    {
+    public PlayerGame add(Player player, Game game) {
         PlayerSpy spy = statistics.newPlayer(player);
 
         LazyJoystick joystick = new LazyJoystick(game, spy);
-        playerController.registerPlayerTransport(player, joystick);
-        screenController.registerPlayerTransport(player, null);
-        PlayerGame result = new PlayerGame(player, game, joystick, () -> {
-            playerController.unregisterPlayerTransport(player);
-            screenController.unregisterPlayerTransport(player);
-        });
+        if (onAddPlayer != null) {
+            onAddPlayer.accept(player, joystick);
+        }
+        PlayerGame result = new PlayerGame(player, game, joystick, onRemovePlayer);
         playerGames.add(result);
         return result;
     }
@@ -254,5 +253,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             result.put(player.getName(), player.getScore());
         }
         return result;
+    }
+
+    public void onAddPlayer(BiConsumer<Player, Joystick> consumer) {
+        this.onAddPlayer = consumer;
+    }
+
+    public void onRemovePlayer(BiConsumer<Player, Joystick> consumer) {
+        this.onRemovePlayer = consumer;
     }
 }

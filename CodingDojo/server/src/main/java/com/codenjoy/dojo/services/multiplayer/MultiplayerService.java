@@ -14,7 +14,5 @@ public interface MultiplayerService {
      * @param save если игрок загружается из save тут будут данные
      * @return игрок связанный с соответствующей игрой
      */
-    PlayerGame playerWantsToPlay(GameType gameType, Player player, String save,
-                                 PlayerController playerController,
-                                 PlayerController screenController);
+    PlayerGame playerWantsToPlay(GameType gameType, Player player, String save);
 }

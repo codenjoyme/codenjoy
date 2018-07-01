@@ -25,14 +25,18 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 
+import java.util.function.BiConsumer;
+
 public class PlayerGame implements Tickable {
 
     private Player player;
     private Game game;
-    private Tickable lazyJoystick;
-    private Runnable onRemove;
+    private LazyJoystick lazyJoystick;
+    private BiConsumer<Player, Joystick> onRemove;
 
-    public PlayerGame(Player player, Game game, Tickable lazyJoystick, Runnable onRemove) {
+    public PlayerGame(Player player, Game game, LazyJoystick lazyJoystick,
+                      BiConsumer<Player, Joystick> onRemove)
+    {
         this.player = player;
         this.game = game;
         this.lazyJoystick = lazyJoystick;
@@ -74,7 +78,7 @@ public class PlayerGame implements Tickable {
 
     public void remove() {
         if (onRemove != null) {
-            onRemove.run();
+            onRemove.accept(player, lazyJoystick);
         }
         game.destroy();
     }

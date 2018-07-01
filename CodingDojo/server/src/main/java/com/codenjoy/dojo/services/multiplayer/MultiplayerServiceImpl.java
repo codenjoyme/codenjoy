@@ -17,10 +17,8 @@ public class MultiplayerServiceImpl implements MultiplayerService{
     private PlayerGames playerGames;
 
     @Override
-    public PlayerGame playerWantsToPlay(GameType gameType, Player player, String save,
-                                        PlayerController playerController,
-                                        PlayerController screenController) {
+    public PlayerGame playerWantsToPlay(GameType gameType, Player player, String save) {
         Game game = gameType.newGame(player.getEventListener(), printer, save, player.getName());
-        return playerGames.add(player, game, playerController, screenController);
+        return playerGames.add(player, game);
     }
 }

@@ -37,19 +37,19 @@ public class PlayerGameTest {
     private PlayerController controller;
     private PlayerController screen;
     private PlayerGame playerGame;
-    private Tickable lazyJoystick;
+    private LazyJoystick lazyJoystick;
 
     @Before
     public void setup() {
         player = new Player("player", "url", PlayerTest.mockGameType("game"), 
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
         game = mock(Game.class);
-        lazyJoystick = mock(Tickable.class);
+        lazyJoystick = mock(LazyJoystick.class);
         controller = mock(PlayerController.class);
         screen = mock(PlayerController.class);
 
         playerGame = new PlayerGame(player, game, lazyJoystick,
-                () -> {
+                (player, joystick) -> {
                     screen.unregisterPlayerTransport(player);
                     controller.unregisterPlayerTransport(player);
                 });

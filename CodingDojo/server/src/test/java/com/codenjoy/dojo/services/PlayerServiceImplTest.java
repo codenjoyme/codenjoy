@@ -150,27 +150,25 @@ public class PlayerServiceImplTest {
         when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
 
         playerGames.clear();
-        Mockito.reset(playerController, screenSender, actionLogger);
+        Mockito.reset(playerController, screenSender, actionLogger, multiplayer);
         playerService.openRegistration();
 
         // TODO подумать как можно упростить
-        when(multiplayer.playerWantsToPlay(any(GameType.class), any(Player.class), any(String.class), eq(playerController), any()))
+        when(multiplayer.playerWantsToPlay(any(GameType.class), any(Player.class), any(String.class)))
                 .thenAnswer((InvocationOnMock invocationOnMock) -> {
                     GameType gameType = invocationOnMock.getArgumentAt(0, GameType.class);
                     Player player = invocationOnMock.getArgumentAt(1, Player.class);
                     String save = invocationOnMock.getArgumentAt(2, String.class);
-                    PlayerController playerController = invocationOnMock.getArgumentAt(3, PlayerController.class);
-                    PlayerController screenController = invocationOnMock.getArgumentAt(4, PlayerController.class);
 
-                    return playerWantsToPlay(gameType, player, save, playerController, screenController);
+                    return playerWantsToPlay(gameType, player, save);
                 });
+
+        playerService.init();
     }
 
-    private PlayerGame playerWantsToPlay(GameType gameType, Player player, String save,
-                                        PlayerController playerController,
-                                        PlayerController screenController) {
+    private PlayerGame playerWantsToPlay(GameType gameType, Player player, String save) {
         Game game = gameType.newGame(player.getEventListener(), new PrinterFactoryImpl(), save, player.getName());
-        return playerGames.add(player, game, playerController, screenController);
+        return playerGames.add(player, game);
     }
 
     private HeroData heroData(int x, int y) {

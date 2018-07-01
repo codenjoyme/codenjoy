@@ -79,6 +79,18 @@ public class PlayerServiceImpl implements PlayerService {
     @Value("${autoSaverEnable}")
     private boolean autoSaverEnable;
 
+    // TODO как-то через аннотации этот метод дергать после инициализации бина
+    public void init() {
+        playerGames.onAddPlayer((player, joystick) -> {
+            playerController.registerPlayerTransport(player, joystick);
+            screenController.registerPlayerTransport(player, null);
+        });
+        playerGames.onRemovePlayer((player, joystick) -> {
+            playerController.unregisterPlayerTransport(player);
+            screenController.unregisterPlayerTransport(player);
+        });
+    }
+
     @Override
     public Player register(String name, String callbackUrl, String gameName) {
         lock.writeLock().lock();
@@ -156,8 +168,7 @@ public class PlayerServiceImpl implements PlayerService {
                     gameType, playerScores, listener);
             player.setEventListener(listener);
 
-            PlayerGame playerGame = multiplayer.playerWantsToPlay(gameType, player, playerSave.getSave(),
-                    playerController, screenController);
+            PlayerGame playerGame = multiplayer.playerWantsToPlay(gameType, player, playerSave.getSave());
 
             player = playerGame.getPlayer();
 

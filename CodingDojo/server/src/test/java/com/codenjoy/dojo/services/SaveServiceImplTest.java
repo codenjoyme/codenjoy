@@ -102,9 +102,7 @@ public class SaveServiceImplTest {
         Game game = mock(Game.class);
         games.add(game);
 
-        playerGames.add(player, game,
-                mock(PlayerController.class),
-                mock(PlayerController.class));
+        playerGames.add(player, game);
 
         return player;
     }
