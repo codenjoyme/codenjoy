@@ -63,7 +63,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame add(Player player, Game game,
-                          PlayerController playerController, PlayerController screenController)
+                          PlayerController playerController,
+                          PlayerController screenController)
     {
         PlayerSpy spy = statistics.newPlayer(player);
 

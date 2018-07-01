@@ -38,6 +38,7 @@ public class Player implements ScreenRecipient {
     private PlayerScores scores;
     private Information info;
     private GameType gameType;
+    private InformationCollector eventListener;
 
     public Player() {
     }
@@ -148,4 +149,11 @@ public class Player implements ScreenRecipient {
         this.data = data;
     }
 
+    public void setEventListener(InformationCollector eventListener) {
+        this.eventListener = eventListener;
+    }
+
+    public InformationCollector getEventListener() {
+        return eventListener;
+    }
 }

@@ -41,6 +41,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -151,6 +152,25 @@ public class PlayerServiceImplTest {
         playerGames.clear();
         Mockito.reset(playerController, screenSender, actionLogger);
         playerService.openRegistration();
+
+        // TODO подумать как можно упростить
+        when(multiplayer.playerWantsToPlay(any(GameType.class), any(Player.class), any(String.class), eq(playerController), any()))
+                .thenAnswer((InvocationOnMock invocationOnMock) -> {
+                    GameType gameType = invocationOnMock.getArgumentAt(0, GameType.class);
+                    Player player = invocationOnMock.getArgumentAt(1, Player.class);
+                    String save = invocationOnMock.getArgumentAt(2, String.class);
+                    PlayerController playerController = invocationOnMock.getArgumentAt(3, PlayerController.class);
+                    PlayerController screenController = invocationOnMock.getArgumentAt(4, PlayerController.class);
+
+                    return playerWantsToPlay(gameType, player, save, playerController, screenController);
+                });
+    }
+
+    private PlayerGame playerWantsToPlay(GameType gameType, Player player, String save,
+                                        PlayerController playerController,
+                                        PlayerController screenController) {
+        Game game = gameType.newGame(player.getEventListener(), new PrinterFactoryImpl(), save, player.getName());
+        return playerGames.add(player, game, playerController, screenController);
     }
 
     private HeroData heroData(int x, int y) {

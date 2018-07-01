@@ -49,7 +49,6 @@ public class PlayerServiceImpl implements PlayerService {
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<Player, String>();
     private boolean registration = true;
-    private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Autowired
     private PlayerGames playerGames;
@@ -135,46 +134,41 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(PlayerSave save) {
-        String name = save.getName();
-        String gameName = save.getGameName();
+    public Player register(PlayerSave playerSave) {
+        String name = playerSave.getName();
+        String gameName = playerSave.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
         if (name.endsWith(BOT_EMAIL_SUFFIX)) {
             gameType.newAI(name);
         }
 
-        Player player = get(save.getName());
+        Player player = get(playerSave.getName());
 
         boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
         if (newPlayer) {
             playerGames.remove(player);
 
-            // TODO .playerWantsToPlay(name, callbackUrl, score, data, gameType);
+            PlayerScores playerScores = gameType.getPlayerScores(playerSave.getScore());
+            InformationCollector listener = new InformationCollector(playerScores);
 
-            PlayerGame playerGame = playerWantsToPlay(gameType, save);
+            player = new Player(playerSave.getName(), playerSave.getCallbackUrl(),
+                    gameType, playerScores, listener);
+            player.setEventListener(listener);
+
+            PlayerGame playerGame = multiplayer.playerWantsToPlay(gameType, player, playerSave.getSave(),
+                    playerController, screenController);
 
             player = playerGame.getPlayer();
 
             if (logger.isDebugEnabled()) {
-                logger.info("Player {} starting new game {}", save.getName(), playerGame.getGame());
+                logger.info("Player {} starting new game {}", playerSave.getName(), playerGame.getGame());
             }
         } else {
           // do nothing
         }
 
         return player;
-    }
-
-    private PlayerGame playerWantsToPlay(GameType gameType, PlayerSave save) {
-        PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
-        InformationCollector informationCollector = new InformationCollector(playerScores);
-
-        Player player = new Player(save.getName(), save.getCallbackUrl(),
-                gameType, playerScores, informationCollector);
-
-        Game game = gameType.newGame(informationCollector, printer, save.getSave(), save.getName());
-        return playerGames.add(player, game, playerController, screenController);
     }
 
     @Override
