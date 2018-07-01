@@ -35,6 +35,10 @@ public class PlayerSave {
     private String name;
     private String save;
 
+    public static PlayerSave get(String name, String callbackUrl, String gameName, Object score, String save) {
+        return new PlayerSave(name, callbackUrl, gameName, score, save);
+    }
+
     public PlayerSave(String name, String callbackUrl, String gameName, Object score, String save) {
         this.name = name;
         this.gameName = gameName;

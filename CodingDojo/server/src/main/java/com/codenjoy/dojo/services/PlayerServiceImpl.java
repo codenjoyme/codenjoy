@@ -130,7 +130,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
         if (gameType.newAI(aiName)) {
-            Player player = register(aiName, "127.0.0.1", gameName, 0, null);
+            Player player = register(PlayerSave.get(aiName, "127.0.0.1", gameName, 0, null));
         }
     }
 
@@ -144,25 +144,26 @@ public class PlayerServiceImpl implements PlayerService {
             gameType.newAI(name);
         }
 
-        return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getSave());
+        return register2(save);
     }
 
-    private Player register(String name, String callbackUrl, String gameName, Object score, String data) {
-        Player player = get(name);
+    private Player register2(PlayerSave save) {
+        Player player = get(save.getName());
+        String gameName = save.getGameName();
         GameType gameType = gameService.getGame(gameName);
 
         boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
         if (newPlayer) {
             playerGames.remove(player);
 
-            // TODO multiplayer.playerWantsToPlay(name, callbackUrl, score, data, gameType);
+            // TODO .playerWantsToPlay(name, callbackUrl, score, data, gameType);
 
-            PlayerGame playerGame = playerWantsToPlay(name, callbackUrl, score, data, gameType);
+            PlayerGame playerGame = playerWantsToPlay(gameType, save);
 
             player = playerGame.getPlayer();
 
             if (logger.isDebugEnabled()) {
-                logger.info("Player {} starting new game {}", name, playerGame.getGame());
+                logger.info("Player {} starting new game {}", save.getName(), playerGame.getGame());
             }
         } else {
           // do nothing
@@ -171,14 +172,14 @@ public class PlayerServiceImpl implements PlayerService {
         return player;
     }
 
-    private PlayerGame playerWantsToPlay(String name, String callbackUrl, Object score, String data, GameType gameType) {
-        PlayerScores playerScores = gameType.getPlayerScores(score);
+    private PlayerGame playerWantsToPlay(GameType gameType, PlayerSave save) {
+        PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
         InformationCollector informationCollector = new InformationCollector(playerScores);
 
-        Player player = new Player(name, callbackUrl,
+        Player player = new Player(save.getName(), save.getCallbackUrl(),
                 gameType, playerScores, informationCollector);
 
-        Game game = gameType.newGame(informationCollector, printer, data, name);
+        Game game = gameType.newGame(informationCollector, printer, save.getSave(), save.getName());
         return playerGames.add(player, game, playerController, screenController);
     }
 
