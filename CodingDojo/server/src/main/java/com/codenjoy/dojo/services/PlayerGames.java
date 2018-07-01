@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,7 +163,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         List<GameType> gameTypes = getGameTypes();  // TODO потестить еще отдельно
         for (GameType gameType : gameTypes) {
             List<PlayerGame> games = getAll(gameType.name());
-            if (gameType.isSingleBoard()) {
+            if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
                 if (!games.isEmpty()) {
                     quietTick(games.iterator().next().getGame());
                 }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
@@ -91,8 +92,8 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return false;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
     }
 
     @Override

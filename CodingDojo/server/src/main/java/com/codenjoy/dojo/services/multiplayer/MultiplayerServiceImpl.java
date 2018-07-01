@@ -2,7 +2,6 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 /**

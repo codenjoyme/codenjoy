@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
@@ -72,15 +73,6 @@ public interface GameType extends Tickable {
     Settings getSettings();
 
     /**
-     * Существует два режима игры. Для начала реализуй - каждый на своей отдельной доске.
-     * Позже можешь пробовать мультиплеерную игру создать.
-     * Смотри com.codenjoy.dojo.sample.model.Single
-     * Смотри com.codenjoy.dojo.sample.model.Sample
-     * @return false - если каждый будет играть на своей отдельной доске, true - если все на одной доске
-     */
-    boolean isSingleBoard();
-
-    /**
      * Каждая игра должна предоставить своего AI который будет развлекать новопришедших игроков.
      * @param aiName имя бота
      */
@@ -92,6 +84,11 @@ public interface GameType extends Tickable {
      * @return версия игры
      */
     String getVersion();
+
+    /**
+     * @return Возвращает тип мультиплеера для этой игы
+     */
+    MultiplayerType getMultiplayerType();
 }
 
 

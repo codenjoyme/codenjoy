@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -637,7 +638,7 @@ public class PlayerServiceImplTest {
         setup(game1);
         setup(game2);
 
-        when(gameType.isSingleBoard()).thenReturn(false);
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         playerService.tick();
 
@@ -659,7 +660,7 @@ public class PlayerServiceImplTest {
         setup(game2);
         doThrow(new RuntimeException()).when(game1).tick();
 
-        when(gameType.isSingleBoard()).thenReturn(false);
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         playerService.tick();
 
@@ -689,7 +690,7 @@ public class PlayerServiceImplTest {
         setup(game2);
         doThrow(new RuntimeException()).when(game1).tick();
 
-        when(gameType.isSingleBoard()).thenReturn(true);   // тут отличия с прошлым тестом
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE);   // тут отличия с прошлым тестом
 
         playerService.tick();
 
@@ -767,7 +768,7 @@ public class PlayerServiceImplTest {
         setup(game1);
         setup(game2);
 
-        when(gameType.isSingleBoard()).thenReturn(true);   // тут отличия с прошлым тестом
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE); // тут отличия с прошлым тестом
 
         playerService.tick();
 

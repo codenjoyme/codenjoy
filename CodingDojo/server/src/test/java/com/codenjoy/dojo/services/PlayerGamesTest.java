@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -304,7 +305,7 @@ public class PlayerGamesTest {
       public void shouldTickGameWhenTickIfSingleGameType() {
         // given
         GameType gameType = playerGames.getGameTypes().get(0);
-        when(gameType.isSingleBoard()).thenReturn(true);
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE);
 
         // when
         playerGames.tick();
@@ -317,7 +318,7 @@ public class PlayerGamesTest {
     public void shouldTickGameWhenTickIfNotSingleGameType() {
         // given
         GameType gameType = playerGames.getGameTypes().get(0);
-        when(gameType.isSingleBoard()).thenReturn(false);
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         // when
         playerGames.tick();

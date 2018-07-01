@@ -24,6 +24,7 @@ package com.codenjoy.dojo.spacerace.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.spacerace.client.ai.AlAnSolver;
 import com.codenjoy.dojo.spacerace.model.*;
 import com.codenjoy.dojo.services.*;
@@ -120,8 +121,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return SINGLE;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
     }
 
     @Override

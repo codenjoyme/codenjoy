@@ -28,6 +28,7 @@ import com.codenjoy.dojo.collapse.client.ai.ApofigSolver;
 import com.codenjoy.dojo.collapse.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public class GameRunner extends AbstractGameType implements GameType {
@@ -72,8 +73,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return GameMode.NOT_SINGLE_MODE;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
     }
 
     @Override

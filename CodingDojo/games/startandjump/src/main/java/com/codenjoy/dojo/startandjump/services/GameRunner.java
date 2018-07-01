@@ -25,6 +25,7 @@ package com.codenjoy.dojo.startandjump.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.startandjump.client.ai.VladKvadratSolver;
 import com.codenjoy.dojo.startandjump.model.*;
 import com.codenjoy.dojo.services.*;
@@ -105,8 +106,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return SINGLE;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
     }
 
     @Override

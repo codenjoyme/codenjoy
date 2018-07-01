@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME;
@@ -111,7 +111,7 @@ public class BoardController {
             return "redirect:/register?" + GAME_NAME + "=" + gameName;
         }
         GameType gameType = player.getGameType();
-        if (gameType.isSingleBoard()) {
+        if (gameType.getMultiplayerType() == MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getName();
         }
 
@@ -132,7 +132,7 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        if (player.getGameType().isSingleBoard()) {
+        if (player.getGameType().getMultiplayerType() == MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getName() + ((code != null)?"?code=" + code:"");
         }
 

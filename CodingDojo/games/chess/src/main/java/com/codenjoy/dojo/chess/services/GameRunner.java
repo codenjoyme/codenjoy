@@ -30,6 +30,7 @@ import com.codenjoy.dojo.chess.model.Single;
 import com.codenjoy.dojo.chess.model.figures.Level;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -89,8 +90,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return SINGLE;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.TOURNAMENT;
     }
 
 }

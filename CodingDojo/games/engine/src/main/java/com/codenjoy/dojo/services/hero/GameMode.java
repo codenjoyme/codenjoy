@@ -30,8 +30,8 @@ import com.codenjoy.dojo.services.Point;
  */
 public class GameMode {
 
-    public static final boolean SINGLE_MODE = true;
-    public static final boolean NOT_SINGLE_MODE = false;
+    public static final boolean SINGLE_MODE = true; // TODO renname to MULTIPLAYER
+    public static final boolean NOT_SINGLE_MODE = false; // TODO renname to SINGLEPLAYER
 
     public static HeroData allHeroesOnSingeBoard(Point pt) {
         return new HeroDataImpl(pt, SINGLE_MODE);

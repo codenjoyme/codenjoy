@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang.StringUtils;
@@ -88,14 +89,14 @@ public class RestBoardController {
         private final String info;
         private final int boardSize;
         private final List<Parameter<?>> parameters;
-        private final boolean singleBoard;
+        private final MultiplayerType multiplayerType;
 
         GameTypeInfo(GameType gameType) {
             version = gameType.getVersion();
             info = gameType.toString();
             boardSize = gameType.getBoardSize().getValue();
             parameters = gameType.getSettings().getParameters();
-            singleBoard = gameType.isSingleBoard();
+            multiplayerType = gameType.getMultiplayerType();
         }
 
         public String getVersion() {
@@ -114,8 +115,8 @@ public class RestBoardController {
             return parameters;
         }
 
-        public boolean isSingleBoard() {
-            return singleBoard;
+        public MultiplayerType getMultiplayerType() {
+            return multiplayerType;
         }
     }
 
