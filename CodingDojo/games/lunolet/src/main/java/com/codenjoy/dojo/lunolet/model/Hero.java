@@ -144,7 +144,7 @@ public class Hero implements Joystick, Tickable {
         }
 
         Pattern patternGo = Pattern.compile(
-                "go\\s*(-?[\\d\\.]+)[,\\s](-?[\\d\\.]+)[,\\s](-?[\\d\\.]+)", Pattern.CASE_INSENSITIVE);
+                "go\\s*(-?[\\d\\.]+)[,\\s]\\s*(-?[\\d\\.]+)[,\\s]\\s*(-?[\\d\\.]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
             double angle = Double.parseDouble(matcher.group(1));

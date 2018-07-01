@@ -340,7 +340,11 @@ var DirectionSolver = function(board) {
         get : function() {
             var target = board.getTarget();
 
-            if (board.getY() < 8.0 || board.getVSpeed() < -1.5) {
+            if (board.getState() == "START") {
+                return Direction.UP;
+            }
+
+            if (board.getY() < target.y + 4.0 || board.getVSpeed() < -1.5) {
                 return Direction.UP;
             }
             else if (board.getX() < target.x && board.getHSpeed() < 3.0) {
