@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 public class Hero implements Joystick, Tickable {
 
     private Player player;
-    private Level level;
+    private LevelManager levelManager;
     private Simulator simulator;
     private Point2D.Double target;
     private boolean isalive;
@@ -46,8 +46,9 @@ public class Hero implements Joystick, Tickable {
         isalive = true;
     }
 
-    public void init(Level level) {
-        this.level = level;
+    public void init(LevelManager levelManager) {
+        this.levelManager = levelManager;
+        Level level = levelManager.getLevel();
 
         simulator.reset();
         simulator.DryMass = level.DryMass;
@@ -95,7 +96,7 @@ public class Hero implements Joystick, Tickable {
     }
 
     public int getLevelNumber() {
-        return level.getLevelNumber();
+        return levelManager.getLevelNumber();
     }
 
     @Override
