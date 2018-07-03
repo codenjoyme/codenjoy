@@ -31,8 +31,6 @@ import java.util.Random;
 
 public class Level {
 
-    int levelNumber;
-
     double DryMass;
 
     VesselStatus VesselStatus;
@@ -41,23 +39,7 @@ public class Level {
 
     double TargetX;
 
-    public Level() {
-        levelNumber = 0;
-
-        prepareLevel();
-    }
-
-    public int getLevelNumber() {
-        return levelNumber;
-    }
-
-    public void levelUp() {
-        levelNumber++;
-
-        prepareLevel();
-    }
-
-    private void prepareLevel() {
+    /*private void prepareLevel() {
         DryMass = 250.0;
         VesselStatus = new VesselStatus();
         Relief = new LinkedList<Point2D.Double>();
@@ -88,5 +70,5 @@ public class Level {
 
         VesselStatus.FuelMass = 50.0;
         VesselStatus.State = VesselState.START;
-    }
+    }*/
 }

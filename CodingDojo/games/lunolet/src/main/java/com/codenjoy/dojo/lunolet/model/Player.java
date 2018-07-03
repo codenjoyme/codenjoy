@@ -31,7 +31,7 @@ public class Player {
     private EventListener listener;
     private int maxScore;
     private int score;
-    private Level level;
+    private LevelManager levelManager;
     private Hero hero;
 
     public Player(EventListener listener) {
@@ -60,16 +60,16 @@ public class Player {
         maxScore = Math.max(maxScore, score);
     }
 
-    public void newHero(Level level) {
+    public void newHero(LevelManager levelManager) {
         hero = new Hero(this);
-        this.level = level;
-        hero.init(level);
+        this.levelManager = levelManager;
+        hero.init(levelManager);
     }
 
     public void event(Events event) {
         if (event == Events.LANDED) {
             increaseScore();
-            level.levelUp();
+            levelManager.levelUp();
         }
 
         if (listener != null) {

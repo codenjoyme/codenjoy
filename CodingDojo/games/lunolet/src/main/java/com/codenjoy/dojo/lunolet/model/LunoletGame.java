@@ -31,11 +31,11 @@ import java.util.List;
 
 public class LunoletGame implements Tickable {
 
-    private Level level;
+    private LevelManager levelManager;
     private List<Player> players;
 
-    public LunoletGame(Level level) {
-        this.level = level;
+    public LunoletGame(LevelManager levelManager) {
+        this.levelManager = levelManager;
 
         players = new LinkedList<Player>();
     }
@@ -61,7 +61,7 @@ public class LunoletGame implements Tickable {
         } else {
             player.clearScore();
         }
-        player.newHero(level);
+        player.newHero(levelManager);
     }
 
     public void remove(Player player) {
