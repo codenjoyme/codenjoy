@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
 /**
- * Это интерфейс указывает на тим игры. Как только ты его реулизуешь -
+ * Это интерфейс указывает на тип игры. Как только ты его реулизуешь -
  * на админке (http://localhost:8080/codenjoy-contest/admin31415)
  * будет возможность переключиться на твою игру.
  */
@@ -42,13 +44,9 @@ public interface GameType extends Tickable {
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя
-     * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
-     * @param factory Через этот интерфейс фреймворк будет инджектить принтер для отрисовки поля
-     * @param save Если игре надо передать что-то чтобы ее настроить, например сейв игрока - это то самое место
-     * @param playerName Имейл игровка зарегавшегося на сервере
      * @return Экземпляр игры пользователя
      */
-    Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName);
+    GameField createGame();
 
     /**
      * @return Размер доски. Важно, чтобы у всех пользователей были одинаковые по размеру поля
@@ -89,6 +87,23 @@ public interface GameType extends Tickable {
      * @return Возвращает тип мультиплеера для этой игы
      */
     MultiplayerType getMultiplayerType();
+
+    /**
+     * Метод для создания игрового пользователя внутри игры
+     * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
+     * @param save Если игре надо передать что-то чтобы ее настроить, например сейв игрока - это то самое место
+     * @param playerName Имейл игровка зарегавшегося на сервере
+     * @return Игрок
+     */
+    GamePlayer createPlayer(EventListener listener, String save, String playerName);
+
+    /**
+     * @return Вовзращает фабрику принтеров, которая создаст
+     * в нужный момент принтер {@see Printer}, который возьмет
+     * на себя представление борды в виде строчки.
+     * Если хочешь использовать кастомный принтер - {@see PrinterFactory#get(GraphicPrinter)}
+     */
+    PrinterFactory getPrinterFactory();
 }
 
 

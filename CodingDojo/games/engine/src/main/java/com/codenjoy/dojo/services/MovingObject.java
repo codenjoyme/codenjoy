@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.services;
 
 /*-
  * #%L
@@ -21,10 +21,6 @@ package com.codenjoy.dojo.battlecity.model;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.PointImpl;
 
 public abstract class MovingObject extends PointImpl {
     protected Direction direction;

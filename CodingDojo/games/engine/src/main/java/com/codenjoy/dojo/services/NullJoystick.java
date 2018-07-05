@@ -24,17 +24,13 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.joystick.ActJoystick;
+import com.codenjoy.dojo.services.joystick.NoActJoystick;
 
-public class NullJoystick extends ActJoystick implements Joystick {
+public class NullJoystick implements ActJoystick, NoActJoystick {
 
     public static final Joystick INSTANCE = new NullJoystick();
 
     private NullJoystick() {
-        // do nothing
-    }
-
-    @Override
-    public void act(int... p) {
         // do nothing
     }
 }

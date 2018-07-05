@@ -28,19 +28,21 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-/**
- * Created by indigo on 2016-10-30.
- */
 public interface HeroData {
+
+    HeroData NULL = new NullHeroData();
+
     /**
-     * @return Координаты игрока на поле из рассчета, что [0, 0] находится в левом нижнем углу
+     * @return Координаты игрока на поле из рассчета,
+     * что [0, 0] находится в левом нижнем углу
      */
     Point getCoordinate();
 
     /**
-     * @return true, усли игрок играет на общем поле, если же играет на своем - false
+     * @return true, усли игрок играет на общем поле,
+     * если же играет на своем отдельно от дургих игроков - false
      */
-    boolean isSingleBoardGame();
+    boolean isMultiplayer();
 
     /**
      * @return Возвращает номер уровня игры

@@ -25,18 +25,6 @@ package com.codenjoy.dojo.services.joystick;
 
 import com.codenjoy.dojo.services.Joystick;
 
-/**
- * Created by indigo on 2016-11-23.
- */
-public abstract class DirectionJoystick implements Joystick {
+public interface DirectionJoystick extends Joystick, NoMessageJoystick, NoActJoystick {
 
-    @Override
-    public void act(int... p) {
-        // do nothing
-    }
-
-    @Override
-    public void message(String command) {
-        // do nothing
-    }
 }

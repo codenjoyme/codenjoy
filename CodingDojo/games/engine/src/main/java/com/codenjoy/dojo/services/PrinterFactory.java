@@ -22,7 +22,20 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public interface PrinterFactory {
-    <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player);
+@FunctionalInterface
+public interface PrinterFactory <E extends CharElements, P extends GamePlayer> {
+    Printer getPrinter(BoardReader reader, P player);
+
+    /**
+     * @param printer Кастомный принтер, который будет прорисовывать борду.
+     * @param <P> Тип объекта-игрока в игре (не путать с Player во время регистрации пользователя)
+     * @return Фабрика, которая потом создаст кастомный принтер.
+     */
+    static <P extends GamePlayer> PrinterFactory get(GraphicPrinter<Object, P> printer) {
+        // во закрутил :)
+        return (PrinterFactory<CharElements, GamePlayer>) (reader, player)
+                -> parameters -> printer.print(reader, (P)player);
+    }
 }

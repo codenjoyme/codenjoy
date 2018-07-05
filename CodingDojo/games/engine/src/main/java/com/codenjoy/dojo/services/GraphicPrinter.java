@@ -23,11 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+
 /**
- * Реализация этого класса овтечает за представление борды в виде строки,
- * которая потом передастся играющему клиенту.
+ * Это кастомная версия {@see Printer}
  */
 @FunctionalInterface
-public interface Printer<T> {
-    T print(Object... parameters);
+public interface GraphicPrinter<T, P extends GamePlayer> {
+    T print(BoardReader reader, P player);
 }

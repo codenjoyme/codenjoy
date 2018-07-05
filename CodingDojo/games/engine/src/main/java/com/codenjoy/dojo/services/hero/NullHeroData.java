@@ -23,12 +23,9 @@ package com.codenjoy.dojo.services.hero;
  */
 
 
-/**
- * Created by indigo on 2016-10-30.
- */
 public class NullHeroData extends HeroDataImpl {
 
     public NullHeroData() {
-        super(GameMode.SINGLEPLAYER);
+        super(true);
     }
 }

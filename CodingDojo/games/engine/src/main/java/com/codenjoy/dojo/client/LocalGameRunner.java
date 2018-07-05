@@ -24,20 +24,24 @@ package com.codenjoy.dojo.client;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.Single;
 
-public class LocalGameRunner {
+public class LocalGameRunner { // TODO test me
 
     public static int TIMEOUT = 1000;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
-        Game game = gameType.newGame(new EventListener() {
-            @Override
-            public void event(Object event) {
-                System.out.println("Fire Event: " + event.toString());
-            }
-        }, new PrinterFactoryImpl(), null, null);
+        GameField field = gameType.createGame();
+        GamePlayer gamePlayer = gameType.createPlayer(
+                event -> System.out.println("Fire Event: " + event.toString()),
+                null, null);
+        PrinterFactory printerFactory = gameType.getPrinterFactory();
 
+        Game game = new Single(field, gamePlayer, printerFactory);
         game.newGame();
+
         while (true) {
             Object data = game.getBoardAsString();
             board.forString(data.toString()); 

@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+
 /**
- * Фектори для PrinterImpl
+ * Фабрика для PrinterImpl. Используется by default для всех графических "квадратных" игр.--
  */
-public class PrinterFactoryImpl implements PrinterFactory {
+public class PrinterFactoryImpl<E extends CharElements, P extends GamePlayer> implements PrinterFactory<E, P> {
     @Override
-    public <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player) {
+    public Printer getPrinter(BoardReader reader, P player) {
         return PrinterImpl.getPrinter(reader, player);
     }
 }

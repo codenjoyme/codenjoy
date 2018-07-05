@@ -4,7 +4,7 @@ package com.codenjoy.dojo.loderunner.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -24,9 +24,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 /**
- * User: sanja
- * Date: 07.01.14
- * Time: 16:21
+ * Created by indigo on 2018-07-03.
  */
 public interface Fieldable {
     void init(Field field);

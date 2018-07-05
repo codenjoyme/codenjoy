@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.joystick;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,11 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
-/**
- * Реализация этого класса овтечает за представление борды в виде строки,
- * которая потом передастся играющему клиенту.
- */
-@FunctionalInterface
-public interface Printer<T> {
-    T print(Object... parameters);
+import com.codenjoy.dojo.services.Joystick;
+
+public interface NoMessageJoystick extends Joystick {
+
+    @Override
+    default void message(String command) {
+        // do nothing
+    }
 }

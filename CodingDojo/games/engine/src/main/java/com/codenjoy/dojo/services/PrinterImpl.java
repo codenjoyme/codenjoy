@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services;
 
 /**
  * Этот малый умеет печатать состояние борды на экране.
- * @see com.codenjoy.dojo.services.PrinterImpl#print()
+ * @see PrinterImpl#print(Object...)
  */
 class PrinterImpl implements Printer {
     public static final String ERROR_SYMBOL = "Ъ";
@@ -44,10 +44,11 @@ class PrinterImpl implements Printer {
     }
 
     /**
-     * @return Строковое представление борды будет отправлено фреймворку и на его основе будет отрисована игра на клиенте.
+     * @return Строковое представление борды будет отправлено фреймворку
+     * и на его основе будет отрисована игра на клиенте.
      */
     @Override
-    public String print() {
+    public String print(Object... parameters) {
         fillField();
 
         StringBuilder string = new StringBuilder();
@@ -71,12 +72,7 @@ class PrinterImpl implements Printer {
         field = new char[size][size];
         printer.init();
 
-        printer.printAll(new GamePrinter.Filler() {
-            @Override
-            public void set(int x, int y, char ch) {
-                PrinterImpl.this.set(x, y, ch);
-            }
-        });
+        printer.printAll((x, y, ch) -> PrinterImpl.this.set(x, y, ch));
     }
 
     private void set(int x, int y, char ch) {

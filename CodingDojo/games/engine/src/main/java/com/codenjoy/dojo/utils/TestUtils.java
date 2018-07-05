@@ -23,6 +23,13 @@ package com.codenjoy.dojo.utils;
  */
 
 
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.Single;
+
 public class TestUtils {
 
     public static final int COUNT_NUMBERS = 3;
@@ -44,6 +51,14 @@ public class TestUtils {
         }
         result.append(string.substring((string.length() / position) * position, string.length()));
         return result.toString();
+    }
+
+    public static Single buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
+        GameField gameField = gameType.createGame();
+        GamePlayer gamePlayer = gameType.createPlayer(listener, null, null);
+        Single game = new Single(gameField, gamePlayer, factory);
+        game.newGame();
+        return game;
     }
 
 }

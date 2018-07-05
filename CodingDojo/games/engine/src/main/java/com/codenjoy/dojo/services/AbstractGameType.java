@@ -68,4 +68,10 @@ public abstract class AbstractGameType implements GameType {
     public void tick() {
         // do nothing
     }
+
+    @Override
+    public PrinterFactory getPrinterFactory() {
+        return new PrinterFactoryImpl();
+    }
+
 }

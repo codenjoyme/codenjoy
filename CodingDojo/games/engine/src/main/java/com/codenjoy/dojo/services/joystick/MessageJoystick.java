@@ -25,33 +25,5 @@ package com.codenjoy.dojo.services.joystick;
 
 import com.codenjoy.dojo.services.Joystick;
 
-/**
- * Created by indigo on 2016-11-23.
- */
-public abstract class MessageJoystick implements Joystick {
-
-    @Override
-    public void act(int... p) {
-        // do nothing
-    }
-
-    @Override
-    public void down() {
-        // do nothing
-    }
-
-    @Override
-    public void up() {
-        // do nothing
-    }
-
-    @Override
-    public void left() {
-        // do nothing
-    }
-
-    @Override
-    public void right() {
-        // do nothing
-    }
+public interface MessageJoystick extends Joystick, NoActJoystick, NoDirectionJoystick {
 }

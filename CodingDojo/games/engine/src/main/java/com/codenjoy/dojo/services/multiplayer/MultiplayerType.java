@@ -83,4 +83,14 @@ public enum MultiplayerType {
     public boolean isQuadro() {
         return this == QUADRO;
     }
+
+    public boolean isSingleplayer() {
+        return isSingle();
+    }
+
+    public boolean isMultiplayer() {
+        return !isSingle();
+    }
+
+
 }
