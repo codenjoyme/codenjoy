@@ -27,37 +27,27 @@ import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
- */
-public class Player {
+public class Player extends GamePlayer<Hero, Field> {
 
     private static Logger logger = LoggerFactory.getLogger(Player.class);
 
-    private EventListener listener;
     private LevelsPool level;
-    private Field field;
-    private List<QuestionAnswers> history = new LinkedList<>();
+    private List<QuestionAnswers> history;
     Hero hero;
     private Timer timer = new Timer();
 
-    /**
-     * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
-     */
     public Player(EventListener listener, LevelsPool level) {
-        this.listener = listener;
+        super(listener);
+        this.history = new LinkedList<>();
         this.level = level;
-        clearScore();
-    }
-
-    public int getMaxScore() {
-        return 0;
+        level.firstLevel();
     }
 
     public int getLevel() {
@@ -69,40 +59,34 @@ public class Player {
         return "{" + Integer.toHexString(this.hashCode()) + "}";
     }
 
-    /**
-     * Борда может файрить ивенты юзера с помощью этого метода
-     *
-     * @param event тип ивента
-     */
     public void event(Object event) {
         logger.info("Player '{}' on Level '{}:{}' fired event '{}'",
                 this.toString(),
                 level.getLevelIndex(), level.getQuestionIndex(),
                 event);
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
     public void clearScore() {
-        history.clear();
-        level.firstLevel();
+        if (history != null) {
+            history.clear();
+            level.firstLevel();
+        }
     }
 
     public Hero getHero() {
         return hero;
     }
 
-    /**
-     * Когда создается новая игра для пользователя, кто-то должен создать героя
-     *
-     * @param field борда
-     */
     public void newHero(Field field) {
         hero = new Hero();
-        this.field = field;
         hero.init(field);
+    }
+
+    @Override
+    public boolean isAlive() {
+        return hero.isAlive();
     }
 
     public List<String> getQuestions() {

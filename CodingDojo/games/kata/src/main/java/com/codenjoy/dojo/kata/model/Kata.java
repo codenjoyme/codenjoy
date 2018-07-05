@@ -23,31 +23,25 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
- */
-public class Kata implements Tickable, Field {
+public class Kata implements Field {
 
     private List<Player> players;
     private Dice dice;
 
     public Kata(Dice dice) {
         this.dice = dice;
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         for (Player player : players) {
@@ -56,11 +50,17 @@ public class Kata implements Tickable, Field {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
+        List<Hero> result = new ArrayList<>(players.size());
         for (Player player : players) {
             result.add(player.getHero());
         }
         return result;
+    }
+
+    @Override
+    public BoardReader reader() {
+        // do nothing, this is text game
+        return null;
     }
 
     public void newGame(Player player) {

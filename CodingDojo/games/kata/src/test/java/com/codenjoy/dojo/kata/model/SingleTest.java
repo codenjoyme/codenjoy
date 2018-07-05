@@ -24,9 +24,14 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
+import com.codenjoy.dojo.kata.services.GameRunner;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +39,7 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -64,16 +69,22 @@ public class SingleTest {
 
         dice = mock(Dice.class);
         kata = new Kata(dice);
-        PrinterFactory factory = new PrinterFactoryImpl();
+        PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(kata, listener1, factory, Arrays.asList(level));
+        LevelsPoolImpl levelsPool1 = new LevelsPoolImpl(Arrays.asList(level));
+        Player player1 = new Player(listener1, levelsPool1);
+        game1 = new Single(kata, player1, factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(kata, listener2, factory, Arrays.asList(level));
+        LevelsPoolImpl levelsPool2 = new LevelsPoolImpl(Arrays.asList(level));
+        Player player2 = new Player(listener2, levelsPool2);
+        game2 = new Single(kata, player2, factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(kata, listener3, factory, Arrays.asList(level));
+        LevelsPoolImpl levelsPool3 = new LevelsPoolImpl(Arrays.asList(level));
+        Player player3 = new Player(listener3, levelsPool3);
+        game3 = new Single(kata, player3, factory);
 
         dice(1, 4);
         game1.newGame();
@@ -821,4 +832,62 @@ public class SingleTest {
         assertNextAlgorithmEvent(listener1, "NextAlgorithm{complexity=30, time=0}");
     }
 
+    @Test
+    public void bug() {
+        // given
+        game1.getJoystick().message("['answer1']");
+        game2.getJoystick().message("['wrong']");
+        game3.getJoystick().message("['wrong']");
+
+        game1.tick();
+
+        asrtFl1("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+    }
 }

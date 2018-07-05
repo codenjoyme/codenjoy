@@ -23,6 +23,8 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-public interface Field {
+import com.codenjoy.dojo.services.multiplayer.GameField;
+
+public interface Field extends GameField<Player> {
 
 }
