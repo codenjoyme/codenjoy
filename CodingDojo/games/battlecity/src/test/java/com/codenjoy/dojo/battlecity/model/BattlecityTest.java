@@ -56,7 +56,7 @@ public class BattlecityTest {
     }
 
     private void givenGame(Tank tank, Construction... constructions) {
-        game = new Battlecity(size, Arrays.asList(constructions));
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions));
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -65,32 +65,32 @@ public class BattlecityTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Battlecity(size, Arrays.asList(new Construction[0]), borders);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, Arrays.asList(new Construction[0]), aiTanks);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private Player initPlayer(Battlecity game, Tank tank) {
         Player player = mock(Player.class);
-        when(player.getTank()).thenReturn(tank);
+        when(player.getHero()).thenReturn(tank);
         players.add(player);
-        tank.setField(game);
+        tank.init(game);
         game.newGame(player);
         return player;
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, Arrays.asList(new Construction[]{}));
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}));
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
-        this.hero = game.getJoystick();
+        this.hero = tanks[0];
     }
 
     public Tank tank(int x, int y, Direction direction) {
@@ -136,7 +136,7 @@ public class BattlecityTest {
         assertEquals(field, getPrinter().print());
     }
 
-    private Printer getPrinter() {
+    private Printer<String> getPrinter() {
         return printerFactory.getPrinter(
                 game.reader(), players.get(0));
     }
@@ -1970,7 +1970,7 @@ public class BattlecityTest {
     }
 
     private void assertW(String expected) {
-        Printer printer = getPrinter();
+        Printer<String> printer = getPrinter();
         assertEquals(expected, printer.print().replaceAll("[«¿»?•]", " "));
     }
 

@@ -23,18 +23,12 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.battlecity.model.levels.Level;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field {
-    int size();
-
-    List<Border> getBorders();
-
-    List<Tank> getTanks();
-
-    List<Construction> getConstructions();
+public interface Field extends GameField<Player>, Level {
 
     boolean isBarrier(int x, int y);
 
@@ -43,6 +37,4 @@ public interface Field {
     void affect(Bullet bullet);
 
     List<Bullet> getBullets();
-
-    BoardReader reader();
 }

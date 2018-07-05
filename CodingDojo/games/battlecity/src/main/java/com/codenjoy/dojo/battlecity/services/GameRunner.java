@@ -26,12 +26,13 @@ package com.codenjoy.dojo.battlecity.services;
 import com.codenjoy.dojo.battlecity.client.ai.ApofigSolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
-import com.codenjoy.dojo.battlecity.model.Single;
+import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.model.Tank;
-import com.codenjoy.dojo.battlecity.model.levels.Level;
+import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 
@@ -39,20 +40,12 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private Battlecity tanks;
-    private Level level;
+    private LevelImpl level;
 
     public GameRunner() {
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
 
-        level = new Level();
-    }
-
-    private Battlecity newTank() {
-        return new Battlecity(level.size(),
-                level.getConstructions(),
-                level.getBorders(),
-                level.getTanks().toArray(new Tank[0]));
+        level = new LevelImpl(getMap(), getDice());
     }
 
     @Override
@@ -61,13 +54,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || tanks == null) {
-            tanks = newTank();
-        }
-        Game game = new Single(tanks, listener, factory, new RandomDice());
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new Battlecity(level.size(),
+                getDice(),
+                level.getConstructions(),
+                level.getBorders(),
+                level.getTanks().toArray(new Tank[0]));
     }
 
     @Override
@@ -91,8 +83,61 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener, getDice());
+    }
+
+    @Override
     public boolean newAI(String aiName) {
         ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
         return true;
+    }
+
+    /**
+     * @return нормальный Random, но ты можешь переопределить его
+     */
+    protected Dice getDice() {
+        return new RandomDice();
+    }
+
+    /**
+     * @return Карта для игры, но ты так же можешь ее переопределить
+     */
+    public String getMap() {
+        return
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
+                "☼                                ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬☼☼╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬☼☼╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬            ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬            ╬╬╬  ╬╬╬  ☼" +
+                "☼            ╬╬╬  ╬╬╬            ☼" +
+                "☼            ╬╬╬  ╬╬╬            ☼" +
+                "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
+                "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
+                "☼                                ☼" +
+                "☼            ╬╬╬  ╬╬╬            ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬                      ╬╬╬  ☼" +
+                "☼  ╬╬╬                      ╬╬╬  ☼" +
+                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
+                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
+                "☼            ╬╬    ╬╬            ☼" +
+                "☼            ╬╬    ╬╬            ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
     }
 }

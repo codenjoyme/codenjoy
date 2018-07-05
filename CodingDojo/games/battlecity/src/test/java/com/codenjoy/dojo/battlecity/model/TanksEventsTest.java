@@ -24,10 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.services.Events;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -53,12 +50,12 @@ public class TanksEventsTest {
     public void setup() {
         enemy = utils.tank(1, 5, Direction.DOWN);
 
-        game = new Battlecity(7, Arrays.asList(new Construction[0]), enemy);
+        game = new Battlecity(7, mock(Dice.class), Arrays.asList(new Construction[0]), enemy);
 
         events = mock(EventListener.class);
         player = utils.player(1, 1, 2, 2, events);
         game.newGame(player);
-        hero = player.getTank();
+        hero = player.getHero();
     }
 
     @Test
@@ -138,7 +135,7 @@ public class TanksEventsTest {
         EventListener events2 = mock(EventListener.class);
         Player player2 = utils.player(5, 1, events2);
         game.newGame(player2);
-        Tank tank2 = player2.getTank();
+        Tank tank2 = player2.getHero();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
@@ -182,7 +179,7 @@ public class TanksEventsTest {
         EventListener events2 = mock(EventListener.class);
         Player player2 = utils.player(5, 1, events2);
         game.newGame(player2);
-        Tank tank2 = player2.getTank();
+        Tank tank2 = player2.getHero();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
@@ -231,7 +228,7 @@ public class TanksEventsTest {
         EventListener events2 = mock(EventListener.class);
         Player player2 = utils.player(5, 1, events2);
         game.newGame(player2);
-        Tank tank2 = player2.getTank();
+        Tank tank2 = player2.getHero();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
@@ -326,7 +323,7 @@ public class TanksEventsTest {
                 "☼☼☼☼☼☼☼\n");
 
 
-        assertFalse(player.getTank().isAlive());
+        assertFalse(player.getHero().isAlive());
         game.newGame(player);
         game.tick();
 

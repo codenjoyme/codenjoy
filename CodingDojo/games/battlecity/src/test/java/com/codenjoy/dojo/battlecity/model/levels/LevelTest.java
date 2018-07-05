@@ -24,12 +24,14 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 
 import com.codenjoy.dojo.battlecity.model.Player;
+import com.codenjoy.dojo.battlecity.services.GameRunner;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -43,7 +45,7 @@ public class LevelTest {
 
     @Test
     public void test() {
-        Level level = new Level();
+        LevelImpl level = new LevelImpl(new GameRunner().getMap(), mock(Dice.class));
 
         assertEquals(34, level.size());
 

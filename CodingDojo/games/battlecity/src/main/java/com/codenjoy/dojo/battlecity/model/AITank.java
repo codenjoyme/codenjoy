@@ -48,7 +48,7 @@ public class AITank extends Tank {
             y = direction.changeY(getY());
 
             if (field.isBarrier(x, y)) {
-                direction = Direction.random();
+                direction = Direction.random(dice);
             }
         } while (field.isBarrier(x, y) && c++ < 10);
 

@@ -27,36 +27,26 @@ import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public class Player {
+public class Player extends GamePlayer<Tank, Field> {
+
     public static final int TICKS_PER_BULLETS = 4;
 
-    private Tank tank;
-    private EventListener listener;
-    private int maxScore;
-    private int score;
+    private Tank hero;
 
     public Player(EventListener listener, Dice dice) {
-        this.listener = listener;
-        clearScore();
-        tank = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
+        super(listener);
+        hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
     }
 
-    public Tank getTank() {
-        return tank;
+    public Tank getHero() {
+        return hero;
     }
 
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
+    @Override
+    public boolean isAlive() {
+        return hero.isAlive();
     }
 
     public void event(Events event) {
@@ -65,23 +55,17 @@ public class Player {
             case KILL_YOUR_TANK: gameOver(); break;
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
-    private void gameOver() {
-        tank.kill(null);
-        score = 0;
+    @Override
+    public void gameOver() {
+        super.gameOver();
+        hero.kill(null);
     }
 
-    public void clearScore() {   // TODO test me
-        score = 0;
-        maxScore = 0;
-    }
-
-    public void newHero(Battlecity tanks) {
-        tank.removeBullets();
-        tank.setField(tanks);
+    public void newHero(Field tanks) {
+        hero.removeBullets();
+        hero.init(tanks);
     }
 }

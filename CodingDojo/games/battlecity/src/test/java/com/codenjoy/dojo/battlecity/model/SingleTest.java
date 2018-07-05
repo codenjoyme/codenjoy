@@ -26,6 +26,7 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -50,11 +51,11 @@ public class SingleTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     public void givenGame() {
-        game = new Battlecity(size, Arrays.asList(new Construction[0]));
-        tanks1 = new Single(game, null, printerFactory, dice1);
-        tanks2 = new Single(game, null, printerFactory, dice2);
-        player1 = tanks1.getPlayer();
-        player2 = tanks2.getPlayer();
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
+        player1 = new Player(null, dice1);
+        player2 = new Player(null, dice2);
+        tanks1 = new Single(game, player1, printerFactory);
+        tanks2 = new Single(game, player2, printerFactory);
     }
 
     @Test
@@ -100,7 +101,7 @@ public class SingleTest {
                 "☼☼☼☼☼\n", player1
         );
 
-        tanks1.getPlayer().getTank().act();
+        tanks1.getPlayer().getHero().act();
         tick();
 
         assertD("☼☼☼☼☼\n" +
@@ -141,7 +142,7 @@ public class SingleTest {
                 "☼☼☼☼☼\n", player1
         );
 
-        tanks1.getPlayer().getTank().act();
+        tanks1.getPlayer().getHero().act();
         tick();
 
         assertD("☼☼☼☼☼\n" +

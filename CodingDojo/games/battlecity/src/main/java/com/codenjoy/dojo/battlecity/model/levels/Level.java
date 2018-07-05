@@ -4,7 +4,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,141 +23,25 @@ package com.codenjoy.dojo.battlecity.model.levels;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.battlecity.model.Border;
+import com.codenjoy.dojo.battlecity.model.Bullet;
+import com.codenjoy.dojo.battlecity.model.Construction;
+import com.codenjoy.dojo.battlecity.model.Tank;
+import com.codenjoy.dojo.services.BoardReader;
 
-import java.util.LinkedList;
 import java.util.List;
 
-public class Level implements Field {
+/**
+ * Created by indigo on 2018-07-01.
+ */
+public interface Level {
+    int size();
 
-    private final LengthToXY xy;
+    List<Border> getBorders();
 
-    private String map =
-            "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ " +
-            "☼   ¿         ¿         ¿                 ¿         ¿         ¿   ☼ " +
-            "☼                                                                 ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬ ☼ ☼ ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬ ☼ ☼ ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬                         ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬                         ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼                         ╬ ╬ ╬     ╬ ╬ ╬                         ☼ " +
-            "☼                         ╬ ╬ ╬     ╬ ╬ ╬                         ☼ " +
-            "☼           ╬ ╬ ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬ ╬ ╬           ☼ " +
-            "☼ ☼ ☼       ╬ ╬ ╬ ╬ ╬                         ╬ ╬ ╬ ╬ ╬       ☼ ☼ ☼ " +
-            "☼                                                                 ☼ " +
-            "☼                         ╬ ╬ ╬     ╬ ╬ ╬                         ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬                                             ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬                                             ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬               ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬               ╬ ╬ ╬     ☼ " +
-            "☼     ╬ ╬ ╬               ╬ ╬ ╬ ╬ ╬ ╬ ╬ ╬               ╬ ╬ ╬     ☼ " +
-            "☼                         ╬ ╬         ╬ ╬                         ☼ " +
-            "☼                         ╬ ╬         ╬ ╬                         ☼ " +
-            "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ";
+    List<Tank> getTanks();
 
-    public Level() {
-        removeSpaces();
-        xy = new LengthToXY(size());
-    }
+    List<Construction> getConstructions();
 
-    private void removeSpaces() {
-        String result = "";
-        for (int i = 0; i < map.length(); i += 2) {
-            result += map.charAt(i);
-        }
-        map = result;
-    }
-
-    @Override
-    public int size() {
-        return (int) Math.sqrt(map.length());
-    }
-
-    @Override
-    public List<Construction> getConstructions() {
-        List<Construction> result = new LinkedList<Construction>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.CONSTRUCTION.ch) {
-                result.add(new Construction(xy.getXY(index)));
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public boolean isBarrier(int x, int y) {
-        return false; // do nothing
-    }
-
-    @Override
-    public boolean outOfField(int x, int y) {
-        return false;  // do nothing
-    }
-
-    @Override
-    public void affect(Bullet bullet) {
-        // do nothing
-    }
-
-    @Override
-    public List<Bullet> getBullets() {
-        return new LinkedList<Bullet>(); // do nothing
-    }
-
-    @Override
-    public BoardReader reader() {
-        return new BoardReader() {
-            @Override
-            public int size() {
-                return Level.this.size();
-            }
-
-            @Override
-            public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Level.this.getBorders());
-                result.addAll(Level.this.getBullets());
-                result.addAll(Level.this.getConstructions());
-                result.addAll(Level.this.getTanks());
-                return result;
-            }
-        };
-    }
-
-    @Override
-    public List<Tank> getTanks() {
-        List<Tank> result = new LinkedList<Tank>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {
-                Point pt = xy.getXY(index);
-                result.add(new AITank(pt.getX(), pt.getY(), new RandomDice(), Direction.DOWN));
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public List<Border> getBorders() {
-        List<Border> result = new LinkedList<Border>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.BATTLE_WALL.ch) {
-                result.add(new Border(xy.getXY(index)));
-            }
-        }
-        return result;
-    }
+    BoardReader reader();
 }

@@ -23,25 +23,32 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tank extends MovingObject implements Joystick, Tickable, State<Elements, Player> {
+public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
-    private Dice dice;
+    protected Dice dice;
     private List<Bullet> bullets;
-    protected Field field;
     private boolean alive;
     private Gun gun;
 
+    protected Direction direction;
+    protected int speed;
+    protected boolean moving;
+
     public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
-        super(x, y, direction);
-        gun = new Gun(ticksPerBullets);
-        bullets = new LinkedList<Bullet>();
+        super(x, y);
         speed = 1;
         moving = false;
+        this.direction = direction;
+        gun = new Gun(ticksPerBullets);
+        bullets = new LinkedList<Bullet>();
         alive = true;
         this.dice = dice;
     }
@@ -74,7 +81,22 @@ public class Tank extends MovingObject implements Joystick, Tickable, State<Elem
         moving = true;
     }
 
-    @Override
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void move() {
+        for (int i = 0; i < speed; i++) {
+            if (!moving) {
+                return;
+            }
+
+            int newX = direction.changeX(x);
+            int newY = direction.changeY(y);
+            moving(newX, newY);
+        }
+    }
+
     public void moving(int newX, int newY) {
         if (field.isBarrier(newX, newY)) {
             // do nothing
@@ -100,17 +122,13 @@ public class Tank extends MovingObject implements Joystick, Tickable, State<Elem
         }
     }
 
-    @Override
-    public void message(String command) {
-        // do nothing
-    }
-
     public Iterable<Bullet> getBullets() {
         return new LinkedList<Bullet>(bullets);
     }
 
-    public void setField(Field field) {
-        this.field = field;
+    public void init(Field field) {
+        super.init(field);
+
         int xx = x;
         int yy = y;
         while (field.isBarrier(xx, yy)) {
@@ -142,7 +160,7 @@ public class Tank extends MovingObject implements Joystick, Tickable, State<Elem
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (isAlive()) {
-            if (player.getTank() == this) {
+            if (player.getHero() == this) {
                 switch (direction) {
                     case LEFT:  return Elements.TANK_LEFT;
                     case RIGHT: return Elements.TANK_RIGHT;

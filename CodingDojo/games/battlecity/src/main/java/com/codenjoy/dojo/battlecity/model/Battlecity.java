@@ -31,7 +31,7 @@ import com.codenjoy.dojo.services.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Battlecity implements Tickable, ITanks, Field {
+public class Battlecity implements Field {
 
     private Dice dice;
     private LinkedList<Tank> aiTanks;
@@ -43,14 +43,14 @@ public class Battlecity implements Tickable, ITanks, Field {
 
     private List<Player> players = new LinkedList<Player>();
 
-    public Battlecity(int size, List<Construction> constructions, Tank... aiTanks) {
-        this(size, constructions, new DefaultBorders(size).get(), aiTanks);
+    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
+        this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
     }
 
-    public Battlecity(int size, List<Construction> constructions,
+    public Battlecity(int size, Dice dice, List<Construction> constructions,
                       List<Border> borders, Tank... aiTanks) {
-        setDice(new RandomDice()); // TODO вынести это чудо за пределы конструктора
         aiCount = aiTanks.length;
+        this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<Tank>();
         this.constructions = new LinkedList<Construction>(constructions);
@@ -123,22 +123,14 @@ public class Battlecity implements Tickable, ITanks, Field {
             }
         }
         for (Player player : players.toArray(new Player[0])) {
-            if (!player.getTank().isAlive()) {
+            if (!player.getHero().isAlive()) {
                 players.remove(player);
             }
         }
     }
 
-    @Override
-    public Joystick getJoystick() {
-       return players.get(0).getTank();
-    }
-
     void addAI(Tank tank) {
-        if (tank != null) {
-            tank.setField(this);
-        }
-        tank.setField(this);
+        tank.init(this);
         aiTanks.add(tank);
     }
 
@@ -210,7 +202,7 @@ public class Battlecity implements Tickable, ITanks, Field {
 
     private Player getPlayer(Tank tank) {
         for (Player player : players) {
-            if (player.getTank().equals(tank)) {
+            if (player.getHero().equals(tank)) {
                 return player;
             }
         }
@@ -259,7 +251,7 @@ public class Battlecity implements Tickable, ITanks, Field {
         LinkedList<Tank> result = new LinkedList<Tank>(aiTanks);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
-                result.add(player.getTank());
+                result.add(player.getHero());
 //            }
         }
         return result;
