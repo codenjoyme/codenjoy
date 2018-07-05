@@ -25,13 +25,14 @@ package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -78,7 +79,7 @@ public class A2048Test {
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
 
         listener = mock(EventListener.class);
-        game = new Single(a2048, listener, printer);
+        game = new Single(a2048, new Player(listener), printer);
         game.newGame();
         this.joystick = game.getJoystick();
     }

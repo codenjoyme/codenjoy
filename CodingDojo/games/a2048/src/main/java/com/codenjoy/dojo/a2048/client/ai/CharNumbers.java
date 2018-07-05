@@ -72,11 +72,7 @@ public class CharNumbers {
     }
 
     public void move(Direction direction) {
-        numbers.move(convert(direction));
-    }
-
-    private com.codenjoy.dojo.services.Direction convert(Direction direction) {
-        return com.codenjoy.dojo.services.Direction.valueOf(direction.value());
+        numbers.move(direction);
     }
 
     public void addNew() {

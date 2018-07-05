@@ -4,7 +4,7 @@ package com.codenjoy.dojo.a2048.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,40 +22,9 @@ package com.codenjoy.dojo.a2048.model;
  * #L%
  */
 
-import com.codenjoy.dojo.a2048.services.Events;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public class Player extends GamePlayer<Hero, Field> {
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-    Hero hero;
-
-    public Player(EventListener listener) {
-        super(listener);
-    }
-
-    public void event(Events event) {
-        switch (event.getType()) {
-            case GAME_OVER: gameOver(); break;
-            case SUM: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
-    @Override
-    public Hero getHero() {
-        return hero;
-    }
-
-    @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-    }
-
-    @Override
-    public boolean isAlive() {
-        return hero.isAlive();
-    }
+public interface Field extends GameField<Player> {
+    boolean isGameOver();
 }

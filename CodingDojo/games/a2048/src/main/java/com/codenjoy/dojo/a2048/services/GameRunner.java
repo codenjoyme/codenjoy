@@ -27,7 +27,8 @@ import com.codenjoy.dojo.a2048.client.ai.ApofigSolver;
 import com.codenjoy.dojo.a2048.model.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -37,7 +38,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private Level level;
-    private A2048 game;
 
     public GameRunner() {
         level = new LevelImpl();
@@ -49,12 +49,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        game = new A2048(level, new RandomDice());
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new A2048(level, new RandomDice());
     }
 
     @Override
@@ -80,6 +76,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.SINGLE;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
     }
 
     @Override

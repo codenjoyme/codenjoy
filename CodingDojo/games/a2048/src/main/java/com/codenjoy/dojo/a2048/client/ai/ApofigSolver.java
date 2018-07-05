@@ -34,9 +34,6 @@ import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.Arrays;
 
-/**
- * User: your name
- */
 public class ApofigSolver implements Solver<Board> {
 
     private static Step[] path = new Step[102400];

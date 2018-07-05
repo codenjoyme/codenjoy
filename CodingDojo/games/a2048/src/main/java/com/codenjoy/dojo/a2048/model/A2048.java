@@ -23,11 +23,12 @@ package com.codenjoy.dojo.a2048.model;
  */
 
 
-import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.model.generator.Factory;
+import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.services.Events;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -35,21 +36,18 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class A2048 implements Tickable {
+public class A2048 implements Field {
 
     private Generator generator;
     private Numbers numbers;
     private final int size;
     private Dice dice;
-    private Direction direction;
     private Player player;
     private Level level;
-    private boolean clear;
 
     public A2048(Level level, Dice dice) {
         this.level = level;
         this.dice = dice;
-        clear = false;
         size = level.size();
         numbers = new Numbers(level.getNumbers(), level.size(), getBreak(level.getMode()));
         generator = Factory.get(level.getNewAdd(), dice);
@@ -126,13 +124,18 @@ public class A2048 implements Tickable {
         return result;
     }
 
+    @Override
     public void newGame(Player player) {
-        clear = false;
-        direction = null;
         if (this.player != null) {
             numbers.clear();
         }
         this.player = player;
+        player.newHero(this);
+    }
+
+    @Override
+    public void remove(Player player) {
+        // do nothing
     }
 
     @Override
@@ -142,11 +145,11 @@ public class A2048 implements Tickable {
         }
 
         if (numbers.isEmpty()) {
-            direction = Direction.DOWN;
+            hero().down();
         }
 
-        if (direction != null) {
-            numbers.move(direction);
+        if (hero().getDirection() != null) {
+            numbers.move(hero().getDirection());
 
             generateNewNumber();
         }
@@ -160,7 +163,11 @@ public class A2048 implements Tickable {
             player.event(new Events(Events.Event.GAME_OVER));
         }
 
-        direction = null;
+        hero().clearDirection();
+    }
+
+    private Hero hero() {
+        return player.getHero();
     }
 
     private void generateNewNumber() {
@@ -175,37 +182,9 @@ public class A2048 implements Tickable {
         return numbers;
     }
 
-    public Joystick getJoystick() {
-        return new DirectionActJoystick() {
-            @Override
-            public void down() {
-                direction = Direction.DOWN;
-            }
-
-            @Override
-            public void up() {
-                direction = Direction.UP;
-            }
-
-            @Override
-            public void left() {
-                direction = Direction.LEFT;
-            }
-
-            @Override
-            public void right() {
-                direction = Direction.RIGHT;
-            }
-
-            @Override
-            public void act(int... p) {
-                clear = true;
-            }
-        };
-    }
-
+    @Override
     public boolean isGameOver() {
-        if (clear) return true;
+        if (hero().isClear()) return true;
         if (isWin()) return true;
         if (!numbers.isFull()) return false;
         return !numbers.canGo();
@@ -215,6 +194,7 @@ public class A2048 implements Tickable {
         return numbers.contains(Elements._4194304);
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             @Override
