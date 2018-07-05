@@ -22,11 +22,14 @@ package com.codenjoy.dojo.lunolet.model;
  * #L%
  */
 
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.geom.Point2D;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,20 +57,54 @@ public class LevelManager {
 
     private void LoadLevels() {
         levels = new ArrayList<>();
-        for (int i = 0; i < JSON_LEVELS.length; i++) {
-            String json = JSON_LEVELS[i];
-            levels.add(parseLevel(json));
+
+        String levelsFileContent = readResourceFile("levels.json");
+
+        // remove license header
+        String jsonLevels = levelsFileContent.replaceFirst("/\\*[\\d\\D]+\\*/", "");
+
+        JSONArray levelsArray = new JSONArray(jsonLevels);
+        for (int i = 0; i < levelsArray.length(); i++) {
+            JSONObject level = levelsArray.getJSONObject(i);
+            levels.add(parseLevel(level));
         }
     }
 
-    private Level parseLevel(String jsonRepresentation) {
+    private String readResourceFile(String fileName) {
+        InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
+        BufferedInputStream bis = new BufferedInputStream(is);
+        StringBuilder sb = new StringBuilder();
+        int bytesRead = 0;
+        byte[] buffer = new byte[1024];
+        try {
+            while ((bytesRead = bis.read(buffer)) != -1) {
+                sb.append(new String(buffer, 0, bytesRead, "windows-1251"));
+            }
+        }
+        catch(FileNotFoundException e) {
+            System.out.println("File not found" + e);
+        }
+        catch(IOException ioe) {
+            System.out.println("Exception while reading the file " + ioe);
+        }
+        finally {
+            try {
+                if (bis != null)
+                    bis.close();
+            } catch (IOException ioe) {
+                System.out.println("Error while closing the stream : " + ioe);
+            }
+        }
+        return sb.toString();
+    }
+
+    private Level parseLevel(JSONObject jsonLevel) {
         Level result = new Level();
-        JSONObject level = new JSONObject(jsonRepresentation);
-        result.DryMass = level.getDouble("dryMass");
-        result.TargetX = level.getDouble("targetX");
-        JSONArray reliefJson = level.getJSONArray("relief");
+        result.DryMass = jsonLevel.getDouble("dryMass");
+        result.TargetX = jsonLevel.getDouble("targetX");
+        JSONArray reliefJson = jsonLevel.getJSONArray("relief");
         result.Relief = parseRelief(reliefJson);
-        JSONObject vesselJson = level.getJSONObject("vesselStatus");
+        JSONObject vesselJson = jsonLevel.getJSONObject("vesselStatus");
         result.VesselStatus = parseVesselStatus(vesselJson);
         return result;
     }
@@ -94,74 +131,4 @@ public class LevelManager {
         vStatus.State = VesselState.values()[vesselJson.getInt("state")];
         return vStatus;
     }
-
-    private static final String[] JSON_LEVELS =
-            {
-                    "{\n" +
-                    "  \"dryMass\": 250.0,\n" +
-                    "  \"targetX\": 25,\n" +
-                    "  \"relief\": [\n" +
-                    "    { \"x\": -10000, \"y\": 0 },\n" +
-                    "    { \"x\": 10000, \"y\": 0 }\n" +
-                    "  ],\n" +
-                    "  \"vesselStatus\": {\n" +
-                    "    \"x\": 0,\n" +
-                    "    \"y\": 0,\n" +
-                    "    \"time\": 0,\n" +
-                    "    \"hSpeed\": 0,\n" +
-                    "    \"vSpeed\": 0,\n" +
-                    "    \"fuelMass\": 50.0,\n" +
-                    "    \"state\": 0\n" +
-                    "  }\n" +
-                    "}",
-
-                    "{\n" +
-                    "  \"dryMass\": 250.0,\n" +
-                    "  \"targetX\": 100,\n" +
-                    "  \"relief\": [\n" +
-                    "    { \"x\": -10000,\"y\": 0 },\n" +
-                    "    { \"x\": 0,\"y\": 0 },\n" +
-                    "    { \"x\": 5,\"y\": 10 },\n" +
-                    "    { \"x\": 10,\"y\": 30 },\n" +
-                    "    { \"x\": 15,\"y\": 23 },\n" +
-                    "    { \"x\": 20,\"y\": 0 },\n" +
-                    "    { \"x\": 10000,\"y\": 0 }\n" +
-                    "  ],\n" +
-                    "  \"vesselStatus\": {\n" +
-                    "    \"x\": 0,\n" +
-                    "    \"y\": 0,\n" +
-                    "    \"time\": 0,\n" +
-                    "    \"hSpeed\": 0,\n" +
-                    "    \"vSpeed\": 0,\n" +
-                    "    \"fuelMass\": 50.0,\n" +
-                    "    \"state\": 0\n" +
-                    "  }\n" +
-                    "}",
-
-                    "{\n" +
-                    "  \"dryMass\": 250.0,\n" +
-                    "  \"targetX\": 40,\n" +
-                    "  \"relief\": [\n" +
-                    "    { \"x\": -10000,\"y\": 0 },\n" +
-                    "    { \"x\": 0,\"y\": 0 },\n" +
-                    "    { \"x\": 5,\"y\": 0 },\n" +
-                    "    { \"x\": 10,\"y\": 30 },\n" +
-                    "    { \"x\": 15,\"y\": 7 },\n" +
-                    "    { \"x\": 20,\"y\": 12 },\n" +
-                    "    { \"x\": 25,\"y\": 17 },\n" +
-                    "    { \"x\": 30,\"y\": 3 },\n" +
-                    "    { \"x\": 35,\"y\": 0 },\n" +
-                    "    { \"x\": 10000,\"y\": 0 }\n" +
-                    "  ],\n" +
-                    "  \"vesselStatus\": {\n" +
-                    "    \"x\": 0,\n" +
-                    "    \"y\": 0,\n" +
-                    "    \"time\": 0,\n" +
-                    "    \"hSpeed\": 0,\n" +
-                    "    \"vSpeed\": 0,\n" +
-                    "    \"fuelMass\": 50.0,\n" +
-                    "    \"state\": 0\n" +
-                    "  }\n" +
-                    "}"
-            };
 }
