@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.puzzlebox.model;
+package com.codenjoy.dojo.services.joystick;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,22 +23,11 @@ package com.codenjoy.dojo.puzzlebox.model;
  */
 
 
-/**
- * Артефакт Золото на поле
- */
-//public class Gold extends PointImpl implements State<Elements, Player> {
+import com.codenjoy.dojo.services.Joystick;
 
-    // TODO
-//    public Gold(int x, int y) {
-//        super(x, y);
-//    }
-//
-//    public Gold(Point point) {
-//        super(point);
-//    }
-//
-//    @Override
-//    public Elements state(Player player, Object... alsoAtPoint) {
-//        return Elements.GOLD;
-//    }
-//}
+public interface NoActJoystick extends Joystick {
+    @Override
+    default void act(int... p) {
+        // do nothing
+    }
+}
