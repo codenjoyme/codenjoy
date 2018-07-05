@@ -30,6 +30,8 @@ import com.codenjoy.dojo.lunolet.model.VesselState;
 import com.codenjoy.dojo.services.Direction;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DumbSolver implements Solver<Board> {
 
@@ -38,11 +40,19 @@ public class DumbSolver implements Solver<Board> {
         Point2D.Double point = board.getPoint();
         Point2D.Double target = board.getTarget();
 
+        List<Point2D.Double> futherHills = new ArrayList<>();
+        for (Point2D.Double p:board.getRelief()) {
+            if(p.x > point.x)
+                futherHills.add(p);
+        }
+        futherHills.sort((o1, o2) -> (int)(o2.y - o1.y));
+        Point2D.Double maxHill = futherHills.get(0);
+
         if (board.getState() == VesselState.START) { // take-off
             return "message('go 0, 0.8, 3')";
         }
 
-        if (point.getY() < 8.0 || board.getVSpeed() < -1.5) {
+        if (point.getY() < maxHill.y || board.getVSpeed() < -1.5) {
             return Direction.UP.toString();
         }
         if (point.getX() < target.getX() && board.getHSpeed() < 3.0) {

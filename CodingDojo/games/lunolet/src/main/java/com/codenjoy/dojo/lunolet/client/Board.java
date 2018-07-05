@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Board implements ClientBoard {
     protected JSONObject source;
@@ -84,6 +85,8 @@ public class Board implements ClientBoard {
     public VesselState getState() {
         return VesselState.valueOf(State);
     }
+
+    public List<Point2D.Double> getRelief(){ return Relief; }
 
     private static Point2D.Double getPoint(JSONObject source, String key) {
         JSONObject obj = source.getJSONObject(key);
