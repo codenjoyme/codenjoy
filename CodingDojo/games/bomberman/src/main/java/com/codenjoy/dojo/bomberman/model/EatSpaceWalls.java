@@ -28,11 +28,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 21.04.13
- * Time: 0:17
- */
 public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO протестить класс
 
     private static final boolean WITH_MEAT_CHOPPERS = true;
@@ -95,7 +90,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         }
 
         if (c == maxc) {
-            throw new  RuntimeException("Dead loop at MeatChoppers.generate!");
+            throw new  RuntimeException("Dead loop at EatSpaceWalls.generate!");
         }
     }
 }

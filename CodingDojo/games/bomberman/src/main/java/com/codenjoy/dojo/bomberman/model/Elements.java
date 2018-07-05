@@ -25,11 +25,6 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.CharElements;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 08:04 PM
- */
 public enum Elements implements CharElements {
     /// This is your Bomberman
     BOMBERMAN('☺'),             // this is what he usually looks like

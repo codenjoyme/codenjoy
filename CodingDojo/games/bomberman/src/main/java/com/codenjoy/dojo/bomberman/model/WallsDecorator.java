@@ -28,11 +28,6 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/23/13
- * Time: 12:44 AM
- */
 public class WallsDecorator implements Walls, Tickable {
     protected Walls walls;
 

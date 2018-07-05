@@ -24,15 +24,11 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 9:38
- */
 public class OptionGameSettings implements GameSettings {
 
     private final Parameter<Integer> bombPower;
@@ -40,13 +36,15 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> destroyWallCount;
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> meatChoppersCount;
+    private Dice dice;
 
-    public OptionGameSettings(Settings settings) {
+    public OptionGameSettings(Settings settings, Dice dice) {
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
         destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue()*boardSize.getValue()/10);
         meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+        this.dice = dice;
     }
 
     @Override
@@ -67,15 +65,15 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Walls getWalls(Bomberman board) {
         OriginalWalls originalWalls = new OriginalWalls(boardSize);
-        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, meatChoppersCount, new RandomDice());
+        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, meatChoppersCount, dice);
 
-        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, destroyWallCount, new RandomDice());
+        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, destroyWallCount, dice);
         return eatWalls;
     }
 
     @Override
     public Hero getBomberman(Level level) {
-        return new HeroImpl(level, new RandomDice());
+        return new Hero(level, dice);
     }
 
     @Override

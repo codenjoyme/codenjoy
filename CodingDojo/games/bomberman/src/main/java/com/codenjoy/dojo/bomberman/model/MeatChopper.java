@@ -29,11 +29,6 @@ import com.codenjoy.dojo.services.State;
 import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_MEAT_CHOPPER;
 import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 8:22 PM
- */
 public class MeatChopper extends Wall implements State<Elements, Player> {
 
     private Direction direction;

@@ -27,11 +27,6 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 7:20 PM
- */
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> killWallScore;

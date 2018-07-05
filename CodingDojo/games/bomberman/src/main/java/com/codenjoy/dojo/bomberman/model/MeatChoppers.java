@@ -30,11 +30,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 8:17 PM
- */
 public class MeatChoppers extends WallsDecorator implements Walls {
 
     private static final boolean WITH_MEATCHOPPERS = true;

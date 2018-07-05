@@ -27,11 +27,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 1:37 PM
- */
 public class Bomb extends PointImpl implements Tickable, State<Elements, Player> {
     protected int timer = 5;
     protected int power;

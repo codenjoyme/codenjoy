@@ -27,20 +27,14 @@ import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 9:11 AM
- */
-public class Bomberman implements Tickable, Field {
+public class Bomberman implements Field {
 
-    private List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<>();
 
     private Walls walls;
     private Parameter<Integer> size;
@@ -52,10 +46,10 @@ public class Bomberman implements Tickable, Field {
 
     public Bomberman(GameSettings settings) {
         this.settings = settings;
-        bombs = new LinkedList<Bomb>();
-        blasts = new LinkedList<Blast>();
-        destroyedWalls = new LinkedList<PointImpl>();
-        destroyedBombs = new LinkedList<Bomb>();
+        bombs = new LinkedList<>();
+        blasts = new LinkedList<>();
+        destroyedWalls = new LinkedList<>();
+        destroyedBombs = new LinkedList<>();
         size = settings.getBoardSize();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
     }
@@ -81,7 +75,7 @@ public class Bomberman implements Tickable, Field {
 
     private void tactAllBombermans() {
         for (Player player : players) {
-            player.getBomberman().apply();
+            player.getHero().apply();
         }
     }
 
@@ -95,7 +89,7 @@ public class Bomberman implements Tickable, Field {
 
     private void wallDestroyed(Wall wall, Blast blast) {
         for (Player player : players) {
-            if (blast.itsMine(player.getBomberman())) {
+            if (blast.itsMine(player.getHero())) {
                 if (wall instanceof MeatChopper) {
                     player.event(Events.KILL_MEAT_CHOPPER);
                 } else if (wall instanceof DestroyWall) {
@@ -108,7 +102,7 @@ public class Bomberman implements Tickable, Field {
     private void meatChopperEatBombermans() {
         for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
             for (Player player : players) {
-                Hero bomberman = player.getBomberman();
+                Hero bomberman = player.getHero();
                 if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
                     player.event(Events.KILL_BOMBERMAN);
                 }
@@ -137,8 +131,8 @@ public class Bomberman implements Tickable, Field {
     }
 
     @Override
-    public List<Bomb> getBombs(HeroImpl bomberman) {
-        List<Bomb> result = new LinkedList<Bomb>();
+    public List<Bomb> getBombs(Hero bomberman) {
+        List<Bomb> result = new LinkedList<>();
         for (Bomb bomb : bombs) {
             if (bomb.itsMine(bomberman)) {
                 result.add(bomb);
@@ -165,7 +159,7 @@ public class Bomberman implements Tickable, Field {
     }
 
     private List<Blast> makeBlast(Bomb bomb) {
-        List barriers = (List) walls.subList(Wall.class);
+        List barriers = walls.subList(Wall.class);
         barriers.addAll(getBombermans());
 
         return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
@@ -182,11 +176,11 @@ public class Bomberman implements Tickable, Field {
         }
         for (Blast blast: blasts) {
             for (Player dead : players) {
-                if (dead.getBomberman().itsMe(blast)) {
+                if (dead.getHero().itsMe(blast)) {
                     dead.event(Events.KILL_BOMBERMAN);
 
                     for (Player bombOwner : players) {
-                        if (dead != bombOwner && blast.itsMine(bombOwner.getBomberman())) {
+                        if (dead != bombOwner && blast.itsMine(bombOwner.getHero())) {
                             bombOwner.event(Events.KILL_OTHER_BOMBERMAN);
                         }
                     }
@@ -236,7 +230,7 @@ public class Bomberman implements Tickable, Field {
     public List<Hero> getBombermans() {
         List<Hero> result = new LinkedList<Hero>();
         for (Player player : players) {
-            result.add(player.getBomberman());
+            result.add(player.getHero());
         }
         return result;
     }

@@ -28,11 +28,6 @@ import com.codenjoy.dojo.services.State;
 import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYED_WALL;
 import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYABLE_WALL;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 8:22 PM
- */
 public class DestroyWall extends Wall implements State<Elements, Player> {
     public DestroyWall(int x, int y) {
         super(x, y);

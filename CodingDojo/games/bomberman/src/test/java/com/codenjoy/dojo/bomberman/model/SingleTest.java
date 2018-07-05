@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -70,9 +71,9 @@ public class SingleTest {
         bombermanDice = mock(Dice.class);
 
         dice(bombermanDice,  0, 0);
-        bomberman1 = new HeroImpl(level, bombermanDice);
+        bomberman1 = new Hero(level, bombermanDice);
         dice(bombermanDice,  0, 0);
-        bomberman2 = new HeroImpl(level, bombermanDice);
+        bomberman2 = new Hero(level, bombermanDice);
         when(settings.getBomberman(any(Level.class))).thenReturn(bomberman1, bomberman2);
 
         when(settings.getLevel()).thenReturn(level);
@@ -84,8 +85,8 @@ public class SingleTest {
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        game1 = new Single(board, listener1, printerFactory);
-        game2 = new Single(board, listener2, printerFactory);
+        game1 = new Single(board, new Player(listener1), printerFactory);
+        game2 = new Single(board, new Player(listener2), printerFactory);
 
         game1.newGame();
         game2.newGame();
@@ -389,7 +390,7 @@ public class SingleTest {
     @Test
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllBomberman();
-        when(settings.getBomberman(any(Level.class))).thenReturn(new HeroImpl(level, bombermanDice), new HeroImpl(level, bombermanDice));
+        when(settings.getBomberman(any(Level.class))).thenReturn(new Hero(level, bombermanDice), new Hero(level, bombermanDice));
 
         game1.newGame();
         game2.newGame();

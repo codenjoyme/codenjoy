@@ -23,21 +23,18 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.GameField;
+
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 16.04.13
- * Time: 22:05
- */
-public interface Field {  // TODO применить тут ISP (все ли методы должны быть паблик?)
+public interface Field extends GameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
     int size();
 
     List<Hero> getBombermans();
 
     List<Bomb> getBombs();
 
-    List<Bomb> getBombs(HeroImpl bomberman);
+    List<Bomb> getBombs(Hero bomberman);
 
     Walls getWalls();
 
@@ -50,4 +47,6 @@ public interface Field {  // TODO применить тут ISP (все ли м�
     void drop(Bomb bomb);
 
     void removeBomb(Bomb bomb);
+
+    GameSettings getSettings();
 }

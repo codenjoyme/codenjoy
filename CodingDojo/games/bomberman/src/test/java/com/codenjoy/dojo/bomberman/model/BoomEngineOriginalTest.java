@@ -374,7 +374,7 @@ public class BoomEngineOriginalTest {
     }
 
     public String print(final List<Blast> blast, final List<? extends Wall> barriers, final PointImpl source) {
-        return printerFactory.getPrinter(new BoardReader() {
+        return (String)printerFactory.getPrinter(new BoardReader() {
             @Override
             public int size() {
                 return SIZE;

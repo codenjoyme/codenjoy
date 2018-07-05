@@ -28,11 +28,6 @@ import com.codenjoy.dojo.services.State;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.BOOM;
 
-/**
- * User: sanja
- * Date: 20.04.13
- * Time: 15:46
- */
 public class Blast extends PointImpl implements State<Elements, Player> {
 
     private Hero bomberman;

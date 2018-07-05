@@ -25,34 +25,25 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public class Player {
-    private Hero bomberman;
-    private EventListener listener;
-    private int maxScore;
-    private int score;
+public class Player extends GamePlayer<Hero, Field> {
+
+    private Hero hero;
     private GameSettings settings;
 
     public Player(EventListener listener) {
-        this.listener = listener;
-        clearScore();
+        super(listener);
     }
 
-    public Hero getBomberman() {
-        return bomberman;
+    @Override
+    public Hero getHero() {
+        return hero;
     }
 
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
+    @Override
+    public boolean isAlive() {
+        return hero.isAlive();
     }
 
     public void event(Events event) {
@@ -62,25 +53,20 @@ public class Player {
             case KILL_BOMBERMAN: gameOver(); break;
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
-    private void gameOver() {
-        bomberman.kill();
-        score = 0;
+    @Override
+    public void gameOver() {
+        super.gameOver();
+        hero.kill();
     }
 
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
-    }
 
-    public void newHero(Bomberman board) {
+    public void newHero(Field board) {
         score = 0;
         settings = board.getSettings();
-        bomberman = settings.getBomberman(settings.getLevel());
-        bomberman.init(board);
+        hero = settings.getBomberman(settings.getLevel());
+        hero.init(board);
     }
 }

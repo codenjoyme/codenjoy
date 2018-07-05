@@ -24,34 +24,22 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.client.ai.ApofigSolver;
-import com.codenjoy.dojo.bomberman.model.Bomberman;
-import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.bomberman.model.GameSettings;
-import com.codenjoy.dojo.bomberman.model.Single;
+import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 7:18 PM
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     public static final String GAME_NAME = "bomberman";
     private GameSettings gameSettings;
-    private Bomberman board;
 
     public GameRunner() {
-        gameSettings = new OptionGameSettings(settings);
+        gameSettings = getGameSettings();
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
-    }
-
-    private Bomberman newGame() {
-        return new Bomberman(gameSettings);
     }
 
     @Override
@@ -60,13 +48,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (board == null) {
-            board = newGame();
-        }
-        Game game = new Single(board, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new Bomberman(gameSettings);
     }
 
     @Override
@@ -90,8 +73,21 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
         ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
         return true;
+    }
+
+    protected Dice getDice() {
+        return new RandomDice();
+    }
+
+    protected GameSettings getGameSettings() {
+        return new OptionGameSettings(settings, getDice());
     }
 }

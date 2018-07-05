@@ -27,11 +27,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/10/12
- * Time: 8:29 PM
- */
 public class OriginalWalls extends WallsImpl implements Iterable<Wall> {
     private int currentSize;
     private Parameter<Integer> size;

@@ -27,11 +27,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 6:04 PM
- */
 public class WallsImpl implements Walls {
     private List<Wall> walls;
 

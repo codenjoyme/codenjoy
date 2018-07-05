@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -83,7 +84,7 @@ public class BombermanTest {
 
     private void initBomberman() {
         dice(bombermanDice, 0, 0);
-        HeroImpl bomberman = new HeroImpl(level, bombermanDice);
+        Hero bomberman = new Hero(level, bombermanDice);
         when(settings.getBomberman(level)).thenReturn(bomberman);
         this.hero = bomberman;
     }
@@ -91,11 +92,11 @@ public class BombermanTest {
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
         bomberman = new Bomberman(settings);
-        game = new Single(bomberman, listener, printer);
+        player = new Player(listener);
+        game = new Single(bomberman, player, printer);
         dice(bombermanDice, 0, 0);
         game.newGame();
         hero = game.getJoystick();
-        player = game.getPlayer();
     }
 
     @Test
@@ -191,8 +192,8 @@ public class BombermanTest {
     }
 
     private void assertBombermanAt(int x, int y) {
-        assertEquals(x, player.getBomberman().getX());
-        assertEquals(y, player.getBomberman().getY());
+        assertEquals(x, player.getHero().getX());
+        assertEquals(y, player.getHero().getY());
     }
 
     @Test

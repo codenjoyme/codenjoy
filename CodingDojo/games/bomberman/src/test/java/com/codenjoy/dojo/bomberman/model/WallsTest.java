@@ -78,7 +78,7 @@ public class WallsTest {
     }
 
     private String print(final Walls walls) {
-        return printerFactory.getPrinter(new BoardReader() {
+        return (String)printerFactory.getPrinter(new BoardReader() {
             @Override
             public int size() {
                 return SIZE;

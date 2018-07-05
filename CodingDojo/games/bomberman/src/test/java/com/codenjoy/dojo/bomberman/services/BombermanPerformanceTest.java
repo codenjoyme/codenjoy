@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -53,9 +54,9 @@ public class BombermanPerformanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
+        List<Game> games = new LinkedList<>();
         for (int i = 0; i < players; i++) {
-            games.add(bomberman.newGame(mock(EventListener.class), factory, null, null));
+            games.add(TestUtils.buildGame(bomberman, mock(EventListener.class), factory));
         }
 
         p.done("creation");

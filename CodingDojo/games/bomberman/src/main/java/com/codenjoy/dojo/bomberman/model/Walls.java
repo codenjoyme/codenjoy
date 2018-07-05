@@ -27,11 +27,6 @@ import com.codenjoy.dojo.services.Tickable;
 
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 8:28 PM
- */
 public interface Walls extends Iterable<Wall>, Tickable {
     void add(int x, int y);
 

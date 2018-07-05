@@ -28,11 +28,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 11:59 PM
- */
 public class BoomEngineOriginal implements BoomEngine {
 
     private Hero bomberman;
