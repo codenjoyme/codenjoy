@@ -23,39 +23,47 @@ package com.codenjoy.dojo.client;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 
+import java.util.function.Consumer;
+
 public class LocalGameRunner { // TODO test me
 
-    public static int TIMEOUT = 1000;
+    public static int timeout = 1000;
+    public static Consumer<String> out = System.out::println;
+    public static Integer countIterations = null;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
         GameField field = gameType.createGame();
         GamePlayer gamePlayer = gameType.createPlayer(
-                event -> System.out.println("Fire Event: " + event.toString()),
+                event -> out.accept("Fire Event: " + event.toString()),
                 null, null);
         PrinterFactory printerFactory = gameType.getPrinterFactory();
 
         Game game = new Single(field, gamePlayer, printerFactory);
         game.newGame();
 
-        while (true) {
+        Integer count = countIterations;
+        while (count == null || (count != null && count-- > 0)) {
             Object data = game.getBoardAsString();
-            board.forString(data.toString()); 
+            board.forString(data.toString());
 
-            System.out.println(board.toString());
+            out.accept(board.toString());
 
             String answer = solver.get(board);
 
-            System.out.println("Answer: " + answer);
+            out.accept("Answer: " + answer);
 
             new PlayerCommand(game.getJoystick(), answer).execute();
 
             try {
-                Thread.sleep(TIMEOUT);
+                Thread.sleep(timeout);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -64,7 +72,7 @@ public class LocalGameRunner { // TODO test me
             if (game.isGameOver()) {
                 game.newGame();
             }
-            System.out.println("------------------------------------------------------------------------------------");
+            out.accept("------------------------------------------------------------------------------------");
         }
     }
 
