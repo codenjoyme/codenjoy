@@ -62,10 +62,12 @@ public class LocalGameRunner { // TODO test me
 
             new PlayerCommand(game.getJoystick(), answer).execute();
 
-            try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (timeout > 0) {
+                try {
+                    Thread.sleep(timeout);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             game.tick();
