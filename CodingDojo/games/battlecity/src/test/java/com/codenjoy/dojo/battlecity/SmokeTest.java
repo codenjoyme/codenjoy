@@ -1,7 +1,8 @@
-package com.codenjoy.dojo.battlecity.services;
+package com.codenjoy.dojo.battlecity;
 
 import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.client.ai.ApofigSolver;
+import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;

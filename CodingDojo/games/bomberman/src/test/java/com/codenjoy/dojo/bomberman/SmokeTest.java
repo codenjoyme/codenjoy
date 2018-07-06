@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.services;
+package com.codenjoy.dojo.bomberman;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.client.ai.ApofigSolver;

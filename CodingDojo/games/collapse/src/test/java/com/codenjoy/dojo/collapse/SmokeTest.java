@@ -1,8 +1,9 @@
-package com.codenjoy.dojo.collapse.services;
+package com.codenjoy.dojo.collapse;
 
 import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.collapse.client.ai.ApofigSolver;
 import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.collapse.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.multiplayer.GameField;

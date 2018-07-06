@@ -1,7 +1,8 @@
-package com.codenjoy.dojo.a2048.services;
+package com.codenjoy.dojo.a2048;
 
 import com.codenjoy.dojo.a2048.client.Board;
 import com.codenjoy.dojo.a2048.client.ai.ApofigSolver;
+import com.codenjoy.dojo.a2048.services.GameRunner;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import org.junit.Test;
 
