@@ -57,7 +57,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame() {
-        return new Chess(level, new RandomDice());
+        return new Chess(level, getDice());
     }
 
     @Override

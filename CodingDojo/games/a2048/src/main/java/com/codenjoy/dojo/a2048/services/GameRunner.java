@@ -50,7 +50,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame() {
-        return new A2048(level, new RandomDice());
+        return new A2048(level, getDice());
     }
 
     @Override
@@ -85,7 +85,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

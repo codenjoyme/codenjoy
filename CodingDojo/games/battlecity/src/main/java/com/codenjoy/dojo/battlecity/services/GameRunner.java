@@ -89,15 +89,8 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
-    }
-
-    /**
-     * @return нормальный Random, но ты можешь переопределить его
-     */
-    protected Dice getDice() {
-        return new RandomDice();
     }
 
     /**
