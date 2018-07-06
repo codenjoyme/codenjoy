@@ -24,38 +24,22 @@ package com.codenjoy.dojo.chess.model;
 
 
 import com.codenjoy.dojo.chess.model.figures.Figure;
+import com.codenjoy.dojo.chess.model.figures.Korol;
 import com.codenjoy.dojo.chess.services.Events;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.joystick.ActJoystick;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player extends ActJoystick implements Joystick {
+public class Player extends GamePlayer<Korol, Field>{
 
-    private EventListener listener;
-    private int maxScore;
-    private int score;
     List<Figure> figures = new LinkedList<Figure>();
+
     private boolean isWhite;
 
     public Player(EventListener listener) {
-        this.listener = listener;
-        clearScore();
-    }
-
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
+        super(listener);
     }
 
     public void event(Events event) {
@@ -63,18 +47,7 @@ public class Player extends ActJoystick implements Joystick {
             case WIN: increaseScore(); break;
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
-    }
-
-    private void gameOver() {
-        score = 0;
-    }
-
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
+        super.event(event);
     }
 
     public void initFigures(Field field) {
@@ -93,12 +66,18 @@ public class Player extends ActJoystick implements Joystick {
         return figures;
     }
 
-    public boolean isAlive() {
-        return true; // TODO
+    @Override
+    public Korol getHero() {
+        return null; // TODO implement me
     }
 
     @Override
-    public void act(int... p) {
-        // TODO
+    public void newHero(Field field) {
+        // TODO implement me
     }
+
+    public boolean isAlive() {
+        return true; // TODO implement me
+    }
+
 }

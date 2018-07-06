@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Chess implements Tickable, Field {
+public class Chess implements Field {
 
     private List<Figure> white;
     private List<Figure> black;
@@ -65,6 +65,7 @@ public class Chess implements Tickable, Field {
         return size;
     }
 
+    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
@@ -72,6 +73,7 @@ public class Chess implements Tickable, Field {
         player.initFigures(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }
@@ -80,6 +82,7 @@ public class Chess implements Tickable, Field {
         return white;
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = Chess.this.size;

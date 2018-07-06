@@ -119,7 +119,7 @@ public class ChessTest {
                 "PPPPPPPP" +
                 "TKSFASKT");
 
-        player1.act();
+        player1.getHero().act();
         game.tick();
 
         assertE("tksfaskt" +

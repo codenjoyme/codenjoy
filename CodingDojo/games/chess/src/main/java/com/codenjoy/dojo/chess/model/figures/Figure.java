@@ -26,13 +26,11 @@ package com.codenjoy.dojo.chess.model.figures;
 import com.codenjoy.dojo.chess.model.Field;
 import com.codenjoy.dojo.chess.model.Player;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Figure extends PointImpl implements Tickable {
+public class Figure extends PlayerHero<Field> {
 
     private boolean isWhite;
-    private Field field;
     private boolean alive;
     private Player player;
 
@@ -41,11 +39,6 @@ public class Figure extends PointImpl implements Tickable {
         this.isWhite = isWhite;
         alive = true;
     }
-
-    public void init(Field field) {
-        this.field = field;
-    }
-
 
     @Override
     public void tick() {
@@ -69,4 +62,30 @@ public class Figure extends PointImpl implements Tickable {
     public boolean isWhite() {
         return isWhite;
     }
+
+    @Override
+    public void down() {
+        // do nothing
+    }
+
+    @Override
+    public void up() {
+        // do nothing
+    }
+
+    @Override
+    public void left() {
+        // do nothing
+    }
+
+    @Override
+    public void right() {
+        // do nothing
+    }
+
+    @Override
+    public void act(int... p) {
+        // do nothing
+    }
+
 }

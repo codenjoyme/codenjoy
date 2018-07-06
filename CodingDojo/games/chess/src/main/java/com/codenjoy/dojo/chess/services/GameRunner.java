@@ -23,13 +23,11 @@ package com.codenjoy.dojo.chess.services;
  */
 
 
-import com.codenjoy.dojo.chess.model.Chess;
-import com.codenjoy.dojo.chess.model.Elements;
-import com.codenjoy.dojo.chess.model.LevelImpl;
-import com.codenjoy.dojo.chess.model.Single;
+import com.codenjoy.dojo.chess.model.*;
 import com.codenjoy.dojo.chess.model.figures.Level;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 
@@ -38,7 +36,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
-    private Chess game;
 
     public GameRunner() {
         new Scores(0, settings);
@@ -53,24 +50,14 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "TKSFASKT");
     }
 
-    private Chess newGame() {
-        return new Chess(level, new RandomDice());
-    }
-
     @Override
     public PlayerScores getPlayerScores(Object score) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new Chess(level, new RandomDice());
     }
 
     @Override
@@ -91,6 +78,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.TOURNAMENT;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
     }
 
 }
