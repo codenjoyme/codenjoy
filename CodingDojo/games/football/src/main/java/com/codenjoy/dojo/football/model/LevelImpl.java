@@ -32,10 +32,8 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -52,7 +50,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<Hero>();
+        List<Hero> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.HERO)) {
             result.add(new Hero(pt));
@@ -83,7 +81,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
+        List<Wall> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.WALL)) {
             result.add(new Wall(pt));
@@ -93,7 +91,7 @@ public class LevelImpl implements Level {
     }
 
     private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));
@@ -103,10 +101,10 @@ public class LevelImpl implements Level {
     }
     
     private List<Point> getPointsOf(Elements... elements) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             for (Elements element : elements) {
-            	if (map.charAt(index) == element.ch) {
+                if (map.charAt(index) == element.ch) {
                     result.add(xy.getXY(index));
                     break;
                 }
@@ -115,51 +113,43 @@ public class LevelImpl implements Level {
         return result;
     }
 
-	@Override
-	public List<Ball> getBalls() {
-		List<Ball> result = new LinkedList<Ball>();
+    @Override
+    public List<Ball> getBalls() {
+        List<Ball> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.BALL, 
-        							Elements.STOPPED_BALL, 
-									Elements.HERO_W_BALL, 
-        							Elements.TEAM_MEMBER_W_BALL,
-        							Elements.ENEMY_W_BALL, 
-        							Elements.HITED_GOAL,
-        							Elements.HITED_MY_GOAL
-        							)) {
+                                    Elements.STOPPED_BALL, 
+                                    Elements.HERO_W_BALL, 
+                                    Elements.TEAM_MEMBER_W_BALL,
+                                    Elements.ENEMY_W_BALL, 
+                                    Elements.HITED_GOAL,
+                                    Elements.HITED_MY_GOAL
+                                    )) {
             result.add(new Ball(pt));
         }
         
         return result;
-	}
+    }
 
-	@Override
-	public List<Goal> getTopGoals() {
-		List<Goal> result = new LinkedList<Goal>();
+    @Override
+    public List<Goal> getTopGoals() {
+        List<Goal> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.TOP_GOAL)) {
             result.add(new Goal(pt, Elements.TOP_GOAL));
         }
-        
-        //for (Point pt : getPointsOf(Elements.HITED_GOAL)) {
-        //    result.add(new Goal(pt, Elements.HITED_GOAL));
-        //}
 
         return result;
-	}
+    }
 
-	@Override
-	public List<Goal> getBottomGoals() {
-		List<Goal> result = new LinkedList<Goal>();
+    @Override
+    public List<Goal> getBottomGoals() {
+        List<Goal> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.BOTTOM_GOAL)) {
             result.add(new Goal(pt, Elements.BOTTOM_GOAL));
         }
-        
-        //for (Point pt : getPointsOf(Elements.HITED_GOAL)) {
-        //    result.add(new Goal(pt, Elements.HITED_GOAL));
-        //}
 
         return result;
-	}
+    }
 }

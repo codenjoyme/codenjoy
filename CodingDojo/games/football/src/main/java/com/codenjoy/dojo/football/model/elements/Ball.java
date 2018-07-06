@@ -36,14 +36,14 @@ import com.codenjoy.dojo.services.Tickable;
  */
 public class Ball extends PointImpl implements State<Elements, Player>, Tickable {
 
-	private static final int DEFAULT_IMPULSE = 3; //после удара игрока мяч летит сам 3 такта
-	private static final int MAX_POWER = 3; 	  //после удара игрока мяч летит сразу на 3 клетки
-	private Direction direction;
+    private static final int DEFAULT_IMPULSE = 3; //после удара игрока мяч летит сам 3 такта
+    private static final int MAX_POWER = 3;       //после удара игрока мяч летит сразу на 3 клетки
+    private Direction direction;
     private Field field;
     private int impulse;
     private int power;
-	
-	public Ball(int x, int y) {
+    
+    public Ball(int x, int y) {
         super(x, y);
     }
 
@@ -57,26 +57,26 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-    	if(isBallMoving()) {
-    		return Elements.BALL;
-    	} else {
-    		return Elements.STOPPED_BALL;
+        if(isBallMoving()) {
+            return Elements.BALL;
+        } else {
+            return Elements.STOPPED_BALL;
         }
     }
 
-	@Override
-	public void tick() {
-		
-		if ( !isBallMoving() ){
-			direction = null;
-		}
-		if (direction != null) {
-			int newX = x;
-			int newY = y;
-			for(int i=1; i<=power; i++) {
-				newX = direction.changeX(newX);
-				newY = direction.changeY(newY);
-			}
+    @Override
+    public void tick() {
+        
+        if ( !isBallMoving() ){
+            direction = null;
+        }
+        if (direction != null) {
+            int newX = x;
+            int newY = y;
+            for(int i=1; i<=power; i++) {
+                newX = direction.changeX(newX);
+                newY = direction.changeY(newY);
+            }
 
            if (!field.isWall(newX, newY)) {
                 move(newX, newY);
@@ -86,14 +86,14 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
            power = 1;
             
         }
-		impulse--;
-	}
-	
-	public boolean isBallMoving() {
+        impulse--;
+    }
+    
+    public boolean isBallMoving() {
         return impulse > 0;
     }
 
-	public void down(int power) {
+    public void down(int power) {
 
         direction = Direction.DOWN;
         setImpulse(DEFAULT_IMPULSE);
@@ -115,28 +115,27 @@ public class Ball extends PointImpl implements State<Elements, Player>, Tickable
     }
 
     public void right(int power) {
-
         direction = Direction.RIGHT;
         setImpulse(DEFAULT_IMPULSE);
         setPower(power);
    }
 
-	public int getImpulse() {
-		return impulse;
-	}
+    public int getImpulse() {
+        return impulse;
+    }
 
-	public void setImpulse(int impulse) {
-		this.impulse = impulse;
-	}
+    public void setImpulse(int impulse) {
+        this.impulse = impulse;
+    }
 
-	private void setPower(int power) {
-		this.power = Math.min(power, MAX_POWER);
-	}
+    private void setPower(int power) {
+        this.power = Math.min(power, MAX_POWER);
+    }
 
-	public void stop() {
-		setImpulse(0);
-		direction = null;
-	}
+    public void stop() {
+        setImpulse(0);
+        direction = null;
+    }
 
-	
+    
 }

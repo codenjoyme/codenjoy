@@ -22,21 +22,18 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
-import com.codenjoy.dojo.football.model.Level;
-import com.codenjoy.dojo.football.model.LevelImpl;
-import com.codenjoy.dojo.football.model.Football;
-import com.codenjoy.dojo.football.model.Single;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
-
+import com.codenjoy.dojo.services.multiplayer.Single;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: sanja
@@ -65,17 +62,17 @@ public class SingleTest {
                 "☼☼┬┬☼☼");
 
         dice = mock(Dice.class);
-        Football Sample = new Football(level, dice);
+        Football field = new Football(level, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(Sample, listener1, factory);
+        game1 = new Single(field, new Player(listener1), factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(Sample, listener2, factory);
+        game2 = new Single(field, new Player(listener2), factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(Sample, listener3, factory);
+        game3 = new Single(field, new Player(listener3), factory);
 
         dice(1, 1);
         game1.newGame();

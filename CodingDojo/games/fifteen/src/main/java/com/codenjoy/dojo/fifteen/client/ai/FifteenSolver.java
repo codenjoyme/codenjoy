@@ -30,12 +30,6 @@ import com.codenjoy.dojo.fifteen.client.Board;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.Point;
 
-/**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random.
- * Для его запуска воспользуйся методом {@see FifteenSolver#main}
- */
 public class FifteenSolver implements Solver<Board> {
 
     private final Dice dice;

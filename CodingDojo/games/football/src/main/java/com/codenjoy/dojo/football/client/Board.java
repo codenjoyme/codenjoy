@@ -35,6 +35,11 @@ import com.codenjoy.dojo.services.Point;
 public class Board extends AbstractBoard<Elements> {
 
     @Override
+    protected int inversionY(int y) { // TODO исправить это
+        return size() - 1 - y;
+    }
+
+    @Override
     public Elements valueOf(char ch) {
         return Elements.valueOf(ch);
     }
@@ -43,17 +48,14 @@ public class Board extends AbstractBoard<Elements> {
         return isAt(x, y, Elements.WALL);
     }
 
-    /*public List<Point> getMe() {
-        return get(Elements.HERO, Elements.HERO_W_BALL);
-    }*/
     public Point getMe() {
         return get(Elements.HERO, Elements.HERO_W_BALL).get(0);
     }
     
     public Point getBall() {
         return get(Elements.BALL, Elements.STOPPED_BALL, 
-        			Elements.HERO_W_BALL, Elements.ENEMY_W_BALL,
-        			Elements.HITED_GOAL, Elements.HITED_MY_GOAL ).get(0);
+                    Elements.HERO_W_BALL, Elements.ENEMY_W_BALL,
+                    Elements.HITED_GOAL, Elements.HITED_MY_GOAL).get(0);
     }
     
     public Point getMyGoal() {
