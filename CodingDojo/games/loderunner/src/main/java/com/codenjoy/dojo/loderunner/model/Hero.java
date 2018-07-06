@@ -24,17 +24,12 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 5:10
- */
-public class Hero extends PointImpl implements Joystick, Tickable, Fieldable, State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Direction direction;
     private boolean moving;
-    private Field field;
     private boolean drill;
     private boolean drilled;
     private boolean alive;
@@ -48,11 +43,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, Fieldable, St
         drill = false;
         alive = true;
         jump = false;
-    }
-
-    @Override
-    public void init(Field field) {
-        this.field = field;
     }
 
     @Override
@@ -105,11 +95,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, Fieldable, St
         }
 
         drill = true;
-    }
-
-    @Override
-    public void message(String command) {
-        // do nothing, this should never happen
     }
 
     public Direction getDirection() {

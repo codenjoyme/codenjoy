@@ -36,11 +36,6 @@ import static junit.framework.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class LoderunnerTest {
 
     private Loderunner game;
@@ -90,7 +85,7 @@ public class LoderunnerTest {
                 printer.getPrinter(game.reader(), player).print());
     }
 
-    private class EnemyJoystick extends DirectionActJoystick implements Joystick {
+    private class EnemyJoystick implements Joystick, DirectionActJoystick {
         @Override
         public void down() {
             ai(Direction.DOWN);

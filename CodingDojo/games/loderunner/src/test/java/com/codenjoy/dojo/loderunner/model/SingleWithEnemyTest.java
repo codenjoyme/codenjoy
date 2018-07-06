@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -35,11 +36,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 5:22
- */
 public class SingleWithEnemyTest {
 
     private Dice dice;
@@ -319,7 +315,7 @@ public class SingleWithEnemyTest {
 
     private void setupPlayer(int x, int y) {
         listener = mock(EventListener.class);
-        game = new Single(loderunner, listener, printerFactory);
+        game = new Single(loderunner, new Player(listener), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game.newGame();
     }

@@ -22,12 +22,6 @@ package com.codenjoy.dojo.loderunner.services;
  * #L%
  */
 
-
-/**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 7:22 PM
- */
 public enum Events {
     KILL_ENEMY, KILL_HERO, GET_GOLD;
 }

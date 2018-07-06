@@ -36,11 +36,6 @@ import java.util.TreeMap;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-/**
- * User: sanja
- * Date: 07.01.14
- * Time: 20:49
- */
 public class ApofigAITest {
 
     private ApofigAI ai;

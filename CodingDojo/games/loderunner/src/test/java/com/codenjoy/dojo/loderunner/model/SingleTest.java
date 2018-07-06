@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -35,11 +36,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 5:22
- */
 public class SingleTest {
 
     private Dice dice;
@@ -642,21 +638,21 @@ public class SingleTest {
 
     private void setupPlayer2(int x, int y) {
         listener2 = mock(EventListener.class);
-        game2 = new Single(loderunner, listener2, printerFactory);
+        game2 = new Single(loderunner, new Player(listener2), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game2.newGame();
     }
 
     private void setupPlayer3(int x, int y) {
         listener3 = mock(EventListener.class);
-        game3 = new Single(loderunner, listener3, printerFactory);
+        game3 = new Single(loderunner, new Player(listener3), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game3.newGame();
     }
 
     private void setupPlayer1(int x, int y) {
         listener1 = mock(EventListener.class);
-        game1 = new Single(loderunner, listener1, printerFactory);
+        game1 = new Single(loderunner, new Player(listener1), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game1.newGame();
     }

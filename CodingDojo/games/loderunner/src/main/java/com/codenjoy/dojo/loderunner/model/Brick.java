@@ -28,11 +28,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 5:06
- */
 public class Brick extends PointImpl implements Tickable, State<Elements, Player> {
 
     public static final int DRILL_TIMER = 13;

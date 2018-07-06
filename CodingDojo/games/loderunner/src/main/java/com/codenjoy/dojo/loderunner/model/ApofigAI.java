@@ -30,14 +30,9 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * User: sanja
- * Date: 07.01.14
- * Time: 20:09
- */
 public class ApofigAI implements EnemyAI {
 
-    Map<Point, List<Direction>> possibleWays = new TreeMap<Point, List<Direction>>();
+    Map<Point, List<Direction>> possibleWays = new TreeMap<>();
 
     @Override
     public Direction getDirection(Field field, Hero hero, Point me) {
@@ -59,13 +54,13 @@ public class ApofigAI implements EnemyAI {
     }
 
     private Map<Point, List<Direction>> getPath(int size, Point from) {
-        Map<Point, List<Direction>> path = new HashMap<Point, List<Direction>>();
+        Map<Point, List<Direction>> path = new HashMap<>();
         for (Point point : possibleWays.keySet()) {
-            path.put(point, new LinkedList<Direction>());
+            path.put(point, new LinkedList<>());
         }
 
         boolean[][] processed = new boolean[size][size];
-        LinkedList<Point> toProcess = new LinkedList<Point>();
+        LinkedList<Point> toProcess = new LinkedList<>();
 
         Point current = from;
         do {
@@ -100,7 +95,7 @@ public class ApofigAI implements EnemyAI {
             for (int x = 0; x < field.size(); x++) {
                 for (int y = 0; y < field.size(); y++) {
                     Point pt = pt(x, y);
-                    List<Direction> directions = new LinkedList<Direction>();
+                    List<Direction> directions = new LinkedList<>();
                     for (Direction direction : Direction.onlyDirections()) {
                         if (isPossible(field, pt, direction)) {
                             directions.add(direction);

@@ -22,10 +22,6 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
-
-/**
- * Created by indigo on 2018-07-03.
- */
 public interface Fieldable {
     void init(Field field);
 }

@@ -27,31 +27,20 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.loderunner.client.ai.ApofigSolver;
 import com.codenjoy.dojo.loderunner.model.*;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * User: oleksandr.baglai
- * Date: 8/17/13
- * Time: 7:47 PM
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
-    private Loderunner loderunner;
 
     public GameRunner() {
         new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
-        level = new LevelImpl(Level1.get());
-    }
-
-    private Loderunner newGame() {
-        return new Loderunner(level, new RandomDice());
+        level = new LevelImpl(getMap());
     }
 
     @Override
@@ -60,14 +49,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || loderunner == null) {
-            loderunner = newGame();
-        }
-
-        Game game = new Single(loderunner, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new Loderunner(level, getDice());
     }
 
     @Override
@@ -91,8 +74,17 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
+    }
+
+    protected String getMap() {
+        return Level1.get();
     }
 }

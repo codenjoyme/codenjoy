@@ -28,11 +28,6 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 15:21
- */
 public class BrickTest {
 
     @Test

@@ -28,20 +28,19 @@ import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:56
- */
-public class Loderunner implements Tickable, Field {
+public class Loderunner implements Field {
 
     private Point[][] field;
     private List<Player> players;
@@ -68,7 +67,7 @@ public class Loderunner implements Tickable, Field {
             enemy.init(this);
         }
 
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
     private void toField(List<? extends Point> elements) {
@@ -79,7 +78,7 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public void tick() {
-        Set<Player> die = new HashSet<Player>();
+        Set<Player> die = new HashSet<>();
 
         heroesGo();
         die.addAll(getDied());
@@ -95,7 +94,7 @@ public class Loderunner implements Tickable, Field {
     }
 
     private Set<Player> getDied() {
-        Set<Player> die = new HashSet<Player>();
+        Set<Player> die = new HashSet<>();
 
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -165,12 +164,9 @@ public class Loderunner implements Tickable, Field {
     private List<Player> bricksGo() {
         List<Player> die = new LinkedList<Player>();
 
-        forAll(new ElementsIterator() {
-            @Override
-            public void it(Point element) {
-                if (element instanceof Brick) {
-                    ((Brick)element).tick();
-                }
+        forAll(element -> {
+            if (element instanceof Brick) {
+                ((Brick)element).tick();
             }
         });
 
@@ -244,7 +240,11 @@ public class Loderunner implements Tickable, Field {
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || isFullBrick(x, y) || is(pt, Border.class) || isHeroAt(x, y);
+        return x > size - 1 || x < 0
+                || y < 0 || y > size - 1
+                || isFullBrick(x, y)
+                || is(pt, Border.class)
+                || isHeroAt(x, y);
     }
 
     @Override
@@ -255,8 +255,12 @@ public class Loderunner implements Tickable, Field {
         }
 
         Point over = pt(x, y + 1);
-        if (is(over, Ladder.class) || gold.contains(over) || isFullBrick(over.getX(), over.getY())
-                || getHeroes().contains(over) || enemies.contains(over)) {
+        if (is(over, Ladder.class)
+                || gold.contains(over)
+                || isFullBrick(over.getX(), over.getY())
+                || getHeroes().contains(over)
+                || enemies.contains(over))
+        {
             return false;
         }
 
@@ -273,44 +277,44 @@ public class Loderunner implements Tickable, Field {
     public boolean isPit(int x, int y) {
         Point pt = pt(x, y - 1);
 
-        if (!isFullBrick(pt.getX(), pt.getY()) && !is(pt, Ladder.class) && !is(pt, Border.class)
-                && !getHeroes().contains(pt) && !enemies.contains(pt)) {
-            return true;
-        }
-
-        return false;
+        return !(isFullBrick(pt.getX(), pt.getY())
+                || is(pt, Ladder.class)
+                || is(pt, Border.class)
+                || getHeroes().contains(pt)
+                || enemies.contains(pt));
     }
 
     @Override
     public boolean isFullBrick(int x, int y) {
         Point el = getAt(x, y);
-        return el instanceof Brick && ((Brick)el).state(null) == Elements.BRICK;
+        return (el instanceof Brick)
+                && ((Brick)el).state(null) == Elements.BRICK;
     }
 
     @Override
     public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
+        int x;
+        int y;
         int c = 0;
         do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
+            x = dice.next(size);
+            y = dice.next(size);
             // TODO подумать над тем, чтобы золото не накапливалось под кирпичами
-        } while (!isFree(rndX, rndY) && c++ < 100);
+        } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
             return pt(0, 0);  // этого никогда не должно случиться, но никогда не говори никогда. чтобы заметить поставил координаты 0, 0
         }
 
-        return pt(rndX, rndY);
+        return pt(x, y);
     }
 
     private boolean isGround(int x, int y) {
         Point under = pt(x, y - 1);
 
-        return is(under, Border.class) &&
-                is(under, Brick.class) &&
-                is(under, Ladder.class);
+        return is(under, Border.class)
+                && is(under, Brick.class)
+                && is(under, Ladder.class);
     }
 
     @Override
@@ -327,12 +331,12 @@ public class Loderunner implements Tickable, Field {
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
-        return !gold.contains(pt) &&
-                !is(pt, Border.class) &&
-                !is(pt, Brick.class) &&
-                !getHeroes().contains(pt) &&
-                !is(pt, Pipe.class) &&
-                !is(pt, Ladder.class);
+        return !(gold.contains(pt)
+                || is(pt, Border.class)
+                || is(pt, Brick.class)
+                || getHeroes().contains(pt)
+                || is(pt, Pipe.class)
+                || is(pt, Ladder.class));
     }
 
     @Override
@@ -371,11 +375,9 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public List<Hero> getHeroes() {
-        List<Hero> result = new LinkedList<Hero>();
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
     public void newGame(Player player) {

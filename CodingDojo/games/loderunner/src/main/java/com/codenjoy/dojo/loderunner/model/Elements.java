@@ -25,11 +25,6 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.CharElements;
 
-/**
- * User: sanja
- * Date: 06.06.13
- * Time: 17:38
- */
 public enum Elements implements CharElements {
 
     NONE(' '),

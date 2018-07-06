@@ -29,11 +29,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * User: sanja
- * Date: 07.01.14
- * Time: 16:00
- */
 public class Enemy extends PointImpl implements Tickable, Fieldable, State<Elements, Player> {
 
     private Direction direction;
