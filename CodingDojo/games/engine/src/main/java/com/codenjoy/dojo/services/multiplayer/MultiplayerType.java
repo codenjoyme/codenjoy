@@ -23,65 +23,117 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import java.util.function.Function;
+
 /**
  * Определяет тип многопользовательский игры.
  * Этот функционал реализует сервис многопользовательской игры {@see MultiplayerService}
  */
-public enum MultiplayerType {
+public class MultiplayerType {
+
     /**
-     * Каждый игрок на своей борде. В случае конца игры он получит новую борду.
+     * Каждый игрок на своей борде.
+     * В случае окончания и стартановой игры он получит новую борду.
      */
-    SINGLE,
+    public static final MultiplayerType SINGLE = new SINGLE();
+    static class SINGLE extends MultiplayerType {
+        SINGLE() {
+            super(1);
+        }
+    }
 
     /**
      * Все игроки на одном поле без ограничений.
      * Если один из игроков закончил (проиграл или выиграл) он тут же регенерируется
      * на этом же поле в рендомном месте.
      */
-    MULTIPLE,
+    public static final MultiplayerType MULTIPLE = new MULTIPLE();
+    static class MULTIPLE extends MultiplayerType {
+        MULTIPLE() {
+            super(-1);
+        }
+    }
+
+    /**
+     * Все игроки в заданном количестве на одном поле без ограничений.
+     * Если один из игроков закончил (проиграл или выиграл) он тут же регенерируется
+     * TODO на новом поле в рендомном месте.
+     * Новый игрок сверх количества команды не регистрируется в новой игре.
+     */
+    public static final Function<Integer, MultiplayerType> TEAM = TEAM_::new;
+    static class TEAM_ extends MultiplayerType {
+        TEAM_(Integer count) {
+            super(count);
+        }
+    }
 
     /**
      * По двое игроков за раз на одной борде.
-     * Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появится
+     * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появится
      * игрок, с которым он еще не играл.
-     * Игра находится на паузе, пока не соберется заданное количество игроков.
+     * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    TOURNAMENT,
+    public static final MultiplayerType TOURNAMENT = new TOURNAMENT();
+    static class TOURNAMENT extends MultiplayerType {
+        TOURNAMENT() {
+            super(2);
+        }
+    }
 
     /**
      * Трое игроков за раз на одной борде.
-     * Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся
+     * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся
      * двое других игроков, с которыми он еще не играл.
-     * Игра находится на паузе, пока не соберется заданное количество игроков.
+     * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    TRIPLE,
+    public static final MultiplayerType TRIPLE = new TRIPLE();
+    static class TRIPLE extends MultiplayerType {
+        TRIPLE() {
+            super(3);
+        }
+    }
 
     /**
      * Четверо игроков за раз на одной борде.
-     * Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся
+     * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся
      * трое других игроков, с которыми он еще не играл.
-     * Игра находится на паузе, пока не соберется заданное количество игроков.
+     * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    QUADRO;
+    public static MultiplayerType QUADRO = new QUADRO();
+    static class QUADRO extends MultiplayerType {
+        QUADRO() {
+            super(4);
+        }
+    }
+
+    private int count;
+
+    MultiplayerType(int count) {
+        this.count = count;
+    }
 
     public boolean isSingle() {
-        return this == SINGLE;
+        return this instanceof SINGLE;
     }
 
     public boolean isMultiple() {
-        return this == MULTIPLE;
+        return this instanceof MULTIPLE;
     }
 
     public boolean isTriple() {
-        return this == TRIPLE;
+        return this instanceof TRIPLE;
     }
 
     public boolean isTournament() {
-        return this == TOURNAMENT;
+        return this instanceof TOURNAMENT;
     }
 
     public boolean isQuadro() {
-        return this == QUADRO;
+        return this instanceof QUADRO;
+    }
+
+    public boolean isTeam() {
+        return this instanceof TEAM_;
     }
 
     public boolean isSingleplayer() {
@@ -92,5 +144,7 @@ public enum MultiplayerType {
         return !isSingle();
     }
 
-
+    public int getCount() {
+        return count;
+    }
 }
