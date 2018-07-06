@@ -36,7 +36,15 @@ public abstract class AbstractGameType implements GameType {
     protected final Settings settings;
 
     public AbstractGameType() {
-        settings = new SettingsImpl();
+        settings = createSettings();
+    }
+
+    /**
+     * Этот метод можно пеоерпределить. Используется в тестовых целях.
+     * @return Настройки игры до момента, когда оно будет использовано в системе
+     */
+    protected SettingsImpl createSettings() {
+        return new SettingsImpl();
     }
 
     @Override

@@ -4,7 +4,7 @@ package com.codenjoy.dojo.moebius.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,40 +23,35 @@ package com.codenjoy.dojo.moebius.model;
  */
 
 
-import com.codenjoy.dojo.moebius.services.Events;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.joystick.ActJoystick;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Hero extends PlayerHero<Field> implements ActJoystick {
+    private boolean alive;
 
-    Hero hero;
-
-    public Player(EventListener listener) {
-        super(listener);
-    }
-
-    public void event(Events event) {
-        switch (event.getType()) {
-            case GAME_OVER: gameOver(); break;
-            case WIN: increaseScore(event.getLines()); break;
-        }
-
-        super.event(event);
+    public Hero() {
+        this.alive = true;
     }
 
     @Override
-    public Hero getHero() {
-        return hero;
+    public void tick() {
+        // do nothing
     }
 
     @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
+    public void act(int... p) {
+        if (p == null || p.length != 2) return;
+        // TODO нельзя поворачивать границы поля
+
+        x = p[0];
+        y = p[1];
     }
 
-    @Override
     public boolean isAlive() {
-        return hero.isAlive();
+        return alive;
+    }
+
+    public void die() {
+        alive = false;
     }
 }

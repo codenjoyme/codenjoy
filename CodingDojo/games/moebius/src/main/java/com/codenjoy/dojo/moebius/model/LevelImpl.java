@@ -25,6 +25,7 @@ package com.codenjoy.dojo.moebius.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -35,9 +36,28 @@ public class LevelImpl implements Level {
 
     private String map;
 
+    public LevelImpl(int size) { // TODO test me
+        this.map = buildMap(size);
+        xy = new LengthToXY(getSize());
+    }
+
     public LevelImpl(String map) {
         this.map = map;
         xy = new LengthToXY(getSize());
+    }
+
+    private String buildMap(int size) {
+        StringBuilder board = new StringBuilder();
+        board.append(pad(size, '╔', '═', '╗'));
+        for (int y = 1; y < size - 1; y++) {
+            board.append(pad(size, '║', ' ', '║'));
+        }
+        board.append(pad(size, '╚', '═', '╝'));
+        return board.toString();
+    }
+
+    private String pad(int len, char left, char middle, char right) {
+        return left + StringUtils.rightPad("", len - 2, middle) + right;
     }
 
     @Override

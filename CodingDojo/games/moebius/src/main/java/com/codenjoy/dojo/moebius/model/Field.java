@@ -24,8 +24,9 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field {
+public interface Field extends GameField<Player> {
 
     Point getFreeRandom();
 
@@ -35,5 +36,4 @@ public interface Field {
 
     boolean removeLine(Point pt);
 
-    boolean isGameOver();
 }

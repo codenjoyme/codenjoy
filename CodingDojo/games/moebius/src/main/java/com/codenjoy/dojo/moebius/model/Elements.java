@@ -31,7 +31,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public enum Elements implements CharElements {
 
-    LEFT_UP('╝', pt(-1, 0), pt(0, 1)), // TODO Тут тоже зеркалирование по Y
+    LEFT_UP('╝', pt(-1, 0), pt(0, 1)),
     UP_RIGHT('╚', pt(0, 1), pt(1, 0)),
     RIGHT_DOWN('╔', pt(1, 0), pt(0, -1)),
     DOWN_LEFT('╗', pt(0, -1), pt(-1, 0)),

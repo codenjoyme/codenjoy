@@ -35,7 +35,7 @@ public class SettingsImpl implements Settings {
 
     @Override
     public List<Parameter<?>> getParameters() {
-        return new LinkedList<Parameter<?>>(parameters);
+        return new LinkedList<>(parameters);
     }
 
     @Override

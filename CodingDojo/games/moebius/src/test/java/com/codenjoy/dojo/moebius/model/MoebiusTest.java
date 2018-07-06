@@ -62,10 +62,10 @@ public class MoebiusTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
         listener = mock(EventListener.class);
-        game = new Moebius(level, dice, listener);
+        game = new Moebius(level, dice);
         player = new Player(listener);
         game.newGame(player);
-        joystick = game.getJoystick();
+        joystick = player.getHero();
     }
 
     private void assertE(String expected) {
@@ -98,7 +98,7 @@ public class MoebiusTest {
                 "║   ║" +
                 "╚═══╝");
 
-        dice(1, 3, 0);
+        dice(1, 1, 0);
         game.tick();
 
         assertE("╔═══╗" +
@@ -116,7 +116,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(1, 1, 2);
+        dice(1, 3, 2);
         game.tick();
 
         assertE("╔═══╗" +
@@ -125,7 +125,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(2, 1, 3);
+        dice(2, 3, 3);
         game.tick();
 
         assertE("╔═══╗" +
@@ -134,7 +134,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(3, 1, 4);
+        dice(3, 3, 4);
         game.tick();
 
         assertE("╔═══╗" +
@@ -152,7 +152,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(3, 3, 6);
+        dice(3, 1, 6);
         game.tick();
 
         assertE("╔═══╗" +
@@ -172,7 +172,7 @@ public class MoebiusTest {
                 "╚═══╝");
 
         try {
-            dice(3, 1, 7);
+            dice(3, 3, 7);
             game.tick();
             fail();
         } catch (IllegalArgumentException e) {
@@ -189,7 +189,7 @@ public class MoebiusTest {
                 "║   ║" +
                 "╚═══╝");
 
-        dice(1, 3, 0);
+        dice(1, 1, 0);
         game.tick();
 
         assertE("╔═══╗" +
@@ -198,10 +198,10 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(1, 3,
-             1, 3,
-             1, 3,
-             1, 3,
+        dice(1, 1,
+             1, 1,
+             1, 1,
+             1, 1,
              2, 2, 1);
         game.tick();
 
@@ -222,21 +222,21 @@ public class MoebiusTest {
                 "╚═══╝");
 
         dice(0, 0,
-                3, 15,
-                0, 3,
-                3, 4,
-                4, 3,
-                3, 0,
-                -1, 3,
-                3, -1,
-                15, 3,
-                1, 1, 1);
+            3, 15,
+            0, 3,
+            3, 4,
+            4, 3,
+            3, 0,
+            -1, 3,
+            3, -1,
+            15, 3,
+            1, 1, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║╚  ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
     }
 
@@ -244,90 +244,90 @@ public class MoebiusTest {
     @Test
     public void shouldRotateClockwiseOneLine_caseCorner() {
         givenFl("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╗ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╝ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╚ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╔ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╗ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
     }
 
     @Test
     public void shouldRotateClockwiseOneLine_caseLine() {
         givenFl("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ═ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ║ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ═ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
     }
 
     @Test
     public void shouldRotateClockwiseOneLine_caseCross() {
         givenFl("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╬ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
 
         joystick.act(2, 1);
         game.tick();
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║ ╬ ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
     }
 
@@ -390,9 +390,9 @@ public class MoebiusTest {
         verifyEvent(new Events(Events.Event.WIN, 4));
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║╚  ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
     }
 
@@ -412,16 +412,16 @@ public class MoebiusTest {
                 "║╚═╗║" +
                 "╚═══╝");
 
-        joystick.act(3, 3);
+        joystick.act(3, 1);
         dice(1, 1, 1);
         game.tick();
 
         verifyEvent(new Events(Events.Event.WIN, 8));
 
         assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
                 "║╚  ║" +
-                "║   ║" +
-                "║   ║" +
                 "╚═══╝");
     }
 
@@ -434,17 +434,17 @@ public class MoebiusTest {
                 "║╚══╗║" +
                 "╚════╝");
 
-        joystick.act(4, 4);
+        joystick.act(4, 1);
         dice(1, 1, 1);
         game.tick();
 
         verifyEvent(new Events(Events.Event.WIN, 16));
 
         assertE("╔════╗" +
+                "║    ║" +
+                "║    ║" +
+                "║    ║" +
                 "║╚   ║" +
-                "║    ║" +
-                "║    ║" +
-                "║    ║" +
                 "╚════╝");
     }
 
@@ -459,7 +459,7 @@ public class MoebiusTest {
                 "║╔╗╔╗║║║" +
                 "╚══════╝");
 
-        joystick.act(5, 5);
+        joystick.act(5, 2);
         dice(2, 2, 1);
         game.tick();
 
@@ -467,10 +467,10 @@ public class MoebiusTest {
 
         assertE("╔══════╗" +
                 "║╔═╔║══║" +
-                "║║╚   ╗║" +
+                "║║    ╗║" +
                 "║╔ ║╔ ║║" +
                 "║╚ ║║ ║║" +
-                "║║    ║║" +
+                "║║╚   ║║" +
                 "║╔╗╔╗║║║" +
                 "╚══════╝");
     }
@@ -484,13 +484,13 @@ public class MoebiusTest {
                 "║╝╚╬║" +
                 "╚═══╝");
 
-        assertFalse(game.isGameOver());
+        assertTrue(player.isAlive());
 
         game.tick();
 
         verifyEvent(new Events(Events.Event.GAME_OVER));
 
-        assertTrue(game.isGameOver());
+        assertFalse(player.isAlive());
     }
 
     // если есть CROSS линия, то по ней можно пройтись дважды
@@ -504,18 +504,18 @@ public class MoebiusTest {
                 "║╚═╗  ║" +
                 "╚═════╝");
 
-        joystick.act(3, 5);
+        joystick.act(3, 1);
         dice(1, 1, 1);
         game.tick();
 
         verifyEvent(new Events(Events.Event.WIN, 15));
 
         assertE("╔═════╗" +
+                "║     ║" +
+                "║     ║" +
+                "║     ║" +
+                "║     ║" +
                 "║╚    ║" +
-                "║     ║" +
-                "║     ║" +
-                "║     ║" +
-                "║     ║" +
                 "╚═════╝");
     }
 
@@ -530,18 +530,18 @@ public class MoebiusTest {
                 "║╚═╗  ║" +
                 "╚═════╝");
 
-        joystick.act(3, 5);
+        joystick.act(3, 1);
         dice(1, 1, 1);
         game.tick();
 
         verifyEvent(new Events(Events.Event.WIN, 12));
 
         assertE("╔═════╗" +
-                "║╚    ║" +
+                "║     ║" +
                 "║     ║" +
                 "║ ═ ═╝║" +
                 "║     ║" +
-                "║     ║" +
+                "║╚    ║" +
                 "╚═════╝");
     }
 
@@ -562,11 +562,11 @@ public class MoebiusTest {
         verifyEvent(new Events(Events.Event.WIN, 12));
 
         assertE("╔═════╗" +
-                "║╚    ║" +
+                "║     ║" +
                 "║  ║  ║" +
                 "║     ║" +
                 "║  ║  ║" +
-                "║  ║  ║" +
+                "║╚ ║  ║" +
                 "╚═════╝");
     }
 }
