@@ -43,7 +43,6 @@
         <module>sample</module>
         <module>sample-text</module>
         <module>a2048</module>
-        <module>a2048-extreme</module>
         <module>bomberman</module>
         <module>battlecity</module>
         <module>chess</module>
