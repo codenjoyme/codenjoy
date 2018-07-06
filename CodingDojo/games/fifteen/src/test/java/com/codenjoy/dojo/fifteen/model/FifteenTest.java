@@ -60,7 +60,6 @@ public class FifteenTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-
         game = new Fifteen(level, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);

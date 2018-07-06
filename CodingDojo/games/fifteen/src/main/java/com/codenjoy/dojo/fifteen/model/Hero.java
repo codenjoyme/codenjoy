@@ -24,30 +24,22 @@ package com.codenjoy.dojo.fifteen.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.joystick.DirectionJoystick;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- */
-public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player>, DirectionJoystick {
+
     private List<Digit> digits;
     private int moveCount;
     private Player player;
-    private Field field;
     private boolean alive;
     private Direction direction;
-
-    public Hero(int x, int y) {
-        super(x, y);
-        direction = null;
-        alive = true;
-        moveCount = 1;
-        digits = new LinkedList<Digit>();
-    }
 
     public void setPlayer(Player player) {
         this.player = player;
@@ -58,12 +50,7 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         direction = null;
         alive = true;
         moveCount = 1;
-        digits = new LinkedList<Digit>();
-    }
-
-    public void init(Field field) {
-        this.field = field;
-
+        digits = new LinkedList<>();
     }
 
     @Override
@@ -92,20 +79,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         if (!alive) return;
 
         direction = Direction.RIGHT;
-    }
-
-    @Override
-    public void act(int... p) {
-        // do nothing, this should never happen
-    }
-
-    @Override
-    public void message(String command) {
-        // do nothing, this should never happen
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     @Override

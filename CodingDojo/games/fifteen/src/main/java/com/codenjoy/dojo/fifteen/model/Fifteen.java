@@ -29,12 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Fifteen#tick()}
- */
-public class Fifteen implements Tickable, Field {
+public class Fifteen implements Field {
     private final Level level;
     private List<Player> players;
 
@@ -48,12 +43,9 @@ public class Fifteen implements Tickable, Field {
         this.level = level;
         this.dice = dice;
         size = level.getSize();
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         for (Player player : players) {
@@ -74,10 +66,6 @@ public class Fifteen implements Tickable, Field {
             }
         }
         return true;
-    }
-
-    public int size() {
-        return size;
     }
 
     @Override
@@ -123,25 +111,30 @@ public class Fifteen implements Tickable, Field {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>();
+        List<Hero> result = new ArrayList<>();
         for (Player player : players) {
             result.add(player.getHero());
         }
         return result;
     }
 
+    @Override
     public void newGame(Player player) {
         walls = level.getWalls();
         digits = level.getDigits();
         size = level.getSize();
-        List<Hero> heros = level.getHero();
         if (!players.contains(player)) {
             players.add(player);
         }
-        player.setHero(heros.get(0));
-        player.hero.init(this);
+        player.newHero(this);
     }
 
+    @Override
+    public Hero getLevelHero() {
+        return level.getHero().get(0);
+    }
+
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }
@@ -154,6 +147,7 @@ public class Fifteen implements Tickable, Field {
         return digits;
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = Fifteen.this.size;
@@ -165,7 +159,7 @@ public class Fifteen implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
+                List<Point> result = new LinkedList<>();
                 result.addAll(Fifteen.this.getWalls());
                 result.addAll(Fifteen.this.getHeroes());
                 result.addAll(Fifteen.this.getDigits());

@@ -22,14 +22,10 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Created by Administrator on 01.08.2015.
- */
 public class Digit extends PointImpl implements State<Elements, Player> {
 
     private Elements element;

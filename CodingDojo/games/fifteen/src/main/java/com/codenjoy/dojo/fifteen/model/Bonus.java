@@ -22,10 +22,6 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-
-/**
- * Created by Administrator on 02.08.2015.
- */
 public class Bonus {
     private int moveCount;
     private int number;

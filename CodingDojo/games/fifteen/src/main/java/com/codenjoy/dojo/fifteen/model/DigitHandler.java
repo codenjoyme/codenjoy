@@ -29,9 +29,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Administrator on 02.08.2015.
- */
 public class DigitHandler {
     public static final Elements[] DIGITS =
             {

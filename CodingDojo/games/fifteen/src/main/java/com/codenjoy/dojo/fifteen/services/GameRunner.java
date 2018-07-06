@@ -26,28 +26,19 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.fifteen.client.ai.FifteenSolver;
 import com.codenjoy.dojo.fifteen.model.*;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private Level level;
-    private Fifteen game;
 
     public GameRunner() {
         new Scores(0, settings);
-    }
-
-    private Fifteen newGame() {
-        level = new LevelImpl(new Randomizer().getRamdomMap(new RandomDice()));
-        return new Fifteen(level, new RandomDice());
     }
 
     @Override
@@ -56,14 +47,9 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        level = new LevelImpl(new Randomizer().getRamdomMap(getDice()));
+        return new Fifteen(level, getDice());
     }
 
     @Override
@@ -87,8 +73,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        FifteenSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        FifteenSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

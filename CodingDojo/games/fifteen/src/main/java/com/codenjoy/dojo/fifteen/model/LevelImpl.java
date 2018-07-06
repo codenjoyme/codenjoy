@@ -28,9 +28,6 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level {
     private final LengthToXY xy;
 
@@ -43,7 +40,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Digit> getDigits() {
-        List<Digit> result = new LinkedList<Digit>();
+        List<Digit> result = new LinkedList<>();
 
         for (Elements digit : DigitHandler.DIGITS) {
             for (Point pt : getPointsOf(digit)) {
@@ -60,7 +57,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<Hero>();
+        List<Hero> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.HERO)) {
             result.add(new Hero(pt));
@@ -71,7 +68,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
+        List<Wall> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.WALL)) {
             result.add(new Wall(pt));
@@ -81,7 +78,7 @@ public class LevelImpl implements Level {
     }
 
     private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));

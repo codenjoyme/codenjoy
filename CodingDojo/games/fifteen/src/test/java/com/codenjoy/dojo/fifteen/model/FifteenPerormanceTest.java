@@ -25,9 +25,15 @@ package com.codenjoy.dojo.fifteen.model;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.fifteen.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -40,17 +46,18 @@ public class FifteenPerormanceTest {
     public void test() {
         GameRunner sampleGame = new GameRunner();
 
-        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
+        List<Game> games = new LinkedList<>();
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null, null);
+            Single game = TestUtils.buildGame(sampleGame,
+                    Mockito.mock(EventListener.class), factory);
             games.add(game);
         }
 
         Profiler profiler = new Profiler();
 
-        for (com.codenjoy.dojo.services.Game game : games) {
+        for (Game game : games) {
             profiler.start();
 
             game.getBoardAsString();
@@ -59,4 +66,5 @@ public class FifteenPerormanceTest {
             profiler.print();
         }
     }
+
 }

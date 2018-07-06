@@ -30,10 +30,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Administrator on 01.08.2015.
- */
 public class Randomizer {
+
     private static final String TEMPLATE =
                     "******" +
                     "*%s*" +
@@ -69,7 +67,7 @@ public class Randomizer {
     }
 
     private List<Elements> getRandomList() {
-        List<Elements> result = new LinkedList<Elements>();
+        List<Elements> result = new LinkedList<>();
         result.addAll(Arrays.asList(DigitHandler.DIGITS));
         result.add(Elements.HERO);
 
@@ -81,7 +79,7 @@ public class Randomizer {
     }
 
     private void shufleList(List<Elements> result) {
-        for (int i=result.size(); i>1; i--)
+        for (int i=result.size(); i > 1; i--)
             Collections.swap(result, i-1, dice.next(i));
     }
 
