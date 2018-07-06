@@ -27,9 +27,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.text.DecimalFormat;
 
-/**
- * Created by indigo on 2017-04-03.
- */
 public class NextAlgorithmEvent {
 
     private double complexity;

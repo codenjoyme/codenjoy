@@ -25,11 +25,6 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 import org.junit.Test;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/13/13
- * Time: 11:42 PM
- */
 public class FibonacciNumbersAlgorithmTest {
 
     @Test

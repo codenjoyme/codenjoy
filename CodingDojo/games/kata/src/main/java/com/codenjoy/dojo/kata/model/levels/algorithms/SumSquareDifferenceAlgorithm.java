@@ -26,10 +26,6 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 
 /**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 8:12 PM
- *
  * @author http://projecteuler.net/problem=6
  */
 public class SumSquareDifferenceAlgorithm extends AlgorithmLevelImpl {

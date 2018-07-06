@@ -27,11 +27,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 11:42 PM
- */
 public class XthPrimeAlgorithmTest {
 
     private static XthPrimeAlgorithm algorithm = new XthPrimeAlgorithm();

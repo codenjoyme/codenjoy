@@ -27,11 +27,6 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/13/13
- * Time: 11:42 PM
- */
 public class FizzBuzzAlgorithmTest {
 
     @Test

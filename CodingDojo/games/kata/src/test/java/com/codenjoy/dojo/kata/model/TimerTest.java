@@ -28,10 +28,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-
-/**
- * Created by indigo on 2017-04-03.
- */
 public class TimerTest {
 
     @Test

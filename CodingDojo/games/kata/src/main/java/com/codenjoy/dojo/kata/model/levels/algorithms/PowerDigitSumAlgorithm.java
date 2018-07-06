@@ -28,10 +28,6 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 import java.math.BigInteger;
 
 /**
- * User: oleksandr.baglai
- * Date: 2/13/13
- * Time: 7:10 PM
- *
  * @author http://projecteuler.net/problem=16
  */
 public class PowerDigitSumAlgorithm extends AlgorithmLevelImpl {

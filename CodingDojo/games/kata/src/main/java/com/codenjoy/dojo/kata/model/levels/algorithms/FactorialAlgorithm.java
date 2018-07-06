@@ -31,7 +31,7 @@ import java.util.Map;
 public class FactorialAlgorithm extends AlgorithmLevelImpl {
 
     // TODO подумать над проблемами многопоточности
-    private static Map<Integer, BigInteger> cache = new java.util.HashMap<Integer, java.math.BigInteger>();
+    private static Map<Integer, BigInteger> cache = new java.util.HashMap<>();
 
     @Override
     public String get(int n) {

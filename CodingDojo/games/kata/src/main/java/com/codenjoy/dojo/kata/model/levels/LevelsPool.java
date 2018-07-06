@@ -25,9 +25,6 @@ package com.codenjoy.dojo.kata.model.levels;
 
 import java.util.List;
 
-/**
- * Created by indigo on 2017-03-05.
- */
 public interface LevelsPool {
 
     int getQuestionIndex();

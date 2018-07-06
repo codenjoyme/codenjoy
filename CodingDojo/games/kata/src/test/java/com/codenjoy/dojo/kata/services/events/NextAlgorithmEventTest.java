@@ -27,9 +27,6 @@ import org.junit.Test;
 import static com.codenjoy.dojo.kata.services.events.Scores.*;
 import static org.junit.Assert.*;
 
-/**
- * Created by indigo on 2017-04-03.
- */
 public class NextAlgorithmEventTest {
 
     @Test

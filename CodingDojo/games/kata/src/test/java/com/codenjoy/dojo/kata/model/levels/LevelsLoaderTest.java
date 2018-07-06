@@ -30,9 +30,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by indigo on 2017-03-05.
- */
 public class LevelsLoaderTest {
     @Test
     public void test() {

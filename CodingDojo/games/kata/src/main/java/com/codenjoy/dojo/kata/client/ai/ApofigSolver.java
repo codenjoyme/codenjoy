@@ -76,7 +76,7 @@ public class ApofigSolver extends AbstractTextSolver {
     }
 
     private static void startLocal() {
-        LocalGameRunner.TIMEOUT = 1000;
+        LocalGameRunner.timeout = 1000;
         LocalGameRunner.run(new GameRunner(),
                 new ApofigSolver(),
                 new Board());

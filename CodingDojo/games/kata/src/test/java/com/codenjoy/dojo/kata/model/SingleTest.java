@@ -43,11 +43,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User:sanja
- * Date:19.12.13
- * Time:5:22
- */
 public class SingleTest {
 
     private EventListener listener1;

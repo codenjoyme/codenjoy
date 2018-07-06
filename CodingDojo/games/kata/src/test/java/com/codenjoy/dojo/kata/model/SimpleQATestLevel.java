@@ -25,9 +25,6 @@ package com.codenjoy.dojo.kata.model;
 
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 
-/**
- * Created by indigo on 2017-03-15.
- */
 public class SimpleQATestLevel extends QuestionAnswerLevelImpl {
 
     public SimpleQATestLevel(String... qa) {

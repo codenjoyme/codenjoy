@@ -30,6 +30,7 @@ import java.math.BigInteger;
 import java.util.Map;
 
 public class Sequence1Algorithm extends AlgorithmLevelImpl {
+
     @Override
     public String get(int n) {
         StringBuilder b = new StringBuilder();

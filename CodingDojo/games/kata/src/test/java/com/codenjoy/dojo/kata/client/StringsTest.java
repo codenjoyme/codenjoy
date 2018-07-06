@@ -29,9 +29,6 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by indigo on 2017-03-05.
- */
 public class StringsTest {
 
     @Test

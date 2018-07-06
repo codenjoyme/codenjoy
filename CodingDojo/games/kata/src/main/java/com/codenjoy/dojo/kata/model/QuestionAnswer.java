@@ -22,10 +22,6 @@ package com.codenjoy.dojo.kata.model;
  * #L%
  */
 
-
-/**
- * Created by indigo on 2016-11-23.
- */
 public class QuestionAnswer {
     private String question;
     private String answer;

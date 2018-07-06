@@ -25,9 +25,6 @@ package com.codenjoy.dojo.kata.model;
 
 import java.util.Calendar;
 
-/**
- * Created by indigo on 2017-04-03.
- */
 public class Timer {
     public static double ONE_MINUTE_IN_MILLS = 60000;
 

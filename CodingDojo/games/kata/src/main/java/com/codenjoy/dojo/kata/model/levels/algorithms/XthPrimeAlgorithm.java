@@ -28,10 +28,6 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 import java.util.LinkedList;
 
 /**
- * User: oleksandr.baglai
- * Date: 2/13/13
- * Time: 7:10 PM
- *
  * @author http://euler.jakumo.org/problems/view/7.html
  */
 public class XthPrimeAlgorithm extends AlgorithmLevelImpl {

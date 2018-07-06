@@ -22,11 +22,8 @@ package com.codenjoy.dojo.kata.model;
  * #L%
  */
 
-
-/**
- * Created by indigo on 2017-04-03.
- */
 public class Elements {
+
     public static final String START_NEXT_LEVEL = "StartNextLevel";
     public static final String SKIP_THIS_LEVEL = "SkipThisLevel";
 }

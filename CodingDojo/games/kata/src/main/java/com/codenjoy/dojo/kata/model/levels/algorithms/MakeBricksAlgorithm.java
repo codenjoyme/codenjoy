@@ -28,11 +28,6 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 02.07.13
- * Time: 19:11
- */
 public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
 
     @Override

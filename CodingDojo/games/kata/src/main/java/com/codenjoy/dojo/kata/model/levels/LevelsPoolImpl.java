@@ -26,9 +26,6 @@ package com.codenjoy.dojo.kata.model.levels;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by indigo on 2017-03-04.
- */
 public class LevelsPoolImpl implements LevelsPool {
 
     private List<Level> levels;

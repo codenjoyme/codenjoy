@@ -33,9 +33,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by indigo on 2017-03-05.
- */
 public class LevelsPoolImplTest {
 
     private Level level1 = mock(Level.class);

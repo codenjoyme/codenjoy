@@ -29,11 +29,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/26/13
- * Time: 11:42 PM
- */
 public class LongDivisionAlgorithmTest {
 
     @Test

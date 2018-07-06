@@ -27,11 +27,6 @@ import com.codenjoy.dojo.kata.model.levels.Algorithm;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 11:37 PM
- */
 public class Assertions {
     public static void assertAlgorithm(String[] expected, Algorithm algorithm) {
         for (int index = 0; index < expected.length; index++) {

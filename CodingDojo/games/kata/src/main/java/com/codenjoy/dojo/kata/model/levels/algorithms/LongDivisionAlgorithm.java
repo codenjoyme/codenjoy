@@ -28,11 +28,6 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/13/13
- * Time: 7:10 PM
- */
 public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
 
     @Override

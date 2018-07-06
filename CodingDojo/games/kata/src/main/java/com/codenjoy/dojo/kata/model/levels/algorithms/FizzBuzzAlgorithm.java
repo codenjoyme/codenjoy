@@ -25,11 +25,6 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/13/13
- * Time: 7:10 PM
- */
 public class FizzBuzzAlgorithm extends AlgorithmLevelImpl {
 
     @Override

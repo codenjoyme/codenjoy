@@ -22,10 +22,6 @@ package com.codenjoy.dojo.kata.model.levels;
  * #L%
  */
 
-
-/**
- * Created by indigo on 2017-03-04.
- */
 public interface Algorithm {
 
     String get(String input);

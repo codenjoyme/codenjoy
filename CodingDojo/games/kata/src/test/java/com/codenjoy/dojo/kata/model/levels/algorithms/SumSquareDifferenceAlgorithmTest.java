@@ -27,11 +27,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 2/25/13
- * Time: 8:13 PM
- */
 public class SumSquareDifferenceAlgorithmTest {
 
     @Test

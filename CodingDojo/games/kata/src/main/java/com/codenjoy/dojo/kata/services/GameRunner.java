@@ -59,7 +59,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame() {
-        return new Kata(new RandomDice());
+        return new Kata(getDice());
     }
 
     @Override

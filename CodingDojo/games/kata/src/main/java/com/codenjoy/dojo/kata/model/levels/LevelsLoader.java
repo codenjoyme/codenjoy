@@ -28,9 +28,6 @@ import org.reflections.Reflections;
 
 import java.util.*;
 
-/**
- * Created by indigo on 2017-03-04.
- */
 public class LevelsLoader {
 
     // TODO На админке можно менять порядок задач местами для играющих, а это убрать
@@ -64,12 +61,7 @@ public class LevelsLoader {
 
 
     private static void sortByComplexity(List<Level> result) {
-        Collections.sort(result, new Comparator<Level>() {
-            @Override
-            public int compare(Level o1, Level o2) {
-                return Integer.compare(o1.complexity(), o2.complexity());
-            }
-        });
+        Collections.sort(result, Comparator.comparingInt(Level::complexity));
     }
 
     private static List<Level> createLevels(List<Class<? extends Level>> classes) {

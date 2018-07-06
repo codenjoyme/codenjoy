@@ -28,9 +28,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by indigo on 2017-03-04.
- */
 public class Strings implements Iterable<String> {
 
     private List<String> strings;

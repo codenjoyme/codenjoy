@@ -26,9 +26,6 @@ package com.codenjoy.dojo.kata.model;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by indigo on 2016-11-23.
- */
 public class QuestionAnswers {
     private List<QuestionAnswer> questionAnswers = new LinkedList<>();
 
