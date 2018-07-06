@@ -27,20 +27,18 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.minesweeper.client.ai.Vaa25Solver;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.minesweeper.model.Minesweeper;
+import com.codenjoy.dojo.minesweeper.model.Player;
 import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/23/13
- * Time: 11:43 PM
- */
-public class GameRunner extends AbstractGameType implements GameType {   // TODO test me
+public class GameRunner extends AbstractGameType implements GameType {
 
     private Parameter<Integer> boardSize;
     private Parameter<Integer> minesOnBoard;
@@ -60,10 +58,8 @@ public class GameRunner extends AbstractGameType implements GameType {   // TODO
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        Minesweeper board = new Minesweeper(boardSize, minesOnBoard, charge, new RandomMinesGenerator(), listener, factory);
-        board.newGame();
-        return board;
+    public GameField createGame() {
+        return new Minesweeper(boardSize, minesOnBoard, charge, new RandomMinesGenerator(getDice()));
     }
 
     @Override
@@ -87,8 +83,13 @@ public class GameRunner extends AbstractGameType implements GameType {   // TODO
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        Vaa25Solver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        Vaa25Solver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

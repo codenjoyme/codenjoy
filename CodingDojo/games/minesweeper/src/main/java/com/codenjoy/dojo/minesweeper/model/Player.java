@@ -4,7 +4,7 @@ package com.codenjoy.dojo.minesweeper.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,28 +23,30 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public enum Direction {
+public class Player extends GamePlayer<Sapper, Field> {
 
-    UP(new PointImpl(0, 1)),
-    DOWN(new PointImpl(0, -1)),
-    LEFT(new PointImpl(-1, 0)),
-    RIGHT(new PointImpl(1, 0)),
-    UP_LEFT(new PointImpl(-1, 1)),
-    UP_RIGHT(new PointImpl(1, 1)),
-    DOWN_LEFT(new PointImpl(-1, -1)),
-    DOWN_RIGHT(new PointImpl(1, -1));
+    Sapper hero;
 
-    private PointImpl delta;
-
-    Direction(PointImpl delta) {
-        this.delta = delta;
+    public Player(EventListener listener) {
+        super(listener);
     }
 
-    public PointImpl change(PointImpl point) {
-        point.change(delta);
-        return point;
+    @Override
+    public Sapper getHero() {
+        return hero;
     }
 
+    @Override
+    public void newHero(Field field) {
+        hero = new Sapper(1, 1);
+        hero.init(field);
+    }
+
+    @Override
+    public boolean isAlive() {
+        return hero.isAlive();
+    }
 }

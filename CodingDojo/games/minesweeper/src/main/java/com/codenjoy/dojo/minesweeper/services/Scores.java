@@ -27,11 +27,6 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/23/13
- * Time: 11:44 PM
- */
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> gameOverPenalty;

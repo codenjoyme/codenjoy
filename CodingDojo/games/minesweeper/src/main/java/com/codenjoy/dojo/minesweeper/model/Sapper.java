@@ -23,21 +23,27 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 /**
  * User: oleksii.morozov
  * Date: 10/14/12
  * Time: 12:39 PM
  */
-public class Sapper extends PointImpl implements State<Elements, Object> {
+public class Sapper extends PlayerHero<Field> implements State<Elements, Object> {
+
     private boolean isDead = false;
     private MineDetector mineDetector;
-    private Field board;
+    private Direction nextStep;
+    private boolean useDetector;
 
     public Sapper(int x, int y) {
         super(x, y);
+        useDetector = false;
     }
 
     public boolean isDead() {
@@ -48,6 +54,12 @@ public class Sapper extends PointImpl implements State<Elements, Object> {
         isDead = true;
     }
 
+    public boolean isAlive() {
+        return !isDead() &&
+                !field.isEmptyDetectorButPresentMines() &&
+                !field.isWin();
+    }
+    
     private void useMineDetector() {
         if (mineDetector.getCharge() > 0) {
             mineDetector.useMe();
@@ -80,14 +92,50 @@ public class Sapper extends PointImpl implements State<Elements, Object> {
 
     @Override
     public Elements state(Object player, Object... alsoAtPoint) {
-        if (board.isSapperOnMine()) {
+        if (field.isSapperOnMine()) {
             return Elements.BANG;
         } else {
             return Elements.DETECTOR;
         }
     }
+    @Override
+    public void down() {
+        nextStep = Direction.DOWN;
+    }
 
-    public void setBoard(Field board) {
-        this.board = board;
+    @Override
+    public void up() {
+        nextStep = Direction.UP;
+    }
+
+    @Override
+    public void left() {
+        nextStep = Direction.LEFT;
+    }
+
+    @Override
+    public void right() {
+        nextStep = Direction.RIGHT;
+    }
+
+    @Override
+    public void act(int... p) {
+        useDetector = true;
+    }
+
+    @Override
+    public void tick() {
+        if (nextStep == null) {
+            return;
+        }
+
+        if (useDetector) {
+            field.useMineDetectorToGivenDirection(nextStep);
+            useDetector = false;
+        } else {
+            field.sapperMoveTo(nextStep);
+        }
+
+        nextStep = null;
     }
 }

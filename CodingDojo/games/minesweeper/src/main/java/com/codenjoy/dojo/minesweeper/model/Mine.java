@@ -55,7 +55,7 @@ public class Mine extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    public void setBoard(Field board) {
+    public void init(Field board) {
         this.board = board;
     }
 }

@@ -23,11 +23,11 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * User: oleksii.morozov
@@ -40,6 +40,11 @@ public class RandomMinesGenerator implements MinesGenerator {
     public static int SAFE_AREA_Y_0 = 1;
     public static int SAFE_AREA_Y_1 = 3;
     private List<Point> freeCells;
+    private Dice dice;
+
+    public RandomMinesGenerator(Dice dice) {
+        this.dice = dice;
+    }
 
     public List<Mine> get(int count, Field board) {
         freeCells = board.getFreeCells();
@@ -47,7 +52,7 @@ public class RandomMinesGenerator implements MinesGenerator {
         List<Mine> result = new ArrayList<Mine>();
         for (int index = 0; index < count; index++) {
             Mine mine = new Mine(getRandomFreeCellOnBoard());
-            mine.setBoard(board);
+            mine.init(board);
             result.add(mine);
             freeCells.remove(mine);
         }
@@ -71,7 +76,7 @@ public class RandomMinesGenerator implements MinesGenerator {
 
     private Point getRandomFreeCellOnBoard() {
         if (!freeCells.isEmpty()) {
-            int place = new Random().nextInt(freeCells.size());
+            int place = dice.next(freeCells.size());
             return freeCells.get(place);
         }
 

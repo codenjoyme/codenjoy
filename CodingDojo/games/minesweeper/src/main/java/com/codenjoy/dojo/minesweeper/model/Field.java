@@ -23,20 +23,21 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends Game {
+public interface Field extends GameField<Player> {
 
     List<Point> getFreeCells();
 
     List<Point> getCells();
 
     int size();
-
-    Sapper getSapper();
 
     List<Mine> getMines();
 
@@ -71,4 +72,6 @@ public interface Field extends Game {
     boolean isSapper(Point pt);
 
     int minesNear(Point pt);
+
+    Sapper sapper();
 }

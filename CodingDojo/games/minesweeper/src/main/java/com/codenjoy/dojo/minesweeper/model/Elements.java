@@ -25,11 +25,6 @@ package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.services.CharElements;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/24/13
- * Time: 12:03 AM
- */
 public enum Elements implements CharElements {
 
     BANG('Ѡ'),

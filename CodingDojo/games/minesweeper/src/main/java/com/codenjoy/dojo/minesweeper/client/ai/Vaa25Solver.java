@@ -23,17 +23,16 @@ package com.codenjoy.dojo.minesweeper.client.ai;
  */
 
 
-import com.YourDirectionSolver;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
-import com.codenjoy.dojo.minesweeper.services.GameRunner;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 
 public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
 
-    public Vaa25Solver(String name) {
-        super(new com.utils.RandomDice(), name);
+    public Vaa25Solver(String name, Dice dice) {
+        super(dice, name);
     }
 
     @Override
@@ -45,14 +44,14 @@ public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new Vaa25Solver("test"),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new Vaa25Solver(name),
+                new Vaa25Solver(name, dice),
                 new Board());
     }
 

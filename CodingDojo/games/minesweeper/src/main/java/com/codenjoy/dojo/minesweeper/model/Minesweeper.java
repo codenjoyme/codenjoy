@@ -25,10 +25,6 @@ package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.hero.GameMode;
-import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
@@ -36,36 +32,30 @@ import java.util.*;
 public class Minesweeper implements Field {
 
     private List<Point> cells;
-    private Sapper sapper;
     private List<Mine> mines;
     private List<Mine> removedMines;
     private int turnCount = 0;
     private MinesGenerator minesGenerator;
-    private EventListener listener;
-    private boolean useDetector;
     private int maxScore;
     private int score;
-    private List<Wall> walls = new LinkedList<Wall>();
+    private List<Wall> walls = new LinkedList<>();
 
     private Parameter<Integer> size;  // TODO это пооубирать отсюда, если изменяются настройки, надо пересобрать все игры
     private Parameter<Integer> detectorCharge;
     private Parameter<Integer> minesCount;
 
-    private Printer printer;
     private List<Flag> flags;
     private Map<Point, Integer> walkAt;
-    private com.codenjoy.dojo.minesweeper.model.Direction nextStep;
     private Integer currentSize;
+    private Player player;
 
     public Minesweeper(Parameter<Integer> size, Parameter<Integer> minesCount, Parameter<Integer> detectorCharge,
-                       MinesGenerator minesGenerator, EventListener listener, PrinterFactory factory) {
+                       MinesGenerator minesGenerator) {
         this.size = size;
-        this.listener = listener; // TODO to use settings
         this.minesGenerator = minesGenerator;
         this.detectorCharge = detectorCharge;
         this.minesCount = minesCount;
         buildWalls();
-        printer = factory.getPrinter(reader(), null);
     }
 
     private void buildWalls() {
@@ -91,15 +81,9 @@ public class Minesweeper implements Field {
             detectorCharge.update(minesCount.getValue());
         }
     }
-
-    protected Sapper initializeSapper() {
-        Sapper s = new Sapper(1, 1);
-        s.setBoard(this);
-        return s;
-    }
-
+    
     private List<Point> initializeBoardCells() {
-        List<Point> result = new ArrayList<Point>();
+        List<Point> result = new ArrayList<>();
         for (int x = 1; x < size.getValue() - 1; x++) {
             for (int y = 1; y < size.getValue() - 1; y++) {
                 result.add(new Cell(x, y, this));
@@ -110,9 +94,9 @@ public class Minesweeper implements Field {
 
     @Override
     public List<Point> getFreeCells() {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (Point cell : getCells()) {
-            boolean isSapper = cell.equals(getSapper());
+            boolean isSapper = cell.equals(sapper());
             boolean isBoard = cell.getX() == 0 || cell.getY() == 0 || cell.getX() == size.getValue() - 1 || cell.getY() == size.getValue() - 1;  // TODO test me
             boolean isMine = isMine(cell);
             if (!isSapper && !isMine && !isBoard) {
@@ -133,11 +117,6 @@ public class Minesweeper implements Field {
     }
 
     @Override
-    public Sapper getSapper() {
-        return sapper;
-    }
-
-    @Override
     public List<Mine> getMines() {
         return mines;
     }
@@ -148,37 +127,31 @@ public class Minesweeper implements Field {
     }
 
     @Override
-    public void sapperMoveTo(com.codenjoy.dojo.minesweeper.model.Direction direction) {
+    public void sapperMoveTo(Direction direction) {
         if (isSapperCanMoveToDirection(direction)) {
             boolean cleaned = moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
-                sapper.die();
+                player.getHero().die();
                 openAllBoard();
-                fire(Events.KILL_ON_MINE);
+                player.event(Events.KILL_ON_MINE);
             } else {
                 if (cleaned) {
-                    fire(Events.CLEAN_BOARD);
+                    player.event(Events.CLEAN_BOARD);
                 }
             }
             nextTurn();
         }
     }
 
-    private void fire(Events event) {
-        if (listener != null) {
-            listener.event(event);
-        }
-    }
+    private boolean moveSapperAndFillFreeCell(Direction direction) {
+        walkAt.put(sapper().copy(), getMinesNearSapper());
+        sapper().change(direction);
 
-    private boolean moveSapperAndFillFreeCell(com.codenjoy.dojo.minesweeper.model.Direction direction) {
-        walkAt.put(sapper.copy(), getMinesNearSapper());
-        direction.change(sapper);
-
-        boolean wasHere = walkAt.containsKey(sapper.copy());
+        boolean wasHere = walkAt.containsKey(sapper());
         return !wasHere;
     }
 
-    private boolean isSapperCanMoveToDirection(com.codenjoy.dojo.minesweeper.model.Direction direction) {
+    private boolean isSapperCanMoveToDirection(Direction direction) {
         Point cell = getCellPossiblePosition(direction);
         return cells.contains(cell);
     }
@@ -189,53 +162,13 @@ public class Minesweeper implements Field {
 
     @Override
     public boolean isSapperOnMine() {
-        return getMines().contains(sapper);
+        return getMines().contains(sapper());
     }
 
     @Override
-    public Joystick getJoystick() {
-        return new DirectionActJoystick() {
-            @Override
-            public void down() {
-                nextStep = com.codenjoy.dojo.minesweeper.model.Direction.DOWN;
-            }
-
-            @Override
-            public void up() {
-                nextStep = com.codenjoy.dojo.minesweeper.model.Direction.UP;
-            }
-
-            @Override
-            public void left() {
-                nextStep = com.codenjoy.dojo.minesweeper.model.Direction.LEFT;
-            }
-
-            @Override
-            public void right() {
-                nextStep = com.codenjoy.dojo.minesweeper.model.Direction.RIGHT;
-            }
-
-            @Override
-            public void act(int... p) {
-                useDetector = true;
-            }
-        };
+    public Sapper sapper() {
+        return player.getHero();
     }
-
-    @Override
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return score;
-    }
-
-    @Override
-    public boolean isGameOver() {
-            return sapper.isDead() || isEmptyDetectorButPresentMines() || isWin();
-        }
 
     @Override
     public boolean isMine(Point pt) {
@@ -255,7 +188,7 @@ public class Minesweeper implements Field {
 
     @Override
     public boolean isSapper(Point pt) {
-        return pt.equals(getSapper());
+        return pt.equals(sapper());
     }
 
     @Override
@@ -267,6 +200,7 @@ public class Minesweeper implements Field {
         return count;
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = Minesweeper.this.size();
@@ -278,69 +212,50 @@ public class Minesweeper implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.add(Minesweeper.this.getSapper());
-                result.addAll(Minesweeper.this.getMines());
-                result.addAll(Minesweeper.this.removedMines);
-                result.addAll(Minesweeper.this.getFlags());
-                result.addAll(Minesweeper.this.getCells());
-                result.addAll(Minesweeper.this.getWalls());
-                return result;
+                return new LinkedList<Point>() {{
+                    add(Minesweeper.this.sapper());
+                    addAll(Minesweeper.this.getMines());
+                    addAll(Minesweeper.this.removedMines);
+                    addAll(Minesweeper.this.getFlags());
+                    addAll(Minesweeper.this.getCells());
+                    addAll(Minesweeper.this.getWalls());
+                }};
             }
         };
     }
 
+
+
     @Override
-    public void newGame() {
+    public void newGame(Player player) {
         validate();
-        flags = new LinkedList<Flag>();
-        walkAt = new HashMap<Point, Integer>();
-        useDetector = false;
+        this.player = player;
+        flags = new LinkedList<>();
+        walkAt = new HashMap<>();
         maxScore = 0;
         score = 0;
         cells = initializeBoardCells();
-        sapper = initializeSapper();
-        sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge.getValue());
+        player.newHero(this);
+        sapper().iWantToHaveMineDetectorWithChargeNumber(detectorCharge.getValue());
         mines = minesGenerator.get(minesCount.getValue(), this);
-        removedMines = new LinkedList<Mine>();
+        removedMines = new LinkedList<>();
         tick();
     }
 
     @Override
-    public String getBoardAsString() {
-        return printer.print();
+    public void remove(Player player) {
+        this.player = null;
     }
 
     @Override
-    public void destroy() {
-        // do nothing
-    }
-
-    @Override
-    public void clearScore() {  // TODO test me
-        maxScore = 0;
-        score = 0;
-    }
-
-    @Override
-    public HeroData getHero() {
-        return GameMode.heroOnTheirOwnBoard(sapper);
-    }
-
-    @Override
-    public String getSave() {
-        return null;
-    }
-
-    @Override
-    public Point getCellPossiblePosition(com.codenjoy.dojo.minesweeper.model.Direction direction) {
-        return direction.change(sapper.copy());
+    public Point getCellPossiblePosition(Direction direction) {
+        return direction.change(sapper().copy());
     }
 
     @Override
     public Mine createMineOnPositionIfPossible(Point cell) {
         Mine result = new Mine(cell);
-        result.setBoard(this);
+        result.init(this);
         getMines().add(result);
         return result;
     }
@@ -351,13 +266,18 @@ public class Minesweeper implements Field {
     }
 
     @Override
+    public boolean isGameOver() {
+        return !sapper().isAlive();
+    }
+
+    @Override
     public int getMinesNearSapper() {
-        return getMinesNear(sapper);
+        return getMinesNear(sapper());
     }
 
     private int getMinesNear(Point position) {
         int result = 0;
-        for (com.codenjoy.dojo.minesweeper.model.Direction direction : com.codenjoy.dojo.minesweeper.model.Direction.values()) {
+        for (QDirection direction : QDirection.values()) {
             Point newPosition = direction.change(position.copy());
             if (cells.contains(newPosition) && getMines().contains(newPosition)) {
                 result++;
@@ -367,10 +287,10 @@ public class Minesweeper implements Field {
     }
 
     @Override
-    public void useMineDetectorToGivenDirection(com.codenjoy.dojo.minesweeper.model.Direction direction) {
+    public void useMineDetectorToGivenDirection(Direction direction) {
         final Point result = getCellPossiblePosition(direction);
         if (cells.contains(result)) {
-            if (sapper.isEmptyCharge()) {
+            if (sapper().isEmptyCharge()) {
                 return;
             }
 
@@ -378,36 +298,36 @@ public class Minesweeper implements Field {
                 return;
             }
 
-            sapper.tryToUseDetector(new DetectorAction() {
+            sapper().tryToUseDetector(new DetectorAction() {
                 @Override
                 public void used() {
                     flags.add(new Flag(result));
                     if (getMines().contains(result)) {
                         removeMine(result);
                     } else {
-                        fire(Events.FORGET_CHARGE);
+                        player.event(Events.FORGET_CHARGE);
                     }
                 }
             });
 
             if (isEmptyDetectorButPresentMines()) {
                 openAllBoard();
-                fire(Events.NO_MORE_CHARGE);
+                player.event(Events.NO_MORE_CHARGE);
             }
         }
     }
 
     private void removeMine(Point result) {
         Mine mine = new Mine(result);
-        mine.setBoard(this);
+        mine.init(this);
         removedMines.add(mine);
         getMines().remove(result);
         increaseScore();
         recalculateWalkMap();
-        fire(Events.DESTROY_MINE);
+        player.event(Events.DESTROY_MINE);
         if (getMines().isEmpty()) {
             openAllBoard();
-            fire(Events.WIN);
+            player.event(Events.WIN);
         }
     }
 
@@ -432,34 +352,23 @@ public class Minesweeper implements Field {
 
     @Override
     public boolean isEmptyDetectorButPresentMines() {
-        return getMines().size() != 0 && sapper.isEmptyCharge();
+        return getMines().size() != 0 && sapper().isEmptyCharge();
     }
 
     @Override
     public boolean isWin() {
-        return getMines().size() == 0 && !sapper.isDead();
+        return getMines().size() == 0 && !sapper().isDead();
     }
 
     @Override
     public void tick() {
         if (currentSize != size.getValue()) {  // TODO потестить это
             currentSize = size.getValue();
-            newGame();
+            newGame(player);
             return;
         }
 
-        if (nextStep == null) {
-            return;
-        }
-
-        if (useDetector) {
-            useMineDetectorToGivenDirection(nextStep);
-            useDetector = false;
-        } else {
-            sapperMoveTo(nextStep);
-        }
-
-        nextStep = null;
+        sapper().tick();
     }
 
     public List<Wall> getWalls() {
