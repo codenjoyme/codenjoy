@@ -83,7 +83,7 @@ public class HexTest {
 
     private void setupPlayer1() {
         listener1 = mock(EventListener.class);
-        player1 = new Player(listener1, game);
+        player1 = new Player(listener1);
         joystick1 = player1.getJoystick();
 
         dice(hero1.getX(), hero1.getY());
@@ -93,7 +93,7 @@ public class HexTest {
 
     private void setupPlayer2() {
         listener2 = mock(EventListener.class);
-        player2 = new Player(listener2, game);
+        player2 = new Player(listener2);
         joystick2 = player2.getJoystick();
 
         dice(hero2.getX(), hero2.getY());

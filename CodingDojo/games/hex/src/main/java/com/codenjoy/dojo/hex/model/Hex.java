@@ -27,24 +27,28 @@ import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
-public class Hex implements Tickable, Field {
+public class Hex implements Field {
 
     private List<Wall> walls;
     private List<Player> players;
 
-    private final int size;
+    private int size;
     private Dice dice;
 
     public Hex(Level level, Dice dice) {
         this.dice = dice;
         walls = level.getWalls();
         size = level.getSize();
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
     @Override
@@ -55,15 +59,15 @@ public class Hex implements Tickable, Field {
 
         if (isGameOver()) return;
 
-        List<Hero> newHeroes = new LinkedList<Hero>();
+        List<Hero> newHeroes = new LinkedList<>();
         for (Player player : players) {
-            if (player.newHero != null) {
-                newHeroes.add(player.newHero);
+            if (player.getNewHero() != null) {
+                newHeroes.add(player.getNewHero());
             }
         }
 
-        List<Hero> annigilateHeroes = new LinkedList<Hero>();
-        List<Hero> removedHeroes = new LinkedList<Hero>();
+        List<Hero> annigilateHeroes = new LinkedList<>();
+        List<Hero> removedHeroes = new LinkedList<>();
         for (int index = 0; index < newHeroes.size(); index++) {
             for (int jndex = index; jndex < newHeroes.size(); jndex++) {
                 if (index == jndex) continue;
@@ -87,14 +91,14 @@ public class Hex implements Tickable, Field {
             }
         }
 
-        Map<Player, List<Hero>> transitions = new HashMap<Player, List<Hero>>();
+        Map<Player, List<Hero>> transitions = new HashMap<>();
 
         for (Player player : players) {
-            Hero newHero = player.newHero;
+            Hero newHero = player.getNewHero();
             if (annigilateHeroes.contains(newHero)) continue;
             if (newHero == null) continue;
 
-            transitions.put(player, new LinkedList<Hero>());
+            transitions.put(player, new LinkedList<>());
 
             for (Player otherPlayer : players) {
                 if (player == otherPlayer) continue;
@@ -171,26 +175,29 @@ public class Hex implements Tickable, Field {
 
         List<Hero> heroes = getHeroes();
         for (Player player : players) {
-            heroes.remove(player.newHero);
+            heroes.remove(player.getNewHero());
         }
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || heroes.contains(pt);
+        return x > size - 1 || x < 0
+                || y < 0 || y > size - 1
+                || walls.contains(pt)
+                || heroes.contains(pt);
     }
 
     @Override
     public Point getFreeRandom() { // TODO найти место чтобы вокруг было свободно
-        int rndX = 0;
-        int rndY = 0;
+        int x;
+        int y;
         int c = 0;
         do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
+            x = dice.next(size);
+            y = dice.next(size);
+        } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
             return pt(0, 0);
         }
 
-        return pt(rndX, rndY);
+        return pt(x, y);
     }
 
     @Override
@@ -202,8 +209,8 @@ public class Hex implements Tickable, Field {
     }
 
     @Override
-    public void addHero(int newX, int newY, Hero hero) {
-        Hero newHero = new Hero(newX, newY, hero.getElement());
+    public void addHero(int x, int y, Hero hero) {
+        Hero newHero = new Hero(x, y, hero.getElement());
         newHero.init(this);
         addHeroToOwner(hero, newHero);
     }
@@ -217,39 +224,35 @@ public class Hex implements Tickable, Field {
     }
 
     @Override
-    public void jumpHero(int newX, int newY, Hero hero) {
-        hero.move(newX, newY);
+    public void jumpHero(int x, int y, Hero hero) {
+        hero.move(x, y);
         addHeroToOwner(hero, hero);
     }
 
     @Override
     public Hero getHero(int x, int y) {
-        List<Hero> heroes = getHeroes();
-        int index = heroes.indexOf(pt(x, y));
-        if (index != -1) {
-            return heroes.get(index);
-        }
-        return null; // TODO
+        return getHeroes().stream()
+                .filter(it -> it.equals(pt(x, y)))
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
-        for (Player player : players) {
-            for (Hero hero : player.getHeroes()) {
-                result.add(hero);
-            }
-        }
-        return result;
+        return players.stream()
+                .flatMap(player -> player.getHeroes().stream())
+                .collect(toList());
     }
 
+    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
             player.setElement(getNextElement());
         }
-        player.newHero();
+        player.newHero(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }
@@ -259,18 +262,13 @@ public class Hex implements Tickable, Field {
     }
 
     public Elements getNextElement() {
-        List<Elements> busy = new LinkedList<Elements>();
-        for (Player player : players) {
-            busy.add(player.getElement());
-        }
+        List<Elements> busy = players.stream()
+                .map(Player::getElement)
+                .collect(toList());
 
-        List<Elements> free = new LinkedList<Elements>();
-        List<Elements> all = Elements.heroesElements();
-        for (Elements element : all) {
-            if (!busy.contains(element)) {
-                free.add(element);
-            }
-        }
+        List<Elements> free = Elements.heroesElements().stream()
+                .filter(el -> !busy.contains(el))
+                .collect(toList());
 
         if (free.isEmpty()) {
             return Elements.HERO11; // TODO надо много героев наплодить либо запретить регистрацию, если привысили их число
@@ -295,10 +293,10 @@ public class Hex implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Hex.this.getHeroes());
-                result.addAll(Hex.this.getWalls());
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(Hex.this.getHeroes());
+                    addAll(Hex.this.getWalls());
+                }};
             }
         };
     }

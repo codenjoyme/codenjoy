@@ -30,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -46,7 +47,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHeroes() {
-        List<Hero> result = new LinkedList<Hero>();
+        List<Hero> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.HERO1)) {
             result.add(new Hero(pt, Elements.HERO1));
@@ -61,7 +62,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
+        List<Wall> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.WALL)) {
             result.add(new Wall(pt));
@@ -71,7 +72,7 @@ public class LevelImpl implements Level {
     }
 
     private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));

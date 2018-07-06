@@ -24,8 +24,9 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 

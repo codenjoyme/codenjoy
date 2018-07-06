@@ -24,6 +24,7 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -53,7 +54,7 @@ public class SingleTest {
         game = new Hex(level, dice);
         List<Single> games = new LinkedList<Single>();
         for (int index = 0; index < count; index++) {
-            Single game = new Single(this.game, listener, printerFactory);
+            Single game = new Single(this.game, new Player(listener), printerFactory);
             games.add(game);
             game.newGame();
         }

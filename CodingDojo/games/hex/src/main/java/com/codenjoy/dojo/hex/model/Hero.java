@@ -24,10 +24,10 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.NoActJoystick;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
-
-    private Field field;
+public class Hero extends PlayerHero<Field> implements State<Elements, Player>, NoActJoystick {
 
     private Direction direction;
     private boolean jump;
@@ -44,6 +44,7 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         this.element = element;
     }
 
+    @Override
     public void init(Field field) {
         this.field = field;
     }
@@ -66,20 +67,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     @Override
     public void right() {
         direction = Direction.RIGHT;
-    }
-
-    @Override
-    public void act(int... p) {
-        // do nothing, this should never happen
-    }
-
-    @Override
-    public void message(String command) {
-        // do nothing, this should never happen
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     @Override

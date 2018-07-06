@@ -24,12 +24,10 @@ package com.codenjoy.dojo.hex.client.ai;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.hex.client.Board;
 import com.codenjoy.dojo.hex.model.Elements;
-import com.codenjoy.dojo.hex.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
@@ -85,14 +83,14 @@ public class ApofigSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new ApofigSolver(new RandomDice()),
+                new ApofigSolver(dice),
                 new Board());
     }
 

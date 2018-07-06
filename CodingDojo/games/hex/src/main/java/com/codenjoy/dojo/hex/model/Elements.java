@@ -63,20 +63,18 @@ public enum Elements implements CharElements {
     }
 
     public static List<Elements> heroesElements() {
-        List<Elements> result = new LinkedList<Elements>(Arrays.asList(Elements.values()));
-        result.remove(Elements.NONE);
-        result.remove(Elements.WALL);
-        result.remove(Elements.MY_HERO);
-        return result;
+        return new LinkedList<Elements>(Arrays.asList(Elements.values())) {{
+            remove(Elements.NONE);
+            remove(Elements.WALL);
+            remove(Elements.MY_HERO);
+        }};
     }
 
     public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
-            if (el.ch == ch) {
-                return el;
-            }
-        }
-        throw new IllegalArgumentException("No such element for " + ch);
+        return Arrays.stream(Elements.values())
+                .filter(el -> el.ch == ch)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No such element for " + ch));
     }
 
 }

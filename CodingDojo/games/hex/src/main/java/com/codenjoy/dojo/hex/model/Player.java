@@ -29,115 +29,53 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class Player implements Tickable {
+public class Player extends GamePlayer<Hero, Field> implements Tickable {
 
-    class Heroes implements Iterable<Hero> {
-        private List<Hero> heroes;
-
-        Heroes() {
-            heroes = new LinkedList<Hero>();
-        }
-
-        public void clear() {
-            for (Hero hero : heroes) {
-                hero.newOwner(null);
-            }
-            heroes.clear();
-        }
-
-        @Override
-        public Iterator<Hero> iterator() {
-            return new LinkedList<Hero>(heroes).iterator();
-        }
-
-        public boolean remove(Hero hero) {
-            hero.newOwner(null);
-            return heroes.remove(hero);
-        }
-
-        public void add(Hero hero, Player player) {
-            heroes.add(hero);
-            hero.newOwner(player);
-        }
-
-        public boolean contains(Hero hero) {
-            return heroes.contains(hero);
-        }
-
-        public boolean isEmpty() {
-            return heroes.isEmpty();
-        }
-
-        public int size() {
-            return heroes.size();
-        }
-    }
-
-    private EventListener listener;
-    private int maxScore;
-    private int score;
+    private Field field;
     private Hero active;
     private boolean alive;
     private Heroes heroes;
-    private Field field;
-    Hero newHero;
+    private Hero newHero;
     private Elements element;
     private int loose;
     private int win;
 
-    public Player(EventListener listener, Field field) {
-        this.listener = listener;
-        this.field = field;
-        this.alive = true;
+    public Player(EventListener listener) {
+        super(listener);
+        alive = true;
         heroes = new Heroes();
-        clearScore();
     }
 
     public Heroes getHeroes() {
         return heroes;
     }
 
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
     public void event(Event event) {
         switch (event.getType()) {
-            case LOOSE: resetScore(); break;
+            case LOOSE: clearScore(); break;
             case WIN: increaseScore(); break;
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
-    private void resetScore() {
-        score = 0;
+    @Override
+    public Hero getHero() {
+        return newHero;
     }
 
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
-    }
-
-    public void newHero() {
+    @Override
+    public void newHero(Field field) {
+        this.field = field;
         Point pt = field.getFreeRandom();
         Hero hero = new Hero(pt, element);
         hero.init(field);
@@ -150,6 +88,7 @@ public class Player implements Tickable {
         this.newHero = newHero;
     }
 
+    @Override
     public Joystick getJoystick() {
         return new DirectionActJoystick() {
             @Override
@@ -275,5 +214,9 @@ public class Player implements Tickable {
 
     public Hero getActive() {
         return active;
+    }
+
+    public Hero getNewHero() {
+        return newHero;
     }
 }
