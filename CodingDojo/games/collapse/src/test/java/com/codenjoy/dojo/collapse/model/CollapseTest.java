@@ -34,11 +34,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class CollapseTest {
 
     private Collapse game;
@@ -56,7 +51,7 @@ public class CollapseTest {
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        joystick = player.getJoystick();
+        joystick = player.getHero();
     }
 
     private void assertE(String expected) {

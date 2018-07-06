@@ -23,8 +23,10 @@ package com.codenjoy.dojo.collapse.model;
  */
 
 
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field {
-    Joystick getJoystick();
+public interface Field extends GameField<Player> {
+    boolean isGameOver();
+
+    int size();
 }

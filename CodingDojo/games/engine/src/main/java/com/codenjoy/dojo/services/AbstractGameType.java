@@ -69,6 +69,13 @@ public abstract class AbstractGameType implements GameType {
         // do nothing
     }
 
+    /**
+     * @return нормальный Random, но ты можешь переопределить его, например, для тестовых целей
+     */
+    protected Dice getDice() {
+        return new RandomDice();
+    }
+
     @Override
     public PrinterFactory getPrinterFactory() {
         return new PrinterFactoryImpl();

@@ -26,12 +26,13 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Collapse implements Tickable, Field {
+public class Collapse implements Field {
 
     private final Dice dice;
     private Container<Point, Cell> cells;
@@ -39,9 +40,6 @@ public class Collapse implements Tickable, Field {
 
     private final int size;
     private Container<Point, Wall> walls;
-
-    private Point act;
-    private Direction direction;
 
     private boolean gameOver;
 
@@ -59,7 +57,10 @@ public class Collapse implements Tickable, Field {
         fall();
         fillNew();
 
-        if (act != null && direction != null) {
+        Hero hero = hero();
+        Point act = hero.getAct();
+        Direction direction = hero.getDirection();
+        if (hero.getAct() != null && direction != null) {
             Cell cell = cells.get(act);
             if (cell == null) return;
 
@@ -72,8 +73,11 @@ public class Collapse implements Tickable, Field {
             checkClear(cell, cellTo);
         }
 
-        act = null;
-        direction = null;
+        hero.tick();
+    }
+
+    private Hero hero() {
+        return player.getHero();
     }
 
     private void fall() {
@@ -155,7 +159,8 @@ public class Collapse implements Tickable, Field {
         }
     }
 
-    public int getSize() {
+    @Override
+    public int size() {
         return size;
     }
 
@@ -173,57 +178,13 @@ public class Collapse implements Tickable, Field {
         return cells.values();
     }
 
+    @Override
     public boolean isGameOver() {
         return gameOver;
     }
 
     public Collection<Wall> getWalls() {
         return walls.values();
-    }
-
-    @Override
-    public Joystick getJoystick() {
-        return new DirectionActJoystick() {
-            @Override
-            public void down() {
-                direction = Direction.DOWN;
-            }
-
-            @Override
-            public void up() {
-                direction = Direction.UP;
-            }
-
-            @Override
-            public void left() {
-                direction = Direction.LEFT;
-            }
-
-            @Override
-            public void right() {
-                direction = Direction.RIGHT;
-            }
-
-            @Override
-            public void act(int... p) {
-                if (gameOver) return;
-
-                if (p.length != 2) {
-                    return;
-                }
-
-                if (check(p[0])) return;
-                if (check(p[1])) return;
-
-                int x = p[0];
-                int y = p[1];
-                act = PointImpl.pt(x, y);
-            }
-        };
-    }
-
-    private boolean check(int i) {
-        return (i >= size || i < 0);
     }
 
     public BoardReader reader() {
