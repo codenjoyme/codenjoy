@@ -76,6 +76,58 @@ public class QDirectionTest {
     }
 
     @Test
+    public void test_mirrorHorizontal() {
+        assertEquals(QDirection.LEFT, QDirection.LEFT.mirrorHorizontal());
+        assertEquals(QDirection.RIGHT, QDirection.RIGHT.mirrorHorizontal());
+        assertEquals(QDirection.DOWN, QDirection.UP.mirrorHorizontal());
+        assertEquals(QDirection.UP, QDirection.DOWN.mirrorHorizontal());
+        assertEquals(QDirection.LEFT_DOWN, QDirection.LEFT_UP.mirrorHorizontal());
+        assertEquals(QDirection.RIGHT_DOWN, QDirection.RIGHT_UP.mirrorHorizontal());
+        assertEquals(QDirection.LEFT_UP, QDirection.LEFT_DOWN.mirrorHorizontal());
+        assertEquals(QDirection.RIGHT_UP, QDirection.RIGHT_DOWN.mirrorHorizontal());
+        assertEquals(QDirection.NONE, QDirection.NONE.mirrorHorizontal());
+    }
+
+    @Test
+    public void test_clockwise() {
+        assertEquals(QDirection.LEFT_DOWN, QDirection.LEFT.clockwise());
+        assertEquals(QDirection.DOWN, QDirection.LEFT_DOWN.clockwise());
+        assertEquals(QDirection.RIGHT_DOWN, QDirection.DOWN.clockwise());
+        assertEquals(QDirection.RIGHT, QDirection.RIGHT_DOWN.clockwise());
+        assertEquals(QDirection.RIGHT_UP, QDirection.RIGHT.clockwise());
+        assertEquals(QDirection.UP, QDirection.RIGHT_UP.clockwise());
+        assertEquals(QDirection.LEFT_UP, QDirection.UP.clockwise());
+        assertEquals(QDirection.LEFT, QDirection.LEFT_UP.clockwise());
+        assertEquals(QDirection.NONE, QDirection.NONE.clockwise());
+    }
+
+    @Test
+    public void test_contrClockwise() {
+        assertEquals(QDirection.LEFT_UP, QDirection.LEFT.contrClockwise());
+        assertEquals(QDirection.UP, QDirection.LEFT_UP.contrClockwise());
+        assertEquals(QDirection.RIGHT_UP, QDirection.UP.contrClockwise());
+        assertEquals(QDirection.RIGHT, QDirection.RIGHT_UP.contrClockwise());
+        assertEquals(QDirection.RIGHT_DOWN, QDirection.RIGHT.contrClockwise());
+        assertEquals(QDirection.DOWN, QDirection.RIGHT_DOWN.contrClockwise());
+        assertEquals(QDirection.LEFT_DOWN, QDirection.DOWN.contrClockwise());
+        assertEquals(QDirection.LEFT, QDirection.LEFT_DOWN.contrClockwise());
+        assertEquals(QDirection.NONE, QDirection.NONE.contrClockwise());
+    }
+
+    @Test
+    public void test_mirrorVertical() {
+        assertEquals(QDirection.RIGHT, QDirection.LEFT.mirrorVertical());
+        assertEquals(QDirection.LEFT, QDirection.RIGHT.mirrorVertical());
+        assertEquals(QDirection.DOWN, QDirection.DOWN.mirrorVertical());
+        assertEquals(QDirection.UP, QDirection.UP.mirrorVertical());
+        assertEquals(QDirection.RIGHT_DOWN, QDirection.LEFT_DOWN.mirrorVertical());
+        assertEquals(QDirection.LEFT_DOWN, QDirection.RIGHT_DOWN.mirrorVertical());
+        assertEquals(QDirection.RIGHT_UP, QDirection.LEFT_UP.mirrorVertical());
+        assertEquals(QDirection.LEFT_UP, QDirection.RIGHT_UP.mirrorVertical());
+        assertEquals(QDirection.NONE, QDirection.NONE.mirrorVertical());
+    }
+
+    @Test
     public void test_random() {
         int[] c = new int[8];
         for (int count = 0; count < N*(8 + 2); count ++) {

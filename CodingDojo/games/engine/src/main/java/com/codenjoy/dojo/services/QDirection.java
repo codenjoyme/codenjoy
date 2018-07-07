@@ -39,7 +39,7 @@ public enum QDirection { // TODO test expansion
     private final int dx;
     private final int dy;
 
-    private QDirection(int value, int dx, int dy) {
+    QDirection(int value, int dx, int dy) {
         this.value = value;
         this.dx = dx;
         this.dy = dy;
@@ -80,16 +80,16 @@ public enum QDirection { // TODO test expansion
             case LEFT_UP: return RIGHT_DOWN;
             case RIGHT_DOWN: return LEFT_UP;
             case RIGHT_UP: return LEFT_DOWN;
-            case NONE: return NONE;
+            case NONE : return NONE;
         }
-        throw new IllegalArgumentException("Unsupported QDirection: " + this);
+        throw new IllegalArgumentException("Cant invert QDirection: " + this);
     }
 
     public static QDirection random() {
         return QDirection.valueOf(new Random().nextInt(8));
     }
 
-    public QDirection clockwise() {
+    public QDirection contrClockwise() {
         switch (this) {
             case LEFT: return LEFT_UP;
             case LEFT_UP: return UP;
@@ -99,8 +99,24 @@ public enum QDirection { // TODO test expansion
             case RIGHT_DOWN: return DOWN;
             case DOWN: return LEFT_DOWN;
             case LEFT_DOWN: return LEFT;
+            case NONE : return NONE;
         }
-        throw new IllegalArgumentException("Cant clockwise for QDirection: " + this);
+        throw new IllegalArgumentException("Cant contr clockwise QDirection: " + this);
+    }
+
+    public QDirection clockwise() {
+        switch (this) {
+            case LEFT: return LEFT_DOWN;
+            case LEFT_DOWN: return DOWN;
+            case DOWN: return RIGHT_DOWN;
+            case RIGHT_DOWN: return RIGHT;
+            case RIGHT: return RIGHT_UP;
+            case RIGHT_UP: return UP;
+            case UP: return LEFT_UP;
+            case LEFT_UP: return LEFT;
+            case NONE : return NONE;
+        }
+        throw new IllegalArgumentException("Cant clockwise QDirection: " + this);
     }
 
     @Override
@@ -116,5 +132,35 @@ public enum QDirection { // TODO test expansion
             case DOWN: return DOWN;
         }
         throw new IllegalArgumentException("Unsupported Direction: " + direction);
+    }
+
+    public QDirection mirrorHorizontal() {
+        switch (this) {
+            case LEFT: return LEFT;
+            case LEFT_UP: return LEFT_DOWN;
+            case UP: return DOWN;
+            case RIGHT_UP: return RIGHT_DOWN;
+            case RIGHT: return RIGHT;
+            case RIGHT_DOWN: return RIGHT_UP;
+            case DOWN: return UP;
+            case LEFT_DOWN: return LEFT_UP;
+            case NONE : return NONE;
+        }
+        throw new IllegalArgumentException("Cant mirror horizontal for QDirection: " + this);
+    }
+
+    public QDirection mirrorVertical() {
+        switch (this) {
+            case LEFT: return RIGHT;
+            case LEFT_UP: return RIGHT_UP;
+            case UP: return UP;
+            case RIGHT_UP: return LEFT_UP;
+            case RIGHT: return LEFT;
+            case RIGHT_DOWN: return LEFT_DOWN;
+            case DOWN: return DOWN;
+            case LEFT_DOWN: return RIGHT_DOWN;
+            case NONE : return NONE;
+        }
+        throw new IllegalArgumentException("Cant mirror vertical for QDirection: " + this);
     }
 }
