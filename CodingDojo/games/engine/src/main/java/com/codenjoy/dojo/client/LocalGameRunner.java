@@ -23,15 +23,16 @@ package com.codenjoy.dojo.client;
  */
 
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerCommand;
-import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
+
+import static java.util.stream.Collectors.toList;
 
 public class LocalGameRunner { // TODO test me
 
@@ -40,42 +41,90 @@ public class LocalGameRunner { // TODO test me
     public static Integer countIterations = null;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
-        GameField field = gameType.createGame();
-        GamePlayer gamePlayer = gameType.createPlayer(
-                event -> out.accept("Fire Event: " + event.toString()),
-                null, null);
-        PrinterFactory printerFactory = gameType.getPrinterFactory();
+        run(gameType, Arrays.asList(solver), Arrays.asList(board));
+    }
 
-        Game game = new Single(field, gamePlayer, printerFactory);
-        game.newGame();
+    public static void run(GameType gameType,
+                           List<Solver> solver,
+                           List<ClientBoard> board)
+    {
+        GameField game = gameType.createGame();
+
+        List<Single> singles = solver.stream()
+                .map(slv -> createGame(gameType, game))
+                .collect(toList());
 
         Integer count = countIterations;
         while (count == null || (count != null && count-- > 0)) {
-            Object data = game.getBoardAsString();
-            board.forString(data.toString());
-
-            out.accept(board.toString());
-
-            String answer = solver.get(board);
-
-            out.accept("Answer: " + answer);
-
-            new PlayerCommand(game.getJoystick(), answer).execute();
-
-            if (timeout > 0) {
-                try {
-                    Thread.sleep(timeout);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            for (int index = 0; index < singles.size(); index++) {
+                processNextTick(index, solver.get(index),
+                        board.get(index),
+                        singles.get(index));
             }
 
             game.tick();
-            if (game.isGameOver()) {
-                game.newGame();
-            }
-            out.accept("------------------------------------------------------------------------------------");
+            for (int index = 0; index < singles.size(); index++) {
+                Game single = singles.get(index);
+                if (single.isGameOver()) {
+                    out.accept(player(index, "PLAYER_GAME_OVER -> START_NEW_GAME"));
+                    single.newGame();
+                }
+            };
+
+            out.accept("------------------------------------------");
         }
+    }
+
+    private static void processNextTick(int index, Solver solver, ClientBoard board, Single single) {
+        Object data = single.getBoardAsString();
+        board.forString(data.toString());
+
+        out.accept(player(index, board.toString()));
+
+        String answer = solver.get(board);
+
+        out.accept(player(index, "Answer: " + answer));
+
+        new PlayerCommand(single.getJoystick(), answer).execute();
+
+        if (timeout > 0) {
+            try {
+                Thread.sleep(timeout);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static Dice getDice(int... numbers) {
+        int[] index = {0};
+        return (n) -> {
+            int next = numbers[index[0]];
+            out.accept("DICE:" + next);
+            if (next > n) {
+                next = next % n;
+                out.accept("DICE_CORRECTED < " + n + " :" + next);
+            }
+            if (++index[0] == numbers.length) {
+                index[0]--; // повторять последнее число если мы в конце массива
+            }
+            return next;
+        };
+    }
+
+    private static String player(int index, String message) {
+        return message.replaceAll("\\n", "\n" + (index + 1) + ":");
+    }
+
+    private static Single createGame(GameType gameType, GameField field) {
+        GamePlayer gamePlayer = gameType.createPlayer(
+                event -> out.accept("Fire Event: " + event.toString()),
+                null, null);
+        PrinterFactory factory = gameType.getPrinterFactory();
+
+        Single game = new Single(field, gamePlayer, factory);
+        game.newGame();
+        return game;
     }
 
 }
