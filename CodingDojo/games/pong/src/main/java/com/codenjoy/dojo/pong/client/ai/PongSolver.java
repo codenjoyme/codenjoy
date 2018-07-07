@@ -22,34 +22,31 @@ package com.codenjoy.dojo.pong.client.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.pong.client.Board;
-import com.codenjoy.dojo.pong.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.List;
-import java.util.Random;
 
 public class PongSolver implements Solver<Board> {
 
     int previousBallPosition;
     int verticalBallDirection;
+    private Dice dice;
 
     public PongSolver(Dice dice) {
-
+        this.dice = dice;
     }
 
     @Override
     public String get(final Board board) {
         Point ball = board.getBall();
 
-        Random random = new Random();
-        int rateCoefficient = random.nextInt(2);
+        int rateCoefficient = dice.next(2);
 
         if (ball != null) {
             verticalBallDirection = ball.getY() - previousBallPosition + rateCoefficient;
@@ -85,14 +82,14 @@ public class PongSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new PongSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new PongSolver(new RandomDice()),
+                new PongSolver(dice),
                 new Board());
     }
 

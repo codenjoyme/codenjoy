@@ -47,11 +47,7 @@ public class Panel extends PointImpl implements State<Elements, Player>, Barrier
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (owner == player.getHero()) {
-            return Elements.HERO;
-        } else {
-            return Elements.PANEL;
-        }
+        return (owner == player.getHero()) ? Elements.HERO : Elements.PANEL;
     }
 
 }

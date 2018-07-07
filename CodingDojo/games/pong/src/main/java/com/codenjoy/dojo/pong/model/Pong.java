@@ -25,131 +25,127 @@ package com.codenjoy.dojo.pong.model;
 import com.codenjoy.dojo.pong.services.Events;
 import com.codenjoy.dojo.services.*;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
-public class Pong implements Tickable, Field {
+import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
-    private List<Player> players = new LinkedList<>();
-    private int maxPlayers = 2;
-    private Point leftStartingPosition;
-    private Point rightStartingPosition;
+public class Pong implements Field {
+
+    public static final int BOUND_DISTANCE = 1;
+    private List<Player> players;
+    private int leftBound;
+    private int rightBound;
     private final int size;
     private Dice dice;
     private Ball ball;
-    private List<Panel> panels;
     private List<Wall> walls;
 
     public Pong(Level level, Dice dice) {
         this.dice = dice;
         size = level.getSize();
-        leftStartingPosition = new PointImpl(1, size()/2);
-        rightStartingPosition = new PointImpl(size - 2, size/2);
+        leftBound = 0 + BOUND_DISTANCE;
+        rightBound = size - 1 - BOUND_DISTANCE;
         ball = level.getBall();
         ball.init(this);
         walls = level.getWalls();
-        panels = level.getPanels();
-
+        players = new LinkedList<>();
     }
 
-    private List<Panel> getHeroesPanels() {
-        List<Panel> result = new LinkedList<>();
-        List<Hero> heroes = getHeroes();
-        for (Hero hero : heroes) {
-            result.addAll(hero.getPanel());
-        }
-        return result;
+    private List<Panel> getPanels() {
+        return new LinkedList<Panel>(){{
+            getHeroes().forEach(hero -> addAll(hero.getPanel()));
+        }};
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
-        ball.tick();
-        List<Hero> heroes = getHeroes();
-        for (Hero hero : heroes) {
-            hero.tick();
+        getHeroes().forEach(Hero::tick);
+
+        if (ballOut()) {
+            resetBall();
+            return;
         }
+
         for (Player player : players) {
             if (playerPassedBall(player)) {
-                List<Player> oppositePlayers = getOppositePlayers(player);
-                if (!oppositePlayers.isEmpty()) {
-                    for (Player oppositePlayer: oppositePlayers) {
-                        oppositePlayer.event(Events.WIN);
-                    }
-                }
-                setBallToCentreWithRandomDirection();
-                break;
-            } else if (ballIsOutOfBounds()) {
-                setBallToCentreWithRandomDirection();
-                break;
+                player.event(Events.LOOSE);
+                allExcept(player).forEach(p -> p.event(Events.WIN));
+                resetBall();
+                return;
             }
         }
+
+        ball.tick();
     }
 
-    private List<Player> getOppositePlayers(Player player) {
-        List<Player> oppositePlayers = new LinkedList<>(players);
-        oppositePlayers.remove(player);
-        return oppositePlayers;
+    private List<Player> allExcept(Player player) {
+        return new LinkedList<Player>(players) {{
+            remove(player);
+        }};
     }
 
-    private boolean ballIsOutOfBounds() {
-        return ball.getX() < leftStartingPosition.getX() || ball.getX() > rightStartingPosition.getX();
+    private boolean ballOut() {
+        return ball.getX() < leftBound ||
+                ball.getX() > rightBound;
     }
 
     private boolean playerPassedBall(Player player) {
-        return player.getHero().getX() == leftStartingPosition.getX() && ball.getX() < leftStartingPosition.getX() ||
-                player.getHero().getX() == rightStartingPosition.getX() && ball.getX() > rightStartingPosition.getX();
+        boolean heroAtLeft =
+                Math.abs(player.getHero().getX() - leftBound) <
+                Math.abs(player.getHero().getX() - rightBound);
+        return  heroAtLeft && ball.getX() <= leftBound
+                || !heroAtLeft && ball.getX() >= rightBound;
     }
 
     public int size() {
         return size;
     }
 
+    @Override
     public void newGame(Player player) {
-        if (!players.contains(player) && players.size() < maxPlayers) {
+        if (!players.contains(player)) {
             players.add(player);
-            Point heroPosition = getNewHeroPosition();
-            player.newHero(this, heroPosition);
+            player.newHero(this);
         }
 
-        panels = getHeroesPanels();
-        setBallToCentreWithRandomDirection();
-
+        if (players.size() > 1) {
+            resetBall();
+        }
     }
 
-    private void setBallToCentreWithRandomDirection() {
+    private void resetBall() {
         ball = new Ball(getBoardCenter());
         ball.init(this);
-        ball.setDirection(getRandomBallDirection());
+        ball.setDirection(BallDirection.getRandom(dice));
     }
 
-    private Point getNewHeroPosition() {
-
+    @Override
+    public Point getNewHeroPosition() {
+        Point center = getBoardCenter();
         if (players.size() > 0 && players.get(0).getHero() != null) {
-            if (players.get(0).getHero().equals(rightStartingPosition)) {
-                return leftStartingPosition;
+            if (players.get(0).getHero().getX() == rightBound) {
+                return pt(leftBound, center.getY());
             } else {
-                return rightStartingPosition;
+                return pt(rightBound, center.getY());
             }
         }
-        return rightStartingPosition;
+        return pt(rightBound, center.getY());
     }
 
-    private PointImpl getBoardCenter() {
-        return new PointImpl(size/2, size/2);
+    private Point getBoardCenter() {
+        return pt(size/2, size/2);
     }
 
-    private BallDirection getRandomBallDirection() {
-        return new BallDirection(Direction.valueOf(dice.next(2)), Direction.valueOf(2 + dice.next(1)));
-    }
-
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = Pong.this.size;
@@ -161,11 +157,11 @@ public class Pong implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(getHeroesPanels());
-                result.add(ball);
-                result.addAll(walls);
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(getPanels());
+                    add(ball);
+                    addAll(walls);
+                }};
             }
         };
     }
@@ -175,41 +171,31 @@ public class Pong implements Tickable, Field {
     }
 
 
-    public boolean isGameOver() {
-        boolean gameOver = false;
-        for(Player player : players) {
-            if (player.getScore() == 10) {
-                gameOver = true;
-            }
-         }
-        return false;
-    }
-
     public List<Hero> getHeroes() {
-        List<Hero> heroes = new LinkedList<Hero>();
-        for(Player player : players) {
-            heroes.add(player.getHero());
-        }
-        return heroes;
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        Point point = new PointImpl(x, y);
-        return walls.contains(point) || panels.contains(point);
+    public boolean isBarrier(Point pt) {
+        return walls.contains(pt) || getPanels().contains(pt);
     }
 
     @Override
-    public Barrier getBarrier(int x, int y) {
-        Point point = new PointImpl(x, y);
-        List<Barrier> barriers = new ArrayList<>(walls.size()+panels.size());
-        barriers.addAll(walls);
-        barriers.addAll(panels);
-        if (barriers.indexOf(point) != -1) {
-            return barriers.get(barriers.indexOf(point));
-        } else {
-            throw new IllegalArgumentException("here is no barriers on this point :(");
-        }
+    public Barrier getBarrier(Point pt) {
+        return getBarriers().stream()
+                .filter(Predicate.isEqual(pt))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Here is no barriers on this point :("));
+    }
+
+    private List<Barrier> getBarriers() {
+        return new LinkedList<Barrier>(){{
+            addAll(walls);
+            addAll(getPanels());
+        }};
     }
 
 }

@@ -30,9 +30,8 @@ import com.codenjoy.dojo.services.Tickable;
 public class Ball extends PointImpl implements Tickable, State<Elements, Player> {
 
     private Field field;
-
     private BallDirection direction;
-    private int ballSpeed = 1;
+    private int speed = 1;
 
     public Ball(Point pt) {
         super(pt);
@@ -49,15 +48,26 @@ public class Ball extends PointImpl implements Tickable, State<Elements, Player>
 
     @Override
     public void tick() {
-        for (int i = 0; i < ballSpeed; i++) {
-            int supposedX =  direction.changeX(x);
-            int supposedY =  direction.changeY(y);
-            if (field.isBarrier(supposedX, supposedY) ) { //todo check all barriers between current position and supposed
-                direction = direction.reflectedFrom(field.getBarrier(supposedX, supposedY));
-                supposedX = direction.changeX(x);
-                supposedY = direction.changeY(y);
+        // навсякий запомним откуда прилетели (как улетать назад)
+        BallDirection inverted = direction.invert();
+        Point to;
+        for (int index = 0; index < speed; index++) {
+            // летим в направлении инерции
+            to = direction.change(this);
+            // если на пути стоит барьер
+            if (field.isBarrier(to)) {
+                // мы должны сменить направлени отразившись от него
+                direction = direction.reflectedFrom(field.getBarrier(to));
+                // и полететь в отраженном направлении
+                to = direction.change(this);
+                // но если и там барьер
+                if (field.isBarrier(to)) {
+                    // мы должны вернуться откуда прилетели
+                    direction = inverted;
+                    to = direction.change(this);
+                }
             }
-            move(supposedX, supposedY);
+            this.move(to);
         }
     }
 

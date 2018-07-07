@@ -26,11 +26,10 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.pong.client.ai.PongSolver;
 import com.codenjoy.dojo.pong.model.*;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -41,8 +40,52 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     public GameRunner() {
         new Scores(0, settings);
-        level = new LevelImpl(
-                "                              " +
+        level = new LevelImpl(getMap());
+    }
+
+    @Override
+    public GameField createGame() {
+        return new Pong(level, getDice());
+    }
+
+    @Override
+    public PlayerScores getPlayerScores(Object score) {
+        return new Scores((Integer) score, settings);
+    }
+
+    @Override
+    public Parameter<Integer> getBoardSize() {
+        return v(level.getSize());
+    }
+
+    @Override
+    public String name() {
+        return "pong";
+    }
+
+    @Override
+    public Enum[] getPlots() {
+        return Elements.values();
+    }
+
+    @Override
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.TOURNAMENT;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
+    public boolean newAI(String aiName) {
+        PongSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
+        return true;
+    }
+
+    protected String getMap() {
+        return "                              " +
                 "                              " +
                 "                              " +
                 "                              " +
@@ -71,52 +114,6 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "                              " +
                 "                              " +
                 "                              " +
-                "                              ");
-    }
-
-    private Pong newGame() {
-        return new Pong(level, new RandomDice());
-    }
-
-    @Override
-    public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer) score, settings);
-    }
-
-    @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
-    }
-
-    @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
-    }
-
-    @Override
-    public String name() {
-        return "pong";
-    }
-
-    @Override
-    public Enum[] getPlots() {
-        return Elements.values();
-    }
-
-    @Override
-    public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TOURNAMENT;
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        PongSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
-        return true;
+                "                              ";
     }
 }

@@ -22,81 +22,56 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class BallDirection {
 
-    private Direction horizontalDirection;
-    private Direction verticalDirection;
+    private QDirection direction;
 
-    public BallDirection(Direction simpleDirection) {
-        this.horizontalDirection = simpleDirection;
-        this.verticalDirection = simpleDirection;
+    public BallDirection(QDirection direction) {
+        this.direction = direction;
     }
 
-    public BallDirection(Direction horizontalDirection, Direction verticalDirection) {
-        this.horizontalDirection = horizontalDirection;
-        this.verticalDirection = verticalDirection;
+    public static BallDirection getRandom(Dice dice) {
+        return new BallDirection(Arrays.asList(
+                    QDirection.LEFT_DOWN, QDirection.LEFT_UP,
+                    QDirection.RIGHT_DOWN, QDirection.RIGHT_UP)
+                .get(dice.next(4)));
     }
 
-    public BallDirection reflectedFrom(Barrier barier) {
-        BallDirection result = this;
-        if (verticalDirection == horizontalDirection) {
-            return new BallDirection(horizontalDirection.inverted(), verticalDirection.inverted());
-        }
-
-        switch (barier.getOrientation()) {
-            case HORISONTAL: {
-                result = new BallDirection(horizontalDirection, verticalDirection.inverted());
-                break;
-            }
-            case VERTICAL: {
-                result = new BallDirection(horizontalDirection.inverted(), verticalDirection);
-                break;
-            }
-        }
-        return result;
-    }
-
-
-    public int changeX(int x) {
-        if (verticalDirection == horizontalDirection) {
-            return verticalDirection.changeX(x);
-        } else {
-            return horizontalDirection.changeX(verticalDirection.changeX(x));
+    public BallDirection reflectedFrom(Barrier barrier) {
+        switch (barrier.getOrientation()) {
+            case HORIZONTAL:
+                return new BallDirection(direction.mirrorHorizontal());
+            case VERTICAL:
+                return new BallDirection(direction.mirrorVertical());
+            default:
+                throw new IllegalArgumentException("Unknown barrier orientation: " + barrier.getOrientation());
         }
     }
 
-    public int changeY(int y) {
-        if (verticalDirection == horizontalDirection) {
-            return verticalDirection.changeY(y);
-        } else {
-            return horizontalDirection.changeY(verticalDirection.changeY(y));
-        }
+    public Point change(Point pt) {
+        return direction.change(pt);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BallDirection that = (BallDirection) o;
-        return Objects.equals(horizontalDirection, that.horizontalDirection) &&
-                Objects.equals(verticalDirection, that.verticalDirection);
+        return Objects.equals(direction, ((BallDirection)o).direction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(horizontalDirection, verticalDirection);
+        return Objects.hash(direction);
     }
 
-    public Direction getHorizontalDirection() {
-        return horizontalDirection;
+    public BallDirection invert() {
+        return new BallDirection(direction.inverted());
     }
-
-    public Direction getVerticalDirection() {
-        return verticalDirection;
-    }
-
 }

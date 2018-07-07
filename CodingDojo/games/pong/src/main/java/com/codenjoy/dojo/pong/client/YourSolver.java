@@ -28,9 +28,6 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.util.List;
-import java.util.Random;
-
 public class YourSolver implements Solver<Board> {
 
     // this is your email

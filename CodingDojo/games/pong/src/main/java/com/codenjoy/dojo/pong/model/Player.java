@@ -25,30 +25,14 @@ package com.codenjoy.dojo.pong.model;
 import com.codenjoy.dojo.pong.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public class Player {
+public class Player extends GamePlayer<Hero, Field> {
 
-    private EventListener listener;
-    private int maxScore;
-    private int score;
-    private Hero hero;
+    Hero hero;
 
     public Player(EventListener listener) {
-        this.listener = listener;
-        clearScore();
-    }
-
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
+        super(listener);
     }
 
     public void event(Events event) {
@@ -56,25 +40,21 @@ public class Player {
             case WIN: increaseScore(); break;
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
-    private void gameOver() {
-        score = 0;
-    }
-
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
-    }
-
-    public void newHero(Field field, Point pt) {
-        hero = new Hero(pt);
+    @Override
+    public void newHero(Field field) {
+        hero = new Hero(field.getNewHeroPosition());
         hero.init(field);
     }
 
+    @Override
+    public boolean isAlive() {
+        return hero.isAlive();
+    }
+
+    @Override
     public Hero getHero() {
         return hero;
     }

@@ -28,9 +28,8 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
+import static java.util.stream.Collectors.toList;
+
 public class LevelImpl implements Level {
     private final LengthToXY xy;
 
@@ -48,28 +47,23 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<Hero>();
-
-        for (Point pt : getPointsOf(Elements.HERO)) {
-            result.add(new Hero(pt));
-        }
-
-        return result;
+        return getPointsOf(Elements.HERO).stream()
+                .map(Hero::new)
+                .collect(toList());
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
+        return new LinkedList<Wall>(){{
+            addAll(getPointsOf(Elements.VERTICAL_WALL).stream()
+                    .map(pt -> new Wall(pt, BarrierOrientation.VERTICAL))
+                    .collect(toList()));
 
-        for (Point pt : getPointsOf(Elements.VERTICAL_WALL)) {
-            result.add(new Wall(pt, BarrierOrientation.VERTICAL));
-        }
+            addAll(getPointsOf(Elements.HORIZONTAL_WALL).stream()
+                    .map(pt -> new Wall(pt, BarrierOrientation.HORIZONTAL))
+                    .collect(toList()));
 
-        for (Point pt : getPointsOf(Elements.HORIZONTAL_WALL)) {
-            result.add(new Wall(pt, BarrierOrientation.HORISONTAL));
-        }
-
-        return result;
+        }};
     }
 
     @Override
@@ -77,18 +71,8 @@ public class LevelImpl implements Level {
         return new Ball(getPointsOf(Elements.BALL).get(0));
     }
 
-    @Override
-    public List<Panel> getPanels() {
-        List<Panel> result = new LinkedList<>();
-        for (Point pt : getPointsOf(Elements.PANEL)) {
-            result.add(new Panel(pt, null));
-        }
-
-        return result;
-    }
-
     private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));

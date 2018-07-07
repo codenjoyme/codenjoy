@@ -40,7 +40,7 @@ public class Wall extends PointImpl implements State<Elements, Player>, Barrier 
         switch (orientation) {
             case VERTICAL:
                 return Elements.VERTICAL_WALL;
-            case HORISONTAL:
+            case HORIZONTAL:
                 return Elements.HORIZONTAL_WALL;
             default:
                 return Elements.HORIZONTAL_WALL;
