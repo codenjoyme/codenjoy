@@ -26,28 +26,28 @@ package com.codenjoy.dojo.puzzlebox.services;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.puzzlebox.client.ai.WGSSolver;
 import com.codenjoy.dojo.puzzlebox.model.*;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
-    private PuzzleBox game;
 
     public GameRunner() {
         new Scores(0, settings);
-        level = new LevelImpl(
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+        level = new LevelImpl(getMap());
+    }
+
+    protected String getMap() {
+        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼               #            ☼" +
                 "☼     ☼☼☼               0   #☼" +
                 "☼     ☼                   ☼☼☼☼" +
@@ -76,27 +76,17 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "☼#                           ☼" +
                 "☼                           0☼" +
                 "☼0  ☼  0                   0#☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
     }
 
-    private PuzzleBox newGame() {
-        return new PuzzleBox(level, new RandomDice());
+    @Override
+    public GameField createGame() {
+        return new PuzzleBox(level, getDice());
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
         return new Scores((Integer)score, settings);
-    }
-
-    @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
     }
 
     @Override
@@ -120,8 +110,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        WGSSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        WGSSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

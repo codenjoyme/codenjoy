@@ -25,16 +25,12 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 import com.codenjoy.dojo.puzzlebox.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {PuzzleBox#tick()}
- */
-public class PuzzleBox implements Tickable, Field {
+public class PuzzleBox implements Field {
 
     private final Level level;
     private List<Player> players;
@@ -52,23 +48,19 @@ public class PuzzleBox implements Tickable, Field {
         targets = level.getTargets();
         this.level = level;
         size = level.getSize();
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         for (Player player : players) {
-            if(player.isWin()){
+            if (player.getHero().isWin()){
                 return;
             }
-            for(Box box: player.getBoxes()) {
+            for (Box box: player.getHero().getBoxes()) {
                 box.tick();
             }
         }
-
     }
 
     @Override
@@ -95,8 +87,8 @@ public class PuzzleBox implements Tickable, Field {
         if (!players.contains(player)) {
             players.add(player);
         }
-        player.setBoxes(level.getBoxes());
-        player.initBoxes(this);
+        player.newHero(this);
+        player.getHero().setBoxes(level.getBoxes(), this);
     }
 
     public void fillEvent() {
@@ -118,19 +110,19 @@ public class PuzzleBox implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(getBoxes());
-                result.addAll(walls);
-                result.addAll(targets);
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(getBoxes());
+                    addAll(walls);
+                    addAll(targets);
+                }};
             }
         };
     }
 
     public List<Box> getBoxes() {
-        List<Box> boxes = new LinkedList<Box>();
+        List<Box> boxes = new LinkedList<>();
         for (Player player : players) {
-            boxes.addAll(player.getBoxes());
+            boxes.addAll(player.getHero().getBoxes());
         }
         return boxes;
     }
