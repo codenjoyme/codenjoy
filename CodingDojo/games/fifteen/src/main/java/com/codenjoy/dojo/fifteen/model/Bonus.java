@@ -38,4 +38,9 @@ public class Bonus {
     public int getNumber() {
         return number;
     }
+
+    @Override
+    public String toString() {
+        return String.format("moveCount: %s, number: %s", moveCount, number);
+    }
 }

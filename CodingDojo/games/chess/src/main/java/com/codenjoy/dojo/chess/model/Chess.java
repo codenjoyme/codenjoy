@@ -94,12 +94,10 @@ public class Chess implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-
-                result.addAll(white);
-                result.addAll(black);
-
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(white);
+                    addAll(black);
+                }};
             }
         };
     }

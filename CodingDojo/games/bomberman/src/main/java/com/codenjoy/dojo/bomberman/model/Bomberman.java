@@ -258,14 +258,12 @@ public class Bomberman implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Bomberman.this.getBombermans());
-                for (Wall wall : Bomberman.this.getWalls()) {
-                    result.add(wall);
-                }
-                result.addAll(Bomberman.this.getBombs());
-                result.addAll(Bomberman.this.getBlasts());
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(Bomberman.this.getBombermans());
+                    Bomberman.this.getWalls().forEach(this::add);
+                    addAll(Bomberman.this.getBombs());
+                    addAll(Bomberman.this.getBlasts());
+                }};
             }
         };
     }

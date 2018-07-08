@@ -394,11 +394,11 @@ public class BoomEngineOriginalTest {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(barriers);
-                result.add(new B(source));
-                result.addAll(blast);
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(barriers);
+                    add(new B(source));
+                    addAll(blast);
+                }};
             }
         }, null).print();
     }

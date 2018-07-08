@@ -30,10 +30,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -130,23 +127,27 @@ public class Loderunner implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Loderunner.this.getHeroes());
-                result.addAll(Loderunner.this.getEnemies());
-                result.addAll(Loderunner.this.getGold());
-
-                for (int x = 0; x < size; x++) {
-                    for (int y = 0; y < size; y++) {
-                        Point el = field[x][y];
-                        if (el != null) {
-                            result.add(el);
-                        }
-                    }
-                }
-
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(Loderunner.this.getHeroes());
+                    addAll(Loderunner.this.getEnemies());
+                    addAll(Loderunner.this.getGold());
+                    addAll(Loderunner.this.getFieldElements());
+                }};
             }
         };
+    }
+
+    public List<Point> getFieldElements() {
+        List<Point> result = new LinkedList<>();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point el = field[x][y];
+                if (el != null) {
+                    result.add(el);
+                }
+            }
+        }
+        return result;
     }
 
     interface ElementsIterator {
@@ -162,7 +163,7 @@ public class Loderunner implements Field {
     }
 
     private List<Player> bricksGo() {
-        List<Player> die = new LinkedList<Player>();
+        List<Player> die = new LinkedList<>();
 
         forAll(element -> {
             if (element instanceof Brick) {

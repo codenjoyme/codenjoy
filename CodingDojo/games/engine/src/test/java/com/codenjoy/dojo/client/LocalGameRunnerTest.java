@@ -1,5 +1,28 @@
 package com.codenjoy.dojo.client;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2016 - 2018 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -194,7 +217,7 @@ public class LocalGameRunnerTest {
                 "GOT_EVENT{EVENT(DOWN)#21}#22\n" +
                 "TICK_GAME#23\n" +
                 "TICK_HERO#24\n" +
-                "------------------------------------------------------------------------------------\n" +
+                "------------------------------------------\n" +
                 "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:25,elements:[[1,26], [2,27], [3,28]],player=PLAYER#29}#30}#31\n" +
                 "CLIENT_BOARD_PRINTED_TO_SRING#32\n" +
                 "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#33\n" +
@@ -207,7 +230,7 @@ public class LocalGameRunnerTest {
                 "GOT_EVENT{EVENT(DOWN)#44}#45\n" +
                 "TICK_GAME#46\n" +
                 "TICK_HERO#47\n" +
-                "------------------------------------------------------------------------------------\n" +
+                "------------------------------------------\n" +
                 "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:48,elements:[[1,49], [2,50], [3,51]],player=PLAYER#52}#53}#54\n" +
                 "CLIENT_BOARD_PRINTED_TO_SRING#55\n" +
                 "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#56\n" +
@@ -220,7 +243,7 @@ public class LocalGameRunnerTest {
                 "GOT_EVENT{EVENT(DOWN)#67}#68\n" +
                 "TICK_GAME#69\n" +
                 "TICK_HERO#70\n" +
-                "------------------------------------------------------------------------------------",
+                "------------------------------------------",
                 String.join("\n", messages));
     }
 

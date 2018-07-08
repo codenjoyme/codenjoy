@@ -252,13 +252,13 @@ public class Football implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<>();
-                result.addAll(Football.this.getWalls());
-                result.addAll(Football.this.getHeroes());
-                result.addAll(Football.this.topGoals);
-                result.addAll(Football.this.bottomGoals);
-                result.addAll(Football.this.balls);
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(Football.this.getWalls());
+                    addAll(Football.this.getHeroes());
+                    addAll(Football.this.topGoals);
+                    addAll(Football.this.bottomGoals);
+                    addAll(Football.this.balls);
+                }};
             }
         };
     }

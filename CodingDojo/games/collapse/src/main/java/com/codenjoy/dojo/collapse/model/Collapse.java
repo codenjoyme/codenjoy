@@ -198,10 +198,10 @@ public class Collapse implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Collapse.this.walls.values());
-                result.addAll(Collapse.this.cells.values());
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(Collapse.this.walls.values());
+                    addAll(Collapse.this.cells.values());
+                }};
             }
         };
     }

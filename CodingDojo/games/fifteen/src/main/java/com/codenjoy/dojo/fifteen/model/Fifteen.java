@@ -159,11 +159,11 @@ public class Fifteen implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<>();
-                result.addAll(Fifteen.this.getWalls());
-                result.addAll(Fifteen.this.getHeroes());
-                result.addAll(Fifteen.this.getDigits());
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(Fifteen.this.getWalls());
+                    addAll(Fifteen.this.getHeroes());
+                    addAll(Fifteen.this.getDigits());
+                }};
             }
         };
     }

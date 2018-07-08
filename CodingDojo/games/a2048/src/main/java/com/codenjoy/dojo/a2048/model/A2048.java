@@ -204,36 +204,31 @@ public class A2048 implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new Iterable<Point>() {
+                return () -> new Iterator<Point>() {
+                    private int x = 0;
+                    private int y = 0;
+                    private Numbers numb = A2048.this.numbers;
+                    private int size = A2048.this.size;
+
                     @Override
-                    public Iterator<Point> iterator() {
-                        return new Iterator<Point>() {
-                            private int x = 0;
-                            private int y = 0;
-                            private Numbers numb = A2048.this.numbers;
-                            private int size = A2048.this.size;
+                    public boolean hasNext() {
+                        return y != size;
+                    }
 
-                            @Override
-                            public boolean hasNext() {
-                                return y != size;
-                            }
+                    @Override
+                    public Point next() {
+                        Number number = numb.get(x, y);
+                        x++;
+                        if (x == size) {
+                            x = 0;
+                            y++;
+                        }
+                        return number;
+                    }
 
-                            @Override
-                            public Point next() {
-                                Number number = numb.get(x, y);
-                                x++;
-                                if (x == size) {
-                                    x = 0;
-                                    y++;
-                                }
-                                return number;
-                            }
-
-                            @Override
-                            public void remove() {
-                                throw new UnsupportedOperationException();
-                            }
-                        };
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException();
                     }
                 };
             }

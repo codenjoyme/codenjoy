@@ -287,12 +287,12 @@ public class Battlecity implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Battlecity.this.getBorders());
-                result.addAll(Battlecity.this.getTanks());
-                result.addAll(Battlecity.this.getConstructions());
-                result.addAll(Battlecity.this.getBullets());
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(Battlecity.this.getBorders());
+                    addAll(Battlecity.this.getTanks());
+                    addAll(Battlecity.this.getConstructions());
+                    addAll(Battlecity.this.getBullets());
+                }};
             }
         };
     }

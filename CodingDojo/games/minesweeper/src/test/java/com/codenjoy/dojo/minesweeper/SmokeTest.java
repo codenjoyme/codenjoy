@@ -28,8 +28,7 @@ public class SmokeTest {
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 225;
 
-        Dice dice = mock(Dice.class);
-        when(dice.next(anyInt())).thenReturn(1);
+        Dice dice = LocalGameRunner.getDice(1);
 
         GameRunner gameType = new GameRunner() {
             @Override

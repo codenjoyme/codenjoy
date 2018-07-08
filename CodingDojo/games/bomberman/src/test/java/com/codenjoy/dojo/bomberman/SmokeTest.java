@@ -27,8 +27,7 @@ public class SmokeTest {
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 20;
 
-        Dice dice = mock(Dice.class);
-        when(dice.next(anyInt())).thenReturn(
+        Dice dice = LocalGameRunner.getDice(
                 1, 2, 3, 0, 3, 2, 2, 0,
                 0, 3, 2, 1, 3, 1, 3, 3,
                 0, 3, 2, 1, 3, 2, 3, 0,
@@ -80,350 +79,572 @@ public class SmokeTest {
                 new Board());
 
         // then
-        assertEquals("☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼     ☼\n" +
-                        "☼☺☼ ☼ ☼\n" +
-                        "☼     ☼\n" +
+        assertEquals("DICE:1\n" +
+                        "DICE:2\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [1,2]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: []\n" +
-                        "Destroy walls at: []\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☺☼ ☼ ☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [1,2]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: []\n" +
+                        "1:Destroy walls at: []\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:3\n" +
                         "Answer: DOWN\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:0\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:0\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼##   ☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼☺ &  ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [1,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[3,1]]\n" +
-                        "Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼##   ☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼☺ &  ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [1,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[3,1]]\n" +
+                        "1:Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
                         "Answer: ACT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼##   ☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼☻  & ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [1,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[4,1]]\n" +
-                        "Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
-                        "Bombs at: [[1,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼##   ☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼☻  & ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [1,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[4,1]]\n" +
+                        "1:Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[1,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "DICE:1\n" +
                         "Answer: RIGHT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼##   ☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼3☺  &☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [2,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,1]]\n" +
-                        "Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
-                        "Bombs at: [[1,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼##   ☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼3☺  &☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [2,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,1]]\n" +
+                        "1:Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[1,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "DICE:1\n" +
                         "Answer: RIGHT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼##   ☼\n" +
-                        "☼ ☼#☼&☼\n" +
-                        "☼2 ☺  ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [3,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,2]]\n" +
-                        "Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
-                        "Bombs at: [[1,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼##   ☼\n" +
+                        "1:☼ ☼#☼&☼\n" +
+                        "1:☼2 ☺  ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [3,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,2]]\n" +
+                        "1:Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[1,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
                         "Answer: ACT,RIGHT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼##  &☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼1  ☺ ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [4,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,3]]\n" +
-                        "Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
-                        "Bombs at: [[1,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼##  &☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼1  ☺ ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [4,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,3]]\n" +
+                        "1:Destroy walls at: [[1,3], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[1,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
                         "Answer: RIGHT\n" +
+                        "DICE:1\n" +
                         "Fire Event: KILL_DESTROY_WALL\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼&☼\n" +
-                        "☼H#   ☼\n" +
-                        "☼҉☼#☼ ☼\n" +
-                        "☼҉҉҉҉☺☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,4]]\n" +
-                        "Destroy walls at: [[2,3], [3,2]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: [[1,1], [1,2], [2,1], [3,1], [4,1]]\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼&☼\n" +
+                        "1:☼H#   ☼\n" +
+                        "1:☼҉☼#☼ ☼\n" +
+                        "1:☼҉҉҉҉☺☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,4]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: [[1,1], [1,2], [2,1], [3,1], [4,1]]\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
                         "Answer: UP\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼    &☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ ##  ☼\n" +
-                        "☼ ☼#☼☺☼\n" +
-                        "☼     ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,2]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,5]]\n" +
-                        "Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼    &☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ ##  ☼\n" +
+                        "1:☼ ☼#☼☺☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,2]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,5]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
                         "Answer: UP\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:0\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼&☼\n" +
-                        "☼ ## ☺☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼     ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,3]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,4]]\n" +
-                        "Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼&☼\n" +
+                        "1:☼ ## ☺☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,3]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,4]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
                         "Answer: ACT,DOWN\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:0\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ ## &☼\n" +
-                        "☼ ☼#☼☺☼\n" +
-                        "☼     ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,2]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,3]]\n" +
-                        "Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ ## &☼\n" +
+                        "1:☼ ☼#☼☺☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,2]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,3]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
                         "Answer: ACT,DOWN\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ ## 3☼\n" +
-                        "☼ ☼#☼&☼\n" +
-                        "☼    ☺☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,2]]\n" +
-                        "Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
-                        "Bombs at: [[5,3]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[4,3], [5,2], [5,3], [5,4]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ ## 3☼\n" +
+                        "1:☼ ☼#☼&☼\n" +
+                        "1:☼    ☺☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,2]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
+                        "1:Bombs at: [[5,3]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[4,3], [5,2], [5,3], [5,4]]\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:0\n" +
                         "Answer: ACT,LEFT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ ## 2☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼   ☺&☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [4,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[5,1]]\n" +
-                        "Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
-                        "Bombs at: [[5,3]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[4,3], [5,2], [5,3], [5,4]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ ## 2☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼   ☺&☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [4,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[5,1]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
+                        "1:Bombs at: [[5,3]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[4,3], [5,2], [5,3], [5,4]]\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
                         "Answer: ACT\n" +
+                        "DICE:3\n" +
+                        "DICE:0\n" +
                         "Fire Event: KILL_BOMBERMAN\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ ## 1☼\n" +
-                        "☼ ☼#☼ ☼\n" +
-                        "☼  ☺& ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [3,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[4,1]]\n" +
-                        "Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
-                        "Bombs at: [[5,3]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[4,3], [5,2], [5,3], [5,4]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ ## 1☼\n" +
+                        "1:☼ ☼#☼ ☼\n" +
+                        "1:☼  ☺& ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [3,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[4,1]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2], [3,3]]\n" +
+                        "1:Bombs at: [[5,3]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[4,3], [5,2], [5,3], [5,4]]\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
                         "Answer: ACT\n" +
+                        "DICE:3\n" +
                         "Fire Event: KILL_BOMBERMAN\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼    ҉☼\n" +
-                        "☼ ☼ ☼҉☼\n" +
-                        "☼ #H҉҉☼\n" +
-                        "☼ ☼#☼҉☼\n" +
-                        "☼  &☺҉☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [4,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[3,1]]\n" +
-                        "Destroy walls at: [[2,3], [3,2]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: [[4,3], [5,1], [5,2], [5,3], [5,4], [5,5]]\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼    ҉☼\n" +
+                        "1:☼ ☼ ☼҉☼\n" +
+                        "1:☼ #H҉҉☼\n" +
+                        "1:☼ ☼#☼҉☼\n" +
+                        "1:☼  &☺҉☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [4,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[3,1]]\n" +
+                        "1:Destroy walls at: [[2,3], [3,2]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: [[4,3], [5,1], [5,2], [5,3], [5,4], [5,5]]\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
                         "Answer: ACT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ #   ☼\n" +
-                        "☼#☼#☼ ☼\n" +
-                        "☼ &3☻ ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [4,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[2,1]]\n" +
-                        "Destroy walls at: [[1,2], [2,3], [3,2]]\n" +
-                        "Bombs at: [[3,1], [4,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ #   ☼\n" +
+                        "1:☼#☼#☼ ☼\n" +
+                        "1:☼ &3☻ ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [4,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[2,1]]\n" +
+                        "1:Destroy walls at: [[1,2], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[3,1], [4,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
                         "Answer: RIGHT\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ #   ☼\n" +
-                        "☼#☼#☼ ☼\n" +
-                        "☼& 23☺☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,1]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[1,1]]\n" +
-                        "Destroy walls at: [[1,2], [2,3], [3,2]]\n" +
-                        "Bombs at: [[3,1], [4,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ #   ☼\n" +
+                        "1:☼#☼#☼ ☼\n" +
+                        "1:☼& 23☺☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,1]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[1,1]]\n" +
+                        "1:Destroy walls at: [[1,2], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[3,1], [4,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
                         "Answer: UP\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ #   ☼\n" +
-                        "☼#☼#☼☺☼\n" +
-                        "☼ &12 ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,2]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[2,1]]\n" +
-                        "Destroy walls at: [[1,2], [2,3], [3,2]]\n" +
-                        "Bombs at: [[3,1], [4,1]]\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ #   ☼\n" +
+                        "1:☼#☼#☼☺☼\n" +
+                        "1:☼ &12 ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,2]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[2,1]]\n" +
+                        "1:Destroy walls at: [[1,2], [2,3], [3,2]]\n" +
+                        "1:Bombs at: [[3,1], [4,1]]\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
+                        "DICE:2\n" +
                         "Answer: UP\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ #  ☺☼\n" +
-                        "☼#☼H☼ ☼\n" +
-                        "☼҉҉x1҉☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,3]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: []\n" +
-                        "Destroy walls at: [[1,2], [2,3]]\n" +
-                        "Bombs at: [[4,1]]\n" +
-                        "Blasts: [[1,1], [2,1], [5,1]]\n" +
-                        "Expected blasts at: [[3,1], [4,1], [5,1]]\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ #  ☺☼\n" +
+                        "1:☼#☼H☼ ☼\n" +
+                        "1:☼҉҉x1҉☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,3]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: []\n" +
+                        "1:Destroy walls at: [[1,2], [2,3]]\n" +
+                        "1:Bombs at: [[4,1]]\n" +
+                        "1:Blasts: [[1,1], [2,1], [5,1]]\n" +
+                        "1:Expected blasts at: [[3,1], [4,1], [5,1]]\n" +
+                        "DICE:2\n" +
                         "Answer: UP\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
                         "Fire Event: KILL_DESTROY_WALL\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ☼ ☼☺☼\n" +
-                        "☼ #   ☼\n" +
-                        "☼#☼&☼ ☼\n" +
-                        "☼  H҉҉☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,4]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[3,2]]\n" +
-                        "Destroy walls at: [[1,2], [2,3]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: [[4,1], [5,1]]\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼ ☼ ☼☺☼\n" +
+                        "1:☼ #   ☼\n" +
+                        "1:☼#☼&☼ ☼\n" +
+                        "1:☼  H҉҉☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,4]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[3,2]]\n" +
+                        "1:Destroy walls at: [[1,2], [2,3]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: [[4,1], [5,1]]\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:2\n" +
                         "Answer: UP\n" +
-                        "------------------------------------------------------------------------------------\n" +
+                        "DICE:3\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
                         "☼☼☼☼☼☼☼\n" +
-                        "☼    ☺☼\n" +
-                        "☼ ☼ ☼ ☼\n" +
-                        "☼ #&  ☼\n" +
-                        "☼#☼ ☼ ☼\n" +
-                        "☼#    ☼\n" +
-                        "☼☼☼☼☼☼☼\n" +
-                        "\n" +
-                        "Bomberman at: [5,5]\n" +
-                        "Other bombermans at: []\n" +
-                        "Meat choppers at: [[3,3]]\n" +
-                        "Destroy walls at: [[1,1], [1,2], [2,3]]\n" +
-                        "Bombs at: []\n" +
-                        "Blasts: []\n" +
-                        "Expected blasts at: []\n" +
+                        "1:☼    ☺☼\n" +
+                        "1:☼ ☼ ☼ ☼\n" +
+                        "1:☼ #&  ☼\n" +
+                        "1:☼#☼ ☼ ☼\n" +
+                        "1:☼#    ☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Bomberman at: [5,5]\n" +
+                        "1:Other bombermans at: []\n" +
+                        "1:Meat choppers at: [[3,3]]\n" +
+                        "1:Destroy walls at: [[1,1], [1,2], [2,3]]\n" +
+                        "1:Bombs at: []\n" +
+                        "1:Blasts: []\n" +
+                        "1:Expected blasts at: []\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
                         "Answer: LEFT\n" +
-                        "------------------------------------------------------------------------------------",
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "------------------------------------------",
                 String.join("\n", messages));
 
     }

@@ -67,11 +67,11 @@ public class LevelImpl implements Level {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(LevelImpl.this.getBorders());
-                result.addAll(LevelImpl.this.getConstructions());
-                result.addAll(LevelImpl.this.getTanks());
-                return result;
+                return new LinkedList<Point>() {{
+                    addAll(LevelImpl.this.getBorders());
+                    addAll(LevelImpl.this.getConstructions());
+                    addAll(LevelImpl.this.getTanks());
+                }};
             }
         };
     }

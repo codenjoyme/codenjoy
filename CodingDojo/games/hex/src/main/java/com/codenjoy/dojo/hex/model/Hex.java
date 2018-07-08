@@ -293,7 +293,7 @@ public class Hex implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>(){{
+                return new LinkedList<Point>() {{
                     addAll(Hex.this.getHeroes());
                     addAll(Hex.this.getWalls());
                 }};
