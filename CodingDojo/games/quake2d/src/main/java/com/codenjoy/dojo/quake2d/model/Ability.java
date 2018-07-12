@@ -55,11 +55,13 @@ public class Ability extends PointImpl implements State<Elements, Player> {
     public Elements state(Player player, Object... alsoAtPoint) {
         if (abilityType == Type.WEAPON){
             return Elements.SUPER_ATTACK;
-        } else if (abilityType == Type.DEFENCE) {
-            return Elements.SUPER_DEFENCE;
-        } else {
-            return Elements.HEALTH_PACKAGE;
         }
+
+        if (abilityType == Type.DEFENCE) {
+            return Elements.SUPER_DEFENCE;
+        }
+
+        return Elements.HEALTH_PACKAGE;
     }
 
     public Type getAbilityType() {

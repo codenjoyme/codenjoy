@@ -23,12 +23,10 @@ package com.codenjoy.dojo.quake2d.client.ai;
  */
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quake2d.client.Board;
 import com.codenjoy.dojo.quake2d.model.Elements;
-import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
@@ -164,7 +162,7 @@ public class BotSolver implements Solver<Board> {
     private Map<Elements, Integer> getDestinationToObject(Board board, int pSize, Point pFrom) {
         Elements[] analyzeElements = {Elements.OTHER_HERO, Elements.SUPER_ATTACK, Elements.SUPER_DEFENCE,
                                       Elements.HEALTH_PACKAGE, Elements.BULLET};
-        Map<Elements, Integer> variantsWays = new HashMap<Elements, Integer>(analyzeElements.length);
+        Map<Elements, Integer> variantsWays = new HashMap<>(analyzeElements.length);
         DeikstraFindWay.Possible map = possible(board);
         for (Elements elem : analyzeElements){
             int destination = way.getShortestWay(pSize, pFrom, board.get(elem), map).size();
@@ -177,14 +175,14 @@ public class BotSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new BotSolver(new RandomDice()),
+                new BotSolver(dice),
                 new Board());
     }
 

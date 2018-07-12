@@ -22,24 +22,19 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
-import com.codenjoy.dojo.client.*;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- */
-public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public static final int ABILITY_LIFE_TIME = 10;
     public static final int START_HEALTH = 100;
     public static final int DEFFENCE_MULTIPLICATOR = 2;
     public static final int FREAQEUNCY_SHUT = 7;
 
-
-    private Field field;
     private boolean alive;
     private Direction direction;
     private Direction previousDirection;
@@ -47,8 +42,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     private Ability ability;
     private int health;
     private int counterBeetwenShut = 0;
-
-
     private int abilityCounter;
 
     public Hero(Point xy) {
@@ -111,15 +104,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
             field.fireBullet(x, y, previousDirection, field, this);
             counterBeetwenShut = FREAQEUNCY_SHUT;
         }
-    }
-
-    @Override
-    public void message(String command) {
-        // do nothing, this should never happen
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     @Override

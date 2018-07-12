@@ -28,9 +28,6 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level {
     private final LengthToXY xy;
 
@@ -48,7 +45,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<Hero>();
+        List<Hero> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.HERO)) {
             result.add(new Hero(pt));
@@ -59,7 +56,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Robot> getRobots(Field field) {
-        List<Robot> result = new LinkedList<Robot>();
+        List<Robot> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.ROBOT)) {
             result.add(new Robot(field, pt.getX(), pt.getY()));
@@ -69,7 +66,7 @@ public class LevelImpl implements Level {
     }
 
     public List<Hero> getOtherHero() {
-        List<Hero> result = new LinkedList<Hero>();
+        List<Hero> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.OTHER_HERO)) {
             result.add(new Hero(pt));

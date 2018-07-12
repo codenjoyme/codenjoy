@@ -35,7 +35,7 @@ import java.util.List;
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
  */
-public class Sample implements Tickable, Field {
+public class Quake2D implements Field {
     public static final int IS_DEAD = 1;
     public static final int IS_ALIVE = 0;
     public static final int ABILITY_TIME_EXIST = 5;
@@ -53,7 +53,7 @@ public class Sample implements Tickable, Field {
     private List<Robot> robotsNew;
 
 
-    public Sample(Level level, Dice dice) {
+    public Quake2D(Level level, Dice dice) {
         counterOfAbility = ABILITY_TIME_EXIST;
         this.dice = dice;
         walls = level.getWalls();
@@ -248,7 +248,7 @@ public class Sample implements Tickable, Field {
 
     public BoardReader reader() {
         return new BoardReader() {
-            private int size = Sample.this.size;
+            private int size = Quake2D.this.size;
 
             @Override
             public int size() {
@@ -257,13 +257,12 @@ public class Sample implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Sample.this.getWalls());
-                result.addAll(Sample.this.getHeroes());
-//                result.addAll(Sample.this.robots);
-                result.addAll(Sample.this.getAbilities());
-                result.addAll(Sample.this.getBullets());
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(Quake2D.this.getWalls());
+                    addAll(Quake2D.this.getHeroes());
+                    addAll(Quake2D.this.getAbilities());
+                    addAll(Quake2D.this.getBullets());
+                }};
             }
         };
     }

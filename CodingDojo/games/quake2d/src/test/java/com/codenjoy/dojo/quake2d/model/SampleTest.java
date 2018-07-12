@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
  */
 public class SampleTest {
 
-    private Sample game;
+    private Quake2D game;
     private Hero hero;
     private Dice dice;
     private EventListener listener;
@@ -70,7 +70,7 @@ public class SampleTest {
         Hero hero = level.getHero().get(0);
 
 
-        game = new Sample(level, dice);
+        game = new Quake2D(level, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -476,7 +476,7 @@ public class SampleTest {
                 "☼☼☼☼☼");
 
 
-        makeTicks(Sample.ABILITY_TIME_EXIST);
+        makeTicks(Quake2D.ABILITY_TIME_EXIST);
         ability = game.getAbilities().get(0);
         ability.move(3, 3);
 
@@ -496,7 +496,7 @@ public class SampleTest {
                 "☼☼☼☼☼");
 
 
-        makeTicks(Sample.ABILITY_TIME_EXIST);
+        makeTicks(Quake2D.ABILITY_TIME_EXIST);
         ability = game.getAbilities().get(0);
         ability.move(3, 3);
         player.hero.up();
@@ -526,7 +526,7 @@ public class SampleTest {
                 "☼    ☼" +
                 "☼ ☺  ☼" +
                 "☼☼☼☼☼☼");
-        makeTicks(Sample.ABILITY_TIME_EXIST);
+        makeTicks(Quake2D.ABILITY_TIME_EXIST);
         game.getAbilities().get(0).move(2, 2);
         hero.up();
         game.tick();
@@ -580,7 +580,7 @@ public class SampleTest {
                 "☼☼☼☼☼");
 
 
-        makeTicks(Sample.ABILITY_TIME_EXIST);
+        makeTicks(Quake2D.ABILITY_TIME_EXIST);
         ability = game.getAbilities().get(0);
         game.getAbilities().add(0, new Ability(new PointImpl(3,3), Ability.Type.HEALTH));
 
@@ -607,7 +607,7 @@ public class SampleTest {
                 "☼    ☼" +
                 "☼ ☻  ☼" +
                 "☼☼☼☼☼☼");
-        makeTicks(Sample.ABILITY_TIME_EXIST);
+        makeTicks(Quake2D.ABILITY_TIME_EXIST);
         game.getAbilities().get(0).move(2, 2);
         otherPlayer.hero.up();
         game.tick();

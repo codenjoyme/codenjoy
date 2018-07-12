@@ -24,9 +24,6 @@ package com.codenjoy.dojo.quake2d.model;
 
 import java.util.List;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
 public interface Level {
 
     /**
