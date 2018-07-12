@@ -24,12 +24,10 @@ package com.codenjoy.dojo.sample.client.ai;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.model.Elements;
-import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
@@ -41,14 +39,17 @@ import java.util.List;
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым
  * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random.
+ * Реализуй его как хочешь, хоть на Random (только используй для этого
+ * {@see Dice} что приходит через конструктор).
  * Для его запуска воспользуйся методом {@see ApofigSolver#main}
  */
 public class ApofigSolver implements Solver<Board> {
 
     private DeikstraFindWay way;
+    private Dice dice;
 
     public ApofigSolver(Dice dice) {
+        this.dice = dice;
         this.way = new DeikstraFindWay();
     }
 
@@ -100,7 +101,7 @@ public class ApofigSolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         if (bombsNear(board)) {
-            return Arrays.asList(Direction.random());
+            return Arrays.asList(Direction.random(dice));
         }
 
         Point from = board.getMe();
@@ -127,14 +128,14 @@ public class ApofigSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new ApofigSolver(new RandomDice()),
+                new ApofigSolver(dice),
                 new Board());
     }
 

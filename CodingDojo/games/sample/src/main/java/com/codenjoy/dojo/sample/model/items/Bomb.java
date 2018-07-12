@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sample.model.items;
 
 /*-
  * #%L
@@ -23,25 +23,27 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.Elements;
+import com.codenjoy.dojo.sample.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Артефакт Золото на поле
+ * Артефакт: Бомба на поле
  */
-public class Gold extends PointImpl implements State<Elements, Player> {
+public class Bomb extends PointImpl implements State<Elements, Player> {
 
-    public Gold(int x, int y) {
+    public Bomb(int x, int y) {
         super(x, y);
     }
 
-    public Gold(Point point) {
+    public Bomb(Point point) {
         super(point);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOLD;
+        return Elements.BOMB;
     }
 }

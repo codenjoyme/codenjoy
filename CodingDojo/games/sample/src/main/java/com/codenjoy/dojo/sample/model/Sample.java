@@ -23,19 +23,26 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.items.Bomb;
+import com.codenjoy.dojo.sample.model.items.Gold;
+import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
  */
-public class Sample implements Tickable, Field {
+public class Sample implements Field {
 
     private List<Wall> walls;
     private List<Gold> gold;
@@ -51,8 +58,8 @@ public class Sample implements Tickable, Field {
         walls = level.getWalls();
         gold = level.getGold();
         size = level.getSize();
-        players = new LinkedList<Player>();
-        bombs = new LinkedList<Bomb>();
+        players = new LinkedList<>();
+        bombs = new LinkedList<>();
     }
 
     /**
@@ -70,7 +77,7 @@ public class Sample implements Tickable, Field {
                 player.event(Events.WIN);
 
                 Point pos = getFreeRandom();
-                gold.add(new Gold(pos.getX(), pos.getY()));
+                gold.add(new Gold(pos));
             }
         }
 
@@ -89,45 +96,50 @@ public class Sample implements Tickable, Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
+        Point pt = pt(x, y);
+        return x > size - 1
+                || x < 0
+                || y < 0
+                || y > size - 1
+                || walls.contains(pt)
+                || getHeroes().contains(pt);
     }
 
     @Override
     public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
+        int x;
+        int y;
         int c = 0;
         do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
+            x = dice.next(size);
+            y = dice.next(size);
+        } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return pt(0, 0);
         }
 
-        return PointImpl.pt(rndX, rndY);
+        return pt(x, y);
     }
 
     @Override
     public boolean isFree(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
 
-        return !gold.contains(pt) &&
-                !bombs.contains(pt) &&
-                !walls.contains(pt) &&
-                !getHeroes().contains(pt);
+        return !(gold.contains(pt)
+                || bombs.contains(pt)
+                || walls.contains(pt)
+                || getHeroes().contains(pt));
     }
 
     @Override
     public boolean isBomb(int x, int y) {
-        return bombs.contains(PointImpl.pt(x, y));
+        return bombs.contains(pt(x, y));
     }
 
     @Override
     public void setBomb(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         if (!bombs.contains(pt)) {
             bombs.add(new Bomb(x, y));
         }
@@ -135,7 +147,7 @@ public class Sample implements Tickable, Field {
 
     @Override
     public void removeBomb(int x, int y) {
-        bombs.remove(PointImpl.pt(x, y));
+        bombs.remove(pt(x, y));
     }
 
     public List<Gold> getGold() {
@@ -143,13 +155,12 @@ public class Sample implements Tickable, Field {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
+    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
@@ -157,6 +168,7 @@ public class Sample implements Tickable, Field {
         player.newHero(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }
@@ -169,6 +181,7 @@ public class Sample implements Tickable, Field {
         return bombs;
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = Sample.this.size;
@@ -180,12 +193,12 @@ public class Sample implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Sample.this.getWalls());
-                result.addAll(Sample.this.getHeroes());
-                result.addAll(Sample.this.getGold());
-                result.addAll(Sample.this.getBombs());
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(Sample.this.getWalls());
+                    addAll(Sample.this.getHeroes());
+                    addAll(Sample.this.getGold());
+                    addAll(Sample.this.getBombs());
+                }};
             }
         };
     }

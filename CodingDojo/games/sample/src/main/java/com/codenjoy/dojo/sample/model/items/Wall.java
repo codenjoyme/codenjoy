@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sample.model.items;
 
 /*-
  * #%L
@@ -23,12 +23,14 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.Elements;
+import com.codenjoy.dojo.sample.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Артефакт Стена на поле
+ * Артефакт: Стена на поле
  */
 public class Wall extends PointImpl implements State<Elements, Player> {
 

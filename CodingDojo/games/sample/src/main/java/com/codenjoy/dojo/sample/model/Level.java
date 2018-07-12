@@ -23,6 +23,9 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.items.Gold;
+import com.codenjoy.dojo.sample.model.items.Wall;
+
 import java.util.List;
 
 /**

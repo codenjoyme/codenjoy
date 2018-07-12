@@ -27,27 +27,27 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sample.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sample.model.*;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
-    private Sample game;
 
     public GameRunner() {
         new Scores(0, settings);
-        level = new LevelImpl(
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+        level = new LevelImpl(getMap());
+    }
+
+    protected String getMap() {
+        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼          $                 ☼" +
                 "☼                            ☼" +
                 "☼   $              $         ☼" +
@@ -76,11 +76,7 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "☼                            ☼" +
                 "☼       ☺        $           ☼" +
                 "☼                            ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
-    }
-
-    private Sample newGame() {
-        return new Sample(level, new RandomDice());
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
     }
 
     @Override
@@ -89,14 +85,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (getMultiplayerType().isSingle() || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new Sample(level, getDice());
     }
 
     @Override
@@ -120,8 +110,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

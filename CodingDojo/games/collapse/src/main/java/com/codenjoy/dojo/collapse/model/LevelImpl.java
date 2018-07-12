@@ -45,7 +45,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Cell> getCells() {
-        List<Cell> result = new LinkedList<Cell>();
+        List<Cell> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             if (ch != Elements.BORDER.ch && ch != ' ') {
@@ -58,7 +58,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
+        List<Wall> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             if (ch == Elements.BORDER.ch) {

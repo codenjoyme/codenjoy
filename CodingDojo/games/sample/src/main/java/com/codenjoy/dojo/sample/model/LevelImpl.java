@@ -23,11 +23,18 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.items.Gold;
+import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.sample.model.Elements.GOLD;
+import static com.codenjoy.dojo.sample.model.Elements.HERO;
+import static com.codenjoy.dojo.sample.model.Elements.WALL;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
@@ -49,39 +56,28 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<Hero>();
+        return pointsOf(HERO).stream()
+                .map(Hero::new)
+                .collect(toList());
 
-        for (Point pt : getPointsOf(Elements.HERO)) {
-            result.add(new Hero(pt));
-        }
-
-        return result;
     }
 
     @Override
     public List<Gold> getGold() {
-        List<Gold> result = new LinkedList<Gold>();
-
-        for (Point pt : getPointsOf(Elements.GOLD)) {
-            result.add(new Gold(pt));
-        }
-
-        return result;
+        return pointsOf(GOLD).stream()
+                .map(Gold::new)
+                .collect(toList());
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
-
-        for (Point pt : getPointsOf(Elements.WALL)) {
-            result.add(new Wall(pt));
-        }
-
-        return result;
+        return pointsOf(WALL).stream()
+                .map(Wall::new)
+                .collect(toList());
     }
 
-    private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
+    private List<Point> pointsOf(Elements element) {
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));

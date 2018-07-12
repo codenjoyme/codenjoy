@@ -24,14 +24,16 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
+ * Ну и конечно же он имплементит {@see State}, а значит может быть отрисован на поле.
+ * Часть этих интерфейсов объявлены в {@see PlayerHero}, а часть явно тут.
  */
-public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
-    private Field field;
     private boolean alive;
     private Direction direction;
 
@@ -41,6 +43,7 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         alive = true;
     }
 
+    @Override
     public void init(Field field) {
         this.field = field;
     }
@@ -78,15 +81,6 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         if (!alive) return;
 
         field.setBomb(x, y);
-    }
-
-    @Override
-    public void message(String command) {
-        // do nothing, this should never happen
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     @Override
