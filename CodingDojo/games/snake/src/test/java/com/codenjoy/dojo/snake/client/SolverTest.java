@@ -23,9 +23,9 @@ package com.codenjoy.dojo.snake.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,11 +34,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 03.08.16
- * Time: 20:57
- */
 public class SolverTest {
 
     private Dice dice;

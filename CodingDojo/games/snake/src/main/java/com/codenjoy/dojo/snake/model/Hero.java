@@ -24,13 +24,12 @@ package com.codenjoy.dojo.snake.model;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
-import com.codenjoy.dojo.services.joystick.DirectionJoystick;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.Tail;
+import com.codenjoy.dojo.snake.services.Events;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -38,132 +37,140 @@ import java.util.LinkedList;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snake.model.BodyDirection.*;
 
-public class Hero extends DirectionJoystick implements Element, Iterable<Tail>, Joystick {
+public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
 
-	private LinkedList<Tail> elements;
-	private Direction direction; 
-	private boolean alive;
-	private int growBy;
+    private LinkedList<Tail> elements;
+    private Direction direction; 
+    private boolean alive;
+    private int growBy;
+    private Player player;
 
-	public Hero(int x, int y) {
-		elements = new LinkedList<Tail>();
-		elements.addFirst(new Tail(x, y, this));
-		elements.addFirst(new Tail(x - 1, y, this));
-		
-		growBy = 0;
-				
-		direction = RIGHT;
-		alive = true;
-	}
-	
-	public int getX() {
-		return getHead().getX();
-	}
+    public Hero(int x, int y) {
+        elements = new LinkedList<>();
+        elements.addFirst(new Tail(x, y, this));
+        elements.addFirst(new Tail(x - 1, y, this));
+        
+        growBy = 0;
+                
+        direction = RIGHT;
+        alive = true;
+    }
+    
+    public int getX() {
+        return getHead().getX();
+    }
 
-	public int getY() {
-		return getHead().getY();
-	}
+    public int getY() {
+        return getHead().getY();
+    }
 
-	public int getLength() {
-		return elements.size();
-	}
+    public int getLength() {
+        return elements.size() + growBy;
+    }
 
-	public Direction getDirection() {
-		return direction;
-	}
+    public Direction getDirection() {
+        return direction;
+    }
 
-	public void move(int x, int y) {
-		elements.addLast(new Tail(x, y, this));
-		
-		if (growBy < 0) { 			
-			for (int count = 0; count <= -growBy; count++) {
-				elements.removeFirst();
-			}
-		} else if (growBy > 0) {
-			
-		} else { // == 0
-			elements.removeFirst();
-		}
-		growBy = 0;		
-	}
-
-    @Override
-	public void down() {
-		if (!alive) return;
-		direction = DOWN;
-	}
+    public void move(int x, int y) {
+        elements.addLast(new Tail(x, y, this));
+        
+        if (growBy < 0) {             
+            for (int count = 0; count <= -growBy; count++) {
+                elements.removeFirst();
+            }
+        } else if (growBy > 0) {
+            
+        } else { // == 0
+            elements.removeFirst();
+        }
+        growBy = 0;        
+    }
 
     @Override
-	public void up() {
+    public void down() {
         if (!alive) return;
-		direction = UP;
-	}
+        direction = DOWN;
+    }
 
     @Override
-	public void left() {
+    public void up() {
         if (!alive) return;
-		direction = LEFT;
-	}
+        direction = UP;
+    }
 
     @Override
-	public void right() {
+    public void left() {
         if (!alive) return;
-		direction = RIGHT;
-	}
+        direction = LEFT;
+    }
 
-	public boolean isAlive() {
-		return alive;
-	}
+    @Override
+    public void right() {
+        if (!alive) return;
+        direction = RIGHT;
+    }
 
-	public void killMe() {
-		alive = false;
-	}
+    @Override
+    public void act(int... p) {
+        // do nothing
+    }
 
-	public void grow() {
-		growBy = 1;
-	}
+    public boolean isAlive() {
+        return alive;
+    }
 
-	public boolean itsMyHead(Point point) {
-		return (getHead().itsMe(point));
-	}
-	
-	public boolean itsMe(Point point) {
-		return itsMyBody(point) || itsMyHead(point);
-	}
+    public void killMe() {
+        player.event(Events.KILL);
+        alive = false;
+    }
+
+    public void grow() {
+        growBy = 1;
+        player.event(Events.EAT_APPLE);
+    }
+
+    public boolean itsMyHead(Point point) {
+        return (getHead().itsMe(point));
+    }
+    
+    public boolean itsMe(Point point) {
+        return itsMyBody(point) || itsMyHead(point);
+    }
 
     public boolean itsMe(int x, int y) {
         return itsMe(new PointImpl(x, y));
     }
-	
-	public boolean itsMyBody(Point point) {		
-		if (itsMyHead(point)) {
-			return false;
-		}
-		
-		for (Point element : elements) {
-			if (element.itsMe(point)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    
+    public boolean itsMyBody(Point point) {        
+        if (itsMyHead(point)) {
+            return false;
+        }
+        
+        for (Point element : elements) {
+            if (element.itsMe(point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public Point getHead() {
-		return elements.getLast();
-	}
+    public Point getHead() {
+        return elements.getLast();
+    }
 
-	@Override
-	public void affect(Hero snake) {
-		killMe();
-	}
+    @Override
+    public void affect(Hero snake) {
+        killMe();
+    }
 
-	public void walk(Field board) {
-		Point place = whereToMove();								
-		place = teleport(board.getSize(), place);
-		board.getAt(place).affect(this);
+    public void walk(Field board) {
+        Point place = whereToMove();                                
+        place = teleport(board.getSize(), place);
+        board.getAt(place).affect(this);
         validatePosition(board.getSize(), place);
         move(place.getX(), place.getY());
-	}
+    }
 
     private void validatePosition(int boardSize, Point place) {
         if (place.getX() >= boardSize || place.getX() < 0 ||
@@ -191,31 +198,33 @@ public class Hero extends DirectionJoystick implements Element, Iterable<Tail>, 
     }
 
     private Point whereToMove() {
-		int x = direction.changeX(getX());
-		int y = direction.changeY(getY());
-		return new PointImpl(x, y);
-	}
+        int x = direction.changeX(getX());
+        int y = direction.changeY(getY());
+        return new PointImpl(x, y);
+    }
 
-	public boolean itsMyTail(Point point) {
-		return getTail().itsMe(point);
-	}
+    public boolean itsMyTail(Point point) {
+        return getTail().itsMe(point);
+    }
 
     public Point getTail() {
         return elements.getFirst();
     }
 
     @Override
-	public Iterator<Tail> iterator() {
-		return elements.descendingIterator();
-	}
+    public Iterator<Tail> iterator() {
+        return elements.descendingIterator();
+    }
 
-	public void eatStone() {
-		if (elements.size() <= 10) {
-			killMe();
-		} else {
-			growBy = -10;
-		}		
-	}
+    public void eatStone() {
+        if (elements.size() <= 10) {
+            player.event(Events.EAT_STONE);
+            killMe();
+        } else {
+            growBy = -10;
+            player.event(Events.EAT_STONE);
+        }        
+    }
 
     public BodyDirection getBodyDirection(Point curr) {
         int currIndex = elements.indexOf(curr);
@@ -265,4 +274,12 @@ public class Hero extends DirectionJoystick implements Element, Iterable<Tail>, 
         }
     }
 
+    @Override
+    public void tick() {
+        // do nothing
+    }
+
+    public void init(Player player) {
+        this.player = player;
+    }
 }

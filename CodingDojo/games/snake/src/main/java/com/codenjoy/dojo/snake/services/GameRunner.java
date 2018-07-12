@@ -24,22 +24,21 @@ package com.codenjoy.dojo.snake.services;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.snake.client.ai.ApofigSolver;
-import com.codenjoy.dojo.snake.model.*;
+import com.codenjoy.dojo.snake.model.Elements;
+import com.codenjoy.dojo.snake.model.Player;
+import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 5:41 PM
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private Parameter<Integer> boardSize;
@@ -55,13 +54,10 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(final EventListener listener, PrinterFactory factory, String save, String playerName) {
-        return new Snake(new RandomArtifactGenerator(), new HeroFactory() {
-            @Override
-            public Hero create(int x, int y) {
-                return new Evented(listener, x, y);
-            }
-        }, new BasicWalls(boardSize.getValue()), boardSize.getValue(), factory);
+    public GameField createGame() {
+        return new Snake(new RandomArtifactGenerator(getDice()),
+                new BasicWalls(boardSize.getValue()),
+                boardSize.getValue());
     }
 
     @Override
@@ -85,8 +81,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 

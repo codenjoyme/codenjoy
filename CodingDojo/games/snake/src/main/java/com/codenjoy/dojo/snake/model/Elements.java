@@ -25,11 +25,6 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.CharElements;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 3:57 AM
- */
 public enum Elements implements CharElements {
     BAD_APPLE('☻'),
     GOOD_APPLE('☺'),

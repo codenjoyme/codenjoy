@@ -31,14 +31,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 5:28 AM
- */
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Walls implements Iterable<Wall>{
 
-    private List<Wall> walls = new LinkedList<Wall>();
+    private List<Wall> walls = new LinkedList<>();
 
     public void add(int x, int y) {
         this.walls.add(new Wall(x, y));
@@ -46,13 +43,13 @@ public class Walls implements Iterable<Wall>{
 
     @Override
     public Iterator<Wall> iterator() {
-        LinkedList<Wall> result = new LinkedList<Wall>();
-        result.addAll(walls);
-        return result.iterator();
+        return new LinkedList<Wall>(){{
+            addAll(walls);
+        }}.iterator();
     }
 
     public boolean itsMe(int x, int y) {
-        return itsMe(new PointImpl(x, y));
+        return itsMe(pt(x, y));
     }
 
     public boolean itsMe(Point point) {

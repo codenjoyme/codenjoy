@@ -23,25 +23,21 @@ package com.codenjoy.dojo.snake.client.ai;
  */
 
 
-import static com.codenjoy.dojo.services.Direction.*;
-
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.client.Board;
 import com.codenjoy.dojo.snake.model.Elements;
-import com.codenjoy.dojo.snake.model.artifacts.Element;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/2/12
- * Time: 12:10 AM
- */
 public class ApofigSolverTest {
 
     // этот тест проверяет что если спереди яблочко по направлению движения, то змейка не свернет

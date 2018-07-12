@@ -23,34 +23,30 @@ package com.codenjoy.dojo.snake.client.ai;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.snake.client.Board;
 import com.codenjoy.dojo.snake.model.Elements;
-import com.codenjoy.dojo.snake.services.GameRunner;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * User: your name
- */
 public class ApofigSolver implements Solver<Board> {
 
+    private Dice dice;
     private DeikstraFindWay way;
     private DeikstraFindWay.Possible possible;
     private Board board;
 
     public ApofigSolver(Dice dice) {
+        this.dice = dice;
         this.way = new DeikstraFindWay();
     }
 
@@ -139,14 +135,14 @@ public class ApofigSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new ApofigSolver(new RandomDice()),
+                new ApofigSolver(dice),
                 new Board());
     }
 

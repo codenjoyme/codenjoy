@@ -30,11 +30,6 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 3:45 AM
- */
 public class ScoresTest {
 
     private Scores scores;

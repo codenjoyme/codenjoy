@@ -25,11 +25,6 @@ package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.snake.model.Walls;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/10/12
- * Time: 9:00 AM
- */
 public class BasicWalls extends Walls implements Iterable<Wall> {
     public BasicWalls(int boardSize) {
         super();

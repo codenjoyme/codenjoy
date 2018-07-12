@@ -23,11 +23,10 @@ package com.codenjoy.dojo.snake.model.artifacts;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.model.Field;
 import com.codenjoy.dojo.snake.model.Hero;
+import com.codenjoy.dojo.snake.model.Player;
 import com.codenjoy.dojo.snake.model.Walls;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,28 +41,38 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RandomArtifactGeneratorTest {
-	
-	private RandomArtifactGenerator generator;
-	private Hero snake;
-	private Stone stone;
+
+    private RandomArtifactGenerator generator;
+    private Hero snake;
+    private Stone stone;
     private Apple apple;
     private Field board;
     private Walls walls;
 
-	private static final int BOARD_SIZE = 5;
+    private static final int BOARD_SIZE = 5;
 
     @Before
-	public void initGenerator() {
-		generator = new RandomArtifactGenerator();
+    public void initGenerator() {
+        generator = new RandomArtifactGenerator(new RandomDice()); // TODO использовать моки
 
         initBoardMock();
         initWallsMock();
 
-		int xy = (BOARD_SIZE - 1)/2;
+        int xy = (BOARD_SIZE - 1)/2;
         snake = new Hero(xy, xy);
-		stone = new Stone(0, 0);
+
+        initSnake();
+
+        stone = new Stone(0, 0);
         apple = new Apple(1, 1);
-	}
+    }
+
+    private void initSnake() {
+        when(board.createSnake()).thenReturn(snake);
+        EventListener listener = mock(EventListener.class);
+        Player player = new Player(listener);
+        player.newHero(board);
+    }
 
     // делаем так, чтобы стенка была только слева от поля (x=0, y)
     private void initWallsMock() {
@@ -73,16 +82,16 @@ public class RandomArtifactGeneratorTest {
         }
     }
 
-	private void initFullWallsMock() {
-		walls = new Walls();
-		for (int x = 0; x < BOARD_SIZE; x++) {
-			for (int y = 0; y < BOARD_SIZE; y++) {
-				if (y == 0 || y == BOARD_SIZE || x == 0 || x == BOARD_SIZE){
-					walls.add(x, y);
-				}
-			}
-		}
-	}
+    private void initFullWallsMock() {
+        walls = new Walls();
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                if (y == 0 || y == BOARD_SIZE || x == 0 || x == BOARD_SIZE){
+                    walls.add(x, y);
+                }
+            }
+        }
+    }
     /**
      * Создаем мок доски, чтобы по ней могла двигаться змейка
      */
@@ -100,76 +109,76 @@ public class RandomArtifactGeneratorTest {
     }
 
     // Я бы хотел потестить другой момент, что камень при каждой новой игре размещается в новом месте
-	@Test
-	public void shouldStoneHasRandomPositionsWhenNewGameStarted() {				
-		Stone firstStone = getNewStone();
-		Stone secondStone = getNewStone();
-		Stone thirdStone = getNewStone();
-					
-		assertPointChangePosition(firstStone, secondStone, thirdStone);		
-	}
+    @Test
+    public void shouldStoneHasRandomPositionsWhenNewGameStarted() {
+        Stone firstStone = getNewStone();
+        Stone secondStone = getNewStone();
+        Stone thirdStone = getNewStone();
 
-	private Stone getNewStone() {
-		return generator.generateStone(snake, apple, walls, BOARD_SIZE);
-	} 
+        assertPointChangePosition(firstStone, secondStone, thirdStone);
+    }
 
-	/**
-	 * метод проверяет что хоть какая-то пара артефактов из переданных в качестве аргументов находится на разных местах.
-	 * @param points артефакты
-	 */
-	private void assertPointChangePosition(Point... points) {
-		boolean atSame = isPointsAtSamePosition(points);
-		assertFalse(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)", 
-				points.length, Arrays.toString(points)), 
-				atSame);
-	}
+    private Stone getNewStone() {
+        return generator.generateStone(snake, apple, walls, BOARD_SIZE);
+    }
 
-	/**
-	 * Метод говорит что какие-то из артефактов находятся на разных позициях. 
-	 * @param points артефакты
-	 * @return true, если хоть два артефакта находятся на разных позициях.     
-	 */
-	private boolean isPointsAtSamePosition(Point... points) {
-		for (int pointIndex = 0; pointIndex < (points.length - 1); pointIndex ++) {
-			Point one = points[pointIndex];
-			Point another = points[pointIndex + 1];
-			
-			if ((one.getX() != another.getX()) || one.getY() != another.getY()) {
-				return false; 
-			}
-		}
-		return true;
-	}  	
-	
-	// камень не может быть за пределами доски 
-	@Test
-	public void shouldStoneAlwaysAtTheBoard() {
-		// тут поставил цикл, чтобы проверить что никогда
-		// камень не генерится за пределами доски
-		for (int countRun = 0; countRun < 100000; countRun ++) {
-			Stone stone = getNewStone(); 
-			
-			assertTrue("камень должен быть в перделах доски по оси X", stone.getX() < BOARD_SIZE);
-			assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() < BOARD_SIZE);
-			assertTrue("камень должен быть в перделах доски по оси X", stone.getX() >= 0);
-			assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() >= 0);
-		}
-	}	
-	
-	// но кажется я допустил еще одну ошибку при использовании Random. Надо проверить что камень когданибудь но 
-	// все же появится возле стенок доски. Да или вообще можно проверить что камень будет везде на поле, 
-	// если мы переберем достаточное количество игр 
-	@Test
-	public void testRandomStonePosition() {
-		int snakeHeadX = snake.getX();   
-		int snakeHeadY = snake.getY(); 
-		int snakeTailX = snakeHeadX - 1; 
-		
-		for (int y = 0; y < BOARD_SIZE; y ++) {
-			for (int x = 0; x < BOARD_SIZE; x ++) {
-				if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути ни на яблоке
-					continue; 
-				}
+    /**
+     * метод проверяет что хоть какая-то пара артефактов из переданных в качестве аргументов находится на разных местах.
+     * @param points артефакты
+     */
+    private void assertPointChangePosition(Point... points) {
+        boolean atSame = isPointsAtSamePosition(points);
+        assertFalse(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)",
+                points.length, Arrays.toString(points)),
+                atSame);
+    }
+
+    /**
+     * Метод говорит что какие-то из артефактов находятся на разных позициях.
+     * @param points артефакты
+     * @return true, если хоть два артефакта находятся на разных позициях.
+     */
+    private boolean isPointsAtSamePosition(Point... points) {
+        for (int pointIndex = 0; pointIndex < (points.length - 1); pointIndex ++) {
+            Point one = points[pointIndex];
+            Point another = points[pointIndex + 1];
+
+            if ((one.getX() != another.getX()) || one.getY() != another.getY()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // камень не может быть за пределами доски
+    @Test
+    public void shouldStoneAlwaysAtTheBoard() {
+        // тут поставил цикл, чтобы проверить что никогда
+        // камень не генерится за пределами доски
+        for (int countRun = 0; countRun < 100000; countRun ++) {
+            Stone stone = getNewStone();
+
+            assertTrue("камень должен быть в перделах доски по оси X", stone.getX() < BOARD_SIZE);
+            assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() < BOARD_SIZE);
+            assertTrue("камень должен быть в перделах доски по оси X", stone.getX() >= 0);
+            assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() >= 0);
+        }
+    }
+
+    // но кажется я допустил еще одну ошибку при использовании Random. Надо проверить что камень когданибудь но
+    // все же появится возле стенок доски. Да или вообще можно проверить что камень будет везде на поле,
+    // если мы переберем достаточное количество игр
+    @Test
+    public void testRandomStonePosition() {
+        int snakeHeadX = snake.getX();
+        int snakeHeadY = snake.getY();
+        int snakeTailX = snakeHeadX - 1;
+
+        for (int y = 0; y < BOARD_SIZE; y ++) {
+            for (int x = 0; x < BOARD_SIZE; x ++) {
+                if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути ни на яблоке
+                    continue;
+                }
                 if (x == 1 && y == 1) { // камень не должен появляться на яблоке
                     continue;
                 }
@@ -180,52 +189,52 @@ public class RandomArtifactGeneratorTest {
                     x == apple.getX() && y == apple.getY() + 1) {
                     continue;
                 }
-				assertStoneInSomeGameAt(x, y);
-			}
-		}
-	}
+                assertStoneInSomeGameAt(x, y);
+            }
+        }
+    }
 
-	/**
-	 * Метод проверяет что за больше число запусков игр камень будет в заданной позиции хоть один раз.
-	 * @param x координата x
-	 * @param y координата y
-	 */
-	private void assertStoneInSomeGameAt(int x, int y) {	
-		boolean found = isStonePresentInSomeGameAt(x, y);		
-		assertTrue(String.format("Должен был быть найден камень в позиции x:%s y:%s", x, y), found);
-	}
+    /**
+     * Метод проверяет что за больше число запусков игр камень будет в заданной позиции хоть один раз.
+     * @param x координата x
+     * @param y координата y
+     */
+    private void assertStoneInSomeGameAt(int x, int y) {
+        boolean found = isStonePresentInSomeGameAt(x, y);
+        assertTrue(String.format("Должен был быть найден камень в позиции x:%s y:%s", x, y), found);
+    }
 
-	/**
-	 * Метод говорит, что за больше число запусков игр камень будет в заданной позиции хоть один раз.
-	 * @param x координата x
-	 * @param y координата y
-	 * @return true - если камень в этой координате появлялся
-	 */
-	private boolean isStonePresentInSomeGameAt(int x, int y) {
-		boolean found = false;
-		for (int countRun = 0; countRun < 100000; countRun ++) {
-			Stone stone = getNewStone();
-			
-			found |= (x == stone.getX()) & (y == stone.getY());
-			if (found) {
-				break;
-			}
-		}
-		return found;
-	}	
-	
-	// еще камень никогда не должен находиться в трех местах - на змейке размером в два поля
-	// и непосредственно на пути ее движения (прямо перед носом, а то не дай бог скорость будет 
-	// большой и что тогда? игрок может не успеть)  
-	@Test
-	public void shouldNotStoneAtSnakeWayWhenGoRight() {
+    /**
+     * Метод говорит, что за больше число запусков игр камень будет в заданной позиции хоть один раз.
+     * @param x координата x
+     * @param y координата y
+     * @return true - если камень в этой координате появлялся
+     */
+    private boolean isStonePresentInSomeGameAt(int x, int y) {
+        boolean found = false;
+        for (int countRun = 0; countRun < 100000; countRun ++) {
+            Stone stone = getNewStone();
+
+            found |= (x == stone.getX()) & (y == stone.getY());
+            if (found) {
+                break;
+            }
+        }
+        return found;
+    }
+
+    // еще камень никогда не должен находиться в трех местах - на змейке размером в два поля
+    // и непосредственно на пути ее движения (прямо перед носом, а то не дай бог скорость будет
+    // большой и что тогда? игрок может не успеть)
+    @Test
+    public void shouldNotStoneAtSnakeWayWhenGoRight() {
         assertEquals(Direction.RIGHT, snake.getDirection());
-		int snakeTailX = snake.getX() - 1;
-		
-		for (int x = snakeTailX; x <= BOARD_SIZE; x ++) {
-			assertStoneNotFoundAt(x, snake.getY());
-		}
-	}
+        int snakeTailX = snake.getX() - 1;
+
+        for (int x = snakeTailX; x <= BOARD_SIZE; x ++) {
+            assertStoneNotFoundAt(x, snake.getY());
+        }
+    }
 
     // так же как и в прошлом тесте shouldNotStoneAtSnakeWayWhenGoRight, только змейка будет двигаться вниз.
     @Test
@@ -268,59 +277,59 @@ public class RandomArtifactGeneratorTest {
     }
 
     /**
-	 * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
-	 * @param x координата x
-	 * @param y координата y
-	 */
-	private void assertStoneNotFoundAt(int x, int y) {	
-		boolean found = isStonePresentInSomeGameAt(x, y);		
-		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
-	}
-	
-	// На поле случайным образом во времени и пространстве появляются яблоки.
-	// тут я не буду тестить того, что яблоки будут в каждой клетке и так далее.
-	@Test
-	public void shouldAppleHasRandomPositionsWhenNewGameStarted() {
-		Apple firstApple = getNewApple();
-		Apple secondApple = getNewApple();
-		Apple thirdApple = getNewApple();
-					
-		assertPointChangePosition(firstApple, secondApple, thirdApple);
-	}
+     * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
+     * @param x координата x
+     * @param y координата y
+     */
+    private void assertStoneNotFoundAt(int x, int y) {
+        boolean found = isStonePresentInSomeGameAt(x, y);
+        assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
+    }
 
-	private Apple getNewApple() {
-		return generator.generateApple(snake, apple, stone, walls, BOARD_SIZE);
-	}
-	
-	// аблоко не может быть за пределами доски 
-	@Test
-	public void shouldAppleAlwaysAtTheBoard() {
-		// тут поставил цикл, чтобы проверить что никогда
-		// яблоко не генерится за пределами доски
-		for (int countRun = 0; countRun < 100000; countRun ++) {
-			Apple apple = getNewApple(); 
-			
-			assertTrue("яблоко должно быть в перделах доски по оси X", apple.getX() < BOARD_SIZE);
-			assertTrue("яблоко должно быть в перделах доски по оси Y", apple.getY() < BOARD_SIZE);
-			assertTrue("яблоко должно быть в перделах доски по оси X", apple.getX() >= 0);
-			assertTrue("яблоко должно быть в перделах доски по оси Y", apple.getY() >= 0);
-		}
-	}
-	
-	// проверим что яблоки могут побывать везде на поле 
-	@Test
-	public void testRandomApplePosition() {
-		int snakeHeadX = snake.getX();
-		int snakeHeadY = snake.getY();
-		int snakeTailX = snakeHeadX - 1;
+    // На поле случайным образом во времени и пространстве появляются яблоки.
+    // тут я не буду тестить того, что яблоки будут в каждой клетке и так далее.
+    @Test
+    public void shouldAppleHasRandomPositionsWhenNewGameStarted() {
+        Apple firstApple = getNewApple();
+        Apple secondApple = getNewApple();
+        Apple thirdApple = getNewApple();
 
-		for (int y = 0; y < BOARD_SIZE; y ++) {
-			for (int x = 0; x < BOARD_SIZE; x ++) {
-				// яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост))
-				if (y == snakeHeadY && (x == snakeTailX || x == snakeHeadY)) {
-					continue;
-				}
-				// так же яблоко не может появитсья на камне
+        assertPointChangePosition(firstApple, secondApple, thirdApple);
+    }
+
+    private Apple getNewApple() {
+        return generator.generateApple(snake, apple, stone, walls, BOARD_SIZE);
+    }
+
+    // аблоко не может быть за пределами доски
+    @Test
+    public void shouldAppleAlwaysAtTheBoard() {
+        // тут поставил цикл, чтобы проверить что никогда
+        // яблоко не генерится за пределами доски
+        for (int countRun = 0; countRun < 100000; countRun ++) {
+            Apple apple = getNewApple();
+
+            assertTrue("яблоко должно быть в перделах доски по оси X", apple.getX() < BOARD_SIZE);
+            assertTrue("яблоко должно быть в перделах доски по оси Y", apple.getY() < BOARD_SIZE);
+            assertTrue("яблоко должно быть в перделах доски по оси X", apple.getX() >= 0);
+            assertTrue("яблоко должно быть в перделах доски по оси Y", apple.getY() >= 0);
+        }
+    }
+
+    // проверим что яблоки могут побывать везде на поле
+    @Test
+    public void testRandomApplePosition() {
+        int snakeHeadX = snake.getX();
+        int snakeHeadY = snake.getY();
+        int snakeTailX = snakeHeadX - 1;
+
+        for (int y = 0; y < BOARD_SIZE; y ++) {
+            for (int x = 0; x < BOARD_SIZE; x ++) {
+                // яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост))
+                if (y == snakeHeadY && (x == snakeTailX || x == snakeHeadY)) {
+                    continue;
+                }
+                // так же яблоко не может появитсья на камне
                 if (y == 0 && x == 0) {
                     continue;
                 }
@@ -332,66 +341,66 @@ public class RandomArtifactGeneratorTest {
                 if (x == apple.getX() && y == apple.getY()) {
                     continue;
                 }
-				assertAppleInSomeGameAt(x, y);
-			}
-		} 
-	}
-	
-	/**
-	 * Метод проверяет что за больше число запусков игр яблоко будет в заданной позиции хоть один раз.
-	 * @param x координата x
-	 * @param y координата y
-	 */
-	private void assertAppleInSomeGameAt(int x, int y) {	
-		boolean found = isApplePresentInSomeGameAt(x, y);		
-		assertTrue(String.format("Должен был быть найдено яблоко в позиции x:%s y:%s", x, y), found);
-	}
+                assertAppleInSomeGameAt(x, y);
+            }
+        }
+    }
 
-	/**
-	 * Метод говорит, что за больше число запусков игр яблоко будет в заданной позиции хоть один раз.
-	 * @param x координата x
-	 * @param y координата y
-	 * @return true - если яблоко в этой координате появлялся
-	 */
-	private boolean isApplePresentInSomeGameAt(int x, int y) {
-		boolean found = false;
-		for (int countRun = 0; countRun < 100000; countRun ++) {
-			Apple apple = getNewApple();
-			
-			found |= (x == apple.getX()) & (y == apple.getY());
-			if (found) {
-				break;
-			}
-		}
-		return found;
-	}
-	
-	// яблоко не может появиться на змейке.  
-	@Test
-	public void shouldNotAppleAtSnakeWay() {
-		int snakeHeadX = snake.getX();
-		int snakeHeadY = snakeHeadX;
-		int snakeTailX = snakeHeadX - 1; 
-		
-		assertAppleNotFoundAt(snakeHeadX, snakeHeadY);				
-		assertAppleNotFoundAt(snakeTailX, snakeHeadY);
-	}	  
+    /**
+     * Метод проверяет что за больше число запусков игр яблоко будет в заданной позиции хоть один раз.
+     * @param x координата x
+     * @param y координата y
+     */
+    private void assertAppleInSomeGameAt(int x, int y) {
+        boolean found = isApplePresentInSomeGameAt(x, y);
+        assertTrue(String.format("Должен был быть найдено яблоко в позиции x:%s y:%s", x, y), found);
+    }
 
-	/**
-	 * Метод проверяет что за больше число запусков игр яблоко не будет в заданной позиции никогда.
-	 * @param x координата x
-	 * @param y координата y
-	 */
-	private void assertAppleNotFoundAt(int x, int y) {	
-		boolean found = isApplePresentInSomeGameAt(x, y);		
-		assertFalse(String.format("Яблоко никогда не должно появляться в позиции x:%s y:%s", x, y), found);
-	}
-	
-	// Яблоко не может появиться на камнe. 
-	@Test
-	public void shouldNotAppleAtStonePlace() {		
-		assertAppleNotFoundAt(stone.getX(), stone.getY());
-	}
+    /**
+     * Метод говорит, что за больше число запусков игр яблоко будет в заданной позиции хоть один раз.
+     * @param x координата x
+     * @param y координата y
+     * @return true - если яблоко в этой координате появлялся
+     */
+    private boolean isApplePresentInSomeGameAt(int x, int y) {
+        boolean found = false;
+        for (int countRun = 0; countRun < 100000; countRun ++) {
+            Apple apple = getNewApple();
+
+            found |= (x == apple.getX()) & (y == apple.getY());
+            if (found) {
+                break;
+            }
+        }
+        return found;
+    }
+
+    // яблоко не может появиться на змейке.
+    @Test
+    public void shouldNotAppleAtSnakeWay() {
+        int snakeHeadX = snake.getX();
+        int snakeHeadY = snakeHeadX;
+        int snakeTailX = snakeHeadX - 1;
+
+        assertAppleNotFoundAt(snakeHeadX, snakeHeadY);
+        assertAppleNotFoundAt(snakeTailX, snakeHeadY);
+    }
+
+    /**
+     * Метод проверяет что за больше число запусков игр яблоко не будет в заданной позиции никогда.
+     * @param x координата x
+     * @param y координата y
+     */
+    private void assertAppleNotFoundAt(int x, int y) {
+        boolean found = isApplePresentInSomeGameAt(x, y);
+        assertFalse(String.format("Яблоко никогда не должно появляться в позиции x:%s y:%s", x, y), found);
+    }
+
+    // Яблоко не может появиться на камнe.
+    @Test
+    public void shouldNotAppleAtStonePlace() {
+        assertAppleNotFoundAt(stone.getX(), stone.getY());
+    }
 
     // Камень не может появиться на яблоке.
     @Test
@@ -490,59 +499,60 @@ public class RandomArtifactGeneratorTest {
         }
     }
 
-	// заполним все поле
-	@Test
-	public void testMaxApplePosition() {
-		generator = new RandomArtifactGenerator();
+    // заполним все поле
+    @Test
+    public void testMaxApplePosition() {
+        generator = new RandomArtifactGenerator(new RandomDice()); // TODO использовать моки
 
-		initBoardMock();
-		initFullWallsMock();
+        initBoardMock();
+        initFullWallsMock();
 
-		snake = new Hero(3, 1);
-		stone = new Stone(1, 1);
-		apple = new Apple(4, 1);
+        snake = new Hero(3, 1);
+        initSnake();
+        stone = new Stone(1, 1);
+        apple = new Apple(4, 1);
 
-		int x = 1;
-		boolean growX = true;
-		for (int y = 1; y < BOARD_SIZE; y++) {
-			while (x <= BOARD_SIZE) {
-				PointImpl xy = new PointImpl(x, y);
-				if (stone.itsMe(xy) || snake.itsMe(xy) || walls.itsMe(x, y)) {
-					if (growX) {
-						x++;
-					} else {
-						x--;
-					}
-					continue;
-				}
+        int x = 1;
+        boolean growX = true;
+        for (int y = 1; y < BOARD_SIZE; y++) {
+            while (x <= BOARD_SIZE) {
+                PointImpl xy = new PointImpl(x, y);
+                if (stone.itsMe(xy) || snake.itsMe(xy) || walls.itsMe(x, y)) {
+                    if (growX) {
+                        x++;
+                    } else {
+                        x--;
+                    }
+                    continue;
+                }
 
-				snake.grow();
-				snake.move(x, y);
+                snake.grow();
+                snake.move(x, y);
 
-				if (growX) {
-					x++;
-				} else {
-					x--;
-				}
+                if (growX) {
+                    x++;
+                } else {
+                    x--;
+                }
 
-				if (x == BOARD_SIZE) {
-					growX = false;
-					x--;
-					break;
-				}
+                if (x == BOARD_SIZE) {
+                    growX = false;
+                    x--;
+                    break;
+                }
 
-				if (x == 0) {
-					growX = true;
-					x++;
-					break;
-				}
+                if (x == 0) {
+                    growX = true;
+                    x++;
+                    break;
+                }
 
-				if (x == BOARD_SIZE - 1 && y == BOARD_SIZE - 1) {
-					break;
-				}
-			}
-		}
-		Apple newApple = generator.generateApple(snake, apple, stone, walls, BOARD_SIZE);
-		assertEquals(new Apple(-1, -1), newApple);
-	}
+                if (x == BOARD_SIZE - 1 && y == BOARD_SIZE - 1) {
+                    break;
+                }
+            }
+        }
+        Apple newApple = generator.generateApple(snake, apple, stone, walls, BOARD_SIZE);
+        assertEquals(new Apple(-1, -1), newApple);
+    }
 }

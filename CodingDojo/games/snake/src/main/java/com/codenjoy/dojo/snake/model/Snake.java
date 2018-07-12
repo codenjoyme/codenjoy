@@ -23,76 +23,50 @@ package com.codenjoy.dojo.snake.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
-import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Snake implements Field, Game {
+public class Snake implements Field {
 
-	private Hero snake;
     private Walls walls;
-	private Stone stone;
-	private int size;
-	private Apple apple;
-    private HeroFactory factory;
+    private Stone stone;
+    private int size;
+    private Apple apple;
     private ArtifactGenerator generator;
     private int maxLength;
-    private Printer printer;
+    private Player player;
 
-    public Snake(ArtifactGenerator generator, Walls walls, int size, PrinterFactory factory) {
-        this(generator, new HeroFactory() {
-            @Override
-            public Hero create(int x, int y) {
-                return new Hero(x, y);
-            }
-        }, walls, size, factory);
-    }
-
-    public Snake(ArtifactGenerator generator, HeroFactory snakeFactory, Walls walls, int size, PrinterFactory factory) {
-	    this.generator = generator;
-	    this.factory = snakeFactory;
+    public Snake(ArtifactGenerator generator, Walls walls, int size) {
+        this.generator = generator;
         if (size%2 == 0) {
             size++;
         }
-	    this.size = size;
+        this.size = size;
         this.walls = walls;
-        this.printer = factory.getPrinter(this.getReader(), null);
-
-        newGame();
-	}
+    }
 
     /**
-	 * метод настраивает систему так, что при съедании одного яблока автоматически появляется другое.
-	 */
-	private void generateNewApple() {
-		apple = generator.generateApple(snake, apple, stone, walls, size);
-		apple.onEat(new Runnable() {
-            @Override
-            public void run() {
-                generateNewApple();
-            }
-        });
-	}
+     * метод настраивает систему так, что при съедании одного яблока автоматически появляется другое.
+     */
+    private void generateNewApple(Hero snake) {
+        apple = generator.generateApple(snake, apple, stone, walls, size);
+        apple.onEat(() -> generateNewApple(snake));
+    }
 
-    // аналогично с камнем - только схели - он сразу появился в другом месте.
-    private void generateNewStone() {
+    // аналогично с камнем - только съели - он сразу появился в другом месте.
+    private void generateNewStone(Hero snake) {
         stone = generator.generateStone(snake, apple, walls, size);
-        stone.onEat(new Runnable() {
-            @Override
-            public void run() {
-                generateNewStone();
-            }
-        });
+        stone.onEat(() -> generateNewStone(snake));
     }
 
     @Override
-	public Stone getStone() {  		
-		return stone;				
-	}
+    public Stone getStone() {          
+        return stone;                
+    }
 
     @Override
     public Walls getWalls() {
@@ -100,119 +74,92 @@ public class Snake implements Field, Game {
     }
 
     @Override
-	public Element getAt(Point point) {
-		if (stone.itsMe(point)) {
-			return stone; 
-		}
-		
-		if (apple.itsMe(point)) {
-			return apple;
-		}
-		
-		// получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
-		// вроде логично
-		if (snake.itsMyTail(point)) {
-			return new EmptySpace(point);
-		}		
-		
-		if (snake.itsMyBody(point)) {
-			return snake;
-			// TODO тут если поменять на
-			// return new EmptySpace(point);
+    public Element getAt(Point point) {
+        if (stone.itsMe(point)) {
+            return stone; 
+        }
+        
+        if (apple.itsMe(point)) {
+            return apple;
+        }
+        
+        // получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
+        // вроде логично
+        if (snake().itsMyTail(point)) {
+            return new EmptySpace(point);
+        }        
+        
+        if (snake().itsMyBody(point)) {
+            return snake();
+            // TODO тут если поменять на
+            // return new EmptySpace(point);
             // можно будет наезжать на себя не умирая
-		}
-		
-		if (isWall(point)) {
-			return new Wall(point);
+        }
+        
+        if (isWall(point)) {
+            return new Wall(point);
             // TODO тут если поменять на
             // return new EmptySpace(point);
             // можно будет наезжать на стенку не умирая
-		}
-		
-		return new EmptySpace(point);
-	}
-
-    @Override
-    public void newGame() {
-        int position = (size - 1)/2;
-        snake = factory.create(position, position);
-        generateNewStone();
-        generateNewApple();
+        }
+        
+        return new EmptySpace(point);
     }
 
     @Override
-    public String getBoardAsString() {
-        return printer.print();
+    public void newGame(Player player) {
+        this.player = player;
+        player.newHero(this);
+    }
+
+    @Override
+    public void remove(Player player) {
+        player = null;
+    }
+
+    @Override
+    public Hero createSnake() {
+        int position = (size - 1)/2;
+        Hero snake = new Hero(position, position);
+        generateNewStone(snake);
+        generateNewApple(snake);
+        return snake;
     }
 
     private boolean isWall(Point point) {
-		return walls.itsMe(point);
-	}
-
-    @Override
-    public Joystick getJoystick() {
-        return snake;
+        return walls.itsMe(point);
     }
 
     @Override
-    public int getMaxScore() {
-        return maxLength;
+    public Apple getApple() {
+        return apple;
     }
 
     @Override
-    public int getCurrentScore() {
-        return snake.getLength();
+    public int getSize() {
+        return size;
     }
 
     @Override
-    public boolean isGameOver() {
-		return !snake.isAlive();
-	}
+    public Hero snake() {
+        return player.getHero();
+    }
 
     @Override
-	public Apple getApple() {
-		return apple;
-	}
-
-    @Override
-	public int getSize() {
-		return size;
-	}
-
-    @Override
-    public Hero getSnake() {
-        return snake;
+    public Player player() {
+        return player;
     }
 
     @Override
     public void tick() {
-        if (!snake.isAlive()) return;
+        if (!snake().isAlive()) return;
 
-        snake.walk(this);
-        maxLength = Math.max(maxLength, snake.getLength());
+        snake().walk(this);
+        maxLength = Math.max(maxLength, snake().getLength());
     }
 
     @Override
-    public void destroy() {
-        // do nothing
-    }
-
-    @Override
-    public void clearScore() { // TODO test me
-        maxLength = 0;
-    }
-
-    @Override
-    public HeroData getHero() {
-        return GameMode.heroOnTheirOwnBoard(snake.getHead());
-    }
-
-    @Override
-    public String getSave() {
-        return null;
-    }
-
-    public BoardReader getReader() {
+    public BoardReader reader() {
         return new BoardReader() {
             private int size = Snake.this.size;
 
@@ -223,19 +170,12 @@ public class Snake implements Field, Game {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-
-                for (Wall wall : walls) {
-                    result.add(wall);
-                }
-
-                for (Tail tail : snake) {
-                    result.add(tail);
-                }
-                result.add(apple);
-                result.add(stone);
-
-                return result;
+                return new LinkedList<Point>(){{
+                    walls.forEach(this::add);
+                    snake().forEach(this::add);
+                    add(apple);
+                    add(stone);
+                }};
             }
         };
     }

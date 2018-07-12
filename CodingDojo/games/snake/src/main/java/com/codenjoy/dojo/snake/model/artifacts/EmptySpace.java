@@ -29,13 +29,13 @@ import com.codenjoy.dojo.snake.model.Hero;
 
 public class EmptySpace extends PointImpl implements Element {
 
-	public EmptySpace(Point point) {
-		super(point);
-	}
+    public EmptySpace(Point point) {
+        super(point);
+    }
 
-	@Override
-	public void affect(Hero snake) {
-		// do nothing		
-	}
+    @Override
+    public void affect(Hero snake) {
+        // do nothing
+    }
 
 }

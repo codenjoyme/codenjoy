@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.model;
 
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
 import com.codenjoy.dojo.snake.model.artifacts.Tail;
@@ -39,15 +40,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/10/13
- * Time: 2:51 PM
- */
 public class DirectionTest {
 
     private Field board;
     private Hero snake;
+    private EventListener listener;
 
     @Before
     public void setup() {
@@ -56,6 +53,10 @@ public class DirectionTest {
         when(board.getAt(any(PointImpl.class))).thenReturn(new EmptySpace(new PointImpl(0, 0)));
 
         snake = new Hero(50, 50);
+        when(board.createSnake()).thenReturn(snake);
+        listener = mock(EventListener.class);
+        Player player = new Player(listener);
+        player.newHero(board);
     }
 
     @Test

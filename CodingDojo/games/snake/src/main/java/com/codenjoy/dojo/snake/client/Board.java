@@ -31,11 +31,6 @@ import com.codenjoy.dojo.snake.model.Elements;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/2/12
- * Time: 12:07 AM
- */
 public class Board extends AbstractBoard<Elements> {
 
     @Override

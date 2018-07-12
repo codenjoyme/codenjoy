@@ -24,12 +24,14 @@ package com.codenjoy.dojo.snake.model;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.snake.model.artifacts.*;
+import com.codenjoy.dojo.snake.model.artifacts.Apple;
+import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
+import com.codenjoy.dojo.snake.model.artifacts.Stone;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -37,20 +39,21 @@ import static org.mockito.Mockito.when;
 
 public class PrinterTest {
 
-	private static final int BOARD_SIZE = 7;
-	private Printer printer;
+    private static final int BOARD_SIZE = 7;
+    private Printer printer;
     private Hero snake;
     private Field board;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private EventListener listener = mock(EventListener.class);
 
     @Before
-	public void init() {
+    public void init() {
         board = mock(Field.class);
         when(board.getSize()).thenReturn(BOARD_SIZE);
         when(board.getApple()).thenReturn(null);
         when(board.getStone()).thenReturn(null);
-        when(board.getWalls()).thenReturn(null);
-        when(board.getSnake()).thenReturn(null);
+        when(board.getWalls()).thenReturn(new Walls());
+        when(board.snake()).thenReturn(null);
 
         printer = printerFactory.getPrinter(new BoardReader() {
             @Override
@@ -60,54 +63,41 @@ public class PrinterTest {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-
-                if (board.getWalls() != null) {
-                    for (Wall wall : board.getWalls()) {
-                        result.add(wall);
+                return new HashSet<Point>(){{
+                    board.getWalls().forEach(this::add);
+                    if (board.snake() != null) {
+                        board.snake().forEach(this::add);
                     }
-                }
-
-                if (board.getSnake() != null) {
-                    for (Tail tail : board.getSnake()) {
-                        result.add(tail);
-                    }
-                }
-
-                if (board.getApple() != null) {
-                    result.add(board.getApple());
-                }
-
-                if (board.getStone() != null) {
-                    result.add(board.getStone());
-                }
-                return result;
+                    add(board.getApple());
+                    add(board.getStone());
+                    remove(null);
+                }};
             }
         }, null);
-	}
-	
-	@Test
-	public void checkCleanBoard() {
-		assertEquals("       \n       \n       \n       \n       \n       \n       \n", printer.print());
-	}
-	
-	@Test
-	public void checkPrintWall() {
+    }
+
+    @Test
+    public void checkCleanBoard() {
+        assertEquals("       \n       \n       \n       \n       \n       \n       \n", printer.print());
+    }
+
+    @Test
+    public void checkPrintWall() {
         Walls walls = new Walls();
         walls.add(2, 2);
         walls.add(3, 3);
         walls.add(4, 4);
         when(board.getWalls()).thenReturn(walls);
 
-		assertEquals(
-				"       \n" +
+        assertEquals(
+                "       \n" +
                 "       \n" +
                 "    ☼  \n" +
                 "   ☼   \n" +
                 "  ☼    \n" +
                 "       \n" +
                 "       \n", printer.print());
-	}
+    }
 
     @Test
     public void checkPrintBasicWalls() {   // тут тестируем больше BasicWalls чем printer
@@ -122,38 +112,38 @@ public class PrinterTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n", printer.print());
     }
-	
-	@Test
-	public void checkPrintApple() {
+
+    @Test
+    public void checkPrintApple() {
         when(board.getApple()).thenReturn(new Apple(2, 2));
 
         assertEquals(
-				"       \n" +
-				"       \n" +
-				"       \n" +
-				"       \n" +
-				"  ☺    \n" +
-				"       \n" +
-				"       \n", printer.print());
-	}
-	
-	@Test
-	public void checkPrintStone() {
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "  ☺    \n" +
+                "       \n" +
+                "       \n", printer.print());
+    }
+
+    @Test
+    public void checkPrintStone() {
         when(board.getStone()).thenReturn(new Stone(4, 4));
 
         assertEquals(
-				"       \n" +
-				"       \n" +
-				"    ☻  \n" +
-				"       \n" +
-				"       \n" +
-				"       \n" +
-				"       \n", printer.print());
-	}
-	
-	@Test
-	public void checkPrintSnake() {
-		shouldSnake();
+                "       \n" +
+                "       \n" +
+                "    ☻  \n" +
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "       \n", printer.print());
+    }
+
+    @Test
+    public void checkPrintSnake() {
+        shouldSnake();
         moveUp();
         moveRight();
         moveUp();
@@ -167,10 +157,10 @@ public class PrinterTest {
                 "       \n" +
                 "       \n" +
                 "       \n");
-	}
+    }
 
     private void assertSnake(String expected) {
-        when(board.getSnake()).thenReturn(snake);
+        when(board.snake()).thenReturn(snake);
         assertEquals(expected, printer.print());
     }
 
@@ -196,6 +186,12 @@ public class PrinterTest {
 
     private void shouldSnake() {
         snake = new Hero(3, 3);
+
+        when(board.createSnake()).thenReturn(snake);
+        listener = mock(EventListener.class);
+        Player player = new Player(listener);
+        player.newHero(board);
+
         snake.right();
     }
 
@@ -457,5 +453,5 @@ public class PrinterTest {
                 "       \n");
     }
 
-	
+
 }

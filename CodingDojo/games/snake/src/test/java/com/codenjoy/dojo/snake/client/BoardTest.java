@@ -28,14 +28,8 @@ import com.codenjoy.dojo.snake.model.Elements;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/2/12
- * Time: 2:03 AM
- */
 public class BoardTest {
     @Test
     public void should() {
