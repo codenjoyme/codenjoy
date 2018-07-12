@@ -24,9 +24,6 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 import com.codenjoy.dojo.services.*;
 
-/**
- * Created by indigo on 01.08.2015.
- */
 public class Box extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
 
     private Field field;

@@ -1,15 +1,12 @@
 package com.codenjoy.dojo.puzzlebox;
 
-import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
-import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.puzzlebox.client.Board;
 import com.codenjoy.dojo.puzzlebox.client.ai.WGSSolver;
 import com.codenjoy.dojo.puzzlebox.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
