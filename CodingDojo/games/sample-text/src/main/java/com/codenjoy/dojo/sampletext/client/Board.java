@@ -25,9 +25,6 @@ package com.codenjoy.dojo.sampletext.client;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 
-/**
- * Created by indigo on 2016-11-23.
- */
 public class Board extends AbstractTextBoard {
 
     public String getData() {

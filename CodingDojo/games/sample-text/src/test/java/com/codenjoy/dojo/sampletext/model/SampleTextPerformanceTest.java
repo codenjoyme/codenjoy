@@ -26,8 +26,10 @@ package com.codenjoy.dojo.sampletext.model;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -36,26 +38,23 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by Sanja on 15.02.14.
- */
 public class SampleTextPerformanceTest {
 
     @Test
     public void test() {
-        GameRunner sampleGame = new GameRunner();
+        GameRunner gameType = new GameRunner();
 
-        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
+        List<Game> games = new LinkedList<Game>();
 
-        PrinterFactory factory = new PrinterFactoryImpl();
+        PrinterFactory factory = gameType.getPrinterFactory();
         for (int index = 0; index < 50; index++) {
-            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null, null);
+            Game game = TestUtils.buildGame(gameType, mock(EventListener.class), factory);
             games.add(game);
         }
 
         Profiler profiler = new Profiler();
 
-        for (com.codenjoy.dojo.services.Game game : games) {
+        for (Game game : games) {
             profiler.start();
 
            game.getBoardAsString();

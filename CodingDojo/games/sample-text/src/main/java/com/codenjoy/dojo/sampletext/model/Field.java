@@ -23,7 +23,10 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
-public interface Field {
+import com.codenjoy.dojo.services.multiplayer.GameField;
+
+public interface Field extends GameField<Player> {
+
     String getQuestion(int index);
 
     String getAnswer(int index);

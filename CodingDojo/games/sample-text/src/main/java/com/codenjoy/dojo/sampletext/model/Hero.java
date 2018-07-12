@@ -25,16 +25,17 @@ package com.codenjoy.dojo.sampletext.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Arrays;
 
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
+ * Эти интерфейсы объявлены в {@see PlayerHero}.
  */
-public class Hero extends MessageJoystick implements Tickable {
+public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
-    private Field field;
     private boolean alive;
     private String answer;
 
@@ -42,6 +43,7 @@ public class Hero extends MessageJoystick implements Tickable {
         alive = true;
     }
 
+    @Override
     public void init(Field field) {
         this.field = field;
     }

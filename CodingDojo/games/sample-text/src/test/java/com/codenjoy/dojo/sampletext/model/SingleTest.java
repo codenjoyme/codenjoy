@@ -24,7 +24,9 @@ package com.codenjoy.dojo.sampletext.model;
 
 
 import com.codenjoy.dojo.sampletext.services.Events;
+import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,11 +35,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 5:22
- */
 public class SingleTest {
 
     private EventListener listener1;
@@ -58,16 +55,16 @@ public class SingleTest {
 
         dice = mock(Dice.class);
         SampleText Sample = new SampleText(level, dice);
-        PrinterFactory factory = new PrinterFactoryImpl();
+        PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(Sample, listener1, factory);
+        game1 = new Single(Sample, new Player(listener1), factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(Sample, listener2, factory);
+        game2 = new Single(Sample, new Player(listener2), factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(Sample, listener3, factory);
+        game3 = new Single(Sample, new Player(listener3), factory);
 
         dice(1, 4);
         game1.newGame();
