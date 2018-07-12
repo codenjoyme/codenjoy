@@ -67,7 +67,7 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 2 :1\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*+jli*\n" +
@@ -77,9 +77,9 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*mjli*\n" +
@@ -89,9 +89,9 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*mjli*\n" +
@@ -100,10 +100,10 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:1\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "Fire Event: moveCount: 4, number: 0\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*m+li*\n" +
@@ -112,9 +112,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:3\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*+mli*\n" +
@@ -123,9 +123,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:2\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*m+li*\n" +
@@ -134,9 +134,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:3\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*+mli*\n" +
@@ -145,9 +145,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:0\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*kmli*\n" +
@@ -156,9 +156,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:1\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*hfeg*\n" +
                         "1:*+mli*\n" +
@@ -167,9 +167,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:1\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*+feg*\n" +
                         "1:*hmli*\n" +
@@ -178,9 +178,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:2\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*f+eg*\n" +
                         "1:*hmli*\n" +
@@ -190,9 +190,9 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*+feg*\n" +
                         "1:*hmli*\n" +
@@ -201,9 +201,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:2\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*f+eg*\n" +
                         "1:*hmli*\n" +
@@ -213,9 +213,9 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*fe+g*\n" +
                         "1:*hmli*\n" +
@@ -224,9 +224,9 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:0\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:******\n" +
                         "1:*felg*\n" +
                         "1:*hm+i*\n" +
@@ -235,7 +235,7 @@ public class SmokeTest {
                         "1:******\n" +
                         "1:\n" +
                         "DICE:2\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

@@ -36,154 +36,154 @@ public class SmokeTest {
                 new Board());
 
         // then
-        assertEquals("Board:\n" +
+        assertEquals("1:Board:\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(8)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:2   2\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(12)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   4\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:2   4\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "Fire Event: SUM(16)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:4   8\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(20)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   4\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:2  48\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "Fire Event: SUM(24)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:    4\n" +
                         "1:4  48\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(28)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   4\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:    4\n" +
                         "1:2  88\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "Fire Event: SUM(32)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:    8\n" +
                         "1:4  88\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(36)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   4\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:    8\n" +
                         "1:2  4A\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "Fire Event: SUM(40)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:    4\n" +
                         "1:    8\n" +
                         "1:4  4A\n" +
                         "1:\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "Fire Event: SUM(44)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:4   2\n" +
                         "1:     \n" +
                         "1:4    \n" +
                         "1:8    \n" +
                         "1:8A  2\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "Fire Event: SUM(48)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:8    \n" +
                         "1:AA  4\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(52)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   4\n" +
                         "1:     \n" +
                         "1:     \n" +
                         "1:    8\n" +
                         "1:2  B4\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "Fire Event: SUM(56)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   2\n" +
                         "1:     \n" +
                         "1:    4\n" +
                         "1:    8\n" +
                         "1:4  B4\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: SUM(60)\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:2   4\n" +
                         "1:     \n" +
                         "1:    4\n" +
                         "1:    8\n" +
                         "1:2 4B4\n" +
                         "1:\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "Fire Event: SUM(64)\n" +
                         "------------------------------------------",
                 String.join("\n", messages));

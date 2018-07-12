@@ -59,7 +59,7 @@ public class SmokeTest {
                 new Board());
 
         // then
-        assertEquals("Board:\n" +
+        assertEquals("1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║   ║\n" +
                         "1:║   ║\n" +
@@ -68,12 +68,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:0\n" +
                         "DICE:0\n" +
-                        "Answer: ACT(0,0)\n" +
+                        "1:Answer: ACT(0,0)\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║   ║\n" +
                         "1:║   ║\n" +
@@ -82,12 +82,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "Answer: ACT(1,1)\n" +
+                        "1:Answer: ACT(1,1)\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║   ║\n" +
                         "1:║╔  ║\n" +
@@ -96,12 +96,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
-                        "Answer: ACT(1,2)\n" +
+                        "1:Answer: ACT(1,2)\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╗  ║\n" +
                         "1:║╗  ║\n" +
@@ -110,12 +110,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
-                        "Answer: ACT(1,3)\n" +
+                        "1:Answer: ACT(1,3)\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╝  ║\n" +
                         "1:║╗  ║\n" +
@@ -124,12 +124,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
-                        "Answer: ACT(2,1)\n" +
+                        "1:Answer: ACT(2,1)\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
                         "DICE:5\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╝  ║\n" +
                         "1:║╗║ ║\n" +
@@ -138,12 +138,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
-                        "Answer: ACT(2,2)\n" +
+                        "1:Answer: ACT(2,2)\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
                         "DICE:6\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╝╬ ║\n" +
                         "1:║╗═ ║\n" +
@@ -152,12 +152,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
-                        "Answer: ACT(2,3)\n" +
+                        "1:Answer: ACT(2,3)\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╝╬ ║\n" +
                         "1:║╗═ ║\n" +
@@ -166,12 +166,12 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
-                        "Answer: ACT(3,1)\n" +
+                        "1:Answer: ACT(3,1)\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╝╬ ║\n" +
                         "1:║╗═╚║\n" +
@@ -180,19 +180,19 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
-                        "Answer: ACT(3,2)\n" +
+                        "1:Answer: ACT(3,2)\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║╝╬╗║\n" +
                         "1:║╗═╔║\n" +
                         "1:║╔╗╚║\n" +
                         "1:╔═══╝\n" +
                         "1:\n" +
-                        "Answer: \n" +
+                        "1:Answer: \n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
@@ -396,9 +396,9 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "Fire Event: GAME_OVER\n" +
-                        "PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:╔═══╗\n" +
                         "1:║   ║\n" +
                         "1:║   ║\n" +
@@ -407,7 +407,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
-                        "Answer: ACT(3,3)\n" +
+                        "1:Answer: ACT(3,3)\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +

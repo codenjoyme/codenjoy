@@ -204,46 +204,46 @@ public class LocalGameRunnerTest {
 
         // then
         assertEquals("GET_READER#0\n" +
-                "NEW_GAME#1\n" +
-                "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:2,elements:[[1,3], [2,4], [3,5]],player=PLAYER#6}#7}#8\n" +
-                "CLIENT_BOARD_PRINTED_TO_SRING#9\n" +
-                "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#10\n" +
-                "Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                "GOT_EVENT{EVENT(ACT{[1, 5]})#11}#12\n" +
-                "GOT_EVENT{EVENT(LEFT)#13}#14\n" +
-                "GOT_EVENT{EVENT(RIGHT)#15}#16\n" +
-                "GOT_EVENT{EVENT(ACT{[9]})#17}#18\n" +
-                "GOT_EVENT{EVENT(UP)#19}#20\n" +
-                "GOT_EVENT{EVENT(DOWN)#21}#22\n" +
-                "TICK_GAME#23\n" +
-                "TICK_HERO#24\n" +
-                "------------------------------------------\n" +
-                "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:25,elements:[[1,26], [2,27], [3,28]],player=PLAYER#29}#30}#31\n" +
-                "CLIENT_BOARD_PRINTED_TO_SRING#32\n" +
-                "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#33\n" +
-                "Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                "GOT_EVENT{EVENT(ACT{[1, 5]})#34}#35\n" +
-                "GOT_EVENT{EVENT(LEFT)#36}#37\n" +
-                "GOT_EVENT{EVENT(RIGHT)#38}#39\n" +
-                "GOT_EVENT{EVENT(ACT{[9]})#40}#41\n" +
-                "GOT_EVENT{EVENT(UP)#42}#43\n" +
-                "GOT_EVENT{EVENT(DOWN)#44}#45\n" +
-                "TICK_GAME#46\n" +
-                "TICK_HERO#47\n" +
-                "------------------------------------------\n" +
-                "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:48,elements:[[1,49], [2,50], [3,51]],player=PLAYER#52}#53}#54\n" +
-                "CLIENT_BOARD_PRINTED_TO_SRING#55\n" +
-                "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#56\n" +
-                "Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                "GOT_EVENT{EVENT(ACT{[1, 5]})#57}#58\n" +
-                "GOT_EVENT{EVENT(LEFT)#59}#60\n" +
-                "GOT_EVENT{EVENT(RIGHT)#61}#62\n" +
-                "GOT_EVENT{EVENT(ACT{[9]})#63}#64\n" +
-                "GOT_EVENT{EVENT(UP)#65}#66\n" +
-                "GOT_EVENT{EVENT(DOWN)#67}#68\n" +
-                "TICK_GAME#69\n" +
-                "TICK_HERO#70\n" +
-                "------------------------------------------",
+                        "NEW_GAME#1\n" +
+                        "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:2,elements:[[1,3], [2,4], [3,5]],player=PLAYER#6}#7}#8\n" +
+                        "1:CLIENT_BOARD_PRINTED_TO_SRING#9\n" +
+                        "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#10\n" +
+                        "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                        "GOT_EVENT{EVENT(ACT{[1, 5]})#11}#12\n" +
+                        "GOT_EVENT{EVENT(LEFT)#13}#14\n" +
+                        "GOT_EVENT{EVENT(RIGHT)#15}#16\n" +
+                        "GOT_EVENT{EVENT(ACT{[9]})#17}#18\n" +
+                        "GOT_EVENT{EVENT(UP)#19}#20\n" +
+                        "GOT_EVENT{EVENT(DOWN)#21}#22\n" +
+                        "TICK_GAME#23\n" +
+                        "TICK_HERO#24\n" +
+                        "------------------------------------------\n" +
+                        "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:25,elements:[[1,26], [2,27], [3,28]],player=PLAYER#29}#30}#31\n" +
+                        "1:CLIENT_BOARD_PRINTED_TO_SRING#32\n" +
+                        "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#33\n" +
+                        "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                        "GOT_EVENT{EVENT(ACT{[1, 5]})#34}#35\n" +
+                        "GOT_EVENT{EVENT(LEFT)#36}#37\n" +
+                        "GOT_EVENT{EVENT(RIGHT)#38}#39\n" +
+                        "GOT_EVENT{EVENT(ACT{[9]})#40}#41\n" +
+                        "GOT_EVENT{EVENT(UP)#42}#43\n" +
+                        "GOT_EVENT{EVENT(DOWN)#44}#45\n" +
+                        "TICK_GAME#46\n" +
+                        "TICK_HERO#47\n" +
+                        "------------------------------------------\n" +
+                        "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:48,elements:[[1,49], [2,50], [3,51]],player=PLAYER#52}#53}#54\n" +
+                        "1:CLIENT_BOARD_PRINTED_TO_SRING#55\n" +
+                        "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#56\n" +
+                        "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                        "GOT_EVENT{EVENT(ACT{[1, 5]})#57}#58\n" +
+                        "GOT_EVENT{EVENT(LEFT)#59}#60\n" +
+                        "GOT_EVENT{EVENT(RIGHT)#61}#62\n" +
+                        "GOT_EVENT{EVENT(ACT{[9]})#63}#64\n" +
+                        "GOT_EVENT{EVENT(UP)#65}#66\n" +
+                        "GOT_EVENT{EVENT(DOWN)#67}#68\n" +
+                        "TICK_GAME#69\n" +
+                        "TICK_HERO#70\n" +
+                        "------------------------------------------",
                 String.join("\n", messages));
     }
 

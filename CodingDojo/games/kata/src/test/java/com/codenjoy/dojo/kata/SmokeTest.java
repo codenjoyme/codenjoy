@@ -42,7 +42,7 @@ public class SmokeTest {
                 new Board());
 
         // then
-        assertEquals("BoardData {\n" +
+        assertEquals("1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один String аргумент и возвращающий строку 'world' если на вход пришло 'hello',и 'hello' - если пришло 'world', в противном случае алгоритм должен вернуть ту же строчку, что пришла на вход. \\nАлгоритм реализован для проверки конневшена клиента к серверу.',\n" +
                         "1:  'history':[],\n" +
                         "1:  'level':0,\n" +
@@ -51,10 +51,10 @@ public class SmokeTest {
                         "1:    'hello'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['world']')\n" +
+                        "1:Answer: message('['world']')\n" +
                         "Fire Event: PassTest{complexity=0, testCount=5}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один String аргумент и возвращающий строку 'world' если на вход пришло 'hello',и 'hello' - если пришло 'world', в противном случае алгоритм должен вернуть ту же строчку, что пришла на вход. \\nАлгоритм реализован для проверки конневшена клиента к серверу.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -70,10 +70,10 @@ public class SmokeTest {
                         "1:    'world'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['world', 'hello']')\n" +
+                        "1:Answer: message('['world', 'hello']')\n" +
                         "Fire Event: PassTest{complexity=0, testCount=5}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один String аргумент и возвращающий строку 'world' если на вход пришло 'hello',и 'hello' - если пришло 'world', в противном случае алгоритм должен вернуть ту же строчку, что пришла на вход. \\nАлгоритм реализован для проверки конневшена клиента к серверу.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -95,10 +95,10 @@ public class SmokeTest {
                         "1:    'qwe'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['world', 'hello', 'qwe']')\n" +
+                        "1:Answer: message('['world', 'hello', 'qwe']')\n" +
                         "Fire Event: PassTest{complexity=0, testCount=5}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один String аргумент и возвращающий строку 'world' если на вход пришло 'hello',и 'hello' - если пришло 'world', в противном случае алгоритм должен вернуть ту же строчку, что пришла на вход. \\nАлгоритм реализован для проверки конневшена клиента к серверу.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -126,10 +126,10 @@ public class SmokeTest {
                         "1:    'asd'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['world', 'hello', 'qwe', 'asd']')\n" +
+                        "1:Answer: message('['world', 'hello', 'qwe', 'asd']')\n" +
                         "Fire Event: PassTest{complexity=0, testCount=5}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один String аргумент и возвращающий строку 'world' если на вход пришло 'hello',и 'hello' - если пришло 'world', в противном случае алгоритм должен вернуть ту же строчку, что пришла на вход. \\nАлгоритм реализован для проверки конневшена клиента к серверу.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -163,11 +163,11 @@ public class SmokeTest {
                         "1:    'zxc'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['world', 'hello', 'qwe', 'asd', 'zxc']')\n" +
+                        "1:Answer: message('['world', 'hello', 'qwe', 'asd', 'zxc']')\n" +
                         "Fire Event: PassTest{complexity=0, testCount=5}\n" +
                         "Fire Event: NextAlgorithm{complexity=0, time=0}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Wait for next level. Please send 'message('StartNextLevel')' command.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -199,9 +199,9 @@ public class SmokeTest {
                         "1:  'level':0,\n" +
                         "1:  'questions':[]\n" +
                         "1:}\n" +
-                        "Answer: message('StartNextLevel')\n" +
+                        "1:Answer: message('StartNextLevel')\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[],\n" +
                         "1:  'level':1,\n" +
@@ -210,10 +210,10 @@ public class SmokeTest {
                         "1:    '1'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1']')\n" +
+                        "1:Answer: message('['1']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -229,10 +229,10 @@ public class SmokeTest {
                         "1:    '2'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2']')\n" +
+                        "1:Answer: message('['1', '2']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -254,10 +254,10 @@ public class SmokeTest {
                         "1:    '3'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -285,10 +285,10 @@ public class SmokeTest {
                         "1:    '4'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz', '4']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz', '4']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -322,10 +322,10 @@ public class SmokeTest {
                         "1:    '5'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz', '4', 'Buzz']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz', '4', 'Buzz']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -365,10 +365,10 @@ public class SmokeTest {
                         "1:    '6'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -414,10 +414,10 @@ public class SmokeTest {
                         "1:    '7'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -469,10 +469,10 @@ public class SmokeTest {
                         "1:    '8'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------\n" +
-                        "BoardData {\n" +
+                        "1:BoardData {\n" +
                         "1:  'description':'Напиши метод, принимающий один int аргумент и возвращающий String. Для тех чисел, которые делятся нацело на 3 метод должен вернуть “Fizz”, для тех, что делятся на 5 - “Buzz”, для тех же, что делятся и на 3 и на 5 - “FizzBuzz”, ну а для всех остальных - само число.',\n" +
                         "1:  'history':[\n" +
                         "1:    {\n" +
@@ -530,7 +530,7 @@ public class SmokeTest {
                         "1:    '9'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
-                        "Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8', 'Fizz']')\n" +
+                        "1:Answer: message('['1', '2', 'Fizz', '4', 'Buzz', 'Fizz', '7', '8', 'Fizz']')\n" +
                         "Fire Event: PassTest{complexity=1, testCount=25}\n" +
                         "------------------------------------------",
                 String.join("\n", messages));

@@ -63,7 +63,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:4\n" +
                         "DICE:5\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~» ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -75,9 +75,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~<  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -89,9 +89,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~<~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -103,9 +103,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ <~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -117,9 +117,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##«  # ☼\n" +
@@ -131,9 +131,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -145,7 +145,7 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "Fire Event: GET_GOLD\n" +
                         "DICE:6\n" +
                         "DICE:1\n" +
@@ -154,7 +154,7 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "DICE:5\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -166,9 +166,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -180,9 +180,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -194,13 +194,13 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: KILL_HERO\n" +
-                        "PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:6\n" +
                         "DICE:6\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -212,9 +212,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -226,9 +226,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -240,9 +240,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -254,9 +254,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -268,9 +268,9 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
-                        "Board:\n" +
+                        "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
@@ -282,7 +282,7 @@ public class SmokeTest {
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "Fire Event: GET_GOLD\n" +
                         "DICE:6\n" +
                         "DICE:6\n" +

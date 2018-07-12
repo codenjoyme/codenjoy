@@ -101,7 +101,7 @@ public class LocalGameRunner { // TODO test me
         return (n) -> {
             int next = numbers[index[0]];
             out.accept("DICE:" + next);
-            if (next > n) {
+            if (next >= n) {
                 next = next % n;
                 out.accept("DICE_CORRECTED < " + n + " :" + next);
             }
@@ -113,7 +113,8 @@ public class LocalGameRunner { // TODO test me
     }
 
     private static String player(int index, String message) {
-        return message.replaceAll("\\n", "\n" + (index + 1) + ":");
+        String preffix = (index + 1) + ":";
+        return preffix + message.replaceAll("\\n", "\n" + preffix);
     }
 
     private static Single createGame(GameType gameType, GameField field) {

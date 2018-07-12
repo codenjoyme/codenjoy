@@ -81,7 +81,7 @@ public class SmokeTest {
         // then
         assertEquals("DICE:1\n" +
                         "DICE:2\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼     ☼\n" +
@@ -97,7 +97,7 @@ public class SmokeTest {
                         "1:Blasts: []\n" +
                         "1:Expected blasts at: []\n" +
                         "DICE:3\n" +
-                        "Answer: DOWN\n" +
+                        "1:Answer: DOWN\n" +
                         "DICE:0\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
@@ -119,7 +119,7 @@ public class SmokeTest {
                         "DICE:2\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼##   ☼\n" +
@@ -196,12 +196,12 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
-                        "Answer: ACT\n" +
+                        "1:Answer: ACT\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼##   ☼\n" +
@@ -217,10 +217,10 @@ public class SmokeTest {
                         "1:Blasts: []\n" +
                         "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
                         "DICE:1\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼##   ☼\n" +
@@ -236,14 +236,14 @@ public class SmokeTest {
                         "1:Blasts: []\n" +
                         "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
                         "DICE:1\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼##   ☼\n" +
@@ -263,10 +263,10 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
-                        "Answer: ACT,RIGHT\n" +
+                        "1:Answer: ACT,RIGHT\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼##  &☼\n" +
@@ -283,11 +283,11 @@ public class SmokeTest {
                         "1:Expected blasts at: [[1,1], [1,2], [2,1]]\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "DICE:1\n" +
                         "Fire Event: KILL_DESTROY_WALL\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼&☼\n" +
                         "1:☼H#   ☼\n" +
@@ -304,12 +304,12 @@ public class SmokeTest {
                         "1:Expected blasts at: []\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼    &☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ ##  ☼\n" +
@@ -326,11 +326,11 @@ public class SmokeTest {
                         "1:Expected blasts at: []\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "DICE:0\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼&☼\n" +
                         "1:☼ ## ☺☼\n" +
@@ -350,11 +350,11 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
-                        "Answer: ACT,DOWN\n" +
+                        "1:Answer: ACT,DOWN\n" +
                         "DICE:0\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ ## &☼\n" +
@@ -371,10 +371,10 @@ public class SmokeTest {
                         "1:Expected blasts at: []\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
-                        "Answer: ACT,DOWN\n" +
+                        "1:Answer: ACT,DOWN\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ ## 3☼\n" +
@@ -395,10 +395,10 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:0\n" +
-                        "Answer: ACT,LEFT\n" +
+                        "1:Answer: ACT,LEFT\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ ## 2☼\n" +
@@ -424,15 +424,15 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
-                        "Answer: ACT\n" +
+                        "1:Answer: ACT\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
                         "Fire Event: KILL_BOMBERMAN\n" +
-                        "PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ ## 1☼\n" +
@@ -458,14 +458,14 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "Answer: ACT\n" +
+                        "1:Answer: ACT\n" +
                         "DICE:3\n" +
                         "Fire Event: KILL_BOMBERMAN\n" +
-                        "PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼    ҉☼\n" +
                         "1:☼ ☼ ☼҉☼\n" +
                         "1:☼ #H҉҉☼\n" +
@@ -491,14 +491,14 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:0\n" +
                         "DICE:2\n" +
-                        "Answer: ACT\n" +
+                        "1:Answer: ACT\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ #   ☼\n" +
@@ -516,10 +516,10 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
-                        "Answer: RIGHT\n" +
+                        "1:Answer: RIGHT\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ #   ☼\n" +
@@ -541,14 +541,14 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ #   ☼\n" +
@@ -564,10 +564,10 @@ public class SmokeTest {
                         "1:Blasts: []\n" +
                         "1:Expected blasts at: [[2,1], [3,1], [3,2], [4,1], [5,1]]\n" +
                         "DICE:2\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ #  ☺☼\n" +
@@ -583,7 +583,7 @@ public class SmokeTest {
                         "1:Blasts: [[1,1], [2,1], [5,1]]\n" +
                         "1:Expected blasts at: [[3,1], [4,1], [5,1]]\n" +
                         "DICE:2\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
@@ -593,7 +593,7 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "Fire Event: KILL_DESTROY_WALL\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼ ☼ ☼☺☼\n" +
                         "1:☼ #   ☼\n" +
@@ -609,12 +609,12 @@ public class SmokeTest {
                         "1:Blasts: [[4,1], [5,1]]\n" +
                         "1:Expected blasts at: []\n" +
                         "DICE:2\n" +
-                        "Answer: UP\n" +
+                        "1:Answer: UP\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
-                        "☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼\n" +
                         "1:☼    ☺☼\n" +
                         "1:☼ ☼ ☼ ☼\n" +
                         "1:☼ #&  ☼\n" +
@@ -631,7 +631,7 @@ public class SmokeTest {
                         "1:Expected blasts at: []\n" +
                         "DICE:2\n" +
                         "DICE:0\n" +
-                        "Answer: LEFT\n" +
+                        "1:Answer: LEFT\n" +
                         "DICE:0\n" +
                         "DICE:0\n" +
                         "DICE:0\n" +
