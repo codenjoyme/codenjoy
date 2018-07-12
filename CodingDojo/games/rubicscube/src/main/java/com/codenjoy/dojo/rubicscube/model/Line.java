@@ -22,12 +22,6 @@ package com.codenjoy.dojo.rubicscube.model;
  * #L%
  */
 
-
-/**
- * User: sanja
- * Date: 08.10.13
- * Time: 5:28
- */
 public class Line {
 
     public static final int SIZE = 3;

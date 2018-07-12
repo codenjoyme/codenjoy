@@ -26,9 +26,6 @@ package com.codenjoy.dojo.rubicscube.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
-/**
- * User: oleksandr.baglai
- */
 public class LengthToXY {
     public LengthToXY(int size) {
         this.size = size;

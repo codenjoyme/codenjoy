@@ -26,11 +26,6 @@ package com.codenjoy.dojo.rubicscube.model;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * User: sanja
- * Date: 08.10.13
- * Time: 4:41
- */
 public class Cube {
 
     private Map<Face, FaceValue> cube = new HashMap<Face, FaceValue>();
@@ -140,6 +135,7 @@ public class Cube {
 
     public boolean isSolved() { // TODO test me
         boolean result = true;
+
         result &= back().isSolved();
         result &= down().isSolved();
         result &= left().isSolved();

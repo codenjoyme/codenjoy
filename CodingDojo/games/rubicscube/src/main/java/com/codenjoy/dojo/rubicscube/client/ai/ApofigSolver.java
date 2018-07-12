@@ -23,19 +23,14 @@ package com.codenjoy.dojo.rubicscube.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.rubicscube.client.Board;
 import com.codenjoy.dojo.rubicscube.client.Face;
 import com.codenjoy.dojo.rubicscube.client.Rotate;
-import com.codenjoy.dojo.rubicscube.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-/**
- * User: your name
- */
 public class ApofigSolver implements Solver<Board> {
 
     private Dice dice;
@@ -49,7 +44,7 @@ public class ApofigSolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        return result(Face.random(dice), Rotate.random(dice));
+        return result(Face.random(dice), Rotate.random(dice)); // TODO implement bot
     }
 
     private String result(Face face, Rotate rotate) {
@@ -60,14 +55,14 @@ public class ApofigSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new ApofigSolver(new RandomDice()),
+                new ApofigSolver(dice),
                 new Board());
     }
 

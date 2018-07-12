@@ -30,11 +30,6 @@ import com.codenjoy.dojo.rubicscube.model.Line;
 
 import java.util.Map;
 
-/**
- * User: sanja
- * Date: 08.10.13
- * Time: 6:17
- */
 public class R implements Command {
 
     @Override

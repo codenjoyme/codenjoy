@@ -26,17 +26,12 @@ package com.codenjoy.dojo.rubicscube.model;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 09.10.13
- * Time: 14:38
- */
 public class Edges {
 
     private List<Edge> edges;
 
     public Edges() {
-        edges = new LinkedList<Edge>();
+        edges = new LinkedList<>();
     }
 
     public void add(Face face1, Face face2, Elements color1, Elements color2) {

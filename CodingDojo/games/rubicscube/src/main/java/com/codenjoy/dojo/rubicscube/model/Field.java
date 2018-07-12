@@ -23,8 +23,12 @@ package com.codenjoy.dojo.rubicscube.model;
  */
 
 
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field {
-    Joystick getJoystick();
+public interface Field extends GameField<Player> {
+    boolean isGameOver();
+
+    void gameOver();
+
+    boolean check(int faceNumber, int i, int i1);
 }

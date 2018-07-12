@@ -22,12 +22,6 @@ package com.codenjoy.dojo.rubicscube.model;
  * #L%
  */
 
-
-/**
- * User: sanja
- * Date: 09.10.13
- * Time: 14:08
- */
 public class Edge {
     public Elements color1;
     public Elements color2;

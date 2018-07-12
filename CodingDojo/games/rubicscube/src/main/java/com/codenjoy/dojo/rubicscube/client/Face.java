@@ -25,9 +25,6 @@ package com.codenjoy.dojo.rubicscube.client;
 
 import com.codenjoy.dojo.services.Dice;
 
-/**
- * User: oleksandr.baglai
- */
 public enum Face {
     LEFT(1),
     FRONT(2),

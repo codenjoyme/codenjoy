@@ -29,11 +29,6 @@ import com.codenjoy.dojo.rubicscube.model.FaceValue;
 
 import java.util.Map;
 
-/**
- * User: sanja
- * Date: 08.10.13
- * Time: 6:15
- */
 public class F_ implements Command {
 
     @Override

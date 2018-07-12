@@ -22,19 +22,17 @@ package com.codenjoy.dojo.rubicscube.services;
  * #L%
  */
 
-
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.rubicscube.client.ai.ApofigSolver;
 import com.codenjoy.dojo.rubicscube.model.Elements;
+import com.codenjoy.dojo.rubicscube.model.Player;
 import com.codenjoy.dojo.rubicscube.model.RandomCommand;
 import com.codenjoy.dojo.rubicscube.model.RubicsCube;
-import com.codenjoy.dojo.rubicscube.model.Single;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -50,12 +48,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        RubicsCube rubicsCube = new RubicsCube(new RandomCommand(new RandomDice()));
-
-        Game game = new Single(rubicsCube, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new RubicsCube(new RandomCommand(getDice()));
     }
 
     @Override
@@ -79,8 +73,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

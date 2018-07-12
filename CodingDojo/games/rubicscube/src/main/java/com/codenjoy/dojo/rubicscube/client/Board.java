@@ -26,9 +26,6 @@ package com.codenjoy.dojo.rubicscube.client;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.rubicscube.model.Elements;
 
-/**
- * User: oleksandr.baglai
- */
 public class Board extends AbstractBoard<Elements> {
 
     private static final int LAYER1 = 0;

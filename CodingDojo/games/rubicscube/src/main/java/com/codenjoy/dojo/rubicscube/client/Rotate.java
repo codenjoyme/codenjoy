@@ -25,9 +25,6 @@ package com.codenjoy.dojo.rubicscube.client;
 
 import com.codenjoy.dojo.services.Dice;
 
-/**
- * User: oleksandr.baglai
- */
 public enum Rotate {
     CLOCKWISE(1),
     TWICE(2),
@@ -57,6 +54,7 @@ public enum Rotate {
     }
 
     public static Rotate random(Dice dice) {
-        return Rotate.values()[dice.next(Rotate.values().length)];
+        Rotate[] values = Rotate.values();
+        return values[dice.next(values.length)];
     }
 }

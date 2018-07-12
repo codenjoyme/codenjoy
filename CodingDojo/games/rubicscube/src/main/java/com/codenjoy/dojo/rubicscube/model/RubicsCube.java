@@ -25,14 +25,11 @@ package com.codenjoy.dojo.rubicscube.model;
 
 import com.codenjoy.dojo.rubicscube.services.Events;
 import com.codenjoy.dojo.services.BoardReader;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.joystick.ActJoystick;
 
 import java.util.List;
 
-public class RubicsCube implements Tickable, Field {
+public class RubicsCube implements Field {
 
     private Cube cube;
     private CellsAdapter cells;
@@ -41,7 +38,6 @@ public class RubicsCube implements Tickable, Field {
     private static final int size = 12;
 
     private boolean gameOver;
-    private String command;
     private RandomCommand generator;
 
     public RubicsCube(RandomCommand generator) {
@@ -54,11 +50,10 @@ public class RubicsCube implements Tickable, Field {
     @Override
     public void tick() {
         if (gameOver) return;
+        String command = player.getHero().pullCommand();
         if (command == null) return;
 
         cube.doCommand(command);
-
-        command = null;
 
         checkIsWin();
     }
@@ -74,6 +69,7 @@ public class RubicsCube implements Tickable, Field {
         return size;
     }
 
+    @Override
     public void newGame(Player player) {
         this.player = player;
         gameOver = false;
@@ -83,6 +79,7 @@ public class RubicsCube implements Tickable, Field {
         cube.doCommand(generator.next());
     }
 
+    @Override
     public void remove(Player player) {
         this.player = null;
     }
@@ -91,57 +88,22 @@ public class RubicsCube implements Tickable, Field {
         return cells.getCells();
     }
 
+    @Override
     public boolean isGameOver() {
         return gameOver;
     }
 
     @Override
-    public Joystick getJoystick() {
-        return new ActJoystick() {
-            @Override
-            public void act(int... p) { // TODO test me
-                if (gameOver) return;
-
-                if (p.length == 1 && p[0] == 0) {
-                    gameOver = true;
-                    player.event(Events.FAIL);
-                    return;
-                }
-
-                if (p.length != 2) {
-                    return;
-                }
-
-                int faceNumber = p[0];
-                if (check(faceNumber, 1, 6)) return;
-
-                int rotateCount = p[1];
-                if (check(rotateCount, -1, 2)) return;
-
-                command = "";
-                switch (faceNumber) {
-                    case 1 : command = "L"; break;
-                    case 2 : command = "F"; break;
-                    case 3 : command = "R"; break;
-                    case 4 : command = "B"; break;
-                    case 5 : command = "U"; break;
-                    case 6 : command = "D"; break;
-                }
-
-                switch (rotateCount) {
-                    case -1 : command += "'"; break;
-                    case 0 : command = "";
-                    case 1 : break;
-                    case 2 : command += "2"; break;
-                }
-            }
-        };
+    public void gameOver() {
+        gameOver = true;
     }
 
-    private boolean check(int i, int min, int max) {
+    @Override
+    public boolean check(int i, int min, int max) {
         return (i > max || i < min);
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = RubicsCube.this.size;

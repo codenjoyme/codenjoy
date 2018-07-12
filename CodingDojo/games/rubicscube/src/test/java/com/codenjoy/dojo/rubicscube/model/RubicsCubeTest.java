@@ -83,7 +83,7 @@ public class RubicsCubeTest {
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        joystick = player.getJoystick();
+        joystick = player.getHero();
     }
 
     private void assertE(String expected) {

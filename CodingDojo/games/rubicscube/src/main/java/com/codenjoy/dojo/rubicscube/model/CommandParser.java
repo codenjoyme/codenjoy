@@ -27,11 +27,6 @@ import com.codenjoy.dojo.rubicscube.model.command.*;
 
 import java.util.Iterator;
 
-/**
- * User: sanja
- * Date: 08.10.13
- * Time: 5:19
- */
 public class CommandParser implements Iterable<Command> {
 
     private String command;
