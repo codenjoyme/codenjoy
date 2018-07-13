@@ -46,7 +46,7 @@ public class Player extends GamePlayer<Tank, Field> {
 
     @Override
     public boolean isAlive() {
-        return hero.isAlive();
+        return hero != null && hero.isAlive();
     }
 
     public void event(Events event) {

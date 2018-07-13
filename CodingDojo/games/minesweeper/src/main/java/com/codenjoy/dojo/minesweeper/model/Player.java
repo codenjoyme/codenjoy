@@ -47,6 +47,6 @@ public class Player extends GamePlayer<Sapper, Field> {
 
     @Override
     public boolean isAlive() {
-        return hero.isAlive();
+        return hero != null && hero.isAlive();
     }
 }
