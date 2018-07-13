@@ -125,10 +125,12 @@ public class Single implements Game {
         field.tick();
     }
 
+    @Override
     public GamePlayer getPlayer() {
         return player;
     }
 
+    @Override
     public GameField getField() {
         return field;
     }

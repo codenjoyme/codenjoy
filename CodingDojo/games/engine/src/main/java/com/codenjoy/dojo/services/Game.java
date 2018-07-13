@@ -24,6 +24,8 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 /**
  * Каждый инстанс игры для каждого игрока реализует этот интерфейс
@@ -88,4 +90,14 @@ public interface Game extends Tickable {
      * @return Если игра сохраняется, то у нее должно быть состояние, иначе null
      */
     String getSave();
+
+    /**
+     * @return Возвращает игрока играющего в эту игру
+     */
+    GamePlayer getPlayer();
+
+    /**
+     * @return Возвращает борду игры
+     */
+    GameField getField();
 }

@@ -24,7 +24,13 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.LinkedList;
 
 public class NullGame implements Game {
 
@@ -82,6 +88,91 @@ public class NullGame implements Game {
     @Override
     public String getSave() {
         return StringUtils.EMPTY;
+    }
+
+    @Override
+    public GamePlayer getPlayer() { // TODO to use NullGamePlayer
+        return new GamePlayer(event -> {}) {
+            @Override
+            public PlayerHero getHero() { // TODO to use PlayerHero
+                return new PlayerHero() {
+                    @Override
+                    public void down() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void up() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void left() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void right() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void act(int... p) {
+                        // do nothing
+                    }
+
+                    @Override
+                    public void tick() {
+                        // do nothing
+                    }
+                };
+            }
+
+            @Override
+            public void newHero(GameField field) {
+                // do nothing
+            }
+
+            @Override
+            public boolean isAlive() {
+                return false;
+            }
+        };
+    }
+
+    @Override
+    public GameField getField() { // TODO to use GameField
+        return new GameField() {
+            @Override
+            public BoardReader reader() { // TODO to use BoardReader
+                return new BoardReader() {
+                    @Override
+                    public int size() {
+                        return 0;
+                    }
+
+                    @Override
+                    public Iterable<? extends Point> elements() {
+                        return new LinkedList<>();
+                    }
+                };
+            }
+
+            @Override
+            public void newGame(GamePlayer player) {
+                // do nothing
+            }
+
+            @Override
+            public void remove(GamePlayer player) {
+                // do nothing
+            }
+
+            @Override
+            public void tick() {
+                // do nothing
+            }
+        };
     }
 
     @Override

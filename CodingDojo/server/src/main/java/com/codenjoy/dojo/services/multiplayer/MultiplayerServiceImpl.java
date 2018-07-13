@@ -133,7 +133,7 @@ public class MultiplayerServiceImpl implements MultiplayerService{
         } else {
             PlayerGame playerGame = games.iterator().next();
             Game game = playerGame.getGame();
-            return ((Single) game).getField();
+            return game.getField();
         }
     }
 

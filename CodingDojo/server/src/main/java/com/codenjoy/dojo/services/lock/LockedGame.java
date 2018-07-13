@@ -25,13 +25,14 @@ package com.codenjoy.dojo.services.lock;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LockedGame implements Game {
+
     private final LockedJoystick joystick;
     private ReadWriteLock lock;
 
@@ -137,6 +138,26 @@ public class LockedGame implements Game {
         lock.writeLock().lock();
         try {
             return game.getSave();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public GamePlayer getPlayer() {
+        lock.writeLock().lock();
+        try {
+            return game.getPlayer();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public GameField getField() {
+        lock.writeLock().lock();
+        try {
+            return game.getField();
         } finally {
             lock.writeLock().unlock();
         }

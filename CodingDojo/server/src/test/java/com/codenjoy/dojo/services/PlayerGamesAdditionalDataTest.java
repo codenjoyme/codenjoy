@@ -26,6 +26,8 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedGameTest;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -116,6 +118,16 @@ public class PlayerGamesAdditionalDataTest {
 
         @Override
         public String getSave() {
+            return null;
+        }
+
+        @Override
+        public GamePlayer getPlayer() {
+            return null;
+        }
+
+        @Override
+        public GameField getField() {
             return null;
         }
 
