@@ -85,6 +85,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public boolean isAlive() {
+        if (hero == null) return false;
         if (isGoalHited()) {
             clearGoalHited();
             return false;
