@@ -159,8 +159,8 @@ public class StartAndJump implements Field {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(getHeroes());
-                    addAll(walls);
-                    addAll(platforms);
+                    if (walls != null) addAll(walls);
+                    if (platforms != null) addAll(platforms);
                 }};
             }
         };
