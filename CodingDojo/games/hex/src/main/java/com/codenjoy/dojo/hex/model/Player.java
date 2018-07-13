@@ -51,7 +51,7 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
 
     public Player(EventListener listener) {
         super(listener);
-        alive = true;
+        alive = false;
         heroes = new Heroes();
     }
 
