@@ -23,10 +23,10 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.lock.LockedGame;
+import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedGameTest;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.fest.reflect.core.Reflection;
@@ -35,12 +35,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -148,28 +145,28 @@ public class PlayerGamesAdditionalDataTest {
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
                     "'user1':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
                     "'user2':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
                     "'user3':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
                     "'user4':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
@@ -197,20 +194,20 @@ public class PlayerGamesAdditionalDataTest {
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
                     "'user1':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
                     "}," +
                     "'user2':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
                     "}," +
                     "'user3':{" +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
                     "'user4':{" +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
@@ -239,16 +236,16 @@ public class PlayerGamesAdditionalDataTest {
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
                         "'heroesData':{" +
                             "'user1':{" +
-                                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'singleBoardGame':false}" +
+                                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
                             "}," +
                             "'user2':{" +
-                                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'singleBoardGame':false}" +
+                                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
                             "}," +
                             "'user3':{" +
-                                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'singleBoardGame':false}" +
+                                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
                             "}," +
                             "'user4':{" +
-                                "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'singleBoardGame':false}" +
+                                "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                             "}" +
                         "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
@@ -273,7 +270,8 @@ public class PlayerGamesAdditionalDataTest {
     }
 
     private HeroData getHeroData(int level, Point coordinate, Object additionalData) {
-        HeroData result = GameMode.heroOnTheirOwnBoard(level, coordinate);
+        HeroData result = new HeroDataImpl(level, coordinate,
+                MultiplayerType.SINGLE.isSingleplayer());
         Reflection.field("additionalData").ofType(Object.class).in(result).set(additionalData);
         heroesData.add(result);
         return result;

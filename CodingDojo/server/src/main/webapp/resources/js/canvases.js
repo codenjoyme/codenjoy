@@ -22,7 +22,7 @@
 var currentBoardSize = null;
 
 function initCanvases(contextPath, players, allPlayersScreen,
-                singleBoardGame, boardSize, gameName,
+                isMultiplayer, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, drawBoard)
 {
@@ -249,10 +249,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 }
 
                 var board = getBoard();
-                if (singleBoardGame || !!board.showName) {
+                if (isMultiplayer || !!board.showName) {
                     var currentPoint = null;
                     var currentHeroData = null;
-                    var heroesData = getHeroesData(singleBoardGame);
+                    var heroesData = getHeroesData(isMultiplayer);
                     for (var name in heroesData) {
                         var heroData = heroesData[name];
                         var point = heroData.coordinate;
@@ -266,7 +266,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             currentPoint = point;
                             currentHeroData = heroData;
                         }
-                        if (!board.onlyMyName && !!heroData.singleBoardGame) {
+                        if (!board.onlyMyName && !!heroData.multiplayer) {
                             drawName(name, point, font, heroData);
                         }
                     }

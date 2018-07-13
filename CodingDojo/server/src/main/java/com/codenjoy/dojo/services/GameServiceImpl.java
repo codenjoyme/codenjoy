@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.lock.LockedGameType;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +35,7 @@ public class GameServiceImpl implements GameService {
     @Autowired private TimerService timer;
     @Autowired private PlayerService players;
 
-    private Map<String, GameType> cache = new TreeMap<String, GameType>();
+    private Map<String, GameType> cache = new TreeMap<>();
 
     public GameServiceImpl() {
         for (Class<? extends GameType> aClass : getGameClasses()) {
@@ -46,17 +45,11 @@ public class GameServiceImpl implements GameService {
     }
 
     private List<Class<? extends GameType>> getGameClasses() {
-        List<Class<? extends GameType>> games = new LinkedList<Class<? extends GameType>>();
+        List<Class<? extends GameType>> games = new LinkedList<>();
         games.addAll(findInPackage("com"));
         games.addAll(findInPackage("org"));
         games.addAll(findInPackage("net"));
-        Collections.sort(games, new Comparator<Class<? extends GameType>>() {
-            @Override
-            public int compare(Class<? extends GameType> o1, Class<? extends GameType> o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        games.remove(LockedGameType.class);
+        Collections.sort(games, Comparator.comparing(Class::getName));
         games.remove(NullGameType.class);
         games.remove(AbstractGameType.class);
         return games;
@@ -101,7 +94,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public GameType getGame(String name) {   // TODO потестить
         if (cache.containsKey(name)) {
-            return new LockedGameType(cache.get(name));
+            return cache.get(name);
         }
 
         return NullGameType.INSTANCE;

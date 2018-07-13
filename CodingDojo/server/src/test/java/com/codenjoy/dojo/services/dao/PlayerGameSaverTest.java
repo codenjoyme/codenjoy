@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
-import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.After;

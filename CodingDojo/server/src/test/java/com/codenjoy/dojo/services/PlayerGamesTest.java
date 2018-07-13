@@ -55,6 +55,11 @@ public class PlayerGamesTest {
 
     @Before
     public void setUp() throws Exception {
+        Arrays.asList(joystick, game, controller, screen, statistics, playerSpy)
+                .forEach(it -> {
+                    if (it != null) reset(it);
+                });
+
         player = createPlayer("game", "player");
 
         game = mock(Game.class);

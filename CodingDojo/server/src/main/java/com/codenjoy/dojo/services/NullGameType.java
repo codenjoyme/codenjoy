@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -45,7 +47,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
+    public GameField createGame() {
         throw exception();
     }
 
@@ -71,6 +73,16 @@ public class NullGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
+        throw exception();
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        throw exception();
+    }
+
+    @Override
+    public PrinterFactory getPrinterFactory() {
         throw exception();
     }
 

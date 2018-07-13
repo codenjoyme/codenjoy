@@ -22,7 +22,7 @@
 var currentBoardSize = null;
 
 function initCanvasesText(contextPath, players, allPlayersScreen,
-                singleBoardGame, boardSize, gameName,
+                isMultiplayer, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel, drawBoard)
 {
     var canvases = {};

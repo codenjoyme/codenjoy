@@ -31,6 +31,7 @@ import org.mockito.stubbing.Answer;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -39,49 +40,36 @@ import static org.mockito.Mockito.*;
 public class LockedTest {
 
     public static final int WAIT = 200;
-    private GameType gameType;
+    private Game game;
     private List<String> messages;
 
     @Before
     public void setup() {
-        messages = new LinkedList<String>();
+        messages = new LinkedList<>();
 
-        gameType = mock(GameType.class);
-        Game game = mock(Game.class);
+        game = mock(Game.class);
         Joystick joystick = mock(Joystick.class);
 
-        when(gameType.newGame(any(EventListener.class), any(PrinterFactory.class), anyString(), anyString())).thenReturn(game);
         when(game.getJoystick()).thenReturn(joystick);
 
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                messages.add("joystick.act()");
-                return null;
-            }
+        doAnswer(invocation -> {
+            messages.add("joystick.act()");
+            return null;
         }).when(joystick).act();
 
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                messages.add("started game.tick()");
-                sleep(WAIT);
-                messages.add("finished game.tick()");
-                return null;
-            }
+        doAnswer(invocation -> {
+            messages.add("started game.tick()");
+            sleep(WAIT);
+            messages.add("finished game.tick()");
+            return null;
         }).when(game).tick();
     }
 
     @Test
     public void testRealObject() {
-        final Game game = gameType.newGame(null, null, null, null);
+        final Game game = this.game;
 
-        run(new Runnable() {
-            @Override
-            public void run() {
-                game.tick();
-            }
-        });
+        run(() -> game.tick());
         sleep(WAIT / 3);
         game.getJoystick().act();
         sleep(WAIT);
@@ -91,14 +79,10 @@ public class LockedTest {
 
     @Test
     public void testLockedObject() {
-        final Game game = new LockedGameType(gameType).newGame(null, null, null, null);
+        final Game game = new LockedGame(new ReentrantReadWriteLock())
+                .wrap(this.game);
 
-        run(new Runnable() {
-            @Override
-            public void run() {
-                game.tick();
-            }
-        });
+        run(() -> game.tick());
         sleep(WAIT / 3);
         game.getJoystick().act();
         sleep(WAIT);

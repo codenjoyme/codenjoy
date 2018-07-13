@@ -25,11 +25,9 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.hero.GameMode;
-import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.mocks.*;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -102,10 +100,13 @@ public class PlayerServiceImplTest {
     private PlayerScores playerScores1;
     private PlayerScores playerScores2;
     private PlayerScores playerScores3;
-    private Game game;
     private Joystick joystick;
     private InformationCollector informationCollector;
     private PlayerSpy playerSpy;
+    private GameField gameField;
+    private GamePlayer gamePlayer;
+    private GraphicPrinter printer;
+    private Game game;
 
     @Before
     @SuppressWarnings("all")
@@ -132,20 +133,27 @@ public class PlayerServiceImplTest {
 
         joystick = mock(Joystick.class);
 
-        game = mock(Game.class);
-        when(game.getJoystick()).thenReturn(joystick);
-        when(game.getHero()).thenReturn(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8));
-        when(game.isGameOver()).thenReturn(false);
+        printer = mock(GraphicPrinter.class);
+        when(printer.print(anyObject(), anyObject())).thenReturn("1234");
+
+        gameField = mock(GameField.class);
+        when(gameField.reader()).thenReturn(mock(BoardReader.class));
+
+        gamePlayer = mock(GamePlayer.class);
+        when(gamePlayer.getJoystick()).thenReturn(joystick);
+        when(gamePlayer.getHero()).thenReturn(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8));
+        when(gamePlayer.isAlive()).thenReturn(true);
 
         gameType = mock(GameType.class);
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
-        when(gameType.newGame(any(InformationCollector.class), any(PrinterFactory.class), anyString(), anyString())).thenReturn(game);
+        when(gameType.createGame()).thenReturn(gameField);
         when(gameType.name()).thenReturn("game");
         when(gameType.getPlots()).thenReturn(Elements.values());
-        when(game.getBoardAsString()).thenReturn("1234");
+        when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
+        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         playerSpy = mock(PlayerSpy.class);
         when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
@@ -159,6 +167,7 @@ public class PlayerServiceImplTest {
                 .thenAnswer((InvocationOnMock invocationOnMock) -> {
                     GameType gameType = invocationOnMock.getArgumentAt(0, GameType.class);
                     Player player = invocationOnMock.getArgumentAt(1, Player.class);
+                    informationCollector = player.getEventListener();
                     String save = invocationOnMock.getArgumentAt(2, String.class);
 
                     return playerWantsToPlay(gameType, player, save);
@@ -168,12 +177,45 @@ public class PlayerServiceImplTest {
     }
 
     private PlayerGame playerWantsToPlay(GameType gameType, Player player, String save) {
-        Game game = gameType.newGame(player.getEventListener(), new PrinterFactoryImpl(), save, player.getName());
-        return playerGames.add(player, game);
+        GameField game = gameType.createGame();
+        this.game = new Single(game, gamePlayer, gameType.getPrinterFactory(),
+                gameType.getMultiplayerType());
+
+        return playerGames.add(player, this.game);
     }
 
-    private HeroData heroData(int x, int y) {
-        return GameMode.heroOnTheirOwnBoard(pt(x, y));
+    private PlayerHero heroData(int x, int y) {
+        return new PlayerHero(pt(x, y)) {
+            @Override
+            public void down() {
+
+            }
+
+            @Override
+            public void up() {
+
+            }
+
+            @Override
+            public void left() {
+
+            }
+
+            @Override
+            public void right() {
+
+            }
+
+            @Override
+            public void act(int... p) {
+
+            }
+
+            @Override
+            public void tick() {
+
+            }
+        };
     }
 
     enum Elements {
@@ -240,7 +282,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
         Player vasia = createPlayer(VASYA);
-        when(game.getBoardAsString()).thenReturn("1234");
+        when(printer.print(anyObject(), anyObject())).thenReturn("1234");
 
         playerService.tick();
 
@@ -251,7 +293,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendPlayerBoardFromJsonBoard() throws IOException {
         Player vasia = createPlayer(VASYA);
-        when(game.getBoardAsString()).thenReturn(new JSONObject("{'layers':['1234','4321']}"));
+        when(printer.print(anyObject(), anyObject()))
+                .thenReturn(new JSONObject("{'layers':['1234','4321']}"));
 
         playerService.tick();
 
@@ -275,7 +318,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
         createPlayer(VASYA);
-        when(game.getBoardAsString()).thenReturn("1234");
+        when(printer.print(anyObject(), anyObject())).thenReturn("1234");
 
         playerService.tick();
 
@@ -289,11 +332,11 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        when(game.getBoardAsString())
+        when(printer.print(anyObject(), anyObject()))
                 .thenReturn("1234")
                 .thenReturn("4321");
-        when(game.getCurrentScore()).thenReturn(8, 9);
-        when(game.getMaxScore()).thenReturn(10, 11);
+        when(gamePlayer.getScore()).thenReturn(8, 9);
+        when(gamePlayer.getMaxScore()).thenReturn(10, 11);
         when(playerScores1.getScore()).thenReturn(123);
         when(playerScores2.getScore()).thenReturn(234);
 
@@ -307,9 +350,9 @@ public class PlayerServiceImplTest {
         Map<String, String> expected = new TreeMap<String, String>();
         String heroesData = "HeroesData:'" +
                 "{\"petya@mail.com\":" +
-                    "{\"petya@mail.com\":{\"coordinate\":{\"x\":7,\"y\":8},\"level\":0,\"singleBoardGame\":false}}," +
+                    "{\"petya@mail.com\":{\"coordinate\":{\"x\":7,\"y\":8},\"level\":0,\"multiplayer\":false}}," +
                 "\"vasya@mail.com\":" +
-                    "{\"vasya@mail.com\":{\"coordinate\":{\"x\":5,\"y\":6},\"level\":0,\"singleBoardGame\":false}}}'";
+                    "{\"vasya@mail.com\":{\"coordinate\":{\"x\":5,\"y\":6},\"level\":0,\"multiplayer\":false}}}'";
         String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, Info:'', " +
@@ -425,9 +468,7 @@ public class PlayerServiceImplTest {
         Player player = playerService.register(userName, getCallbackUrl(userName), userName + "game");
 
         if (player != NullPlayer.INSTANCE) {
-            ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
-            verify(gameType, atLeastOnce()).newGame(captor.capture(), any(PrinterFactory.class), anyString(), anyString());
-            informationCollector = captor.getValue();
+            verify(gameType, atLeastOnce()).createGame();
         }
 
         return player;
@@ -757,7 +798,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldContinueTicksWhenException_caseSingleBoardGame() {
+    public void shouldContinueTicksWhenException_caseMultiplayer() {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -792,10 +833,10 @@ public class PlayerServiceImplTest {
         verifyNoMoreInteractions(joystick);
 
         Joystick joystick2 = mock(Joystick.class);
-        when(game.isGameOver()).thenReturn(true);
+        when(gamePlayer.isAlive()).thenReturn(false);
         playerService.tick();
-        verify(game).newGame();
-        when(game.getJoystick()).thenReturn(joystick2);
+        verify(gameField).newGame(gamePlayer);
+        when(gamePlayer.getJoystick()).thenReturn(joystick2);
 
         // when
         j.up();
@@ -946,7 +987,8 @@ public class PlayerServiceImplTest {
     private void setup(Game game) {
         when(game.getBoardAsString()).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);
-        when(game.getHero()).thenReturn(heroData(0, 0));
+        when(game.getHero()).thenReturn(new HeroDataImpl(pt(0, 0),
+                MultiplayerType.SINGLE.isSingleplayer()));
     }
 
     @Test
@@ -998,8 +1040,8 @@ public class PlayerServiceImplTest {
         verify(playerScores2).clear();
         verifyNoMoreInteractions(playerScores3);
 
-        verify(game, times(2)).newGame();
-        verify(game, times(2)).clearScore();
+        verify(gameField, times(2)).newGame(any());
+        verify(gamePlayer, times(2)).clearScore();
     }
 
     @Test

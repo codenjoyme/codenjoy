@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.hero.HeroData;
 
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class LockedGame implements Game {
     private final LockedJoystick joystick;

@@ -156,4 +156,6 @@ public class Player implements ScreenRecipient {
     public InformationCollector getEventListener() {
         return eventListener;
     }
+
+
 }
