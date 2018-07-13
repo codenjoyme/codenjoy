@@ -41,6 +41,11 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
+    @Override
+    protected int inversionY(int y) { // TODO разобраться с этим чудом
+        return size - 1 - y;
+    }
+
     public boolean isBarrierAt(int x, int y) {
         return isAt(x, y, Elements.BATTLE_WALL) ||
                 isAt(x, y, Elements.CONSTRUCTION) ||
