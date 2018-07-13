@@ -26,21 +26,17 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 5:22
- */
 public class SingleTest {
 
     private EventListener listener1;
@@ -63,17 +59,17 @@ public class SingleTest {
                 "☼☼☼☼☼☼");
 
         dice = mock(Dice.class);
-        Sample Sample = new Sample(level, dice);
+        Sample sample = new Sample(level, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(Sample, listener1, factory);
+        game1 = new Single(sample, new Player(listener1), factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(Sample, listener2, factory);
+        game2 = new Single(sample, new Player(listener2), factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(Sample, listener3, factory);
+        game3 = new Single(sample, new Player(listener3), factory);
 
         dice(1, 4);
         game1.newGame();

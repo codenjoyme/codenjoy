@@ -6,12 +6,12 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.22</version>
+    <version>1.0.25</version>
 
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <org.json.version>20160810</org.json.version>
@@ -43,7 +43,6 @@
         <module>sample</module>
         <module>sample-text</module>
         <module>a2048</module>
-        <module>a2048-extreme</module>
         <module>bomberman</module>
         <module>battlecity</module>
         <module>chess</module>
@@ -211,12 +210,21 @@
                                          includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                               README.txt,
+                                               README.*,
                                                src/license/**,
                                                **/pom.xml"
                                          excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                **/target/**"
+                                         update="true"/>
+
+                                    <zip destfile="${client.sources}"
+                                         basedir="."
+                                         includes="src/main/**"
+                                         excludes="src/main/java/**,
+                                                src/main/webapp/**,
+                                                src/main/resources/**,
+                                                **/target/**"
                                          update="true"/>
 
                                     <zip destfile="${project.build.directory}/${project.artifactId}.jar"

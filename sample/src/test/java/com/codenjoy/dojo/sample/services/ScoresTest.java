@@ -26,17 +26,12 @@ package com.codenjoy.dojo.sample.services;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 05.06.13
- * Time: 20:35
- */
 public class ScoresTest {
     private PlayerScores scores;
 
@@ -72,14 +67,14 @@ public class ScoresTest {
 
         loose(); //-100
 
-        Assert.assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
         loose();    //-100
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
@@ -88,7 +83,7 @@ public class ScoresTest {
 
         scores.clear();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
 

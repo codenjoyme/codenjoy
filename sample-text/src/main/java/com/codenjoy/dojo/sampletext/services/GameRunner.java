@@ -25,23 +25,22 @@ package com.codenjoy.dojo.sampletext.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sampletext.client.ai.ApofigSolver;
-import com.codenjoy.dojo.sampletext.model.Level;
-import com.codenjoy.dojo.sampletext.model.LevelImpl;
-import com.codenjoy.dojo.sampletext.model.SampleText;
-import com.codenjoy.dojo.sampletext.model.Single;
+import com.codenjoy.dojo.sampletext.model.*;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
+import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = GameMode.NOT_SINGLE_MODE;
     private final Level level;
     private SampleText game;
 
@@ -71,24 +70,14 @@ public class GameRunner extends AbstractGameType implements GameType {
         );
     }
 
-    private SampleText newGame() {
-        return new SampleText(level, new RandomDice());
+    @Override
+    public SampleText createGame() {
+        return new SampleText(level, getDice());
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
-        return new Scores(score, settings);
-    }
-
-    @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
-        if (!SINGLE || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+    public PlayerScores getPlayerScores(Object score) {
+        return new Scores((Integer)score, settings);
     }
 
     @Override
@@ -107,13 +96,30 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return SINGLE;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
     }
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
+    }
+
+    @Override
+    public PrinterFactory getPrinterFactory() {
+        return PrinterFactory.get((BoardReader reader, Player player) -> {
+            JSONObject result = new JSONObject();
+
+            result.put("nextQuestion", player.getNextQuestion());
+            result.put("history", player.getHistory());
+
+            return result;
+        });
     }
 }

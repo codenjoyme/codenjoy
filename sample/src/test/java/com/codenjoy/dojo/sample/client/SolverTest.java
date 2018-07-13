@@ -23,22 +23,17 @@ package com.codenjoy.dojo.sample.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 05.10.13
- * Time: 11:56
- */
 public class SolverTest {
 
     private Dice dice;

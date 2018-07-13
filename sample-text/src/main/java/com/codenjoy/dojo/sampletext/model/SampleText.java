@@ -23,19 +23,20 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
-import com.codenjoy.dojo.sampletext.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
  */
-public class SampleText implements Tickable, Field {
+public class SampleText implements Field {
 
     private Level level;
     private List<Player> players;
@@ -44,12 +45,9 @@ public class SampleText implements Tickable, Field {
     public SampleText(Level level, Dice dice) {
         this.level = level;
         this.dice = dice;
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         for (Player player : players) {
@@ -58,13 +56,17 @@ public class SampleText implements Tickable, Field {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
+    @Override
+    public BoardReader reader() {
+        return null;
+    }
+
+    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
@@ -74,6 +76,7 @@ public class SampleText implements Tickable, Field {
         player.newHero(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }

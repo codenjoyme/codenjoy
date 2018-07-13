@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sampletext.model;
 import com.codenjoy.dojo.sampletext.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -33,36 +34,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
+ * Класс игрока. Тут кроме героя может подсчитываться очки.
+ * Тут же ивенты передабтся лиснеру фреймворка.
  */
-public class Player {
+public class Player extends GamePlayer<Hero, Field> {
 
-    private EventListener listener;
     private Field field;
-    private int maxScore;
-    private int score;
-    private List<QuestionAnswer> history = new LinkedList<>();
+    private List<QuestionAnswer> history;
     Hero hero;
 
-    /**
-     * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
-     */
     public Player(EventListener listener) {
-        this.listener = listener;
-        clearScore();
-    }
-
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
+        super(listener);
+        history = new LinkedList<>();
     }
 
     /**
@@ -75,34 +58,30 @@ public class Player {
             case WIN: increaseScore(); break;
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
-    private void gameOver() {
-//        history.clear();
-//        score = 0;
-    }
-
+    @Override
     public void clearScore() {
-        history.clear();
-        score = 0;
-        maxScore = 0;
+        if (history != null) {
+            history.clear();
+        }
+        super.clearScore();
     }
 
     public Hero getHero() {
         return hero;
     }
 
-    /**
-     * Когда создается новая игра для пользователя, кто-то должен создать героя
-     * @param field борда
-     */
     public void newHero(Field field) {
         hero = new Hero();
         this.field = field;
         hero.init(field);
+    }
+
+    @Override
+    public boolean isAlive() {
+        return hero != null && hero.isAlive();
     }
 
     public String getNextQuestion() { // TODO test me
