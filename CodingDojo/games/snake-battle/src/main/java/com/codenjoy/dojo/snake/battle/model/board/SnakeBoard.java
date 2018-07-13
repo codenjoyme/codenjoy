@@ -34,12 +34,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {SnakeBoard#tick()}
- */
-public class SnakeBoard implements Tickable, Field {
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
+public class SnakeBoard implements Field {
 
     public boolean debugMode = false;
     private static final int pause = 5;
@@ -71,9 +68,6 @@ public class SnakeBoard implements Tickable, Field {
         startCounter = pause;
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         // отсчёт "секунд" до старта
@@ -222,19 +216,19 @@ public class SnakeBoard implements Tickable, Field {
 
     @Override
     public Point getFreeRandom() {
-        int rndX;
-        int rndY;
+        int x;
+        int y;
         int c = 0;
         do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
+            x = dice.next(size);
+            y = dice.next(size);
+        } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return pt(0, 0);
         }
 
-        return PointImpl.pt(rndX, rndY);
+        return pt(x, y);
     }
 
     @Override
@@ -247,12 +241,12 @@ public class SnakeBoard implements Tickable, Field {
         for (StartFloor start : starts)
             if (freeOfHero(start))
                 return start;
-        return PointImpl.pt(0, 0);
+        return pt(0, 0);
     }
 
     @Override
     public boolean isFree(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return isFree(pt);
     }
 
@@ -442,24 +436,22 @@ public class SnakeBoard implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<>();
-                List<Hero> heroes = SnakeBoard.this.getHeroes();
-                for (Hero hero : heroes)
-                    result.addAll(hero.getBody());
-                result.addAll(SnakeBoard.this.getWalls());
-                result.addAll(SnakeBoard.this.getApples());
-                result.addAll(SnakeBoard.this.getStones());
-                result.addAll(SnakeBoard.this.getFlyingPills());
-                result.addAll(SnakeBoard.this.getFuryPills());
-                result.addAll(SnakeBoard.this.getGold());
-                result.addAll(SnakeBoard.this.getStarts());
-                for (int i = 0; i < result.size(); i++) {
-                    Point p = result.get(i);
-                    if (p.isOutOf(SnakeBoard.this.size())) { // TODO могут ли существовать объекты за границей поля? (выползать из-за края змея)
-                        result.remove(p);
+                return new LinkedList<Point>(){{
+                    SnakeBoard.this.getHeroes().forEach(hero -> addAll(hero.getBody()));
+                    addAll(SnakeBoard.this.getWalls());
+                    addAll(SnakeBoard.this.getApples());
+                    addAll(SnakeBoard.this.getStones());
+                    addAll(SnakeBoard.this.getFlyingPills());
+                    addAll(SnakeBoard.this.getFuryPills());
+                    addAll(SnakeBoard.this.getGold());
+                    addAll(SnakeBoard.this.getStarts());
+                    for (int i = 0; i < size(); i++) {
+                        Point p = get(i);
+                        if (p.isOutOf(SnakeBoard.this.size())) { // TODO могут ли существовать объекты за границей поля? (выползать из-за края змея)
+                            remove(p);
+                        }
                     }
-                }
-                return result;
+                }};
             }
         };
     }

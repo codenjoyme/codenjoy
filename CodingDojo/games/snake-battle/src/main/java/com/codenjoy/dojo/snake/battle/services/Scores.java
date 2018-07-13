@@ -27,10 +27,6 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
- */
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
@@ -45,7 +41,6 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        // вот тут мы на админке увидим поля с подписями и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
         stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(10);
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);

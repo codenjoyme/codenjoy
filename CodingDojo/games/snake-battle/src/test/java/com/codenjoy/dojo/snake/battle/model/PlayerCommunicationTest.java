@@ -54,12 +54,12 @@ public class PlayerCommunicationTest {
 
     private String simpleField =
             "☼☼☼☼☼☼☼" +
-                    "☼     ☼" +
-                    "☼ →►  ☼" +
-                    "☼     ☼" +
-                    "☼ ⇒>  ☼" +
-                    "☼     ☼" +
-                    "☼☼☼☼☼☼☼";
+            "☼     ☼" +
+            "☼ →►  ☼" +
+            "☼     ☼" +
+            "☼ ⇒>  ☼" +
+            "☼     ☼" +
+            "☼☼☼☼☼☼☼";
 
     @Before
     public void setup() {

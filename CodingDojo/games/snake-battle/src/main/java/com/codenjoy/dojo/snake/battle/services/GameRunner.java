@@ -25,6 +25,8 @@ package com.codenjoy.dojo.snake.battle.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snake.battle.client.ai.AISolver;
@@ -35,20 +37,17 @@ import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = true;
     private final Level level;
-    private SnakeBoard game;
 
     public GameRunner() {
         new Scores(0, settings);
-        level = new LevelImpl(
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+        level = new LevelImpl(getMap());
+    }
+
+    protected String getMap() {
+        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼☼         ○                 ☼" +
                 "☼#                           ☼" +
                 "☼☼  ○   ☼#         ○         ☼" +
@@ -77,27 +76,16 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "☼#                           ☼" +
                 "☼☼     →►        ○           ☼" +
                 "☼☼                           ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
     }
 
-    private SnakeBoard newGame() {
-        return new SnakeBoard(level, new RandomDice());
+    public GameField createGame() {
+        return new SnakeBoard(level, getDice());
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
         return new Scores((Integer)score, settings);
-    }
-
-    @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (!SINGLE || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
     }
 
     @Override
@@ -121,8 +109,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        AISolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        AISolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

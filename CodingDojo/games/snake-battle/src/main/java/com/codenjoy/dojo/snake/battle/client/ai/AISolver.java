@@ -24,7 +24,6 @@ package com.codenjoy.dojo.snake.battle.client.ai;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
@@ -32,18 +31,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.snake.battle.client.Board;
-import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.snake.battle.model.Elements.*;
 
-/**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random.
- * Для его запуска воспользуйся методом {@see AISolver#main}
- */
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
@@ -151,14 +143,14 @@ public class AISolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new AISolver(new RandomDice()),
+                new AISolver(dice),
                 new Board());
     }
 

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.battle.model.hero;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.board.Field;
 
@@ -35,15 +36,10 @@ import static com.codenjoy.dojo.snake.battle.model.hero.BodyDirection.*;
 import static com.codenjoy.dojo.snake.battle.model.DirectionUtils.getPointAt;
 import static com.codenjoy.dojo.snake.battle.model.hero.TailDirection.*;
 
-/**
- * Это реализация змейки. Змейка имплементит {@see Joystick}, а значит может быть управляема фреймворком
- * Так же она имплементит {@see Tickable}, что значит - есть возможность её оповещать о каждом тике игры.
- */
-public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player> {
+public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
     static final int reducedValue = 4;
 
     private LinkedList<Tail> elements;
-    private Field field;
     private boolean alive;
     private Direction direction;
     private int growBy;
@@ -73,6 +69,33 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return elements.getFirst();
     }
 
+    @Override
+    public int getX() {
+        return getHead().getX();
+    }
+
+    @Override
+    public int getY() {
+        return getHead().getY();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (o == null) {
+            return false;
+        }
+
+        if (!(o instanceof Hero)) {
+            throw new IllegalArgumentException("Must be Hero!");
+        }
+
+        return o == this;
+    }
+
     public int size() {
         return elements == null ? 0 : elements.size();
     }
@@ -89,6 +112,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return elements.get(elements.size() - 2);
     }
 
+    @Override
     public void init(Field field) {
         this.field = field;
     }
@@ -134,10 +158,6 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         }
     }
 
-    @Override
-    public void message(String command) {
-    }
-
     Direction getDirection() {
         return direction;
     }
@@ -174,7 +194,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         if (growBy > 0)
             grow(next);
         else
-            move(next);
+            go(next);
     }
 
     private void count() {
@@ -220,7 +240,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         elements.add(new Tail(newLocation, this));
     }
 
-    private void move(Point newLocation) {
+    private void go(Point newLocation) {
         elements.add(new Tail(newLocation, this));
         elements.removeFirst();
     }

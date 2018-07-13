@@ -24,12 +24,11 @@ package com.codenjoy.dojo.snake.battle.model.board;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 
-/**
- * Так случилось что у меня доска знает про героя, а герой про доску. И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
-public interface Field {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(Point p);
 

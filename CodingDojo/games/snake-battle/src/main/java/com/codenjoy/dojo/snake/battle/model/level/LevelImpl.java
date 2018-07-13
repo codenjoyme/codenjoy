@@ -34,9 +34,6 @@ import java.util.List;
 
 import static com.codenjoy.dojo.snake.battle.model.Elements.*;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level {
     private final LengthToXY xy;
 
