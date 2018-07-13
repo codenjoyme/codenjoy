@@ -37,6 +37,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -81,7 +82,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Value("${autoSaverEnable}")
     private boolean autoSaverEnable;
 
-    // TODO как-то через аннотации этот метод дергать после инициализации бина
+    @PostConstruct
     public void init() {
         playerGames.onAddPlayer((player, joystick) -> {
             playerController.registerPlayerTransport(player, joystick);
