@@ -122,7 +122,7 @@ public class BoardController {
             return "redirect:/register?" + GAME_NAME + "=" + gameName;
         }
         GameType gameType = player.getGameType();
-        if (gameType.getMultiplayerType() == MultiplayerType.SINGLE) {
+        if (gameType.getMultiplayerType() != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getName();
         }
 
@@ -145,7 +145,7 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-        if (player.getGameType().getMultiplayerType() == MultiplayerType.SINGLE) {
+        if (player.getGameType().getMultiplayerType() != MultiplayerType.SINGLE) {
             return "redirect:/board/player/" + player.getName() + ((code != null)?"?code=" + code:"");
         }
 
