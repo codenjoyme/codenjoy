@@ -22,13 +22,13 @@ package com.codenjoy.dojo.football.services;
  * #L%
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.football.client.ai.DefaultSolver;
 import com.codenjoy.dojo.football.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;

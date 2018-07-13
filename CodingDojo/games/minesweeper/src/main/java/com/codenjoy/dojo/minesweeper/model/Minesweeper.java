@@ -24,7 +24,11 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.minesweeper.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;

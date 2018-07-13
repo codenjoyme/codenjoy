@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.hero.HeroData;
 import org.junit.Before;
 import org.junit.Test;

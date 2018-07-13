@@ -23,7 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.Collection;
 import java.util.LinkedList;

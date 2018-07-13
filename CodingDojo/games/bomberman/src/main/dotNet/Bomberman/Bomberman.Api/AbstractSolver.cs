@@ -28,14 +28,17 @@ namespace Bomberman.Api
     {
         private const string ResponsePrefix = "board=";
 
-        public AbstractSolver(string userName, string server)
+        public AbstractSolver(string userName, string code, string server)
         {
             Console.OutputEncoding = Encoding.UTF8;
             UserName = userName;
+            Code = code;
             Server = server;
         }
 
         public string UserName { get; private set; }
+		
+		public string Code { get; private set; }
 
         public string Server { get; private set; }
 
@@ -46,8 +49,10 @@ namespace Bomberman.Api
 
         public void Play()
         {
-            var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}", 
-                Server, Uri.EscapeDataString(UserName)));
+            var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}?code={2}", 
+                Server, 
+				Uri.EscapeDataString(UserName),
+				Code));
 
             using (var socket = new WebSocket(uri))
             {

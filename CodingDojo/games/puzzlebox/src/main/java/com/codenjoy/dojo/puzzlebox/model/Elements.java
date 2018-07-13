@@ -23,7 +23,7 @@ package com.codenjoy.dojo.puzzlebox.model;
  */
 
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 
 /**
  * Тут указана легенда всех возможных объектов на поле и их состояний.

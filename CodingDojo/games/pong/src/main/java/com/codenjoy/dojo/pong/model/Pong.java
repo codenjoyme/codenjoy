@@ -24,6 +24,7 @@ package com.codenjoy.dojo.pong.model;
 
 import com.codenjoy.dojo.pong.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.LinkedList;

@@ -24,8 +24,13 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -34,15 +39,10 @@ import java.util.LinkedList;
 import static com.codenjoy.dojo.bomberman.model.BombermanTest.DestroyWallAt;
 import static com.codenjoy.dojo.bomberman.model.BombermanTest.MeatChopperAt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 20.04.13
- * Time: 13:40
- */
 public class SingleTest {
 
     public static final int SIZE = 5;

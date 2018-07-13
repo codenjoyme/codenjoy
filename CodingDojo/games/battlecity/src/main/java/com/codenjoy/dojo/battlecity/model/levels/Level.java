@@ -24,10 +24,9 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 
 import com.codenjoy.dojo.battlecity.model.Border;
-import com.codenjoy.dojo.battlecity.model.Bullet;
 import com.codenjoy.dojo.battlecity.model.Construction;
 import com.codenjoy.dojo.battlecity.model.Tank;
-import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.List;
 

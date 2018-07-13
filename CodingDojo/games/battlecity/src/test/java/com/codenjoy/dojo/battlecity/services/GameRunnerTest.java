@@ -25,22 +25,13 @@ package com.codenjoy.dojo.battlecity.services;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
-/**
- * User: sanja
- * Date: 14.12.13
- * Time: 7:41
- */
 public class GameRunnerTest {
     @Test
     public void testNoNPE() {

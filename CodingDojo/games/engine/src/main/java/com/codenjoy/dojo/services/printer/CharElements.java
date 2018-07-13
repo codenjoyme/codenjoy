@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer;
 
 /*-
  * #%L
@@ -24,10 +24,9 @@ package com.codenjoy.dojo.services;
 
 
 /**
- * Реализация этого класса овтечает за представление борды в виде строки,
- * которая потом передастся играющему клиенту.
+ * Этот интерфейс расширяют все енумы, содержащие перечень символов кодирующих
+ * живность на поле.
  */
-@FunctionalInterface
-public interface Printer<T> {
-    T print(Object... parameters);
+public interface CharElements {
+    char ch();
 }

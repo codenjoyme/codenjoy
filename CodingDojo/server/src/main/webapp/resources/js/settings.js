@@ -32,7 +32,12 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = true;
 game.sprites = null;
-game.heroInfo= null;
+game.heroInfo = null;
+
+game.debug = false;
+game.debugger = function() {
+    debugger;
+}
 
 var getSettings = function(name) {
     var value = $('#settings').attr(name);

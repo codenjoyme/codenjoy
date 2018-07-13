@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
-import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Tickable;
 
 /**

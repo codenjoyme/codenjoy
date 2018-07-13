@@ -24,22 +24,16 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/11/13
- * Time: 5:23 PM
- */
 public class GameRunnerTest {
 
     private PrinterFactory printerFactory = new PrinterFactoryImpl();

@@ -41,9 +41,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-03.
- */
 public class PlayerGamesAdditionalDataTest {
 
     private PlayerGames playerGames;
@@ -271,7 +268,7 @@ public class PlayerGamesAdditionalDataTest {
 
     private HeroData getHeroData(int level, Point coordinate, Object additionalData) {
         HeroData result = new HeroDataImpl(level, coordinate,
-                MultiplayerType.SINGLE.isSingleplayer());
+                MultiplayerType.SINGLE.isMultiplayer());
         Reflection.field("additionalData").ofType(Object.class).in(result).set(additionalData);
         heroesData.add(result);
         return result;
@@ -279,7 +276,7 @@ public class PlayerGamesAdditionalDataTest {
 
     private GameType addNewGameType(String gameName, int boardSize) {
         GameType result = mock(GameType.class);
-        when(result.getBoardSize()).thenReturn(new SimpleParameter<Integer>(boardSize));
+        when(result.getBoardSize()).thenReturn(new SimpleParameter<>(boardSize));
         when(result.name()).thenReturn(gameName);
         gameTypes.add(result);
         return result;

@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.codenjoy</groupId>
         <artifactId>games</artifactId>
-        <version>1.0.23</version>
+        <version>1.0.24</version>
     </parent>
 
     <artifactId>${module.name}-engine</artifactId>

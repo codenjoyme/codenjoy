@@ -26,6 +26,8 @@ package com.codenjoy.dojo.bomberman.services;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
 import java.util.LinkedList;

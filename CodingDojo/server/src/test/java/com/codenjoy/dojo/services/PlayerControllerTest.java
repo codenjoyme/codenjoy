@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 // TODO разобратсья почему не рабоатет весь тест
 public class PlayerControllerTest {

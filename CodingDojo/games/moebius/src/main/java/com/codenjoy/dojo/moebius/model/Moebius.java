@@ -24,9 +24,9 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.moebius.services.Events;
-import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Arrays;
 import java.util.LinkedList;

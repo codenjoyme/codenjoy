@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sudoku.model;
  */
 
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum Elements implements CharElements {
 

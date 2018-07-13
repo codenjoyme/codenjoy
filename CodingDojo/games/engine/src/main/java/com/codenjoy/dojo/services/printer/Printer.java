@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.printer;
 
 /*-
  * #%L
@@ -24,9 +24,10 @@ package com.codenjoy.dojo.services;
 
 
 /**
- * Этот интерфейс расширяют все енумы, содержащие перечень символов кодирующих
- * живность на поле.
+ * Реализация этого класса овтечает за представление борды в виде строки,
+ * которая потом передастся играющему клиенту.
  */
-public interface CharElements {
-    char ch();
+@FunctionalInterface
+public interface Printer<T> {
+    T print(Object... parameters);
 }

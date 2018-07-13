@@ -23,13 +23,13 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.spacerace.client.ai.AlAnSolver;
+import com.codenjoy.dojo.spacerace.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.spacerace.client.ai.AlAnSolver;
-import com.codenjoy.dojo.spacerace.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 

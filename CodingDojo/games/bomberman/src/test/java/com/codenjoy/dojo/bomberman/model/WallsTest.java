@@ -24,13 +24,17 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -78,7 +82,7 @@ public class WallsTest {
     }
 
     private String print(final Walls walls) {
-        return (String)printerFactory.getPrinter(new BoardReader() {
+        Printer<String> printer = printerFactory.getPrinter(new BoardReader() {
             @Override
             public int size() {
                 return SIZE;
@@ -88,7 +92,8 @@ public class WallsTest {
             public Iterable<? extends Point> elements() {
                 return walls;
             }
-        }, null).print();
+        }, null);
+        return printer.print();
     }
 
     @Test

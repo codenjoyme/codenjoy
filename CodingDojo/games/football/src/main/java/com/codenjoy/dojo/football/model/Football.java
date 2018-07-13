@@ -27,10 +27,10 @@ import com.codenjoy.dojo.football.model.elements.Goal;
 import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.model.elements.Wall;
 import com.codenjoy.dojo.football.services.Events;
-import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

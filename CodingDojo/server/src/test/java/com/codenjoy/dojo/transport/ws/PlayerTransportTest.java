@@ -43,16 +43,13 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by indigo on 2017-12-01.
- */
 public class PlayerTransportTest {
 
     private PlayerTransport transport;
     private List<PlayerResponseHandler> handlers = new LinkedList<>();
     private AuthenticationService authentication;
     private PlayerSocketCreator creator;
-    private ServletUpgradeResponse response;
+    private LinkedList<ServletUpgradeResponse> responses = new LinkedList<>();
 
     @Test
     public void shouldSendDataToWebSocketClient_caseClientSendFirst_withUniqueSocketFilter() throws IOException {
@@ -106,7 +103,8 @@ public class PlayerTransportTest {
         ServletUpgradeRequest request = mock(ServletUpgradeRequest.class);
         HttpServletRequest httpRequest = mock(HttpServletRequest.class);
         when(request.getHttpServletRequest()).thenReturn(httpRequest);
-        response = mock(ServletUpgradeResponse.class);
+        ServletUpgradeResponse response = mock(ServletUpgradeResponse.class);
+        responses.add(response);
         return creator.createWebSocket(request, response);
     }
 
@@ -179,7 +177,7 @@ public class PlayerTransportTest {
         // then
         // verify(webSocket.getSession().getRemote()).sendString("Unregistered user");
         assertEquals(null, webSocket);
-        verify(response).sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
+        verify(responses.get(0)).sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
     }
 
     @Test

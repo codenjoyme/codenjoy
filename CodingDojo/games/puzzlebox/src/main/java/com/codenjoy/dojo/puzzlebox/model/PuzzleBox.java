@@ -24,8 +24,10 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 
 import com.codenjoy.dojo.puzzlebox.services.Events;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;

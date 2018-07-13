@@ -27,7 +27,7 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 //import org.approvaltests.legacycode.Range;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class MakeBricksAlgorithmTest {
 

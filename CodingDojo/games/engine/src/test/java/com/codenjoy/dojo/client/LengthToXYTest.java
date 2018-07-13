@@ -26,7 +26,7 @@ package com.codenjoy.dojo.client;
 import com.codenjoy.dojo.services.LengthToXY;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class LengthToXYTest {
 

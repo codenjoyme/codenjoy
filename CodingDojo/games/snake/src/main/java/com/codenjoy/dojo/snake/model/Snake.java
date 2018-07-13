@@ -23,12 +23,11 @@ package com.codenjoy.dojo.snake.model;
  */
 
 
-import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Snake implements Field {
 

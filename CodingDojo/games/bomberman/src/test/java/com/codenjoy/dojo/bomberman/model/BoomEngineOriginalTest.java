@@ -24,6 +24,10 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
@@ -374,7 +378,7 @@ public class BoomEngineOriginalTest {
     }
 
     public String print(final List<Blast> blast, final List<? extends Wall> barriers, final PointImpl source) {
-        return (String)printerFactory.getPrinter(new BoardReader() {
+        Printer<String> printer = printerFactory.getPrinter(new BoardReader() {
             @Override
             public int size() {
                 return SIZE;
@@ -400,7 +404,8 @@ public class BoomEngineOriginalTest {
                     addAll(blast);
                 }};
             }
-        }, null).print();
+        }, null);
+        return printer.print();
     }
 
 }

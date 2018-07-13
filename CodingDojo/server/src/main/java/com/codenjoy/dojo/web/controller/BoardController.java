@@ -37,19 +37,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME;
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
 public class BoardController {
-    public static final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
 
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private ChatService chatService;
     @Autowired private GameService gameService;
+    @Autowired private Validator validator;
 
     @Value("${donate.code}")
     private String donateCode;
@@ -62,13 +63,18 @@ public class BoardController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(value = "/board/player/{playerName:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", method = RequestMethod.GET)
     public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName) {
+        validator.checkPlayerName(playerName, CANT_BE_NULL);
+
         return boardPlayer(model, playerName, null);
     }
 
-    @RequestMapping(value = "/board/player/{playerName:.+}", params = {"code", "remove"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = {"code", "remove"}, method = RequestMethod.GET)
     public String removePlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+        validator.checkPlayerName(playerName, CANT_BE_NULL);
+        validator.checkCode(code, CANT_BE_NULL);
+
         Player player = playerService.get(registration.getEmail(code));
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?name=" + playerName;
@@ -77,8 +83,11 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/board/player/{playerName:.+}", params = "code", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = "code", method = RequestMethod.GET)
     public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+        validator.checkPlayerName(playerName, CANT_BE_NULL);
+        validator.checkCode(code, CAN_BE_NULL);
+
         Player player = playerService.get(playerName);
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?name=" + playerName;
@@ -100,8 +109,10 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = "/board/game/{gameName}", method = RequestMethod.GET)
-    public String boardAllGames(ModelMap model,  @PathVariable("gameName") String gameName) {
+    @RequestMapping(value = "/board/game/{gameName:" + Validator.GAME + "}", method = RequestMethod.GET)
+    public String boardAllGames(ModelMap model, @PathVariable("gameName") String gameName) {
+        validator.checkGameName(gameName, CANT_BE_NULL);
+
         if (gameName == null) {
             return "redirect:/board";
         }
@@ -124,6 +135,8 @@ public class BoardController {
 
     @RequestMapping(value = "/board", params = "code", method = RequestMethod.GET)
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
+        validator.checkCode(code, CAN_BE_NULL);
+
         String name = registration.getEmail(code);
         Player player = playerService.get(name);
         if (player == NullPlayer.INSTANCE) {
@@ -155,5 +168,11 @@ public class BoardController {
     @RequestMapping(value = "/help")
     public String help() {
         return "help";
+    }
+
+    @RequestMapping(value = "/error", params = "message")
+    public String error(ModelMap model, @RequestParam("message") String message) {
+        model.addAttribute("message", message);
+        return "error";
     }
 }

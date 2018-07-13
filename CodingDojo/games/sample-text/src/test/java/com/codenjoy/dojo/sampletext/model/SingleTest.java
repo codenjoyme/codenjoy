@@ -25,8 +25,10 @@ package com.codenjoy.dojo.sampletext.model;
 
 import com.codenjoy.dojo.sampletext.services.Events;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;

@@ -19,13 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initBoards(players, allPlayersScreen, gameName, playerName, contextPath){
+var getWSProtocol = function() {
+    if (window.location.protocol == "https:") {
+        return "wss";
+    } else {
+        return "ws";
+    }
+}
 
+function initBoards(players, allPlayersScreen, gameName, playerName, contextPath){
     var constructUrl = function() {
         var link = document.createElement('a');
         link.setAttribute('href', window.location.href);
         var user = (playerName == null) ? "anonymous" : playerName;
-        return "ws://" + link.hostname + ':' + link.port + contextPath + "/screen-ws?user=" + user;
+        return getWSProtocol() + "://" + link.hostname + ':' + link.port + contextPath + "/screen-ws?user=" + user;
     }
 
     var socket = null;

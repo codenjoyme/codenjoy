@@ -23,7 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.Point;
 import org.json.JSONArray;
 import org.json.JSONObject;

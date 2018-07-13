@@ -23,13 +23,9 @@ package com.codenjoy.dojo.services;
  */
 
 
-import junit.framework.Assert;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PointImplTest {
 
@@ -156,8 +152,8 @@ public class PointImplTest {
     public void shouldDistance() {
         Point pt = new PointImpl(10, 15);
 
-        assertEquals(0.0, pt.distance(new PointImpl(10, 15)));
-        assertEquals(11.180339887498949, pt.distance(new PointImpl(20, 20)));
+        assertEquals(0.0, pt.distance(new PointImpl(10, 15)), 0.001);
+        assertEquals(11.180339887498949, pt.distance(new PointImpl(20, 20)), 0.001);
     }
 
     @Test

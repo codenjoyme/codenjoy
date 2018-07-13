@@ -26,9 +26,10 @@ package com.codenjoy.dojo.a2048.model;
 import com.codenjoy.dojo.a2048.model.generator.Factory;
 import com.codenjoy.dojo.a2048.model.generator.Generator;
 import com.codenjoy.dojo.a2048.services.Events;
-import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+
 
 import java.util.Iterator;
 import java.util.LinkedList;

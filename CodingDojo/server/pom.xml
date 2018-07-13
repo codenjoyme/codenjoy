@@ -6,13 +6,13 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-contest</artifactId>
-    <version>1.0.23</version>
+    <version>1.0.24</version>
     <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
-        <spring.version>3.2.17.RELEASE</spring.version>
-        <spring.security.version>3.2.10.RELEASE</spring.security.version>
+        <spring.version>4.3.18.RELEASE</spring.version>
+        <spring.security.version>4.2.7.RELEASE</spring.security.version>
         <jetty.version>9.3.14.v20161028</jetty.version>
         <jetty.jsp.version>9.2.19.v20160908</jetty.jsp.version>
         <jetty.io.version>9.3.14.v20161028</jetty.io.version>

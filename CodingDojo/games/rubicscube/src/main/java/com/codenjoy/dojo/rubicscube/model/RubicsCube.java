@@ -24,8 +24,8 @@ package com.codenjoy.dojo.rubicscube.model;
 
 
 import com.codenjoy.dojo.rubicscube.services.Events;
-import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.List;
 

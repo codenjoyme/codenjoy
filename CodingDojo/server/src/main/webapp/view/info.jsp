@@ -24,7 +24,7 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
-<div>
+<div id="how-to-play">
     <h3>
         <a href="${ctx}/help?gameName=${gameName}" target="_blank">
             How to play ${gameName}

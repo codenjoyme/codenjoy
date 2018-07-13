@@ -124,7 +124,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
     }
 
     var getBoardDrawer = function(canvas, playerName, playerData) {
-        var board = playerData.board;
+        var data = playerData.board;
         var heroesData = playerData.heroesData[playerName];
 
         var clear = function() {
@@ -141,20 +141,23 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
                 canvas.drawText(value.question, {x:7, y:1 + parseInt(index)}, color);
             }
 
-            canvas.drawText(data.nextQuestion, {x:7, y:1 + parseInt(data.history.length)}, '#099');
+            if (!!data.nextQuestion) {
+                canvas.drawText(data.nextQuestion, {x:7, y:1 + parseInt(data.history.length)}, '#099');
+            }
         }
 
         return {
             clear : clear,
             drawLines : drawLines,
             canvas : canvas,
+            drawText: canvas.drawText,
             playerName : playerName,
             playerData : playerData
         };
     }
 
     function defaultDrawBoard(drawer) {
-        drawer.clean();
+        drawer.clear();
         drawer.drawLines();
     }
 
@@ -223,7 +226,10 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             });
         };
 
-        var drawText = function(name, pt, color) {
+        var drawText = function(text, pt, color) {
+            if (!text) {
+                console.warn("Text to draw is undefined or empty");
+            }
             canvas.drawText({
                 fillStyle: color,
                 strokeStyle: '#000',
@@ -231,7 +237,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
                 x: (pt.x) * plotSize, y: (pt.y) * plotSize,
                 fontSize: 16,
                 fontFamily: 'Verdana, sans-serif',
-                text: name
+                text: text
             });
         }
 

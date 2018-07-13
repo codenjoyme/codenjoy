@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 
 public class PlayerCommand {
 
+    public static final String COMMAND = "(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))";
+
     private Joystick joystick;
     private String commandString;
 
@@ -41,7 +43,7 @@ public class PlayerCommand {
     }
 
     public void execute(){
-        Pattern pattern = Pattern.compile("(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile(COMMAND, Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(commandString);
         while (matcher.find()) {
             String command = matcher.group(0);

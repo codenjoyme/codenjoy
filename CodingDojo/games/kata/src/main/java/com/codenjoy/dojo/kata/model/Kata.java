@@ -23,10 +23,8 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

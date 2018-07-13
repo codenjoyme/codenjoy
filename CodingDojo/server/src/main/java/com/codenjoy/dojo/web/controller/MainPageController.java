@@ -25,7 +25,6 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -36,7 +35,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
 public class MainPageController {
@@ -45,6 +46,7 @@ public class MainPageController {
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
     @Autowired private Statistics statistics;
+    @Autowired private Validator validator;
 
     @Value("${page.main}")
     private String mainPage;
@@ -68,6 +70,8 @@ public class MainPageController {
 
     @RequestMapping(value = "/help", params = "gameName", method = RequestMethod.GET)
     public String helpForGame(Model model, @RequestParam("gameName") String gameName) {
+        validator.checkGameName(gameName, CANT_BE_NULL);
+
         String suffix = (StringUtils.isEmpty(language)) ? "" : ("-" + language);
         return "redirect:resources/help/" + gameName + suffix + ".html";
     }
@@ -87,6 +91,8 @@ public class MainPageController {
                               @RequestParam("code") String code,
                               Model model)
     {
+        validator.checkCode(code, CAN_BE_NULL);
+
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 

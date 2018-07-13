@@ -25,6 +25,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 import com.codenjoy.dojo.battlecity.model.*;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
