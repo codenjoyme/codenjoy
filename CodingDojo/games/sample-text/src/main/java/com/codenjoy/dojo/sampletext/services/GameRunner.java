@@ -119,7 +119,7 @@ public class GameRunner extends AbstractGameType implements GameType {
             result.put("nextQuestion", player.getNextQuestion());
             result.put("history", player.getHistory());
 
-            return result.toString();
+            return result;
         });
     }
 }
