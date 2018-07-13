@@ -38,7 +38,7 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    // TODO
+    // TODO закончить
 //    public boolean isBarrierAt(int x, int y) {
 //        return isAt(x, y, Elements.WALL);
 //    }

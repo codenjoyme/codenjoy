@@ -30,9 +30,6 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level, Tickable {
     private final LengthToXY xy;
 
