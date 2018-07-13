@@ -52,6 +52,8 @@ public class GameServiceImpl implements GameService {
         Collections.sort(games, Comparator.comparing(Class::getName));
         games.remove(NullGameType.class);
         games.remove(AbstractGameType.class);
+        // TODO исключить нерабочие игры
+        // games.stream().filter(it -> it.getPackage().toString().contains("chess")).findFirst().ifPresent(games::remove);
         return games;
     }
 
