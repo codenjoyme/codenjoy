@@ -34,12 +34,6 @@ import com.codenjoy.dojo.spacerace.model.Elements;
 
 import java.util.List;
 
-/**
- * User: your name
- * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
- * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
- * фреймворк для тебя.
- */
 public class AI2Solver implements Solver<Board> {
 
     private Dice dice;

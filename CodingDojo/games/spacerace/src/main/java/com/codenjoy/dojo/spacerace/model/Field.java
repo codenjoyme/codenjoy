@@ -23,11 +23,9 @@ package com.codenjoy.dojo.spacerace.model;
  */
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-/**
- * Так случилось что у меня доска знает про героя, а герой про доску. И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
-public interface Field {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
@@ -36,4 +34,6 @@ public interface Field {
     boolean isFree(int x, int y);
 
     void addBullet(int x, int y, Hero hero);
+
+    BulletCharger getCharger();
 }

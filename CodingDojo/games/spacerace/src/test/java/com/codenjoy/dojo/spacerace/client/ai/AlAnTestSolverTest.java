@@ -37,11 +37,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.spacerace.client.Board;
 import com.codenjoy.dojo.spacerace.client.YourSolver;
 
-/**
- * User: sanja
- * Date: 05.10.13
- * Time: 11:56
- */
 public class AlAnTestSolverTest {
 
     private Dice dice;

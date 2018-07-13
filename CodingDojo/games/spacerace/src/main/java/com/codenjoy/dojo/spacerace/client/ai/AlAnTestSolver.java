@@ -38,43 +38,43 @@ import com.codenjoy.dojo.spacerace.services.GameRunner;
 
 public class AlAnTestSolver implements Solver<Board> {
 
-	private int delay = 0;
-	private boolean vpravo = true;
-	private Board board;
+    private int delay = 0;
+    private boolean vpravo = true;
+    private Board board;
     private int bullets = 0;
 
     public AlAnTestSolver(Dice dice) {
-	}
+    }
 
-	/**
-	 * Метод для запуска игры с текущим ботом. Служит для отладки.
-	 */
-	public static void main(String[] args) {
-		LocalGameRunner.run(new GameRunner(), new AlAnTestSolver(new RandomDice()), new Board());
-		// start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
-	}
+    /**
+     * Метод для запуска игры с текущим ботом. Служит для отладки.
+     */
+    public static void main(String[] args) {
+        LocalGameRunner.run(new GameRunner(), new AlAnTestSolver(new RandomDice()), new Board());
+        // start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
 
-	public static void start(String name, WebSocketRunner.Host server) {
-		try {
-			WebSocketRunner.run(server,
+    public static void start(String name, WebSocketRunner.Host server) {
+        try {
+            WebSocketRunner.run(server,
                     name,
                     null,
                     new AlAnTestSolver(new RandomDice()),
                     new Board());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public String get(final Board board) {
-		this.board = board;
-		if (board.isGameOver())
-			return "";
-		Direction result = Direction.STOP;
-		result = findDirection(board);
-		if (result != null) {
-			if(isStoneOrBombAtop() & bullets > 0){
+    @Override
+    public String get(final Board board) {
+        this.board = board;
+        if (board.isGameOver())
+            return "";
+        Direction result = Direction.STOP;
+        result = findDirection(board);
+        if (result != null) {
+            if(isStoneOrBombAtop() & bullets > 0){
                 if(isBulletAtop()){
                     return result.toString();
                 }
@@ -82,9 +82,9 @@ public class AlAnTestSolver implements Solver<Board> {
                 return result + Direction.ACT.toString();
             }
             return result.toString();
-		}
-		return Direction.STOP.toString();
-	}
+        }
+        return Direction.STOP.toString();
+    }
 
     private boolean isBulletAtop() {
         int y = board.getMe().getY();
@@ -111,69 +111,69 @@ public class AlAnTestSolver implements Solver<Board> {
     }
 
     private Direction findDirection(Board board) {
-		Direction result = Direction.STOP;
+        Direction result = Direction.STOP;
 
-		Point me = board.getMe();
-		if (me != null) {
-			int x = me.getX();
-			int y = me.getY();
-			result = findDirectionToBulletPack(board, me, result);
-		}
-		return CheckResult(result, board);
-	}
+        Point me = board.getMe();
+        if (me != null) {
+            int x = me.getX();
+            int y = me.getY();
+            result = findDirectionToBulletPack(board, me, result);
+        }
+        return CheckResult(result, board);
+    }
 
-	private Direction findDirectionToBulletPack(Board board, Point me, Direction result) {
-		List<Point> boxes = board.get(Elements.BULLET_PACK);
-		if (boxes.size() != 0) {
-			Point box = boxes.get(0);
-			if (box != null) {
-				Point newMe;
-				double newDistance = (double) Integer.MAX_VALUE;
-				double distance;
-				newMe = new PointImpl(me.getX() + 1, me.getY());
+    private Direction findDirectionToBulletPack(Board board, Point me, Direction result) {
+        List<Point> boxes = board.get(Elements.BULLET_PACK);
+        if (boxes.size() != 0) {
+            Point box = boxes.get(0);
+            if (box != null) {
+                Point newMe;
+                double newDistance = (double) Integer.MAX_VALUE;
+                double distance;
+                newMe = new PointImpl(me.getX() + 1, me.getY());
 
-				distance = newMe.distance(box);
-				if (distance < newDistance) {
-					newDistance = distance;
-					result = Direction.RIGHT;
-				}
+                distance = newMe.distance(box);
+                if (distance < newDistance) {
+                    newDistance = distance;
+                    result = Direction.RIGHT;
+                }
 
-				newMe = new PointImpl(me.getX(), me.getY() + 1);
-				distance = newMe.distance(box);
-				if (distance < newDistance) {
-					newDistance = distance;
-					result = Direction.DOWN;
-				}
+                newMe = new PointImpl(me.getX(), me.getY() + 1);
+                distance = newMe.distance(box);
+                if (distance < newDistance) {
+                    newDistance = distance;
+                    result = Direction.DOWN;
+                }
 
-				newMe = new PointImpl(me.getX() - 1, me.getY());
-				distance = newMe.distance(box);
-				if (distance < newDistance) {
-					newDistance = distance;
-					result = Direction.LEFT;
-				}
+                newMe = new PointImpl(me.getX() - 1, me.getY());
+                distance = newMe.distance(box);
+                if (distance < newDistance) {
+                    newDistance = distance;
+                    result = Direction.LEFT;
+                }
 
-				newMe = new PointImpl(me.getX(), me.getY() - 1);
-				distance = newMe.distance(box);
-				if (distance < newDistance) {
-					newDistance = distance;
-					result = Direction.UP;
-				}
+                newMe = new PointImpl(me.getX(), me.getY() - 1);
+                distance = newMe.distance(box);
+                if (distance < newDistance) {
+                    newDistance = distance;
+                    result = Direction.UP;
+                }
 
                 if(newDistance < 1){
                     bullets = 10;
                 }
-			}
-		}
-		return result;
-	}
+            }
+        }
+        return result;
+    }
 
-	private Direction CheckResult(Direction result, Board board) {
-		Direction checkedResultStone = result;
-		Direction checkedResultBomb = result;
+    private Direction CheckResult(Direction result, Board board) {
+        Direction checkedResultStone = result;
+        Direction checkedResultBomb = result;
         Direction checkedDirection = Direction.STOP;
 
-		Point me = board.getMe();
-		if (me != null) {
+        Point me = board.getMe();
+        if (me != null) {
 
             checkedResultStone = findBestDirectionNearStone(board, me, result);
             checkedResultBomb = findBestDirectionNearBomb(board, me, result);
@@ -186,9 +186,9 @@ public class AlAnTestSolver implements Solver<Board> {
             }else {
                 checkedDirection = checkedResultBomb;
             }
-		}
-		return checkedDirection;
-	}
+        }
+        return checkedDirection;
+    }
 
     private Direction checkedResultHighPosition(Board board, Point me, Direction result) {
         //todo implement !!!!

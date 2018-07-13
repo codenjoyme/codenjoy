@@ -39,11 +39,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class SpaceraceTest {
 
     private Spacerace game;

@@ -22,26 +22,21 @@ package com.codenjoy.dojo.spacerace.client.ai;
  * #L%
  */
 
-import java.util.List;
-
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.spacerace.client.Board;
-import com.codenjoy.dojo.spacerace.model.Elements;
-import com.codenjoy.dojo.spacerace.services.GameRunner;
 
 public class AlAnSolver implements Solver<Board> {
 
     private int delay = 0;
     private boolean vpravo = true;
+    private Dice dice;
 
     public AlAnSolver(Dice dice) {
+        this.dice = dice;
     }
 
     @Override
@@ -49,16 +44,16 @@ public class AlAnSolver implements Solver<Board> {
         String result = "";
         int x = board.getMe().getX();
 
-		if (vpravo && (x < board.size() - 5)||(x < 5)){
+        if (vpravo && (x < board.size() - 5)||(x < 5)){
             result = Direction.RIGHT.toString();
             vpravo = true;
-        }else {
+        } else {
             vpravo = false;
             result = Direction.LEFT.toString();
         }
 
         delay++;
-        if(delay >= 3){
+        if (delay >= 3){
             result += Direction.UP.ACT.toString();
             delay = 0;
         }
@@ -70,14 +65,14 @@ public class AlAnSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new AI2Solver(new RandomDice()),
+                new AI2Solver(dice),
                 new Board());
     }
 

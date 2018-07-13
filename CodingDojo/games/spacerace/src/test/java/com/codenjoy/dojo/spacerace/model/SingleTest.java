@@ -22,6 +22,7 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -36,11 +37,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 5:22
- */
 public class SingleTest {
 
     private EventListener listener1;
@@ -74,22 +70,22 @@ public class SingleTest {
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(spacerace, listener1, factory);
+        game1 = new Single(spacerace, new Player(listener1), factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(spacerace, listener2, factory);
+        game2 = new Single(spacerace, new Player(listener2), factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(spacerace, listener3, factory);
+        game3 = new Single(spacerace, new Player(listener3), factory);
 
         listener4 = mock(EventListener.class);
-        game4 = new Single(spacerace, listener4, factory);
+        game4 = new Single(spacerace, new Player(listener4), factory);
 
         listener5 = mock(EventListener.class);
-        game5 = new Single(spacerace, listener5, factory);
+        game5 = new Single(spacerace, new Player(listener5), factory);
 
         listener6 = mock(EventListener.class);
-        game6 = new Single(spacerace, listener6, factory);
+        game6 = new Single(spacerace, new Player(listener6), factory);
 
         dice(1, 0);
         game1.newGame();
@@ -190,7 +186,7 @@ public class SingleTest {
     // привязать пули к игроку, и каждый получат очки за свое
     @Test
     public void shouldKillOneHeroAnother() {
-        game3.getPlayer().getHero().recharge();
+        ((Hero)game3.getPlayer().getHero()).recharge();
         game1.getJoystick().up();
         game2.getJoystick().up();
 
@@ -252,7 +248,7 @@ public class SingleTest {
     // если игрок идет на встречу булету, то он все равно должен погибать
     @Test
     public void shouldKillOneHeroAnother_caseGoOnBullet() {
-        game3.getPlayer().getHero().recharge();
+        ((Hero)game3.getPlayer().getHero()).recharge();
         game1.getJoystick().up();
         game2.getJoystick().up();
 
@@ -307,7 +303,7 @@ public class SingleTest {
     // если игрок идет на встречу булету, то он все равно должен погибать
     @Test
     public void shouldKillOneHeroAnother_caseGoOnBullet_case2() {
-        game3.getPlayer().getHero().recharge();
+        ((Hero)game3.getPlayer().getHero()).recharge();
         game1.getJoystick().up();
         game2.getJoystick().up();
         game3.getJoystick().up();

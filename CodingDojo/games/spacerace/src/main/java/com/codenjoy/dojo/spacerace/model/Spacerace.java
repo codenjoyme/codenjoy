@@ -22,6 +22,7 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.services.*;
 
@@ -29,12 +30,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Spacerace#tick()}
- */
-public class Spacerace implements Tickable, Field {
+public class Spacerace implements Field {
 
     private static final int NEW_APPEAR_PERIOD = 3;
     private static final int MAX_COUNT_BULLET_PACKS = 1;
@@ -71,9 +67,6 @@ public class Spacerace implements Tickable, Field {
         explosions = new LinkedList<>();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         explosions.clear();
@@ -368,6 +361,11 @@ public class Spacerace implements Tickable, Field {
         bullets.add(new Bullet(x, y, hero));
     }
 
+    @Override
+    public BulletCharger getCharger() {
+        return new BulletCharger(ticksToRecharge, bulletsCount);
+    }
+
     public List<Gold> getGold() {
         return gold;
     }
@@ -380,13 +378,15 @@ public class Spacerace implements Tickable, Field {
         return result;
     }
 
+    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
         }
-        player.newHero(this, new BulletCharger(ticksToRecharge, bulletsCount));
+        player.newHero(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
     }
@@ -399,6 +399,7 @@ public class Spacerace implements Tickable, Field {
         return bombs;
     }
 
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             private int size = Spacerace.this.size;
@@ -410,16 +411,16 @@ public class Spacerace implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(explosions);
-                result.addAll(walls);
-                result.addAll(getHeroes());
-                result.addAll(getGold());
-                result.addAll(bombs);
-                result.addAll(stones);
-                result.addAll(bullets);
-                result.addAll(bulletPacks);
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(explosions);
+                    addAll(walls);
+                    addAll(getHeroes());
+                    addAll(getGold());
+                    addAll(bombs);
+                    addAll(stones);
+                    addAll(bullets);
+                    addAll(bulletPacks);
+                }};
             }
         };
     }
