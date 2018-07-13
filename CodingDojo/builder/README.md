@@ -7,7 +7,7 @@ A project that brings together the Codenjoy server and several games of your cho
 To connect your game (game-name-engine), add the dependency
 ```
     <properties>
-        <codenjoy.version>1.0.24</codenjoy.version>
+        <codenjoy.version>1.0.25</codenjoy.version>
     </properties>
     ...
     <dependencies>
