@@ -39,7 +39,7 @@ function loadPlayers(onLoad) {
 function initBoardPage(game) {
     loadContext(function(ctx) {
         loadData('/rest/game/' + game.gameName + '/type', function(playerGameInfo) {
-            game.isMultiplayer = playerGameInfo.multiplayer;
+            game.multiplayerType = playerGameInfo.multiplayerType;
             game.boardSize = playerGameInfo.boardSize;
 
             loadData('/rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
@@ -63,13 +63,13 @@ function initBoardComponents(game) {
 
     if (game.isGraphicOrTextGame) {
         initCanvases(game.contextPath, game.players, game.allPlayersScreen,
-                    game.isMultiplayer, game.boardSize,
+                    game.multiplayerType, game.boardSize,
                     game.gameName, game.enablePlayerInfo,
                     game.enablePlayerInfoLevel,
                     game.sprites, game.drawBoard);
     } else {
         initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
-                        game.isMultiplayer, game.boardSize,
+                        game.multiplayerType, game.boardSize,
                         game.gameName, game.enablePlayerInfo,
                         game.enablePlayerInfoLevel, game.drawBoard);
     }

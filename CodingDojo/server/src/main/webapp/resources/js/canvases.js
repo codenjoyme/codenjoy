@@ -22,10 +22,11 @@
 var currentBoardSize = null;
 
 function initCanvases(contextPath, players, allPlayersScreen,
-                isMultiplayer, boardSize, gameName,
+                multiplayerType, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, drawBoard)
 {
+    var isMultiplayer = multiplayerType.multiplayer;
     var canvases = {};
     var infoPools = {};
     currentBoardSize = boardSize;
