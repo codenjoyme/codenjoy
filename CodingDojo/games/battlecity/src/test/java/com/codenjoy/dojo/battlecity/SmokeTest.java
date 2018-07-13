@@ -397,7 +397,6 @@ public class SmokeTest {
                         "1:Answer: RIGHT, ACT\n" +
                         "DICE:1\n" +
                         "------------------------------------------",
-                        "------------------------------------------",
                 String.join("\n", messages));
 
     }
