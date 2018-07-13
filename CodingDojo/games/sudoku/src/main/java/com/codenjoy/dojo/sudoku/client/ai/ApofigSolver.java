@@ -23,17 +23,16 @@ package com.codenjoy.dojo.sudoku.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.services.GameRunner;
 
 import java.util.*;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class ApofigSolver implements Solver<Board> {
 
@@ -44,12 +43,12 @@ public class ApofigSolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        Map<Point, Set<Integer>> deprecated = new TreeMap<Point, Set<Integer>>();
+        Map<Point, Set<Integer>> deprecated = new TreeMap<>();
 
         for (int x = 1; x <= SIZE; x++) {
             for (int y = 1; y <= SIZE; y++) {
-                Set<Integer> numbers = new HashSet<Integer>();
-                deprecated.put(new PointImpl(x, y), numbers);
+                Set<Integer> numbers = new HashSet<>();
+                deprecated.put(pt(x, y), numbers);
             }
         }
 
@@ -58,7 +57,7 @@ public class ApofigSolver implements Solver<Board> {
                 Integer current = board.getAt(Board.toAbsolute(x), Board.toAbsolute(y)).value();
 
                 for (int xx = 1; xx <= SIZE; xx++) {
-                    Set<Integer> list = deprecated.get(new PointImpl(xx, y));
+                    Set<Integer> list = deprecated.get(pt(xx, y));
                     if (xx == x && current != 0) {
                         list.addAll(invert(Arrays.asList(current)));
                     } else {
@@ -67,7 +66,7 @@ public class ApofigSolver implements Solver<Board> {
                 }
 
                 for (int yy = 1; yy <= SIZE; yy++) {
-                    Set<Integer> list = deprecated.get(new PointImpl(x, yy));
+                    Set<Integer> list = deprecated.get(pt(x, yy));
                     if (yy == y && current != 0) {
                         list.addAll(invert(Arrays.asList(current)));
                     } else {
@@ -82,7 +81,7 @@ public class ApofigSolver implements Solver<Board> {
                         int xxx = rx * 3 + 1 + tx;
                         int yyy = ry * 3 + 1 + ty;
 
-                        Set<Integer> list = deprecated.get(new PointImpl(xxx, yyy));
+                        Set<Integer> list = deprecated.get(pt(xxx, yyy));
 
                         if (xxx == x && yyy == y && current != 0) {
                             list.addAll(invert(Arrays.asList(current)));
@@ -94,19 +93,19 @@ public class ApofigSolver implements Solver<Board> {
             }
         }
 
-        Map<Point, Set<Integer>> accepted = new TreeMap<Point, Set<Integer>>();
+        Map<Point, Set<Integer>> accepted = new TreeMap<>();
         for (int x = 1; x <= SIZE; x++) {
             for (int y = 1; y <= SIZE; y++) {
-                PointImpl key = new PointImpl(x, y);
+                Point key = pt(x, y);
                 accepted.put(key, invert(deprecated.get(key)));
             }
         }
 
-        Map<Point, Set<Integer>> toSet = new TreeMap<Point, Set<Integer>>();
+        Map<Point, Set<Integer>> toSet = new TreeMap<>();
         for (int x = 1; x <= SIZE; x++) {
             for (int y = 1; y <= SIZE; y++) {
                 Integer current = board.getAt(Board.toAbsolute(x), Board.toAbsolute(y)).value();
-                PointImpl key = new PointImpl(x, y);
+                Point key = pt(x, y);
 
                 Set<Integer> numbers = accepted.get(key);
                 if (current == 0 && numbers.size() == 1) {
@@ -129,7 +128,7 @@ public class ApofigSolver implements Solver<Board> {
     }
 
     private Set<Integer> invert(Collection<Integer> source) {
-        Set<Integer> result = new HashSet<Integer>();
+        Set<Integer> result = new HashSet<>();
 
         for (int n = 1; n <= SIZE; n++) {
             if (!source.contains(n)) {
@@ -144,14 +143,14 @@ public class ApofigSolver implements Solver<Board> {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
 //                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
+    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
         WebSocketRunner.run(host,
                 name,
                 null,
-                new ApofigSolver(new RandomDice()),
+                new ApofigSolver(dice),
                 new Board());
     }
 }

@@ -23,8 +23,13 @@ package com.codenjoy.dojo.sudoku.model;
  */
 
 
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field {
-    Joystick getJoystick();
+public interface Field extends GameField<Player> {
+    boolean isGameOver();
+
+    void gameOver();
+
+    void set(Point pt, int n);
 }

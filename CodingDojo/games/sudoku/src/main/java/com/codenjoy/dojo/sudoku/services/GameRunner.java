@@ -25,11 +25,10 @@ package com.codenjoy.dojo.sudoku.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.sudoku.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sudoku.model.*;
 
@@ -47,15 +46,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        LevelBuilder builder = new LevelBuilder(40, new RandomDice());
+    public GameField createGame() {
+        LevelBuilder builder = new LevelBuilder(40, getDice());
         builder.build();
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
-        Sudoku sudoku = new Sudoku(level);
-
-        Game game = new Single(sudoku, listener, factory);
-        game.newGame();
-        return game;
+        return new Sudoku(level);
     }
 
     @Override
@@ -79,8 +74,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 }

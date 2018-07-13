@@ -32,9 +32,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- */
 public class Board extends AbstractBoard<Elements> {
 
     @Override

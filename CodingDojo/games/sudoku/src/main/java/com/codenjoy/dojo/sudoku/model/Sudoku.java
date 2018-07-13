@@ -25,14 +25,14 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.sudoku.services.Events;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Sudoku implements Tickable, Field {
+public class Sudoku implements Field {
 
-    public static final int SIZE = 9;
     private List<Cell> cells;
     private Player player;
 
@@ -96,6 +96,7 @@ public class Sudoku implements Tickable, Field {
         return size;
     }
 
+    @Override
     public void newGame(Player player) {
         this.player = player;
         this.acts.clear();
@@ -121,8 +122,15 @@ public class Sudoku implements Tickable, Field {
         return result;
     }
 
+    @Override
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    @Override
+    public void gameOver() {
+        player.event(Events.LOOSE);
+        this.gameOver = true;
     }
 
     public List<Wall> getWalls() {
@@ -130,46 +138,8 @@ public class Sudoku implements Tickable, Field {
     }
 
     @Override
-    public Joystick getJoystick() {
-        return new ActJoystick() {
-            @Override
-            public void act(int... p) {
-                if (gameOver) return;
-
-                if (p.length == 1 && p[0] == 0) {
-                    gameOver = true;
-                    player.event(Events.LOOSE);
-                    return;
-                }
-
-                if (p.length != 3) {
-                    return;
-                }
-
-                if (check(p[0])) return;
-                if (check(p[1])) return;
-                if (check(p[2])) return;
-
-                int x = fix(p[0]);
-                int y = fix(SIZE + 1 - p[1]);
-                Point pt = PointImpl.pt(x, y);
-
-                set(pt, p[2]);
-            }
-        };
-    }
-
-    private boolean check(int i) {
-        if (i > SIZE || i < 1) return true;
-        return false;
-    }
-
-    private void set(Point pt, int n) {
+    public void set(Point pt, int n) {
         this.act = new Cell(pt, n, true);
-    }
-
-    public static int fix(int x) {
-        return x + Math.abs((x - 1) / 3);
     }
 
     public BoardReader reader() {
@@ -183,11 +153,11 @@ public class Sudoku implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
-                result.addAll(Sudoku.this.walls);
-                result.addAll(Sudoku.this.cells);
-                result.addAll(Sudoku.this.acts);
-                return result;
+                return new LinkedList<Point>(){{
+                    addAll(Sudoku.this.walls);
+                    addAll(Sudoku.this.cells);
+                    addAll(Sudoku.this.acts);
+                }};
             }
         };
     }

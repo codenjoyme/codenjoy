@@ -34,11 +34,6 @@ import org.junit.Test;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class SudokuTest {
 
     public static final String INITIAL =
@@ -196,15 +191,15 @@ public class SudokuTest {
 
     @Test
     public void shouldFixCoordinates() {
-        assertEquals(1, Sudoku.fix(1));
-        assertEquals(2, Sudoku.fix(2));
-        assertEquals(3, Sudoku.fix(3));
-        assertEquals(5, Sudoku.fix(4));
-        assertEquals(6, Sudoku.fix(5));
-        assertEquals(7, Sudoku.fix(6));
-        assertEquals(9, Sudoku.fix(7));
-        assertEquals(10, Sudoku.fix(8));
-        assertEquals(11, Sudoku.fix(9));
+        assertEquals(1, Player.fix(1));
+        assertEquals(2, Player.fix(2));
+        assertEquals(3, Player.fix(3));
+        assertEquals(5, Player.fix(4));
+        assertEquals(6, Player.fix(5));
+        assertEquals(7, Player.fix(6));
+        assertEquals(9, Player.fix(7));
+        assertEquals(10, Player.fix(8));
+        assertEquals(11, Player.fix(9));
     }
 
     @Test
