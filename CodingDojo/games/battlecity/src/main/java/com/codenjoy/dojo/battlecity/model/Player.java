@@ -34,10 +34,11 @@ public class Player extends GamePlayer<Tank, Field> {
     public static final int TICKS_PER_BULLETS = 4;
 
     private Tank hero;
+    private Dice dice;
 
     public Player(EventListener listener, Dice dice) {
         super(listener);
-        hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
+        this.dice = dice;
     }
 
     public Tank getHero() {
@@ -64,8 +65,9 @@ public class Player extends GamePlayer<Tank, Field> {
         hero.kill(null);
     }
 
-    public void newHero(Field tanks) {
+    public void newHero(Field field) {
+        hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
         hero.removeBullets();
-        hero.init(tanks);
+        hero.init(field);
     }
 }

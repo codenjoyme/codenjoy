@@ -35,10 +35,13 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.battlecity.model.BattlecityTest.tank;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 public class TanksEventsTest {
 
@@ -47,19 +50,28 @@ public class TanksEventsTest {
     private EventListener events;
     private Player player;
     private Tank hero;
-    private BattlecityTest utils = new BattlecityTest();
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     @Before
     public void setup() {
-        enemy = utils.tank(1, 5, Direction.DOWN);
+        enemy = tank(1, 5, Direction.DOWN, 1);
 
         game = new Battlecity(7, mock(Dice.class), Arrays.asList(new Construction[0]), enemy);
 
         events = mock(EventListener.class);
-        player = utils.player(1, 1, 2, 2, events);
+        player = player(1, 1, 2, 2, events);
         game.newGame(player);
         hero = player.getHero();
+    }
+
+    private Player player(int x1, int y1, int x2, int y2, EventListener events) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(x1, y1, x2, y2);
+        return new Player(events, dice);
+    }
+
+    private Player player(int x1, int y1, EventListener events) {
+        return player(x1, y1, x1, y1, events);
     }
 
     @Test
@@ -137,7 +149,7 @@ public class TanksEventsTest {
     @Test
     public void shouldKillOtherPlayerTankEvent() {
         EventListener events2 = mock(EventListener.class);
-        Player player2 = utils.player(5, 1, events2);
+        Player player2 = player(5, 1, events2);
         game.newGame(player2);
         Tank tank2 = player2.getHero();
 
@@ -181,7 +193,7 @@ public class TanksEventsTest {
     @Test
     public void shouldKillMyTankByOtherPlayerTankEvent() {
         EventListener events2 = mock(EventListener.class);
-        Player player2 = utils.player(5, 1, events2);
+        Player player2 = player(5, 1, events2);
         game.newGame(player2);
         Tank tank2 = player2.getHero();
 
@@ -230,7 +242,7 @@ public class TanksEventsTest {
     @Test
     public void shouldIKillOtherTankWhenKillMeByAi() {
         EventListener events2 = mock(EventListener.class);
-        Player player2 = utils.player(5, 1, events2);
+        Player player2 = player(5, 1, events2);
         game.newGame(player2);
         Tank tank2 = player2.getHero();
 
@@ -335,7 +347,7 @@ public class TanksEventsTest {
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼ ►   ☼\n" +
+                "☼ ▲   ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }

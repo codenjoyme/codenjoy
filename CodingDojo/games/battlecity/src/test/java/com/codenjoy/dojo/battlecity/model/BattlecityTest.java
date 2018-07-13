@@ -96,9 +96,13 @@ public class BattlecityTest {
         this.hero = tanks[0];
     }
 
-    public Tank tank(int x, int y, Direction direction) {
+    public static Tank tank(int x, int y, Direction direction, int ticksPerBullets) {
         Dice dice = getDice(x, y);
         return new Tank(x, y, direction, dice, ticksPerBullets);
+    }
+
+    public Tank tank(int x, int y, Direction direction) {
+        return tank(x, y, direction, ticksPerBullets);
     }
 
     private static Dice getDice(int x, int y) {
@@ -1907,11 +1911,6 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
-    public static Player player(int x, int y, EventListener listener) {
-        Dice dice = getDice(x, y);
-        return new Player(listener, dice);
-    }
-
     @Ignore
     @Test
     public void shouldRemoveAIWhenKillIt() {
@@ -2030,18 +2029,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-    }
-
-
-    public static Player player(int x1, int y1, int x2, int y2, EventListener listener) {
-        Dice dice = getDice(x1, y1, x2, y2);
-        return new Player(listener, dice);
-    }
-
-    private static Dice getDice(int x1, int y1, int x2, int y2) {
-        Dice dice = mock(Dice.class);
-        when(dice.next(anyInt())).thenReturn(x1, y1, x2, y2);
-        return dice;
     }
 
     @Test
