@@ -144,7 +144,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
         if (gameType.newAI(aiName)) {
-            Player player = register(PlayerSave.get(aiName, "127.0.0.1", gameName, 0, null));
+            Player player = getPlayer(gameType, PlayerSave.get(aiName, "127.0.0.1", gameName, 0, null));
         }
     }
 
@@ -158,7 +158,16 @@ public class PlayerServiceImpl implements PlayerService {
             gameType.newAI(name);
         }
 
-        Player player = get(playerSave.getName());
+        Player player = getPlayer(gameType, playerSave);
+        return player;
+    }
+
+    private Player getPlayer(GameType gameType, PlayerSave playerSave) {
+        String name = playerSave.getName();
+        String gameName = playerSave.getGameName();
+        String callbackUrl = playerSave.getCallbackUrl();
+
+        Player player = get(name);
 
         boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
         if (newPlayer) {
@@ -167,7 +176,7 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerScores playerScores = gameType.getPlayerScores(playerSave.getScore());
             InformationCollector listener = new InformationCollector(playerScores);
 
-            player = new Player(playerSave.getName(), playerSave.getCallbackUrl(),
+            player = new Player(name, callbackUrl,
                     gameType, playerScores, listener);
             player.setEventListener(listener);
 
@@ -176,12 +185,11 @@ public class PlayerServiceImpl implements PlayerService {
             player = playerGame.getPlayer();
 
             if (logger.isDebugEnabled()) {
-                logger.info("Player {} starting new game {}", playerSave.getName(), playerGame.getGame());
+                logger.info("Player {} starting new game {}", name, playerGame.getGame());
             }
         } else {
           // do nothing
         }
-
         return player;
     }
 
