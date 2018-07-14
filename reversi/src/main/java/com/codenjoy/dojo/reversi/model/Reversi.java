@@ -88,9 +88,8 @@ public class Reversi implements Field {
         for (Direction direction : Direction.getValues()) {
             List<Chip> toFlip = new LinkedList<>();
             Chip next = current;
-            while (true) {
+            while (next != Chip.NULL) {
                 next = getChip(direction.change(next));
-                if (next == Chip.NULL) break;
 
                 if (!next.sameColor(current)) {
                     toFlip.add(next);
