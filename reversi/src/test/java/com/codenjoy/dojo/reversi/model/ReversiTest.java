@@ -820,6 +820,61 @@ public class ReversiTest {
                 player1);
     }
 
+    // борда может быть большего или меньшего размера
+    @Test
+    public void shouldSmallerBoard() {
+        givenFl("    " +
+                " xO " +
+                " Ox " +
+                "    ");
+
+        assertEquals(4, game.size());
+
+        hero1.act(3, 1);
+        game.tick();
+
+        assertE("    " +
+                " Xo " +
+                " ooo" +
+                "    ",
+                player1);
+    }
+
+    @Test
+    public void shouldBiggerBoard() {
+        givenFl("            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "     xO     " +
+                "     Ox     " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            ");
+
+        assertEquals(12, game.size());
+
+        hero1.act(7, 5);
+        game.tick();
+
+        assertE("            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "     Xo     " +
+                "     ooo    " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            ",
+                player1);
+    }
+
     // TODO побеждает белый, если черному больше некуда ходить и у него меньше фишек
     // TODO побеждает белый, если черному больше некуда ходить и у него вообще нет фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него меньше фишек
@@ -828,5 +883,4 @@ public class ReversiTest {
     // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
 
     // TODO добавить препятствия на поле
-    // TODO борда может быть большего размера
 }
