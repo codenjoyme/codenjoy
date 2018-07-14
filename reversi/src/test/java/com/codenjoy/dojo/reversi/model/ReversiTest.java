@@ -346,8 +346,8 @@ public class ReversiTest {
     // фишки напротив
     @Test
     public void shouldNotChangeSeveralChips_whenNoSupportChipInOtherSide() {
-        givenFl("        " +
-                "    x   " +
+        givenFl("O       " +
+                "x   x   " +
                 "    x   " +
                 " xxx xx " +
                 "    x   " +
@@ -358,8 +358,8 @@ public class ReversiTest {
         hero1.act(4, 4);
         game.tick();
 
-        assertE("        " +
-                "    X   " +
+        assertE("o       " +
+                "X   X   " +
                 "    X   " +
                 " XXX XX " +
                 "    X   " +
@@ -1051,6 +1051,52 @@ public class ReversiTest {
                 "            " +
                 "            " +
                 "            ",
+                player1);
+    }
+
+    // белый на старте походить не может, ход передается черному
+    @Test
+    public void shouldSkipTurn_ifNoWay_white_atStart() {
+        givenFl("   xx   " +
+                "   OO   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ");
+
+        assertE("   XX   " +
+                "   oo   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    // черный на старте походить не может, ход передается белому
+    @Test
+    public void shouldSkipTurn_ifNoWay_black_atStart() {
+        givenFl("   oo   " +
+                "   XX   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ");
+
+        assertE("   OO   " +
+                "   xx   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
                 player1);
     }
 

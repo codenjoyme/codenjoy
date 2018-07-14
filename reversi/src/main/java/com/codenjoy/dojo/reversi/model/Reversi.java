@@ -54,6 +54,9 @@ public class Reversi implements Field {
         players = new LinkedList<>();
         chips = level.chips(this);
         currentColor = level.currentColor();
+        if (!canFlip(currentColor)) {
+            nextTurn();
+        }
     }
 
     @Override
@@ -78,6 +81,10 @@ public class Reversi implements Field {
             whoWin(countWhite, countBlack);
         }
 
+        nextTurn();
+    }
+
+    private void nextTurn() {
         currentColor = !currentColor;
     }
 
