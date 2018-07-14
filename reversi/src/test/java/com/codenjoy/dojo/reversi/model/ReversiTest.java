@@ -86,8 +86,8 @@ public class ReversiTest {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -95,12 +95,44 @@ public class ReversiTest {
         assertE("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ",
                 player1);
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
+
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
     }
 
     // я могу походить и перевернуть одну фишку горизонтально влево
@@ -109,8 +141,8 @@ public class ReversiTest {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -121,7 +153,7 @@ public class ReversiTest {
         assertE("        " +
                 "        " +
                 "        " +
-                "   xo   " +
+                "   Xo   " +
                 "   ooo  " +
                 "        " +
                 "        " +
@@ -135,8 +167,8 @@ public class ReversiTest {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -148,7 +180,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "  ooo   " +
-                "   ox   " +
+                "   oX   " +
                 "        " +
                 "        " +
                 "        ",
@@ -161,8 +193,8 @@ public class ReversiTest {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -173,7 +205,7 @@ public class ReversiTest {
         assertE("        " +
                 "        " +
                 "        " +
-                "   xo   " +
+                "   Xo   " +
                 "   oo   " +
                 "    o   " +
                 "        " +
@@ -187,8 +219,8 @@ public class ReversiTest {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -200,7 +232,7 @@ public class ReversiTest {
                 "        " +
                 "   o    " +
                 "   oo   " +
-                "   ox   " +
+                "   oX   " +
                 "        " +
                 "        " +
                 "        ",
@@ -213,8 +245,8 @@ public class ReversiTest {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -225,8 +257,8 @@ public class ReversiTest {
         assertE("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   Xo   " +
+                "   oX   " +
                 "        " +
                 "        " +
                 "        ",
@@ -237,11 +269,11 @@ public class ReversiTest {
     @Test
     public void shouldChangeChipsInAllDirections() {
         givenFl("        " +
-                "    o   " +
+                "    O   " +
                 "    x   " +
-                "  ox xo " +
+                "  Ox xO " +
                 "    x   " +
-                "    o   " +
+                "    O   " +
                 "        " +
                 "        ");
 
@@ -263,7 +295,7 @@ public class ReversiTest {
     @Test
     public void shouldNotChangeChips_whenNoSupportChip() {
         givenFl("        " +
-                "    o   " +
+                "    O   " +
                 "    x   " +
                 "   x x  " +
                 "    x   " +
@@ -277,8 +309,8 @@ public class ReversiTest {
         assertE("        " +
                 "    o   " +
                 "    o   " +
-                "   xox  " +
-                "    x   " +
+                "   XoX  " +
+                "    X   " +
                 "        " +
                 "        " +
                 "        ",
@@ -288,14 +320,14 @@ public class ReversiTest {
     // я могу перевернуть некоторое число фишек в любом направлении
     @Test
     public void shouldChangeSeveralChips_whenSupportChipInOtherSide() {
-        givenFl("    o   " +
+        givenFl("    O   " +
                 "    x   " +
                 "    x   " +
-                "oxxx xxo" +
+                "Oxxx xxO" +
                 "    x   " +
                 "    x   " +
                 "    x   " +
-                "    o   ");
+                "    O   ");
 
         hero1.act(4, 4);
         game.tick();
@@ -328,12 +360,12 @@ public class ReversiTest {
         game.tick();
 
         assertE("        " +
-                "    x   " +
-                "    x   " +
-                " xxx xx " +
-                "    x   " +
-                "    x   " +
-                "    x   " +
+                "    X   " +
+                "    X   " +
+                " XXX XX " +
+                "    X   " +
+                "    X   " +
+                "    X   " +
                 "        ",
                 player1);
     }
@@ -342,10 +374,10 @@ public class ReversiTest {
     // если у меня есть фишка напротив
     @Test
     public void shouldChangeSeveralChips_whenSupportChipInOtherSide_case2() {
-        givenFl("    o   " +
+        givenFl("    O   " +
                 "    x   " +
                 "    x   " +
-                "oxxx xx " +
+                "Oxxx xx " +
                 "    x   " +
                 "    x   " +
                 "    x   " +
@@ -357,10 +389,10 @@ public class ReversiTest {
         assertE("    o   " +
                 "    o   " +
                 "    o   " +
-                "oooooxx " +
-                "    x   " +
-                "    x   " +
-                "    x   " +
+                "oooooXX " +
+                "    X   " +
+                "    X   " +
+                "    X   " +
                 "        ",
                 player1);
     }
@@ -368,14 +400,14 @@ public class ReversiTest {
     // я могу походить и перевернуть одну фишку диагонально в разные стороны
     @Test
     public void shouldChangeSeveralChips_whenWhenDiagonalDirections() {
-        givenFl("       o" +
-                "  o   x " +
+        givenFl("       O" +
+                "  O   x " +
                 "   x x  " +
                 "        " +
                 "   x x  " +
-                "  x   o " +
+                "  x   O " +
                 " x      " +
-                "o       ");
+                "O       ");
 
         hero1.act(4, 4);
         game.tick();
@@ -391,14 +423,16 @@ public class ReversiTest {
                 player1);
     }
 
-    // попробовать походить черными сперва
+    // попробовать походить черными сперва - не получится
+    // а после белого - пожалуйста
+    // но если один из игроков пропустил ход, то следующим ходит его опонент
     @Test
-    public void shouldChangeChip_blackGoesLeft() {
+    public void shouldChangeChip_blackGoesFirst() {
         givenFl("        " +
                 "        " +
                 "        " +
-                "   xo   " +
-                "   ox   " +
+                "   xO   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ");
@@ -409,22 +443,39 @@ public class ReversiTest {
         assertE("        " +
                 "        " +
                 "        " +
-                "   xxx  " +
-                "   ox   " +
+                "   Xo   " +
+                "   oX   " +
                 "        " +
                 "        " +
                 "        ",
                 player1);
 
+        hero1.act(5, 3);
+        hero2.act(5, 4);
+        game.tick();
+
         assertE("        " +
                 "        " +
                 "        " +
                 "   xxx  " +
-                "   ox   " +
+                "   Ox   " +
                 "        " +
                 "        " +
                 "        ",
-                player2);
+                player1);
+
+        hero1.act(5, 3);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   XXX  " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
     }
 
     // TODO я победил когда поле заполнено и моих фишек больше всего

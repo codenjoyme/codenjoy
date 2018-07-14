@@ -25,7 +25,6 @@ package com.codenjoy.dojo.reversi.model;
 
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -47,12 +46,14 @@ public class Reversi implements Field {
 
     private final int size;
     private Dice dice;
+    private boolean currentColor;
 
     public Reversi(Level level, Dice dice) {
         this.dice = dice;
-        size = level.getSize();
+        size = level.size();
         players = new LinkedList<>();
-        chips = level.getChips(this);
+        chips = level.chips(this);
+        currentColor = level.currentColor();
     }
 
     @Override
@@ -62,6 +63,8 @@ public class Reversi implements Field {
 
             hero.tick();
         }
+
+        currentColor = !currentColor;
     }
 
     public int size() {
@@ -71,6 +74,11 @@ public class Reversi implements Field {
     @Override
     public boolean getFreeColor() {
         return players.size() == 1;
+    }
+
+    @Override
+    public boolean currentColor() {
+        return currentColor;
     }
 
     @Override

@@ -29,8 +29,9 @@ import java.util.List;
 
 public interface Level {
 
-    int getSize();
+    int size();
 
-    List<Chip> getChips(Field field);
+    List<Chip> chips(Field field);
 
+    boolean currentColor();
 }

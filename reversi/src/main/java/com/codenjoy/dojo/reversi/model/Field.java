@@ -38,4 +38,6 @@ public interface Field extends GameField<Player> {
     int size();
 
     boolean getFreeColor();
+
+    boolean currentColor();
 }

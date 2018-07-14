@@ -91,7 +91,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+        return v(level.size());
     }
 
     @Override

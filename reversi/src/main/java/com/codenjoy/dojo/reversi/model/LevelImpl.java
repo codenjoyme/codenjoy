@@ -39,32 +39,56 @@ public class LevelImpl implements Level {
 
     public LevelImpl(String map) {
         this.map = map;
-        xy = new LengthToXY(getSize());
+        xy = new LengthToXY(size());
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return (int) Math.sqrt(map.length());
     }
 
     @Override
-    public List<Chip> getChips(Field field) {
+    public List<Chip> chips(Field field) {
         return new LinkedList<Chip>(){{
-            addAll(pointsOf(Elements.WHITE).stream()
+            addAll(pointsOf(Elements.WHITE, Elements.WHITE_TURN).stream()
                     .map(pt -> new Chip(true, pt, field))
                     .collect(toList()));
 
-            addAll(pointsOf(Elements.BLACK).stream()
+            addAll(pointsOf(Elements.BLACK, Elements.BLACK_TURN).stream()
                     .map(pt -> new Chip(false, pt, field))
                     .collect(toList()));
         }};
     }
 
-    private List<Point> pointsOf(Elements element) {
+    @Override
+    public boolean currentColor() {
+        boolean whiteTurn = !pointsOf(Elements.WHITE_TURN).isEmpty();
+        boolean white = !pointsOf(Elements.WHITE).isEmpty();
+        boolean blackTurn = !pointsOf(Elements.BLACK_TURN).isEmpty();
+        boolean black = !pointsOf(Elements.BLACK).isEmpty();
+
+        if (whiteTurn && white
+                || blackTurn && black
+                || white && black)
+        {
+            error();
+        }
+
+        return whiteTurn || !blackTurn;
+    }
+
+    private void error() {
+        throw new IllegalArgumentException("Пожалуйста используте либо WHITE_TURN + BLACK, " +
+                "либо BLACK_TURN + WHITE");
+    }
+
+    private List<Point> pointsOf(Elements... elements) {
         List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
+            for (Elements el : elements) {
+                if (map.charAt(index) == el.ch) {
+                    result.add(xy.getXY(index));
+                }
             }
         }
         return result;
