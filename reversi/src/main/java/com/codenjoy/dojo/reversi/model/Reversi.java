@@ -87,7 +87,7 @@ public class Reversi implements Field {
         boolean result = false;
         for (Direction direction : Direction.getValues()) {
             Chip enemy = getChip(direction.change(chip));
-            if (!enemy.sameColor(chip)) {
+            if (flippable(chip, enemy, direction)) {
                 enemy.flip();
                 result = true;
             }
@@ -95,6 +95,10 @@ public class Reversi implements Field {
         return result;
     }
 
+    private boolean flippable(Chip current, Chip next, Direction direction) {
+        Chip nextNext = getChip(direction.change(next));
+        return !next.sameColor(current) && nextNext.sameColor(current);
+    }
 
 
     private Chip getChip(Point chip) {
