@@ -187,6 +187,10 @@ public class Reversi implements Field {
 
     @Override
     public void newGame(Player player) {
+        if (players.size() == 2) {
+            throw new IllegalArgumentException("Нельзя добавить игрока - поле занято!");
+        }
+
         if (!players.contains(player)) {
             players.add(player);
         }

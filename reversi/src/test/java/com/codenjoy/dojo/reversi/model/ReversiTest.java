@@ -33,9 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -790,12 +788,42 @@ public class ReversiTest {
                 player1);
     }
 
+    // если добавился третий игрок, то вылетает исключение без добавления игрока
+    @Test
+    public void shouldDoNothing_whenAddThirdPlayer() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ");
+
+        try {
+            game.newGame(new Player(mock(EventListener.class)));
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Нельзя добавить игрока - поле занято!", exception.getMessage());
+        }
+
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
     // TODO побеждает белый, если черному больше некуда ходить и у него меньше фишек
     // TODO побеждает белый, если черному больше некуда ходить и у него вообще нет фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него меньше фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него вообще нет фишек
-
-    // TODO проверить что если добавился третий игрок, то вылетает исключение без добавления игрока
 
     // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
 
