@@ -1,4 +1,5 @@
 .idea/
+quadro/target/
 
 /a2048/**
 /battlecity/**
