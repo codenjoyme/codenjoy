@@ -23,6 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -478,7 +479,51 @@ public class ReversiTest {
                 player1);
     }
 
-    // TODO я победил когда поле заполнено и моих фишек больше всего
-    // TODO я проиграл когда поле заполнено и моих фишек меньше всего
+    // я победил когда поле заполнено и моих фишек больше всего
+    // я проиграл когда поле заполнено и моих фишек меньше всего
+    @Test
+    public void shouldWinLoose_noEmptySpace() {
+        givenFl("oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oXoooooo" +
+                "  oXoooo");
+
+        hero2.act(1, 0);
+        game.tick();
+
+        assertE("OOOOOOOO" +
+                "OOOOOOOO" +
+                "OOOOOOOO" +
+                "OOOOOOOO" +
+                "OOOOOOOO" +
+                "OOOOOOOO" +
+                "OxOOOOOO" +
+                " xxxOOOO",
+                player1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        hero1.act(0, 0);
+        game.tick();
+
+        assertE("oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo",
+                player1);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.LOOSE);
+    }
+
     // TODO сделать валидацию на act(x, y)
 }

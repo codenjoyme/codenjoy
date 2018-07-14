@@ -59,4 +59,11 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero != null && hero.isAlive();
     }
 
+    public boolean isBlack() {
+        return !hero.color();
+    }
+
+    public boolean isWhite() {
+        return hero.color();
+    }
 }

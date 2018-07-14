@@ -98,4 +98,16 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         }
         return flip;
     }
+
+    public boolean color() {
+        return color;
+    }
+
+    public boolean isBlack() {
+        return !color;
+    }
+
+    public boolean isWhite() {
+        return color;
+    }
 }

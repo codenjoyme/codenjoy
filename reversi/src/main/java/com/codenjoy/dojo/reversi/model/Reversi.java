@@ -24,6 +24,7 @@ package com.codenjoy.dojo.reversi.model;
 
 
 import com.codenjoy.dojo.reversi.model.items.Chip;
+import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
@@ -41,9 +42,7 @@ import static java.util.stream.Collectors.toList;
 public class Reversi implements Field {
 
     private List<Chip> chips;
-
     private List<Player> players;
-
     private final int size;
     private Dice dice;
     private boolean currentColor;
@@ -64,7 +63,32 @@ public class Reversi implements Field {
             hero.tick();
         }
 
+        if (chips.size() == size*size){
+            long countWhite = chips.stream().filter(Chip::isWhite).count();
+            long countBlack = chips.stream().filter(Chip::isBlack).count();
+            if (countWhite == countBlack) {
+                // TODO
+                // whitePlayer().event(Events.WIN);
+                // blackPlayer().event(Events.WIN);
+            } else if (countBlack < countWhite) {
+                whitePlayer().event(Events.WIN);
+                blackPlayer().event(Events.LOOSE);
+            } else if (countBlack > countWhite) {
+                // TODO
+                // whitePlayer().event(Events.LOOSE);
+                // blackPlayer().event(Events.WIN);
+            }
+        }
+
         currentColor = !currentColor;
+    }
+
+    private Player whitePlayer() {
+        return players.stream().filter(Player::isWhite).findFirst().get();
+    }
+
+    private Player blackPlayer() {
+        return players.stream().filter(Player::isBlack).findFirst().get();
     }
 
     public int size() {

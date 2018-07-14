@@ -62,4 +62,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         return true;
     }
 
+    public boolean color() {
+        return color;
+    }
 }
