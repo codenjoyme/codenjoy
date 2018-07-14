@@ -26,10 +26,7 @@ package com.codenjoy.dojo.reversi.model.items;
 import com.codenjoy.dojo.reversi.model.Elements;
 import com.codenjoy.dojo.reversi.model.Field;
 import com.codenjoy.dojo.reversi.model.Player;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 
 public class Chip extends PointImpl implements State<Elements, Player> {
 
@@ -61,11 +58,11 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         return color == chip.color;
     }
 
-    public boolean flip(Direction direction) {
+    public boolean flip(QDirection direction) {
         return flip(this, direction);
     }
 
-    boolean flip(Chip start, Direction direction) {
+    boolean flip(Chip start, QDirection direction) {
         if (this == Chip.NULL) {
             return false;
         }
@@ -85,7 +82,7 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         return flipNext(start, direction);
     }
 
-    private boolean flipNext(Chip start, Direction direction) {
+    private boolean flipNext(Chip start, QDirection direction) {
         Chip next = field.getChip(direction.change(this));
         boolean flip = next.flip(start, direction);
         if (flip && this != start) {

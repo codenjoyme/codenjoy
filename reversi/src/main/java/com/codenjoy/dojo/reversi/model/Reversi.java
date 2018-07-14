@@ -27,13 +27,16 @@ import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.QDirection.*;
 import static java.util.stream.Collectors.toList;
 
 public class Reversi implements Field {
@@ -85,10 +88,15 @@ public class Reversi implements Field {
 
     private boolean flipFromChip(Chip current) {
         boolean result = false;
-        for (Direction direction : Direction.getValues()) {
+        for (QDirection direction : directions()){
             result |= current.flip(direction);
         }
         return result;
+    }
+
+    private List<QDirection> directions() {
+        return Arrays.asList(LEFT, LEFT_UP, UP, RIGHT_UP,
+            RIGHT, RIGHT_DOWN, DOWN, LEFT_DOWN);
     }
 
     private boolean flippable(Chip current, Chip next, Direction direction) {
