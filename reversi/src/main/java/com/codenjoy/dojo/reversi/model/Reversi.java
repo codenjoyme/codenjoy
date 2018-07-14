@@ -23,31 +23,20 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
-import com.codenjoy.dojo.reversi.model.items.Bomb;
-import com.codenjoy.dojo.reversi.model.items.Gold;
-import com.codenjoy.dojo.reversi.model.items.Wall;
-import com.codenjoy.dojo.reversi.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.reversi.model.items.Chip;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Reversi#tick()}
- */
 public class Reversi implements Field {
 
-    private List<Wall> walls;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
+    private List<Chip> chips;
 
     private List<Player> players;
 
@@ -56,38 +45,17 @@ public class Reversi implements Field {
 
     public Reversi(Level level, Dice dice) {
         this.dice = dice;
-        walls = level.getWalls();
-        gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<>();
-        bombs = new LinkedList<>();
+        chips = level.getChips();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         for (Player player : players) {
             Hero hero = player.getHero();
 
             hero.tick();
-
-            if (gold.contains(hero)) {
-                gold.remove(hero);
-                player.event(Events.WIN);
-
-                Point pos = getFreeRandom();
-                gold.add(new Gold(pos));
-            }
-        }
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                player.event(Events.LOOSE);
-            }
         }
     }
 
@@ -96,63 +64,18 @@ public class Reversi implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        Point pt = pt(x, y);
-        return x > size - 1
-                || x < 0
-                || y < 0
-                || y > size - 1
-                || walls.contains(pt)
-                || getHeroes().contains(pt);
-    }
-
-    @Override
-    public Point getFreeRandom() {
-        int x;
-        int y;
-        int c = 0;
-        do {
-            x = dice.next(size);
-            y = dice.next(size);
-        } while (!isFree(x, y) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(x, y);
-    }
-
-    @Override
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
-        return !(gold.contains(pt)
-                || bombs.contains(pt)
-                || walls.contains(pt)
-                || getHeroes().contains(pt));
+        return !chips.contains(pt);
     }
 
     @Override
-    public boolean isBomb(int x, int y) {
-        return bombs.contains(pt(x, y));
-    }
-
-    @Override
-    public void setBomb(int x, int y) {
+    public void setChip(boolean color, int x, int y) {
         Point pt = pt(x, y);
-        if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(x, y));
+        if (!chips.contains(pt)) {
+            chips.add(new Chip(color, x, y));
         }
-    }
-
-    @Override
-    public void removeBomb(int x, int y) {
-        bombs.remove(pt(x, y));
-    }
-
-    public List<Gold> getGold() {
-        return gold;
     }
 
     public List<Hero> getHeroes() {
@@ -174,12 +97,8 @@ public class Reversi implements Field {
         players.remove(player);
     }
 
-    public List<Wall> getWalls() {
-        return walls;
-    }
-
-    public List<Bomb> getBombs() {
-        return bombs;
+    public List<Chip> getChips() {
+        return chips;
     }
 
     @Override
@@ -194,12 +113,7 @@ public class Reversi implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>(){{
-                    addAll(Reversi.this.getWalls());
-                    addAll(Reversi.this.getHeroes());
-                    addAll(Reversi.this.getGold());
-                    addAll(Reversi.this.getBombs());
-                }};
+                return Reversi.this.getChips();
             }
         };
     }

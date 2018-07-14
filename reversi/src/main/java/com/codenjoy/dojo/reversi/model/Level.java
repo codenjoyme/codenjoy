@@ -23,24 +23,14 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
-import com.codenjoy.dojo.reversi.model.items.Gold;
-import com.codenjoy.dojo.reversi.model.items.Wall;
+import com.codenjoy.dojo.reversi.model.items.Chip;
 
 import java.util.List;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
 public interface Level {
 
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
     int getSize();
 
-    List<Wall> getWalls();
+    List<Chip> getChips();
 
-    List<Hero> getHero();
-
-    List<Gold> getGold();
 }

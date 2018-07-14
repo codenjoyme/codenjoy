@@ -29,21 +29,27 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Артефакт: Золото на поле
- */
-public class Gold extends PointImpl implements State<Elements, Player> {
+public class Chip extends PointImpl implements State<Elements, Player> {
 
-    public Gold(int x, int y) {
+    private boolean color;
+
+    public Chip(boolean color, int x, int y) {
         super(x, y);
+        this.color = color;
     }
 
-    public Gold(Point point) {
+    public Chip(boolean color, Point point) {
         super(point);
+        this.color = color;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOLD;
+        if (color == true) {
+            return Elements.WHITE;
+        } else {
+            return Elements.BLACK;
+        }
+
     }
 }
