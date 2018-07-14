@@ -657,6 +657,96 @@ public class ReversiTest {
         verify(listener2).event(Events.WIN);
     }
 
+    // побеждает белый, когда не осталось куда ходить обоим и у черного фишек меньше
+    @Test
+    public void shouldWinLoose_noBlackChipPossibleTurn_whiteWin() {
+        givenFl("       X" +
+                "        " +
+                "        " +
+                "  oXo   " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero2.act(1, 4);
+        game.tick();
+
+        assertE("       x" +
+                "        " +
+                "        " +
+                " xxxO   " +
+                "   OOO  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        hero1.act(0, 4);
+        game.tick();
+
+        assertE("       X" +
+                "        " +
+                "        " +
+                "ooooo   " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.LOOSE);
+    }
+
+    // побеждает черный, когда не осталось куда ходить обоим и у черного фишек меньше
+    @Test
+    public void shouldWinLoose_noWhiteChipPossibleTurn_blackWin() {
+        givenFl("       O" +
+                "        " +
+                "        " +
+                "  xOx   " +
+                "   xxx  " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(1, 4);
+        game.tick();
+
+        assertE("       o" +
+                "        " +
+                "        " +
+                " oooX   " +
+                "   XXX  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        hero2.act(0, 4);
+        game.tick();
+
+        assertE("       O" +
+                "        " +
+                "        " +
+                "xxxxx   " +
+                "   xxx  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+
     // сделать валидацию на act(x, y)
     @Test
     public void shouldSkipNotValidActCommand_oneParamener() {
@@ -964,10 +1054,8 @@ public class ReversiTest {
                 player1);
     }
 
-    // TODO побеждает белый, если черному больше некуда ходить и у него меньше фишек
-    // TODO побеждает белый, если черному больше некуда ходить и у него вообще нет фишек
-    // TODO побеждает черный, если белому больше некуда ходить и у него меньше фишек
-    // TODO побеждает черный, если белому больше некуда ходить и у него вообще нет фишек
+    // TODO если один игрок не может походить, то ход передается другому
+    // TODO тот же случай только с другими цветами
 
     // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
 

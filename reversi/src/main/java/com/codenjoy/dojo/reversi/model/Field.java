@@ -33,11 +33,11 @@ public interface Field extends GameField<Player> {
 
     void setChip(boolean color, int x, int y);
 
-    Chip getChip(Point point);
+    Chip chip(Point point);
 
     int size();
 
-    boolean getFreeColor();
+    boolean freeColor();
 
     boolean currentColor();
 

@@ -68,9 +68,10 @@ public class Reversi implements Field {
             return;
         }
 
-        long countWhite = chips.stream().filter(Chip::isWhite).count();
-        long countBlack = chips.stream().filter(Chip::isBlack).count();
-        if (chips.size() == size*size
+        long countWhite = chips(true).size();
+        long countBlack = chips(false).size();
+        if (fildIsCompletelyFilled()
+                || !canFlip(true) && !canFlip(false)
                 || countBlack == 0
                 || countWhite == 0)
         {
@@ -78,6 +79,44 @@ public class Reversi implements Field {
         }
 
         currentColor = !currentColor;
+    }
+
+    private List<Chip> chips(boolean color) {
+        return chips.stream()
+                .filter(chip -> chip.color() == color)
+                .collect(toList());
+    }
+
+    private boolean canFlip;
+    private boolean canFlip(boolean color) {
+        canFlip = false;
+        for (Point pt : freeSpaces()) {
+            for (QDirection direction : directions()) {
+                Chip chip = new Chip(color, pt, this);
+                chip.flip(chip, direction, c -> canFlip = true);
+                if (canFlip) {
+                    return true;
+                }
+            };
+        };
+        return false;
+    }
+
+    private List<Point> freeSpaces() {
+        List<Point> result = new LinkedList<>();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point pt = pt(x, y);
+                if (chip(pt) == Chip.NULL) {
+                    result.add(pt);
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean fildIsCompletelyFilled() {
+        return chips.size() == size*size;
     }
 
     private void whoWin(long countWhite, long countBlack) {
@@ -107,7 +146,7 @@ public class Reversi implements Field {
     }
 
     @Override
-    public boolean getFreeColor() {
+    public boolean freeColor() {
         if (players.isEmpty()) {
             return true;
         }
@@ -179,7 +218,7 @@ public class Reversi implements Field {
             RIGHT, RIGHT_DOWN, DOWN, LEFT_DOWN);
     }
 
-    public Chip getChip(Point chip) {
+    public Chip chip(Point chip) {
         return chips.stream()
                 .filter(Predicate.isEqual(chip))
                 .findFirst()
@@ -210,7 +249,7 @@ public class Reversi implements Field {
         player.hero = null;
     }
 
-    public List<Chip> getChips() {
+    public List<Chip> chips() {
         return chips;
     }
 
@@ -226,7 +265,7 @@ public class Reversi implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return Reversi.this.getChips();
+                return Reversi.this.chips();
             }
         };
     }
