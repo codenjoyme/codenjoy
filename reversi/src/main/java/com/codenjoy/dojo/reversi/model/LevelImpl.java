@@ -48,14 +48,14 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Chip> getChips() {
+    public List<Chip> getChips(Field field) {
         return new LinkedList<Chip>(){{
             addAll(pointsOf(Elements.WHITE).stream()
-                    .map(pt -> new Chip(true, pt))
+                    .map(pt -> new Chip(true, pt, field))
                     .collect(toList()));
 
             addAll(pointsOf(Elements.BLACK).stream()
-                    .map(pt -> new Chip(false, pt))
+                    .map(pt -> new Chip(false, pt, field))
                     .collect(toList()));
         }};
     }

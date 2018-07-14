@@ -49,7 +49,7 @@ public class Reversi implements Field {
         this.dice = dice;
         size = level.getSize();
         players = new LinkedList<>();
-        chips = level.getChips();
+        chips = level.getChips(this);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Reversi implements Field {
     public void setChip(boolean color, int x, int y) {
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
-            Chip chip = new Chip(color, x, y);
+            Chip chip = new Chip(color, pt, this);
             if (flipFromChip(chip)){
                 chips.add(chip);
             }
@@ -86,25 +86,9 @@ public class Reversi implements Field {
     private boolean flipFromChip(Chip current) {
         boolean result = false;
         for (Direction direction : Direction.getValues()) {
-            result |= flipFromChip(current, direction);
+            result |= current.flip(direction);
         }
         return result;
-    }
-
-    private boolean flipFromChip(Chip current, Direction direction) {
-        List<Chip> flips = new LinkedList<>();
-        Chip next = current;
-        while (next != Chip.NULL) {
-            next = getChip(direction.change(next));
-
-            if (!next.sameColor(current)) {
-                flips.add(next);
-            } else {
-                flips.forEach(Chip::flip);
-                return !flips.isEmpty();
-            }
-        }
-        return false;
     }
 
     private boolean flippable(Chip current, Chip next, Direction direction) {
@@ -112,7 +96,7 @@ public class Reversi implements Field {
         return !next.sameColor(current) && nextNext.sameColor(current);
     }
 
-    private Chip getChip(Point chip) {
+    public Chip getChip(Point chip) {
         return chips.stream()
                 .filter(Predicate.isEqual(chip))
                 .findFirst()

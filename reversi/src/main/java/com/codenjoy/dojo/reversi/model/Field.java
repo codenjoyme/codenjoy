@@ -23,6 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
@@ -32,4 +33,5 @@ public interface Field extends GameField<Player> {
 
     void setChip(boolean color, int x, int y);
 
+    Chip getChip(Point point);
 }

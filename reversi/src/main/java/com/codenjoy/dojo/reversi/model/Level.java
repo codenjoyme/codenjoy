@@ -31,6 +31,6 @@ public interface Level {
 
     int getSize();
 
-    List<Chip> getChips();
+    List<Chip> getChips(Field field);
 
 }

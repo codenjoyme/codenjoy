@@ -24,25 +24,24 @@ package com.codenjoy.dojo.reversi.model.items;
 
 
 import com.codenjoy.dojo.reversi.model.Elements;
+import com.codenjoy.dojo.reversi.model.Field;
 import com.codenjoy.dojo.reversi.model.Player;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 public class Chip extends PointImpl implements State<Elements, Player> {
 
-    public static final Chip NULL = new Chip(false, -1, -1);
+    public static final Chip NULL = new Chip(false, pt(-1, -1), null);
 
     private boolean color;
+    private Field field;
 
-    public Chip(boolean color, int x, int y) {
-        super(x, y);
-        this.color = color;
-    }
-
-    public Chip(boolean color, Point point) {
+    public Chip(boolean color, Point point, Field field) {
         super(point);
         this.color = color;
+        this.field = field;
     }
 
     @Override
@@ -52,7 +51,6 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         } else {
             return Elements.BLACK;
         }
-
     }
 
     public void flip() {
@@ -61,5 +59,38 @@ public class Chip extends PointImpl implements State<Elements, Player> {
 
     public boolean sameColor(Chip chip) {
         return color == chip.color;
+    }
+
+    public boolean flip(Direction direction) {
+        return flip(this, direction);
+    }
+
+    boolean flip(Chip start, Direction direction) {
+        if (this == Chip.NULL) {
+            return false;
+        }
+
+        if (this != start) {
+            if (start.distance(this) == 1) {
+                if (start.sameColor(this)) {
+                    return false;
+                }
+            } else {
+                if (start.sameColor(this)) {
+                    return true;
+                }
+            }
+        }
+
+        return flipNext(start, direction);
+    }
+
+    private boolean flipNext(Chip start, Direction direction) {
+        Chip next = field.getChip(direction.change(this));
+        boolean flip = next.flip(start, direction);
+        if (flip && this != start) {
+            this.flip();
+        }
+        return flip;
     }
 }
