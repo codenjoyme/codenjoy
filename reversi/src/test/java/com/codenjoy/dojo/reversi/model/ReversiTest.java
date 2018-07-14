@@ -345,7 +345,7 @@ public class ReversiTest {
     // я не могу перевернуть некоторое число фишек в любом направлении если у меня нет
     // фишки напротив
     @Test
-    public void shouldNotChangeSeveralChips_whenNoSupportChipInOtherSide() {
+    public void shouldNotChangeSeveralChips_whenNoSupportChipInOtherSide_white() {
         givenFl("O       " +
                 "x   x   " +
                 "    x   " +
@@ -358,13 +358,38 @@ public class ReversiTest {
         hero1.act(4, 4);
         game.tick();
 
-        assertE("o       " +
-                "X   X   " +
-                "    X   " +
-                " XXX XX " +
-                "    X   " +
-                "    X   " +
-                "    X   " +
+        assertE("O       " +
+                "x   x   " +
+                "    x   " +
+                " xxx xx " +
+                "    x   " +
+                "    x   " +
+                "    x   " +
+                "        ",
+                player1);
+    }
+
+    @Test
+    public void shouldNotChangeSeveralChips_whenNoSupportChipInOtherSide_black() {
+        givenFl("X       " +
+                "o   o   " +
+                "    o   " +
+                " ooo oo " +
+                "    o   " +
+                "    o   " +
+                "    o   " +
+                "        ");
+
+        hero2.act(4, 4);
+        game.tick();
+
+        assertE("X       " +
+                "o   o   " +
+                "    o   " +
+                " ooo oo " +
+                "    o   " +
+                "    o   " +
+                "    o   " +
                 "        ",
                 player1);
     }
@@ -1100,8 +1125,109 @@ public class ReversiTest {
                 player1);
     }
 
-    // TODO если один игрок не может походить, то ход передается другому
-    // TODO тот же случай только с другими цветами
+    // после хода черного у белого не осталось ходов и он пропускает
+    @Test
+    public void shouldSkipTurn_ifNoWay_white_afterBlack() {
+        givenFl("  xOx   " +
+                "   OO   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(5, 7);
+        game.tick();
+
+        assertE("  Xooo  " +
+                "   oo   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero2.act(6, 7);
+        game.tick();
+
+        assertE("  XXXXX " +
+                "   oo   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero2.act(2, 5);
+        game.tick();
+
+        assertE("  xxxxx " +
+                "   xO   " +
+                "  x     " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    // после хода белого у черного не осталось ходов и он пропускает
+    @Test
+    public void shouldSkipTurn_ifNoWay_black_afterWhite() {
+        givenFl("  oXo   " +
+                "   XX   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero2.act(5, 7);
+        game.tick();
+
+        assertE("  Oxxx  " +
+                "   xx   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero1.act(6, 7);
+        game.tick();
+
+        assertE("  OOOOO " +
+                "   xx   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero1.act(2, 5);
+        game.tick();
+
+        assertE("  ooooo " +
+                "   oX   " +
+                "  o     " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
 
     // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
 

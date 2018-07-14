@@ -80,12 +80,14 @@ public class Reversi implements Field {
         {
             whoWin(countWhite, countBlack);
         }
-
         nextTurn();
     }
 
     private void nextTurn() {
         currentColor = !currentColor;
+        if (!canFlip(currentColor) && canFlip(!currentColor)) {
+            currentColor = !currentColor;
+        }
     }
 
     private List<Chip> chips(boolean color) {
