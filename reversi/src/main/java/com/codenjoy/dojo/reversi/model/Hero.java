@@ -60,6 +60,10 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void tick() {
+        if (field.stop()) {
+            act = false;
+        }
+
         if (act) {
             if (field.currentColor() == color) {
                 field.setChip(color, x, y);

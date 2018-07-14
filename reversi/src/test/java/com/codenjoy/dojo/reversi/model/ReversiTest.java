@@ -671,10 +671,134 @@ public class ReversiTest {
                 player1);
     }
 
+    // игра не идет (ходы игнорятся), даже если тикается, пока не добавится
+    // ровно два игрока
+    @Test
+    public void shouldDoNothing_ifOnlyOnePlayer_black() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ");
+
+        game.remove(player2);
+
+        hero1.act(2, 4);
+        game.tick();
+
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        game.newGame(player2);
+        hero2 = player2.hero;
+
+        assertEquals(true, player2.isBlack());
+
+        hero1.act(2, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "  ooo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero2.act(2, 3);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "  OOO   " +
+                "  xxx   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    @Test
+    public void shouldDoNothing_ifOnlyOnePlayer_white() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ");
+
+        game.remove(player1);
+
+        hero2.act(2, 3);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        game.newGame(player1);
+        hero1 = player1.hero;
+
+        assertEquals(true, player1.isWhite());
+
+        hero2.act(2, 3);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "  xxx   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero1.act(2, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "  ooo   " +
+                "  XXX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
     // TODO побеждает белый, если черному больше некуда ходить и у него меньше фишек
     // TODO побеждает белый, если черному больше некуда ходить и у него вообще нет фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него меньше фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него вообще нет фишек
-    // TODO игра не идет (ходы игнорятся), даже если тикается, пока не добавится ровано два игрока
+
     // TODO проверить что если добавился третий игрок, то вылетает исключение без добавления игрока
+
+    // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
+
+    // TODO добавить препятствия на поле
+    // TODO борда может быть большего размера
 }

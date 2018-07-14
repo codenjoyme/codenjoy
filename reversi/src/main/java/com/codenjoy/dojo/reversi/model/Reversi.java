@@ -28,6 +28,7 @@ import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Arrays;
@@ -63,6 +64,10 @@ public class Reversi implements Field {
             hero.tick();
         }
 
+        if (stop()) {
+            return;
+        }
+
         if (chips.size() == size*size){
             long countWhite = chips.stream().filter(Chip::isWhite).count();
             long countBlack = chips.stream().filter(Chip::isBlack).count();
@@ -96,12 +101,44 @@ public class Reversi implements Field {
 
     @Override
     public boolean getFreeColor() {
-        return players.size() == 1;
+        if (players.isEmpty()) {
+            return true;
+        }
+
+        if (players.size() == 1) {
+            Hero hero = players.get(0).hero;
+            if (hero == null) {
+                return true;
+            } else {
+                return !hero.color();
+            }
+        }
+
+        if (players.size() == 2) {
+            Hero hero1 = players.get(0).hero;
+            Hero hero2 = players.get(1).hero;
+            if (hero1 == null && hero2 == null) {
+                return true;
+            } else if (hero1 == null) {
+                 return !hero2.color();
+            } else if (hero2 == null) {
+                return !hero1.color();
+            } else{
+                throw new IllegalArgumentException("Все цвета заняты!");
+            }
+        }
+
+        throw new IllegalArgumentException("На поле больше двух игроков: " + players.size());
     }
 
     @Override
     public boolean currentColor() {
         return currentColor;
+    }
+
+    @Override
+    public boolean stop() {
+        return players.size() != MultiplayerType.TOURNAMENT.getCount();
     }
 
     @Override
@@ -159,6 +196,7 @@ public class Reversi implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+        player.hero = null;
     }
 
     public List<Chip> getChips() {

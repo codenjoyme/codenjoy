@@ -40,4 +40,6 @@ public interface Field extends GameField<Player> {
     boolean getFreeColor();
 
     boolean currentColor();
+
+    boolean stop();
 }
