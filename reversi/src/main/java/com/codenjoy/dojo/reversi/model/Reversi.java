@@ -77,15 +77,25 @@ public class Reversi implements Field {
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
             Chip chip = new Chip(color, x, y);
-            chips.add(chip);
-            flipFromChip(chip);
+            if (flipFromChip(chip)){
+                chips.add(chip);
+            }
         }
     }
 
-    private void flipFromChip(Chip chip) {
-        Direction.getValues()
-                .forEach(d -> getChip(d.change(chip)).flip());
+    private boolean flipFromChip(Chip chip) {
+        boolean result = false;
+        for (Direction direction : Direction.getValues()) {
+            Chip enemy = getChip(direction.change(chip));
+            if (!enemy.sameColor(chip)) {
+                enemy.flip();
+                result = true;
+            }
+        }
+        return result;
     }
+
+
 
     private Chip getChip(Point chip) {
         return chips.stream()

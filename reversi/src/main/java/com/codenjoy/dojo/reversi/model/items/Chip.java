@@ -58,4 +58,8 @@ public class Chip extends PointImpl implements State<Elements, Player> {
     public void flip() {
         color = !color;
     }
+
+    public boolean sameColor(Chip chip) {
+        return color == chip.color;
+    }
 }
