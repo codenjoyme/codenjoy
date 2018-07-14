@@ -23,7 +23,6 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
@@ -34,6 +33,8 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
  * Часть этих интерфейсов объявлены в {@see PlayerHero}, а часть явно тут.
  */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
+
+    private boolean color = true;
 
 //    public Hero(Point xy) {
 //        super(xy);
@@ -46,12 +47,12 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
-        // TODO
+        this.x = p[0];
     }
 
     @Override
     public void tick() {
-        // TODO
+        field.setChip(color, x);
     }
 
     public boolean isAlive() {

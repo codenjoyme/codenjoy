@@ -86,7 +86,13 @@ public class Quadro implements Field {
     }
 
     @Override
-    public void setChip(boolean color, int x, int y) {
+    public void setChip(boolean color, int x) {
+        int y = 0;
+
+        while (chips.contains(pt(x, y))) {
+            y++;
+        }
+
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
             chips.add(new Chip(color, x, y));
