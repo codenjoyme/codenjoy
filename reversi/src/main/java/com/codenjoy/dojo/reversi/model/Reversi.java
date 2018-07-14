@@ -56,6 +56,9 @@ public class Reversi implements Field {
         currentColor = level.currentColor();
         if (!canFlip(currentColor)) {
             nextTurn();
+            if (!canFlip(currentColor) && !canFlip(!currentColor)) {
+                nextTurn();
+            }
         }
     }
 
@@ -71,16 +74,20 @@ public class Reversi implements Field {
             return;
         }
 
+        checkWin();
+        nextTurn();
+    }
+
+    private void checkWin() {
         long countWhite = chips(true).size();
         long countBlack = chips(false).size();
-        if (fildIsCompletelyFilled()
+        if (isCompletelyFilled()
                 || !canFlip(true) && !canFlip(false)
                 || countBlack == 0
                 || countWhite == 0)
         {
             whoWin(countWhite, countBlack);
         }
-        nextTurn();
     }
 
     private void nextTurn() {
@@ -124,15 +131,14 @@ public class Reversi implements Field {
         return result;
     }
 
-    private boolean fildIsCompletelyFilled() {
+    private boolean isCompletelyFilled() {
         return chips.size() == size*size;
     }
 
     private void whoWin(long countWhite, long countBlack) {
         if (countWhite == countBlack) {
-            // TODO
-            // whitePlayer().event(Events.WIN);
-            // blackPlayer().event(Events.WIN);
+            whitePlayer().event(Events.WIN);
+            blackPlayer().event(Events.WIN);
         } else if (countBlack < countWhite) {
             whitePlayer().event(Events.WIN);
             blackPlayer().event(Events.LOOSE);

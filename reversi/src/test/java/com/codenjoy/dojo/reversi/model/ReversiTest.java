@@ -1229,6 +1229,62 @@ public class ReversiTest {
                 player1);
     }
 
+    // если патовая ситуация, то конец игры
+    @Test
+    public void shouldWinLoose_ifNoWay_whiteAndBlack_black() {
+        givenFl("   xx   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "   OO   ");
+
+        game.tick();
+
+        assertE("   XX   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "   oo   ",
+                player1);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.WIN);
+    }
+
+    // если патовая ситуация, то конец игры
+    @Test
+    public void shouldWinLoose_ifNoWay_whiteAndBlack_white() {
+        givenFl("   XX   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "   oo   ");
+
+        game.tick();
+
+        assertE("   xx   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "   OO   ",
+                player1);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.WIN);
+    }
+
     // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
 
     // TODO добавить препятствия на поле
