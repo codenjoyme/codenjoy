@@ -68,23 +68,30 @@ public class Reversi implements Field {
             return;
         }
 
-        if (chips.size() == size*size){
-            long countWhite = chips.stream().filter(Chip::isWhite).count();
-            long countBlack = chips.stream().filter(Chip::isBlack).count();
-            if (countWhite == countBlack) {
-                // TODO
-                // whitePlayer().event(Events.WIN);
-                // blackPlayer().event(Events.WIN);
-            } else if (countBlack < countWhite) {
-                whitePlayer().event(Events.WIN);
-                blackPlayer().event(Events.LOOSE);
-            } else if (countBlack > countWhite) {
-                whitePlayer().event(Events.LOOSE);
-                blackPlayer().event(Events.WIN);
-            }
+        long countWhite = chips.stream().filter(Chip::isWhite).count();
+        long countBlack = chips.stream().filter(Chip::isBlack).count();
+        if (chips.size() == size*size
+                || countBlack == 0
+                || countWhite == 0)
+        {
+            whoWin(countWhite, countBlack);
         }
 
         currentColor = !currentColor;
+    }
+
+    private void whoWin(long countWhite, long countBlack) {
+        if (countWhite == countBlack) {
+            // TODO
+            // whitePlayer().event(Events.WIN);
+            // blackPlayer().event(Events.WIN);
+        } else if (countBlack < countWhite) {
+            whitePlayer().event(Events.WIN);
+            blackPlayer().event(Events.LOOSE);
+        } else if (countBlack > countWhite) {
+            whitePlayer().event(Events.LOOSE);
+            blackPlayer().event(Events.WIN);
+        }
     }
 
     private Player whitePlayer() {

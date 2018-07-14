@@ -477,8 +477,7 @@ public class ReversiTest {
                 player1);
     }
 
-    // я победил когда поле заполнено и моих фишек больше всего
-    // я проиграл когда поле заполнено и моих фишек меньше всего
+    // побеждает белый, когда все поле занято им
     @Test
     public void shouldWinLoose_noEmptySpace_whiteWin() {
         givenFl("oooooooo" +
@@ -523,7 +522,7 @@ public class ReversiTest {
         verify(listener2).event(Events.LOOSE);
     }
     
-    // побеждает черный, когда все поле занято белым
+    // побеждает черный, когда все поле занято им
     @Test
     public void shouldWinLoose_noEmptySpace_blackWin() {
         givenFl("xxxxxxxx" +
@@ -562,6 +561,96 @@ public class ReversiTest {
                 "xxxxxxxx" +
                 "xxxxxxxx" +
                 "xxxxxxxx",
+                player1);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+
+    // побеждает белый, когда не осталось фишек у черного
+    @Test
+    public void shouldWinLoose_noBlackChip_whiteWin() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "  oXo   " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero2.act(1, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                " xxxO   " +
+                "   OOO  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        hero1.act(0, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "ooooo   " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.LOOSE);
+    }
+
+    // побеждает черный, когда не осталось фишек у белого
+    @Test
+    public void shouldWinLoose_noWhiteChip_blackWin() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "  xOx   " +
+                "   xxx  " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(1, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                " oooX   " +
+                "   XXX  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        hero2.act(0, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "xxxxx   " +
+                "   xxx  " +
+                "        " +
+                "        " +
+                "        ",
                 player1);
 
         verify(listener1).event(Events.LOOSE);
