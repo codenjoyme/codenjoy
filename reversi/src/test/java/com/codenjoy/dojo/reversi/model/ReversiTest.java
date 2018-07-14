@@ -569,12 +569,112 @@ public class ReversiTest {
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
     }
-    
+
+    // сделать валидацию на act(x, y)
+    @Test
+    public void shouldSkipNotValidActCommand_oneParamener() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(5);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommand_zerroParamener() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act();
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommand_twoInvalidCoordinates() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(8, -1);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    @Test
+    public void shouldValidActCommand_threeParameners() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(2, 4, 2);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "  ooo   " +
+                "   oX   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
     // TODO побеждает белый, если черному больше некуда ходить и у него меньше фишек
     // TODO побеждает белый, если черному больше некуда ходить и у него вообще нет фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него меньше фишек
     // TODO побеждает черный, если белому больше некуда ходить и у него вообще нет фишек
     // TODO игра не идет (ходы игнорятся), даже если тикается, пока не добавится ровано два игрока
     // TODO проверить что если добавился третий игрок, то вылетает исключение без добавления игрока
-    // TODO сделать валидацию на act(x, y)
 }

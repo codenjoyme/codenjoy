@@ -43,8 +43,18 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
+        if (p.length < 2) {
+            act = false;
+            return;
+        }
+
         this.x = p[0];
         this.y = p[1];
+
+        if (isOutOf(field.size())) {
+            return;
+        }
+
         act = true;
     }
 
