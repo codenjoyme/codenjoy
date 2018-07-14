@@ -86,21 +86,25 @@ public class Reversi implements Field {
     private boolean flipFromChip(Chip current) {
         boolean result = false;
         for (Direction direction : Direction.getValues()) {
-            List<Chip> toFlip = new LinkedList<>();
-            Chip next = current;
-            while (next != Chip.NULL) {
-                next = getChip(direction.change(next));
-
-                if (!next.sameColor(current)) {
-                    toFlip.add(next);
-                } else {
-                    result = !toFlip.isEmpty();
-                    toFlip.forEach(Chip::flip);
-                    break;
-                }
-            }
+            result |= flipFromChip(current, direction);
         }
         return result;
+    }
+
+    private boolean flipFromChip(Chip current, Direction direction) {
+        List<Chip> flips = new LinkedList<>();
+        Chip next = current;
+        while (next != Chip.NULL) {
+            next = getChip(direction.change(next));
+
+            if (!next.sameColor(current)) {
+                flips.add(next);
+            } else {
+                flips.forEach(Chip::flip);
+                return !flips.isEmpty();
+            }
+        }
+        return false;
     }
 
     private boolean flippable(Chip current, Chip next, Direction direction) {
