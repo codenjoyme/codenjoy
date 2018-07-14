@@ -69,6 +69,11 @@ public class Reversi implements Field {
     }
 
     @Override
+    public boolean getFreeColor() {
+        return players.size() == 1;
+    }
+
+    @Override
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
@@ -97,11 +102,6 @@ public class Reversi implements Field {
     private List<QDirection> directions() {
         return Arrays.asList(LEFT, LEFT_UP, UP, RIGHT_UP,
             RIGHT, RIGHT_DOWN, DOWN, LEFT_DOWN);
-    }
-
-    private boolean flippable(Chip current, Chip next, Direction direction) {
-        Chip nextNext = getChip(direction.change(next));
-        return !next.sameColor(current) && nextNext.sameColor(current);
     }
 
     public Chip getChip(Point chip) {

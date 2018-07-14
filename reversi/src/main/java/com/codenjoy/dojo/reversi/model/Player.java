@@ -50,7 +50,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(true);
+        hero = new Hero(field.getFreeColor());
         hero.init(field);
     }
 

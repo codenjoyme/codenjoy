@@ -392,6 +392,40 @@ public class ReversiTest {
     }
 
     // попробовать походить черными сперва
+    @Test
+    public void shouldChangeChip_blackGoesLeft() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xo   " +
+                "   ox   " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero2.act(5, 4);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   xxx  " +
+                "   ox   " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   xxx  " +
+                "   ox   " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
+    }
 
     // TODO я победил когда поле заполнено и моих фишек больше всего
     // TODO я проиграл когда поле заполнено и моих фишек меньше всего
