@@ -77,61 +77,79 @@ public class QuadroTest {
     // Поле 7x6 изначально пустое
     @Test
     public void shouldFieldAtStart() {
-        givenFl("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       ");
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
 
-        assertE("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       ");
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
     }
 
     // Игрок может походить
     @Test
     public void shouldAddChip() {
-        givenFl("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       ");
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
 
         hero.act(4);
         game.tick();
 
-        assertE("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "   x   ");
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    ");
     }
 
     // Игрок может походить на столбец, где есть фишки
     @Test
     public void shouldAddChipOnChip() {
-        givenFl("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "   x   ");
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    ");
 
         hero.act(4);
         game.tick();
 
-        assertE("       " +
-                "       " +
-                "       " +
-                "       " +
-                "   x   " +
-                "   x   ");
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    x    ");
     }
 
     // TODO Игрок победил когда в ряд 4 мои фишки
