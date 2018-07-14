@@ -54,7 +54,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(field.getFreeRandom());
+        hero = new Hero();
         hero.init(field);
     }
 

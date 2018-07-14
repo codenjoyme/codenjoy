@@ -32,15 +32,8 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
  */
 public interface Field extends GameField<Player> {
 
-    boolean isBarrier(int x, int y);
-
-    Point getFreeRandom();
-
     boolean isFree(int x, int y);
+    void setChip(boolean color, int x, int y);
 
-    boolean isBomb(int x, int y);
 
-    void setBomb(int x, int y);
-
-    void removeBomb(int x, int y);
 }
