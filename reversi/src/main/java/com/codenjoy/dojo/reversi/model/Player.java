@@ -25,15 +25,8 @@ package com.codenjoy.dojo.reversi.model;
 
 import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки.
- * Тут же ивенты передабтся лиснеру фреймворка.
- */
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
@@ -57,7 +50,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero();
+        hero = new Hero(true);
         hero.init(field);
     }
 

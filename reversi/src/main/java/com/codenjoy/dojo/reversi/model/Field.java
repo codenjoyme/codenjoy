@@ -34,4 +34,6 @@ public interface Field extends GameField<Player> {
     void setChip(boolean color, int x, int y);
 
     Chip getChip(Point point);
+
+    int size();
 }

@@ -25,7 +25,6 @@ package com.codenjoy.dojo.reversi.model;
 
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -42,10 +41,13 @@ import static org.mockito.Mockito.*;
 public class ReversiTest {
 
     private Reversi game;
-    private Hero hero;
+    private Hero hero1;
+    private Hero hero2;
     private Dice dice;
-    private EventListener listener;
-    private Player player;
+    private EventListener listener1;
+    private EventListener listener2;
+    private Player player1;
+    private Player player2;
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
@@ -63,13 +65,17 @@ public class ReversiTest {
     private void givenFl(String board) {
         Level level = new LevelImpl(board);
         game = new Reversi(level, dice);
-        listener = mock(EventListener.class);
-        player = new Player(listener);
-        game.newGame(player);
-        hero = game.getHeroes().get(0);
+        listener1 = mock(EventListener.class);
+        listener2 = mock(EventListener.class);
+        player1 = new Player(listener1);
+        player2 = new Player(listener2);
+        game.newGame(player1);
+        game.newGame(player2);
+        hero1 = game.getHeroes().get(0);
+        hero2 = game.getHeroes().get(1);
     }
 
-    private void assertE(String expected) {
+    private void assertE(String expected, Player player) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
     }
@@ -93,7 +99,8 @@ public class ReversiTest {
                 "   ox   " +
                 "        " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу походить и перевернуть одну фишку горизонтально влево
@@ -108,7 +115,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(5, 3);
+        hero1.act(5, 3);
         game.tick();
 
         assertE("        " +
@@ -118,7 +125,8 @@ public class ReversiTest {
                 "   ooo  " +
                 "        " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу походить и перевернуть одну фишку горизонтально вправо
@@ -133,7 +141,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(2, 4);
+        hero1.act(2, 4);
         game.tick();
 
         assertE("        " +
@@ -143,7 +151,8 @@ public class ReversiTest {
                 "   ox   " +
                 "        " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу походить и перевернуть одну фишку вертикально вверх
@@ -158,7 +167,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(4, 2);
+        hero1.act(4, 2);
         game.tick();
 
         assertE("        " +
@@ -168,7 +177,8 @@ public class ReversiTest {
                 "   oo   " +
                 "    o   " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу походить и перевернуть одну фишку вертикально вниз
@@ -183,7 +193,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(3, 5);
+        hero1.act(3, 5);
         game.tick();
 
         assertE("        " +
@@ -193,7 +203,8 @@ public class ReversiTest {
                 "   ox   " +
                 "        " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я не могу походить если ничего не переверну (вниз)
@@ -208,7 +219,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(4, 5);
+        hero1.act(4, 5);
         game.tick();
 
         assertE("        " +
@@ -218,7 +229,8 @@ public class ReversiTest {
                 "   ox   " +
                 "        " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу одновременно переворачивать в нескольких направлениях
@@ -233,7 +245,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(4, 4);
+        hero1.act(4, 4);
         game.tick();
 
         assertE("        " +
@@ -243,7 +255,8 @@ public class ReversiTest {
                 "    o   " +
                 "    o   " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу переворачивать только в тех направлениях где есть моя фишка через 1
@@ -258,7 +271,7 @@ public class ReversiTest {
                 "        " +
                 "        ");
 
-        hero.act(4, 4);
+        hero1.act(4, 4);
         game.tick();
 
         assertE("        " +
@@ -268,7 +281,8 @@ public class ReversiTest {
                 "    x   " +
                 "        " +
                 "        " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу перевернуть некоторое число фишек в любом направлении
@@ -283,7 +297,7 @@ public class ReversiTest {
                 "    x   " +
                 "    o   ");
 
-        hero.act(4, 4);
+        hero1.act(4, 4);
         game.tick();
 
         assertE("    o   " +
@@ -293,7 +307,8 @@ public class ReversiTest {
                 "    o   " +
                 "    o   " +
                 "    o   " +
-                "    o   ");
+                "    o   ",
+                player1);
     }
 
     // я не могу перевернуть некоторое число фишек в любом направлении если у меня нет
@@ -309,7 +324,7 @@ public class ReversiTest {
                 "    x   " +
                 "        ");
 
-        hero.act(4, 4);
+        hero1.act(4, 4);
         game.tick();
 
         assertE("        " +
@@ -319,7 +334,8 @@ public class ReversiTest {
                 "    x   " +
                 "    x   " +
                 "    x   " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу перевернуть некоторое число фишек в любом направлении только
@@ -335,7 +351,7 @@ public class ReversiTest {
                 "    x   " +
                 "        ");
 
-        hero.act(4, 4);
+        hero1.act(4, 4);
         game.tick();
 
         assertE("    o   " +
@@ -345,7 +361,8 @@ public class ReversiTest {
                 "    x   " +
                 "    x   " +
                 "    x   " +
-                "        ");
+                "        ",
+                player1);
     }
 
     // я могу походить и перевернуть одну фишку диагонально в разные стороны
@@ -360,7 +377,7 @@ public class ReversiTest {
                 " x      " +
                 "o       ");
 
-        hero.act(4, 4);
+        hero1.act(4, 4);
         game.tick();
 
         assertE("       o" +
@@ -370,11 +387,13 @@ public class ReversiTest {
                 "   o o  " +
                 "  o   o " +
                 " o      " +
-                "o       ");
+                "o       ",
+                player1);
     }
+
+    // попробовать походить черными сперва
 
     // TODO я победил когда поле заполнено и моих фишек больше всего
     // TODO я проиграл когда поле заполнено и моих фишек меньше всего
     // TODO сделать валидацию на act(x, y)
-    // TODO попробовать походить черными сперва
 }

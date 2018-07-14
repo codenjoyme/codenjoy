@@ -28,7 +28,13 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
-    private boolean color = true; // TODO а может походить черными?
+    private boolean act;
+    private boolean color;
+
+    public Hero(boolean color) {
+        this.color = color;
+        this.act = false;
+    }
 
     @Override
     public void init(Field field) {
@@ -39,11 +45,15 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
     public void act(int... p) {
         this.x = p[0];
         this.y = p[1];
+        act = true;
     }
 
     @Override
     public void tick() {
-        field.setChip(color, x, y);
+        if (act) {
+            field.setChip(color, x, y);
+            act = false;
+        }
     }
 
     public boolean isAlive() {
