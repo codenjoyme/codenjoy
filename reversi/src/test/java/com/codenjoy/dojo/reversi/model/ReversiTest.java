@@ -482,7 +482,7 @@ public class ReversiTest {
     // я победил когда поле заполнено и моих фишек больше всего
     // я проиграл когда поле заполнено и моих фишек меньше всего
     @Test
-    public void shouldWinLoose_noEmptySpace() {
+    public void shouldWinLoose_noEmptySpace_whiteWin() {
         givenFl("oooooooo" +
                 "oooooooo" +
                 "oooooooo" +
@@ -524,6 +524,57 @@ public class ReversiTest {
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
     }
+    
+    // побеждает черный, когда все поле занято белым
+    @Test
+    public void shouldWinLoose_noEmptySpace_blackWin() {
+        givenFl("xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xOxxxxxx" +
+                "  xOxxxx");
 
+        hero1.act(1, 0);
+        game.tick();
+
+        assertE("XXXXXXXX" +
+                "XXXXXXXX" +
+                "XXXXXXXX" +
+                "XXXXXXXX" +
+                "XXXXXXXX" +
+                "XXXXXXXX" +
+                "XoXXXXXX" +
+                " oooXXXX",
+                player1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        hero2.act(0, 0);
+        game.tick();
+
+        assertE("xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx",
+                player1);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+    
+    // TODO побеждает белый, если черному больше некуда ходить и у него меньше фишек
+    // TODO побеждает белый, если черному больше некуда ходить и у него вообще нет фишек
+    // TODO побеждает черный, если белому больше некуда ходить и у него меньше фишек
+    // TODO побеждает черный, если белому больше некуда ходить и у него вообще нет фишек
+    // TODO игра не идет (ходы игнорятся), даже если тикается, пока не добавится ровано два игрока
+    // TODO проверить что если добавился третий игрок, то вылетает исключение без добавления игрока
     // TODO сделать валидацию на act(x, y)
 }

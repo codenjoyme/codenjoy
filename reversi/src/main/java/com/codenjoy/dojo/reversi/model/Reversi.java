@@ -74,9 +74,8 @@ public class Reversi implements Field {
                 whitePlayer().event(Events.WIN);
                 blackPlayer().event(Events.LOOSE);
             } else if (countBlack > countWhite) {
-                // TODO
-                // whitePlayer().event(Events.LOOSE);
-                // blackPlayer().event(Events.WIN);
+                whitePlayer().event(Events.LOOSE);
+                blackPlayer().event(Events.WIN);
             }
         }
 
