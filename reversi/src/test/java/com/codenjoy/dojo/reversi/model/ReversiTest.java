@@ -271,11 +271,87 @@ public class ReversiTest {
                 "        ");
     }
 
+    // я могу перевернуть некоторое число фишек в любом направлении
+    @Test
+    public void shouldChangeSeveralChips_whenSupportChipInOtherSide() {
+        givenFl("    o   " +
+                "    x   " +
+                "    x   " +
+                "oxxx xxo" +
+                "    x   " +
+                "    x   " +
+                "    x   " +
+                "    o   ");
+
+        hero.act(4, 4);
+        game.tick();
+
+        assertE("    o   " +
+                "    o   " +
+                "    o   " +
+                "oooooooo" +
+                "    o   " +
+                "    o   " +
+                "    o   " +
+                "    o   ");
+    }
+
+    // я не могу перевернуть некоторое число фишек в любом направлении если у меня нет
+    // фишки напротив
+    @Test
+    public void shouldNotChangeSeveralChips_whenNoSupportChipInOtherSide() {
+        givenFl("        " +
+                "    x   " +
+                "    x   " +
+                " xxx xx " +
+                "    x   " +
+                "    x   " +
+                "    x   " +
+                "        ");
+
+        hero.act(4, 4);
+        game.tick();
+
+        assertE("        " +
+                "    x   " +
+                "    x   " +
+                " xxx xx " +
+                "    x   " +
+                "    x   " +
+                "    x   " +
+                "        ");
+    }
+
+    // я могу перевернуть некоторое число фишек в любом направлении только
+    // если у меня есть фишка напротив
+    @Test
+    public void shouldChangeSeveralChips_whenSupportChipInOtherSide_case2() {
+        givenFl("    o   " +
+                "    x   " +
+                "    x   " +
+                "oxxx xx " +
+                "    x   " +
+                "    x   " +
+                "    x   " +
+                "        ");
+
+        hero.act(4, 4);
+        game.tick();
+
+        assertE("    o   " +
+                "    o   " +
+                "    o   " +
+                "oooooxx " +
+                "    x   " +
+                "    x   " +
+                "    x   " +
+                "        ");
+    }
+
     // TODO я могу походить и перевернуть одну фишку диагонально влево вверх
     // TODO я могу походить и перевернуть одну фишку диагонально влево вниз
     // TODO я могу походить и перевернуть одну фишку диагонально вправо вверх
     // TODO я могу походить и перевернуть одну фишку диагонально вправо вних
-    // TODO я могу перевернуть некоторое число фишек в любом направлении
     // TODO я победил когда поле заполнено и моих фишек больше всего
     // TODO я проиграл когда поле заполнено и моих фишек меньше всего
     // TODO сделать валидацию на act(x, y)

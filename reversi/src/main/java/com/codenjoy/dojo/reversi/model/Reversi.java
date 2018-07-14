@@ -83,13 +83,22 @@ public class Reversi implements Field {
         }
     }
 
-    private boolean flipFromChip(Chip chip) {
+    private boolean flipFromChip(Chip current) {
         boolean result = false;
         for (Direction direction : Direction.getValues()) {
-            Chip enemy = getChip(direction.change(chip));
-            if (flippable(chip, enemy, direction)) {
-                enemy.flip();
-                result = true;
+            List<Chip> toFlip = new LinkedList<>();
+            Chip next = current;
+            while (true) {
+                next = getChip(direction.change(next));
+                if (next == Chip.NULL) break;
+
+                if (!next.sameColor(current)) {
+                    toFlip.add(next);
+                } else {
+                    result = !toFlip.isEmpty();
+                    toFlip.forEach(Chip::flip);
+                    break;
+                }
             }
         }
         return result;
@@ -99,7 +108,6 @@ public class Reversi implements Field {
         Chip nextNext = getChip(direction.change(next));
         return !next.sameColor(current) && nextNext.sameColor(current);
     }
-
 
     private Chip getChip(Point chip) {
         return chips.stream()
