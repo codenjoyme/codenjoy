@@ -83,15 +83,15 @@ public class Reversi implements Field {
     }
 
     private void flipFromChip(Chip chip) {
-        Chip enemyChip = getChip(Direction.LEFT.change(chip));
-        enemyChip.flip();
+        getChip(Direction.LEFT.change(chip)).flip(); // TODO устранить дублирование
+        getChip(Direction.RIGHT.change(chip)).flip();
     }
 
     private Chip getChip(Point chip) {
         return chips.stream()
                 .filter(Predicate.isEqual(chip))
                 .findFirst()
-                .orElseThrow(() -> new UnsupportedOperationException());
+                .orElse(Chip.NULL);
     }
 
     public List<Hero> getHeroes() {

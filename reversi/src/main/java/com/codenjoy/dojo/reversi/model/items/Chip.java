@@ -31,6 +31,8 @@ import com.codenjoy.dojo.services.State;
 
 public class Chip extends PointImpl implements State<Elements, Player> {
 
+    public static final Chip NULL = new Chip(false, -1, -1);
+
     private boolean color;
 
     public Chip(boolean color, int x, int y) {
