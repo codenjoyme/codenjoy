@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="engine" />
+        <module name="sample-engine" />
+        <module name="sampletext-engine" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="engine" target="1.8" />
+      <module name="games" target="1.5" />
+      <module name="sample-engine" target="1.8" />
+      <module name="sampletext-engine" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
