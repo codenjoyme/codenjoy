@@ -25,11 +25,13 @@ package com.codenjoy.dojo.reversi.model;
 
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -74,8 +76,22 @@ public class Reversi implements Field {
     public void setChip(boolean color, int x, int y) {
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
-            chips.add(new Chip(color, x, y));
+            Chip chip = new Chip(color, x, y);
+            chips.add(chip);
+            flipFromChip(chip);
         }
+    }
+
+    private void flipFromChip(Chip chip) {
+        Chip enemyChip = getChip(Direction.LEFT.change(chip));
+        enemyChip.flip();
+    }
+
+    private Chip getChip(Point chip) {
+        return chips.stream()
+                .filter(Predicate.isEqual(chip))
+                .findFirst()
+                .orElseThrow(() -> new UnsupportedOperationException());
     }
 
     public List<Hero> getHeroes() {
