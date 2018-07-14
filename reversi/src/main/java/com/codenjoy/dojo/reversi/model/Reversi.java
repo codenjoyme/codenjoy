@@ -85,6 +85,7 @@ public class Reversi implements Field {
     private void flipFromChip(Chip chip) {
         getChip(Direction.LEFT.change(chip)).flip(); // TODO устранить дублирование
         getChip(Direction.RIGHT.change(chip)).flip();
+        getChip(Direction.UP.change(chip)).flip();
     }
 
     private Chip getChip(Point chip) {
