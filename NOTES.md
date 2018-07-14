@@ -1,0 +1,2 @@
+- [Revolution OS](https://www.youtube.com/watch?v=5f322-vseJU) film
+- [Как начать трансляцию на youtube канале](http://bit.ly/juja-34726AED5) doc
