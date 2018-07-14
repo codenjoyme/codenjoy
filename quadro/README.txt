@@ -1,3 +1,4 @@
+5:50
 http://localhost:8080/codenjoy-contest
 
 Чтобы настроить клиент сделай следующее:
