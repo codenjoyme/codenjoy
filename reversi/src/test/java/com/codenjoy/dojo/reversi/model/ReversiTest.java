@@ -545,6 +545,18 @@ public class ReversiTest {
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
+
+        game.tick(); // reset to new game
+
+        assertE("oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oooooooo" +
+                "oXoooooo" +
+                "  oXoooo",
+                player1);
     }
     
     // побеждает черный, когда все поле занято им
@@ -590,6 +602,18 @@ public class ReversiTest {
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
+
+        game.tick(); // reset to new game
+
+        assertE("xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xxxxxxxx" +
+                "xOxxxxxx" +
+                "  xOxxxx",
+                player1);
     }
 
     // побеждает белый, когда не осталось фишек у черного
@@ -635,6 +659,18 @@ public class ReversiTest {
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
+
+        game.tick(); // reset to new game
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "  oXo   " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
     }
 
     // побеждает черный, когда не осталось фишек у белого
@@ -680,6 +716,18 @@ public class ReversiTest {
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
+
+        game.tick(); // reset to new game
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "  xOx   " +
+                "   xxx  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
     }
 
     // побеждает белый, когда не осталось куда ходить обоим и у черного фишек меньше
@@ -725,6 +773,18 @@ public class ReversiTest {
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
+
+        game.tick(); // reset to new game
+
+        assertE("       X" +
+                "        " +
+                "        " +
+                "  oXo   " +
+                "   ooo  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
     }
 
     // побеждает черный, когда не осталось куда ходить обоим и у черного фишек меньше
@@ -770,6 +830,18 @@ public class ReversiTest {
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
+
+        game.tick(); // reset to new game
+
+        assertE("       O" +
+                "        " +
+                "        " +
+                "  xOx   " +
+                "   xxx  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
     }
 
     // сделать валидацию на act(x, y)
@@ -1229,63 +1301,24 @@ public class ReversiTest {
                 player1);
     }
 
-    // если патовая ситуация, то конец игры
+    // если патовая ситуация на старте, то исключение
     @Test
-    public void shouldWinLoose_ifNoWay_whiteAndBlack_black() {
-        givenFl("   xx   " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "   OO   ");
+    public void shouldBadInputLevel() {
 
-        game.tick();
-
-        assertE("   XX   " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "   oo   ",
-                player1);
-
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.WIN);
+        try {
+            givenFl("   xx   " +
+                    "        " +
+                    "        " +
+                    "        " +
+                    "        " +
+                    "        " +
+                    "        " +
+                    "   OO   ");
+            fail();
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Изначально патовая ситуация", exception.getMessage());
+        }
     }
-
-    // если патовая ситуация, то конец игры
-    @Test
-    public void shouldWinLoose_ifNoWay_whiteAndBlack_white() {
-        givenFl("   XX   " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "   oo   ");
-
-        game.tick();
-
-        assertE("   xx   " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "   OO   ",
-                player1);
-
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.WIN);
-    }
-
-    // TODO если кто-то победил, тогда игра начинается снова с теми же пользователями
 
     // TODO добавить препятствия на поле
 }

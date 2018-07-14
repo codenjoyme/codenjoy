@@ -45,15 +45,16 @@ public class Reversi implements Field {
     private List<Chip> chips;
     private List<Player> players;
     private final int size;
+    private Level level;
     private Dice dice;
     private boolean currentColor;
 
     public Reversi(Level level, Dice dice) {
+        this.level = level;
         this.dice = dice;
         size = level.size();
         players = new LinkedList<>();
-        chips = level.chips(this);
-        currentColor = level.currentColor();
+        resetField(level);
         if (!canFlip(currentColor)) {
             nextTurn();
             if (!canFlip(currentColor) && !canFlip(!currentColor)) {
@@ -62,11 +63,23 @@ public class Reversi implements Field {
         }
     }
 
+    private void resetField(Level level) {
+        chips = level.chips(this);
+        currentColor = level.currentColor();
+        if (isGameOver()) {
+            throw new IllegalArgumentException("Изначально патовая ситуация");
+        }
+    }
+
     @Override
     public void tick() {
+        if (isGameOver()) {
+            resetField(level);
+            return;
+        }
+
         for (Player player : players) {
             Hero hero = player.getHero();
-
             hero.tick();
         }
 
@@ -74,20 +87,19 @@ public class Reversi implements Field {
             return;
         }
 
-        checkWin();
+        if (isGameOver()) {
+            whoWin();
+        }
         nextTurn();
     }
 
-    private void checkWin() {
+    private boolean isGameOver() {
         long countWhite = chips(true).size();
         long countBlack = chips(false).size();
-        if (isCompletelyFilled()
+        return isCompletelyFilled()
                 || !canFlip(true) && !canFlip(false)
                 || countBlack == 0
-                || countWhite == 0)
-        {
-            whoWin(countWhite, countBlack);
-        }
+                || countWhite == 0;
     }
 
     private void nextTurn() {
@@ -135,7 +147,10 @@ public class Reversi implements Field {
         return chips.size() == size*size;
     }
 
-    private void whoWin(long countWhite, long countBlack) {
+    private void whoWin() {
+        long countWhite = chips(true).size();
+        long countBlack = chips(false).size();
+
         if (countWhite == countBlack) {
             whitePlayer().event(Events.WIN);
             blackPlayer().event(Events.WIN);
