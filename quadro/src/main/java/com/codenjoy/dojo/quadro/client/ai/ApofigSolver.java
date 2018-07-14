@@ -45,83 +45,15 @@ import java.util.List;
  */
 public class ApofigSolver implements Solver<Board> {
 
-    private DeikstraFindWay way;
     private Dice dice;
 
     public ApofigSolver(Dice dice) {
         this.dice = dice;
-        this.way = new DeikstraFindWay();
-    }
-
-    public DeikstraFindWay.Possible possible(final Board board) {
-        return new DeikstraFindWay.Possible() {
-            @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isBarrierAt(x, y)) return false;
-                if (board.isBombAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.isBarrierAt(nx, ny)) return false;
-                if (board.isBombAt(nx, ny)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
-            }
-        };
     }
 
     @Override
     public String get(final Board board) {
-        if (board.isGameOver()) return "";
-        List<Direction> result = getDirections(board);
-        if (result.isEmpty()) return "";
-        return result.get(0).toString() + getBombIfNeeded(board);
-    }
-
-    private String getBombIfNeeded(Board board) {
-        Point me = board.getMe();
-        if (me.getX() % 2 == 0 && me.getY() % 2 == 0) {
-            return ", ACT";
-        } else {
-            return "";
-        }
-    }
-
-    public List<Direction> getDirections(Board board) {
-        int size = board.size();
-        if (bombsNear(board)) {
-            return Arrays.asList(Direction.random(dice));
-        }
-
-        Point from = board.getMe();
-        List<Point> to = board.get(Elements.GOLD);
-        DeikstraFindWay.Possible map = possible(board);
-        return way.getShortestWay(size, from, to, map);
-    }
-
-    // TODO fix Deikstra find way
-    private boolean bombsNear(Board board) {
-        Point me = board.getMe();
-        Point atLeft = Direction.LEFT.change(me);
-        Point atRight = Direction.RIGHT.change(me);
-        Point atUp = Direction.UP.change(me);
-        Point atDown = Direction.DOWN.change(me);
-
-        return board.isAt(atLeft.getX(), atLeft.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atRight.getX(), atRight.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);
+        return "ACT(1,1)";
     }
 
     public static void main(String[] args) {

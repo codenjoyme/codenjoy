@@ -23,17 +23,15 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.quadro.model.items.Gold;
-import com.codenjoy.dojo.quadro.model.items.Wall;
+import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.quadro.model.Elements.GOLD;
-import static com.codenjoy.dojo.quadro.model.Elements.HERO;
-import static com.codenjoy.dojo.quadro.model.Elements.WALL;
+import static com.codenjoy.dojo.quadro.model.Elements.YELLOW_CHIP;
+import static com.codenjoy.dojo.quadro.model.Elements.RED_CHIP;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -55,25 +53,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Hero> getHero() {
-        return pointsOf(HERO).stream()
-                .map(Hero::new)
-                .collect(toList());
-
-    }
-
-    @Override
-    public List<Gold> getGold() {
-        return pointsOf(GOLD).stream()
-                .map(Gold::new)
-                .collect(toList());
-    }
-
-    @Override
-    public List<Wall> getWalls() {
-        return pointsOf(WALL).stream()
-                .map(Wall::new)
-                .collect(toList());
+    public List<Chip> getChips() {
+        return new LinkedList<Chip>() {{
+            addAll(pointsOf(YELLOW_CHIP).stream()
+                    .map(pt -> new Chip(true, pt))
+                    .collect(toList()));
+            addAll(pointsOf(RED_CHIP).stream()
+                    .map(pt -> new Chip(false, pt))
+                    .collect(toList()));
+        }};
     }
 
     private List<Point> pointsOf(Elements element) {

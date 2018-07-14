@@ -23,8 +23,7 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.quadro.model.items.Gold;
-import com.codenjoy.dojo.quadro.model.items.Wall;
+import com.codenjoy.dojo.quadro.model.items.Chip;
 
 import java.util.List;
 
@@ -34,13 +33,9 @@ import java.util.List;
 public interface Level {
 
     /**
-     * @return Размер поля (обязательно квадратное)
+     * @return Размер поля
      */
     int getSize();
 
-    List<Wall> getWalls();
-
-    List<Hero> getHero();
-
-    List<Gold> getGold();
+    List<Chip> getChips();
 }
