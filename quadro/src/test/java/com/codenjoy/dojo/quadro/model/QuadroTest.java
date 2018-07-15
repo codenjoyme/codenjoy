@@ -207,7 +207,7 @@ public class QuadroTest {
                         "         " +
                         "         " +
                         "         " +
-                        "    x    ",
+                        "    o    ",
                 player1);
     }
 
@@ -222,7 +222,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "    x    ");
+                "    o    ");
 
         hero1.act(4);
         game.tick();
@@ -234,8 +234,8 @@ public class QuadroTest {
                         "         " +
                         "         " +
                         "         " +
-                        "    x    " +
-                        "    x    ",
+                        "    o    " +
+                        "    o    ",
                 player1);
     }
 
@@ -263,7 +263,7 @@ public class QuadroTest {
                         "         " +
                         "         " +
                         "         " +
-                        "    o    ",
+                        "    x    ",
                 player1);
     }
 
@@ -277,9 +277,9 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "    x    " +
-                "    x    " +
-                "    x    ");
+                "    o    " +
+                "    o    " +
+                "    o    ");
 
         hero1.act(4);
         game.tick();
@@ -289,10 +289,10 @@ public class QuadroTest {
                         "         " +
                         "         " +
                         "         " +
-                        "    x    " +
-                        "    x    " +
-                        "    x    " +
-                        "    x    ",
+                        "    o    " +
+                        "    o    " +
+                        "    o    " +
+                        "    o    ",
                 player1);
     }
 
