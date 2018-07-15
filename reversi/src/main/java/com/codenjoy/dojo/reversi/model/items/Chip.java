@@ -45,6 +45,12 @@ public class Chip extends PointImpl implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        boolean itsMyTurn = player.color() == field.currentColor();
+        boolean itsMyChip = player.color() == color;
+        if (!itsMyTurn && itsMyChip) {
+            return Elements.NOT_YOUR_TURN;
+        }
+
         if (color == true) {
             if (field.currentColor() == color) {
                 return Elements.WHITE_TURN;

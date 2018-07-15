@@ -53,9 +53,12 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        if (board.isGameOver()) return "";
+        if (!board.isMyTurn()) return "";
 
-        return Direction.UP.toString();
+        int x = 0;
+        int y = 0;
+
+        return String.format("ACT(%s,%s)", x, y);
     }
 
     public static void main(String[] args) {

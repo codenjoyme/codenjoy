@@ -24,6 +24,7 @@ package com.codenjoy.dojo.reversi.model;
 
 
 import com.codenjoy.dojo.reversi.services.Events;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -75,8 +76,28 @@ public class ReversiTest {
     }
 
     private void assertE(String expected, Player player) {
-        assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player).print());
+        Object actualOne = printer.getPrinter(game.reader(), player).print();
+        String expectedOne = TestUtils.injectN(expected);
+        assertEquals(expectedOne, actualOne);
+
+        assertE2(expectedOne, player);
+    }
+
+    private void assertE2(String expectedOne, Player player) {
+        if (game.getHeroes().size() != 2) {
+            return;
+        }
+
+        Object actualAnother = printer.getPrinter(game.reader(), another(player)).print();
+        String expectedAnother = (player == player1)
+                ? expectedOne.replaceAll("x", "-")
+                : expectedOne.replaceAll("o", "-");
+
+        assertEquals(expectedAnother, actualAnother);
+    }
+
+    private GamePlayer another(Player player) {
+        return (player == player1) ? player2 : player1;
     }
 
     // поле изначально инциализировалось 4 фишками по 2 на каждый цвет
@@ -101,27 +122,7 @@ public class ReversiTest {
                 "        ",
                 player1);
 
-        assertE("        " +
-                "        " +
-                "        " +
-                "   xO   " +
-                "   Ox   " +
-                "        " +
-                "        " +
-                "        ",
-                player2);
-
         game.tick();
-
-        assertE("        " +
-                "        " +
-                "        " +
-                "   Xo   " +
-                "   oX   " +
-                "        " +
-                "        " +
-                "        ",
-                player1);
 
         assertE("        " +
                 "        " +
@@ -157,7 +158,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу походить и перевернуть одну фишку горизонтально вправо
@@ -183,7 +184,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу походить и перевернуть одну фишку вертикально вверх
@@ -209,7 +210,7 @@ public class ReversiTest {
                 "    o   " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу походить и перевернуть одну фишку вертикально вниз
@@ -235,7 +236,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я не могу походить если ничего не переверну (вниз)
@@ -261,7 +262,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу одновременно переворачивать в нескольких направлениях
@@ -287,7 +288,7 @@ public class ReversiTest {
                 "    o   " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу переворачивать только в тех направлениях где есть моя фишка через 1
@@ -313,7 +314,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу перевернуть некоторое число фишек в любом направлении
@@ -339,7 +340,7 @@ public class ReversiTest {
                 "    o   " +
                 "    o   " +
                 "    o   ",
-                player1);
+                player2);
     }
 
     // я не могу перевернуть некоторое число фишек в любом направлении если у меня нет
@@ -391,7 +392,7 @@ public class ReversiTest {
                 "    o   " +
                 "    o   " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу перевернуть некоторое число фишек в любом направлении только
@@ -418,7 +419,7 @@ public class ReversiTest {
                 "    X   " +
                 "    X   " +
                 "        ",
-                player1);
+                player2);
     }
 
     // я могу походить и перевернуть одну фишку диагонально в разные стороны
@@ -444,7 +445,7 @@ public class ReversiTest {
                 "  o   o " +
                 " o      " +
                 "o       ",
-                player1);
+                player2);
     }
 
     // попробовать походить черными сперва - не получится
@@ -472,7 +473,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         hero1.act(5, 3);
         hero2.act(5, 4);
@@ -499,7 +500,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // побеждает белый, когда все поле занято им
@@ -541,7 +542,7 @@ public class ReversiTest {
                 "oooooooo" +
                 "oooooooo" +
                 "oooooooo",
-                player1);
+                player2);
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
@@ -556,7 +557,7 @@ public class ReversiTest {
                 "oooooooo" +
                 "oXoooooo" +
                 "  oXoooo",
-                player1);
+                player2);
     }
     
     // побеждает черный, когда все поле занято им
@@ -582,7 +583,7 @@ public class ReversiTest {
                 "XXXXXXXX" +
                 "XoXXXXXX" +
                 " oooXXXX",
-                player1);
+                player2);
 
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
@@ -655,7 +656,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
@@ -670,7 +671,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // побеждает черный, когда не осталось фишек у белого
@@ -696,7 +697,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
@@ -769,7 +770,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
@@ -784,7 +785,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // побеждает черный, когда не осталось куда ходить обоим и у черного фишек меньше
@@ -810,7 +811,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
@@ -867,7 +868,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     @Test
@@ -892,7 +893,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     @Test
@@ -917,7 +918,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     @Test
@@ -942,7 +943,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // игра не идет (ходы игнорятся), даже если тикается, пока не добавится
@@ -990,7 +991,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         hero2.act(2, 3);
         game.tick();
@@ -1030,7 +1031,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         game.newGame(player1);
         hero1 = player1.hero;
@@ -1061,7 +1062,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // если добавился третий игрок, то вылетает исключение без добавления игрока
@@ -1113,7 +1114,7 @@ public class ReversiTest {
                 " Xo " +
                 " ooo" +
                 "    ",
-                player1);
+                player2);
     }
 
     @Test
@@ -1148,7 +1149,7 @@ public class ReversiTest {
                 "            " +
                 "            " +
                 "            ",
-                player1);
+                player2);
     }
 
     // белый на старте походить не может, ход передается черному
@@ -1171,7 +1172,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // черный на старте походить не может, ход передается белому
@@ -1220,7 +1221,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         hero2.act(6, 7);
         game.tick();
@@ -1233,7 +1234,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
 
         hero2.act(2, 5);
         game.tick();
@@ -1298,7 +1299,7 @@ public class ReversiTest {
                 "        " +
                 "        " +
                 "        ",
-                player1);
+                player2);
     }
 
     // если патовая ситуация на старте, то исключение

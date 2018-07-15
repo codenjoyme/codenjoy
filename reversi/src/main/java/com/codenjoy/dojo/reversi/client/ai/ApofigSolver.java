@@ -39,7 +39,9 @@ public class ApofigSolver implements Solver<Board> {
 
     @Override
     public String get(final Board board) {
-        return "ACT(1,1)";
+        return String.format("ACT(%s,%s)",
+                dice.next(board.size()),
+                dice.next(board.size()));
     }
 
     public static void main(String[] args) {

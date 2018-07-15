@@ -27,11 +27,12 @@ import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum Elements implements CharElements {
 
-    NONE(' '),       // пустое место для фишки
-    WHITE('o'),      // белые фишки, ходят черные
-    WHITE_TURN('O'), // белые фишки, ходят белые
-    BLACK('x'),      // черные фишки, ходят белые
-    BLACK_TURN('X'); // черные фишки, ходят черные
+    NONE(' '),          // пустое место для фишки
+    NOT_YOUR_TURN('-'), // этим "цветом" помечаются твои фишки когда ход не твой
+    WHITE('o'),         // белые фишки, ходят черные
+    WHITE_TURN('O'),    // белые фишки, ходят белые
+    BLACK('x'),         // черные фишки, ходят белые
+    BLACK_TURN('X');    // черные фишки, ходят черные
 
     final char ch;
 

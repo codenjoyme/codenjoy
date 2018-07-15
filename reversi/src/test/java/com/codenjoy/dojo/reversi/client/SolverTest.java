@@ -51,42 +51,46 @@ public class SolverTest {
 
     @Test
     public void should() {
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ $   ☼" +
-                "☼     ☼" +
-                "☼ ☺ $ ☼" +
-                "☼  ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+        asertAI("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ", "ACT(0,0)");
 
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ $   ☼" +
-                "☼ ☺   ☼" +
-                "☼   $ ☼" +
-                "☼  ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+        asertAI("        " +
+                "        " +
+                "        " +
+                "  ---   " +
+                "   -X   " +
+                "        " +
+                "        " +
+                "        ", "");
 
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ ☺   ☼" +
-                "☼     ☼" +
-                "☼   $ ☼" +
-                "☼$ ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+        asertAI("        " +
+                "        " +
+                "        " +
+                "  OOO   " +
+                "  xxx   " +
+                "        " +
+                "        " +
+                "        ", "ACT(0,0)");
 
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼ ☺x  ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼   $ ☼" +
-                "☼$ ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+        asertAI("        " +
+                "        " +
+                "        " +
+                "   ---  " +
+                "   X--  " +
+                "     -  " +
+                "        " +
+                "        ", "");
     }
 
-    private void asertAI(String board, Direction expected) {
+    private void asertAI(String board, String expected) {
         String actual = ai.get(board(board));
-        assertEquals(expected.toString(), actual);
+        assertEquals(expected, actual);
     }
 
     private void dice(Direction direction) {

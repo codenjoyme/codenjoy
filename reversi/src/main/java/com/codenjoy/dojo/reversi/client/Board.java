@@ -53,7 +53,7 @@ public class Board extends AbstractBoard<Elements> {
         return isAt(x, y, Elements.BLACK);
     }
 
-    public boolean isGameOver() {
-        return false;
+    public boolean isMyTurn() {
+        return get(Elements.NOT_YOUR_TURN).isEmpty();
     }
 }

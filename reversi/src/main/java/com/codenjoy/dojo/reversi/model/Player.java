@@ -66,4 +66,8 @@ public class Player extends GamePlayer<Hero, Field> {
     public boolean isWhite() {
         return hero.color();
     }
+
+    public boolean color() {
+        return hero.color();
+    }
 }
