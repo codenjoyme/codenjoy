@@ -34,11 +34,7 @@ public enum Elements implements CharElements {
 
     NONE(' '),        // пустое поле
     YELLOW('o'),      // желтая фишка
-    RED('x'),         // красная фишка
-
-    // TODO: пока не востребовано
-    RED_TURN('X'),    // красная фишка, ходят красные
-    YELLOW_TURN('O'); // желтая фишка, ходят желтые
+    RED('x');         // красная фишка
 
     final char ch;
 
