@@ -36,9 +36,14 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void event(Events event) {
-        switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+        if (event.isLoose()) {
+            gameOver();
+        }
+        if (event.isFlip()) {
+            increaseScore();
+        }
+        if (event.isWin()) {
+            // do nothing
         }
 
         super.event(event);

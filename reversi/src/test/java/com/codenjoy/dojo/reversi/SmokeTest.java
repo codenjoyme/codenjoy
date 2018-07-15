@@ -105,6 +105,7 @@ public class SmokeTest {
                         "2:    \n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:    \n" +
@@ -121,6 +122,7 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:2\n" +
                         "2:Answer: ACT(2,3)\n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  x \n" +
@@ -137,6 +139,7 @@ public class SmokeTest {
                         "2:    \n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X-\n" +
@@ -153,6 +156,7 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:1\n" +
                         "2:Answer: ACT(0,1)\n" +
+                        "Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -169,6 +173,7 @@ public class SmokeTest {
                         "2:    \n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X-\n" +
@@ -185,6 +190,7 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:3\n" +
                         "2:Answer: ACT(3,1)\n" +
+                        "Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -201,6 +207,7 @@ public class SmokeTest {
                         "2:  O \n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X-\n" +
@@ -217,6 +224,7 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:2\n" +
                         "2:Answer: ACT(3,2)\n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -233,6 +241,7 @@ public class SmokeTest {
                         "2:O O \n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X-\n" +
@@ -250,6 +259,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE_CORRECTED < 1 :0\n" +
                         "2:Answer: ACT(1,0)\n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -266,6 +276,7 @@ public class SmokeTest {
                         "2:O-OO\n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:- X-\n" +
@@ -282,8 +293,9 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:0\n" +
                         "2:Answer: ACT(1,3)\n" +
-                        "Fire Event: WIN\n" +
-                        "Fire Event: LOOSE\n" +
+                        "Fire Event: FLIP:1\n" +
+                        "Fire Event: WIN:1\n" +
+                        "Fire Event: LOOSE:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:OxxO\n" +
@@ -315,6 +327,7 @@ public class SmokeTest {
                         "2:    \n" +
                         "2:\n" +
                         "2:Answer: \n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1: -  \n" +
@@ -332,6 +345,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
                         "2:Answer: ACT(0,1)\n" +
+                        "Fire Event: FLIP:1\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

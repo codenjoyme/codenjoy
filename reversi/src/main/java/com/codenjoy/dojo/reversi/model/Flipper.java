@@ -68,12 +68,12 @@ public class Flipper {
         return !turns(color).isEmpty();
     }
 
-    public boolean flipFromChip(Chip current) {
-        boolean result = false;
+    public int flip(Chip current) {
+        int count = 0;
         for (QDirection direction : directions()){
-            result |= current.flip(direction);
+            count += current.flip(direction);
         }
-        return result;
+        return count;
     }
 
     private List<QDirection> directions() {

@@ -22,11 +22,68 @@ package com.codenjoy.dojo.reversi.services;
  * #L%
  */
 
+public class Events {
 
-/**
- * Ивенты, которые могут возникать в игре опиши тут. Что есть ивенты? ну убили твоего героя и ты хочешь ему очков начислить штрафных
- * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
- */
-public enum Events {
-    WIN, LOOSE;
+    private static final String WIN = "WIN";
+    private static final String LOOSE = "LOOSE";
+    private static final String FLIP = "FLIP";
+
+    private String name;
+    private int count;
+
+    public Events(String name, int count) {
+        this.name = name;
+        this.count = count;
+    }
+
+    public static Events WIN() {
+        return new Events(WIN, 1);
+    }
+
+    public static Events LOOSE() {
+        return new Events(LOOSE, 1);
+    }
+
+    public static Events FLIP(int count) {
+        return new Events(FLIP, count);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s", name, count);
+    }
+
+    public boolean isFlip() {
+        return name.equals(FLIP);
+    }
+
+    public int count() {
+        return count;
+    }
+
+    public boolean isLoose() {
+        return name.equals(LOOSE);
+    }
+
+    public boolean isWin() {
+        return name.equals(WIN);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Events events = (Events) o;
+
+        if (count != events.count) return false;
+        return name.equals(events.name);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + count;
+        return result;
+    }
 }

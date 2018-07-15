@@ -28,6 +28,7 @@ import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.Player;
 import com.codenjoy.dojo.services.*;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 public class Chip extends PointImpl implements State<Elements, Player> {
@@ -74,8 +75,13 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         return color == chip.color;
     }
 
-    public boolean flip(QDirection direction) {
-        return flip(this, direction, chip -> chip.flip());
+    public int flip(QDirection direction) {
+        AtomicInteger count = new AtomicInteger(0);
+        flip(this, direction, chip -> {
+            chip.flip();
+            count.incrementAndGet();
+        });
+        return count.get();
     }
 
     public boolean flip(Chip start, QDirection direction, Consumer<Chip> onflip) {

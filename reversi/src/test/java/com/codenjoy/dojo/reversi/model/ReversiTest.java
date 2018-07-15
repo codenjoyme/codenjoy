@@ -24,17 +24,19 @@ package com.codenjoy.dojo.reversi.model;
 
 
 import com.codenjoy.dojo.reversi.services.Events;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -133,6 +135,8 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verifyNoMoreInteractions();
     }
 
     // я могу походить и перевернуть одну фишку горизонтально влево
@@ -159,6 +163,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // я могу походить и перевернуть одну фишку горизонтально вправо
@@ -185,6 +192,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // я могу походить и перевернуть одну фишку вертикально вверх
@@ -211,6 +221,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // я могу походить и перевернуть одну фишку вертикально вниз
@@ -237,6 +250,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // я не могу походить если ничего не переверну (вниз)
@@ -263,13 +279,15 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verifyNoMoreInteractions();
     }
 
     // я могу одновременно переворачивать в нескольких направлениях
     @Test
     public void shouldChangeChipsInAllDirections() {
-        givenFl("        " +
-                "    O   " +
+        givenFl("x       " +
+                "O   O   " +
                 "    x   " +
                 "  Ox xO " +
                 "    x   " +
@@ -280,8 +298,8 @@ public class ReversiTest {
         hero1.act(4, 4);
         game.tick();
 
-        assertE("        " +
-                "    o   " +
+        assertE("X       " +
+                "o   o   " +
                 "    o   " +
                 "  ooooo " +
                 "    o   " +
@@ -289,6 +307,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(4));
+        verifyNoMoreInteractions();
     }
 
     // я могу переворачивать только в тех направлениях где есть моя фишка через 1
@@ -315,13 +336,16 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // я могу перевернуть некоторое число фишек в любом направлении
     @Test
     public void shouldChangeSeveralChips_whenSupportChipInOtherSide() {
-        givenFl("    O   " +
-                "    x   " +
+        givenFl("x   O   " +
+                "O   x   " +
                 "    x   " +
                 "Oxxx xxO" +
                 "    x   " +
@@ -332,8 +356,8 @@ public class ReversiTest {
         hero1.act(4, 4);
         game.tick();
 
-        assertE("    o   " +
-                "    o   " +
+        assertE("X   o   " +
+                "o   o   " +
                 "    o   " +
                 "oooooooo" +
                 "    o   " +
@@ -341,6 +365,9 @@ public class ReversiTest {
                 "    o   " +
                 "    o   ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(10));
+        verifyNoMoreInteractions();
     }
 
     // я не могу перевернуть некоторое число фишек в любом направлении если у меня нет
@@ -368,6 +395,8 @@ public class ReversiTest {
                 "    x   " +
                 "        ",
                 player1);
+
+        verifyNoMoreInteractions();
     }
 
     @Test
@@ -393,6 +422,8 @@ public class ReversiTest {
                 "    o   " +
                 "        ",
                 player2);
+
+        verifyNoMoreInteractions();
     }
 
     // я могу перевернуть некоторое число фишек в любом направлении только
@@ -420,13 +451,16 @@ public class ReversiTest {
                 "    X   " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(5));
+        verifyNoMoreInteractions();
     }
 
     // я могу походить и перевернуть одну фишку диагонально в разные стороны
     @Test
     public void shouldChangeSeveralChips_whenWhenDiagonalDirections() {
-        givenFl("       O" +
-                "  O   x " +
+        givenFl("x      O" +
+                "O O   x " +
                 "   x x  " +
                 "        " +
                 "   x x  " +
@@ -437,8 +471,8 @@ public class ReversiTest {
         hero1.act(4, 4);
         game.tick();
 
-        assertE("       o" +
-                "  o   o " +
+        assertE("X      o" +
+                "o o   o " +
                 "   o o  " +
                 "    o   " +
                 "   o o  " +
@@ -446,6 +480,9 @@ public class ReversiTest {
                 " o      " +
                 "o       ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(7));
+        verifyNoMoreInteractions();
     }
 
     // попробовать походить черными сперва - не получится
@@ -465,6 +502,8 @@ public class ReversiTest {
         hero2.act(5, 4);
         game.tick();
 
+        verifyNoMoreInteractions();
+
         assertE("        " +
                 "        " +
                 "        " +
@@ -479,6 +518,9 @@ public class ReversiTest {
         hero2.act(5, 4);
         game.tick();
 
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
+
         assertE("        " +
                 "        " +
                 "        " +
@@ -491,6 +533,9 @@ public class ReversiTest {
 
         hero1.act(5, 3);
         game.tick();
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         assertE("        " +
                 "        " +
@@ -528,8 +573,9 @@ public class ReversiTest {
                 " xxxOOOO",
                 player1);
 
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
+
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         hero1.act(0, 0);
         game.tick();
@@ -544,8 +590,10 @@ public class ReversiTest {
                 "oooooooo",
                 player2);
 
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener1).event(Events.FLIP(4));
+        verify(listener1).event(Events.WIN());
+        verify(listener2).event(Events.LOOSE());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -585,8 +633,8 @@ public class ReversiTest {
                 " oooXXXX",
                 player2);
 
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         hero2.act(0, 0);
         game.tick();
@@ -601,8 +649,10 @@ public class ReversiTest {
                 "xxxxxxxx",
                 player1);
 
-        verify(listener1).event(Events.LOOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Events.LOOSE());
+        verify(listener2).event(Events.FLIP(4));
+        verify(listener2).event(Events.WIN());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -642,8 +692,8 @@ public class ReversiTest {
                 "        ",
                 player1);
 
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         hero1.act(0, 4);
         game.tick();
@@ -658,8 +708,10 @@ public class ReversiTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener1).event(Events.FLIP(3));
+        verify(listener1).event(Events.WIN());
+        verify(listener2).event(Events.LOOSE());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -699,8 +751,8 @@ public class ReversiTest {
                 "        ",
                 player2);
 
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         hero2.act(0, 4);
         game.tick();
@@ -715,8 +767,10 @@ public class ReversiTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Events.LOOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Events.LOOSE());
+        verify(listener2).event(Events.FLIP(3));
+        verify(listener2).event(Events.WIN());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -756,8 +810,8 @@ public class ReversiTest {
                 "        ",
                 player1);
 
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         hero1.act(0, 4);
         game.tick();
@@ -772,8 +826,11 @@ public class ReversiTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
+
+        verify(listener1).event(Events.FLIP(3));
+        verify(listener1).event(Events.WIN());
+        verify(listener2).event(Events.LOOSE());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -813,8 +870,8 @@ public class ReversiTest {
                 "        ",
                 player2);
 
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
 
         hero2.act(0, 4);
         game.tick();
@@ -829,8 +886,10 @@ public class ReversiTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Events.LOOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Events.LOOSE());
+        verify(listener2).event(Events.FLIP(3));
+        verify(listener2).event(Events.WIN());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -944,6 +1003,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // игра не идет (ходы игнорятся), даже если тикается, пока не добавится
@@ -1115,6 +1177,9 @@ public class ReversiTest {
                 " ooo" +
                 "    ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     @Test
@@ -1150,6 +1215,9 @@ public class ReversiTest {
                 "            " +
                 "            ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // белый на старте походить не может, ход передается черному
@@ -1223,6 +1291,9 @@ public class ReversiTest {
                 "        ",
                 player2);
 
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
+
         hero2.act(6, 7);
         game.tick();
 
@@ -1236,6 +1307,9 @@ public class ReversiTest {
                 "        ",
                 player2);
 
+        verify(listener2).event(Events.FLIP(3));
+        verifyNoMoreInteractions();
+
         hero2.act(2, 5);
         game.tick();
 
@@ -1248,6 +1322,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player1);
+
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // после хода белого у черного не осталось ходов и он пропускает
@@ -1275,6 +1352,9 @@ public class ReversiTest {
                 "        ",
                 player1);
 
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
+
         hero1.act(6, 7);
         game.tick();
 
@@ -1288,8 +1368,12 @@ public class ReversiTest {
                 "        ",
                 player1);
 
+        verify(listener1).event(Events.FLIP(3));
+        verifyNoMoreInteractions();
+
         hero1.act(2, 5);
         game.tick();
+
 
         assertE("  ooooo " +
                 "   oX   " +
@@ -1300,6 +1384,9 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
     }
 
     // если патовая ситуация на старте, то исключение
@@ -1346,6 +1433,8 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+
+        verifyNoMoreInteractions();
     }
 
     @Test
@@ -1371,6 +1460,8 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player1);
+
+        verifyNoMoreInteractions();
     }
 
     // препятствие не фигурирует как место куда потенциально можно поставить фишку
@@ -1399,6 +1490,9 @@ public class ReversiTest {
                 "        ",
                 player2);
 
+        verify(listener2).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
+
         hero2.act(1, 7);
         game.tick();
 
@@ -1412,8 +1506,10 @@ public class ReversiTest {
                 "        ",
                 player1);
 
-        verify(listener1).event(Events.LOOSE);
-        verify(listener2).event(Events.WIN);
+        verify(listener1).event(Events.LOOSE());
+        verify(listener2).event(Events.FLIP(1));
+        verify(listener2).event(Events.WIN());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 
@@ -1426,6 +1522,13 @@ public class ReversiTest {
                 "        " +
                 "        ",
                 player2);
+    }
+
+    private void verifyNoMoreInteractions() {
+        Mockito.verifyNoMoreInteractions(listener1);
+        Mockito.verifyNoMoreInteractions(listener2);
+        Mockito.reset(listener1);
+        Mockito.reset(listener2);
     }
 
     // препятствие не фигурирует как место куда потенциально можно поставить фишку
@@ -1454,6 +1557,9 @@ public class ReversiTest {
                 "        ",
                 player1);
 
+        verify(listener1).event(Events.FLIP(1));
+        verifyNoMoreInteractions();
+
         hero1.act(1, 7);
         game.tick();
 
@@ -1467,8 +1573,10 @@ public class ReversiTest {
                 "        ",
                 player2);
 
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
+        verify(listener1).event(Events.FLIP(1));
+        verify(listener1).event(Events.WIN());
+        verify(listener2).event(Events.LOOSE());
+        verifyNoMoreInteractions();
 
         game.tick(); // reset to new game
 

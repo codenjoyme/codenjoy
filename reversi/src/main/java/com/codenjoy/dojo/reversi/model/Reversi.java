@@ -140,23 +140,27 @@ public class Reversi implements Field {
         long countBlack = chips(false).size();
 
         if (countWhite == countBlack) {
-            whitePlayer().event(Events.WIN);
-            blackPlayer().event(Events.WIN);
+            whitePlayer().event(Events.WIN());
+            blackPlayer().event(Events.WIN());
         } else if (countBlack < countWhite) {
-            whitePlayer().event(Events.WIN);
-            blackPlayer().event(Events.LOOSE);
+            whitePlayer().event(Events.WIN());
+            blackPlayer().event(Events.LOOSE());
         } else if (countBlack > countWhite) {
-            whitePlayer().event(Events.LOOSE);
-            blackPlayer().event(Events.WIN);
+            whitePlayer().event(Events.LOOSE());
+            blackPlayer().event(Events.WIN());
         }
     }
 
     private Player whitePlayer() {
-        return players.stream().filter(Player::isWhite).findFirst().get();
+        return player(true);
     }
 
     private Player blackPlayer() {
-        return players.stream().filter(Player::isBlack).findFirst().get();
+        return player(false);
+    }
+
+    private Player player(boolean color) {
+        return players.stream().filter(player -> player.color() == color).findFirst().get();
     }
 
     @Override
@@ -223,7 +227,9 @@ public class Reversi implements Field {
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
             Chip chip = new Chip(color, pt, this);
-            if (flipper.flipFromChip(chip)){
+            int count = flipper.flip(chip);
+            if (count > 0){
+                player(color).event(Events.FLIP(count));
                 chips.add(chip);
             }
         }

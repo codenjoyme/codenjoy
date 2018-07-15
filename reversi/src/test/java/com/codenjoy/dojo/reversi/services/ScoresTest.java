@@ -38,13 +38,18 @@ public class ScoresTest {
     private Settings settings;
     private Integer loosePenalty;
     private Integer winScore;
+    private Integer flipScore;
 
     public void loose() {
-        scores.event(Events.LOOSE);
+        scores.event(Events.LOOSE());
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(Events.WIN());
+    }
+
+    public void flip(int count) {
+        scores.event(Events.FLIP(count));
     }
 
     @Before
@@ -54,32 +59,38 @@ public class ScoresTest {
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
+        flipScore = settings.getParameter("Flip score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        win();  //+30
-        win();  //+30
-        win();  //+30
-        win();  //+30
+        win();  //+100
+        win();  //+100
+        win();  //+100
+        win();  //+100
+        flip(35); // +1*35
+        flip(45); // +1*45
 
-        loose(); //-100
+        loose(); //-0
 
-        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        assertEquals(140
+                + 4 * winScore
+                + (35 + 45)*flipScore
+                - loosePenalty, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();    //-100
+        loose();    //-0
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +30
+        win();    // +100
 
         scores.clear();
 

@@ -31,13 +31,15 @@ public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> loosePenalty;
+    private final Parameter<Integer> flipScore;
 
     private volatile int score;
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(1);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(100);
+        flipScore = settings.addEditBox("Flip score").type(Integer.class).def(1);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
     }
 
@@ -52,10 +54,14 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public void event(Object event) {
-        if (event.equals(Events.WIN)) {
+    public void event(Object object) {
+        Events event = (Events)object;
+
+        if (event.isFlip()) {
+            score += flipScore.getValue() * event.count();
+        } else if (event.isWin()) {
             score += winScore.getValue();
-        } else if (event.equals(Events.LOOSE)) {
+        } else if (event.isLoose()) {
             score -= loosePenalty.getValue();
         }
         score = Math.max(0, score);
