@@ -27,9 +27,6 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 
 import java.util.List;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
 public interface Level {
 
     /**

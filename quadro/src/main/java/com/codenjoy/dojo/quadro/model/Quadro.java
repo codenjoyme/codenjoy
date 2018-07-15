@@ -42,10 +42,10 @@ import static java.util.stream.Collectors.toList;
 public class Quadro implements Field {
 
     private List<Chip> chips;
-
     private List<Player> players;
-
     private final int size;
+    private boolean yellowPlayerAct = true;
+    boolean chipMoved;
     private Dice dice;
 
     public Quadro(Level level, Dice dice) {
@@ -57,10 +57,14 @@ public class Quadro implements Field {
 
     @Override
     public void tick() {
+        chipMoved = false;
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
         }
+
+        if (chipMoved)
+            yellowPlayerAct = !yellowPlayerAct;
 
 //        for (Player player : players) {
 //            Hero hero = player.getHero();
@@ -93,11 +97,23 @@ public class Quadro implements Field {
         if (!chips.contains(pt)) {
             chips.add(new Chip(color, x, y));
         }
+
+        chipMoved = true;
     }
 
     @Override
     public boolean getFreeColor() {
         return players.size() == 1;
+    }
+
+    @Override
+    public Hero currentPlayer() {
+        return yellowPlayerAct ? players.get(0).getHero() : players.get(1).getHero();
+    }
+
+    @Override
+    public void playerMissedAct() {
+        // TODO
     }
 
     // Direction

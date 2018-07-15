@@ -248,6 +248,7 @@ public class QuadroTest {
                 "         " +
                 "         ");
 
+        hero1.act(0);
         game.tick();
         hero2.act(4);
         game.tick();
@@ -260,7 +261,7 @@ public class QuadroTest {
                         "         " +
                         "         " +
                         "         " +
-                        "    x    ",
+                        "o   x    ",
                 player1);
     }
 
@@ -321,7 +322,6 @@ public class QuadroTest {
                 player1);
 
         game.tick();
-
         hero1.act(5);
         hero2.act(4);
         game.tick();
@@ -395,7 +395,35 @@ public class QuadroTest {
                 player1);
     }
 
-    // TODO: если игрок пропустил ход, то на следующий ход ходит он
+    // Если игрок пропустил ход, то на следующий ход ходит он
+    @Test
+    public void shouldAddChip_afterMissedAct() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        game.tick();
+        hero1.act(4);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    o    ",
+                player1);
+    }
+
     // TODO: если игрок пропустил 10 ходов, то он проиграл
 
     // TODO: соперник может положить фишку в ряд, который я изначально положил,либо в оставшиеся из 6 вертикальных рядов

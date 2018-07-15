@@ -34,12 +34,10 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
  */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
-    private boolean act;
     private final boolean color;
 
     public Hero(boolean color) {
         this.color = color;
-        this.act = color;
     }
 
 //    public Hero(Point xy) {
@@ -61,13 +59,12 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void tick() {
-        if (act) {
+        if (this.equals(field.currentPlayer())) {
             if (x >= 0)
                 field.setChip(color, x);
-            // TODO: if x = -1 - игрок пропустил ход
-            act = false;
-        } else
-            act = true;
+            else
+                field.playerMissedAct();
+        }
         x = -1;
     }
 

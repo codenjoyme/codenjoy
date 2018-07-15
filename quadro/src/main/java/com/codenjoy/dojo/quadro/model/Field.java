@@ -29,4 +29,6 @@ public interface Field extends GameField<Player> {
     boolean isFree(int x, int y);
     void setChip(boolean color, int x);
     boolean getFreeColor();
+    Hero currentPlayer();
+    void playerMissedAct();
 }
