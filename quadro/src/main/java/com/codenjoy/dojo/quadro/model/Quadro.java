@@ -10,12 +10,12 @@ package com.codenjoy.dojo.quadro.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
+import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -66,6 +67,11 @@ public class Quadro implements Field {
         if (chipMoved)
             yellowPlayerAct = !yellowPlayerAct;
 
+        if (chips.size() == size * size) {
+            players.get(0).event(Events.DRAW);
+            players.get(1).event(Events.DRAW);
+        }
+
 //        for (Player player : players) {
 //            Hero hero = player.getHero();
 //            if (!hero.isAlive()) {
@@ -99,6 +105,22 @@ public class Quadro implements Field {
         }
 
         chipMoved = true;
+
+        // TODO: остальные направления для выиграша
+        if (y - 3 >= 0) {
+            outerloop:
+            for (int i = 1; i < 4; i++) {
+                for (Chip chip : chips) {
+                    if (chip.equals(pt(x, y - i)) && chip.getColor() != color)
+                        break outerloop;
+                }
+
+                if (i == 3) {
+                    (color ? players.get(0) : players.get(1)).event(Events.WIN);
+                    (!color ? players.get(0) : players.get(1)).event(Events.LOOSE);
+                }
+            }
+        }
     }
 
     @Override

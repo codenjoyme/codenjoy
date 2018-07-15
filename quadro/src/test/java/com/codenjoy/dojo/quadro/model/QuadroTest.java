@@ -23,6 +23,7 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
+import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -265,8 +266,7 @@ public class QuadroTest {
                 player1);
     }
 
-    // Игрок победил когда в ряд 4 мои фишки вертикально
-    // TODO: win
+    // Игрок победил когда в ряд 4 его фишки вертикально
     @Test
     public void shouldWinVertical() {
         givenFl("         " +
@@ -292,6 +292,9 @@ public class QuadroTest {
                         "    o    " +
                         "    o    ",
                 player1);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.LOOSE);
     }
 
     // Первым ходит желтый
