@@ -10,12 +10,12 @@ package com.codenjoy.dojo.quadro.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -39,7 +39,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     public Hero(boolean color) {
         this.color = color;
-        this.act = false;
+        this.act = color;
     }
 
 //    public Hero(Point xy) {
@@ -53,16 +53,22 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
-        this.x = p[0];
-        act = true;
+        if (p.length > 0)
+            x = p[0];
+        else
+            x = -1;
     }
 
     @Override
     public void tick() {
         if (act) {
-            field.setChip(color, x);
+            if (x >= 0)
+                field.setChip(color, x);
+            // TODO: if x = -1 - игрок пропустил ход
             act = false;
-        }
+        } else
+            act = true;
+        x = -1;
     }
 
     public boolean isAlive() {

@@ -33,8 +33,10 @@ import com.codenjoy.dojo.services.printer.CharElements;
 public enum Elements implements CharElements {
 
     NONE(' '),        // пустое поле
-    RED('x'),         // красная фишка, ходят желтые
-    YELLOW('o'),      // желтая фишка, ходят красные
+    YELLOW('o'),      // желтая фишка
+    RED('x'),         // красная фишка
+
+    // TODO: пока не востребовано
     RED_TURN('X'),    // красная фишка, ходят красные
     YELLOW_TURN('O'); // желтая фишка, ходят желтые
 
