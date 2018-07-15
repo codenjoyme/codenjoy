@@ -106,8 +106,6 @@ public class ApofigSolver implements Solver<Board> {
         WebSocketRunner.run(host,
                 name,
                 null,
-//                "apofdig@gmail.com",
-//                "6871816771070354251",
                 new ApofigSolver(dice),
                 new Board());
     }
