@@ -23,6 +23,8 @@ package com.codenjoy.dojo.reversi.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.reversi.client.Board;
@@ -30,10 +32,13 @@ import com.codenjoy.dojo.reversi.model.Elements;
 import com.codenjoy.dojo.reversi.model.Flipper;
 import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.items.Chip;
+import com.codenjoy.dojo.reversi.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ApofigSolver implements Solver<Board> {
@@ -86,9 +91,15 @@ public class ApofigSolver implements Solver<Board> {
 
     public static void main(String[] args) {
 //        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
+//                new LinkedList<Solver>(){{
+//                    add(new ApofigSolver(new RandomDice()));
+//                    add(new ApofigSolver(new RandomDice()));
+//                }},
+//                new LinkedList<ClientBoard>(){{
+//                    add(new Board());
+//                    add(new Board());
+//                }});
+         start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
     public static void start(String name, WebSocketRunner.Host host, Dice dice) {
