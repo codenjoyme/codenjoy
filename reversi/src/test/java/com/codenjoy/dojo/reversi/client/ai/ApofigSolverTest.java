@@ -24,112 +24,87 @@ package com.codenjoy.dojo.reversi.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.reversi.client.Board;
-import com.codenjoy.dojo.reversi.client.YourSolver;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import org.junit.Before;
+import com.codenjoy.dojo.reversi.client.AbstractSolverTest;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+public class ApofigSolverTest extends AbstractSolverTest {
 
-public class ApofigSolverTest {
-
-    private Dice dice;
-    private Solver ai;
-
-    @Before
-    public void setup() {
-        dice = mock(Dice.class);
-        ai = new ApofigSolver(dice);
-    }
-
-    private Board board(String board) {
-        return (Board) new Board().forString(board);
+    @Override
+    protected Solver getSolver() {
+        return new ApofigSolver(dice);
     }
 
     @Test
     public void should() {
         asertAI("    " +
-                " xO " +
+                "+xO " +
                 " Ox " +
-                "    ", "ACT(0,2)");
+                "    ");
 
         asertAI("    " +
                 "ooo " +
-                " oX " +
-                "    ", "ACT(0,1)");
+                "+oX " +
+                "    ");
 
         asertAI("    " +
                 "OOO " +
                 "xxx " +
-                "    ", "ACT(0,0)");
+                "+   ");
 
-        asertAI("    " +
+        asertAI("+   " +
                 "ooo " +
                 "ooX " +
-                "o   ", "ACT(0,3)");
+                "o   ");
 
-        asertAI("x   " +
+        asertAI("x+  " +
                 "OxO " +
                 "OOx " +
-                "O   ", "ACT(1,3)");
+                "O   ");
 
-        asertAI("Xo  " +
+        asertAI("Xo+ " +
                 "ooo " +
                 "ooX " +
-                "o   ", "ACT(2,3)");
+                "o   ");
 
         asertAI("xxx " +
                 "OOx " +
                 "OOx " +
-                "O   ", "ACT(3,0)");
+                "O  +");
 
         asertAI("XXX " +
                 "ooX " +
                 "ooo " +
-                "o  o", "ACT(1,0)");
+                "o+ o");
 
         asertAI("xxx " +
                 "Oxx " +
                 "OxO " +
-                "Ox O", "ACT(2,0)");
+                "Ox+O");
 
         asertAI("XXX " +
                 "oXX " +
                 "ooo " +
-                "oooo", "");
+                "oooo");
 
         asertAI("xxx " +
-                "Oxx " +
+                "Oxx+" +
                 "OOO " +
-                "OOOO", "ACT(3,2)");
+                "OOOO");
 
         asertAI("XXX " +
                 "oooo" +
-                "ooo " +
-                "oooo", "ACT(3,1)");
+                "ooo+" +
+                "oooo");
 
-        asertAI("xxx " +
+        asertAI("xxx+" +
                 "OOxO" +
                 "OOOx" +
-                "OOOO", "ACT(3,3)");
+                "OOOO");
 
         asertAI("XXXo" +
                 "oooo" +
                 "oooX" +
-                "oooo", "");
+                "oooo");
     }
 
-    private void asertAI(String board, String expected) {
-        String actual = ai.get(board(board));
-        assertEquals(expected, actual);
-    }
-
-    private void dice(Direction direction) {
-        when(dice.next(anyInt())).thenReturn(direction.value());
-    }
 }

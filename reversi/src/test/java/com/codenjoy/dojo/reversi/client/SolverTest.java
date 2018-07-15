@@ -23,30 +23,14 @@ package com.codenjoy.dojo.reversi.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.Dice;
-import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+public class SolverTest extends AbstractSolverTest {
 
-public class SolverTest {
-
-    private Dice dice;
-    private Solver ai;
-
-    @Before
-    public void setup() {
-        dice = mock(Dice.class);
-        ai = new YourSolver(dice);
-    }
-
-    private Board board(String board) {
-        return (Board) new Board().forString(board);
+    @Override
+    protected Solver getSolver() {
+        return new YourSolver(dice);
     }
 
     @Test
@@ -58,7 +42,7 @@ public class SolverTest {
                 "   Ox   " +
                 "        " +
                 "        " +
-                "        ", "ACT(0,0)");
+                "+       ");
 
         asertAI("        " +
                 "        " +
@@ -67,7 +51,7 @@ public class SolverTest {
                 "   -X   " +
                 "        " +
                 "        " +
-                "        ", "");
+                "        ");
 
         asertAI("        " +
                 "        " +
@@ -76,7 +60,7 @@ public class SolverTest {
                 "  xxx   " +
                 "        " +
                 "        " +
-                "        ", "ACT(0,0)");
+                "+       ");
 
         asertAI("        " +
                 "        " +
@@ -85,15 +69,7 @@ public class SolverTest {
                 "   X--  " +
                 "     -  " +
                 "        " +
-                "        ", "");
+                "        ");
     }
 
-    private void asertAI(String board, String expected) {
-        String actual = ai.get(board(board));
-        assertEquals(expected, actual);
-    }
-
-    private void dice(Direction direction) {
-        when(dice.next(anyInt())).thenReturn(direction.value());
-    }
 }
