@@ -24,7 +24,7 @@ package com.codenjoy.dojo.reversi.model.items;
 
 
 import com.codenjoy.dojo.reversi.model.Elements;
-import com.codenjoy.dojo.reversi.model.Field;
+import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.Player;
 import com.codenjoy.dojo.services.*;
 
@@ -35,9 +35,9 @@ public class Chip extends PointImpl implements State<Elements, Player> {
     public static final Chip NULL = new Chip(false, pt(-1, -1), null);
 
     private boolean color;
-    private Field field;
+    private GetChip field;
 
-    public Chip(boolean color, Point point, Field field) {
+    public Chip(boolean color, Point point, GetChip field) {
         super(point);
         this.color = color;
         this.field = field;
@@ -78,7 +78,7 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         return flip(this, direction, chip -> chip.flip());
     }
 
-    public boolean flip(Chip start, QDirection direction, Consumer<Chip> flipper) {
+    public boolean flip(Chip start, QDirection direction, Consumer<Chip> onflip) {
         if (this == Chip.NULL) {
             return false;
         }
@@ -95,14 +95,14 @@ public class Chip extends PointImpl implements State<Elements, Player> {
             }
         }
 
-        return flipNext(start, direction, flipper);
+        return flipNext(start, direction, onflip);
     }
 
-    private boolean flipNext(Chip start, QDirection direction, Consumer<Chip> flipper) {
+    private boolean flipNext(Chip start, QDirection direction, Consumer<Chip> onflip) {
         Chip next = field.chip(direction.change(this));
-        boolean flip = next.flip(start, direction, flipper);
+        boolean flip = next.flip(start, direction, onflip);
         if (flip && this != start) {
-            flipper.accept(this);
+            onflip.accept(this);
         }
         return flip;
     }

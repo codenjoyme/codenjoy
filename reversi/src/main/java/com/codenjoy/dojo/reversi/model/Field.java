@@ -27,19 +27,17 @@ import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
-public interface Field extends GameField<Player> {
+import java.util.List;
+
+public interface Field extends GameField<Player>, GetChip {
 
     boolean isFree(int x, int y);
 
     void setChip(boolean color, int x, int y);
 
-    Chip chip(Point point);
-
     int size();
 
     boolean freeColor();
-
-    boolean currentColor();
 
     boolean stop();
 

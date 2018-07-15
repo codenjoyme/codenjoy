@@ -39,8 +39,6 @@ import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
-    private Dice dice;
-
     @Test
     public void test() {
         // given
@@ -48,7 +46,7 @@ public class SmokeTest {
 
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 10;
+        LocalGameRunner.countIterations = 15;
 
         Dice dice = LocalGameRunner.getDice(
                 0, 2, 3, 1, 3, 3,
@@ -99,7 +97,6 @@ public class SmokeTest {
                         "1:    \n" +
                         "1:\n" +
                         "DICE:0\n" +
-                        "DICE:2\n" +
                         "1:Answer: ACT(0,2)\n" +
                         "2:Board:\n" +
                         "2:    \n" +
@@ -107,9 +104,7 @@ public class SmokeTest {
                         "2: O- \n" +
                         "2:    \n" +
                         "2:\n" +
-                        "DICE:3\n" +
-                        "DICE:1\n" +
-                        "2:Answer: ACT(3,1)\n" +
+                        "2:Answer: \n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:    \n" +
@@ -117,170 +112,226 @@ public class SmokeTest {
                         "1: -X \n" +
                         "1:    \n" +
                         "1:\n" +
-                        "DICE:3\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2:    \n" +
+                        "2:ooo \n" +
+                        "2: oX \n" +
+                        "2:    \n" +
+                        "2:\n" +
+                        "DICE:2\n" +
+                        "2:Answer: ACT(2,3)\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  x \n" +
+                        "1:OOx \n" +
+                        "1: Ox \n" +
+                        "1:    \n" +
+                        "1:\n" +
                         "DICE:3\n" +
                         "1:Answer: ACT(3,3)\n" +
                         "2:Board:\n" +
+                        "2:  - \n" +
+                        "2:OO- \n" +
+                        "2: O- \n" +
                         "2:    \n" +
+                        "2:\n" +
+                        "2:Answer: \n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  X-\n" +
+                        "1:--- \n" +
+                        "1: -X \n" +
+                        "1:    \n" +
+                        "1:\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2:  Xo\n" +
                         "2:ooo \n" +
                         "2: oX \n" +
                         "2:    \n" +
                         "2:\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "2:Answer: ACT(0,2)\n" +
+                        "DICE:1\n" +
+                        "2:Answer: ACT(0,1)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
-                        "1:    \n" +
-                        "1:OOO \n" +
-                        "1: Ox \n" +
+                        "1:  xO\n" +
+                        "1:OxO \n" +
+                        "1:xxx \n" +
                         "1:    \n" +
                         "1:\n" +
-                        "DICE:2\n" +
                         "DICE:3\n" +
-                        "1:Answer: ACT(2,3)\n" +
+                        "1:Answer: ACT(2,0)\n" +
                         "2:Board:\n" +
-                        "2:    \n" +
-                        "2:OOO \n" +
-                        "2: O- \n" +
+                        "2:  -O\n" +
+                        "2:O-O \n" +
+                        "2:--- \n" +
                         "2:    \n" +
                         "2:\n" +
-                        "DICE:1\n" +
+                        "2:Answer: \n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  X-\n" +
+                        "1:-X- \n" +
+                        "1:X-- \n" +
+                        "1:  - \n" +
+                        "1:\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2:  Xo\n" +
+                        "2:oXo \n" +
+                        "2:Xoo \n" +
+                        "2:  o \n" +
+                        "2:\n" +
+                        "DICE:3\n" +
+                        "2:Answer: ACT(3,1)\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  xO\n" +
+                        "1:OxO \n" +
+                        "1:xxxx\n" +
+                        "1:  O \n" +
+                        "1:\n" +
                         "DICE:0\n" +
+                        "1:Answer: ACT(0,0)\n" +
+                        "2:Board:\n" +
+                        "2:  -O\n" +
+                        "2:O-O \n" +
+                        "2:----\n" +
+                        "2:  O \n" +
+                        "2:\n" +
+                        "2:Answer: \n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  X-\n" +
+                        "1:-X- \n" +
+                        "1:--XX\n" +
+                        "1:- - \n" +
+                        "1:\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2:  Xo\n" +
+                        "2:oXo \n" +
+                        "2:ooXX\n" +
+                        "2:o o \n" +
+                        "2:\n" +
+                        "DICE:2\n" +
+                        "2:Answer: ACT(3,2)\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  xO\n" +
+                        "1:Oxxx\n" +
+                        "1:OOxx\n" +
+                        "1:O O \n" +
+                        "1:\n" +
+                        "DICE:2\n" +
+                        "1:Answer: ACT(3,0)\n" +
+                        "2:Board:\n" +
+                        "2:  -O\n" +
+                        "2:O---\n" +
+                        "2:OO--\n" +
+                        "2:O O \n" +
+                        "2:\n" +
+                        "2:Answer: \n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:  X-\n" +
+                        "1:-XX-\n" +
+                        "1:--X-\n" +
+                        "1:- --\n" +
+                        "1:\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2:  Xo\n" +
+                        "2:oXXo\n" +
+                        "2:ooXo\n" +
+                        "2:o oo\n" +
+                        "2:\n" +
+                        "DICE:3\n" +
+                        "DICE_CORRECTED < 1 :0\n" +
                         "2:Answer: ACT(1,0)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
-                        "1:  - \n" +
-                        "1:--- \n" +
-                        "1: -X \n" +
-                        "1:    \n" +
+                        "1:  xO\n" +
+                        "1:OxxO\n" +
+                        "1:OxxO\n" +
+                        "1:OxOO\n" +
                         "1:\n" +
                         "DICE:1\n" +
-                        "DICE:3\n" +
-                        "1:Answer: ACT(1,3)\n" +
+                        "1:Answer: ACT(0,3)\n" +
                         "2:Board:\n" +
-                        "2:  o \n" +
-                        "2:ooo \n" +
-                        "2: oX \n" +
-                        "2:    \n" +
+                        "2:  -O\n" +
+                        "2:O--O\n" +
+                        "2:O--O\n" +
+                        "2:O-OO\n" +
                         "2:\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "2:Answer: ACT(1,2)\n" +
+                        "2:Answer: \n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
-                        "1:  O \n" +
-                        "1:OOO \n" +
-                        "1: Ox \n" +
-                        "1:    \n" +
+                        "1:- X-\n" +
+                        "1:--X-\n" +
+                        "1:-X--\n" +
+                        "1:-X--\n" +
                         "1:\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "1:Answer: ACT(1,3)\n" +
+                        "1:Answer: \n" +
                         "2:Board:\n" +
-                        "2:  O \n" +
-                        "2:OOO \n" +
-                        "2: O- \n" +
-                        "2:    \n" +
-                        "2:\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "2:Answer: ACT(2,1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1: -- \n" +
-                        "1:--- \n" +
-                        "1: -X \n" +
-                        "1:    \n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:Answer: ACT(1,1)\n" +
-                        "2:Board:\n" +
-                        "2: oo \n" +
-                        "2:ooo \n" +
-                        "2: oX \n" +
-                        "2:    \n" +
-                        "2:\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "2:Answer: ACT(3,0)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1: OO \n" +
-                        "1:OOO \n" +
-                        "1: Ox \n" +
-                        "1:   x\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "1:Answer: ACT(0,1)\n" +
-                        "2:Board:\n" +
-                        "2: OO \n" +
-                        "2:OOO \n" +
-                        "2: O- \n" +
-                        "2:   -\n" +
+                        "2:o Xo\n" +
+                        "2:ooXo\n" +
+                        "2:oXoo\n" +
+                        "2:oXoo\n" +
                         "2:\n" +
                         "DICE:0\n" +
-                        "DICE:0\n" +
-                        "2:Answer: ACT(0,0)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1: -- \n" +
-                        "1:--- \n" +
-                        "1:--X \n" +
-                        "1:   X\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "DICE:0\n" +
-                        "1:Answer: ACT(1,0)\n" +
-                        "2:Board:\n" +
-                        "2: oo \n" +
-                        "2:ooo \n" +
-                        "2:ooX \n" +
-                        "2:   X\n" +
-                        "2:\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "2:Answer: ACT(2,1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1: OO \n" +
-                        "1:OOO \n" +
-                        "1:OOx \n" +
-                        "1:   x\n" +
-                        "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:2\n" +
-                        "1:Answer: ACT(3,2)\n" +
-                        "2:Board:\n" +
-                        "2: OO \n" +
-                        "2:OOO \n" +
-                        "2:OO- \n" +
-                        "2:   -\n" +
-                        "2:\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "2:Answer: ACT(2,1)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1: -- \n" +
-                        "1:----\n" +
-                        "1:--X \n" +
-                        "1:   X\n" +
-                        "1:\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "1:Answer: ACT(0,1)\n" +
-                        "2:Board:\n" +
-                        "2: oo \n" +
-                        "2:oooo\n" +
-                        "2:ooX \n" +
-                        "2:   X\n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
                         "2:Answer: ACT(1,3)\n" +
+                        "Fire Event: WIN\n" +
+                        "Fire Event: LOOSE\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:OxxO\n" +
+                        "1:OxxO\n" +
+                        "1:OxOO\n" +
+                        "1:OxOO\n" +
+                        "1:\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2:O--O\n" +
+                        "2:O--O\n" +
+                        "2:O-OO\n" +
+                        "2:O-OO\n" +
+                        "2:\n" +
+                        "2:Answer: \n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:    \n" +
+                        "1: xO \n" +
+                        "1: Ox \n" +
+                        "1:    \n" +
+                        "1:\n" +
+                        "DICE:1\n" +
+                        "1:Answer: ACT(1,3)\n" +
+                        "2:Board:\n" +
+                        "2:    \n" +
+                        "2: -O \n" +
+                        "2: O- \n" +
+                        "2:    \n" +
+                        "2:\n" +
+                        "2:Answer: \n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1: -  \n" +
+                        "1: -- \n" +
+                        "1: -X \n" +
+                        "1:    \n" +
+                        "1:\n" +
+                        "1:Answer: \n" +
+                        "2:Board:\n" +
+                        "2: o  \n" +
+                        "2: oo \n" +
+                        "2: oX \n" +
+                        "2:    \n" +
+                        "2:\n" +
+                        "DICE:3\n" +
+                        "DICE_CORRECTED < 3 :0\n" +
+                        "2:Answer: ACT(0,1)\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

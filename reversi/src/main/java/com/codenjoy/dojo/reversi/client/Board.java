@@ -46,14 +46,31 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isWhite(int x, int y) {
-        return isAt(x, y, Elements.WHITE);
+        return isAt(x, y, Elements.WHITE)
+                || isAt(x, y, Elements.WHITE_TURN)
+                || isAt(x, y, Elements.NOT_YOUR_TURN) && myColor();
     }
 
     public boolean isBlack(int x, int y) {
-        return isAt(x, y, Elements.BLACK);
+        return isAt(x, y, Elements.BLACK)
+                || isAt(x, y, Elements.BLACK_TURN)
+                || isAt(x, y, Elements.NOT_YOUR_TURN) && !myColor();
     }
 
     public boolean isMyTurn() {
         return get(Elements.NOT_YOUR_TURN).isEmpty();
+    }
+
+    @Override
+    protected int inversionY(int y) { // TODO почему тут ивертирование
+        return size - 1 - y;
+    }
+
+    public boolean myColor() {
+        if (isMyTurn()) {
+            return !get(Elements.WHITE_TURN).isEmpty();
+        } else {
+            return get(Elements.WHITE_TURN).isEmpty();
+        }
     }
 }

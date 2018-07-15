@@ -28,21 +28,19 @@ import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.services.QDirection.*;
 import static java.util.stream.Collectors.toList;
 
 public class Reversi implements Field {
 
+    private Flipper flipper;
     private List<Chip> chips;
     private List<Break> breaks;
     private List<Player> players;
@@ -52,14 +50,15 @@ public class Reversi implements Field {
     private boolean currentColor;
 
     public Reversi(Level level, Dice dice) {
+        flipper = new Flipper(this);
         this.level = level;
         this.dice = dice;
         size = level.size();
         players = new LinkedList<>();
         resetField(level);
-        if (!canFlip(currentColor)) {
+        if (!flipper.canFlip(currentColor)) {
             nextTurn();
-            if (!canFlip(currentColor) && !canFlip(!currentColor)) {
+            if (!flipper.canFlip(currentColor) && !flipper.canFlip(!currentColor)) {
                 nextTurn();
             }
         }
@@ -100,14 +99,14 @@ public class Reversi implements Field {
         long countWhite = chips(true).size();
         long countBlack = chips(false).size();
         return isCompletelyFilled()
-                || !canFlip(true) && !canFlip(false)
+                || !flipper.canFlip(true) && !flipper.canFlip(false)
                 || countBlack == 0
                 || countWhite == 0;
     }
 
     private void nextTurn() {
         currentColor = !currentColor;
-        if (!canFlip(currentColor) && canFlip(!currentColor)) {
+        if (!flipper.canFlip(currentColor) && flipper.canFlip(!currentColor)) {
             currentColor = !currentColor;
         }
     }
@@ -118,22 +117,8 @@ public class Reversi implements Field {
                 .collect(toList());
     }
 
-    private boolean canFlip;
-    private boolean canFlip(boolean color) {
-        canFlip = false;
-        for (Point pt : freeSpaces()) {
-            for (QDirection direction : directions()) {
-                Chip chip = new Chip(color, pt, this);
-                chip.flip(chip, direction, c -> canFlip = true);
-                if (canFlip) {
-                    return true;
-                }
-            };
-        };
-        return false;
-    }
-
-    private List<Point> freeSpaces() {
+    @Override
+    public List<Point> freeSpaces() {
         List<Point> result = new LinkedList<>();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
@@ -174,6 +159,7 @@ public class Reversi implements Field {
         return players.stream().filter(Player::isBlack).findFirst().get();
     }
 
+    @Override
     public int size() {
         return size;
     }
@@ -237,25 +223,13 @@ public class Reversi implements Field {
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
             Chip chip = new Chip(color, pt, this);
-            if (flipFromChip(chip)){
+            if (flipper.flipFromChip(chip)){
                 chips.add(chip);
             }
         }
     }
 
-    private boolean flipFromChip(Chip current) {
-        boolean result = false;
-        for (QDirection direction : directions()){
-            result |= current.flip(direction);
-        }
-        return result;
-    }
-
-    private List<QDirection> directions() {
-        return Arrays.asList(LEFT, LEFT_UP, UP, RIGHT_UP,
-            RIGHT, RIGHT_DOWN, DOWN, LEFT_DOWN);
-    }
-
+    @Override
     public Chip chip(Point chip) {
         return chips.stream()
                 .filter(Predicate.isEqual(chip))

@@ -26,8 +26,15 @@ package com.codenjoy.dojo.reversi.client.ai;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.reversi.client.Board;
+import com.codenjoy.dojo.reversi.model.Elements;
+import com.codenjoy.dojo.reversi.model.Flipper;
+import com.codenjoy.dojo.reversi.model.GetChip;
+import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
+
+import java.util.List;
 
 public class ApofigSolver implements Solver<Board> {
 
@@ -39,9 +46,42 @@ public class ApofigSolver implements Solver<Board> {
 
     @Override
     public String get(final Board board) {
+        if (!board.isMyTurn()) return "";
+
+        Flipper flipper = new Flipper(new GetChip() {
+            @Override
+            public Chip chip(Point point) {
+                if (point.isOutOf(board.size())) {
+                    return Chip.NULL; // TODO почему?
+                }
+                Elements element = board.getAt(point.getX(), point.getY());
+                switch (element) {
+                    case BLACK: return new Chip(false, point, this);
+                    case BLACK_TURN: return new Chip(false, point, this);
+                    case WHITE: return new Chip(true, point, this);
+                    case WHITE_TURN: return new Chip(true, point, this);
+                    default: return Chip.NULL;
+                }
+            }
+
+            @Override
+            public boolean currentColor() {
+                return false; // do nothing
+            }
+
+            @Override
+            public List<Point> freeSpaces() {
+                return board.get(Elements.NONE);
+            }
+        });
+
+        List<Flipper.Turn> turns = flipper.turns(board.myColor());
+        if (turns.isEmpty()) return "";
+        Flipper.Turn turn = turns.get(dice.next(turns.size()));
+
         return String.format("ACT(%s,%s)",
-                dice.next(board.size()),
-                dice.next(board.size()));
+                turn.chip.getX(),
+                turn.chip.getY());
     }
 
     public static void main(String[] args) {
