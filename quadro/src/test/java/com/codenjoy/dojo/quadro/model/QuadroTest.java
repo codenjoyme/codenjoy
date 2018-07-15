@@ -78,9 +78,78 @@ public class QuadroTest {
                 printer.getPrinter(game.reader(), player).print());
     }
 
+    // изначально иницализируется пустое поле 7х6
+    @Test
+    public void shouldFieldAtStart7x6() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "      " +
+                "      ");
+
+        assertE("      " +
+                        "      " +
+                        "      " +
+                        "      " +
+                        "      " +
+                        "      ",
+                player1);
+
+    }
+
+    //я могу походить только заполнив один из нижних рядов
+//    @Test
+    public void shouldPutChipOnBottomLine() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "      " +
+                "      ");
+
+        hero1.act(2);
+        game.tick();
+
+        assertE("      " +
+                        "      " +
+                        "      " +
+                        "      " +
+                        "      " +
+                        "     x",
+                player1);
+
+    }
+
+    //соперник может положить фишку в ряд, который я изначально положил,либо в оставшиеся из 6 вертикальных рядов
+    public void firstEnemyTurn() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "      " +
+                "     x");
+
+        hero1.act(2);
+        game.tick();
+
+        assertE("      " +
+                        "      " +
+                        "      " +
+                        "      " +
+                        "      " +
+                        "    ox",
+                player1);
+
+    }
+
+    //TODO соперник может положить фишку в ряд, который я изначально положил,либо в оставшиеся из 6 вертикальных рядов
+    //TODO я выигрываю в случае когда 4 мои фишки подряд будут выстроены в линию или по диагонали
+    //TODO я проигрываю в случае когда 4 фишки соперника подряд будут выстроены в линию либо по диагонали
+
     // Поле 9х9 изначально пустое
     @Test
-    public void shouldFieldAtStart() {
+    public void shouldFieldAtStart9x9() {
         givenFl("         " +
                 "         " +
                 "         " +

@@ -42,6 +42,10 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         this.act = false;
     }
 
+//    public Hero(Point xy) {
+//        super(xy);
+//    }
+
     @Override
     public void init(Field field) {
         this.field = field;

@@ -49,8 +49,8 @@ public class Chip extends PointImpl implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (color)
-            return Elements.YELLOW_CHIP;
+            return Elements.RED;
         else
-            return Elements.RED_CHIP;
+            return Elements.YELLOW;
     }
 }

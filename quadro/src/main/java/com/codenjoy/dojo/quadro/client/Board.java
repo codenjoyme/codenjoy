@@ -25,7 +25,6 @@ package com.codenjoy.dojo.quadro.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.quadro.model.Elements;
-import com.codenjoy.dojo.services.Point;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
@@ -39,16 +38,15 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public boolean isYellowChipAt(int x, int y) {
-        return isAt(x, y, Elements.YELLOW_CHIP);
+    public boolean isYellow(int x, int y) {
+        return isAt(x, y, Elements.YELLOW);
     }
 
-    public boolean isRedChipAt(int x, int y) {
-        return isAt(x, y, Elements.RED_CHIP);
+    public boolean isRed(int x, int y) {
+        return isAt(x, y, Elements.RED);
     }
 
     public boolean isGameOver() {
-//        return !get(Elements.NONE).isEmpty();
         return false;
     }
 }

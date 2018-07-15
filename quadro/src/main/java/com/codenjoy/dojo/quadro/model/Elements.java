@@ -32,9 +32,11 @@ import com.codenjoy.dojo.services.printer.CharElements;
  */
 public enum Elements implements CharElements {
 
-    NONE(' '),        // пустое место, куда можно поставить фишку
-    YELLOW_CHIP('x'), // желтая фишка
-    RED_CHIP('o');    // красная фишка
+    NONE(' '),        // пустое поле
+    RED('x'),         // красная фишка, ходят желтые
+    YELLOW('o'),      // желтая фишка, ходят красные
+    RED_TURN('X'),    // красная фишка, ходят красные
+    YELLOW_TURN('O'); // желтая фишка, ходят желтые
 
     final char ch;
 

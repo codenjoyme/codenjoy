@@ -1,5 +1,6 @@
 .idea/
 quadro/target/
+quadro/quadro-engine.iml
 
 /a2048/**
 /battlecity/**

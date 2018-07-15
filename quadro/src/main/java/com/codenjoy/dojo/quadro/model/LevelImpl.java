@@ -30,8 +30,6 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.quadro.model.Elements.YELLOW_CHIP;
-import static com.codenjoy.dojo.quadro.model.Elements.RED_CHIP;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -54,11 +52,11 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Chip> getChips() {
-        return new LinkedList<Chip>() {{
-            addAll(pointsOf(YELLOW_CHIP).stream()
+        return new LinkedList<Chip>(){{
+            addAll(pointsOf(Elements.YELLOW).stream()
                     .map(pt -> new Chip(true, pt))
                     .collect(toList()));
-            addAll(pointsOf(RED_CHIP).stream()
+            addAll(pointsOf(Elements.RED).stream()
                     .map(pt -> new Chip(false, pt))
                     .collect(toList()));
         }};

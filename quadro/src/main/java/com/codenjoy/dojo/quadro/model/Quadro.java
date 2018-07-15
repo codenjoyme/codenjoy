@@ -24,7 +24,8 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
@@ -54,9 +55,6 @@ public class Quadro implements Field {
         chips = level.getChips();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
         for (Player player : players) {
@@ -66,7 +64,6 @@ public class Quadro implements Field {
 
 //        for (Player player : players) {
 //            Hero hero = player.getHero();
-//
 //            if (!hero.isAlive()) {
 //                player.event(Events.LOOSE);
 //            }
