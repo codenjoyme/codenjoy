@@ -58,14 +58,15 @@ public class Flipper {
         for (Point pt : field.freeSpaces()) {
             for (QDirection direction : directions()) {
                 Chip chip = new Chip(color, pt, field);
-                chip.flip(chip, direction, c -> result.add(new Turn(chip, direction)));
+                chip.flip(chip, direction,
+                        c -> result.add(new Turn(chip, direction)));
             };
         };
         return result;
     }
 
-    public boolean canFlip(boolean color) {
-        return !turns(color).isEmpty();
+    public boolean cantFlip(boolean color) {
+        return turns(color).isEmpty();
     }
 
     public int flip(Chip current) {

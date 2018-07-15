@@ -47,7 +47,7 @@ public class Reversi implements Field {
     private final int size;
     private Level level;
     private Dice dice;
-    private boolean currentColor;
+    private boolean current;
 
     public Reversi(Level level, Dice dice) {
         flipper = new Flipper(this);
@@ -56,9 +56,13 @@ public class Reversi implements Field {
         size = level.size();
         players = new LinkedList<>();
         resetField(level);
-        if (!flipper.canFlip(currentColor)) {
+        whoFirst();
+    }
+
+    private void whoFirst() {
+        if (flipper.cantFlip(current)) {
             nextTurn();
-            if (!flipper.canFlip(currentColor) && !flipper.canFlip(!currentColor)) {
+            if (flipper.cantFlip(current) && flipper.cantFlip(!current)) {
                 nextTurn();
             }
         }
@@ -67,7 +71,7 @@ public class Reversi implements Field {
     private void resetField(Level level) {
         chips = level.chips(this);
         breaks = level.breaks(this);
-        currentColor = level.currentColor();
+        current = level.currentColor();
         if (isGameOver()) {
             throw new IllegalArgumentException("Изначально патовая ситуация");
         }
@@ -96,15 +100,15 @@ public class Reversi implements Field {
         long countWhite = chips(true).size();
         long countBlack = chips(false).size();
         return isCompletelyFilled()
-                || !flipper.canFlip(true) && !flipper.canFlip(false)
+                || flipper.cantFlip(true) && flipper.cantFlip(false)
                 || countBlack == 0
                 || countWhite == 0;
     }
 
     private void nextTurn() {
-        currentColor = !currentColor;
-        if (!flipper.canFlip(currentColor) && flipper.canFlip(!currentColor)) {
-            currentColor = !currentColor;
+        current = !current;
+        if (flipper.cantFlip(current) && !flipper.cantFlip(!current)) {
+            current = !current;
         }
     }
 
@@ -120,7 +124,9 @@ public class Reversi implements Field {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Point pt = pt(x, y);
-                if (chip(pt) == Chip.NULL && !isBreak(pt.getX(), pt.getY())) {
+                if (chip(pt) == Chip.NULL
+                        && !isBreak(pt.getX(), pt.getY()))
+                {
                     result.add(pt);
                 }
             }
@@ -199,7 +205,7 @@ public class Reversi implements Field {
 
     @Override
     public boolean currentColor() {
-        return currentColor;
+        return current;
     }
 
     @Override
