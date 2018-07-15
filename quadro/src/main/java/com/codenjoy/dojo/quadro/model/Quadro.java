@@ -24,9 +24,13 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
+<<<<<<< HEAD
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+=======
+import com.codenjoy.dojo.services.*;
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
@@ -42,7 +46,10 @@ import static java.util.stream.Collectors.toList;
  */
 public class Quadro implements Field {
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
     private List<Chip> chips;
 
     private List<Player> players;
@@ -63,6 +70,7 @@ public class Quadro implements Field {
             Hero hero = player.getHero();
 
             hero.tick();
+<<<<<<< HEAD
 
         }
 
@@ -73,6 +81,17 @@ public class Quadro implements Field {
 //            player.event(Events.LOOSE);
 //      }
 // }
+=======
+        }
+
+//        for (Player player : players) {
+//            Hero hero = player.getHero();
+//
+//            if (!hero.isAlive()) {
+//                player.event(Events.LOOSE);
+//            }
+//        }
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
     }
 
     public int size() {
@@ -83,6 +102,7 @@ public class Quadro implements Field {
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
+<<<<<<< HEAD
         return !(chips.contains(pt));
     }
 
@@ -91,9 +111,27 @@ public class Quadro implements Field {
         Point pt = pt(x, y);
         if (!chips.contains(pt)) {
             chips.add(new Chip(color, x, y));
-        }
+=======
+        return !chips.contains(pt);
     }
 
+    @Override
+    public void setChip(boolean color, int x) {
+        int y = 0;
+
+        while (chips.contains(pt(x, y))) {
+            y++;
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
+        }
+
+<<<<<<< HEAD
+=======
+        Point pt = pt(x, y);
+        if (!chips.contains(pt)) {
+            chips.add(new Chip(color, x, y));
+        }
+    }
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 
     public List<Hero> getHeroes() {
         return players.stream()
@@ -118,7 +156,6 @@ public class Quadro implements Field {
         return chips;
     }
 
-    // TODO: реализовать
     @Override
     public BoardReader reader() {
         return new BoardReader() {

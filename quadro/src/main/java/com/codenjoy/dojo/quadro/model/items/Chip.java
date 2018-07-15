@@ -33,27 +33,45 @@ import com.codenjoy.dojo.services.State;
  * Артефакт: Бомба на поле
  */
 public class Chip extends PointImpl implements State<Elements, Player> {
+<<<<<<< HEAD:quadro/src/main/java/com/codenjoy/dojo/quadro/model/items/Chip.java
 
     private boolean color;
 
     public Chip(boolean color, int x, int y) {
 
+=======
+
+    private boolean color;
+
+    public Chip(boolean color, int x, int y) {
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8:quadro/src/main/java/com/codenjoy/dojo/quadro/model/items/Chip.java
         super(x, y);
         this.color = color;
     }
 
     public Chip(boolean color, Point point) {
+<<<<<<< HEAD:quadro/src/main/java/com/codenjoy/dojo/quadro/model/items/Chip.java
 
+=======
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8:quadro/src/main/java/com/codenjoy/dojo/quadro/model/items/Chip.java
         super(point);
         this.color = color;
     }
 
     @Override
+<<<<<<< HEAD:quadro/src/main/java/com/codenjoy/dojo/quadro/model/items/Chip.java
     public Elements state(Player player, Object... alsoAtPoint){
         if (color == true){
             return Elements.RED;
         } else {
             return Elements.YELLOW;
         }
+=======
+    public Elements state(Player player, Object... alsoAtPoint) {
+        if (color)
+            return Elements.YELLOW_CHIP;
+        else
+            return Elements.RED_CHIP;
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8:quadro/src/main/java/com/codenjoy/dojo/quadro/model/items/Chip.java
     }
 }

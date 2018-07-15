@@ -33,13 +33,17 @@ import java.util.List;
 public interface Level {
 
     /**
-     * @return Размер поля (обязательно квадратное)
+     * @return Размер поля
      */
     int getSize();
 
+<<<<<<< HEAD
 
 
     List<Chip> getChips();
 
 
+=======
+    List<Chip> getChips();
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 }

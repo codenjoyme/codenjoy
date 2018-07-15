@@ -23,17 +23,17 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
-/**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
 public interface Field extends GameField<Player> {
+<<<<<<< HEAD
 
     boolean isFree(int x, int y);
     void setChip(boolean color, int x, int y);
 
 
+=======
+    boolean isFree(int x, int y);
+    void setChip(boolean color, int x);
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 }

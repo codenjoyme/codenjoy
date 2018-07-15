@@ -23,7 +23,10 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
+<<<<<<< HEAD
 import com.codenjoy.dojo.services.*;
+=======
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
@@ -35,14 +38,25 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
  */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
+<<<<<<< HEAD
     private boolean color;
+=======
+    private boolean color = true;
+
+//    public Hero(Point xy) {
+//        super(xy);
+//    }
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 
     @Override
     public void init(Field field) {
         this.field = field;
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
     @Override
     public void act(int... p) {
         this.x = p[0];
@@ -50,11 +64,18 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void tick() {
+<<<<<<< HEAD
         field.setChip(color, x, y);
+=======
+        field.setChip(color, x);
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
     }
 
     public boolean isAlive() {
         return true;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 }

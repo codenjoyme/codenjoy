@@ -39,6 +39,7 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
+<<<<<<< HEAD
     public boolean isYellow(int x, int y) {
         return isAt(x, y, Elements.YELLOW);
     }
@@ -48,6 +49,18 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isGameOver() {
+=======
+    public boolean isYellowChipAt(int x, int y) {
+        return isAt(x, y, Elements.YELLOW_CHIP);
+    }
+
+    public boolean isRedChipAt(int x, int y) {
+        return isAt(x, y, Elements.RED_CHIP);
+    }
+
+    public boolean isGameOver() {
+//        return !get(Elements.NONE).isEmpty();
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
         return false;
     }
 }

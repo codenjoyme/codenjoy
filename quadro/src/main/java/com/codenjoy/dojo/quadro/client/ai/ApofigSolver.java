@@ -47,14 +47,17 @@ import java.util.List;
  */
 public class ApofigSolver implements Solver<Board> {
 
-    private DeikstraFindWay way;
     private Dice dice;
 
     public ApofigSolver(Dice dice) {
         this.dice = dice;
+<<<<<<< HEAD
         this.way = new DeikstraFindWay();
     }
 
+=======
+    }
+>>>>>>> e88ddd11bf2be859b6168599581a05035b8248e8
 
     @Override
     public String get(final Board board) {
