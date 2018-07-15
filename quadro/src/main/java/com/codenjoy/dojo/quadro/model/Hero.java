@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
  */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
-
+    private boolean color;
 
     @Override
     public void init(Field field) {
@@ -45,12 +45,12 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
-        //TODO Cuntinue later
+        this.x = p[0];
     }
 
     @Override
     public void tick() {
-        //TODO Continue later
+        field.setChip(color, x, y);
     }
 
     public boolean isAlive() {
