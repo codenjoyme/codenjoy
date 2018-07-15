@@ -138,7 +138,7 @@ public class Reversi implements Field {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Point pt = pt(x, y);
-                if (chip(pt) == Chip.NULL) {
+                if (chip(pt) == Chip.NULL && !isBreak(pt.getX(), pt.getY())) {
                     result.add(pt);
                 }
             }
@@ -285,10 +285,6 @@ public class Reversi implements Field {
     public void remove(Player player) {
         players.remove(player);
         player.hero = null;
-    }
-
-    public List<Chip> chips() {
-        return chips;
     }
 
     @Override

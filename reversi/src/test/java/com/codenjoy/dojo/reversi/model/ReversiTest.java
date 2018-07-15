@@ -1373,5 +1373,114 @@ public class ReversiTest {
                 player1);
     }
 
-    // TODO препятствие не фигурирует как место куда мотенциально можно поставить фишку
+    // препятствие не фигурирует как место куда потенциально можно поставить фишку
+    // после хода черного у белого не осталось ходов и он пропускает
+    @Test
+    public void shouldFailIfNoTurnWithBreak_black() {
+        givenFl("  oXo ☼ " +
+                "   XX   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero2.act(5, 7);
+        game.tick();
+
+        assertE("  oXXX☼ " +
+                "   XX   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
+
+        hero2.act(1, 7);
+        game.tick();
+
+        assertE(" xxxxx☼ " +
+                "   xx   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+
+        game.tick(); // reset to new game
+
+        assertE("  oXo ☼ " +
+                "   XX   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
+    }
+
+    // препятствие не фигурирует как место куда потенциально можно поставить фишку
+    // после хода белого у черного не осталось ходов и он пропускает
+    @Test
+    public void shouldFailIfNoTurnWithBreak_white() {
+        givenFl("  xOx ☼ " +
+                "   OO   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(5, 7);
+        game.tick();
+
+        assertE("  xOOO☼ " +
+                "   OO   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+
+        hero1.act(1, 7);
+        game.tick();
+
+        assertE(" ooooo☼ " +
+                "   oo   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.LOOSE);
+
+        game.tick(); // reset to new game
+
+        assertE("  xOx ☼ " +
+                "   OO   " +
+                "    ☼   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
 }
