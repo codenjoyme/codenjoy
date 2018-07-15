@@ -1321,5 +1321,57 @@ public class ReversiTest {
         }
     }
 
-    // TODO добавить препятствия на поле
+    // добавить препятствия на поле
+    // на препятствие ход сделать нельзя
+    @Test
+    public void shouldCantSetChipOnBarrier_white() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox☼  " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero1.act(5, 3);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Xo   " +
+                "   oX☼  " +
+                "        " +
+                "        " +
+                "        ",
+                player2);
+    }
+
+    @Test
+    public void shouldCantSetChipOnBarrier_black() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "   oX   " +
+                "   Xo☼  " +
+                "        " +
+                "        " +
+                "        ");
+
+        hero2.act(5, 3);
+        game.tick();
+
+        assertE("        " +
+                "        " +
+                "        " +
+                "   Ox   " +
+                "   xO☼  " +
+                "        " +
+                "        " +
+                "        ",
+                player1);
+    }
+
+    // TODO препятствие не фигурирует как место куда мотенциально можно поставить фишку
 }

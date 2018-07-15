@@ -23,6 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
@@ -45,6 +46,15 @@ public class LevelImpl implements Level {
     @Override
     public int size() {
         return (int) Math.sqrt(map.length());
+    }
+
+    @Override
+    public List<Break> breaks(Field field) {
+        return new LinkedList<Break>(){{
+            addAll(pointsOf(Elements.BREAK).stream()
+                    .map(Break::new)
+                    .collect(toList()));
+        }};
     }
 
     @Override

@@ -42,4 +42,6 @@ public interface Field extends GameField<Player> {
     boolean currentColor();
 
     boolean stop();
+
+    boolean isBreak(int x, int y);
 }

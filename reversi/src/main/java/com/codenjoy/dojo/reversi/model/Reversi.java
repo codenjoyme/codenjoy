@@ -23,6 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.reversi.services.Events;
 import com.codenjoy.dojo.services.Dice;
@@ -43,6 +44,7 @@ import static java.util.stream.Collectors.toList;
 public class Reversi implements Field {
 
     private List<Chip> chips;
+    private List<Break> breaks;
     private List<Player> players;
     private final int size;
     private Level level;
@@ -65,6 +67,7 @@ public class Reversi implements Field {
 
     private void resetField(Level level) {
         chips = level.chips(this);
+        breaks = level.breaks(this);
         currentColor = level.currentColor();
         if (isGameOver()) {
             throw new IllegalArgumentException("Изначально патовая ситуация");
@@ -218,6 +221,11 @@ public class Reversi implements Field {
     }
 
     @Override
+    public boolean isBreak(int x, int y) {
+        return breaks.contains(pt(x, y));
+    }
+
+    @Override
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
@@ -295,7 +303,10 @@ public class Reversi implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return Reversi.this.chips();
+                return new LinkedList<Point>(){{
+                    addAll(Reversi.this.chips);
+                    addAll(Reversi.this.breaks);
+                }};
             }
         };
     }

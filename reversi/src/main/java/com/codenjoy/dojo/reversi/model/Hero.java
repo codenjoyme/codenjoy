@@ -65,7 +65,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         }
 
         if (act) {
-            if (field.currentColor() == color) {
+            if (field.currentColor() == color && !field.isBreak(x, y)) {
                 field.setChip(color, x, y);
             }
             act = false;

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.reversi.model;
  */
 
 
+import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 
 import java.util.List;
@@ -30,6 +31,8 @@ import java.util.List;
 public interface Level {
 
     int size();
+
+    List<Break> breaks(Field field);
 
     List<Chip> chips(Field field);
 
