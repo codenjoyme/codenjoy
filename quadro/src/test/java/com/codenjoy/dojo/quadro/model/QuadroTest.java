@@ -10,12 +10,12 @@ package com.codenjoy.dojo.quadro.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,7 +25,6 @@ package com.codenjoy.dojo.quadro.model;
 
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -34,18 +33,19 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class QuadroTest {
 
     private Quadro game;
-    private Hero hero;
+    private Hero hero1;
+    private Hero hero2;
     private Dice dice;
-    private EventListener listener;
-    private Player player;
+    private EventListener listener1;
+    private EventListener listener2;
+    private Player player1;
+    private Player player2;
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
@@ -53,7 +53,7 @@ public class QuadroTest {
         dice = mock(Dice.class);
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -63,13 +63,17 @@ public class QuadroTest {
     private void givenFl(String board) {
         Level level = new LevelImpl(board);
         game = new Quadro(level, dice);
-        listener = mock(EventListener.class);
-        player = new Player(listener);
-        game.newGame(player);
-        hero = game.getHeroes().get(0);
+        listener1 = mock(EventListener.class);
+        listener2 = mock(EventListener.class);
+        player1 = new Player(listener1);
+        player2 = new Player(listener2);
+        game.newGame(player1);
+        game.newGame(player2);
+        hero1 = game.getHeroes().get(0);
+        hero2 = game.getHeroes().get(1);
     }
 
-    private void assertE(String expected) {
+    private void assertE(String expected, Player player) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
     }
@@ -88,14 +92,26 @@ public class QuadroTest {
                 "         ");
 
         assertE("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         ");
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         ",
+                player1);
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         ",
+                player2);
     }
 
     // Игрок может походить
@@ -111,18 +127,19 @@ public class QuadroTest {
                 "         " +
                 "         ");
 
-        hero.act(4);
+        hero1.act(4);
         game.tick();
 
         assertE("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "    x    ");
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    ",
+                player1);
     }
 
     // Игрок может походить на столбец, где есть фишки
@@ -138,18 +155,47 @@ public class QuadroTest {
                 "         " +
                 "    x    ");
 
-        hero.act(4);
+        hero1.act(4);
         game.tick();
 
         assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    " +
+                        "    x    ",
+                player1);
+    }
+
+    // Второй игрок может походить
+    @Test
+    public void shouldHero2AddChip() {
+        givenFl("         " +
                 "         " +
                 "         " +
                 "         " +
                 "         " +
                 "         " +
                 "         " +
-                "    x    " +
-                "    x    ");
+                "         " +
+                "         ");
+
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    o    ",
+                player1);
     }
 
     // Игрок победил когда в ряд 4 мои фишки вертикально
@@ -166,18 +212,19 @@ public class QuadroTest {
                 "    x    " +
                 "    x    ");
 
-        hero.act(4);
+        hero1.act(4);
         game.tick();
 
         assertE("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "    x    " +
-                "    x    " +
-                "    x    " +
-                "    x    ");
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    " +
+                        "    x    " +
+                        "    x    " +
+                        "    x    ",
+                player1);
     }
 
     // TODO: Игрок победил когда в ряд 4 мои фишки горизонтально
@@ -185,5 +232,4 @@ public class QuadroTest {
     // TODO Игрок победил когда в ряд 4 мои фишки по диагонали влево вверх
     // TODO Игрок проиграл когда в ряд 4 чужих фишки
     // TODO Ничья когда нет места для хода
-    // TODO Второй ход (напарника)
 }

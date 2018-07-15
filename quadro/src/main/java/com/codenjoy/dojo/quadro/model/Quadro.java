@@ -61,7 +61,6 @@ public class Quadro implements Field {
     public void tick() {
         for (Player player : players) {
             Hero hero = player.getHero();
-
             hero.tick();
         }
 
@@ -99,6 +98,14 @@ public class Quadro implements Field {
         }
     }
 
+    @Override
+    public boolean getFreeColor() {
+        return players.size() == 1;
+    }
+
+    // Direction
+    // QDirection
+
     public List<Hero> getHeroes() {
         return players.stream()
                 .map(Player::getHero)
@@ -107,9 +114,8 @@ public class Quadro implements Field {
 
     @Override
     public void newGame(Player player) {
-        if (!players.contains(player)) {
+        if (!players.contains(player))
             players.add(player);
-        }
         player.newHero(this);
     }
 
