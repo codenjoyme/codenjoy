@@ -80,10 +80,7 @@ public class Reversi implements Field {
             return;
         }
 
-        for (Player player : players) {
-            Hero hero = player.getHero();
-            hero.tick();
-        }
+        getHeroes().forEach(Hero::tick);
 
         if (stop()) {
             return;
