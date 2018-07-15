@@ -91,9 +91,7 @@ public class ReversiTest {
         }
 
         Object actualAnother = printer.getPrinter(game.reader(), another(player)).print();
-        String expectedAnother = (player == player1)
-                ? expectedOne.replaceAll("x", "-")
-                : expectedOne.replaceAll("o", "-");
+        String expectedAnother = expectedOne.replaceAll("x", "+").replaceAll("o", ".");
 
         assertEquals(expectedAnother, actualAnother);
     }

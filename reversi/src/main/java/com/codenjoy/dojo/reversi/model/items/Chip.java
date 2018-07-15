@@ -49,7 +49,11 @@ public class Chip extends PointImpl implements State<Elements, Player> {
         boolean itsMyTurn = player.color() == field.currentColor();
         boolean itsMyChip = player.color() == color;
         if (!itsMyTurn && itsMyChip) {
-            return Elements.NOT_YOUR_TURN;
+            if (color) {
+                return Elements.WHITE_STOP;
+            } else {
+                return Elements.BLACK_STOP;
+            }
         }
 
         if (color == true) {

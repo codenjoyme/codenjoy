@@ -48,17 +48,17 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isWhite(int x, int y) {
         return isAt(x, y, Elements.WHITE)
                 || isAt(x, y, Elements.WHITE_TURN)
-                || isAt(x, y, Elements.NOT_YOUR_TURN) && myColor();
+                || isAt(x, y, Elements.WHITE_STOP);
     }
 
     public boolean isBlack(int x, int y) {
         return isAt(x, y, Elements.BLACK)
                 || isAt(x, y, Elements.BLACK_TURN)
-                || isAt(x, y, Elements.NOT_YOUR_TURN) && !myColor();
+                || isAt(x, y, Elements.BLACK_STOP);
     }
 
     public boolean isMyTurn() {
-        return get(Elements.NOT_YOUR_TURN).isEmpty();
+        return get(Elements.WHITE_STOP, Elements.BLACK_STOP).isEmpty();
     }
 
     @Override

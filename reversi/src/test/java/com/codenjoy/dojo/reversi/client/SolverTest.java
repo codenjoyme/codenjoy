@@ -47,8 +47,8 @@ public class SolverTest extends AbstractSolverTest {
         asertAI("        " +
                 "        " +
                 "        " +
-                "  ---   " +
-                "   -X   " +
+                "  ...   " +
+                "   .X   " +
                 "        " +
                 "        " +
                 "        ");
@@ -65,9 +65,9 @@ public class SolverTest extends AbstractSolverTest {
         asertAI("        " +
                 "        " +
                 "        " +
-                "   ---  " +
-                "   X--  " +
-                "     -  " +
+                "   ...  " +
+                "   X..  " +
+                "     .  " +
                 "        " +
                 "        ");
     }

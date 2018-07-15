@@ -46,8 +46,8 @@ public class BoardTest {
         assertEquals(false, board.isBlack(2, 2));
 
         shouldB("    " +
-                " -O " +
-                " O- " +
+                " +O " +
+                " O+ " +
                 "    ");
 
         assertEquals(false, board.isMyTurn());
@@ -70,8 +70,8 @@ public class BoardTest {
         assertEquals(false, board.isBlack(2, 2));
 
         shouldB("    " +
-                " X- " +
-                " -X " +
+                " X. " +
+                " .X " +
                 "    ");
 
         assertEquals(false, board.isMyTurn());
