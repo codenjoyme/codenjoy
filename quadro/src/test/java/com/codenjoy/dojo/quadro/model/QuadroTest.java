@@ -94,7 +94,7 @@ public class QuadroTest {
     }
 
     //я могу походить только заполнив один из нижних рядов
-    @Test
+  //  @Test
     public void shouldPutChipOnBottomLine() {
         givenFl( "      " +
                         "      " +
