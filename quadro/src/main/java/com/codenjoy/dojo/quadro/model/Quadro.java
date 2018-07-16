@@ -29,8 +29,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -42,11 +41,11 @@ import static java.util.stream.Collectors.toList;
  */
 public class Quadro implements Field {
 
-    private List<Chip> chips;
+    private Map<Point, Chip> chips;
     private List<Player> players;
     private final int size;
     private boolean yellowPlayerAct = true;
-    boolean chipMoved;
+    private boolean chipMoved;
     private Dice dice;
 
     public Quadro(Level level, Dice dice) {
@@ -88,39 +87,44 @@ public class Quadro implements Field {
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
-        return !chips.contains(pt);
+        return !chips.containsKey(pt);
     }
 
     @Override
     public void setChip(boolean color, int x) {
         int y = 0;
 
-        while (chips.contains(pt(x, y))) {
+        while (chips.containsKey(pt(x, y))) {
             y++;
         }
 
         Point pt = pt(x, y);
-        if (!chips.contains(pt)) {
-            chips.add(new Chip(color, x, y));
+        if (!chips.containsKey(pt)) {
+            chips.put(pt, new Chip(color, x, y));
         }
 
         chipMoved = true;
 
         // TODO: остальные направления для выиграша
         if (y - 3 >= 0) {
-            outerloop:
+//            outerloop:
             for (int i = 1; i < 4; i++) {
-                for (Chip chip : chips) {
-                    if (chip.equals(pt(x, y - i)) && chip.getColor() != color)
-                        break outerloop;
-                }
+//                for (Chip chip : chips) {
+//                    if (chip.equals(pt(x, y - i)) && chip.getColor() != color)
+//                        break outerloop;
+//                }
+                if (chips.get(pt(x, y - i)).getColor() != color)
+                    break;
 
-                if (i == 3) {
-                    (color ? players.get(0) : players.get(1)).event(Events.WIN);
-                    (!color ? players.get(0) : players.get(1)).event(Events.LOOSE);
-                }
+                if (i == 3)
+                    win(color);
             }
         }
+    }
+
+    private void win(boolean color) {
+        (color ? players.get(0) : players.get(1)).event(Events.WIN);
+        (!color ? players.get(0) : players.get(1)).event(Events.LOOSE);
     }
 
     @Override
@@ -159,10 +163,6 @@ public class Quadro implements Field {
         players.remove(player);
     }
 
-    public List<Chip> getChips() {
-        return chips;
-    }
-
     @Override
     public BoardReader reader() {
         return new BoardReader() {
@@ -175,7 +175,7 @@ public class Quadro implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return Quadro.this.getChips();
+                return new ArrayList<>(chips.values());
             }
         };
     }
