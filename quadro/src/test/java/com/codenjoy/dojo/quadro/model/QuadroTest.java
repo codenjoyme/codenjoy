@@ -79,68 +79,6 @@ public class QuadroTest {
                 printer.getPrinter(game.reader(), player).print());
     }
 
-    // изначально иницализируется пустое поле 7х6
-    @Test
-    public void shouldFieldAtStart7x6() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "      " +
-                "      ");
-
-        assertE("      " +
-                        "      " +
-                        "      " +
-                        "      " +
-                        "      " +
-                        "      ",
-                player1);
-    }
-
-    //я могу походить только заполнив один из нижних рядов
-//    @Test
-    public void shouldPutChipOnBottomLine() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "      " +
-                "      ");
-
-        hero1.act(2);
-        game.tick();
-
-        assertE("      " +
-                        "      " +
-                        "      " +
-                        "      " +
-                        "      " +
-                        "     x",
-                player1);
-    }
-
-    //соперник может положить фишку в ряд, который я изначально положил,либо в оставшиеся из 6 вертикальных рядов
-    public void firstEnemyTurn() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "      " +
-                "     x");
-
-        hero1.act(2);
-        game.tick();
-
-        assertE("      " +
-                        "      " +
-                        "      " +
-                        "      " +
-                        "      " +
-                        "    ox",
-                player1);
-    }
-
     // Поле 9х9 изначально пустое
     @Test
     public void shouldFieldAtStart9x9() {
@@ -437,8 +375,12 @@ public class QuadroTest {
                 "         " +
                 "         ");
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 9; i++) {
             game.tick();
+            verifyNoMoreInteractions(listener1);
+            verifyNoMoreInteractions(listener2);
+        }
+        game.tick();
 
         assertE("         " +
                         "         " +
@@ -466,4 +408,7 @@ public class QuadroTest {
 
     // TODO: Нельзя положить фишку, когда столбик полностью забит
     // TODO: Ничья когда нет места для хода
+
+    // TODO: Игра не начинается, хотя идут тики, пока нет двух игроков
+    // TODO: Начиная с третьего игрока идут спектаторы?, либо не добавлять?, либо исключение?
 }
