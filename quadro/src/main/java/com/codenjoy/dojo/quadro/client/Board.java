@@ -38,10 +38,6 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public int size() {
-        return size;
-    }
-
     public boolean isYellow(int x, int y) {
         return isAt(x, y, Elements.YELLOW);
     }

@@ -44,15 +44,23 @@ public class YourSolverTest {
 
     @Test
     public void should() {
-        assertAI("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "   o     " +
-                "   ox    " +
-                " xxoox   ");
+        assertAI("    " +
+                "   o" +
+                "   o" +
+                " xxo");
+
+        assertAI("     " +
+                "     " +
+                "   o " +
+                "   ox" +
+                " xxoo");
+
+        assertAI("      " +
+                "      " +
+                "      " +
+                "   o  " +
+                "   ox " +
+                " xxoox");
 
         assertAI("         " +
                 "         " +
@@ -64,25 +72,15 @@ public class YourSolverTest {
                 "   ox    " +
                 " xxoox   ");
 
-        assertAI("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "   o     " +
-                "   ox    " +
-                " xxoox   ");
-
-        assertAI("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "   o     " +
-                "   ox    " +
-                " xxoox   ");
+        assertAI("                " +
+                "                " +
+                "                " +
+                "                " +
+                "                " +
+                "                " +
+                "   o            " +
+                "   ox           " +
+                " xxoox          ");
     }
 
     private void assertAI(String board) {
