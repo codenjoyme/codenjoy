@@ -625,9 +625,76 @@ public class QuadroTest {
         game.newGame(new Player(mock(EventListener.class)));
     }
 
+    // Если ничья, то игра начинается снова; Через 15 тиков
+    @Test
+    public void gameOverDraw() {
+        givenFl(" xoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo");
+
+        hero1.act(0);
+        game.tick();
+
+        verify(listener1).event(Events.DRAW);
+        verify(listener2).event(Events.DRAW);
+
+        for (int i = 0; i < 15; i++) {
+            game.tick();
+        }
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         ",
+                player1);
+    }
+
+    // Если кто-то победил, то игра начинается снова; Через 15 тиков
+    @Test
+    public void gameOverWin() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "o        " +
+                "o        " +
+                "o        ");
+
+        hero1.act(0);
+        game.tick();
+
+        verify(listener1).event(Events.WIN);
+        verify(listener2).event(Events.LOOSE);
+
+        for (int i = 0; i < 15; i++)
+            game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         ",
+                player1);
+    }
+
     // TODO: Игрок победил когда в ряд 4 его фишки горизонтально
     // TODO: Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх / влево вниз
     // TODO: Игрок победил когда в ряд 4 его фишки по диагонали влево вверх / вправо вниз
-
-    // TODO: Если кто-то победил, то игра начинается снова; Через Х тиков?
 }

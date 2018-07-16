@@ -48,6 +48,7 @@ public class Quadro implements Field {
     private boolean yellowPlayerAct = true;
     private boolean chipMoved;
     private int missedActs = 0;
+    private int gameOver = 0;
     private Dice dice;
 
     public Quadro(Level level, Dice dice) {
@@ -59,6 +60,14 @@ public class Quadro implements Field {
 
     @Override
     public void tick() {
+        if (gameOver > 0) {
+            if (++gameOver > 15) {
+                chips.clear();
+                gameOver = 0;
+            }
+            else return;
+        }
+
         chipMoved = false;
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -74,10 +83,8 @@ public class Quadro implements Field {
                 win(!yellowPlayerAct);
         }
 
-        if (chips.size() == size * size) {
-            players.get(0).event(Events.DRAW);
-            players.get(1).event(Events.DRAW);
-        }
+        if (chips.size() == size * size)
+            draw();
 
 //        for (Player player : players) {
 //            Hero hero = player.getHero();
@@ -119,16 +126,19 @@ public class Quadro implements Field {
         }
 
         chipMoved = true;
+        checkWin(pt, color);
+    }
 
+    private void checkWin(Point pt, boolean color) {
         // TODO: остальные направления для выиграша
-        if (y - 3 >= 0) {
+        if (pt.getY() - 3 >= 0) {
 //            outerloop:
             for (int i = 1; i < 4; i++) {
 //                for (Chip chip : chips) {
 //                    if (chip.equals(pt(x, y - i)) && chip.getColor() != color)
 //                        break outerloop;
 //                }
-                if (chips.get(pt(x, y - i)).getColor() != color)
+                if (chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color)
                     break;
 
                 if (i == 3)
@@ -137,7 +147,14 @@ public class Quadro implements Field {
         }
     }
 
+    private void draw() {
+        gameOver = 1;
+        players.get(0).event(Events.DRAW);
+        players.get(1).event(Events.DRAW);
+    }
+
     private void win(boolean color) {
+        gameOver = 1;
         (color ? players.get(0) : players.get(1)).event(Events.WIN);
         (!color ? players.get(0) : players.get(1)).event(Events.LOOSE);
     }
