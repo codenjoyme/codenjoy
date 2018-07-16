@@ -589,11 +589,28 @@ public class QuadroTest {
 //                player1);
     }
 
+    // Ничья когда нет места для хода
+    @Test
+    public void shouldDraw_whenNoMoreSpace() {
+        givenFl("oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo" +
+                "xoxoxoxox" +
+                "oxoxoxoxo");
+
+        game.tick();
+
+        verify(listener1).event(Events.DRAW);
+        verify(listener2).event(Events.DRAW);
+    }
+
     // TODO: Игрок победил когда в ряд 4 его фишки горизонтально
     // TODO: Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх / влево вниз
     // TODO: Игрок победил когда в ряд 4 его фишки по диагонали влево вверх / вправо вниз
-
-    // TODO: Ничья когда нет места для хода
 
     // TODO: Начиная с третьего игрока идут спектаторы?, либо не добавлять?, либо исключение?
     // TODO: Если кто-то победил, то игра начинается снова; Через Х тиков?
