@@ -86,7 +86,7 @@ public class Quadro implements Field {
 //        }
     }
 
-    public int size() {
+    public int getSize() {
         return size;
     }
 

@@ -31,4 +31,5 @@ public interface Field extends GameField<Player> {
     boolean getFreeColor();
     Hero currentPlayer();
     void playerMissedAct();
+    int getSize();
 }

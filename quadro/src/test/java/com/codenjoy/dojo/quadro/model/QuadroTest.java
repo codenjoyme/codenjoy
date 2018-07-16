@@ -460,6 +460,42 @@ public class QuadroTest {
                 player1);
     }
 
+    // Валидация параметров для хода
+    @Test
+    public void shouldSkipNotValidActCommands() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act();
+        game.tick();
+        hero1.act(-2);
+        game.tick();
+        hero1.act(1, 1);
+        game.tick();
+        hero1.act(12);
+        game.tick();
+        hero2.act(1);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         ",
+                player1);
+    }
+
     // TODO: Игрок победил когда в ряд 4 его фишки горизонтально
     // TODO: Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх / влево вниз
     // TODO: Игрок победил когда в ряд 4 его фишки по диагонали влево вверх / вправо вниз

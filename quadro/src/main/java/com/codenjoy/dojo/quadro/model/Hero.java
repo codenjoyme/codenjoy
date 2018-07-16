@@ -51,7 +51,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
-        if (p.length > 0)
+        if (p.length == 1 && p[0] >= 0 && p[0] < field.getSize())
             x = p[0];
         else
             x = -1;
