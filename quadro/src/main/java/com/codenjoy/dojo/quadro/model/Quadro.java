@@ -46,6 +46,7 @@ public class Quadro implements Field {
     private final int size;
     private boolean yellowPlayerAct = true;
     private boolean chipMoved;
+    private int missedActs = 0;
     private Dice dice;
 
     public Quadro(Level level, Dice dice) {
@@ -63,8 +64,14 @@ public class Quadro implements Field {
             hero.tick();
         }
 
-        if (chipMoved)
+        if (chipMoved) {
             yellowPlayerAct = !yellowPlayerAct;
+            missedActs = 0;
+        }
+        else {
+            if (++missedActs >9)
+                win(!yellowPlayerAct);
+        }
 
         if (chips.size() == size * size) {
             players.get(0).event(Events.DRAW);
