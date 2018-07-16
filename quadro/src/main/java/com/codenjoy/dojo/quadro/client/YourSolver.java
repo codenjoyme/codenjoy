@@ -55,7 +55,9 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        return Direction.UP.toString();
+        int x = 0;
+
+        return String.format("ACT(%s)", x);
     }
 
     public static void main(String[] args) {
