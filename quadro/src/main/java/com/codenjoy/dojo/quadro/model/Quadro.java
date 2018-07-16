@@ -105,6 +105,8 @@ public class Quadro implements Field {
             y++;
         }
 
+        if (y >= size) return;
+
         Point pt = pt(x, y);
         if (!chips.containsKey(pt)) {
             chips.put(pt, new Chip(color, x, y));
