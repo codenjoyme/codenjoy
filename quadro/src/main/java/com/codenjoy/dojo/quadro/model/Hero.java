@@ -59,16 +59,20 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void tick() {
+        if (!field.isGameStarted()) return;
+
         if (this.equals(field.currentPlayer())) {
             if (x >= 0)
                 field.setChip(color, x);
-            else
-                field.playerMissedAct();
         }
         x = -1;
     }
 
     public boolean isAlive() {
         return true;
+    }
+
+    public boolean getColor() {
+        return color;
     }
 }

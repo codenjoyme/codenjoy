@@ -27,6 +27,7 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
@@ -91,6 +92,11 @@ public class Quadro implements Field {
     }
 
     @Override
+    public boolean isGameStarted() {
+        return players.size() == MultiplayerType.TOURNAMENT.getCount();
+    }
+
+    @Override
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
@@ -138,17 +144,12 @@ public class Quadro implements Field {
 
     @Override
     public boolean getFreeColor() {
-        return players.size() == 1;
+        return players.size() == 1 || !players.get(0).getHero().getColor();
     }
 
     @Override
     public Hero currentPlayer() {
         return yellowPlayerAct ? players.get(0).getHero() : players.get(1).getHero();
-    }
-
-    @Override
-    public void playerMissedAct() {
-        // TODO
     }
 
     // Direction

@@ -30,6 +30,6 @@ public interface Field extends GameField<Player> {
     void setChip(boolean color, int x);
     boolean getFreeColor();
     Hero currentPlayer();
-    void playerMissedAct();
     int getSize();
+    boolean isGameStarted();
 }
