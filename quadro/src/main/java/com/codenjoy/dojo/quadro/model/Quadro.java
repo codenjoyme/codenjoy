@@ -163,6 +163,9 @@ public class Quadro implements Field {
 
     @Override
     public void newGame(Player player) {
+        if (players.size() == 2)
+            throw new IllegalStateException("Too many players: " + players.size());
+
         if (!players.contains(player))
             players.add(player);
         player.newHero(this);
