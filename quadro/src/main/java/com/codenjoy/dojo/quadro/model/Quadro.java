@@ -132,7 +132,7 @@ public class Quadro implements Field {
     private void checkWin(Point pt, boolean color) {
         // TODO: остальные направления для выиграша
         // Direction, QDirection
-        
+
         if (pt.getY() - 3 >= 0) {
 //            outerloop:
             for (int i = 1; i < 4; i++) {

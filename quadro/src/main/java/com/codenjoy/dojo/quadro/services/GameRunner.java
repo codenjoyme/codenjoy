@@ -47,12 +47,15 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     protected String getMap() {
-        return "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       ";
+        return "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "   o     " +
+                "   ox    " +
+                " xxoox   ";
     }
 
     @Override
