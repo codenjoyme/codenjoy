@@ -80,7 +80,14 @@ public class YourSolverTest {
                 "                " +
                 "   o            " +
                 "   ox           " +
-                " xxoox          ");
+                " xxoox          " +
+                "                " +
+                "                " +
+                "                " +
+                "                " +
+                "                " +
+                "                " +
+                "                ");
     }
 
     private void assertAI(String board) {
