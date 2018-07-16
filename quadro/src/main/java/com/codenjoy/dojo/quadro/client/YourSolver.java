@@ -23,11 +23,12 @@ package com.codenjoy.dojo.quadro.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * User: your name
@@ -46,6 +47,9 @@ public class YourSolver implements Solver<Board> {
     private Dice dice;
     private Board board;
 
+    public YourSolver() {
+    }
+
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
@@ -53,11 +57,8 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        if (board.isGameOver()) return "";
 
-        int x = 0;
-
-        return String.format("ACT(%s)", x);
+        return String.format("ACT(%s)", random(board.size()));
     }
 
     public static void main(String[] args) {
@@ -67,5 +68,9 @@ public class YourSolver implements Solver<Board> {
                 CODE,
                 new YourSolver(new RandomDice()),
                 new Board());
+    }
+
+    private int random(int less) {
+        return ThreadLocalRandom.current().nextInt(0, less);
     }
 }

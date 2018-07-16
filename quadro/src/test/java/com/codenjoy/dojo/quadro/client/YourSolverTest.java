@@ -23,26 +23,19 @@ package com.codenjoy.dojo.quadro.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertTrue;
 
-public class SolverTest {
+public class YourSolverTest {
 
-    private Dice dice;
     private Solver ai;
 
     @Before
     public void setup() {
-        dice = mock(Dice.class);
-        ai = new YourSolver(dice);
+        ai = new YourSolver();
     }
 
     private Board board(String board) {
@@ -59,7 +52,7 @@ public class SolverTest {
                 "         " +
                 "   o     " +
                 "   ox    " +
-                " xxoox   ", "ACT(0)");
+                " xxoox   ");
 
         assertAI("         " +
                 "         " +
@@ -69,7 +62,7 @@ public class SolverTest {
                 "         " +
                 "   o     " +
                 "   ox    " +
-                " xxoox   ", "ACT(0)");
+                " xxoox   ");
 
         assertAI("         " +
                 "         " +
@@ -79,7 +72,7 @@ public class SolverTest {
                 "         " +
                 "   o     " +
                 "   ox    " +
-                " xxoox   ", "ACT(0)");
+                " xxoox   ");
 
         assertAI("         " +
                 "         " +
@@ -89,15 +82,12 @@ public class SolverTest {
                 "         " +
                 "   o     " +
                 "   ox    " +
-                " xxoox   ", "ACT(0)");
+                " xxoox   ");
     }
 
-    private void assertAI(String board, String expected) {
+    private void assertAI(String board) {
         String actual = ai.get(board(board));
-        assertEquals(expected, actual);
-    }
-
-    private void dice(Direction direction) {
-        when(dice.next(anyInt())).thenReturn(direction.value());
+        int act = Integer.parseInt(actual.substring(4, actual.length() - 1));
+        assertTrue(act >= 0 && act < Math.sqrt(board.length()));
     }
 }
