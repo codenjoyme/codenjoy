@@ -201,9 +201,9 @@ public class QuadroTest {
                 player1);
     }
 
-    // Игрок победил когда в ряд 4 его фишки вертикально
+    // Желтый игрок победил когда в ряд 4 его фишки вертикально
     @Test
-    public void shouldWinVertical() {
+    public void shouldWinVertical_yellow() {
         givenFl("         " +
                 "         " +
                 "         " +
@@ -230,6 +230,39 @@ public class QuadroTest {
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
+    }
+
+    // Красный игрок победил когда в ряд 4 его фишки вертикально
+    @Test
+    public void shouldWinVertical_red() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " x       " +
+                " x       " +
+                " x       ");
+
+        hero1.act(0);
+        game.tick();
+        hero2.act(1);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        " x       " +
+                        " x       " +
+                        " x       " +
+                        "ox       ",
+                player2);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
     }
 
     // Первым ходит желтый
