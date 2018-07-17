@@ -19,6 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+
 // ты можешь включать или выключать те или иные компоненты
 // например этот скрипт настроен на то, что будет только борда и
 // встроится она в layout указанный в ресурсах
@@ -50,7 +52,6 @@ game.onBoardPageLoad = function() {
         ],
         function() {
             // setup UI
-
             $(document.body).show();
         });
 }
@@ -61,7 +62,6 @@ game.onBoardAllPageLoad = function() {
         [],
         function() {
             // setup UI
-
             $(document.body).show();
         });
 }

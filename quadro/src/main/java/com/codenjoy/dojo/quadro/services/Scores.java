@@ -29,21 +29,25 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
+ * Обычно хочется, чтобы константы очков не были захардкоджены,
+ * потому используй объект {@see Settings} для их хранения.
  */
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
+    private final Parameter<Integer> looseScore;
+    private final Parameter<Integer> drawScore;
 
     private volatile int score;
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+        // вот тут мы на админке увидим два поля с подписями
+        // и возожностью редактировать значение по умолчанию
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(10);
+        looseScore = settings.addEditBox("Loose score").type(Integer.class).def(1);
+        drawScore = settings.addEditBox("Draw score").type(Integer.class).def(1);
     }
 
     @Override
@@ -58,11 +62,12 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.WIN)) {
+        if (event.equals(Events.WIN))
             score += winScore.getValue();
-        } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
-        }
+        else if (event.equals(Events.LOOSE))
+            score += looseScore.getValue();
+        else if (event.equals(Events.DRAW))
+            score+= drawScore.getValue();
         score = Math.max(0, score);
     }
 }

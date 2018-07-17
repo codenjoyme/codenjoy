@@ -53,9 +53,9 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "         " +
                 "         " +
                 "         " +
-                "   o     " +
-                "   ox    " +
-                " xxoox   ";
+                "         " +
+                "         " +
+                "         ";
     }
 
     @Override

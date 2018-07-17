@@ -22,12 +22,16 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Sample codenjoy — как играть? | Игры на работе</title>
+    <title>Quadro codenjoy — как играть? | Игры на работе</title>
     <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
-<a target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<a target="_blank" href="https://github.com/codenjoyme"><img
+        style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;"
+        src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+        alt="Fork me on GitHub"
+        data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
 <div id="page" class="hfeed">
     <div id="main">
         <div id="primary">
@@ -35,9 +39,10 @@
 
 
                 <header class="entry-header">
-                    <h1 class="entry-title">Sample codenjoy — как играть?</h1>
+                    <h1 class="entry-title">Quadro codenjoy — как играть?</h1>
                 </header>
 
+                <!--TODO: p3~50-->
                 <div class="entry-content">
                     <div class="page-restrict-output"><p>В принципе, игровой сервер доступен
                         сейчас в целях ознакомления <a href="/codenjoy-contest">
@@ -54,10 +59,12 @@
 
                         <p>Итак, игрок <a href="/codenjoy-contest/register?gameName=quadro" target="_blank">
                             регистрируется на сервере</a>, указывая свой email</p>
-                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/quadro-servers.zip">из кода</a>
+                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/quadro-servers.zip">из
+                            кода</a>
                             к серверу через вебсокеты. Это Maven проект и подойдет он дял игры на JVM языках.
                             Как его запустить смотри в корне README.txt</p>
-                        <p>Для других языков придется написать свой клиент (а после пошарить с нами на почту: apofig@gmail.com)</p>
+                        <p>Для других языков придется написать свой клиент (а после пошарить с нами на почту:
+                            apofig@gmail.com)</p>
                         <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
                         <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
                         <p>Адрес для подключения к игре на сервере, развернутом в локальной сети:</p>
@@ -122,7 +129,7 @@
                         <p>Чертики - их надо собирать</p>
                         <pre>GOLD('$')</pre>
                         <p>Бомбы - их лучше избегать</p>
-                        <pre>BOMB('x')</pre>                        
+                        <pre>BOMB('x')</pre>
                         <p>Игра пошаговая, каждую секунду сервер посылает твоему клиенту (боту)
                             состояние обновленного поля на текущий момент и ожидает ответа команды герою.
                             За следующую секунду игрок должен успеть дать команду герою.
