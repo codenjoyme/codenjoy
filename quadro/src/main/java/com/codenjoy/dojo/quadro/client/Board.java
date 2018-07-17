@@ -45,16 +45,4 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isRed(int x, int y) {
         return isAt(x, y, Elements.RED);
     }
-
-    public boolean isYellowStep() {
-        return get(Elements.YELLOW).size() == get(Elements.RED).size();
-    }
-
-    public boolean isRedStep() {
-        return !isYellowStep();
-    }
-
-    public boolean isGameOver() {
-        return false;
-    }
 }
