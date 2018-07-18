@@ -556,37 +556,6 @@ public class QuadroTest {
                         "    x    " +
                         "    o    ",
                 player1);
-
-        // TODO
-//        game.newGame(player1);
-//        hero1 = player1.hero;
-//        hero1.act(4);
-//        game.tick();
-//
-//        assertE("         " +
-//                        "         " +
-//                        "         " +
-//                        "         " +
-//                        "         " +
-//                        "         " +
-//                        "    o    " +
-//                        "    x    " +
-//                        "    o    ",
-//                player1);
-//
-//        hero2.act(4);
-//        game.tick();
-//
-//        assertE("         " +
-//                        "         " +
-//                        "         " +
-//                        "         " +
-//                        "         " +
-//                        "    x    " +
-//                        "    o    " +
-//                        "    x    " +
-//                        "    o    ",
-//                player1);
     }
 
     // Ничья когда нет места для хода
@@ -694,7 +663,168 @@ public class QuadroTest {
                 player1);
     }
 
-    // TODO: Игрок победил когда в ряд 4 его фишки горизонтально
-    // TODO: Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх / влево вниз
-    // TODO: Игрок победил когда в ряд 4 его фишки по диагонали влево вверх / вправо вниз
+    // Игрок победил когда в ряд 4 его фишки горизонтально
+    @Test
+    public void shouldWinHorizontal() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " o       " +
+                " o       " +
+                " xx xxo  ");
+
+        hero1.act(0);
+        game.tick();
+        hero2.act(3);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        " o       " +
+                        " o       " +
+                        "oxxxxxo  ",
+                player2);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+
+    // Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх
+    @Test
+    public void shouldWin_directionBottomLeftToTopRightActive() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xx    " +
+                "  xxo    " +
+                "  ooooo  ");
+
+        hero1.act(0);
+        game.tick();
+        hero2.act(1);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    " +
+                        "   xx    " +
+                        "  xxo    " +
+                        "oxooooo  ",
+                player2);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+
+    // Игрок победил когда в ряд 4 его фишки по диагонали влево вниз
+    @Test
+    public void shouldWin_directionTopRightToBottomLeftActive() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "   xx    " +
+                "  xxo    " +
+                " xooooo  ");
+
+        hero1.act(0);
+        game.tick();
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    " +
+                        "   xx    " +
+                        "  xxo    " +
+                        "oxooooo  ",
+                player2);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+
+    // TODO: Игрок победил когда в ряд 4 его фишки по диагонали влево вверх
+    @Test
+    public void shouldWin_directionBottomRightToTopLeftActive() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xxx   " +
+                "  oxoox  " +
+                " xooooo  ");
+
+        hero1.act(0);
+        game.tick();
+        hero2.act(7);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    " +
+                        "   xxx   " +
+                        "  oxoox  " +
+                        "oxooooox ",
+                player2);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
+
+    // TODO: Игрок победил когда в ряд 4 его фишки по диагонали вправо вниз
+    @Test
+    public void shouldWin_directionTopLeftToBottomRightActive() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "   xxx   " +
+                "  oxoox  " +
+                " xooooox ");
+
+        hero1.act(0);
+        game.tick();
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "         " +
+                        "    x    " +
+                        "   xxx   " +
+                        "  oxoox  " +
+                        "oxooooox ",
+                player2);
+
+        verify(listener1).event(Events.LOOSE);
+        verify(listener2).event(Events.WIN);
+    }
 }

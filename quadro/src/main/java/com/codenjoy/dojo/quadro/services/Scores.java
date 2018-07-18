@@ -47,7 +47,7 @@ public class Scores implements PlayerScores {
         // и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(10);
         looseScore = settings.addEditBox("Loose score").type(Integer.class).def(1);
-        drawScore = settings.addEditBox("Draw score").type(Integer.class).def(1);
+        drawScore = settings.addEditBox("Draw score").type(Integer.class).def(3);
     }
 
     @Override

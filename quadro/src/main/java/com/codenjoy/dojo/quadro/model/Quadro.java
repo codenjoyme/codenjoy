@@ -26,6 +26,7 @@ package com.codenjoy.dojo.quadro.model;
 import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -64,8 +65,7 @@ public class Quadro implements Field {
             if (++gameOver > 15) {
                 chips.clear();
                 gameOver = 0;
-            }
-            else return;
+            } else return;
         }
 
         chipMoved = false;
@@ -77,8 +77,7 @@ public class Quadro implements Field {
         if (chipMoved) {
             yellowPlayerAct = !yellowPlayerAct;
             missedActs = 0;
-        }
-        else {
+        } else {
             if (++missedActs > 9)
                 win(!yellowPlayerAct);
         }
@@ -130,23 +129,55 @@ public class Quadro implements Field {
     }
 
     private void checkWin(Point pt, boolean color) {
-        // TODO: остальные направления для выиграша
-        // Direction, QDirection
+        int verticalCounter = 1,
+                horizontalCounter = 1,
+                diagonal1Counter = 1, // ⭧⭩
+                diagonal2Counter = 1; // ⭦⭨
+        boolean directionTopToDownActive = true,
+                directionLeftToRightActive = true,
+                directionRightToLeftActive = true,
+                directionTopRightToBottomLeftActive = true,
+                directionBottomLeftToTopRightActive = true,
+                directionTopLeftToBottomRightActive = true,
+                directionBottomRightToTopLeftActive = true;
 
-        if (pt.getY() - 3 >= 0) {
-//            outerloop:
-            for (int i = 1; i < 4; i++) {
-//                for (Chip chip : chips) {
-//                    if (chip.equals(pt(x, y - i)) && chip.getColor() != color)
-//                        break outerloop;
-//                }
-                if (chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color)
-                    break;
+        for (int i = 1; i < 4; i++) {
+            if (chips.get(pt(pt.getX(), pt.getY() - i)) == null
+                    || chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color)
+                directionTopToDownActive = false;
+            if (chips.get(pt(pt.getX() + i, pt.getY())) == null
+                    || chips.get(pt(pt.getX() + i, pt.getY())).getColor() != color)
+                directionLeftToRightActive = false;
+            if (chips.get(pt(pt.getX() - i, pt.getY())) == null
+                    || chips.get(pt(pt.getX() - i, pt.getY())).getColor() != color)
+                directionRightToLeftActive = false;
+            if (chips.get(pt(pt.getX() - i, pt.getY() - i)) == null
+                    || chips.get(pt(pt.getX() - i, pt.getY() - i)).getColor() != color)
+                directionTopRightToBottomLeftActive = false;
+            if (chips.get(pt(pt.getX() + i, pt.getY() + i)) == null
+                    || chips.get(pt(pt.getX() + i, pt.getY() + i)).getColor() != color)
+                directionBottomLeftToTopRightActive = false;
+            if (chips.get(pt(pt.getX() + i, pt.getY() - i)) == null
+                    || chips.get(pt(pt.getX() + i, pt.getY() - i)).getColor() != color)
+                directionTopLeftToBottomRightActive = false;
+            if (chips.get(pt(pt.getX() - i, pt.getY() + i)) == null
+                    || chips.get(pt(pt.getX() - i, pt.getY() + i)).getColor() != color)
+                directionBottomRightToTopLeftActive = false;
 
-                if (i == 3)
-                    win(color);
-            }
+            if (directionTopToDownActive) verticalCounter++;
+            if (directionLeftToRightActive) horizontalCounter++;
+            if (directionRightToLeftActive) horizontalCounter++;
+            if (directionTopRightToBottomLeftActive) diagonal1Counter++;
+            if (directionBottomLeftToTopRightActive) diagonal1Counter++;
+            if (directionTopLeftToBottomRightActive) diagonal2Counter++;
+            if (directionBottomRightToTopLeftActive) diagonal2Counter++;
         }
+
+        if (verticalCounter >= 4
+                || horizontalCounter >= 4
+                || diagonal1Counter >= 4
+                || diagonal2Counter >= 4)
+            win(color);
     }
 
     private void draw() {

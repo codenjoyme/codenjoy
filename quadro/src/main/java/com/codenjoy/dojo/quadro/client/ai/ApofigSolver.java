@@ -54,18 +54,18 @@ public class ApofigSolver implements Solver<Board> {
         return String.format("ACT(%s)", dice.next(board.size()));
     }
 
+    // TODO
     public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(),
-                new ArrayList<Solver>() {{
-                    add(new ApofigSolver(new RandomDice()));
-                    add(new ApofigSolver(new RandomDice()));
-                }},
-                new ArrayList<ClientBoard>() {{
-                    add(new Board());
-                    add(new Board());
-                }});
-        // TODO
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
+//        LocalGameRunner.run(new GameRunner(),
+//                new ArrayList<Solver>() {{
+//                    add(new ApofigSolver(new RandomDice()));
+//                    add(new ApofigSolver(new RandomDice()));
+//                }},
+//                new ArrayList<ClientBoard>() {{
+//                    add(new Board());
+//                    add(new Board());
+//                }});
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
     }
 
     public static void start(String name, WebSocketRunner.Host host, Dice dice) {
