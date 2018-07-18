@@ -26,7 +26,6 @@ package com.codenjoy.dojo.quadro.model;
 import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -128,6 +127,7 @@ public class Quadro implements Field {
         checkWin(pt, color);
     }
 
+    // TODO: possible refactoring to recursive and QDirection
     private void checkWin(Point pt, boolean color) {
         int verticalCounter = 1,
                 horizontalCounter = 1,
@@ -142,26 +142,33 @@ public class Quadro implements Field {
                 directionBottomRightToTopLeftActive = true;
 
         for (int i = 1; i < 4; i++) {
-            if (chips.get(pt(pt.getX(), pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color)
+            if (directionTopToDownActive
+                    && (chips.get(pt(pt.getX(), pt.getY() - i)) == null
+                    || chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color))
                 directionTopToDownActive = false;
-            if (chips.get(pt(pt.getX() + i, pt.getY())) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY())).getColor() != color)
+            if (directionLeftToRightActive
+                    && (chips.get(pt(pt.getX() + i, pt.getY())) == null
+                    || chips.get(pt(pt.getX() + i, pt.getY())).getColor() != color))
                 directionLeftToRightActive = false;
-            if (chips.get(pt(pt.getX() - i, pt.getY())) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY())).getColor() != color)
+            if (directionRightToLeftActive
+                    && (chips.get(pt(pt.getX() - i, pt.getY())) == null
+                    || chips.get(pt(pt.getX() - i, pt.getY())).getColor() != color))
                 directionRightToLeftActive = false;
-            if (chips.get(pt(pt.getX() - i, pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY() - i)).getColor() != color)
+            if (directionTopRightToBottomLeftActive
+                    && (chips.get(pt(pt.getX() - i, pt.getY() - i)) == null
+                    || chips.get(pt(pt.getX() - i, pt.getY() - i)).getColor() != color))
                 directionTopRightToBottomLeftActive = false;
-            if (chips.get(pt(pt.getX() + i, pt.getY() + i)) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY() + i)).getColor() != color)
+            if (directionBottomLeftToTopRightActive
+                    && (chips.get(pt(pt.getX() + i, pt.getY() + i)) == null
+                    || chips.get(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
                 directionBottomLeftToTopRightActive = false;
-            if (chips.get(pt(pt.getX() + i, pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY() - i)).getColor() != color)
+            if (directionTopLeftToBottomRightActive
+                    && (chips.get(pt(pt.getX() + i, pt.getY() - i)) == null
+                    || chips.get(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
                 directionTopLeftToBottomRightActive = false;
-            if (chips.get(pt(pt.getX() - i, pt.getY() + i)) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY() + i)).getColor() != color)
+            if (directionBottomRightToTopLeftActive
+                    && (chips.get(pt(pt.getX() - i, pt.getY() + i)) == null
+                    || chips.get(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
                 directionBottomRightToTopLeftActive = false;
 
             if (directionTopToDownActive) verticalCounter++;
