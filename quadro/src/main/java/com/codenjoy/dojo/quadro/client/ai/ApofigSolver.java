@@ -54,7 +54,7 @@ public class ApofigSolver implements Solver<Board> {
         return String.format("ACT(%s)", dice.next(board.size()));
     }
 
-    // TODO
+    // TODO: it's just a link here
     public static void main(String[] args) {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ArrayList<Solver>() {{

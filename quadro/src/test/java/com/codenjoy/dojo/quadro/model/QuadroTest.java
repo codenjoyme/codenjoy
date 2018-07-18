@@ -762,7 +762,7 @@ public class QuadroTest {
         verify(listener2).event(Events.WIN);
     }
 
-    // TODO: Игрок победил когда в ряд 4 его фишки по диагонали влево вверх
+    // Игрок победил когда в ряд 4 его фишки по диагонали влево вверх
     @Test
     public void shouldWin_directionBottomRightToTopLeftActive() {
         givenFl("         " +
@@ -795,7 +795,7 @@ public class QuadroTest {
         verify(listener2).event(Events.WIN);
     }
 
-    // TODO: Игрок победил когда в ряд 4 его фишки по диагонали вправо вниз
+    // Игрок победил когда в ряд 4 его фишки по диагонали вправо вниз
     @Test
     public void shouldWin_directionTopLeftToBottomRightActive() {
         givenFl("         " +

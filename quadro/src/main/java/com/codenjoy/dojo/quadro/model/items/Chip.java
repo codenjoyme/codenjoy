@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Артефакт: Бомба на поле
+ * Артефакт: Фишка на поле
  */
 public class Chip extends PointImpl implements State<Elements, Player> {
 
