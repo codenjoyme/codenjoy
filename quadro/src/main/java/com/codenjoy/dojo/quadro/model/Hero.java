@@ -27,10 +27,11 @@ import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 /**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- * Ну и конечно же он имплементит {@see State}, а значит может быть отрисован на поле.
- * Часть этих интерфейсов объявлены в {@see PlayerHero}, а часть явно тут.
+ * Это реализация героя. Он имплементит:
+ * - {@see Joystick} - может быть управляем фреймворком;
+ * - {@see Tickable} - есть возможность его оповещать о каждом тике игры;
+ * - {@see State} - может быть отрисован на поле.
+ * Часть этих интерфейсов объявлены в {@see PlayerHero}, часть явно тут.
  */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
@@ -39,10 +40,6 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
     public Hero(boolean color) {
         this.color = color;
     }
-
-//    public Hero(Point xy) {
-//        super(xy);
-//    }
 
     @Override
     public void init(Field field) {

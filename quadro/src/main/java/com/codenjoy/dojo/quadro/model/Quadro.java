@@ -36,7 +36,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 /**
- * О! Это самое сердце игры - борда, на которой все происходит.
+ * Борда, на которой все происходит.
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Quadro#tick()}
  */
@@ -83,13 +83,6 @@ public class Quadro implements Field {
 
         if (chips.size() == size * size)
             draw();
-
-//        for (Player player : players) {
-//            Hero hero = player.getHero();
-//            if (!hero.isAlive()) {
-//                player.event(Events.LOOSE);
-//            }
-//        }
     }
 
     public int getSize() {
@@ -128,6 +121,7 @@ public class Quadro implements Field {
     }
 
     // TODO: possible refactoring to recursive and QDirection
+    // Для этого нужно понять как работает Direction
     private void checkWin(Point pt, boolean color) {
         int verticalCounter = 1,
                 horizontalCounter = 1,

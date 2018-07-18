@@ -28,8 +28,7 @@ import com.codenjoy.dojo.quadro.model.Elements;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
- * Содержит ряд унаследованных методов {@see AbstractBoard},
- * но ты можешь добавить сюда любые свои методы на их основе.
+ * Содержит ряд унаследованных методов {@see AbstractBoard}.
  */
 public class Board extends AbstractBoard<Elements> {
 

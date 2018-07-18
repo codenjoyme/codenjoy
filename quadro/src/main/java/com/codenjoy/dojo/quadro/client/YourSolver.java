@@ -32,9 +32,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * User: your name
- * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
- * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
- * фреймворк для тебя.
+ * Алгоритм AI для игры. Реализуй его на свое усмотрение.
+ * Обрати внимание на {@see YourSolverTest}.
  */
 public class YourSolver implements Solver<Board> {
 

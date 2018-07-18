@@ -23,22 +23,18 @@ package com.codenjoy.dojo.quadro.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quadro.client.Board;
-import com.codenjoy.dojo.quadro.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.ArrayList;
 
 /**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random (только используй для этого
- * {@see Dice} что приходит через конструктор).
+ * Это алгоритм бота.
+ * Он будет запускаться в игру с первым зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
+ * Реализуй его как хочешь, хоть на Random (только используй для этого {@see Dice} что приходит через конструктор).
  * Для его запуска воспользуйся методом {@see ApofigSolver#main}
  */
 public class ApofigSolver implements Solver<Board> {
@@ -54,7 +50,6 @@ public class ApofigSolver implements Solver<Board> {
         return String.format("ACT(%s)", dice.next(board.size()));
     }
 
-    // TODO: it's just a link here
     public static void main(String[] args) {
 //        LocalGameRunner.run(new GameRunner(),
 //                new ArrayList<Solver>() {{
@@ -75,5 +70,4 @@ public class ApofigSolver implements Solver<Board> {
                 new ApofigSolver(dice),
                 new Board());
     }
-
 }
