@@ -219,11 +219,15 @@ public class Quadro implements Field {
         return isThatColor(pt, color);
     }
 
-    private boolean toDown(Point pt, boolean color, int i) {
+    private boolean to(QDirection where, Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
-            pt = QDirection.DOWN.change(pt);
+            pt = where.change(pt);
         }
         return isThatColor(pt, color);
+    }
+
+    private boolean toDown(Point pt, boolean color, int i) {
+        return to(QDirection.DOWN, pt, color, i);
     }
 
     private Chip chip(Point pt) {
