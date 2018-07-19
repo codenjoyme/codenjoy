@@ -129,9 +129,9 @@ public class Quadro implements Field {
 
     private void checkWin(Point pt, boolean color) {
         boolean vertical = getCount(DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN;
-        boolean diagonal1 = (getCountHalf(RIGHT, pt, color) + getCountHalf(LEFT, pt, color)) >= CHIPS_LENGTH_TO_WIN;
-        boolean diagonal2 = (getCountHalf(LEFT_DOWN, pt, color) + getCountHalf(RIGHT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN;
-        boolean horizontal = (getCountHalf(RIGHT_DOWN, pt, color) + getCountHalf(LEFT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN;
+        boolean diagonal1 = getCount(RIGHT, pt, color) >= CHIPS_LENGTH_TO_WIN;
+        boolean diagonal2 = getCount(LEFT_DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN;
+        boolean horizontal = getCount(RIGHT_DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN;
 
         if (vertical || diagonal1 || diagonal2 || horizontal) {
             win(color);
