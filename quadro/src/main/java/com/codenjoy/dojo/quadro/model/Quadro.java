@@ -129,16 +129,12 @@ public class Quadro implements Field {
 
     private void checkWin(Point pt, boolean color) {
         if (getCount(DOWN, pt, color) + 1 >= CHIPS_LENGTH_TO_WIN
-                || getHorizontalCount(pt, color) >= CHIPS_LENGTH_TO_WIN
+                || (getCount(RIGHT, pt, color) + getCount(LEFT, pt, color) + 1) >= CHIPS_LENGTH_TO_WIN
                 || getDiagonal1Count(pt, color) >= CHIPS_LENGTH_TO_WIN
-                || getDiagonal2Count(pt, color) + 1 >= CHIPS_LENGTH_TO_WIN)
+                || (getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color) + 1) >= CHIPS_LENGTH_TO_WIN)
         {
             win(color);
         }
-    }
-
-    private int getDiagonal2Count(Point pt, boolean color) {
-        return getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color);
     }
 
     private int getDiagonal1Count(Point pt, boolean color) {
@@ -155,22 +151,6 @@ public class Quadro implements Field {
             }
         }
         return diagonal1Counter;
-    }
-
-    private int getHorizontalCount(Point pt, boolean color) {
-        int horizontalCounter = 1;
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(RIGHT, pt, color, length)) {
-                horizontalCounter++;
-            }
-        }
-
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(LEFT, pt, color, length)) {
-                horizontalCounter++;
-            }
-        }
-        return horizontalCounter;
     }
 
     private int getCount(QDirection direction, Point pt, boolean color) {
