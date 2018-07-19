@@ -129,16 +129,13 @@ public class Quadro implements Field {
 
     private void checkWin(Point pt, boolean color) {
         int verticalCounter = 1;
-        int horizontalCounter = 1;
-        int diagonal1Counter = 1;
-        int diagonal2Counter = 1;
-
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
             if (to(DOWN, pt, color, length)) {
                 verticalCounter++;
             }
         }
 
+        int horizontalCounter = 1;
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
             if (to(RIGHT, pt, color, length)) {
                 horizontalCounter++;
@@ -151,6 +148,7 @@ public class Quadro implements Field {
             }
         }
 
+        int diagonal1Counter = 1;
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
             if (to(LEFT_DOWN, pt, color, length)) {
                 diagonal1Counter++;
@@ -163,6 +161,7 @@ public class Quadro implements Field {
             }
         }
 
+        int diagonal2Counter = 1;
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
             if (to(RIGHT_DOWN, pt, color, length)) {
                 diagonal2Counter++;
