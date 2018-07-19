@@ -426,7 +426,18 @@ public class QuadroTest {
 
         hero1.act(6);
         game.tick();
-        hero2.act(5);
+
+        assertE("      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  ");
+
+        hero2.act(5); // ходит все равно hero1
         game.tick();
 
         assertE("      o  " +
@@ -442,7 +453,36 @@ public class QuadroTest {
 
     // Валидация параметров для хода
     @Test
-    public void shouldSkipNotValidActCommands() {
+    public void shouldSkipNotValidActCommands_parameterShouldBePositive () {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act(-2);
+        game.tick();
+
+        hero2.act(1); // ходит все равно первый
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommands_notExistParameter() {
         givenFl("         " +
                 "         " +
                 "         " +
@@ -455,13 +495,66 @@ public class QuadroTest {
 
         hero1.act();
         game.tick();
-        hero1.act(-2);
+
+        hero2.act(1); // ходит все равно первый
         game.tick();
-        hero1.act(1, 1);
-        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommands_moreThanSize() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
         hero1.act(12);
         game.tick();
-        hero2.act(1);
+
+        hero2.act(1); // ходит все равно первый
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommands_moreThanOneParameter() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act(1, 1);
+        game.tick();
+
+        hero2.act(1); // ходит все равно первый
         game.tick();
 
         assertE("         " +
@@ -570,7 +663,7 @@ public class QuadroTest {
         game.newGame(new Player(mock(EventListener.class)));
     }
 
-    // Если ничья, то игра начинается снова; Через 15 тиков
+    // Если ничья, то игра начинается снова; Через TIMEOUT_TICKS тиков
     @Test
     public void gameOverDraw() {
         givenFl(" xoxoxoxo" +
@@ -589,7 +682,7 @@ public class QuadroTest {
         verify(listener1).event(Events.DRAW);
         verify(listener2).event(Events.DRAW);
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
         }
 

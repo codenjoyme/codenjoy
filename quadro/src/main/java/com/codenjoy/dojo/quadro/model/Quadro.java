@@ -42,6 +42,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class Quadro implements Field {
 
+    public static final int TIMEOUT_TICKS = 15;
+
     private Map<Point, Chip> chips;
     private List<Player> players;
     private final int size;
@@ -61,7 +63,7 @@ public class Quadro implements Field {
     @Override
     public void tick() {
         if (gameOver > 0) {
-            if (++gameOver > 15) {
+            if (++gameOver > TIMEOUT_TICKS) {
                 chips.clear();
                 gameOver = 0;
             } else return;
