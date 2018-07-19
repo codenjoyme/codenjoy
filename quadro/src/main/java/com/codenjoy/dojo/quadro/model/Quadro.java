@@ -27,6 +27,7 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
@@ -174,38 +175,57 @@ public class Quadro implements Field {
     }
 
     private boolean isDirectionRightToLeftActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX() - i, pt.getY()));
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.LEFT.change(pt);
+        }
+        return isThatColor(pt, color);
+    }
+
+    private boolean isThatColor(Point pt, boolean color) {
+        Chip chip = chip(pt);
         return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionLeftToRightActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX() + i, pt.getY()));
-        return chip != null && chip.itsMyColor(color);
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.RIGHT.change(pt);
+        }
+        return isThatColor(pt, color);
     }
 
     private boolean isDirectionBottomRightToTopLeftActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX() - i, pt.getY() + i));
-        return chip != null && chip.itsMyColor(color);
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.LEFT_UP.change(pt);
+        }
+        return isThatColor(pt, color);
     }
 
     private boolean isDirectionTopLeftToBottomRightActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX() + i, pt.getY() - i));
-        return chip != null && chip.itsMyColor(color);
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.RIGHT_DOWN.change(pt);
+        }
+        return isThatColor(pt, color);
     }
 
     private boolean isDirectionBottomLeftToTopRightActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX() + i, pt.getY() + i));
-        return chip != null && chip.itsMyColor(color);
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.RIGHT_UP.change(pt);
+        }
+        return isThatColor(pt, color);
     }
 
     private boolean isDirectionTopRightToBottomLeftActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX() - i, pt.getY() - i));
-        return chip != null && chip.itsMyColor(color);
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.LEFT_DOWN.change(pt);
+        }
+        return isThatColor(pt, color);
     }
 
     private boolean isDirectionTopToDownActive(Point pt, boolean color, int i) {
-        Chip chip = chip(pt(pt.getX(), pt.getY() - i));
-        return chip != null && chip.itsMyColor(color);
+        for (int j = 0; j < i; j++) {
+            pt = QDirection.DOWN.change(pt);
+        }
+        return isThatColor(pt, color);
     }
 
     private Chip chip(Point pt) {
