@@ -697,7 +697,7 @@ public class QuadroTest {
                 "         ");
     }
 
-    // Если кто-то победил, то игра начинается снова; Через 15 тиков
+    // Если кто-то победил, то игра начинается снова; Через TIMEOUT_TICKS тиков
     @Test
     public void gameOverWin() {
         givenFl("         " +
@@ -716,8 +716,9 @@ public class QuadroTest {
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
+        }
 
         assertE("         " +
                 "         " +
@@ -743,8 +744,8 @@ public class QuadroTest {
                 " o       " +
                 " xx xxo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(3);
         game.tick();
 
@@ -762,6 +763,11 @@ public class QuadroTest {
         verify(listener2).event(Events.WIN);
     }
 
+    private void hero1MakeSomeStep() {
+        hero1.act(0); // любой ход, нам интересно что сделает hero2
+        game.tick();
+    }
+
     // Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх
     @Test
     public void shouldWin_directionBottomLeftToTopRightActive() {
@@ -775,8 +781,8 @@ public class QuadroTest {
                 "  xxo    " +
                 "  ooooo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(1);
         game.tick();
 
@@ -807,8 +813,8 @@ public class QuadroTest {
                 "  xxo    " +
                 " xooooo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(4);
         game.tick();
 
@@ -839,8 +845,8 @@ public class QuadroTest {
                 "  oxoox  " +
                 " xooooo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(7);
         game.tick();
 
@@ -871,8 +877,8 @@ public class QuadroTest {
                 "  oxoox  " +
                 " xooooox ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(4);
         game.tick();
 
