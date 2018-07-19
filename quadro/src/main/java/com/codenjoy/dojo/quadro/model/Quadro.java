@@ -35,11 +35,6 @@ import java.util.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
-/**
- * Борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Quadro#tick()}
- */
 public class Quadro implements Field {
 
     public static final int TIMEOUT_TICKS = 15;

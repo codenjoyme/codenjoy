@@ -34,9 +34,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;

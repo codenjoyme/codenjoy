@@ -30,9 +30,6 @@ import java.util.Map;
 
 public interface Level {
 
-    /**
-     * @return Размер поля
-     */
     int getSize();
 
     Map<Point, Chip> getChips();

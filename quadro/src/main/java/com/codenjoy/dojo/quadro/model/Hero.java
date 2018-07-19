@@ -26,13 +26,6 @@ package com.codenjoy.dojo.quadro.model;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-/**
- * Это реализация героя. Он имплементит:
- * - {@see Joystick} - может быть управляем фреймворком;
- * - {@see Tickable} - есть возможность его оповещать о каждом тике игры;
- * - {@see State} - может быть отрисован на поле.
- * Часть этих интерфейсов объявлены в {@see PlayerHero}, часть явно тут.
- */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     private final boolean color;

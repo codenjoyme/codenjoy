@@ -23,9 +23,6 @@ package com.codenjoy.dojo.quadro.services;
  */
 
 
-/**
- * Ивенты, которые могут возникать в игре.
- */
 public enum Events {
     WIN, LOOSE, DRAW;
 }

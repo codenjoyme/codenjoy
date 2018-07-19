@@ -31,12 +31,6 @@ import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.ArrayList;
 
-/**
- * Это алгоритм бота.
- * Он будет запускаться в игру с первым зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random (только используй для этого {@see Dice} что приходит через конструктор).
- * Для его запуска воспользуйся методом {@see ApofigSolver#main}
- */
 public class ApofigSolver implements Solver<Board> {
 
     private Dice dice;
