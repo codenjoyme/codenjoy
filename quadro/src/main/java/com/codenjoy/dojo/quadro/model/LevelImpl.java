@@ -24,6 +24,8 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
+import com.codenjoy.dojo.quadro.model.items.RedChip;
+import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
@@ -54,11 +56,11 @@ public class LevelImpl implements Level {
     public List<Chip> getChips() {
         return new LinkedList<Chip>(){{
             addAll(pointsOf(Elements.YELLOW).stream()
-                    .map(pt -> new Chip(true, pt))
+                    .map(YellowChip::new)
                     .collect(toList()));
 
             addAll(pointsOf(Elements.RED).stream()
-                    .map(pt -> new Chip(false, pt))
+                    .map(RedChip::new)
                     .collect(toList()));
         }};
     }
