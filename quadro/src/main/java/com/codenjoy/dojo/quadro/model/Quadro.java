@@ -140,12 +140,7 @@ public class Quadro implements Field {
     private int getDiagonal2Count(Point pt, boolean color) {
         int diagonal2Counter = getCount(RIGHT_DOWN, pt, color);
 
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(LEFT_UP, pt, color, length)) {
-                diagonal2Counter++;
-            }
-        }
-        return diagonal2Counter;
+        return diagonal2Counter + getCount(LEFT_UP, pt, color) - 1;
     }
 
     private int getDiagonal1Count(Point pt, boolean color) {
