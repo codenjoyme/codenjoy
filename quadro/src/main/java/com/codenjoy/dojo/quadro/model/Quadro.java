@@ -95,6 +95,11 @@ public class Quadro implements Field {
     }
 
     @Override
+    public boolean isMyTurn(Hero hero) {
+        return hero.equals(currentHero());
+    }
+
+    @Override
     public void setChip(boolean color, int x) {
         int y = 0;
 
@@ -191,10 +196,11 @@ public class Quadro implements Field {
         return players.size() == 1 || !players.get(0).getHero().getColor();
     }
 
-    @Override
-    public Hero currentPlayer() {
+    private Hero currentHero() {
         return yellowPlayerAct ? players.get(0).getHero() : players.get(1).getHero();
     }
+
+
 
     public List<Hero> getHeroes() {
         return players.stream()

@@ -31,9 +31,9 @@ public interface Field extends GameField<Player> {
 
     boolean getFreeColor();
 
-    Hero currentPlayer();
-
     int getSize();
 
     boolean isGameStarted();
+
+    boolean isMyTurn(Hero hero);
 }

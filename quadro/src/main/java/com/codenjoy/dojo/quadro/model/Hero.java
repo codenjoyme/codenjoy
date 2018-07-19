@@ -41,19 +41,21 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
-        if (p.length == 1 && p[0] >= 0 && p[0] < field.getSize())
+        if (p.length == 1 && !pt(p[0], 0).isOutOf(field.getSize())) {
             x = p[0];
-        else
+        } else {
             x = -1;
+        }
     }
 
     @Override
     public void tick() {
         if (!field.isGameStarted()) return;
 
-        if (this.equals(field.currentPlayer())) {
-            if (x >= 0)
+        if (field.isMyTurn(this)) {
+            if (x >= 0) {
                 field.setChip(color, x);
+            }
         }
         x = -1;
     }
