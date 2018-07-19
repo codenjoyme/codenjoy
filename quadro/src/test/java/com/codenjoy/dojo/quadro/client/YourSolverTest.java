@@ -24,18 +24,30 @@ package com.codenjoy.dojo.quadro.client;
 
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class YourSolverTest {
 
     private Solver ai;
+    private void dice(int number) {
+        when(dice.next(anyInt())).thenReturn(number);
+    }
+
+    private Dice dice;
 
     @Before
     public void setup() {
-        ai = new YourSolver();
+        dice = mock(Dice.class);
+        ai = new YourSolver(dice);
     }
 
     private Board board(String board) {
@@ -44,24 +56,28 @@ public class YourSolverTest {
 
     @Test
     public void should() {
+        dice(1);
         assertAI("    " +
                 "   o" +
                 "   o" +
-                " xxo");
+                " xxo", "ACT(1)");
 
+        dice(2);
         assertAI("     " +
                 "     " +
                 "   o " +
                 "   ox" +
-                " xxoo");
+                " xxoo", "ACT(2)");
 
+        dice(0);
         assertAI("      " +
                 "      " +
                 "      " +
                 "   o  " +
                 "   ox " +
-                " xxoox");
+                " xxoox", "ACT(0)");
 
+        dice(5);
         assertAI("         " +
                 "         " +
                 "         " +
@@ -70,8 +86,9 @@ public class YourSolverTest {
                 "         " +
                 "   o     " +
                 "   ox    " +
-                " xxoox   ");
+                " xxoox   ", "ACT(5)");
 
+        dice(6);
         assertAI("                " +
                 "                " +
                 "                " +
@@ -87,12 +104,11 @@ public class YourSolverTest {
                 "                " +
                 "                " +
                 "                " +
-                "                ");
+                "                ", "ACT(6)");
     }
 
-    private void assertAI(String board) {
+    private void assertAI(String board, String expected) {
         String actual = ai.get(board(board));
-        int act = Integer.parseInt(actual.substring(4, actual.length() - 1));
-        assertTrue(act >= 0 && act < Math.sqrt(board.length()));
+        assertEquals(expected, actual);
     }
 }
