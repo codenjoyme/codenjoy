@@ -135,31 +135,31 @@ public class Quadro implements Field {
         int diagonal2Counter = 1;
 
         for (int i = 1; i < CHIPS_LENGTH_TO_WIN; i++) {
-            if (upToDown(pt, color, i)) {
+            if (toDown(pt, color, i)) {
                 verticalCounter++;
             }
 
-            if (leftToRight(pt, color, i)) {
+            if (toRight(pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (rightToLeft(pt, color, i)) {
+            if (toLeft(pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (topRightToDownLeft(pt, color, i)) {
+            if (toDownLeft(pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (downLeftToUpRight(pt, color, i)) {
+            if (toUpRight(pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (upLeftToDownRight(pt, color, i)) {
+            if (toDownRight(pt, color, i)) {
                 diagonal2Counter++;
             }
 
-            if (downRightToUpLeft(pt, color, i)) {
+            if (toUpLeft(pt, color, i)) {
                 diagonal2Counter++;
             }
         }
@@ -173,7 +173,7 @@ public class Quadro implements Field {
         }
     }
 
-    private boolean rightToLeft(Point pt, boolean color, int i) {
+    private boolean toLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.LEFT.change(pt);
         }
@@ -184,42 +184,42 @@ public class Quadro implements Field {
         return chip(pt).itsMyColor(color);
     }
 
-    private boolean leftToRight(Point pt, boolean color, int i) {
+    private boolean toRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.RIGHT.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean downRightToUpLeft(Point pt, boolean color, int i) {
+    private boolean toUpLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.LEFT_UP.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean upLeftToDownRight(Point pt, boolean color, int i) {
+    private boolean toDownRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.RIGHT_DOWN.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean downLeftToUpRight(Point pt, boolean color, int i) {
+    private boolean toUpRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.RIGHT_UP.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean topRightToDownLeft(Point pt, boolean color, int i) {
+    private boolean toDownLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.LEFT_DOWN.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean upToDown(Point pt, boolean color, int i) {
+    private boolean toDown(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.DOWN.change(pt);
         }
