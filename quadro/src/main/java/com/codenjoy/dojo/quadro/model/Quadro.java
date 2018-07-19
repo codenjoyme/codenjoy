@@ -42,8 +42,8 @@ import static java.util.stream.Collectors.toList;
 
 public class Quadro implements Field {
 
-    public static final int TIMEOUT_TICKS = 15;
-    public static final int CHIPS_LENGTH_TO_WIN = 4;
+    static final int TIMEOUT_TICKS = 15;
+    private static final int CHIPS_LENGTH_TO_WIN = 4;
 
     private List<Chip> chips;
     private List<Player> players;
@@ -193,7 +193,7 @@ public class Quadro implements Field {
                 : players.get(1).getHero();
     }
 
-    public List<Hero> getHeroes() {
+    List<Hero> getHeroes() {
         return players.stream()
                 .map(Player::getHero)
                 .collect(toList());

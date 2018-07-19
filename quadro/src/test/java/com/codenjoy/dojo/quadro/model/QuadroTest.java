@@ -221,6 +221,36 @@ public class QuadroTest {
         verify(listener2).event(Events.LOOSE);
     }
 
+    // Ничего, когда в ряд 4 фишки желтого игрока вертикально но есть между чужая фишка
+    @Test
+    public void shouldNothing_verticalYellowHasSeparated4() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    " +
+                "    x    " +
+                "    o    ");
+
+        hero1.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    " +
+                "    o    " +
+                "    x    " +
+                "    o    ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+    }
+
     // Красный игрок победил когда в ряд 4 его фишки вертикально
     @Test
     public void shouldWinVertical_red() {
@@ -798,6 +828,38 @@ public class QuadroTest {
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
+    }
+
+    // Ничего, когда в ряд 4 фишки игрока по диагонали вправо вверх, но есть разрыв чужой фишкой
+    @Test
+    public void shouldNothing_directionBottomLeftToTopRightActiveAndAlienChip() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "     x   " +
+                "    oo   " +
+                "   xxo   " +
+                "  xxoo   " +
+                "  ooooo  ");
+
+        hero1MakeSomeStep();
+
+        hero2.act(1);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "     x   " +
+                "    oo   " +
+                "   xxo   " +
+                "  xxoo   " +
+                "oxooooo  ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
     }
 
     // Игрок победил когда в ряд 4 его фишки по диагонали влево вниз
