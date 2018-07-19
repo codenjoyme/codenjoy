@@ -175,37 +175,37 @@ public class Quadro implements Field {
 
     private boolean isDirectionRightToLeftActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX() - i, pt.getY()));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionLeftToRightActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX() + i, pt.getY()));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionBottomRightToTopLeftActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX() - i, pt.getY() + i));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionTopLeftToBottomRightActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX() + i, pt.getY() - i));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionBottomLeftToTopRightActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX() + i, pt.getY() + i));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionTopRightToBottomLeftActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX() - i, pt.getY() - i));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private boolean isDirectionTopToDownActive(Point pt, boolean color, int i) {
         Chip chip = chip(pt(pt.getX(), pt.getY() - i));
-        return chip != null && chip.getColor() == color;
+        return chip != null && chip.itsMyColor(color);
     }
 
     private Chip chip(Point pt) {

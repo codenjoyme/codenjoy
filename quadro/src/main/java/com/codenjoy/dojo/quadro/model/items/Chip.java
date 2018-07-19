@@ -58,4 +58,8 @@ public class Chip extends PointImpl implements State<Elements, Player> {
     public boolean getColor() {
         return color;
     }
+
+    public boolean itsMyColor(boolean color) {
+        return this.color == color;
+    }
 }
