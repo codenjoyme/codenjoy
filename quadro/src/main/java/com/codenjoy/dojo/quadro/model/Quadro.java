@@ -153,7 +153,7 @@ public class Quadro implements Field {
             }
 
             if (to(RIGHT_UP, pt, color, i)) {
-                diagonal1Counter++;
+                diagonal1Counter++; // TODO не хватает кейза на этот случай если поменять diagonal1Counter и следующий  diagonal2Counter местами
             }
 
             if (to(RIGHT_DOWN, pt, color, i)) {
@@ -174,57 +174,11 @@ public class Quadro implements Field {
         }
     }
 
-    private boolean toLeft(Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
-            pt = LEFT.change(pt);
-        }
-        return isThatColor(pt, color);
-    }
-
-    private boolean isThatColor(Point pt, boolean color) {
-        return chip(pt).itsMyColor(color);
-    }
-
-    private boolean toRight(Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
-            pt = RIGHT.change(pt);
-        }
-        return isThatColor(pt, color);
-    }
-
-    private boolean toUpLeft(Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
-            pt = QDirection.LEFT_UP.change(pt);
-        }
-        return isThatColor(pt, color);
-    }
-
-    private boolean toDownRight(Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
-            pt = QDirection.RIGHT_DOWN.change(pt);
-        }
-        return isThatColor(pt, color);
-    }
-
-    private boolean toUpRight(Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
-            pt = QDirection.RIGHT_UP.change(pt);
-        }
-        return isThatColor(pt, color);
-    }
-
-    private boolean toDownLeft(Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
-            pt = LEFT_DOWN.change(pt);
-        }
-        return isThatColor(pt, color);
-    }
-
-    private boolean to(QDirection where, Point pt, boolean color, int i) {
-        for (int j = 0; j < i; j++) {
+    private boolean to(QDirection where, Point pt, boolean color, int length) {
+        for (int i = 0; i < length; i++) {
             pt = where.change(pt);
         }
-        return isThatColor(pt, color);
+        return chip(pt).itsMyColor(color);
     }
 
     private Chip chip(Point pt) {
