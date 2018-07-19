@@ -118,4 +118,9 @@ public class LockedGameType implements GameType {
     public void tick() {
         gameType.tick();
     }
+
+    @Override
+    public GameType getGame() {
+        return gameType;
+    }
 }

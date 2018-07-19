@@ -88,4 +88,9 @@ public class NullGameType implements GameType {
     public void tick() {
         // do nothing
     }
+
+    @Override
+    public Object getGame() {
+        return null;
+    }
 }

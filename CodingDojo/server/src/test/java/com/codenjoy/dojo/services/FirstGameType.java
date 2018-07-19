@@ -105,4 +105,9 @@ public class FirstGameType implements GameType {
     public String getVersion() {
         return null;
     }
+
+    @Override
+    public Object getGame() {
+        return null;
+    }
 }

@@ -106,4 +106,9 @@ public class SecondGameType implements GameType {
     public String getVersion() {
         return null;
     }
+
+    @Override
+    public Object getGame() {
+        return null;
+    }
 }

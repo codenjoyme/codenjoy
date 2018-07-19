@@ -97,6 +97,8 @@ public interface GameType extends Tickable {
      * @return версия игры
      */
     String getVersion();
+
+    Object getGame();
 }
 
 
