@@ -174,78 +174,38 @@ public class Quadro implements Field {
     }
 
     private boolean isDirectionRightToLeftActive(Point pt, boolean color, int i) {
-        boolean directionRightToLeftActive = true;
-        if (directionRightToLeftActive
-                && (chip(pt(pt.getX() - i, pt.getY())) == null
-                || chip(pt(pt.getX() - i, pt.getY())).getColor() != color)) {
-            directionRightToLeftActive = false;
-        }
-        return directionRightToLeftActive;
+        Chip chip = chip(pt(pt.getX() - i, pt.getY()));
+        return chip != null && chip.getColor() == color;
     }
 
     private boolean isDirectionLeftToRightActive(Point pt, boolean color, int i) {
-        boolean directionLeftToRightActive = true;
-        if (directionLeftToRightActive
-                && (chip(pt(pt.getX() + i, pt.getY())) == null
-                    || chip(pt(pt.getX() + i, pt.getY())).getColor() != color))
-        {
-            directionLeftToRightActive = false;
-        }
-        return directionLeftToRightActive;
+        Chip chip = chip(pt(pt.getX() + i, pt.getY()));
+        return chip != null && chip.getColor() == color;
     }
 
     private boolean isDirectionBottomRightToTopLeftActive(Point pt, boolean color, int i) {
-        boolean directionBottomRightToTopLeftActive = true;
-        if (directionBottomRightToTopLeftActive
-                && (chip(pt(pt.getX() - i, pt.getY() + i)) == null
-                    || chip(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
-        {
-            directionBottomRightToTopLeftActive = false;
-        }
-        return directionBottomRightToTopLeftActive;
+        Chip chip = chip(pt(pt.getX() - i, pt.getY() + i));
+        return chip != null && chip.getColor() == color;
     }
 
     private boolean isDirectionTopLeftToBottomRightActive(Point pt, boolean color, int i) {
-        boolean directionTopLeftToBottomRightActive = true;
-        if (directionTopLeftToBottomRightActive
-                && (chip(pt(pt.getX() + i, pt.getY() - i)) == null
-                    || chip(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
-        {
-            directionTopLeftToBottomRightActive = false;
-        }
-        return directionTopLeftToBottomRightActive;
+        Chip chip = chip(pt(pt.getX() + i, pt.getY() - i));
+        return chip != null && chip.getColor() == color;
     }
 
     private boolean isDirectionBottomLeftToTopRightActive(Point pt, boolean color, int i) {
-        boolean directionBottomLeftToTopRightActive = true;
-        if (directionBottomLeftToTopRightActive
-                && (chip(pt(pt.getX() + i, pt.getY() + i)) == null
-                || chip(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
-        {
-            directionBottomLeftToTopRightActive = false;
-        }
-        return directionBottomLeftToTopRightActive;
+        Chip chip = chip(pt(pt.getX() + i, pt.getY() + i));
+        return chip != null && chip.getColor() == color;
     }
 
     private boolean isDirectionTopRightToBottomLeftActive(Point pt, boolean color, int i) {
-        boolean directionTopRightToBottomLeftActive = true;
-        if (directionTopRightToBottomLeftActive
-                && (chip(pt(pt.getX() - i, pt.getY() - i)) == null
-                    || chip(pt(pt.getX() - i, pt.getY() - i)).getColor() != color))
-        {
-            directionTopRightToBottomLeftActive = false;
-        }
-        return directionTopRightToBottomLeftActive;
+        Chip chip = chip(pt(pt.getX() - i, pt.getY() - i));
+        return chip != null && chip.getColor() == color;
     }
 
     private boolean isDirectionTopToDownActive(Point pt, boolean color, int i) {
-        boolean directionTopToDownActive = true;
-        if ((chip(pt(pt.getX(), pt.getY() - i)) == null
-                    || chip(pt(pt.getX(), pt.getY() - i)).getColor() != color))
-        {
-            directionTopToDownActive = false;
-        }
-        return directionTopToDownActive;
+        Chip chip = chip(pt(pt.getX(), pt.getY() - i));
+        return chip != null && chip.getColor() == color;
     }
 
     private Chip chip(Point pt) {
