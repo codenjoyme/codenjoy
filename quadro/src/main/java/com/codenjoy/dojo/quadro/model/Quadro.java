@@ -138,9 +138,7 @@ public class Quadro implements Field {
     }
 
     private int getDiagonal2Count(Point pt, boolean color) {
-        int diagonal2Counter = getCount(RIGHT_DOWN, pt, color);
-
-        return diagonal2Counter + getCount(LEFT_UP, pt, color) - 1;
+        return getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color) - 1;
     }
 
     private int getDiagonal1Count(Point pt, boolean color) {
