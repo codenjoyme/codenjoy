@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -42,7 +43,7 @@ public class Quadro implements Field {
 
     public static final int TIMEOUT_TICKS = 15;
 
-    private Map<Point, Chip> chips;
+    private List<Chip> chips;
     private List<Player> players;
     private final int size;
     private boolean yellowPlayerAct = true;
@@ -103,15 +104,15 @@ public class Quadro implements Field {
     public void setChip(boolean color, int x) {
         int y = 0;
 
-        while (chips.containsKey(pt(x, y))) {
+        while (chips.contains(pt(x, y))) {
             y++;
         }
 
         if (y >= size) return;
 
         Point pt = pt(x, y);
-        if (!chips.containsKey(pt)) {
-            chips.put(pt, new Chip(color, x, y));
+        if (!chips.contains(pt)) {
+            chips.add(new Chip(color, x, y));
         }
 
         chipMoved = true;
@@ -135,32 +136,32 @@ public class Quadro implements Field {
 
         for (int i = 1; i < 4; i++) {
             if (directionTopToDownActive
-                    && (chips.get(pt(pt.getX(), pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color))
+                    && (chip(pt(pt.getX(), pt.getY() - i)) == null
+                    || chip(pt(pt.getX(), pt.getY() - i)).getColor() != color))
                 directionTopToDownActive = false;
             if (directionLeftToRightActive
-                    && (chips.get(pt(pt.getX() + i, pt.getY())) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY())).getColor() != color))
+                    && (chip(pt(pt.getX() + i, pt.getY())) == null
+                    || chip(pt(pt.getX() + i, pt.getY())).getColor() != color))
                 directionLeftToRightActive = false;
             if (directionRightToLeftActive
-                    && (chips.get(pt(pt.getX() - i, pt.getY())) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY())).getColor() != color))
+                    && (chip(pt(pt.getX() - i, pt.getY())) == null
+                    || chip(pt(pt.getX() - i, pt.getY())).getColor() != color))
                 directionRightToLeftActive = false;
             if (directionTopRightToBottomLeftActive
-                    && (chips.get(pt(pt.getX() - i, pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY() - i)).getColor() != color))
+                    && (chip(pt(pt.getX() - i, pt.getY() - i)) == null
+                    || chip(pt(pt.getX() - i, pt.getY() - i)).getColor() != color))
                 directionTopRightToBottomLeftActive = false;
             if (directionBottomLeftToTopRightActive
-                    && (chips.get(pt(pt.getX() + i, pt.getY() + i)) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
+                    && (chip(pt(pt.getX() + i, pt.getY() + i)) == null
+                    || chip(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
                 directionBottomLeftToTopRightActive = false;
             if (directionTopLeftToBottomRightActive
-                    && (chips.get(pt(pt.getX() + i, pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
+                    && (chip(pt(pt.getX() + i, pt.getY() - i)) == null
+                    || chip(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
                 directionTopLeftToBottomRightActive = false;
             if (directionBottomRightToTopLeftActive
-                    && (chips.get(pt(pt.getX() - i, pt.getY() + i)) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
+                    && (chip(pt(pt.getX() - i, pt.getY() + i)) == null
+                    || chip(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
                 directionBottomRightToTopLeftActive = false;
 
             if (directionTopToDownActive) verticalCounter++;
@@ -177,6 +178,13 @@ public class Quadro implements Field {
                 || diagonal1Counter >= 4
                 || diagonal2Counter >= 4)
             win(color);
+    }
+
+    private Chip chip(Point pt) {
+        return chips.stream()
+                .filter(Predicate.isEqual(pt))
+                .findFirst()
+                .orElse(null);
     }
 
     private void draw() {
@@ -199,8 +207,6 @@ public class Quadro implements Field {
     private Hero currentHero() {
         return yellowPlayerAct ? players.get(0).getHero() : players.get(1).getHero();
     }
-
-
 
     public List<Hero> getHeroes() {
         return players.stream()
@@ -235,7 +241,7 @@ public class Quadro implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new ArrayList<>(chips.values());
+                return new ArrayList<>(chips);
             }
         };
     }

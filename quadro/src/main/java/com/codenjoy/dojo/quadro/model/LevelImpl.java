@@ -35,6 +35,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -50,18 +51,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Map<Point, Chip> getChips() {
-        return new HashMap<Point, Chip>(){{
-            for (Chip chip : pointsOf(Elements.YELLOW).stream()
+    public List<Chip> getChips() {
+        return new LinkedList<Chip>(){{
+            addAll(pointsOf(Elements.YELLOW).stream()
                     .map(pt -> new Chip(true, pt))
-                    .collect(toList())) {
-                put(chip, chip);
-            }
-            for (Chip chip : pointsOf(Elements.RED).stream()
+                    .collect(toList()));
+
+            addAll(pointsOf(Elements.RED).stream()
                     .map(pt -> new Chip(false, pt))
-                    .collect(toList())) {
-                put(chip, chip);
-            }
+                    .collect(toList()));
         }};
     }
 
