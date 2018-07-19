@@ -95,13 +95,6 @@ public class Quadro implements Field {
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
-        return !chips.containsKey(pt);
-    }
-
-    @Override
     public void setChip(boolean color, int x) {
         int y = 0;
 
