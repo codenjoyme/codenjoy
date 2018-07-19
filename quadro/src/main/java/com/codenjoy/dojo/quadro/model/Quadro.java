@@ -182,8 +182,7 @@ public class Quadro implements Field {
     }
 
     private boolean isThatColor(Point pt, boolean color) {
-        Chip chip = chip(pt);
-        return chip != null && chip.itsMyColor(color);
+        return chip(pt).itsMyColor(color);
     }
 
     private boolean isDirectionLeftToRightActive(Point pt, boolean color, int i) {
@@ -232,7 +231,7 @@ public class Quadro implements Field {
         return chips.stream()
                 .filter(Predicate.isEqual(pt))
                 .findFirst()
-                .orElse(null);
+                .orElse(Chip.NULL);
     }
 
     private void draw() {
