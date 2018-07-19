@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.QDirection.*;
 import static java.util.stream.Collectors.toList;
 
 public class Quadro implements Field {
@@ -135,31 +136,31 @@ public class Quadro implements Field {
         int diagonal2Counter = 1;
 
         for (int i = 1; i < CHIPS_LENGTH_TO_WIN; i++) {
-            if (toDown(pt, color, i)) {
+            if (to(DOWN, pt, color, i)) {
                 verticalCounter++;
             }
 
-            if (toRight(pt, color, i)) {
+            if (to(RIGHT, pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (toLeft(pt, color, i)) {
+            if (to(LEFT, pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (toDownLeft(pt, color, i)) {
+            if (to(LEFT_DOWN, pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (toUpRight(pt, color, i)) {
+            if (to(RIGHT_UP, pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (toDownRight(pt, color, i)) {
+            if (to(RIGHT_DOWN, pt, color, i)) {
                 diagonal2Counter++;
             }
 
-            if (toUpLeft(pt, color, i)) {
+            if (to(LEFT_UP, pt, color, i)) {
                 diagonal2Counter++;
             }
         }
@@ -175,7 +176,7 @@ public class Quadro implements Field {
 
     private boolean toLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
-            pt = QDirection.LEFT.change(pt);
+            pt = LEFT.change(pt);
         }
         return isThatColor(pt, color);
     }
@@ -186,7 +187,7 @@ public class Quadro implements Field {
 
     private boolean toRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
-            pt = QDirection.RIGHT.change(pt);
+            pt = RIGHT.change(pt);
         }
         return isThatColor(pt, color);
     }
@@ -214,7 +215,7 @@ public class Quadro implements Field {
 
     private boolean toDownLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
-            pt = QDirection.LEFT_DOWN.change(pt);
+            pt = LEFT_DOWN.change(pt);
         }
         return isThatColor(pt, color);
     }
@@ -224,10 +225,6 @@ public class Quadro implements Field {
             pt = where.change(pt);
         }
         return isThatColor(pt, color);
-    }
-
-    private boolean toDown(Point pt, boolean color, int i) {
-        return to(QDirection.DOWN, pt, color, i);
     }
 
     private Chip chip(Point pt) {
