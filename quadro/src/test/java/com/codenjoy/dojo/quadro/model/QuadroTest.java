@@ -93,25 +93,25 @@ public class QuadroTest {
                 "         ");
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player2);
     }
 
@@ -132,14 +132,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ",
                 player1);
     }
 
@@ -160,14 +160,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    ",
                 player1);
     }
 
@@ -190,14 +190,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "o   x    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "o   x    ",
                 player1);
     }
 
@@ -218,14 +218,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    " +
-                        "    o    " +
-                        "    o    " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    " +
+                "    o    " +
+                "    o    ",
                 player1);
 
         verify(listener1).event(Events.WIN);
@@ -251,14 +251,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        " x       " +
-                        " x       " +
-                        " x       " +
-                        "ox       ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " x       " +
+                " x       " +
+                " x       " +
+                "ox       ",
                 player2);
 
         verify(listener1).event(Events.LOOSE);
@@ -282,14 +282,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
 
         game.tick();
@@ -298,14 +298,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "     o   ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "     o   ",
                 player1);
 
         hero1.act(5);
@@ -313,14 +313,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    xo   ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    xo   ",
                 player1);
     }
 
@@ -341,28 +341,28 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ",
                 player1);
 
         hero2.act(4);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    o    ",
                 player1);
     }
 
@@ -384,14 +384,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ",
                 player1);
     }
 
@@ -416,14 +416,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
 
         verify(listener1).event(Events.LOOSE);
@@ -449,14 +449,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  ",
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  ",
                 player1);
     }
 
@@ -485,14 +485,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
     }
 
@@ -514,14 +514,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
 
         game.newGame(player2);
@@ -532,14 +532,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    o    ",
                 player1);
 
         game.remove(player1);
@@ -547,14 +547,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "    o    ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    o    ",
                 player1);
     }
 
@@ -618,14 +618,14 @@ public class QuadroTest {
         }
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
     }
 
@@ -652,14 +652,14 @@ public class QuadroTest {
             game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ",
                 player1);
     }
 
@@ -682,14 +682,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        " o       " +
-                        " o       " +
-                        "oxxxxxo  ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " o       " +
+                " o       " +
+                "oxxxxxo  ",
                 player2);
 
         verify(listener1).event(Events.LOOSE);
@@ -715,14 +715,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xx    " +
-                        "  xxo    " +
-                        "oxooooo  ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xx    " +
+                "  xxo    " +
+                "oxooooo  ",
                 player2);
 
         verify(listener1).event(Events.LOOSE);
@@ -748,14 +748,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xx    " +
-                        "  xxo    " +
-                        "oxooooo  ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xx    " +
+                "  xxo    " +
+                "oxooooo  ",
                 player2);
 
         verify(listener1).event(Events.LOOSE);
@@ -781,14 +781,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xxx   " +
-                        "  oxoox  " +
-                        "oxooooox ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xxx   " +
+                "  oxoox  " +
+                "oxooooox ",
                 player2);
 
         verify(listener1).event(Events.LOOSE);
@@ -814,14 +814,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xxx   " +
-                        "  oxoox  " +
-                        "oxooooox ",
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xxx   " +
+                "  oxoox  " +
+                "oxooooox ",
                 player2);
 
         verify(listener1).event(Events.LOOSE);
