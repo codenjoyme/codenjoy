@@ -139,7 +139,7 @@ public class Quadro implements Field {
 
     private int getCount(QDirection direction, Point from, boolean color) {
         int result = 0;
-        for (int length = 1; length <= CHIPS_LENGTH_TO_WIN; length++) {
+        for (int length = 0; length < CHIPS_LENGTH_TO_WIN; length++) {
             from = direction.change(from);
             if (chip(from).itsMyColor(color)) {
                 result++;
