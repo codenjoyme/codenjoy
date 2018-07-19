@@ -128,36 +128,20 @@ public class Quadro implements Field {
     }
 
     private void checkWin(Point pt, boolean color) {
-        if (getCount(DOWN, pt, color) + 1 >= CHIPS_LENGTH_TO_WIN
-                || (getCount(RIGHT, pt, color) + getCount(LEFT, pt, color) + 1) >= CHIPS_LENGTH_TO_WIN
-                || getDiagonal1Count(pt, color) >= CHIPS_LENGTH_TO_WIN
-                || (getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color) + 1) >= CHIPS_LENGTH_TO_WIN)
+        if (getCount(DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN - 1
+                || (getCount(RIGHT, pt, color) + getCount(LEFT, pt, color)) >= CHIPS_LENGTH_TO_WIN - 1
+                || (getCount(LEFT_DOWN, pt, color) + getCount(RIGHT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN - 1
+                || (getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN - 1)
         {
             win(color);
         }
     }
 
-    private int getDiagonal1Count(Point pt, boolean color) {
-        int diagonal1Counter = 1;
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(LEFT_DOWN, pt, color, length)) {
-                diagonal1Counter++;
-            }
-        }
-
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(RIGHT_UP, pt, color, length)) {
-                diagonal1Counter++; // TODO не хватает кейза на этот случай если поменять diagonal1Counter и следующий  diagonal2Counter местами
-            }
-        }
-        return diagonal1Counter;
-    }
-
-    private int getCount(QDirection direction, Point pt, boolean color) {
+    private int getCount(QDirection direction, Point from, boolean color) {
         int result = 0;
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            pt = direction.change(pt);
-            if (chip(pt).itsMyColor(color)) {
+            from = direction.change(from);
+            if (chip(from).itsMyColor(color)) {
                 result++;
             }
         }
