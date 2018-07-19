@@ -43,7 +43,7 @@ import static java.util.stream.Collectors.toList;
 public class Quadro implements Field {
 
     public static final int TIMEOUT_TICKS = 15;
-    public static final int CHIPS_LENGTH_TO_WIN = 4;
+    public static final int CHIPS_LENGTH_TO_WIN = 3;
 
     private List<Chip> chips;
     private List<Player> players;
@@ -128,10 +128,10 @@ public class Quadro implements Field {
     }
 
     private void checkWin(Point pt, boolean color) {
-        if (getCount(DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN - 1
-                || (getCount(RIGHT, pt, color) + getCount(LEFT, pt, color)) >= CHIPS_LENGTH_TO_WIN - 1
-                || (getCount(LEFT_DOWN, pt, color) + getCount(RIGHT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN - 1
-                || (getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN - 1)
+        if (getCount(DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN
+                || (getCount(RIGHT, pt, color) + getCount(LEFT, pt, color)) >= CHIPS_LENGTH_TO_WIN
+                || (getCount(LEFT_DOWN, pt, color) + getCount(RIGHT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN
+                || (getCount(RIGHT_DOWN, pt, color) + getCount(LEFT_UP, pt, color)) >= CHIPS_LENGTH_TO_WIN)
         {
             win(color);
         }
@@ -139,7 +139,7 @@ public class Quadro implements Field {
 
     private int getCount(QDirection direction, Point from, boolean color) {
         int result = 0;
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+        for (int length = 1; length <= CHIPS_LENGTH_TO_WIN; length++) {
             from = direction.change(from);
             if (chip(from).itsMyColor(color)) {
                 result++;
