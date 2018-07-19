@@ -85,7 +85,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.MULTIPLE;
+        return MultiplayerType.TOURNAMENT;
     }
 
     @Override

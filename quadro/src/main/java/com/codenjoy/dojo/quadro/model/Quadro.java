@@ -127,6 +127,7 @@ public class Quadro implements Field {
         checkWin(new Chip(color, pt));
     }
 
+    // See refactoring: https://youtu.be/sLl2q-xJhgg?t=57m39s
     private void checkWin(Chip from) {
         boolean vertical = getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN;
         boolean diagonal1 = getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN;
