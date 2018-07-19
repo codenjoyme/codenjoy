@@ -127,40 +127,50 @@ public class Quadro implements Field {
         checkWin(pt, color);
     }
 
-    // TODO: possible refactoring to recursive and QDirection
-    // Для этого нужно понять как работает Direction
     private void checkWin(Point pt, boolean color) {
         int verticalCounter = 1;
         int horizontalCounter = 1;
         int diagonal1Counter = 1;
         int diagonal2Counter = 1;
 
-        for (int i = 1; i < CHIPS_LENGTH_TO_WIN; i++) {
-            if (to(DOWN, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(DOWN, pt, color, length)) {
                 verticalCounter++;
             }
+        }
 
-            if (to(RIGHT, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(RIGHT, pt, color, length)) {
                 horizontalCounter++;
             }
+        }
 
-            if (to(LEFT, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(LEFT, pt, color, length)) {
                 horizontalCounter++;
             }
+        }
 
-            if (to(LEFT_DOWN, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(LEFT_DOWN, pt, color, length)) {
                 diagonal1Counter++;
             }
+        }
 
-            if (to(RIGHT_UP, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(RIGHT_UP, pt, color, length)) {
                 diagonal1Counter++; // TODO не хватает кейза на этот случай если поменять diagonal1Counter и следующий  diagonal2Counter местами
             }
+        }
 
-            if (to(RIGHT_DOWN, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(RIGHT_DOWN, pt, color, length)) {
                 diagonal2Counter++;
             }
+        }
 
-            if (to(LEFT_UP, pt, color, i)) {
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(LEFT_UP, pt, color, length)) {
                 diagonal2Counter++;
             }
         }
