@@ -42,6 +42,7 @@ import static java.util.stream.Collectors.toList;
 public class Quadro implements Field {
 
     public static final int TIMEOUT_TICKS = 15;
+    public static final int CHIPS_LENGTH_TO_WIN = 4;
 
     private List<Chip> chips;
     private List<Player> players;
@@ -132,96 +133,119 @@ public class Quadro implements Field {
         int horizontalCounter = 1;
         int diagonal1Counter = 1;
         int diagonal2Counter = 1;
-        boolean directionTopToDownActive = true;
-        boolean directionLeftToRightActive = true;
-        boolean directionRightToLeftActive = true;
-        boolean directionTopRightToBottomLeftActive = true;
-        boolean directionBottomLeftToTopRightActive = true;
-        boolean directionTopLeftToBottomRightActive = true;
-        boolean directionBottomRightToTopLeftActive = true;
 
-        for (int i = 1; i < 4; i++) {
-            if (directionTopToDownActive
-                    && (chip(pt(pt.getX(), pt.getY() - i)) == null
-                    || chip(pt(pt.getX(), pt.getY() - i)).getColor() != color)) {
-                directionTopToDownActive = false;
-            }
-
-            if (directionLeftToRightActive
-                    && (chip(pt(pt.getX() + i, pt.getY())) == null
-                    || chip(pt(pt.getX() + i, pt.getY())).getColor() != color)) {
-                directionLeftToRightActive = false;
-            }
-
-            if (directionRightToLeftActive
-                    && (chip(pt(pt.getX() - i, pt.getY())) == null
-                    || chip(pt(pt.getX() - i, pt.getY())).getColor() != color)) {
-                directionRightToLeftActive = false;
-            }
-
-            if (directionTopRightToBottomLeftActive
-                    && (chip(pt(pt.getX() - i, pt.getY() - i)) == null
-                    || chip(pt(pt.getX() - i, pt.getY() - i)).getColor() != color)) {
-                directionTopRightToBottomLeftActive = false;
-            }
-
-            if (directionBottomLeftToTopRightActive
-                    && (chip(pt(pt.getX() + i, pt.getY() + i)) == null
-                    || chip(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
-            {
-                directionBottomLeftToTopRightActive = false;
-            }
-
-            if (directionTopLeftToBottomRightActive
-                    && (chip(pt(pt.getX() + i, pt.getY() - i)) == null
-                    || chip(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
-            {
-                directionTopLeftToBottomRightActive = false;
-            }
-
-            if (directionBottomRightToTopLeftActive
-                    && (chip(pt(pt.getX() - i, pt.getY() + i)) == null
-                    || chip(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
-            {
-                directionBottomRightToTopLeftActive = false;
-            }
-
-            if (directionTopToDownActive) {
+        for (int i = 1; i < CHIPS_LENGTH_TO_WIN; i++) {
+            if (isDirectionTopToDownActive(pt, color, i)) {
                 verticalCounter++;
             }
 
-            if (directionLeftToRightActive) {
+            if (isDirectionLeftToRightActive(pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (directionRightToLeftActive) {
+            if (isDirectionRightToLeftActive(pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (directionTopRightToBottomLeftActive) {
+            if (isDirectionTopRightToBottomLeftActive(pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (directionBottomLeftToTopRightActive) {
+            if (isDirectionBottomLeftToTopRightActive(pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (directionTopLeftToBottomRightActive) {
+            if (isDirectionTopLeftToBottomRightActive(pt, color, i)) {
                 diagonal2Counter++;
             }
 
-            if (directionBottomRightToTopLeftActive) {
+            if (isDirectionBottomRightToTopLeftActive(pt, color, i)) {
                 diagonal2Counter++;
             }
         }
 
-        if (verticalCounter >= 4
-                || horizontalCounter >= 4
-                || diagonal1Counter >= 4
-                || diagonal2Counter >= 4)
+        if (verticalCounter >= CHIPS_LENGTH_TO_WIN
+                || horizontalCounter >= CHIPS_LENGTH_TO_WIN
+                || diagonal1Counter >= CHIPS_LENGTH_TO_WIN
+                || diagonal2Counter >= CHIPS_LENGTH_TO_WIN)
         {
             win(color);
         }
+    }
+
+    private boolean isDirectionRightToLeftActive(Point pt, boolean color, int i) {
+        boolean directionRightToLeftActive = true;
+        if (directionRightToLeftActive
+                && (chip(pt(pt.getX() - i, pt.getY())) == null
+                || chip(pt(pt.getX() - i, pt.getY())).getColor() != color)) {
+            directionRightToLeftActive = false;
+        }
+        return directionRightToLeftActive;
+    }
+
+    private boolean isDirectionLeftToRightActive(Point pt, boolean color, int i) {
+        boolean directionLeftToRightActive = true;
+        if (directionLeftToRightActive
+                && (chip(pt(pt.getX() + i, pt.getY())) == null
+                    || chip(pt(pt.getX() + i, pt.getY())).getColor() != color))
+        {
+            directionLeftToRightActive = false;
+        }
+        return directionLeftToRightActive;
+    }
+
+    private boolean isDirectionBottomRightToTopLeftActive(Point pt, boolean color, int i) {
+        boolean directionBottomRightToTopLeftActive = true;
+        if (directionBottomRightToTopLeftActive
+                && (chip(pt(pt.getX() - i, pt.getY() + i)) == null
+                    || chip(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
+        {
+            directionBottomRightToTopLeftActive = false;
+        }
+        return directionBottomRightToTopLeftActive;
+    }
+
+    private boolean isDirectionTopLeftToBottomRightActive(Point pt, boolean color, int i) {
+        boolean directionTopLeftToBottomRightActive = true;
+        if (directionTopLeftToBottomRightActive
+                && (chip(pt(pt.getX() + i, pt.getY() - i)) == null
+                    || chip(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
+        {
+            directionTopLeftToBottomRightActive = false;
+        }
+        return directionTopLeftToBottomRightActive;
+    }
+
+    private boolean isDirectionBottomLeftToTopRightActive(Point pt, boolean color, int i) {
+        boolean directionBottomLeftToTopRightActive = true;
+        if (directionBottomLeftToTopRightActive
+                && (chip(pt(pt.getX() + i, pt.getY() + i)) == null
+                || chip(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
+        {
+            directionBottomLeftToTopRightActive = false;
+        }
+        return directionBottomLeftToTopRightActive;
+    }
+
+    private boolean isDirectionTopRightToBottomLeftActive(Point pt, boolean color, int i) {
+        boolean directionTopRightToBottomLeftActive = true;
+        if (directionTopRightToBottomLeftActive
+                && (chip(pt(pt.getX() - i, pt.getY() - i)) == null
+                    || chip(pt(pt.getX() - i, pt.getY() - i)).getColor() != color))
+        {
+            directionTopRightToBottomLeftActive = false;
+        }
+        return directionTopRightToBottomLeftActive;
+    }
+
+    private boolean isDirectionTopToDownActive(Point pt, boolean color, int i) {
+        boolean directionTopToDownActive = true;
+        if ((chip(pt(pt.getX(), pt.getY() - i)) == null
+                    || chip(pt(pt.getX(), pt.getY() - i)).getColor() != color))
+        {
+            directionTopToDownActive = false;
+        }
+        return directionTopToDownActive;
     }
 
     private Chip chip(Point pt) {
