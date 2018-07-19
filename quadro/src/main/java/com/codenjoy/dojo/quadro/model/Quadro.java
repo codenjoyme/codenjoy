@@ -34,7 +34,6 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -136,31 +135,31 @@ public class Quadro implements Field {
         int diagonal2Counter = 1;
 
         for (int i = 1; i < CHIPS_LENGTH_TO_WIN; i++) {
-            if (isDirectionTopToDownActive(pt, color, i)) {
+            if (topToDown(pt, color, i)) {
                 verticalCounter++;
             }
 
-            if (isDirectionLeftToRightActive(pt, color, i)) {
+            if (leftToRight(pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (isDirectionRightToLeftActive(pt, color, i)) {
+            if (rightToLeft(pt, color, i)) {
                 horizontalCounter++;
             }
 
-            if (isDirectionTopRightToBottomLeftActive(pt, color, i)) {
+            if (topRightToBottomLeft(pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (isDirectionBottomLeftToTopRightActive(pt, color, i)) {
+            if (bottomLeftToTopRight(pt, color, i)) {
                 diagonal1Counter++;
             }
 
-            if (isDirectionTopLeftToBottomRightActive(pt, color, i)) {
+            if (topLeftToBottomRight(pt, color, i)) {
                 diagonal2Counter++;
             }
 
-            if (isDirectionBottomRightToTopLeftActive(pt, color, i)) {
+            if (bottomRightToTopLeft(pt, color, i)) {
                 diagonal2Counter++;
             }
         }
@@ -174,7 +173,7 @@ public class Quadro implements Field {
         }
     }
 
-    private boolean isDirectionRightToLeftActive(Point pt, boolean color, int i) {
+    private boolean rightToLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.LEFT.change(pt);
         }
@@ -185,42 +184,42 @@ public class Quadro implements Field {
         return chip(pt).itsMyColor(color);
     }
 
-    private boolean isDirectionLeftToRightActive(Point pt, boolean color, int i) {
+    private boolean leftToRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.RIGHT.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean isDirectionBottomRightToTopLeftActive(Point pt, boolean color, int i) {
+    private boolean bottomRightToTopLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.LEFT_UP.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean isDirectionTopLeftToBottomRightActive(Point pt, boolean color, int i) {
+    private boolean topLeftToBottomRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.RIGHT_DOWN.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean isDirectionBottomLeftToTopRightActive(Point pt, boolean color, int i) {
+    private boolean bottomLeftToTopRight(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.RIGHT_UP.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean isDirectionTopRightToBottomLeftActive(Point pt, boolean color, int i) {
+    private boolean topRightToBottomLeft(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.LEFT_DOWN.change(pt);
         }
         return isThatColor(pt, color);
     }
 
-    private boolean isDirectionTopToDownActive(Point pt, boolean color, int i) {
+    private boolean topToDown(Point pt, boolean color, int i) {
         for (int j = 0; j < i; j++) {
             pt = QDirection.DOWN.change(pt);
         }
