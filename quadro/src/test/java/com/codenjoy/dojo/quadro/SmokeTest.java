@@ -366,8 +366,8 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:1\n" +
                         "2:Answer: ACT(1)\n" +
-                        "Fire Event: WIN\n" +
                         "Fire Event: LOOSE\n" +
+                        "Fire Event: WIN\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 
