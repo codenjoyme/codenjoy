@@ -29,8 +29,6 @@ import com.codenjoy.dojo.quadro.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.util.ArrayList;
-
 public class ApofigSolver implements Solver<Board> {
 
     private Dice dice;

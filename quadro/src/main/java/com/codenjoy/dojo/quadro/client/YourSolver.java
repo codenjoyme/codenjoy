@@ -28,8 +28,6 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 /**
  * User: your name
  * Алгоритм AI для игры. Реализуй его на свое усмотрение.

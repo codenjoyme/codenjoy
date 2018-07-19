@@ -27,7 +27,10 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
