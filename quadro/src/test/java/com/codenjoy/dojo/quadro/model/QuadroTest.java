@@ -24,11 +24,11 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.services.Events;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -74,6 +74,11 @@ public class QuadroTest {
         hero2 = game.getHeroes().get(1);
     }
 
+    private void assertE(String expected) {
+        assertE(expected, player1);
+        assertE(expected, player2);
+    }
+
     private void assertE(String expected, Player player) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
@@ -100,19 +105,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
-
-        assertE("         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         " +
-                "         ",
-                player2);
+                "         ");
     }
 
     // Игрок может походить
@@ -139,8 +132,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "    o    ",
-                player1);
+                "    o    ");
     }
 
     // Игрок может походить на столбец, где есть фишки
@@ -167,8 +159,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "    o    " +
-                "    o    ",
-                player1);
+                "    o    ");
     }
 
     // Второй игрок может походить
@@ -197,8 +188,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "o   x    ",
-                player1);
+                "o   x    ");
     }
 
     // Желтый игрок победил когда в ряд 4 его фишки вертикально
@@ -225,8 +215,7 @@ public class QuadroTest {
                 "    o    " +
                 "    o    " +
                 "    o    " +
-                "    o    ",
-                player1);
+                "    o    ");
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
@@ -258,8 +247,7 @@ public class QuadroTest {
                 " x       " +
                 " x       " +
                 " x       " +
-                "ox       ",
-                player2);
+                "ox       ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -289,8 +277,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
+                "         ");
 
         game.tick();
         hero1.act(5);
@@ -305,8 +292,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "     o   ",
-                player1);
+                "     o   ");
 
         hero1.act(5);
         hero2.act(4);
@@ -320,8 +306,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "    xo   ",
-                player1);
+                "    xo   ");
     }
 
     // Игроки ходят по очереди, сначала желтый, потом красный
@@ -348,8 +333,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "    o    ",
-                player1);
+                "    o    ");
 
         hero2.act(4);
         game.tick();
@@ -362,8 +346,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "    x    " +
-                "    o    ",
-                player1);
+                "    o    ");
     }
 
     // Если игрок пропустил ход, то на следующий ход ходит он
@@ -391,8 +374,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "    o    ",
-                player1);
+                "    o    ");
     }
 
     // Если игрок пропустил 10 ходов, то он проиграл
@@ -423,8 +405,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
+                "         ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -456,8 +437,7 @@ public class QuadroTest {
                 "      o  " +
                 "      o  " +
                 "      o  " +
-                "      o  ",
-                player1);
+                "      o  ");
     }
 
     // Валидация параметров для хода
@@ -492,8 +472,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
+                "         ");
     }
 
     // Игра не начинается, хотя идут тики, пока нет двух игроков
@@ -521,8 +500,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
+                "         ");
 
         game.newGame(player2);
         hero2 = player2.hero;
@@ -539,8 +517,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "    x    " +
-                "    o    ",
-                player1);
+                "    o    ");
 
         game.remove(player1);
         hero2.act(4);
@@ -554,8 +531,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "    x    " +
-                "    o    ",
-                player1);
+                "    o    ");
     }
 
     // Ничья когда нет места для хода
@@ -625,8 +601,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
+                "         ");
     }
 
     // Если кто-то победил, то игра начинается снова; Через 15 тиков
@@ -659,8 +634,7 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "         " +
-                "         ",
-                player1);
+                "         ");
     }
 
     // Игрок победил когда в ряд 4 его фишки горизонтально
@@ -689,8 +663,7 @@ public class QuadroTest {
                 "         " +
                 " o       " +
                 " o       " +
-                "oxxxxxo  ",
-                player2);
+                "oxxxxxo  ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -722,8 +695,7 @@ public class QuadroTest {
                 "    x    " +
                 "   xx    " +
                 "  xxo    " +
-                "oxooooo  ",
-                player2);
+                "oxooooo  ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -755,8 +727,7 @@ public class QuadroTest {
                 "    x    " +
                 "   xx    " +
                 "  xxo    " +
-                "oxooooo  ",
-                player2);
+                "oxooooo  ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -788,8 +759,7 @@ public class QuadroTest {
                 "    x    " +
                 "   xxx   " +
                 "  oxoox  " +
-                "oxooooox ",
-                player2);
+                "oxooooox ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -821,8 +791,7 @@ public class QuadroTest {
                 "    x    " +
                 "   xxx   " +
                 "  oxoox  " +
-                "oxooooox ",
-                player2);
+                "oxooooox ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
