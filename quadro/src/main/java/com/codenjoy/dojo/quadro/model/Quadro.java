@@ -128,39 +128,21 @@ public class Quadro implements Field {
     }
 
     private void checkWin(Point pt, boolean color) {
-        int verticalCounter = 1;
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(DOWN, pt, color, length)) {
-                verticalCounter++;
-            }
-        }
+        int verticalCounter = getVerticalCount(pt, color);
+        int horizontalCounter = getHorizontalCount(pt, color);
+        int diagonal1Counter = getDiagonal1Count(pt, color);
+        int diagonal2Counter = getDiagonal2Count(pt, color);
 
-        int horizontalCounter = 1;
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(RIGHT, pt, color, length)) {
-                horizontalCounter++;
-            }
+        if (verticalCounter >= CHIPS_LENGTH_TO_WIN
+                || horizontalCounter >= CHIPS_LENGTH_TO_WIN
+                || diagonal1Counter >= CHIPS_LENGTH_TO_WIN
+                || diagonal2Counter >= CHIPS_LENGTH_TO_WIN)
+        {
+            win(color);
         }
+    }
 
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(LEFT, pt, color, length)) {
-                horizontalCounter++;
-            }
-        }
-
-        int diagonal1Counter = 1;
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(LEFT_DOWN, pt, color, length)) {
-                diagonal1Counter++;
-            }
-        }
-
-        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            if (to(RIGHT_UP, pt, color, length)) {
-                diagonal1Counter++; // TODO не хватает кейза на этот случай если поменять diagonal1Counter и следующий  diagonal2Counter местами
-            }
-        }
-
+    private int getDiagonal2Count(Point pt, boolean color) {
         int diagonal2Counter = 1;
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
             if (to(RIGHT_DOWN, pt, color, length)) {
@@ -173,14 +155,49 @@ public class Quadro implements Field {
                 diagonal2Counter++;
             }
         }
+        return diagonal2Counter;
+    }
 
-        if (verticalCounter >= CHIPS_LENGTH_TO_WIN
-                || horizontalCounter >= CHIPS_LENGTH_TO_WIN
-                || diagonal1Counter >= CHIPS_LENGTH_TO_WIN
-                || diagonal2Counter >= CHIPS_LENGTH_TO_WIN)
-        {
-            win(color);
+    private int getDiagonal1Count(Point pt, boolean color) {
+        int diagonal1Counter = 1;
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(LEFT_DOWN, pt, color, length)) {
+                diagonal1Counter++;
+            }
         }
+
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(RIGHT_UP, pt, color, length)) {
+                diagonal1Counter++; // TODO не хватает кейза на этот случай если поменять diagonal1Counter и следующий  diagonal2Counter местами
+            }
+        }
+        return diagonal1Counter;
+    }
+
+    private int getHorizontalCount(Point pt, boolean color) {
+        int horizontalCounter = 1;
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(RIGHT, pt, color, length)) {
+                horizontalCounter++;
+            }
+        }
+
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(LEFT, pt, color, length)) {
+                horizontalCounter++;
+            }
+        }
+        return horizontalCounter;
+    }
+
+    private int getVerticalCount(Point pt, boolean color) {
+        int verticalCounter = 1;
+        for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
+            if (to(DOWN, pt, color, length)) {
+                verticalCounter++;
+            }
+        }
+        return verticalCounter;
     }
 
     private boolean to(QDirection where, Point pt, boolean color, int length) {
