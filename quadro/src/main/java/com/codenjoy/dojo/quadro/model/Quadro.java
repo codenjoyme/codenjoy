@@ -186,9 +186,13 @@ public class Quadro implements Field {
     }
 
     private int getVerticalCount(Point pt, boolean color) {
+        return getCount(DOWN, pt, color);
+    }
+
+    private int getCount(QDirection direction, Point pt, boolean color) {
         int result = 1;
         for (int length = 1; length < CHIPS_LENGTH_TO_WIN; length++) {
-            pt = DOWN.change(pt);
+            pt = direction.change(pt);
             if (chip(pt).itsMyColor(color)) {
                 result++;
             }
