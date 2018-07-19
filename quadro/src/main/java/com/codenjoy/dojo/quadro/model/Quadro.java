@@ -139,7 +139,9 @@ public class Quadro implements Field {
     }
 
     private int getCount(QDirection direction, Point pt, boolean color) {
-        return getCountHalf(direction, pt, color) + getCountHalf(direction.inverted(), pt, color) + 1;
+        return getCountHalf(direction, pt, color)
+                + getCountHalf(direction.inverted(), pt, color)
+                + 1;
     }
 
     private int getCountHalf(QDirection direction, Point from, boolean color) {
