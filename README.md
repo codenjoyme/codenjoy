@@ -1,7 +1,9 @@
 [Quadro - _Чотири в ряд_](https://uk.wikipedia.org/wiki/%D0%A7%D0%BE%D1%82%D0%B8%D1%80%D0%B8_%D0%B2_%D1%80%D1%8F%D0%B4)
 ==============
 
-[youtube: Codereview игры Quadro для Codenjoy](https://youtu.be/sLl2q-xJhgg?t=57m39s)
+- [youtube: Codereview игры Quadro для Codenjoy](https://youtu.be/sLl2q-xJhgg?t=57m39s)
+- Кент Бек "Экстремальное программирование. Разработка через тестирование"
+- [youtube: film Revolution OS](https://www.youtube.com/watch?v=5f322-vseJU)
 
 <br /><br />
 
