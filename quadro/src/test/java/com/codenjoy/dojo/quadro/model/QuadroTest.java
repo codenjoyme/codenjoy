@@ -862,6 +862,38 @@ public class QuadroTest {
         verifyNoMoreInteractions(listener2);
     }
 
+    // Ничего, когда в ряд 4 фишки игрока горизонтально, но есть разрыв чужой фишкой
+    @Test
+    public void shouldNothing_directionHorizontalAndAlienChip() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " xxo oxx ");
+
+        hero1MakeSomeStep();
+
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "oxxoxoxx ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+    }
+
     // Игрок победил когда в ряд 4 его фишки по диагонали влево вниз
     @Test
     public void shouldWin_directionTopRightToBottomLeftActive() {
