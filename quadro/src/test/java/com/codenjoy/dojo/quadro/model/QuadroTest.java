@@ -862,9 +862,9 @@ public class QuadroTest {
         verifyNoMoreInteractions(listener2);
     }
 
-    // Ничего, когда в ряд 4 фишки игрока горизонтально, но есть разрыв чужой фишкой
+    // Ничего, когда в ряд 4 фишки игрока горизонтально, но есть разрыв двумя чужими фишками
     @Test
-    public void shouldNothing_directionHorizontalAndAlienChip() {
+    public void shouldNothing_directionHorizontalAndAlienTwoChip() {
         givenFl("         " +
                 "         " +
                 "         " +
@@ -889,6 +889,70 @@ public class QuadroTest {
                 "         " +
                 "         " +
                 "oxxoxoxx ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+    }
+
+    // Ничего, когда в ряд 4 фишки игрока горизонтально, но есть разрыв чужой фишкой
+    @Test
+    public void shouldNothing_directionHorizontalAndAlienChip() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "  xx oxx ");
+
+        hero1MakeSomeStep();
+
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "o xxxoxx ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+    }
+
+    // Ничего, когда в ряд 4 фишки игрока по диагонали, но есть разрыв чужой фишкой
+    @Test
+    public void shouldNothing_directionDiagonalAndAlienChip() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "      x  " +
+                "      x  " +
+                "    ooo  " +
+                "   xoxo  " +
+                "  xxooxx ");
+
+        hero1MakeSomeStep();
+
+        hero2.act(5);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "      x  " +
+                "     xx  " +
+                "    ooo  " +
+                "   xoxo  " +
+                "o xxooxx ");
 
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);

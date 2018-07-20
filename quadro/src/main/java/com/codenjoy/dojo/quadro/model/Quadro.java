@@ -129,14 +129,23 @@ public class Quadro implements Field {
 
     // See refactoring: https://youtu.be/sLl2q-xJhgg?t=57m39s
     private void checkWin(Chip from) {
-        boolean vertical = getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN;
-        boolean diagonal1 = getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN;
-        boolean diagonal2 = getCount(LEFT_DOWN, from) >= CHIPS_LENGTH_TO_WIN;
-        boolean horizontal = getCount(RIGHT_DOWN, from) >= CHIPS_LENGTH_TO_WIN;
-
-        if (vertical || diagonal1 || diagonal2 || horizontal) {
+        if (getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN) {
             win(from.getColor());
+            return;
         }
+
+        if (getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN) {
+            win(from.getColor());
+            return;
+        }
+
+        if (getCount(LEFT_DOWN, from) >= CHIPS_LENGTH_TO_WIN) {
+            win(from.getColor());
+            return;
+        }
+
+        if (getCount(RIGHT_DOWN, from) >= CHIPS_LENGTH_TO_WIN)
+            win(from.getColor());
     }
 
     private int getCount(QDirection direction, Chip from) {
@@ -153,6 +162,7 @@ public class Quadro implements Field {
             if (chip(current).itsMyColor(from.getColor())) {
                 result++;
             }
+            else break;
         }
         return result;
     }
