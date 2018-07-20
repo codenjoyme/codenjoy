@@ -27,6 +27,7 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -34,7 +35,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.QDirection.*;
@@ -45,7 +46,7 @@ public class Quadro implements Field {
     static final int TIMEOUT_TICKS = 15;
     private static final int CHIPS_LENGTH_TO_WIN = 4;
 
-    private List<Chip> chips;
+    private Map<Point, Chip> chips;
     private List<Player> players;
     private final int size;
     private boolean yellowPlayerAct = true;
@@ -110,7 +111,7 @@ public class Quadro implements Field {
     public void setChip(boolean color, int x) {
         int y = 0;
 
-        while (chips.contains(pt(x, y))) {
+        while (chips.containsKey(pt(x, y))) {
             y++;
         }
 
@@ -118,33 +119,18 @@ public class Quadro implements Field {
             return;
         }
 
-        Point pt = pt(x, y);
-        if (!chips.contains(pt)) {
-            chips.add(new Chip(color, x, y));
-        }
+            Chip chip = new Chip(color, x, y);
+            chips.put(chip, chip);
 
         chipMoved = true;
-        checkWin(new Chip(color, pt));
+        checkWin(chip);
     }
 
-    // See refactoring: https://youtu.be/sLl2q-xJhgg?t=57m39s
     private void checkWin(Chip from) {
-        if (getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN) {
-            win(from.getColor());
-            return;
-        }
-
-        if (getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN) {
-            win(from.getColor());
-            return;
-        }
-
-        if (getCount(LEFT_DOWN, from) >= CHIPS_LENGTH_TO_WIN) {
-            win(from.getColor());
-            return;
-        }
-
-        if (getCount(RIGHT_DOWN, from) >= CHIPS_LENGTH_TO_WIN)
+        if (getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN
+                || getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN
+                || getCount(LEFT_DOWN, from) >= CHIPS_LENGTH_TO_WIN
+                || getCount(RIGHT_DOWN, from) >= CHIPS_LENGTH_TO_WIN)
             win(from.getColor());
     }
 
@@ -159,7 +145,9 @@ public class Quadro implements Field {
         Point current = from;
         for (int length = 0; length < CHIPS_LENGTH_TO_WIN - 1; length++) {
             current = direction.change(current);
-            if (chip(current).itsMyColor(from.getColor())) {
+            Chip currentChip = chip(current);
+            if (currentChip != null
+                    && currentChip.itsMyColor(from.getColor())) {
                 result++;
             }
             else break;
@@ -168,10 +156,7 @@ public class Quadro implements Field {
     }
 
     private Chip chip(Point pt) {
-        return chips.stream()
-                .filter(Predicate.isEqual(pt))
-                .findFirst()
-                .orElse(Chip.NULL);
+        return chips.get(pt);
     }
 
     private void draw() {
@@ -240,7 +225,7 @@ public class Quadro implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new ArrayList<>(chips);
+                return new ArrayList<>(chips.values());
             }
         };
     }

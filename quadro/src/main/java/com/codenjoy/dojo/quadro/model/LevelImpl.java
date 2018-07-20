@@ -34,7 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class LevelImpl implements Level {
 
@@ -52,16 +52,23 @@ public class LevelImpl implements Level {
         return (int) Math.sqrt(map.length());
     }
 
+    /*
+     * Раньше тут был Set, на нем вызывался contains, и eq тянется далеко
+     * Set это частный случай Map ~ Map<E, Obj>
+     * Map<E, E> вижу тем же Set<E>, только можно вызвать get
+     * мне не известна причина, по которой эта конструкция займет больше ресурсов
+     * нарушений тут вроде нет
+     */
     @Override
-    public List<Chip> getChips() {
-        return new LinkedList<Chip>(){{
-            addAll(pointsOf(Elements.YELLOW).stream()
+    public Map<Point, Chip> getChips() {
+        return new HashMap<Point, Chip>() {{
+            putAll(pointsOf(Elements.YELLOW).stream()
                     .map(YellowChip::new)
-                    .collect(toList()));
+                    .collect(toMap(i -> i, i -> i)));
 
-            addAll(pointsOf(Elements.RED).stream()
+            putAll(pointsOf(Elements.RED).stream()
                     .map(RedChip::new)
-                    .collect(toList()));
+                    .collect(toMap(i -> i, i -> i)));
         }};
     }
 
