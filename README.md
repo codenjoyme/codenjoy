@@ -1,7 +1,9 @@
 [Quadro - _Чотири в ряд_](https://uk.wikipedia.org/wiki/%D0%A7%D0%BE%D1%82%D0%B8%D1%80%D0%B8_%D0%B2_%D1%80%D1%8F%D0%B4)
 ==============
 
-<br /><br /><br /><br /><br />
+[youtube: Codereview игры Quadro для Codenjoy](https://youtu.be/sLl2q-xJhgg?t=57m39s)
+
+<br /><br />
 
 Создай свою Codenjoy игру
 ==============
