@@ -26,14 +26,12 @@ package com.codenjoy.dojo.quadro.model;
 import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
 import java.util.Map;
 
 public interface Level {
 
-    /**
-     * @return Размер поля
-     */
     int getSize();
 
-    Map<Point, Chip> getChips();
+    List<Chip> getChips();
 }

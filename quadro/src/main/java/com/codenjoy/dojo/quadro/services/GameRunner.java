@@ -26,7 +26,10 @@ package com.codenjoy.dojo.quadro.services;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quadro.client.ai.ApofigSolver;
 import com.codenjoy.dojo.quadro.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -34,9 +37,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
@@ -85,7 +85,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.MULTIPLE;
+        return MultiplayerType.TOURNAMENT;
     }
 
     @Override

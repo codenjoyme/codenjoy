@@ -24,17 +24,20 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.model.items.Chip;
+import com.codenjoy.dojo.quadro.model.items.RedChip;
+import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -50,18 +53,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Map<Point, Chip> getChips() {
-        return new HashMap<Point, Chip>(){{
-            for (Chip chip : pointsOf(Elements.YELLOW).stream()
-                    .map(pt -> new Chip(true, pt))
-                    .collect(toList())) {
-                put(chip, chip);
-            }
-            for (Chip chip : pointsOf(Elements.RED).stream()
-                    .map(pt -> new Chip(false, pt))
-                    .collect(toList())) {
-                put(chip, chip);
-            }
+    public List<Chip> getChips() {
+        return new LinkedList<Chip>(){{
+            addAll(pointsOf(Elements.YELLOW).stream()
+                    .map(YellowChip::new)
+                    .collect(toList()));
+
+            addAll(pointsOf(Elements.RED).stream()
+                    .map(RedChip::new)
+                    .collect(toList()));
         }};
     }
 

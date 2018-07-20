@@ -27,22 +27,25 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.QDirection.*;
 import static java.util.stream.Collectors.toList;
 
-/**
- * Борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Quadro#tick()}
- */
 public class Quadro implements Field {
 
-    private Map<Point, Chip> chips;
+    static final int TIMEOUT_TICKS = 15;
+    private static final int CHIPS_LENGTH_TO_WIN = 4;
+
+    private List<Chip> chips;
     private List<Player> players;
     private final int size;
     private boolean yellowPlayerAct = true;
@@ -61,10 +64,12 @@ public class Quadro implements Field {
     @Override
     public void tick() {
         if (gameOver > 0) {
-            if (++gameOver > 15) {
+            if (++gameOver > TIMEOUT_TICKS) {
                 chips.clear();
                 gameOver = 0;
-            } else return;
+            } else {
+                return;
+            }
         }
 
         chipMoved = false;
@@ -77,12 +82,14 @@ public class Quadro implements Field {
             yellowPlayerAct = !yellowPlayerAct;
             missedActs = 0;
         } else {
-            if (++missedActs > 9)
+            if (++missedActs > 9) {
                 win(!yellowPlayerAct);
+            }
         }
 
-        if (chips.size() == size * size)
+        if (chips.size() == size * size) {
             draw();
+        }
     }
 
     public int getSize() {
@@ -95,90 +102,66 @@ public class Quadro implements Field {
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
-        return !chips.containsKey(pt);
+    public boolean isMyTurn(Hero hero) {
+        return hero.equals(currentHero());
     }
 
     @Override
     public void setChip(boolean color, int x) {
         int y = 0;
 
-        while (chips.containsKey(pt(x, y))) {
+        while (chips.contains(pt(x, y))) {
             y++;
         }
 
-        if (y >= size) return;
+        if (y >= size) {
+            return;
+        }
 
         Point pt = pt(x, y);
-        if (!chips.containsKey(pt)) {
-            chips.put(pt, new Chip(color, x, y));
+        if (!chips.contains(pt)) {
+            chips.add(new Chip(color, x, y));
         }
 
         chipMoved = true;
-        checkWin(pt, color);
+        checkWin(new Chip(color, pt));
     }
 
-    // TODO: possible refactoring to recursive and QDirection
-    // Для этого нужно понять как работает Direction
-    private void checkWin(Point pt, boolean color) {
-        int verticalCounter = 1,
-                horizontalCounter = 1,
-                diagonal1Counter = 1, // ⭧⭩
-                diagonal2Counter = 1; // ⭦⭨
-        boolean directionTopToDownActive = true,
-                directionLeftToRightActive = true,
-                directionRightToLeftActive = true,
-                directionTopRightToBottomLeftActive = true,
-                directionBottomLeftToTopRightActive = true,
-                directionTopLeftToBottomRightActive = true,
-                directionBottomRightToTopLeftActive = true;
+    // See refactoring: https://youtu.be/sLl2q-xJhgg?t=57m39s
+    private void checkWin(Chip from) {
+        boolean vertical = getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN;
+        boolean diagonal1 = getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN;
+        boolean diagonal2 = getCount(LEFT_DOWN, from) >= CHIPS_LENGTH_TO_WIN;
+        boolean horizontal = getCount(RIGHT_DOWN, from) >= CHIPS_LENGTH_TO_WIN;
 
-        for (int i = 1; i < 4; i++) {
-            if (directionTopToDownActive
-                    && (chips.get(pt(pt.getX(), pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX(), pt.getY() - i)).getColor() != color))
-                directionTopToDownActive = false;
-            if (directionLeftToRightActive
-                    && (chips.get(pt(pt.getX() + i, pt.getY())) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY())).getColor() != color))
-                directionLeftToRightActive = false;
-            if (directionRightToLeftActive
-                    && (chips.get(pt(pt.getX() - i, pt.getY())) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY())).getColor() != color))
-                directionRightToLeftActive = false;
-            if (directionTopRightToBottomLeftActive
-                    && (chips.get(pt(pt.getX() - i, pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY() - i)).getColor() != color))
-                directionTopRightToBottomLeftActive = false;
-            if (directionBottomLeftToTopRightActive
-                    && (chips.get(pt(pt.getX() + i, pt.getY() + i)) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY() + i)).getColor() != color))
-                directionBottomLeftToTopRightActive = false;
-            if (directionTopLeftToBottomRightActive
-                    && (chips.get(pt(pt.getX() + i, pt.getY() - i)) == null
-                    || chips.get(pt(pt.getX() + i, pt.getY() - i)).getColor() != color))
-                directionTopLeftToBottomRightActive = false;
-            if (directionBottomRightToTopLeftActive
-                    && (chips.get(pt(pt.getX() - i, pt.getY() + i)) == null
-                    || chips.get(pt(pt.getX() - i, pt.getY() + i)).getColor() != color))
-                directionBottomRightToTopLeftActive = false;
-
-            if (directionTopToDownActive) verticalCounter++;
-            if (directionLeftToRightActive) horizontalCounter++;
-            if (directionRightToLeftActive) horizontalCounter++;
-            if (directionTopRightToBottomLeftActive) diagonal1Counter++;
-            if (directionBottomLeftToTopRightActive) diagonal1Counter++;
-            if (directionTopLeftToBottomRightActive) diagonal2Counter++;
-            if (directionBottomRightToTopLeftActive) diagonal2Counter++;
+        if (vertical || diagonal1 || diagonal2 || horizontal) {
+            win(from.getColor());
         }
+    }
 
-        if (verticalCounter >= 4
-                || horizontalCounter >= 4
-                || diagonal1Counter >= 4
-                || diagonal2Counter >= 4)
-            win(color);
+    private int getCount(QDirection direction, Chip from) {
+        return getCountHalf(direction, from)
+                + getCountHalf(direction.inverted(), from)
+                + 1;
+    }
+
+    private int getCountHalf(QDirection direction, Chip from) {
+        int result = 0;
+        Point current = from;
+        for (int length = 0; length < CHIPS_LENGTH_TO_WIN - 1; length++) {
+            current = direction.change(current);
+            if (chip(current).itsMyColor(from.getColor())) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+    private Chip chip(Point pt) {
+        return chips.stream()
+                .filter(Predicate.isEqual(pt))
+                .findFirst()
+                .orElse(Chip.NULL);
     }
 
     private void draw() {
@@ -189,21 +172,29 @@ public class Quadro implements Field {
 
     private void win(boolean color) {
         gameOver = 1;
-        (color ? players.get(0) : players.get(1)).event(Events.WIN);
-        (!color ? players.get(0) : players.get(1)).event(Events.LOOSE);
+
+        if (color) {
+            players.get(0).event(Events.WIN);
+            players.get(1).event(Events.LOOSE);
+        } else {
+            players.get(0).event(Events.LOOSE);
+            players.get(1).event(Events.WIN);
+        }
     }
 
     @Override
     public boolean getFreeColor() {
-        return players.size() == 1 || !players.get(0).getHero().getColor();
+        return players.size() == 1
+                || !players.get(0).getHero().getColor();
     }
 
-    @Override
-    public Hero currentPlayer() {
-        return yellowPlayerAct ? players.get(0).getHero() : players.get(1).getHero();
+    private Hero currentHero() {
+        return yellowPlayerAct
+                ? players.get(0).getHero()
+                : players.get(1).getHero();
     }
 
-    public List<Hero> getHeroes() {
+    List<Hero> getHeroes() {
         return players.stream()
                 .map(Player::getHero)
                 .collect(toList());
@@ -211,11 +202,14 @@ public class Quadro implements Field {
 
     @Override
     public void newGame(Player player) {
-        if (players.size() == 2)
-            throw new IllegalStateException("Too many players: " + players.size());
+        if (players.size() == 2) {
+            throw new IllegalStateException("Too many players: "
+                    + players.size());
+        }
 
-        if (!players.contains(player))
+        if (!players.contains(player)) {
             players.add(player);
+        }
         player.newHero(this);
     }
 
@@ -236,7 +230,7 @@ public class Quadro implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new ArrayList<>(chips.values());
+                return new ArrayList<>(chips);
             }
         };
     }

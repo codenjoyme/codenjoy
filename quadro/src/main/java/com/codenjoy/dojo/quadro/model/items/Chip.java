@@ -34,6 +34,13 @@ import com.codenjoy.dojo.services.State;
  */
 public class Chip extends PointImpl implements State<Elements, Player> {
 
+    public static final Chip NULL = new Chip(false, pt(-1, -1)) {
+        @Override
+        public boolean itsMyColor(boolean color) {
+            return false;
+        }
+    };
+
     private boolean color;
 
     public Chip(boolean color, int x, int y) {
@@ -48,13 +55,18 @@ public class Chip extends PointImpl implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (color)
+        if (color) {
             return Elements.YELLOW;
-        else
+        } else {
             return Elements.RED;
+        }
     }
 
     public boolean getColor() {
         return color;
+    }
+
+    public boolean itsMyColor(boolean color) {
+        return this.color == color;
     }
 }

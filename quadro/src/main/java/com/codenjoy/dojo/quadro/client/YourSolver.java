@@ -28,8 +28,6 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 /**
  * User: your name
  * Алгоритм AI для игры. Реализуй его на свое усмотрение.
@@ -46,9 +44,6 @@ public class YourSolver implements Solver<Board> {
     private Dice dice;
     private Board board;
 
-    public YourSolver() {
-    }
-
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
@@ -57,7 +52,7 @@ public class YourSolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        return String.format("ACT(%s)", random(board.size()));
+        return String.format("ACT(%s)", dice.next(board.size()));
     }
 
     public static void main(String[] args) {
@@ -67,9 +62,5 @@ public class YourSolver implements Solver<Board> {
                 CODE,
                 new YourSolver(new RandomDice()),
                 new Board());
-    }
-
-    private int random(int less) {
-        return ThreadLocalRandom.current().nextInt(0, less);
     }
 }

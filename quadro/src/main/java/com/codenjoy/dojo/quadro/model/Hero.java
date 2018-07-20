@@ -26,16 +26,10 @@ package com.codenjoy.dojo.quadro.model;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-/**
- * Это реализация героя. Он имплементит:
- * - {@see Joystick} - может быть управляем фреймворком;
- * - {@see Tickable} - есть возможность его оповещать о каждом тике игры;
- * - {@see State} - может быть отрисован на поле.
- * Часть этих интерфейсов объявлены в {@see PlayerHero}, часть явно тут.
- */
 public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     private final boolean color;
+    private boolean act;
 
     public Hero(boolean color) {
         this.color = color;
@@ -48,21 +42,22 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
 
     @Override
     public void act(int... p) {
-        if (p.length == 1 && p[0] >= 0 && p[0] < field.getSize())
+        act = (p.length == 1)
+                && !pt(p[0], 0).isOutOf(field.getSize());
+
+        if (act) {
             x = p[0];
-        else
-            x = -1;
+        }
     }
 
     @Override
     public void tick() {
         if (!field.isGameStarted()) return;
 
-        if (this.equals(field.currentPlayer())) {
-            if (x >= 0)
-                field.setChip(color, x);
+        if (field.isMyTurn(this) && act) {
+            field.setChip(color, x);
         }
-        x = -1;
+        act = false;
     }
 
     public boolean isAlive() {

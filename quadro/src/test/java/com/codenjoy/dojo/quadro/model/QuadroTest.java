@@ -24,11 +24,11 @@ package com.codenjoy.dojo.quadro.model;
 
 
 import com.codenjoy.dojo.quadro.services.Events;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -74,6 +74,11 @@ public class QuadroTest {
         hero2 = game.getHeroes().get(1);
     }
 
+    private void assertE(String expected) {
+        assertE(expected, player1);
+        assertE(expected, player2);
+    }
+
     private void assertE(String expected, Player player) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
@@ -93,26 +98,14 @@ public class QuadroTest {
                 "         ");
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
-
-        assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
     }
 
     // Игрок может походить
@@ -132,15 +125,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ");
     }
 
     // Игрок может походить на столбец, где есть фишки
@@ -160,15 +152,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    ");
     }
 
     // Второй игрок может походить
@@ -190,15 +181,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "o   x    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "o   x    ");
     }
 
     // Желтый игрок победил когда в ряд 4 его фишки вертикально
@@ -218,18 +208,47 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    " +
-                        "    o    " +
-                        "    o    " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    " +
+                "    o    " +
+                "    o    ");
 
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
+    }
+
+    // Ничего, когда в ряд 4 фишки желтого игрока вертикально но есть между чужая фишка
+    @Test
+    public void shouldNothing_verticalYellowHasSeparated4() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    " +
+                "    x    " +
+                "    o    ");
+
+        hero1.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    " +
+                "    o    " +
+                "    o    " +
+                "    x    " +
+                "    o    ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
     }
 
     // Красный игрок победил когда в ряд 4 его фишки вертикально
@@ -251,15 +270,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        " x       " +
-                        " x       " +
-                        " x       " +
-                        "ox       ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " x       " +
+                " x       " +
+                " x       " +
+                "ox       ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -282,15 +300,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
 
         game.tick();
         hero1.act(5);
@@ -298,30 +315,28 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "     o   ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "     o   ");
 
         hero1.act(5);
         hero2.act(4);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    xo   ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    xo   ");
     }
 
     // Игроки ходят по очереди, сначала желтый, потом красный
@@ -341,29 +356,27 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ");
 
         hero2.act(4);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    o    ");
     }
 
     // Если игрок пропустил ход, то на следующий ход ходит он
@@ -384,15 +397,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ");
     }
 
     // Если игрок пропустил 10 ходов, то он проиграл
@@ -416,15 +428,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -445,24 +456,63 @@ public class QuadroTest {
 
         hero1.act(6);
         game.tick();
-        hero2.act(5);
+
+        assertE("      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  ");
+
+        hero2.act(5); // ходит все равно hero1
         game.tick();
 
         assertE("      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  " +
-                        "      o  ",
-                player1);
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  " +
+                "      o  ");
     }
 
     // Валидация параметров для хода
     @Test
-    public void shouldSkipNotValidActCommands() {
+    public void shouldSkipNotValidActCommands_parameterShouldBePositive () {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act(-2);
+        game.tick();
+
+        hero2.act(1); // ходит все равно первый
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommands_notExistParameter() {
         givenFl("         " +
                 "         " +
                 "         " +
@@ -475,25 +525,77 @@ public class QuadroTest {
 
         hero1.act();
         game.tick();
-        hero1.act(-2);
-        game.tick();
-        hero1.act(1, 1);
-        game.tick();
-        hero1.act(12);
-        game.tick();
-        hero2.act(1);
+
+        hero2.act(1); // ходит все равно первый
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommands_moreThanSize() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act(12);
+        game.tick();
+
+        hero2.act(1); // ходит все равно первый
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
+    @Test
+    public void shouldSkipNotValidActCommands_moreThanOneParameter() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act(1, 1);
+        game.tick();
+
+        hero2.act(1); // ходит все равно первый
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
     }
 
     // Игра не начинается, хотя идут тики, пока нет двух игроков
@@ -514,15 +616,14 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
 
         game.newGame(player2);
         hero2 = player2.hero;
@@ -532,30 +633,28 @@ public class QuadroTest {
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    o    ");
 
         game.remove(player1);
         hero2.act(4);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "    o    ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "    o    ");
     }
 
     // Ничья когда нет места для хода
@@ -594,7 +693,7 @@ public class QuadroTest {
         game.newGame(new Player(mock(EventListener.class)));
     }
 
-    // Если ничья, то игра начинается снова; Через 15 тиков
+    // Если ничья, то игра начинается снова; Через TIMEOUT_TICKS тиков
     @Test
     public void gameOverDraw() {
         givenFl(" xoxoxoxo" +
@@ -613,23 +712,22 @@ public class QuadroTest {
         verify(listener1).event(Events.DRAW);
         verify(listener2).event(Events.DRAW);
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
         }
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
     }
 
-    // Если кто-то победил, то игра начинается снова; Через 15 тиков
+    // Если кто-то победил, то игра начинается снова; Через TIMEOUT_TICKS тиков
     @Test
     public void gameOverWin() {
         givenFl("         " +
@@ -648,19 +746,19 @@ public class QuadroTest {
         verify(listener1).event(Events.WIN);
         verify(listener2).event(Events.LOOSE);
 
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < Quadro.TIMEOUT_TICKS; i++) {
             game.tick();
+        }
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         ",
-                player1);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
     }
 
     // Игрок победил когда в ряд 4 его фишки горизонтально
@@ -676,24 +774,28 @@ public class QuadroTest {
                 " o       " +
                 " xx xxo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(3);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        " o       " +
-                        " o       " +
-                        "oxxxxxo  ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " o       " +
+                " o       " +
+                "oxxxxxo  ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
+    }
+
+    private void hero1MakeSomeStep() {
+        hero1.act(0); // любой ход, нам интересно что сделает hero2
+        game.tick();
     }
 
     // Игрок победил когда в ряд 4 его фишки по диагонали вправо вверх
@@ -709,24 +811,87 @@ public class QuadroTest {
                 "  xxo    " +
                 "  ooooo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(1);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xx    " +
-                        "  xxo    " +
-                        "oxooooo  ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xx    " +
+                "  xxo    " +
+                "oxooooo  ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
+    }
+
+    // Ничего, когда в ряд 4 фишки игрока по диагонали вправо вверх, но есть разрыв чужой фишкой
+    @Test
+    public void shouldNothing_directionBottomLeftToTopRightActiveAndAlienChip() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "     x   " +
+                "    oo   " +
+                "   xxo   " +
+                "  xxoo   " +
+                "  ooooo  ");
+
+        hero1MakeSomeStep();
+
+        hero2.act(1);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "     x   " +
+                "    oo   " +
+                "   xxo   " +
+                "  xxoo   " +
+                "oxooooo  ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+    }
+
+    // Ничего, когда в ряд 4 фишки игрока горизонтально, но есть разрыв чужой фишкой
+    @Test
+    public void shouldNothing_directionHorizontalAndAlienChip() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                " xxo oxx ");
+
+        hero1MakeSomeStep();
+
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "oxxoxoxx ");
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
     }
 
     // Игрок победил когда в ряд 4 его фишки по диагонали влево вниз
@@ -742,21 +907,20 @@ public class QuadroTest {
                 "  xxo    " +
                 " xooooo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(4);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xx    " +
-                        "  xxo    " +
-                        "oxooooo  ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xx    " +
+                "  xxo    " +
+                "oxooooo  ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -775,21 +939,20 @@ public class QuadroTest {
                 "  oxoox  " +
                 " xooooo  ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(7);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xxx   " +
-                        "  oxoox  " +
-                        "oxooooox ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xxx   " +
+                "  oxoox  " +
+                "oxooooox ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
@@ -808,21 +971,20 @@ public class QuadroTest {
                 "  oxoox  " +
                 " xooooox ");
 
-        hero1.act(0);
-        game.tick();
+        hero1MakeSomeStep();
+
         hero2.act(4);
         game.tick();
 
         assertE("         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "         " +
-                        "    x    " +
-                        "   xxx   " +
-                        "  oxoox  " +
-                        "oxooooox ",
-                player2);
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    x    " +
+                "   xxx   " +
+                "  oxoox  " +
+                "oxooooox ");
 
         verify(listener1).event(Events.LOOSE);
         verify(listener2).event(Events.WIN);
