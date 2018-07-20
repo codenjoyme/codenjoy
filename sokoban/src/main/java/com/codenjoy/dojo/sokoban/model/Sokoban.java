@@ -32,6 +32,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.Collections.addAll;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -46,7 +47,7 @@ public class Sokoban implements Field {
     private List<Bomb> bombs;
     private List<Box> boxes;
     private List<Mark> marks;
-
+    private boolean boxesBlocked;
     private List<Player> players;
 
     private final int size;
@@ -61,6 +62,7 @@ public class Sokoban implements Field {
         size = level.getSize();
         players = new LinkedList<>();
         bombs = new LinkedList<>();
+
     }
 
     /**
@@ -82,13 +84,17 @@ public class Sokoban implements Field {
             }
         }
 
+        for (Box box: boxes) {
+
+        }
         for (Player player : players) {
             Hero hero = player.getHero();
 
-            if (!hero.isAlive()) {
+            if (!hero.isAlive()||boxesBlocked) {
                 player.event(Events.LOOSE);
             }
         }
+
     }
 
     public int size() {
@@ -103,7 +109,20 @@ public class Sokoban implements Field {
                 || y < 0
                 || y > size - 1
                 || walls.contains(pt)
+                || boxes.contains(pt)
                 || getHeroes().contains(pt);
+    }
+
+    public boolean isWall(int x, int y) {
+        Point pt = pt(x, y);
+        return walls.contains(pt);
+    }
+
+    public boolean isAdjacentToWall(int x, int y) {
+        return isBarrier(x - 1, y)
+                || isWall(x +1, y)
+                || isWall(x , y-1)
+                || isWall(x,y+1);
     }
 
     @Override
@@ -130,12 +149,28 @@ public class Sokoban implements Field {
         return !(gold.contains(pt)
                 || bombs.contains(pt)
                 || walls.contains(pt)
+                || boxes.contains(pt)
                 || getHeroes().contains(pt));
     }
 
     @Override
     public boolean isBomb(int x, int y) {
         return bombs.contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isBox(int x, int y) {
+        return boxes.contains(pt(x, y));
+    }
+
+     public void moveBox(int x, int y, int xNew, int yNew) {
+        boxes.remove(pt(x, y));
+        boxes.add(new Box(pt(xNew, yNew)));
+    }
+
+    @Override
+    public boolean isMark(int x, int y) {
+        return marks.contains(pt(x, y));
     }
 
     @Override
@@ -181,6 +216,13 @@ public class Sokoban implements Field {
     public List<Bomb> getBombs() {
         return bombs;
     }
+    public List<Box> getBoxes() {
+        return boxes;
+    }
+
+    public List<Mark> getMarks() {
+        return marks;
+    }
 
     @Override
     public BoardReader reader() {
@@ -194,23 +236,17 @@ public class Sokoban implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>(){{
-                    addAll(Sokoban.this.getWalls());
-                    addAll(Sokoban.this.getHeroes());
-                    addAll(Sokoban.this.getGold());
-                    addAll(Sokoban.this.getBombs());
-                    addAll(getBoxes());
-                    addAll(getMarks());
-                }};
+                LinkedList<Point> result = new LinkedList<>();
+                result.addAll(getWalls());
+                result.addAll(getHeroes());
+                result.addAll(getGold());
+                result.addAll(getBombs());
+                result.addAll(getBoxes());
+                result.addAll(getMarks());
+                return result;
             }
         };
     }
 
-    public List<Box> getBoxes() {
-        return boxes;
-    }
 
-    public List<Mark> getMarks() {
-        return marks;
-    }
 }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
+import com.codenjoy.dojo.sokoban.model.items.Hero;
 import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;

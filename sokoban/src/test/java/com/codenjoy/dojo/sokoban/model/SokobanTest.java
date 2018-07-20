@@ -24,8 +24,8 @@ package com.codenjoy.dojo.sokoban.model;
 
 
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.sokoban.model.items.Hero;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -53,7 +53,7 @@ public class SokobanTest {
         dice = mock(Dice.class);
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -79,14 +79,13 @@ public class SokobanTest {
     }
 
 
-
-//    TODO: initial map is created (map == walls && boxes && markes)
-//    TODO: hero appearing is not colliding with map elements
-//    TODO: hero is moving in 4 directions (UP, DOWN, LEFT, RIGHT)
-//    TODO: hero is not passing through the walls
-//    TODO: hero can push boxes in 4 directions (UP, DOWN, LEFT, RIGHT)
-//    TODO: hero cannot push boxes if wall is next element after a box in the direction of hero pushing.
-
+//    DONE: initial map is created (map == walls && boxes && markes)
+//    DONE: hero is moving in 4 directions (UP, DOWN, LEFT, RIGHT)
+//    DONE: hero is not passing through the walls
+//    DONE: hero can push boxes in 4 directions (UP, DOWN, LEFT, RIGHT)
+//    DONE: hero cannot push boxes if wall is next element after a box in the direction of hero pushing.
+//    TODO: if all boxes in the marks == win, next level.
+//    TODO: If all boxes not in the marks and in the corners - lose.
 
     // initial map is created (map == walls && boxes)
     @Test
@@ -103,8 +102,167 @@ public class SokobanTest {
                 "☼ ■X☼" +
                 "☼☺ ■☼" +
                 "☼☼☼☼☼");
+    }
+
+    // hero is moving in 4 directions (UP, DOWN, LEFT, RIGHT)
+    @Test
+    public void shouldMoveHeroin4Directioons() {
+            givenFl("☼☼☼☼☼" +
+                    "☼   ☼" +
+                    "☼ ☺ ☼" +
+                    "☼   ☼" +
+                    "☼☼☼☼☼");
+
+            hero.left();
+            game.tick();
+            assertE("☼☼☼☼☼" +
+                    "☼   ☼" +
+                    "☼☺  ☼" +
+                    "☼   ☼" +
+                    "☼☼☼☼☼");
+
+            hero.right();
+            game.tick();
+            assertE("☼☼☼☼☼" +
+                    "☼   ☼" +
+                    "☼ ☺ ☼" +
+                    "☼   ☼" +
+                    "☼☼☼☼☼");
+
+            hero.up();
+            game.tick();
+            assertE("☼☼☼☼☼" +
+                    "☼ ☺ ☼" +
+                    "☼   ☼" +
+                    "☼   ☼" +
+                    "☼☼☼☼☼");
+
+            hero.down();
+            game.tick();
+            assertE("☼☼☼☼☼" +
+                    "☼   ☼" +
+                    "☼ ☺ ☼" +
+                    "☼   ☼" +
+                    "☼☼☼☼☼");
         }
 
+//    hero is not passing through the walls
+    @Test
+        public void shouldNotMoveThroughTheWalls() {
+                givenFl("☼☼☼" +
+                               "☼☺☼" +
+                               "☼☼☼");
 
-        
+                hero.left();
+                game.tick();
+                assertE("☼☼☼" +
+                        "☼☺☼" +
+                        "☼☼☼");
+
+                hero.right();
+                game.tick();
+                assertE("☼☼☼" +
+                "☼☺☼" +
+                "☼☼☼");
+
+                hero.up();
+                game.tick();
+                assertE("☼☼☼" +
+                "☼☺☼" +
+                "☼☼☼");
+
+                hero.down();
+                game.tick();
+                assertE("☼☼☼" +
+                "☼☺☼" +
+                "☼☼☼");
+            }
+
+
+    //hero can push boxes in 4 directions (UP, DOWN, LEFT, RIGHT)
+    @Test
+    public void shouldPushBoxesIn4Direcitons(){
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ■■  ☼" +
+                "☼ ■☺  ☼" +
+                "☼  ■  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ■■  ☼" +
+                "☼■☺   ☼" +
+                "☼  ■  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+
+        hero.up();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ■   ☼" +
+                "☼ ☺■  ☼" +
+                "☼■    ☼" +
+                "☼  ■  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ■   ☼" +
+                "☼  ☺■ ☼" +
+                "☼■    ☼" +
+                "☼  ■  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        for (int i = 0; i<2;i++) {
+            hero.down();
+            game.tick();
+        }
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ■   ☼" +
+                "☼   ■ ☼" +
+                "☼■    ☼" +
+                "☼  ☺  ☼" +
+                "☼  ■  ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+
+    //hero cannot push boxes if wall is next element after a box in the direction of hero pushing.
+    @Test
+    public void shouldNotPushBoxesIn4DirecitonsIfNextIsWall() {
+        String testBoardInit="☼☼☼☼☼" +
+                "☼ ■ ☼" +
+                "☼■☺■☼" +
+                "☼ ■ ☼" +
+                "☼☼☼☼☼";
+        givenFl(testBoardInit);
+
+        hero.left();
+        game.tick();
+        assertE(testBoardInit);
+
+        hero.up();
+        game.tick();
+        assertE(testBoardInit);
+
+        hero.right();
+        game.tick();
+        assertE(testBoardInit);
+
+        for (int i = 0; i<2;i++) {
+            hero.down();
+            game.tick();
+        }
+        assertE(testBoardInit);
+    }
+
 }
+

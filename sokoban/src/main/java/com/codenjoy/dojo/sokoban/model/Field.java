@@ -34,6 +34,12 @@ public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
+    boolean isBox(int x, int y);
+
+    void moveBox(int x, int y, int xNew, int ynew);
+
+    boolean isMark(int x, int y);
+
     Point getFreeRandom();
 
     boolean isFree(int x, int y);
@@ -41,6 +47,7 @@ public interface Field extends GameField<Player> {
     boolean isBomb(int x, int y);
 
     void setBomb(int x, int y);
+
 
     void removeBomb(int x, int y);
 }

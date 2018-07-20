@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model;
+package com.codenjoy.dojo.sokoban.model.items;
 
 /*-
  * #%L
@@ -25,6 +25,9 @@ package com.codenjoy.dojo.sokoban.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.sokoban.model.Elements;
+import com.codenjoy.dojo.sokoban.model.Field;
+import com.codenjoy.dojo.sokoban.model.Player;
 
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
@@ -90,14 +93,21 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (direction != null) {
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
+            int newNextX = direction.changeX(newX);
+            int newNextY = direction.changeY(newY);
 
             if (field.isBomb(newX, newY)) {
                 alive = false;
                 field.removeBomb(newX, newY);
             }
 
+            if (field.isBox(newX, newY)) {
+                if (!field.isBarrier(newNextX, newNextY))
+                field.moveBox(newX, newY,newNextX,newNextY );
+            }
+
             if (!field.isBarrier(newX, newY)) {
-                move(newX, newY);
+                 move(newX, newY);
             }
         }
         direction = null;

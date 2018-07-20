@@ -23,10 +23,7 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.items.Box;
-import com.codenjoy.dojo.sokoban.model.items.Gold;
-import com.codenjoy.dojo.sokoban.model.items.Mark;
-import com.codenjoy.dojo.sokoban.model.items.Wall;
+import com.codenjoy.dojo.sokoban.model.items.*;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 

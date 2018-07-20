@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sokoban.model.items;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
@@ -33,14 +34,15 @@ import com.codenjoy.dojo.sokoban.model.Player;
  * Boxes to push
  */
 public class Box extends PointImpl implements State<Elements, Player> {
+    private boolean alive;
+    private Direction direction;
 
-    public Box(int x, int y) {
-        super(x, y);
+    public Box(Point xy) {
+        super(xy);
+        direction = null;
+        alive = true;
     }
 
-    public Box(Point point) {
-        super(point);
-    }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
