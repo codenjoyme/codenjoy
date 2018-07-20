@@ -27,15 +27,11 @@ import com.codenjoy.dojo.quadro.model.items.Chip;
 import com.codenjoy.dojo.quadro.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.QDirection.*;
@@ -46,7 +42,7 @@ public class Quadro implements Field {
     static final int TIMEOUT_TICKS = 15;
     private static final int CHIPS_LENGTH_TO_WIN = 4;
 
-    private Map<Point, Chip> chips;
+    private ChipSet chips;
     private List<Player> players;
     private final int size;
     private boolean yellowPlayerAct = true;
@@ -111,7 +107,7 @@ public class Quadro implements Field {
     public void setChip(boolean color, int x) {
         int y = 0;
 
-        while (chips.containsKey(pt(x, y))) {
+        while (chips.contains(pt(x, y))) {
             y++;
         }
 
@@ -225,7 +221,7 @@ public class Quadro implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new ArrayList<>(chips.values());
+                return new ArrayList<>(chips.chips());
             }
         };
     }

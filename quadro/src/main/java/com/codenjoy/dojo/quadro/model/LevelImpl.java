@@ -23,18 +23,11 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.quadro.model.items.Chip;
-import com.codenjoy.dojo.quadro.model.items.RedChip;
-import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toMap;
 
 public class LevelImpl implements Level {
 
@@ -52,23 +45,11 @@ public class LevelImpl implements Level {
         return (int) Math.sqrt(map.length());
     }
 
-    /*
-     * Раньше тут был Set, на нем вызывался contains, и eq тянется далеко
-     * Set это частный случай Map ~ Map<E, Obj>
-     * Map<E, E> вижу тем же Set<E>, только можно вызвать get
-     * мне не известна причина, по которой эта конструкция займет больше ресурсов
-     * нарушений тут вроде нет
-     */
     @Override
-    public Map<Point, Chip> getChips() {
-        return new HashMap<Point, Chip>() {{
-            putAll(pointsOf(Elements.YELLOW).stream()
-                    .map(YellowChip::new)
-                    .collect(toMap(i -> i, i -> i)));
-
-            putAll(pointsOf(Elements.RED).stream()
-                    .map(RedChip::new)
-                    .collect(toMap(i -> i, i -> i)));
+    public ChipSet getChips() {
+        return new ChipSet() {{
+            putAll(pointsOf(Elements.YELLOW), Elements.YELLOW);
+            putAll(pointsOf(Elements.RED), Elements.RED);
         }};
     }
 

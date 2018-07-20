@@ -23,14 +23,9 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
-import com.codenjoy.dojo.quadro.model.items.Chip;
-import com.codenjoy.dojo.services.Point;
-
-import java.util.Map;
-
 public interface Level {
 
     int getSize();
 
-    Map<Point, Chip> getChips();
+    ChipSet getChips();
 }

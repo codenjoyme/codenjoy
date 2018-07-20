@@ -55,5 +55,4 @@ public enum Elements implements CharElements {
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
-
 }
