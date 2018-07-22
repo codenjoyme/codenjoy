@@ -38,17 +38,28 @@ import static java.util.stream.Collectors.toList;
  */
 public class LevelImpl implements Level {
     private final LengthToXY xy;
-
+    private final int expectedBoxesValuesInMarks;
     private String map;
 
     public LevelImpl(String map) {
         this.map = map;
         xy = new LengthToXY(getSize());
+        this.expectedBoxesValuesInMarks = getMarks().size();
+    }
+    public LevelImpl(String map, int expectedBoxesValuesInMarks) {
+        this.map = map;
+        xy = new LengthToXY(getSize());
+        this.expectedBoxesValuesInMarks = expectedBoxesValuesInMarks;
     }
 
     @Override
     public int getSize() {
         return (int) Math.sqrt(map.length());
+    }
+
+    @Override
+    public int getExpectedBoxesValuesInMarks() {
+        return this.expectedBoxesValuesInMarks;
     }
 
     @Override
@@ -96,4 +107,6 @@ public class LevelImpl implements Level {
         }
         return result;
     }
+
+
 }

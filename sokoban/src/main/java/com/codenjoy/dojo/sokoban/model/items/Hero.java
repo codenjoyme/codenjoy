@@ -103,7 +103,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
             if (field.isBox(newX, newY)) {
                 if (!field.isBarrier(newNextX, newNextY))
-                field.moveBox(newX, newY,newNextX,newNextY );
+                field.moveBox(newX, newY,newNextX,newNextY);
             }
 
             if (!field.isBarrier(newX, newY)) {
@@ -116,7 +116,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public boolean isAlive() {
         return alive;
     }
-
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {

@@ -37,6 +37,7 @@ public interface Level {
      * @return Размер поля (обязательно квадратное)
      */
     int getSize();
+    int getExpectedBoxesValuesInMarks();
 
     List<Wall> getWalls();
 

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -60,8 +61,12 @@ public class SokobanTest {
         }
     }
 
-    private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+    private void givenF1(String board, int expectedMarksToWin){
+        LevelImpl level;
+        if (expectedMarksToWin!=0)
+        level = new LevelImpl(board,expectedMarksToWin);
+        else
+        level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
         game = new Sokoban(level, dice);
@@ -73,30 +78,32 @@ public class SokobanTest {
         this.hero = game.getHeroes().get(0);
     }
 
+    private void givenF(String board) {
+        givenF1(board,0);
+    }
+
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
     }
-
 
 //    DONE: initial map is created (map == walls && boxes && markes)
 //    DONE: hero is moving in 4 directions (UP, DOWN, LEFT, RIGHT)
 //    DONE: hero is not passing through the walls
 //    DONE: hero can push boxes in 4 directions (UP, DOWN, LEFT, RIGHT)
 //    DONE: hero cannot push boxes if wall is next element after a box in the direction of hero pushing.
-//    TODO: if all boxes in the marks == win, next level.
+//    TODO: if expected (definied by scenario) boxes in the marks == win event (in perspective == next level/scenario).
 //    TODO: If all boxes not in the marks and in the corners - lose.
 
     // initial map is created (map == walls && boxes)
     @Test
     public void shouldFieldWithBoxesAtStart() {
 
-        givenFl("☼☼☼☼☼" +
+        givenF("☼☼☼☼☼" +
                 "☼■XX☼" +
                 "☼ ■X☼" +
                 "☼☺ ■☼" +
                 "☼☼☼☼☼");
-
         assertE("☼☼☼☼☼" +
                 "☼■XX☼" +
                 "☼ ■X☼" +
@@ -107,89 +114,78 @@ public class SokobanTest {
     // hero is moving in 4 directions (UP, DOWN, LEFT, RIGHT)
     @Test
     public void shouldMoveHeroin4Directioons() {
-            givenFl("☼☼☼☼☼" +
-                    "☼   ☼" +
-                    "☼ ☺ ☼" +
-                    "☼   ☼" +
-                    "☼☼☼☼☼");
+        givenF("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+        hero.left();
+        game.tick();
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+        hero.right();
+        game.tick();
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+        hero.up();
+        game.tick();
+        assertE("☼☼☼☼☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+        hero.down();
+        game.tick();
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
 
-            hero.left();
-            game.tick();
-            assertE("☼☼☼☼☼" +
-                    "☼   ☼" +
-                    "☼☺  ☼" +
-                    "☼   ☼" +
-                    "☼☼☼☼☼");
-
-            hero.right();
-            game.tick();
-            assertE("☼☼☼☼☼" +
-                    "☼   ☼" +
-                    "☼ ☺ ☼" +
-                    "☼   ☼" +
-                    "☼☼☼☼☼");
-
-            hero.up();
-            game.tick();
-            assertE("☼☼☼☼☼" +
-                    "☼ ☺ ☼" +
-                    "☼   ☼" +
-                    "☼   ☼" +
-                    "☼☼☼☼☼");
-
-            hero.down();
-            game.tick();
-            assertE("☼☼☼☼☼" +
-                    "☼   ☼" +
-                    "☼ ☺ ☼" +
-                    "☼   ☼" +
-                    "☼☼☼☼☼");
-        }
-
-//    hero is not passing through the walls
+    //    hero is not passing through the walls
     @Test
-        public void shouldNotMoveThroughTheWalls() {
-                givenFl("☼☼☼" +
-                               "☼☺☼" +
-                               "☼☼☼");
+    public void shouldNotMoveThroughTheWalls() {
 
-                hero.left();
-                game.tick();
-                assertE("☼☼☼" +
-                        "☼☺☼" +
-                        "☼☼☼");
-
-                hero.right();
-                game.tick();
-                assertE("☼☼☼" +
+        String testBoardInit = "☼☼☼" +
                 "☼☺☼" +
-                "☼☼☼");
+                "☼☼☼";
+        givenF(testBoardInit);
 
-                hero.up();
-                game.tick();
-                assertE("☼☼☼" +
-                "☼☺☼" +
-                "☼☼☼");
+        hero.left();
+        game.tick();
+        assertE(testBoardInit);
 
-                hero.down();
-                game.tick();
-                assertE("☼☼☼" +
-                "☼☺☼" +
-                "☼☼☼");
-            }
+        hero.right();
+        game.tick();
+        assertE(testBoardInit);
+
+        hero.up();
+        game.tick();
+        assertE(testBoardInit);
+
+        hero.down();
+        game.tick();
+        assertE(testBoardInit);
+    }
 
 
     //hero can push boxes in 4 directions (UP, DOWN, LEFT, RIGHT)
     @Test
-    public void shouldPushBoxesIn4Direcitons(){
-        givenFl("☼☼☼☼☼☼☼" +
+    public void shouldPushBoxesIn4Direcitons() {
+        givenF("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ■■  ☼" +
                 "☼ ■☺  ☼" +
                 "☼  ■  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-
         hero.left();
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
@@ -199,8 +195,6 @@ public class SokobanTest {
                 "☼  ■  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-
-
         hero.up();
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
@@ -210,7 +204,6 @@ public class SokobanTest {
                 "☼  ■  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-
         hero.right();
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
@@ -220,8 +213,7 @@ public class SokobanTest {
                 "☼  ■  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-
-        for (int i = 0; i<2;i++) {
+        for (int i = 0; i < 2; i++) {
             hero.down();
             game.tick();
         }
@@ -234,16 +226,15 @@ public class SokobanTest {
                 "☼☼☼☼☼☼☼");
     }
 
-
     //hero cannot push boxes if wall is next element after a box in the direction of hero pushing.
     @Test
     public void shouldNotPushBoxesIn4DirecitonsIfNextIsWall() {
-        String testBoardInit="☼☼☼☼☼" +
+        String testBoardInit = "☼☼☼☼☼" +
                 "☼ ■ ☼" +
                 "☼■☺■☼" +
                 "☼ ■ ☼" +
                 "☼☼☼☼☼";
-        givenFl(testBoardInit);
+        givenF(testBoardInit);
 
         hero.left();
         game.tick();
@@ -257,12 +248,27 @@ public class SokobanTest {
         game.tick();
         assertE(testBoardInit);
 
-        for (int i = 0; i<2;i++) {
+        for (int i = 0; i < 2; i++) {
             hero.down();
             game.tick();
         }
         assertE(testBoardInit);
     }
 
+
+    //    TODO: if expected (definied by scenario) boxes in the marks == win event (in perspective == next level/scenario).
+@Test
+    public void shouldWinIfExpectedValueOfBoxInMarksIsReached() {
+        String testBoardInit = "☼☼☼☼☼" +
+                "☼☺■X☼" +
+                "☼  ■☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼";
+        givenF(testBoardInit);
+          hero.right();
+          game.tick();
+        assertTrue("expected marks to fill is: "+game.getExpectedMarksToWin()+" real value is:" + game.getRealMarksToWin(),game.isWon());
+
+    }
 }
 

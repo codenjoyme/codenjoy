@@ -22,7 +22,6 @@ package com.codenjoy.dojo.sokoban.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.sokoban.model.items.*;
 import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.services.*;
@@ -48,21 +47,23 @@ public class Sokoban implements Field {
     private List<Box> boxes;
     private List<Mark> marks;
     private boolean boxesBlocked;
+    private boolean isWon;
     private List<Player> players;
-
+    private final int expectedMarksToWin;
     private final int size;
+    private int realMarksToWin;
     private Dice dice;
 
     public Sokoban(Level level, Dice dice) {
         this.dice = dice;
+        size = level.getSize();
         walls = level.getWalls();
         boxes = level.getBoxes();
         marks = level.getMarks();
         gold = level.getGold();
-        size = level.getSize();
+        this.expectedMarksToWin = level.getExpectedBoxesValuesInMarks();
         players = new LinkedList<>();
         bombs = new LinkedList<>();
-
     }
 
     /**
@@ -70,30 +71,43 @@ public class Sokoban implements Field {
      */
     @Override
     public void tick() {
-        for (Player player : players) {
-            Hero hero = player.getHero();
+
+          Player player = players.get(0);
+          Hero hero = player.getHero();
 
             hero.tick();
 
             if (gold.contains(hero)) {
                 gold.remove(hero);
                 player.event(Events.WIN);
-
+                isWon=true;
                 Point pos = getFreeRandom();
                 gold.add(new Gold(pos));
+
             }
-        }
 
-        for (Box box: boxes) {
-
-        }
-        for (Player player : players) {
-            Hero hero = player.getHero();
+            if (expectedMarksToWin==realMarksToWin){
+                player.event(Events.WIN);
+                isWon=true;
+            }
 
             if (!hero.isAlive()||boxesBlocked) {
                 player.event(Events.LOOSE);
+        }
+
+        for (Mark mark: marks) {
+            for (Box box: boxes) {
+                if(mark.itsMe(box)) {
+                    realMarksToWin++;
+                }
+                if(!mark.itsMe(box)) {
+                    realMarksToWin--;
+                }
+
             }
         }
+
+
 
     }
 
@@ -247,6 +261,15 @@ public class Sokoban implements Field {
             }
         };
     }
+    public int getRealMarksToWin() {
+        return realMarksToWin;
+    }
 
+    public int getExpectedMarksToWin() {
+        return expectedMarksToWin;
+    }
 
+    public boolean isWon() {
+        return isWon;
+    }
 }
