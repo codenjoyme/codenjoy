@@ -25,17 +25,20 @@ package com.codenjoy.dojo.sokoban.model.items;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.model.Elements;
+import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.model.Player;
 
 /**
  * Boxes to push
  */
-public class Box extends PointImpl implements State<Elements, Player> {
+public class Box extends PointEnriched<Field> implements State<Elements, Player> {
     private boolean alive;
     private Direction direction;
+    private boolean isBlocked;
+    private boolean isOnMark;
+
 
     public Box(Point xy) {
         super(xy);
@@ -45,7 +48,43 @@ public class Box extends PointImpl implements State<Elements, Player> {
 
 
     @Override
+    public void init(Field field) {
+        this.field = field;
+    }
+
+
+    public void tick() {
+
+        if (this.field!=null) {
+            if (this.field.isMark(x, y)) {
+                isOnMark = true;
+            } else {
+                isOnMark = false;
+            }
+        }
+}
+
+
+    @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.BOX;
     }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public boolean isOnMark() {
+        return isOnMark;
+    }
+
+    public void setOnMark(boolean onMark) {
+        isOnMark = onMark;
+    }
+
+
 }

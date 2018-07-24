@@ -31,7 +31,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.Collections.addAll;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -51,7 +50,7 @@ public class Sokoban implements Field {
     private List<Player> players;
     private final int expectedMarksToWin;
     private final int size;
-    private int realMarksToWin;
+    static int realMarksToWin;
     private Dice dice;
 
     public Sokoban(Level level, Dice dice) {
@@ -71,44 +70,53 @@ public class Sokoban implements Field {
      */
     @Override
     public void tick() {
-
+          realMarksToWin=0;
           Player player = players.get(0);
           Hero hero = player.getHero();
+          hero.tick();
 
-            hero.tick();
+        heroCheckingReachGold(player, hero);
 
-            if (gold.contains(hero)) {
-                gold.remove(hero);
-                player.event(Events.WIN);
-                isWon=true;
-                Point pos = getFreeRandom();
-                gold.add(new Gold(pos));
-
-            }
-
-            if (expectedMarksToWin==realMarksToWin){
-                player.event(Events.WIN);
-                isWon=true;
-            }
-
-            if (!hero.isAlive()||boxesBlocked) {
+        if (!hero.isAlive()||boxesBlocked) {
                 player.event(Events.LOOSE);
         }
 
-        for (Mark mark: marks) {
-            for (Box box: boxes) {
-                if(mark.itsMe(box)) {
-                    realMarksToWin++;
-                }
-                if(!mark.itsMe(box)) {
-                    realMarksToWin--;
-                }
-
+        for (Box box: boxes) {
+            box.tick();
             }
+        for (Mark mark: marks) {
+            mark.tick();
         }
 
+        for (Mark mark: marks)
+        {
+            if (mark.isFilled()){
+                realMarksToWin++;
+            }
+            else  {
+                realMarksToWin--;
+            }
+            }
 
+        if (expectedMarksToWin==realMarksToWin){
+            isWon=true;
+            player.event(Events.WIN);
+        }
 
+    }
+
+    /** cheking reached Gold if so - triggered Win
+     * @param player Player obj
+     * @param hero particular case of player = player.getHero()
+     */
+    private void heroCheckingReachGold(Player player, Hero hero) {
+        if (gold.contains(hero)) {
+            gold.remove(hero);
+            player.event(Events.WIN);
+            isWon=true;
+            Point pos = getFreeRandom();
+            gold.add(new Gold(pos));
+        }
     }
 
     public int size() {

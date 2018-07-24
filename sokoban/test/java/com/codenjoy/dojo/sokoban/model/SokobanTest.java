@@ -24,7 +24,9 @@ package com.codenjoy.dojo.sokoban.model;
 
 
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.sokoban.model.items.Box;
 import com.codenjoy.dojo.sokoban.model.items.Hero;
+import com.codenjoy.dojo.sokoban.model.items.Mark;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -48,6 +50,8 @@ public class SokobanTest {
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private Box box;
+    private Mark mark;
 
     @Before
     public void setup() {
@@ -61,12 +65,12 @@ public class SokobanTest {
         }
     }
 
-    private void givenF1(String board, int expectedMarksToWin){
+    private void givenF1(String board, int expectedMarksToWin) {
         LevelImpl level;
-        if (expectedMarksToWin!=0)
-        level = new LevelImpl(board,expectedMarksToWin);
+        if (expectedMarksToWin != 0)
+            level = new LevelImpl(board, expectedMarksToWin);
         else
-        level = new LevelImpl(board);
+            level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
         game = new Sokoban(level, dice);
@@ -75,11 +79,17 @@ public class SokobanTest {
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
+
+        for(Mark mark : level.getMarks()){
+            mark.init(game);
+        }
+
+
         this.hero = game.getHeroes().get(0);
     }
 
     private void givenF(String board) {
-        givenF1(board,0);
+        givenF1(board, 0);
     }
 
     private void assertE(String expected) {
@@ -257,7 +267,7 @@ public class SokobanTest {
 
 
     //    TODO: if expected (definied by scenario) boxes in the marks == win event (in perspective == next level/scenario).
-@Test
+    @Test
     public void shouldWinIfExpectedValueOfBoxInMarksIsReached() {
         String testBoardInit = "☼☼☼☼☼" +
                 "☼☺■X☼" +
@@ -265,10 +275,33 @@ public class SokobanTest {
                 "☼   ☼" +
                 "☼☼☼☼☼";
         givenF(testBoardInit);
-          hero.right();
-          game.tick();
-        assertTrue("expected marks to fill is: "+game.getExpectedMarksToWin()+" real value is:" + game.getRealMarksToWin(),game.isWon());
+        hero.right();
+        game.tick();
+        assertTrue("\nWe need to have same expected and real marks, but" +
+                "\n expected marks to fill is: " + game.getExpectedMarksToWin() + " real value is:" + game.getRealMarksToWin(), game.isWon());
 
     }
+
+
+//    @Test
+//    public void justToChecksSomeBehaviours() {
+//        String testBoardInit =
+//                "☼☼☼☼☼☼☼☼☼"+
+//                "☼ ■     ☼"   +
+//                "☼■☺■X   ☼"  +
+//                "☼ ■     ☼"   +
+//                "☼       ☼"    +
+//                "☼       ☼"    +
+//                "☼       ☼"    +
+//                "☼       ☼"    +
+//                        "☼☼☼☼☼☼☼☼☼";
+//        givenF(testBoardInit);
+//
+//        for (int i = 0; i < 3; i++) {
+//            hero.right();
+//            game.tick();
+//        }
+//        assertE(testBoardInit);
+//    }
 }
 

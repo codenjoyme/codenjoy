@@ -27,12 +27,14 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.model.Elements;
+import com.codenjoy.dojo.sokoban.model.Field;
 import com.codenjoy.dojo.sokoban.model.Player;
 
 /**
  * Boxes to push
  */
-public class Mark extends PointImpl implements State<Elements, Player> {
+public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
+    private boolean isFilled;
 
     public Mark(int x, int y) {
         super(x, y);
@@ -43,7 +45,33 @@ public class Mark extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
+    public void init(Field field) {
+        this.field = field;
+    }
+
+    @Override
+    public void tick() {
+
+        if (field!=null) {
+            if (this.field.isBox(x, y)) {
+                isFilled = true;
+            } else {
+                isFilled = false;
+            }
+        }
+    }
+
+    @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.MARK_TO_WIN;
+    }
+
+
+    public boolean isFilled() {
+        return isFilled;
+    }
+
+    public void setFilled(boolean filled) {
+        isFilled = filled;
     }
 }
