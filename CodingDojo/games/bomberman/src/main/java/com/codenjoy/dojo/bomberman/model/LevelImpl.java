@@ -472,4 +472,9 @@ public class LevelImpl implements Level {
 
         mapReload();
     }
+
+    @Override
+    public Object getChoppers() {
+        return choppers;
+    }
 }

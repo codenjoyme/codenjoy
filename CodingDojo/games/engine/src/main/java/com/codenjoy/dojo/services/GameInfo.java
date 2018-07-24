@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.services;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,8 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
+public interface GameInfo {
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+  Object getChoppers();
 
-public class Gold extends PointImpl implements State<Elements, Player> {
-
-    public Gold(Point point) {
-        super(point);
-    }
-
-    public Gold(int x, int y) {
-        super(x, y);
-    }
-
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOLD;
-    }
 }

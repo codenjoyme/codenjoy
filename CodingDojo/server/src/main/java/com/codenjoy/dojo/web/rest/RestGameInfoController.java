@@ -22,16 +22,12 @@ package com.codenjoy.dojo.web.rest;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.Bomberman;
-import com.codenjoy.dojo.bomberman.model.Level;
-import com.codenjoy.dojo.bomberman.model.MeatChopper;
-import com.codenjoy.dojo.bomberman.services.GameRunner;
-import com.codenjoy.dojo.loderunner.model.Enemy;
-import com.codenjoy.dojo.loderunner.model.Loderunner;
 import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.LevelInfo;
 import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerGames;
-import com.codenjoy.dojo.services.lock.LockedGameType;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.web.rest.pojo.Chopper;
 import com.codenjoy.dojo.web.rest.pojo.GameInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
@@ -76,7 +72,7 @@ public class RestGameInfoController {
                 })
             .collect(Collectors.toList());
     String map = (String) playerGameList.get(0).getGame().getBoardAsString();
-    map = map.replaceAll("\\n","");
+    map = map.replaceAll("\\n", "");
     gameInfo.setMap(map);
     gameInfo.setPlayerInfoList(playerInfoList);
     choppers = getChoppers(gameName);
@@ -86,11 +82,10 @@ public class RestGameInfoController {
 
   private List<Chopper> getChoppers(String gameName) {
     if (BOMBERMAN.equals(gameName)) {
-      GameRunner gameRunner = (GameRunner) gameService.getGame(gameName).getGame();
-      Bomberman bomberman = (Bomberman) gameRunner.getGame();
-      Level level = bomberman.getLevel();
-      List<MeatChopper> meatChoppers = level.getChoppers();
-      return meatChoppers
+      GameType gameType = (GameType) gameService.getGame(gameName).getGame();
+      LevelInfo levelInfo = (LevelInfo) gameType.getGame();
+      List<PointImpl> choppers = (List<PointImpl>) levelInfo.getGameInfo().getChoppers();
+      return choppers
           .stream()
           .map(
               meatChopper -> {
@@ -100,14 +95,11 @@ public class RestGameInfoController {
                 return chopper;
               })
           .collect(Collectors.toList());
-
     } else if (LODERUNNER.equals(gameName)) {
-      LockedGameType lockedGameType = (LockedGameType) gameService.getGame(gameName);
-      com.codenjoy.dojo.loderunner.services.GameRunner gameRunner =
-          (com.codenjoy.dojo.loderunner.services.GameRunner) lockedGameType.getGame();
-      Loderunner loderunner = (Loderunner) gameRunner.getGame();
-      List<Enemy> enemies = loderunner.getEnemies();
-      return enemies
+      GameType gameType = (GameType) gameService.getGame(gameName).getGame();
+      com.codenjoy.dojo.services.GameInfo gameInfo = (com.codenjoy.dojo.services.GameInfo) gameType.getGame();
+      List<PointImpl> choppers = (List<PointImpl>) gameInfo.getChoppers();
+      return choppers
           .stream()
           .map(
               enemy -> {

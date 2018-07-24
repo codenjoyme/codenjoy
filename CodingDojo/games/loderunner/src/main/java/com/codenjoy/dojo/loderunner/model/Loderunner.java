@@ -24,6 +24,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.services.GameInfo;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -41,7 +42,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Date: 17.12.13
  * Time: 4:56
  */
-public class Loderunner implements Tickable, Field {
+public class Loderunner implements Tickable, Field, GameInfo {
 
     private Point[][] field;
     private List<Player> players;
@@ -148,6 +149,11 @@ public class Loderunner implements Tickable, Field {
                 return result;
             }
         };
+    }
+
+    @Override
+    public Object getChoppers() {
+        return enemies;
     }
 
     interface ElementsIterator {

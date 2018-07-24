@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.GameInfo;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -34,7 +35,7 @@ import java.util.List;
  * Date: 3/7/13
  * Time: 1:48 PM
  */
-public interface Level extends Field, Tickable {
+public interface Level extends Field, Tickable, GameInfo {
 
     Parameter<Integer> bombsCount(); //настройка для каждой карты своя
 

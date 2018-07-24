@@ -23,6 +23,8 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.services.Level1;
+import com.codenjoy.dojo.services.GameInfo;
+import com.codenjoy.dojo.services.LevelInfo;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -35,7 +37,7 @@ import java.util.List;
  * Date: 3/7/13
  * Time: 9:11 AM
  */
-public class Bomberman implements Tickable {
+public class Bomberman implements Tickable,LevelInfo {
 
     private GameSettings settings; //общие настройки игры
 
@@ -97,4 +99,9 @@ public class Bomberman implements Tickable {
             }
         };
     }
+
+  @Override
+  public GameInfo getGameInfo() {
+    return level;
+  }
 }
