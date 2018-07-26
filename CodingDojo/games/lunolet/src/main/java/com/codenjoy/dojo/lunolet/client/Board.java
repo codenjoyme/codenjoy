@@ -65,6 +65,10 @@ public class Board implements ClientBoard {
         return this;
     }
 
+    public double getTime() {
+        return Time;
+    }
+
     public Point2D.Double getPoint() {
         return new Point2D.Double(X, Y);
     }
@@ -83,6 +87,20 @@ public class Board implements ClientBoard {
 
     public VesselState getState() {
         return VesselState.valueOf(State);
+    }
+
+    public double getAngle() { return Angle; }
+
+    public double getFuelMass() {
+        return FuelMass;
+    }
+
+    public ArrayList<Point2D.Double> getRelief() {
+        return Relief;
+    }
+
+    public ArrayList<Point2D.Double> getHistory() {
+        return History;
     }
 
     private static Point2D.Double getPoint(JSONObject source, String key) {

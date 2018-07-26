@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lunolet.client;
  */
 
 
+import com.codenjoy.dojo.lunolet.model.VesselState;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -49,7 +50,16 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         System.out.println(board.toString());
 
-        return Direction.UP.toString();
+        if (board.getState() == VesselState.START)
+            return "message('go 0, 0.2, 1')";
+        if (board.Y < 8.0 || board.VSpeed < -1.5) {
+            return "UP";
+        } else if (board.X < board.getTarget().getX() && board.HSpeed < 3.0) {
+            return "RIGHT";
+        } else if (board.X > board.getTarget().getX() && board.HSpeed > -3.0) {
+            return "LEFT";
+        }
+        return "UP";
     }
 
     public static void main(String[] args) {
