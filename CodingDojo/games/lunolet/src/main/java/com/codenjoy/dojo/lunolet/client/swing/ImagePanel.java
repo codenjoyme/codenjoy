@@ -143,8 +143,6 @@ public class ImagePanel extends JPanel {
             }
         }
 
-        //TODO
-
         g2.dispose();
 
         this.repaint();
