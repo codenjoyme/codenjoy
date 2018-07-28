@@ -23,8 +23,11 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -82,9 +85,10 @@ public class TetrisGame implements Field {
 
     void setPlots(List<Plot> plots) {
         Glass glass = player.getHero().getGlass();
+        Collections.sort(plots, Comparator.comparingInt(PointImpl::getY));
         for (Plot plot : plots) {
             Figure.Type type = Figure.Type.valueOf(String.valueOf(plot.getColor().ch()));
-            Figure figure = new TetrisFigure(0, 1, type, "#", "#", "#", "#");
+            Figure figure = new TetrisFigure(0, 0, type, "#");
             glass.drop(figure, plot.getX(), plot.getY());
         }
     }

@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -99,7 +100,7 @@ public class TetrisTest {
     }
 
     @Test
-    public void shouldFieldAtStart() {
+    public void shouldEmptyFieldAtStart() {
         givenFl("     " +
                 "     " +
                 "     " +
@@ -111,6 +112,41 @@ public class TetrisTest {
                 "     " +
                 "     " +
                 "     ");
+    }
+
+    @Test
+    public void shouldOFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                " OO   " +
+                " OO   ");
+
+        assrtDr("      " +
+                "      " +
+                "      " +
+                "      " +
+                " OO   " +
+                " OO   ");
+    }
+
+    @Ignore
+    @Test
+    public void shouldSomeFiguresAtStart() {
+        givenFl(" SS Z " +
+                " LSSZZ" +
+                "ILTTTZ" +
+                "ILLTJ " +
+                "IOO J " +
+                "IOOJJ ");
+
+        assrtDr(" SS Z " +
+                " LSSZZ" +
+                "ILTTTZ" +
+                "ILLTJ " +
+                "IOO J " +
+                "IOOJJ ");
     }
 
 }
