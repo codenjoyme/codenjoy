@@ -341,7 +341,7 @@ var DirectionSolver = function(board) {
             var target = board.getTarget();
 
             if (board.getState() == "START") {
-                return Direction.UP;
+                return "message('go 0, 0.2, 1')";
             }
 
             if (board.getY() < target.y + 4.0 || board.getVSpeed() < -1.5) {

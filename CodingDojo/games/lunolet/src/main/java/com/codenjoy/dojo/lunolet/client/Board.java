@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class Board implements ClientBoard {
     protected JSONObject source;
 
+    int Level;
     double Time;
     double X;
     double Y;
@@ -50,6 +51,7 @@ public class Board implements ClientBoard {
     public ClientBoard forString(String boardString) {
         source = new JSONObject(boardString);
 
+        Level = source.getInt("level");
         Time = source.getDouble("time");
         X = source.getDouble("x");
         Y = source.getDouble("y");

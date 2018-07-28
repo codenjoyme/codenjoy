@@ -44,6 +44,7 @@ namespace LunoletClient
             using (Graphics gfx = Graphics.FromImage(bitmap))
             {
                 gfx.FillRectangle(Brushes.White, 0, 0, bitmap.Width, bitmap.Height);
+                gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                 Font font = new Font(FontFamily.GenericMonospace, 10f);
                 Brush brush = Brushes.Black;
@@ -55,7 +56,6 @@ namespace LunoletClient
                 gfx.DrawString($"YPOS {board.Y}", font, brush, 200, 45);
                 gfx.DrawString($"HSPEED {board.HSpeed}", font, brush, 350, 30);
                 gfx.DrawString($"VSPEED {board.VSpeed}", font, brush, 350, 45);
-                gfx.DrawString($"ANGLE  {board.Angle}", font, brush, 350, 60);
                 if (board.HSpeed >= 0.001)
                 {
                     gfx.DrawString("→", font, brush, 500, 30);
@@ -162,25 +162,14 @@ namespace LunoletClient
         {
             //Random random = new Random((int)DateTime.Now.Ticks);
             //int move = random.Next(0, 3);
-            //switch (move)
-            //{
-            //    case 0:
-            //        CommandText = "UP";
-            //        break;
-            //    case 1:
-            //        CommandText = "DOWN";
-            //        break;
-            //    case 2:
-            //        CommandText = "LEFT";
-            //        break;
-            //    case 3:
-            //        CommandText = "RIGHT";
-            //        break;
-            //}
 
             var target = board.Target;
 
-            if (board.Y < 8.0 || board.VSpeed < -1.5)
+            if (board.State == "START")
+            {
+                CommandText = "message('go 0, 0.2, 1')";
+            }
+            else if (board.Y < 8.0 || board.VSpeed < -1.5)
             {
                 CommandText = "UP";
             }
