@@ -251,6 +251,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             else if (board.vspeed <= -0.001) {
                 canvas.drawText("↓", {"x": 18, "y": 16.4}, monofont);
             }
+            canvas.drawText("LEVEL " + board.level, {"x": 0, "y": 0.4}, monofont);
 
             let ctx = canvas.getCanvasContext();
             // scale, move center to (300, 300), and flip vertically
