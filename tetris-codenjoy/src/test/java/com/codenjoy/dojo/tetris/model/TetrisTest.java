@@ -131,22 +131,125 @@ public class TetrisTest {
                 " OO   ");
     }
 
-    @Ignore
+    @Test
+    public void shouldIFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                " I    " +
+                " I    " +
+                " I    " +
+                " I    ");
+
+        assrtDr("      " +
+                "      " +
+                " I    " +
+                " I    " +
+                " I    " +
+                " I    ");
+    }
+
+    @Test
+    public void shouldJFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                " J    " +
+                " J    " +
+                "JJ    ");
+
+        assrtDr("      " +
+                "      " +
+                "      " +
+                " J    " +
+                " J    " +
+                "JJ    ");
+    }
+
+    @Test
+    public void shouldLFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                " L    " +
+                " L    " +
+                " LL   ");
+
+        assrtDr("      " +
+                "      " +
+                "      " +
+                " L    " +
+                " L    " +
+                " LL   ");
+    }
+
+    @Test
+    public void shouldSFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "  SS  " +
+                " SSO  ");
+
+        assrtDr("      " +
+                "      " +
+                "      " +
+                "      " +
+                "  SS  " +
+                " SSO  ");
+    }
+
+    @Test
+    public void shouldZFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "  ZZ  " +
+                "  OZZ ");
+
+        assrtDr("      " +
+                "      " +
+                "      " +
+                "      " +
+                "  ZZ  " +
+                "  OZZ ");
+    }
+
+    @Test
+    public void shouldTFiguresAtStart() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "   T  " +
+                "  TTT ");
+
+        assrtDr("      " +
+                "      " +
+                "      " +
+                "      " +
+                "   T  " +
+                "  TTT ");
+    }
+
     @Test
     public void shouldSomeFiguresAtStart() {
-        givenFl(" SS Z " +
-                " LSSZZ" +
-                "ILTTTZ" +
-                "ILLTJ " +
-                "IOO J " +
-                "IOOJJ ");
+        givenFl("       " +
+                "   SSZ " +
+                "  SSZZ " +
+                "ILOIZI " +
+                "ILLIJI " +
+                "IOOIJI " +
+                "IOOJJI ");
 
-        assrtDr(" SS Z " +
-                " LSSZZ" +
-                "ILTTTZ" +
-                "ILLTJ " +
-                "IOO J " +
-                "IOOJJ ");
+        assrtDr("       " +
+                "   SSZ " +
+                "  SSZZ " +
+                "ILOIZI " +
+                "ILLIJI " +
+                "IOOIJI " +
+                "IOOJJI ");
     }
 
 }
