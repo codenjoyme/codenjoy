@@ -23,11 +23,12 @@ package com.codenjoy.dojo.tetris.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+import org.json.JSONObject;
 
 /**
  * User: your name
@@ -35,37 +36,32 @@ import com.codenjoy.dojo.services.RandomDice;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class YourSolver implements Solver<Board> {
+public class YourSolver extends AbstractJsonSolver {
 
-    private static final String USER_NAME = "user@gmail.com";
+    // this is your email
+    private static final String USER_NAME = "your@email.com";
+    // you can get this code after registration on the server with your email
+    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+    private static final String CODE = "12345678901234567890";
 
     private Dice dice;
-    private Board board;
 
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
 
     @Override
-    public String get(Board board) {
-        this.board = board;
-        if (board.isGameOver()) return "";
-
-        return Direction.UP.toString();
+    public String getAnswer(JSONObject question) {
+        return "DOWN";
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.REMOTE);
-    }
-
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new YourSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
+        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
+                USER_NAME,
+                CODE,
+                new YourSolver(new RandomDice()),
+                new Board());
     }
 
 }

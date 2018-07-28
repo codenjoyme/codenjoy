@@ -31,15 +31,15 @@ import com.codenjoy.dojo.services.State;
  * Date: 5/9/12
  * Time: 6:55 PM
  */
-public class Plot extends PointImpl implements State<PlotColor, Object> {
-    private PlotColor color;
+public class Plot extends PointImpl implements State<Elements, Player> {
+    private Elements color;
 
-    public Plot(int x, int y, PlotColor color) {
+    public Plot(int x, int y, Elements color) {
         super(x, y);
         this.color = color;
     }
 
-    public PlotColor getColor() {
+    public Elements getColor() {
         return color;
     }
 
@@ -53,7 +53,7 @@ public class Plot extends PointImpl implements State<PlotColor, Object> {
     }
 
     @Override
-    public PlotColor state(Object player, Object... alsoAtPoint) {
+    public Elements state(Player player, Object... alsoAtPoint) {
         return color;
     }
 }

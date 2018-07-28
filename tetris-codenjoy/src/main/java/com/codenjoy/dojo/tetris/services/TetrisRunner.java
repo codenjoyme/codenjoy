@@ -25,50 +25,51 @@ package com.codenjoy.dojo.tetris.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.tetris.client.ai.ApofigSolver;
 import com.codenjoy.dojo.tetris.model.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+public class TetrisRunner extends AbstractGameType {
 
-/**
- * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see TetrisRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
- */
-public class TetrisRunner implements GameType {
-
-    private final Settings settings;
-    private final PlayerFigures queue;
-    private final Levels levels;
+    private Settings settings;
+    private PlayerFigures queue;
+    private Levels levels;
     private TetrisPlayerScores scores;
+
+    private Parameter<String> gameLevels;
+    private Parameter<Integer> glassSize;
 
     public TetrisRunner() {
         settings = new SettingsImpl();;
-        Parameter<?> gameLevelsSelect = settings.addSelect("gameLevels", Arrays.<Object>asList("AllFigureLevels"));
-        gameLevelsSelect.select(0);
+        gameLevels = settings.addSelect("Game Levels", Arrays.asList("AllFigureLevels")).type(String.class);
+        gameLevels.select(0);
+        glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(20);
         queue = new PlayerFigures();
         levels = getLevels(queue);
     }
 
     @Override
-    public PlayerScores getPlayerScores(int score) {
-        scores = new TetrisPlayerScores(score);
+    public PlayerScores getPlayerScores(Object score) {
+        scores = new TetrisPlayerScores((Integer)score);
         scores.levelChanged(levels.getCurrentLevelNumber(), levels.getCurrentLevel());
         return scores;
     }
 
     @Override
-    public Game newGame(EventListener eventListener, PrinterFactory printerFactory, String s) {
-        TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, scores, levels);
-        final TetrisGame game = new TetrisGame(queue, glass, printerFactory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new TetrisGame(new PlayerFigures(), glassSize.getValue());
     }
-
 
     private Levels getLevels(PlayerFigures queue) {
         String levelName = (String) settings.getParameter("gameLevels").getValue();
@@ -77,7 +78,7 @@ public class TetrisRunner implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(TetrisGame.GLASS_HEIGHT);
+        return glassSize;
     }
 
     @Override
@@ -87,7 +88,7 @@ public class TetrisRunner implements GameType {
 
     @Override
     public Enum[] getPlots() {
-        return PlotColor.values();
+        return Elements.values();
     }
 
     @Override
@@ -96,18 +97,37 @@ public class TetrisRunner implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return true;
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
     }
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
         return true;
     }
 
     @Override
-    public String getVersion() {
-        return "1.0";
+    public PrinterFactory getPrinterFactory() {
+        return PrinterFactory.get((BoardReader reader, Player player) -> {
+            JSONObject result = new JSONObject();
+
+            JSONArray array = new JSONArray();
+            result.put("layers", array);
+            Hero hero = player.getHero();
+            array.put(hero.getCurrentFigurePlots());
+            array.put(hero.getDroppedPlots());
+
+            result.put("currentFigureType", hero.getCurrentFigureType());
+            result.put("currentFigurePoint", hero.getCurrentFigurePoint());
+            result.put("futureFigures", hero.getFutureFigures());
+
+            return result;
+        });
     }
 }

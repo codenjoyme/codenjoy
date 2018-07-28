@@ -75,7 +75,7 @@ public class TetrisPlayerScores implements GlassEventListener, ChangeLevelListen
         score += FIGURE_DROPPED_SCORE;
     }
 
-    public int getScore() {
+    public Object getScore() {
         return score;
     }
 

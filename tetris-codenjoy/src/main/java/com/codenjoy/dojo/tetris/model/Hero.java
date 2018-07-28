@@ -24,100 +24,162 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- */
-public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
+import java.util.List;
 
-    private Field field;
-    private boolean alive;
-    private Direction direction;
+public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
-    public Hero(Point xy) {
-        super(xy);
-        direction = null;
-        alive = true;
-    }
+    private Glass glass;
 
+    private int x;
+    private int y;
+
+    private boolean dropRequested;
+    private Figure figure;
+
+    @Override
     public void init(Field field) {
+        glass = new TetrisGlass(field.size(), field.size());
         this.field = field;
     }
 
     @Override
     public void down() {
-        if (!alive) return;
-
-        direction = Direction.DOWN;
+        dropRequested = true;
     }
 
     @Override
     public void up() {
-        if (!alive) return;
-
-        direction = Direction.UP;
+        // do nothing
     }
 
     @Override
     public void left() {
-        if (!alive) return;
-
-        direction = Direction.LEFT;
+        moveHorizontallyIfAccepted(x - 1 < figure.getLeft() ? figure.getLeft() : x - 1);
     }
 
     @Override
     public void right() {
-        if (!alive) return;
+        moveHorizontallyIfAccepted(x + 1 > field.size() - figure.getRight() ? field.size() - figure.getRight() : x + 1);
+    }
 
-        direction = Direction.RIGHT;
+    protected void moveHorizontallyIfAccepted(int tmpX) {
+        if (glass.accept(figure, tmpX, y)) {
+            x = tmpX;
+        }
     }
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
-
-        field.setBomb(x, y);
+        if (p.length == 0) {
+            act(1);
+        } else {
+            act(p[0]);
+        }
     }
 
-    public Direction getDirection() {
-        return direction;
+    public void act(int times) {
+        Figure clonedFigure = figure.getCopy();
+
+        figure.rotate(times);
+        if (!glass.accept(figure, x, y)) {
+            figure = clonedFigure;
+        }
+        glass.figureAt(figure, x, y);
     }
 
+    private boolean theFirstStep() {
+        return figure == null;
+    }
+    
     @Override
     public void tick() {
-        if (!alive) return;
-
-        if (direction != null) {
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-
-            if (field.isBomb(newX, newY)) {
-                alive = false;
-                field.removeBomb(newX, newY);
-            }
-
-            if (!field.isBarrier(newX, newY)) {
-                move(newX, newY);
-            }
+        if (theFirstStep()) {
+            Figure figure = field.takeFigure();
+            setFigure(figure);
+            showCurrentFigure();
+            return;
         }
-        direction = null;
+
+        if (!glass.accept(figure, x, y)) {
+            glass.empty();
+            figure = null;
+            tick();
+            return;
+        }
+
+        if (dropRequested) {
+            dropRequested = false;
+            glass.drop(figure, x, y);
+            figure = null;
+            tick();
+            return;
+        }
+        if (!glass.accept(figure, x, y - 1)) {
+            glass.drop(figure, x, y);
+            figure = null;
+            tick();
+            return;
+        }
+        y--;
+        showCurrentFigure();
     }
 
     public boolean isAlive() {
-        return alive;
+        return true;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (!isAlive()) {
-            return Elements.DEAD_HERO;
+        if (figure == null) {
+            return Elements.NONE;
         }
 
-        if (this == player.getHero()) {
-            return Elements.HERO;
-        } else {
-            return Elements.OTHER_HERO;
+        return figure.getType().getColor();
+    }
+
+    public List<Plot> getCurrentFigurePlots() {
+        return glass.getCurrentFigurePlots();
+    }
+
+    public List<Plot> getDroppedPlots() {
+        return glass.getDroppedPlots();
+    }
+
+    public Glass getGlass() {
+        return glass;
+    }
+
+    public void setFigure(Figure figure) {
+        this.figure = figure;
+        x = field.size() / 2 - 1;
+        y = initialYPosition();
+    }
+
+    private int initialYPosition() {
+        return field.size() - figure.getTop();
+    }
+
+    public void showCurrentFigure() {
+        glass.figureAt(figure, x, y);
+    }
+
+    public Figure.Type getCurrentFigureType() {
+        if (figure == null) {
+            return null;
         }
+        return figure.getType();
+    }
+
+    public Point getCurrentFigurePoint() {
+        if (figure == null) {
+            return null;
+        }
+        return this.copy();
+    }
+
+    public List<Figure.Type> getFutureFigures() {
+        return field.getFutureFigures();
     }
 }

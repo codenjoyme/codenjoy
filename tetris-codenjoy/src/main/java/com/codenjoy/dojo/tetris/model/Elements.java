@@ -23,26 +23,32 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.CharElements;
+import com.codenjoy.dojo.services.printer.CharElements;
 
 /**
- * Тут указана легенда всех возможных объектов на поле и их состояний.
- * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
+ * User: serhiy.zelenin
+ * Date: 5/9/12
+ * Time: 6:56 PM
  */
 public enum Elements implements CharElements {
 
-    NONE(' '),       // например это пустое место, куда можно перейти герою
-    WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
-    HERO('☺'),       // а это мой герой
-    OTHER_HERO('☻'), // это герои других игроков
-    DEAD_HERO('X'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-    GOLD('$'),       // это то, за чем будет охота
-    BOMB('x');       // а это бомба, на которой можно подорваться
+    BLUE('I'),
+    CYAN('J'),
+    ORANGE('L'),
+    YELLOW('O'),
+    GREEN('S'),
+    PURPLE('T'),
+    RED('Z'),
+    NONE(' ');
 
-    final char ch;
+    char ch;
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    public String getName() {
+        return this.name().toLowerCase();
     }
 
     @Override
@@ -52,16 +58,25 @@ public enum Elements implements CharElements {
 
     @Override
     public String toString() {
-        return String.valueOf(ch);
+        return String.valueOf(ch());
+    }
+
+    public int index() {
+        for (int i = 0; i < values().length; i++) {
+            if (values()[i] == this) {
+                return i;
+            }
+        }
+        throw new IllegalStateException();
     }
 
     public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
-            if (el.ch == ch) {
-                return el;
+        for (int i = 0; i < values().length; i++) {
+            Elements element = values()[i];
+            if (element.ch == ch) {
+                return element;
             }
         }
-        throw new IllegalArgumentException("No such element for " + ch);
+        throw new IllegalStateException();
     }
-
 }

@@ -23,22 +23,15 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-/**
- * Так случилось что у меня доска знает про героя, а герой про доску. И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
-public interface Field {
+import java.util.List;
 
-    boolean isBarrier(int x, int y);
+public interface Field extends GameField<Player> {
 
-    Point getFreeRandom();
+    int size();
 
-    boolean isFree(int x, int y);
+    Figure takeFigure();
 
-    boolean isBomb(int x, int y);
-
-    void setBomb(int x, int y);
-
-    void removeBomb(int x, int y);
+    List<Figure.Type> getFutureFigures();
 }

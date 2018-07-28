@@ -23,6 +23,9 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+
 import java.util.List;
 
 public interface Glass {
@@ -37,4 +40,6 @@ public interface Glass {
     List<Plot> getDroppedPlots();
 
     List<Plot> getCurrentFigurePlots();
+
+    void setEventListener(EventListener eventListener);
 }

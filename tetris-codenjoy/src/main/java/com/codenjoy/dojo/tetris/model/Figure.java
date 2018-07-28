@@ -28,59 +28,57 @@ public interface Figure {
 
     Figure rotate(int times);
 
-    public enum Type {
-        I("I", PlotColor.BLUE) {
+    enum Type {
+        I("I", Elements.BLUE) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(0, 1, I, "#", "#", "#", "#");
             }
-        }, J("J", PlotColor.CYAN) {
+        }, J("J", Elements.CYAN) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(1, 1, J, " #", " #", "##");
             }
-        }, L("L", PlotColor.ORANGE) {
+        }, L("L", Elements.ORANGE) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(0, 1, L, "# ", "# ", "##");
             }
-        }, O("O", PlotColor.YELLOW) {
+        }, O("O", Elements.YELLOW) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(0, 0, O, "##", "##");
             }
-        }, S("S", PlotColor.GREEN) {
+        }, S("S", Elements.GREEN) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(1, 1, S, " ##", "## ");
             }
-        }, T("T", PlotColor.PURPLE) {
+        }, T("T", Elements.PURPLE) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(1, 1, T, " # ", "###");
             }
-        }, Z("Z", PlotColor.RED) {
+        }, Z("Z", Elements.RED) {
             @Override
             public Figure createNewFigure() {
                 return new TetrisFigure(1, 1, Z, "## ", " ##");
             }
         };
 
-
         private String name;
-        private PlotColor color;
+        private Elements color;
 
-        Type(String name, PlotColor color) {
+        Type(String name, Elements color) {
             this.name = name;
             this.color = color;
         }
-
 
         public String getName() {
             return name;
         }
 
-        public PlotColor getColor() {
+        public Elements getColor() {
             return color;
         }
 

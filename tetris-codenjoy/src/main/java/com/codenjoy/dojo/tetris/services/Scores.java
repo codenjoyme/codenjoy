@@ -27,23 +27,18 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
- */
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
+    private final Parameter<Integer> lineRemovedScore;
+    private final Parameter<Integer> glassOverflownPenalty;
 
     private volatile int score;
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+        lineRemovedScore = settings.addEditBox("Lines removed score").type(Integer.class).def(10);
+        glassOverflownPenalty = settings.addEditBox("Glass overflown penalty").type(Integer.class).def(100);
     }
 
     @Override
@@ -52,17 +47,28 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public int getScore() {
+    public Integer getScore() {
         return score;
     }
 
     @Override
-    public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
-        } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+    public void event(Object object) {
+        Events event = (Events)object;
+        if (event.isLinesRemoved()) {
+            score += getMultiplier(event.getData()) * lineRemovedScore.getValue();
+        } else if (event.isGlassOverflown()) {
+            score -= glassOverflownPenalty.getValue();
         }
         score = Math.max(0, score);
+    }
+
+    private int getMultiplier(int lines) {
+        switch (lines) {
+            case 1 : return 1;
+            case 2 : return 3;
+            case 3 : return 5;
+            case 4 : return 7;
+            default: return 0;
+        }
     }
 }

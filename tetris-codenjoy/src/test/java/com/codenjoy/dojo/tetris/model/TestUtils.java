@@ -23,8 +23,6 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.Plot;
-import com.codenjoy.dojo.tetris.model.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.junit.Test;
@@ -42,7 +40,7 @@ public class TestUtils {
         // TODO do nothing
     }
 
-    public static void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
+    public static void assertContainsPlot(final int x, final int y, final Elements color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {
             @Override
             public boolean evaluate(Object object) {

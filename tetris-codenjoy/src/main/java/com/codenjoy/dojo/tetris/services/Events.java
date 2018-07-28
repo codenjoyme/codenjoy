@@ -22,11 +22,45 @@ package com.codenjoy.dojo.tetris.services;
  * #L%
  */
 
+public class Events {
 
-/**
- * Ивенты, которые могут возникать в игре опиши тут. Что есть ивенты? ну убили твоего героя и ты хочешь ему очков начислить штрафных
- * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
- */
-public enum Events {
-    WIN, LOOSE;
+    public static final String GLASS_OVERFLOWN = "glassOverflown";
+    public static final String LINES_REMOVED = "linesRemoved";
+    public static final String FIGURES_DROPPED = "figuresDropped";
+
+    private String type;
+    private int data;
+
+    public Events(String type, int data) {
+        this.type = type;
+        this.data = data;
+    }
+
+    public boolean isGlassOverflown() {
+        return type.equals(GLASS_OVERFLOWN);
+    }
+
+    public boolean isLinesRemoved() {
+        return type.equals(LINES_REMOVED);
+    }
+
+    public boolean isFiguresDropped() {
+        return type.equals(FIGURES_DROPPED);
+    }
+
+    public static Events glassOverflown() {
+        return new Events(GLASS_OVERFLOWN, 0);
+    }
+
+    public static Events linesRemoved(int removedLines) {
+        return new Events(LINES_REMOVED, removedLines);
+    }
+
+    public static Events figuresDropped(int figureIndex) {
+        return new Events(FIGURES_DROPPED, figureIndex);
+    }
+
+    public int getData() {
+        return data;
+    }
 }

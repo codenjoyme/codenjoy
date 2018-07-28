@@ -23,22 +23,22 @@ package com.codenjoy.dojo.tetris.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.tetris.model.Hero;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
+import static com.codenjoy.dojo.services.PointImpl.pt;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 05.10.13
- * Time: 11:56
- */
 public class SolverTest {
 
     private Dice dice;
@@ -56,42 +56,33 @@ public class SolverTest {
 
     @Test
     public void should() {
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ $   ☼" +
-                "☼     ☼" +
-                "☼ ☺ $ ☼" +
-                "☼  ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
-
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ $   ☼" +
-                "☼ ☺   ☼" +
-                "☼   $ ☼" +
-                "☼  ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
-
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ ☺   ☼" +
-                "☼     ☼" +
-                "☼   $ ☼" +
-                "☼$ ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
-
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼ ☺x  ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼   $ ☼" +
-                "☼$ ☻  ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+        asertAI("       " +
+                "       " +
+                "       " +
+                "       " +
+                "       " +
+                "       " +
+                "       ",
+                "T",
+                pt(1, 2),
+                Direction.DOWN);
     }
 
-    private void asertAI(String board, Direction expected) {
-        String actual = ai.get(board(board));
-        assertEquals(expected.toString(), actual);
+    private void asertAI(String board, String figureType, Point point, Direction expected) {
+        JSONObject result = new JSONObject();
+
+        JSONArray array = new JSONArray();
+        result.put("layers", array);
+        array.put(board);
+        array.put(board);
+
+        result.put("currentFigureType", figureType);
+        result.put("currentFigurePoint", point);
+        result.put("futureFigures", "[]");
+
+        String actual = ai.get(board(result.toString()));
+        assertEquals(String.format("message('%s')", expected.toString()),
+                actual);
     }
 
     private void dice(Direction direction) {

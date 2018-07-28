@@ -23,24 +23,27 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.tetris.services.Events;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 public class TetrisGlass implements Glass {
+
     public static final int BITS_PER_POINT = 3;
     private int width;
     private int height;
-    private GlassEventListener[] glassEventListeners;
+    private EventListener eventListener;
     private long occupied[];
     private Figure currentFigure;
     private int currentX;
     private int currentY;
 
-    public TetrisGlass(int width, int height, GlassEventListener... glassEventListeners) {
+    public TetrisGlass(int width, int height) {
         this.width = width;
         this.height = height;
-        this.glassEventListeners = glassEventListeners;
         occupied = new long[height];
     }
 
@@ -109,8 +112,8 @@ public class TetrisGlass implements Glass {
             occupied[rowPosition] |= alignedRows[i];
         }
 
-        for (GlassEventListener glassEventListener : glassEventListeners) {
-            glassEventListener.figureDropped(figure);
+        if (eventListener != null) {
+            eventListener.event(Events.figuresDropped(figure.getType().getColor().index()));
         }
     }
 
@@ -124,8 +127,8 @@ public class TetrisGlass implements Glass {
             }
         }
         if (removedLines > 0) {
-            for (GlassEventListener glassEventListener : glassEventListeners) {
-                glassEventListener.linesRemoved(removedLines);
+            if (eventListener != null) {
+                eventListener.event(Events.linesRemoved(removedLines));
             }
         }
     }
@@ -158,8 +161,8 @@ public class TetrisGlass implements Glass {
 
     public void empty() {
         Arrays.fill(occupied, 0);
-        for (GlassEventListener glassEventListener : glassEventListeners) {
-            glassEventListener.glassOverflown();
+        if (eventListener != null) {
+            eventListener.event(Events.glassOverflown());
         }
     }
 
@@ -185,8 +188,8 @@ public class TetrisGlass implements Glass {
         return plots;
     }
 
-    private PlotColor findColor(long colorNumber) {
-        return PlotColor.values()[(int) colorNumber];
+    private Elements findColor(long colorNumber) {
+        return Elements.values()[(int) colorNumber];
     }
 
     @Override
@@ -218,5 +221,10 @@ public class TetrisGlass implements Glass {
             }
         }
         return true;
+    }
+
+    @Override
+    public void setEventListener(EventListener eventListener) {
+        this.eventListener = eventListener;
     }
 }
