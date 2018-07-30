@@ -30,11 +30,11 @@ import org.json.JSONObject;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Board implements ClientBoard {
     protected JSONObject source;
 
+    int Level;
     double Time;
     double X;
     double Y;
@@ -51,6 +51,7 @@ public class Board implements ClientBoard {
     public ClientBoard forString(String boardString) {
         source = new JSONObject(boardString);
 
+        Level = source.getInt("level");
         Time = source.getDouble("time");
         X = source.getDouble("x");
         Y = source.getDouble("y");
@@ -64,6 +65,10 @@ public class Board implements ClientBoard {
         History = getPointList(source, "history");
 
         return this;
+    }
+
+    public double getTime() {
+        return Time;
     }
 
     public Point2D.Double getPoint() {
@@ -86,9 +91,19 @@ public class Board implements ClientBoard {
         return VesselState.valueOf(State);
     }
 
-    public List<Point2D.Double> getRelief(){ return Relief; }
+    public double getAngle() { return Angle; }
 
-    public double getFuelMass(){ return FuelMass; }
+    public double getFuelMass() {
+        return FuelMass;
+    }
+
+    public ArrayList<Point2D.Double> getRelief() {
+        return Relief;
+    }
+
+    public ArrayList<Point2D.Double> getHistory() {
+        return History;
+    }
 
     private static Point2D.Double getPoint(JSONObject source, String key) {
         JSONObject obj = source.getJSONObject(key);

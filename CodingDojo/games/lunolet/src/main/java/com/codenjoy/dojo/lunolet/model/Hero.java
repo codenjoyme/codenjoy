@@ -37,6 +37,8 @@ public class Hero implements Joystick, Tickable {
     private LevelManager levelManager;
     private Simulator simulator;
     private Point2D.Double target;
+    private Point2D.Double targetPoint1;
+    private Point2D.Double targetPoint2;
     private boolean isalive;
 
     public Hero(Player player) {
@@ -62,9 +64,13 @@ public class Hero implements Joystick, Tickable {
             Point2D.Double pt1 = relief.get(i);
             Point2D.Double pt2 = relief.get(i + 1);
             if (pt1.x < targetX && pt2.x > targetX &&
-                    Math.abs(pt2.y - pt1.y) < 1e-5)
-            {
+                    Math.abs(pt2.y - pt1.y) < 1e-5) {
                 target = new Point2D.Double(targetX, pt1.y);
+                if (pt1.x <= pt2.x) {
+                    targetPoint1 = pt1;  targetPoint2 = pt2;
+                } else {
+                    targetPoint1 = pt2;  targetPoint2 = pt1;
+                }
                 break;
             }
         }
@@ -162,8 +168,22 @@ public class Hero implements Joystick, Tickable {
         if (simulator.Status.isNotFinalState()) {
             simulator.simulate(angle, mass, duration);
 
+            // check if we're landed on the proper segment
+            if (simulator.Status.State == VesselState.LANDED &&
+                    targetPoint1 != null && targetPoint2 != null) {
+                double x = simulator.Status.X;
+                //double y = simulator.Status.Y;
+                if (x < targetPoint1.x && x < targetPoint2.x ||
+                        targetPoint1.x < x && targetPoint2.x < x) {
+                    simulator.Status.State = VesselState.CRASHED;
+                }
+            }
+
             if (simulator.Status.State == VesselState.LANDED) {
                 player.event(Events.LANDED);
+            }
+            else if (simulator.Status.State == VesselState.CRASHED) {
+                player.event(Events.CRASHED);
             }
         }
     }

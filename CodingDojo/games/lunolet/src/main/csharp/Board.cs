@@ -25,6 +25,8 @@ namespace LunoletClient
 {
     internal class Board
     {
+        public int Level { get; set; }
+
         public double Time { get; set; }
 
         public double X { get; set; }
