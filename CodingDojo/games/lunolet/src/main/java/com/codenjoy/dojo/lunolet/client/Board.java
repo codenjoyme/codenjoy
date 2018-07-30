@@ -88,6 +88,8 @@ public class Board implements ClientBoard {
 
     public List<Point2D.Double> getRelief(){ return Relief; }
 
+    public double getFuelMass(){ return FuelMass; }
+
     private static Point2D.Double getPoint(JSONObject source, String key) {
         JSONObject obj = source.getJSONObject(key);
         return new Point2D.Double(
