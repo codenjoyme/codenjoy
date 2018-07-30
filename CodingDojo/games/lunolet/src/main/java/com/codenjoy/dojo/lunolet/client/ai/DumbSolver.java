@@ -39,7 +39,7 @@ public class DumbSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         // go UP on start
-        if(board.getState() == VesselState.START) {
+        if (board.getState() == VesselState.START) {
             return "message('go 0, 1, 3')";
         }
 
@@ -51,7 +51,7 @@ public class DumbSolver implements Solver<Board> {
         boolean closeToTarget = closeToTarget(board, 2.0);
         boolean hSpeedIsNotZero = hSpeedIsNotZero(board);
 
-        if(highObstacleOnWay(board)){
+        if (highObstacleOnWay(board)) {
             vMass = 0.2;
             calculateTotalMassAndAngle(hMass, vMass);
             mass = mass > 1.8 ? 1.8 : mass;
@@ -65,23 +65,20 @@ public class DumbSolver implements Solver<Board> {
         Point2D.Double point = board.getPoint();
         Point2D.Double target = board.getTarget();
 
-        if(closeToTarget) {
-            if(hSpeedIsNotZero) {
+        if (closeToTarget) {
+            if (hSpeedIsNotZero) {
                 // braking
                 hMass = ((250 + board.getFuelMass()) * board.getHSpeed()) / (3660 + board.getHSpeed());
                 shouldBrake = false;
-            }
-            else
-            {
-                if(vMass == 0.0)
+            } else {
+                if (vMass == 0.0)
                     vMass = -0.1;
             }
-        }
-        else {
+        } else {
             hMass = Math.abs(target.x - point.x) / 100.0;
         }
 
-        double preferredDirection = (target.x - point.x) - board.getHSpeed()*Math.abs(board.getHSpeed());
+        double preferredDirection = (target.x - point.x) - board.getHSpeed() * Math.abs(board.getHSpeed());
         hMass = preferredDirection > 0 ? hMass : -hMass;
 
         calculateTotalMassAndAngle(hMass, vMass);
@@ -92,24 +89,24 @@ public class DumbSolver implements Solver<Board> {
 
     private void calculateTotalMassAndAngle(double hMass, double vMass) {
         mass = Math.sqrt(hMass * hMass + vMass * vMass);
-        angle = Math.asin(Math.abs(vMass) / mass) / (Math.PI /180.0);
-        if(hMass<0) {
+        angle = Math.asin(Math.abs(vMass) / mass) / (Math.PI / 180.0);
+        if (hMass < 0) {
             angle = 180 - angle;
         }
-        if(vMass<0) {
+        if (vMass < 0) {
             angle = -angle;
         }
-        angle = 90-angle;
+        angle = 90 - angle;
         //System.out.println("2 angle:" + (angle) + /*", mass:" + mass + */", hMass:" + hMass + ", vMass:" + vMass);
     }
 
-    private boolean fallDownTooFastOrLowFlying(Board board){
+    private boolean fallDownTooFastOrLowFlying(Board board) {
         Point2D.Double target = board.getTarget();
         Point2D.Double point = board.getPoint();
         return board.getVSpeed() < -1.5 || (Math.abs(target.x - point.x) > 10 && Math.abs(target.y - point.y) < 20);
     }
 
-    private boolean highObstacleOnWay(Board board){
+    private boolean highObstacleOnWay(Board board) {
         Point2D.Double target = board.getTarget();
         Point2D.Double point = board.getPoint();
         Point2D.Double start = point.x < target.x ? point : target;
@@ -123,16 +120,16 @@ public class DumbSolver implements Solver<Board> {
         return false;
     }
 
-    private boolean closeToTarget(Board board, double distance){
+    private boolean closeToTarget(Board board, double distance) {
         double me = board.getPoint().x;
         double t = board.getTarget().x;
         double nextPositionOnFlight = me + board.getHSpeed() * 1;
         boolean close = Math.abs(me - t) < distance;
-        boolean isCrossTarget = (me - t) * (nextPositionOnFlight -t) < 0;
+        boolean isCrossTarget = (me - t) * (nextPositionOnFlight - t) < 0;
         return close || isCrossTarget;
     }
 
-    private boolean hSpeedIsNotZero(Board board){
+    private boolean hSpeedIsNotZero(Board board) {
         return Math.abs(board.getHSpeed()) >= 0.001;
     }
 
