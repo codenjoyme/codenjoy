@@ -26,7 +26,6 @@ package com.codenjoy.dojo.lunolet.model;
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.*;
 
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -35,18 +34,23 @@ import java.util.regex.Pattern;
 public class Hero implements Joystick, Tickable {
 
     private Player player;
-    private Level level;
+    private LevelManager levelManager;
     private Simulator simulator;
     private Point2D.Double target;
+    private Point2D.Double targetPoint1;
+    private Point2D.Double targetPoint2;
+    private boolean isalive;
 
     public Hero(Player player) {
         this.player = player;
 
         simulator = new Simulator();
+        isalive = true;
     }
 
-    public void init(Level level) {
-        this.level = level;
+    public void init(LevelManager levelManager) {
+        this.levelManager = levelManager;
+        Level level = levelManager.getLevel();
 
         simulator.reset();
         simulator.DryMass = level.DryMass;
@@ -60,9 +64,13 @@ public class Hero implements Joystick, Tickable {
             Point2D.Double pt1 = relief.get(i);
             Point2D.Double pt2 = relief.get(i + 1);
             if (pt1.x < targetX && pt2.x > targetX &&
-                    Math.abs(pt2.y - pt1.y) < 1e-5)
-            {
+                    Math.abs(pt2.y - pt1.y) < 1e-5) {
                 target = new Point2D.Double(targetX, pt1.y);
+                if (pt1.x <= pt2.x) {
+                    targetPoint1 = pt1;  targetPoint2 = pt2;
+                } else {
+                    targetPoint1 = pt2;  targetPoint2 = pt1;
+                }
                 break;
             }
         }
@@ -70,7 +78,7 @@ public class Hero implements Joystick, Tickable {
     }
 
     public boolean isAlive() {
-        return simulator.Status.isAlive();
+        return isalive;
     }
 
     public List<Point2D.Double> getLevelRelief() {
@@ -93,9 +101,16 @@ public class Hero implements Joystick, Tickable {
         return target;
     }
 
+    public int getLevelNumber() {
+        return levelManager.getLevelNumber();
+    }
+
     @Override
     public void tick() {
         //do nothing: no actions driven by real time
+
+        if (!simulator.Status.isNotFinalState())
+            isalive = false;
     }
 
     @Override
@@ -136,7 +151,7 @@ public class Hero implements Joystick, Tickable {
         }
 
         Pattern patternGo = Pattern.compile(
-                "go\\s*(-?[\\d\\.]+)[,\\s](-?[\\d\\.]+)[,\\s](-?[\\d\\.]+)", Pattern.CASE_INSENSITIVE);
+                "go\\s*(-?[\\d\\.]+)[,\\s]\\s*(-?[\\d\\.]+)[,\\s]\\s*(-?[\\d\\.]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
             double angle = Double.parseDouble(matcher.group(1));
@@ -150,11 +165,25 @@ public class Hero implements Joystick, Tickable {
     }
 
     private void simulate(double angle, double mass, double duration) {
-        if (simulator.Status.isAlive()) {
+        if (simulator.Status.isNotFinalState()) {
             simulator.simulate(angle, mass, duration);
+
+            // check if we're landed on the proper segment
+            if (simulator.Status.State == VesselState.LANDED &&
+                    targetPoint1 != null && targetPoint2 != null) {
+                double x = simulator.Status.X;
+                //double y = simulator.Status.Y;
+                if (x < targetPoint1.x && x < targetPoint2.x ||
+                        targetPoint1.x < x && targetPoint2.x < x) {
+                    simulator.Status.State = VesselState.CRASHED;
+                }
+            }
 
             if (simulator.Status.State == VesselState.LANDED) {
                 player.event(Events.LANDED);
+            }
+            else if (simulator.Status.State == VesselState.CRASHED) {
+                player.event(Events.CRASHED);
             }
         }
     }

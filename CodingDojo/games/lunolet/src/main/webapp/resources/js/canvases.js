@@ -251,6 +251,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             else if (board.vspeed <= -0.001) {
                 canvas.drawText("↓", {"x": 18, "y": 16.4}, monofont);
             }
+            canvas.drawText("LEVEL " + board.level, {"x": 0, "y": 0.4}, monofont);
 
             let ctx = canvas.getCanvasContext();
             // scale, move center to (300, 300), and flip vertically
@@ -306,7 +307,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var radian = board.angle / 180 * Math.PI;
             var sin = Math.sin(radian);
             var cos = Math.cos(radian);
-            ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.x * scale, yshift - board.y * scale);
+            ctx.setTransform(-cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.x * scale, yshift - board.y * scale);
             ctx.strokeStyle = "#008";
             ctx.beginPath();
             ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lunolet.services;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.lunolet.client.ai.DumbSolver;
 import com.codenjoy.dojo.lunolet.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
@@ -35,12 +36,12 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private LunoletGame game;
-    private Level level;
+    private LevelManager levelManager;
 
     public GameRunner() {
         new Scores(0, settings);
 
-        level = new Level();//TODO
+        levelManager = new LevelManager();
     }
 
     @Override
@@ -50,7 +51,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String s, String s1) {
-        game = new LunoletGame(level);
+        game = new LunoletGame(levelManager);
 
         Game game = new Single(this.game, listener, factory);
         game.newGame();
@@ -75,5 +76,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public boolean isSingleBoard() {
         return GameMode.NOT_SINGLE_MODE;
+    }
+
+    @Override
+    public boolean newAI(String aiName) {
+        DumbSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        return true;
     }
 }

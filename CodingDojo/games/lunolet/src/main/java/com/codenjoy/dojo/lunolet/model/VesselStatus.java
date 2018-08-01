@@ -41,7 +41,7 @@ public class VesselStatus {
 
     public VesselState State;
 
-    public boolean isAlive() {
+    public boolean isNotFinalState() {
         return State != VesselState.CRASHED && State != VesselState.LANDED;
     }
 

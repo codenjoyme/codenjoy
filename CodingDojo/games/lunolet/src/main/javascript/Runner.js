@@ -127,7 +127,7 @@ function drawTelemetry(board) {
         drawText("↓", {"x": 500, "y": 45});
     }
 
-    // scale, move center to (300, 300), and flip vertically
+    // scale, move center to (300, 200), and flip vertically
     var scale = 6;
     var xshift = 300 - board.getX() * scale;
     var yshift = 200 + board.getY() * scale;
@@ -180,7 +180,7 @@ function drawTelemetry(board) {
     var radian = board.getAngle() / 180 * Math.PI;
     var sin = Math.sin(radian);
     var cos = Math.cos(radian);
-    ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.getX() * scale, yshift - board.getY() * scale);
+    ctx.setTransform(-cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.getX() * scale, yshift - board.getY() * scale);
     ctx.strokeStyle = "#008";
     ctx.beginPath();
     ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
@@ -340,7 +340,11 @@ var DirectionSolver = function(board) {
         get : function() {
             var target = board.getTarget();
 
-            if (board.getY() < 8.0 || board.getVSpeed() < -1.5) {
+            if (board.getState() == "START") {
+                return "message('go 0, 0.2, 1')";
+            }
+
+            if (board.getY() < target.y + 4.0 || board.getVSpeed() < -1.5) {
                 return Direction.UP;
             }
             else if (board.getX() < target.x && board.getHSpeed() < 3.0) {

@@ -1,3 +1,5 @@
+package com.codenjoy.dojo.lunolet.model;
+
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -19,34 +21,14 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
 
-namespace LunoletClient
-{
-    internal class Board
-    {
-        public int Level { get; set; }
 
-        public double Time { get; set; }
+import org.junit.Test;
 
-        public double X { get; set; }
+public class LevelManagerTest {
 
-        public double Y { get; set; }
-
-        public double HSpeed { get; set; }
-
-        public double VSpeed { get; set; }
-
-        public double FuelMass { get; set; }
-
-        public string State { get; set; }
-
-        public Point2D[] Relief { get; set; }
-
-        public Point2D[] History { get; set; }
-
-        public double Angle { get; set; }
-
-        public Point2D Target { get; set; }
+    @Test
+    public void InitializingTest(){
+        LevelManager manager = new LevelManager();
     }
 }
