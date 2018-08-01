@@ -180,7 +180,7 @@ function drawTelemetry(board) {
     var radian = board.getAngle() / 180 * Math.PI;
     var sin = Math.sin(radian);
     var cos = Math.cos(radian);
-    ctx.setTransform(cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.getX() * scale, yshift - board.getY() * scale);
+    ctx.setTransform(-cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.getX() * scale, yshift - board.getY() * scale);
     ctx.strokeStyle = "#008";
     ctx.beginPath();
     ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
