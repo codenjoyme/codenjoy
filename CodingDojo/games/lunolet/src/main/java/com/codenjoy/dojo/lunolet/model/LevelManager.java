@@ -98,13 +98,23 @@ public class LevelManager {
     private static final String[] JSON_LEVELS = {
         // level 0
             "{" +
+            "  'dryMass': 250.0, 'targetX': 0, 'relief': [" +
+            "    { 'x': -10000, 'y': 3000 }," +
+            "    { 'x': -10, 'y': 0 }," +
+            "    { 'x': 10, 'y': 0 }," +
+            "    { 'x': 10000, 'y': 3000 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 5, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
+            "}",
+        // level 1
+            "{" +
             "  'dryMass': 250.0, 'targetX': 25, 'relief': [" +
             "    { 'x': -10000, 'y': 0 }," +
             "    { 'x': 10000, 'y': 0 }" +
             "  ]," +
             "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
             "}",
-        // level 1
+        // level 2
             "{" +
             "  'dryMass': 250.0, 'targetX': 40, 'relief': [" +
             "    { 'x': -10000, 'y': 0 }," +
@@ -116,7 +126,7 @@ public class LevelManager {
             "  ]," +
             "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
             "}",
-        // level 2
+        // level 3
             "{" +
             "  'dryMass': 250.0, 'targetX': 100, 'relief': [" +
             "    { 'x': -10000, 'y': 0 }," +
@@ -129,7 +139,7 @@ public class LevelManager {
             "  ]," +
             "  'vesselStatus': { 'x': -5, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
             "}",
-        // level 3
+        // level 4
             "{" +
             "  'dryMass': 250.0, 'targetX': 40, 'relief': [" +
             "    { 'x': -10000, 'y': 0 }," +
