@@ -39,6 +39,8 @@ public class Hero implements Joystick, Tickable {
     private Point2D.Double target;
     private Point2D.Double targetPoint1;
     private Point2D.Double targetPoint2;
+    private double levelLeft;
+    private double levelRight;
     private boolean isalive;
 
     public Hero(Player player) {
@@ -67,14 +69,27 @@ public class Hero implements Joystick, Tickable {
                     Math.abs(pt2.y - pt1.y) < 1e-5) {
                 target = new Point2D.Double(targetX, pt1.y);
                 if (pt1.x <= pt2.x) {
-                    targetPoint1 = pt1;  targetPoint2 = pt2;
+                    targetPoint1 = pt1;
+                    targetPoint2 = pt2;
                 } else {
-                    targetPoint1 = pt2;  targetPoint2 = pt1;
+                    targetPoint1 = pt2;
+                    targetPoint2 = pt1;
                 }
                 break;
             }
         }
         //TODO: if target == null then something wrong with this level
+
+        // find out box left/right margins
+        levelLeft = 0.0;
+        levelRight = 0.0;
+        for (int i = 0; i < relief.size(); i++) {
+            Point2D.Double pt1 = relief.get(i);
+            if (pt1.x < levelLeft)
+                levelLeft = pt1.x;
+            if (pt1.x > levelRight)
+                levelRight = pt1.x;
+        }
     }
 
     public boolean isAlive() {
@@ -179,10 +194,16 @@ public class Hero implements Joystick, Tickable {
                 }
             }
 
+            // check if we're out of the box
+            if (simulator.Status.State == VesselState.FLIGHT &&
+                    (simulator.Status.X < levelLeft || simulator.Status.X > levelRight)) {
+                simulator.Status.State = VesselState.CRASHED;
+            }
+
+            // trigger player events
             if (simulator.Status.State == VesselState.LANDED) {
                 player.event(Events.LANDED);
-            }
-            else if (simulator.Status.State == VesselState.CRASHED) {
+            } else if (simulator.Status.State == VesselState.CRASHED) {
                 player.event(Events.CRASHED);
             }
         }
