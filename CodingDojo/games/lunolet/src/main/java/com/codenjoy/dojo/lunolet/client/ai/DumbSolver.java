@@ -38,28 +38,34 @@ public class DumbSolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        // go UP on start
-        if (board.getState() == VesselState.START) {
-            return "message('go 0, 1, 3')";
-        }
+        if(Math.abs(board.getHSpeed()) < 1e-5 && board.getVSpeed() > 5)
+            return "message('go 0, 0, 1')";
 
         mass = 0.0;
         angle = 0.0;
         double hMass = 0.0;
         double vMass = 0.0;
 
+        // go UP on start
+        if (board.getState() == VesselState.START) {
+            vMass = calculateFuelMassForGoingUp(board, 4.62);
+            calculateTotalMassAndAngle(hMass, vMass);
+            mass = preventVertigo(mass, board);
+            return String.format("message('go %f, %f, 1')", angle, mass);
+        }
+
         boolean closeToTarget = closeToTarget(board, 2.0);
         boolean hSpeedIsNotZero = hSpeedIsNotZero(board);
 
         if (highObstacleOnWay(board)) {
-            vMass = 0.2;
+            vMass = calculateFuelMassForGoingUp(board, 4.62);
             calculateTotalMassAndAngle(hMass, vMass);
-            mass = mass > 1.8 ? 1.8 : mass;
+            mass = preventVertigo(mass, board);
             return String.format("message('go %f, %f, 1')", angle, mass);
         }
 
         if (fallDownTooFastOrLowFlying(board)) {
-            vMass = 0.2;
+            vMass = calculateFuelMassForGoingUp(board, 4.62);
         }
 
         Point2D.Double point = board.getPoint();
@@ -83,8 +89,17 @@ public class DumbSolver implements Solver<Board> {
 
         calculateTotalMassAndAngle(hMass, vMass);
 
-        mass = mass > 1.8 ? 1.8 : mass;
+        mass = preventVertigo(mass, board);
         return String.format("message('go %f, %f, 1')", angle, mass);
+    }
+
+    private double preventVertigo(double mass, Board board) {
+        double maxMass = calculateFuelMassForGoingUp(board, 29.43);
+        return Math.min(maxMass, mass);
+    }
+
+    private double calculateFuelMassForGoingUp(Board board, double acceleration) {
+        return (acceleration) * (250.0 + board.getFuelMass()) / 3600.0;
     }
 
     private void calculateTotalMassAndAngle(double hMass, double vMass) {
