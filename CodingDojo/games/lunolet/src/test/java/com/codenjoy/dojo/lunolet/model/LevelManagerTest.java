@@ -23,12 +23,34 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class LevelManagerTest {
 
     @Test
-    public void InitializingTest(){
+    public void InitializeAndCountLevelsTest(){
         LevelManager manager = new LevelManager();
+
+        assertEquals(0, manager.getLevelNumber());
+        Level level0 = manager.getLevel();
+        Assert.assertNotNull(level0);
+
+        int levelNumExpected = 1;
+        while (true) {
+            manager.levelUp();
+
+            int levelNum = manager.getLevelNumber();
+            if (levelNum == 0)
+                break; // start of another round
+            assertEquals(levelNumExpected, levelNum);
+            Level level = manager.getLevel();
+            Assert.assertNotNull(level);
+
+            levelNumExpected++;
+        }
+        System.out.println("Number of levels: " + levelNumExpected);
     }
 }

@@ -34,7 +34,7 @@ public class LevelManager {
     private List<Level> levels;
 
     public LevelManager(){
-        LoadLevels();
+        loadLevels();
         currentLevel = 0;
     }
 
@@ -51,15 +51,24 @@ public class LevelManager {
         currentLevel = currentLevel < levels.size() - 1 ? currentLevel + 1 : 0;
     }
 
-    private void LoadLevels() {
+    private void loadLevels() {
         levels = new ArrayList<>();
         for (int i = 0; i < JSON_LEVELS.length; i++) {
             String json = JSON_LEVELS[i];
             levels.add(parseLevel(json));
         }
-        for (int i = JSON_LEVELS.length; i < 100 - JSON_LEVELS.length; i++) {
+
+        for (int i = JSON_LEVELS.length; i < JSON_LEVELS.length + 5; i++) {
             Level level = prepareLevel(i);
             levels.add(level);
+        }
+
+        for (int i = 0; i < JSON_LEVELGEN.length; i++) {
+            for (int hardness = 1; hardness < 51; hardness++) {
+                JSONObject levelJson = new JSONObject(JSON_LEVELGEN[i]);
+                Level level = LevelGenerator.generate(levelJson, hardness);
+                levels.add(level);
+            }
         }
     }
 
@@ -97,6 +106,43 @@ public class LevelManager {
         vStatus.State = VesselState.values()[vesselJson.getInt("state")];
         return vStatus;
     }
+
+    private static final String[] JSON_LEVELGEN = {
+            "{" +
+            "  'dryMass': 250.0, 'targetX': 25, 'reliefGeneration': 'linear', 'relief': [" +
+            "    { 'x': -10000, 'y': 0 }," +
+            "    { 'x': 10000, 'y': 0 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'time': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'state': 0 }" +
+            "}",
+            "{" +
+            "  'dryMass': 250.0, 'targetX': 100, 'reliefGeneration': 'linear', 'relief': [" +
+            "    { 'x': -10000,'y': 0 }," +
+            "    { 'x': 0,'y': 0 }," +
+            "    { 'x': 5,'y': 10 }," +
+            "    { 'x': 10,'y': 30 }," +
+            "    { 'x': 15,'y': 23 }," +
+            "    { 'x': 20,'y': 0 }," +
+            "    { 'x': 10000,'y': 0 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'time': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'state': 0 }" +
+            "}",
+            "{" +
+            "  'dryMass': 250.0, 'targetX': 40, 'reliefGeneration': 'linear', 'relief': [" +
+            "    { 'x': -10000,'y': 0 }," +
+            "    { 'x': 0,'y': 0 }," +
+            "    { 'x': 5,'y': 0 }," +
+            "    { 'x': 10,'y': 30 }," +
+            "    { 'x': 15,'y': 7 }," +
+            "    { 'x': 20,'y': 12 }," +
+            "    { 'x': 25,'y': 17 }," +
+            "    { 'x': 30,'y': 3 }," +
+            "    { 'x': 35,'y': 0 }," +
+            "    { 'x': 10000,'y': 0 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'time': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'state': 0 }" +
+            "}",
+    };
 
     private static final String[] JSON_LEVELS = {
         // level 0
