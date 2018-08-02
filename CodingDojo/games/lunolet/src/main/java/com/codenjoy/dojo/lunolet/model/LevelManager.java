@@ -27,8 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class LevelManager {
     private int currentLevel;
@@ -57,6 +56,10 @@ public class LevelManager {
         for (int i = 0; i < JSON_LEVELS.length; i++) {
             String json = JSON_LEVELS[i];
             levels.add(parseLevel(json));
+        }
+        for (int i = JSON_LEVELS.length; i < 100 - JSON_LEVELS.length; i++) {
+            Level level = prepareLevel(i);
+            levels.add(level);
         }
     }
 
@@ -156,4 +159,40 @@ public class LevelManager {
             "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'time': 0, 'fuelMass': 50.0, 'state': 0 }" +
             "}"
     };
+
+    private Level prepareLevel(int levelNumber) {
+        Level level = new Level();
+        level.DryMass = 250.0;
+        level.VesselStatus = new VesselStatus();
+        level.Relief = new LinkedList<Point2D.Double>();
+
+        if (levelNumber == 0) {
+            level.Relief.add(new Point2D.Double(-10000, 0));
+            level.Relief.add(new Point2D.Double(10000, 0));
+            level.TargetX = 25;
+        } else {
+            Random random = new Random(levelNumber);
+            Point2D.Double[] array = new Point2D.Double[21];
+            array[0] = new Point2D.Double(-10000, 0);
+            array[9] = new Point2D.Double(-5, 0);
+            array[10] = new Point2D.Double(5, 0);
+            double y1 = 0;
+            double y2 = 0;
+            for (int i = 0; i < 8; i++) {
+                y1 += random.nextInt(11) - 5;
+                y2 += random.nextInt(11) - 5;
+                array[8 - i] = new Point2D.Double(-10 - 5 * i, y1);
+                array[11 + i] = new Point2D.Double(10 + 5 * i, y2);
+            }
+            array[19] = new Point2D.Double(array[18].x + 10, array[18].y);  // target
+            array[20] = new Point2D.Double(10000, 0);
+            level.Relief = Arrays.asList(array);
+            level.TargetX = array[18].x + 5;
+        }
+
+        level.VesselStatus.FuelMass = 50.0;
+        level.VesselStatus.State = VesselState.START;
+
+        return level;
+    }
 }
