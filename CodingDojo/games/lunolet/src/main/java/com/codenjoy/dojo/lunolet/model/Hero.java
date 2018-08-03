@@ -65,9 +65,15 @@ public class Hero implements Joystick, Tickable {
         for (int i = 0; i < relief.size() - 1; i++) {
             Point2D.Double pt1 = relief.get(i);
             Point2D.Double pt2 = relief.get(i + 1);
-            if (pt1.x < targetX && pt2.x > targetX &&
-                    Math.abs(pt2.y - pt1.y) < 1e-5) {
-                target = new Point2D.Double(targetX, pt1.y);
+            if (pt1.x < targetX && pt2.x >= targetX) {
+                double targetY;
+                if (Math.abs(pt2.x - targetX) < 1e-5)
+                    targetY = pt2.y;
+                else
+                    targetY = ((targetX - pt1.x) / (pt2.x - pt1.x) * (pt2.y - pt1.y) + pt1.y);
+
+                target = new Point2D.Double(targetX, targetY);
+
                 if (pt1.x <= pt2.x) {
                     targetPoint1 = pt1;
                     targetPoint2 = pt2;
@@ -75,6 +81,7 @@ public class Hero implements Joystick, Tickable {
                     targetPoint1 = pt2;
                     targetPoint2 = pt1;
                 }
+
                 break;
             }
         }
