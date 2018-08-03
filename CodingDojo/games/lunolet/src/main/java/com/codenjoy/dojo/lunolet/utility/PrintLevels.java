@@ -85,13 +85,13 @@ public class PrintLevels {
                 double levelRight = 30.0;
                 double levelTop = 20.0;
                 double levelBottom = -20.0;
-                if (targetX < levelLeft)
+                if (targetX - 30.0 < levelLeft)
                     levelLeft = targetX - 30.0;
-                if (targetX > levelRight)
+                if (targetX + 30.0 > levelRight)
                     levelRight = targetX + 30.0;
-                if (targetY < levelBottom)
+                if (targetY - 20.0 < levelBottom)
                     levelBottom = targetY - 20.0;
-                if (targetY > levelTop)
+                if (targetY + 20.0 > levelTop)
                     levelTop = targetY + 20.0;
 
                 for (int i = 0; i < relief.size(); i++) {

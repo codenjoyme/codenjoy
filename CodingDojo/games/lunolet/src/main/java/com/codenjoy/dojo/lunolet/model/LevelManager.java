@@ -149,11 +149,11 @@ public class LevelManager {
             "{" +
             "  'dryMass': 250.0, 'targetX': 0, 'relief': [" +
             "    { 'x': -10000, 'y': 3000 }," +
-            "    { 'x': -10, 'y': 0 }," +
-            "    { 'x': 10, 'y': 0 }," +
+            "    { 'x': -10, 'y': -10 }," +
+            "    { 'x': 10, 'y': -10 }," +
             "    { 'x': 10000, 'y': 3000 }" +
             "  ]," +
-            "  'vesselStatus': { 'x': 0, 'y': 5, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
             "}",
         // level 1
             "{" +
@@ -178,7 +178,7 @@ public class LevelManager {
         // level 3
             "{" +
             "  'dryMass': 250.0, 'targetX': 100, 'relief': [" +
-            "    { 'x': -10000, 'y': 0 }," +
+            "    { 'x': -10000, 'y': 3 }," +
             "    { 'x': 0,'y': 0 }," +
             "    { 'x': 5,'y': 10 }," +
             "    { 'x': 10,'y': 30 }," +
@@ -186,7 +186,7 @@ public class LevelManager {
             "    { 'x': 20,'y': 0 }," +
             "    { 'x': 10000,'y': 0 }" +
             "  ]," +
-            "  'vesselStatus': { 'x': -5, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
             "}",
         // level 4
             "{" +
@@ -201,6 +201,21 @@ public class LevelManager {
             "    { 'x': 30,'y': 3 }," +
             "    { 'x': 35,'y': 0 }," +
             "    { 'x': 10000,'y': 0 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'time': 0, 'fuelMass': 50.0, 'state': 0 }" +
+            "}",
+            // level 5
+            "{" +
+            "  'dryMass': 250.0, 'targetX': 30, 'relief': [" +
+            "    { 'x': -5000, 'y': 5000 }," +
+            "    { 'x': -5,'y': 0 }," +
+            "    { 'x': 5,'y': 0 }," +
+            "    { 'x': 10,'y': 30 }," +
+            "    { 'x': 15,'y': -10 }," +
+            "    { 'x': 20,'y': 30 }," +
+            "    { 'x': 25,'y': 0 }," +
+            "    { 'x': 35,'y': 0 }," +
+            "    { 'x': 5000,'y': 5000 }" +
             "  ]," +
             "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'time': 0, 'fuelMass': 50.0, 'state': 0 }" +
             "}"
