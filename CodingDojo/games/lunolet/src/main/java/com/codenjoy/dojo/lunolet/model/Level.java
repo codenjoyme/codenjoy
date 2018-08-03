@@ -31,11 +31,11 @@ import java.util.Random;
 
 public class Level {
 
-    double DryMass;
+    public double DryMass;
 
-    VesselStatus VesselStatus;
+    public VesselStatus VesselStatus;
 
-    List<Point2D.Double> Relief;
+    public List<Point2D.Double> Relief;
 
-    double TargetX;
+    public double TargetX;
 }
