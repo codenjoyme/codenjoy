@@ -128,7 +128,7 @@
                                             **/clients/**,
                                             **/utils/**"
                                      update="true"/>
-                            
+
                                 <zip destfile="${client.csharp-sources}"
                                      basedir="src/main/clients/csharp"
                                      includes="**/*"
@@ -164,6 +164,30 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+            
+            <!-- Generate lunolet-levels.html -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-levels-html</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.codenjoy.dojo.lunolet.utility.PrintLevels</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>
