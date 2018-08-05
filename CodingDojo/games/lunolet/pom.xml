@@ -15,6 +15,8 @@
     <properties>
         <module.name>lunolet</module.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <client.csharp-sources>${user.resources}/${module.name}-csharp-client.zip</client.csharp-sources>
+        <client.javascript-sources>${user.resources}/${module.name}-javascript-client.zip</client.javascript-sources>
     </properties>
 
     <repositories>
@@ -75,7 +77,89 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${user.resources}</directory>
+                            <includes>
+                                <include>**/${module.name}-servers.zip</include>
+                                <include>**/${module.name}-csharp-client.zip</include>
+                                <include>**/${module.name}-javascript-client.zip</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <inherited>false</inherited>
+                        <configuration combine.self="override">
+                            <target>
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
+                                           src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                           README.*,
+                                           src/license/**,
+                                           **/pom.xml"
+                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                           src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                           **/target/**,
+                                           **/clients/**,
+                                           **/utils/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/**"
+                                     excludes="src/main/java/**,
+                                            src/main/webapp/**,
+                                            src/main/resources/**,
+                                            **/target/**,
+                                            **/clients/**,
+                                            **/utils/**"
+                                     update="true"/>
+                            
+                                <zip destfile="${client.csharp-sources}"
+                                     basedir="src/main/clients/csharp"
+                                     includes="**/*"
+                                     excludes="**/bin/**,
+                                            **/obj/**,
+                                            **/packages/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.javascript-sources}"
+                                     basedir="src/main/clients/javascript"
+                                     includes="**/*"
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/*.zip"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/*.zip"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
