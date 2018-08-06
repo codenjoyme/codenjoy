@@ -230,6 +230,7 @@
                         </goals>
                         <configuration>
                             <source><![CDATA[
+                                // Games list (put your game here)
                                 def allGames = 'sample,sampletext,a2048,battlecity,bomberman,chess,collapse,hex,kata,loderunner,minesweeper,rubicscube,snake,snake-battle,sudoku,moebius,football,startandjump,quake2d,pong,fifteen,puzzlebox,spacerace,reversi'
 
                                 def enableAll = !pom.properties['games']
@@ -289,6 +290,7 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+                    <!-- Games resources (put your game here) -->
                     <execution>
                         <id>unpack-sample-game</id>
                         <phase>compile</phase>
