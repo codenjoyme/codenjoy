@@ -7,6 +7,8 @@ A project that brings together the Codenjoy server and several games of your cho
 You can choose which games to run with the server with command.
 ```
 mvn clean jetty:run-war -Pgame1,game,game3
+OR
+mvn clean jetty:run-war -DallGames
 ```
 This is Codenjoy Maven repository. To select existing games type the following in your pom.xml file.
 ```
@@ -37,6 +39,11 @@ Add your game dependency.
     <!-- Games dependencies (put your game here - replace YOURGAME) -->
     <profile>
         <id>YOURGAME</id>
+        <activation>
+            <property>
+                <name>allGames</name>
+            </property>
+        </activation>
         <properties>
             <exclude.YOURGAME>false</exclude.battlecity>
         </properties>

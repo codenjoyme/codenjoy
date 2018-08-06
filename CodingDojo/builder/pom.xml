@@ -61,6 +61,11 @@
         <!-- Games dependencies (put your game here - replace YOURGAME) -->
         <!-- <profile>
             <id>YOURGAME</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.YOURGAME>false</exclude.battlecity>
             </properties>
@@ -75,6 +80,11 @@
 
         <profile>
             <id>sample</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.sample>false</exclude.sample>
             </properties>
@@ -88,6 +98,11 @@
         </profile>
         <profile>
             <id>sampletext</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.sampletext>false</exclude.sampletext>
             </properties>
@@ -101,6 +116,11 @@
         </profile>
         <profile>
             <id>a2048</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.a2048>false</exclude.a2048>
             </properties>
@@ -114,6 +134,11 @@
         </profile>
         <profile>
             <id>battlecity</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.battlecity>false</exclude.battlecity>
             </properties>
@@ -127,6 +152,11 @@
         </profile>
         <profile>
             <id>bomberman</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.bomberman>false</exclude.bomberman>
             </properties>
@@ -140,6 +170,11 @@
         </profile>
         <profile>
             <id>chess</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.chess>true</exclude.chess>
             </properties>
@@ -153,6 +188,11 @@
         </profile>
         <profile>
             <id>collapse</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.collapse>false</exclude.collapse>
             </properties>
@@ -166,6 +206,11 @@
         </profile>
         <profile>
             <id>hex</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.hex>false</exclude.hex>
             </properties>
@@ -179,6 +224,11 @@
         </profile>
         <profile>
             <id>kata</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.kata>false</exclude.kata>
             </properties>
@@ -192,6 +242,11 @@
         </profile>
         <profile>
             <id>loderunner</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.loderunner>false</exclude.loderunner>
             </properties>
@@ -205,6 +260,11 @@
         </profile>
         <profile>
             <id>minesweeper</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.minesweeper>false</exclude.minesweeper>
             </properties>
@@ -218,6 +278,11 @@
         </profile>
         <profile>
             <id>rubicscube</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.rubicscube>false</exclude.rubicscube>
             </properties>
@@ -231,6 +296,11 @@
         </profile>
         <profile>
             <id>snake</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.snake>false</exclude.snake>
             </properties>
@@ -244,6 +314,11 @@
         </profile>
         <profile>
             <id>snake-battle</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.snake-battle>false</exclude.snake-battle>
             </properties>
@@ -257,6 +332,11 @@
         </profile>
         <profile>
             <id>sudoku</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.sudoku>false</exclude.sudoku>
             </properties>
@@ -270,6 +350,11 @@
         </profile>
         <profile>
             <id>moebius</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.moebius>false</exclude.moebius>
             </properties>
@@ -283,6 +368,11 @@
         </profile>
         <profile>
             <id>football</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.football>false</exclude.football>
             </properties>
@@ -296,6 +386,11 @@
         </profile>
         <profile>
             <id>startandjump</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.startandjump>false</exclude.startandjump>
             </properties>
@@ -309,6 +404,11 @@
         </profile>
         <profile>
             <id>quake2d</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.quake2d>false</exclude.quake2d>
             </properties>
@@ -322,6 +422,11 @@
         </profile>
         <profile>
             <id>pong</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.pong>false</exclude.pong>
             </properties>
@@ -335,6 +440,11 @@
         </profile>
         <profile>
             <id>fifteen</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.fifteen>false</exclude.fifteen>
             </properties>
@@ -348,6 +458,11 @@
         </profile>
         <profile>
             <id>puzzlebox</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.puzzlebox>false</exclude.puzzlebox>
             </properties>
@@ -361,6 +476,11 @@
         </profile>
         <profile>
             <id>spacerace</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.spacerace>false</exclude.spacerace>
             </properties>
@@ -374,6 +494,11 @@
         </profile>
         <profile>
             <id>reversi</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
             <properties>
                 <exclude.reversi>false</exclude.reversi>
             </properties>
