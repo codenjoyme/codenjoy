@@ -21,31 +21,6 @@
         <maven-license.version>1.9</maven-license.version>
         <maven-gmaven-plugin.version>1.5</maven-gmaven-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-
-        <exclude.sample>false</exclude.sample>
-        <exclude.sample-text>false</exclude.sample-text>
-        <exclude.a2048>false</exclude.a2048>
-        <exclude.battlecity>false</exclude.battlecity>
-        <exclude.bomberman>false</exclude.bomberman>
-        <exclude.chess>true</exclude.chess>
-        <exclude.collapse>false</exclude.collapse>
-        <exclude.hex>false</exclude.hex>
-        <exclude.kata>false</exclude.kata>
-        <exclude.loderunner>false</exclude.loderunner>
-        <exclude.minesweeper>false</exclude.minesweeper>
-        <exclude.rubicscube>false</exclude.rubicscube>
-        <exclude.snake>false</exclude.snake>
-        <exclude.snake-battle>false</exclude.snake-battle>
-        <exclude.sudoku>false</exclude.sudoku>
-        <exclude.moebius>false</exclude.moebius>
-        <exclude.football>false</exclude.football>
-        <exclude.startandjump>false</exclude.startandjump>
-        <exclude.quake2d>false</exclude.quake2d>
-        <exclude.pong>false</exclude.pong>
-        <exclude.fifteen>false</exclude.fifteen>
-        <exclude.puzzlebox>false</exclude.puzzlebox>
-        <exclude.spacerace>false</exclude.spacerace>
-        <exclude.reversi>false</exclude.reversi>
     </properties>
 
     <repositories>
@@ -255,23 +230,27 @@
                         </goals>
                         <configuration>
                             <source><![CDATA[
+                                def allGames = 'sample,sampletext,a2048,battlecity,bomberman,chess,collapse,hex,kata,loderunner,minesweeper,rubicscube,snake,snake-battle,sudoku,moebius,football,startandjump,quake2d,pong,fifteen,puzzlebox,spacerace,reversi'
+
                                 def enableAll = !pom.properties['games']
-                                pom.properties.keys().toList().each {
-                                    if (!it.startsWith('exclude.')) return
-                                    pom.properties[it] = !enableAll
-                                }
                                 def games = pom.properties['games'];
                                 println "Games to add: '${games}' (enableAll=${enableAll})"
-                                games.split().each {
+
+                                allGames.split(',').each {
                                     if (!it) return
-                                    pom.properties["exclude.${it}"] = false
+                                    pom.properties.put('exclude.' + it, String.valueOf(!enableAll))
+                                }
+
+                                games.split(',').each {
+                                    if (!it) return
+                                    pom.properties.put('exclude.' + it, 'false')
                                 }
                                 pom.properties.each {
                                     if (it.key.startsWith('exclude.')) {
-                                        println "${it.key} = ${it.value}"
+                                        println "${it.key} = '${it.value}'"
                                     }
                                 }
-                            ]]></source>
+                                ]]></source>
                         </configuration>
                     </execution>
                 </executions>
@@ -328,6 +307,18 @@
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*,WEB-INF/classes/com/codenjoy/dojo/server/*</includes>
                                 </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-sampletext-game</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${exclude.sampletext}</skip>
+                            <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>sampletext-engine</artifactId>
