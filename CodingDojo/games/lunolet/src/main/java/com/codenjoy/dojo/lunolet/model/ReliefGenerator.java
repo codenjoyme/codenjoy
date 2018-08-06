@@ -36,7 +36,7 @@ public class ReliefGenerator {
     }
 
     public void addSin(double amplitude, double frequency) {
-        functions.add(x -> amplitude * Math.sin(x));
+        functions.add(x -> amplitude * Math.sin(frequency * x * 2.0 * Math.PI));
     }
 
     public void addTrend(DoubleUnaryOperator trend) {

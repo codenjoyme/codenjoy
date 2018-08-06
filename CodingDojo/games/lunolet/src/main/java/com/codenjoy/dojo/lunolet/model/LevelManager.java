@@ -116,7 +116,7 @@ public class LevelManager {
             "  'vesselStatus': { 'x': 0, 'y': 0, 'time': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'state': 0 }" +
             "}",
             "{" +
-            "  'dryMass': 250.0, 'targetX': 100, 'reliefGeneration': 'linear', 'relief': [" +
+            "  'dryMass': 250.0, 'targetX': 100, 'reliefGeneration': 'cos', 'relief': [" +
             "    { 'x': -10000,'y': 0 }," +
             "    { 'x': 0,'y': 0 }," +
             "    { 'x': 5,'y': 10 }," +

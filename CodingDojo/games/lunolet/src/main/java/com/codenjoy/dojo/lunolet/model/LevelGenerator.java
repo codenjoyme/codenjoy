@@ -78,8 +78,11 @@ public class LevelGenerator {
             case "linear":
                 trend = x -> level / 50.0 * x;
                 break;
+            case "cos":
+                trend = x -> 4.0 * level * Math.cos((0.05 / level) * x * 2.0 * Math.PI);
+                break;
         }
-        reliefGen.addSin(level * 10, level);
+        reliefGen.addSin(level * 10, 1.0 / (level == 0 ? 1.0 : level));
         reliefGen.addTrend(trend);
         return reliefGen.generate(-100, 100 * level);
     }

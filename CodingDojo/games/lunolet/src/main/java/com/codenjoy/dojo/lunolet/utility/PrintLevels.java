@@ -155,7 +155,7 @@ public class PrintLevels {
 
                 manager.levelUp();
                 levelNum = manager.getLevelNumber();
-                if (levelNum == 0 || levelNum >= 50)
+                if (levelNum == 0 || levelNum >= 150)
                     break;
             }
 
