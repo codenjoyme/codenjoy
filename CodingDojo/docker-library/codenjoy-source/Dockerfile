@@ -18,9 +18,7 @@ RUN cd /tmp \
     && git clone ${GIT_REPO} \
     && cd /tmp/codenjoy/CodingDojo \
     && mvn clean install -DskipTests=${SKIP_TESTS} \
-    && touch /var/lib/jetty/LOCAL \ 
-    && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-contest.war /var/lib/jetty/webapps \
-    && cd /tmp/codenjoy/CodingDojo/builder
+    && touch /var/lib/jetty/LOCAL
     
 RUN cd /tmp/codenjoy/CodingDojo/builder \
     && if [ "x$GAMES" = "x" ] ; \
@@ -28,7 +26,8 @@ RUN cd /tmp/codenjoy/CodingDojo/builder \
                 mvn clean install -DallGames ; \
             else \
                 mvn clean install -P${GAMES} ; \
-            fi
+            fi \
+    && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-contest.war /var/lib/jetty/webapps
     
 RUN 
 
