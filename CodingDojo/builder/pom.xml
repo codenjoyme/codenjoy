@@ -22,6 +22,8 @@
         <maven-gmaven-plugin.version>1.5</maven-gmaven-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 
+        <!-- Games settings (put your game here - replace YOURGAME) -->
+        <!-- <exclude.YOURGAME>true</exclude.sample> -->
         <exclude.sample>true</exclude.sample>
         <exclude.sampletext>true</exclude.sampletext>
         <exclude.a2048>true</exclude.a2048>
@@ -484,7 +486,7 @@
                         </configuration>
                     </execution>
 
-                    <!-- Games resources (put your game here) -->
+                    <!-- Games resources (put your game here - replace YOURGAME) -->
                     <!-- <execution>
                         <id>unpack-YOURGAME</id>
                         <phase>compile</phase>
