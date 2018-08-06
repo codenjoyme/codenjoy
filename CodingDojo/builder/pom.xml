@@ -21,6 +21,31 @@
         <maven-license.version>1.9</maven-license.version>
         <maven-gmaven-plugin.version>1.5</maven-gmaven-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+
+        <exclude.sample>true</exclude.sample>
+        <exclude.sampletext>true</exclude.sampletext>
+        <exclude.a2048>true</exclude.a2048>
+        <exclude.battlecity>true</exclude.battlecity>
+        <exclude.bomberman>true</exclude.bomberman>
+        <exclude.chess>true</exclude.chess>
+        <exclude.collapse>true</exclude.collapse>
+        <exclude.hex>true</exclude.hex>
+        <exclude.kata>true</exclude.kata>
+        <exclude.loderunner>true</exclude.loderunner>
+        <exclude.minesweeper>true</exclude.minesweeper>
+        <exclude.rubicscube>true</exclude.rubicscube>
+        <exclude.snake>true</exclude.snake>
+        <exclude.snake-battle>true</exclude.snake-battle>
+        <exclude.sudoku>true</exclude.sudoku>
+        <exclude.moebius>true</exclude.moebius>
+        <exclude.football>true</exclude.football>
+        <exclude.startandjump>true</exclude.startandjump>
+        <exclude.quake2d>true</exclude.quake2d>
+        <exclude.pong>true</exclude.pong>
+        <exclude.fifteen>true</exclude.fifteen>
+        <exclude.puzzlebox>true</exclude.puzzlebox>
+        <exclude.spacerace>true</exclude.spacerace>
+        <exclude.reversi>true</exclude.reversi>
     </properties>
 
     <repositories>
@@ -30,129 +55,335 @@
         </repository>
     </repositories>
 
-    <dependencies>
-        <!-- Games dependencies (put your game here) -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sample-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sampletext-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>a2048-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>battlecity-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>bomberman-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>chess-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>collapse-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>hex-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>kata-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>loderunner-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>minesweeper-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>rubicscube-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>snake-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>snake-battle-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sudoku-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>moebius-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>football-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>startandjump-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>quake2d-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>pong-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>fifteen-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>puzzlebox-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>spacerace-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>reversi-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    <profiles>
+        <!-- Games dependencies (put your game here - replace YOURGAME) -->
+        <!-- <profile>
+            <id>YOURGAME</id>
+            <properties>
+                <exclude.YOURGAME>false</exclude.battlecity>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>YOURGAME-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile> -->
+
+        <profile>
+            <id>sample</id>
+            <properties>
+                <exclude.sample>false</exclude.sample>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>sample-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>sampletext</id>
+            <properties>
+                <exclude.sampletext>false</exclude.sampletext>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>sampletext-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>a2048</id>
+            <properties>
+                <exclude.a2048>false</exclude.a2048>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>a2048-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>battlecity</id>
+            <properties>
+                <exclude.battlecity>false</exclude.battlecity>
+            </properties>
+            <dependencies>                
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>battlecity-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>bomberman</id>
+            <properties>
+                <exclude.bomberman>false</exclude.bomberman>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>bomberman-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>chess</id>
+            <properties>
+                <exclude.chess>true</exclude.chess>
+            </properties>
+            <dependencies>                
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>chess-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>collapse</id>
+            <properties>
+                <exclude.collapse>false</exclude.collapse>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>collapse-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>hex</id>
+            <properties>
+                <exclude.hex>false</exclude.hex>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>hex-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>kata</id>
+            <properties>
+                <exclude.kata>false</exclude.kata>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>kata-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>loderunner</id>
+            <properties>
+                <exclude.loderunner>false</exclude.loderunner>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>loderunner-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>minesweeper</id>
+            <properties>
+                <exclude.minesweeper>false</exclude.minesweeper>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>minesweeper-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>rubicscube</id>
+            <properties>
+                <exclude.rubicscube>false</exclude.rubicscube>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>rubicscube-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>snake</id>
+            <properties>
+                <exclude.snake>false</exclude.snake>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>snake-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>snake-battle</id>
+            <properties>
+                <exclude.snake-battle>false</exclude.snake-battle>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>snake-battle-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>sudoku</id>
+            <properties>
+                <exclude.sudoku>false</exclude.sudoku>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>sudoku-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>moebius</id>
+            <properties>
+                <exclude.moebius>false</exclude.moebius>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>moebius-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>football</id>
+            <properties>
+                <exclude.football>false</exclude.football>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>football-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>startandjump</id>
+            <properties>
+                <exclude.startandjump>false</exclude.startandjump>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>startandjump-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>quake2d</id>
+            <properties>
+                <exclude.quake2d>false</exclude.quake2d>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>quake2d-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>pong</id>
+            <properties>
+                <exclude.pong>false</exclude.pong>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>pong-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fifteen</id>
+            <properties>
+                <exclude.fifteen>false</exclude.fifteen>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>fifteen-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>puzzlebox</id>
+            <properties>
+                <exclude.puzzlebox>false</exclude.puzzlebox>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>puzzlebox-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>spacerace</id>
+            <properties>
+                <exclude.spacerace>false</exclude.spacerace>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>spacerace-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>reversi</id>
+            <properties>
+                <exclude.reversi>false</exclude.reversi>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>reversi-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <build>
         <finalName>${war.name}</finalName>
@@ -219,44 +450,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>${maven-gmaven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <source><![CDATA[
-                                // Games list (put your game here)
-                                def allGames = 'sample,sampletext,a2048,battlecity,bomberman,chess,collapse,hex,kata,loderunner,minesweeper,rubicscube,snake,snake-battle,sudoku,moebius,football,startandjump,quake2d,pong,fifteen,puzzlebox,spacerace,reversi'
-
-                                def enableAll = !pom.properties['games']
-                                def games = pom.properties['games'];
-                                println "Games to add: '${games}' (enableAll=${enableAll})"
-
-                                allGames.split(',').each {
-                                    if (!it) return
-                                    pom.properties.put('exclude.' + it, String.valueOf(!enableAll))
-                                }
-
-                                games.split(',').each {
-                                    if (!it) return
-                                    pom.properties.put('exclude.' + it, 'false')
-                                }
-                                pom.properties.each {
-                                    if (it.key.startsWith('exclude.')) {
-                                        println "${it.key} = '${it.value}'"
-                                    }
-                                }
-                                ]]></source>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>${maven-dependency}</version>
@@ -290,9 +483,32 @@
                             </artifactItems>
                         </configuration>
                     </execution>
+
                     <!-- Games resources (put your game here) -->
+                    <!-- <execution>
+                        <id>unpack-YOURGAME</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${exclude.YOURGAME}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>YOURGAME-engine</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>resources/**/*,WEB-INF/classes/com/codenjoy/dojo/server/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution> -->
+
                     <execution>
-                        <id>unpack-sample-game</id>
+                        <id>unpack-sample</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -313,7 +529,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-sampletext-game</id>
+                        <id>unpack-sampletext</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -334,7 +550,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-a2048-game</id>
+                        <id>unpack-a2048</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -355,7 +571,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-battlecity-game</id>
+                        <id>unpack-battlecity</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -376,7 +592,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-bomberman-game</id>
+                        <id>unpack-bomberman</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -397,7 +613,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-chess-game</id>
+                        <id>unpack-chess</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -418,7 +634,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-collapse-game</id>
+                        <id>unpack-collapse</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -439,7 +655,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-hex-game</id>
+                        <id>unpack-hex</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -460,7 +676,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-kata-game</id>
+                        <id>unpack-kata</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -481,7 +697,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-loderunner-game</id>
+                        <id>unpack-loderunner</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -502,7 +718,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-minesweeper-game</id>
+                        <id>unpack-minesweeper</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -523,7 +739,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-rubicscube-game</id>
+                        <id>unpack-rubicscube</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -544,7 +760,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-snake-game</id>
+                        <id>unpack-snake</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -565,7 +781,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-snake-battle-game</id>
+                        <id>unpack-snake-battle</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -586,7 +802,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-sudoku-game</id>
+                        <id>unpack-sudoku</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -607,7 +823,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-moebius-game</id>
+                        <id>unpack-moebius</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -628,7 +844,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-football-game</id>
+                        <id>unpack-football</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -649,7 +865,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-startandjump-game</id>
+                        <id>unpack-startandjump</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -670,7 +886,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-quake2d-game</id>
+                        <id>unpack-quake2d</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -691,7 +907,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-pong-game</id>
+                        <id>unpack-pong</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -712,7 +928,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-fifteen-game</id>
+                        <id>unpack-fifteen</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -733,7 +949,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-puzzlebox-game</id>
+                        <id>unpack-puzzlebox</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -754,7 +970,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-spacerace-game</id>
+                        <id>unpack-spacerace</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
@@ -775,7 +991,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-reversi-game</id>
+                        <id>unpack-reversi</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
