@@ -203,14 +203,13 @@
                         <p>Итак, игрок <a href="/codenjoy-contest/register?gameName=lunolet" target="_blank">
                             регистрируется на сервере</a>, указывая свой email</p>
 
-                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/lunolet-servers.zip">из кода</a>
-                            к серверу через вебсокеты. Это Maven-проект и подойдет он для игры на JVM-языках.
-                            Как его запустить - смотри в корне README.txt.
-                            Также ты можешь скачать исходники заготовок клиентов для других языков
-                            (<a href="/codenjoy-contest/resources/user/lunolet-csharp-client.zip">C#</a> и 
-                            <a href="/codenjoy-contest/resources/user/lunolet-javascript-client.zip">JavaScript</a>).
-                        </p>
-                        <p>Если ты не можешь найти свой язык - придется написать свой клиент.</p>
+                        <p>Далее необходимо скачать, настроить и запустить клиента, который подключается к серверу через веб-сокеты:</p>
+                        <ul>
+                            <li><a href="/codenjoy-contest/resources/user/lunolet-servers.zip">Java-клиент</a>, для запуска используется класс SwingClient;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lunolet-csharp-client.zip">C# клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lunolet-javascript-client.zip">JavaScript клиент</a>.</li>
+                        </ul>
+                        <p>Если в этом списке нет нужного языка, придётся написать свой клиент.</p>
 
                         <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
                         <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
