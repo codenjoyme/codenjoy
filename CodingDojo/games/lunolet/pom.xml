@@ -106,7 +106,9 @@
                                 <zip destfile="${client.sources}"
                                      basedir="."
                                      includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/client/swing/*.java,
                                            src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/model/VesselState.java,
                                            src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                            README.*,
                                            src/license/**,
