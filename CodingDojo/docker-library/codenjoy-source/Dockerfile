@@ -28,8 +28,6 @@ RUN cd /tmp/codenjoy/CodingDojo/builder \
                 mvn clean install -P${GAMES} ; \
             fi \
     && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-contest.war /var/lib/jetty/webapps
-    
-RUN 
 
 VOLUME ["/var/lib/jetty/database"]
 
