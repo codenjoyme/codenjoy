@@ -258,14 +258,14 @@
                                 def enableAll = !pom.properties['games']
                                 pom.properties.keys().toList().each {
                                     if (!it.startsWith('exclude.')) return
-                                    if (pom.properties[it]) return
                                     pom.properties[it] = !enableAll
                                 }
-                                pom.properties['games'].split().each {
+                                def games = pom.properties['games'];
+                                println "Games to add: '${games}' (enableAll=${enableAll})"
+                                games.split().each {
                                     if (!it) return
                                     pom.properties["exclude.${it}"] = false
                                 }
-                                println 'Games to add:'
                                 pom.properties.each {
                                     if (it.key.startsWith('exclude.')) {
                                         println "${it.key} = ${it.value}"
