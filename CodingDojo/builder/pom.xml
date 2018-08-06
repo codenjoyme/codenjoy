@@ -19,6 +19,33 @@
         <maven-war.version>2.6</maven-war.version>
         <maven-dependency>2.10</maven-dependency>
         <maven-license.version>1.9</maven-license.version>
+        <maven-gmaven-plugin.version>1.5</maven-gmaven-plugin.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+
+        <exclude.sample>false</exclude.sample>
+        <exclude.sample-text>false</exclude.sample-text>
+        <exclude.a2048>false</exclude.a2048>
+        <exclude.battlecity>false</exclude.battlecity>
+        <exclude.bomberman>false</exclude.bomberman>
+        <exclude.chess>true</exclude.chess>
+        <exclude.collapse>false</exclude.collapse>
+        <exclude.hex>false</exclude.hex>
+        <exclude.kata>false</exclude.kata>
+        <exclude.loderunner>false</exclude.loderunner>
+        <exclude.minesweeper>false</exclude.minesweeper>
+        <exclude.rubicscube>false</exclude.rubicscube>
+        <exclude.snake>false</exclude.snake>
+        <exclude.snake-battle>false</exclude.snake-battle>
+        <exclude.sudoku>false</exclude.sudoku>
+        <exclude.moebius>false</exclude.moebius>
+        <exclude.football>false</exclude.football>
+        <exclude.startandjump>false</exclude.startandjump>
+        <exclude.quake2d>false</exclude.quake2d>
+        <exclude.pong>false</exclude.pong>
+        <exclude.fifteen>false</exclude.fifteen>
+        <exclude.puzzlebox>false</exclude.puzzlebox>
+        <exclude.spacerace>false</exclude.spacerace>
+        <exclude.reversi>false</exclude.reversi>
     </properties>
 
     <repositories>
@@ -181,6 +208,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -212,6 +240,39 @@
                             <goal>update-file-header</goal>
                         </goals>
                         <phase>process-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>${maven-gmaven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source><![CDATA[
+                                def enableAll = !pom.properties['games']
+                                pom.properties.keys().toList().each {
+                                    if (!it.startsWith('exclude.')) return
+                                    if (pom.properties[it]) return
+                                    pom.properties[it] = !enableAll
+                                }
+                                pom.properties['games'].split().each {
+                                    if (!it) return
+                                    pom.properties["exclude.${it}"] = false
+                                }
+                                println 'Games to add:'
+                                pom.properties.each {
+                                    if (it.key.startsWith('exclude.')) {
+                                        println "${it.key} = ${it.value}"
+                                    }
+                                }
+                            ]]></source>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -256,6 +317,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.sample}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -285,6 +347,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.a2048}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -305,6 +368,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.battlecity}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -325,6 +389,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.bomberman}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -345,6 +410,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.chess}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -365,6 +431,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.collapse}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -385,6 +452,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.hex}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -405,6 +473,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.kata}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -425,6 +494,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.loderunner}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -445,6 +515,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.minesweeper}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -465,6 +536,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.rubicscube}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -485,6 +557,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.snake}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -505,6 +578,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.snake-battle}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -525,6 +599,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.sudoku}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -545,6 +620,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.moebius}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -565,6 +641,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.football}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -585,6 +662,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.startandjump}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -605,6 +683,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.quake2d}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -625,6 +704,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.pong}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -645,6 +725,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.fifteen}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -665,6 +746,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.puzzlebox}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -685,6 +767,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.spacerace}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -705,6 +788,7 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <skip>${exclude.reversi}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
