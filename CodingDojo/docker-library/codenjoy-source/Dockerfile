@@ -22,12 +22,13 @@ RUN cd /tmp \
     && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-contest.war /var/lib/jetty/webapps \
     && cd /tmp/codenjoy/CodingDojo/builder
     
-RUN if [ "x$GAMES" = "x" ] ; \ 
-    then \ 
-        mvn clean install -DallGames ; \
-    else \
-        mvn clean install -P${GAMES} ; \
-    fi
+RUN cd /tmp/codenjoy/CodingDojo/builder \
+    && if [ "x$GAMES" = "x" ] ; \
+            then \
+                mvn clean install -DallGames ; \
+            else \
+                mvn clean install -P${GAMES} ; \
+            fi
     
 RUN 
 
