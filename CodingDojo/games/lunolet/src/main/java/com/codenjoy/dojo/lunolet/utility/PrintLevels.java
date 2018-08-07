@@ -134,13 +134,16 @@ public class PrintLevels {
                 }
                 writer.println("\" />");
 
+                double startX = level.VesselStatus.X;
+                double startY = level.VesselStatus.Y;
+
                 // starting point
                 writer.println(String.format(
                         "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
-                        Math.round(scale), 0.0, -scale * 5, 0.0, scale * 5));
+                        Math.round(scale), startX, startY - scale * 5, startX, startY + scale * 5));
                 writer.println(String.format(
                         "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
-                        Math.round(scale), -scale * 5, 0.0, scale * 5, 0.0));
+                        Math.round(scale), startX - scale * 5, startY, startX + scale * 5, startY));
                 // target point
                 writer.println(String.format(
                         "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
@@ -155,7 +158,7 @@ public class PrintLevels {
 
                 manager.levelUp();
                 levelNum = manager.getLevelNumber();
-                if (levelNum == 0 || levelNum >= 50)
+                if (levelNum == 0 || levelNum >= 150)
                     break;
             }
 
