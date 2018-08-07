@@ -36,7 +36,7 @@ public class ReliefGenerator {
     }
 
     public void addSin(double amplitude, double frequency) {
-        functions.add(x -> amplitude * Math.sin(x));
+        functions.add(x -> amplitude * Math.sin(frequency * x * 2.0 * Math.PI));
     }
 
     public void addTrend(DoubleUnaryOperator trend) {
@@ -50,7 +50,7 @@ public class ReliefGenerator {
     public List<Point2D.Double> generate(double start, double end, DoubleUnaryOperator sequenceGenerator) {
         double x = start;
         List<Point2D.Double> relief = new ArrayList<>();
-        double minY = 0.0;
+        double minY = Double.MAX_VALUE;
         while (x <= end) {
             double y = calculateYValue(x);
             if (y < minY)
