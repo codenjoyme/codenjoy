@@ -36,12 +36,9 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private LunoletGame game;
-    private LevelManager levelManager;
 
     public GameRunner() {
         new Scores(0, settings);
-
-        levelManager = new LevelManager();
     }
 
     @Override
@@ -51,7 +48,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory, String s, String s1) {
-        game = new LunoletGame(levelManager);
+        game = new LunoletGame(new LevelManager());
 
         Game game = new Single(this.game, listener, factory);
         game.newGame();
