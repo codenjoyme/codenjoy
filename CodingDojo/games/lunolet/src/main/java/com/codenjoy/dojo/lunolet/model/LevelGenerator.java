@@ -58,9 +58,13 @@ public class LevelGenerator {
                 ? 100 * (level - 1)
                 : result.Relief.get(result.Relief.size() - 1).x - 50;//jsonLevel.getDouble("targetX");
 
+        Point2D.Double startPoint = new Point2D.Double(result.VesselStatus.X, result.VesselStatus.Y);
+
         normalizeSquares(result.Relief,
-                new Point2D.Double(result.VesselStatus.X, result.VesselStatus.Y),
+                startPoint,
                 result.TargetX);
+
+        result.VesselStatus.Y = startPoint.y;
 
         return result;
     }
@@ -80,6 +84,20 @@ public class LevelGenerator {
                 break;
             case "cos":
                 trend = x -> 4.0 * level * Math.cos((0.05 / level) * x * 2.0 * Math.PI);
+                break;
+            case "polynomial1":
+                trend = x -> {
+                    x /= level * 18.0;
+                    x -= 3.0;
+                    return 10.0 * level * ((x + 2) * (x + 2) * (x - 2) - 50.0);
+                };
+                break;
+            case "polynomial2":
+                trend = x -> {
+                    x /= level * 18.0;
+                    x -= 3.0;
+                    return -10.0 * level * ((x + 2) * (x + 2) * (x - 2) - 50.0);
+                };
                 break;
         }
         reliefGen.addSin(level * 10, 1.0 / (level == 0 ? 1.0 : level));
@@ -119,8 +137,15 @@ public class LevelGenerator {
                     return;
                 if (point.x == start.x)
                     point.x += 10;
-                double minY = Math.min(prevPoint.y, point.y);
-                prevPoint.y = point.y = minY > start.y ? start.y : minY;
+
+                double startHeight = Math.min(prevPoint.y, point.y);
+
+                // make canyon on start
+                if (((startHeight + targetX) % 10.0) < 1.5)
+                    startHeight -= 100.0;
+
+                start.y = prevPoint.y = point.y = startHeight;
+
                 startNormalized = true;
             } else if (point.x >= targetX) {
                 if (point.x == targetX)

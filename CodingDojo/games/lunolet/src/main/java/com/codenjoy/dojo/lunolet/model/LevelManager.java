@@ -33,7 +33,7 @@ public class LevelManager {
     private int currentLevel;
     private List<Level> levels;
 
-    public LevelManager(){
+    public LevelManager() {
         loadLevels();
         currentLevel = 0;
     }
@@ -63,8 +63,8 @@ public class LevelManager {
             levels.add(level);
         }
 
-        for (int i = 0; i < JSON_LEVELGEN.length; i++) {
-            for (int hardness = 1; hardness < 51; hardness++) {
+        for (int hardness = 1; hardness < 41; hardness++) {
+            for (int i = 0; i < JSON_LEVELGEN.length; i++) {
                 JSONObject levelJson = new JSONObject(JSON_LEVELGEN[i]);
                 Level level = LevelGenerator.generate(levelJson, hardness);
                 levels.add(level);
@@ -86,8 +86,8 @@ public class LevelManager {
 
     private List<Point2D.Double> parseRelief(JSONArray reliefJson) {
         List<Point2D.Double> relief = new ArrayList<>();
-        for (Object point : reliefJson){
-            if(point instanceof JSONObject){
+        for (Object point : reliefJson) {
+            if (point instanceof JSONObject) {
                 JSONObject p = (JSONObject) point;
                 relief.add(new Point2D.Double(p.getDouble("x"), p.getDouble("y")));
             }
@@ -128,7 +128,22 @@ public class LevelManager {
             "  'vesselStatus': { 'x': 0, 'y': 0, 'time': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'state': 0 }" +
             "}",
             "{" +
-            "  'dryMass': 250.0, 'targetX': 40, 'reliefGeneration': 'linear', 'relief': [" +
+            "  'dryMass': 250.0, 'targetX': 40, 'reliefGeneration': 'polynomial1', 'relief': [" +
+            "    { 'x': -10000,'y': 0 }," +
+            "    { 'x': 0,'y': 0 }," +
+            "    { 'x': 5,'y': 0 }," +
+            "    { 'x': 10,'y': 30 }," +
+            "    { 'x': 15,'y': 7 }," +
+            "    { 'x': 20,'y': 12 }," +
+            "    { 'x': 25,'y': 17 }," +
+            "    { 'x': 30,'y': 3 }," +
+            "    { 'x': 35,'y': 0 }," +
+            "    { 'x': 10000,'y': 0 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'time': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'state': 0 }" +
+            "}",
+            "{" +
+            "  'dryMass': 250.0, 'targetX': 40, 'reliefGeneration': 'polynomial2', 'relief': [" +
             "    { 'x': -10000,'y': 0 }," +
             "    { 'x': 0,'y': 0 }," +
             "    { 'x': 5,'y': 0 }," +
@@ -204,7 +219,7 @@ public class LevelManager {
             "  ]," +
             "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'time': 0, 'fuelMass': 50.0, 'state': 0 }" +
             "}",
-            // level 5
+        // level 5
             "{" +
             "  'dryMass': 250.0, 'targetX': 30, 'relief': [" +
             "    { 'x': -5000, 'y': 5000 }," +
