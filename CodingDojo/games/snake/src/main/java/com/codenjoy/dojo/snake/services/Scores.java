@@ -50,6 +50,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
+        length = startSnakeLength.getValue();
         return score = 0;
     }
 

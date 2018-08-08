@@ -105,6 +105,29 @@ public class ScoresTest {
     }
 
     @Test
+    public void shouldClearScoreTogetherWithSnakeLength() {
+        scores = new Scores(0, settings);
+
+        snakeEatApple();  //+3
+        snakeEatApple();  //+4
+        snakeEatApple();  //+5
+        snakeEatApple();  //+6
+        snakeEatApple();  //+7
+        snakeEatApple();  //+8
+        snakeEatApple();  //+9
+        snakeEatApple();  //+10
+        snakeEatApple();  //+11
+        snakeEatApple();  //+12
+
+        scores.clear();
+
+        snakeEatApple();  //+3
+        snakeEatApple();  //+4
+
+        assertEquals(3 + 4, score());
+    }
+
+    @Test
     public void shouldStartsFrom3AfterDead() {
         scores = new Scores(100, settings);
 
