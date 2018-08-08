@@ -35,6 +35,10 @@ public class LevelManager {
 
     public LevelManager() {
         loadLevels();
+        reset();
+    }
+
+    public void reset() {
         currentLevel = 0;
     }
 
