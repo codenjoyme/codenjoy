@@ -23,20 +23,24 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.services.EventListener;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class LevelManagerTest {
 
     @Test
-    public void InitializeAndCountLevelsTest() {
+    public void initializeAndCountLevelsTest() {
         LevelManager manager = new LevelManager();
 
         assertEquals(0, manager.getLevelNumber());
         Level level0 = manager.getLevel();
         Assert.assertNotNull(level0);
+        Assert.assertNotNull(level0.Relief);
+        Assert.assertNotNull(level0.VesselStatus);
 
         int levelNumExpected = 1;
         while (true) {
@@ -46,11 +50,34 @@ public class LevelManagerTest {
             if (levelNum == 0)
                 break; // start of another round
             assertEquals(levelNumExpected, levelNum);
+
             Level level = manager.getLevel();
             Assert.assertNotNull(level);
+            Assert.assertNotNull(level.Relief);
+            Assert.assertNotNull(level.VesselStatus);
 
             levelNumExpected++;
         }
         System.out.println("Number of levels: " + levelNumExpected);
+    }
+
+    @Test
+    public void initPlayerForEveryLevelTest() {
+        LevelManager manager = new LevelManager();
+        EventListener listener = mock(EventListener.class);
+        Player player = new Player(listener);
+        while (true) {
+            int levelNum = manager.getLevelNumber();
+            player.newHero(manager);
+            Hero hero = player.getHero();
+            Assert.assertNotNull(hero);
+            Assert.assertNotNull(hero.getLevelRelief());
+            Assert.assertNotNull(hero.getVesselStatus());
+            Assert.assertEquals(levelNum, hero.getLevelNumber());
+
+            manager.levelUp();
+            if (manager.getLevelNumber() == 0)
+                break; // start of another round
+        }
     }
 }
