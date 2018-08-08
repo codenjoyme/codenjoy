@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lunolet.utility;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,16 +32,20 @@ import java.awt.geom.Point2D;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class PrintLevels {
 
     public static void main(String[] args) {
         try {
+            DecimalFormat format = new DecimalFormat("0.###########");
+
             PrintWriter writer = new PrintWriter("src\\main\\webapp\\resources\\help\\lunolet-levels.html", "UTF-8");
             writer.println("<html>");
             writer.println("<head>");
             writer.println("    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">");
+            writer.println("    <title>Lunolet — Levels</title>");
             writer.println("    <link href=\"files/style.css\" media=\"all\" type=\"text/css\" rel=\"stylesheet\">");
             writer.println("</head>");
             writer.println("<body style=\"background-color: white;\" class=\"single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support\"");
@@ -121,7 +125,7 @@ public class PrintLevels {
                 int boxWidth = (int) (levelWidth / scale);
                 int boxHeight = (int) (levelHeight / scale);
 
-                writer.print("<svg xmlns=\"http://www.w3.org/2000/svg\" ");
+                writer.print("<svg xmlns=\"http://www.w3.org/2000/svg\" style=\"border: 1pt solid #ddd\" ");
                 writer.print(String.format("width=\"%d\" height=\"%d\" ", boxWidth, boxHeight));
                 writer.print(String.format("viewBox=\"%f %f %f %f\" ", levelLeft, levelBottom, levelWidth, levelHeight));
                 writer.println("transform=\"scale(1 -1)\">");
@@ -129,8 +133,12 @@ public class PrintLevels {
                 writer.print(String.format(
                         "<polyline stroke=\"black\" stroke-width=\"%d\" fill=\"none\" points=\"", Math.round(scale)));
                 for (int i = 0; i < relief.size(); i++) {
+                    if (i > 0)
+                        writer.print(" ");
                     Point2D.Double pt = relief.get(i);
-                    writer.print(String.format("%f,%f ", pt.x, pt.y));
+                    writer.print(format.format(pt.x));
+                    writer.print(",");
+                    writer.print(format.format(pt.y));
                 }
                 writer.println("\" />");
 
@@ -158,7 +166,7 @@ public class PrintLevels {
 
                 manager.levelUp();
                 levelNum = manager.getLevelNumber();
-                if (levelNum == 0 || levelNum >= 150)
+                if (levelNum == 0 || levelNum >= 100)
                     break;
             }
 
