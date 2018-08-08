@@ -1,37 +1,69 @@
-call .\settings\setup.bat
+call 00-settings.bat
 
+del /Q .\files\*.*
+
+del /Q %JETTY_HOME%\database\*.*
+del /Q %JETTY_HOME%\gameData\*.*
+del /Q %JETTY_HOME%\webapps\codenjoy-contest.war
+
+rd /S /Q %ROOT%\codenjoy-sources\CodingDojo\builder\target
+
+cd %ROOT%
+
+echo off
 if not exist %ROOT%\codenjoy (
-   mkdir %ROOT%\codenjoy
-   call %GIT_HOME%\cmd\git clone https://github.com/codenjoyme/codenjoy.git
+	echo [44;93m
+	echo        +-------------------------------------+        
+	echo        !      Clonning Codenjoy from git     !        
+	echo        +-------------------------------------+        
+	echo [0m
+	echo on
+
+    mkdir %ROOT%\codenjoy
+    call %GIT_HOME%\cmd\git clone https://github.com/codenjoyme/codenjoy.git
 )
+
+echo off
+echo [44;93m
+echo        +-------------------------------------+        
+echo        !      Updating Codenjoy from git     !        
+echo        +-------------------------------------+        
+echo [0m
+echo on
 
 cd %ROOT%\codenjoy\CodingDojo
 call %GIT_HOME%\cmd\git pull origin master
 
 echo off
-echo     +-------------------------------------------------------------+
-echo     !    Please check that poject updat from git was successful   !
-echo     ! There must be a message 'Already up-to-date' without errors !
-echo     !                  Press any key to do it                     !
-echo     +-------------------------------------------------------------+
+echo [44;93m
+echo        +-------------------------------------------------------------+        
+echo        !    Please check that poject update from git was successful  !        
+echo        !  There must be a message [102;30mAlready up-to-date[44;93m without errors  !        
+echo        !            After that we are try build server               !        
+echo        !                 Press any key to continue                   !        
+echo        +-------------------------------------------------------------+        
+echo [0m
 echo on
 pause >nul
 
 call %M2_HOME%\bin\mvn clean install -DskipTests=%SKIP_TESTS%
 
 echo off
-echo     +--------------------------------------------+
-echo     !   Please check that BUILD are SUCCESSFUL   !
-echo     !    After that we are try build server      !
-echo     !         Press any key to do it             !
-echo     +--------------------------------------------+
+echo [44;93m
+echo        +--------------------------------------------+        
+echo        !    Please check that BUILD was [102;30mSUCCESS[44;93m     !        
+echo        !   Press any key to build games you want    !        
+echo        +--------------------------------------------+        
+echo [0m
 echo on
 pause >nul
 
 cd %ROOT%\codenjoy\CodingDojo\builder
 
 echo off
-set /p GAMES_TO_RUN="Please select games from list with comma separated (just click Enter for all games):"
+echo [44;93m
+set /p GAMES_TO_RUN="Please select games from list with comma separated (just click Enter to select all games):"
+echo [0m
 IF "%GAMES_TO_RUN%"=="" (
 	call %M2_HOME%\bin\mvn clean package -DallGames
 ) else (
@@ -39,10 +71,12 @@ IF "%GAMES_TO_RUN%"=="" (
 )
 
 echo off
-echo     +--------------------------------------------+
-echo     !   Please check that BUILD are SUCCESSFUL   !
-echo     !         Press any key to continue          !
-echo     +--------------------------------------------+
+echo [44;93m
+echo        +--------------------------------------------+        
+echo        !    Please check that BUILD was [102;30mSUCCESS[44;93m     !        
+echo        !      Press any key to deploy on Jetty      !        
+echo        +--------------------------------------------+        
+echo [0m
 echo on
 pause >nul
 
@@ -64,12 +98,15 @@ call setup.bat
 cd %ROOT%
 
 copy %ROOT%\codenjoy\CodingDojo\builder\target\codenjoy-contest.war %ROOT%\files\*.*
-
 copy %ROOT%\files\codenjoy-contest.war %JETTY_HOME%\webapps\*.*
 
+cd %ROOT%
+
 echo off
-echo     +--------------------------------------------+
-echo     !     Now you can run 2-start-server.bat     !
-echo     +--------------------------------------------+
+echo [44;93m
+echo        +--------------------------------------------+        
+echo        !     Now you can run [102;30m2-start-server.bat[44;93m     !        
+echo        +--------------------------------------------+        
+echo [0m
 echo on
 pause >nul

@@ -1,11 +1,13 @@
-call .\settings\setup.bat
+call 00-settings.bat
 
 echo off
-echo     +--------------------------------------------+
-echo     !     Now we are try to start the server     !
-echo     ! Also we open register page on your browser !
-echo     !  So you can use it for registration after  !
-echo     +--------------------------------------------+
+echo [44;93m
+echo        +-----------------------------------------------+        
+echo        !       Now we are starting the server...       !        
+echo        ! Also we'll open register page on your browser !        
+echo        !   So you can use it for registration after    !        
+echo        +-----------------------------------------------+        
+echo [0m
 echo on
 pause >nul
 
@@ -16,3 +18,5 @@ cd %JETTY_HOME%
 
 echo Press any key to exit
 pause >nul
+
+cd %ROOT%
