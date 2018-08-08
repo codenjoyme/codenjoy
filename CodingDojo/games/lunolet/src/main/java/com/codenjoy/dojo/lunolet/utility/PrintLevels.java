@@ -25,9 +25,7 @@ package com.codenjoy.dojo.lunolet.utility;
 
 import com.codenjoy.dojo.lunolet.model.Level;
 import com.codenjoy.dojo.lunolet.model.LevelManager;
-import com.codenjoy.dojo.lunolet.model.LineIntersection;
 
-import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -39,8 +37,6 @@ public class PrintLevels {
 
     public static void main(String[] args) {
         try {
-            DecimalFormat format = new DecimalFormat("0.###########");
-
             PrintWriter writer = new PrintWriter("src\\main\\webapp\\resources\\help\\lunolet-levels.html", "UTF-8");
             writer.println("<html>");
             writer.println("<head>");
@@ -63,110 +59,11 @@ public class PrintLevels {
             LevelManager manager = new LevelManager();
 
             while (true) {
-                int levelNum = manager.getLevelNumber();
-                writer.println(String.format("<h2>Level %d</h2>", levelNum));
-                Level level = manager.getLevel();
-
-                List<Point2D.Double> relief = level.Relief;
-                double targetX = level.TargetX;
-                double targetY = 0.0;
-                for (int i = 0; i < relief.size() - 1; i++) {
-                    Point2D.Double pt1 = relief.get(i);
-                    Point2D.Double pt2 = relief.get(i + 1);
-                    if (pt1.x < targetX && pt2.x >= targetX) {
-
-                        if (Math.abs(pt2.x - targetX) < 1e-5)
-                            targetY = pt2.y;
-                        else
-                            targetY = ((targetX - pt1.x) / (pt2.x - pt1.x) * (pt2.y - pt1.y) + pt1.y);
-
-                        break;
-                    }
-                }
-
-                // find out the box margins
-                double levelLeft = -30.0;
-                double levelRight = 30.0;
-                double levelTop = 20.0;
-                double levelBottom = -20.0;
-                if (targetX - 30.0 < levelLeft)
-                    levelLeft = targetX - 30.0;
-                if (targetX + 30.0 > levelRight)
-                    levelRight = targetX + 30.0;
-                if (targetY - 20.0 < levelBottom)
-                    levelBottom = targetY - 20.0;
-                if (targetY + 20.0 > levelTop)
-                    levelTop = targetY + 20.0;
-
-                for (int i = 0; i < relief.size(); i++) {
-                    Point2D.Double pt1 = relief.get(i);
-                    if (pt1.x < levelLeft || pt1.x > levelRight)
-                        continue;
-                    if (pt1.y < levelBottom)
-                        levelBottom = pt1.y;
-                    if (pt1.y > levelTop)
-                        levelTop = pt1.y;
-                    if (pt1.x < levelLeft)
-                        levelLeft = pt1.x;
-                    if (pt1.x > levelRight)
-                        levelRight = pt1.x;
-                }
-
-                double levelWidth = levelRight - levelLeft;
-                double levelHeight = levelTop - levelBottom;
-
-                double scale = 1.0;
-                for (int i = 1; i < 200; i++) {
-                    scale = ((double) i) / 2.0;
-                    if (levelWidth / scale < 800.0 && levelHeight / scale < 800.0)
-                        break;
-                }
-
-                int boxWidth = (int) (levelWidth / scale);
-                int boxHeight = (int) (levelHeight / scale);
-
-                writer.print("<svg xmlns=\"http://www.w3.org/2000/svg\" style=\"border: 1pt solid #ddd\" ");
-                writer.print(String.format("width=\"%d\" height=\"%d\" ", boxWidth, boxHeight));
-                writer.print(String.format("viewBox=\"%f %f %f %f\" ", levelLeft, levelBottom, levelWidth, levelHeight));
-                writer.println("transform=\"scale(1 -1)\">");
-
-                writer.print(String.format(
-                        "<polyline stroke=\"black\" stroke-width=\"%d\" fill=\"none\" points=\"", Math.round(scale)));
-                for (int i = 0; i < relief.size(); i++) {
-                    if (i > 0)
-                        writer.print(" ");
-                    Point2D.Double pt = relief.get(i);
-                    writer.print(format.format(pt.x));
-                    writer.print(",");
-                    writer.print(format.format(pt.y));
-                }
-                writer.println("\" />");
-
-                double startX = level.VesselStatus.X;
-                double startY = level.VesselStatus.Y;
-
-                // starting point
-                writer.println(String.format(
-                        "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
-                        Math.round(scale), startX, startY - scale * 5, startX, startY + scale * 5));
-                writer.println(String.format(
-                        "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
-                        Math.round(scale), startX - scale * 5, startY, startX + scale * 5, startY));
-                // target point
-                writer.println(String.format(
-                        "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
-                        Math.round(scale), targetX, targetY - scale * 5, targetX, targetY + scale * 5));
-                writer.println(String.format(
-                        "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
-                        Math.round(scale), targetX - scale * 5, targetY, targetX + scale * 5, targetY));
-
-                writer.println("</svg>");
-
-                writer.println();
+                printLevel(writer, manager);
 
                 manager.levelUp();
-                levelNum = manager.getLevelNumber();
-                if (levelNum == 0 || levelNum >= 100)
+                int levelNum = manager.getLevelNumber();
+                if (levelNum == 0 || levelNum >= 50)
                     break;
             }
 
@@ -185,5 +82,110 @@ public class PrintLevels {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void printLevel(PrintWriter writer, LevelManager manager) {
+        DecimalFormat format = new DecimalFormat("0.###########");
+
+        int levelNum = manager.getLevelNumber();
+        writer.println(String.format("<h2>Level %d</h2>", levelNum));
+        Level level = manager.getLevel();
+
+        List<Point2D.Double> relief = level.Relief;
+        double targetX = level.TargetX;
+        double targetY = 0.0;
+        for (int i = 0; i < relief.size() - 1; i++) {
+            Point2D.Double pt1 = relief.get(i);
+            Point2D.Double pt2 = relief.get(i + 1);
+            if (pt1.x < targetX && pt2.x >= targetX) {
+
+                if (Math.abs(pt2.x - targetX) < 1e-5)
+                    targetY = pt2.y;
+                else
+                    targetY = ((targetX - pt1.x) / (pt2.x - pt1.x) * (pt2.y - pt1.y) + pt1.y);
+
+                break;
+            }
+        }
+
+        // find out the box margins
+        double levelLeft = -30.0;
+        double levelRight = 30.0;
+        double levelTop = 20.0;
+        double levelBottom = -20.0;
+        if (targetX - 30.0 < levelLeft)
+            levelLeft = targetX - 30.0;
+        if (targetX + 30.0 > levelRight)
+            levelRight = targetX + 30.0;
+        if (targetY - 20.0 < levelBottom)
+            levelBottom = targetY - 20.0;
+        if (targetY + 20.0 > levelTop)
+            levelTop = targetY + 20.0;
+
+        for (int i = 0; i < relief.size(); i++) {
+            Point2D.Double pt1 = relief.get(i);
+            if (pt1.x < levelLeft || pt1.x > levelRight)
+                continue;
+            if (pt1.y < levelBottom)
+                levelBottom = pt1.y;
+            if (pt1.y > levelTop)
+                levelTop = pt1.y;
+            if (pt1.x < levelLeft)
+                levelLeft = pt1.x;
+            if (pt1.x > levelRight)
+                levelRight = pt1.x;
+        }
+
+        double levelWidth = levelRight - levelLeft;
+        double levelHeight = levelTop - levelBottom;
+
+        double scale = 1.0;
+        for (int i = 1; i < 200; i++) {
+            scale = ((double) i) / 2.0;
+            if (levelWidth / scale < 800.0 && levelHeight / scale < 800.0)
+                break;
+        }
+
+        int boxWidth = (int) (levelWidth / scale);
+        int boxHeight = (int) (levelHeight / scale);
+
+        writer.print("<svg xmlns=\"http://www.w3.org/2000/svg\" style=\"border: 1pt solid #ddd\" ");
+        writer.print(String.format("width=\"%d\" height=\"%d\" ", boxWidth, boxHeight));
+        writer.print(String.format("viewBox=\"%f %f %f %f\" ", levelLeft, levelBottom, levelWidth, levelHeight));
+        writer.println("transform=\"scale(1 -1)\">");
+
+        writer.print(String.format(
+                "<polyline stroke=\"black\" stroke-width=\"%d\" fill=\"none\" points=\"", Math.round(scale)));
+        for (int i = 0; i < relief.size(); i++) {
+            if (i > 0)
+                writer.print(" ");
+            Point2D.Double pt = relief.get(i);
+            writer.print(format.format(pt.x));
+            writer.print(",");
+            writer.print(format.format(pt.y));
+        }
+        writer.println("\" />");
+
+        double startX = level.VesselStatus.X;
+        double startY = level.VesselStatus.Y;
+
+        // starting point
+        writer.println(String.format(
+                "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+                Math.round(scale), startX, startY - scale * 5, startX, startY + scale * 5));
+        writer.println(String.format(
+                "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+                Math.round(scale), startX - scale * 5, startY, startX + scale * 5, startY));
+        // target point
+        writer.println(String.format(
+                "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+                Math.round(scale), targetX, targetY - scale * 5, targetX, targetY + scale * 5));
+        writer.println(String.format(
+                "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
+                Math.round(scale), targetX - scale * 5, targetY, targetX + scale * 5, targetY));
+
+        writer.println("</svg>");
+
+        writer.println();
     }
 }
