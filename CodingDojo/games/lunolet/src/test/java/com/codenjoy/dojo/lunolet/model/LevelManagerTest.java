@@ -74,6 +74,9 @@ public class LevelManagerTest {
             Assert.assertNotNull(hero.getLevelRelief());
             Assert.assertNotNull(hero.getVesselStatus());
             Assert.assertEquals(levelNum, hero.getLevelNumber());
+            Assert.assertTrue(hero.isAlive());
+            Assert.assertNotNull(hero.getTarget());
+            Assert.assertNotNull(hero.getVesselHistory());
 
             manager.levelUp();
             if (manager.getLevelNumber() == 0)
