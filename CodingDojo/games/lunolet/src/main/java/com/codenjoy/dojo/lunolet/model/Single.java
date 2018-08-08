@@ -88,6 +88,8 @@ public class Single implements Game {
     @Override
     public void clearScore() {
         player.clearScore();
+        player.resetLevels();
+        game.newGame(player);
     }
 
     @Override

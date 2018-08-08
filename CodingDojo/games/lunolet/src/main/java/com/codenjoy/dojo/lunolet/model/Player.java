@@ -55,6 +55,15 @@ public class Player {
         score = 0;
     }
 
+    public void resetLevels() {
+        if (levelManager != null) {
+            levelManager.reset();
+        }
+        if (hero != null) {
+            hero.init(levelManager);
+        }
+    }
+
     private void increaseScore() {
         score = score + 10;
         maxScore = Math.max(maxScore, score);
