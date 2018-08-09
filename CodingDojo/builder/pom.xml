@@ -10,12 +10,14 @@
     <packaging>war</packaging>
 
     <properties>
+
         <!-- you can change context here or on build start
              mvn jetty:run-war -Dcontext=another-context -->
         <context>codenjoy-contest</context>
 
         <jetty.version>9.3.14.v20161028</jetty.version>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-war.version>2.6</maven-war.version>
@@ -562,7 +564,6 @@
                     <licenseResolver>${project.baseUri}/src/license</licenseResolver>
                     <organizationName>Codenjoy</organizationName>
                     <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
-                    <failOnMissingHeader>true</failOnMissingHeader>
                     <inceptionYear>2016</inceptionYear>
                     <canUpdateCopyright>false</canUpdateCopyright>
                     <canUpdateDescription>false</canUpdateDescription>

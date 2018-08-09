@@ -11,6 +11,7 @@
     <properties>
         <jetty.version>9.3.14.v20161028</jetty.version>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <logback.version>1.1.7</logback.version>
         <commons-collections.version>3.2.2</commons-collections.version>
@@ -27,6 +28,8 @@
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.16</maven-license.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
@@ -139,7 +142,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${maven-clean-plugin.version}</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -197,6 +200,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -215,7 +219,6 @@
                     <licenseResolver>${project.baseUri}/src/license</licenseResolver>
                     <organizationName>Codenjoy</organizationName>
                     <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
-                    <failOnMissingHeader>true</failOnMissingHeader>
                     <inceptionYear>2016</inceptionYear>
                     <canUpdateCopyright>false</canUpdateCopyright>
                     <canUpdateDescription>false</canUpdateDescription>
