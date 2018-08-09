@@ -24,10 +24,6 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
-import com.sun.org.apache.bcel.internal.generic.Type;
-
-import java.math.BigInteger;
-import java.util.Map;
 
 public class Sequence1Algorithm extends AlgorithmLevelImpl {
 
