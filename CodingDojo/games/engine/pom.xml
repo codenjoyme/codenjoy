@@ -220,7 +220,7 @@
                     <organizationName>Codenjoy</organizationName>
                     <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
                     <inceptionYear>2018</inceptionYear>
-                    <canUpdateCopyright>false</canUpdateCopyright>
+                    <canUpdateCopyright>true</canUpdateCopyright>
                     <canUpdateDescription>false</canUpdateDescription>
                     <canUpdateLicense>false</canUpdateLicense>
                 </configuration>

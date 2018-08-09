@@ -2,15 +2,15 @@
  * #%L
  * jQuery JavaScript Library v3.1.0
  * https://jquery.com/
- *
+ * 
  * Includes Sizzle.js
  * https://sizzlejs.com/
  * %%
- * Copyright (C) 2017 jQuery Foundation and other contributors
+ * Copyright (C) 2018 Codenjoy
  * %%
  * Released under the MIT license
  * https://jquery.org/license
- *
+ * 
  * Date: 2016-07-07T21:44Z
  * #L%
  */

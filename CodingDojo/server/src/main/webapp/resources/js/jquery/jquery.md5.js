@@ -3,11 +3,11 @@
  * jQuery MD5 Plugin 1.2.1
  * https://github.com/blueimp/jQuery-MD5
  * %%
- * Copyright (C) 2010 Sebastian Tschan https://blueimp.net
+ * Copyright (C) 2018 Codenjoy
  * %%
  * Licensed under the MIT license:
  * http://creativecommons.org/licenses/MIT/
- *
+ * 
  * Based on
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
  * Digest Algorithm, as defined in RFC 1321.

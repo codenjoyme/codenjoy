@@ -2,7 +2,7 @@
  * #%L
  * Bootstrap v3.3.5 (http://getbootstrap.com)
  * %%
- * Copyright (C) 2016 Twitter, Inc.
+ * Copyright (C) 2018 Codenjoy
  * %%
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * #L%
