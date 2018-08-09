@@ -56,10 +56,9 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        WebSocketRunner.runOnServer("localhost:8080", // to use for local server
-//        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
-                USER_NAME,
-                CODE,
+        WebSocketRunner.runClient(
+                // paste here board page url from browser after registration
+                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 new YourSolver(new RandomDice()),
                 new Board());
     }
