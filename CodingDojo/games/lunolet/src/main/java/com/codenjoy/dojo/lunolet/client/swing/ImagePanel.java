@@ -83,8 +83,8 @@ public class ImagePanel extends JPanel {
         g.setColor(Color.BLACK);
         ArrayList<Point2D.Double> relief = board.getRelief();
         if (relief != null && relief.size() > 0) {
-            Point2D.Double pt1 = relief.get(0);
             for (int i = 1; i < relief.size(); i++) {
+                Point2D.Double pt1 = relief.get(i - 1);
                 Point2D.Double pt2 = relief.get(i);
                 g.drawLine((int) (pt1.x * 100.0), (int) (pt1.y * 100.0), (int) (pt2.x * 100.0), (int) (pt2.y * 100.0));
             }
