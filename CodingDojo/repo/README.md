@@ -1,86 +1,87 @@
 Codenjoy framework Maven Repository
 -----------
 
-Тут находится Maven репозиторий. Для подключения компонентов к своему проекту укажи в своем `pom.xml`
+This is Maven repository. To connect components to your project, type the following in your pom.xml file.
 ```
 <repositories>
-	<repository>
-		<id>codenjoy-releases</id>
-		<url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
-	</repository>
+    <repository>
+        <id>codenjoy-releases</id>
+        <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+    </repository>
 </repositories>
 ```
-А так же одну из нескольких депенденсей
-- для интерфейсной части (на основе тих интерфейсов создаются игры)
+And one of several dependencies
+- for the interface part (games are based on these interfaces)
 ```
 <dependency>
-	<groupId>com.codenjoy</groupId>
-	<artifactId>sample-engine</artifactId>
-	<version>${codenjoy.version}</version>
+    <groupId>com.codenjoy</groupId>
+    <artifactId>engine</artifactId>
+    <version>${codenjoy.version}</version>
 </dependency>
 ```
-- для той или иной игры 
+- for a specific game 
 ```
 <dependency>
-	<groupId>com.codenjoy</groupId>
-	<artifactId>${game.name}-engine</artifactId>
-	<version>${codenjoy.version}</version>
+    <groupId>com.codenjoy</groupId>
+    <artifactId>${game.name}-engine</artifactId>
+    <version>${codenjoy.version}</version>
 </dependency>
 ```
-- для сервера codenjoy
+- for the codenjoy server
 ```
 <dependency>
-	<groupId>com.codenjoy</groupId>
+    <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-contest</artifactId>
-	<version>${codenjoy.version}</version>
+    <version>${codenjoy.version}</version>
 </dependency>
 ```
-- для сборщика игор (собирает сервер совместно с выбранными играми, [детальнее тут](https://github.com/codenjoyme/codenjoy-builder)
+- for the game assembler (assembles a server with selected games, [click here for details](https://github.com/codenjoyme/codenjoy-builder)
 ```
 <dependency>
-	<groupId>com.codenjoy</groupId>
+    <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-builder</artifactId>
-	<version>${codenjoy.version}</version>
+    <version>${codenjoy.version}</version>
 </dependency>
 ```
-- последняя на данный момент версия
+- the latest version as of now
 ```
 <properties>
-	<codenjoy.version>1.0.7</codenjoy.version>
+    <codenjoy.version>1.0.25</codenjoy.version>
 </properties>
 ```
-- варианты игор
+- a choice of games
 ```
 <properties>
-	<game.name>sample-engine</game.name>
-	<!--
-		<game.name>a2048-engine</game.name>
-		<game.name>a2048-extreme-engine</game.name>
-		<game.name>bomberman-engine</game.name>
-		<game.name>battlecity-engine</game.name>
-		<game.name>chess-engine</game.name>
-		<game.name>collapse-engine</game.name>
-		<game.name>hex-engine</game.name>
-		<game.name>loderunner-engine</game.name>
-		<game.name>minesweeper-engine</game.name>
-		<game.name>rubicscube-engine</game.name>
-		<game.name>sudoku-engine</game.name>
-		<game.name>snake-engine</game.name>
-		<game.name>moebius-engine</game.name>
-		<game.name>football-engine</game.name>
-		<game.name>startandjump-engine</game.name>
-		<game.name>quake2d-engine</game.name>
-		<game.name>pong-engine</game.name>
-		<game.name>fifteen-engine</game.name>
-		<game.name>puzzlebox-engine</game.name>
-		<game.name>spacerace-engine</game.name>
-	-->
+    <game.name>sample-engine</game.name>
+    <!--
+        <game.name>a2048-engine</game.name>
+        <game.name>a2048-extreme-engine</game.name>
+        <game.name>bomberman-engine</game.name>
+        <game.name>battlecity-engine</game.name>
+        <game.name>chess-engine</game.name>
+        <game.name>collapse-engine</game.name>
+        <game.name>hex-engine</game.name>
+        <game.name>loderunner-engine</game.name>
+        <game.name>minesweeper-engine</game.name>
+        <game.name>rubicscube-engine</game.name>
+        <game.name>sudoku-engine</game.name>
+        <game.name>snake-engine</game.name>
+        <game.name>moebius-engine</game.name>
+        <game.name>football-engine</game.name>
+        <game.name>startandjump-engine</game.name>
+        <game.name>quake2d-engine</game.name>
+        <game.name>pong-engine</game.name>
+        <game.name>fifteen-engine</game.name>
+        <game.name>puzzlebox-engine</game.name>
+        <game.name>spacerace-engine</game.name>
+        <game.name>reversi-engine</game.name>
+    -->
 </properties>
 ```
 
-Другие материалы
+Other materials
 --------------
-Больше [деталей тут](https://github.com/codenjoyme/codenjoy)
+For [more details, click here](https://github.com/codenjoyme/codenjoy)
 
-[Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
+[Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========
