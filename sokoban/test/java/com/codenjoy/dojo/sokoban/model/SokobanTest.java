@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sokoban.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,24 +23,23 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.sokoban.model.items.Box;
 import com.codenjoy.dojo.sokoban.model.items.Hero;
 import com.codenjoy.dojo.sokoban.model.items.Mark;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SokobanTest {
 
@@ -78,11 +77,8 @@ public class SokobanTest {
         player = new Player(listener);
         game.newGame(player);
         player.hero = hero;
-        hero.init(game);
 
-        for(Mark mark : level.getMarks()){
-            mark.init(game);
-        }
+        hero.init(game);
 
 
         this.hero = game.getHeroes().get(0);

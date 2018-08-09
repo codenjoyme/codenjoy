@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sokoban.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -59,6 +59,7 @@ public class Sokoban implements Field {
         walls = level.getWalls();
         boxes = level.getBoxes();
         marks = level.getMarks();
+        marks.stream().forEach(mark -> mark.init(this));
         gold = level.getGold();
         this.expectedMarksToWin = level.getExpectedBoxesValuesInMarks();
         players = new LinkedList<>();
@@ -70,50 +71,47 @@ public class Sokoban implements Field {
      */
     @Override
     public void tick() {
-          realMarksToWin=0;
-          Player player = players.get(0);
-          Hero hero = player.getHero();
-          hero.tick();
+        realMarksToWin = 0;
+        Player player = players.get(0);
+        Hero hero = player.getHero();
+        hero.tick();
 
         heroCheckingReachGold(player, hero);
 
-        if (!hero.isAlive()||boxesBlocked) {
-                player.event(Events.LOOSE);
+        if (!hero.isAlive() || boxesBlocked) {
+            player.event(Events.LOOSE);
         }
 
-        for (Box box: boxes) {
-            box.tick();
-            }
-        for (Mark mark: marks) {
+        for (Mark mark : marks) {
             mark.tick();
         }
 
-        for (Mark mark: marks)
-        {
-            if (mark.isFilled()){
+        for (Mark mark : marks) {
+            if (mark.isFilled()) {
                 realMarksToWin++;
-            }
-            else  {
+            } else {
                 realMarksToWin--;
             }
-            }
+        }
 
-        if (expectedMarksToWin==realMarksToWin){
-            isWon=true;
+        if (expectedMarksToWin == realMarksToWin) {
+            isWon = true;
             player.event(Events.WIN);
         }
 
     }
 
-    /** cheking reached Gold if so - triggered Win
+    /**
+     * cheking reached Gold if so - triggered Win
+     *
      * @param player Player obj
-     * @param hero particular case of player = player.getHero()
+     * @param hero   particular case of player = player.getHero()
      */
     private void heroCheckingReachGold(Player player, Hero hero) {
         if (gold.contains(hero)) {
             gold.remove(hero);
             player.event(Events.WIN);
-            isWon=true;
+            isWon = true;
             Point pos = getFreeRandom();
             gold.add(new Gold(pos));
         }
@@ -142,9 +140,9 @@ public class Sokoban implements Field {
 
     public boolean isAdjacentToWall(int x, int y) {
         return isBarrier(x - 1, y)
-                || isWall(x +1, y)
-                || isWall(x , y-1)
-                || isWall(x,y+1);
+                || isWall(x + 1, y)
+                || isWall(x, y - 1)
+                || isWall(x, y + 1);
     }
 
     @Override
@@ -185,7 +183,7 @@ public class Sokoban implements Field {
         return boxes.contains(pt(x, y));
     }
 
-     public void moveBox(int x, int y, int xNew, int yNew) {
+    public void moveBox(int x, int y, int xNew, int yNew) {
         boxes.remove(pt(x, y));
         boxes.add(new Box(pt(xNew, yNew)));
     }
@@ -238,6 +236,7 @@ public class Sokoban implements Field {
     public List<Bomb> getBombs() {
         return bombs;
     }
+
     public List<Box> getBoxes() {
         return boxes;
     }
@@ -269,6 +268,7 @@ public class Sokoban implements Field {
             }
         };
     }
+
     public int getRealMarksToWin() {
         return realMarksToWin;
     }
