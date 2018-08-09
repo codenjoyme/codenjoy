@@ -62,7 +62,7 @@ public class LevelManager {
             levels.add(parseLevel(json));
         }
 
-        for (int i = JSON_LEVELS.length; i < JSON_LEVELS.length + 5; i++) {
+        for (int i = JSON_LEVELS.length; i < JSON_LEVELS.length + 8; i++) {
             Level level = prepareLevel(i);
             levels.add(level);
         }
@@ -237,6 +237,21 @@ public class LevelManager {
             "    { 'x': 5000,'y': 5000 }" +
             "  ]," +
             "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'time': 0, 'fuelMass': 50.0, 'state': 0 }" +
+            "}",
+        // level 6
+            "{" +
+            "  'dryMass': 250.0, 'targetX': 232, 'relief': [" +
+            "    { 'x': -5000, 'y': 1000 }," +
+            "    { 'x': -5,'y': 0 }," +
+            "    { 'x': 1,'y': 0 }," +
+            "    { 'x': 4,'y': 42 }," +
+            "    { 'x': 17,'y': 42 }," +
+            "    { 'x': 226,'y': 18 }," +
+            "    { 'x': 238,'y': 18 }," +
+            "    { 'x': 244,'y': 29 }," +
+            "    { 'x': 5000,'y': 2000 }" +
+            "  ]," +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'time': 0, 'fuelMass': 50.0, 'state': 0 }" +
             "}"
     };
 
@@ -246,28 +261,31 @@ public class LevelManager {
         level.VesselStatus = new VesselStatus();
         level.Relief = new LinkedList<Point2D.Double>();
 
+        Random random = new Random(levelNumber);
+        int step = 8 + random.nextInt(41) * 2;
+        int halfstep = step / 2;
+
         if (levelNumber == 0) {
             level.Relief.add(new Point2D.Double(-10000, 0));
             level.Relief.add(new Point2D.Double(10000, 0));
-            level.TargetX = 25;
+            level.TargetX = step * 2.0 + halfstep;
         } else {
-            Random random = new Random(levelNumber);
             Point2D.Double[] array = new Point2D.Double[21];
             array[0] = new Point2D.Double(-10000, 0);
-            array[9] = new Point2D.Double(-5, 0);
-            array[10] = new Point2D.Double(5, 0);
+            array[9] = new Point2D.Double(-halfstep, 0);
+            array[10] = new Point2D.Double(halfstep, 0);
             double y1 = 0;
             double y2 = 0;
             for (int i = 0; i < 8; i++) {
-                y1 += random.nextInt(11) - 5;
-                y2 += random.nextInt(11) - 5;
-                array[8 - i] = new Point2D.Double(-10 - 5 * i, y1);
-                array[11 + i] = new Point2D.Double(10 + 5 * i, y2);
+                y1 += random.nextInt(step + 1) - halfstep;
+                y2 += random.nextInt(step + 1) - halfstep;
+                array[8 - i] = new Point2D.Double(-step - halfstep * i, y1);
+                array[11 + i] = new Point2D.Double(step + halfstep * i, y2);
             }
-            array[19] = new Point2D.Double(array[18].x + 10, array[18].y);  // target
+            array[19] = new Point2D.Double(array[18].x + step, array[18].y);  // target
             array[20] = new Point2D.Double(10000, 0);
             level.Relief = Arrays.asList(array);
-            level.TargetX = array[18].x + 5;
+            level.TargetX = array[18].x + halfstep;
         }
 
         level.VesselStatus.FuelMass = 50.0;
