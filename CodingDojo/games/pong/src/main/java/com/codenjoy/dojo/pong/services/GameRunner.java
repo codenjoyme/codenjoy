@@ -80,7 +80,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        PongSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
+        PongSolver.start(aiName, getDice());
         return true;
     }
 

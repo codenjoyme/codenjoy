@@ -67,16 +67,11 @@ public class RandomSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new PongSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.run(host,
-                name,
-                null,
+    public static void start(String name, Dice dice) {
+        WebSocketRunner.runAI(name,
                 new RandomSolver(new RandomDice()),
                 new Board());
     }

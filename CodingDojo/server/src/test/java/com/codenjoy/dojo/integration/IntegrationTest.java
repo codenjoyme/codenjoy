@@ -67,7 +67,7 @@ public class IntegrationTest {
 
     @BeforeClass
     public static void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", "/codenjoy-contest");
+        runner = new SpringMockerJettyRunner("src/main/webapp", "/appcontext");
         runner.spyBean("playerService");
         runner.spyBean("mailService");
         port = runner.start(new Random().nextInt(1000) + 10000);
@@ -198,8 +198,8 @@ public class IntegrationTest {
 
         String activationUrl = getActivationUrl(name);
 
-        assertEquals("http://localhost:" + port + "/codenjoy-contest/register", driver.getCurrentUrl());
-        assertTrue(activationUrl.startsWith("http://localhost:" + port + "/codenjoy-contest/register?approve="));
+        assertEquals("http://localhost:" + port + "/appcontext/register", driver.getCurrentUrl());
+        assertTrue(activationUrl.startsWith("http://localhost:" + port + "/appcontext/register?approve="));
 
         driver.get(activationUrl);
     }

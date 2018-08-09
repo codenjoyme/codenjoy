@@ -103,7 +103,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        VladKvadratSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
+        VladKvadratSolver.start(aiName, getDice());
         return true;
     }
 }

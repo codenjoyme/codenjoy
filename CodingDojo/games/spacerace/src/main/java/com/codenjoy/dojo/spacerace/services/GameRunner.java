@@ -118,7 +118,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        AlAnSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
+        AlAnSolver.start(aiName, getDice());
         return true;
     }
 }

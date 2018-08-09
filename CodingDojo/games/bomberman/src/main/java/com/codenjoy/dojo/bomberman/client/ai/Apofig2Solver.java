@@ -25,10 +25,9 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.bomberman.services.GameRunner;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
@@ -235,16 +234,11 @@ public class Apofig2Solver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.run(host,
-                name,
-                null,
+    public static void start(String name, Dice dice) {
+        WebSocketRunner.runAI(name,
                 new ApofigSolver(new RandomDice()),
                 new Board());
     }

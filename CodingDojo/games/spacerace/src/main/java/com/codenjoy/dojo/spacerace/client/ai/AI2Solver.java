@@ -282,16 +282,11 @@ public class AI2Solver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.run(host,
-                name,
-                null,
+    public static void start(String name, Dice dice) {
+        WebSocketRunner.runAI(name,
                 new AI2Solver(new RandomDice()),
                 new Board());
     }

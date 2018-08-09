@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 public class PlayerControllerTest {
 
     public static final int PORT = 8081;
-    public static final String CONTEXT_PATH = "/codenjoy-contest";
+    public static final String CONTEXT_PATH = "/appcontext";
     private static WebSocketRunner client;
 
     private static String url;
@@ -52,7 +52,7 @@ public class PlayerControllerTest {
     private static final String SERVER = "ws://127.0.0.1:" + PORT + CONTEXT_PATH + "/ws";
     private static String USER_NAME = "apofig";
 
-    private static List<String> serverMessages = new LinkedList<String>();
+    private static List<String> serverMessages = new LinkedList<>();
 
     @BeforeClass
     public static void setupJetty() throws Exception {

@@ -24,8 +24,7 @@ package com.codenjoy.dojo.a2048.client.ai;
 
 
 import com.codenjoy.dojo.a2048.client.Board;
-import com.codenjoy.dojo.a2048.services.GameRunner;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -215,16 +214,11 @@ public class ApofigSolver2 implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver2(),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.run(host,
-                name,
-                null,
+    public static void start(String name, Dice dice) {
+        WebSocketRunner.runAI(name,
                 new ApofigSolver2(),
                 new Board());
     }

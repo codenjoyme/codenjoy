@@ -28,8 +28,9 @@ import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -41,32 +42,56 @@ public class WebSocketRunner {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
-    private static final String REMOTE = "tetrisj.jvmhost.net:12270";
-    public static final String WS_URI_PATTERN = "ws://%s/codenjoy-contest/ws";
+    public static final String WS_URI_PATTERN = "ws://%s/%s/ws";
 
     public static boolean printToConsole = true;
     private static Map<String, WebSocketRunner> clients = new ConcurrentHashMap<>();
 
-    private static String getUrl() {
-        return REMOTE;
-    }
+    public static class UrlParser {
+        public String server;
+        public String code;
+        public String userName;
+        public String context;
 
-    public enum Host {
-        // подключение клиента к удаленному серваку
-        REMOTE(WebSocketRunner.getUrl()),
+        public UrlParser(String uri) {
+            try {
+                URL url = new URL(uri);
+                String[] queryParts = url.getQuery().split("=");
+                String[] urlParts = url.getPath().split("\\/");
+                if (urlParts.length != 5
+                        || !urlParts[0].equals("")
+                        || !urlParts[2].equals("board")
+                        || !urlParts[3].equals("player")
+                        || queryParts.length != 2
+                        || !queryParts[0].equals("code"))
+                {
+                    throw new IllegalArgumentException("Bad URL");
+                }
 
-        // используется для запуска AI бота на локали сервера, без печати в консоль трешняка
-        REMOTE_LOCAL(WebSocketRunner.getUrl()),
+                server = url.getHost() + portPart(url.getPort());
+                code = queryParts[1];
+                userName = urlParts[4];
+                context = urlParts[1];
+            } catch (MalformedURLException e) {
+                throw new RuntimeException("Please set url in format " +
+                        "'http://codenjoyDomainOrIP:8080/codenjoy-contest/" +
+                        "board/player/your@email.com?code=12345678901234567890'",
+                        e);
+            }
+        }
 
-        // работа клиента с локальным серваком
-        LOCAL(WebSocketRunner.LOCAL);
+        private String portPart(int port) {
+            return (port == -1) ? "" : (":" + port);
+        }
 
-        public String host;
-        public String uri;
-
-        Host(String host) {
-            this.host = host;
-            this.uri = String.format(WS_URI_PATTERN, host);
+        @Override
+        public String toString() {
+            return "UrlParser{" +
+                    "server='" + server + '\'' +
+                    ", context='" + context + '\'' +
+                    ", code='" + code + '\'' +
+                    ", userName='" + userName + '\'' +
+                    '}';
         }
     }
 
@@ -81,51 +106,47 @@ public class WebSocketRunner {
         this.board = board;
     }
 
-    /**
-     * @param host Servers enum
-     * @see Host
-     * @see WebSocketRunner#run(String, String, String, Solver, ClientBoard)
-     */
-    public static WebSocketRunner run(Host host, String userName, String code,
-                                      Solver solver, ClientBoard board)
-    {
+    public static void runClient(String url, Solver solver, ClientBoard board) {
+        UrlParser parser = new UrlParser(url);
+        run(parser.server, parser.context,
+                parser.userName, parser.code,
+                solver, board);
+    }
+
+    public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
         // если запускаем на серваке бота, то в консоль не принтим
-        printToConsole = (host != Host.REMOTE_LOCAL);
-
-        // на локали файлик LOCAL означает что мы игнорим что выбрал игрок
-        if (new File("LOCAL").exists()) {
-            host = Host.LOCAL;
-        }
-
-        return run(host.uri, userName, code, solver, board);
+        printToConsole = false;
+        return run(LOCAL, aiName, CodenjoyContext.get(), null, solver, board);
     }
 
     /**
      * To connect on server in your LAN.
      * @param server String server and port. Format 192.168.0.1:8080
+     * @param context String context of codenjoy application. For example 'codenjoy-contest'
      * @see WebSocketRunner#run(String, String, String, Solver, ClientBoard)
      */
-    public static WebSocketRunner runOnServer(String server, String userName, String code,
-                                              Solver solver, ClientBoard board)
+    private static WebSocketRunner run(String server, String context,
+                                       String userName, String code,
+                                       Solver solver, ClientBoard board)
     {
-         return run(String.format(WS_URI_PATTERN, server), userName, code, solver, board);
+         return run(String.format(WS_URI_PATTERN, context, server), userName, code, solver, board);
     }
 
      /**
      * To connect on server in your LAN.
-     * @param uri String websocker server uri
+     * @param uri String websocket server uri
      * @see WebSocketRunner#WS_URI_PATTERN
      *
      * @param userName email that you enter on registration page
      * @param solver your AI
      * @param board Board class
-     * @return WebSocketRunner intance
+     * @return WebSocketRunner instance
      */
     public static WebSocketRunner run(String uri, String userName, String code,
                                       Solver solver, ClientBoard board)
     {
         try {
-            if (clients.containsKey(userName)) {
+            if (clients.containsKey(userName)) { // TODO этот кеш кеширует старых AI и они потом не работают после удаления юзера и перезапуска
                 return clients.get(userName);
             }
             final WebSocketRunner client = new WebSocketRunner(solver, board);

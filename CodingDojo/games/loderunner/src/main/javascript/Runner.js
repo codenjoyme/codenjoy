@@ -37,6 +37,10 @@ var util = require('util');
 var hostIp = 'tetrisj.jvmhost.net';
 
 var userName = 'user@gmail.com';
+// you can get this code after registration on the server with your email
+// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+var code = '12345678901234567890';
+
 var protocol = 'WS';
 
 var processBoard = function(boardString) {
@@ -62,7 +66,7 @@ if (protocol == 'HTTP') {
     }
     var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
     var WSocket = require('ws');
-    var ws = new WSocket(server + '?user=' + userName);
+    var ws = new WSocket(server + '?user=' + userName + '&code=' + code);
 
     ws.on('open', function() {
         log('Opened');

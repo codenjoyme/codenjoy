@@ -72,10 +72,9 @@ public class YourSolver extends AbstractTextSolver {
     }
 
     private static void run(Solver solver) {
-//        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
-        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
-                USER_NAME,
-                CODE,
+            WebSocketRunner.runClient(
+                // paste here board page url from browser after registration
+                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 solver,
                 new Board());
     }

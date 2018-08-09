@@ -65,9 +65,9 @@ echo [44;93m
 set /p GAMES_TO_RUN="Please select games from list with comma separated (just click Enter to select all games):"
 echo [0m
 IF "%GAMES_TO_RUN%"=="" (
-    call %M2_HOME%\bin\mvn clean package -DallGames
+    call %M2_HOME%\bin\mvn clean package -Dcontext=${CONTEXT} -DallGames
 ) else (
-    call %M2_HOME%\bin\mvn clean package -P%GAMES_TO_RUN%
+    call %M2_HOME%\bin\mvn clean package -Dcontext=${CONTEXT} -P%GAMES_TO_RUN%
 )
 
 echo off

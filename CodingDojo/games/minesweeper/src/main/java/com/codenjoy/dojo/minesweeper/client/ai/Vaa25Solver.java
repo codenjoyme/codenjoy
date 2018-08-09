@@ -41,16 +41,11 @@ public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new Vaa25Solver("test"),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
+        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
-        WebSocketRunner.run(host,
-                name,
-                null,
+    public static void start(String name, Dice dice) {
+        WebSocketRunner.runAI(name,
                 new Vaa25Solver(name, dice),
                 new Board());
     }

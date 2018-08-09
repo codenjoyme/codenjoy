@@ -46,25 +46,6 @@ public class AlAnTestSolver implements Solver<Board> {
     public AlAnTestSolver(Dice dice) {
     }
 
-    /**
-     * Метод для запуска игры с текущим ботом. Служит для отладки.
-     */
-    public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(), new AlAnTestSolver(new RandomDice()), new Board());
-        // start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
-    }
-
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server,
-                    name,
-                    null,
-                    new AlAnTestSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public String get(final Board board) {
@@ -313,5 +294,15 @@ public class AlAnTestSolver implements Solver<Board> {
             return Direction.LEFT;
         }
         return bestDirection;
+    }
+
+    public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
+    }
+
+    public static void start(String name, Dice dice) {
+        WebSocketRunner.runAI(name,
+                    new AlAnTestSolver(new RandomDice()),
+                    new Board());
     }
 }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
+import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -110,6 +111,10 @@ public class RegistrationController {
         return ip;
     }
 
+    private String getLocalIp(HttpServletRequest request) {
+        return request.getLocalAddr();
+    }
+
     @RequestMapping(params = "approve", method = RequestMethod.GET)
     public String approveEmail(Model model, @RequestParam("approve") String link) {
         validator.checkMD5(link);
@@ -190,8 +195,9 @@ public class RegistrationController {
                     map.put("ip", request.getRemoteAddr());
                     map.put("host", gameName);
 
-                    String host = WebSocketRunner.Host.REMOTE.host;
-                    String link = "http://" + host + "/codenjoy-contest/register?approve=" + storage.getLink();
+                    String host = getLocalIp(request); // TODO test me on prod
+                    String context = CodenjoyContext.get();
+                    String link = "http://" + host + "/" + context + "/register?approve=" + storage.getLink();
                     try {
                         mailService.sendEmail(email, "Codenjoy регистрация",
                                 "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +

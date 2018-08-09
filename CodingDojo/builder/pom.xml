@@ -10,7 +10,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <war.name>codenjoy-contest</war.name>
+        <!-- you can change context here or on build start
+             mvn jetty:run-war -Dcontext=another-context -->
+        <context>codenjoy-contest</context>
 
         <jetty.version>9.3.14.v20161028</jetty.version>
         <java.version>1.8</java.version>
@@ -513,7 +515,7 @@
     </profiles>
 
     <build>
-        <finalName>${war.name}</finalName>
+        <finalName>${context}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -530,9 +532,9 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
-                    <war>${project.basedir}/target/${war.name}.war</war>
+                    <war>${project.basedir}/target/${context}.war</war>
                     <webApp>
-                        <contextPath>/${war.name}</contextPath>
+                        <contextPath>/${context}</contextPath>
                     </webApp>
                     <stopPort>9999</stopPort>
                     <stopKey>foo</stopKey>
@@ -591,7 +593,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>${war.name}</artifactId>
+                                    <artifactId>${context}</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
                                     <overWrite>true</overWrite>

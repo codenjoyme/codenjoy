@@ -112,7 +112,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        BotSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
+        BotSolver.start(aiName, getDice());
         return true;
     }
 }

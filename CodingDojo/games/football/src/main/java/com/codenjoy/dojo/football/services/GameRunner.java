@@ -92,7 +92,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     public boolean newAI(String aiName) {
         boolean result = (needAI.getValue() == 1);
         if (result) {
-            DefaultSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
+            DefaultSolver.start(aiName, getDice());
         }
         return result;
     }

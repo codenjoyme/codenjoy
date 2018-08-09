@@ -40,8 +40,7 @@ RUN cd /tmp \
          else \
              git checkout ${REVISION} ; \
          fi \
- && mvn clean install -DskipTests=${SKIP_TESTS} \
- && touch /var/lib/jetty/LOCAL
+ && mvn clean install -DskipTests=${SKIP_TESTS}
 
 # -----------------------------------------------------------------------
 
@@ -56,9 +55,9 @@ ARG CONTEXT=codenjoy-contest
 RUN cd /tmp/codenjoy/CodingDojo/builder \
  && if [ "x$GAMES" = "x" ] ; \
          then \
-             mvn clean install -DallGames ; \
+             mvn clean install -Dcontext=${CONTEXT} -DallGames ; \
          else \
-             mvn clean install -P${GAMES} ; \
+             mvn clean install -Dcontext=${CONTEXT} -P${GAMES} ; \
          fi \
  && cp /tmp/codenjoy/CodingDojo/builder/target/${CONTEXT}.war /var/lib/jetty/webapps
 
