@@ -30,6 +30,8 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
+import java.awt.geom.Point2D;
+
 public class YourSolver implements Solver<Board> {
 
     // this is your email
@@ -47,19 +49,25 @@ public class YourSolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-        this.board = board;
-        System.out.println(board.toString());
 
-        if (board.getState() == VesselState.START)
+        Point2D.Double target = board.getTarget();
+        Point2D.Double current = board.getPoint();
+
+        if (board.getState() == VesselState.START) {
             return "message('go 0, 0.2, 1')";
-        if (board.Y < 8.0 || board.VSpeed < -1.5) {
-            return "UP";
-        } else if (board.X < board.getTarget().getX() && board.HSpeed < 3.0) {
-            return "RIGHT";
-        } else if (board.X > board.getTarget().getX() && board.HSpeed > -3.0) {
-            return "LEFT";
         }
-        return "UP";
+
+        if (current.y < target.y + 4.0 || board.getVSpeed() < -1.5) {
+            return Direction.UP.toString();
+        } else if (current.x < target.x && board.getHSpeed() < 3.0) {
+            return Direction.RIGHT.toString();
+        } else if (current.x > target.x && board.getHSpeed() > -3.0) {
+            return Direction.LEFT.toString();
+        } else {
+            return Direction.DOWN.toString();
+        }
+
+        //TODO: Code your logic here and return direction
     }
 
     public static void main(String[] args) {
