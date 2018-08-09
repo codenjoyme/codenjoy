@@ -129,7 +129,8 @@ public class WebSocketRunner {
                                        String userName, String code,
                                        Solver solver, ClientBoard board)
     {
-         return run(String.format(WS_URI_PATTERN, context, server), userName, code, solver, board);
+         return run(String.format(WS_URI_PATTERN, server, context),
+                 userName, code, solver, board);
     }
 
      /**
