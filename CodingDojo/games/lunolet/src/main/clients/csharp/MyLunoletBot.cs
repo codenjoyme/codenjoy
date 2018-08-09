@@ -169,7 +169,7 @@ namespace LunoletClient
             {
                 CommandText = "message('go 0, 0.2, 1')";
             }
-            else if (board.Y < 8.0 || board.VSpeed < -1.5)
+            else if (board.Y < target.Y + 4.0 || board.VSpeed < -1.5)
             {
                 CommandText = "UP";
             }
