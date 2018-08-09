@@ -116,7 +116,7 @@ public class WebSocketRunner {
     public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
         // если запускаем на серваке бота, то в консоль не принтим
         printToConsole = false;
-        return run(LOCAL, aiName, CodenjoyContext.get(), null, solver, board);
+        return run(LOCAL, CodenjoyContext.get(), aiName, null, solver, board);
     }
 
     /**

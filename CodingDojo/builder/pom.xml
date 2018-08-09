@@ -20,7 +20,7 @@
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-war.version>2.6</maven-war.version>
         <maven-dependency>2.10</maven-dependency>
-        <maven-license.version>1.9</maven-license.version>
+        <maven-license.version>1.16</maven-license.version>
         <maven-gmaven-plugin.version>1.5</maven-gmaven-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 
@@ -593,7 +593,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>${context}</artifactId>
+                                    <artifactId>codenjoy-contest</artifactId>
                                     <version>${project.version}</version>
                                     <type>war</type>
                                     <overWrite>true</overWrite>

@@ -38,6 +38,6 @@ public class ContextPathGetter {
 
     @PostConstruct
     public void showIt() {
-        CodenjoyContext.set(servletContext.getContextPath());
+        CodenjoyContext.set(servletContext.getContextPath().replaceAll("/", ""));
     }
 }

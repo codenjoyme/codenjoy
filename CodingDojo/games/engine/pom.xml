@@ -26,7 +26,7 @@
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
-        <maven-license.version>1.9</maven-license.version>
+        <maven-license.version>1.16</maven-license.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
