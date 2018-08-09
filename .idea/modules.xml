@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/engine/engine.iml" filepath="$PROJECT_DIR$/engine/engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games.iml" filepath="$PROJECT_DIR$/games.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample/sample-engine.iml" filepath="$PROJECT_DIR$/sample/sample-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample-text/sampletext-engine.iml" filepath="$PROJECT_DIR$/sample-text/sampletext-engine.iml" />
+    </modules>
+  </component>
+</project>
