@@ -51,6 +51,7 @@ MAINTAINER Alexander Baglay <apofig@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 ARG GAMES
+ARG CONTEXT=codenjoy-contest
 
 RUN cd /tmp/codenjoy/CodingDojo/builder \
  && if [ "x$GAMES" = "x" ] ; \
@@ -59,7 +60,7 @@ RUN cd /tmp/codenjoy/CodingDojo/builder \
          else \
              mvn clean install -P${GAMES} ; \
          fi \
- && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-contest.war /var/lib/jetty/webapps
+ && cp /tmp/codenjoy/CodingDojo/builder/target/${CONTEXT}.war /var/lib/jetty/webapps
 
 VOLUME ["/var/lib/jetty/database"]
 

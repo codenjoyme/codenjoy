@@ -4,20 +4,20 @@ del /Q .\files\*.*
 
 del /Q %JETTY_HOME%\database\*.*
 del /Q %JETTY_HOME%\gameData\*.*
-del /Q %JETTY_HOME%\webapps\codenjoy-contest.war
+del /Q %JETTY_HOME%\webapps\%CONTEXT%.war
 
-rd /S /Q %ROOT%\codenjoy-sources\CodingDojo\builder\target
+rd /S /Q %ROOT%\codenjoy\CodingDojo\builder\target
 
 cd %ROOT%
 
 echo off
 if not exist %ROOT%\codenjoy (
-	echo [44;93m
-	echo        +-------------------------------------+        
-	echo        !      Clonning Codenjoy from git     !        
-	echo        +-------------------------------------+        
-	echo [0m
-	echo on
+    echo [44;93m
+    echo        +-------------------------------------+        
+    echo        !      Clonning Codenjoy from git     !        
+    echo        +-------------------------------------+        
+    echo [0m
+    echo on
 
     mkdir %ROOT%\codenjoy
     call %GIT_HOME%\cmd\git clone https://github.com/codenjoyme/codenjoy.git
@@ -65,9 +65,9 @@ echo [44;93m
 set /p GAMES_TO_RUN="Please select games from list with comma separated (just click Enter to select all games):"
 echo [0m
 IF "%GAMES_TO_RUN%"=="" (
-	call %M2_HOME%\bin\mvn clean package -DallGames
+    call %M2_HOME%\bin\mvn clean package -DallGames
 ) else (
-	call %M2_HOME%\bin\mvn clean package -P%GAMES_TO_RUN%
+    call %M2_HOME%\bin\mvn clean package -P%GAMES_TO_RUN%
 )
 
 echo off
@@ -97,8 +97,8 @@ cd %ROOT%\files\engine-libs
 call setup.bat
 cd %ROOT%
 
-copy %ROOT%\codenjoy\CodingDojo\builder\target\codenjoy-contest.war %ROOT%\files\*.*
-copy %ROOT%\files\codenjoy-contest.war %JETTY_HOME%\webapps\*.*
+copy %ROOT%\codenjoy\CodingDojo\builder\target\%CONTEXT%.war %ROOT%\files\*.*
+copy %ROOT%\files\%CONTEXT%.war %JETTY_HOME%\webapps\*.*
 
 cd %ROOT%
 
