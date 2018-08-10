@@ -66,6 +66,7 @@
         <module>spacerace</module>
         <module>kata</module>
         <module>reversi</module>
+        <module>quadro</module>
     </modules>
 
     <dependencyManagement>
