@@ -89,7 +89,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public List<Player> players() {
-        List<Player> result = new ArrayList<Player>(playerGames.size());
+        List<Player> result = new ArrayList<>(playerGames.size());
 
         for (PlayerGame playerGame : playerGames) {
             result.add(playerGame.getPlayer());
@@ -109,7 +109,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public List<PlayerGame> getAll(String gameType) {
-        List<PlayerGame> result = new LinkedList<PlayerGame>();
+        List<PlayerGame> result = new LinkedList<>();
 
         for (PlayerGame playerGame : playerGames) {
             if (playerGame.getPlayer().getGameName().equals(gameType)) {

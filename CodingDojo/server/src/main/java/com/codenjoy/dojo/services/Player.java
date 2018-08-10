@@ -158,4 +158,7 @@ public class Player implements ScreenRecipient {
     }
 
 
+    public void setGameType(GameType gameType) {
+        this.gameType = gameType;
+    }
 }

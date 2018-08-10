@@ -35,15 +35,12 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
-/**
- * Created by indigo on 2018-07-01.
- */
 @Component("multiplayerService") // TODO test me
 public class MultiplayerServiceImpl implements MultiplayerService {
 
     static class Room {
-        private final int maxCount;
-        private final List<GameField> archive;
+        private int maxCount;
+        private List<GameField> archive;
         private GameField current;
         private int currentCount;
 
@@ -69,6 +66,12 @@ public class MultiplayerServiceImpl implements MultiplayerService {
 
     private final Map<String, Room> rooms = new HashMap<>();
 
+    public MultiplayerServiceImpl() {}
+
+    MultiplayerServiceImpl(PlayerGames playerGames) {
+        this.playerGames = playerGames;
+    }
+
     @Autowired
     private PlayerGames playerGames;
 
@@ -83,16 +86,37 @@ public class MultiplayerServiceImpl implements MultiplayerService {
         }
 
         // тикаем игры по правилам много-/однопользовательской игры
-        List<GameType> gameTypes = playerGames.getGameTypes();  // TODO потестить еще отдельно
+        List<GameType> gameTypes = playerGames.getGameTypes();
         for (GameType gameType : gameTypes) {
             List<PlayerGame> games = playerGames.getAll(gameType.name());
-            if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
-                if (!games.isEmpty()) {
-                    games.iterator().next().getGame().quietTick();
-                }
-            } else {
+
+            MultiplayerType type = gameType.getMultiplayerType();
+
+            if (type.isSingle()) {
                 for (PlayerGame playerGame : games) {
                     playerGame.getGame().quietTick();
+                }
+            }
+
+            if (type.isTournament()) {
+                // TODO implement me
+            }
+
+            if (type.isTriple()) {
+                // TODO implement me
+            }
+
+            if (type.isQuadro()) {
+                // TODO implement me
+            }
+
+            if (type.isTeam()) {
+                // TODO implement me
+            }
+
+            if (type.isMultiple()) {
+                if (!games.isEmpty()) {
+                    games.iterator().next().getGame().quietTick();
                 }
             }
         }
@@ -100,6 +124,7 @@ public class MultiplayerServiceImpl implements MultiplayerService {
 
     @Override
     public PlayerGame playerWantsToPlay(GameType gameType, Player player, String save) {
+        player.setGameType(gameType);
         GameField field = getField(gameType);
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(), save, player.getName());
         Single single = new Single(field, gamePlayer,
