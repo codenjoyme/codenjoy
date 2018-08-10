@@ -121,11 +121,6 @@ public class Single implements Game {
     }
 
     @Override
-    public void tick() {
-        field.tick();
-    }
-
-    @Override
     public GamePlayer getPlayer() {
         return player;
     }

@@ -24,13 +24,15 @@ package com.codenjoy.dojo.services.mocks;
 
 
 import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerServiceImpl;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
-public class MockMultiplayerService {
+public class SpyMultiplayerService {
     @Bean(name = "mulptiplayerService")
     public MultiplayerService bean() throws Exception {
-        return mock(MultiplayerService.class);
+        return spy(new MultiplayerServiceImpl(SpyPlayerGames.playerGames){});
     }
 }

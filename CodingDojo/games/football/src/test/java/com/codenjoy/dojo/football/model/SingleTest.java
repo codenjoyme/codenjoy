@@ -44,6 +44,7 @@ public class SingleTest {
     private Single game2;
     private Single game3;
     private Dice dice;
+    private Football field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -57,7 +58,7 @@ public class SingleTest {
                 "☼☼┬┬☼☼");
 
         dice = mock(Dice.class);
-        Football field = new Football(level, dice);
+        field = new Football(level, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
@@ -122,9 +123,9 @@ public class SingleTest {
                 "☼☼==☼☼\n");
         
         game3.getJoystick().up();
-        game3.tick();
+        field.tick();
         game3.getJoystick().up();
-        game3.tick();
+        field.tick();
         asrtFl3(
         		"☼☼⌂⌂☼☼\n" +
                 "☼ ♣  ☼\n" +
@@ -134,7 +135,7 @@ public class SingleTest {
                 "☼☼==☼☼\n");
         game3.getJoystick().act(Actions.HIT_DOWN.getValue());
         game3.getJoystick().down();
-        game3.tick();
+        field.tick();
         
         asrtFl3(
                 "☼☼⌂⌂☼☼\n" +
@@ -154,7 +155,7 @@ public class SingleTest {
         game2.getJoystick().down();
         game3.getJoystick().right();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -169,7 +170,7 @@ public class SingleTest {
     public void shouldRemove() {
         game3.destroy();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼ ♣  ☼\n" +
@@ -192,12 +193,12 @@ public class SingleTest {
     	
     	game2.getJoystick().down();
     	game3.getJoystick().up();
-    	game1.tick();
+    	field.tick();
     	game2.getJoystick().down();
     	game3.getJoystick().up();
-    	game1.tick();
+    	field.tick();
     	game2.getJoystick().right();
-    	game1.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -207,7 +208,7 @@ public class SingleTest {
                 "☼☼==☼☼\n");
     	
     	game3.getJoystick().act(Actions.HIT_DOWN.getValue());
-    	game1.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -216,7 +217,7 @@ public class SingleTest {
                 "☼☺   ☼\n" +
                 "☼☼==☼☼\n");
     	
-    	game1.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -232,12 +233,12 @@ public class SingleTest {
     public void shouldStopBall() {
     	game2.getJoystick().down();
     	game3.getJoystick().up();
-    	game1.tick();
+    	field.tick();
     	game2.getJoystick().down();
     	game3.getJoystick().up();
-    	game1.tick();
+    	field.tick();
     	game2.getJoystick().right();
-    	game1.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -247,7 +248,7 @@ public class SingleTest {
                 "☼☼==☼☼\n");
     	
     	game3.getJoystick().act(Actions.HIT_DOWN.getValue());
-    	game1.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -257,7 +258,7 @@ public class SingleTest {
                 "☼☼==☼☼\n");
     	
     	game2.getJoystick().act(Actions.STOP_BALL.getValue());
-    	game1.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
@@ -273,7 +274,7 @@ public class SingleTest {
         game1.getJoystick().right();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼ ♣  ☼\n" +
@@ -288,13 +289,13 @@ public class SingleTest {
     public void scoreMultiplayerTest() {
     	
     	game3.getJoystick().up();
-    	game1.tick();
+    	field.tick();
     	game3.getJoystick().up();
-    	game1.tick();
+    	field.tick();
     	
     	game3.getJoystick().act(Actions.HIT_UP.getValue());
-    	game1.tick();
-    	game1.tick();
+    	field.tick();
+    	field.tick();
     	
     	asrtFl1("☼☼⌂x☼☼\n" +
                 "☼ ♣  ☼\n" +
@@ -307,7 +308,7 @@ public class SingleTest {
     	assertEquals(0, game2.getPlayer().getScore());
     	assertEquals(0, game3.getPlayer().getScore());
     	
-    	game1.tick();
+    	field.tick();
     	
     	assertEquals(1, game1.getPlayer().getScore());
     	assertEquals(0, game2.getPlayer().getScore());

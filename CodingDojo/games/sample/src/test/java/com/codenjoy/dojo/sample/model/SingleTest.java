@@ -46,6 +46,7 @@ public class SingleTest {
     private Single game2;
     private Single game3;
     private Dice dice;
+    private Sample field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -59,17 +60,17 @@ public class SingleTest {
                 "☼☼☼☼☼☼");
 
         dice = mock(Dice.class);
-        Sample sample = new Sample(level, dice);
+        field = new Sample(level, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(sample, new Player(listener1), factory);
+        game1 = new Single(field, new Player(listener1), factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(sample, new Player(listener2), factory);
+        game2 = new Single(field, new Player(listener2), factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(sample, new Player(listener3), factory);
+        game3 = new Single(field, new Player(listener3), factory);
 
         dice(1, 4);
         game1.newGame();
@@ -132,7 +133,7 @@ public class SingleTest {
         game2.getJoystick().right();
         game3.getJoystick().down();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼x  $☼\n" +
@@ -147,7 +148,7 @@ public class SingleTest {
     public void shouldRemove() {
         game3.destroy();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼☺  $☼\n" +
@@ -164,7 +165,7 @@ public class SingleTest {
         game1.getJoystick().act();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼x☻ $☼\n" +
@@ -174,7 +175,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game3.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼X  $☼\n" +
@@ -189,7 +190,7 @@ public class SingleTest {
         dice(4, 1);
         game3.newGame();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼   $☼\n" +
@@ -206,7 +207,7 @@ public class SingleTest {
 
         dice(1, 2);
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼☺  ☻☼\n" +
@@ -238,7 +239,7 @@ public class SingleTest {
         game1.getJoystick().right();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼ ☺☻$☼\n" +

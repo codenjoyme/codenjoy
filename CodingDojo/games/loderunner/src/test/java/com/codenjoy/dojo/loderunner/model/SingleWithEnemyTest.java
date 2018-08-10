@@ -41,7 +41,7 @@ public class SingleWithEnemyTest {
     private Dice dice;
     private EventListener listener;
     private Single game;
-    private Loderunner loderunner;
+    private Loderunner field;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     // чертик идет за тобой
@@ -56,7 +56,7 @@ public class SingleWithEnemyTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -68,10 +68,10 @@ public class SingleWithEnemyTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -83,8 +83,8 @@ public class SingleWithEnemyTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -96,9 +96,9 @@ public class SingleWithEnemyTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -110,9 +110,9 @@ public class SingleWithEnemyTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -124,8 +124,8 @@ public class SingleWithEnemyTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -144,7 +144,7 @@ public class SingleWithEnemyTest {
 
         game.newGame();
 
-        game.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -169,7 +169,7 @@ public class SingleWithEnemyTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -194,7 +194,7 @@ public class SingleWithEnemyTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -220,7 +220,7 @@ public class SingleWithEnemyTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -245,7 +245,7 @@ public class SingleWithEnemyTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -271,10 +271,10 @@ public class SingleWithEnemyTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -287,15 +287,15 @@ public class SingleWithEnemyTest {
                 "☼☼☼☼☼☼☼☼\n");
 
         setupPlayer(1, 4);
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
@@ -315,7 +315,7 @@ public class SingleWithEnemyTest {
 
     private void setupPlayer(int x, int y) {
         listener = mock(EventListener.class);
-        game = new Single(loderunner, new Player(listener), printerFactory);
+        game = new Single(field, new Player(listener), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game.newGame();
     }
@@ -323,7 +323,7 @@ public class SingleWithEnemyTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        loderunner = new Loderunner(level, dice);
+        field = new Loderunner(level, dice);
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();

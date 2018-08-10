@@ -100,4 +100,8 @@ public class LockedJoystick implements Joystick {
             lock.writeLock().unlock();
         }
     }
+
+    public Joystick getWrapped() {
+        return joystick;
+    }
 }

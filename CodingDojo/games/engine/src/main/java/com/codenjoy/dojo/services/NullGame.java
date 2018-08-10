@@ -174,9 +174,4 @@ public class NullGame implements Game {
             }
         };
     }
-
-    @Override
-    public void tick() {
-        // do nothing
-    }
 }

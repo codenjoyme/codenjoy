@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 /**
  * Каждый инстанс игры для каждого игрока реализует этот интерфейс
  */
-public interface Game extends Tickable {
+public interface Game {
 
     /**
      * @return Джойстик для управления ботом игрока

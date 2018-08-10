@@ -53,7 +53,7 @@ public class GameRunnerTest {
         gameType.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
 
         Game game = TestUtils.buildGame(gameType, listener, printerFactory);
-        game.tick();
+        game.getField().tick();
 
         PlayerScores scores = gameType.getPlayerScores(10);
         assertEquals(10, scores.getScore());
@@ -79,7 +79,7 @@ public class GameRunnerTest {
 
         joystick.act();
         for (int index = 0; index < 100; index ++) {
-            game.tick();
+            game.getField().tick();
         }
 
         assertTrue(game.isGameOver());

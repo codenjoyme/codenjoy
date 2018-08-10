@@ -43,7 +43,7 @@ public class SingleTest {
     private Single game1;
     private EventListener listener2;
     private Single game2;
-    private Loderunner loderunner;
+    private Loderunner field;
     private EventListener listener3;
     private Single game3;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
@@ -90,7 +90,7 @@ public class SingleTest {
         game2.getJoystick().left();
         game3.getJoystick().right();
 
-        game1.tick(); // достаточно тикнуть у одной доски
+        field.tick(); 
 
         atGame1(
                 "☼☼☼☼☼☼\n" +
@@ -119,7 +119,7 @@ public class SingleTest {
         game1.getJoystick().act();
         game3.destroy();
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼ R  ☼\n" +
@@ -144,9 +144,9 @@ public class SingleTest {
 
         game1.getJoystick().right();
 
-        game1.tick();
-        game1.tick();
-        game1.tick();
+        field.tick();
+        field.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -166,7 +166,7 @@ public class SingleTest {
         game1.getJoystick().act();
         game2.getJoystick().right();
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -183,10 +183,10 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         for (int c = 2; c < Brick.DRILL_TIMER; c++) {
-            game1.tick();
+            field.tick();
         }
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -210,7 +210,7 @@ public class SingleTest {
 
         game2.newGame();
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼(   ☼\n" +
@@ -230,7 +230,7 @@ public class SingleTest {
 
         when(dice.next(anyInt())).thenReturn(1, 2);
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼(   ☼\n" +
@@ -281,7 +281,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -291,7 +291,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game2.getJoystick().left();
-        game2.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -322,7 +322,7 @@ public class SingleTest {
 
         game1.getJoystick().right();
         game2.getJoystick().down();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -333,7 +333,7 @@ public class SingleTest {
 
         game1.getJoystick().up();
         game2.getJoystick().down();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -344,7 +344,7 @@ public class SingleTest {
 
         game1.getJoystick().up();
         game2.getJoystick().down();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -375,7 +375,7 @@ public class SingleTest {
 
         game1.getJoystick().right();
         game2.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -393,7 +393,7 @@ public class SingleTest {
 
         game1.getJoystick().right();
         game2.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -404,7 +404,7 @@ public class SingleTest {
 
         game1.getJoystick().right();
         game2.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -437,7 +437,7 @@ public class SingleTest {
         game1.getJoystick().act();
         game2.getJoystick().left();
         game2.getJoystick().act();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -467,7 +467,7 @@ public class SingleTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -498,7 +498,7 @@ public class SingleTest {
 
         setupPlayer1(2, 4);
         setupPlayer2(2, 2);
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -507,7 +507,7 @@ public class SingleTest {
                 "☼ Є  ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -517,7 +517,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game1.getJoystick().down();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -532,7 +532,7 @@ public class SingleTest {
         shouldICantStayAtOtherHeroHeadWhenOnPipe();
 
         game2.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -541,7 +541,7 @@ public class SingleTest {
                 "☼)~  ☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -551,7 +551,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game2.getJoystick().right();  // нельзя входить в друг в друга :) даже на трубе
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -561,7 +561,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game1.getJoystick().left();  // нельзя входить в друг в друга :) даже на трубе
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -583,7 +583,7 @@ public class SingleTest {
 
         setupPlayer1(2, 4);
         setupPlayer2(3, 4);
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -593,7 +593,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game2.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -603,7 +603,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -614,7 +614,7 @@ public class SingleTest {
 
         game1.getJoystick().right();
         game2.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -638,21 +638,21 @@ public class SingleTest {
 
     private void setupPlayer2(int x, int y) {
         listener2 = mock(EventListener.class);
-        game2 = new Single(loderunner, new Player(listener2), printerFactory);
+        game2 = new Single(field, new Player(listener2), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game2.newGame();
     }
 
     private void setupPlayer3(int x, int y) {
         listener3 = mock(EventListener.class);
-        game3 = new Single(loderunner, new Player(listener3), printerFactory);
+        game3 = new Single(field, new Player(listener3), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game3.newGame();
     }
 
     private void setupPlayer1(int x, int y) {
         listener1 = mock(EventListener.class);
-        game1 = new Single(loderunner, new Player(listener1), printerFactory);
+        game1 = new Single(field, new Player(listener1), printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game1.newGame();
     }
@@ -660,7 +660,7 @@ public class SingleTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        loderunner = new Loderunner(level, dice);
+        field = new Loderunner(level, dice);
     }
 
     @Test
@@ -675,7 +675,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game1.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -684,7 +684,7 @@ public class SingleTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game1.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -706,7 +706,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game2.getJoystick().right();
-        game2.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
@@ -715,7 +715,7 @@ public class SingleTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        game2.tick();
+        field.tick();
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +

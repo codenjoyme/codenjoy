@@ -27,9 +27,9 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.puzzlebox.client.Board;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.util.Random;
 
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым
@@ -39,30 +39,16 @@ import java.util.Random;
  */
 public class WGSSolver implements Solver<Board> {
 
+    private Dice dice;
+
     public WGSSolver(Dice dice) {
-        // TODO
+        this.dice = dice;
     }
 
     @Override
     public String get(final Board board) {
         String result = "";
-        Random random = new Random(4);
-        int r = (int) ((Math.random() * 4) +1);
-        switch (r) {
-            case 1:
-                result = "UP";
-                break;
-            case 2:
-                result = "RIGHT";
-                break;
-            case 3:
-                result = "DOWN";
-            break;
-            case 4:
-                result = "LEFT";
-            break;
-            default: break;
-        }
+        result = Direction.random(dice).toString();
         result += ", ACT";
         return result;
     }

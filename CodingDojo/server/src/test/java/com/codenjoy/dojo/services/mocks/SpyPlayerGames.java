@@ -29,8 +29,11 @@ import org.springframework.context.annotation.Bean;
 import static org.mockito.Mockito.spy;
 
 public class SpyPlayerGames {
+    public static PlayerGames playerGames;
+
     @Bean(name = "playerGames")
     public PlayerGames bean() throws Exception {
-        return spy(new PlayerGames());
+        playerGames = new PlayerGames();
+        return spy(playerGames);
     }
 }

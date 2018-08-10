@@ -51,6 +51,7 @@ public class SingleTest {
     private Single game5;
     private Single game6;
     private Dice dice;
+    private Spacerace field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -63,28 +64,28 @@ public class SingleTest {
                 "☼   ☼");
 
         dice = mock(Dice.class);
-        Spacerace spacerace = new Spacerace(level, dice,
+        field = new Spacerace(level, dice,
                 SpaceraceTest.getBulletCharger().getTicksToRecharge(),
                 SpaceraceTest.getBulletCharger().getBulletsCount());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(spacerace, new Player(listener1), factory);
+        game1 = new Single(field, new Player(listener1), factory);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(spacerace, new Player(listener2), factory);
+        game2 = new Single(field, new Player(listener2), factory);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(spacerace, new Player(listener3), factory);
+        game3 = new Single(field, new Player(listener3), factory);
 
         listener4 = mock(EventListener.class);
-        game4 = new Single(spacerace, new Player(listener4), factory);
+        game4 = new Single(field, new Player(listener4), factory);
 
         listener5 = mock(EventListener.class);
-        game5 = new Single(spacerace, new Player(listener5), factory);
+        game5 = new Single(field, new Player(listener5), factory);
 
         listener6 = mock(EventListener.class);
-        game6 = new Single(spacerace, new Player(listener6), factory);
+        game6 = new Single(field, new Player(listener6), factory);
 
         dice(1, 0);
         game1.newGame();
@@ -146,7 +147,7 @@ public class SingleTest {
         game1.getJoystick().up();
         game3.getJoystick().up();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -158,7 +159,7 @@ public class SingleTest {
         game2.getJoystick().right();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -172,7 +173,7 @@ public class SingleTest {
     public void shouldRemove() {
         game3.destroy();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -189,7 +190,7 @@ public class SingleTest {
         game1.getJoystick().up();
         game2.getJoystick().up();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -200,7 +201,7 @@ public class SingleTest {
         game1.getJoystick().up();
         game2.getJoystick().up();
         game3.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -210,7 +211,7 @@ public class SingleTest {
 
         dice(-1, -1);
         game3.getJoystick().act();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -218,7 +219,7 @@ public class SingleTest {
                 "☼ * ☼\n" +
                 "☼ ☻ ☼\n");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -235,7 +236,7 @@ public class SingleTest {
         dice(1, 0);
         game2.newGame();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -251,7 +252,7 @@ public class SingleTest {
         game1.getJoystick().up();
         game2.getJoystick().up();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -262,7 +263,7 @@ public class SingleTest {
         game1.getJoystick().up();
         game2.getJoystick().up();
         game3.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -273,7 +274,7 @@ public class SingleTest {
         dice(-1, -1);
         game3.getJoystick().act();
         game2.getJoystick().down();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -290,7 +291,7 @@ public class SingleTest {
         dice(1, 0);
         game2.newGame();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -307,7 +308,7 @@ public class SingleTest {
         game2.getJoystick().up();
         game3.getJoystick().up();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -317,7 +318,7 @@ public class SingleTest {
 
         game1.getJoystick().up();
         game2.getJoystick().up();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -327,7 +328,7 @@ public class SingleTest {
 
         dice(-1, -1);
         game3.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -337,7 +338,7 @@ public class SingleTest {
 
         game3.getJoystick().act();
         game2.getJoystick().up();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼ ☻ ☼\n" +
@@ -346,7 +347,7 @@ public class SingleTest {
                 "☼   ☼\n");
 
         game2.getJoystick().down();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -363,7 +364,7 @@ public class SingleTest {
         dice(1, 0);
         game2.newGame();
         dice(-1, -1);
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -379,7 +380,7 @@ public class SingleTest {
         game2.getJoystick().right();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼   ☼\n" +
                 "☼   ☼\n" +
@@ -393,13 +394,13 @@ public class SingleTest {
     public void shodOneBulletPack() {
 
         dice(2, 1);
-        game1.tick();
+        field.tick();
         dice(-1, -1);
-        game1.tick();
+        field.tick();
         dice(-1, -1);
-        game1.tick();
+        field.tick();
         dice(1, 1);
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼  7☼\n" +
                 "☼   ☼\n" +
@@ -422,17 +423,17 @@ public class SingleTest {
         game6.newGame();
 
         dice(2, 1);// появляются 2 баллет пака
-        game1.tick();
+        field.tick();
         dice(1, 1);
-        game1.tick();
+        field.tick();
 
         dice(-1, -1);// не появляется камень и бомба
-        game1.tick();
+        field.tick();
         dice(-1, -1);
-        game1.tick();
+        field.tick();
 
         dice(0, 1);// не появляется 3-й баллет пак
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼ 77☼\n" +
                 "☼   ☼\n" +

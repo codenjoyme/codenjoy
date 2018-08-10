@@ -3,7 +3,6 @@ package com.codenjoy.dojo.services.multiplayer;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,8 +12,9 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class MultiplayerServiceImplTest {
 
@@ -31,6 +31,7 @@ public class MultiplayerServiceImplTest {
     private GameType team4;
 
     private List<GameField> fields = new LinkedList<>();
+    private List<GamePlayer> players = new LinkedList<>();
 
     @Before
     public void setup() {
@@ -52,6 +53,7 @@ public class MultiplayerServiceImplTest {
         when(result.name()).thenReturn(gameName);
         when(result.getPrinterFactory()).thenReturn(printerFactory);
         when(result.createGame()).thenAnswer(inv -> createGameField());
+        when(result.createPlayer(any(EventListener.class), anyString(), anyString())).thenAnswer(inv -> createGamePlayer());
         return result;
     }
 
@@ -62,24 +64,43 @@ public class MultiplayerServiceImplTest {
         return field;
     }
 
+    private GamePlayer createGamePlayer() {
+        GamePlayer player = mock(GamePlayer.class);
+        when(player.isAlive()).thenReturn(true);
+        players.add(player);
+        return player;
+    }
+
     @Test
     public void shouldEveryPlayerGoToTheirOwnField_whenSingle() {
+        // given
         Player player1 = new Player();
         Player player2 = new Player();
         Player player3 = new Player();
 
+        // when
         PlayerGame playerGame1 = multiplayer.playerWantsToPlay(single, player1, null);
         PlayerGame playerGame2 = multiplayer.playerWantsToPlay(single, player2, null);
         PlayerGame playerGame3 = multiplayer.playerWantsToPlay(single, player3, null);
 
+        // then
         GameField field1 = playerGame1.getGame().getField();
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
 
-        assertThat(field1)
+        assertGroup(field1)
                 .notIn(field2)
                 .notIn(field3)
                 .check();
+
+        // и каждый из них тикается независимо
+        // when
+        multiplayer.tick();
+
+        // then
+        verify(field1, times(1)).quietTick();
+        verify(field2, times(1)).quietTick();
+        verify(field3, times(1)).quietTick();
     }
 
     private static class GroupsAsserter {
@@ -135,126 +156,181 @@ public class MultiplayerServiceImplTest {
         }
     }
 
-    private GroupsAsserter assertThat(GameField... group1) {
+    private GroupsAsserter assertGroup(GameField... group1) {
         return new GroupsAsserter(group1);
     }
 
     @Test
     public void shouldTwoPlayerOnBoard_whenTournament() {
+        // given
         Player player1 = new Player();
         Player player2 = new Player();
         Player player3 = new Player();
         Player player4 = new Player();
         Player player5 = new Player();
 
+        // when
         PlayerGame playerGame1 = multiplayer.playerWantsToPlay(tournament, player1, null);
         PlayerGame playerGame2 = multiplayer.playerWantsToPlay(tournament, player2, null);
         PlayerGame playerGame3 = multiplayer.playerWantsToPlay(tournament, player3, null);
         PlayerGame playerGame4 = multiplayer.playerWantsToPlay(tournament, player4, null);
         PlayerGame playerGame5 = multiplayer.playerWantsToPlay(tournament, player5, null);
 
+        // then
         GameField field1 = playerGame1.getGame().getField();
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertThat(field1, field2)
+        assertGroup(field1, field2)
                 .notIn(field3, field4)
                 .notIn(field5)
                 .check();
+
+        // и в группах борда тикается только раз
+        // when
+        multiplayer.tick();
+
+        // then
+        verify(field1, times(1)).quietTick();
+        verify(field3, times(1)).quietTick();
+        verify(field5, times(1)).quietTick();
     }
 
     @Test
     public void shouldThreePlayerOnBoard_whenTriple() {
+        // given
         Player player1 = new Player();
         Player player2 = new Player();
         Player player3 = new Player();
         Player player4 = new Player();
         Player player5 = new Player();
 
+        // when
         PlayerGame playerGame1 = multiplayer.playerWantsToPlay(triple, player1, null);
         PlayerGame playerGame2 = multiplayer.playerWantsToPlay(triple, player2, null);
         PlayerGame playerGame3 = multiplayer.playerWantsToPlay(triple, player3, null);
         PlayerGame playerGame4 = multiplayer.playerWantsToPlay(triple, player4, null);
         PlayerGame playerGame5 = multiplayer.playerWantsToPlay(triple, player5, null);
 
+        // then
         GameField field1 = playerGame1.getGame().getField();
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertThat(field1, field2, field3)
+        assertGroup(field1, field2, field3)
                 .notIn(field4, field5)
                 .check();
+
+        // и в группах борда тикается только раз
+        // when
+        multiplayer.tick();
+
+        // then
+        verify(field1, times(1)).quietTick();
+        verify(field4, times(1)).quietTick();
     }
 
     @Test
     public void shouldXPlayerOnBoard_whenTeam() {
+        // given
         Player player1 = new Player();
         Player player2 = new Player();
         Player player3 = new Player();
         Player player4 = new Player();
         Player player5 = new Player();
 
+        // when
         PlayerGame playerGame1 = multiplayer.playerWantsToPlay(team4, player1, null);
         PlayerGame playerGame2 = multiplayer.playerWantsToPlay(team4, player2, null);
         PlayerGame playerGame3 = multiplayer.playerWantsToPlay(team4, player3, null);
         PlayerGame playerGame4 = multiplayer.playerWantsToPlay(team4, player4, null);
         PlayerGame playerGame5 = multiplayer.playerWantsToPlay(team4, player5, null);
 
+        // then
         GameField field1 = playerGame1.getGame().getField();
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertThat(field1, field2, field3, field4)
+        assertGroup(field1, field2, field3, field4)
                 .notIn(field5)
                 .check();
+
+        // и в группах борда тикается только раз
+        // when
+        multiplayer.tick();
+
+        // then
+        verify(field1, times(1)).quietTick();
+        verify(field5, times(1)).quietTick();
     }
 
     @Test
     public void shouldFourPlayerOnBoard_whenQuadro() {
+        // given
         Player player1 = new Player();
         Player player2 = new Player();
         Player player3 = new Player();
         Player player4 = new Player();
         Player player5 = new Player();
 
+        // when
         PlayerGame playerGame1 = multiplayer.playerWantsToPlay(quadro, player1, null);
         PlayerGame playerGame2 = multiplayer.playerWantsToPlay(quadro, player2, null);
         PlayerGame playerGame3 = multiplayer.playerWantsToPlay(quadro, player3, null);
         PlayerGame playerGame4 = multiplayer.playerWantsToPlay(quadro, player4, null);
         PlayerGame playerGame5 = multiplayer.playerWantsToPlay(quadro, player5, null);
 
+        // then
         GameField field1 = playerGame1.getGame().getField();
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertThat(field1, field2, field3, field4)
+        assertGroup(field1, field2, field3, field4)
                 .notIn(field5)
                 .check();
+
+        // и в группах борда тикается только раз
+        // when
+        multiplayer.tick();
+
+        // then
+        verify(field1, times(1)).quietTick();
+        verify(field5, times(1)).quietTick();
     }
 
     @Test
     public void shouldAllPlayersGoToOneField_whenMultiple() {
+        // given
         Player player1 = new Player();
         Player player2 = new Player();
         Player player3 = new Player();
 
+        // when
         PlayerGame playerGame1 = multiplayer.playerWantsToPlay(multiple, player1, null);
         PlayerGame playerGame2 = multiplayer.playerWantsToPlay(multiple, player2, null);
         PlayerGame playerGame3 = multiplayer.playerWantsToPlay(multiple, player3, null);
 
+        // then
         GameField field1 = playerGame1.getGame().getField();
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
 
-        assertThat(field1, field2, field3)
+        assertGroup(field1, field2, field3)
                 .check();
+
+        // и в группах борда тикается только раз
+        // when
+        multiplayer.tick();
+
+        // then
+        verify(field1, times(1)).quietTick();
     }
 }

@@ -131,10 +131,6 @@ public class PlayerGamesAdditionalDataTest {
             return null;
         }
 
-        @Override
-        public void tick() {
-
-        }
     }
 
     @Test

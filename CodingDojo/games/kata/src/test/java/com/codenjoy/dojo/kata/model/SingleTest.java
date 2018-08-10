@@ -52,7 +52,7 @@ public class SingleTest {
     private Single game2;
     private Single game3;
     private Dice dice;
-    private Kata kata;
+    private Kata field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -63,23 +63,23 @@ public class SingleTest {
                 "question3=answer3");
 
         dice = mock(Dice.class);
-        kata = new Kata(dice);
+        field = new Kata(dice);
         PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
         LevelsPoolImpl levelsPool1 = new LevelsPoolImpl(Arrays.asList(level));
         Player player1 = new Player(listener1, levelsPool1);
-        game1 = new Single(kata, player1, factory);
+        game1 = new Single(field, player1, factory);
 
         listener2 = mock(EventListener.class);
         LevelsPoolImpl levelsPool2 = new LevelsPoolImpl(Arrays.asList(level));
         Player player2 = new Player(listener2, levelsPool2);
-        game2 = new Single(kata, player2, factory);
+        game2 = new Single(field, player2, factory);
 
         listener3 = mock(EventListener.class);
         LevelsPoolImpl levelsPool3 = new LevelsPoolImpl(Arrays.asList(level));
         Player player3 = new Player(listener3, levelsPool3);
-        game3 = new Single(kata, player3, factory);
+        game3 = new Single(field, player3, factory);
 
         dice(1, 4);
         game1.newGame();
@@ -157,7 +157,7 @@ public class SingleTest {
 
         game3.getJoystick().message("['answer3']");
 
-        game1.tick();
+        field.tick();
 
         // then
         asrtFl1("{\n" +
@@ -215,7 +215,7 @@ public class SingleTest {
     public void shouldRemove() {
         game3.destroy();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
@@ -256,7 +256,7 @@ public class SingleTest {
         game2.getJoystick().message("['answer1']");
         game3.getJoystick().message("['answer1']");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
@@ -311,7 +311,7 @@ public class SingleTest {
 
         // when
         game1.newGame();
-        game1.tick();
+        field.tick();
 
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
@@ -366,7 +366,7 @@ public class SingleTest {
         game2.getJoystick().message("['wrong2']");
         game3.getJoystick().message("['wrong3']");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
@@ -423,7 +423,7 @@ public class SingleTest {
         verifyNoMoreInteractions(listener3);
 
         // when
-        game1.tick();
+        field.tick();
 
         // then
         verifyNoMoreInteractions(listener1);
@@ -452,7 +452,7 @@ public class SingleTest {
                     game1.getJoystick(),
                     game2.getJoystick(),
                     game3.getJoystick()),
-                kata.getHeroes());
+                field.getHeroes());
     }
 
     private void givenUser1GoesToEnd() {
@@ -461,7 +461,7 @@ public class SingleTest {
         game2.getJoystick().message("['wrong']");
         game3.getJoystick().message("['wrong']");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
@@ -514,7 +514,7 @@ public class SingleTest {
 
         // when
         game1.getJoystick().message("['answer1', 'answer2']");
-        game1.tick();
+        field.tick();
 
         // then
         asrtFl1("{\n" +
@@ -574,7 +574,7 @@ public class SingleTest {
 
         // when
         game1.getJoystick().message("['answer1', 'answer2', 'answer3']");
-        game1.tick();
+        field.tick();
 
         // then
         // wait level
@@ -635,7 +635,7 @@ public class SingleTest {
         
         // when
         game1.getJoystick().message(Elements.START_NEXT_LEVEL);
-        game1.tick();
+        field.tick();
 
         // then
         // win level with clean history
@@ -679,7 +679,7 @@ public class SingleTest {
                 "}");
 
         // when
-        game1.tick();
+        field.tick();
 
         // then 
         // still clear history
@@ -731,7 +731,7 @@ public class SingleTest {
 
         // when
         game1.getJoystick().message("['blablabla']");
-        game1.tick();
+        field.tick();
 
         // then
         asrtFl1("{\n" +
@@ -775,7 +775,7 @@ public class SingleTest {
 
         // when
         game1.getJoystick().message("['qweasadzxc']");
-        game1.tick();
+        field.tick();
 
         // then
         asrtFl1("{\n" +
@@ -834,7 +834,7 @@ public class SingleTest {
         game2.getJoystick().message("['wrong']");
         game3.getJoystick().message("['wrong']");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{\n" +
                 "  'description':'description',\n" +

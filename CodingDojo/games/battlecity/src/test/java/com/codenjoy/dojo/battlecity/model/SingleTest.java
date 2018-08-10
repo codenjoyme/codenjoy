@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 public class SingleTest {
 
     private int size = 5;
-    private Battlecity game;
+    private Battlecity field;
     private Dice dice1;
     private Dice dice2;
     private Single tanks1;
@@ -51,11 +51,11 @@ public class SingleTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     public void givenGame() {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
+        field = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);
-        tanks1 = new Single(game, player1, printerFactory);
-        tanks2 = new Single(game, player2, printerFactory);
+        tanks1 = new Single(field, player1, printerFactory);
+        tanks2 = new Single(field, player2, printerFactory);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class SingleTest {
         );
 
         tanks1.getPlayer().getHero().act();
-        tick();
+        field.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -114,7 +114,7 @@ public class SingleTest {
         assertTrue(tanks2.isGameOver());
         tanks2.newGame();
 
-        tick();
+        field.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -143,7 +143,7 @@ public class SingleTest {
         );
 
         tanks1.getPlayer().getHero().act();
-        tick();
+        field.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -155,7 +155,7 @@ public class SingleTest {
         assertTrue(tanks2.isGameOver());
         tanks2.newGame();
 
-        tick();
+        field.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -164,10 +164,6 @@ public class SingleTest {
                 "☼☼☼☼☼\n", player1
         );
 
-    }
-
-    private void tick() {
-        tanks1.tick();  // тикать надо только один раз - и все применится для основной доски
     }
 
     private Dice givenDice(int... values) {
@@ -181,7 +177,7 @@ public class SingleTest {
 
     private void assertD(String field, Player player) {
         assertEquals(field, printerFactory.getPrinter(
-                game.reader(), player).print());
+                this.field.reader(), player).print());
     }
 
 }

@@ -45,7 +45,7 @@ public class A2048Test {
     private static final boolean WITH_BREAK = true;
     private static final boolean WITHOUT_BREAK = false;
     private static final int ADD_NEW_AT_CORNER = -1;
-    private A2048 a2048;
+    private A2048 field;
     private Single game;
     private Joystick joystick;
     private Dice dice;
@@ -79,18 +79,18 @@ public class A2048Test {
         level.getSettings().getParameter("New numbers").type(Integer.class).update(newNumbers);
         level.getSettings().getParameter("Mode").type(Integer.class).update(mode);
 
-        a2048 = new A2048(level, dice);
+        field = new A2048(level, dice);
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
 
         listener = mock(EventListener.class);
-        game = new Single(a2048, new Player(listener), printer);
+        game = new Single(field, new Player(listener), printer);
         game.newGame();
         this.joystick = game.getJoystick();
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected), printer.getPrinter(
-                a2048.reader(), null).print());
+                field.reader(), null).print());
     }
 
     // есть поле
@@ -102,7 +102,7 @@ public class A2048Test {
                 "    ");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE(" 2  " +
@@ -119,7 +119,7 @@ public class A2048Test {
                 "    ");
 
         joystick.up();
-        game.tick();
+        field.tick();
 
         assertE(" 24 " +
                 "    " +
@@ -135,7 +135,7 @@ public class A2048Test {
                 "    ");
 
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("    " +
                 "    " +
@@ -151,7 +151,7 @@ public class A2048Test {
                 "    ");
 
         joystick.right();
-        game.tick();
+        field.tick();
 
         assertE("   2" +
                 "    " +
@@ -167,7 +167,7 @@ public class A2048Test {
                 "    ");
 
         joystick.left();
-        game.tick();
+        field.tick();
 
         assertE("2   " +
                 "    " +
@@ -183,7 +183,7 @@ public class A2048Test {
                 "    ");
 
         joystick.right();
-        game.tick();
+        field.tick();
 
         assertE("    " +
                 "    " +
@@ -199,7 +199,7 @@ public class A2048Test {
                 "    ");
 
         joystick.up();
-        game.tick();
+        field.tick();
 
         assertE("  4 " +
                 "    " +
@@ -215,7 +215,7 @@ public class A2048Test {
                 "    ");
 
         joystick.left();
-        game.tick();
+        field.tick();
 
         assertE("2   " +
                 "    " +
@@ -231,7 +231,7 @@ public class A2048Test {
                 "    ");
 
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("    " +
                 "    " +
@@ -247,7 +247,7 @@ public class A2048Test {
                 "  2 ");
 
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("    " +
                 "    " +
@@ -263,7 +263,7 @@ public class A2048Test {
                 "  2 ");
 
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("    " +
                 "    " +
@@ -280,7 +280,7 @@ public class A2048Test {
 
         // when
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -291,7 +291,7 @@ public class A2048Test {
 
         // when
         joystick.down();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -302,7 +302,7 @@ public class A2048Test {
 
         // when
         joystick.right();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -313,7 +313,7 @@ public class A2048Test {
 
         // when
         joystick.up();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -324,7 +324,7 @@ public class A2048Test {
 
         // when
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -335,7 +335,7 @@ public class A2048Test {
 
         // when
         joystick.down();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -346,7 +346,7 @@ public class A2048Test {
 
         // when
         joystick.right();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(32)]");
@@ -366,7 +366,7 @@ public class A2048Test {
         // when
         dice(1,1, 2,3, 3,3);
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(6)]");
@@ -378,7 +378,7 @@ public class A2048Test {
         // when
         dice(-1, -1);
         joystick.down();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(6)]");
@@ -397,7 +397,7 @@ public class A2048Test {
 
         // when
         joystick.right();
-        game.tick();
+        field.tick();
 
         // then
         assertE("    " +
@@ -410,7 +410,7 @@ public class A2048Test {
         // when
         joystick.up();
         dice(1, 2);
-        game.tick();
+        field.tick();
 
         // then
         assertE("   4" +
@@ -432,7 +432,7 @@ public class A2048Test {
         joystick.up();
 
         dice(1, 2);
-        game.tick();
+        field.tick();
 
         // then
         assertE("    " +
@@ -444,7 +444,7 @@ public class A2048Test {
         joystick.up();
 
         dice(2, 2);
-        game.tick();
+        field.tick();
 
         // then
         assertE(" 2  " +
@@ -462,7 +462,7 @@ public class A2048Test {
 
         // when
         joystick.up();
-        game.tick();
+        field.tick();
 
         // then
         assertE("2  2" +
@@ -472,7 +472,7 @@ public class A2048Test {
 
         // when
         joystick.up();
-        game.tick();
+        field.tick();
 
         // then
         assertE("4  4" +
@@ -482,7 +482,7 @@ public class A2048Test {
 
         // when
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertE("8  2" +
@@ -492,7 +492,7 @@ public class A2048Test {
 
         // when
         joystick.right();
-        game.tick();
+        field.tick();
 
         // then
         assertE("2 82" +
@@ -513,7 +513,7 @@ public class A2048Test {
         joystick.up();
 
         dice(0,1, 1,2, 2,2, 2,3);
-        game.tick();
+        field.tick();
 
         // then
         assertE("  2 " +
@@ -531,7 +531,7 @@ public class A2048Test {
 
         // when
         dice(1, 2);   // Если поле чистое то одна двоечка добавляется после первого тика
-        game.tick();
+        field.tick();
 
         // then
         assertE("    " +
@@ -542,7 +542,7 @@ public class A2048Test {
         // when
         dice(2, 2);    // только если юзер сделал какое-то действие
 //        joystick.up();
-        game.tick();
+        field.tick();
 
         // then
         assertE("    " +
@@ -559,7 +559,7 @@ public class A2048Test {
                 "8 8 ");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(84)]");
@@ -568,7 +568,7 @@ public class A2048Test {
         // when
         joystick.up();
         dice(1, 0);
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(86)]");
@@ -584,7 +584,7 @@ public class A2048Test {
         // when
         joystick.up();
         dice(3, 0);
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(88), GAME_OVER]");
@@ -605,7 +605,7 @@ public class A2048Test {
                 "2222");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -619,7 +619,7 @@ public class A2048Test {
                 "8484");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -633,7 +633,7 @@ public class A2048Test {
                 "8484");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -647,7 +647,7 @@ public class A2048Test {
                 "8484");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -661,7 +661,7 @@ public class A2048Test {
                 "8484");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -675,7 +675,7 @@ public class A2048Test {
                 "8484");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -689,7 +689,7 @@ public class A2048Test {
                 "8284");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertFalse(game.isGameOver());
@@ -705,7 +705,7 @@ public class A2048Test {
 
         // when
         joystick.down();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(4194304), WIN]");
@@ -718,7 +718,7 @@ public class A2048Test {
                 "   S");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         verifyNoMoreInteractions(listener);
@@ -741,7 +741,7 @@ public class A2048Test {
 
         // when
         joystick.left(); // ignore
-        game.tick();
+        field.tick();
 
         // then
         verifyNoMoreInteractions(listener);
@@ -765,7 +765,7 @@ public class A2048Test {
         // when
         dice(0, 2);
         game.newGame();
-        game.tick();
+        field.tick();
 
         // then
         assertEvens("[SUM(2)]");
@@ -805,7 +805,7 @@ public class A2048Test {
 
         // when
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("                      " +
                 "R                     " +
@@ -872,7 +872,7 @@ public class A2048Test {
 
         // when
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("                      " +
                 "R                     " +
@@ -898,7 +898,7 @@ public class A2048Test {
                 "222222222222222222222 ");
 
         joystick.left();
-        game.tick();
+        field.tick();
 
         assertE("                      " +
                 "R                     " +
@@ -924,7 +924,7 @@ public class A2048Test {
                 "44444444442           ");
 
         joystick.left();
-        game.tick();
+        field.tick();
 
         assertE("                      " +
                 "R                     " +
@@ -950,7 +950,7 @@ public class A2048Test {
                 "888882                ");
 
         joystick.right();
-        game.tick();
+        field.tick();
 
         assertE("                      " +
                 "                     R" +
@@ -976,7 +976,7 @@ public class A2048Test {
                 "                  8AA2");
 
         joystick.down();
-        game.tick();
+        field.tick();
 
         assertE("                      " +
                 "                      " +
@@ -1011,7 +1011,7 @@ public class A2048Test {
                 "     ", 1, WITH_BREAK);
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("  x  " +
@@ -1031,7 +1031,7 @@ public class A2048Test {
                 "      ", 1, WITH_BREAK);
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("  xx  " +
@@ -1053,7 +1053,7 @@ public class A2048Test {
                 "       ", 1, WITH_BREAK);
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("  xxx  " +
@@ -1077,7 +1077,7 @@ public class A2048Test {
                 "        ", 1, WITH_BREAK);
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("   xx   " +
@@ -1102,7 +1102,7 @@ public class A2048Test {
 
         // when
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertE("  x  " +
@@ -1122,7 +1122,7 @@ public class A2048Test {
 
         // when
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertE("2 x2 " +
@@ -1133,7 +1133,7 @@ public class A2048Test {
 
         // when
         joystick.right();
-        game.tick();
+        field.tick();
 
         // then
         assertE(" 2x 2" +
@@ -1144,7 +1144,7 @@ public class A2048Test {
 
         // when
         joystick.up();
-        game.tick();
+        field.tick();
 
         // then
         assertE(" 4x 2" +
@@ -1155,7 +1155,7 @@ public class A2048Test {
 
         // when
         joystick.left();
-        game.tick();
+        field.tick();
 
         // then
         assertE("4 x2 " +
@@ -1175,7 +1175,7 @@ public class A2048Test {
 
         // when
         game.newGame();
-        game.tick();
+        field.tick();
 
         // then
         assertE("  x  " +
@@ -1196,7 +1196,7 @@ public class A2048Test {
         // when
         dice(1, 1);
 //        joystick.left(); // do nothing
-        game.tick();
+        field.tick();
 
         // then
         assertE("  x  " +
@@ -1216,7 +1216,7 @@ public class A2048Test {
                 "2 24 4");
 
         joystick.left();
-        game.tick();
+        field.tick();
 
         assertE("48    " +
                 "48    " +
@@ -1235,7 +1235,7 @@ public class A2048Test {
 
         dice(1,2, 3,3);
         joystick.act();
-        game.tick();
+        field.tick();
         game.newGame();
 
         assertE("    " +
@@ -1255,7 +1255,7 @@ public class A2048Test {
 
         // when
         joystick.left(); // ignore
-        game.tick();
+        field.tick();
 
         // then
         verifyNoMoreInteractions(listener);

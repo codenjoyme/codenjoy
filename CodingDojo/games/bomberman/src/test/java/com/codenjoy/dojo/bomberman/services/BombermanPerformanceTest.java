@@ -64,7 +64,7 @@ public class BombermanPerformanceTest {
         p.done("creation");
 
         for (int i = 0; i < ticks; i++) {
-            games.get(0).tick();
+            games.get(0).getField().tick();
             p.done("tick");
 
             for (int j = 0; j < games.size(); j++) {

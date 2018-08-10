@@ -28,10 +28,7 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
@@ -68,7 +65,7 @@ public class MultiplayerServiceImpl implements MultiplayerService {
 
     public MultiplayerServiceImpl() {}
 
-    MultiplayerServiceImpl(PlayerGames playerGames) {
+    protected MultiplayerServiceImpl(PlayerGames playerGames) {
         this.playerGames = playerGames;
     }
 
@@ -78,47 +75,22 @@ public class MultiplayerServiceImpl implements MultiplayerService {
     @Override
     public void tick() {
         // создаем новые игры для тех, кто уже game over
-        for (final PlayerGame playerGame : playerGames) {
-            final Game game = playerGame.getGame();
+        for (PlayerGame playerGame : playerGames) {
+            Game game = playerGame.getGame();
             if (game.isGameOver()) {
                 ((Tickable)() -> game.newGame()).quietTick();
             }
         }
 
-        // тикаем игры по правилам много-/однопользовательской игры
-        List<GameType> gameTypes = playerGames.getGameTypes();
-        for (GameType gameType : gameTypes) {
-            List<PlayerGame> games = playerGames.getAll(gameType.name());
-
-            MultiplayerType type = gameType.getMultiplayerType();
-
-            if (type.isSingle()) {
-                for (PlayerGame playerGame : games) {
-                    playerGame.getGame().quietTick();
-                }
-            }
-
-            if (type.isTournament()) {
-                // TODO implement me
-            }
-
-            if (type.isTriple()) {
-                // TODO implement me
-            }
-
-            if (type.isQuadro()) {
-                // TODO implement me
-            }
-
-            if (type.isTeam()) {
-                // TODO implement me
-            }
-
-            if (type.isMultiple()) {
-                if (!games.isEmpty()) {
-                    games.iterator().next().getGame().quietTick();
-                }
-            }
+        // собираем все уникальные борды
+        Set<GameField> fields = new HashSet<>();
+        for (PlayerGame playerGame : playerGames) {
+            GameField field = playerGame.getGame().getField();
+            fields.add(field);
+        }
+        // независимо от типа игры нам нужно тикнуть все
+        for (GameField field : fields) {
+            field.quietTick();
         }
     }
 

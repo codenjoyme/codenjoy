@@ -164,18 +164,6 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public void tick() {
-        synchronized (this) { // TODO это я с перепугу написал, потому как lock.writeLock().lock() глючит
-            lock.writeLock().lock();
-            try {
-                game.tick();
-            } finally {
-                lock.writeLock().unlock();
-            }
-        }
-    }
-
-    @Override
     public String toString() {
         lock.writeLock().lock();
         try {
