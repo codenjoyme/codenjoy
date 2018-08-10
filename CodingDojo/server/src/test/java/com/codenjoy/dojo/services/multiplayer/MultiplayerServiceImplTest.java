@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -96,15 +97,21 @@ public class MultiplayerServiceImplTest {
         }
 
         public void check() {
+            List<String> expected = new LinkedList<>();
+            List<String> actual = new LinkedList<>();
+
             for (int i = 0; i < groups.size(); i++) {
                 List<GameField> group = groups.get(i);
                 for (int ii = 0; ii < group.size(); ii++) {
                     for (int jj = ii + 1; jj < group.size(); jj++) {
                         if (jj == ii) continue;
                         String message = String.format("[G%s:%s]==[G%s:%s]", i + 1, ii + 1, i + 1, jj + 1);
-                        System.out.println(message);
-                        Assert.assertSame(message,
-                                group.get(ii), group.get(jj));
+                        expected.add(message);
+                        if (group.get(ii) == group.get(jj)) {
+                            actual.add(message);
+                        } else {
+                            actual.add(message.replace("==", "!="));
+                        }
                     }
                 }
                 for (int j = i + 1; j < groups.size(); j++) {
@@ -113,12 +120,17 @@ public class MultiplayerServiceImplTest {
                     for (int ii = 0; ii < group1.size(); ii++) {
                         for (int jj = 0; jj < group2.size(); jj++) {
                             String message = String.format("[G%s:%s]!=[G%s:%s]", i + 1, ii + 1, j + 1, jj + 1);
-                            System.out.println(message);
-                            Assert.assertNotSame(message,
-                                    group1.get(ii), group2.get(jj));
+                            expected.add(message);
+                            if (group1.get(ii) != group2.get(jj)) {
+                                actual.add(message);
+                            } else {
+                                actual.add(message.replace("!=", "=="));
+                            }
                         }
                     }
                 }
+                assertEquals(expected.toString().replaceAll(",", ",\n"),
+                        actual.toString().replaceAll(",", ",\n"));
             }
         }
     }
