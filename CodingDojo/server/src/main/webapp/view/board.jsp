@@ -47,7 +47,6 @@
     <script src="${ctx}/resources/js/donate.js"></script>
     <script src="${ctx}/resources/js/joystick.js"></script>
     <script src="${ctx}/resources/js/leaderstable.js"></script>
-    <script src="${ctx}/resources/js/chat.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script src="${ctx}/resources/js/advertisement.js"></script>
     <script src="${ctx}/resources/js/board.js"></script>
@@ -62,7 +61,6 @@
         <%@include file="canvases.jsp"%>
         <%@include file="leaderstable.jsp"%>
         <%@include file="info.jsp"%>
-        <%@include file="chat.jsp"%>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>

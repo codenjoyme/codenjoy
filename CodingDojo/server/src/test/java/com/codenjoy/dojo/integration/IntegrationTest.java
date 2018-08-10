@@ -25,7 +25,6 @@ package com.codenjoy.dojo.integration;
 
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
@@ -56,7 +55,6 @@ public class IntegrationTest {
     private static PlayerService players;
     private static TimerService timer;
     private static SaveServiceImpl save;
-    private static ChatServiceImpl chat;
     private static GameServiceImpl game;
     private static MailService mail;
     private static WebDriver driver;
@@ -79,7 +77,6 @@ public class IntegrationTest {
         players = runner.getBean(PlayerService.class, "playerService");
         timer = runner.getBean(TimerService.class, "timerService");
         save = runner.getBean(SaveServiceImpl.class, "saveService");
-        chat = runner.getBean(ChatServiceImpl.class, "chatService");
         game = runner.getBean(GameServiceImpl.class, "gameService");
         saver = runner.getBean(PlayerGameSaver.class, "playerGameSaver");
         mail = runner.getBean(MailService.class, "mailService");
@@ -89,7 +86,6 @@ public class IntegrationTest {
         save.removeAllSaves();
         players.removeAll();
 
-        new File("chat.log").delete();
         timer.resume();
     }
 
@@ -98,8 +94,6 @@ public class IntegrationTest {
     public void test() throws Exception {
         register(getEmail("apofig"), "pass", "snake");
         // TODO continue test
-//        sendChat("hello world");
-//
 //        save("[apofig]");
 //
 //        register(getEmail("zanefig"), "pass2", "sample");
@@ -123,7 +117,6 @@ public class IntegrationTest {
         // connectWebsocketClientToServer
         // useJoystick
         // useJoystickOnMultiBoardGame
-        // cantSendChatWhenNotMyUser
         // cantJoystickWhenNotMyUser
         // unregisterAtMainPage
         // spyAnotherUser
@@ -170,18 +163,6 @@ public class IntegrationTest {
         driver.get(url + "admin31415");
         driver.findElement(By.linkText("Save")).click();
         assertSaves(saves);
-    }
-
-    private void sendChat(final String message) {
-        driver.findElement(By.id("chat-message")).sendKeys(message);
-        driver.findElement(By.id("chat-send")).click();
-
-        new WebDriverWait(driver, 500) {}.until(new ExpectedCondition<Object>() {
-            @Override
-            public Object apply(@Nullable WebDriver driverObject) {
-                return chat.getChatLog().toString().contains(message);
-            }
-        });
     }
 
     private void register(String name, String password, String gameName) throws Exception {

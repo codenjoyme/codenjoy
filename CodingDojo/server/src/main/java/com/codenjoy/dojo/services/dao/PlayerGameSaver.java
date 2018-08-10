@@ -26,7 +26,6 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
-import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
@@ -48,12 +47,7 @@ public class PlayerGameSaver implements GameSaver {
                         "callbackUrl varchar(255)," +
                         "gameName varchar(255)," +
                         "score int," +
-                        "save varchar(255));",
-                "CREATE TABLE IF NOT EXISTS chats (" +
-                        "time varchar(255), " +
-                        "name varchar(255), " +
-//                            "gameType varchar(255), " + // TODO сделать чтобы чат был в каждой комнате отдельный
-                        "message varchar(255));");
+                        "save varchar(255));");
     }
 
     void removeDatabase() {
@@ -116,59 +110,5 @@ public class PlayerGameSaver implements GameSaver {
     public void delete(final String name) {
         pool.update("DELETE FROM saves WHERE name = ?;",
                 new Object[]{name});
-    }
-
-    @Override
-    public void saveChat(final List<ChatMessage> messages) {
-        final long last = getTimeLastChatMessage();
-
-        pool.batchUpdate("INSERT INTO chats " +
-                        "(time, name, message) " +
-                        "VALUES (?,?,?);",
-                messages,
-                new ForStmt<ChatMessage>() {
-                    @Override
-                    public boolean run(PreparedStatement stmt, ChatMessage message) throws SQLException {
-                        if (message.getTime().getTime() <= last) {
-                            return false;
-                        }
-                        stmt.setString(1, JDBCTimeUtils.toString(message.getTime()));
-                        stmt.setString(2, message.getPlayerName());
-                        stmt.setString(3, message.getMessage());
-                        return true;
-                    }
-                });
-    }
-
-    private Long getTimeLastChatMessage() {
-        return pool.select("SELECT * FROM chats ORDER BY time DESC LIMIT 1 OFFSET 0;",
-                new ObjectMapper<Long>() {
-                    @Override
-                    public Long mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return JDBCTimeUtils.getTimeLong(resultSet);
-                        }
-                        return 0L;
-                    }
-                });
-    }
-
-    @Override
-    public List<ChatMessage> loadChat() {
-        return pool.select("SELECT * FROM chats ORDER BY time ASC;",
-                new ObjectMapper<List<ChatMessage>>() {
-                    @Override
-                    public List<ChatMessage> mapFor(ResultSet resultSet) throws SQLException {
-                        List<ChatMessage> result = new LinkedList<ChatMessage>();
-                        while (resultSet.next()) {
-                            String name = resultSet.getString("name");
-                            long timeLong = JDBCTimeUtils.getTimeLong(resultSet);
-                            String message = resultSet.getString("message");
-                            result.add(new ChatMessage(new Date(timeLong), name, message));
-                        }
-                        return result;
-                    }
-                }
-        );
     }
 }

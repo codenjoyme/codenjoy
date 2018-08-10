@@ -79,9 +79,6 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
         var count = 0;
         $.each(data, function (email, score) {
             var name = email.substring(0, email.indexOf('@'));
-            if (name == 'chatLog') {
-                return;
-            }
 
             var you = (name == playerName)?"=> ":"";
 

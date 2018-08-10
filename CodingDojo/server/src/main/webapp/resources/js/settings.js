@@ -26,7 +26,6 @@ game.enableAlways = false;
 game.enablePlayerInfo = true;
 game.enablePlayerInfoLevel = true;
 game.enableLeadersTable = true;
-game.enableChat = false;
 game.enableInfo = true;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;

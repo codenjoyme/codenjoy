@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +33,6 @@ import java.util.*;
 public class SaveServiceImpl implements SaveService {
 
     @Autowired private GameSaver saver;
-    @Autowired private ChatService chatService;
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private PlayerGames playerGames;
@@ -44,7 +42,6 @@ public class SaveServiceImpl implements SaveService {
         for (PlayerGame playerGame : playerGames) {
             saveGame(playerGame);
         }
-        saver.saveChat(chatService.getMessages());
     }
 
     @Override
@@ -52,7 +49,6 @@ public class SaveServiceImpl implements SaveService {
         for (String playerName : saver.getSavedList()) {
             load(playerName);
         }
-        chatService.setMessages(saver.loadChat());
     }
 
     @Override

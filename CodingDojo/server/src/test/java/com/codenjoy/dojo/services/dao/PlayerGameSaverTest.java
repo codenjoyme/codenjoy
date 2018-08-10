@@ -24,9 +24,6 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.ChatMessage;
-import com.codenjoy.dojo.services.chat.ChatServiceImpl;
-import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.After;
@@ -105,103 +102,6 @@ public class PlayerGameSaverTest {
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getCallbackUrl(), actual.getCallbackUrl());
         assertEquals(expected.getScore(), actual.getScore());
-    }
-
-    @Test
-    public void shouldWorks_saveLoadChat() {
-        ChatServiceImpl chat = new ChatServiceImpl();
-        LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
-        chat.setMessages(messages);
-        setTime(0);
-        chat.chat("apofig", "message1");
-        chat.chat("apofig", "message2");
-        chat.chat("apofig", "message3");
-        chat.chat("apofig", "message4");
-        chat.chat("apofig", "message5");
-        chat.chat("apofig", "message6");
-        chat.chat("apofig", "message7");
-
-        saver.saveChat(chat.getMessages());
-        messages.clear();
-
-        List<ChatMessage> chatMessages = saver.loadChat();
-        chat.setMessages(chatMessages);
-
-        assertEquals("apofig, НЛО прилетело и украло ваше сообщение\n" +
-                        "[15:03] apofig: message6\n" +
-                        "[15:03] apofig: message5\n" +
-                        "[15:03] apofig: message4\n" +
-                        "[15:03] apofig: message3\n" +
-                        "[15:03] apofig: message2\n" +
-                        "[15:03] apofig: message1\n",
-                StringEscapeUtils.unescapeJava(chat.getChatLog()));
-    }
-
-    @Test
-    public void shouldWorks_saveLoadChat_caseRussian() {
-        ChatServiceImpl chat = new ChatServiceImpl();
-        chat.setMessages(new LinkedList<ChatMessage>());
-        setTime(0);
-        chat.chat("apofig", "Привет Мир!");
-
-        saver.saveChat(chat.getMessages());
-
-        chat.setMessages(saver.loadChat());
-
-        assertEquals("[15:03] apofig: Привет Мир!\n",
-                StringEscapeUtils.unescapeJava(chat.getChatLog()));
-    }
-
-    private void setTime(int second) {
-        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, second);
-    }
-
-    @Test
-    public void shouldSaleOnlyLastMessages_saveLoadChat() {
-        ChatServiceImpl chat = new ChatServiceImpl();
-        LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
-        chat.setMessages(messages);
-
-        setTime(0);
-        chat.chat("apofig", "message1");
-
-        setTime(1);
-        chat.chat("apofig", "message2");
-
-        setTime(2);
-        chat.chat("apofig", "message3");
-        assertEquals(TIME + 2000, messages.getLast().getTime().getTime());
-
-        saver.saveChat(chat.getMessages());
-
-        setTime(3);
-        chat.chat("apofig", "message4");
-
-        setTime(4);
-        chat.chat("apofig", "message5");
-
-        setTime(5);
-        chat.chat("apofig", "message6");
-
-        setTime(6);
-        chat.chat("apofig", "message7");
-
-        setTime(7);
-        assertEquals(TIME + 6000, messages.getLast().getTime().getTime());
-
-        saver.saveChat(chat.getMessages());
-
-        List<ChatMessage> chatMessages = saver.loadChat();
-        chat.setMessages(chatMessages);
-
-        assertEquals("apofig, НЛО прилетело и украло ваше сообщение\n" +
-                        "[15:03] apofig: message6\n" +
-                        "[15:03] apofig: message5\n" +
-                        "[15:03] apofig: message4\n" +
-                        "[15:03] apofig: message3\n" +
-                        "[15:03] apofig: message2\n" +
-                        "[15:03] apofig: message1\n",
-                StringEscapeUtils.unescapeJava(chat.getChatLog()));
     }
 
     @Test

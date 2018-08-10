@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
 import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.multiplayer.*;
-import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -41,7 +40,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -457,31 +455,18 @@ public class PlayerServiceImplTest {
     }
 
     private String getBoardFor(Player vasya) {
-        Map<Player, PlayerData> value = getScreenSendCaptorValues();
+        Map sentScreens = screenSendCaptor.getValue();
+        Map<Player, PlayerData> value = sentScreens;
         return value.get(vasya).getBoard().toString();
     }
 
     private void assertSentToPlayers(Player ... players) throws IOException {
         verify(screenController).requestControlToAll(screenSendCaptor.capture());
-        Map sentScreens = getScreenSendCaptorValues();
+        Map sentScreens1 = screenSendCaptor.getValue();
+        Map sentScreens = sentScreens1;
         assertEquals(players.length, sentScreens.size());
         for (Player player : players) {
             assertTrue(sentScreens.containsKey(player));
-        }
-    }
-
-    private Map getScreenSendCaptorValues() {
-        Map sentScreens = screenSendCaptor.getValue();
-        removeChatRecord(sentScreens);
-        return sentScreens;
-    }
-
-    private void removeChatRecord(Map<Object, Object> sentScreens) {
-        for (Map.Entry<Object, Object> entry : sentScreens.entrySet()) {
-            if (entry.getValue() instanceof ChatLog) {
-                sentScreens.remove(entry.getKey());
-                return;
-            }
         }
     }
 
@@ -622,7 +607,8 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         verify(screenController, atLeast(1)).requestControlToAll(screenSendCaptor.capture());
-        Map<ScreenRecipient, PlayerData> data = getScreenSendCaptorValues();
+        Map sentScreens = screenSendCaptor.getValue();
+        Map<ScreenRecipient, PlayerData> data = sentScreens;
         Iterator<Map.Entry<ScreenRecipient, PlayerData>> iterator = data.entrySet().iterator();
         Map.Entry<ScreenRecipient, PlayerData> next = iterator.next();
         ScreenRecipient key = next.getKey();

@@ -24,10 +24,8 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +43,6 @@ public class RestBoardController {
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private ServletContext servletContext;
-    @Autowired private ChatService chatService;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -129,27 +126,6 @@ public class RestBoardController {
         GameType game = gameService.getGame(gameName);
 
         return new GameTypeInfo(game);
-    }
-
-    @RequestMapping(value = "/chat/{gameName}/log", method = RequestMethod.GET)
-    @ResponseBody
-    public ChatLog getChatLog(@PathVariable("gameName") String gameName) {
-        String log = chatService.getChatLog();
-        return new ChatLog(log);
-    }
-
-    @RequestMapping(value = "/chat/{gameName}/player/{playerName}/post", method = RequestMethod.POST)
-    @ResponseBody
-    public String chat(@PathVariable("gameName") String gameName,
-                       @PathVariable("playerName") String name,
-                       @RequestParam("code") String code,
-                       @RequestParam("message") String message)
-    {
-        Player player = playerService.get(registration.getEmail(code));
-        if (player != NullPlayer.INSTANCE && player.getName().equals(name)) {
-            chatService.chat(player.getName(), message);
-        }
-        return "ok";
     }
 
 }

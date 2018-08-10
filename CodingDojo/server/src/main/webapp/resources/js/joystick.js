@@ -75,13 +75,9 @@ function initJoystick(playerName, registered, code, contextPath) {
         });
     }
 
-    function isFocusOnChat() {
-        return $("#chat-message").is(":focus");
-    }
-
     function registerKeys() {
         $("body").keydown(function(event) {
-            if (!game.enableJoystick || isFocusOnChat()) {
+            if (!game.enableJoystick) {
                 return;
             }
             var command = parseCommand(event);
@@ -101,7 +97,7 @@ function initJoystick(playerName, registered, code, contextPath) {
             event.preventDefault();
         });
         $("body").keyup(function(event) {
-            if (!game.enableJoystick || isFocusOnChat()) {
+            if (!game.enableJoystick) {
                 return;
             }
 

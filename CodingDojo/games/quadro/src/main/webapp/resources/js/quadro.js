@@ -32,7 +32,6 @@ game.enableJoystick = true;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
-game.enableChat = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;

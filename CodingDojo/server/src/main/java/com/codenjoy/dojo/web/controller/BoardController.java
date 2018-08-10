@@ -24,7 +24,6 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,6 @@ public class BoardController {
 
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
-    @Autowired private ChatService chatService;
     @Autowired private GameService gameService;
     @Autowired private Validator validator;
 

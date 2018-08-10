@@ -23,8 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatMessage;
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
@@ -46,7 +44,6 @@ import static org.mockito.Mockito.*;
         SaveServiceImpl.class,
         MockPlayerService.class,
         MockPlayerGames.class,
-        MockChatService.class,
         MockStatistics.class,
         MockRegistration.class,
         MockGameSaver.class})
@@ -63,9 +60,6 @@ public class SaveServiceImplTest {
     private PlayerGames playerGames;
 
     @Autowired
-    private ChatService chat;
-
-    @Autowired
     private GameSaver saver;
 
     private List<Player> players;
@@ -73,7 +67,7 @@ public class SaveServiceImplTest {
 
     @Before
     public void setUp() throws IOException {
-        reset(playerService, chat, saver);
+        reset(playerService, saver);
         players = new LinkedList<Player>();
         games = new LinkedList<Game>();
         when(playerService.getAll()).thenReturn(players);
@@ -245,9 +239,6 @@ public class SaveServiceImplTest {
     public void testSaveAll() {
         createPlayer("first");
         createPlayer("second");
-        when(chat.getMessages()).thenReturn(Arrays.asList(
-                new ChatMessage(new Date(), "player_one", "message_one"),
-                new ChatMessage(new Date(), "player_two", "message_two")));
         when(games.get(0).getSave()).thenReturn("{'key':'value1'}");
         when(games.get(1).getSave()).thenReturn("{'key':'value2'}");
 
@@ -255,16 +246,6 @@ public class SaveServiceImplTest {
 
         verify(saver).saveGame(players.get(0), "{'key':'value1'}");
         verify(saver).saveGame(players.get(1), "{'key':'value2'}");
-
-        ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
-        verify(saver).saveChat(captor.capture());
-        try {
-            assertEquals("[[[**:**] player_one: message_one, [**:**] player_two: message_two]]",
-                    captor.getAllValues().toString().replaceAll("[0-9]", "*"));
-        } catch (Error e) {
-            assertEquals("[[[**** days ago, **:**] player_one: message_one, [**** days ago, **:**] player_two: message_two]]",
-                    captor.getAllValues().toString().replaceAll("[0-9]", "*"));
-        }
     }
 
     @Test
@@ -277,9 +258,6 @@ public class SaveServiceImplTest {
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);
 
-        List<ChatMessage> list = new LinkedList<ChatMessage>();
-        when(saver.loadChat()).thenReturn(list);
-
         saveService.loadAll();
 
         verify(playerService).contains("first");
@@ -287,9 +265,6 @@ public class SaveServiceImplTest {
         verify(playerService).contains("second");
         verify(playerService).register(second);
         verifyNoMoreInteractions(playerService);
-
-        verify(saver).loadChat();
-        verify(chat).setMessages(list);
     }
 
     private void allPlayersNotRegistered() {
@@ -307,9 +282,6 @@ public class SaveServiceImplTest {
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);
 
-        List<ChatMessage> list = new LinkedList<ChatMessage>();
-        when(saver.loadChat()).thenReturn(list);
-
         saveService.loadAll();
 
         verify(playerService).contains("first");
@@ -319,9 +291,6 @@ public class SaveServiceImplTest {
         verify(playerService).remove("second");
         verify(playerService).register(second);
         verifyNoMoreInteractions(playerService);
-
-        verify(saver).loadChat();
-        verify(chat).setMessages(list);
     }
 
     private void allPlayersRegistered() {

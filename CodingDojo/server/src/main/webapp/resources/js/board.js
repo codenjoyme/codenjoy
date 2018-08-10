@@ -85,11 +85,6 @@ function initBoardComponents(game) {
         initLeadersTable(game.contextPath, game.playerName, game.code);
     }
 
-    if (game.enableChat) {
-        initChat(game.playerName, game.registered,
-                game.code, game.contextPath,
-                game.gameName);
-    }
     if (!game.enableInfo) {
         $("#fork-me").hide();
         $("#how-to-play").hide();

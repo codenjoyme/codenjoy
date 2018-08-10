@@ -29,7 +29,6 @@ game.enableDonate = false;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
-game.enableChat = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
@@ -52,7 +51,6 @@ var getQuestionFormatted = function(value) {
     }
 }
 
-// TODO same method in the chat.js - remove duplicate
 function unescapeUnicode(unicode) {
     var r = /\\u([\d\w]{4})/gi;
     var temp = unicode.replace(r, function (match, grp) {

@@ -85,15 +85,6 @@ label.error {
     height: 20px;
 }
 
-#chat-container {
-    float: right;
-    width: 500px;
-}
-
-#chat-send {
-    vertical-align: top;
-}
-
 #leaderboard {
     width: 500px;
     float: right;
