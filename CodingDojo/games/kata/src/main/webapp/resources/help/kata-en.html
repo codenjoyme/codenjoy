@@ -24,10 +24,13 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Kata Сodenjoy — how to play? | Games at work</title>
     <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+
+    <script src="../../resources/js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="../../resources/js/game-rules.js"></script>
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
-<a target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<a target="_blank" href="https://github.com/codenjoyme/codenjoy"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="../../resources/img/fork-me.png" alt="Fork me on GitHub"></a>
 <div id="page" class="hfeed">
     <div id="main">
         <div id="primary">
@@ -40,9 +43,19 @@
                 <div class="entry-content">
                     <div class="page-restrict-output">
                         <p>The game server is available for familiarization reasons
-                            <a href="/codenjoy-contest">http://codenjoy.com/codenjoy-contest</a></p>
+                            <a href="http://codenjoy.com/codenjoy-contest">
+                                http://codenjoy.com/codenjoy-contest</a></p>
 
-                        <p>What is the gist of the game?</p>
+                        <p>This is the open source game. To realize your game, correct errors in the current
+                            version and make the other corrections, you should
+                            <a href="https://github.com/codenjoyme/codenjoy">fork the project</a> at first.
+                            There is the description in the Readme.md file in the repository root.
+                            It is specified in the description what to do next.</p>
+
+                        <p> If any questions, please write in <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            or Email <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+
+                        <h2>What is the gist of the game?</h2>
 
                         <p>There is multitude of algorithmic problems in the queue. You are expected
                             to solve them one by one in a contest with the colleagues. For that,
@@ -82,15 +95,15 @@
                             implement the following interface:
                             CodingDojo\games\kata\src\main\java\com\codenjoy\dojo\kata\model\levels\Level.javа
                             and locate it nearby in the ‘algorithms’ package.
-                            You can <a href="https://github.com/codenjoyme">fork the project</a>
+                            You can <a href="https://github.com/codenjoyme/codenjoy">fork the project</a>
                             at first. Then you should proceed to the Readme.md file in the
                             repository root and read instructions.</p>
 
-                        <p>Therefore, the player <a href="/codenjoy-contest/register?gameName=kata" target="_blank">
+                        <p>Therefore, the player <a href="register?gameName=kata" target="_blank">
                             registers on the server</a> by indicating her/his Email.</p>
 
                         <p>Then you should connect
-                            <a href="/codenjoy-contest/resources/user/kata-servers.zip">from code</a>
+                            <a href="resources/user/kata-servers.zip">from code</a>
                             to the server via Web Sockets. This is the Maven project and it will suit
                             for playing in JVM languages. The .NET and JavaScript clients are available
                             as well. To know how to launch a client, refer to README.txt in the root
@@ -160,10 +173,6 @@ message('['answer1','answer2','answer3']')
                             server. Then you should “force” the server to listen to the client answer.
                             This is the way the gamer will prepare herself/himself to the main game.
                             The main goal is to play meaningfully and win.</p>
-
-                        <p>If any questions, please write in
-                            <a href="skype:alexander.baglay">skype:alexander.baglay</a>
-                            or Email: <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
                     </div>
                 </div>
             </div>

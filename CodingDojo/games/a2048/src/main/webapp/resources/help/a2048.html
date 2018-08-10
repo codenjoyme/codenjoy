@@ -24,10 +24,13 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>2048 codenjoy — как играть? | Игры на работе</title>
     <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+
+    <script src="../../resources/js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="../../resources/js/game-rules.js"></script>
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
-<a target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+<a target="_blank" href="https://github.com/codenjoyme/codenjoy"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="../../resources/img/fork-me.png" alt="Fork me on GitHub"></a>
 <div id="page" class="hfeed">
     <div id="main">
         <div id="primary">
@@ -42,11 +45,19 @@
                             <a href="http://gabrielecirulli.github.io/2048/">
                                 http://gabrielecirulli.github.io/2048/</a>. Спасибо Авторам за идею.</p>
 
-                        <p>Игровой сервер доступен сейчас в целях ознакомления
-                            <a href="/codenjoy-contest">
+                        <p>Игровой demo-сервер доступен так же в интернете 24/7
+                            в целях ознакомления <a href="http://codenjoy.com/codenjoy-contest">
                                 http://codenjoy.com/codenjoy-contest</a></p>
 
-                        <p>В чем суть игры?</p>
+                        <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
+                            ошибок в текущей и внесения других правок необходимо для начала
+                            <a href="https://github.com/codenjoyme/codenjoy">форкнуть проект</a>.
+                            В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
+
+                        <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+
+                        <h2>В чем суть игры?</h2>
 
                         <p>Тебе предстоит добраться до 2048 (или даже дальше). После каждого твоего
                             хода в свободных угловых ячейках появится цифра 2.
@@ -58,10 +69,10 @@
 
                         <p>Побеждает игрок с большим числом очков (до условленного времени). </p>
 
-                        <p>Итак, игрок <a href="/codenjoy-contest/register?gameName=a2048" target="_blank">
+                        <p>Итак, игрок <a href="register?gameName=a2048">
                             регистрируется на сервере</a>, указывая свой email</p>
 
-                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/a2048-servers.zip">из кода</a>
+                        <p>Далее необходимо подключиться <a href="resources/user/a2048-servers.zip">из кода</a>
                             к серверу через вебсокеты. Это Maven проект, и он подойдет он для игры на JVM языках.
                             Как его запустить смотри в корне проекта в файле README.txt</p>
 
@@ -132,14 +143,6 @@ NONE(' ')</pre>
                             к серверу. Затем заставить цифры на поле слушаться команд.
                             Таким образом, игрок подготовится к основной игре.
                             Основная цель – вести осмысленную игру и победить.</p>
-                        
-                        <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
-                            ошибок в текущей и внесения других правок необходимо для начала
-                            <a href="https://github.com/codenjoyme">форкнуть проект</a>.
-                            В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
-
-                        <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
-                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
                     </div>
                 </div>
             </div>

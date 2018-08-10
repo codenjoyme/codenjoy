@@ -24,31 +24,44 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Snake Battle — как играть? | Игры на работе</title>
     <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+
+    <script src="../../resources/js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="../../resources/js/game-rules.js"></script>
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
 <a target="_blank" href="https://github.com/Kors/codenjoy"><img
         style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;"
-        src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+        src="../../resources/img/fork-me.png"
         alt="Fork me on GitHub"
-        data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+       ></a>
 <div id="page" class="hfeed">
     <div id="main">
         <div id="primary">
             <div id="content" role="main">
-
-
                 <header class="entry-header">
                     <h1 class="entry-title">Snake Battle — как играть?</h1>
                 </header>
-
                 <div class="entry-content">
                     <div class="page-restrict-output">
-                        <p><b>Проект игры (для написания своего бота) брать <a href="/codenjoy-contest/resources/user/snake-battle-servers.zip">ЗДЕСЬ</a></b></p>
-                        <p>Читая инструкцию, помните - В процессе написания бота Вам необходимо заботится только о логике перемещений вашего бота.
+                        <p>Игровой demo-сервер доступен так же в интернете 24/7
+                            в целях ознакомления <a href="http://codenjoy.com/codenjoy-contest">
+                                http://codenjoy.com/codenjoy-contest</a></p>
+
+                        <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
+                            ошибок в текущей и внесения других правок необходимо для начала
+                            <a href="https://github.com/codenjoyme/codenjoy">форкнуть проект</a>.
+                            В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
+
+                        <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+
+                        <p><b>Проект игры (для написания своего бота) брать <a href="resources/user/snake-battle-servers.zip">ЗДЕСЬ</a></b></p>
+                        <p>Читая инструкцию, помните: процессе написания бота Вам необходимо заботится только о логике перемещений вашего бота.
                             Все необходимые вспомогательные вещи уже сделаны за Вас.</p>
-                        <br>
-                        <p><b>В чем суть игры?</b></p>
+
+                        <h2>В чем суть игры?</h2>
+
                         <p>Надо написать своего бота для змейки, который обыграет других ботов
                             по очкам. Все играют на одном поле. Змейка может передвигаться по
                             свободным ячейкам во все четыре стороны, но не может возвращаться в предыдущую клетку.</p>
@@ -61,9 +74,9 @@
                             Мертвая змейка тут же появляется на одном из свободных стартовых полей и ждёт начала
                             следующего раунда (события старта).</p>
 
-                        <p>Итак, игрок <a href="/codenjoy-contest/register?gameName=snake-battle" target="_blank">
+                        <p>Итак, игрок <a href="register?gameName=snake-battle">
                             регистрируется на сервере</a>, указывая свой email</p>
-                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/snake-battle-servers.zip">из кода</a>
+                        <p>Далее необходимо подключиться <a href="resources/user/snake-battle-servers.zip">из кода</a>
                             к серверу через вебсокеты. Это Maven проект и подойдет он для игры на JVM языках.
                             Как его запустить смотри в корне проекта в файле README.txt</p>
                         <p>Для других языков придется написать свой клиент (а после пошарить с нами на почту: apofig@gmail.com)</p>
@@ -212,10 +225,6 @@
                         <p>Максимальное количество игроков определяется количеством стартовых точек на карте.(15 для текущей карты)</p>
                     </div>
                     <div class="entry-author">
-                        <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
-                            ошибок в текущей и внесения других правок необходимо для начала
-                            <a href="https://github.com/codenjoyme">форкнуть проект</a>.
-                            В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
                         <p>По возникающим вопросам, обращайся:<br>
                             Author: <b>Корсиков Илья</b><br>
                             mail: <b>kors.ilya@gmail.com</b><br>
