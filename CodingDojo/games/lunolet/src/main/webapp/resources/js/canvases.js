@@ -303,6 +303,21 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 ctx.stroke();
             }
 
+            // draw crashes
+            var crashes = board.crashes;
+            if (crashes && crashes.length > 0) {
+                ctx.strokeStyle = "#888";
+                for (i = 0; i < crashes.length; i++) {
+                    var pt = crashes[i];
+                    ctx.beginPath();
+                    ctx.moveTo(pt.x, pt.y + 12/scale);  ctx.lineTo(pt.x, pt.y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(pt.x - 4/scale, pt.y + 8/scale);  ctx.lineTo(pt.x + 4/scale, pt.y + 8/scale);
+                    ctx.stroke();
+                }
+            }
+
             // draw the ship
             var radian = board.angle / 180 * Math.PI;
             var sin = Math.sin(radian);

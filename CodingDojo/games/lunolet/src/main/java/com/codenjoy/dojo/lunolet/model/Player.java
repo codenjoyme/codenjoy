@@ -26,6 +26,10 @@ package com.codenjoy.dojo.lunolet.model;
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
+import java.awt.geom.Point2D;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Player {
 
     private EventListener listener;
@@ -33,14 +37,20 @@ public class Player {
     private int score;
     private LevelManager levelManager;
     private Hero hero;
+    private List<Point2D.Double> crashes;
 
     public Player(EventListener listener) {
         this.listener = listener;
+        crashes = new LinkedList<Point2D.Double>();
         clearScore();
     }
 
     public Hero getHero() {
         return hero;
+    }
+
+    public List<Point2D.Double> getCrashes() {
+        return crashes;
     }
 
     public int getMaxScore() {
@@ -62,6 +72,7 @@ public class Player {
         if (hero != null) {
             hero.init(levelManager);
         }
+        crashes.clear();
     }
 
     private void increaseScore() {
@@ -79,10 +90,24 @@ public class Player {
         if (event == Events.LANDED) {
             increaseScore();
             levelManager.levelUp();
+            crashes.clear();
+        } else if (event == Events.CRASHED) {
+            addCrash(hero.getVesselStatus().getPoint());
         }
 
         if (listener != null) {
             listener.event(event);
         }
+    }
+
+    private void addCrash(Point2D.Double ptCrash) {
+        for (int i = 0; i < crashes.size(); i++) {
+            Point2D.Double pt = crashes.get(i);
+            if (Math.abs(pt.x - ptCrash.x) < 1e-3 && Math.abs(pt.y - ptCrash.y) < 1e-3)
+                return;  // already have the point
+        }
+        crashes.add(ptCrash);
+        if (crashes.size() > 100)
+            crashes.remove(0);
     }
 }
