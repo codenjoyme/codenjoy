@@ -56,6 +56,9 @@ public class MultiplayerServiceImpl implements MultiplayerService{
         public GameField getOrCreateGame(Supplier<GameField> creator) {
             if (currentCount >= maxCount) {
                 archive.add(current);
+                current = null;
+            }
+            if (current == null) {
                 current = creator.get();
                 currentCount = 0;
             }
