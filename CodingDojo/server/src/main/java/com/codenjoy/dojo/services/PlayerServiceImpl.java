@@ -1,3 +1,4 @@
+
 package com.codenjoy.dojo.services;
 
 /*-
@@ -56,9 +57,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     private MultiplayerService multiplayer;
-
-    @Autowired
-    private ScreenSender<ScreenRecipient, ScreenData> screenSender;
 
     @Autowired
     @Qualifier("playerController")
@@ -243,7 +241,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void sendScreenUpdates() {
         Map<ScreenRecipient, ScreenData> map = buildScreenData();
-        sendScreenForAsync(map);
         sendScreenForWebSockets(map);
     }
 
@@ -283,10 +280,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         return map;
-    }
-
-    private void sendScreenForAsync(Map<ScreenRecipient, ScreenData> map) {
-        screenSender.sendUpdates(map);
     }
 
     private void sendScreenForWebSockets(Map<ScreenRecipient, ScreenData> map) {
