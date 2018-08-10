@@ -172,7 +172,7 @@ public class LevelManager {
             "    { 'x': 10, 'y': -10 }," +
             "    { 'x': 10000, 'y': 3000 }" +
             "  ]," +
-            "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 0 }" +
+            "  'vesselStatus': { 'x': 0, 'y': 0, 'hSpeed': 0, 'vSpeed': 0, 'fuelMass': 50.0, 'time': 0, 'state': 1 }" +
             "}",
         // level 1
             "{" +

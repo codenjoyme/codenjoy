@@ -179,6 +179,8 @@ public class Hero implements Joystick, Tickable {
             double angle = Double.parseDouble(matcher.group(1));
             double mass = Double.parseDouble(matcher.group(2));
             double duration = Double.parseDouble(matcher.group(3));
+            if (duration <= 0.0 || mass < 0.0)
+                return;
             simulate(angle, mass, duration);
             return;
         }
