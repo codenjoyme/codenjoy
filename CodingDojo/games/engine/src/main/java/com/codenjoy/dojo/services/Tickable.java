@@ -32,4 +32,15 @@ public interface Tickable {
 
     void tick();
 
+    /**
+     * Если вдруг захотим тикнуть так, чтобы ничего не поломать
+     * для других играющих, то вот метод
+     */
+    default void quietTick() {
+        try {
+            tick();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

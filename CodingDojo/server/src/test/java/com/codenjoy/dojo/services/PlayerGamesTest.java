@@ -266,7 +266,7 @@ public class PlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(statistics).tick();
+        verify(statistics).quietTick();
     }
 
     @Test
@@ -278,7 +278,7 @@ public class PlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(statistics).tick();
+        verify(statistics).quietTick();
     }
 
     @Test
@@ -316,7 +316,7 @@ public class PlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(game).tick();
+        verify(game).quietTick();
     }
 
     @Test
@@ -329,7 +329,7 @@ public class PlayerGamesTest {
         playerGames.tick();
 
         // then
-        verify(game).tick();
+        verify(game).quietTick();
     }
 
     @Test
@@ -359,12 +359,12 @@ public class PlayerGamesTest {
         InOrder order = inOrder(games.get(0), games.get(1), games.get(2),
                 gameTypes.get(0), gameTypes.get(1), gameTypes.get(2));
 
-        order.verify(games.get(0)).tick();
-        order.verify(games.get(1)).tick();
-        order.verify(games.get(2)).tick();
-        order.verify(gameTypes.get(0)).tick();
-        order.verify(gameTypes.get(1)).tick();
-        order.verify(gameTypes.get(2)).tick();
+        order.verify(games.get(0)).quietTick();
+        order.verify(games.get(1)).quietTick();
+        order.verify(games.get(2)).quietTick();
+        order.verify(gameTypes.get(0)).quietTick();
+        order.verify(gameTypes.get(1)).quietTick();
+        order.verify(gameTypes.get(2)).quietTick();
     }
 
 

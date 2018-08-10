@@ -88,7 +88,7 @@ public class PlayerServiceImplTest {
     private ArgumentCaptor<String> boardCaptor;
 
     @Autowired private PlayerServiceImpl playerService;
-    @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
+    @Autowired private PlayerController screenController;
     @Autowired private PlayerController playerController;
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
@@ -161,7 +161,7 @@ public class PlayerServiceImplTest {
         when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
 
         playerGames.clear();
-        Mockito.reset(playerController, screenSender, actionLogger, multiplayer);
+        Mockito.reset(playerController, screenController, actionLogger, multiplayer);
         playerService.openRegistration();
 
         // TODO подумать как можно упростить
@@ -346,7 +346,7 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+        verify(screenController).requestControlToAll(screenSendCaptor.capture());
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         Map<String, String> expected = new TreeMap<String, String>();
@@ -485,8 +485,8 @@ public class PlayerServiceImplTest {
         return value.get(vasya).getBoard().toString();
     }
 
-    private void assertSentToPlayers(Player ... players) {
-        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+    private void assertSentToPlayers(Player ... players) throws IOException {
+        verify(screenController).requestControlToAll(screenSendCaptor.capture());
         Map sentScreens = getScreenSendCaptorValues();
         assertEquals(players.length, sentScreens.size());
         for (Player player : players) {
@@ -642,10 +642,10 @@ public class PlayerServiceImplTest {
         checkInfo("+3");
     }
 
-    private void checkInfo(String expected) {
+    private void checkInfo(String expected) throws IOException {
         playerService.tick();
 
-        verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
+        verify(screenController, atLeast(1)).requestControlToAll(screenSendCaptor.capture());
         Map<ScreenRecipient, PlayerData> data = getScreenSendCaptorValues();
         Iterator<Map.Entry<ScreenRecipient, PlayerData>> iterator = data.entrySet().iterator();
         Map.Entry<ScreenRecipient, PlayerData> next = iterator.next();
@@ -685,8 +685,8 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
-        verify(game2).tick();
+        verify(game1).quietTick();
+        verify(game2).quietTick();
     }
 
     @Test
@@ -707,8 +707,8 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
-        verify(game2).tick();
+        verify(game1).quietTick();
+        verify(game2).quietTick();
     }
 
     private void setNewGames(Game... games) {
@@ -737,8 +737,8 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
-        verify(game2, never()).tick();    // тут отличия с прошлым тестом
+        verify(game1).quietTick();
+        verify(game2, never()).quietTick();    // тут отличия с прошлым тестом
     }
 
     @Test
@@ -754,7 +754,7 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
+        verify(game1).quietTick();
     }
 
     @Test
@@ -774,8 +774,8 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
-        verify(game2).tick();
+        verify(game1).quietTick();
+        verify(game2).quietTick();
     }
 
     @Test
@@ -796,7 +796,7 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
+        verify(game1).quietTick();
     }
 
     @Test
@@ -815,8 +815,8 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(game1).tick();
-        verify(game2, never()).tick();    // тут отличия с прошлым тестом
+        verify(game1).quietTick();
+        verify(game2, never()).quietTick();    // тут отличия с прошлым тестом
     }
 
     @Test
@@ -1165,7 +1165,7 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(statistics).tick();
+        verify(statistics).quietTick();
     }
 
     @Test

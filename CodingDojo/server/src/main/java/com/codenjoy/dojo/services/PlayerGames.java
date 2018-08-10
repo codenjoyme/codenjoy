@@ -121,7 +121,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public List<GameType> getGameTypes() {
-        List<GameType> result = new LinkedList<GameType>();
+        List<GameType> result = new LinkedList<>();
 
         for (PlayerGame playerGame : playerGames) {
             GameType gameType = playerGame.getPlayer().getGameType();
@@ -133,53 +133,42 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
-    private void quietTick(Tickable tickable) {
-        try {
-            tickable.tick();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void tick() {
-//        long time = System.currentTimeMillis();
-
+        // по всем джойстикам отправили сообщения играм
         for (PlayerGame playerGame : playerGames) {
-            quietTick(playerGame);
+            playerGame.quietTick();
         }
 
-        quietTick(statistics);
-
+        // следим за плеерами, кто давно не играет
+        statistics.quietTick();
 //        removeNotActivePlayers();
 
+        // создаем новые игры для тех, кто уже gameover
         for (final PlayerGame playerGame : playerGames) {
             final Game game = playerGame.getGame();
             if (game.isGameOver()) {
-                quietTick(() -> game.newGame());
+                ((Tickable)() -> game.newGame()).quietTick();
             }
         }
 
+        // тикаем игры по правилам много-/однопользовательской игры
         List<GameType> gameTypes = getGameTypes();  // TODO потестить еще отдельно
         for (GameType gameType : gameTypes) {
             List<PlayerGame> games = getAll(gameType.name());
             if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
                 if (!games.isEmpty()) {
-                    quietTick(games.iterator().next().getGame());
+                    games.iterator().next().getGame().quietTick();
                 }
             } else {
                 for (PlayerGame playerGame : games) {
-                    quietTick(playerGame.getGame());
+                    playerGame.getGame().quietTick();
                 }
             }
         }
 
-        getGameTypes().forEach(gameType -> gameType.tick());
-
-//        if (logger.isDebugEnabled()) {
-//            time = System.currentTimeMillis() - time;
-//            logger.debug("PlayerGames.tick() is {} ms", time);
-//        }
+        // ну и тикаем все GameRunner мало ли кому надо на это подписаться
+        getGameTypes().forEach(gameType -> gameType.quietTick());
     }
 
     private void removeNotActivePlayers() {
