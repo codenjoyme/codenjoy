@@ -72,7 +72,7 @@ public abstract class AbstractGameType implements GameType {
     }
 
     /**
-     * Этот метод будет дергаться после всех тиков всех игор
+     * Этот метод будет дергаться перед всеми тиками игрушек
      */
     @Override
     public void tick() {

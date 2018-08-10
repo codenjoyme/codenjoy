@@ -205,6 +205,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             playerGames.tick();
+            multiplayer.tick();
             sendScreenUpdates();
             requestControls();
             actionLogger.log(playerGames);

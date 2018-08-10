@@ -43,6 +43,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -163,6 +164,25 @@ public class PlayerServiceImplTest {
         playerGames.clear();
         Mockito.reset(playerController, screenController, actionLogger, multiplayer);
         playerService.openRegistration();
+
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                List<PlayerGame> playerGames = getPlayerGames();
+                playerGames.forEach(playerGame -> {
+                    Game g = playerGame.getGame();
+                    if (g.isGameOver()) {
+                        ((Tickable)() -> g.newGame()).quietTick();
+                    }
+                });
+                if (playerGames.get(0).getPlayer().getGameType().getMultiplayerType().isSingleplayer()) {
+                    playerGames.forEach(playerGame -> playerGame.getGame().quietTick());
+                } else {
+                    playerGames.get(0).getGame().quietTick();
+                }
+                return null;
+            }
+        }).when(multiplayer).tick();
 
         // TODO подумать как можно упростить
         when(multiplayer.playerWantsToPlay(any(GameType.class), any(Player.class), any(String.class)))
@@ -712,12 +732,16 @@ public class PlayerServiceImplTest {
     }
 
     private void setNewGames(Game... games) {
-        List<PlayerGame> list = field("playerGames").ofType(List.class).in(playerGames).get();
+        List<PlayerGame> list = getPlayerGames();
         for (int index = 0; index < list.size(); index++) {
             PlayerGame playerGame = list.get(index);
 
             field("game").ofType(Game.class).in(playerGame).set(games[index]);
         }
+    }
+
+    private List<PlayerGame> getPlayerGames() {
+        return field("playerGames").ofType(List.class).in(playerGames).get();
     }
 
     @Test

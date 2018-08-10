@@ -282,57 +282,6 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void shouldNewGameWhenGameOverWhenTick() {
-        // given
-        when(game.isGameOver()).thenReturn(true);
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(game).newGame();
-    }
-
-    @Test
-    public void shouldQuietNewGameWhenGameOverWhenTick() {
-        // given
-        when(game.isGameOver()).thenReturn(true);
-        doThrow(new RuntimeException()).when(game).newGame();
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(game).newGame();
-    }
-
-    @Test
-      public void shouldTickGameWhenTickIfSingleGameType() {
-        // given
-        GameType gameType = playerGames.getGameTypes().get(0);
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE);
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(game).quietTick();
-    }
-
-    @Test
-    public void shouldTickGameWhenTickIfNotSingleGameType() {
-        // given
-        GameType gameType = playerGames.getGameTypes().get(0);
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(game).quietTick();
-    }
-
-    @Test
     public void shouldNotRemovePlayerIfNoActive() {
         // given
         when(statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, PlayerGames.TICKS_FOR_REMOVE)).thenReturn(Arrays.asList(player));
@@ -346,7 +295,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void shouldTickGameTypeAfterAllGames() {
+    public void shouldTickGameType() {
         // given
         addOtherPlayer();
         addOtherPlayer();
@@ -356,12 +305,8 @@ public class PlayerGamesTest {
 
         // then
 
-        InOrder order = inOrder(games.get(0), games.get(1), games.get(2),
-                gameTypes.get(0), gameTypes.get(1), gameTypes.get(2));
+        InOrder order = inOrder(gameTypes.get(0), gameTypes.get(1), gameTypes.get(2));
 
-        order.verify(games.get(0)).quietTick();
-        order.verify(games.get(1)).quietTick();
-        order.verify(games.get(2)).quietTick();
         order.verify(gameTypes.get(0)).quietTick();
         order.verify(gameTypes.get(1)).quietTick();
         order.verify(gameTypes.get(2)).quietTick();

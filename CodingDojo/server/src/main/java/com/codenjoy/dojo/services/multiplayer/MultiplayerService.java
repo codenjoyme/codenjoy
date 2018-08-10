@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.*;
 /**
  * Интерфейс сервиса, реализующий одно- и многопользовательские варианты игры.
  */
-public interface MultiplayerService {
+public interface MultiplayerService extends Tickable {
     /**
      * Добавляеь игрока к существующей игре или создает новую в
      * соответствии с правилами указанными в этой игре.

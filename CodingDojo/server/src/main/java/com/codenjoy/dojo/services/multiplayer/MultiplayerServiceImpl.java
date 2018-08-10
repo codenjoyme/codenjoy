@@ -39,7 +39,7 @@ import java.util.function.Supplier;
  * Created by indigo on 2018-07-01.
  */
 @Component("multiplayerService") // TODO test me
-public class MultiplayerServiceImpl implements MultiplayerService{
+public class MultiplayerServiceImpl implements MultiplayerService {
 
     static class Room {
         private final int maxCount;
@@ -71,6 +71,32 @@ public class MultiplayerServiceImpl implements MultiplayerService{
 
     @Autowired
     private PlayerGames playerGames;
+
+    @Override
+    public void tick() {
+        // создаем новые игры для тех, кто уже game over
+        for (final PlayerGame playerGame : playerGames) {
+            final Game game = playerGame.getGame();
+            if (game.isGameOver()) {
+                ((Tickable)() -> game.newGame()).quietTick();
+            }
+        }
+
+        // тикаем игры по правилам много-/однопользовательской игры
+        List<GameType> gameTypes = playerGames.getGameTypes();  // TODO потестить еще отдельно
+        for (GameType gameType : gameTypes) {
+            List<PlayerGame> games = playerGames.getAll(gameType.name());
+            if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
+                if (!games.isEmpty()) {
+                    games.iterator().next().getGame().quietTick();
+                }
+            } else {
+                for (PlayerGame playerGame : games) {
+                    playerGame.getGame().quietTick();
+                }
+            }
+        }
+    }
 
     @Override
     public PlayerGame playerWantsToPlay(GameType gameType, Player player, String save) {

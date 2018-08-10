@@ -40,7 +40,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private static Logger logger = LoggerFactory.getLogger(PlayerGames.class);
 
     public static final int TICKS_FOR_REMOVE = 60*30; // 15 минут без игры - дисквалификация
-    private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
+    private List<PlayerGame> playerGames = new LinkedList<>();
 
     private BiConsumer<Player, Joystick> onAddPlayer;
     private BiConsumer<Player, Joystick> onRemovePlayer;
@@ -143,29 +143,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // следим за плеерами, кто давно не играет
         statistics.quietTick();
 //        removeNotActivePlayers();
-
-        // создаем новые игры для тех, кто уже gameover
-        for (final PlayerGame playerGame : playerGames) {
-            final Game game = playerGame.getGame();
-            if (game.isGameOver()) {
-                ((Tickable)() -> game.newGame()).quietTick();
-            }
-        }
-
-        // тикаем игры по правилам много-/однопользовательской игры
-        List<GameType> gameTypes = getGameTypes();  // TODO потестить еще отдельно
-        for (GameType gameType : gameTypes) {
-            List<PlayerGame> games = getAll(gameType.name());
-            if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
-                if (!games.isEmpty()) {
-                    games.iterator().next().getGame().quietTick();
-                }
-            } else {
-                for (PlayerGame playerGame : games) {
-                    playerGame.getGame().quietTick();
-                }
-            }
-        }
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(gameType -> gameType.quietTick());
