@@ -7,10 +7,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.TestCase.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -75,9 +75,56 @@ public class MultiplayerServiceImplTest {
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
 
-        assertNotSame(field1, field2);
-        assertNotSame(field2, field3);
-        assertNotSame(field3, field1);
+        assertThat(field1)
+                .notIn(field2)
+                .notIn(field3)
+                .check();
+    }
+
+    private static class GroupsAsserter {
+
+        private List<List<GameField>> groups;
+
+        public GroupsAsserter(GameField[] group) {
+            groups = new LinkedList();
+            notIn(group);
+        }
+
+        public GroupsAsserter notIn(GameField... anotherGroup) {
+            groups.add(Arrays.asList(anotherGroup));
+            return this;
+        }
+
+        public void check() {
+            for (int i = 0; i < groups.size(); i++) {
+                List<GameField> group = groups.get(i);
+                for (int ii = 0; ii < group.size(); ii++) {
+                    for (int jj = ii + 1; jj < group.size(); jj++) {
+                        if (jj == ii) continue;
+                        String message = String.format("[G%s:%s]==[G%s:%s]", i + 1, ii + 1, i + 1, jj + 1);
+                        System.out.println(message);
+                        Assert.assertSame(message,
+                                group.get(ii), group.get(jj));
+                    }
+                }
+                for (int j = i + 1; j < groups.size(); j++) {
+                    List<GameField> group1 = groups.get(i);
+                    List<GameField> group2 = groups.get(j);
+                    for (int ii = 0; ii < group1.size(); ii++) {
+                        for (int jj = 0; jj < group2.size(); jj++) {
+                            String message = String.format("[G%s:%s]!=[G%s:%s]", i + 1, ii + 1, j + 1, jj + 1);
+                            System.out.println(message);
+                            Assert.assertNotSame(message,
+                                    group1.get(ii), group2.get(jj));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private GroupsAsserter assertThat(GameField... group1) {
+        return new GroupsAsserter(group1);
     }
 
     @Test
@@ -100,30 +147,10 @@ public class MultiplayerServiceImplTest {
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertSame(field1, field2);
-        assertSame(field3, field4);
-
-        assertNotSame(field1, field3, field5);
-    }
-
-    public void assertSame(GameField... fields) {
-        for (int i = 0; i < fields.length; i++) {
-            for (int j = 0; j < fields.length; j++) {
-                if (j == i) continue;
-                Assert.assertSame(String.format("[%s]==[%s]", i, j),
-                        fields[i], fields[j]);
-            }
-        }
-    }
-
-    public void assertNotSame(GameField... fields) {
-        for (int i = 0; i < fields.length; i++) {
-            for (int j = 0; j < fields.length; j++) {
-                if (j == i) continue;
-                Assert.assertNotSame(String.format("[%s]!=[%s]", i, j),
-                        fields[i], fields[j]);
-            }
-        }
+        assertThat(field1, field2)
+                .notIn(field3, field4)
+                .notIn(field5)
+                .check();
     }
 
     @Test
@@ -146,12 +173,9 @@ public class MultiplayerServiceImplTest {
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertSame(field1, field2, field3);
-        assertSame(field4, field5);
-
-        assertNotSame(field1, field4);
-        assertNotSame(field2, field5);
-        assertNotSame(field3, field5);
+        assertThat(field1, field2, field3)
+                .notIn(field4, field5)
+                .check();
     }
 
     @Test
@@ -174,12 +198,9 @@ public class MultiplayerServiceImplTest {
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertSame(field1, field2, field3, field4);
-
-        assertNotSame(field1, field5);
-        assertNotSame(field2, field5);
-        assertNotSame(field3, field5);
-        assertNotSame(field4, field5);
+        assertThat(field1, field2, field3, field4)
+                .notIn(field5)
+                .check();
     }
 
     @Test
@@ -202,12 +223,9 @@ public class MultiplayerServiceImplTest {
         GameField field4 = playerGame4.getGame().getField();
         GameField field5 = playerGame5.getGame().getField();
 
-        assertSame(field1, field2, field3, field4);
-
-        assertNotSame(field1, field5);
-        assertNotSame(field2, field5);
-        assertNotSame(field3, field5);
-        assertNotSame(field4, field5);
+        assertThat(field1, field2, field3, field4)
+                .notIn(field5)
+                .check();
     }
 
     @Test
@@ -224,8 +242,7 @@ public class MultiplayerServiceImplTest {
         GameField field2 = playerGame2.getGame().getField();
         GameField field3 = playerGame3.getGame().getField();
 
-        assertSame(field1, field2);
-        assertSame(field2, field3);
-        assertSame(field3, field1);
+        assertThat(field1, field2, field3)
+                .check();
     }
 }
