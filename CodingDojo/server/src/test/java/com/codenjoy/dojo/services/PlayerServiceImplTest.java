@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
@@ -59,7 +58,6 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
-        MockChatService.class,
         MockPlayerController.class,
         MockScreenController.class,
         MockAutoSaver.class,
@@ -91,7 +89,6 @@ public class PlayerServiceImplTest {
     @Autowired private PlayerController screenController;
     @Autowired private PlayerController playerController;
     @Autowired private GameService gameService;
-    @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
     @Autowired private PlayerGames playerGames;
@@ -112,7 +109,7 @@ public class PlayerServiceImplTest {
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
-        Mockito.reset(actionLogger, autoSaver, chatService, gameService, playerController, statistics);
+        Mockito.reset(actionLogger, autoSaver, gameService, playerController, statistics);
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
@@ -129,8 +126,6 @@ public class PlayerServiceImplTest {
 
         playerScores3 = mock(PlayerScores.class);
         when(playerScores3.getScore()).thenReturn(0);
-
-        when(chatService.getChatLog()).thenReturn("chat");
 
         joystick = mock(Joystick.class);
 

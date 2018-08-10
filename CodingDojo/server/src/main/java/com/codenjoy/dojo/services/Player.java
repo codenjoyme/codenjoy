@@ -130,7 +130,7 @@ public class Player implements ScreenRecipient {
     }
 
     public String getGameName() {
-        return (gameType != null)?gameType.name():gameName;
+        return (gameType != null) ? gameType.name() : gameName;
     }
 
     public String getPassword() {

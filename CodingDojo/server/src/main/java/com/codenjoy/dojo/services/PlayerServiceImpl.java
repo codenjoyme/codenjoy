@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -53,30 +52,30 @@ public class PlayerServiceImpl implements PlayerService {
     private boolean registration = true;
 
     @Autowired
-    private PlayerGames playerGames;
+    protected PlayerGames playerGames;
 
     @Autowired
-    private MultiplayerService multiplayer;
+    protected MultiplayerService multiplayer;
 
     @Autowired
     @Qualifier("playerController")
-    private PlayerController playerController;
+    protected PlayerController playerController;
 
     @Autowired
     @Qualifier("screenController")
-    private PlayerController screenController;
+    protected PlayerController screenController;
 
     @Autowired
-    private GameService gameService;
+    protected GameService gameService;
 
     @Autowired
-    private AutoSaver autoSaver;
+    protected AutoSaver autoSaver;
 
     @Autowired
-    private ActionLogger actionLogger;
+    protected ActionLogger actionLogger;
 
     @Value("${autoSaverEnable}")
-    private boolean autoSaverEnable;
+    protected boolean autoSaverEnable;
 
     @PostConstruct
     public void init() {
@@ -102,7 +101,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return NullPlayer.INSTANCE;
             }
 
-            registerAIFor(name, gameName);
+            registerAIIfNeeded(name, gameName);
 
             Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, null));
 
@@ -124,7 +123,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void registerAIFor(String forPlayer, String gameName) {
+    private void registerAIIfNeeded(String forPlayer, String gameName) {
         if (forPlayer.endsWith(BOT_EMAIL_SUFFIX)) return;
 
         GameType gameType = gameService.getGame(gameName);
@@ -313,7 +312,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private List<Player> private_getAll(String gameName) {
-        List<Player> result = new LinkedList<Player>();
+        List<Player> result = new LinkedList<>();
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             if (player.getGameName().equals(gameName)) {
