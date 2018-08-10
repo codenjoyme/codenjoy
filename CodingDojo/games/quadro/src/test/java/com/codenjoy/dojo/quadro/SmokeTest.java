@@ -212,8 +212,8 @@ public class SmokeTest {
                         "1:         \n" +
                         "1:         \n" +
                         "1:   x     \n" +
-                        "1:  xoo    \n" +
-                        "1:  oox    \n" +
+                        "1:   oo    \n" +
+                        "1:  xox    \n" +
                         "1:oxxoox   \n" +
                         "1:\n" +
                         "DICE:3\n" +
@@ -225,8 +225,8 @@ public class SmokeTest {
                         "2:         \n" +
                         "2:         \n" +
                         "2:   x     \n" +
-                        "2:  xoo    \n" +
-                        "2:  oox    \n" +
+                        "2:   oo    \n" +
+                        "2:  xox    \n" +
                         "2:oxxoox   \n" +
                         "2:\n" +
                         "DICE:1\n" +
@@ -239,8 +239,8 @@ public class SmokeTest {
                         "1:         \n" +
                         "1:   o     \n" +
                         "1:   x     \n" +
-                        "1:  xoo    \n" +
-                        "1:  oox    \n" +
+                        "1:   oo    \n" +
+                        "1:  xox    \n" +
                         "1:oxxoox   \n" +
                         "1:\n" +
                         "DICE:0\n" +
@@ -252,8 +252,8 @@ public class SmokeTest {
                         "2:         \n" +
                         "2:   o     \n" +
                         "2:   x     \n" +
-                        "2:  xoo    \n" +
-                        "2:  oox    \n" +
+                        "2:   oo    \n" +
+                        "2:  xox    \n" +
                         "2:oxxoox   \n" +
                         "2:\n" +
                         "DICE:1\n" +
@@ -266,8 +266,8 @@ public class SmokeTest {
                         "1:         \n" +
                         "1:   o     \n" +
                         "1:   x     \n" +
-                        "1:  xoo    \n" +
-                        "1: xoox    \n" +
+                        "1:   oo    \n" +
+                        "1: xxox    \n" +
                         "1:oxxoox   \n" +
                         "1:\n" +
                         "DICE:4\n" +
@@ -279,8 +279,8 @@ public class SmokeTest {
                         "2:         \n" +
                         "2:   o     \n" +
                         "2:   x     \n" +
-                        "2:  xoo    \n" +
-                        "2: xoox    \n" +
+                        "2:   oo    \n" +
+                        "2: xxox    \n" +
                         "2:oxxoox   \n" +
                         "2:\n" +
                         "DICE:1\n" +
@@ -293,8 +293,8 @@ public class SmokeTest {
                         "1:         \n" +
                         "1:   o     \n" +
                         "1:   xo    \n" +
-                        "1:  xoo    \n" +
-                        "1: xoox    \n" +
+                        "1:   oo    \n" +
+                        "1: xxox    \n" +
                         "1:oxxoox   \n" +
                         "1:\n" +
                         "DICE:2\n" +
@@ -306,8 +306,8 @@ public class SmokeTest {
                         "2:         \n" +
                         "2:   o     \n" +
                         "2:   xo    \n" +
-                        "2:  xoo    \n" +
-                        "2: xoox    \n" +
+                        "2:   oo    \n" +
+                        "2: xxox    \n" +
                         "2:oxxoox   \n" +
                         "2:\n" +
                         "DICE:1\n" +
@@ -320,8 +320,8 @@ public class SmokeTest {
                         "1:         \n" +
                         "1:   o     \n" +
                         "1:   xo    \n" +
-                        "1: xxoo    \n" +
-                        "1: xoox    \n" +
+                        "1: x oo    \n" +
+                        "1: xxox    \n" +
                         "1:oxxoox   \n" +
                         "1:\n" +
                         "DICE:3\n" +
@@ -333,8 +333,8 @@ public class SmokeTest {
                         "2:         \n" +
                         "2:   o     \n" +
                         "2:   xo    \n" +
-                        "2: xxoo    \n" +
-                        "2: xoox    \n" +
+                        "2: x oo    \n" +
+                        "2: xxox    \n" +
                         "2:oxxoox   \n" +
                         "2:\n" +
                         "DICE:2\n" +
@@ -347,8 +347,8 @@ public class SmokeTest {
                         "1:   o     \n" +
                         "1:   o     \n" +
                         "1:   xo    \n" +
-                        "1: xxoo    \n" +
-                        "1: xoox    \n" +
+                        "1: x oo    \n" +
+                        "1: xxox    \n" +
                         "1:oxxoox   \n" +
                         "1:\n" +
                         "DICE:4\n" +
@@ -360,8 +360,8 @@ public class SmokeTest {
                         "2:   o     \n" +
                         "2:   o     \n" +
                         "2:   xo    \n" +
-                        "2: xxoo    \n" +
-                        "2: xoox    \n" +
+                        "2: x oo    \n" +
+                        "2: xxox    \n" +
                         "2:oxxoox   \n" +
                         "2:\n" +
                         "DICE:1\n" +

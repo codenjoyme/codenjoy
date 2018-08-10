@@ -100,7 +100,7 @@ public class Quadro implements Field {
 
     @Override
     public boolean isMyTurn(Hero hero) {
-        return hero.equals(currentHero());
+        return hero == currentHero();
     }
 
     @Override

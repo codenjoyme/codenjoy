@@ -177,6 +177,7 @@ public class QuadroTest {
 
         hero1.act(0);
         game.tick();
+
         hero2.act(4);
         game.tick();
 
@@ -266,6 +267,7 @@ public class QuadroTest {
 
         hero1.act(0);
         game.tick();
+
         hero2.act(1);
         game.tick();
 
@@ -339,7 +341,35 @@ public class QuadroTest {
                 "    xo   ");
     }
 
-    // Игроки ходят по очереди, сначала желтый, потом красный
+    // Первым ходит желтый даже если они оба походят в одну клетку
+    @Test
+    public void shouldYellowGoesFirst_eventIfRedGoesToTheSameCell() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+
+        hero1.act(4);
+        hero2.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "    o    ");
+    }
+
+        // Игроки ходят по очереди, сначала желтый, потом красный
     @Test
     public void shouldHero1AddChip_thenShouldHero1AddChip() {
         givenFl("         " +
