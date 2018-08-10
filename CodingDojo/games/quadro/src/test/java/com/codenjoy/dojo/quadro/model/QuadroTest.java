@@ -369,7 +369,7 @@ public class QuadroTest {
                 "    o    ");
     }
 
-        // Игроки ходят по очереди, сначала желтый, потом красный
+    // Игроки ходят по очереди, сначала желтый, потом красный
     @Test
     public void shouldHero1AddChip_thenShouldHero1AddChip() {
         givenFl("         " +
@@ -409,7 +409,7 @@ public class QuadroTest {
                 "    o    ");
     }
 
-    // Если игрок пропустил ход, то на следующий ход ходит он
+    // Если игрок пропустил ход, то на следующий ход ходит он же
     @Test
     public void shouldAddChip_afterMissedAct() {
         givenFl("         " +

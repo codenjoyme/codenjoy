@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 public enum Elements implements CharElements {
 
     NONE(' '),        // пустое поле
-    YELLOW('o'),      // желтая фишка
+    YELLOW('o'),      // желтая фишка (ходит первым)
     RED('x');         // красная фишка
 
     final char ch;
