@@ -23,4 +23,9 @@ $(document).ready(function () {
     var contextPath = window.location.pathname.split('/')[1];
     var base = window.location.origin + '/' + contextPath + '/';
     document.head.innerHTML = document.head.innerHTML + "<base target='_blank' href='" + base + "' />";
+    $('pre').each(function(i, e) {
+        var content = $(this).html();
+        content = content.replace('codenjoy-contest', contextPath);
+        $(this).html(content);
+    });
 });
