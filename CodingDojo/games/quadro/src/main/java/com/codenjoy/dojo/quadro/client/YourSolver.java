@@ -35,12 +35,6 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    // this is your email
-    private static final String USER_NAME = "your@email.com";
-    // you can get this code after registration on the server with your email
-    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-    private static final String CODE = "12345678901234567890";
-
     private Dice dice;
     private Board board;
 
