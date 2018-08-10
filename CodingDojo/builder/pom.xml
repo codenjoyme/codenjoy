@@ -523,7 +523,7 @@
                 </property>
             </activation>
             <properties>
-                <exclude.reversi>false</exclude.reversi>
+                <exclude.quadro>false</exclude.quadro>
             </properties>
             <dependencies>
                 <dependency>
