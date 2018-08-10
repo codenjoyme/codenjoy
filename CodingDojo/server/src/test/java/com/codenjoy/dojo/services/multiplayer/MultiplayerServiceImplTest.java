@@ -27,6 +27,7 @@ public class MultiplayerServiceImplTest {
     private GameType tournament;
     private GameType triple;
     private GameType quadro;
+    private GameType team4;
 
     private List<GameField> fields = new LinkedList<>();
 
@@ -40,6 +41,7 @@ public class MultiplayerServiceImplTest {
         tournament = setupGameType("tournament", MultiplayerType.TOURNAMENT);
         triple = setupGameType("triple", MultiplayerType.TRIPLE);
         quadro = setupGameType("quadro", MultiplayerType.QUADRO);
+        team4 = setupGameType("team4", MultiplayerType.TEAM.apply(4));
         multiple = setupGameType("multiple", MultiplayerType.MULTIPLE);
     }
 
@@ -153,6 +155,34 @@ public class MultiplayerServiceImplTest {
     }
 
     @Test
+    public void shouldXPlayerOnBoard_whenTeam() {
+        Player player1 = new Player();
+        Player player2 = new Player();
+        Player player3 = new Player();
+        Player player4 = new Player();
+        Player player5 = new Player();
+
+        PlayerGame playerGame1 = multiplayer.playerWantsToPlay(team4, player1, null);
+        PlayerGame playerGame2 = multiplayer.playerWantsToPlay(team4, player2, null);
+        PlayerGame playerGame3 = multiplayer.playerWantsToPlay(team4, player3, null);
+        PlayerGame playerGame4 = multiplayer.playerWantsToPlay(team4, player4, null);
+        PlayerGame playerGame5 = multiplayer.playerWantsToPlay(team4, player5, null);
+
+        GameField field1 = playerGame1.getGame().getField();
+        GameField field2 = playerGame2.getGame().getField();
+        GameField field3 = playerGame3.getGame().getField();
+        GameField field4 = playerGame4.getGame().getField();
+        GameField field5 = playerGame5.getGame().getField();
+
+        assertSame(field1, field2, field3, field4);
+
+        assertNotSame(field1, field5);
+        assertNotSame(field2, field5);
+        assertNotSame(field3, field5);
+        assertNotSame(field4, field5);
+    }
+
+    @Test
     public void shouldFourPlayerOnBoard_whenQuadro() {
         Player player1 = new Player();
         Player player2 = new Player();
@@ -173,7 +203,6 @@ public class MultiplayerServiceImplTest {
         GameField field5 = playerGame5.getGame().getField();
 
         assertSame(field1, field2, field3, field4);
-        assertSame(field5);
 
         assertNotSame(field1, field5);
         assertNotSame(field2, field5);
