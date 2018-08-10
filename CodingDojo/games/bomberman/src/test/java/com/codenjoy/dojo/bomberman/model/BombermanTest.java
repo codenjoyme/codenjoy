@@ -1768,7 +1768,6 @@ public class BombermanTest {
                 "&3   \n" +
                 "#2   \n" +
                 "&1   \n");
-        assertScores(0, 0);
 
         hero.right();
         field.tick();
@@ -1777,7 +1776,6 @@ public class BombermanTest {
                 "&2   \n" +
                 "#1   \n" +
                 "x҉҉  \n");
-        assertScores(1, 1);
 
         field.tick();
         asrtBrd("  ☺  \n" +
@@ -1785,7 +1783,6 @@ public class BombermanTest {
                 "&1   \n" +
                 "H҉҉  \n" +
                 "&҉   \n");
-        assertScores(2, 2);
 
         field.tick();
         asrtBrd("  ☺  \n" +
@@ -1793,7 +1790,6 @@ public class BombermanTest {
                 "x҉҉  \n" +
                 "#҉   \n" +
                 "&    \n");
-        assertScores(3, 3);
 
         field.tick();
         asrtBrd(" ҉☺  \n" +
@@ -1801,7 +1797,6 @@ public class BombermanTest {
                 "&҉   \n" +
                 "#    \n" +
                 "&    \n");
-        assertScores(4, 4);
 
         hero.left();
         field.tick();
@@ -1822,7 +1817,6 @@ public class BombermanTest {
                 "&҉   \n" +
                 "#    \n" +
                 "&    \n");
-        assertScores(0, 5);
 
         assertBombermanDie();
 
@@ -1848,12 +1842,6 @@ public class BombermanTest {
                 "&    \n" +
                 "#҉   \n" +
                 "x҉҉☺ \n");
-        assertScores(1, 5);
-    }
-
-    private void assertScores(int expectedCurrent, int expectedMax) {
-        assertEquals(expectedCurrent, game.getCurrentScore());
-        assertEquals(expectedMax, game.getMaxScore());
     }
 
     // если я двинулся за пределы стены и тут же поставил бомбу, то бомба упадет на моем текущем месте

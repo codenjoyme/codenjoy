@@ -35,15 +35,13 @@ public class PlayerDataTest {
 
     @Test
     public void shouldSavePlayerData(){
-        PlayerData data = new PlayerData(13, "board", "game", 55, 78, 99, "+100",
+        PlayerData data = new PlayerData(13, "board", "game", 55, "+100",
                 new JSONObject("{'user@mail.com':12}"),
                 new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"));
 
         assertSame("board", data.getBoard());
         assertEquals(55, data.getScore());
-        assertEquals(78, data.getMaxLength());
         assertEquals(13, data.getBoardSize());
-        assertEquals(99, data.getLength());
         assertEquals("+100", data.getInfo());
         assertEquals("{\"user@mail.com\":12}", JsonUtils.toStringSorted(data.getScores().toString()).toString());
         assertEquals("{\"user@gmail.com\":{\"x\":5,\"y\":10}}", JsonUtils.toStringSorted(data.getHeroesData().toString()).toString());
@@ -52,7 +50,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldCollectData() {
-        PlayerData data = new PlayerData(15, "board", "game", 10, 5, 7, "info",
+        PlayerData data = new PlayerData(15, "board", "game", 10, "info",
                 new JSONObject("{'user@mail.com':12}"),
                 new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"));
 
@@ -61,8 +59,6 @@ public class PlayerDataTest {
                 "Board:'board', " +
                 "GameName:'game', " +
                 "Score:10, " +
-                "MaxLength:5, " +
-                "Length:7, " +
                 "Info:'info', " +
                 "Scores:'{\"user@mail.com\":12}', " +
                 "HeroesData:'{\"user@gmail.com\":{\"x\":5,\"y\":10}}']", data.toString());
@@ -70,7 +66,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldEmptyInfoIfNull(){
-        PlayerData data = new PlayerData(15, "board", "game", 10, 9, 8, null,
+        PlayerData data = new PlayerData(15, "board", "game", 10, null,
                 new JSONObject("{'user@mail.com':12}"),
                 new JSONObject("{'user@gmail.com':{'y':10,'x':5}}"));
 

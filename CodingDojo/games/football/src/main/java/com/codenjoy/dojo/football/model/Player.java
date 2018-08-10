@@ -40,27 +40,18 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    @Override
-    public void increaseScore() {
-        super.increaseScore();
-
-        if (listener != null) {
-            listener.event(Events.WIN);
-        }
-    }
-    
     public void event(Events event) {
         switch (event) {
             case TOP_GOAL: 
                 goalHited = true;
                 if (myGoal != Elements.TOP_GOAL) {
-                    increaseScore();
+                    super.event(Events.WIN);
                 }
                 break;
             case BOTTOM_GOAL: 
                 goalHited = true;
                 if (myGoal != Elements.BOTTOM_GOAL) {
-                    increaseScore();
+                    super.event(Events.WIN);
                 }
                 break;
             case WIN:

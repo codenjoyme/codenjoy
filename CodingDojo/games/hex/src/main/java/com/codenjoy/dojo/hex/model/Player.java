@@ -59,15 +59,6 @@ public class Player extends GamePlayer<Hero, Field> implements Tickable {
         return heroes;
     }
 
-    public void event(Event event) {
-        switch (event.getType()) {
-            case LOOSE: clearScore(); break;
-            case WIN: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
     @Override
     public Hero getHero() {
         return newHero;

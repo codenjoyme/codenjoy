@@ -41,17 +41,6 @@ public class Player extends GamePlayer<PlayerHero, Field> {
         super(listener);
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case FAIL: gameOver(); break;
-            case SUCCESS: increaseScore(); break;
-            case WIN: gameOver(); break;
-            case LOOSE: gameOver(); break;
-        }
-
-        super.event(event);
-    }
-
     public static final int SIZE = 9;
 
     private boolean check(int i) {

@@ -48,23 +48,14 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public void event(Events event) {
         switch (event) {
-            case KILL_MEAT_CHOPPER : increaseScore(); break;
-            case KILL_DESTROY_WALL : increaseScore(); break;
-            case KILL_BOMBERMAN: gameOver(); break;
+            case KILL_BOMBERMAN: hero.kill(); break;
         }
 
         super.event(event);
     }
 
-    @Override
-    public void gameOver() {
-        super.gameOver();
-        hero.kill();
-    }
-
 
     public void newHero(Field board) {
-        score = 0;
         settings = board.getSettings();
         hero = settings.getBomberman(settings.getLevel());
         hero.init(board);

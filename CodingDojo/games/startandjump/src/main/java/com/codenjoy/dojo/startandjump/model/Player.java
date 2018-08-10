@@ -36,15 +36,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case LOSE: gameOver(); break;
-            case STILL_ALIVE: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
     public Hero getHero() {
         return hero;
     }

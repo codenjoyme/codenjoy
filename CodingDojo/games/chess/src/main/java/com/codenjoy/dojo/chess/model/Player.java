@@ -42,13 +42,6 @@ public class Player extends GamePlayer<Korol, Field>{
         super(listener);
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case WIN: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
 
     public void initFigures(Field field) {
         List<Figure> figures = field.getFigures(false);

@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.snake.services.Events;
 
 public class Player extends GamePlayer<Hero, Field> {
 
@@ -36,16 +35,6 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public Player(EventListener listener) {
         super(listener);
-    }
-
-    public void event(Events event) {
-        switch (event) {
-            case KILL : gameOver(); break;
-            case EAT_STONE : setScore(snake.getLength()); break;
-            case EAT_APPLE : setScore(snake.getLength()); break;
-        }
-
-        super.event(event);
     }
 
     @Override
@@ -57,11 +46,6 @@ public class Player extends GamePlayer<Hero, Field> {
     public HeroData getHeroData() {
         return new HeroDataImpl(snake.getHead(),
                 MultiplayerType.SINGLE.isSingle());
-    }
-
-    @Override
-    public int getScore() {
-        return snake.getLength();
     }
 
     @Override

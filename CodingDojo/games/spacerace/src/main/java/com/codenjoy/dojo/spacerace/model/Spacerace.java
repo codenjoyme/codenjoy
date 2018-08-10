@@ -190,11 +190,11 @@ public class Spacerace implements Field {
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-            if(bulletPacks.contains((Point) hero)){ // todo проверить приведение
-                bulletPacks.remove((Point) hero);
+            if (bulletPacks.contains(hero)) {
+                bulletPacks.remove(hero);
                 currentBulletPacks--;
                 createBulletPack();
-                player.event(Events.RECHARGE);
+                player.recharge();
             }
         }
     }

@@ -35,20 +35,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    public void event(Events event) {
-        if (event.isLoose()) {
-            gameOver();
-        }
-        if (event.isFlip()) {
-            increaseScore();
-        }
-        if (event.isWin()) {
-            // do nothing
-        }
-
-        super.event(event);
-    }
-
     public Hero getHero() {
         return hero;
     }

@@ -267,8 +267,6 @@ public class PlayerServiceImpl implements PlayerService {
                         encoded,
                         gameType.name(),
                         player.getScore(),
-                        game.getMaxScore(),
-                        game.getCurrentScore(),
                         player.getMessage(),
                         gameData.getScores(),
                         gameData.getHeroesData()));

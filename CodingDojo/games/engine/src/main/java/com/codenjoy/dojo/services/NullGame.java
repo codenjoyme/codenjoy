@@ -46,16 +46,6 @@ public class NullGame implements Game {
     }
 
     @Override
-    public int getMaxScore() {
-        return 0; 
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return 0; 
-    }
-
-    @Override
     public boolean isGameOver() {
         return false; 
     }

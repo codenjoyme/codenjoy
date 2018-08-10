@@ -38,16 +38,6 @@ public interface Game {
     Joystick getJoystick();
 
     /**
-     * @return Максимально количество полезных действий, которое удалось совершить игроком между двух смертей
-     */
-    int getMaxScore();
-
-    /**
-     * @return Текущее количество полезных действий, которое удалось совершить игроком между двух смертей
-     */
-    int getCurrentScore();
-
-    /**
      * @return true - если герой убит
      */
     boolean isGameOver();

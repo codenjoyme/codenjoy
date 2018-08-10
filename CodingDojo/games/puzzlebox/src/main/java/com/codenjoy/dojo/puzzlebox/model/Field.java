@@ -28,6 +28,4 @@ public interface Field extends GameField<Player> {
     boolean isBarrier(int x, int y);
 
     boolean isTarget(int x, int y);
-
-    void fillEvent();
 }

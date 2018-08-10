@@ -999,32 +999,6 @@ public class SpaceraceTest {
     }
 
     @Test
-    public void shouldCountScores() {
-        // given
-        givenFl("☼   ☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼   ☼");
-
-        assertEquals(0, player.getScore());
-        player.event(Events.DESTROY_BOMB);
-
-        assertEquals(1, player.getScore());
-        player.event(Events.DESTROY_STONE);
-        player.event(Events.DESTROY_STONE);
-
-        assertEquals(3, player.getScore());
-        player.event(Events.DESTROY_ENEMY);
-
-        assertEquals(4, player.getScore());
-        player.event(Events.LOOSE);
-
-        assertEquals(0, player.getScore());
-        assertEquals(4, player.getMaxScore());
-    }
-
-    @Test
     public void shouldBulletChargerOnField() {
         // given
         givenFl("☼    ☼" +

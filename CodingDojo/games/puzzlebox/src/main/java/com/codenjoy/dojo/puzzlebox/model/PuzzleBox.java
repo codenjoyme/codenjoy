@@ -93,10 +93,6 @@ public class PuzzleBox implements Field {
         player.getHero().setBoxes(level.getBoxes(), this);
     }
 
-    public void fillEvent() {
-        players.get(0).increaseScore();
-    }
-
     public void remove(Player player) {
         players.remove(player);
     }

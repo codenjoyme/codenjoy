@@ -217,20 +217,6 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         verify(listener3).event(Events.WIN);
-
-        assertEquals(1, game3.getCurrentScore());
-        assertEquals(1, game3.getMaxScore());
-
-        assertEquals(0, game2.getCurrentScore());
-        assertEquals(0, game2.getMaxScore());
-
-        assertEquals(0, game1.getCurrentScore());
-        assertEquals(0, game1.getMaxScore());
-
-        game3.clearScore();
-
-        assertEquals(0, game3.getCurrentScore());
-        assertEquals(0, game3.getMaxScore());
     }
 
     // игрок не может пойи на другого игрока

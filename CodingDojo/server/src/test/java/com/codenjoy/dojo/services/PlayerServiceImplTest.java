@@ -311,8 +311,6 @@ public class PlayerServiceImplTest {
         when(printer.print(anyObject(), anyObject()))
                 .thenReturn("1234")
                 .thenReturn("4321");
-        when(gamePlayer.getScore()).thenReturn(8, 9);
-        when(gamePlayer.getMaxScore()).thenReturn(10, 11);
         when(playerScores1.getScore()).thenReturn(123);
         when(playerScores2.getScore()).thenReturn(234);
 
@@ -331,12 +329,12 @@ public class PlayerServiceImplTest {
                     "{\"vasya@mail.com\":{\"coordinate\":{\"x\":5,\"y\":6},\"level\":0,\"multiplayer\":false}}}'";
         String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, Info:'', " +
+                "Board:'ABCD', GameName:'game', Score:123, Info:'', " +
                 scores + ", " +
                 heroesData + "]");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, Info:'', " +
+                "Board:'DCBA', GameName:'game', Score:234, Info:'', " +
                 scores + ", " +
                 heroesData + "]");
 
@@ -1019,7 +1017,7 @@ public class PlayerServiceImplTest {
         verifyNoMoreInteractions(playerScores3);
 
         verify(gameField, times(2)).newGame(any());
-        verify(gamePlayer, times(2)).clearScore();
+        verify(gameField, times(2)).clearScore();
     }
 
     @Test

@@ -54,26 +54,6 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public int getMaxScore() {
-        lock.writeLock().lock();
-        try {
-            return game.getMaxScore();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @Override
-    public int getCurrentScore() {
-        lock.writeLock().lock();
-        try {
-            return game.getCurrentScore();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @Override
     public boolean isGameOver() {
         lock.writeLock().lock();
         try {

@@ -248,16 +248,6 @@ public class SingleTest {
 
         verify(listener1).event(Events.GET_GOLD);
 
-        assertEquals(1, game1.getCurrentScore());
-        assertEquals(1, game1.getMaxScore());
-
-        assertEquals(0, game2.getCurrentScore());
-        assertEquals(0, game2.getMaxScore());
-
-        game1.clearScore();
-
-        assertEquals(0, game1.getCurrentScore());
-        assertEquals(0, game1.getMaxScore());
     }
 
     // можно ли проходить героям друг через дурга? Нет

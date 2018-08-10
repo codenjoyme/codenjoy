@@ -35,9 +35,6 @@ import com.codenjoy.dojo.services.hero.HeroData;
 public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
 
     protected EventListener listener;
-    // TODO понять нужны ли эти очки тут или это апендикс?
-    protected int maxScore;
-    protected int score;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты
@@ -45,7 +42,6 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      */
     public GamePlayer(EventListener listener) {
         this.listener = listener;
-        clearScore();
     }
 
     /**
@@ -56,42 +52,6 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
         if (listener != null) {
             listener.event(event);
         }
-    }
-
-    public void setScore(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("Score must be positive");
-        }
-        score = count;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public void increaseScore(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("Score must be positive");
-        }
-        setScore(score + count);
-    }
-
-    public void increaseScore() {
-        increaseScore(1);
-    }
-
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
-    }
-
-    public void gameOver() {
-        score = 0;
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     /**

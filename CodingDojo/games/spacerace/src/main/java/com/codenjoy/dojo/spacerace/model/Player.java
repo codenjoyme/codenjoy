@@ -36,16 +36,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case RECHARGE: recharge(); break;
-            case LOOSE: gameOver(); break;
-            default: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
     public void recharge(){
         hero.recharge();
     }

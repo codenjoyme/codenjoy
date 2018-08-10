@@ -35,14 +35,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case WIN: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
     @Override
     public void newHero(Field field) {
         hero = new Hero(field.getNewHeroPosition());

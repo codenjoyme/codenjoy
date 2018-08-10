@@ -73,8 +73,6 @@ public class GameRunnerTest {
         assertCharCount(actual, "&", meatChoppersCount);  // TODO тут ошибка опять появилась
         assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
 
-        assertEquals(0, game.getMaxScore());
-        assertEquals(0, game.getCurrentScore());
         assertFalse(game.isGameOver());
 
         joystick.act();

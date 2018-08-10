@@ -127,7 +127,7 @@ public class SingleTest {
         game3.getJoystick().up();
         field.tick();
         asrtFl3(
-        		"☼☼⌂⌂☼☼\n" +
+                "☼☼⌂⌂☼☼\n" +
                 "☼ ♣  ☼\n" +
                 "☼  ☻ ☼\n" +
                 "☼    ☼\n" +
@@ -183,84 +183,84 @@ public class SingleTest {
     // игрок может пробросить мяч через другого
     @Test
     public void shouldPassBallThroughPlayer() {
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼ ♣  ☼\n" +
                 "☼  ∙ ☼\n" +
                 "☼    ☼\n" +
                 "☼☺ ♦ ☼\n" +
                 "☼☼==☼☼\n");
-    	
-    	game2.getJoystick().down();
-    	game3.getJoystick().up();
-    	field.tick();
-    	game2.getJoystick().down();
-    	game3.getJoystick().up();
-    	field.tick();
-    	game2.getJoystick().right();
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        
+        game2.getJoystick().down();
+        game3.getJoystick().up();
+        field.tick();
+        game2.getJoystick().down();
+        game3.getJoystick().up();
+        field.tick();
+        game2.getJoystick().right();
+        field.tick();
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ♥ ☼\n" +
                 "☼  ♣ ☼\n" +
                 "☼☺   ☼\n" +
                 "☼☼==☼☼\n");
-    	
-    	game3.getJoystick().act(Actions.HIT_DOWN.getValue());
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        
+        game3.getJoystick().act(Actions.HIT_DOWN.getValue());
+        field.tick();
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ♦ ☼\n" +
                 "☼  ♠ ☼\n" +
                 "☼☺   ☼\n" +
                 "☼☼==☼☼\n");
-    	
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        
+        field.tick();
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ♦ ☼\n" +
                 "☼  ♣ ☼\n" +
                 "☼☺ * ☼\n" +
                 "☼☼==☼☼\n");
-    	
+        
     }
 
     // другой игрок может остановить мяч
     @Test
     public void shouldStopBall() {
-    	game2.getJoystick().down();
-    	game3.getJoystick().up();
-    	field.tick();
-    	game2.getJoystick().down();
-    	game3.getJoystick().up();
-    	field.tick();
-    	game2.getJoystick().right();
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        game2.getJoystick().down();
+        game3.getJoystick().up();
+        field.tick();
+        game2.getJoystick().down();
+        game3.getJoystick().up();
+        field.tick();
+        game2.getJoystick().right();
+        field.tick();
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ♥ ☼\n" +
                 "☼  ♣ ☼\n" +
                 "☼☺   ☼\n" +
                 "☼☼==☼☼\n");
-    	
-    	game3.getJoystick().act(Actions.HIT_DOWN.getValue());
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        
+        game3.getJoystick().act(Actions.HIT_DOWN.getValue());
+        field.tick();
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ♦ ☼\n" +
                 "☼  ♠ ☼\n" +
                 "☼☺   ☼\n" +
                 "☼☼==☼☼\n");
-    	
-    	game2.getJoystick().act(Actions.STOP_BALL.getValue());
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂⌂☼☼\n" +
+        
+        game2.getJoystick().act(Actions.STOP_BALL.getValue());
+        field.tick();
+        
+        asrtFl1("☼☼⌂⌂☼☼\n" +
                 "☼    ☼\n" +
                 "☼  ♦ ☼\n" +
                 "☼  ♠ ☼\n" +
@@ -287,35 +287,27 @@ public class SingleTest {
     // счет начисляется
     @Test
     public void scoreMultiplayerTest() {
-    	
-    	game3.getJoystick().up();
-    	field.tick();
-    	game3.getJoystick().up();
-    	field.tick();
-    	
-    	game3.getJoystick().act(Actions.HIT_UP.getValue());
-    	field.tick();
-    	field.tick();
-    	
-    	asrtFl1("☼☼⌂x☼☼\n" +
+
+        game3.getJoystick().up();
+        field.tick();
+        game3.getJoystick().up();
+        field.tick();
+
+        game3.getJoystick().act(Actions.HIT_UP.getValue());
+        field.tick();
+        field.tick();
+
+        asrtFl1("☼☼⌂x☼☼\n" +
                 "☼ ♣  ☼\n" +
                 "☼  ♦ ☼\n" +
                 "☼    ☼\n" +
                 "☼☺   ☼\n" +
                 "☼☼==☼☼\n");
-    	
-    	assertEquals(0, game1.getPlayer().getScore());
-    	assertEquals(0, game2.getPlayer().getScore());
-    	assertEquals(0, game3.getPlayer().getScore());
-    	
-    	field.tick();
-    	
-    	assertEquals(1, game1.getPlayer().getScore());
-    	assertEquals(0, game2.getPlayer().getScore());
-    	assertEquals(1, game3.getPlayer().getScore());
-    	
-    	assertEquals(true, game1.isGameOver());
-    	assertEquals(true, game2.isGameOver());
-    	assertEquals(true, game3.isGameOver());
+
+        field.tick();
+        
+        assertEquals(true, game1.isGameOver());
+        assertEquals(true, game2.isGameOver());
+        assertEquals(true, game3.isGameOver());
     }
 }

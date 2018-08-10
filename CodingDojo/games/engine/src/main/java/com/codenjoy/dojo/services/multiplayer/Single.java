@@ -68,16 +68,6 @@ public class Single implements Game {
     }
 
     @Override
-    public int getMaxScore() {
-        return player.getMaxScore();
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return player.getScore();
-    }
-
-    @Override
     public boolean isGameOver() {
         return !player.isAlive();
     }
@@ -99,7 +89,7 @@ public class Single implements Game {
 
     @Override
     public void clearScore() {
-        player.clearScore();
+        field.clearScore();
     }
 
     /**

@@ -37,16 +37,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case KILL_HERO: gameOver(); break;
-            case KILL_ENEMY: increaseScore(); break;
-            case GET_GOLD: break;
-        }
-
-        super.event(event);
-    }
-
     @Override
     public Hero getHero() {
         return hero;

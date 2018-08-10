@@ -52,17 +52,10 @@ public class Player extends GamePlayer<Tank, Field> {
 
     public void event(Events event) {
         switch (event) {
-            case KILL_OTHER_TANK: increaseScore(); break;
-            case KILL_YOUR_TANK: gameOver(); break;
+            case KILL_YOUR_TANK:  hero.kill(null); break;
         }
 
         super.event(event);
-    }
-
-    @Override
-    public void gameOver() {
-        super.gameOver();
-        hero.kill(null);
     }
 
     public void newHero(Field field) {

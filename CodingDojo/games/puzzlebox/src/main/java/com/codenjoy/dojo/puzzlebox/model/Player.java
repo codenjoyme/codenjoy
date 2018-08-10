@@ -40,10 +40,6 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
     }
 
-    public int getScore() {
-        return score;
-    }
-
     @Override
     public Hero getHero() {
         return hero;
@@ -61,23 +57,4 @@ public class Player extends GamePlayer<Hero, Field> {
         return true;
     }
 
-    public void event(Events event) {
-        switch (event) {
-            case WIN: win(); break;
-            case FILL: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
-    public void increaseScore() {
-        this.score += 21;
-        this.score -= hero.deltaClicks;
-        hero.deltaClicks = 0;
-        maxScore = Math.max(maxScore, this.score);
-    }
-
-    private void win() {
-        return;
-    }
 }

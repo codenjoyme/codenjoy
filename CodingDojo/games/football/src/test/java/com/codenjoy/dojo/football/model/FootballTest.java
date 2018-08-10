@@ -111,7 +111,7 @@ public class FootballTest {
         game.tick();
 
         assertE("☼☼☼☼☼" +
-        		"☼ ☺ ☼" +
+                "☼ ☺ ☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
@@ -120,7 +120,7 @@ public class FootballTest {
         game.tick();
         
         assertE("☼☼☼☼☼" +
-        		"☼☺  ☼" +
+                "☼☺  ☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
@@ -129,7 +129,7 @@ public class FootballTest {
         game.tick();
         
         assertE("☼☼☼☼☼" +
-        		"☼ ☺ ☼" +
+                "☼ ☺ ☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
@@ -139,7 +139,7 @@ public class FootballTest {
         
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-        		"☼ ☺ ☼" +
+                "☼ ☺ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
     }
@@ -198,7 +198,7 @@ public class FootballTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼ ☻    ☼" +
                 "☼      ☼" +
@@ -210,7 +210,7 @@ public class FootballTest {
     
     public void ballCanMove() {
         
-    	givenFl("☼☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼☼" +
                 "☼∙     ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -223,7 +223,7 @@ public class FootballTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼ *    ☼" +
+                "☼ *    ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -251,7 +251,7 @@ public class FootballTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼ ☻    ☼" +
                 "☼      ☼" +
@@ -269,7 +269,7 @@ public class FootballTest {
         assertEquals(true, game.getBall(3, 4) != null);
         
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼  ☻   ☼" +
                 "☼      ☼" +
@@ -293,7 +293,7 @@ public class FootballTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼☻     ☼" +
                 "☼      ☼" +
@@ -308,7 +308,7 @@ public class FootballTest {
         game.tick();
         
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼☻     ☼" +
                 "☼      ☼" +
@@ -321,7 +321,7 @@ public class FootballTest {
         game.tick();
         
         assertE("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼ ☻    ☼" +
                 "☼      ☼" +
@@ -333,7 +333,7 @@ public class FootballTest {
     @Test
     public void gameStartsFromPlayerWithBallState() {
         givenFl("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼☻     ☼" +
                 "☼      ☼" +
@@ -358,7 +358,7 @@ public class FootballTest {
     @Test
     public void playerHitsBallRight() {
         givenFl("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼  ☻   ☼" +
                 "☼      ☼" +
@@ -393,7 +393,7 @@ public class FootballTest {
     @Test
     public void playerHitsTheGate() {
         givenFl("☼☼☼┴┴☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼  ☻   ☼" +
                 "☼      ☼" +
@@ -419,7 +419,7 @@ public class FootballTest {
     @Test
     public void ballStopsWhetGetWall() {
         givenFl("☼☼☼☼☼☼☼☼" +
-        		"☼      ☼" +
+                "☼      ☼" +
                 "☼      ☼" +
                 "☼    ☻ ☼" +
                 "☼      ☼" +
@@ -452,8 +452,8 @@ public class FootballTest {
     
     public void resetFieldAfterGoalAndNewGameCall() {
         
-    	givenFl("☼☼☼┴┴☼☼☼" +
-        		"☼      ☼" +
+        givenFl("☼☼☼┴┴☼☼☼" +
+                "☼      ☼" +
                 "☼  ☻   ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -461,12 +461,12 @@ public class FootballTest {
                 "☼      ☼" +
                 "☼☼☼┬┬☼☼☼");
         
-    	hero.act(Actions.HIT_UP.getValue());
+        hero.act(Actions.HIT_UP.getValue());
         game.tick();
         game.tick();
         dice(2, 2);
-    	game.newGame(player);
-    	
+        game.newGame(player);
+        
         assertE("☼☼☼┴┴☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -481,8 +481,8 @@ public class FootballTest {
     @Test
     public void resetFieldAfterHittenGoal() {
         
-    	givenFl("☼☼☼┴┴☼☼☼" +
-        		"☼      ☼" +
+        givenFl("☼☼☼┴┴☼☼☼" +
+                "☼      ☼" +
                 "☼  ☻   ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -490,7 +490,7 @@ public class FootballTest {
                 "☼      ☼" +
                 "☼☼☼┬┬☼☼☼");
         
-    	hero.act(Actions.HIT_UP.getValue());
+        hero.act(Actions.HIT_UP.getValue());
         game.tick();
         game.tick();
         dice(2, 2);
@@ -507,12 +507,12 @@ public class FootballTest {
                 "☼☼☼┬┬☼☼☼");
     }
     
-	@Ignore
+    @Ignore
     @Test
     public void resetFieldByNewGameCall() {
         
-    	givenFl("☼☼☼x┴┴☼☼☼" +
-        		"☼       ☼" +
+        givenFl("☼☼☼x┴┴☼☼☼" +
+                "☼       ☼" +
                 "☼  ☺    ☼" +
                 "☼       ☼" +
                 "☼       ☼" +
@@ -521,9 +521,9 @@ public class FootballTest {
                 "☼       ☼" +
                 "☼☼☼┬┬┬☼☼☼");
         
-    	dice(2, 2);
-    	game.tick();
-    	verify(listener, only()).event(Events.TOP_GOAL);
+        dice(2, 2);
+        game.tick();
+        verify(listener, only()).event(Events.TOP_GOAL);
         
         assertE("☼☼☼┴┴┴☼☼☼" +
                 "☼       ☼" +
@@ -536,25 +536,4 @@ public class FootballTest {
                 "☼☼☼┬┬┬☼☼☼");
     }
     
-	@Test
-    public void scoreShouldIncreaseAfterTopGoalHited() {
-        
-    	givenFl("☼☼☼┴┴☼☼☼" +
-        		"☼      ☼" +
-                "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼☼☼┬┬☼☼☼");
-        
-    	assertEquals(0, player.getScore());
-    	hero.act(Actions.HIT_UP.getValue());
-        game.tick();
-        game.tick();
-        game.tick();
-        assertEquals(1, player.getScore());
-        
-	}
-	
 }
