@@ -103,6 +103,14 @@ public class Simulator {
         Relief.addAll(relief);
     }
 
+    /**
+     * Simulate given lunolet maneuver.
+     *
+     * @param angle
+     * @param mass
+     * @param duration
+     * @throws IllegalArgumentException if mass less than 0 or duration not a positive value
+     */
     public void simulate(double angle, double mass, double duration) {
         if (mass < 0.0)
             throw new IllegalArgumentException("mass should be positive number or zero.");
@@ -157,11 +165,13 @@ public class Simulator {
 
         if (mass < Eps) {
             flight(0, duration, 0, angle);
+            Status.Consumption = 0;
         } else {
             double consumption = mass / duration;
             double accel = consumption * ExhaustSpeed / (DryMass + Status.FuelMass);
 
             flight(mass, duration, accel, angle);
+            Status.Consumption = consumption;
 
             // Check for overload; if overload then pilot unconscious, free flight
             if (Status.State != VesselState.CRASHED && Status.State != VesselState.LANDED &&

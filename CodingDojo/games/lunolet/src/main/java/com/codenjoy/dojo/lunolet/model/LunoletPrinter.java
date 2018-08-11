@@ -61,6 +61,7 @@ public class LunoletPrinter implements Printer<JSONObject> {
         result.put("fuelmass", round3(vesselStatus.FuelMass));
         result.put("state", vesselStatus.State);
         result.put("angle", round3(lastAngle));
+        result.put("consumption", round3(vesselStatus.Consumption));
         result.put("target", getJsonPoint(target));
         result.put("relief", getJsonPointArray(relief));
         result.put("history", getJsonPointArray(history));

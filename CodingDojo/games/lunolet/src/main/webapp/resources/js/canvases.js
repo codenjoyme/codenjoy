@@ -253,7 +253,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
             canvas.drawText("LEVEL " + board.level, {"x": 0, "y": 0.4}, monofont);
 
-            let ctx = canvas.getCanvasContext();
+            var ctx = canvas.getCanvasContext();
             // scale, move center to (300, 300), and flip vertically
             var scale = 6;
             var xshift = 300 - board.x * scale;
@@ -323,6 +323,13 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var sin = Math.sin(radian);
             var cos = Math.cos(radian);
             ctx.setTransform(-cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.x * scale, yshift - board.y * scale);
+            var consumption = board.consumption;
+            if (consumption && consumption > 0.01) {
+                ctx.strokeStyle = "#FA0";
+                ctx.beginPath();
+                ctx.moveTo(0.5, 0);  ctx.lineTo(0, -2 * consumption);  ctx.lineTo(-0.5, 0);
+                ctx.stroke();
+            }
             ctx.strokeStyle = "#008";
             ctx.beginPath();
             ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
