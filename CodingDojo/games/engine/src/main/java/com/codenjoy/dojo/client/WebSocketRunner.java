@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WebSocketRunner {
+public class WebSocketRunner implements Closeable {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
@@ -47,7 +47,7 @@ public class WebSocketRunner {
     public static boolean printToConsole = true;
 
     private Session session;
-    private WebSocketClient wsClient;
+    private WebSocketClient client;
     private Solver solver;
     private ClientBoard board;
     private Runnable onClose;
@@ -92,7 +92,7 @@ public class WebSocketRunner {
         try {
             WebSocketRunner client = new WebSocketRunner(solver, board);
             client.start(uri);
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> client.stop()));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> client.close()));
 
             return client;
         } catch (Exception e) {
@@ -100,17 +100,9 @@ public class WebSocketRunner {
         }
     }
 
-    private void stop() {
-        try {
-            session.close();
-        } catch (Exception e) {
-            print(e);
-        }
-    }
-
     private void start(URI uri) throws Exception {
-        wsClient = new WebSocketClient();
-        wsClient.start();
+        client = new WebSocketClient();
+        client.start();
 
         onClose = () -> {
             if (solver instanceof OneCommandSolver) {
@@ -121,6 +113,17 @@ public class WebSocketRunner {
         };
 
         connectLoop(uri);
+    }
+
+    @Override
+    public void close() {
+        try {
+            if (session.isOpen()) {
+                session.close();
+            }
+        } catch (Exception e) {
+            print(e);
+        }
     }
 
     @WebSocket
@@ -205,7 +208,7 @@ public class WebSocketRunner {
             session.close();
         }
 
-        session = wsClient.connect(new ClientSocket(), uri)
+        session = client.connect(new ClientSocket(), uri)
                 .get(5000, TimeUnit.MILLISECONDS);
     }
 

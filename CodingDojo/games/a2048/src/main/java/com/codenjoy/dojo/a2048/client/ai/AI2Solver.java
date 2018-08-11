@@ -24,6 +24,7 @@ package com.codenjoy.dojo.a2048.client.ai;
 
 
 import com.codenjoy.dojo.a2048.client.Board;
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
@@ -43,6 +44,9 @@ public class AI2Solver implements Solver<Board> {
     private static Step[] path = new Step[102400];
     private static int length = 0;
     private static int deepIndex = 0;
+
+    public AI2Solver(Dice dice) {
+    }
 
     class Step {
         String directions;
@@ -214,9 +218,9 @@ public class AI2Solver implements Solver<Board> {
         start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, Dice dice) {
-        WebSocketRunner.runAI(name,
-                new AI2Solver(),
+    public static Closeable start(String name, Dice dice) {
+        return WebSocketRunner.runAI(name,
+                new AI2Solver(dice),
                 new Board());
     }
 

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.kata.client.ai;
 
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.AbstractTextSolver;
 import com.codenjoy.dojo.kata.client.Board;
@@ -68,8 +69,8 @@ public class AISolver extends AbstractTextSolver {
         start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, Dice dice) {
-        WebSocketRunner.runAI(name,
+    public static Closeable start(String name, Dice dice) {
+        return WebSocketRunner.runAI(name,
                 new AISolver(),
                 new Board());
     }

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sudoku.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
@@ -143,8 +144,8 @@ public class AISolver implements Solver<Board> {
         start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, Dice dice) {
-        WebSocketRunner.runAI(name,
+    public static Closeable start(String name, Dice dice) {
+        return WebSocketRunner.runAI(name,
                 new AISolver(dice),
                 new Board());
     }

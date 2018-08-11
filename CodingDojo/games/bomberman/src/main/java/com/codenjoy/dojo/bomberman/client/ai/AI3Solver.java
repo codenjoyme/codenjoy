@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -66,9 +67,9 @@ public class AI3Solver implements Solver<Board> {
         start(WebSocketRunner.DEFAULT_USER, new RandomDice());
     }
 
-    public static void start(String name, Dice dice) {
-        WebSocketRunner.runAI(name,
-                new AI3Solver(new RandomDice()),
+    public static Closeable start(String name, Dice dice) {
+        return WebSocketRunner.runAI(name,
+                new AI3Solver(dice),
                 new Board());
     }
 }
