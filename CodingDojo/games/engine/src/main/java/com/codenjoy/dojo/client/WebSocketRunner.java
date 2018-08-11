@@ -28,11 +28,8 @@ import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -42,58 +39,12 @@ public class WebSocketRunner {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
-    public static final String WS_URI_PATTERN = "ws://%s/%s/ws";
+    public static final String WS_URI_PATTERN = "ws://%s/%s/ws?user=%s&code=%s";
+    public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
+    public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
+    public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
 
     public static boolean printToConsole = true;
-    private static Map<String, WebSocketRunner> clients = new ConcurrentHashMap<>();
-
-    public static class UrlParser {
-        public String server;
-        public String code;
-        public String userName;
-        public String context;
-
-        public UrlParser(String uri) {
-            try {
-                URL url = new URL(uri);
-                String[] queryParts = url.getQuery().split("=");
-                String[] urlParts = url.getPath().split("\\/");
-                if (urlParts.length != 5
-                        || !urlParts[0].equals("")
-                        || !urlParts[2].equals("board")
-                        || !urlParts[3].equals("player")
-                        || queryParts.length != 2
-                        || !queryParts[0].equals("code"))
-                {
-                    throw new IllegalArgumentException("Bad URL");
-                }
-
-                server = url.getHost() + portPart(url.getPort());
-                code = queryParts[1];
-                userName = urlParts[4];
-                context = urlParts[1];
-            } catch (MalformedURLException e) {
-                throw new RuntimeException("Please set url in format " +
-                        "'http://codenjoyDomainOrIP:8080/codenjoy-contest/" +
-                        "board/player/your@email.com?code=12345678901234567890'",
-                        e);
-            }
-        }
-
-        private String portPart(int port) {
-            return (port == -1) ? "" : (":" + port);
-        }
-
-        @Override
-        public String toString() {
-            return "UrlParser{" +
-                    "server='" + server + '\'' +
-                    ", context='" + context + '\'' +
-                    ", code='" + code + '\'' +
-                    ", userName='" + userName + '\'' +
-                    '}';
-        }
-    }
 
     private Session session;
     private WebSocketClient wsClient;
@@ -106,60 +57,43 @@ public class WebSocketRunner {
         this.board = board;
     }
 
-    public static void runClient(String url, Solver solver, ClientBoard board) {
+    public static WebSocketRunner runClient(String url, Solver solver, ClientBoard board) {
         UrlParser parser = new UrlParser(url);
-        run(parser.server, parser.context,
+        return run(parser.server, parser.context,
                 parser.userName, parser.code,
                 solver, board);
     }
 
     public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
-        // если запускаем на серваке бота, то в консоль не принтим
         printToConsole = false;
         return run(LOCAL, CodenjoyContext.get(), aiName, null, solver, board);
     }
 
-    /**
-     * To connect on server in your LAN.
-     * @param server String server and port. Format 192.168.0.1:8080
-     * @param context String context of codenjoy application. For example 'codenjoy-contest'
-     * @see WebSocketRunner#run(String, String, String, Solver, ClientBoard)
-     */
     private static WebSocketRunner run(String server, String context,
                                        String userName, String code,
                                        Solver solver, ClientBoard board)
     {
-         return run(String.format(WS_URI_PATTERN, server, context),
-                 userName, code, solver, board);
+        return run(getUri(server, context, userName, code), solver, board);
     }
 
-     /**
-     * To connect on server in your LAN.
-     * @param uri String websocket server uri
-     * @see WebSocketRunner#WS_URI_PATTERN
-     *
-     * @param userName email that you enter on registration page
-     * @param solver your AI
-     * @param board Board class
-     * @return WebSocketRunner instance
-     */
-    public static WebSocketRunner run(String uri, String userName, String code,
-                                      Solver solver, ClientBoard board)
-    {
+    private static URI getUri(String server, String context, String userName, String code) {
         try {
-            if (clients.containsKey(userName)) { // TODO этот кеш кеширует старых AI и они потом не работают после удаления юзера и перезапуска
-                return clients.get(userName);
+            String url = String.format(WS_URI_PATTERN, server, context, userName, code);
+            if (url.contains(CODENJOY_COM_ALIAS)) { // TODO это костылек пока сервер не сделаем нормальный
+                url = url.replace(CODENJOY_COM_ALIAS, CODENJOY_COM_SERVER);
             }
-            final WebSocketRunner client = new WebSocketRunner(solver, board);
-            client.start(uri, userName, code);
-            Runtime.getRuntime().addShutdownHook(new Thread(){
-                @Override
-                public void run() {
-                    client.stop();
-                }
-            });
+            return new URI(url);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            clients.put(userName, client);
+    public static WebSocketRunner run(URI uri, Solver solver, ClientBoard board) {
+        try {
+            WebSocketRunner client = new WebSocketRunner(solver, board);
+            client.start(uri);
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> client.stop()));
+
             return client;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -174,9 +108,7 @@ public class WebSocketRunner {
         }
     }
 
-    private void start(final String server, final String userName, final String code) throws Exception {
-        final Pattern urlPattern = Pattern.compile("^board=(.*)$");
-
+    private void start(URI uri) throws Exception {
         wsClient = new WebSocketClient();
         wsClient.start();
 
@@ -185,20 +117,14 @@ public class WebSocketRunner {
                 return;
             }
             printReconnect();
-            connectLoop(server, userName, code, urlPattern);
+            connectLoop(uri);
         };
 
-        connectLoop(server, userName, code, urlPattern);
+        connectLoop(uri);
     }
 
     @WebSocket
     public class ClientSocket {
-
-        private Pattern pattern;
-
-        public ClientSocket(Pattern pattern) {
-            this.pattern = pattern;
-        }
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
@@ -226,7 +152,7 @@ public class WebSocketRunner {
         public void onMessage(String data) {
             print("Data from server: " + data);
             try {
-                Matcher matcher = pattern.matcher(data);
+                Matcher matcher = BOARD_PATTERN.matcher(data);
                 if (!matcher.matches()) {
                     throw new RuntimeException("Error parsing data: " + data);
                 }
@@ -249,10 +175,10 @@ public class WebSocketRunner {
         return exception instanceof UpgradeException && ((UpgradeException)exception).getResponseStatusCode() == 401;
     }
 
-    private void connectLoop(String server, String userName, String code, Pattern urlPattern) {
+    private void connectLoop(URI uri) {
         while (true) {
             try {
-                tryToConnect(server, userName, code, urlPattern);
+                tryToConnect(uri);
                 break;
             } catch (ExecutionException e) {
                 if (!isUnauthorizedAccess(e.getCause())) {
@@ -272,15 +198,15 @@ public class WebSocketRunner {
         sleep(5000);
     }
 
-    private void tryToConnect(String server, String userName, String code, Pattern pattern) throws Exception {
-        URI uri = new URI(String.format("%s?user=%s&code=%s", server, userName, code));
-        print(String.format("Connecting '%s' to '%s'...", userName, uri));
+    private void tryToConnect(URI uri) throws Exception {
+        print(String.format("Connecting to '%s'...", uri));
 
         if (session != null) {
             session.close();
         }
 
-        session = wsClient.connect(new ClientSocket(pattern), uri).get(5000, TimeUnit.MILLISECONDS);
+        session = wsClient.connect(new ClientSocket(), uri)
+                .get(5000, TimeUnit.MILLISECONDS);
     }
 
     private void sleep(int mills) {

@@ -55,26 +55,23 @@ public class WebSocketRunner {
 
     public static WebSocketRunner run(final String server, final String userName) throws Exception {
         final WebSocketRunner client = new WebSocketRunner();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    client.start(server, userName);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                Runtime.getRuntime().addShutdownHook(new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            client.stop();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
+        new Thread(() -> {
+            try {
+                client.start(server, userName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        client.stop();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         }).start();
 
         System.out.println("client starting...");

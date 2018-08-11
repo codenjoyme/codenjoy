@@ -63,7 +63,7 @@ public class WebSocketRunnerTest {
 
     private void assertURL(String expected, String uri) {
         try {
-            assertEquals(expected, new WebSocketRunner.UrlParser(uri).toString());
+            assertEquals(expected, new UrlParser(uri).toString());
         } catch (RuntimeException e) {
             assertEquals(expected, e.getMessage());
         }
