@@ -22,8 +22,7 @@ package com.codenjoy.dojo.rubicscube.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.rubicscube.client.ai.ApofigSolver;
+import com.codenjoy.dojo.rubicscube.client.ai.AISolver;
 import com.codenjoy.dojo.rubicscube.model.Elements;
 import com.codenjoy.dojo.rubicscube.model.Player;
 import com.codenjoy.dojo.rubicscube.model.RandomCommand;
@@ -79,7 +78,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

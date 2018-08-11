@@ -25,7 +25,7 @@ package com.codenjoy.dojo.quake2d;
 
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.quake2d.client.Board;
-import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
+import com.codenjoy.dojo.quake2d.client.ai.AISolver;
 import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new BotSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

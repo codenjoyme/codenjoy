@@ -22,7 +22,7 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
-import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
+import com.codenjoy.dojo.quake2d.client.ai.AISolver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -96,8 +96,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void act(int... p) {
         if (!alive) return;
-        if (p.length != 0 && p[0] >= BotSolver.SHIFT_COMMAND){
-            direction = Direction.getValues().get(p[0] - BotSolver.SHIFT_COMMAND);
+        if (p.length != 0 && p[0] >= AISolver.SHIFT_COMMAND){
+            direction = Direction.getValues().get(p[0] - AISolver.SHIFT_COMMAND);
             tick();
         }
         if (counterBeetwenShut == 0){

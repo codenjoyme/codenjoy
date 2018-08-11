@@ -22,8 +22,7 @@ package com.codenjoy.dojo.fifteen.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.fifteen.client.ai.FifteenSolver;
+import com.codenjoy.dojo.fifteen.client.ai.AISolver;
 import com.codenjoy.dojo.fifteen.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -79,7 +78,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        FifteenSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

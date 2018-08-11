@@ -23,7 +23,6 @@ package com.codenjoy.dojo.snake.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
@@ -32,7 +31,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.snake.client.ai.ApofigSolver;
+import com.codenjoy.dojo.snake.client.ai.AISolver;
 import com.codenjoy.dojo.snake.model.Elements;
 import com.codenjoy.dojo.snake.model.Player;
 import com.codenjoy.dojo.snake.model.Snake;
@@ -87,7 +86,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 

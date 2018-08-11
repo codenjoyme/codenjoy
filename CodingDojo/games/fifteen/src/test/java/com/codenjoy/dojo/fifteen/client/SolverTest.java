@@ -24,7 +24,7 @@ package com.codenjoy.dojo.fifteen.client;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.fifteen.client.ai.FifteenSolver;
+import com.codenjoy.dojo.fifteen.client.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +42,7 @@ public class SolverTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = new FifteenSolver(dice);
+        ai = new AISolver(dice);
     }
 
     private Board board(String board) {

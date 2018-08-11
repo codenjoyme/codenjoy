@@ -26,7 +26,7 @@ package com.codenjoy.dojo.snake;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.snake.client.Board;
-import com.codenjoy.dojo.snake.client.ai.ApofigSolver;
+import com.codenjoy.dojo.snake.client.ai.AISolver;
 import com.codenjoy.dojo.snake.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

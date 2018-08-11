@@ -22,8 +22,7 @@ package com.codenjoy.dojo.pong.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.pong.client.ai.PongSolver;
+import com.codenjoy.dojo.pong.client.ai.AISolver;
 import com.codenjoy.dojo.pong.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -80,7 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        PongSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 

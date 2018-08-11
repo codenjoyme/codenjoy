@@ -25,7 +25,6 @@ package com.codenjoy.dojo.sampletext.client;
 
 import com.codenjoy.dojo.client.AbstractTextSolver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.sampletext.client.ai.ApofigSolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 

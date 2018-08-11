@@ -25,7 +25,7 @@ package com.codenjoy.dojo.puzzlebox;
 
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.puzzlebox.client.Board;
-import com.codenjoy.dojo.puzzlebox.client.ai.WGSSolver;
+import com.codenjoy.dojo.puzzlebox.client.ai.AISolver;
 import com.codenjoy.dojo.puzzlebox.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new WGSSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

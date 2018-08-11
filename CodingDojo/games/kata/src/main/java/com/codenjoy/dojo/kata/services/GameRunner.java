@@ -23,8 +23,7 @@ package com.codenjoy.dojo.kata.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.kata.client.ai.ApofigSolver;
+import com.codenjoy.dojo.kata.client.ai.AISolver;
 import com.codenjoy.dojo.kata.model.Kata;
 import com.codenjoy.dojo.kata.model.Player;
 import com.codenjoy.dojo.kata.model.levels.Level;
@@ -105,7 +104,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

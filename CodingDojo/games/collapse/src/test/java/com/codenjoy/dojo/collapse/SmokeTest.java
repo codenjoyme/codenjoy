@@ -24,22 +24,18 @@ package com.codenjoy.dojo.collapse;
 
 
 import com.codenjoy.dojo.collapse.client.Board;
-import com.codenjoy.dojo.collapse.client.ai.ApofigSolver;
+import com.codenjoy.dojo.collapse.client.ai.AISolver;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.collapse.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class SmokeTest {
     @Test
@@ -74,7 +70,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

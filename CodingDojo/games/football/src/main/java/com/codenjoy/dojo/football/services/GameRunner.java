@@ -22,8 +22,7 @@ package com.codenjoy.dojo.football.services;
  * #L%
  */
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.football.client.ai.DefaultSolver;
+import com.codenjoy.dojo.football.client.ai.AISolver;
 import com.codenjoy.dojo.football.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -92,7 +91,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     public boolean newAI(String aiName) {
         boolean result = (needAI.getValue() == 1);
         if (result) {
-            DefaultSolver.start(aiName, getDice());
+            AISolver.start(aiName, getDice());
         }
         return result;
     }

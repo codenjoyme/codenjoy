@@ -28,7 +28,7 @@ import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.pong.client.Board;
 import com.codenjoy.dojo.pong.client.YourSolver;
-import com.codenjoy.dojo.pong.client.ai.PongSolver;
+import com.codenjoy.dojo.pong.client.ai.AISolver;
 import com.codenjoy.dojo.pong.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -38,9 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class SmokeTest {
 
@@ -88,7 +86,7 @@ public class SmokeTest {
         // when
         LocalGameRunner.run(gameType,
                 new ArrayList<Solver>() {{
-                    add(new PongSolver(dice));
+                    add(new AISolver(dice));
                     add(new YourSolver(dice));
                 }},
                 new ArrayList<ClientBoard>() {{

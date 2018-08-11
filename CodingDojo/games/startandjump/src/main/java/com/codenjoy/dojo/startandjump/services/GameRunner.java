@@ -23,8 +23,7 @@ package com.codenjoy.dojo.startandjump.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.startandjump.client.ai.VladKvadratSolver;
+import com.codenjoy.dojo.startandjump.client.ai.AISolver;
 import com.codenjoy.dojo.startandjump.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -103,7 +102,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        VladKvadratSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

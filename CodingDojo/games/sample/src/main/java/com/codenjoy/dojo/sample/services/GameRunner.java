@@ -23,8 +23,7 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.sample.client.ai.ApofigSolver;
+import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -116,7 +115,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

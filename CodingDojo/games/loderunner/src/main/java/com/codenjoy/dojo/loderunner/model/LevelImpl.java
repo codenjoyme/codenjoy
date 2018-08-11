@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.loderunner.model.Elements.*;
 import static java.util.stream.Collectors.toList;
@@ -43,7 +42,7 @@ public class LevelImpl implements Level {
 
     public LevelImpl(String map) {
         this.map = map;
-        ai = new ApofigAI();
+        ai = new AI();
         xy = new LengthToXY(getSize());
     }
 

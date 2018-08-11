@@ -24,7 +24,7 @@ package com.codenjoy.dojo.bomberman;
 
 
 import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.client.ai.ApofigSolver;
+import com.codenjoy.dojo.bomberman.client.ai.AISolver;
 import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
@@ -36,9 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class SmokeTest {
     @Test
@@ -98,7 +96,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

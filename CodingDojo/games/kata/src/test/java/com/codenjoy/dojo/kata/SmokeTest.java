@@ -25,7 +25,7 @@ package com.codenjoy.dojo.kata;
 
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.kata.client.Board;
-import com.codenjoy.dojo.kata.client.ai.ApofigSolver;
+import com.codenjoy.dojo.kata.client.ai.AISolver;
 import com.codenjoy.dojo.kata.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Ignore;
@@ -35,9 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class SmokeTest {
 
@@ -62,7 +60,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(),
+                new AISolver(),
                 new Board());
 
         // then

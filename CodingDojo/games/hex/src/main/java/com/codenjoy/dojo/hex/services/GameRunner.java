@@ -23,8 +23,7 @@ package com.codenjoy.dojo.hex.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.hex.client.ai.ApofigSolver;
+import com.codenjoy.dojo.hex.client.ai.AISolver;
 import com.codenjoy.dojo.hex.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -83,7 +82,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 

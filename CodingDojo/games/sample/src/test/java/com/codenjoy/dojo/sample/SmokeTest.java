@@ -27,7 +27,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sample.client.Board;
-import com.codenjoy.dojo.sample.client.ai.ApofigSolver;
+import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -90,8 +90,8 @@ public class SmokeTest {
         // when
         LocalGameRunner.run(gameType,
                 new LinkedList<Solver>(){{
-                    add(new ApofigSolver(dice));
-                    add(new ApofigSolver(dice));
+                    add(new AISolver(dice));
+                    add(new AISolver(dice));
                 }},
                 new LinkedList<ClientBoard>(){{
                     add(new Board());

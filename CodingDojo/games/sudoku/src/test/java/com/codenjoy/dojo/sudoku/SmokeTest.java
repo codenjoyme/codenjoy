@@ -25,9 +25,8 @@ package com.codenjoy.dojo.sudoku;
 
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.client.ai.ApofigSolver;
+import com.codenjoy.dojo.sudoku.client.ai.AISolver;
 import com.codenjoy.dojo.sudoku.services.GameRunner;
 import org.junit.Test;
 
@@ -123,7 +122,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

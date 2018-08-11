@@ -23,8 +23,7 @@ package com.codenjoy.dojo.minesweeper.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.minesweeper.client.ai.Vaa25Solver;
+import com.codenjoy.dojo.minesweeper.client.ai.AISolver;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.minesweeper.model.Minesweeper;
 import com.codenjoy.dojo.minesweeper.model.Player;
@@ -89,7 +88,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        Vaa25Solver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

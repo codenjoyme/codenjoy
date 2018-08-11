@@ -24,7 +24,7 @@ package com.codenjoy.dojo.fifteen;
 
 
 import com.codenjoy.dojo.fifteen.client.Board;
-import com.codenjoy.dojo.fifteen.client.ai.FifteenSolver;
+import com.codenjoy.dojo.fifteen.client.ai.AISolver;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.fifteen.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
@@ -34,9 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class SmokeTest {
     @Test
@@ -70,7 +68,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new FifteenSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // thend

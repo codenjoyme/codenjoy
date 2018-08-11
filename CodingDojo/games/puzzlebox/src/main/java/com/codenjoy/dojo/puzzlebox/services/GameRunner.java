@@ -23,8 +23,7 @@ package com.codenjoy.dojo.puzzlebox.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.puzzlebox.client.ai.WGSSolver;
+import com.codenjoy.dojo.puzzlebox.client.ai.AISolver;
 import com.codenjoy.dojo.puzzlebox.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -116,7 +115,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        WGSSolver.start(aiName, getDice());
+        AISolver.start(aiName, getDice());
         return true;
     }
 }

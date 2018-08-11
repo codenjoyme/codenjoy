@@ -25,7 +25,7 @@ package com.codenjoy.dojo.moebius;
 
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.moebius.client.Board;
-import com.codenjoy.dojo.moebius.client.ai.ApofigSolver;
+import com.codenjoy.dojo.moebius.client.ai.AISolver;
 import com.codenjoy.dojo.moebius.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -35,9 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class SmokeTest {
     private int index;
@@ -78,7 +76,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

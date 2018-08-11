@@ -29,7 +29,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.spacerace.client.Board;
 import com.codenjoy.dojo.spacerace.client.YourSolver;
-import com.codenjoy.dojo.spacerace.client.ai.AlAnSolver;
+import com.codenjoy.dojo.spacerace.client.ai.AISolver;
 import com.codenjoy.dojo.spacerace.services.GameRunner;
 import org.junit.Test;
 
@@ -97,7 +97,7 @@ public class SmokeTest {
         LocalGameRunner.run(gameType,
                 new LinkedList<Solver>(){{
                     add(new YourSolver(dice));
-                    add(new AlAnSolver(dice));
+                    add(new AISolver(dice));
                 }},
                 new LinkedList<ClientBoard>(){{
                     add(new Board());

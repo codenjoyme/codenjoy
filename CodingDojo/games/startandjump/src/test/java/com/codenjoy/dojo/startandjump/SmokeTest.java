@@ -26,7 +26,7 @@ package com.codenjoy.dojo.startandjump;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.startandjump.client.Board;
-import com.codenjoy.dojo.startandjump.client.ai.VladKvadratSolver;
+import com.codenjoy.dojo.startandjump.client.ai.AISolver;
 import com.codenjoy.dojo.startandjump.services.GameRunner;
 import org.junit.Test;
 
@@ -79,7 +79,7 @@ public class SmokeTest {
 
         // when
         LocalGameRunner.run(gameType,
-                new VladKvadratSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then
