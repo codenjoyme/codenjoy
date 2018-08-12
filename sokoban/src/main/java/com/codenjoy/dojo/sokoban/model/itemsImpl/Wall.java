@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model;
+package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 /*-
  * #%L
@@ -23,31 +23,26 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
+import com.codenjoy.dojo.sokoban.model.game.Player;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
 /**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
+ * Артефакт: Стена на поле
  */
-public interface Field extends GameField<Player> {
+public class Wall extends PointImpl implements State<Elements, Player> {
 
-    boolean isBarrier(int x, int y);
+    public Wall(int x, int y) {
+        super(x, y);
+    }
 
-    boolean isBox(int x, int y);
+    public Wall(Point point) {
+        super(point);
+    }
 
-    void moveBox(int x, int y, int xNew, int ynew);
-
-    boolean isMark(int x, int y);
-
-    Point getFreeRandom();
-
-    boolean isFree(int x, int y);
-
-    boolean isBomb(int x, int y);
-
-    void setBomb(int x, int y);
-
-
-    void removeBomb(int x, int y);
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.WALL;
+    }
 }

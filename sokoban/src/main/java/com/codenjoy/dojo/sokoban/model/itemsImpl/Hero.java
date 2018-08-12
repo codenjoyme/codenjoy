@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.items;
+package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 /*-
  * #%L
@@ -25,9 +25,8 @@ package com.codenjoy.dojo.sokoban.model.items;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.sokoban.model.Elements;
-import com.codenjoy.dojo.sokoban.model.Field;
-import com.codenjoy.dojo.sokoban.model.Player;
+import com.codenjoy.dojo.sokoban.model.items.Field;
+import com.codenjoy.dojo.sokoban.model.game.Player;
 
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком

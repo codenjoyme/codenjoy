@@ -25,12 +25,19 @@ package com.codenjoy.dojo.sokoban.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
-import com.codenjoy.dojo.sokoban.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
+import com.codenjoy.dojo.sokoban.model.game.Player;
+import com.codenjoy.dojo.sokoban.model.game.Sokoban;
+import com.codenjoy.dojo.sokoban.model.items.Level;
+import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
+import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
+
+import java.util.LinkedList;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -40,6 +47,8 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
+//    TODO: level is updated every time GameRunner init, hence we need store level in db or class higher
+    private int levelRef;
 
     public GameRunner() {
         new Scores(0, settings);
@@ -47,36 +56,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     protected String getMap() {
-        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼          $                 ☼" +
-                "☼                            ☼" +
-                "☼   $              $         ☼" +
-                "☼                       $    ☼" +
-                "☼  $                         ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼        $                   ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼ $                         $☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼                            ☼" +
-                "☼    $                       ☼" +
-                "☼                            ☼" +
-                "☼                       $    ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼            $               ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼       $                $   ☼" +
-                "☼                            ☼" +
-                "☼       ☺        $           ☼" +
-                "☼                            ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+        return TextIOHelper.getStringFromResources(levelRef);
     }
 
     @Override

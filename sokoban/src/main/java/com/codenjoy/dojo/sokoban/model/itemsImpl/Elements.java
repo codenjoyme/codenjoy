@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model;
+package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 /*-
  * #%L

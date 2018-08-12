@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model;
+package com.codenjoy.dojo.sokoban.model.game;
 
 /*-
  * #%L
@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sokoban.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,8 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.items.Hero;
+import com.codenjoy.dojo.sokoban.model.items.Field;
+import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
 import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -34,7 +35,8 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
  */
 public class Player extends GamePlayer<Hero, Field> {
 
-    Hero hero;
+    public Hero hero;
+    private int level;
 
     public Player(EventListener listener) {
         super(listener);
@@ -42,8 +44,14 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public void event(Events event) {
         switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+            case LOOSE:
+                gameOver();
+                break;
+            case WIN:
+                increaseScore();
+                //TODO looks level has to be stored in higher class or in db.
+                increaseLevel(1);
+                break;
         }
 
         super.event(event);
@@ -62,6 +70,14 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public boolean isAlive() {
         return hero != null && hero.isAlive();
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    private void increaseLevel(int value) {
+        level+=value;
     }
 
 }

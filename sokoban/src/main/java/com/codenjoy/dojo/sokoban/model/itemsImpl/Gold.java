@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.items;
+package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 /*-
  * #%L
@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sokoban.model.items;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,49 +23,26 @@ package com.codenjoy.dojo.sokoban.model.items;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.sokoban.model.game.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.sokoban.model.Elements;
-import com.codenjoy.dojo.sokoban.model.Field;
-import com.codenjoy.dojo.sokoban.model.Player;
 
 /**
- * Boxes to push
+ * Артефакт: Золото на поле
  */
-public class Box extends PointImpl implements State<Elements, Player> {
-    private boolean alive;
-    private Direction direction;
-    private boolean isBlocked;
-    private boolean isOnMark;
+public class Gold extends PointImpl implements State<Elements, Player> {
 
-    public Box(Point xy) {
-        super(xy);
-        direction = null;
-        alive = true;
+    public Gold(int x, int y) {
+        super(x, y);
+    }
+
+    public Gold(Point point) {
+        super(point);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOX;
+        return Elements.GOLD;
     }
-
-    public boolean isBlocked() {
-        return isBlocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
-
-    public boolean isOnMark() {
-        return isOnMark;
-    }
-
-    public void setOnMark(boolean onMark) {
-        isOnMark = onMark;
-    }
-
-
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model;
+package com.codenjoy.dojo.sokoban.model.items;
 
 /*-
  * #%L
@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.items.*;
+import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
 
 
 import java.util.List;

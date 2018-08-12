@@ -40,7 +40,6 @@ public class Scores implements PlayerScores {
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
-
         // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);

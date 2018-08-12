@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model;
+package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 /*-
  * #%L
@@ -23,14 +23,14 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.items.*;
+import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.sokoban.model.Elements.*;
+import static com.codenjoy.dojo.sokoban.model.itemsImpl.Elements.*;
 import static java.util.stream.Collectors.toList;
 
 /**

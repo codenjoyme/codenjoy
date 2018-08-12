@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sokoban.model.items;
+package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 /*-
  * #%L
@@ -23,8 +23,7 @@ package com.codenjoy.dojo.sokoban.model.items;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.Elements;
-import com.codenjoy.dojo.sokoban.model.Player;
+import com.codenjoy.dojo.sokoban.model.game.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;

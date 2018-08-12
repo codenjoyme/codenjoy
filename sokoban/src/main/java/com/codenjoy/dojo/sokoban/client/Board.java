@@ -24,7 +24,7 @@ package com.codenjoy.dojo.sokoban.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.sokoban.model.Elements;
+import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
 import com.codenjoy.dojo.services.Point;
 
 /**
