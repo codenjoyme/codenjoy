@@ -72,18 +72,15 @@ public class PlayerGameSaver implements GameSaver {
     public PlayerSave loadGame(final String name) {
         return pool.select("SELECT * FROM saves WHERE name = ? ORDER BY time DESC LIMIT 1;",
                 new Object[]{name},
-                new ObjectMapper<PlayerSave>() {
-                    @Override
-                    public PlayerSave mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            String callbackUrl = resultSet.getString("callbackUrl");
-                            int score = resultSet.getInt("score");
-                            String gameName = resultSet.getString("gameName");
-                            String save = resultSet.getString("save");
-                            return new PlayerSave(name, callbackUrl, gameName, score, save);
-                        } else {
-                            return PlayerSave.NULL;
-                        }
+                rs -> {
+                    if (rs.next()) {
+                        String callbackUrl = rs.getString("callbackUrl");
+                        int score = rs.getInt("score");
+                        String gameName = rs.getString("gameName");
+                        String save = rs.getString("save");
+                        return new PlayerSave(name, callbackUrl, gameName, score, save);
+                    } else {
+                        return PlayerSave.NULL;
                     }
                 }
         );
@@ -92,16 +89,13 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public List<String> getSavedList() {
         return pool.select("SELECT DISTINCT name FROM saves;", // TODO убедиться, что загружены самые последние
-                new ObjectMapper<List<String>>() {
-                    @Override
-                    public List<String> mapFor(ResultSet resultSet) throws SQLException {
-                        List<String> result = new LinkedList<String>();
-                        while (resultSet.next()) {
-                            String name = resultSet.getString("name");
-                            result.add(name);
-                        }
-                        return result;
+                rs -> {
+                    List<String> result = new LinkedList<>();
+                    while (rs.next()) {
+                        String name = rs.getString("name");
+                        result.add(name);
                     }
+                    return result;
                 }
         );
     }

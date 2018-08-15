@@ -47,32 +47,14 @@ public class GameData {
     public String get(final String gameType, final String key) {
         return pool.select("SELECT value FROM game_settings WHERE game_type = ? AND key = ?;",
                 new Object[]{gameType, key},
-                new ObjectMapper<String>() {
-                    @Override
-                    public String mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getString("value");
-                        } else {
-                            return null;
-                        }
-                    }
-                }
+                rs -> rs.next() ? rs.getString("value") : null
         );
     }
 
     public boolean exists(final String gameType, final String key) {
         return pool.select("SELECT count(*) AS count FROM game_settings WHERE game_type = ? AND key = ?;",
                 new Object[]{gameType, key},
-                new ObjectMapper<Boolean>() {
-                    @Override
-                    public Boolean mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getInt("count") > 0;
-                        } else {
-                            return false;
-                        }
-                    }
-                }
+                rs -> rs.next() && rs.getInt("count") > 0
         );
     }
 

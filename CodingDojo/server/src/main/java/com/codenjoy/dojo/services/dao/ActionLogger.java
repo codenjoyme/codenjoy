@@ -44,7 +44,7 @@ public class ActionLogger {
     private final int ticksPerSave;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private Queue<BoardLog> cache = new ConcurrentLinkedQueue<BoardLog>();
+    private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
     private int count;
     private boolean active;
 
@@ -79,35 +79,32 @@ public class ActionLogger {
     }
 
     public void saveToDB() {
-        pool.run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                String sql = "INSERT INTO player_boards " +
-                        "(time, player_name, game_type, score, board) " +
-                        "VALUES (?,?,?,?,?);";
+        pool.run((For<Void>) connection -> {
+            String sql = "INSERT INTO player_boards " +
+                    "(time, player_name, game_type, score, board) " +
+                    "VALUES (?,?,?,?,?);";
 
-                BoardLog data = null;
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    int size = cache.size();
-                    for (int i = 0; i < size; i++) {
-                        data = cache.poll();
-                        if (data == null) {
-                            break;
-                        }
-
-                        stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
-                        stmt.setString(2, data.getPlayerName());
-                        stmt.setString(3, data.getGameType());
-                        stmt.setString(4, data.getScore().toString());
-                        stmt.setString(5, data.getBoard());
-                        stmt.addBatch();
+            BoardLog data;
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                int size = cache.size();
+                for (int i = 0; i < size; i++) {
+                    data = cache.poll();
+                    if (data == null) {
+                        break;
                     }
-                    stmt.executeBatch();
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error saving log", e);
+
+                    stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
+                    stmt.setString(2, data.getPlayerName());
+                    stmt.setString(3, data.getGameType());
+                    stmt.setString(4, data.getScore().toString());
+                    stmt.setString(5, data.getBoard());
+                    stmt.addBatch();
                 }
-                return null;
+                stmt.executeBatch();
+            } catch (SQLException e) {
+                throw new RuntimeException("Error saving log", e);
             }
+            return null;
         });
     }
 
@@ -126,26 +123,18 @@ public class ActionLogger {
 
         if (count++ % ticksPerSave == 0) {
             // executor.submit потому что sqlite тормозит при сохранении
-            executor.submit(new Runnable() {
-                @Override
-                public void run() {
-                    saveToDB();
-                }
-            });
+            executor.submit(() -> saveToDB());
         }
     }
 
     public List<BoardLog> getAll() {
         return pool.select("SELECT * FROM player_boards;",
-                new ObjectMapper<List<BoardLog>>() {
-                    @Override
-                    public List<BoardLog> mapFor(ResultSet resultSet) throws SQLException {
-                        List<BoardLog> result = new LinkedList<BoardLog>();
-                        while (resultSet.next()) {
-                            result.add(new BoardLog(resultSet));
-                        }
-                        return result;
+                resultSet -> {
+                    List<BoardLog> result = new LinkedList<>();
+                    while (resultSet.next()) {
+                        result.add(new BoardLog(resultSet));
                     }
+                    return result;
                 }
         );
     }

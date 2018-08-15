@@ -56,34 +56,22 @@ public class Registration {
     public boolean approved(final String email) {
         return pool.select("SELECT * FROM users WHERE email = ?;",
                 new Object[]{email},
-                new ObjectMapper<Boolean>() {
-                    @Override
-                    public Boolean mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getInt("email_approved") == 1;
-                        } else {
-                            return false;
-                        }
-                    }
-                }
+                rs -> rs.next() && rs.getInt("email_approved") == 1
         );
     }
 
     public boolean registered(final String email) {
         return pool.select("SELECT count(*) AS total FROM users WHERE email = ?;",
                 new Object[]{email},
-                new ObjectMapper<Boolean>() {
-                    @Override
-                    public Boolean mapFor(ResultSet resultSet) throws SQLException {
-                        if (!resultSet.next()) {
-                            return false;
-                        }
-                        int count = resultSet.getInt("total");
-                        if (count > 1) {
-                            throw new IllegalStateException("Found more than one user with email " + email);
-                        }
-                        return count > 0;
+                rs -> {
+                    if (!rs.next()) {
+                        return false;
                     }
+                    int count = rs.getInt("total");
+                    if (count > 1) {
+                        throw new IllegalStateException("Found more than one user with email " + email);
+                    }
+                    return count > 0;
                 }
         );
     }
@@ -98,16 +86,7 @@ public class Registration {
     public String login(final String email, final String password) {
         return pool.select("SELECT code FROM users WHERE email = ? AND password = ? AND email_approved != 0;",
                 new Object[]{email, password},
-                new ObjectMapper<String>() {
-                    @Override
-                    public String mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getString("code");
-                        } else {
-                            return null;
-                        }
-                    }
-                }
+                rs -> rs.next() ? rs.getString("code") : null
         );
     }
 
@@ -123,32 +102,14 @@ public class Registration {
     public String getEmail(final String code) {
         return pool.select("SELECT email FROM users WHERE code = ?;",
                 new Object[]{code},
-                new ObjectMapper<String>() {
-                    @Override
-                    public String mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getString("email");
-                        } else {
-                            return null;
-                        }
-                    }
-                }
+                rs -> rs.next() ? rs.getString("email") : null
         );
     }
 
     public String getCode(final String email) {
         return pool.select("SELECT code FROM users WHERE email = ?;",
                 new Object[]{email},
-                new ObjectMapper<String>() {
-                    @Override
-                    public String mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getString("code");
-                        } else {
-                            return null;
-                        }
-                    }
-                }
+                rs -> rs.next() ? rs.getString("code") : null
         );
     }
 
@@ -195,20 +156,17 @@ public class Registration {
 
     public List<User> getUsers() {
         return pool.select("SELECT * FROM users;",
-                    new ObjectMapper<List<User>>() {
-                        @Override
-                        public List<User> mapFor(ResultSet resultSet) throws SQLException {
-                            List<User> result = new LinkedList<User>();
-                            while (resultSet.next()) {
-                                result.add(new User(resultSet.getString("email"),
-                                        resultSet.getInt("email_approved"),
-                                        resultSet.getString("password"),
-                                        resultSet.getString("code"),
-                                        resultSet.getString("data")));
-                            }
-                            return result;
-                        }
+                rs -> {
+                    List<User> result = new LinkedList<>();
+                    while (rs.next()) {
+                        result.add(new User(rs.getString("email"),
+                                rs.getInt("email_approved"),
+                                rs.getString("password"),
+                                rs.getString("code"),
+                                rs.getString("data")));
                     }
-            );
+                    return result;
+                }
+        );
     }
 }

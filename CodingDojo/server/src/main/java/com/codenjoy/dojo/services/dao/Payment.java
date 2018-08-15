@@ -53,16 +53,8 @@ public class Payment {
     public boolean canPlay(final String email, final String gameType) {
         return pool.select("SELECT till FROM payments WHERE email = ? AND game_type = ?;",
                 new Object[]{email, gameType},
-                new ObjectMapper<Boolean>() {
-                    @Override
-                    public Boolean mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getLong("till") > Calendar.getInstance().getTime().getTime();
-                        } else {
-                            return false;
-                        }
-                    }
-                }
+                rs -> rs.next() && rs.getLong("till")
+                        > Calendar.getInstance().getTime().getTime()
         );
     }
 
@@ -86,16 +78,7 @@ public class Payment {
     public long till(String email, String gameType) {
         return pool.select("SELECT till FROM payments WHERE email = ? AND game_type = ?;",
                 new Object[]{email, gameType},
-                new ObjectMapper<Long>() {
-                    @Override
-                    public Long mapFor(ResultSet resultSet) throws SQLException {
-                        if (resultSet.next()) {
-                            return resultSet.getLong("till");
-                        } else {
-                            return 0L;
-                        }
-                    }
-                }
+                rs -> rs.next() ? rs.getLong("till") : 0L
         );
     }
 }
