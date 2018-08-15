@@ -95,7 +95,11 @@ public class WebSocketRunner implements Closeable {
         try {
             WebSocketRunner client = new WebSocketRunner(solver, board);
             client.start(uri);
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> client.close()));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (client != null) {
+                    client.close();
+                }
+            }));
 
             return client;
         } catch (Exception e) {
@@ -124,6 +128,7 @@ public class WebSocketRunner implements Closeable {
             if (session.isOpen()) {
                 session.close();
             }
+            client = null;
         } catch (Exception e) {
             print(e);
         }
