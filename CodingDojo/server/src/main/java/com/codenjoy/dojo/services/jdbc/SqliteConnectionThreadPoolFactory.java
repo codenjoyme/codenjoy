@@ -22,12 +22,14 @@ package com.codenjoy.dojo.services.jdbc;
  * #L%
  */
 
+import com.codenjoy.dojo.services.ContextPathGetter;
+
 public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
 
     private String dbFile;
 
-    public SqliteConnectionThreadPoolFactory(String dbFile) {
-        this.dbFile = dbFile;
+    public SqliteConnectionThreadPoolFactory(String dbFile, ContextPathGetter context) {
+        this.dbFile = dbFile.replace(".db", "_" + context.getContext() + ".db");
     }
 
     @Override

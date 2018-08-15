@@ -26,11 +26,8 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
-import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -115,7 +112,7 @@ public class Registration {
 
     public void approve(final String code) {
         pool.update("UPDATE users SET email_approved = ? WHERE code = ?;",
-                new Object[] {1, code});
+                new Object[]{1, code});
     }
 
     class User {

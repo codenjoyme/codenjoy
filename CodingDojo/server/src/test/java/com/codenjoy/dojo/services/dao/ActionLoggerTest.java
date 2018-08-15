@@ -42,7 +42,15 @@ public class ActionLoggerTest {
 
     @Before
     public void setup() {
-        logger = new ActionLogger(new SqliteConnectionThreadPoolFactory("target/logs.db" + new Random().nextInt()), 1);
+        String dbFile = "target/logs.db" + new Random().nextInt();
+        logger = new ActionLogger(
+                    new SqliteConnectionThreadPoolFactory(dbFile,
+                            new ContextPathGetter() {
+                                @Override
+                                public String getContext() {
+                                    return "context";
+                                }
+                            }), 1);
     }
 
     @After

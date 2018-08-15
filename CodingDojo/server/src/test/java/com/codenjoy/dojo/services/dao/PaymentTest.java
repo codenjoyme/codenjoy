@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +43,15 @@ public class PaymentTest {
 
     @Before
     public void setup() {
-        service = new Payment(new SqliteConnectionThreadPoolFactory("target/payment.db" + new Random().nextInt()));
+        String dbFile = "target/payment.db" + new Random().nextInt();
+        service = new Payment(
+                new SqliteConnectionThreadPoolFactory(dbFile,
+                        new ContextPathGetter() {
+                            @Override
+                            public String getContext() {
+                                return "context";
+                            }
+                        }));
     }
 
     @After

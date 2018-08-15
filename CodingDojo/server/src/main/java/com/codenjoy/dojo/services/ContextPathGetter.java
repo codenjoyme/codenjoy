@@ -30,14 +30,18 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
-@Component
+@Component("contextPathGetter")
 public class ContextPathGetter {
 
     @Autowired
     private ServletContext servletContext;
 
     @PostConstruct
-    public void showIt() {
+    public void gotIt() {
         CodenjoyContext.set(servletContext.getContextPath().replaceAll("/", ""));
+    }
+
+    public String getContext() {
+        return CodenjoyContext.get();
     }
 }

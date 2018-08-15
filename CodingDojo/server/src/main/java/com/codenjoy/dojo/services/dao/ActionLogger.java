@@ -79,7 +79,7 @@ public class ActionLogger {
     }
 
     public void saveToDB() {
-        pool.run((For<Void>) connection -> {
+        pool.run(connection -> {
             String sql = "INSERT INTO player_boards " +
                     "(time, player_name, game_type, score, board) " +
                     "VALUES (?,?,?,?,?);";
@@ -129,10 +129,10 @@ public class ActionLogger {
 
     public List<BoardLog> getAll() {
         return pool.select("SELECT * FROM player_boards;",
-                resultSet -> {
+                rs -> {
                     List<BoardLog> result = new LinkedList<>();
-                    while (resultSet.next()) {
-                        result.add(new BoardLog(resultSet));
+                    while (rs.next()) {
+                        result.add(new BoardLog(rs));
                     }
                     return result;
                 }

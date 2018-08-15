@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
@@ -41,7 +42,15 @@ public class RegistrationTest {
 
     @Before
     public void setup() {
-        service = new Registration(new SqliteConnectionThreadPoolFactory("target/users.db" + new Random().nextInt()));
+        String dbFile = "target/users.db" + new Random().nextInt();
+        service = new Registration(
+                new SqliteConnectionThreadPoolFactory(dbFile,
+                        new ContextPathGetter() {
+                            @Override
+                            public String getContext() {
+                                return "context";
+                            }
+                        }));
     }
 
     @After
