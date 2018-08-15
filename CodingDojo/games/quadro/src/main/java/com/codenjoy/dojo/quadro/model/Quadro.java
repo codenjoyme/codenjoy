@@ -83,6 +83,7 @@ public class Quadro implements Field {
         } else {
             if (++missedActs > 9) {
                 win(!yellowPlayerAct);
+                missedActs = 0; // TODO test me
             }
         }
 
