@@ -177,10 +177,12 @@ public class PlayerServiceImpl implements PlayerService {
 
             try {
                 solver = Reflection.constructor()
+                        .withParameterTypes(Dice.class)
                         .in(ai)
                         .newInstance(gameType.getDice());
             } catch (Exception e) {
                 solver = Reflection.constructor()
+                        .withParameterTypes()
                         .in(ai)
                         .newInstance(); // without dice
             }
