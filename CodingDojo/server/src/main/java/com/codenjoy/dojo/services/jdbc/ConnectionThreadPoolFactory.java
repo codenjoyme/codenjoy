@@ -23,9 +23,6 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
-/**
- * Created by indigo on 13.08.2016.
- */
 public interface ConnectionThreadPoolFactory {
     CrudConnectionThreadPool create(String... createTableSqls);
 }

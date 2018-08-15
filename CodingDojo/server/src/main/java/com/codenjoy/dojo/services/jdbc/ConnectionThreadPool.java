@@ -34,21 +34,18 @@ import java.util.concurrent.*;
 public class ConnectionThreadPool {
     private ExecutorService executorService;
 
-    private List<Connection> connections = new LinkedList<Connection>();
+    private List<Connection> connections = new LinkedList<>();
 
     public ConnectionThreadPool(int count, final Get get) {
-        executorService = Executors.newFixedThreadPool(count, new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable runnable) {
-                Connection connection = null;
-                try {
-                    connection = get.connection();
-                } catch (Exception e) {
-                    throw new RuntimeException("Error get connection", e);
-                }
-                connections.add(connection);
-                return new ConnectionThread(runnable, connection);
+        executorService = Executors.newFixedThreadPool(count, runnable -> {
+            Connection connection = null;
+            try {
+                connection = get.connection();
+            } catch (Exception e) {
+                throw new RuntimeException("Error get connection", e);
             }
+            connections.add(connection);
+            return new ConnectionThread(runnable, connection);
         });
     }
 
@@ -64,13 +61,10 @@ public class ConnectionThreadPool {
     }
 
     public <T> T run(final For<T> runner) {
-        Future<T> submit = executorService.submit(new Callable<T>() {
-            @Override
-            public T call() throws Exception {
-                ConnectionThread thread = (ConnectionThread) Thread.currentThread();
-                Connection connection = thread.getConnection();
-                return runner.run(connection);
-            }
+        Future<T> submit = executorService.submit(() -> {
+            ConnectionThread thread = (ConnectionThread) Thread.currentThread();
+            Connection connection = thread.getConnection();
+            return runner.run(connection);
         });
 
         try {

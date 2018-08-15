@@ -26,7 +26,7 @@ package com.codenjoy.dojo.services.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@FunctionalInterface
 public interface ObjectMapper<T> {
-
     T mapFor(ResultSet resultSet) throws SQLException;
 }

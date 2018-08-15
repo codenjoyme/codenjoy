@@ -22,10 +22,6 @@ package com.codenjoy.dojo.services.jdbc;
  * #L%
  */
 
-
-/**
- * Created by indigo on 13.08.2016.
- */
 public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
 
     private String dbFile;
