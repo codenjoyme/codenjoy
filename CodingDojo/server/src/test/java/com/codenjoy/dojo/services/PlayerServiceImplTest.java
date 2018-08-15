@@ -1167,8 +1167,8 @@ public class PlayerServiceImplTest {
     @Test
     public void testReloadAI() {
         // given
-        WebSocketRunner.attempts = 0;
-        WebSocketRunner.timeout = 100;
+        WebSocketRunner.ATTEMPTS = 0;
+        WebSocketRunner.TIMEOUT = 100;
 
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
         when(gameType.getBoard()).thenReturn((Class)BoardStub.class);

@@ -44,39 +44,41 @@ public class WebSocketRunner implements Closeable {
     public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
     public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
 
-    public static boolean printToConsole = true;
-    public static int timeout = 5000;
-    public static Integer attempts = null;
+    public static boolean PRINT_TO_CONSOLE = true;
+    public static int TIMEOUT = 5000;
+    public static Integer ATTEMPTS = 3;
 
     private Session session;
     private WebSocketClient client;
     private Solver solver;
     private ClientBoard board;
     private Runnable onClose;
+    private boolean forceClose;
 
     public WebSocketRunner(Solver solver, ClientBoard board) {
         this.solver = solver;
         this.board = board;
+        this.forceClose = false;
     }
 
     public static WebSocketRunner runClient(String url, Solver solver, ClientBoard board) {
         UrlParser parser = new UrlParser(url);
         return run(parser.server, parser.context,
                 parser.userName, parser.code,
-                solver, board);
+                solver, board, ATTEMPTS);
     }
 
     public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
-        printToConsole = false;
-        attempts = 2;
-        return run(LOCAL, CodenjoyContext.get(), aiName, null, solver, board);
+        PRINT_TO_CONSOLE = false;
+        return run(LOCAL, CodenjoyContext.get(), aiName, null, solver, board, 1);
     }
 
     private static WebSocketRunner run(String server, String context,
                                        String userName, String code,
-                                       Solver solver, ClientBoard board)
+                                       Solver solver, ClientBoard board,
+                                       int countAttempts)
     {
-        return run(getUri(server, context, userName, code), solver, board);
+        return run(getUri(server, context, userName, code), solver, board, countAttempts);
     }
 
     private static URI getUri(String server, String context, String userName, String code) {
@@ -91,10 +93,10 @@ public class WebSocketRunner implements Closeable {
         }
     }
 
-    public static WebSocketRunner run(URI uri, Solver solver, ClientBoard board) {
+    public static WebSocketRunner run(URI uri, Solver solver, ClientBoard board, int countAttempts) {
         try {
             WebSocketRunner client = new WebSocketRunner(solver, board);
-            client.start(uri);
+            client.start(uri, countAttempts);
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 if (client != null) {
                     client.close();
@@ -107,25 +109,27 @@ public class WebSocketRunner implements Closeable {
         }
     }
 
-    private void start(URI uri) throws Exception {
+    private void start(URI uri, int countAttempts) throws Exception {
         client = new WebSocketClient();
         client.start();
 
         onClose = () -> {
-            if (solver instanceof OneCommandSolver) {
+            if (forceClose || solver instanceof OneCommandSolver) {
                 return;
             }
+
             printReconnect();
-            connectLoop(uri);
+            connectLoop(uri, countAttempts);
         };
 
-        connectLoop(uri);
+        connectLoop(uri, countAttempts);
     }
 
     @Override
     public void close() {
+        forceClose = true;
         try {
-            if (session.isOpen()) {
+            if (session != null && session.isOpen()) {
                 session.close();
             }
             client = null;
@@ -186,8 +190,8 @@ public class WebSocketRunner implements Closeable {
         return exception instanceof UpgradeException && ((UpgradeException)exception).getResponseStatusCode() == 401;
     }
 
-    private void connectLoop(URI uri) {
-        while (attempts == null || attempts-- > 0) {
+    private void connectLoop(URI uri, int countAttempts) {
+        while (countAttempts-- > 0) {
             try {
                 tryToConnect(uri);
                 break;
@@ -206,7 +210,7 @@ public class WebSocketRunner implements Closeable {
     private void printReconnect() {
         print("Waiting before reconnect...");
         printBreak();
-        sleep(timeout);
+        sleep(TIMEOUT);
     }
 
     private void tryToConnect(URI uri) throws Exception {
@@ -217,7 +221,7 @@ public class WebSocketRunner implements Closeable {
         }
 
         session = client.connect(new ClientSocket(), uri)
-                .get(timeout, TimeUnit.MILLISECONDS);
+                .get(TIMEOUT, TimeUnit.MILLISECONDS);
     }
 
     private void sleep(int mills) {
@@ -233,13 +237,13 @@ public class WebSocketRunner implements Closeable {
     }
 
     public static void print(String message) {
-        if (printToConsole) {
+        if (PRINT_TO_CONSOLE) {
             System.out.println(message);
         }
     }
 
     private void print(Exception e) {
-        if (printToConsole) {
+        if (PRINT_TO_CONSOLE) {
             e.printStackTrace(System.out);
         }
     }
