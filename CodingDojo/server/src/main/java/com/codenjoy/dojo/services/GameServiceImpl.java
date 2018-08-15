@@ -68,9 +68,9 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Map<String, List<String>> getSprites() {
-        Map<String, List<String>> result = new TreeMap<String, List<String>>();
+        Map<String, List<String>> result = new TreeMap<>();
         for (Map.Entry<String, GameType> gameTypeEntry : cache.entrySet()) {
-            List<String> sprites = new LinkedList<String>();
+            List<String> sprites = new LinkedList<>();
 
             GameType gameType = gameTypeEntry.getValue();
 

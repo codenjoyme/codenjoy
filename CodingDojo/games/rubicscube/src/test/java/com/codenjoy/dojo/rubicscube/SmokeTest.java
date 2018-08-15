@@ -57,7 +57,7 @@ public class SmokeTest {
 
         GameRunner gameType = new GameRunner() {
             @Override
-            protected Dice getDice() {
+            public Dice getDice() {
                 return dice;
             }
         };

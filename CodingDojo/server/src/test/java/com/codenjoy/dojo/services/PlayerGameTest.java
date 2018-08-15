@@ -84,7 +84,7 @@ public class PlayerGameTest {
     public void testRemove() throws Exception {
         playerGame.remove();
 
-        verify(game).destroy();
+        verify(game).close();
         verify(controller).unregisterPlayerTransport(player);
         verify(screen).unregisterPlayerTransport(player);
     }

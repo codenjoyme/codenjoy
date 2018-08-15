@@ -23,13 +23,10 @@ package com.codenjoy.dojo.collapse.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.Direction;
 
 public class AISolver implements Solver<Board> {
 
@@ -50,15 +47,4 @@ public class AISolver implements Solver<Board> {
 
         return String.format("ACT(%s,%s),%s", x, y, direction);
     }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
-    }
-
 }

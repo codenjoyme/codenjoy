@@ -50,12 +50,6 @@ public abstract class AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        // do nothing
-        return false;
-    }
-
-    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.SINGLE;
     }
@@ -79,10 +73,8 @@ public abstract class AbstractGameType implements GameType {
         // do nothing
     }
 
-    /**
-     * @return нормальный Random, но ты можешь переопределить его, например, для тестовых целей
-     */
-    protected Dice getDice() {
+    @Override
+    public Dice getDice() {
         return new RandomDice();
     }
 

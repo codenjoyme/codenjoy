@@ -45,6 +45,8 @@ public class WebSocketRunner implements Closeable {
     public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
 
     public static boolean printToConsole = true;
+    public static int timeout = 5000;
+    public static Integer attempts = null;
 
     private Session session;
     private WebSocketClient client;
@@ -66,6 +68,7 @@ public class WebSocketRunner implements Closeable {
 
     public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
         printToConsole = false;
+        attempts = 2;
         return run(LOCAL, CodenjoyContext.get(), aiName, null, solver, board);
     }
 
@@ -179,7 +182,7 @@ public class WebSocketRunner implements Closeable {
     }
 
     private void connectLoop(URI uri) {
-        while (true) {
+        while (attempts == null || attempts-- > 0) {
             try {
                 tryToConnect(uri);
                 break;
@@ -198,7 +201,7 @@ public class WebSocketRunner implements Closeable {
     private void printReconnect() {
         print("Waiting before reconnect...");
         printBreak();
-        sleep(5000);
+        sleep(timeout);
     }
 
     private void tryToConnect(URI uri) throws Exception {
@@ -209,7 +212,7 @@ public class WebSocketRunner implements Closeable {
         }
 
         session = client.connect(new ClientSocket(), uri)
-                .get(5000, TimeUnit.MILLISECONDS);
+                .get(timeout, TimeUnit.MILLISECONDS);
     }
 
     private void sleep(int mills) {

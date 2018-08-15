@@ -92,7 +92,7 @@ public class PlayerGamesAdditionalDataTest {
         }
 
         @Override
-        public void destroy() {
+        public void close() {
 
         }
 

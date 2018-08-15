@@ -38,7 +38,7 @@ public class PlayerControllerTest {
 
     public static final int PORT = 8081;
     public static final String CONTEXT_PATH = "/appcontext";
-    private static WebSocketRunner client;
+    private static WebSocketRunnerMock client;
 
     private static String url;
 
@@ -99,7 +99,7 @@ public class PlayerControllerTest {
 
         controller.registerPlayerTransport(player, joystick);
 
-        client = WebSocketRunner.run(SERVER, USER_NAME);
+        client = WebSocketRunnerMock.run(SERVER, USER_NAME);
     }
 
     @Before

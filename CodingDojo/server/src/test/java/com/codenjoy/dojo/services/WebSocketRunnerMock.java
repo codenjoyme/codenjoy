@@ -36,7 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class WebSocketRunner {
+public class WebSocketRunnerMock {
 
     private Session session;
     private WebSocketClient wsClient;
@@ -49,12 +49,12 @@ public class WebSocketRunner {
     private boolean answered;
     public List<String> messages = new LinkedList<>();
 
-    public WebSocketRunner() {
+    public WebSocketRunnerMock() {
         reset();
     }
 
-    public static WebSocketRunner run(final String server, final String userName) throws Exception {
-        final WebSocketRunner client = new WebSocketRunner();
+    public static WebSocketRunnerMock run(final String server, final String userName) throws Exception {
+        final WebSocketRunnerMock client = new WebSocketRunnerMock();
         new Thread(() -> {
             try {
                 client.start(server, userName);
@@ -93,7 +93,7 @@ public class WebSocketRunner {
         session = wsClient.connect(new ClientSocket(), new URI(server + "?user=" + userName)).get(5000, TimeUnit.MILLISECONDS);
     }
 
-    public WebSocketRunner willAnswer(String answer) {
+    public WebSocketRunnerMock willAnswer(String answer) {
         this.answer = answer;
         return this;
     }
@@ -113,12 +113,12 @@ public class WebSocketRunner {
         started = false;
     }
 
-    public WebSocketRunner times(int times) {
+    public WebSocketRunnerMock times(int times) {
         this.times = times;
         return this;
     }
 
-    public WebSocketRunner onlyOnce() {
+    public WebSocketRunnerMock onlyOnce() {
         this.onlyOnce = true;
         return this;
     }

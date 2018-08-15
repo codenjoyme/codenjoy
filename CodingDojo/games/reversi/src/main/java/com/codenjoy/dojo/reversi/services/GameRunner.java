@@ -23,6 +23,9 @@ package com.codenjoy.dojo.reversi.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.reversi.client.Board;
 import com.codenjoy.dojo.reversi.client.ai.AISolver;
 import com.codenjoy.dojo.reversi.model.*;
 import com.codenjoy.dojo.services.*;
@@ -33,9 +36,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
@@ -58,7 +58,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer) score, settings);
     }
 
     @Override
@@ -82,6 +82,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.MULTIPLE;
     }
@@ -89,11 +99,5 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
         return new Player(listener);
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        AISolver.start(aiName, getDice());
-        return true;
     }
 }

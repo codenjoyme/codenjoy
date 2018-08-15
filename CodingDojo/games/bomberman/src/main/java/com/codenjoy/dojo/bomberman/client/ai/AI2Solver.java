@@ -233,15 +233,4 @@ public class AI2Solver implements Solver<Board> {
 
         return byAI;
     }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
-    }
-
 }

@@ -83,7 +83,7 @@ public class Single implements Game {
     }
 
     @Override
-    public void destroy() {
+    public void close() {
         field.remove(player);
     }
 

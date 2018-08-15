@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
@@ -624,8 +625,8 @@ public class PlayerServiceImplTest {
 
         playerService.removeAll();
 
-        verify(game1).destroy();
-        verify(game2).destroy();
+        verify(game1).close();
+        verify(game2).close();
     }
 
     @Test
@@ -1166,37 +1167,50 @@ public class PlayerServiceImplTest {
     @Test
     public void testReloadAI() {
         // given
+        WebSocketRunner.attempts = 0;
+        WebSocketRunner.timeout = 100;
+
+        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
+        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
+
         String gameName = createPlayer(VASYA).getGameName();
-        when(gameType.newAI(anyString())).thenReturn(true);
+
+        verify(gameType, times(1)).getAI();
+        verify(gameType, times(1)).getBoard();
 
         // when
         playerService.reloadAI(VASYA);
 
         // then
-        verify(gameType).newAI(VASYA);
+        verify(gameType, times(2)).getAI();
+        verify(gameType, times(2)).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA);
         assertEquals(gameName, playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA, player.getName());
+        assertNotNull(VASYA, player.getAI());
     }
 
     @Test
     public void testLoadPlayersFromSaveAndLoadAI() {
         // given
-        when(gameType.newAI(anyString())).thenReturn(true);
+        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
+        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
         PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", 100, null);
 
         // when
         playerService.register(save);
 
         // then
-        verify(gameType).newAI(VASYA_AI);
+        verify(gameType).getAI();
+        verify(gameType).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA_AI);
         assertEquals("game", playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getName());
+        assertNotNull(VASYA, player.getAI());
 
     }
 

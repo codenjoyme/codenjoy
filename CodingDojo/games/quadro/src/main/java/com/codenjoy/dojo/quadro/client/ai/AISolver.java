@@ -23,12 +23,9 @@ package com.codenjoy.dojo.quadro.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quadro.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 public class AISolver implements Solver<Board> {
 
@@ -41,15 +38,5 @@ public class AISolver implements Solver<Board> {
     @Override
     public String get(final Board board) {
         return String.format("ACT(%s)", dice.next(board.size()));
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
     }
 }

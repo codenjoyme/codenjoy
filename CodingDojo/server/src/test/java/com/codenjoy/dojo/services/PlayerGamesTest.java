@@ -71,12 +71,9 @@ public class PlayerGamesTest {
         controller = mock(PlayerController.class);
         screen = mock(PlayerController.class);
 
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                lazyJoystick = invocation.getArgumentAt(1, LazyJoystick.class);
-                return null;
-            }
+        doAnswer(invocation -> {
+            lazyJoystick = invocation.getArgumentAt(1, LazyJoystick.class);
+            return null;
         }).when(controller).registerPlayerTransport(eq(player), any(LazyJoystick.class));
 
 
@@ -206,7 +203,7 @@ public class PlayerGamesTest {
     }
 
     private void verifyRemove(PlayerGame playerGame) {
-        verify(playerGame.getGame()).destroy();
+        verify(playerGame.getGame()).close();
         verify(controller).unregisterPlayerTransport(playerGame.getPlayer());
         verify(screen).unregisterPlayerTransport(playerGame.getPlayer());
     }

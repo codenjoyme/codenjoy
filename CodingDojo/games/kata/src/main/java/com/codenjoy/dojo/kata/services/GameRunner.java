@@ -23,6 +23,9 @@ package com.codenjoy.dojo.kata.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.ai.AISolver;
 import com.codenjoy.dojo.kata.model.Kata;
 import com.codenjoy.dojo.kata.model.Player;
@@ -79,6 +82,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.SINGLE;
     }
@@ -101,10 +114,5 @@ public class GameRunner extends AbstractGameType implements GameType {
 
             return result;
         });
-    }
-
-    public boolean newAI(String aiName) {
-        AISolver.start(aiName, getDice());
-        return true;
     }
 }

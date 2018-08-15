@@ -23,12 +23,15 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -77,6 +80,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.MULTIPLE;
     }
@@ -84,12 +97,6 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
         return new Player(listener, getDice());
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        AISolver.start(aiName, getDice());
-        return true;
     }
 
     /**

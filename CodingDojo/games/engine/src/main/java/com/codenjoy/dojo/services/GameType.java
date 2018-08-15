@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -72,10 +74,14 @@ public interface GameType extends Tickable {
     Settings getSettings();
 
     /**
-     * Каждая игра должна предоставить своего AI который будет развлекать новопришедших игроков.
-     * @param aiName имя бота
+     * @return каждая игра должна предоставить своего AI который будет развлекать новопришедших игроков
      */
-    boolean newAI(String aiName);
+    Class<? extends Solver> getAI();
+
+    /**
+     * @return А это борда клиентская для игры
+     */
+    Class<? extends ClientBoard> getBoard();
 
     /**
      * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку 'version=${project.version}'
@@ -97,6 +103,11 @@ public interface GameType extends Tickable {
      * @return Игрок
      */
     GamePlayer createPlayer(EventListener listener, String save, String playerName);
+
+    /**
+     * @return нормальный Random, но ты можешь переопределить его, например, для тестовых целей
+     */
+    Dice getDice();
 
     /**
      * @return Вовзращает фабрику принтеров, которая создаст

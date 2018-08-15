@@ -23,14 +23,11 @@ package com.codenjoy.dojo.rubicscube.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.rubicscube.client.Board;
 import com.codenjoy.dojo.rubicscube.client.Face;
 import com.codenjoy.dojo.rubicscube.client.Rotate;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 public class AISolver implements Solver<Board> {
 
@@ -51,15 +48,4 @@ public class AISolver implements Solver<Board> {
     private String result(Face face, Rotate rotate) {
         return String.format("ACT(%s, %s)", face.number(), rotate.rotate());
     }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
-    }
-
 }

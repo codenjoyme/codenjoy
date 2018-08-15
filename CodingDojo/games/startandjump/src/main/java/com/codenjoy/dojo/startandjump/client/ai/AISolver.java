@@ -23,40 +23,21 @@ package com.codenjoy.dojo.startandjump.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.startandjump.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.startandjump.client.Board;
 
-/**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random.
- * Для его запуска воспользуйся методом {@see VladKvadratSolver#main}
- */
 public class AISolver implements Solver<Board> {
 
+    private Dice dice;
+
     public AISolver(Dice dice) {
-        // TODO
+        this.dice = dice;
     }
 
     @Override
     public String get(final Board board) {
-        // TODO
+        // TODO implement bot
         return "UP";
-//        return "";
     }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
-    }
-
 }

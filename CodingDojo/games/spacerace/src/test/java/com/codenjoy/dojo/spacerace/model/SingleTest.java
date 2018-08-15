@@ -171,7 +171,7 @@ public class SingleTest {
     // игроков можно удалять из игры
     @Test
     public void shouldRemove() {
-        game3.destroy();
+        game3.close();
 
         field.tick();
 

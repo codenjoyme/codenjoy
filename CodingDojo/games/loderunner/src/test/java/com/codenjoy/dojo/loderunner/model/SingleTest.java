@@ -117,7 +117,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game1.getJoystick().act();
-        game3.destroy();
+        game3.close();
 
         field.tick();
 

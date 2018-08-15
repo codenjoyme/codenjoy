@@ -23,12 +23,9 @@ package com.codenjoy.dojo.sudoku.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.sudoku.client.Board;
 
 import java.util.*;
@@ -38,8 +35,10 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class AISolver implements Solver<Board> {
 
     private static final int SIZE = 9;
+    private Dice dice;
 
     public AISolver(Dice dice) {
+        this.dice = dice;
     }
 
     @Override
@@ -138,15 +137,5 @@ public class AISolver implements Solver<Board> {
         }
 
         return result;
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
     }
 }

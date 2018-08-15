@@ -23,9 +23,7 @@ package com.codenjoy.dojo.reversi.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.reversi.client.Board;
 import com.codenjoy.dojo.reversi.model.Elements;
 import com.codenjoy.dojo.reversi.model.Flipper;
@@ -33,7 +31,6 @@ import com.codenjoy.dojo.reversi.model.GetChip;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.List;
 
@@ -84,15 +81,4 @@ public class AISolver implements Solver<Board> {
                 turn.chip.getX(),
                 turn.chip.getY());
     }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
-    }
-
 }

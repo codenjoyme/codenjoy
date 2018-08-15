@@ -23,9 +23,10 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 
-public class Player implements ScreenRecipient {
+public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
 
@@ -39,6 +40,7 @@ public class Player implements ScreenRecipient {
     private Information info;
     private GameType gameType;
     private InformationCollector eventListener;
+    private Closeable ai;
 
     public Player() {
     }
@@ -160,5 +162,20 @@ public class Player implements ScreenRecipient {
 
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
+    }
+
+    public void setAI(Closeable ai) {
+        this.ai = ai;
+    }
+
+    @Override
+    public void close() {
+        if (ai != null) {
+            ai.close();
+        }
+    }
+
+    public Closeable getAI() {
+        return ai;
     }
 }

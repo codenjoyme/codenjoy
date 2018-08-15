@@ -22,6 +22,9 @@ package com.codenjoy.dojo.football.services;
  * #L%
  */
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.football.client.Board;
 import com.codenjoy.dojo.football.client.ai.AISolver;
 import com.codenjoy.dojo.football.model.*;
 import com.codenjoy.dojo.services.AbstractGameType;
@@ -78,6 +81,20 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        if (needAI.getValue() == 1) {
+            return AISolver.class;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.TEAM.apply(numberOfPlayers.getValue());
     }
@@ -85,15 +102,6 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
         return new Player(listener);
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        boolean result = (needAI.getValue() == 1);
-        if (result) {
-            AISolver.start(aiName, getDice());
-        }
-        return result;
     }
 
     protected String getMap() {

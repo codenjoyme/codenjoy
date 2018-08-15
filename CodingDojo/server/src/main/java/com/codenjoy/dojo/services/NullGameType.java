@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -73,6 +75,16 @@ public class NullGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return null;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         throw exception();
     }
@@ -88,8 +100,8 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        throw exception();
+    public Dice getDice() {
+        return null;
     }
 
     @Override

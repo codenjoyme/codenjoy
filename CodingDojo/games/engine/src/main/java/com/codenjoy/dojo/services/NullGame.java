@@ -61,7 +61,7 @@ public class NullGame implements Game {
     }
 
     @Override
-    public void destroy() {
+    public void close() {
         // do nothing
     }
 

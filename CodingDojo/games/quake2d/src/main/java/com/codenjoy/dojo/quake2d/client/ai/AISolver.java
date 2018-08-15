@@ -36,18 +36,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random.
- * Для его запуска воспользуйся методом {@see BotSolver#main}
- */
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
     public static final int SHIFT_COMMAND = 100;
-
-//    private static Sample game = null;
 
     public AISolver(Dice dice) {
         this.way = new DeikstraFindWay();
@@ -82,10 +74,6 @@ public class AISolver implements Solver<Board> {
 
     @Override
     public String get(final Board board) {
-//        if (game == null) {
-//            game = new Sample(new LevelImpl(board.boardAsString()), new RandomDice());
-//        }
-
         if (board.isGameOver()) return "";
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return "";
@@ -171,15 +159,4 @@ public class AISolver implements Solver<Board> {
         }
         return variantsWays;
     }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
-    }
-
 }

@@ -80,7 +80,8 @@ public class PlayerGame implements Tickable {
         if (onRemove != null) {
             onRemove.accept(player, lazyJoystick);
         }
-        game.destroy();
+        game.close();
+        player.close();
     }
 
     public Player getPlayer() {

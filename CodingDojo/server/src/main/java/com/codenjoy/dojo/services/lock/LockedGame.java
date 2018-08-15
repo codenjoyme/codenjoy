@@ -84,10 +84,10 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public void destroy() {
+    public void close() {
         lock.writeLock().lock();
         try {
-            game.destroy();
+            game.close();
         } finally {
             lock.writeLock().unlock();
         }

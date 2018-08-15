@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -93,6 +95,16 @@ public class SecondGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return null;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.SINGLE;
     }
@@ -103,13 +115,13 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public PrinterFactory getPrinterFactory() {
+    public Dice getDice() {
         return null;
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        return false;
+    public PrinterFactory getPrinterFactory() {
+        return null;
     }
 
     @Override

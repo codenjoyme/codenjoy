@@ -25,13 +25,10 @@ package com.codenjoy.dojo.battlecity.client.ai;
 
 import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.model.Elements;
-import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
@@ -96,16 +93,6 @@ public class AISolver implements Solver<Board> {
                 Elements.OTHER_TANK_UP);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
     }
 
 }

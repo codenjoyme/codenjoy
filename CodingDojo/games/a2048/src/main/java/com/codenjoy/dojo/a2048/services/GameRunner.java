@@ -23,8 +23,11 @@ package com.codenjoy.dojo.a2048.services;
  */
 
 
+import com.codenjoy.dojo.a2048.client.Board;
 import com.codenjoy.dojo.a2048.client.ai.AISolver;
 import com.codenjoy.dojo.a2048.model.*;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -83,8 +86,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        AISolver.start(aiName, getDice());
-        return true;
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
     }
 }

@@ -23,12 +23,9 @@ package com.codenjoy.dojo.minesweeper.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 public class AISolver extends YourDirectionSolver implements Solver<Board> {
 
@@ -39,16 +36,6 @@ public class AISolver extends YourDirectionSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         return super.get(new BoardAdapter(board));
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(name, dice),
-                new Board());
     }
 
 }

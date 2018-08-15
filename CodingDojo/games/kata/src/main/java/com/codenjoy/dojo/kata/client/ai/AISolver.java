@@ -24,15 +24,13 @@ package com.codenjoy.dojo.kata.client.ai;
 
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
-import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.AbstractTextSolver;
-import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.Strings;
-import com.codenjoy.dojo.kata.model.levels.*;
 import com.codenjoy.dojo.kata.model.Elements;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.kata.model.levels.Algorithm;
+import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.LevelsLoader;
+import com.codenjoy.dojo.kata.model.levels.NullAlgorithm;
 
 import java.util.List;
 
@@ -63,15 +61,5 @@ public class AISolver extends AbstractTextSolver {
             return new NullAlgorithm();
         }
         return (Algorithm) levels.get(level);
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(),
-                new Board());
     }
 }

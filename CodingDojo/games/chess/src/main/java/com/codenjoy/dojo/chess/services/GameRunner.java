@@ -25,6 +25,8 @@ package com.codenjoy.dojo.chess.services;
 
 import com.codenjoy.dojo.chess.model.*;
 import com.codenjoy.dojo.chess.model.figures.Level;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -73,6 +75,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
+    }
+
+    @Override
+    public Class<? extends Solver> getAI() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return null;
     }
 
     @Override

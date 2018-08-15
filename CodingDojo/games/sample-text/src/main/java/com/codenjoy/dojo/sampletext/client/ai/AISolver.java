@@ -25,11 +25,7 @@ package com.codenjoy.dojo.sampletext.client.ai;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.AbstractTextSolver;
-import com.codenjoy.dojo.client.Closeable;
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.sampletext.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 /**
  * User: your name
@@ -49,15 +45,5 @@ public class AISolver extends AbstractTextSolver {
     @Override
     public String getAnswer(String question) {
         return "answer" + question.substring("question".length());
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
     }
 }

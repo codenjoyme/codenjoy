@@ -23,11 +23,14 @@ package com.codenjoy.dojo.sudoku.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.sudoku.client.Board;
 import com.codenjoy.dojo.sudoku.client.ai.AISolver;
 import com.codenjoy.dojo.sudoku.model.*;
 
@@ -68,6 +71,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.SINGLE;
     }
@@ -75,11 +88,5 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
         return new Player(listener);
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        AISolver.start(aiName, getDice());
-        return true;
     }
 }

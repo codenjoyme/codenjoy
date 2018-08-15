@@ -22,13 +22,19 @@ package com.codenjoy.dojo.spacerace.services;
  * #L%
  */
 
-import com.codenjoy.dojo.spacerace.client.ai.AISolver;
-import com.codenjoy.dojo.spacerace.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.spacerace.client.Board;
+import com.codenjoy.dojo.spacerace.client.ai.AISolver;
+import com.codenjoy.dojo.spacerace.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -106,6 +112,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.MULTIPLE;
     }
@@ -113,11 +129,5 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
         return new Player(listener);
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        AISolver.start(aiName, getDice());
-        return true;
     }
 }

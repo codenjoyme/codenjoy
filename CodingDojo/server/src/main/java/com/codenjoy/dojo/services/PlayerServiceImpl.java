@@ -24,11 +24,16 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Closeable;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import org.fest.reflect.core.Reflection;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -138,8 +143,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
-        if (gameType.newAI(aiName)) {
+        Closeable ai = createAI(gameType, aiName);
+        if (ai != null) {
             Player player = getPlayer(gameType, PlayerSave.get(aiName, "127.0.0.1", gameName, 0, null));
+            player.setAI(ai);
         }
     }
 
@@ -149,12 +156,48 @@ public class PlayerServiceImpl implements PlayerService {
         String gameName = playerSave.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
+        Player player = getPlayer(gameType, playerSave);
+
         if (name.endsWith(BOT_EMAIL_SUFFIX)) {
-            gameType.newAI(name);
+            Closeable runner = createAI(gameType, name);
+            player.setAI(runner);
         }
 
-        Player player = getPlayer(gameType, playerSave);
         return player;
+    }
+
+    private Closeable createAI(GameType gameType, String aiName) {
+        Class<? extends Solver> ai = gameType.getAI();
+        if (ai == null) {
+            return null;
+        }
+
+        try {
+            Solver solver = null;
+
+            try {
+                solver = Reflection.constructor()
+                        .in(ai)
+                        .newInstance(gameType.getDice());
+            } catch (Exception e) {
+                solver = Reflection.constructor()
+                        .in(ai)
+                        .newInstance(); // without dice
+            }
+
+            ClientBoard board = Reflection.constructor()
+                    .in(gameType.getBoard())
+                    .newInstance();
+
+            WebSocketRunner runner = runAI(aiName, solver, board);
+            return runner;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
+        return WebSocketRunner.runAI(aiName, solver, board);
     }
 
     private Player getPlayer(GameType gameType, PlayerSave playerSave) {

@@ -23,14 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-/**
- * Каждый инстанс игры для каждого игрока реализует этот интерфейс
- */
-public interface Game {
+public interface Game extends Closeable {
 
     /**
      * @return Джойстик для управления ботом игрока
@@ -64,7 +62,7 @@ public interface Game {
      * Если вдруг пользователь передумает играть и уйдет, от при выходе из игры фреймворк дернет этот метод.
      * Мало ли, вдруг ты хранишь всех игроков у себя (актуально для игры типа много игроков на одном поле).
      */
-    void destroy();
+    void close();
 
     /**
      * Иногда ведущий игры сбрасывает очки участников. Тогда фреймворк дернет этот метод.

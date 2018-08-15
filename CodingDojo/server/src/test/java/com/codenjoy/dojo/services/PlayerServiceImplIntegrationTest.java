@@ -22,7 +22,11 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.client.*;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.mocks.AISolverStub;
+import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerServiceImpl;
@@ -54,39 +58,56 @@ public class PlayerServiceImplIntegrationTest {
     private Statistics statistics;
     private PlayerGames playerGames;
     private Map<String, GameType> gameTypes = new HashMap<>();
+    private Map<String, WebSocketRunner> runners = new HashMap<>();
 
     @Before
     public void setup() {
-        service = new PlayerServiceImpl() {{
-            statistics = mock(Statistics.class);
+        service = new PlayerServiceImpl() {
 
-            PlayerServiceImplIntegrationTest.this.playerGames
-                    = this.playerGames = new PlayerGames(statistics);
+            {
+                statistics = mock(Statistics.class);
 
-            PlayerServiceImplIntegrationTest.this.multiplayer
-                    = this.multiplayer = new MultiplayerServiceImpl(playerGames){};
+                PlayerServiceImplIntegrationTest.this.playerGames
+                        = this.playerGames = new PlayerGames(statistics);
 
-            PlayerServiceImplIntegrationTest.this.playerController
-                    = this.playerController = mock(PlayerController.class);
+                PlayerServiceImplIntegrationTest.this.multiplayer
+                        = this.multiplayer = new MultiplayerServiceImpl(playerGames){};
 
-            PlayerServiceImplIntegrationTest.this.screenController
-                    = this.screenController = mock(PlayerController.class);
+                PlayerServiceImplIntegrationTest.this.playerController
+                        = this.playerController = mock(PlayerController.class);
 
-            PlayerServiceImplIntegrationTest.this.gameService
-                    = this.gameService = mock(GameService.class);
+                PlayerServiceImplIntegrationTest.this.screenController
+                        = this.screenController = mock(PlayerController.class);
 
-            PlayerServiceImplIntegrationTest.this.autoSaver
-                    = this.autoSaver = mock(AutoSaver.class);
+                PlayerServiceImplIntegrationTest.this.gameService
+                        = this.gameService = mock(GameService.class);
 
-            PlayerServiceImplIntegrationTest.this.actionLogger
-                    = this.actionLogger = mock(ActionLogger.class);
+                PlayerServiceImplIntegrationTest.this.autoSaver
+                        = this.autoSaver = mock(AutoSaver.class);
 
-            this.autoSaverEnable = true;
-        }};
+                PlayerServiceImplIntegrationTest.this.actionLogger
+                        = this.actionLogger = mock(ActionLogger.class);
+
+                this.autoSaverEnable = true;
+            }
+
+            protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
+                WebSocketRunner runner = mock(WebSocketRunner.class);
+                doAnswer(inv -> {
+                    return null; // for debug
+                }).when(runner).close();
+                runners.put(aiName, runner);
+                return runner;
+            }
+
+        };
     }
 
     @Test
-    public void createTwoPlayersInSingleTypeWithOneAI() {
+    public void test() {
+        int ai1 = 0;
+        int ai2 = 0;
+        int ai3 = 0;
         when(gameService.getGame(anyString())).thenAnswer(
                 inv -> getOrCreateGameType(inv.getArgumentAt(0, String.class))
         );
@@ -94,11 +115,13 @@ public class PlayerServiceImplIntegrationTest {
         // первый плеер зарегался
         Player player1 = service.register("player1", "callback1", "game1");
         assertEquals("[game1-super-ai@codenjoy.com, player1]", service.getAll().toString());
+        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
 
         // потом еще двое подоспели на ту же игру
         Player player2 = service.register("player2", "callback2", "game1");
         Player player3 = service.register("player3", "callback2", "game1");
-        verify(gameTypes.get("game1"), times(1)).newAI("game1-super-ai@codenjoy.com");
+        verify(gameTypes.get("game1"), times(++ai1)).getAI();
+        verify(gameTypes.get("game1"), times(ai1)).getBoard();
         assertEquals("[game1-super-ai@codenjoy.com, player1, player2, player3]",
                 service.getAll().toString());
 
@@ -118,7 +141,8 @@ public class PlayerServiceImplIntegrationTest {
 
         // потом зарегались на другую игру
         Player player4 = service.register("player4", "callback4", "game2");
-        verify(gameTypes.get("game2"), times(1)).newAI("game2-super-ai@codenjoy.com");
+        verify(gameTypes.get("game2"), times(++ai2)).getAI();
+        verify(gameTypes.get("game2"), times(ai2)).getBoard();
         Player player5 = service.register("player5", "callback5", "game2");
         Player player6 = service.register("player6", "callback6", "game1");
         assertEquals("[game1-super-ai@codenjoy.com, player1, player6]",
@@ -129,6 +153,8 @@ public class PlayerServiceImplIntegrationTest {
         // при этом у нас теперь два AI
         assertEquals(true, service.contains("game1-super-ai@codenjoy.com"));
         assertEquals(true, service.contains("game2-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("game2-super-ai@codenjoy.com"));
 
         // взяли игру с плеерами
         assertEquals("game1", service.getAnyGameWithPlayers().name());
@@ -140,9 +166,12 @@ public class PlayerServiceImplIntegrationTest {
                 service.getRandom("game2").toString());
 
         // несложно понять что берется просто первый в очереди
+        verifyNoMoreInteractions(runners.get("game2-super-ai@codenjoy.com"));
         service.remove("game2-super-ai@codenjoy.com");
+        verify(runners.get("game2-super-ai@codenjoy.com"), times(1)).close();
         assertEquals("player4",
                 service.getRandom("game2").toString());
+        runners.remove("game2-super-ai@codenjoy.com");
 
         // закрыли регистрацию
         assertEquals(true, service.isRegistrationOpened());
@@ -157,16 +186,25 @@ public class PlayerServiceImplIntegrationTest {
         service.openRegistration();
         assertEquals(true, service.isRegistrationOpened());
         player7 = service.register("player7", "callback7", "game3");
-        verify(gameTypes.get("game3"), times(1)).newAI("game3-super-ai@codenjoy.com");
+        verify(gameTypes.get("game3"), times(++ai3)).getAI();
+        verify(gameTypes.get("game3"), times(ai3)).getBoard();
         assertEquals(true, service.contains("player7"));
         assertEquals("[game3-super-ai@codenjoy.com, player7]",
                 service.getAll("game3").toString());
+        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
+        assertEquals(false, runners.containsKey("game2-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("game3-super-ai@codenjoy.com"));
 
         // загрузили AI вместо плеера
         service.reloadAI("player7");
-        verify(gameTypes.get("game3"), times(1)).newAI("player7");
+        verify(gameTypes.get("game3"), times(++ai3)).getAI();
+        verify(gameTypes.get("game3"), times(ai3)).getBoard();
         assertEquals("[game3-super-ai@codenjoy.com, player7]",
                 service.getAll("game3").toString());
+        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
+        assertEquals(false, runners.containsKey("game2-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("game3-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("player7"));
 
         // обновили описание ребят
         List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getName() + "_updated",
@@ -193,16 +231,24 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals("[]", service.getAll("game1").toString());
         assertEquals("[]", service.getAll("game2").toString());
         assertEquals("[]", service.getAll("game3").toString());
+        verify(runners.get("game1-super-ai@codenjoy.com"), times(1)).close();
+        verify(runners.get("game3-super-ai@codenjoy.com"), times(1)).close();
+        verify(runners.get("player7"), times(1)).close();
+        runners.clear();
 
         // грузим плеера из сейва
         player1 = service.register(new PlayerSave("player1", "callback1", "game1", 120, "save"));
         assertEquals("[player1]", service.getAll("game1").toString());
-        verify(gameTypes.get("game1"), times(0)).newAI("player1");
+        assertEquals(0, runners.size());
 
         // а теперь AI из сейва
+        verify(gameTypes.get("game1"), times(ai1)).getAI();
+        verify(gameTypes.get("game1"), times(ai1)).getBoard();
         player1 = service.register(new PlayerSave("bot-super-ai@codenjoy.com", "callback", "game1", 120, "save"));
         assertEquals("[player1, bot-super-ai@codenjoy.com]", service.getAll("game1").toString());
-        verify(gameTypes.get("game1"), times(1)).newAI("bot-super-ai@codenjoy.com");
+        verify(gameTypes.get("game1"), times(++ai1)).getAI();
+        verify(gameTypes.get("game1"), times(ai1)).getBoard();
+        assertEquals(true, runners.containsKey("bot-super-ai@codenjoy.com"));
     }
 
     private GameType getOrCreateGameType(String name) {
@@ -217,7 +263,8 @@ public class PlayerServiceImplIntegrationTest {
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
         when(gameType.createGame()).thenReturn(field);
         when(gameType.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
-        when(gameType.newAI(anyString())).thenReturn(true);
+        when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
+        when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
         when(gameType.name()).thenReturn(name);
 
         gameTypes.put(name, gameType);
