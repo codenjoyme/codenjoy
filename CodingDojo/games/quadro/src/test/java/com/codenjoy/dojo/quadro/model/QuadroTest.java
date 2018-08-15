@@ -135,6 +135,34 @@ public class QuadroTest {
                 "    o    ");
     }
 
+    // Игрок не может походить если он один на борде
+    @Test
+    public void shouldNotTurnWhenALone() {
+        givenFl("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+        game.remove(player2);
+
+        hero1.act(4);
+        game.tick();
+
+        assertE("         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         " +
+                "         ");
+    }
+
     // Игрок может походить на столбец, где есть фишки
     @Test
     public void shouldAddChipOnChip() {

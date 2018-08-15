@@ -60,6 +60,8 @@ public class Quadro implements Field {
 
     @Override
     public void tick() {
+        if (!isGameStarted()) return;
+
         if (gameOver > 0) {
             if (++gameOver > TIMEOUT_TICKS) {
                 chips.clear();
