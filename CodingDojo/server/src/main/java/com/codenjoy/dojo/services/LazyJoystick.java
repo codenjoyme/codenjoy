@@ -40,16 +40,14 @@ public class LazyJoystick implements Joystick, Tickable {
     }
     private final Game game;
 
-    private PlayerSpy player;
     private Direction direction;
 
     private String message;
     private int[] parameters;
     private boolean firstAct;
 
-    public LazyJoystick(Game game, PlayerSpy player) {
+    public LazyJoystick(Game game) {
         this.game = game;
-        this.player = player;
     }
 
     @Override
@@ -115,6 +113,5 @@ public class LazyJoystick implements Joystick, Tickable {
         parameters = null;
         direction = null;
         message = null;
-        player.act();
     }
 }

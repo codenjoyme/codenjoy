@@ -45,7 +45,6 @@ public class MainPageController {
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
-    @Autowired private Statistics statistics;
     @Autowired private Validator validator;
 
     @Value("${page.main}")
@@ -100,7 +99,6 @@ public class MainPageController {
         request.setAttribute("registered", player != NullPlayer.INSTANCE);
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
-        model.addAttribute("statistics", statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3));
         return "main";
     }
 

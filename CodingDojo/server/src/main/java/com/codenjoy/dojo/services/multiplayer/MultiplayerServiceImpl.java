@@ -57,6 +57,7 @@ public class MultiplayerServiceImpl implements MultiplayerService {
                 currentCount = 0;
             }
             currentCount++;
+            // TODO тут большая беда, если ребята выходят из игры и снова заходят - разобраться
             return current;
         }
     }

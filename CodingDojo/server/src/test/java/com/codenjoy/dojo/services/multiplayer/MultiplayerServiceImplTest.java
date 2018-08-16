@@ -57,7 +57,7 @@ public class MultiplayerServiceImplTest {
 
     @Before
     public void setup() {
-        playerGames = new PlayerGames(mock(Statistics.class));
+        playerGames = new PlayerGames();
         multiplayer = new MultiplayerServiceImpl(playerGames);
         printerFactory = mock(PrinterFactory.class);
 

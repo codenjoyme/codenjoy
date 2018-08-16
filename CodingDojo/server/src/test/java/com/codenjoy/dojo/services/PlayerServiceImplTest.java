@@ -65,7 +65,6 @@ import static org.mockito.Mockito.*;
         SpyMultiplayerService.class,
         MockActionLogger.class,
         SpyPlayerGames.class,
-        MockStatistics.class,
         MockPropertyPlaceholderConfigurer.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
@@ -91,7 +90,6 @@ public class PlayerServiceImplTest {
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
     @Autowired private PlayerGames playerGames;
-    @Autowired private Statistics statistics;
     @Autowired private MultiplayerService multiplayer;
 
     private GameType gameType;
@@ -100,7 +98,6 @@ public class PlayerServiceImplTest {
     private PlayerScores playerScores3;
     private Joystick joystick;
     private InformationCollector informationCollector;
-    private PlayerSpy playerSpy;
     private GameField gameField;
     private GamePlayer gamePlayer;
     private GraphicPrinter printer;
@@ -108,7 +105,7 @@ public class PlayerServiceImplTest {
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
-        Mockito.reset(actionLogger, autoSaver, gameService, playerController, statistics);
+        Mockito.reset(actionLogger, autoSaver, gameService, playerController);
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
@@ -150,9 +147,6 @@ public class PlayerServiceImplTest {
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
-
-        playerSpy = mock(PlayerSpy.class);
-        when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
 
         playerGames.clear();
         Mockito.reset(playerController, screenController, actionLogger, multiplayer);
@@ -716,22 +710,6 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldContinueTicksWhenExceptionInStatistics() {
-        createPlayer(VASYA);
-
-        Game game1 = createGame();
-
-        setNewGames(game1);
-
-        setup(game1);
-        doThrow(new RuntimeException()).when(statistics).tick();
-
-        playerService.tick();
-
-        verify(game1.getField()).quietTick();
-    }
-
-    @Test
     public void shouldContinueTicksWhenExceptionInNewGame() {
         createPlayer(VASYA);
         createPlayer(PETYA);
@@ -1132,30 +1110,6 @@ public class PlayerServiceImplTest {
 
         verify(actionLogger).log(playerGames);
 //        verifyNoMoreInteractions(actionLogger);
-    }
-
-    @Test
-    public void shouldTickStatistics() {
-        createPlayer(VASYA);
-
-        playerService.tick();
-
-        verify(statistics).quietTick();
-    }
-
-    @Test
-    public void shouldActPlayerSpyWhenActAtJoystick() {
-        // given
-        createPlayer(VASYA);
-        Joystick j = getJoystick(playerController);
-
-        // when
-        j.down();
-        playerService.tick();
-
-        // then
-        verify(playerSpy).act();
-        verifyNoMoreInteractions(playerSpy);
     }
 
     private Joystick getJoystick(PlayerController controller) {

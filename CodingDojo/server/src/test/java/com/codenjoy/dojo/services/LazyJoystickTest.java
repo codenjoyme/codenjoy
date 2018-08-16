@@ -34,7 +34,6 @@ import static org.mockito.Mockito.*;
  */
 public class LazyJoystickTest {
     private Game game;
-    private PlayerSpy playerSpy;
     private LazyJoystick lazy;
     private Joystick original;
 
@@ -43,8 +42,7 @@ public class LazyJoystickTest {
         original = mock(Joystick.class);
         game = mock(Game.class);
         when(game.getJoystick()).thenReturn(original);
-        playerSpy = new PlayerSpy();
-        lazy = new LazyJoystick(game, playerSpy);
+        lazy = new LazyJoystick(game);
     }
 
     @Test

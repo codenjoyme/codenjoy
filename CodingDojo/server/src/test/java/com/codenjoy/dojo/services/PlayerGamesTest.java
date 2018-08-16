@@ -48,14 +48,12 @@ public class PlayerGamesTest {
     private PlayerController screen;
     private LazyJoystick lazyJoystick;
     private Joystick joystick;
-    private PlayerSpy playerSpy;
-    private Statistics statistics;
     private List<GameType> gameTypes = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
 
     @Before
     public void setUp() throws Exception {
-        Arrays.asList(joystick, game, controller, screen, statistics, playerSpy)
+        Arrays.asList(joystick, game, controller, screen)
                 .forEach(it -> {
                     if (it != null) reset(it);
                 });
@@ -77,10 +75,7 @@ public class PlayerGamesTest {
         }).when(controller).registerPlayerTransport(eq(player), any(LazyJoystick.class));
 
 
-        statistics = mock(Statistics.class);
-        playerSpy = mock(PlayerSpy.class);
-        when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
-        playerGames = new PlayerGames(statistics);
+        playerGames = new PlayerGames();
 
         playerGames.onAddPlayer((player, joystick) -> {
             controller.registerPlayerTransport(player, joystick);
@@ -230,65 +225,6 @@ public class PlayerGamesTest {
 
         // then
         verify(joystick).right();
-    }
-
-    @Test
-    public void shouldQuietTickPlayerSpyWhenTick() {
-        // given
-        lazyJoystick.right();
-        doThrow(new RuntimeException()).when(playerSpy).act();
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(playerSpy).act();
-    }
-
-    @Test
-    public void shouldTickPlayerSpyWhenTick() {
-        // given
-        lazyJoystick.right();
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(playerSpy).act();
-    }
-
-    @Test
-    public void shouldTickStatisticsWhenTick() {
-        // when
-        playerGames.tick();
-
-        // then
-        verify(statistics).quietTick();
-    }
-
-    @Test
-    public void shouldQuietTickStatisticsWhenTick() {
-        // given
-        doThrow(new RuntimeException()).when(statistics).tick();
-
-        // when
-        playerGames.tick();
-
-        // then
-        verify(statistics).quietTick();
-    }
-
-    @Test
-    public void shouldNotRemovePlayerIfNoActive() {
-        // given
-        when(statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, PlayerGames.TICKS_FOR_REMOVE)).thenReturn(Arrays.asList(player));
-        assertEquals(1, playerGames.size());
-
-        // when
-        playerGames.tick();
-
-        // then
-        assertEquals(1, playerGames.size());
     }
 
     @Test

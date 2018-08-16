@@ -54,8 +54,7 @@ public class PlayerGamesAdditionalDataTest {
 
     @Before
     public void setup() {
-        Statistics statistics = mock(Statistics.class);
-        playerGames = new PlayerGames(statistics);
+        playerGames = new PlayerGames();
         players = new LinkedList<>();
         games = new LinkedList<>();
         controllers = new LinkedList<>();

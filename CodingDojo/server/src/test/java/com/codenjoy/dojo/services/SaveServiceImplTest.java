@@ -44,7 +44,6 @@ import static org.mockito.Mockito.*;
         SaveServiceImpl.class,
         MockPlayerService.class,
         MockPlayerGames.class,
-        MockStatistics.class,
         MockRegistration.class,
         MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)

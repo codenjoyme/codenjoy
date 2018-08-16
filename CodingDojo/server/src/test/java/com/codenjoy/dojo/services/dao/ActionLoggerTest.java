@@ -76,7 +76,7 @@ public class ActionLoggerTest {
     }
 
     private void act() throws InterruptedException {
-        PlayerGames playerGames = new PlayerGames(mock(Statistics.class));
+        PlayerGames playerGames = new PlayerGames();
 
         addPlayer(playerGames, "board1", 123, "player1", "game1");
         addPlayer(playerGames, "board2", 234, "player2", "game2");

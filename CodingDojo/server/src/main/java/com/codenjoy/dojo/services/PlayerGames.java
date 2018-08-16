@@ -39,18 +39,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private static Logger logger = LoggerFactory.getLogger(PlayerGames.class);
 
-    public static final int TICKS_FOR_REMOVE = 60*30; // 15 минут без игры - дисквалификация
     private List<PlayerGame> playerGames = new LinkedList<>();
 
     private BiConsumer<Player, Joystick> onAddPlayer;
     private BiConsumer<Player, Joystick> onRemovePlayer;
 
     public PlayerGames() {}
-    public PlayerGames(Statistics statistics) { // TODO
-        this.statistics = statistics;
-    }
-
-    private @Autowired Statistics statistics;
 
     public void remove(Player player) {
         int index = playerGames.indexOf(player);
@@ -68,9 +62,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame add(Player player, Game game) {
-        PlayerSpy spy = statistics.newPlayer(player);
-
-        LazyJoystick joystick = new LazyJoystick(game, spy);
+        LazyJoystick joystick = new LazyJoystick(game);
         if (onAddPlayer != null) {
             onAddPlayer.accept(player, joystick);
         }
@@ -140,18 +132,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             playerGame.quietTick();
         }
 
-        // следим за плеерами, кто давно не играет
-        statistics.quietTick();
-//        removeNotActivePlayers();
-
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(gameType -> gameType.quietTick());
-    }
-
-    private void removeNotActivePlayers() {
-        for (Player player : statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, TICKS_FOR_REMOVE)) {
-            remove(player);
-        }
     }
 
     public Map<String, GameData> getGamesDataMap() {

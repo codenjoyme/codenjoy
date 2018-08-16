@@ -55,7 +55,6 @@ public class PlayerServiceImplIntegrationTest {
     private PlayerController screenController;
     private PlayerController playerController;
     private MultiplayerService multiplayer;
-    private Statistics statistics;
     private PlayerGames playerGames;
     private Map<String, GameType> gameTypes = new HashMap<>();
     private Map<String, WebSocketRunner> runners = new HashMap<>();
@@ -63,12 +62,9 @@ public class PlayerServiceImplIntegrationTest {
     @Before
     public void setup() {
         service = new PlayerServiceImpl() {
-
             {
-                statistics = mock(Statistics.class);
-
                 PlayerServiceImplIntegrationTest.this.playerGames
-                        = this.playerGames = new PlayerGames(statistics);
+                        = this.playerGames = new PlayerGames();
 
                 PlayerServiceImplIntegrationTest.this.multiplayer
                         = this.multiplayer = new MultiplayerServiceImpl(playerGames){};
