@@ -89,25 +89,27 @@ public class LazyJoystick implements Joystick, Tickable {
     public void tick() {
         if (direction == null && parameters == null && message == null) return; // TODO test me
 
+        Joystick joystick = game.getJoystick();
+
         if (!StringUtils.isEmpty(message)) {
-            game.getJoystick().message(message);
+            joystick.message(message);
         }
 
         if (parameters != null && firstAct) {
-            game.getJoystick().act(parameters);
+            joystick.act(parameters);
         }
 
         if (direction != null) {
             switch (direction) {
-                case DOWN: game.getJoystick().down(); break;
-                case LEFT: game.getJoystick().left(); break;
-                case RIGHT: game.getJoystick().right(); break;
-                case UP: game.getJoystick().up(); break;
+                case DOWN: joystick.down(); break;
+                case LEFT: joystick.left(); break;
+                case RIGHT: joystick.right(); break;
+                case UP: joystick.up(); break;
             }
         }
 
         if (parameters != null && !firstAct) {
-            game.getJoystick().act(parameters);
+            joystick.act(parameters);
         }
 
         parameters = null;
