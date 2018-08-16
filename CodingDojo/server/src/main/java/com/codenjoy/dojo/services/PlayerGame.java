@@ -32,20 +32,16 @@ public class PlayerGame implements Tickable {
     private Player player;
     private Game game;
     private LazyJoystick lazyJoystick;
-    private BiConsumer<Player, Joystick> onRemove;
 
-    public PlayerGame(Player player, Game game, LazyJoystick lazyJoystick,
-                      BiConsumer<Player, Joystick> onRemove)
-    {
+    public PlayerGame(Player player, Game game, LazyJoystick lazyJoystick) {
         this.player = player;
         this.game = game;
         this.lazyJoystick = lazyJoystick;
-        this.onRemove = onRemove;
     }
 
     // only for searching
     public static PlayerGame by(Game game) {
-        return new PlayerGame(null, game, null, null);
+        return new PlayerGame(null, game, null);
     }
 
     @Override
@@ -76,7 +72,7 @@ public class PlayerGame implements Tickable {
         return player.hashCode();
     }
 
-    public void remove() {
+    public void remove(BiConsumer<Player, Joystick> onRemove) {
         if (onRemove != null) {
             onRemove.accept(player, lazyJoystick);
         }

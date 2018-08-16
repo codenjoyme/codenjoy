@@ -49,7 +49,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void remove(Player player) {
         int index = playerGames.indexOf(player);
         if (index == -1) return;
-        playerGames.remove(index).remove();
+        playerGames.remove(index).remove(onRemovePlayer);
     }
 
     public PlayerGame get(String playerName) {
@@ -66,7 +66,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (onAddPlayer != null) {
             onAddPlayer.accept(player, joystick);
         }
-        PlayerGame result = new PlayerGame(player, game, joystick, onRemovePlayer);
+        PlayerGame result = new PlayerGame(player, game, joystick);
         playerGames.add(result);
         return result;
     }
