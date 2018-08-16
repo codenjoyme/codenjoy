@@ -113,7 +113,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     @Override
     public void tick() {
         // по всем джойстикам отправили сообщения играм
-        playerGames.forEach(PlayerGame::tick);
+        playerGames.forEach(PlayerGame::quietTick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
