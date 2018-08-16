@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.Closeable;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
@@ -45,6 +47,7 @@ public class PlayerGamesTest {
     private Joystick joystick;
     private List<GameType> gameTypes = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
+    private Map<Player, Closeable> ais = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
@@ -68,11 +71,14 @@ public class PlayerGamesTest {
         playerGames.add(player, game);
     }
 
+    private PlayerGame removed;
+
     @Test
     public void testRemove() throws Exception {
         assertFalse(playerGames.isEmpty());
         assertEquals(1, playerGames.size());
         PlayerGame playerGame = playerGames.get(player.getName());
+        playerGames.onRemove(pg -> removed = pg);
 
         playerGames.remove(player);
 
@@ -80,6 +86,7 @@ public class PlayerGamesTest {
         assertEquals(0, playerGames.size());
 
         verifyRemove(playerGame);
+        assertSame(removed, playerGame);
     }
 
     @Test
@@ -138,7 +145,11 @@ public class PlayerGamesTest {
         when(gameType.name()).thenReturn(game);
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
-        return new Player(name, "url", gameType, scores, mock(Information.class));
+        Player player = new Player(name, "url", gameType, scores, mock(Information.class));
+        Closeable ai = mock(Closeable.class);
+        ais.put(player, ai);
+        player.setAI(ai);
+        return player;
     }
 
     @Test
@@ -150,6 +161,23 @@ public class PlayerGamesTest {
         assertSame(player, players.get(0));
         assertSame(otherPlayer, players.get(1));
         assertEquals(2, players.size());
+    }
+
+    @Test
+    public void testGetAll() throws Exception {
+        Player secondPlayer = addOtherPlayer();
+        Player thirdPlayer = addOtherPlayer("game2");
+
+        List<PlayerGame> result = playerGames.getAll("game");
+
+        assertEquals(2, result.size());
+        assertSame(player, result.get(0).getPlayer());
+        assertSame(secondPlayer, result.get(1).getPlayer());
+
+        List<PlayerGame> result2 = playerGames.getAll("game2");
+
+        assertEquals(1, result2.size());
+        assertSame(thirdPlayer, result2.get(0).getPlayer());
     }
 
     private Player addOtherPlayer() {
@@ -178,6 +206,7 @@ public class PlayerGamesTest {
 
     private void verifyRemove(PlayerGame playerGame) {
         verify(playerGame.getGame()).close();
+        verify(ais.get(playerGame.getPlayer())).close();
     }
 
     @Test
@@ -207,8 +236,9 @@ public class PlayerGamesTest {
     @Test
     public void shouldTickGameType() {
         // given
-        addOtherPlayer();
-        addOtherPlayer();
+        addOtherPlayer("game2");
+        addOtherPlayer("game3");
+        addOtherPlayer("game2"); // второй игрок к уже существующей game2
 
         // when
         playerGames.tick();

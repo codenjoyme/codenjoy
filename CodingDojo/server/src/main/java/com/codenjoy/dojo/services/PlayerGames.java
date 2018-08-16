@@ -32,6 +32,8 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static java.util.stream.Collectors.toList;
+
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
@@ -51,12 +53,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame get(String playerName) {
-        for (PlayerGame playerGame : playerGames) {
-            if (playerGame.getPlayer().getName().equals(playerName)) {
-                return playerGame;
-            }
-        }
-        return NullPlayerGame.INSTANCE;
+        return playerGames.stream()
+                .filter(pg -> pg.getPlayer().getName().equals(playerName))
+                .findFirst()
+                .orElse(NullPlayerGame.INSTANCE);
     }
 
     public PlayerGame add(Player player, Game game) {
@@ -78,13 +78,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public List<Player> players() {
-        List<Player> result = new ArrayList<>(playerGames.size());
-
-        for (PlayerGame playerGame : playerGames) {
-            result.add(playerGame.getPlayer());
-        }
-
-        return result;
+        return playerGames.stream()
+                .map(PlayerGame::getPlayer)
+                .collect(toList());
     }
 
     public int size() {
@@ -92,21 +88,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public void clear() {
-        for (Player player : players()) {
-            remove(player);
-        }
+        players().forEach(this::remove);
     }
 
     public List<PlayerGame> getAll(String gameType) {
-        List<PlayerGame> result = new LinkedList<>();
-
-        for (PlayerGame playerGame : playerGames) {
-            if (playerGame.getPlayer().getGameName().equals(gameType)) {
-                result.add(playerGame);
-            }
-        }
-
-        return result;
+        return playerGames.stream()
+                .filter(pg -> pg.getPlayer().getGameName().equals(gameType))
+                .collect(toList());
     }
 
     public List<GameType> getGameTypes() {
@@ -125,12 +113,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     @Override
     public void tick() {
         // по всем джойстикам отправили сообщения играм
-        for (PlayerGame playerGame : playerGames) {
-            playerGame.quietTick();
-        }
+        playerGames.forEach(PlayerGame::tick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
-        getGameTypes().forEach(gameType -> gameType.quietTick());
+        getGameTypes().forEach(GameType::quietTick);
     }
 
     public Map<String, GameData> getGamesDataMap() {
