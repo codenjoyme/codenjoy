@@ -84,11 +84,14 @@ public class PlayerServiceImpl implements PlayerService {
 
     @PostConstruct
     public void init() {
-        playerGames.onAddPlayer((player, joystick) -> {
+        playerGames.onAdd(playerGame -> {
+            Player player = playerGame.getPlayer();
+            Joystick joystick = playerGame.getJoystick();
             playerController.registerPlayerTransport(player, joystick);
-            screenController.registerPlayerTransport(player, null);
+            screenController.registerPlayerTransport(player, joystick);
         });
-        playerGames.onRemovePlayer((player, joystick) -> {
+        playerGames.onRemove(playerGame -> {
+            Player player = playerGame.getPlayer();
             playerController.unregisterPlayerTransport(player);
             screenController.unregisterPlayerTransport(player);
         });

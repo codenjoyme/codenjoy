@@ -34,21 +34,15 @@ public class PlayerGameTest {
 
     private Player player;
     private Game game;
-    private PlayerController controller;
-    private PlayerController screen;
     private PlayerGame playerGame;
-    private LazyJoystick lazyJoystick;
 
     @Before
     public void setup() {
         player = new Player("player", "url", PlayerTest.mockGameType("game"), 
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
         game = mock(Game.class);
-        lazyJoystick = mock(LazyJoystick.class);
-        controller = mock(PlayerController.class);
-        screen = mock(PlayerController.class);
 
-        playerGame = new PlayerGame(player, game, lazyJoystick);
+        playerGame = new PlayerGame(player, game);
     }
 
     @Test
@@ -65,8 +59,7 @@ public class PlayerGameTest {
         assertFalse(playerGame.equals(otherPlayer));
         assertTrue(playerGame.equals(player));
 
-        PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, NullGame.INSTANCE,
-                lazyJoystick);
+        PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, NullGame.INSTANCE);
         assertFalse(playerGame.equals(otherPlayerGame));
         assertTrue(playerGame.equals(playerGame));
     }
@@ -78,14 +71,13 @@ public class PlayerGameTest {
 
     @Test
     public void testRemove() throws Exception {
-        playerGame.remove((player, joystick) -> {
-            screen.unregisterPlayerTransport(player);
-            controller.unregisterPlayerTransport(player);
+        boolean[] removed = {false};
+        playerGame.remove(playerGame -> {
+            removed[0] = true;
         });
 
         verify(game).close();
-        verify(controller).unregisterPlayerTransport(player);
-        verify(screen).unregisterPlayerTransport(player);
+        assertEquals(true, removed[0]);
     }
 
     @Test

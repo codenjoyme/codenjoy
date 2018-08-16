@@ -25,23 +25,23 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class PlayerGame implements Tickable {
 
     private Player player;
     private Game game;
-    private LazyJoystick lazyJoystick;
+    private LazyJoystick joystick;
 
-    public PlayerGame(Player player, Game game, LazyJoystick lazyJoystick) {
+    public PlayerGame(Player player, Game game) {
         this.player = player;
         this.game = game;
-        this.lazyJoystick = lazyJoystick;
+        this.joystick = new LazyJoystick(game);
     }
 
     // only for searching
     public static PlayerGame by(Game game) {
-        return new PlayerGame(null, game, null);
+        return new PlayerGame(null, game);
     }
 
     @Override
@@ -72,9 +72,9 @@ public class PlayerGame implements Tickable {
         return player.hashCode();
     }
 
-    public void remove(BiConsumer<Player, Joystick> onRemove) {
+    public void remove(Consumer<PlayerGame> onRemove) {
         if (onRemove != null) {
-            onRemove.accept(player, lazyJoystick);
+            onRemove.accept(this);
         }
         game.close();
         player.close();
@@ -97,6 +97,10 @@ public class PlayerGame implements Tickable {
 
     @Override
     public void tick() {
-        lazyJoystick.tick();
+        joystick.tick();
+    }
+
+    public Joystick getJoystick() {
+        return joystick;
     }
 }

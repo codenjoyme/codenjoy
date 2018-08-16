@@ -23,12 +23,9 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.*;
 
@@ -44,16 +41,14 @@ public class PlayerGamesTest {
     private PlayerGames playerGames;
     private Player player;
     private Game game;
-    private PlayerController controller;
-    private PlayerController screen;
-    private LazyJoystick lazyJoystick;
+    private Joystick lazyJoystick;
     private Joystick joystick;
     private List<GameType> gameTypes = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
 
     @Before
     public void setUp() throws Exception {
-        Arrays.asList(joystick, game, controller, screen)
+        Arrays.asList(joystick, game)
                 .forEach(it -> {
                     if (it != null) reset(it);
                 });
@@ -66,25 +61,9 @@ public class PlayerGamesTest {
         joystick = mock(Joystick.class);
         when(game.getJoystick()).thenReturn(joystick);
 
-        controller = mock(PlayerController.class);
-        screen = mock(PlayerController.class);
-
-        doAnswer(invocation -> {
-            lazyJoystick = invocation.getArgumentAt(1, LazyJoystick.class);
-            return null;
-        }).when(controller).registerPlayerTransport(eq(player), any(LazyJoystick.class));
-
-
         playerGames = new PlayerGames();
 
-        playerGames.onAddPlayer((player, joystick) -> {
-            controller.registerPlayerTransport(player, joystick);
-            screen.registerPlayerTransport(player, null);
-        });
-        playerGames.onRemovePlayer((player, joystick) -> {
-            controller.unregisterPlayerTransport(player);
-            screen.unregisterPlayerTransport(player);
-        });
+        playerGames.onAdd(playerGame -> lazyJoystick = playerGame.getJoystick());
 
         playerGames.add(player, game);
     }
@@ -199,8 +178,6 @@ public class PlayerGamesTest {
 
     private void verifyRemove(PlayerGame playerGame) {
         verify(playerGame.getGame()).close();
-        verify(controller).unregisterPlayerTransport(playerGame.getPlayer());
-        verify(screen).unregisterPlayerTransport(playerGame.getPlayer());
     }
 
     @Test

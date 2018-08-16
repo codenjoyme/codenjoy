@@ -24,15 +24,13 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.hero.HeroData;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -41,15 +39,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private List<PlayerGame> playerGames = new LinkedList<>();
 
-    private BiConsumer<Player, Joystick> onAddPlayer;
-    private BiConsumer<Player, Joystick> onRemovePlayer;
+    private Consumer<PlayerGame> onAdd;
+    private Consumer<PlayerGame> onRemove;
 
     public PlayerGames() {}
 
     public void remove(Player player) {
         int index = playerGames.indexOf(player);
         if (index == -1) return;
-        playerGames.remove(index).remove(onRemovePlayer);
+        playerGames.remove(index).remove(onRemove);
     }
 
     public PlayerGame get(String playerName) {
@@ -62,11 +60,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame add(Player player, Game game) {
-        LazyJoystick joystick = new LazyJoystick(game);
-        if (onAddPlayer != null) {
-            onAddPlayer.accept(player, joystick);
+        PlayerGame result = new PlayerGame(player, game);
+        if (onAdd != null) {
+            onAdd.accept(result);
         }
-        PlayerGame result = new PlayerGame(player, game, joystick);
         playerGames.add(result);
         return result;
     }
@@ -204,11 +201,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
-    public void onAddPlayer(BiConsumer<Player, Joystick> consumer) {
-        this.onAddPlayer = consumer;
+    public void onAdd(Consumer<PlayerGame> consumer) {
+        this.onAdd = consumer;
     }
 
-    public void onRemovePlayer(BiConsumer<Player, Joystick> consumer) {
-        this.onRemovePlayer = consumer;
+    public void onRemove(Consumer<PlayerGame> consumer) {
+        this.onRemove = consumer;
     }
 }
