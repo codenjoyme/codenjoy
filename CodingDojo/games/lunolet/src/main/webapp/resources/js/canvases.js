@@ -253,7 +253,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
             canvas.drawText("LEVEL " + board.level, {"x": 0, "y": 0.4}, monofont);
 
-            let ctx = canvas.getCanvasContext();
+            var ctx = canvas.getCanvasContext();
             // scale, move center to (300, 300), and flip vertically
             var scale = 6;
             var xshift = 300 - board.x * scale;
@@ -303,11 +303,33 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 ctx.stroke();
             }
 
+            // draw crashes
+            var crashes = board.crashes;
+            if (crashes && crashes.length > 0) {
+                ctx.strokeStyle = "#888";
+                for (i = 0; i < crashes.length; i++) {
+                    var pt = crashes[i];
+                    ctx.beginPath();
+                    ctx.moveTo(pt.x, pt.y + 12/scale);  ctx.lineTo(pt.x, pt.y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(pt.x - 4/scale, pt.y + 8/scale);  ctx.lineTo(pt.x + 4/scale, pt.y + 8/scale);
+                    ctx.stroke();
+                }
+            }
+
             // draw the ship
             var radian = board.angle / 180 * Math.PI;
             var sin = Math.sin(radian);
             var cos = Math.cos(radian);
             ctx.setTransform(-cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.x * scale, yshift - board.y * scale);
+            var consumption = board.consumption;
+            if (consumption && consumption > 0.01) {
+                ctx.strokeStyle = "#FA0";
+                ctx.beginPath();
+                ctx.moveTo(0.5, 0);  ctx.lineTo(0, -2 * consumption);  ctx.lineTo(-0.5, 0);
+                ctx.stroke();
+            }
             ctx.strokeStyle = "#008";
             ctx.beginPath();
             ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);

@@ -172,6 +172,11 @@ public class Hero implements Joystick, Tickable {
             return;
         }
 
+        if (command.equals("reset") || command.equals("die")) {
+            isalive = false; // player decided to die
+            return;
+        }
+
         Pattern patternGo = Pattern.compile(
                 "go\\s*(-?[\\d\\.]+)[,\\s]\\s*(-?[\\d\\.]+)[,\\s]\\s*(-?[\\d\\.]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = patternGo.matcher(command);
@@ -179,6 +184,8 @@ public class Hero implements Joystick, Tickable {
             double angle = Double.parseDouble(matcher.group(1));
             double mass = Double.parseDouble(matcher.group(2));
             double duration = Double.parseDouble(matcher.group(3));
+            if (duration <= 0.0 || mass < 0.0)
+                return;
             simulate(angle, mass, duration);
             return;
         }
