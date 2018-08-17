@@ -83,4 +83,8 @@ public abstract class AbstractGameType implements GameType {
         return new PrinterFactoryImpl();
     }
 
+    @Override
+    public String toString() {
+        return String.format("GameType[%s]", name());
+    }
 }

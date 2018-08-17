@@ -35,7 +35,6 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
@@ -160,7 +159,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             if (game.isGameOver()) {
                 quiet(() -> {
                     GameType gameType = getPlayer(game).getGameType();
-                    spreader.replay(game, gameType);
+// TODO так не сработает потому что оно всегда будет удалять только что связанных с бордой плееров
+//                    spreader.replay(game, gameType);
                     game.newGame();
                 });
             }
@@ -258,98 +258,4 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
-    private static class Room {
-        private GameField field;
-        private int count;
-        private List<GamePlayer> players = new LinkedList<>();
-
-        private Room(GameField field, int count) {
-            this.field = field;
-            this.count = count;
-        }
-
-        private GameField getField(GamePlayer player) {
-            players.add(player);
-            return field;
-        }
-
-        public boolean isFree() {
-            return players.size() < count;
-        }
-
-        public boolean contains(GamePlayer player) {
-            return players.stream()
-                    .filter(p -> p.equals(player))
-                    .count() != 0;
-        }
-    }
-
-    private class Spreader {
-
-        private Map<String, List<Room>> rooms = new HashMap<>();
-
-        public GameField getField(GamePlayer player, String gameType, int count, Supplier<GameField> supplier) {
-            Room room = findUnfilled(gameType);
-            if (room == null) {
-                room = new Room(supplier.get(), count);
-                add(gameType, room);
-            }
-
-            GameField field = room.getField(player);
-            return field;
-        }
-
-        private void add(String gameType, Room room) {
-            List<Room> rooms = getRooms(gameType);
-            rooms.add(room);
-        }
-
-        private Room findUnfilled(String gameType) {
-            List<Room> rooms = getRooms(gameType);
-            if (rooms.isEmpty()) {
-                return null;
-            }
-            return rooms.stream()
-                    .filter(Room::isFree)
-                    .findFirst()
-                    .orElse(null);
-        }
-
-        private List<Room> getRooms(String gameType) {
-            List<Room> result = rooms.get(gameType);
-            if (result == null) {
-                rooms.put(gameType, result = new LinkedList<>());
-            }
-            return result;
-        }
-
-        public void remove(Game game, GameType gameType) {
-            List<Room> roomList = rooms.get(gameType.name());
-            GamePlayer player = game.getPlayer();
-            Room room = roomList.stream()
-                    .filter(r -> r.contains(player))
-                    .findFirst()
-                    .orElse(null);
-
-            roomList.remove(room);
-
-            List<GamePlayer> players = room.players;
-            players.remove(player);
-            players.forEach(p -> play(game, gameType));
-        }
-
-        public void play(Game game, GameType gameType) {
-            GameField field = spreader.getField(game.getPlayer(),
-                    gameType.name(),
-                    gameType.getMultiplayerType().getCount(),
-                    gameType::createGame);
-
-            game.on(field);
-        }
-
-        public void replay(Game game, GameType gameType) {
-            remove(game, gameType);
-            play(game, gameType);
-        }
-    }
 }
