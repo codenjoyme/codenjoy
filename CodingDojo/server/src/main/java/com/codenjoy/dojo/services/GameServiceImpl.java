@@ -86,9 +86,7 @@ public class GameServiceImpl implements GameService {
     private GameType loadGameType(Class<? extends GameType> gameType) {
         try {
             return gameType.newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
