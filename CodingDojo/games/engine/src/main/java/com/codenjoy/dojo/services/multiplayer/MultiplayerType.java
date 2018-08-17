@@ -50,7 +50,7 @@ public class MultiplayerType {
     public static final MultiplayerType MULTIPLE = new MULTIPLE();
     static class MULTIPLE extends MultiplayerType {
         MULTIPLE() {
-            super(-1);
+            super(Integer.MAX_VALUE);
         }
     }
 

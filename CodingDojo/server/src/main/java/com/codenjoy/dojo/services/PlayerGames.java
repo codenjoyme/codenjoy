@@ -274,7 +274,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
 
         public boolean isFree() {
-            return count < players.size();
+            return players.size() < count;
         }
 
         public boolean contains(GamePlayer player) {
