@@ -85,7 +85,7 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = playerGame.getPlayer();
             Joystick joystick = playerGame.getJoystick();
             playerController.registerPlayerTransport(player, joystick);
-            screenController.registerPlayerTransport(player, joystick);
+            screenController.registerPlayerTransport(player, null);
         });
         playerGames.onRemove(playerGame -> {
             Player player = playerGame.getPlayer();
