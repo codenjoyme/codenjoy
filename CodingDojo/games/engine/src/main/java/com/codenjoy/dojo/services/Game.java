@@ -88,4 +88,9 @@ public interface Game extends Closeable {
      * @return Возвращает борду игры
      */
     GameField getField();
+
+    /**
+     * @param field указывает, что плеер хочет играть в эту игру
+     */
+    void on(GameField field);
 }

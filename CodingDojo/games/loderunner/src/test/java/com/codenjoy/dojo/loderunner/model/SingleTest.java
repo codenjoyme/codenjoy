@@ -628,21 +628,24 @@ public class SingleTest {
 
     private void setupPlayer2(int x, int y) {
         listener2 = mock(EventListener.class);
-        game2 = new Single(field, new Player(listener2), printerFactory);
+        game2 = new Single(new Player(listener2), printerFactory);
+        game2.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game2.newGame();
     }
 
     private void setupPlayer3(int x, int y) {
         listener3 = mock(EventListener.class);
-        game3 = new Single(field, new Player(listener3), printerFactory);
+        game3 = new Single(new Player(listener3), printerFactory);
+        game3.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game3.newGame();
     }
 
     private void setupPlayer1(int x, int y) {
         listener1 = mock(EventListener.class);
-        game1 = new Single(field, new Player(listener1), printerFactory);
+        game1 = new Single(new Player(listener1), printerFactory);
+        game1.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game1.newGame();
     }

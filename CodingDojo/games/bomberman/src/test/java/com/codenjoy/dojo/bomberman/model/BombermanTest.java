@@ -95,7 +95,8 @@ public class BombermanTest {
         when(settings.getBoardSize()).thenReturn(v(size));
         field = new Bomberman(settings);
         player = new Player(listener);
-        game = new Single(field, player, printer);
+        game = new Single(player, printer);
+        game.on(field);
         dice(bombermanDice, 0, 0);
         game.newGame();
         hero = game.getJoystick();

@@ -85,8 +85,10 @@ public class SingleTest {
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        game1 = new Single(board, new Player(listener1), printerFactory);
-        game2 = new Single(board, new Player(listener2), printerFactory);
+        game1 = new Single(new Player(listener1), printerFactory);
+        game1.on(board);
+        game2 = new Single(new Player(listener2), printerFactory);
+        game2.on(board);
 
         game1.newGame();
         game2.newGame();

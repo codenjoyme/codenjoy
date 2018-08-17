@@ -38,5 +38,11 @@ public interface GameField<P extends GamePlayer> extends Tickable {
 
     void remove(P player);
 
-    default void clearScore(){};
+    default void clearScore(){
+        // do nothing
+    }
+
+    default String getSave(){
+        return null;
+    }
 }

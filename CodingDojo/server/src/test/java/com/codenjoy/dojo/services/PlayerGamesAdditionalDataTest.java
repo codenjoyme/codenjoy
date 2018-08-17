@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.lock.LockedGameTest;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.fest.reflect.core.Reflection;
@@ -40,6 +42,8 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -51,6 +55,7 @@ public class PlayerGamesAdditionalDataTest {
     private List<PlayerController> controllers;
     private List<GameType> gameTypes;
     private List<HeroData> heroesData;
+    private List<GamePlayer> gamePlayers;
 
     @Before
     public void setup() {
@@ -60,66 +65,7 @@ public class PlayerGamesAdditionalDataTest {
         controllers = new LinkedList<>();
         gameTypes = new LinkedList<>();
         heroesData = new LinkedList<>();
-    }
-
-    public static class DummyGame implements Game {
-
-        private HeroData heroData;
-
-        public DummyGame(HeroData heroData) {
-            this.heroData = heroData;
-        }
-
-        @Override
-        public Joystick getJoystick() {
-            return null;
-        }
-
-        @Override
-        public boolean isGameOver() {
-            return false;
-        }
-
-        @Override
-        public void newGame() {
-
-        }
-
-        @Override
-        public Object getBoardAsString() {
-            return null;
-        }
-
-        @Override
-        public void close() {
-
-        }
-
-        @Override
-        public void clearScore() {
-
-        }
-
-        @Override
-        public HeroData getHero() {
-            return heroData;
-        }
-
-        @Override
-        public String getSave() {
-            return null;
-        }
-
-        @Override
-        public GamePlayer getPlayer() {
-            return null;
-        }
-
-        @Override
-        public GameField getField() {
-            return null;
-        }
-
+        gamePlayers = new LinkedList<>();
     }
 
     @Test
@@ -267,7 +213,6 @@ public class PlayerGamesAdditionalDataTest {
         HeroData result = new HeroDataImpl(level, coordinate,
                 MultiplayerType.SINGLE.isMultiplayer());
         Reflection.field("additionalData").ofType(Object.class).in(result).set(additionalData);
-        heroesData.add(result);
         return result;
     }
 
@@ -275,6 +220,11 @@ public class PlayerGamesAdditionalDataTest {
         GameType result = mock(GameType.class);
         when(result.getBoardSize()).thenReturn(new SimpleParameter<>(boardSize));
         when(result.name()).thenReturn(gameName);
+        when(result.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+        when(result.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
+        when(result.createPlayer(any(EventListener.class), anyString(), anyString()))
+                .thenAnswer(inv -> gamePlayers.get(gamePlayers.size() - 1));
+        when(result.createGame()).thenAnswer(inv -> mock(GameField.class));
         gameTypes.add(result);
         return result;
     }
@@ -283,15 +233,19 @@ public class PlayerGamesAdditionalDataTest {
         PlayerScores gameScore = mock(PlayerScores.class);
         when(gameScore.getScore()).thenReturn(scores);
 
+        GamePlayer gamePlayer = mock(GamePlayer.class);
+        when(gamePlayer.getHeroData()).thenReturn(heroData);
+        gamePlayers.add(gamePlayer);
+        heroesData.add(heroData);
+
         Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null);
         players.add(player);
 
-        Game game = LockedGameTest.getLockedGame().wrap(new DummyGame(heroData));
-        games.add(game);
-
         PlayerController controller = mock(PlayerController.class);
         controllers.add(controller);
-        return playerGames.add(player, game);
+        PlayerGame playerGame = playerGames.add(player, null);
+        games.add(playerGame.getGame());
+        return playerGame;
     }
 
     private String getNextName() {

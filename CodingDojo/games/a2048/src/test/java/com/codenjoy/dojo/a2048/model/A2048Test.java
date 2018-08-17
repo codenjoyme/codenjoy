@@ -83,7 +83,8 @@ public class A2048Test {
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
 
         listener = mock(EventListener.class);
-        game = new Single(field, new Player(listener), printer);
+        game = new Single(new Player(listener), printer);
+        game.on(field);
         game.newGame();
         this.joystick = game.getJoystick();
     }

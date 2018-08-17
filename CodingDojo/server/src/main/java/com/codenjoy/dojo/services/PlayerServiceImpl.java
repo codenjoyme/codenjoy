@@ -29,7 +29,6 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -53,14 +52,11 @@ public class PlayerServiceImpl implements PlayerService {
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
-    private Map<Player, String> cacheBoards = new HashMap<Player, String>();
+    private Map<Player, String> cacheBoards = new HashMap<>();
     private boolean registration = true;
 
     @Autowired
     protected PlayerGames playerGames;
-
-    @Autowired
-    protected MultiplayerService multiplayer;
 
     @Autowired
     @Qualifier("playerController")
@@ -84,6 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @PostConstruct
     public void init() {
+        playerGames.init(lock);
         playerGames.onAdd(playerGame -> {
             Player player = playerGame.getPlayer();
             Joystick joystick = playerGame.getJoystick();
@@ -223,7 +220,8 @@ public class PlayerServiceImpl implements PlayerService {
                     gameType, playerScores, listener);
             player.setEventListener(listener);
 
-            PlayerGame playerGame = multiplayer.playerWantsToPlay(gameType, player, playerSave.getSave());
+            player.setGameType(gameType);
+            PlayerGame playerGame = playerGames.add(player, playerSave);
 
             player = playerGame.getPlayer();
 
@@ -252,7 +250,6 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             playerGames.tick();
-            multiplayer.tick();
             sendScreenUpdates();
             requestControls();
             actionLogger.log(playerGames);
@@ -349,11 +346,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> getAll(String gameName) {
-        lock.writeLock().lock();
+        lock.readLock().lock();
         try {
             return private_getAll(gameName);
         } finally {
-            lock.writeLock().unlock();
+            lock.readLock().unlock();
         }
     }
 
@@ -430,10 +427,14 @@ public class PlayerServiceImpl implements PlayerService {
     public Player get(String name) {
         lock.readLock().lock();
         try {
-            return playerGames.get(name).getPlayer();
+            return private_get(name);
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    private Player private_get(String name) {
+        return playerGames.get(name).getPlayer();
     }
 
     @Override

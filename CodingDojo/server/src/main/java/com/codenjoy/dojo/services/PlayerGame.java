@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.lock.LockedGame;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.function.Consumer;
 
@@ -58,10 +59,10 @@ public class PlayerGame implements Tickable {
         if (o instanceof PlayerGame) {
             PlayerGame pg = (PlayerGame)o;
 
-            if (player == null) {
+            if (player == null || pg.getPlayer() == null) {
                 return LockedGame.equals(pg.game, game);
             }
-            return pg.player.equals(player);
+            return player.equals(pg.player);
         }
 
         return false;
@@ -86,6 +87,10 @@ public class PlayerGame implements Tickable {
 
     public Game getGame() {
         return game;
+    }
+
+    public GameField getField() {
+        return game.getField();
     }
 
     @Override

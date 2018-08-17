@@ -62,7 +62,6 @@ import static org.mockito.Mockito.*;
         MockAutoSaver.class,
         MockSaveService.class,
         MockGameService.class,
-        SpyMultiplayerService.class,
         MockActionLogger.class,
         SpyPlayerGames.class,
         MockPropertyPlaceholderConfigurer.class})
@@ -90,7 +89,6 @@ public class PlayerServiceImplTest {
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
     @Autowired private PlayerGames playerGames;
-    @Autowired private MultiplayerService multiplayer;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -149,7 +147,7 @@ public class PlayerServiceImplTest {
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         playerGames.clear();
-        Mockito.reset(playerController, screenController, actionLogger, multiplayer);
+        Mockito.reset(playerController, screenController, actionLogger);
         playerService.openRegistration();
 
         playerService.init();

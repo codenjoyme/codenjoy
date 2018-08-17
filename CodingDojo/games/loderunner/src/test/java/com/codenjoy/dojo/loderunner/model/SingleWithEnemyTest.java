@@ -315,7 +315,8 @@ public class SingleWithEnemyTest {
 
     private void setupPlayer(int x, int y) {
         listener = mock(EventListener.class);
-        game = new Single(field, new Player(listener), printerFactory);
+        game = new Single(new Player(listener), printerFactory);
+        game.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game.newGame();
     }

@@ -24,15 +24,22 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.lock.LockedGame;
+import com.codenjoy.dojo.services.multiplayer.*;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -43,8 +50,24 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private Consumer<PlayerGame> onAdd;
     private Consumer<PlayerGame> onRemove;
+    private ReadWriteLock lock;
+    private Spreader spreader = new Spreader();
 
-    public PlayerGames() {}
+    public void onAdd(Consumer<PlayerGame> consumer) {
+        this.onAdd = consumer;
+    }
+
+    public void onRemove(Consumer<PlayerGame> consumer) {
+        this.onRemove = consumer;
+    }
+
+    public void init(ReadWriteLock lock) {
+        this.lock = lock;
+    }
+
+    public PlayerGames() {
+        lock = new ReentrantReadWriteLock();
+    }
 
     public void remove(Player player) {
         int index = playerGames.indexOf(player);
@@ -59,13 +82,26 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .orElse(NullPlayerGame.INSTANCE);
     }
 
-    public PlayerGame add(Player player, Game game) {
-        PlayerGame result = new PlayerGame(player, game);
+    public PlayerGame add(Player player, PlayerSave save) {
+        GameType gameType = player.getGameType();
+
+        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
+                (save == null) ? "" : save.getSave(), player.getName());
+
+        Single single = new Single(gamePlayer,
+                gameType.getPrinterFactory(),
+                gameType.getMultiplayerType());
+
+        spreader.play(single, gameType);
+
+        Game game = new LockedGame(lock).wrap(single);
+
+        PlayerGame playerGame = new PlayerGame(player, game);
         if (onAdd != null) {
-            onAdd.accept(result);
+            onAdd.accept(playerGame);
         }
-        playerGames.add(result);
-        return result;
+        playerGames.add(playerGame);
+        return playerGame;
     }
 
     public boolean isEmpty() {
@@ -115,8 +151,42 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // по всем джойстикам отправили сообщения играм
         playerGames.forEach(PlayerGame::quietTick);
 
+        // создаем новые игры для тех, кто уже game over
+        // TODO если игра игрока многопользовательская то
+        // он должен добавиться в новую борду
+        // ну и последний играющий игрок на борде так же должен ее покинуть
+        for (PlayerGame playerGame : playerGames) {
+            Game game = playerGame.getGame();
+            if (game.isGameOver()) {
+                quiet(() -> {
+                    GameType gameType = getPlayer(game).getGameType();
+                    spreader.replay(game, gameType);
+                    game.newGame();
+                });
+            }
+        }
+
+        // собираем все уникальные борды
+        // независимо от типа игры нам нужно тикнуть все
+        playerGames.stream()
+                .map(PlayerGame::getField)
+                .collect(toSet())
+                .forEach(GameField::quietTick);
+
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private Player getPlayer(Game game) {
+        return playerGames.stream()
+                .filter(pg -> pg.equals(by(game)))
+                .findFirst()
+                .orElseThrow(IllegalStateException::new)
+                .getPlayer();
+    }
+
+    private void quiet(Runnable runnable) {
+        ((Tickable)() -> runnable.run()).quietTick();
     }
 
     public Map<String, GameData> getGamesDataMap() {
@@ -146,11 +216,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 playersGroup.add(player);
             } else {
                 for (Game game2 : gamesGroup) {
-                    int index = playerGames.indexOf(PlayerGame.by(game2));
+                    int index = playerGames.indexOf(by(game2));
                     if (index != -1) {
                         playersGroup.add(playerGames.get(index).getPlayer());
                     } else {
                         // TODO этого не должн случиться, но лучше порефакторить
+                        throw new IllegalStateException("Игрок не в группе");
                     }
                 }
             }
@@ -187,11 +258,98 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
-    public void onAdd(Consumer<PlayerGame> consumer) {
-        this.onAdd = consumer;
+    private static class Room {
+        private GameField field;
+        private int count;
+        private List<GamePlayer> players = new LinkedList<>();
+
+        private Room(GameField field, int count) {
+            this.field = field;
+            this.count = count;
+        }
+
+        private GameField getField(GamePlayer player) {
+            players.add(player);
+            return field;
+        }
+
+        public boolean isFree() {
+            return count < players.size();
+        }
+
+        public boolean contains(GamePlayer player) {
+            return players.stream()
+                    .filter(p -> p.equals(player))
+                    .count() != 0;
+        }
     }
 
-    public void onRemove(Consumer<PlayerGame> consumer) {
-        this.onRemove = consumer;
+    private class Spreader {
+
+        private Map<String, List<Room>> rooms = new HashMap<>();
+
+        public GameField getField(GamePlayer player, String gameType, int count, Supplier<GameField> supplier) {
+            Room room = findUnfilled(gameType);
+            if (room == null) {
+                room = new Room(supplier.get(), count);
+                add(gameType, room);
+            }
+
+            GameField field = room.getField(player);
+            return field;
+        }
+
+        private void add(String gameType, Room room) {
+            List<Room> rooms = getRooms(gameType);
+            rooms.add(room);
+        }
+
+        private Room findUnfilled(String gameType) {
+            List<Room> rooms = getRooms(gameType);
+            if (rooms.isEmpty()) {
+                return null;
+            }
+            return rooms.stream()
+                    .filter(Room::isFree)
+                    .findFirst()
+                    .orElse(null);
+        }
+
+        private List<Room> getRooms(String gameType) {
+            List<Room> result = rooms.get(gameType);
+            if (result == null) {
+                rooms.put(gameType, result = new LinkedList<>());
+            }
+            return result;
+        }
+
+        public void remove(Game game, GameType gameType) {
+            List<Room> roomList = rooms.get(gameType.name());
+            GamePlayer player = game.getPlayer();
+            Room room = roomList.stream()
+                    .filter(r -> r.contains(player))
+                    .findFirst()
+                    .orElse(null);
+
+            roomList.remove(room);
+
+            List<GamePlayer> players = room.players;
+            players.remove(player);
+            players.forEach(p -> play(game, gameType));
+        }
+
+        public void play(Game game, GameType gameType) {
+            GameField field = spreader.getField(game.getPlayer(),
+                    gameType.name(),
+                    gameType.getMultiplayerType().getCount(),
+                    gameType::createGame);
+
+            game.on(field);
+        }
+
+        public void replay(Game game, GameType gameType) {
+            remove(game, gameType);
+            play(game, gameType);
+        }
     }
 }

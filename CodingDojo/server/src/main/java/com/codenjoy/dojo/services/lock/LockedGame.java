@@ -144,6 +144,16 @@ public class LockedGame implements Game {
     }
 
     @Override
+    public void on(GameField field) {
+        lock.writeLock().lock();
+        try {
+            game.on(field);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public String toString() {
         lock.writeLock().lock();
         try {

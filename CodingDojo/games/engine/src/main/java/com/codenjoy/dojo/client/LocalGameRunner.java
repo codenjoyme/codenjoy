@@ -127,7 +127,8 @@ public class LocalGameRunner { // TODO test me
                 null, null);
         PrinterFactory factory = gameType.getPrinterFactory();
 
-        Single game = new Single(field, gamePlayer, factory);
+        Single game = new Single(gamePlayer, factory);
+        game.on(field);
         game.newGame();
         return game;
     }

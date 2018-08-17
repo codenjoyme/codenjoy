@@ -56,7 +56,8 @@ public class TestUtils {
     public static Single buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
         GameField gameField = gameType.createGame();
         GamePlayer gamePlayer = gameType.createPlayer(listener, null, null);
-        Single game = new Single(gameField, gamePlayer, factory);
+        Single game = new Single(gamePlayer, factory);
+        game.on(gameField);
         game.newGame();
         return game;
     }

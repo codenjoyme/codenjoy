@@ -164,4 +164,9 @@ public class NullGame implements Game {
             }
         };
     }
+
+    @Override
+    public void on(GameField field) {
+        // do nothing
+    }
 }

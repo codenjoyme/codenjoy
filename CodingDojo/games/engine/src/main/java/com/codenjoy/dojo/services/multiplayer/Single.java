@@ -39,19 +39,24 @@ import com.codenjoy.dojo.services.hero.HeroDataImpl;
  */
 public class Single implements Game {
 
+    private PrinterFactory factory;
     private Printer printer;
     private GamePlayer player;
     private GameField field;
     private MultiplayerType multiplayerType;
 
-    public Single(GameField field, GamePlayer player, PrinterFactory factory) {
-        this(field, player, factory, MultiplayerType.SINGLE);
+    public Single(GamePlayer player, PrinterFactory factory) {
+        this(player, factory, MultiplayerType.SINGLE);
     }
 
-    public Single(GameField field, GamePlayer player, PrinterFactory factory, MultiplayerType multiplayerType) {
-        this.field = field;
+    public Single(GamePlayer player, PrinterFactory factory, MultiplayerType multiplayerType) {
         this.player = player;
         this.multiplayerType = multiplayerType;
+        this.factory = factory;
+    }
+
+    public void on(GameField field) {
+        this.field = field;
         this.printer = factory.getPrinter(field.reader(), player);
     }
 
@@ -107,7 +112,7 @@ public class Single implements Game {
 
     @Override
     public String getSave() {
-        return null;
+        return field.getSave();
     }
 
     @Override

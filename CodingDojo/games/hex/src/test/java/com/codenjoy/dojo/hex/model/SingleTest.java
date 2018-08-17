@@ -56,9 +56,10 @@ public class SingleTest {
         when(level.getSize()).thenReturn(5);
 
         game = new Hex(level, dice);
-        List<Single> games = new LinkedList<Single>();
+        List<Single> games = new LinkedList<>();
         for (int index = 0; index < count; index++) {
-            Single game = new Single(this.game, new Player(listener), printerFactory);
+            Single game = new Single(new Player(listener), printerFactory);
+            game.on(this.game);
             games.add(game);
             game.newGame();
         }

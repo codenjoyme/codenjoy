@@ -69,17 +69,20 @@ public class SingleTest {
         listener1 = mock(EventListener.class);
         LevelsPoolImpl levelsPool1 = new LevelsPoolImpl(Arrays.asList(level));
         Player player1 = new Player(listener1, levelsPool1);
-        game1 = new Single(field, player1, factory);
+        game1 = new Single(player1, factory);
+        game1.on(field);
 
         listener2 = mock(EventListener.class);
         LevelsPoolImpl levelsPool2 = new LevelsPoolImpl(Arrays.asList(level));
         Player player2 = new Player(listener2, levelsPool2);
-        game2 = new Single(field, player2, factory);
+        game2 = new Single(player2, factory);
+        game2.on(field);
 
         listener3 = mock(EventListener.class);
         LevelsPoolImpl levelsPool3 = new LevelsPoolImpl(Arrays.asList(level));
         Player player3 = new Player(listener3, levelsPool3);
-        game3 = new Single(field, player3, factory);
+        game3 = new Single(player3, factory);
+        game3.on(field);
 
         dice(1, 4);
         game1.newGame();

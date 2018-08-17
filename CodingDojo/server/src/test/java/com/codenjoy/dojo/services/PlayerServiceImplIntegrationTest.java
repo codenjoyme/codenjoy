@@ -28,8 +28,6 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerService;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerServiceImpl;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -54,7 +52,6 @@ public class PlayerServiceImplIntegrationTest {
     private GameService gameService;
     private PlayerController screenController;
     private PlayerController playerController;
-    private MultiplayerService multiplayer;
     private PlayerGames playerGames;
     private Map<String, GameType> gameTypes = new HashMap<>();
     private Map<String, WebSocketRunner> runners = new HashMap<>();
@@ -65,9 +62,6 @@ public class PlayerServiceImplIntegrationTest {
             {
                 PlayerServiceImplIntegrationTest.this.playerGames
                         = this.playerGames = new PlayerGames();
-
-                PlayerServiceImplIntegrationTest.this.multiplayer
-                        = this.multiplayer = new MultiplayerServiceImpl(playerGames){};
 
                 PlayerServiceImplIntegrationTest.this.playerController
                         = this.playerController = mock(PlayerController.class);

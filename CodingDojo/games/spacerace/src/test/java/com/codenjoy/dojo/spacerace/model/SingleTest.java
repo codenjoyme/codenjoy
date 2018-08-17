@@ -70,22 +70,28 @@ public class SingleTest {
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(field, new Player(listener1), factory);
+        game1 = new Single(new Player(listener1), factory);
+        game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(field, new Player(listener2), factory);
+        game2 = new Single(new Player(listener2), factory);
+        game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(field, new Player(listener3), factory);
+        game3 = new Single(new Player(listener3), factory);
+        game3.on(field);
 
         listener4 = mock(EventListener.class);
-        game4 = new Single(field, new Player(listener4), factory);
+        game4 = new Single(new Player(listener4), factory);
+        game4.on(field);
 
         listener5 = mock(EventListener.class);
-        game5 = new Single(field, new Player(listener5), factory);
+        game5 = new Single(new Player(listener5), factory);
+        game5.on(field);
 
         listener6 = mock(EventListener.class);
-        game6 = new Single(field, new Player(listener6), factory);
+        game6 = new Single(new Player(listener6), factory);
+        game6.on(field);
 
         dice(1, 0);
         game1.newGame();

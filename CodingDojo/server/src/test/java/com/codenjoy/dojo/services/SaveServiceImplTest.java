@@ -24,11 +24,18 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -62,13 +69,13 @@ public class SaveServiceImplTest {
     private GameSaver saver;
 
     private List<Player> players;
-    private List<Game> games;
+    private List<GameField> fields;
 
     @Before
     public void setUp() throws IOException {
         reset(playerService, saver);
-        players = new LinkedList<Player>();
-        games = new LinkedList<Game>();
+        players = new LinkedList<>();
+        fields = new LinkedList<>();
         when(playerService.getAll()).thenReturn(players);
         when(playerService.get(anyString())).thenReturn(NullPlayer.INSTANCE);
     }
@@ -76,7 +83,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldSavePlayerWhenExists() {
         Player player = createPlayer("vasia");
-        when(games.get(0).getSave()).thenReturn("{'key':'value'}");
+        when(fields.get(0).getSave()).thenReturn("{'key':'value'}");
 
         saveService.save("vasia");
 
@@ -92,12 +99,16 @@ public class SaveServiceImplTest {
         when(playerService.get(name)).thenReturn(player);
         players.add(player);
 
-        Game game = mock(Game.class);
-        games.add(game);
+        Answer<Object> answerCreateGame = inv1 -> {
+            GameField field = mock(GameField.class);
+            fields.add(field);
+            return field;
+        };
 
-        playerGames.add(player, game);
+        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, answerCreateGame);
+        PlayerGame playerGame = env.playerGame;
 
-        return player;
+        return playerGame.getPlayer();
     }
 
     @Test
@@ -238,8 +249,8 @@ public class SaveServiceImplTest {
     public void testSaveAll() {
         createPlayer("first");
         createPlayer("second");
-        when(games.get(0).getSave()).thenReturn("{'key':'value1'}");
-        when(games.get(1).getSave()).thenReturn("{'key':'value2'}");
+        when(fields.get(0).getSave()).thenReturn("{'key':'value1'}");
+        when(fields.get(1).getSave()).thenReturn("{'key':'value2'}");
 
         saveService.saveAll();
 

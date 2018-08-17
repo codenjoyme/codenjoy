@@ -54,8 +54,10 @@ public class SingleTest {
         field = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);
-        tanks1 = new Single(field, player1, printerFactory);
-        tanks2 = new Single(field, player2, printerFactory);
+        tanks1 = new Single(player1, printerFactory);
+        tanks1.on(field);
+        tanks2 = new Single(player2, printerFactory);
+        tanks2.on(field);
     }
 
     @Test

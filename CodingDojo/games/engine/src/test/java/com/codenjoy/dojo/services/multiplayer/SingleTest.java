@@ -58,7 +58,8 @@ public class SingleTest {
 
         when(player.getHero()).thenReturn(hero);
 
-        single = new Single(field, player, factory);
+        single = new Single(player, factory);
+        single.on(field);
     }
 
     @Test
@@ -116,7 +117,8 @@ public class SingleTest {
     @Test
     public void callHeroDataFromHero_ifNotRealizedInPlayer_multiplayer() {
         // given
-        single = new Single(field, player, factory, MultiplayerType.MULTIPLE);
+        single = new Single(player, factory, MultiplayerType.MULTIPLE);
+        single.on(field);
 
         when(player.getHeroData()).thenReturn(null);
         when(hero.getX()).thenReturn(7);

@@ -24,51 +24,35 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.client.Closeable;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
 import java.util.*;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.eq;
 
 public class PlayerGamesTest {
 
     private PlayerGames playerGames;
     private Player player;
-    private Game game;
-    private Joystick lazyJoystick;
-    private Joystick joystick;
     private List<GameType> gameTypes = new LinkedList<>();
-    private List<Game> games = new LinkedList<>();
     private Map<Player, Closeable> ais = new HashMap<>();
+    private List<Joystick> joysticks = new LinkedList<>();
+    private List<Joystick> lazyJoysticks = new LinkedList<>();
 
     @Before
     public void setUp() throws Exception {
-        Arrays.asList(joystick, game)
-                .forEach(it -> {
-                    if (it != null) reset(it);
-                });
-
-        player = createPlayer("game", "player");
-
-        game = mock(Game.class);
-        games.add(game);
-
-        joystick = mock(Joystick.class);
-        when(game.getJoystick()).thenReturn(joystick);
-
         playerGames = new PlayerGames();
-
-        playerGames.onAdd(playerGame -> lazyJoystick = playerGame.getJoystick());
-
-        playerGames.add(player, game);
+        player = createPlayer("game", "player");
     }
 
     private PlayerGame removed;
@@ -96,7 +80,7 @@ public class PlayerGamesTest {
         PlayerGame playerGame = playerGames.get(player.getName());
 
         assertSame(player, playerGame.getPlayer());
-        assertSame(game, playerGame.getGame());
+//        assertSame(game, playerGame.getGame());
 
     }
 
@@ -127,13 +111,7 @@ public class PlayerGamesTest {
     }
 
     private Player addOtherPlayer(String game) {
-        Player otherPlayer = createPlayer(game, "player" + Calendar.getInstance().getTimeInMillis());
-
-        Game anotherGame = mock(Game.class);
-        games.add(anotherGame);
-
-        playerGames.add(otherPlayer, anotherGame);
-        return otherPlayer;
+        return createPlayer(game, "player" + Calendar.getInstance().getTimeInMillis());
     }
 
     private Player createPlayer(String game, String name) {
@@ -149,6 +127,12 @@ public class PlayerGamesTest {
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
         player.setAI(ai);
+
+        playerGames.onAdd(playerGame -> lazyJoysticks.add(playerGame.getJoystick()));
+
+        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, inv -> mock(GameField.class));
+        joysticks.add(env.joystick);
+
         return player;
     }
 
@@ -205,14 +189,14 @@ public class PlayerGamesTest {
     }
 
     private void verifyRemove(PlayerGame playerGame) {
-        verify(playerGame.getGame()).close();
+        verify(playerGame.getGame().getField()).remove(playerGame.getGame().getPlayer());
         verify(ais.get(playerGame.getPlayer())).close();
     }
 
     @Test
     public void testGetGameTypes() {
         Player player2 = addOtherPlayer("game2");
-        playerGames.add(player2, mock(Game.class));
+        playerGames.add(player2, null);
 
         List<GameType> gameTypes = playerGames.getGameTypes();
 
@@ -224,13 +208,13 @@ public class PlayerGamesTest {
     @Test
     public void shouldTickLazyJoystickWhenTick() {
         // given
-        lazyJoystick.right();
+        lazyJoysticks.get(0).right();
 
         // when
         playerGames.tick();
 
         // then
-        verify(joystick).right();
+        verify(joysticks.get(0)).right();
     }
 
     @Test
