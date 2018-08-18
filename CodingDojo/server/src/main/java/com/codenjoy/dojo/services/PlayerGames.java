@@ -23,10 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -71,7 +69,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void remove(Player player) {
         int index = playerGames.indexOf(player);
         if (index == -1) return;
-        playerGames.remove(index).remove(onRemove);
+        PlayerGame toRemove = playerGames.remove(index);
+
+        List<PlayerGame> gamePlayers = remove(toRemove.getGame());
+        gamePlayers.forEach(gp -> spreader.play(gp.getGame(), gp.getPlayer().getGameType()));
+
+        toRemove.remove(onRemove);
+        toRemove.getGame().on(null);
     }
 
     public PlayerGame get(String playerName) {
@@ -83,9 +87,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public PlayerGame get(GamePlayer player) {
         return playerGames.stream()
-                .filter(pg -> pg.getPlayer().equals(player))
+                .filter(pg -> pg.getGame().getPlayer().equals(player))
                 .findFirst()
-                .orElse(NullPlayerGame.INSTANCE);
+                .orElse(null);
     }
 
     public PlayerGame add(Player player, PlayerSave save) {
@@ -98,8 +102,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 gameType.getPrinterFactory(),
                 gameType.getMultiplayerType());
 
-        List<Game> games = resetGames(single);
-        games.forEach(game -> spreader.play(game, gameType));
+        spreader.play(single, gameType);
 
         Game game = new LockedGame(lock).wrap(single);
 
@@ -111,14 +114,19 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGame;
     }
 
-    private List<Game> resetGames(Game toRemove) {
+    private List<PlayerGame> remove(Game toRemove) {
         if (spreader.contains(toRemove)) {
             List<GamePlayer> removed = spreader.remove(toRemove);
-            return removed.stream()
-                    .map(p -> get(p).getGame())
+            List<PlayerGame> result = removed.stream()
+                    .map(p -> get(p))
                     .collect(toList());
+            while (result.contains(null)) { // TODO как-то странно так делать
+                result.remove(null);
+            }
+            result.forEach(pg -> pg.getGame().on(null));
+            return result;
         } else {
-            return Arrays.asList(toRemove);
+            return Arrays.asList();
         }
     }
 

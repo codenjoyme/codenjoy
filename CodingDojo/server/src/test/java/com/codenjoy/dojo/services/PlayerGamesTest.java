@@ -62,6 +62,7 @@ public class PlayerGamesTest {
         assertFalse(playerGames.isEmpty());
         assertEquals(1, playerGames.size());
         PlayerGame playerGame = playerGames.get(player.getName());
+        GameField field = playerGame.getGame().getField();
         playerGames.onRemove(pg -> removed = pg);
 
         playerGames.remove(player);
@@ -69,7 +70,7 @@ public class PlayerGamesTest {
         assertTrue(playerGames.isEmpty());
         assertEquals(0, playerGames.size());
 
-        verifyRemove(playerGame);
+        verifyRemove(playerGame, field);
         assertSame(removed, playerGame);
     }
 
@@ -174,8 +175,13 @@ public class PlayerGamesTest {
         Player player3 = addOtherPlayer();
 
         PlayerGame playerGame1 = playerGames.get(player.getName());
+        GameField field1 = playerGame1.getGame().getField();
+
         PlayerGame playerGame2 = playerGames.get(player2.getName());
+        GameField field2 = playerGame2.getGame().getField();
+
         PlayerGame playerGame3 = playerGames.get(player3.getName());
+        GameField field3 = playerGame3.getGame().getField();
 
         assertEquals(3, playerGames.size());
 
@@ -183,13 +189,13 @@ public class PlayerGamesTest {
 
         assertEquals(0, playerGames.size());
 
-        verifyRemove(playerGame1);
-        verifyRemove(playerGame2);
-        verifyRemove(playerGame3);
+        verifyRemove(playerGame1, field1);
+        verifyRemove(playerGame2, field2);
+        verifyRemove(playerGame3, field3);
     }
 
-    private void verifyRemove(PlayerGame playerGame) {
-        verify(playerGame.getGame().getField()).remove(playerGame.getGame().getPlayer());
+    private void verifyRemove(PlayerGame playerGame, GameField field) {
+        verify(field).remove(playerGame.getGame().getPlayer());
         verify(ais.get(playerGame.getPlayer())).close();
     }
 

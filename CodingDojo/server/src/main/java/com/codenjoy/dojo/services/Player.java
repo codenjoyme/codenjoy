@@ -69,6 +69,10 @@ public class Player implements ScreenRecipient, Closeable {
         if (o instanceof Player) {
             Player p = (Player)o;
 
+            if (p.name == null) {
+                return name == null;
+            }
+
             return (p.name.equals(name));
         }
 

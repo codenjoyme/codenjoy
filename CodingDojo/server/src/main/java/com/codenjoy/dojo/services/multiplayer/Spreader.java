@@ -56,21 +56,17 @@ public class Spreader {
         GamePlayer player = game.getPlayer();
         List<Room> playerRooms = roomsFor(player);
 
-        removed.add(player);
-
         playerRooms.forEach(room -> {
             List<GamePlayer> players = room.getPlayers();
             players.remove(player);
 
-            if (players.isEmpty()) {
-                rooms.remove(room);
-            }
             if (players.size() == 1) {
                 GamePlayer lastPlayer = players.iterator().next();
-
                 removed.add(lastPlayer);
-
-                rooms.remove(room);
+                players.remove(lastPlayer);
+            }
+            if (players.isEmpty()) {
+                rooms.values().forEach(it -> it.remove(room));
             }
         });
 

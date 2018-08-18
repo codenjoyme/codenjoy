@@ -123,7 +123,6 @@ public class PlayerServiceImplTest {
         playerScores3 = mock(PlayerScores.class);
         when(playerScores3.getScore()).thenReturn(0);
 
-
         printer = mock(GraphicPrinter.class);
         when(printer.print(anyObject(), anyObject())).thenReturn("1234");
 

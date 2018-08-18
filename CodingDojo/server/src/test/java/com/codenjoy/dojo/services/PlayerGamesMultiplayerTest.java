@@ -360,4 +360,74 @@ public class PlayerGamesMultiplayerTest {
         // then
         verify(field1, times(1)).quietTick();
     }
+
+    @Test
+    public void shouldPlayerStartsNewGame_whenSingle_whenRemove() {
+        // given
+        Player player1 = new Player();
+        Player player2 = new Player();
+
+        PlayerGame playerGame1 = playerWantsToPlay(single, player1, null);
+        PlayerGame playerGame2 = playerWantsToPlay(single, player2, null);
+
+        GameField field1 = playerGame1.getGame().getField();
+        GameField field2 = playerGame2.getGame().getField();
+
+        assertGroup(field1)
+                .notIn(field2)
+                .check();
+
+        // when
+        playerGame1 = playerWantsToPlay(single, player1, null);
+
+        // then
+        field1 = playerGame1.getGame().getField();
+
+        assertGroup(field1)
+                .notIn(field2)
+                .check();
+
+        // when
+        playerGames.remove(player1);
+        playerGame1 = playerWantsToPlay(single, player1, null);
+
+        // then
+        field1 = playerGame1.getGame().getField();
+
+        assertGroup(field1)
+                .notIn(field2)
+                .check();
+    }
+
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTournament_whenRemove() {
+        // given
+        Player player1 = new Player("player1");
+        Player player2 = new Player("player2");
+        Player player3 = new Player("player3");
+
+        PlayerGame playerGame1 = playerWantsToPlay(tournament, player1, null);
+        PlayerGame playerGame2 = playerWantsToPlay(tournament, player2, null);
+        PlayerGame playerGame3 = playerWantsToPlay(tournament, player3, null);
+
+        GameField field1 = playerGame1.getGame().getField();
+        GameField field2 = playerGame2.getGame().getField();
+        GameField field3 = playerGame3.getGame().getField();
+
+        assertGroup(field1, field2)
+                .notIn(field3)
+                .check();
+
+        // when
+        playerGames.remove(player1);
+
+        // then
+        field1 = playerGame1.getGame().getField();
+        field2 = playerGame2.getGame().getField();
+        field3 = playerGame3.getGame().getField();
+
+        assertGroup(field2, field3)
+                .check();
+        assertEquals(null, field1);
+    }
 }

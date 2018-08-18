@@ -57,7 +57,11 @@ public class Single implements Game {
 
     public void on(GameField field) {
         this.field = field;
-        this.printer = factory.getPrinter(field.reader(), player);
+        if (field == null) {
+            printer = null;
+        } else {
+            printer = factory.getPrinter(field.reader(), player);
+        }
     }
 
     /**
@@ -84,6 +88,10 @@ public class Single implements Game {
 
     @Override
     public Object getBoardAsString() {
+        if (printer == null) {
+            throw new IllegalStateException("No board for this player");
+        }
+
         return printer.print();
     }
 
