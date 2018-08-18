@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static java.util.stream.Collectors.toList;
+
 public class Spreader {
 
     private Map<String, List<Room>> rooms = new HashMap<>();
@@ -48,23 +50,43 @@ public class Spreader {
         return result;
     }
 
-    public void remove(Game game, GameType gameType) {
-        List<Room> roomList = rooms.get(gameType.name());
+    public List<GamePlayer> remove(Game game) {
+        List<GamePlayer> removed = new LinkedList<>();
+
         GamePlayer player = game.getPlayer();
-        Room room = roomList.stream()
-                .filter(r -> r.contains(player))
-                .findFirst()
-                .orElse(null);
+        List<Room> playerRooms = roomsFor(player);
 
-        if (room == null) {
-            return;
-        }
+        removed.add(player);
 
-        roomList.remove(room);
+        playerRooms.forEach(room -> {
+            List<GamePlayer> players = room.getPlayers();
+            players.remove(player);
 
-        List<GamePlayer> players = room.getPlayers();
-        players.remove(player);
-        players.forEach(p -> replay(game, gameType));
+            if (players.isEmpty()) {
+                rooms.remove(room);
+            }
+            if (players.size() == 1) {
+                GamePlayer lastPlayer = players.iterator().next();
+
+                removed.add(lastPlayer);
+
+                rooms.remove(room);
+            }
+        });
+
+        return removed;
+    }
+
+    private List<Room> roomsFor(GamePlayer player) {
+        return allRooms().stream()
+                    .filter(r -> r.contains(player))
+                    .collect(toList());
+    }
+
+    private List<Room> allRooms() {
+        return rooms.values().stream()
+                .flatMap(List::stream)
+                .collect(toList());
     }
 
     public void play(Game game, GameType gameType) {
@@ -76,8 +98,7 @@ public class Spreader {
         game.on(field);
     }
 
-    public void replay(Game game, GameType gameType) {
-        remove(game, gameType);
-        play(game, gameType);
+    public boolean contains(Game game) {
+        return !roomsFor(game.getPlayer()).isEmpty();
     }
 }

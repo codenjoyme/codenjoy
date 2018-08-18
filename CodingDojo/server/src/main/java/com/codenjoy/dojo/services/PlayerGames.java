@@ -81,6 +81,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .orElse(NullPlayerGame.INSTANCE);
     }
 
+    public PlayerGame get(GamePlayer player) {
+        return playerGames.stream()
+                .filter(pg -> pg.getPlayer().equals(player))
+                .findFirst()
+                .orElse(NullPlayerGame.INSTANCE);
+    }
+
     public PlayerGame add(Player player, PlayerSave save) {
         GameType gameType = player.getGameType();
 
@@ -91,7 +98,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 gameType.getPrinterFactory(),
                 gameType.getMultiplayerType());
 
-        spreader.play(single, gameType);
+        List<Game> games = resetGames(single);
+        games.forEach(game -> spreader.play(game, gameType));
 
         Game game = new LockedGame(lock).wrap(single);
 
@@ -101,6 +109,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
         playerGames.add(playerGame);
         return playerGame;
+    }
+
+    private List<Game> resetGames(Game toRemove) {
+        if (spreader.contains(toRemove)) {
+            List<GamePlayer> removed = spreader.remove(toRemove);
+            return removed.stream()
+                    .map(p -> get(p).getGame())
+                    .collect(toList());
+        } else {
+            return Arrays.asList(toRemove);
+        }
     }
 
     public boolean isEmpty() {
@@ -190,4 +209,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
 
+    public void clean() {
+        new LinkedList<>(playerGames)
+                .forEach(pg -> remove(pg.getPlayer()));
+    }
 }

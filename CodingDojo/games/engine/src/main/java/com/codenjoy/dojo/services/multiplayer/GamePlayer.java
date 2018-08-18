@@ -87,4 +87,14 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      * @return Жив ли герой. Обычно делегируется герою.
      */
     public abstract boolean isAlive();
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -246,12 +247,16 @@ public class PlayerServiceImplIntegrationTest {
             return gameTypes.get(name);
         }
 
-        GameField field = mock(GameField.class);
-        when(field.reader()).thenReturn(mock(BoardReader.class));
 
         GameType gameType = mock(GameType.class);
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
-        when(gameType.createGame()).thenReturn(field);
+        when(gameType.createGame()).thenAnswer(inv -> {
+            GameField field = mock(GameField.class);
+            when(field.reader()).thenAnswer(inv2 -> mock(BoardReader.class));
+            return field;
+        });
+        when(gameType.createPlayer(any(EventListener.class), anyString(), anyString()))
+                .thenAnswer(inv -> mock(GamePlayer.class));
         when(gameType.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
         when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
