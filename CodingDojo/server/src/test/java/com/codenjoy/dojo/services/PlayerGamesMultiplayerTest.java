@@ -429,5 +429,59 @@ public class PlayerGamesMultiplayerTest {
         assertGroup(field2, field3)
                 .check();
         assertEquals(null, field1);
+
+        // when
+        Player player4 = new Player("player4");
+        Player player5 = new Player("player5");
+
+        PlayerGame playerGame4 = playerWantsToPlay(tournament, player4, null);
+        PlayerGame playerGame5 = playerWantsToPlay(tournament, player5, null);
+
+        // then
+        field1 = playerGame1.getGame().getField();
+        field2 = playerGame2.getGame().getField();
+        field3 = playerGame3.getGame().getField();
+        GameField field4 = playerGame4.getGame().getField();
+        GameField field5 = playerGame5.getGame().getField();
+
+        assertGroup(field2, field3)
+                .notIn(field4, field5)
+                .check();
+        assertEquals(null, field1);
+
+        // when
+        playerGames.remove(player2);
+
+        // then
+        field1 = playerGame1.getGame().getField();
+        field2 = playerGame2.getGame().getField();
+        field3 = playerGame3.getGame().getField();
+        field4 = playerGame4.getGame().getField();
+        field5 = playerGame5.getGame().getField();
+
+        assertGroup(field4, field5)
+                .notIn(field3)
+                .check();
+        assertEquals(null, field1);
+        assertEquals(null, field2);
+
+        // when
+        Player player6 = new Player("player6");
+
+        PlayerGame playerGame6 = playerWantsToPlay(tournament, player6, null);
+
+        // then
+        field1 = playerGame1.getGame().getField();
+        field2 = playerGame2.getGame().getField();
+        field3 = playerGame3.getGame().getField();
+        field4 = playerGame4.getGame().getField();
+        field5 = playerGame5.getGame().getField();
+        GameField field6 = playerGame6.getGame().getField();
+
+        assertGroup(field4, field5)
+                .notIn(field3, field6)
+                .check();
+        assertEquals(null, field1);
+        assertEquals(null, field2);
     }
 }
