@@ -47,8 +47,9 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PlayerGamesAdditionalDataTest {
+public class PlayerGamesViewTest {
 
+    private PlayerGamesView playerGamesView;
     private PlayerGames playerGames;
     private List<Player> players;
     private List<Game> games;
@@ -60,6 +61,9 @@ public class PlayerGamesAdditionalDataTest {
     @Before
     public void setup() {
         playerGames = new PlayerGames();
+        playerGamesView = new PlayerGamesView();
+        playerGamesView.service = playerGames;
+
         players = new LinkedList<>();
         games = new LinkedList<>();
         controllers = new LinkedList<>();
@@ -79,7 +83,7 @@ public class PlayerGamesAdditionalDataTest {
         addNewPlayer(gameType, 456, getHeroDataForAllPlayers(13, pt(7, 8), Arrays.asList("data3, data4")));
 
         // when
-        Map<String, GameData> dataMap = playerGames.getGamesDataMap();
+        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
 
         // then
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
@@ -128,7 +132,7 @@ public class PlayerGamesAdditionalDataTest {
         setHeroesGroup(heroesData.get(3), Arrays.asList(games.get(2), games.get(3)));
 
         // when
-        Map<String, GameData> dataMap = playerGames.getGamesDataMap();
+        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
 
         // then
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
@@ -170,7 +174,7 @@ public class PlayerGamesAdditionalDataTest {
         assertEquals(null, heroesData.get(3).playersGroup());
 
         // when
-        Map<String, GameData> dataMap = playerGames.getGamesDataMap();
+        Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
 
         // then
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +

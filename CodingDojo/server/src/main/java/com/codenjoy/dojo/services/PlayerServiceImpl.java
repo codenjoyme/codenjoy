@@ -59,6 +59,9 @@ public class PlayerServiceImpl implements PlayerService {
     protected PlayerGames playerGames;
 
     @Autowired
+    private PlayerGamesView playerGamesView;
+
+    @Autowired
     @Qualifier("playerController")
     protected PlayerController playerController;
 
@@ -293,7 +296,7 @@ public class PlayerServiceImpl implements PlayerService {
         Map<ScreenRecipient, ScreenData> map = new HashMap<>();
         cacheBoards.clear();
 
-        Map<String, GameData> gameDataMap = playerGames.getGamesDataMap();
+        Map<String, GameData> gameDataMap = playerGamesView.getGamesDataMap();
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();

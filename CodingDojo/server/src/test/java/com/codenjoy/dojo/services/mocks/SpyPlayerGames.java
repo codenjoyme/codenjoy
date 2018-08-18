@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.mocks;
 
 
 import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.PlayerGamesView;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.spy;
@@ -35,5 +36,10 @@ public class SpyPlayerGames {
     public PlayerGames bean() throws Exception {
         playerGames = new PlayerGames();
         return spy(playerGames);
+    }
+
+    @Bean(name = "playerGamesView")
+    public PlayerGamesView bean2() throws Exception {
+        return spy(new PlayerGamesView());
     }
 }
