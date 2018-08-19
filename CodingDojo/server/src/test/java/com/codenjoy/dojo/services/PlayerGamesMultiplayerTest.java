@@ -382,5 +382,56 @@ public class PlayerGamesMultiplayerTest {
                 .check();
     }
 
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTriple_whenRemove() {
+        // given
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+
+        assertGroup(0, 1, 2)
+                .notIn(3, 4)
+                .check();
+
+        // when
+        playerGames.remove(players.get(0));
+
+        // then
+        assertGroup(1, 2)
+                .notIn(3, 4)
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+
+        // then
+        assertGroup(1, 2, 5) // TODO подумать, может не стоит лепить нового юзера к уже играющим
+                .notIn(3, 4, 6)
+                .isNull(0)
+                .check();
+
+        // when
+        playerGames.remove(players.get(1));
+
+        // then
+        assertGroup(2, 5)
+                .notIn(3, 4, 6)
+                .isNull(0, 1)
+                .check();
+
+        // when
+        playerWantsToPlay(triple);
+
+        // then
+        assertGroup(2, 5, 7)
+                .notIn(3, 4, 6)
+                .isNull(0, 1)
+                .check();
+    }
+
     // TODO shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTournament_whenRemove сделать такой же тест для других типов комнат
 }
