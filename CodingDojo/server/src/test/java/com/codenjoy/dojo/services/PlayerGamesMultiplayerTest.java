@@ -433,5 +433,115 @@ public class PlayerGamesMultiplayerTest {
                 .check();
     }
 
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenQuadro_whenRemove() {
+        // given
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+
+        assertGroup(0, 1, 2, 3)
+                .notIn(4)
+                .check();
+
+        // when
+        playerGames.remove(players.get(0));
+
+        // then
+        assertGroup(1, 2, 3)
+                .notIn(4)
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+
+        // then
+        assertGroup(1, 2, 3, 5)
+                .notIn(4, 6, 7)
+                .isNull(0)
+                .check();
+
+        // when
+        playerGames.remove(players.get(1));
+
+        // then
+        assertGroup(2, 3, 5)
+                .notIn(4, 6, 7)
+                .isNull(0, 1)
+                .check();
+
+        // when
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+
+        // then
+        assertGroup(2, 3, 5, 8)
+                .notIn(4, 6, 7, 9)
+                .notIn(10)
+                .isNull(0, 1)
+                .check();
+    }
+
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTeam4_whenRemove() {
+        // given
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+
+        assertGroup(0, 1, 2, 3)
+                .notIn(4)
+                .check();
+
+        // when
+        playerGames.remove(players.get(0));
+
+        // then
+        assertGroup(1, 2, 3)
+                .notIn(4)
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+
+        // then
+        assertGroup(1, 2, 3, 5)
+                .notIn(4, 6, 7)
+                .isNull(0)
+                .check();
+
+        // when
+        playerGames.remove(players.get(1));
+
+        // then
+        assertGroup(2, 3, 5)
+                .notIn(4, 6, 7)
+                .isNull(0, 1)
+                .check();
+
+        // when
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+
+        // then
+        assertGroup(2, 3, 5, 8)
+                .notIn(4, 6, 7, 9)
+                .notIn(10)
+                .isNull(0, 1)
+                .check();
+    }
+
     // TODO shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTournament_whenRemove сделать такой же тест для других типов комнат
 }
