@@ -29,10 +29,13 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.verification.VerificationMode;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -54,7 +57,9 @@ public class PlayerGamesMultiplayerTest {
     private GameType team4;
 
     private List<GameField> fields = new LinkedList<>();
-    private List<GamePlayer> players = new LinkedList<>();
+    private List<GamePlayer> gamePlayers = new LinkedList<>();
+    private List<Player> players = new LinkedList<>();
+    private List<Supplier<GameField>> filedSuppliers = new LinkedList<>();;
 
     @Before
     public void setup() {
@@ -89,40 +94,20 @@ public class PlayerGamesMultiplayerTest {
     private GamePlayer createGamePlayer() {
         GamePlayer player = mock(GamePlayer.class);
         when(player.isAlive()).thenReturn(true);
-        players.add(player);
+        gamePlayers.add(player);
         return player;
     }
 
-    @Test
-    public void shouldEveryPlayerGoToTheirOwnField_whenSingle() {
-        // given
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
+    private void verifyAllFieldsTicks(VerificationMode count) {
+        filedSuppliers.forEach(s -> verify(s.get(), count).quietTick());
+    }
 
-        // when
-        PlayerGame playerGame1 = playerWantsToPlay(single, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(single, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(single, player3, null);
-
-        // then
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-
-        assertGroup(field1)
-                .notIn(field2)
-                .notIn(field3)
-                .check();
-
-        // и каждый из них тикается независимо
-        // when
-        playerGames.tick();
-
-        // then
-        verify(field1, times(1)).quietTick();
-        verify(field2, times(1)).quietTick();
-        verify(field3, times(1)).quietTick();
+    private void playerWantsToPlay(GameType gameType) {
+        int index = gamePlayers.size();
+        Player player = new Player("player" + index);
+        players.add(player);
+        PlayerGame playerGame = playerWantsToPlay(gameType, player, null);
+        filedSuppliers.add(() -> playerGame.getGame().getField());
     }
 
     private PlayerGame playerWantsToPlay(GameType gameType, Player player, Object data) {
@@ -131,15 +116,17 @@ public class PlayerGamesMultiplayerTest {
     }
 
     private static class GroupsAsserter {
+        private Function<Integer, GameField> mapper;
+        private List<List<Integer>> groups;
+        private List<Integer> isNull;
 
-        private List<List<GameField>> groups;
-
-        public GroupsAsserter(GameField[] group) {
+        public GroupsAsserter(Function<Integer, GameField> mapper) {
             groups = new LinkedList();
-            notIn(group);
+            isNull = new LinkedList();
+            this.mapper = mapper;
         }
 
-        public GroupsAsserter notIn(GameField... anotherGroup) {
+        public GroupsAsserter notIn(Integer... anotherGroup) {
             groups.add(Arrays.asList(anotherGroup));
             return this;
         }
@@ -149,13 +136,15 @@ public class PlayerGamesMultiplayerTest {
             List<String> actual = new LinkedList<>();
 
             for (int i = 0; i < groups.size(); i++) {
-                List<GameField> group = groups.get(i);
+                List<Integer> group = groups.get(i);
                 for (int ii = 0; ii < group.size(); ii++) {
                     for (int jj = ii + 1; jj < group.size(); jj++) {
                         if (jj == ii) continue;
-                        String message = String.format("[G%s:%s]==[G%s:%s]", i + 1, ii + 1, i + 1, jj + 1);
+                        Integer fj = group.get(jj);
+                        Integer fi = group.get(ii);
+                        String message = String.format("field[%s] == field[%s]", fi, fj);
                         expected.add(message);
-                        if (group.get(ii) == group.get(jj)) {
+                        if (mapper.apply(fi) == mapper.apply(fj)) {
                             actual.add(message);
                         } else {
                             actual.add(message.replace("==", "!="));
@@ -163,13 +152,15 @@ public class PlayerGamesMultiplayerTest {
                     }
                 }
                 for (int j = i + 1; j < groups.size(); j++) {
-                    List<GameField> group1 = groups.get(i);
-                    List<GameField> group2 = groups.get(j);
+                    List<Integer> group1 = groups.get(i);
+                    List<Integer> group2 = groups.get(j);
                     for (int ii = 0; ii < group1.size(); ii++) {
                         for (int jj = 0; jj < group2.size(); jj++) {
-                            String message = String.format("[G%s:%s]!=[G%s:%s]", i + 1, ii + 1, j + 1, jj + 1);
+                            Integer fi = group1.get(ii);
+                            Integer fj = group2.get(jj);
+                            String message = String.format("field[%s] != field[%s]", fi, fj);
                             expected.add(message);
-                            if (group1.get(ii) != group2.get(jj)) {
+                            if (mapper.apply(fi) != mapper.apply(fj)) {
                                 actual.add(message);
                             } else {
                                 actual.add(message.replace("!=", "=="));
@@ -177,311 +168,219 @@ public class PlayerGamesMultiplayerTest {
                         }
                     }
                 }
-                assertEquals(expected.toString().replaceAll(",", ",\n"),
-                        actual.toString().replaceAll(",", ",\n"));
             }
+            for (int i = 0; i < isNull.size(); i++) {
+                String message = String.format("field[%s] %s null", i, (mapper.apply(isNull.get(i)) == null)?"==":"!=");
+                actual.add(message);
+                expected.add(message.replace("!=", "=="));
+            }
+            assertEquals(expected.toString().replaceAll(",", ",\n"),
+                    actual.toString().replaceAll(",", ",\n"));
+        }
+
+        public GroupsAsserter isNull(Integer... fields) {
+            isNull.addAll(Arrays.asList(fields));
+            return this;
         }
     }
 
-    private GroupsAsserter assertGroup(GameField... group1) {
-        return new GroupsAsserter(group1);
+    private GroupsAsserter assertGroup(Integer... group) {
+        return new GroupsAsserter(index -> filedSuppliers.get(index).get())
+                .notIn(group);
     }
 
     @Test
-    public void shouldTwoPlayerOnBoard_whenTournament() {
+    public void shouldEveryPlayerGoToTheirOwnField_whenSingle() {
         // given
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
-        Player player4 = new Player();
-        Player player5 = new Player();
-
-        // when
-        PlayerGame playerGame1 = playerWantsToPlay(tournament, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(tournament, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(tournament, player3, null);
-        PlayerGame playerGame4 = playerWantsToPlay(tournament, player4, null);
-        PlayerGame playerGame5 = playerWantsToPlay(tournament, player5, null);
+        playerWantsToPlay(single);
+        playerWantsToPlay(single);
+        playerWantsToPlay(single);
 
         // then
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-        GameField field4 = playerGame4.getGame().getField();
-        GameField field5 = playerGame5.getGame().getField();
-
-        assertGroup(field1, field2)
-                .notIn(field3, field4)
-                .notIn(field5)
+        assertGroup(0)
+                .notIn(1)
+                .notIn(2)
                 .check();
 
-        // и в группах борда тикается только раз
         // when
         playerGames.tick();
 
         // then
-        verify(field1, times(1)).quietTick();
-        verify(field3, times(1)).quietTick();
-        verify(field5, times(1)).quietTick();
+        verifyAllFieldsTicks(times(1));
+    } 
+    
+    @Test
+    public void shouldTwoPlayerOnBoard_whenTournament() {
+        // given
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+
+        assertGroup(0, 1)
+                .notIn(2, 3)
+                .notIn(4)
+                .check();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verifyAllFieldsTicks(times(1));
     }
 
     @Test
     public void shouldThreePlayerOnBoard_whenTriple() {
         // given
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
-        Player player4 = new Player();
-        Player player5 = new Player();
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
 
-        // when
-        PlayerGame playerGame1 = playerWantsToPlay(triple, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(triple, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(triple, player3, null);
-        PlayerGame playerGame4 = playerWantsToPlay(triple, player4, null);
-        PlayerGame playerGame5 = playerWantsToPlay(triple, player5, null);
-
-        // then
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-        GameField field4 = playerGame4.getGame().getField();
-        GameField field5 = playerGame5.getGame().getField();
-
-        assertGroup(field1, field2, field3)
-                .notIn(field4, field5)
+        assertGroup(0, 1, 2)
+                .notIn(3, 4)
                 .check();
 
-        // и в группах борда тикается только раз
         // when
         playerGames.tick();
 
         // then
-        verify(field1, times(1)).quietTick();
-        verify(field4, times(1)).quietTick();
+        verifyAllFieldsTicks(times(1));
     }
 
     @Test
     public void shouldXPlayerOnBoard_whenTeam() {
         // given
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
-        Player player4 = new Player();
-        Player player5 = new Player();
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
+        playerWantsToPlay(team4);
 
-        // when
-        PlayerGame playerGame1 = playerWantsToPlay(team4, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(team4, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(team4, player3, null);
-        PlayerGame playerGame4 = playerWantsToPlay(team4, player4, null);
-        PlayerGame playerGame5 = playerWantsToPlay(team4, player5, null);
-
-        // then
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-        GameField field4 = playerGame4.getGame().getField();
-        GameField field5 = playerGame5.getGame().getField();
-
-        assertGroup(field1, field2, field3, field4)
-                .notIn(field5)
+        assertGroup(0, 1, 2, 3)
+                .notIn(4)
                 .check();
 
-        // и в группах борда тикается только раз
         // when
         playerGames.tick();
 
         // then
-        verify(field1, times(1)).quietTick();
-        verify(field5, times(1)).quietTick();
+        verifyAllFieldsTicks(times(1));
     }
 
     @Test
     public void shouldFourPlayerOnBoard_whenQuadro() {
         // given
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
-        Player player4 = new Player();
-        Player player5 = new Player();
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
 
-        // when
-        PlayerGame playerGame1 = playerWantsToPlay(quadro, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(quadro, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(quadro, player3, null);
-        PlayerGame playerGame4 = playerWantsToPlay(quadro, player4, null);
-        PlayerGame playerGame5 = playerWantsToPlay(quadro, player5, null);
-
-        // then
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-        GameField field4 = playerGame4.getGame().getField();
-        GameField field5 = playerGame5.getGame().getField();
-
-        assertGroup(field1, field2, field3, field4)
-                .notIn(field5)
+        assertGroup(0, 1, 2, 3)
+                .notIn(4)
                 .check();
 
-        // и в группах борда тикается только раз
         // when
         playerGames.tick();
 
         // then
-        verify(field1, times(1)).quietTick();
-        verify(field5, times(1)).quietTick();
+        verifyAllFieldsTicks(times(1));
     }
 
     @Test
     public void shouldAllPlayersGoToOneField_whenMultiple() {
         // given
-        Player player1 = new Player();
-        Player player2 = new Player();
-        Player player3 = new Player();
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
 
-        // when
-        PlayerGame playerGame1 = playerWantsToPlay(multiple, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(multiple, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(multiple, player3, null);
-
-        // then
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-
-        assertGroup(field1, field2, field3)
+        assertGroup(0, 1, 2)
                 .check();
 
-        // и в группах борда тикается только раз
         // when
         playerGames.tick();
 
         // then
-        verify(field1, times(1)).quietTick();
+        verifyAllFieldsTicks(times(1));
     }
 
     @Test
     public void shouldPlayerStartsNewGame_whenSingle_whenRemove() {
         // given
-        Player player1 = new Player();
-        Player player2 = new Player();
+        playerWantsToPlay(single);
+        playerWantsToPlay(single);
 
-        PlayerGame playerGame1 = playerWantsToPlay(single, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(single, player2, null);
-
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-
-        assertGroup(field1)
-                .notIn(field2)
+        assertGroup(0)
+                .notIn(1)
                 .check();
 
         // when
-        playerGame1 = playerWantsToPlay(single, player1, null);
+        playerWantsToPlay(single);
 
-        // then
-        field1 = playerGame1.getGame().getField();
-
-        assertGroup(field1)
-                .notIn(field2)
+        assertGroup(0)
+                .notIn(1)
+                .notIn(2)
                 .check();
 
         // when
-        playerGames.remove(player1);
-        playerGame1 = playerWantsToPlay(single, player1, null);
+        playerGames.remove(players.get(0));
 
         // then
-        field1 = playerGame1.getGame().getField();
-
-        assertGroup(field1)
-                .notIn(field2)
+        assertGroup(0)
+                .notIn(1)
                 .check();
     }
 
     @Test
     public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTournament_whenRemove() {
         // given
-        Player player1 = new Player("player1");
-        Player player2 = new Player("player2");
-        Player player3 = new Player("player3");
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
 
-        PlayerGame playerGame1 = playerWantsToPlay(tournament, player1, null);
-        PlayerGame playerGame2 = playerWantsToPlay(tournament, player2, null);
-        PlayerGame playerGame3 = playerWantsToPlay(tournament, player3, null);
-
-        GameField field1 = playerGame1.getGame().getField();
-        GameField field2 = playerGame2.getGame().getField();
-        GameField field3 = playerGame3.getGame().getField();
-
-        assertGroup(field1, field2)
-                .notIn(field3)
+        assertGroup(0, 1)
+                .notIn(2)
                 .check();
 
         // when
-        playerGames.remove(player1);
+        playerGames.remove(players.get(0));
 
         // then
-        field1 = playerGame1.getGame().getField();
-        field2 = playerGame2.getGame().getField();
-        field3 = playerGame3.getGame().getField();
-
-        assertGroup(field2, field3)
+        assertGroup(1, 2)
+                .isNull(0)
                 .check();
-        assertEquals(null, field1);
 
         // when
-        Player player4 = new Player("player4");
-        Player player5 = new Player("player5");
-
-        PlayerGame playerGame4 = playerWantsToPlay(tournament, player4, null);
-        PlayerGame playerGame5 = playerWantsToPlay(tournament, player5, null);
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
 
         // then
-        field1 = playerGame1.getGame().getField();
-        field2 = playerGame2.getGame().getField();
-        field3 = playerGame3.getGame().getField();
-        GameField field4 = playerGame4.getGame().getField();
-        GameField field5 = playerGame5.getGame().getField();
-
-        assertGroup(field2, field3)
-                .notIn(field4, field5)
+        assertGroup(1, 2)
+                .notIn(3, 4)
+                .isNull(0)
                 .check();
-        assertEquals(null, field1);
 
         // when
-        playerGames.remove(player2);
+        playerGames.remove(players.get(1));
 
         // then
-        field1 = playerGame1.getGame().getField();
-        field2 = playerGame2.getGame().getField();
-        field3 = playerGame3.getGame().getField();
-        field4 = playerGame4.getGame().getField();
-        field5 = playerGame5.getGame().getField();
-
-        assertGroup(field4, field5)
-                .notIn(field3)
+        assertGroup(3, 4)
+                .notIn(2)
+                .isNull(0, 1)
                 .check();
-        assertEquals(null, field1);
-        assertEquals(null, field2);
 
         // when
-        Player player6 = new Player("player6");
-
-        PlayerGame playerGame6 = playerWantsToPlay(tournament, player6, null);
+        playerWantsToPlay(tournament);
 
         // then
-        field1 = playerGame1.getGame().getField();
-        field2 = playerGame2.getGame().getField();
-        field3 = playerGame3.getGame().getField();
-        field4 = playerGame4.getGame().getField();
-        field5 = playerGame5.getGame().getField();
-        GameField field6 = playerGame6.getGame().getField();
-
-        assertGroup(field4, field5)
-                .notIn(field3, field6)
+        assertGroup(3, 4)
+                .notIn(2, 5)
+                .isNull(0, 1)
                 .check();
-        assertEquals(null, field1);
-        assertEquals(null, field2);
     }
+
+    // TODO shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTournament_whenRemove сделать такой же тест для других типов комнат
 }
