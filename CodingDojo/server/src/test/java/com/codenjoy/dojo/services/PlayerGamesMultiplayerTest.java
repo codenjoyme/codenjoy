@@ -326,7 +326,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(0));
+        remove(0);
 
         // then
         assertGroup(0)
@@ -346,7 +346,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(0));
+        remove(0);
 
         // then
         assertGroup(1, 2)
@@ -364,7 +364,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(1));
+        remove(1);
 
         // then
         assertGroup(3, 4)
@@ -396,7 +396,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(0));
+        remove(0);
 
         // then
         assertGroup(1, 2)
@@ -415,7 +415,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(1));
+        remove(1);
 
         // then
         assertGroup(2, 5)
@@ -447,7 +447,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(0));
+        remove(0);
 
         // then
         assertGroup(1, 2, 3)
@@ -467,7 +467,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(1));
+        remove(1);
 
         // then
         assertGroup(2, 3, 5)
@@ -502,7 +502,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(0));
+        remove(0);
 
         // then
         assertGroup(1, 2, 3)
@@ -522,7 +522,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(1));
+        remove(1);
 
         // then
         assertGroup(2, 3, 5)
@@ -556,7 +556,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(0));
+        remove(0);
 
         // then
         assertGroup(1, 2, 3, 4)
@@ -574,7 +574,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerGames.remove(players.get(5));
+        remove(5);
 
         // then
         assertGroup(1, 2, 3, 4, 6, 7)
@@ -589,6 +589,160 @@ public class PlayerGamesMultiplayerTest {
         // then
         assertGroup(1, 2, 3, 4, 6, 7, 8, 9, 10)
                 .isNull(0, 5)
+                .check();
+    }
+
+    private void remove(int index) {
+        playerGames.remove(players.get(index));
+    }
+
+    @Test
+    public void shouldMixSeveralGameTypes() {
+        // given
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+
+        assertGroup(0, 1, 2, 3, 4)
+                .check();
+
+        // when
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+
+        // then
+        assertGroup(0, 1, 2, 3, 4)
+                .notIn(5, 6, 7)
+                .check();
+
+        // when
+        playerWantsToPlay(single);
+
+        // then
+        assertGroup(0, 1, 2, 3, 4)
+                .notIn(5, 6, 7)
+                .notIn(8)
+                .check();
+
+        // when
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+
+        // then
+        assertGroup(0, 1, 2, 3, 4)
+                .notIn(5, 6, 7)
+                .notIn(8)
+                .notIn(9, 10)
+                .check();
+
+        // when
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+
+        // then
+        assertGroup(0, 1, 2, 3, 4)
+                .notIn(5, 6, 7)
+                .notIn(8)
+                .notIn(9, 10)
+                .notIn(11, 12, 13)
+                .check();
+
+        // when
+        remove(0);
+        remove(6);
+        remove(10);
+        remove(13);
+
+        // then
+        assertGroup(1, 2, 3, 4)
+                .notIn(5, 7)
+                .notIn(8)
+                .notIn(9)
+                .notIn(11, 12)
+                .isNull(0, 6, 10, 13)
+                .check();
+
+        // when
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+
+        // then
+        assertGroup(1, 2, 3, 4, 14, 15)
+                .notIn(5, 7)
+                .notIn(8)
+                .notIn(9)
+                .notIn(11, 12)
+                .isNull(0, 6, 10, 13)
+                .check();
+
+        // when
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+
+        // then
+        assertGroup(1, 2, 3, 4, 14, 15)
+                .notIn(5, 7, 16, 17)
+                .notIn(8)
+                .notIn(9)
+                .notIn(11, 12)
+                .notIn(18)
+                .isNull(0, 6, 10, 13)
+                .check();
+
+        // when
+        playerWantsToPlay(single);
+        playerWantsToPlay(single);
+
+        // then
+        assertGroup(1, 2, 3, 4, 14, 15)
+                .notIn(5, 7, 16, 17)
+                .notIn(8)
+                .notIn(9)
+                .notIn(11, 12)
+                .notIn(18)
+                .notIn(19)
+                .notIn(20)
+                .isNull(0, 6, 10, 13)
+                .check();
+
+        // when
+        playerWantsToPlay(tournament);
+        playerWantsToPlay(tournament);
+
+        // then
+        assertGroup(1, 2, 3, 4, 14, 15)
+                .notIn(5, 7, 16, 17)
+                .notIn(8)
+                .notIn(9, 21)
+                .notIn(11, 12)
+                .notIn(18)
+                .notIn(19)
+                .notIn(20)
+                .notIn(22)
+                .isNull(0, 6, 10, 13)
+                .check();
+
+        // when
+        playerWantsToPlay(triple);
+        playerWantsToPlay(triple);
+
+        // then
+        assertGroup(1, 2, 3, 4, 14, 15)
+                .notIn(5, 7, 16, 17)
+                .notIn(8)
+                .notIn(9, 21)
+                .notIn(11, 12, 23)
+                .notIn(18)
+                .notIn(19)
+                .notIn(20)
+                .notIn(22)
+                .notIn(24)
+                .isNull(0, 6, 10, 13)
                 .check();
     }
 }
