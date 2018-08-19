@@ -543,5 +543,52 @@ public class PlayerGamesMultiplayerTest {
                 .check();
     }
 
-    // TODO shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTournament_whenRemove сделать такой же тест для других типов комнат
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenMultiple_whenRemove() {
+        // given
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+
+        assertGroup(0, 1, 2, 3, 4)
+                .check();
+
+        // when
+        playerGames.remove(players.get(0));
+
+        // then
+        assertGroup(1, 2, 3, 4)
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+
+        // then
+        assertGroup(1, 2, 3, 4, 5, 6, 7)
+                .isNull(0)
+                .check();
+
+        // when
+        playerGames.remove(players.get(5));
+
+        // then
+        assertGroup(1, 2, 3, 4, 6, 7)
+                .isNull(0, 5)
+                .check();
+
+        // when
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+        playerWantsToPlay(multiple);
+
+        // then
+        assertGroup(1, 2, 3, 4, 6, 7, 8, 9, 10)
+                .isNull(0, 5)
+                .check();
+    }
 }
