@@ -43,6 +43,7 @@
     <script src="${ctx}/resources/js/board-data-ws.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
     <script src="${ctx}/resources/js/canvases-text.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
     <script src="${ctx}/resources/js/layout.js"></script>
     <script src="${ctx}/resources/js/donate.js"></script>
     <script src="${ctx}/resources/js/joystick.js"></script>

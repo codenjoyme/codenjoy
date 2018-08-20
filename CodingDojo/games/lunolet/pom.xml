@@ -105,6 +105,7 @@
                         <inherited>false</inherited>
                         <configuration combine.self="override">
                             <target>
+                                <!-- TODO to use basic client build method on games/pom.xml -->
                                 <zip destfile="${client.sources}"
                                      basedir="."
                                      includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,

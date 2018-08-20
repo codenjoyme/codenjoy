@@ -19,16 +19,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var currentBoardSize = null;
 
-function initCanvases(contextPath, players, allPlayersScreen,
+ // TODO удалить неиспользуемые вещи, которые остались от default реализации
+function initCanvasesGame(contextPath, players, allPlayersScreen,
                 singleBoardGame, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, drawBoard)
 {
     var canvases = {};
     var infoPools = {};
-    currentBoardSize = boardSize;
     var plots = {};
     var plotsUrls = {};
     loadCanvasesData();
@@ -627,10 +626,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     function drawUserCanvas(playerName, data, allPlayersScreen) {
-        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
-            reloadCanvasesData();
-        }
-
         var canvas = canvases[playerName];
         canvas.boardSize = boardSize;
         drawBoard(getBoardDrawer(canvas, playerName, data, allPlayersScreen));
