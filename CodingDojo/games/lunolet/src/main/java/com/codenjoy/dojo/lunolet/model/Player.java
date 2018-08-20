@@ -46,10 +46,6 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero;
     }
 
-    public void reset() {
-        currentLevel = 0;
-    }
-
     public int getCurrentLevel() {
         return currentLevel;
     }
@@ -68,7 +64,7 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void resetLevels() {
-        reset();
+        currentLevel = 0;
         if (hero != null) {
             hero.die();
         }
@@ -78,7 +74,7 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public void newHero(Field field) {
         hero = new Hero(this);
-        hero.init(field);
+        hero.init(field.getLevel(currentLevel));
     }
 
     public void event(Events event) {

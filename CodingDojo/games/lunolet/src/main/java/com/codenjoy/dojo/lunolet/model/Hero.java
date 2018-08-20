@@ -49,10 +49,7 @@ public class Hero extends PlayerHero<Field> {
         isAlive = true;
     }
 
-    public void init(Field field) {
-        super.init(field);
-        Level level = field.getLevel(player.getCurrentLevel());
-
+    public void init(Level level) {
         simulator.reset();
         simulator.DryMass = level.DryMass;
         simulator.setRelief(level.Relief);

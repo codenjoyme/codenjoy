@@ -37,9 +37,7 @@ public class HeroTest {
         Player player = new Player(listener);
 
         Hero hero = new Hero(player);
-        Field field = mock(Field.class);
-        when(field.getLevel(anyInt())).thenReturn(new LevelManager().getLevel(0));
-        hero.init(field);
+        hero.init(new LevelManager().getLevel(0));
 
         Assert.assertEquals(0, player.getCurrentLevel());
         Assert.assertTrue(hero.isAlive());
