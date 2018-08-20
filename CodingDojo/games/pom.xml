@@ -67,6 +67,7 @@
         <module>kata</module>
         <module>reversi</module>
         <module>quadro</module>
+        <module>lunolet</module>
     </modules>
 
     <dependencyManagement>

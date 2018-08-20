@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.codenjoy</groupId>
+        <artifactId>games</artifactId>
+        <version>1.0.25</version>
+    </parent>
+
+    <artifactId>${module.name}-engine</artifactId>
+
+    <properties>
+        <module.name>lunolet</module.name>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <client.csharp-sources>${user.resources}/${module.name}-csharp-client.zip</client.csharp-sources>
+        <client.javascript-sources>${user.resources}/${module.name}-javascript-client.zip</client.javascript-sources>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-assert</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-reflect</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${user.resources}</directory>
+                            <includes>
+                                <include>**/${module.name}-servers.zip</include>
+                                <include>**/${module.name}-csharp-client.zip</include>
+                                <include>**/${module.name}-javascript-client.zip</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <inherited>false</inherited>
+                        <configuration combine.self="override">
+                            <target>
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/client/swing/*.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/model/VesselState.java,
+                                           src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                           README.*,
+                                           src/license/**,
+                                           **/pom.xml"
+                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                           src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                           **/target/**,
+                                           **/clients/**,
+                                           **/utils/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/**"
+                                     excludes="src/main/java/**,
+                                            src/main/webapp/**,
+                                            src/main/resources/**,
+                                            **/target/**,
+                                            **/clients/**,
+                                            **/utils/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.csharp-sources}"
+                                     basedir="src/main/clients/csharp"
+                                     includes="**/*"
+                                     excludes="**/bin/**,
+                                            **/obj/**,
+                                            **/packages/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.javascript-sources}"
+                                     basedir="src/main/clients/javascript"
+                                     includes="**/*"
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/*.zip"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/*.zip"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+            
+            <!-- Generate lunolet-levels.html -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-levels-html</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>
+                        <argument>-classpath</argument>
+                        <classpath/>
+                        <argument>com.codenjoy.dojo.lunolet.utility.PrintLevels</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
