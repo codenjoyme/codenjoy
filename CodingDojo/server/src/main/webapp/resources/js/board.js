@@ -61,7 +61,7 @@ function initBoardComponents(game) {
     initBoards(game.players, game.allPlayersScreen,
             game.gameName, game.playerName, game.contextPath);
 
-    if (initCanvasesGame) {
+    if (typeof initCanvasesGame == 'function') {
         initCanvasesGame(game.contextPath, game.players, game.allPlayersScreen,
                     game.multiplayerType, game.boardSize,
                     game.gameName, game.enablePlayerInfo,

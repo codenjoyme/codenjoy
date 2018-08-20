@@ -48,7 +48,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public boolean isAlive() {
-        return hero.isAlive();
+        return hero != null && hero.isAlive();
     }
 
     public List<Point2D.Double> getCrashes() {
