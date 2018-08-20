@@ -26,8 +26,10 @@ package com.codenjoy.dojo.lunolet.client.ai;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.lunolet.client.Board;
 import com.codenjoy.dojo.lunolet.model.VesselState;
+import com.codenjoy.dojo.lunolet.utility.PrintLevels;
 
 import java.awt.geom.Point2D;
+import java.util.Locale;
 
 public class DumbSolver implements Solver<Board> {
 
@@ -50,7 +52,7 @@ public class DumbSolver implements Solver<Board> {
             vMass = calculateFuelMassForGoingUp(board, 4.62);
             calculateTotalMassAndAngle(hMass, vMass);
             mass = preventVertigo(mass, board);
-            return String.format("message('go %f, %f, 1')", angle, mass);
+            return PrintLevels.stringFormat("message('go %f, %f, 1')", angle, mass);
         }
 
         boolean closeToTarget = closeToTarget(board, 2.0);
@@ -60,7 +62,7 @@ public class DumbSolver implements Solver<Board> {
             vMass = calculateFuelMassForGoingUp(board, 4.62);
             calculateTotalMassAndAngle(hMass, vMass);
             mass = preventVertigo(mass, board);
-            return String.format("message('go %f, %f, 1')", angle, mass);
+            return PrintLevels.stringFormat("message('go %f, %f, 1')", angle, mass);
         }
 
         if (fallDownTooFastOrLowFlying(board)) {
@@ -89,7 +91,7 @@ public class DumbSolver implements Solver<Board> {
         calculateTotalMassAndAngle(hMass, vMass);
 
         mass = preventVertigo(mass, board);
-        return String.format("message('go %f, %f, 1')", angle, mass);
+        return PrintLevels.stringFormat("message('go %f, %f, 1')", angle, mass);
     }
 
     private double preventVertigo(double mass, Board board) {

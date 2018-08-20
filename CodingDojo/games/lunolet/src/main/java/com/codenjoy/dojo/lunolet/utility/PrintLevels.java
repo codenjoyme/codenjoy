@@ -32,6 +32,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class PrintLevels {
 
@@ -87,7 +88,7 @@ public class PrintLevels {
     private static void printLevel(PrintWriter writer, LevelManager manager, int levelNum) {
         DecimalFormat format = new DecimalFormat("0.###########");
 
-        writer.println(String.format("<h2>Level %d</h2>", levelNum));
+        writer.println(stringFormat("<h2>Level %d</h2>", levelNum));
         Level level = manager.getLevel(levelNum);
 
         List<Point2D.Double> relief = level.Relief;
@@ -149,11 +150,11 @@ public class PrintLevels {
         int boxHeight = (int) (levelHeight / scale);
 
         writer.print("<svg xmlns=\"http://www.w3.org/2000/svg\" style=\"border: 1pt solid #ddd\" ");
-        writer.print(String.format("width=\"%d\" height=\"%d\" ", boxWidth, boxHeight));
-        writer.print(String.format("viewBox=\"%f %f %f %f\" ", levelLeft, levelBottom, levelWidth, levelHeight));
+        writer.print(stringFormat("width=\"%d\" height=\"%d\" ", boxWidth, boxHeight));
+        writer.print(stringFormat("viewBox=\"%f %f %f %f\" ", levelLeft, levelBottom, levelWidth, levelHeight));
         writer.println("transform=\"scale(1 -1)\">");
 
-        writer.print(String.format(
+        writer.print(stringFormat(
                 "<polyline stroke=\"black\" stroke-width=\"%d\" fill=\"none\" points=\"", Math.round(scale)));
         for (int i = 0; i < relief.size(); i++) {
             if (i > 0)
@@ -169,22 +170,26 @@ public class PrintLevels {
         double startY = level.VesselStatus.Y;
 
         // starting point
-        writer.println(String.format(
+        writer.println(stringFormat(
                 "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                 Math.round(scale), startX, startY - scale * 5, startX, startY + scale * 5));
-        writer.println(String.format(
+        writer.println(stringFormat(
                 "<line stroke=\"blue\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                 Math.round(scale), startX - scale * 5, startY, startX + scale * 5, startY));
         // target point
-        writer.println(String.format(
+        writer.println(stringFormat(
                 "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                 Math.round(scale), targetX, targetY - scale * 5, targetX, targetY + scale * 5));
-        writer.println(String.format(
+        writer.println(stringFormat(
                 "<line stroke=\"red\" stroke-width=\"%d\" x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" />",
                 Math.round(scale), targetX - scale * 5, targetY, targetX + scale * 5, targetY));
 
         writer.println("</svg>");
 
         writer.println();
+    }
+
+    public static String stringFormat(String string, Object... parameters) {
+        return String.format(Locale.US, string, parameters);
     }
 }

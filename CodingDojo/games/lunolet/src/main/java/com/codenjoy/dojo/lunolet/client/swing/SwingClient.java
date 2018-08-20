@@ -123,6 +123,7 @@ public class SwingClient extends JFrame implements ActionListener {
 
     private void connect() {
         try {
+            // TODO to use board url parsing like WebSocketRunner.runClient
             String server = String.format("ws://%s/codenjoy-contest/ws", SERVER_AND_PORT);
             URI uri = new URI(String.format("%s?user=%s&code=%s", server, USER_NAME, CODE));
 
