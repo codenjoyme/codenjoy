@@ -24,7 +24,6 @@ package com.codenjoy.dojo.lunolet.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.lunolet.client.Board;
 import com.codenjoy.dojo.lunolet.model.VesselState;
 
@@ -146,17 +145,5 @@ public class DumbSolver implements Solver<Board> {
 
     private boolean hSpeedIsNotZero(Board board) {
         return Math.abs(board.getHSpeed()) >= 0.001;
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
-    }
-
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.run(host,
-                name,
-                null,
-                new DumbSolver(),
-                new Board());
     }
 }

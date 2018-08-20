@@ -24,14 +24,14 @@ package com.codenjoy.dojo.lunolet.model;
 
 
 import com.codenjoy.dojo.lunolet.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Hero implements Joystick, Tickable {
+public class Hero extends PlayerHero<Field> {
 
     private Player player;
     private LevelManager levelManager;
@@ -41,13 +41,13 @@ public class Hero implements Joystick, Tickable {
     private Point2D.Double targetPoint2;
     private double levelLeft;
     private double levelRight;
-    private boolean isalive;
+    private boolean isAlive;
 
     public Hero(Player player) {
         this.player = player;
 
         simulator = new Simulator();
-        isalive = true;
+        isAlive = true;
     }
 
     public void init(LevelManager levelManager) {
@@ -100,7 +100,7 @@ public class Hero implements Joystick, Tickable {
     }
 
     public boolean isAlive() {
-        return isalive;
+        return isAlive;
     }
 
     public List<Point2D.Double> getLevelRelief() {
@@ -132,7 +132,7 @@ public class Hero implements Joystick, Tickable {
         //do nothing: no actions driven by real time
 
         if (!simulator.Status.isNotFinalState())
-            isalive = false;
+            isAlive = false;
     }
 
     @Override
@@ -173,7 +173,7 @@ public class Hero implements Joystick, Tickable {
         }
 
         if (command.equals("reset") || command.equals("die")) {
-            isalive = false; // player decided to die
+            isAlive = false; // player decided to die
             return;
         }
 

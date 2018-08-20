@@ -68,7 +68,9 @@ public class LevelManagerTest {
         Player player = new Player(listener);
         while (true) {
             int levelNum = manager.getLevelNumber();
-            player.newHero(manager);
+            Field field = mock(Field.class);
+            when(field.getLevels()).thenReturn(manager);
+            player.newHero(field);
             Hero hero = player.getHero();
             Assert.assertNotNull(hero);
             Assert.assertNotNull(hero.getLevelRelief());

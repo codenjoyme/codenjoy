@@ -23,19 +23,24 @@ package com.codenjoy.dojo.lunolet.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.lunolet.client.Board;
 import com.codenjoy.dojo.lunolet.client.ai.DumbSolver;
 import com.codenjoy.dojo.lunolet.model.*;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
-
-    private LunoletGame game;
 
     public GameRunner() {
         new Scores(0, settings);
@@ -47,12 +52,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String s, String s1) {
-        game = new LunoletGame(new LevelManager());
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+    public GameField createGame() {
+        return new Lunolet(() -> new LevelManager());
     }
 
     @Override
@@ -71,13 +72,28 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public boolean isSingleBoard() {
-        return GameMode.NOT_SINGLE_MODE;
+    public Class<? extends Solver> getAI() {
+        return DumbSolver.class;
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        DumbSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
-        return true;
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+        return new Player(listener);
+    }
+
+    @Override
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.SINGLE;
+    }
+
+    @Override
+    public PrinterFactory getPrinterFactory() {
+        return (PrinterFactory<Elements, Player>) (reader, player)
+                -> new LunoletPrinter(player);
     }
 }

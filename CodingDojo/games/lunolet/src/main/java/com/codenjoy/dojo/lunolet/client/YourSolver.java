@@ -34,12 +34,6 @@ import java.awt.geom.Point2D;
 
 public class YourSolver implements Solver<Board> {
 
-    // this is your email
-    private static final String USER_NAME = "your@email.com";
-    // you can get this code after registration on the server with your email
-    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-    private static final String CODE = "1889919902398150091";
-
     private Dice dice;
     private Board board;
 
@@ -49,7 +43,6 @@ public class YourSolver implements Solver<Board> {
 
     @Override
     public String get(Board board) {
-
         Point2D.Double target = board.getTarget();
         Point2D.Double current = board.getPoint();
 
@@ -71,10 +64,9 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        WebSocketRunner.runOnServer("127.0.0.1:8080", // to use for local server
-//        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
-                USER_NAME,
-                CODE,
+        WebSocketRunner.runClient(
+                // paste here board page url from browser after registration
+                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 new YourSolver(new RandomDice()),
                 new Board());
     }

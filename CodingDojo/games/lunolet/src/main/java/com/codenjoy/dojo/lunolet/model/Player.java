@@ -25,44 +25,34 @@ package com.codenjoy.dojo.lunolet.model;
 
 import com.codenjoy.dojo.lunolet.services.Events;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player {
+public class Player extends GamePlayer<Hero, Field> {
 
-    private EventListener listener;
-    private int maxScore;
-    private int score;
     private LevelManager levelManager;
     private Hero hero;
     private List<Point2D.Double> crashes;
 
     public Player(EventListener listener) {
-        this.listener = listener;
-        crashes = new LinkedList<Point2D.Double>();
-        clearScore();
+        super(listener);
+        crashes = new LinkedList<>();
     }
 
     public Hero getHero() {
         return hero;
     }
 
+    @Override
+    public boolean isAlive() {
+        return hero.isAlive();
+    }
+
     public List<Point2D.Double> getCrashes() {
         return crashes;
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void clearScore() {
-        score = 0;
     }
 
     public void resetLevels() {
@@ -75,29 +65,22 @@ public class Player {
         crashes.clear();
     }
 
-    private void increaseScore() {
-        score = score + 10;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public void newHero(LevelManager levelManager) {
+    @Override
+    public void newHero(Field field) {
         hero = new Hero(this);
-        this.levelManager = levelManager;
+        this.levelManager = field.getLevels();
         hero.init(levelManager);
     }
 
     public void event(Events event) {
         if (event == Events.LANDED) {
-            increaseScore();
             levelManager.levelUp();
             crashes.clear();
         } else if (event == Events.CRASHED) {
             addCrash(hero.getVesselStatus().getPoint());
         }
 
-        if (listener != null) {
-            listener.event(event);
-        }
+        super.event(event);
     }
 
     private void addCrash(Point2D.Double ptCrash) {

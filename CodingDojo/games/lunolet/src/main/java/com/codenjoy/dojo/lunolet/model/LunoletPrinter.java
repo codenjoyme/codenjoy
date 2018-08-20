@@ -32,16 +32,14 @@ import java.util.List;
 
 public class LunoletPrinter implements Printer<JSONObject> {
 
-    private LunoletGame game;
     private Player player;
 
-    public LunoletPrinter(LunoletGame game, Player player) {
-        this.game = game;
+    public LunoletPrinter(Player player) {
         this.player = player;
     }
 
     @Override
-    public JSONObject print() {
+    public JSONObject print(Object... parameters) {
         List<Point2D.Double> relief = player.getHero().getLevelRelief();
         List<Point2D.Double> history = player.getHero().getVesselHistory();
         VesselStatus vesselStatus = player.getHero().getVesselStatus();

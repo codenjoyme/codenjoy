@@ -30,6 +30,7 @@ import java.awt.geom.Point2D;
 import java.util.*;
 
 public class LevelManager {
+
     private int currentLevel;
     private List<Level> levels;
 

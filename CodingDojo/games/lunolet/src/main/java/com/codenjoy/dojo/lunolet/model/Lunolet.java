@@ -23,21 +23,20 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class LunoletGame implements Tickable {
+public class Lunolet implements Field {
 
-    private LevelManager levelManager;
+    private Supplier<LevelManager> levelManager;
     private List<Player> players;
 
-    public LunoletGame(LevelManager levelManager) {
+    public Lunolet(Supplier<LevelManager> levelManager) {
         this.levelManager = levelManager;
-
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
     @Override
@@ -47,24 +46,33 @@ public class LunoletGame implements Tickable {
         }
     }
 
-    public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
+    @Override
+    public BoardReader reader() {
+        return null; // do nothing, because this game use custom Printer
     }
 
+    @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
-        } else {
-            player.clearScore();
         }
-        player.newHero(levelManager);
+        player.newHero(this);
     }
 
+    @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public void clearScore() {
+        for (Player player : players) {
+            player.resetLevels();
+        }
+    }
+
+    @Override
+    public LevelManager getLevels() {
+        return levelManager.get();
     }
 }
