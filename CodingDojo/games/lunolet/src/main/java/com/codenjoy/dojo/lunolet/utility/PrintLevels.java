@@ -57,13 +57,13 @@ public class PrintLevels {
             writer.println();
 
             LevelManager manager = new LevelManager();
+            int levelNum = 0;
 
             while (true) {
-                printLevel(writer, manager);
+                printLevel(writer, manager, levelNum);
 
-                manager.levelUp();
-                int levelNum = manager.getLevelNumber();
-                if (levelNum == 0 || levelNum >= 50)
+                levelNum++;
+                if (levelNum == manager.levelsCount() || levelNum >= 50)
                     break;
             }
 
@@ -84,12 +84,11 @@ public class PrintLevels {
         }
     }
 
-    private static void printLevel(PrintWriter writer, LevelManager manager) {
+    private static void printLevel(PrintWriter writer, LevelManager manager, int levelNum) {
         DecimalFormat format = new DecimalFormat("0.###########");
 
-        int levelNum = manager.getLevelNumber();
         writer.println(String.format("<h2>Level %d</h2>", levelNum));
-        Level level = manager.getLevel();
+        Level level = manager.getLevel(levelNum);
 
         List<Point2D.Double> relief = level.Relief;
         double targetX = level.TargetX;

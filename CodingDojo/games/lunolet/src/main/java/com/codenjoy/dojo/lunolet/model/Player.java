@@ -33,7 +33,7 @@ import java.util.List;
 
 public class Player extends GamePlayer<Hero, Field> {
 
-    private LevelManager levelManager;
+    private int currentLevel;
     private Hero hero;
     private List<Point2D.Double> crashes;
 
@@ -46,6 +46,18 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero;
     }
 
+    public void reset() {
+        currentLevel = 0;
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void levelUp() {
+        currentLevel++;
+    }
+
     @Override
     public boolean isAlive() {
         return hero != null && hero.isAlive();
@@ -56,11 +68,9 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void resetLevels() {
-        if (levelManager != null) {
-            levelManager.reset();
-        }
+        reset();
         if (hero != null) {
-            hero.init(levelManager);
+            hero.die();
         }
         crashes.clear();
     }
@@ -68,13 +78,12 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public void newHero(Field field) {
         hero = new Hero(this);
-        this.levelManager = field.getLevels();
-        hero.init(levelManager);
+        hero.init(field);
     }
 
     public void event(Events event) {
         if (event == Events.LANDED) {
-            levelManager.levelUp();
+            levelUp();
             crashes.clear();
         } else if (event == Events.CRASHED) {
             addCrash(hero.getVesselStatus().getPoint());

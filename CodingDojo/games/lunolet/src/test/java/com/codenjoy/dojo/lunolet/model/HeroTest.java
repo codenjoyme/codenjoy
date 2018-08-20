@@ -33,14 +33,15 @@ public class HeroTest {
 
     @Test
     public void initAndThenUp() {
-        LevelManager levelManager = new LevelManager();
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);
 
         Hero hero = new Hero(player);
-        hero.init(levelManager);
+        Field field = mock(Field.class);
+        when(field.getLevel(anyInt())).thenReturn(new LevelManager().getLevel(0));
+        hero.init(field);
 
-        Assert.assertEquals(0, hero.getLevelNumber());
+        Assert.assertEquals(0, player.getCurrentLevel());
         Assert.assertTrue(hero.isAlive());
         Assert.assertNotNull(hero.getLevelRelief());
         Assert.assertNotNull(hero.getVesselStatus());
@@ -51,7 +52,7 @@ public class HeroTest {
 
         hero.up();
 
-        Assert.assertEquals(0, hero.getLevelNumber());
+        Assert.assertEquals(0, player.getCurrentLevel());
         Assert.assertTrue(hero.isAlive());
         Assert.assertNotNull(hero.getLevelRelief());
         Assert.assertNotNull(hero.getVesselStatus());

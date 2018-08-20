@@ -36,22 +36,21 @@ public class LevelManagerTest {
     public void initializeAndCountLevelsTest() {
         LevelManager manager = new LevelManager();
 
-        assertEquals(0, manager.getLevelNumber());
-        Level level0 = manager.getLevel();
+        int levelNum = 0;
+        Level level0 = manager.getLevel(levelNum);
         Assert.assertNotNull(level0);
         Assert.assertNotNull(level0.Relief);
         Assert.assertNotNull(level0.VesselStatus);
 
         int levelNumExpected = 1;
         while (true) {
-            manager.levelUp();
+            levelNum++;
 
-            int levelNum = manager.getLevelNumber();
-            if (levelNum == 0)
+            if (levelNum == manager.levelsCount())
                 break; // start of another round
             assertEquals(levelNumExpected, levelNum);
 
-            Level level = manager.getLevel();
+            Level level = manager.getLevel(levelNum);
             Assert.assertNotNull(level);
             Assert.assertNotNull(level.Relief);
             Assert.assertNotNull(level.VesselStatus);
@@ -66,22 +65,24 @@ public class LevelManagerTest {
         LevelManager manager = new LevelManager();
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);
+        Field field = mock(Field.class);
+        when(field.getLevel(anyInt()))
+                .thenAnswer(inv -> manager.getLevel(inv.getArgumentAt(0, Integer.class)));
+        int levelNum = 0;
         while (true) {
-            int levelNum = manager.getLevelNumber();
-            Field field = mock(Field.class);
-            when(field.getLevels()).thenReturn(manager);
             player.newHero(field);
             Hero hero = player.getHero();
             Assert.assertNotNull(hero);
             Assert.assertNotNull(hero.getLevelRelief());
             Assert.assertNotNull(hero.getVesselStatus());
-            Assert.assertEquals(levelNum, hero.getLevelNumber());
+            Assert.assertEquals(levelNum, player.getCurrentLevel());
             Assert.assertTrue(hero.isAlive());
             Assert.assertNotNull(hero.getTarget());
             Assert.assertNotNull(hero.getVesselHistory());
 
-            manager.levelUp();
-            if (manager.getLevelNumber() == 0)
+            player.levelUp();
+            levelNum++;
+            if (player.getCurrentLevel() == manager.levelsCount())
                 break; // start of another round
         }
     }

@@ -31,10 +31,10 @@ import java.util.function.Supplier;
 
 public class Lunolet implements Field {
 
-    private Supplier<LevelManager> levelManager;
+    private LevelManager levelManager;
     private List<Player> players;
 
-    public Lunolet(Supplier<LevelManager> levelManager) {
+    public Lunolet(LevelManager levelManager) {
         this.levelManager = levelManager;
         players = new LinkedList<>();
     }
@@ -72,7 +72,7 @@ public class Lunolet implements Field {
     }
 
     @Override
-    public LevelManager getLevels() {
-        return levelManager.get();
+    public Level getLevel(int level) {
+        return levelManager.getLevel(level);
     }
 }

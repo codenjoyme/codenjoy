@@ -31,29 +31,17 @@ import java.util.*;
 
 public class LevelManager {
 
-    private int currentLevel;
     private List<Level> levels;
 
     public LevelManager() {
         loadLevels();
-        reset();
     }
 
-    public void reset() {
-        currentLevel = 0;
-    }
-
-    public Level getLevel() {
-        return levels.get(currentLevel);
-    }
-
-    public int getLevelNumber() {
-        return currentLevel;
-    }
-
-    public void levelUp() {
-        // roll levels
-        currentLevel = currentLevel < levels.size() - 1 ? currentLevel + 1 : 0;
+    public Level getLevel(int level) {
+        if (level >= levels.size()) {
+            level = 0;
+        }
+        return levels.get(level);
     }
 
     private void loadLevels() {
@@ -293,5 +281,9 @@ public class LevelManager {
         level.VesselStatus.State = VesselState.START;
 
         return level;
+    }
+
+    public int levelsCount() {
+        return levels.size();
     }
 }

@@ -53,7 +53,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame() {
-        return new Lunolet(() -> new LevelManager());
+        return new Lunolet(new LevelManager());
     }
 
     @Override

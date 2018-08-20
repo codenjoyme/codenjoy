@@ -34,7 +34,6 @@ import java.util.regex.Pattern;
 public class Hero extends PlayerHero<Field> {
 
     private Player player;
-    private LevelManager levelManager;
     private Simulator simulator;
     private Point2D.Double target;
     private Point2D.Double targetPoint1;
@@ -50,9 +49,9 @@ public class Hero extends PlayerHero<Field> {
         isAlive = true;
     }
 
-    public void init(LevelManager levelManager) {
-        this.levelManager = levelManager;
-        Level level = levelManager.getLevel();
+    public void init(Field field) {
+        super.init(field);
+        Level level = field.getLevel(player.getCurrentLevel());
 
         simulator.reset();
         simulator.DryMass = level.DryMass;
@@ -121,10 +120,6 @@ public class Hero extends PlayerHero<Field> {
 
     public Point2D.Double getTarget() {
         return target;
-    }
-
-    public int getLevelNumber() {
-        return levelManager.getLevelNumber();
     }
 
     @Override
@@ -221,5 +216,9 @@ public class Hero extends PlayerHero<Field> {
                 player.event(Events.CRASHED);
             }
         }
+    }
+
+    public void die() {
+        isAlive = false;
     }
 }
