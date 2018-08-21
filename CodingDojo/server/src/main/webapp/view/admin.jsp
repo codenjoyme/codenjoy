@@ -250,7 +250,14 @@
                                 </c:choose>
                                 <td><a href="${ctx}/admin31415?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.name}?code=${player.code}">ViewGame</a></td>
-                                <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
+                                <c:choose>
+                                    <c:when test="${player.aiPlayer}">
+                                        <td>AILoaded</td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
                             <c:otherwise>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>

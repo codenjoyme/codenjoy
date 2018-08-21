@@ -90,6 +90,7 @@ public class SaveServiceImpl implements SaveService {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCode(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
+            info.setAIPlayer(player.getAI() != null);
             map.put(player.getName(), info);
         }
 

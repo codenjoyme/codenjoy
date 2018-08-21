@@ -28,6 +28,7 @@ public class PlayerInfo extends Player {
     private boolean saved;
     private boolean active;
     private boolean hidden;
+    private boolean hasAI;
 
     public PlayerInfo() {
         //
@@ -78,5 +79,13 @@ public class PlayerInfo extends Player {
 
     public void setHidden(boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public boolean isAiPlayer() {
+        return hasAI;
+    }
+
+    public void setAIPlayer(boolean hasAI) {
+        this.hasAI = hasAI;
     }
 }
