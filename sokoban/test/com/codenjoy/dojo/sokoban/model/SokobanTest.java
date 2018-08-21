@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
 import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.sokoban.model.game.Sokoban;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Box;
@@ -336,6 +337,22 @@ public class SokobanTest {
         }
         assertE(testBoardAfter);
     }
+
+    @Test
+    public void shouldReadlevelFromTxtResource() {
+        String testBoardInit = TextIOHelper.getStringFromResources(0);
+        givenF(testBoardInit);
+        assertE(testBoardInit);
+    }
+
+    @Test
+    public void shouldReadLevelNonQuadroFromTxtResource() {
+        String testBoardInit = TextIOHelper.getStringFromResources(1);
+        givenF(testBoardInit);
+        assertE(testBoardInit);
+    }
+
+
 
 //    @Test
 //    public void justToChecksSomeBehaviours() {
