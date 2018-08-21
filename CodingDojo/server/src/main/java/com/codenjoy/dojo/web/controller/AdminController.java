@@ -308,11 +308,7 @@ public class AdminController {
     }
 
     private String getGameName(HttpServletRequest request) {
-        String gameName = request.getParameter(GAME_NAME);
-        if (gameName == null) {
-            gameName = (String) request.getAttribute(GAME_NAME);
-        }
-        return gameName;
+        return request.getParameter(GAME_NAME);
     }
 
     private void prepareList(Model model, AdminSettings settings, String gameName) {
