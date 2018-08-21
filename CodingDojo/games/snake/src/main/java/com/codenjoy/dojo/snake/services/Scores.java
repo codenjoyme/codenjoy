@@ -69,6 +69,7 @@ public class Scores implements PlayerScores {
             snakeEatStone();
         }
         score = Math.max(0, score);
+        length = Math.max(startSnakeLength.getValue(), score); // TODO test me
     }
 
     private void snakeIsDead() {
