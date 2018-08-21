@@ -23,6 +23,7 @@ package com.codenjoy.dojo.transport.auth;
  */
 
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.PlayerServiceImpl;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,13 @@ public class SecureAuthenticationService implements AuthenticationService {
     @Override
     public String authenticate(HttpServletRequest request) {
         String user = request.getParameter("user");
-        if (user.endsWith(PlayerServiceImpl.BOT_EMAIL_SUFFIX)) {
+        if (user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
             return user;
         }
         String code = request.getParameter("code");
+        if (code.equals(WebSocketRunner.BOT_CODE)) { // TODO test me
+            return user;
+        }
         if (registration.checkUser(user, code)) {
             return user;
         } else {

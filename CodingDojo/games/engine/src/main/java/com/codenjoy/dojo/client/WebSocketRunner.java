@@ -43,6 +43,9 @@ public class WebSocketRunner implements Closeable {
     public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
     public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
     public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
+    public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
+    public static String BOT_CODE = "12345678901234567890";
+
 
     public static boolean PRINT_TO_CONSOLE = true;
     public static int TIMEOUT = 5000;
@@ -70,7 +73,7 @@ public class WebSocketRunner implements Closeable {
 
     public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
-        return run(LOCAL, CodenjoyContext.get(), aiName, null, solver, board, 1);
+        return run(LOCAL, CodenjoyContext.get(), aiName, BOT_CODE, solver, board, 1);
     }
 
     private static WebSocketRunner run(String server, String context,

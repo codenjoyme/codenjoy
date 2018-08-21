@@ -49,8 +49,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
 
     private static Logger logger = DLoggerFactory.getLogger(PlayerServiceImpl.class);
-    public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
-
+    
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
     private boolean registration = true;
@@ -132,12 +131,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAIIfNeeded(String forPlayer, String gameName) {
-        if (forPlayer.endsWith(BOT_EMAIL_SUFFIX)) return;
+        if (forPlayer.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) return;
 
         GameType gameType = gameService.getGame(gameName);
 
         // если в эту игру ai еще не играет
-        String aiName = gameName + BOT_EMAIL_SUFFIX;
+        String aiName = gameName + WebSocketRunner.BOT_EMAIL_SUFFIX;
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
@@ -161,7 +160,7 @@ public class PlayerServiceImpl implements PlayerService {
         GameType gameType = gameService.getGame(gameName);
         Player player = getPlayer(gameType, playerSave);
 
-        if (name.endsWith(BOT_EMAIL_SUFFIX)) {
+        if (name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
             Closeable runner = createAI(gameType, name);
             player.setAI(runner);
         }

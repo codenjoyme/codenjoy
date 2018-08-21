@@ -252,7 +252,7 @@
                                 <td><a href="${ctx}/board/player/${player.name}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.aiPlayer}">
-                                        <td>AILoaded</td>
+                                        <td>Loaded</td>
                                     </c:when>
                                     <c:otherwise>
                                         <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
