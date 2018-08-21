@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.screen.ws;
+package com.codenjoy.dojo.services;
 
 /*-
  * #%L
@@ -22,35 +22,27 @@ package com.codenjoy.dojo.transport.screen.ws;
  * #L%
  */
 
-
-import com.codenjoy.dojo.transport.auth.DefaultAuthenticationService;
-import com.codenjoy.dojo.transport.ws.PlayerSocket;
-import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
-import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
-import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-public class ScreenWebSocketServlet extends WebSocketServlet{
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+@WebListener
+public class ApplicationStarted implements ServletContextListener {
 
     @Autowired
-    @Qualifier("screenPlayerTransport")
-    private PlayerTransport transport;
-
-    @Autowired
-    private DefaultAuthenticationService authentication;
+    private TimerService timer;
 
     @Override
-    public void configure(WebSocketServletFactory webSocketServletFactory) {
+    public void contextInitialized(ServletContextEvent sce) {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+        timer.start();
+    }
 
-        PlayerSocketCreator creator =
-                new PlayerSocketCreator(transport,
-                        authentication,
-                        PlayerSocket.CLIENT_SEND_FIRST);
-
-        webSocketServletFactory.setCreator(creator);
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        // do nothing
     }
 }

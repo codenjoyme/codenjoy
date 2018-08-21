@@ -23,31 +23,40 @@ package com.codenjoy.dojo.transport.control;
  */
 
 
-import com.codenjoy.dojo.transport.ApplicationContextListener;
-import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.SecureAuthenticationService;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 public class ControlWebSocketServlet extends WebSocketServlet {
 
+    @Autowired
+    private TimerService timer;
+
+    @Autowired
+    @Qualifier("controlPlayerTransport")
+    private PlayerTransport transport;
+
+    @Autowired
+    private SecureAuthenticationService authentication;
+
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+
         PlayerSocketCreator creator =
-                new PlayerSocketCreator(getPlayerTransport(),
-                        getAuthenticationService(),
+                new PlayerSocketCreator(transport,
+                        authentication,
                         PlayerSocket.SERVER_SEND_FIRST);
+
         webSocketServletFactory.setCreator(creator);
-    }
 
-    private PlayerTransport getPlayerTransport() {
-        return ApplicationContextListener.getContext().getBean("controlPlayerTransport", PlayerTransport.class);
-    }
-
-    public AuthenticationService getAuthenticationService() {
-        return ApplicationContextListener.getContext().getBean(SecureAuthenticationService.class);
+        timer.resume();
     }
 }
