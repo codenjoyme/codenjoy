@@ -49,5 +49,4 @@ public class Player extends GamePlayer<Hero, Field> {
     public boolean isAlive() {
         return hero != null && hero.isAlive();
     }
-
 }

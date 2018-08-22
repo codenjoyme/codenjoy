@@ -86,6 +86,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:4\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'I',\n" +
                         "1:    'J',\n" +
@@ -101,6 +102,7 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -146,6 +148,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -191,6 +194,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -234,10 +238,11 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@83b407\n" +
+                        "Fire Event: Event[figuresDropped:1:0]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'      I    I    I    I   ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
@@ -310,10 +315,11 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@153f17c\n" +
+                        "Fire Event: Event[glassOverflown:1:0]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
@@ -359,6 +365,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
@@ -404,6 +411,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
@@ -449,6 +457,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
@@ -492,10 +501,11 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@67c67e\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'           L    L    LL  ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'S',\n" +
                         "1:  'futureFigures':[\n" +
@@ -570,6 +580,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'           L    L    LL  ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'S',\n" +
                         "1:  'futureFigures':[\n" +
@@ -642,10 +653,11 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@116f93d\n" +
+                        "Fire Event: Event[figuresDropped:1:4]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':' SS  SS    L    L    LL  ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'O',\n" +
                         "1:  'futureFigures':[\n" +
@@ -746,10 +758,11 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@1fc609f\n" +
+                        "Fire Event: Event[glassOverflown:1:0]\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
@@ -795,6 +808,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
@@ -840,6 +854,7 @@ public class SmokeTest {
                         "1:Answer: message('DOWN')\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
+                        "1:  'board':'                         ',\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +

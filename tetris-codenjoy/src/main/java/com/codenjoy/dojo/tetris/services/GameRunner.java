@@ -28,11 +28,14 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
@@ -114,6 +117,8 @@ public class GameRunner extends AbstractGameType {
 
     @Override
     public PrinterFactory getPrinterFactory() {
+        PrinterFactoryImpl graphic = new PrinterFactoryImpl();
+
         return PrinterFactory.get((BoardReader reader, Player player) -> {
             JSONObject result = new JSONObject();
 
@@ -122,6 +127,19 @@ public class GameRunner extends AbstractGameType {
             Hero hero = player.getHero();
             array.put(hero.getCurrentFigurePlots());
             array.put(hero.getDroppedPlots());
+
+            Printer<String> graphicPrinter = graphic.getPrinter(new BoardReader() {
+                @Override
+                public int size() {
+                    return hero.boardSize();
+                }
+
+                @Override
+                public Iterable<? extends Point> elements() {
+                    return hero.getDroppedPlots();
+                }
+            }, player);
+            result.put("board", graphicPrinter.print().replace("\n", ""));
 
             result.put("currentFigureType", hero.getCurrentFigureType());
             result.put("currentFigurePoint", hero.getCurrentFigurePoint());

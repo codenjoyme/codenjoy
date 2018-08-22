@@ -62,6 +62,11 @@ public class Events {
         return new Events(FIGURES_DROPPED, levelNumber, figureIndex);
     }
 
+    @Override
+    public String toString() {
+        return String.format("Event[%s:%s:%s]", type, level, data);
+    }
+
     public int getLevel() {
         return level;
     }

@@ -187,4 +187,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 .map(f -> f.getColor().ch())
                 .collect(toList());
     }
+
+    public int boardSize() {
+        return field.size();
+    }
 }
