@@ -23,7 +23,6 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,6 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -49,6 +47,7 @@ public class LevelsTest {
     @Mock
     private GameLevel level2;
     private Levels levels;
+
     @Mock
     private ChangeLevelListener levelChangedListener;
 

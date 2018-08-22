@@ -23,9 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.Randomizer;
-
-import java.util.Random;
+import com.codenjoy.dojo.services.Dice;
 
 /**
  * User: oleksandr.baglai
@@ -34,22 +32,23 @@ import java.util.Random;
  */
 public class ProbabilityRandomizer implements Randomizer {
 
-    private Random random = new Random();
+    private Dice dice;
     private int lastFigureProbability;
 
-    public ProbabilityRandomizer(int lastFigureProbability) {
+    public ProbabilityRandomizer(Dice dice, int lastFigureProbability) {
+        this.dice = dice;
         this.lastFigureProbability = lastFigureProbability;
     }
 
     @Override
     public int getNextNumber(int count) {
-        int i = random.nextInt(count);
+        int i = dice.next(count);
         if (i == count - 1) {
-            int j = random.nextInt(100);
+            int j = dice.next(100);
             if (j <= lastFigureProbability) {
                 return i;
             } else {
-                return random.nextInt(count - 1);
+                return dice.next(count - 1);
             }
         }
         return i;

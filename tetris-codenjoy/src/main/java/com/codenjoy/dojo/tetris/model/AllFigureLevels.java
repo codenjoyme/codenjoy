@@ -24,6 +24,8 @@ package com.codenjoy.dojo.tetris.model;
 
 
 
+import com.codenjoy.dojo.services.Dice;
+
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 
 /**
@@ -33,8 +35,8 @@ import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
  */
 public class AllFigureLevels extends Levels {
 
-    public AllFigureLevels(PlayerFigures queue) {
-        super(new FigureTypesLevel(queue,
+    public AllFigureLevels(Dice dice, PlayerFigures queue) {
+        super(new FigureTypesLevel(dice, queue,
                 new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4),
                 O, I, J, L, S, Z, T));
     }

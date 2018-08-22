@@ -23,19 +23,15 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.*;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
-import com.codenjoy.dojo.tetris.model.ProbabilityRandomizerTest;
-import com.codenjoy.dojo.tetris.model.Randomizer;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.fail;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class ProbabilityLevelsTest {
 
@@ -44,7 +40,8 @@ public class ProbabilityLevelsTest {
 
     @Before
     public void setUp() {
-        levels = new ProbabilityLevels(new PlayerFigures());
+        Dice dice = new RandomDice();
+        levels = new ProbabilityLevels(dice, new PlayerFigures());
         levels.setChangeLevelListener(mock(ChangeLevelListener.class));
     }
 

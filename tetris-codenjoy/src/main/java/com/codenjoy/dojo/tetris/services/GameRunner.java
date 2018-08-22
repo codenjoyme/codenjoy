@@ -35,7 +35,6 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
@@ -46,13 +45,10 @@ import java.util.Arrays;
 
 public class GameRunner extends AbstractGameType {
 
-    private Settings settings;
-
     private Parameter<String> gameLevels;
     private Parameter<Integer> glassSize;
 
     public GameRunner() {
-        settings = new SettingsImpl();;
         gameLevels = settings.addSelect("Game Levels", Arrays.asList("AllFigureLevels")).type(String.class);
         gameLevels.select(0);
         glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(20);
@@ -72,8 +68,8 @@ public class GameRunner extends AbstractGameType {
     }
 
     private Levels getLevels(PlayerFigures queue) {
-        String levelName = (String) settings.getParameter("gameLevels").getValue();
-        return new LevelsFactory().getGameLevels(queue, levelName);
+        String levelName = gameLevels.getValue();
+        return new LevelsFactory().getGameLevels(getDice(), queue, levelName);
     }
 
     @Override

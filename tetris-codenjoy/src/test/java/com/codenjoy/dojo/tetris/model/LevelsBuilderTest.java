@@ -23,18 +23,21 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class LevelsBuilderTest {
 
     private Levels levels;
+    private Dice dice = mock(Dice.class);
 
     @Test
     public void shouldGetLevelsDataWhenCallLevelsReader() {
-        levels = new MockLevels(new PlayerFigures());
+        levels = new MockLevels(dice, new PlayerFigures());
 
         gotoNextLevel();
 
@@ -70,7 +73,7 @@ public class LevelsBuilderTest {
     }
 
     private Levels.LevelsBuilder getBuilder(int currentLevel, int totalRemovedLines) {
-        Levels.LevelsBuilder builder = new Levels.LevelsBuilder();
+        Levels.LevelsBuilder builder = new Levels.LevelsBuilder(dice);
         builder.setCurrentLevel(currentLevel);
         builder.setLevelsName(MockLevels.class.getSimpleName());
         builder.setTotalRemovedLines(totalRemovedLines);

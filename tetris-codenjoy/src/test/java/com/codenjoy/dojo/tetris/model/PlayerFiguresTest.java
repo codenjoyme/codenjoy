@@ -23,6 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,10 +38,12 @@ import static org.mockito.Mockito.when;
 public class PlayerFiguresTest {
 
     private Figure.Type[] allTypes;
+    private Dice dice;
 
     @Before
     public void setUp() throws Exception {
         allTypes = new Figure.Type[]{I, O, J, L, S, Z, T};
+        dice = mock(Dice.class);
     }
 
     @Test
@@ -60,7 +63,7 @@ public class PlayerFiguresTest {
 
     @Test
     public void shouldReturnFutureFigures(){
-        Randomizer randomizer = new EquiprobableRandomizer();
+        Randomizer randomizer = new EquiprobableRandomizer(dice);
         RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
         when(randomizerFetcher.get()).thenReturn(randomizer);
         PlayerFigures playerFigures = new PlayerFigures(4);
@@ -78,7 +81,7 @@ public class PlayerFiguresTest {
 
     @Test
     public void shouldOpenNewFituresAfterFutureIsEmpty(){
-        Randomizer randomizer = new EquiprobableRandomizer();
+        Randomizer randomizer = new EquiprobableRandomizer(dice);
         RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
         when(randomizerFetcher.get()).thenReturn(randomizer);
         PlayerFigures playerFigures = new PlayerFigures(1);

@@ -23,10 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.FigureTypesLevel;
-import com.codenjoy.dojo.tetris.model.GlassEvent;
-import com.codenjoy.dojo.tetris.model.NullGameLevel;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.*;
@@ -43,20 +40,21 @@ public class FigureTypesLevelTest {
     @Test
     public void validateNextLevelIngoingCriteria() {
         PlayerFigures queue = mock(PlayerFigures.class);
+        Dice dice = mock(Dice.class);
 
         assertEquals("Remove 4 lines together",
-                new FigureTypesLevel(queue, new GlassEvent(LINES_REMOVED, 4)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(LINES_REMOVED, 4)).getNextLevelIngoingCriteria());
 
         assertEquals("Remove 13 lines",
-                new FigureTypesLevel(queue, new GlassEvent(TOTAL_LINES_REMOVED, 13)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(TOTAL_LINES_REMOVED, 13)).getNextLevelIngoingCriteria());
 
         assertEquals("This is last level",
-                new FigureTypesLevel(queue, new GlassEvent(FIGURE_DROPPED, 0)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(FIGURE_DROPPED, 0)).getNextLevelIngoingCriteria());
 
         assertEquals("This is last level",
                 new NullGameLevel().getNextLevelIngoingCriteria());
 
         assertEquals("Remove 77 lines without overflown",
-                new FigureTypesLevel(queue, new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 77)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 77)).getNextLevelIngoingCriteria());
     }
 }

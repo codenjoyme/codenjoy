@@ -23,9 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.Randomizer;
-
-import java.util.Random;
+import com.codenjoy.dojo.services.Dice;
 
 /**
  * User: oleksandr.baglai
@@ -34,10 +32,14 @@ import java.util.Random;
  */
 public class EquiprobableRandomizer implements Randomizer {
 
-    private Random random = new Random();
+    private Dice dice;
+
+    public EquiprobableRandomizer(Dice dice) {
+        this.dice = dice;
+    }
 
     @Override
     public int getNextNumber(int count) {
-        return random.nextInt(count);
+        return dice.next(count);
     }
 }

@@ -23,22 +23,22 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.tetris.model.EquiprobableRandomizer;
-import com.codenjoy.dojo.tetris.model.ProbabilityRandomizer;
-import com.codenjoy.dojo.tetris.model.Randomizer;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
-import static org.fest.assertions.Assertions.assertThat;
 
 public class ProbabilityRandomizerTest {
 
+    private Dice dice = new RandomDice();
+
     @Test
     public void checkProbabilities1(){
-        Randomizer randomizer = new ProbabilityRandomizer(20);
+        Randomizer randomizer = new ProbabilityRandomizer(dice, 20);
 
         Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 10, 1000000);
 
@@ -48,7 +48,7 @@ public class ProbabilityRandomizerTest {
 
     @Test
     public void checkProbabilities2(){
-        Randomizer randomizer = new ProbabilityRandomizer(50);
+        Randomizer randomizer = new ProbabilityRandomizer(dice, 50);
 
         Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 5, 1000000);
 
@@ -58,7 +58,7 @@ public class ProbabilityRandomizerTest {
 
     @Test
     public void checkProbabilities3(){
-        Randomizer randomizer = new ProbabilityRandomizer(100);
+        Randomizer randomizer = new ProbabilityRandomizer(dice, 100);
 
         Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, 1000000);
 
@@ -68,7 +68,7 @@ public class ProbabilityRandomizerTest {
 
     @Test
     public void checkProbabilities4(){
-        Randomizer randomizer = new EquiprobableRandomizer();
+        Randomizer randomizer = new EquiprobableRandomizer(dice);
 
         Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, 1000000);
 

@@ -23,22 +23,19 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+
 public class FigureTypesLevel implements GameLevel {
     protected PlayerFigures figuresQueue;
     private GlassEvent event;
     private Figure.Type[] figureTypesToOpen;
 
-    public FigureTypesLevel(PlayerFigures figuresQueue, GlassEvent event, Figure.Type... figureTypesToOpen) {
+    public FigureTypesLevel(Dice dice, PlayerFigures figuresQueue, GlassEvent event, Figure.Type... figureTypesToOpen) {
         this.figuresQueue = figuresQueue;
         this.event = event;
         this.figureTypesToOpen = figureTypesToOpen;
 
-        figuresQueue.setRandomizerFetcher(new RandomizerFetcher() {
-            @Override
-            public Randomizer get() {
-                return new EquiprobableRandomizer();
-            }
-        });
+        figuresQueue.setRandomizerFetcher(() -> new EquiprobableRandomizer(dice));
     }
 
     @Override

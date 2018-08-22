@@ -23,6 +23,8 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+
 public class Levels implements GlassEventListener {
     private GameLevel[] levels;
     private int currentLevel;
@@ -120,6 +122,11 @@ public class Levels implements GlassEventListener {
         private String name;
         private PlayerFigures queue;
         private Levels levels;
+        private Dice dice;
+
+        public LevelsBuilder(Dice dice) {
+            this.dice = dice;
+        }
 
         public void setCurrentLevel(int currentLevel) {
             this.currentLevel = currentLevel;
@@ -140,7 +147,7 @@ public class Levels implements GlassEventListener {
         public Levels getLevels() {
             if (levels == null) {
                 queue = new PlayerFigures();
-                levels = levelsFactory.getGameLevels(queue, name);
+                levels = levelsFactory.getGameLevels(dice, queue, name);
                 levels.totalRemovedLines = totalRemovedLines;
                 levels.currentLevel = currentLevel;
                 levels.getCurrentLevel().apply();

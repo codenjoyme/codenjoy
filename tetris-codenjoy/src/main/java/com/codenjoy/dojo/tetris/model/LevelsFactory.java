@@ -23,6 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import org.fest.reflect.core.Reflection;
 import org.reflections.Reflections;
 
@@ -38,11 +39,14 @@ public class LevelsFactory {
         return reflections.getSubTypesOf(Levels.class);
     }
 
-    public Levels getGameLevels(FigureQueue playerQueue, String levels) {
+    public Levels getGameLevels(Dice dice, FigureQueue playerQueue, String levels) {
         String className = LevelsFactory.class.getPackage().getName() + '.' + levels;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
-            return (Levels) Reflection.constructor().withParameterTypes(PlayerFigures.class).in(aClass).newInstance(playerQueue);
+            return (Levels) Reflection.constructor()
+                    .withParameterTypes(Dice.class, PlayerFigures.class)
+                    .in(aClass)
+                    .newInstance(dice, playerQueue);
         } catch (ClassNotFoundException e) {
             return throwRuntime(e);
         }

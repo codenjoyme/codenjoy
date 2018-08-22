@@ -23,22 +23,20 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+
 public class ProbabilityFigureTypesLevel extends FigureTypesLevel {
     private Randomizer randomizer;
 
-    public ProbabilityFigureTypesLevel(PlayerFigures figuresQueue,
+    public ProbabilityFigureTypesLevel(Dice dice,
+                                       PlayerFigures figuresQueue,
                                        GlassEvent event,
                                        Randomizer randomizer,
                                        Figure.Type... figureTypesToOpen)
     {
-        super(figuresQueue, event, figureTypesToOpen);
+        super(dice, figuresQueue, event, figureTypesToOpen);
         this.randomizer = randomizer;
 
-        figuresQueue.setRandomizerFetcher(new RandomizerFetcher() {
-            @Override
-            public Randomizer get() {
-                return ProbabilityFigureTypesLevel.this.randomizer;
-            }
-        });
+        figuresQueue.setRandomizerFetcher(() -> ProbabilityFigureTypesLevel.this.randomizer);
     }
 }

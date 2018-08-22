@@ -23,18 +23,20 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
 import static org.mockito.Mockito.mock;
 
 public class ProbabilityWithoutOverflownLevelsTest extends ProbabilityLevelsTest {
 
     @Before
     public void setUp() {
-        levels = new ProbabilityWithoutOverflownLevels(new PlayerFigures());
+        Dice dice = new RandomDice();
+        levels = new ProbabilityWithoutOverflownLevels(dice, new PlayerFigures());
         levels.setChangeLevelListener(mock(ChangeLevelListener.class));
     }
 
