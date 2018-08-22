@@ -25,10 +25,7 @@ package com.codenjoy.dojo.tetris.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.AbstractGameType;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -47,7 +44,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GameRunner extends AbstractGameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
     private Parameter<String> gameLevels;
     private Parameter<Integer> glassSize;
@@ -143,7 +140,8 @@ public class GameRunner extends AbstractGameType {
                     }};
                 }
             }, player);
-            result.put("board", graphicPrinter.print().replace("\n", ""));
+            String board = graphicPrinter.print().replace("\n", "");
+            result.put("layers", Arrays.asList(board));
 
             result.put("currentFigureType", hero.getCurrentFigureType());
             result.put("currentFigurePoint", hero.getCurrentFigurePoint());
