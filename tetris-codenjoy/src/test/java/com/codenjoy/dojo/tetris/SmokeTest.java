@@ -99,7 +99,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' I    I    I             ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,4]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
@@ -112,7 +112,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' I    I    I    I        ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,3]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
@@ -125,7 +125,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':'      I    I    I    I   ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,2]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
@@ -140,7 +140,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' J   JI    I    I    I   ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,4]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'L',\n" +
@@ -155,7 +155,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' L    LL                 ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,4]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'S',\n" +
@@ -168,7 +168,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' L    L    LL            ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,3]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'S',\n" +
@@ -181,7 +181,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':'      L    L    LL       ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,2]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'S',\n" +
@@ -194,7 +194,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':'           L    L    LL  ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'S',\n" +
@@ -209,7 +209,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':'SS         L    L    LL  ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,4]',\n" +
                         "1:  'currentFigureType':'S',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'O',\n" +
@@ -222,7 +222,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' SS  SS    L    L    LL  ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,3]',\n" +
                         "1:  'currentFigureType':'S',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'O',\n" +
@@ -237,7 +237,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' SS  SS    L    L    LL  ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,5]',\n" +
                         "1:  'currentFigureType':'O',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
@@ -252,7 +252,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' J   JJ                  ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,4]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
@@ -265,7 +265,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':' J    J   JJ             ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,3]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
@@ -278,7 +278,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':'      J    J   JJ        ',\n" +
-                        "1:  'currentFigurePoint':'[-1,-1]',\n" +
+                        "1:  'currentFigurePoint':'[1,2]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +

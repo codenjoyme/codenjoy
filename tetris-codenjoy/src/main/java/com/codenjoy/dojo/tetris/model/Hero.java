@@ -34,9 +34,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Glass glass;
 
-    private int x;
-    private int y;
-
     private boolean dropRequested;
     private Figure figure;
 
