@@ -45,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class GameRunner extends AbstractGameType {
 
@@ -122,11 +123,7 @@ public class GameRunner extends AbstractGameType {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
             JSONObject result = new JSONObject();
 
-            JSONArray array = new JSONArray();
-            result.put("layers", array);
             Hero hero = player.getHero();
-            array.put(hero.getCurrentFigurePlots());
-            array.put(hero.getDroppedPlots());
 
             Printer<String> graphicPrinter = graphic.getPrinter(new BoardReader() {
                 @Override
@@ -136,7 +133,10 @@ public class GameRunner extends AbstractGameType {
 
                 @Override
                 public Iterable<? extends Point> elements() {
-                    return hero.getDroppedPlots();
+                    return new LinkedList<Point>() {{
+                        addAll(hero.getDroppedPlots());
+                        addAll(hero.getCurrentFigurePlots());
+                    }};
                 }
             }, player);
             result.put("board", graphicPrinter.print().replace("\n", ""));
