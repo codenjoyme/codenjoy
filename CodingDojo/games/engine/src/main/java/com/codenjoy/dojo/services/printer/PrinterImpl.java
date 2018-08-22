@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.printer;
 
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
@@ -117,6 +118,9 @@ class PrinterImpl implements Printer<String> {
                 int x = el.getX();
                 int y = el.getY();
 
+                if (PointImpl.pt(x, y).isOutOf(field.length)) {
+                    continue; // TODO test me (пропускаем элементы за пределами борды)
+                }
                 Object[] existing = (Object[]) field[x][y];
                 if (existing == null) {
                     existing = new Object[7];
