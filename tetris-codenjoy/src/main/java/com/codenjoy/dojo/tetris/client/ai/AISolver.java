@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.client.ai;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.tetris.client.AbstractJsonSolver;
+import com.codenjoy.dojo.client.AbstractJsonSolver;
 import org.json.JSONObject;
 
 public class AISolver extends AbstractJsonSolver {

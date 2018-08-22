@@ -23,8 +23,7 @@ package com.codenjoy.dojo.tetris.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
