@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Glass glass;
@@ -179,7 +181,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return this.copy();
     }
 
-    public List<Figure.Type> getFutureFigures() {
-        return field.getFutureFigures();
+    public List<Character> getFutureFigures() {
+        return field.getFutureFigures()
+                .stream()
+                .map(f -> f.getColor().ch())
+                .collect(toList());
     }
 }

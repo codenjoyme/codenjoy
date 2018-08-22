@@ -87,30 +87,10 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "1:BoardData {\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'blue'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'I'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    }\n" +
+                        "1:    'I',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'S'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [],\n" +
@@ -124,30 +104,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'O'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -189,30 +149,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'O'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -254,30 +194,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'O'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -314,37 +234,17 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@1deb50e\n" +
+                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@83b407\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    }\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -410,37 +310,17 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@1c20538\n" +
+                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@153f17c\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    }\n" +
+                        "1:    'S',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -482,30 +362,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    }\n" +
+                        "1:    'S',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -547,30 +407,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    }\n" +
+                        "1:    'S',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -612,30 +452,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'green'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'S'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    }\n" +
+                        "1:    'S',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -672,37 +492,17 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@1536d79\n" +
+                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@67c67e\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'S',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    }\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -773,30 +573,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'S',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    }\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -862,37 +642,17 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@a7e666\n" +
+                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@116f93d\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'O',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'blue'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'I'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -986,37 +746,17 @@ public class SmokeTest {
                         "1:  ]\n" +
                         "1:}\n" +
                         "1:Answer: message('DOWN')\n" +
-                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@17030a6\n" +
+                        "Fire Event: com.codenjoy.dojo.tetris.services.Events@1fc609f\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'blue'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'I'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'O'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -1058,30 +798,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'blue'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'I'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'O'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
@@ -1123,30 +843,10 @@ public class SmokeTest {
                         "1:  'currentFigurePoint':'[-1,-1]',\n" +
                         "1:  'currentFigureType':'J',\n" +
                         "1:  'futureFigures':[\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'cyan'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'J'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'orange'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'L'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'blue'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'I'\n" +
-                        "1:    },\n" +
-                        "1:    {\n" +
-                        "1:      'color':{\n" +
-                        "1:        'name':'yellow'\n" +
-                        "1:      },\n" +
-                        "1:      'name':'O'\n" +
-                        "1:    }\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'O'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    [\n" +
