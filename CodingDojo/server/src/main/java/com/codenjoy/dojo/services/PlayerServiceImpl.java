@@ -122,8 +122,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void reloadAI(String name) {
         lock.writeLock().lock();
         try {
-            Player player = get(name);
-            playerGames.remove(player);
+            Player player = getPlayer(name);
             registerAI(player.getGameName(), player.getGameType(), name);
         } finally {
             lock.writeLock().unlock();
@@ -209,7 +208,7 @@ public class PlayerServiceImpl implements PlayerService {
         String gameName = playerSave.getGameName();
         String callbackUrl = playerSave.getCallbackUrl();
 
-        Player player = get(name);
+        Player player = getPlayer(name);
 
         boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
         if (newPlayer) {
@@ -350,13 +349,13 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll(String gameName) {
         lock.readLock().lock();
         try {
-            return private_getAll(gameName);
+            return getAllPlayers(gameName);
         } finally {
             lock.readLock().unlock();
         }
     }
 
-    private List<Player> private_getAll(String gameName) {
+    private List<Player> getAllPlayers(String gameName) {
         List<Player> result = new LinkedList<>();
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
@@ -371,7 +370,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void remove(String name) {
         lock.writeLock().lock();
         try {
-            Player player = get(name);
+            Player player = getPlayer(name);
 
             if (logger.isDebugEnabled()) {
                 logger.debug("Unregistered user {} from game {}",
@@ -419,7 +418,7 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean contains(String name) {
         lock.readLock().lock();
         try {
-            return get(name) != NullPlayer.INSTANCE;
+            return getPlayer(name) != NullPlayer.INSTANCE;
         } finally {
             lock.readLock().unlock();
         }
@@ -429,13 +428,13 @@ public class PlayerServiceImpl implements PlayerService {
     public Player get(String name) {
         lock.readLock().lock();
         try {
-            return private_get(name);
+            return getPlayer(name);
         } finally {
             lock.readLock().unlock();
         }
     }
 
-    private Player private_get(String name) {
+    private Player getPlayer(String name) {
         return playerGames.get(name).getPlayer();
     }
 
@@ -502,7 +501,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return playerGames.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = private_getAll(gameType).iterator();
+            Iterator<Player> iterator = getAllPlayers(gameType).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {
