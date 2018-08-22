@@ -113,7 +113,9 @@ public class TetrisGlass implements Glass {
         }
 
         if (eventListener != null) {
-            eventListener.event(Events.figuresDropped(figure.getType().getColor().index()));
+            // TODO и где я тут достану номер уровня?
+            int levelNumber = 1;
+            eventListener.event(Events.figuresDropped(levelNumber, figure.getType().getColor().index()));
         }
     }
 
@@ -128,7 +130,9 @@ public class TetrisGlass implements Glass {
         }
         if (removedLines > 0) {
             if (eventListener != null) {
-                eventListener.event(Events.linesRemoved(removedLines));
+                // TODO и где я тут достану номер уровня?
+                int levelNumber = 1;
+                eventListener.event(Events.linesRemoved(levelNumber, removedLines));
             }
         }
     }
@@ -162,7 +166,9 @@ public class TetrisGlass implements Glass {
     public void empty() {
         Arrays.fill(occupied, 0);
         if (eventListener != null) {
-            eventListener.event(Events.glassOverflown());
+            // TODO и где я тут достану номер уровня?
+            int levelNumber = 1;
+            eventListener.event(Events.glassOverflown(levelNumber));
         }
     }
 

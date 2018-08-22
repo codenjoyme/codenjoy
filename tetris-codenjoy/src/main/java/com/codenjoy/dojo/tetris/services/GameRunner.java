@@ -23,8 +23,11 @@ package com.codenjoy.dojo.tetris.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -33,42 +36,39 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.tetris.client.ai.ApofigSolver;
+import com.codenjoy.dojo.tetris.client.Board;
+import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class TetrisRunner extends AbstractGameType {
+public class GameRunner extends AbstractGameType {
 
     private Settings settings;
-    private PlayerFigures queue;
-    private Levels levels;
-    private TetrisPlayerScores scores;
 
     private Parameter<String> gameLevels;
     private Parameter<Integer> glassSize;
 
-    public TetrisRunner() {
+    public GameRunner() {
         settings = new SettingsImpl();;
         gameLevels = settings.addSelect("Game Levels", Arrays.asList("AllFigureLevels")).type(String.class);
         gameLevels.select(0);
         glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(20);
-        queue = new PlayerFigures();
-        levels = getLevels(queue);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        scores = new TetrisPlayerScores((Integer)score);
-        scores.levelChanged(levels.getCurrentLevelNumber(), levels.getCurrentLevel());
-        return scores;
+        return new Scores((Integer)score, settings);
     }
 
     @Override
     public GameField createGame() {
-        return new TetrisGame(new PlayerFigures(), glassSize.getValue());
+        PlayerFigures queue = new PlayerFigures();
+        Levels levels = getLevels(queue);
+        // TODO не понятно что делать с этим levels
+        return new TetrisGame(queue, glassSize.getValue());
     }
 
     private Levels getLevels(PlayerFigures queue) {
@@ -107,9 +107,13 @@ public class TetrisRunner extends AbstractGameType {
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
-        return true;
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.client.ai;
 
 /*-
  * #%L
@@ -23,31 +23,20 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.client.AbstractJsonSolver;
+import org.json.JSONObject;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class AISolver extends AbstractJsonSolver {
 
-    Hero hero;
+    private Dice dice;
 
-    public Player(EventListener listener) {
-        super(listener);
-    }
-
-    public Hero getHero() {
-        return hero;
+    public AISolver(Dice dice) {
+        this.dice = dice;
     }
 
     @Override
-    public void newHero(Field field) {
-        hero = new Hero();
-        hero.init(field);
-        hero.getGlass().setEventListener(listener);
+    public String getAnswer(JSONObject question) {
+        return "DOWN";
     }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
 }

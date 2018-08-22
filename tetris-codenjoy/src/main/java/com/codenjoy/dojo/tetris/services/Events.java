@@ -29,10 +29,12 @@ public class Events {
     public static final String FIGURES_DROPPED = "figuresDropped";
 
     private String type;
+    private int level;
     private int data;
 
-    public Events(String type, int data) {
+    public Events(String type, int level, int data) {
         this.type = type;
+        this.level = level;
         this.data = data;
     }
 
@@ -48,19 +50,27 @@ public class Events {
         return type.equals(FIGURES_DROPPED);
     }
 
-    public static Events glassOverflown() {
-        return new Events(GLASS_OVERFLOWN, 0);
+    public static Events glassOverflown(int levelNumber) {
+        return new Events(GLASS_OVERFLOWN, levelNumber, 0);
     }
 
-    public static Events linesRemoved(int removedLines) {
-        return new Events(LINES_REMOVED, removedLines);
+    public static Events linesRemoved(int levelNumber, int removedLines) {
+        return new Events(LINES_REMOVED, levelNumber, removedLines);
     }
 
-    public static Events figuresDropped(int figureIndex) {
-        return new Events(FIGURES_DROPPED, figureIndex);
+    public static Events figuresDropped(int levelNumber, int figureIndex) {
+        return new Events(FIGURES_DROPPED, levelNumber, figureIndex);
     }
 
-    public int getData() {
+    public int getLevel() {
+        return level;
+    }
+
+    public int getFigureIndex() {
+        return data;
+    }
+
+    public int getRemovedLines() {
         return data;
     }
 }
