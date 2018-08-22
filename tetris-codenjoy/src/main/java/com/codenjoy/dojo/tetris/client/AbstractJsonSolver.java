@@ -19,7 +19,7 @@ public abstract class AbstractJsonSolver<T> implements Solver<AbstractTextBoard>
 
         String answer = getAnswer(data);
 
-        return String.format("message('%s')", answer);
+        return answer;
     }
 
 }

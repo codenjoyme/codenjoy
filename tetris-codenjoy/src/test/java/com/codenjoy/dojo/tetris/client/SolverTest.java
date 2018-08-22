@@ -81,8 +81,7 @@ public class SolverTest {
         result.put("futureFigures", "[]");
 
         String actual = ai.get(board(result.toString()));
-        assertEquals(String.format("message('%s')", expected.toString()),
-                actual);
+        assertEquals(expected.toString(), actual);
     }
 
     private void dice(Direction direction) {
