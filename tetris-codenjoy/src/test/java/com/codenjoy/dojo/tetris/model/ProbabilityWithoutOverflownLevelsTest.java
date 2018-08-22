@@ -24,7 +24,6 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +34,7 @@ public class ProbabilityWithoutOverflownLevelsTest extends ProbabilityLevelsTest
 
     @Before
     public void setUp() {
-        Dice dice = new RandomDice();
+        Dice dice = new TrueRandomDice();
         levels = new ProbabilityWithoutOverflownLevels(dice, new PlayerFigures());
         levels.setChangeLevelListener(mock(ChangeLevelListener.class));
     }

@@ -24,7 +24,6 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -34,15 +33,16 @@ import static junit.framework.Assert.assertEquals;
 
 public class ProbabilityRandomizerTest {
 
-    private Dice dice = new RandomDice();
+    public static final int COUNT_ITERATIONS = 100000;
+    private Dice dice = new TrueRandomDice();
 
     @Test
     public void checkProbabilities1(){
         Randomizer randomizer = new ProbabilityRandomizer(dice, 20);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 10, 1000000);
+        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 10, COUNT_ITERATIONS);
 
-        assertEquals("{0=10.0, 1=10.0, 2=10.0, 3=10.0, 4=10.0, 5=10.0, 6=10.0, 7=10.0, 8=10.0, 9=2.0}",
+        assertEquals("{0=10.87, 1=10.87, 2=10.87, 3=10.87, 4=10.87, 5=10.87, 6=10.87, 7=10.87, 8=10.87, 9=2.1}",
                 map.toString());
     }
 
@@ -50,9 +50,9 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities2(){
         Randomizer randomizer = new ProbabilityRandomizer(dice, 50);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 5, 1000000);
+        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 5, COUNT_ITERATIONS);
 
-        assertEquals("{0=22.0, 1=22.0, 2=22.0, 3=22.0, 4=10.0}",
+        assertEquals("{0=22.45, 1=22.45, 2=22.45, 3=22.45, 4=10.2}",
                 map.toString());
     }
 
@@ -60,9 +60,9 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities3(){
         Randomizer randomizer = new ProbabilityRandomizer(dice, 100);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, 1000000);
+        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, COUNT_ITERATIONS);
 
-        assertEquals("{0=33.0, 1=33.0, 2=33.0}",
+        assertEquals("{0=33.33, 1=33.33, 2=33.33}",
                 map.toString());
     }
 
@@ -70,9 +70,9 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities4(){
         Randomizer randomizer = new EquiprobableRandomizer(dice);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, 1000000);
+        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, COUNT_ITERATIONS);
 
-        assertEquals("{0=33.0, 1=33.0, 2=33.0}",
+        assertEquals("{0=33.33, 1=33.33, 2=33.33}",
                 map.toString());
     }
 
@@ -89,8 +89,8 @@ public class ProbabilityRandomizerTest {
 
         Map<Integer, Double> map2 = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            double figureProbability = 100 * entry.getValue() / countIterations;
-            map2.put(entry.getKey(), figureProbability);
+            double figureProbability = 10000L * entry.getValue() / countIterations;
+            map2.put(entry.getKey(), 1D * figureProbability / 100);
         }
 
         return map2;
