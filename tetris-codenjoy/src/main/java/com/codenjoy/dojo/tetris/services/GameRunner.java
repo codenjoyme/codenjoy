@@ -41,11 +41,11 @@ import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class GameRunner extends AbstractGameType {
 
@@ -134,8 +134,12 @@ public class GameRunner extends AbstractGameType {
                 @Override
                 public Iterable<? extends Point> elements() {
                     return new LinkedList<Point>() {{
-                        addAll(hero.getDroppedPlots());
-                        addAll(hero.getCurrentFigurePlots());
+                        // TODO перекрываются фигурки которые падают с теми, что уже упали - надо пофиксить но не тут, а в момент появления фигурки, она должна появляться не полностью а только 1 ее уровень
+                        List<Plot> droppedPlots = hero.getDroppedPlots();
+                        List<Plot> currentFigurePlots = hero.getCurrentFigurePlots();
+                        droppedPlots.removeAll(currentFigurePlots);
+                        addAll(droppedPlots);
+                        addAll(currentFigurePlots);
                     }};
                 }
             }, player);

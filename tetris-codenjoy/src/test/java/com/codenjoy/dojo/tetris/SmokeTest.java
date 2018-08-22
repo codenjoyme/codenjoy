@@ -317,7 +317,7 @@ public class SmokeTest {
                         "1:BoardData {\n" +
                         "1:  'board':'\n" +
                         "    J     \n" +
-                        "   JSS    \n" +
+                        "   JJS    \n" +
                         "   SS     \n" +
                         "    L     \n" +
                         "    L     \n" +
@@ -344,7 +344,7 @@ public class SmokeTest {
                         "1:BoardData {\n" +
                         "1:  'board':'\n" +
                         "   JL     \n" +
-                        "  JJSS    \n" +
+                        "  JJLL    \n" +
                         "   SS     \n" +
                         "    L     \n" +
                         "    L     \n" +
@@ -528,7 +528,7 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'board':'\n" +
-                        "   SS     \n" +
+                        "   SI     \n" +
                         "  SSI     \n" +
                         "   II     \n" +
                         "   I      \n" +
