@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Function;
 
 public class EditBox<T> extends Updatable<T> implements Parameter<T> {
@@ -39,6 +41,11 @@ public class EditBox<T> extends Updatable<T> implements Parameter<T> {
     @Override
     public T getValue() {
         return (get() == null) ? def : get();
+    }
+
+    @Override
+    public String getType() {
+        return "editbox";
     }
 
     @Override
@@ -98,6 +105,16 @@ public class EditBox<T> extends Updatable<T> implements Parameter<T> {
     @Override
     public void select(int index) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public List<T> getOptions() {
+        return new LinkedList<T>(){{
+            add(def);
+            if (EditBox.this.get() != null) {
+                add(EditBox.this.get());
+            }
+        }};
     }
 
     @Override

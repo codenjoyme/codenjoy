@@ -46,9 +46,6 @@ public interface Settings {
      */
     Parameter<?> addEditBox(String name);
 
-    /**
-     * @deprecated Пока не реализовано
-     */
     Parameter<?> addSelect(String name, List<Object> strings);
 
     /**

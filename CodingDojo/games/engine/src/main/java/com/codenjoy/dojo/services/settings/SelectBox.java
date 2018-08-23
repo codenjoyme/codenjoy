@@ -47,6 +47,11 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
+    public String getType() {
+        return "selectbox";
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -88,5 +93,10 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     @Override
     public void select(int index) {
         set(index);
+    }
+
+    @Override
+    public List<T> getOptions() {
+        return options;
     }
 }

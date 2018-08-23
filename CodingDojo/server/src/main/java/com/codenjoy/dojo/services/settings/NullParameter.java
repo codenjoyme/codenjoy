@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.settings;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 public class NullParameter<T> implements Parameter<T> {
@@ -38,6 +40,11 @@ public class NullParameter<T> implements Parameter<T> {
     @Override
     public T getValue() {
         return (T)new Object();
+    }
+
+    @Override
+    public String getType() {
+        return StringUtils.EMPTY;
     }
 
     @Override
@@ -83,5 +90,10 @@ public class NullParameter<T> implements Parameter<T> {
     @Override
     public void changesReacted() {
         // do nothing
+    }
+
+    @Override
+    public List<T> getOptions() {
+        return Arrays.asList();
     }
 }

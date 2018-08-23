@@ -179,7 +179,15 @@
                 <c:forEach items="${parameters}" var="parameter" varStatus="status">
                     <tr>
                         <td>${parameter.name}</td>
-                        <td><form:input path="parameters[${status.index}]"/></td>
+                        <c:choose> <!-- TODO реализовать check box -->
+                            <c:when test="${parameter.type == 'selectbox'}">
+                                <td><form:select path="parameters[${status.index}]"
+                                        items="${parameter.options}"/></td>
+                            </c:when>
+                            <c:otherwise> <!-- editbox -->
+                                <td><form:input path="parameters[${status.index}]"/></td>
+                            </c:otherwise>
+                        </c:choose>
                     </tr>
                 </c:forEach>
                 <tr>

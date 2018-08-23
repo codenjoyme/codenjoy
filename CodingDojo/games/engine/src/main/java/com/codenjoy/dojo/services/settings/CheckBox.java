@@ -23,9 +23,12 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Function;
 
 public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
+
     private Boolean def;
     private String name;
 
@@ -36,6 +39,11 @@ public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
     @Override
     public Boolean getValue() {
         return (get() == null) ? def : get();
+    }
+
+    @Override
+    public String getType() {
+        return "checkbox";
     }
 
     @Override
@@ -71,6 +79,16 @@ public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
     @Override
     public void select(int index) {
         set(index == 1);
+    }
+
+    @Override
+    public List<Boolean> getOptions() {
+        return new LinkedList<Boolean>(){{
+            add(def);
+            if (CheckBox.this.get() != null) {
+                add(CheckBox.this.get());
+            }
+        }};
     }
 
 

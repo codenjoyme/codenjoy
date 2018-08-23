@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -37,6 +38,11 @@ public interface Parameter<T> {
      * @return Значение параметра
      */
     T getValue();
+
+    /**
+     * @return Тип параметра
+     */
+    String getType();
 
     String getName();
 
@@ -61,4 +67,6 @@ public interface Parameter<T> {
     boolean changed();
 
     void changesReacted();
+
+    List<T> getOptions();
 }

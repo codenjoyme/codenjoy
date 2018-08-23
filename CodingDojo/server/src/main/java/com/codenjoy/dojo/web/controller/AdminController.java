@@ -286,7 +286,7 @@ public class AdminController {
 
         AdminSettings settings = new AdminSettings();
 
-        settings.setParameters(new LinkedList<String>());
+        settings.setParameters(new LinkedList<>());
         for (Parameter p : parameters) {
             settings.getParameters().add(p.getValue().toString());
         }
@@ -304,6 +304,7 @@ public class AdminController {
         checkDebugStatus(model);
         checkRegistrationClosed(model);
         prepareList(model, settings, gameName);
+
         return "admin";
     }
 

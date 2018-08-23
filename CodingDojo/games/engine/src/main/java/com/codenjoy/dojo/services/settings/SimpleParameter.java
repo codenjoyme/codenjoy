@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 public class SimpleParameter<T> implements Parameter<T> {
@@ -40,6 +42,11 @@ public class SimpleParameter<T> implements Parameter<T> {
     @Override
     public T getValue() {
         return value;
+    }
+
+    @Override
+    public String getType() {
+        return "noui";
     }
 
     @Override
@@ -80,6 +87,11 @@ public class SimpleParameter<T> implements Parameter<T> {
     @Override
     public void changesReacted() {
         // do nothing
+    }
+
+    @Override
+    public List<T> getOptions() {
+        return Arrays.asList(value);
     }
 
     @Override
