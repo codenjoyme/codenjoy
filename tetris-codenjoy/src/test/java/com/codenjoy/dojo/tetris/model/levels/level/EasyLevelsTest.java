@@ -43,7 +43,7 @@ public class EasyLevelsTest {
 
     @Before
     public void setUp() {
-        levels = new EasyLevels(dice, new PlayerFigures());
+        levels = new EasyLevels(dice, new Figures());
         levels.setChangeLevelListener(mock(ChangeLevelListener.class));
     }
 
@@ -67,14 +67,14 @@ public class EasyLevelsTest {
     private void assertFigures(Type... expected) {
         GameLevel currentLevel = levels.getCurrentLevel();
 
-        Type[] openFigures = getOpenFigures(currentLevel.getFigureQueue());
+        Type[] openFigures = getOpenFigures(currentLevel.queue());
 
         assertEquals(Arrays.toString(expected), Arrays.toString(openFigures));
 
         levels.linesRemoved(LINES_REMOVED_FOR_NEXT_LEVEL);
     }
 
-    private Type[] getOpenFigures(FigureQueue queue) {
-        return field("openFigures").ofType(Type[].class).in(queue).get();
+    public static Type[] getOpenFigures(FigureQueue queue) {
+        return field("open").ofType(Type[].class).in(queue).get();
     }
 }

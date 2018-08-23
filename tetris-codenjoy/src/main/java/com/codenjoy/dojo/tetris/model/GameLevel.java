@@ -30,7 +30,7 @@ public interface GameLevel {
 
     String getNextLevelIngoingCriteria();
 
-    FigureQueue getFigureQueue();
+    FigureQueue queue();
 
-    int getFigureTypesToOpenCount();
+    int openCount();
 }

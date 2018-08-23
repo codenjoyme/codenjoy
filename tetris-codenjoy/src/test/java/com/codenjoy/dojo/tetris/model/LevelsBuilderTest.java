@@ -38,7 +38,7 @@ public class LevelsBuilderTest {
 
     @Test
     public void shouldGetLevelsDataWhenCallLevelsReader() {
-        levels = new MockLevels(dice, new PlayerFigures());
+        levels = new MockLevels(dice, new Figures());
 
         gotoNextLevel();
 
@@ -65,12 +65,12 @@ public class LevelsBuilderTest {
 
         levels = builder.getLevels();
 
-        FigureQueue queue = levels.getCurrentLevel().getFigureQueue();
+        FigureQueue queue = levels.getCurrentLevel().queue();
 
         gotoNextLevel();
 
         assertEquals(2, levels.getCurrentLevelNumber());
-        assertSame(queue, levels.getCurrentLevel().getFigureQueue());
+        assertSame(queue, levels.getCurrentLevel().queue());
     }
 
     private Levels.LevelsBuilder getBuilder(int currentLevel, int totalRemovedLines) {
@@ -87,7 +87,7 @@ public class LevelsBuilderTest {
 
         levels = builder.getLevels();
 
-        FigureQueue queue = levels.getCurrentLevel().getFigureQueue();
+        FigureQueue queue = levels.getCurrentLevel().queue();
         retrieveAllFiguresFromPreviousLevel(queue);
         assertEquals(Type.O, queue.next().getType());
         assertEquals(Type.O, queue.next().getType());
@@ -95,7 +95,7 @@ public class LevelsBuilderTest {
     }
 
     private void retrieveAllFiguresFromPreviousLevel(FigureQueue queue) {
-        for (int i = 0; i < PlayerFigures.DEFAULT_FUTURE_COUNT; i++) {
+        for (int i = 0; i < Figures.DEFAULT_FUTURE_COUNT; i++) {
             queue.next();
         }
     }

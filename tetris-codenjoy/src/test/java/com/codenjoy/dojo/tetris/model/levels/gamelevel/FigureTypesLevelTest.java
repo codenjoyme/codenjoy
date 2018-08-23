@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.model.levels.gamelevel;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.Figures;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.*;
@@ -41,7 +41,7 @@ public class FigureTypesLevelTest {
 
     @Test
     public void validateNextLevelIngoingCriteria() {
-        PlayerFigures queue = mock(PlayerFigures.class);
+        Figures queue = mock(Figures.class);
         Dice dice = mock(Dice.class);
 
         assertEquals("Remove 4 lines together",

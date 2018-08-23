@@ -38,7 +38,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PlayerFiguresTest {
+public class FiguresTest {
 
     private Type[] allTypes;
     private Dice dice;
@@ -54,53 +54,53 @@ public class PlayerFiguresTest {
         Randomizer randomizer = mock(Randomizer.class);
         RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
         when(randomizerFetcher.get()).thenReturn(randomizer);
-        PlayerFigures playerFigures = new PlayerFigures(4);
-        playerFigures.setRandomizerFetcher(randomizerFetcher);
+        Figures figures = new Figures(4);
+        figures.setRandomizer(randomizerFetcher);
 
         when(randomizer.getNextNumber(anyInt())).thenReturn(3);
-        playerFigures.openFigures(allTypes);
+        figures.open(allTypes);
 
-        Figure next = playerFigures.next();
+        Figure next = figures.next();
         assertEquals(allTypes[3], next.getType());
     }
 
     @Test
     public void shouldReturnFutureFigures(){
-        Randomizer randomizer = new EquiprobableRandomizer(dice);
-        RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
-        when(randomizerFetcher.get()).thenReturn(randomizer);
-        PlayerFigures playerFigures = new PlayerFigures(4);
-        playerFigures.setRandomizerFetcher(randomizerFetcher);
-        playerFigures.openFigures(allTypes);
+        Figures figures = new Figures(4);
+        figures.setRandomizer(getFetcher(new EquiprobableRandomizer(dice)));
+        figures.open(allTypes);
 
-        List<Type> figures = playerFigures.getFutureFigures();
+        List<Type> types = figures.getFuture();
 
-        assertEquals(4, figures.size());
-        assertTypesEqual(playerFigures, figures, 0);
-        assertTypesEqual(playerFigures, figures, 1);
-        assertTypesEqual(playerFigures, figures, 2);
-        assertTypesEqual(playerFigures, figures, 3);
+        assertEquals(4, types.size());
+        assertTypesEqual(figures, types, 0);
+        assertTypesEqual(figures, types, 1);
+        assertTypesEqual(figures, types, 2);
+        assertTypesEqual(figures, types, 3);
+    }
+
+    private RandomizerFetcher getFetcher(Randomizer random) {
+        RandomizerFetcher randomizer = mock(RandomizerFetcher.class);
+        when(randomizer.get()).thenReturn(random);
+        return randomizer;
     }
 
     @Test
     public void shouldOpenNewFituresAfterFutureIsEmpty(){
-        Randomizer randomizer = new EquiprobableRandomizer(dice);
-        RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
-        when(randomizerFetcher.get()).thenReturn(randomizer);
-        PlayerFigures playerFigures = new PlayerFigures(1);
-        playerFigures.setRandomizerFetcher(randomizerFetcher);
-        playerFigures.openFigures(I);
+        Figures figures = new Figures(1);
+        figures.setRandomizer(getFetcher(new EquiprobableRandomizer(dice)));
+        figures.open(I);
 
-        playerFigures.openFigures(J);
+        figures.open(J);
 
-        assertEquals(I, playerFigures.getFutureFigures().get(0));
-        assertEquals(I, playerFigures.next().getType());
-        assertEquals(J, playerFigures.getFutureFigures().get(0));
-        assertEquals(J, playerFigures.next().getType());
+        assertEquals(I, figures.getFuture().get(0));
+        assertEquals(I, figures.next().getType());
+        assertEquals(J, figures.getFuture().get(0));
+        assertEquals(J, figures.next().getType());
     }
 
-    private void assertTypesEqual(PlayerFigures playerFigures, List<Type> futureFigures, int index) {
-        assertEquals(playerFigures.next().getType(), futureFigures.get(index));
+    private void assertTypesEqual(Figures figures, List<Type> futureFigures, int index) {
+        assertEquals(figures.next().getType(), futureFigures.get(index));
     }
 
 

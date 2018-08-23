@@ -40,7 +40,7 @@ import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED
  */
 public class ProbabilityLevels extends Levels {
 
-    public ProbabilityLevels(Dice dice, PlayerFigures queue) {
+    public ProbabilityLevels(Dice dice, Figures queue) {
         super(new ProbabilityFigureTypesLevel(dice, queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 0),
                         lastFigureProbability(dice, 100),

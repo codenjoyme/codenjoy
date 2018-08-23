@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.model.levels;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.Levels;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.Figures;
 import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
 import com.codenjoy.dojo.tetris.model.levels.level.EasyLevels;
 import com.codenjoy.dojo.tetris.model.levels.level.HardLevels;
@@ -51,7 +51,7 @@ public class LevelsFactoryTest {
     @Test
     public void shouldLoadClass(){
         Levels loaded = factory.getGameLevels(mock(Dice.class),
-                mock(PlayerFigures.class),
+                mock(Figures.class),
                 "HardLevels");
 
         assertEquals(HardLevels.class, loaded.getClass());

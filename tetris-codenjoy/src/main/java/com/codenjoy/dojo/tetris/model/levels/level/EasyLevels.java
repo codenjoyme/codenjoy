@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
 import com.codenjoy.dojo.tetris.model.Levels;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.Figures;
 
 import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
@@ -39,7 +39,7 @@ import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED
  */
 public class EasyLevels extends Levels {
 
-    public EasyLevels(Dice dice, PlayerFigures queue) {
+    public EasyLevels(Dice dice, Figures queue) {
         super(new FigureTypesLevel(dice, queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 0),
                         O),

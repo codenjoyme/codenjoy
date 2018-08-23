@@ -47,12 +47,12 @@ public class NullGameLevel implements GameLevel {
     }
 
     @Override
-    public FigureQueue getFigureQueue() {
+    public FigureQueue queue() {
         return null;
     }
 
     @Override
-    public int getFigureTypesToOpenCount() {
+    public int openCount() {
         return 0;
     }
 }

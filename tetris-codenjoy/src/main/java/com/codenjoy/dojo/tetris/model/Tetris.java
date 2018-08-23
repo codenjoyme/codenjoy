@@ -55,7 +55,7 @@ public class Tetris implements Field {
 
     @Override
     public List<Type> getFutureFigures() {
-        return queue.getFutureFigures();
+        return queue.getFuture();
     }
 
     @Override

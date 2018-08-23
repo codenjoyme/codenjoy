@@ -122,7 +122,7 @@ public class Levels implements GlassEventListener {
         private int totalRemovedLines;
         private int currentLevel;
         private String name;
-        private PlayerFigures queue;
+        private Figures queue;
         private Levels levels;
         private Dice dice;
 
@@ -148,7 +148,7 @@ public class Levels implements GlassEventListener {
 
         public Levels getLevels() {
             if (levels == null) {
-                queue = new PlayerFigures();
+                queue = new Figures();
                 levels = levelsFactory.getGameLevels(dice, queue, name);
                 levels.totalRemovedLines = totalRemovedLines;
                 levels.currentLevel = currentLevel;

@@ -32,67 +32,67 @@ import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class PlayerFigures implements FigureQueue {
+public class Figures implements FigureQueue {
     // TODO вот тут вообще ничего не понятно :)
     public static final int DEFAULT_FUTURE_COUNT = 4;
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
-    private Type[] openFigures = null;
-    private RandomizerFetcher randomizerFetcher;
+    private Type[] open = null;
+    private RandomizerFetcher fetcher;
     private List<Type> figures = new LinkedList<>();
     private int futureCount;
 
-    public PlayerFigures() {
+    public Figures() {
         this(DEFAULT_FUTURE_COUNT);
     }
 
-    public PlayerFigures(int futureCount) {
+    public Figures(int futureCount) {
         this.futureCount = futureCount;
     }
 
-    public void setRandomizerFetcher(RandomizerFetcher randomizerFetcher) {
-        this.randomizerFetcher = randomizerFetcher;
+    public void setRandomizer(RandomizerFetcher fetcher) {
+        this.fetcher = fetcher;
     }
 
     @Override
     public Figure next() {
         lock.readLock().lock();
         try {
-            figures.add(generateNextFigure());
+            figures.add(generate());
             return figures.remove(0).create();
         } finally {
             lock.readLock().unlock();
         }
     }
 
-    private Type generateNextFigure() {
-        return openFigures[getRandomizer().getNextNumber(openFigures.length)];
+    private Type generate() {
+        return open[getRandomizer().getNextNumber(open.length)];
     }
 
     @Override
-    public List<Type> getFutureFigures() {
+    public List<Type> getFuture() {
         return Collections.unmodifiableList(new LinkedList<>(figures));
     }
 
     private Randomizer getRandomizer() {
-        return randomizerFetcher.get();
+        return fetcher.get();
     }
 
-    public void openFigures(Type... figureTypesToOpen) {
+    public void open(Type... figures) {
         lock.writeLock().lock();
         try {
-            openFigures = figureTypesToOpen;
-            if (figures.isEmpty()) {
-                fillFutureFigures();
+            open = figures;
+            if (this.figures.isEmpty()) {
+                fillFuture();
             }
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private void fillFutureFigures() {
+    private void fillFuture() {
         for (int i = 0; i < futureCount; i++) {
-            figures.add(generateNextFigure());
+            figures.add(generate());
         }
     }
 }

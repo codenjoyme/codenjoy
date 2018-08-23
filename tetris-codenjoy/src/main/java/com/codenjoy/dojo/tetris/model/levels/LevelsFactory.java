@@ -26,7 +26,7 @@ package com.codenjoy.dojo.tetris.model.levels;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.Levels;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.Figures;
 import com.codenjoy.dojo.tetris.model.levels.level.*;
 
 import java.lang.reflect.Constructor;
@@ -51,7 +51,7 @@ public class LevelsFactory {
         String className = LevelsFactory.class.getPackage().getName() + ".level." + levels;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
-            Constructor<?> constructor = aClass.getConstructor(Dice.class, PlayerFigures.class);
+            Constructor<?> constructor = aClass.getConstructor(Dice.class, Figures.class);
             Object result = constructor.newInstance(dice, playerQueue);
             return (Levels)result;
         } catch (ReflectiveOperationException e) {

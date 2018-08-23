@@ -48,7 +48,7 @@ public class ProbabilityLevelsTest {
     @Before
     public void setUp() {
         Dice dice = new TrueRandomDice();
-        levels = new ProbabilityLevels(dice, new PlayerFigures());
+        levels = new ProbabilityLevels(dice, new Figures());
         levels.setChangeLevelListener(mock(ChangeLevelListener.class));
     }
 
@@ -104,13 +104,10 @@ public class ProbabilityLevelsTest {
         GameLevel currentLevel = levels.getCurrentLevel();
 
         Randomizer randomizer = getRandomizer(currentLevel);
-        int openFigures = getOpenFiguresLength(currentLevel.getFigureQueue());
+        Type[] figures = EasyLevelsTest.getOpenFigures(currentLevel.queue());
+        int openFigures = figures.length;
 
         return ProbabilityRandomizerTest.calculateFiguresProbabilities(randomizer, openFigures, COUNT_ITERATIONS).toString();
-    }
-
-    private int getOpenFiguresLength(FigureQueue queue) {
-        return field("openFigures").ofType(Type[].class).in(queue).get().length;
     }
 
     @Test

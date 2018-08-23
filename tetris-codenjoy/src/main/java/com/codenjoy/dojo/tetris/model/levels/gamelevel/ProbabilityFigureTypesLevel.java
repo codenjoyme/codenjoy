@@ -25,7 +25,7 @@ package com.codenjoy.dojo.tetris.model.levels.gamelevel;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.Figures;
 import com.codenjoy.dojo.tetris.model.Type;
 import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 
@@ -33,7 +33,7 @@ public class ProbabilityFigureTypesLevel extends FigureTypesLevel {
     private Randomizer randomizer;
 
     public ProbabilityFigureTypesLevel(Dice dice,
-                                       PlayerFigures figuresQueue,
+                                       Figures figuresQueue,
                                        GlassEvent event,
                                        Randomizer randomizer,
                                        Type... figureTypesToOpen)
@@ -41,6 +41,6 @@ public class ProbabilityFigureTypesLevel extends FigureTypesLevel {
         super(dice, figuresQueue, event, figureTypesToOpen);
         this.randomizer = randomizer;
 
-        figuresQueue.setRandomizerFetcher(() -> ProbabilityFigureTypesLevel.this.randomizer);
+        figuresQueue.setRandomizer(() -> ProbabilityFigureTypesLevel.this.randomizer);
     }
 }

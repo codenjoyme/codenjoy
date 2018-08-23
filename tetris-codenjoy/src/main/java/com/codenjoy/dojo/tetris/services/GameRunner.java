@@ -63,13 +63,13 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame() {
-        PlayerFigures queue = new PlayerFigures();
+        Figures queue = new Figures();
         Levels levels = getLevels(queue);
         // TODO не понятно что делать с этим levels
         return new Tetris(queue, glassSize.getValue());
     }
 
-    private Levels getLevels(PlayerFigures queue) {
+    private Levels getLevels(Figures queue) {
         String levelName = gameLevels.getValue();
         return new LevelsFactory().getGameLevels(getDice(), queue, levelName);
     }

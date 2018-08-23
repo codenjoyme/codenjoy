@@ -28,16 +28,16 @@ import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.random.EquiprobableRandomizer;
 
 public class FigureTypesLevel implements GameLevel {
-    protected PlayerFigures figuresQueue;
+    protected Figures figuresQueue;
     private GlassEvent event;
     private Type[] figureTypesToOpen;
 
-    public FigureTypesLevel(Dice dice, PlayerFigures figuresQueue, GlassEvent event, Type... figureTypesToOpen) {
+    public FigureTypesLevel(Dice dice, Figures figuresQueue, GlassEvent event, Type... figureTypesToOpen) {
         this.figuresQueue = figuresQueue;
         this.event = event;
         this.figureTypesToOpen = figureTypesToOpen;
 
-        figuresQueue.setRandomizerFetcher(() -> new EquiprobableRandomizer(dice));
+        figuresQueue.setRandomizer(() -> new EquiprobableRandomizer(dice));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class FigureTypesLevel implements GameLevel {
 
     @Override
     public void apply() {
-        figuresQueue.openFigures(figureTypesToOpen);
+        figuresQueue.open(figureTypesToOpen);
     }
 
     @Override
@@ -61,12 +61,12 @@ public class FigureTypesLevel implements GameLevel {
     }
 
     @Override
-    public FigureQueue getFigureQueue() {
+    public FigureQueue queue() {
         return figuresQueue;
     }
 
     @Override
-    public int getFigureTypesToOpenCount() {
+    public int openCount() {
         return figureTypesToOpen.length;
     }
 }
