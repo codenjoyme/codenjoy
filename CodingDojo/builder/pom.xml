@@ -54,6 +54,7 @@
         <exclude.reversi>true</exclude.reversi>
         <exclude.quadro>true</exclude.quadro>
         <exclude.lunolet>true</exclude.lunolet>
+        <exclude.tetris>true</exclude.tetris>
     </properties>
 
     <repositories>
@@ -548,6 +549,24 @@
                 <dependency>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>lunolet-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>tetris</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.tetris>false</exclude.tetris>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>tetris-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -1212,6 +1231,27 @@
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>lunolet-engine</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>resources/**/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-tetris</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${exclude.tetris}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>tetris-engine</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

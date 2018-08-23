@@ -68,6 +68,7 @@
         <module>reversi</module>
         <module>quadro</module>
         <module>lunolet</module>
+        <module>tetris</module>
     </modules>
 
     <dependencyManagement>
