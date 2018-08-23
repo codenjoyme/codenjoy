@@ -25,11 +25,10 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
-public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
+public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
-    private Boolean def;
+    private T def;
     private String name;
 
     public CheckBox(String name) {
@@ -37,7 +36,7 @@ public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
     }
 
     @Override
-    public Boolean getValue() {
+    public T getValue() {
         return (get() == null) ? def : get();
     }
 
@@ -52,12 +51,45 @@ public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
     }
 
     @Override
-    public void update(Boolean value) {
-        set(value);
+    public void update(T value) {
+        if (value == null) {
+            return;
+        }
+        Boolean b = parse(value);
+        if (b == null) {
+            set(tryParse(value));
+        } else {
+            set(code(b));
+        }
+    }
+
+    private T code(boolean value) {
+        if (Integer.class.equals(type)) {
+            return (T)((value) ? Integer.valueOf(1) : Integer.valueOf(0));
+        } else if (Boolean.class.equals(type)) {
+            return (T) Boolean.valueOf(value);
+        } else if (String.class.equals(type)) {
+            return (T) Boolean.valueOf(value).toString();
+        } else {
+            return tryParse(Boolean.valueOf(value));
+        }
+    }
+
+    private Boolean parse(T value) {
+        if (value instanceof Boolean) {
+            return (Boolean)value;
+        } else if (value instanceof String) {
+            return ("true".equalsIgnoreCase((String) value)
+                    || "1".equals(value));
+        } else if (value instanceof Integer){
+            return ((Integer)value == 1);
+        } else {
+            return null;
+        }
     }
 
     @Override
-    public Parameter<Boolean> def(Boolean value) {
+    public Parameter<T> def(T value) {
         this.def = value;
         return this;
     }
@@ -67,23 +99,14 @@ public class CheckBox extends Updatable<Boolean> implements Parameter<Boolean> {
         return this.name.equals(name);
     }
 
-    public <V> Parameter<V> type(Class<V> integerClass) {
-        return (Parameter<V>)this;
-    }
-
-    @Override
-    public Parameter<Boolean> parser(Function<String, Boolean> parser) {
-        throw new UnsupportedOperationException();
-    }
-
     @Override
     public void select(int index) {
-        set(index == 1);
+        set((T) Boolean.valueOf(index == 1));
     }
 
     @Override
-    public List<Boolean> getOptions() {
-        return new LinkedList<Boolean>(){{
+    public List<T> getOptions() {
+        return new LinkedList<T>(){{
             add(def);
             if (CheckBox.this.get() != null) {
                 add(CheckBox.this.get());

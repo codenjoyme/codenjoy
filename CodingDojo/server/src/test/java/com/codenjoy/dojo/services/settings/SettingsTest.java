@@ -23,15 +23,11 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -292,6 +288,35 @@ public class SettingsTest {
     }
 
     @Test
+    public void shouldToBooleanCheckBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Boolean> edit = settings.addCheckBox("check")
+                .type(Boolean.class).def(true);
+
+        assertEquals(true, edit.getValue());
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        Parameter parameter = parameters.get(0);
+
+        parameter.update("false");
+
+        assertEquals(false, edit.getValue());
+
+        parameter.update(true);
+
+        assertEquals(true, edit.getValue());
+
+        parameter.update(0);
+
+        assertEquals(false, edit.getValue());
+
+        parameter.update("1");
+
+        assertEquals(true, edit.getValue());
+    }
+
+    @Test
     public void shouldSetStringToIntegerEditBox() {
         Settings settings = new SettingsImpl();
 
@@ -304,6 +329,35 @@ public class SettingsTest {
         parameters.get(0).update("42");
 
         assertEquals(42, edit.getValue().intValue());
+    }
+
+    @Test
+    public void shouldToIntegerCheckBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Integer> edit = settings.addCheckBox("check")
+                .type(Integer.class).def(1);
+
+        assertEquals(1, edit.getValue().intValue());
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        Parameter parameter = parameters.get(0);
+
+        parameter.update("0");
+
+        assertEquals(0, edit.getValue().intValue());
+
+        parameter.update(1);
+
+        assertEquals(1, edit.getValue().intValue());
+
+        parameter.update(false);
+
+        assertEquals(0, edit.getValue().intValue());
+
+        parameter.update("true");
+
+        assertEquals(1, edit.getValue().intValue());
     }
 
     @Test
@@ -334,6 +388,35 @@ public class SettingsTest {
         parameters.get(0).update("updated");
 
         assertEquals("updated", edit.getValue());
+    }
+
+    @Test
+    public void shouldToStringCheckBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<String> edit = settings.addCheckBox("check")
+                .type(String.class).def("false");
+
+        assertEquals("false", edit.getValue());
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        Parameter parameter = parameters.get(0);
+
+        parameter.update("true");
+
+        assertEquals("true", edit.getValue());
+
+        parameter.update(0);
+
+        assertEquals("false", edit.getValue());
+
+        parameter.update("1");
+
+        assertEquals("true", edit.getValue());
+
+        parameter.update(false);
+
+        assertEquals("false", edit.getValue());
     }
 
     public static class Foo {
@@ -369,6 +452,31 @@ public class SettingsTest {
 
         assertEquals(3, edit.getValue().a);
         assertEquals(4, edit.getValue().b);
+    }
+
+    @Test
+    public void shouldSetStringToObjectCheckBox() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Foo> edit = settings.addCheckBox("check")
+                .type(Foo.class).def(new Foo(2, 2))
+                .parser(string -> new Foo(
+                        (Boolean.valueOf(string)) ? 1 : 0,
+                        (Boolean.valueOf(string)) ? 0 : 1));
+
+        assertEquals(2, edit.getValue().a);
+        assertEquals(2, edit.getValue().b);
+
+        List<Parameter> parameters = (List)settings.getParameters();
+        parameters.get(0).update(true);
+
+        assertEquals(1, edit.getValue().a);
+        assertEquals(0, edit.getValue().b);
+
+        parameters.get(0).update(false);
+
+        assertEquals(0, edit.getValue().a);
+        assertEquals(1, edit.getValue().b);
     }
 
     @Test

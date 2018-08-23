@@ -176,16 +176,22 @@
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
                 </tr>
-                <c:forEach items="${parameters}" var="parameter" varStatus="status">
+                <c:forEach items="${settings}" var="element" varStatus="status">
                     <tr>
-                        <td>${parameter.name}</td>
-                        <c:choose> <!-- TODO реализовать check box -->
-                            <c:when test="${parameter.type == 'selectbox'}">
+                        <td>${element.name}</td>
+                        <c:choose>
+                            <c:when test="${element.type == 'selectbox'}">
                                 <td><form:select path="parameters[${status.index}]"
-                                        items="${parameter.options}"/></td>
+                                        items="${element.options}"/></td>
                             </c:when>
-                            <c:otherwise> <!-- editbox -->
+                            <c:when test="${element.type == 'editbox'}">
                                 <td><form:input path="parameters[${status.index}]"/></td>
+                            </c:when>
+                            <c:when test="${element.type == 'checkbox'}">
+                                <td><form:checkbox path="parameters[${status.index}]"/></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${parameter.value}</td>
                             </c:otherwise>
                         </c:choose>
                     </tr>

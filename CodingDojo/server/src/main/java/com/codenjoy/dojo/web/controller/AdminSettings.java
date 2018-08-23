@@ -31,7 +31,7 @@ public class AdminSettings {
 
     private List<PlayerInfo> players;
 
-    private List<String> parameters;
+    private List<Object> parameters;
 
     private String gameName;
 
@@ -52,11 +52,11 @@ public class AdminSettings {
         this.players = players;
     }
 
-    public void setParameters(List<String> parameters) {
+    public void setParameters(List<Object> parameters) {
         this.parameters = parameters;
     }
 
-    public List<String> getParameters() {
+    public List<Object> getParameters() {
         return parameters;
     }
 

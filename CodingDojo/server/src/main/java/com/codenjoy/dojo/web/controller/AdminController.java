@@ -225,7 +225,10 @@ public class AdminController {
             List<Parameter> parameters = (List) gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
                 try {
-                    parameters.get(index).update(settings.getParameters().get(index));
+                    Parameter parameter = parameters.get(index);
+                    Object value = settings.getParameters().get(index);
+                    value = fixForCheckbox(parameter, value);
+                    parameter.update(value);
                 } catch (Exception e) {
                     errors.add(e);
                 }
@@ -255,6 +258,13 @@ public class AdminController {
 
         request.setAttribute(GAME_NAME, settings.getGameName());
         return getAdmin(settings.getGameName());
+    }
+
+    private Object fixForCheckbox(Parameter parameter, Object value) {
+        if (value == null && parameter.getType().equals("checkbox")) {
+            return false; // потому что так работает <form:checkbox
+        }
+        return value;
     }
 
     private String getAdmin(String gameName) {
@@ -288,11 +298,11 @@ public class AdminController {
 
         settings.setParameters(new LinkedList<>());
         for (Parameter p : parameters) {
-            settings.getParameters().add(p.getValue().toString());
+            settings.getParameters().add(p.getValue());
         }
 
         model.addAttribute("adminSettings", settings);
-        model.addAttribute("parameters", parameters);
+        model.addAttribute("settings", parameters);
         model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");

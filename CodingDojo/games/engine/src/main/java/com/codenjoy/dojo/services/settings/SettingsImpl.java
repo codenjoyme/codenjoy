@@ -63,6 +63,7 @@ public class SettingsImpl implements Settings {
         if (map.containsKey(name)) return (Parameter<Boolean>) map.get(name);
 
         Parameter<Boolean> parameter = new CheckBox(name);
+        parameter.type(Boolean.class);
         parameters.add(parameter);
         map.put(name, parameter);
         return parameter;
