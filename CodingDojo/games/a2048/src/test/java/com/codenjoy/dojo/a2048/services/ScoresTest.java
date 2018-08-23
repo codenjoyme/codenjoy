@@ -33,8 +33,6 @@ import static org.junit.Assert.assertEquals;
 public class ScoresTest {
     private PlayerScores scores;
 
-    private Settings settings;
-
     public void sum(int sum) {
         scores.event(new Events(Events.Event.SUM, sum));
     }

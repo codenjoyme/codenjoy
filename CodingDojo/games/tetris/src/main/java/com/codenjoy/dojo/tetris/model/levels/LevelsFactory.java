@@ -44,6 +44,7 @@ public class LevelsFactory {
     public List<String> allLevels() {
         return allLevelsClasses().stream()
                 .map(clazz -> clazz.getSimpleName())
+                .sorted()
                 .collect(toList());
     }
 

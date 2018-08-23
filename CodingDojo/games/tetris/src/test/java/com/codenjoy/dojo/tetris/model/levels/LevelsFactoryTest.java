@@ -41,7 +41,7 @@ public class LevelsFactoryTest {
     @Test
     public void shouldReturnAllLevels(){
         List<String> list = factory.allLevels();
-        assertEquals("[HardLevels, EasyLevels, AllFigureLevels, " +
+        assertEquals("[AllFigureLevels, EasyLevels, HardLevels, " +
                 "ProbabilityLevels, ProbabilityWithoutOverflownLevels]", list.toString());
     }
 

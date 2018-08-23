@@ -27,6 +27,8 @@ import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
+import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
+import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityLevels;
 import com.codenjoy.dojo.tetris.services.GameRunner;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -68,7 +70,8 @@ public class SmokeTest {
 
         GameRunner gameType = new GameRunner() {
             {
-                settings.addEditBox("Glass Size").type(Integer.class).update(10);
+                settings.getParameter("Glass Size").update(10);
+                settings.getParameter("Game Levels").update(AllFigureLevels.class.getSimpleName());
             }
 
             @Override

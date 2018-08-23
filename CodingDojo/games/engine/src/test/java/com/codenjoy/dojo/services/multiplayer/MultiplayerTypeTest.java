@@ -121,7 +121,7 @@ public class MultiplayerTypeTest {
     @Test
     public void typeMultiple() {
         MultiplayerType multiple = MultiplayerType.MULTIPLE;
-        assertEquals(-1, multiple.getCount());
+        assertEquals(Integer.MAX_VALUE, multiple.getCount());
 
         assertEquals(false, multiple.isSingle());
         assertEquals(false, multiple.isTournament());

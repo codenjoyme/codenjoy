@@ -81,6 +81,20 @@ public class ScoresTest {
     }
 
     @Test
+    public void shouldSnakeLengthCantLessThen3() {
+        scores = new Scores(0, settings);
+
+        snakeEatStone();  //-10
+        snakeEatStone();  //-10
+
+        assertEquals(0, score());
+
+        snakeEatApple();
+
+        assertEquals(3, score());
+    }
+
+    @Test
     public void shouldShortLengthWhenEatStone() {
         scores = new Scores(0, settings);
 
