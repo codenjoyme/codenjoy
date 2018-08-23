@@ -65,7 +65,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureI() {
-        Figure figure = Type.I.createNewFigure();
+        Figure figure = Type.I.create();
         assertDimensions(figure, 1, 2, 1, 0, 0);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b001, 0b001, 0b001, 0b001});
 
@@ -87,7 +87,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureJ() {
-        Figure figure = Type.J.createNewFigure();
+        Figure figure = Type.J.create();
         assertDimensions(figure, 2, 1, 1, 1, 0);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b0000010, 0b000010, 0b010010});
 
@@ -109,7 +109,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureL() {
-        Figure figure = Type.L.createNewFigure();
+        Figure figure = Type.L.create();
         assertDimensions(figure, 2, 1, 1, 0, 1);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b011000, 0b011000, 0b011011});
 
@@ -131,7 +131,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureO() {
-        Figure figure = Type.O.createNewFigure();
+        Figure figure = Type.O.create();
         assertDimensions(figure, 2, 1, 0, 0, 1);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b100100, 0b100100});
 
@@ -153,7 +153,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureS() {
-        Figure figure = Type.S.createNewFigure();
+        Figure figure = Type.S.create();
         assertDimensions(figure, 3, 0, 1, 1, 1);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b000101101, 0b101101000});
 
@@ -175,7 +175,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureT() {
-        Figure figure = Type.T.createNewFigure();
+        Figure figure = Type.T.create();
         assertDimensions(figure, 3, 0, 1, 1, 1);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b000110000, 0b110110110});
 
@@ -197,7 +197,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureT_NoNegativeRotatesSupported() {
-        Figure figure = Type.T.createNewFigure();
+        Figure figure = Type.T.create();
         assertDimensions(figure, 3, 0, 1, 1, 1);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b000110000, 0b110110110});
 
@@ -209,7 +209,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateFigureZ() {
-        Figure figure = Type.Z.createNewFigure();
+        Figure figure = Type.Z.create();
         assertDimensions(figure, 3, 0, 1, 1, 1);
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b111111000, 0b000111111});
 

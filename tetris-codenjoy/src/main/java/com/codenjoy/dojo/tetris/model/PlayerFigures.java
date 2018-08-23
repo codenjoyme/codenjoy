@@ -59,7 +59,7 @@ public class PlayerFigures implements FigureQueue {
         lock.readLock().lock();
         try {
             figures.add(generateNextFigure());
-            return figures.remove(0).createNewFigure();
+            return figures.remove(0).create();
         } finally {
             lock.readLock().unlock();
         }
