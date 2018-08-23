@@ -164,7 +164,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         glass.figureAt(figure, x, y);
     }
 
-    public Figure.Type getCurrentFigureType() {
+    public Type getCurrentFigureType() {
         if (figure == null) {
             return null;
         }

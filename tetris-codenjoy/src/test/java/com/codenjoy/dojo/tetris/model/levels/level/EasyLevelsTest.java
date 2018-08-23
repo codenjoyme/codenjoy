@@ -30,7 +30,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Type.*;
 import static junit.framework.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
@@ -64,17 +64,17 @@ public class EasyLevelsTest {
         assertFigures(O, I, J, L, S, Z, T);
     }
 
-    private void assertFigures(Figure.Type... expected) {
+    private void assertFigures(Type... expected) {
         GameLevel currentLevel = levels.getCurrentLevel();
 
-        Figure.Type[] openFigures = getOpenFigures(currentLevel.getFigureQueue());
+        Type[] openFigures = getOpenFigures(currentLevel.getFigureQueue());
 
         assertEquals(Arrays.toString(expected), Arrays.toString(openFigures));
 
         levels.linesRemoved(LINES_REMOVED_FOR_NEXT_LEVEL);
     }
 
-    private Figure.Type[] getOpenFigures(FigureQueue queue) {
-        return field("openFigures").ofType(Figure.Type[].class).in(queue).get();
+    private Type[] getOpenFigures(FigureQueue queue) {
+        return field("openFigures").ofType(Type[].class).in(queue).get();
     }
 }

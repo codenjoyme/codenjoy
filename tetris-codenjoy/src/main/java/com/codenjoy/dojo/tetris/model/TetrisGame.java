@@ -54,7 +54,7 @@ public class TetrisGame implements Field {
     }
 
     @Override
-    public List<Figure.Type> getFutureFigures() {
+    public List<Type> getFutureFigures() {
         return queue.getFutureFigures();
     }
 
@@ -87,7 +87,7 @@ public class TetrisGame implements Field {
         Glass glass = player.getHero().getGlass();
         Collections.sort(plots, Comparator.comparingInt(PointImpl::getY));
         for (Plot plot : plots) {
-            Figure.Type type = Figure.Type.valueOf(String.valueOf(plot.getColor().ch()));
+            Type type = Type.valueOf(String.valueOf(plot.getColor().ch()));
             Figure figure = new TetrisFigure(0, 0, type, "#");
             glass.drop(figure, plot.getX(), plot.getY());
         }

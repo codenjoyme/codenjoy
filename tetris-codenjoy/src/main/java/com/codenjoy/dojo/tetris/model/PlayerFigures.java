@@ -37,9 +37,9 @@ public class PlayerFigures implements FigureQueue {
     public static final int DEFAULT_FUTURE_COUNT = 4;
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
-    private Figure.Type[] openFigures = null;
+    private Type[] openFigures = null;
     private RandomizerFetcher randomizerFetcher;
-    private List<Figure.Type> figures = new LinkedList<>();
+    private List<Type> figures = new LinkedList<>();
     private int futureCount;
 
     public PlayerFigures() {
@@ -65,12 +65,12 @@ public class PlayerFigures implements FigureQueue {
         }
     }
 
-    private Figure.Type generateNextFigure() {
+    private Type generateNextFigure() {
         return openFigures[getRandomizer().getNextNumber(openFigures.length)];
     }
 
     @Override
-    public List<Figure.Type> getFutureFigures() {
+    public List<Type> getFutureFigures() {
         return Collections.unmodifiableList(new LinkedList<>(figures));
     }
 
@@ -78,7 +78,7 @@ public class PlayerFigures implements FigureQueue {
         return randomizerFetcher.get();
     }
 
-    public void openFigures(Figure.Type... figureTypesToOpen) {
+    public void openFigures(Type... figureTypesToOpen) {
         lock.writeLock().lock();
         try {
             openFigures = figureTypesToOpen;

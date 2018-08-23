@@ -30,9 +30,9 @@ import com.codenjoy.dojo.tetris.model.levels.random.EquiprobableRandomizer;
 public class FigureTypesLevel implements GameLevel {
     protected PlayerFigures figuresQueue;
     private GlassEvent event;
-    private Figure.Type[] figureTypesToOpen;
+    private Type[] figureTypesToOpen;
 
-    public FigureTypesLevel(Dice dice, PlayerFigures figuresQueue, GlassEvent event, Figure.Type... figureTypesToOpen) {
+    public FigureTypesLevel(Dice dice, PlayerFigures figuresQueue, GlassEvent event, Type... figureTypesToOpen) {
         this.figuresQueue = figuresQueue;
         this.event = event;
         this.figureTypesToOpen = figureTypesToOpen;

@@ -29,8 +29,8 @@ import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.PlayerFigures;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 
-import static com.codenjoy.dojo.tetris.model.Figure.Type.I;
-import static com.codenjoy.dojo.tetris.model.Figure.Type.O;
+import static com.codenjoy.dojo.tetris.model.Type.I;
+import static com.codenjoy.dojo.tetris.model.Type.O;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.LINES_REMOVED;
 
 /**

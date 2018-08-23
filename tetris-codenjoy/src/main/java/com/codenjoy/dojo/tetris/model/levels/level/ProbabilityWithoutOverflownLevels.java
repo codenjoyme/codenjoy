@@ -29,7 +29,7 @@ import com.codenjoy.dojo.tetris.model.levels.gamelevel.ProbabilityFigureTypesLev
 import com.codenjoy.dojo.tetris.model.levels.random.ProbabilityRandomizer;
 import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 
-import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED;
 
 

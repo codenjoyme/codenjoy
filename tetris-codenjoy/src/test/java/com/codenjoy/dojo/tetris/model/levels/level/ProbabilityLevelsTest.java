@@ -109,7 +109,7 @@ public class ProbabilityLevelsTest {
     }
 
     private int getOpenFiguresLength(FigureQueue queue) {
-        return field("openFigures").ofType(Figure.Type[].class).in(queue).get().length;
+        return field("openFigures").ofType(Type[].class).in(queue).get().length;
     }
 
     @Test

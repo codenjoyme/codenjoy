@@ -29,7 +29,7 @@ import com.codenjoy.dojo.tetris.model.GlassEvent;
 import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.PlayerFigures;
 
-import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
 
 /**

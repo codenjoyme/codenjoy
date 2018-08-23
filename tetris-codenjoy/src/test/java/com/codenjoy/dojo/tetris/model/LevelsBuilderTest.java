@@ -89,9 +89,9 @@ public class LevelsBuilderTest {
 
         FigureQueue queue = levels.getCurrentLevel().getFigureQueue();
         retrieveAllFiguresFromPreviousLevel(queue);
-        assertEquals(Figure.Type.O, queue.next().getType());
-        assertEquals(Figure.Type.O, queue.next().getType());
-        assertEquals(Figure.Type.O, queue.next().getType());
+        assertEquals(Type.O, queue.next().getType());
+        assertEquals(Type.O, queue.next().getType());
+        assertEquals(Type.O, queue.next().getType());
     }
 
     private void retrieveAllFiguresFromPreviousLevel(FigureQueue queue) {

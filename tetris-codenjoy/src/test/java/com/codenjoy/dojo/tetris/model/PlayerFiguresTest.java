@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Type.*;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -40,12 +40,12 @@ import static org.mockito.Mockito.when;
 
 public class PlayerFiguresTest {
 
-    private Figure.Type[] allTypes;
+    private Type[] allTypes;
     private Dice dice;
 
     @Before
     public void setUp() throws Exception {
-        allTypes = new Figure.Type[]{I, O, J, L, S, Z, T};
+        allTypes = new Type[]{I, O, J, L, S, Z, T};
         dice = mock(Dice.class);
     }
 
@@ -73,7 +73,7 @@ public class PlayerFiguresTest {
         playerFigures.setRandomizerFetcher(randomizerFetcher);
         playerFigures.openFigures(allTypes);
 
-        List<Figure.Type> figures = playerFigures.getFutureFigures();
+        List<Type> figures = playerFigures.getFutureFigures();
 
         assertEquals(4, figures.size());
         assertTypesEqual(playerFigures, figures, 0);
@@ -99,7 +99,7 @@ public class PlayerFiguresTest {
         assertEquals(J, playerFigures.next().getType());
     }
 
-    private void assertTypesEqual(PlayerFigures playerFigures, List<Figure.Type> futureFigures, int index) {
+    private void assertTypesEqual(PlayerFigures playerFigures, List<Type> futureFigures, int index) {
         assertEquals(playerFigures.next().getType(), futureFigures.get(index));
     }
 

@@ -37,5 +37,5 @@ public @interface FigureProperties {
 
     int bottom() default 0;
 
-    Figure.Type type() default Figure.Type.I;
+    Type type() default Type.I;
 }

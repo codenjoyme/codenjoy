@@ -40,9 +40,9 @@ import static org.fest.assertions.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class TetrisFigureColorTest {
     private int expectedColorCode;
-    private Figure.Type figureType;
+    private Type figureType;
 
-    public TetrisFigureColorTest(Figure.Type figureType, int expectedColorCode) {
+    public TetrisFigureColorTest(Type figureType, int expectedColorCode) {
         this.figureType = figureType;
         this.expectedColorCode = expectedColorCode;
     }
@@ -50,13 +50,13 @@ public class TetrisFigureColorTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] data = new Object[][] {
-                { Figure.Type.I, 0b001},
-                { Figure.Type.J, 0b010},
-                { Figure.Type.L, 0b011},
-                { Figure.Type.O, 0b100},
-                { Figure.Type.S, 0b101},
-                { Figure.Type.T, 0b110},
-                { Figure.Type.Z, 0b111},
+                { Type.I, 0b001},
+                { Type.J, 0b010},
+                { Type.L, 0b011},
+                { Type.O, 0b100},
+                { Type.S, 0b101},
+                { Type.T, 0b110},
+                { Type.Z, 0b111},
         };
         return Arrays.asList(data);
     }
