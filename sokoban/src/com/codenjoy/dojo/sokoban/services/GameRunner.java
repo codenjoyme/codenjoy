@@ -52,9 +52,9 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     protected String getMap() {
         if (Storage.levels.size()>0)
-        return TextIOHelper.getStringFromResources(Storage.levels.get("PlayerFirst")); //TODO player has to be real, not PlayerFirst as dummy
+        return TextIOHelper.getStringFromResourcesRtf(Storage.levels.get("PlayerFirst")); //TODO player has to be real, not PlayerFirst as dummy
         else
-            return TextIOHelper.getStringFromResources(1);
+            return TextIOHelper.getStringFromResourcesRtf(1);
     }
 
     @Override

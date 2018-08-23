@@ -339,15 +339,15 @@ public class SokobanTest {
     }
 
     @Test
-    public void shouldReadlevelFromTxtResource() {
-        String testBoardInit = TextIOHelper.getStringFromResources(0);
+    public void shouldReadlevelFromRtfResource() {
+        String testBoardInit = TextIOHelper.getStringFromResourcesRtf(0);
         givenF(testBoardInit);
         assertE(testBoardInit);
     }
 
     @Test
-    public void shouldReadLevelNonQuadroFromTxtResource() {
-        String testBoardInit = TextIOHelper.getStringFromResources(1);
+    public void shouldReadLevelFromRtfResourceWithSpacesAtTheEnd() {
+        String testBoardInit = TextIOHelper.getStringFromResourcesRtf(1);
         givenF(testBoardInit);
         assertE(testBoardInit);
     }
