@@ -26,7 +26,7 @@ package com.codenjoy.dojo.tetris.model.levels.level;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.ChangeLevelListener;
 import com.codenjoy.dojo.tetris.model.PlayerFigures;
-import com.codenjoy.dojo.tetris.model.TrueRandomDice;
+import com.codenjoy.dojo.tetris.model.levels.random.TrueRandomDice;
 import org.junit.Before;
 import org.junit.Test;
 

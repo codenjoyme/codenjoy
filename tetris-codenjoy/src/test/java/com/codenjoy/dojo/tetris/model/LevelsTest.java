@@ -62,7 +62,7 @@ public class LevelsTest {
         verify(levelChangedListener).levelChanged(0, level0);
         acceptLevels(true, false);
 
-        levels.figureDropped(new TetrisFigure());
+        levels.figureDropped(new FigureImpl());
 
         verify(levelChangedListener).levelChanged(1, level1);
         verifyNoMoreInteractions(levelChangedListener);
@@ -73,7 +73,7 @@ public class LevelsTest {
         acceptLevels(true, false);
 
         levels.glassOverflown();
-        levels.figureDropped(new TetrisFigure());
+        levels.figureDropped(new FigureImpl());
 
         verify(level1, times(1)).apply();
         verify(level2, never()).apply();
@@ -93,7 +93,7 @@ public class LevelsTest {
         acceptLevels(false, false);
 
         levels.glassOverflown();
-        TetrisFigure droppedFigure = new TetrisFigure();
+        FigureImpl droppedFigure = new FigureImpl();
         levels.figureDropped(droppedFigure);
         levels.linesRemoved(12);
 
@@ -171,7 +171,7 @@ public class LevelsTest {
     public void shouldStayOnLastLevelWhenNoMoreLevels(){
         acceptLevels(true, true);
         levels.linesRemoved(1);
-        levels.figureDropped(new TetrisFigure());
+        levels.figureDropped(new FigureImpl());
 
         levels.glassOverflown();
 
@@ -196,7 +196,7 @@ public class LevelsTest {
 
     private void gotoNextLevel() {
         acceptLevel(level1, true);
-        levels.figureDropped(new TetrisFigure());
+        levels.figureDropped(new FigureImpl());
         acceptLevel(level2, false);
     }
 
@@ -206,7 +206,7 @@ public class LevelsTest {
         acceptLevels(true, false);
 
         levels.setChangeLevelListener(null);
-        levels.figureDropped(new TetrisFigure());
+        levels.figureDropped(new FigureImpl());
 
         verifyNoMoreInteractions(levelChangedListener);
     }

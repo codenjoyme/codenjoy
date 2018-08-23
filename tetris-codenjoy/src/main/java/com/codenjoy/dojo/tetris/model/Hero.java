@@ -39,7 +39,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void init(Field field) {
-        glass = new TetrisGlass(field.size(), field.size());
+        glass = new GlassImpl(field.size(), field.size());
         this.field = field;
     }
 

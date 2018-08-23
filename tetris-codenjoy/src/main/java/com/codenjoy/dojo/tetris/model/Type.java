@@ -5,49 +5,49 @@ public enum Type {
     I("I", Elements.BLUE) {
         @Override
         public Figure create() {
-            return new TetrisFigure(0, 1, I, "#", "#", "#", "#");
+            return new FigureImpl(0, 1, I, "#", "#", "#", "#");
         }
     },
 
     J("J", Elements.CYAN) {
         @Override
         public Figure create() {
-            return new TetrisFigure(1, 1, J, " #", " #", "##");
+            return new FigureImpl(1, 1, J, " #", " #", "##");
         }
     },
 
     L("L", Elements.ORANGE) {
         @Override
         public Figure create() {
-            return new TetrisFigure(0, 1, L, "# ", "# ", "##");
+            return new FigureImpl(0, 1, L, "# ", "# ", "##");
         }
     },
 
     O("O", Elements.YELLOW) {
         @Override
         public Figure create() {
-            return new TetrisFigure(0, 0, O, "##", "##");
+            return new FigureImpl(0, 0, O, "##", "##");
         }
     },
 
     S("S", Elements.GREEN) {
         @Override
         public Figure create() {
-            return new TetrisFigure(1, 1, S, " ##", "## ");
+            return new FigureImpl(1, 1, S, " ##", "## ");
         }
     },
 
     T("T", Elements.PURPLE) {
         @Override
         public Figure create() {
-            return new TetrisFigure(1, 1, T, " # ", "###");
+            return new FigureImpl(1, 1, T, " # ", "###");
         }
     },
 
     Z("Z", Elements.RED) {
         @Override
         public Figure create() {
-            return new TetrisFigure(1, 1, Z, "## ", " ##");
+            return new FigureImpl(1, 1, Z, "## ", " ##");
         }
     };
 

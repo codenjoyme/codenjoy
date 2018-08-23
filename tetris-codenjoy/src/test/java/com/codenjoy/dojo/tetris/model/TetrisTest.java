@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 
 public class TetrisTest {
 
-    private TetrisGame game;
+    private Tetris game;
     private Hero hero;
     private Dice dice;
     private EventListener listener;
@@ -72,7 +72,7 @@ public class TetrisTest {
 
         queue = mock(FigureQueue.class);
 
-        game = new TetrisGame(queue, level.getSize());
+        game = new Tetris(queue, level.getSize());
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);

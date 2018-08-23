@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.random.ProbabilityRandomizerTest;
 import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
+import com.codenjoy.dojo.tetris.model.levels.random.TrueRandomDice;
 import org.junit.Before;
 import org.junit.Test;
 

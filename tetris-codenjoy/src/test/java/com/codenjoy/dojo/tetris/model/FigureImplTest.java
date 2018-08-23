@@ -28,25 +28,25 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static org.fest.assertions.Assertions.assertThat;
 
-public class TetrisFigureTest {
+public class FigureImplTest {
 
     @Test
     public void shouldGetDimensionsWhenDefaultFigure() {
-        assertFigure(new TetrisFigure(), 0, 0, 0, 0);
+        assertFigure(new FigureImpl(), 0, 0, 0, 0);
     }
 
     @Test
     public void shouldGetXDimensionsWhenOneRow() {
-        assertFigure(new TetrisFigure(1, 0, "##"), 1, 0, 0, 0);
-        assertFigure(new TetrisFigure(0, 0, "##"), 0, 1, 0, 0);
-        assertFigure(new TetrisFigure(1, 0, "####"), 1, 2, 0, 0);
+        assertFigure(new FigureImpl(1, 0, "##"), 1, 0, 0, 0);
+        assertFigure(new FigureImpl(0, 0, "##"), 0, 1, 0, 0);
+        assertFigure(new FigureImpl(1, 0, "####"), 1, 2, 0, 0);
     }
 
     @Test
     public void shouldGetYDimensionsWhenOneColumn() {
-        assertFigure(new TetrisFigure(0, 1, "#", "#"), 0, 0, 1, 0);
-        assertFigure(new TetrisFigure(0, 0, "#", "#"), 0, 0, 0, 1);
-        assertFigure(new TetrisFigure(0, 1, "#", "#", "#", "#"), 0, 0, 1, 2);
+        assertFigure(new FigureImpl(0, 1, "#", "#"), 0, 0, 1, 0);
+        assertFigure(new FigureImpl(0, 0, "#", "#"), 0, 0, 0, 1);
+        assertFigure(new FigureImpl(0, 1, "#", "#", "#", "#"), 0, 0, 1, 2);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateWhenRotateOverShiftedYCenter() {
-        TetrisFigure figure = new TetrisFigure(0, 1, "#", "#");
+        FigureImpl figure = new FigureImpl(0, 1, "#", "#");
 
         figure.rotate(1);
 
@@ -241,7 +241,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateWhenRotateOverShiftedXCenter() {
-        TetrisFigure figure = new TetrisFigure(1, 0, "##");
+        FigureImpl figure = new FigureImpl(1, 0, "##");
 
         figure.rotate(1);
 
@@ -251,7 +251,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldRotateWhenSeveralTimes() {
-        TetrisFigure figure = new TetrisFigure(1, 1, " #", "# ", " #");
+        FigureImpl figure = new FigureImpl(1, 1, " #", "# ", " #");
 
         figure.rotate(2);
 
@@ -261,7 +261,7 @@ public class TetrisFigureTest {
 
     @Test
     public void shouldParseRowCodesWhenColorCyan() {
-        TetrisFigure figure = new TetrisFigure(0, 0, Type.J, "#");
+        FigureImpl figure = new FigureImpl(0, 0, Type.J, "#");
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{0b010});
     }
 
@@ -274,7 +274,7 @@ public class TetrisFigureTest {
 
     @Test(timeout = 1000)
     public void shouldRotateWhenOverflowTimes() {
-        TetrisFigure figure = new TetrisFigure(1, 1, " #", "# ", " #");
+        FigureImpl figure = new FigureImpl(1, 1, " #", "# ", " #");
 
         figure.rotate(Integer.MAX_VALUE);
     }
@@ -292,10 +292,10 @@ public class TetrisFigureTest {
     }
 
     private int[] rowCodes(boolean ignoreColors, String... rows) {
-        return new TetrisFigure(0, 0, rows).getRowCodes(ignoreColors);
+        return new FigureImpl(0, 0, rows).getRowCodes(ignoreColors);
     }
 
-    private void assertFigure(TetrisFigure figure, int left, int right, int top, int bottom) {
+    private void assertFigure(FigureImpl figure, int left, int right, int top, int bottom) {
         assertEquals(left, figure.getLeft());
         assertEquals(right, figure.getRight());
         assertEquals(top, figure.getTop());

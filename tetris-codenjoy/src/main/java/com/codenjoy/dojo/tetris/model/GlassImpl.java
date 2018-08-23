@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TetrisGlass implements Glass {
+public class GlassImpl implements Glass {
 
     public static final int BITS_PER_POINT = 3;
     private int width;
@@ -41,7 +41,7 @@ public class TetrisGlass implements Glass {
     private int currentX;
     private int currentY;
 
-    public TetrisGlass(int width, int height) {
+    public GlassImpl(int width, int height) {
         this.width = width;
         this.height = height;
         occupied = new long[height];

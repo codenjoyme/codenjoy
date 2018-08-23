@@ -66,7 +66,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         PlayerFigures queue = new PlayerFigures();
         Levels levels = getLevels(queue);
         // TODO не понятно что делать с этим levels
-        return new TetrisGame(queue, glassSize.getValue());
+        return new Tetris(queue, glassSize.getValue());
     }
 
     private Levels getLevels(PlayerFigures queue) {

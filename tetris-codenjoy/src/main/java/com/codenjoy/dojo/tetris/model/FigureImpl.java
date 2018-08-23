@@ -25,7 +25,8 @@ package com.codenjoy.dojo.tetris.model;
 
 import org.apache.commons.lang.StringUtils;
 
-public class TetrisFigure implements Figure, Cloneable {
+public class FigureImpl implements Figure, Cloneable {
+
     private int centerX;
     private int centerY;
     private Type type;
@@ -34,22 +35,21 @@ public class TetrisFigure implements Figure, Cloneable {
     private int[] uncoloredCodes;
 
     @Deprecated
-    public TetrisFigure() {
+    public FigureImpl() {
         this(0, 0, "#");
     }
 
     @Deprecated
-    public TetrisFigure(int centerX, int centerY, String... rows) {
+    public FigureImpl(int centerX, int centerY, String... rows) {
         this(centerX, centerY, Type.I, rows);
     }
 
-    public TetrisFigure(int centerX, int centerY, Type type, String... rows) {
+    public FigureImpl(int centerX, int centerY, Type type, String... rows) {
         this.centerX = centerX;
         this.centerY = centerY;
         this.type = type;
         parseRows(rows);
     }
-
 
     private void parseRows(String... rows) {
         this.rows = rows;

@@ -33,13 +33,13 @@ import java.util.List;
 /**
  * Created by Sergii_Zelenin on 7/10/2016.
  */
-public class TetrisGame implements Field {
+public class Tetris implements Field {
 
     protected FigureQueue queue;
     private int size;
     private Player player;
 
-    public TetrisGame(FigureQueue queue, int size) {
+    public Tetris(FigureQueue queue, int size) {
         this.queue = queue;
         this.size = size;
         takeFigure();
@@ -88,7 +88,7 @@ public class TetrisGame implements Field {
         Collections.sort(plots, Comparator.comparingInt(PointImpl::getY));
         for (Plot plot : plots) {
             Type type = Type.valueOf(String.valueOf(plot.getColor().ch()));
-            Figure figure = new TetrisFigure(0, 0, type, "#");
+            Figure figure = new FigureImpl(0, 0, type, "#");
             glass.drop(figure, plot.getX(), plot.getY());
         }
     }

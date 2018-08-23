@@ -38,11 +38,11 @@ import static org.fest.assertions.Assertions.assertThat;
  * Time: 6:31 PM
  */
 @RunWith(Parameterized.class)
-public class TetrisFigureColorTest {
+public class FigureImplColorTest {
     private int expectedColorCode;
     private Type figureType;
 
-    public TetrisFigureColorTest(Type figureType, int expectedColorCode) {
+    public FigureImplColorTest(Type figureType, int expectedColorCode) {
         this.figureType = figureType;
         this.expectedColorCode = expectedColorCode;
     }
@@ -63,7 +63,7 @@ public class TetrisFigureColorTest {
 
     @Test
     public void shouldReturnValidColorCode() {
-        TetrisFigure figure = new TetrisFigure(0, 0, figureType, "#");
+        FigureImpl figure = new FigureImpl(0, 0, figureType, "#");
         assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{expectedColorCode});
 
     }
