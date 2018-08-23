@@ -28,9 +28,10 @@ import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.NullGameLevel;
 
 public class Levels implements GlassEventListener {
+
     private GameLevel[] levels;
     private int currentLevel;
-    private ChangeLevelListener changeLevelListener;
+    private ChangeLevelListener listener;
     private int totalRemovedLines;
 
     public Levels(GameLevel ... levels) {
@@ -86,18 +87,18 @@ public class Levels implements GlassEventListener {
         return currentLevel;
     }
 
-    public void setChangeLevelListener(ChangeLevelListener changeLevelListener) {
-        this.changeLevelListener = changeLevelListener;
+    public void onChangeLevel(ChangeLevelListener listener) {
+        this.listener = listener;
         onLevelChanged();
     }
 
     protected void onLevelChanged() {
-        if (changeLevelListener != null) {
-            changeLevelListener.levelChanged(getCurrentLevelNumber(), getCurrentLevel());
+        if (listener != null) {
+            listener.levelChanged(getCurrentLevelNumber(), getCurrentLevel());
         }
     }
 
-    public int getTotalRemovedLines() {
+    public int totalRemovedLines() {
         return totalRemovedLines;
     }
 
@@ -142,11 +143,11 @@ public class Levels implements GlassEventListener {
             this.name = name;
         }
 
-        public FigureQueue getFigureQueue() {
+        public FigureQueue figureQueue() {
             return queue;
         }
 
-        public Levels getLevels() {
+        public Levels levels() {
             if (levels == null) {
                 queue = new Figures();
                 levels = levelsFactory.getGameLevels(dice, queue, name);

@@ -68,11 +68,11 @@ public class TetrisTest {
         printerFactory = new PrinterFactoryImpl<>();
 
         LevelImpl level = new LevelImpl(board);
-        List<Plot> plots = level.getPlots();
+        List<Plot> plots = level.plots();
 
         queue = mock(FigureQueue.class);
 
-        game = new Tetris(queue, level.getSize());
+        game = new Tetris(queue, level.size());
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -89,7 +89,7 @@ public class TetrisTest {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return hero.getDroppedPlots();
+                return hero.dropped();
             }
         }, player);
 

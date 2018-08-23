@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.State;
  * Time: 6:55 PM
  */
 public class Plot extends PointImpl implements State<Elements, Player> {
+
     private Elements color;
 
     public Plot(int x, int y, Elements color) {

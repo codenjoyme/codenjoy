@@ -61,7 +61,7 @@ public class FiguresTest {
         figures.open(allTypes);
 
         Figure next = figures.next();
-        assertEquals(allTypes[3], next.getType());
+        assertEquals(allTypes[3], next.type());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class FiguresTest {
         figures.setRandomizer(getFetcher(new EquiprobableRandomizer(dice)));
         figures.open(allTypes);
 
-        List<Type> types = figures.getFuture();
+        List<Type> types = figures.future();
 
         assertEquals(4, types.size());
         assertTypesEqual(figures, types, 0);
@@ -93,14 +93,14 @@ public class FiguresTest {
 
         figures.open(J);
 
-        assertEquals(I, figures.getFuture().get(0));
-        assertEquals(I, figures.next().getType());
-        assertEquals(J, figures.getFuture().get(0));
-        assertEquals(J, figures.next().getType());
+        assertEquals(I, figures.future().get(0));
+        assertEquals(I, figures.next().type());
+        assertEquals(J, figures.future().get(0));
+        assertEquals(J, figures.next().type());
     }
 
     private void assertTypesEqual(Figures figures, List<Type> futureFigures, int index) {
-        assertEquals(figures.next().getType(), futureFigures.get(index));
+        assertEquals(figures.next().type(), futureFigures.get(index));
     }
 
 

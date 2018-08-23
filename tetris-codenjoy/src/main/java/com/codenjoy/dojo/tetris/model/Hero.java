@@ -34,7 +34,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Glass glass;
 
-    private boolean dropRequested;
+    private boolean drop;
     private Figure figure;
 
     @Override
@@ -45,7 +45,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void down() {
-        dropRequested = true;
+        drop = true;
     }
 
     @Override
@@ -55,12 +55,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void left() {
-        moveHorizontallyIfAccepted(x - 1 < figure.getLeft() ? figure.getLeft() : x - 1);
+        moveHorizontallyIfAccepted(x - 1 < figure.left() ? figure.left() : x - 1);
     }
 
     @Override
     public void right() {
-        moveHorizontallyIfAccepted(x + 1 > field.size() - figure.getRight() ? field.size() - figure.getRight() : x + 1);
+        moveHorizontallyIfAccepted(x + 1 > field.size() - figure.right() ? field.size() - figure.right() : x + 1);
     }
 
     protected void moveHorizontallyIfAccepted(int tmpX) {
@@ -79,13 +79,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void act(int times) {
-        Figure clonedFigure = figure.getCopy();
+        Figure clonedFigure = figure.copy();
 
         figure.rotate(times);
         if (!glass.accept(figure, x, y)) {
             figure = clonedFigure;
         }
-        glass.figureAt(figure, x, y);
+        glass.isAt(figure, x, y);
     }
 
     private boolean theFirstStep() {
@@ -95,7 +95,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         if (theFirstStep()) {
-            Figure figure = field.takeFigure();
+            Figure figure = field.take();
             setFigure(figure);
             showCurrentFigure();
             return;
@@ -108,8 +108,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
 
-        if (dropRequested) {
-            dropRequested = false;
+        if (drop) {
+            drop = false;
             glass.drop(figure, x, y);
             figure = null;
             tick();
@@ -135,18 +135,18 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return Elements.NONE;
         }
 
-        return figure.getType().getColor();
+        return figure.type().getColor();
     }
 
-    public List<Plot> getCurrentFigurePlots() {
-        return glass.getCurrentFigurePlots();
+    public List<Plot> currentFigure() {
+        return glass.currentFigure();
     }
 
-    public List<Plot> getDroppedPlots() {
-        return glass.getDroppedPlots();
+    public List<Plot> dropped() {
+        return glass.dropped();
     }
 
-    public Glass getGlass() {
+    public Glass glass() {
         return glass;
     }
 
@@ -157,29 +157,29 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private int initialYPosition() {
-        return field.size() - figure.getTop();
+        return field.size() - figure.top();
     }
 
     public void showCurrentFigure() {
-        glass.figureAt(figure, x, y);
+        glass.isAt(figure, x, y);
     }
 
-    public Type getCurrentFigureType() {
+    public Type currentFigureType() {
         if (figure == null) {
             return null;
         }
-        return figure.getType();
+        return figure.type();
     }
 
-    public Point getCurrentFigurePoint() {
+    public Point currentFigurePoint() {
         if (figure == null) {
             return null;
         }
         return this.copy();
     }
 
-    public List<Character> getFutureFigures() {
-        return field.getFutureFigures()
+    public List<Character> future() {
+        return field.getFuture()
                 .stream()
                 .map(f -> f.getColor().ch())
                 .collect(toList());

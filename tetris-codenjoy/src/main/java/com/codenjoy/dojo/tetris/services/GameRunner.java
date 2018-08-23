@@ -133,8 +133,8 @@ public class GameRunner extends AbstractGameType implements GameType {
                 public Iterable<? extends Point> elements() {
                     return new LinkedList<Point>() {{
                         // TODO перекрываются фигурки которые падают с теми, что уже упали - надо пофиксить но не тут, а в момент появления фигурки, она должна появляться не полностью а только 1 ее уровень
-                        List<Plot> droppedPlots = hero.getDroppedPlots();
-                        List<Plot> currentFigurePlots = hero.getCurrentFigurePlots();
+                        List<Plot> droppedPlots = hero.dropped();
+                        List<Plot> currentFigurePlots = hero.currentFigure();
                         droppedPlots.removeAll(currentFigurePlots);
                         addAll(droppedPlots);
                         addAll(currentFigurePlots);
@@ -144,9 +144,9 @@ public class GameRunner extends AbstractGameType implements GameType {
             String board = graphicPrinter.print().replace("\n", "");
             result.put("layers", Arrays.asList(board));
 
-            result.put("currentFigureType", hero.getCurrentFigureType());
-            result.put("currentFigurePoint", hero.getCurrentFigurePoint());
-            result.put("futureFigures", hero.getFutureFigures());
+            result.put("currentFigureType", hero.currentFigureType());
+            result.put("currentFigurePoint", hero.currentFigurePoint());
+            result.put("futureFigures", hero.future());
 
             return result;
         });

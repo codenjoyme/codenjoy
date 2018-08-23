@@ -44,7 +44,7 @@ public class EasyLevelsTest {
     @Before
     public void setUp() {
         levels = new EasyLevels(dice, new Figures());
-        levels.setChangeLevelListener(mock(ChangeLevelListener.class));
+        levels.onChangeLevel(mock(ChangeLevelListener.class));
     }
 
     @Test

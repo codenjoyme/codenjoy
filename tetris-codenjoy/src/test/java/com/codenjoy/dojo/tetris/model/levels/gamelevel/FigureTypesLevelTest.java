@@ -45,18 +45,18 @@ public class FigureTypesLevelTest {
         Dice dice = mock(Dice.class);
 
         assertEquals("Remove 4 lines together",
-                new FigureTypesLevel(dice, queue, new GlassEvent(LINES_REMOVED, 4)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(LINES_REMOVED, 4)).nextLevelCriteria());
 
         assertEquals("Remove 13 lines",
-                new FigureTypesLevel(dice, queue, new GlassEvent(TOTAL_LINES_REMOVED, 13)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(TOTAL_LINES_REMOVED, 13)).nextLevelCriteria());
 
         assertEquals("This is last level",
-                new FigureTypesLevel(dice, queue, new GlassEvent(FIGURE_DROPPED, 0)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(FIGURE_DROPPED, 0)).nextLevelCriteria());
 
         assertEquals("This is last level",
-                new NullGameLevel().getNextLevelIngoingCriteria());
+                new NullGameLevel().nextLevelCriteria());
 
         assertEquals("Remove 77 lines without overflown",
-                new FigureTypesLevel(dice, queue, new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 77)).getNextLevelIngoingCriteria());
+                new FigureTypesLevel(dice, queue, new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 77)).nextLevelCriteria());
     }
 }

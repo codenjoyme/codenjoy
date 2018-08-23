@@ -39,7 +39,7 @@ public class ProbabilityWithoutOverflownLevelsTest extends ProbabilityLevelsTest
     public void setUp() {
         Dice dice = new TrueRandomDice();
         levels = new ProbabilityWithoutOverflownLevels(dice, new Figures());
-        levels.setChangeLevelListener(mock(ChangeLevelListener.class));
+        levels.onChangeLevel(mock(ChangeLevelListener.class));
     }
 
     @Test

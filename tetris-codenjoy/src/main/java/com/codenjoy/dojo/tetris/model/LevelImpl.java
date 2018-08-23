@@ -30,22 +30,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
 
     public LevelImpl(String map) {
         this.map = map;
-        xy = new LengthToXY(getSize());
+        xy = new LengthToXY(size());
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return (int) Math.sqrt(map.length());
     }
 
     @Override
-    public List<Plot> getPlots() {
+    public List<Plot> plots() {
         List<Plot> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);

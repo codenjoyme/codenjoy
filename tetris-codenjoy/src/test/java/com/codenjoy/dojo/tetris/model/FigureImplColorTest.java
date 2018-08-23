@@ -64,7 +64,7 @@ public class FigureImplColorTest {
     @Test
     public void shouldReturnValidColorCode() {
         FigureImpl figure = new FigureImpl(0, 0, figureType, "#");
-        assertThat(figure.getRowCodes(false)).isEqualTo(new int[]{expectedColorCode});
+        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{expectedColorCode});
 
     }
 }

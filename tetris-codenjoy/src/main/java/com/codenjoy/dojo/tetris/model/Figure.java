@@ -24,21 +24,22 @@ package com.codenjoy.dojo.tetris.model;
 
 
 public interface Figure {
-    Type getType();
+
+    Type type();
 
     Figure rotate(int times);
 
-    int getLeft();
+    int left();
 
-    int getRight();
+    int right();
 
-    int getTop();
+    int top();
 
-    int getBottom();
+    int bottom();
 
-    int[] getRowCodes(boolean ignoreColors);
+    int[] rowCodes(boolean ignoreColors);
 
-    int getWidth();
+    int width();
 
-    Figure getCopy();
+    Figure copy();
 }

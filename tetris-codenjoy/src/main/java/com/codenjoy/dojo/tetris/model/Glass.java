@@ -35,11 +35,11 @@ public interface Glass {
 
     void empty();
 
-    void figureAt(Figure figure, int x, int y);
+    void isAt(Figure figure, int x, int y);
 
-    List<Plot> getDroppedPlots();
+    List<Plot> dropped();
 
-    List<Plot> getCurrentFigurePlots();
+    List<Plot> currentFigure();
 
-    void setEventListener(EventListener eventListener);
+    void setListener(EventListener listener);
 }

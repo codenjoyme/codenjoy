@@ -28,5 +28,5 @@ import java.util.List;
 public interface FigureQueue {
     Figure next();
 
-    List<Type> getFuture();
+    List<Type> future();
 }

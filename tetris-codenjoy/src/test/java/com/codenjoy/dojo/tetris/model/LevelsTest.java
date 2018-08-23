@@ -54,7 +54,7 @@ public class LevelsTest {
     @Before
     public void setUp() throws Exception {
         levels = new Levels(level0, level1, level2);
-        levels.setChangeLevelListener(levelChangedListener);
+        levels.onChangeLevel(levelChangedListener);
     }
 
     @Test
@@ -108,7 +108,7 @@ public class LevelsTest {
         levels.linesRemoved(12);
         levels.linesRemoved(21);
 
-        assertEquals(33, levels.getTotalRemovedLines());
+        assertEquals(33, levels.totalRemovedLines());
     }
 
     @Test
@@ -124,7 +124,7 @@ public class LevelsTest {
         }
 
         levels = new MyLevels(level0, level1, level2) {};
-        levels.setChangeLevelListener(levelChangedListener);
+        levels.onChangeLevel(levelChangedListener);
 
         levels.linesRemoved(2);
 
@@ -205,7 +205,7 @@ public class LevelsTest {
         verify(levelChangedListener).levelChanged(0, level0);
         acceptLevels(true, false);
 
-        levels.setChangeLevelListener(null);
+        levels.onChangeLevel(null);
         levels.figureDropped(new FigureImpl());
 
         verifyNoMoreInteractions(levelChangedListener);

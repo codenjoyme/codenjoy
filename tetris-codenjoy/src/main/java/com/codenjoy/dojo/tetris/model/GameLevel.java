@@ -28,7 +28,7 @@ public interface GameLevel {
 
     void apply();
 
-    String getNextLevelIngoingCriteria();
+    String nextLevelCriteria();
 
     FigureQueue queue();
 

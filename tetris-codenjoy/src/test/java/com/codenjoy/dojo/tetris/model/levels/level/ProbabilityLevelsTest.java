@@ -49,7 +49,7 @@ public class ProbabilityLevelsTest {
     public void setUp() {
         Dice dice = new TrueRandomDice();
         levels = new ProbabilityLevels(dice, new Figures());
-        levels.setChangeLevelListener(mock(ChangeLevelListener.class));
+        levels.onChangeLevel(mock(ChangeLevelListener.class));
     }
 
     @Test

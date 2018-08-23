@@ -146,7 +146,7 @@ public class ProbabilityLevels extends Levels {
     }
 
     public GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
-        return new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, getTotalRemovedLines());
+        return new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, totalRemovedLines());
     }
 
     private static Randomizer lastFigureProbability(Dice dice, int i) {

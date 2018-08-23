@@ -42,7 +42,7 @@ public class NullGameLevel implements GameLevel {
     }
 
     @Override
-    public String getNextLevelIngoingCriteria() {
+    public String nextLevelCriteria() {
         return THIS_IS_LAST_LEVEL;
     }
 

@@ -70,7 +70,7 @@ public class Figures implements FigureQueue {
     }
 
     @Override
-    public List<Type> getFuture() {
+    public List<Type> future() {
         return Collections.unmodifiableList(new LinkedList<>(figures));
     }
 

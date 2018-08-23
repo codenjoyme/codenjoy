@@ -41,14 +41,10 @@ public enum Elements implements CharElements {
     RED('Z'),
     NONE(' ');
 
-    char ch;
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;
-    }
-
-    public String getName() {
-        return this.name().toLowerCase();
     }
 
     @Override
@@ -58,7 +54,7 @@ public enum Elements implements CharElements {
 
     @Override
     public String toString() {
-        return String.valueOf(ch());
+        return String.valueOf(ch);
     }
 
     public int index() {
@@ -71,12 +67,11 @@ public enum Elements implements CharElements {
     }
 
     public static Elements valueOf(char ch) {
-        for (int i = 0; i < values().length; i++) {
-            Elements element = values()[i];
-            if (element.ch == ch) {
-                return element;
+        for (Elements el : Elements.values()) {
+            if (el.ch == ch) {
+                return el;
             }
         }
-        throw new IllegalStateException();
+        throw new IllegalArgumentException("No such element for " + ch);
     }
 }

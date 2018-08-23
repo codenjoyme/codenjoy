@@ -51,7 +51,7 @@ public class FigureTypesLevel implements GameLevel {
     }
 
     @Override
-    public String getNextLevelIngoingCriteria() {
+    public String nextLevelCriteria() {
         switch (event.getType()) {
             case LINES_REMOVED : return String.format("Remove %s lines together", event.getValue());
             case TOTAL_LINES_REMOVED : return String.format("Remove %s lines", event.getValue());

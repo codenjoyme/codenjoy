@@ -31,7 +31,7 @@ public interface Field extends GameField<Player> {
 
     int size();
 
-    Figure takeFigure();
+    Figure take();
 
-    List<Type> getFutureFigures();
+    List<Type> getFuture();
 }

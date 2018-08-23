@@ -56,7 +56,7 @@ public class GlassImpl implements Glass {
         boolean isOccupied = false;
         for (int i = 0; i < alignedRows.length; i++) {
             long alignedRow = alignedRows[i];
-            int rowPosition = y - i + figure.getTop();
+            int rowPosition = y - i + figure.top();
             if (rowPosition >= height) {
                 continue;
             }
@@ -79,15 +79,15 @@ public class GlassImpl implements Glass {
     }
 
     private boolean isOutsideBottom(Figure figure, int y) {
-        return y - figure.getBottom() < 0;
+        return y - figure.bottom() < 0;
     }
 
     private boolean isOutsideLeft(Figure figure, int x) {
-        return x - figure.getLeft() < 0;
+        return x - figure.left() < 0;
     }
 
     private boolean isOutsideRight(Figure figure, int x) {
-        return x + figure.getRight() >= width;
+        return x + figure.right() >= width;
     }
 
     public void drop(Figure figure, int x, int y) {
@@ -98,7 +98,7 @@ public class GlassImpl implements Glass {
         if (availablePosition >= height) {
             return;
         }
-        performDrop(figure, x, availablePosition - figure.getBottom());
+        performDrop(figure, x, availablePosition - figure.bottom());
         removeLines();
     }
 
@@ -115,7 +115,7 @@ public class GlassImpl implements Glass {
         if (eventListener != null) {
             // TODO и где я тут достану номер уровня?
             int levelNumber = 1;
-            eventListener.event(Events.figuresDropped(levelNumber, figure.getType().getColor().index()));
+            eventListener.event(Events.figuresDropped(levelNumber, figure.type().getColor().index()));
         }
     }
 
@@ -155,10 +155,10 @@ public class GlassImpl implements Glass {
     }
 
     private long[] alignFigureRowCoordinatesWithGlass(Figure figure, int x, boolean ignoreColors) {
-        int[] rows = figure.getRowCodes(ignoreColors);
-        long[] result = new long[figure.getRowCodes(false).length];
+        int[] rows = figure.rowCodes(ignoreColors);
+        long[] result = new long[figure.rowCodes(false).length];
         for (int i = 0; i < rows.length; i++) {
-            result[i] = ((long) rows[i]) << ((width - x - figure.getRight()) * BITS_PER_POINT);
+            result[i] = ((long) rows[i]) << ((width - x - figure.right()) * BITS_PER_POINT);
         }
         return result;
     }
@@ -173,14 +173,14 @@ public class GlassImpl implements Glass {
     }
 
     @Override
-    public void figureAt(Figure figure, int x, int y) {
+    public void isAt(Figure figure, int x, int y) {
         currentFigure = figure;
         this.currentX = x;
         this.currentY = y;
     }
 
     @Override
-    public List<Plot> getDroppedPlots() {
+    public List<Plot> dropped() {
         LinkedList<Plot> plots = new LinkedList<>();
         for (int y = 0; y < occupied.length; y++) {
             for (int x = width; x >= 0; x--) {
@@ -199,13 +199,13 @@ public class GlassImpl implements Glass {
     }
 
     @Override
-    public List<Plot> getCurrentFigurePlots() {
+    public List<Plot> currentFigure() {
         LinkedList<Plot> plots = new LinkedList<>();
         if (currentFigure == null) {
             return plots;
         }
-        final int[] rowCodes = currentFigure.getRowCodes(false);
-        int rowWidth = currentFigure.getWidth();
+        final int[] rowCodes = currentFigure.rowCodes(false);
+        int rowWidth = currentFigure.width();
 
         for (int i = 0; i < rowCodes.length; i++) {
             for (int x = rowWidth; x >= 0; x--) {
@@ -213,8 +213,8 @@ public class GlassImpl implements Glass {
                 if (colorNumber == 0) {
                     continue;
                 }
-                int y = currentFigure.getTop() - i;
-                plots.add(new Plot(currentX - x + currentFigure.getRight(), currentY + y, findColor(colorNumber - 1)));
+                int y = currentFigure.top() - i;
+                plots.add(new Plot(currentX - x + currentFigure.right(), currentY + y, findColor(colorNumber - 1)));
             }
         }
         return plots;
@@ -230,7 +230,7 @@ public class GlassImpl implements Glass {
     }
 
     @Override
-    public void setEventListener(EventListener eventListener) {
-        this.eventListener = eventListener;
+    public void setListener(EventListener listener) {
+        this.eventListener = listener;
     }
 }

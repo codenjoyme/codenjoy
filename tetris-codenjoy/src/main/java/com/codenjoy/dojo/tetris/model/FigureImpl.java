@@ -27,8 +27,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class FigureImpl implements Figure, Cloneable {
 
-    private int centerX;
-    private int centerY;
+    private int x;
+    private int y;
     private Type type;
     public String[] rows = new String[]{"#"};
     private int[] codes;
@@ -40,13 +40,13 @@ public class FigureImpl implements Figure, Cloneable {
     }
 
     @Deprecated
-    public FigureImpl(int centerX, int centerY, String... rows) {
-        this(centerX, centerY, Type.I, rows);
+    public FigureImpl(int x, int y, String... rows) {
+        this(x, y, Type.I, rows);
     }
 
-    public FigureImpl(int centerX, int centerY, Type type, String... rows) {
-        this.centerX = centerX;
-        this.centerY = centerY;
+    public FigureImpl(int x, int y, Type type, String... rows) {
+        this.x = x;
+        this.y = y;
         this.type = type;
         parseRows(rows);
     }
@@ -64,24 +64,24 @@ public class FigureImpl implements Figure, Cloneable {
         }
     }
 
-    public int getLeft() {
-        return centerX;
+    public int left() {
+        return x;
     }
 
-    public int getRight() {
-        return rows[0].length() - centerX - 1;
+    public int right() {
+        return rows[0].length() - x - 1;
     }
 
-    public int getTop() {
-        return centerY;
+    public int top() {
+        return y;
     }
 
-    public int getBottom() {
-        return rows.length - centerY - 1;
+    public int bottom() {
+        return rows.length - y - 1;
     }
 
     @Override
-    public int[] getRowCodes(boolean ignoreColors) {
+    public int[] rowCodes(boolean ignoreColors) {
         if (ignoreColors) {
             return uncoloredCodes;
         }
@@ -97,15 +97,15 @@ public class FigureImpl implements Figure, Cloneable {
     }
 
     private void performRotate() {
-        char newRows[][] = new char[getWidth()][rows.length];
-        int newX = rows.length - centerY - 1;
-        int newY = getLeft();
+        char newRows[][] = new char[width()][rows.length];
+        int newX = rows.length - y - 1;
+        int newY = left();
         for (int y = 0; y < rows.length; y++) {
             String row = rows[y];
             for (int x = 0; x < row.length(); x++) {
                 char c = row.charAt(x);
-                int shiftedX = x - centerX;
-                int shiftedY = y - centerY;
+                int shiftedX = x - this.x;
+                int shiftedY = y - this.y;
                 newRows[shiftedX + newY][- shiftedY + newX] = c;
             }
         }
@@ -116,17 +116,17 @@ public class FigureImpl implements Figure, Cloneable {
         }
 
         parseRows(rows);
-        centerX = newX;
-        centerY = newY;
+        x = newX;
+        y = newY;
     }
 
     @Override
-    public int getWidth() {
-        return getLeft() + getRight() + 1;
+    public int width() {
+        return left() + right() + 1;
     }
 
     @Override
-    public Figure getCopy() {
+    public Figure copy() {
         try {
             return (Figure) clone();
         } catch (CloneNotSupportedException e) {
@@ -135,7 +135,7 @@ public class FigureImpl implements Figure, Cloneable {
     }
 
     @Override
-    public Type getType() {
+    public Type type() {
         return type;
     }
 }

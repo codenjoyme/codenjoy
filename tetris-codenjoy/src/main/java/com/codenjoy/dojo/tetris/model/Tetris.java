@@ -42,10 +42,10 @@ public class Tetris implements Field {
     public Tetris(FigureQueue queue, int size) {
         this.queue = queue;
         this.size = size;
-        takeFigure();
+        take();
     }
 
-    public Figure takeFigure() {
+    public Figure take() {
         return queue.next();
     }
 
@@ -54,8 +54,8 @@ public class Tetris implements Field {
     }
 
     @Override
-    public List<Type> getFutureFigures() {
-        return queue.getFuture();
+    public List<Type> getFuture() {
+        return queue.future();
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Tetris implements Field {
     }
 
     void setPlots(List<Plot> plots) {
-        Glass glass = player.getHero().getGlass();
+        Glass glass = player.getHero().glass();
         Collections.sort(plots, Comparator.comparingInt(PointImpl::getY));
         for (Plot plot : plots) {
             Type type = Type.valueOf(String.valueOf(plot.getColor().ch()));

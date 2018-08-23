@@ -42,7 +42,7 @@ public class Player extends GamePlayer<Hero, Field> {
     public void newHero(Field field) {
         hero = new Hero();
         hero.init(field);
-        hero.getGlass().setEventListener(listener);
+        hero.glass().setListener(listener);
     }
 
     @Override

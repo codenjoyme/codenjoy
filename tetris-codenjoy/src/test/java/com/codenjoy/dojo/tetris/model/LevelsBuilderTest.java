@@ -52,10 +52,10 @@ public class LevelsBuilderTest {
     public void shouldSetLevelsPropertiesWhenBuildLevels() {
         Levels.LevelsBuilder builder = getBuilder(1, 4);
 
-        levels = builder.getLevels();
+        levels = builder.levels();
 
         assertEquals(1, levels.getCurrentLevelNumber());
-        assertEquals(4, levels.getTotalRemovedLines());
+        assertEquals(4, levels.totalRemovedLines());
         assertEquals(MockLevels.class, levels.getClass());
     }
 
@@ -63,7 +63,7 @@ public class LevelsBuilderTest {
     public void shouldLevelsHasOneQueueWhenBuildLevels() {
         Levels.LevelsBuilder builder = getBuilder(1, 4);
 
-        levels = builder.getLevels();
+        levels = builder.levels();
 
         FigureQueue queue = levels.getCurrentLevel().queue();
 
@@ -85,13 +85,13 @@ public class LevelsBuilderTest {
     public void shouldApplyCurrentLevelWhenBuildLevels() {
         Levels.LevelsBuilder builder = getBuilder(1, 4);
 
-        levels = builder.getLevels();
+        levels = builder.levels();
 
         FigureQueue queue = levels.getCurrentLevel().queue();
         retrieveAllFiguresFromPreviousLevel(queue);
-        assertEquals(Type.O, queue.next().getType());
-        assertEquals(Type.O, queue.next().getType());
-        assertEquals(Type.O, queue.next().getType());
+        assertEquals(Type.O, queue.next().type());
+        assertEquals(Type.O, queue.next().type());
+        assertEquals(Type.O, queue.next().type());
     }
 
     private void retrieveAllFiguresFromPreviousLevel(FigureQueue queue) {
