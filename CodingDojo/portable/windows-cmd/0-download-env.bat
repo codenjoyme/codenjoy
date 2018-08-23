@@ -66,10 +66,10 @@ cd %ROOT%
 
 echo off
 echo [44;93m
-echo        +-------------------------------------+        
-echo        !   All build files are cleaned       !        
-echo        !   Please run [102;30m0-clean-all.bat[44;93m        !        
-echo        +-------------------------------------+        
+echo        +---------------------------------------------+        
+echo        !      All build files are cleaned            !        
+echo        !      Please run [102;30m1-rebuild-server.bat[44;93m        !        
+echo        +---------------------------------------------+        
 echo [0m
 echo on
 pause >nul
