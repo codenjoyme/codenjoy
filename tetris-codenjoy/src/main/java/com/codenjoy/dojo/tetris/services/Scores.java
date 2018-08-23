@@ -77,7 +77,7 @@ public class Scores implements PlayerScores {
     }
 
     private void glassOverflown(int level) {
-        score += glassOverflownPenalty.getValue() * level;
+        score -= glassOverflownPenalty.getValue() * level;
     }
 
     private void linesRemoved(int level, int count) {
