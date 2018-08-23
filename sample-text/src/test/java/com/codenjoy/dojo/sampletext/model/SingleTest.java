@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sampletext.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -46,6 +46,7 @@ public class SingleTest {
     private Single game2;
     private Single game3;
     private Dice dice;
+    private SampleText field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -56,17 +57,20 @@ public class SingleTest {
                 "question3=answer3");
 
         dice = mock(Dice.class);
-        SampleText Sample = new SampleText(level, dice);
+        field = new SampleText(level, dice);
         PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(Sample, new Player(listener1), factory);
+        game1 = new Single(new Player(listener1), factory);
+        game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(Sample, new Player(listener2), factory);
+        game2 = new Single(new Player(listener2), factory);
+        game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(Sample, new Player(listener3), factory);
+        game3 = new Single(new Player(listener3), factory);
+        game3.on(field);
 
         dice(1, 4);
         game1.newGame();
@@ -118,7 +122,7 @@ public class SingleTest {
 
         game3.getJoystick().message("answer3");
 
-        game1.tick();
+        field.tick();
 
         // then
         asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}]," +
@@ -134,9 +138,9 @@ public class SingleTest {
     // игроков можно удалять из игры
     @Test
     public void shouldRemove() {
-        game3.destroy();
+        game3.close();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{'history':[],'nextQuestion':'question1'}");
         asrtFl2("{'history':[],'nextQuestion':'question1'}");
@@ -151,7 +155,7 @@ public class SingleTest {
         game2.getJoystick().message("answer1");
         game3.getJoystick().message("answer1");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
         asrtFl2("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
@@ -159,7 +163,7 @@ public class SingleTest {
 
         // when
         game1.newGame();
-        game1.tick();
+        field.tick();
 
         asrtFl1("{'history':[],'nextQuestion':'question1'}");
         asrtFl2("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
@@ -174,7 +178,7 @@ public class SingleTest {
         game2.getJoystick().message("answer2");
         game3.getJoystick().message("answer3");
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
         asrtFl2("{'history':[{'answer':'answer2','question':'question1','valid':false}],'nextQuestion':'question1'}");
@@ -186,7 +190,7 @@ public class SingleTest {
         verify(listener3).event(Events.LOOSE);
 
         // when
-        game1.tick();
+        field.tick();
 
         // then
         verifyNoMoreInteractions(listener1);

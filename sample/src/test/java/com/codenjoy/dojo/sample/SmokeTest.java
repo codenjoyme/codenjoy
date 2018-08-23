@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2018 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,7 +27,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sample.client.Board;
-import com.codenjoy.dojo.sample.client.ai.ApofigSolver;
+import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -67,7 +67,7 @@ public class SmokeTest {
 
         GameRunner gameType = new GameRunner() {
             @Override
-            protected Dice getDice() {
+            public Dice getDice() {
                 return dice;
             }
 
@@ -90,8 +90,8 @@ public class SmokeTest {
         // when
         LocalGameRunner.run(gameType,
                 new LinkedList<Solver>(){{
-                    add(new ApofigSolver(dice));
-                    add(new ApofigSolver(dice));
+                    add(new AISolver(dice));
+                    add(new AISolver(dice));
                 }},
                 new LinkedList<ClientBoard>(){{
                     add(new Board());

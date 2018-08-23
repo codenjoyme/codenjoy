@@ -22,6 +22,10 @@
 /mailshooter/**
 /snake-battle/**
 /sudoku/**
+/quadro/**
+/tetris/**
+/lunolet/**
+/reversi/**
 /engine/src/**
 /engine/target/**
 /engine/.idea/**

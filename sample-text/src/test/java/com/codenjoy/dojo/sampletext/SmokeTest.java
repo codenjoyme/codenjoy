@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sampletext;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2018 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,11 +23,9 @@ package com.codenjoy.dojo.sampletext;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
-import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sampletext.client.Board;
-import com.codenjoy.dojo.sampletext.client.ai.ApofigSolver;
+import com.codenjoy.dojo.sampletext.client.ai.AISolver;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
@@ -67,14 +65,14 @@ public class SmokeTest {
 
         GameRunner gameType = new GameRunner() {
             @Override
-            protected Dice getDice() {
+            public Dice getDice() {
                 return dice;
             }
         };
 
         // when
         LocalGameRunner.run(gameType,
-                new ApofigSolver(dice),
+                new AISolver(dice),
                 new Board());
 
         // then

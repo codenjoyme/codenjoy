@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -46,6 +46,7 @@ public class SingleTest {
     private Single game2;
     private Single game3;
     private Dice dice;
+    private Sample field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -59,17 +60,20 @@ public class SingleTest {
                 "☼☼☼☼☼☼");
 
         dice = mock(Dice.class);
-        Sample sample = new Sample(level, dice);
+        field = new Sample(level, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(sample, new Player(listener1), factory);
+        game1 = new Single(new Player(listener1), factory);
+        game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(sample, new Player(listener2), factory);
+        game2 = new Single(new Player(listener2), factory);
+        game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(sample, new Player(listener3), factory);
+        game3 = new Single(new Player(listener3), factory);
+        game3.on(field);
 
         dice(1, 4);
         game1.newGame();
@@ -132,7 +136,7 @@ public class SingleTest {
         game2.getJoystick().right();
         game3.getJoystick().down();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼x  $☼\n" +
@@ -145,9 +149,9 @@ public class SingleTest {
     // игроков можно удалять из игры
     @Test
     public void shouldRemove() {
-        game3.destroy();
+        game3.close();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼☺  $☼\n" +
@@ -164,7 +168,7 @@ public class SingleTest {
         game1.getJoystick().act();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼x☻ $☼\n" +
@@ -174,7 +178,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         game3.getJoystick().left();
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼X  $☼\n" +
@@ -189,7 +193,7 @@ public class SingleTest {
         dice(4, 1);
         game3.newGame();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼   $☼\n" +
@@ -206,7 +210,7 @@ public class SingleTest {
 
         dice(1, 2);
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼☺  ☻☼\n" +
@@ -216,20 +220,6 @@ public class SingleTest {
                 "☼☼☼☼☼☼\n");
 
         verify(listener3).event(Events.WIN);
-
-        assertEquals(1, game3.getCurrentScore());
-        assertEquals(1, game3.getMaxScore());
-
-        assertEquals(0, game2.getCurrentScore());
-        assertEquals(0, game2.getMaxScore());
-
-        assertEquals(0, game1.getCurrentScore());
-        assertEquals(0, game1.getMaxScore());
-
-        game3.clearScore();
-
-        assertEquals(0, game3.getCurrentScore());
-        assertEquals(0, game3.getMaxScore());
     }
 
     // игрок не может пойи на другого игрока
@@ -238,7 +228,7 @@ public class SingleTest {
         game1.getJoystick().right();
         game3.getJoystick().left();
 
-        game1.tick();
+        field.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼ ☺☻$☼\n" +

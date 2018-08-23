@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample.services;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,8 +23,10 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.sample.client.ai.ApofigSolver;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.sample.client.Board;
+import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -105,6 +107,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
+    public Class<? extends Solver> getAI() {
+        return AISolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
+    }
+
+    @Override
     public MultiplayerType getMultiplayerType() {
         return MultiplayerType.MULTIPLE;
     }
@@ -112,11 +124,5 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
         return new Player(listener);
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
-        return true;
     }
 }

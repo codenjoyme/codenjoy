@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sampletext.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -41,6 +41,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     private Field field;
     private List<QuestionAnswer> history;
+    private int questionIndex;
     Hero hero;
 
     public Player(EventListener listener) {
@@ -48,25 +49,11 @@ public class Player extends GamePlayer<Hero, Field> {
         history = new LinkedList<>();
     }
 
-    /**
-     * Борда может файрить ивенты юзера с помощью этого метода
-     * @param event тип ивента
-     */
-    public void event(Events event) {
-        switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
-        }
-
-        super.event(event);
-    }
-
-    @Override
     public void clearScore() {
         if (history != null) {
             history.clear();
         }
-        super.clearScore();
+        questionIndex = 0;
     }
 
     public Hero getHero() {
@@ -85,10 +72,10 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public String getNextQuestion() { // TODO test me
-        if (field.isLastQuestion(score)) {
+        if (field.isLastQuestion(questionIndex)) {
             return "You win!";
         }
-        return field.getQuestion(score);
+        return field.getQuestion(questionIndex);
     }
 
     public List<QuestionAnswer> getHistory() {
@@ -101,15 +88,17 @@ public class Player extends GamePlayer<Hero, Field> {
         hero.tick();
 
         String answer = hero.popAnswer();
-        if (answer != null && !field.isLastQuestion(score)) {
-            String question = field.getQuestion(score);
-            String validAnswer = field.getAnswer(score);
+        if (answer != null && !field.isLastQuestion(questionIndex)) {
+            String question = field.getQuestion(questionIndex);
+            String validAnswer = field.getAnswer(questionIndex);
             if (validAnswer.equals(answer)) {
                 logSuccess(question, answer);
                 event(Events.WIN);
+                questionIndex++;
             } else {
                 logFailure(question, answer);
                 event(Events.LOOSE);
+                questionIndex = 0;
             }
         }
     }

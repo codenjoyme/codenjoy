@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -40,15 +40,6 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public Player(EventListener listener) {
         super(listener);
-    }
-
-    public void event(Events event) {
-        switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
-        }
-
-        super.event(event);
     }
 
     public Hero getHero() {

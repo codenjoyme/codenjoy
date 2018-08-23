@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample.client.ai;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,14 +23,12 @@ package com.codenjoy.dojo.sample.client.ai;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.model.Elements;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.Arrays;
@@ -43,12 +41,12 @@ import java.util.List;
  * {@see Dice} что приходит через конструктор).
  * Для его запуска воспользуйся методом {@see ApofigSolver#main}
  */
-public class ApofigSolver implements Solver<Board> {
+public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
     private Dice dice;
 
-    public ApofigSolver(Dice dice) {
+    public AISolver(Dice dice) {
         this.dice = dice;
         this.way = new DeikstraFindWay();
     }
@@ -123,20 +121,4 @@ public class ApofigSolver implements Solver<Board> {
                 board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
                 board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);
     }
-
-    public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
-    }
-
-    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
-        WebSocketRunner.run(host,
-                name,
-                null,
-                new ApofigSolver(dice),
-                new Board());
-    }
-
 }

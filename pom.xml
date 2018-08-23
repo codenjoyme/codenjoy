@@ -6,12 +6,13 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.25</version>
+    <version>1.0.26</version>
 
     <packaging>pom</packaging>
 
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <org.json.version>20160810</org.json.version>
@@ -25,7 +26,8 @@
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
-        <maven-license.version>1.9</maven-license.version>
+        <maven-license.version>1.16</maven-license.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
@@ -63,6 +65,10 @@
         <module>puzzlebox</module>
         <module>spacerace</module>
         <module>kata</module>
+        <module>reversi</module>
+        <module>quadro</module>
+        <module>lunolet</module>
+        <module>tetris</module>
     </modules>
 
     <dependencyManagement>
@@ -160,6 +166,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -255,8 +262,7 @@
                         <licenseResolver>${project.baseUri}/src/license</licenseResolver>
                         <organizationName>Codenjoy</organizationName>
                         <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
-                        <failOnMissingHeader>true</failOnMissingHeader>
-                        <inceptionYear>2016</inceptionYear>
+                        <inceptionYear>2018</inceptionYear>
                         <canUpdateCopyright>false</canUpdateCopyright>
                         <canUpdateDescription>false</canUpdateDescription>
                         <canUpdateLicense>false</canUpdateLicense>

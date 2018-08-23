@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sample.client;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -37,12 +37,6 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    // this is your email
-    private static final String USER_NAME = "your@email.com";
-    // you can get this code after registration on the server with your email
-    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-    private static final String CODE = "12345678901234567890";
-
     private Dice dice;
     private Board board;
 
@@ -59,10 +53,9 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-//        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
-        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
-                USER_NAME,
-                CODE,
+        WebSocketRunner.runClient(
+                // paste here board page url from browser after registration
+                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 new YourSolver(new RandomDice()),
                 new Board());
     }

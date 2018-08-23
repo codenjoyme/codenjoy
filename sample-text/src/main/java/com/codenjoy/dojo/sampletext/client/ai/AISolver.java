@@ -4,7 +4,7 @@ package com.codenjoy.dojo.sampletext.client.ai;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -25,10 +25,7 @@ package com.codenjoy.dojo.sampletext.client.ai;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.AbstractTextSolver;
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.sampletext.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 /**
  * User: your name
@@ -36,32 +33,17 @@ import com.codenjoy.dojo.services.RandomDice;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class ApofigSolver extends AbstractTextSolver {
+public class AISolver extends AbstractTextSolver {
 
     private Dice dice;
     private AbstractTextBoard board;
 
-    public ApofigSolver(Dice dice) {
+    public AISolver(Dice dice) {
         this.dice = dice;
     }
 
     @Override
     public String getAnswer(String question) {
         return "answer" + question.substring("question".length());
-    }
-
-    public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL, new RandomDice());
-    }
-
-    public static void start(String name, WebSocketRunner.Host host, Dice dice) {
-        WebSocketRunner.run(host,
-                name,
-                null,
-                new ApofigSolver(dice),
-                new Board());
     }
 }
