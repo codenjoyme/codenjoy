@@ -39,6 +39,7 @@ import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
+import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityLevels;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -51,9 +52,15 @@ public class GameRunner extends AbstractGameType implements GameType {
     private Parameter<Integer> glassSize;
 
     public GameRunner() {
-        gameLevels = settings.addSelect("Game Levels", Arrays.asList("AllFigureLevels")).type(String.class);
-        gameLevels.select(0);
+        gameLevels = settings.addSelect("Game Levels", (List)levels())
+                .type(String.class)
+                .def(ProbabilityLevels.class.getSimpleName());
         glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(20);
+    }
+
+    private List<String> levels() {
+        LevelsFactory factory = new LevelsFactory();
+        return factory.allLevels();
     }
 
     @Override
@@ -71,7 +78,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     private Levels getLevels(Figures queue) {
         String levelName = gameLevels.getValue();
-        return new LevelsFactory().getGameLevels(getDice(), queue, levelName);
+        return new LevelsFactory().createLevels(levelName, getDice(), queue);
     }
 
     @Override

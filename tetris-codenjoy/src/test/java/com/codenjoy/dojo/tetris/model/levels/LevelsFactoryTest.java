@@ -24,17 +24,14 @@ package com.codenjoy.dojo.tetris.model.levels;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.Figures;
-import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
-import com.codenjoy.dojo.tetris.model.levels.level.EasyLevels;
+import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.levels.level.HardLevels;
 import org.junit.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 public class LevelsFactoryTest {
@@ -43,16 +40,16 @@ public class LevelsFactoryTest {
 
     @Test
     public void shouldReturnAllLevels(){
-        Set<Class<? extends Levels>> levels = factory.getAllLevelsInPackage();
-
-        assertThat(levels).contains(EasyLevels.class, HardLevels.class, AllFigureLevels.class);
+        List<String> list = factory.allLevels();
+        assertEquals("[HardLevels, EasyLevels, AllFigureLevels, " +
+                "ProbabilityLevels, ProbabilityWithoutOverflownLevels]", list.toString());
     }
 
     @Test
     public void shouldLoadClass(){
-        Levels loaded = factory.getGameLevels(mock(Dice.class),
-                mock(Figures.class),
-                "HardLevels");
+        Levels loaded = factory.createLevels("HardLevels", mock(Dice.class),
+                mock(Figures.class)
+        );
 
         assertEquals(HardLevels.class, loaded.getClass());
     }

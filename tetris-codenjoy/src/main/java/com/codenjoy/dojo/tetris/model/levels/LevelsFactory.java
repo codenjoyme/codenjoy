@@ -25,19 +25,29 @@ package com.codenjoy.dojo.tetris.model.levels;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
-import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.Figures;
+import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.levels.level.*;
 
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Sergii_Zelenin on 7/17/2016.
  */
 public class LevelsFactory {
-    public Set<Class<? extends Levels>> getAllLevelsInPackage() {
+
+    public List<String> allLevels() {
+        return allLevelsClasses().stream()
+                .map(clazz -> clazz.getSimpleName())
+                .collect(toList());
+    }
+
+    private Set<Class<? extends Levels>> allLevelsClasses() {
         return new HashSet<Class<? extends Levels>>(){{
             add(EasyLevels.class);
             add(HardLevels.class);
@@ -47,8 +57,8 @@ public class LevelsFactory {
         }};
     }
 
-    public Levels getGameLevels(Dice dice, FigureQueue playerQueue, String levels) {
-        String className = LevelsFactory.class.getPackage().getName() + ".level." + levels;
+    public Levels createLevels(String level, Dice dice, FigureQueue playerQueue) {
+        String className = LevelsFactory.class.getPackage().getName() + ".level." + level;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
             Constructor<?> constructor = aClass.getConstructor(Dice.class, Figures.class);
