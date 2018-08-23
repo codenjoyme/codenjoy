@@ -15,7 +15,6 @@ echo [0m
 echo on
 pause >nul
 
-
 call mvn install:install-file -Dfile=games-%CODENJOY_VERSION%-pom.xml -DpomFile=games-%CODENJOY_VERSION%-pom.xml -DgroupId=com.codenjoy -DartifactId=games -Dversion=%CODENJOY_VERSION% -Dpackaging=pom
 echo off
 echo [44;93m
