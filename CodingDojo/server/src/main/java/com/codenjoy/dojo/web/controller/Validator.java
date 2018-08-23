@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.PlayerCommand;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
 
@@ -58,22 +59,27 @@ public class Validator {
     }
 
     public void checkPlayerName(String input, boolean canBeNull) {
-        if (!(input == null && canBeNull ||
-                input != null && email.matcher(input).matches())) {
+        boolean empty = StringUtils.isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && email.matcher(input).matches()))
+        {
             throw new IllegalArgumentException("Player name is invalid: " + input);
         }
     }
 
     public void checkCode(String input, boolean canBeNull) {
-        if (!(input == null && canBeNull ||
-                input != null && code.matcher(input).matches())) {
+        boolean empty = StringUtils.isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && code.matcher(input).matches()))
+        {
             throw new IllegalArgumentException("Player code is invalid: " + input);
         }
     }
 
     public void checkGameName(String input, boolean canBeNull) {
-        if (!(input == null && canBeNull ||
-                input != null && gameName.matcher(input).matches()))
+        boolean empty = StringUtils.isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && gameName.matcher(input).matches()))
         {
             throw new IllegalArgumentException("Game name is invalid: " + input);
         }
