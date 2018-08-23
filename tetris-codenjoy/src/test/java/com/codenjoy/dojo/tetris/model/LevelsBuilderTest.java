@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.levels.level.MockLevels;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertSame;
@@ -59,7 +60,7 @@ public class LevelsBuilderTest {
     }
 
     @Test
-    public void shouldLevelsHaseOneQueueWhenBuildLevels() {
+    public void shouldLevelsHasOneQueueWhenBuildLevels() {
         Levels.LevelsBuilder builder = getBuilder(1, 4);
 
         levels = builder.getLevels();

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.gamelevel;
 
 /*-
  * #%L
@@ -23,19 +23,36 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.GameLevel;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
-import com.codenjoy.dojo.tetris.model.NullGameLevel;
-import org.junit.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
+public class NullGameLevel implements GameLevel {
 
-public class NullGameLevelTest {
+    public static final String THIS_IS_LAST_LEVEL = "This is last level";
+    public static final boolean NO_ACCEPT = false;
 
-    @Test
-    public void shouldNoApplyNextLevelWhenAccepted() {
-        assertFalse("Levels terminator should not apply any events",
-                new NullGameLevel().accept(mock(GlassEvent.class)));
+    @Override
+    public boolean accept(GlassEvent event) {
+        return NO_ACCEPT;
     }
 
+    @Override
+    public void apply() {
+    }
+
+    @Override
+    public String getNextLevelIngoingCriteria() {
+        return THIS_IS_LAST_LEVEL;
+    }
+
+    @Override
+    public FigureQueue getFigureQueue() {
+        return null;
+    }
+
+    @Override
+    public int getFigureTypesToOpenCount() {
+        return 0;
+    }
 }

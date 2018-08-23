@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.gamelevel;
 
 /*-
  * #%L
@@ -24,6 +24,8 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.*;
+import com.codenjoy.dojo.tetris.model.levels.random.EquiprobableRandomizer;
 
 public class FigureTypesLevel implements GameLevel {
     protected PlayerFigures figuresQueue;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.gamelevel;
 
 /*-
  * #%L
@@ -23,34 +23,18 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
+import org.junit.Test;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/25/12
- * Time: 10:36 AM
- */
-public class ProbabilityRandomizer implements Randomizer {
+import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
 
-    private Dice dice;
-    private int lastFigureProbability;
+public class NullGameLevelTest {
 
-    public ProbabilityRandomizer(Dice dice, int lastFigureProbability) {
-        this.dice = dice;
-        this.lastFigureProbability = lastFigureProbability;
+    @Test
+    public void shouldNoApplyNextLevelWhenAccepted() {
+        assertFalse("Levels terminator should not apply any events",
+                new NullGameLevel().accept(mock(GlassEvent.class)));
     }
 
-    @Override
-    public int getNextNumber(int count) {
-        int i = dice.next(count);
-        if (i == count - 1) {
-            int j = dice.next(100);
-            if (j <= lastFigureProbability) {
-                return i;
-            } else {
-                return dice.next(count - 1);
-            }
-        }
-        return i;
-    }
 }

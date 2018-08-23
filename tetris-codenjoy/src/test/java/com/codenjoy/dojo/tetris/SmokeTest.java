@@ -84,20 +84,23 @@ public class SmokeTest {
 
         // then
         String join = String.join("\n", messages);
-        List<String> result = Arrays.stream(join.split("\n"))
-                .map(s -> {
-                    if (s.indexOf("board':'") == -1) {
-                        return s;
-                    }
-                    int beginIndex = "1:  'board':'".length();
-                    int toIndex = s.length() - "',".length();
-                    String board = s.substring(beginIndex, toIndex);
-                    return s.substring(0, beginIndex)
-                            + '\n'
-                            + TestUtils.injectN(board)
-                            + s.substring(toIndex);
-                })
-                .collect(toList());
+        List<String> result = Arrays.asList(join.split("\n"));
+        for (int i = 0; i < result.size(); i++) {
+            String line = result.get(i);
+            if (line.contains("1:  'layers'")) {
+                i++;
+                line = result.get(i);
+                int beginIndex = "1:    '".length();
+                int toIndex = line.length() - "'".length();
+                String board = line.substring(beginIndex, toIndex);
+                line = line.substring(0, beginIndex)
+                        + '\n'
+                        + TestUtils.injectN(board)
+                        + line.substring(toIndex);
+                result.set(i, line);
+            }
+        }
+
         join = String.join("\n", result);
 
         assertEquals("DICE:0\n" +
@@ -106,23 +109,25 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:4\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'I',\n" +
                         "1:    'J',\n" +
                         "1:    'L',\n" +
                         "1:    'S'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:0\n" +
@@ -130,18 +135,6 @@ public class SmokeTest {
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[4,9]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -149,6 +142,20 @@ public class SmokeTest {
                         "1:    'L',\n" +
                         "1:    'S',\n" +
                         "1:    'J'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "    I     \n" +
+                        "    I     \n" +
+                        "    I     \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:2\n" +
@@ -157,7 +164,16 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "    J     \n" +
                         "   JJ     \n" +
                         "          \n" +
@@ -168,21 +184,23 @@ public class SmokeTest {
                         "     I    \n" +
                         "     I    \n" +
                         "     I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'J',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'L',\n" +
-                        "1:    'S',\n" +
-                        "1:    'J',\n" +
-                        "1:    'L'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[3,8]',\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "   J      \n" +
                         "   J      \n" +
                         "  JJ      \n" +
@@ -193,14 +211,7 @@ public class SmokeTest {
                         "     I    \n" +
                         "     I    \n" +
                         "     I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[3,8]',\n" +
-                        "1:  'currentFigureType':'J',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'L',\n" +
-                        "1:    'S',\n" +
-                        "1:    'J',\n" +
-                        "1:    'L'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:0\n" +
@@ -209,7 +220,16 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'L',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'S',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "    L     \n" +
                         "    LL    \n" +
                         "          \n" +
@@ -220,14 +240,7 @@ public class SmokeTest {
                         "   J I    \n" +
                         "   J I    \n" +
                         "  JJ I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'L',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'S',\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:4\n" +
@@ -237,7 +250,16 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "   SS     \n" +
                         "          \n" +
                         "          \n" +
@@ -248,21 +270,23 @@ public class SmokeTest {
                         "   J I    \n" +
                         "   J I    \n" +
                         "  JJ I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:2\n" +
                         "1:Answer: RIGHT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[5,8]',\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "     SS   \n" +
                         "    SS    \n" +
                         "          \n" +
@@ -273,21 +297,23 @@ public class SmokeTest {
                         "   J I    \n" +
                         "   J I    \n" +
                         "  JJ I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[5,8]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,7]',\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "          \n" +
                         "    SS    \n" +
                         "   SS     \n" +
@@ -298,14 +324,7 @@ public class SmokeTest {
                         "   J I    \n" +
                         "   J I    \n" +
                         "  JJ I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,7]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:3\n" +
@@ -315,7 +334,16 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'I',\n" +
+                        "1:    'S'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "    J     \n" +
                         "   JJS    \n" +
                         "   SS     \n" +
@@ -326,14 +354,7 @@ public class SmokeTest {
                         "   J I    \n" +
                         "   J I    \n" +
                         "  JJ I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'J',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I',\n" +
-                        "1:    'S'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
@@ -342,7 +363,16 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'L',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'I',\n" +
+                        "1:    'S',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "   JL     \n" +
                         "  JJLL    \n" +
                         "   SS     \n" +
@@ -353,14 +383,7 @@ public class SmokeTest {
                         "   J I    \n" +
                         "   J I    \n" +
                         "  JJ I    \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'L',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'I',\n" +
-                        "1:    'S',\n" +
-                        "1:    'I'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:3\n" +
@@ -370,18 +393,6 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[4,9]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -389,24 +400,26 @@ public class SmokeTest {
                         "1:    'S',\n" +
                         "1:    'I',\n" +
                         "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "    I     \n" +
+                        "    I     \n" +
+                        "    I     \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[3,8]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -414,6 +427,20 @@ public class SmokeTest {
                         "1:    'S',\n" +
                         "1:    'I',\n" +
                         "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:0\n" +
@@ -422,18 +449,6 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[4,9]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -441,24 +456,26 @@ public class SmokeTest {
                         "1:    'I',\n" +
                         "1:    'O',\n" +
                         "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "    I     \n" +
+                        "    I     \n" +
+                        "    I     \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[3,8]',\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
@@ -466,6 +483,20 @@ public class SmokeTest {
                         "1:    'I',\n" +
                         "1:    'O',\n" +
                         "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "          \n" +
+                        "          \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "   I      \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:0\n" +
@@ -474,7 +505,16 @@ public class SmokeTest {
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'O',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "   SS     \n" +
                         "          \n" +
                         "   I      \n" +
@@ -485,21 +525,23 @@ public class SmokeTest {
                         "   I      \n" +
                         "   I      \n" +
                         "   I      \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'O',\n" +
-                        "1:    'O',\n" +
-                        "1:    'J'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[3,8]',\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'O',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "   SS     \n" +
                         "  SS      \n" +
                         "   I      \n" +
@@ -510,14 +552,7 @@ public class SmokeTest {
                         "   I      \n" +
                         "   I      \n" +
                         "   I      \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[3,8]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'O',\n" +
-                        "1:    'O',\n" +
-                        "1:    'J'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:3\n" +
@@ -527,7 +562,16 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigureType':'I',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'O',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'S'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "   SI     \n" +
                         "  SSI     \n" +
                         "   II     \n" +
@@ -538,14 +582,7 @@ public class SmokeTest {
                         "   I      \n" +
                         "   I      \n" +
                         "   I      \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'I',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'O',\n" +
-                        "1:    'O',\n" +
-                        "1:    'J',\n" +
-                        "1:    'S'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
@@ -554,7 +591,16 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
+                        "1:  'currentFigurePoint':'[4,10]',\n" +
+                        "1:  'currentFigureType':'O',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'S',\n" +
+                        "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
                         "    OO    \n" +
                         "          \n" +
                         "          \n" +
@@ -565,32 +611,13 @@ public class SmokeTest {
                         "          \n" +
                         "          \n" +
                         "          \n" +
-                        "',\n" +
-                        "1:  'currentFigurePoint':'[4,10]',\n" +
-                        "1:  'currentFigureType':'O',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'O',\n" +
-                        "1:    'J',\n" +
-                        "1:    'S',\n" +
-                        "1:    'O'\n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "   OO     \n" +
-                        "   OO     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[3,9]',\n" +
                         "1:  'currentFigureType':'O',\n" +
                         "1:  'futureFigures':[\n" +
@@ -598,24 +625,26 @@ public class SmokeTest {
                         "1:    'J',\n" +
                         "1:    'S',\n" +
                         "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "   OO     \n" +
+                        "   OO     \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:1\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'board':'\n" +
-                        "          \n" +
-                        "  OO      \n" +
-                        "  OO      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "',\n" +
                         "1:  'currentFigurePoint':'[2,8]',\n" +
                         "1:  'currentFigureType':'O',\n" +
                         "1:  'futureFigures':[\n" +
@@ -623,6 +652,20 @@ public class SmokeTest {
                         "1:    'J',\n" +
                         "1:    'S',\n" +
                         "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "          \n" +
+                        "  OO      \n" +
+                        "  OO      \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "          \n" +
+                        "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
                         "DICE:3\n" +

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.level;
 
 /*-
  * #%L
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -38,6 +38,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
+import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import org.json.JSONObject;
 
 import java.util.Arrays;

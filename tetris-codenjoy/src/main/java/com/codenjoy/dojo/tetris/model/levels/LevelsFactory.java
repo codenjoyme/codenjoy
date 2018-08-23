@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels;
 
 /*-
  * #%L
@@ -24,9 +24,13 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import org.fest.reflect.core.Reflection;
-import org.reflections.Reflections;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.levels.level.*;
 
+import java.lang.reflect.Constructor;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -34,20 +38,23 @@ import java.util.Set;
  */
 public class LevelsFactory {
     public Set<Class<? extends Levels>> getAllLevelsInPackage() {
-        Reflections reflections = new Reflections(LevelsFactory.class.getPackage().getName());
-
-        return reflections.getSubTypesOf(Levels.class);
+        return new HashSet<Class<? extends Levels>>(){{
+            add(EasyLevels.class);
+            add(HardLevels.class);
+            add(ProbabilityWithoutOverflownLevels.class);
+            add(ProbabilityLevels.class);
+            add(AllFigureLevels.class);
+        }};
     }
 
     public Levels getGameLevels(Dice dice, FigureQueue playerQueue, String levels) {
-        String className = LevelsFactory.class.getPackage().getName() + '.' + levels;
+        String className = LevelsFactory.class.getPackage().getName() + ".level." + levels;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
-            return (Levels) Reflection.constructor()
-                    .withParameterTypes(Dice.class, PlayerFigures.class)
-                    .in(aClass)
-                    .newInstance(dice, playerQueue);
-        } catch (ClassNotFoundException e) {
+            Constructor<?> constructor = aClass.getConstructor(Dice.class, PlayerFigures.class);
+            Object result = constructor.newInstance(dice, playerQueue);
+            return (Levels)result;
+        } catch (ReflectiveOperationException e) {
             return throwRuntime(e);
         }
     }

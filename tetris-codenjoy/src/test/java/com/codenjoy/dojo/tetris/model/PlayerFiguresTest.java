@@ -24,6 +24,9 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.levels.random.EquiprobableRandomizer;
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
+import com.codenjoy.dojo.tetris.model.levels.random.RandomizerFetcher;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -23,6 +23,9 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
+import com.codenjoy.dojo.tetris.model.levels.random.RandomizerFetcher;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;

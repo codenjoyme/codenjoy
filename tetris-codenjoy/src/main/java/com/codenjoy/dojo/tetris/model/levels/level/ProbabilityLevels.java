@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.level;
 
 /*-
  * #%L
@@ -24,9 +24,13 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.*;
+import com.codenjoy.dojo.tetris.model.levels.gamelevel.ProbabilityFigureTypesLevel;
+import com.codenjoy.dojo.tetris.model.levels.random.ProbabilityRandomizer;
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
-import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED;
+import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
 
 
 /**
@@ -34,148 +38,118 @@ import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.WITHOUT_OVERFLOWN_L
  * Date: 9/23/12
  * Time: 3:18 PM
  */
-public class ProbabilityWithoutOverflownLevels extends Levels {
+public class ProbabilityLevels extends Levels {
 
-    public static final int LINES_REMOVED_FOR_NEXT_LEVEL = 20;
-    private static final GlassEvent.Type criteria = WITHOUT_OVERFLOWN_LINES_REMOVED;
-
-    private int removedLinesWithoutOverflown;
-
-    public ProbabilityWithoutOverflownLevels(Dice dice, PlayerFigures queue) {
+    public ProbabilityLevels(Dice dice, PlayerFigures queue) {
         super(new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, 0),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 0),
                         lastFigureProbability(dice, 100),
                         O),
                 // + I
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 20),
                         lastFigureProbability(dice, 15),
                         O, I),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 40),
                         lastFigureProbability(dice, 50),
                         O, I),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 60),
                         lastFigureProbability(dice, 100),
                         O, I),
 
                 // + J
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 80),
                         lastFigureProbability(dice, 15),
                         O, I, J),
 
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 100),
                         lastFigureProbability(dice, 50),
                         O, I, J),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 120),
                         lastFigureProbability(dice, 100),
                         O, I, J),
 
                 // + L
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 140),
                         lastFigureProbability(dice, 15),
                         O, I, J, L),
 
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 160),
                         lastFigureProbability(dice, 50),
                         O, I, J, L),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 180),
                         lastFigureProbability(dice, 100),
                         O, I, J, L),
 
                 // + S
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 200),
                         lastFigureProbability(dice, 15),
                         O, I, J, L, S),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 220),
                         lastFigureProbability(dice, 50),
                         O, I, J, L, S),
 
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 240),
                         lastFigureProbability(dice, 100),
                         O, I, J, L, S),
 
                 // + Z
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 260),
                         lastFigureProbability(dice, 15),
                         O, I, J, L, S, Z),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 280),
                         lastFigureProbability(dice, 50),
                         O, I, J, L, S, Z),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 300),
                         lastFigureProbability(dice, 100),
                         O, I, J, L, S, Z),
 
                 // + T
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 320),
                         lastFigureProbability(dice, 15),
                         O, I, J, L, S, Z, T),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 340),
                         lastFigureProbability(dice, 50),
                         O, I, J, L, S, Z, T),
 
                 new ProbabilityFigureTypesLevel(dice, queue,
-                        new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 360),
                         lastFigureProbability(dice, 100),
                         O, I, J, L, S, Z, T));
-
-        removedLinesWithoutOverflown = 0;
-    }
-
-    @Override
-    public void glassOverflown() {
-        removedLinesWithoutOverflown = 0;
-        super.glassOverflown();
-    }
-
-    @Override
-    public void linesRemoved(int amount) {
-        removedLinesWithoutOverflown += amount;
-        super.linesRemoved(amount);
-    }
-
-    @Override
-    protected void onLevelChanged() {
-        removedLinesWithoutOverflown = 0;
-        super.onLevelChanged();
     }
 
     public GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
-        return new GlassEvent<>(GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED,
-                removedLinesWithoutOverflown);
+        return new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, getTotalRemovedLines());
     }
 
     private static Randomizer lastFigureProbability(Dice dice, int i) {
         return new ProbabilityRandomizer(dice, i);
-    }
-
-    public int getRemovedLinesWithoutOverflown() {
-        return removedLinesWithoutOverflown;
     }
 }

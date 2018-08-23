@@ -24,6 +24,8 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
+import com.codenjoy.dojo.tetris.model.levels.gamelevel.NullGameLevel;
 
 public class Levels implements GlassEventListener {
     private GameLevel[] levels;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.level;
 
 /*-
  * #%L
@@ -23,35 +23,36 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 
-import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Figure.Type.I;
+import static com.codenjoy.dojo.tetris.model.Figure.Type.O;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.LINES_REMOVED;
 
 /**
  * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
+ * Date: 11/18/12
+ * Time: 6:37 PM
  */
-public class HardLevels extends Levels {
+public class MockLevels extends Levels {
 
-    public HardLevels(Dice dice, PlayerFigures queue) {
+    public static final int LINES_REMOVED_FOR_NEXT_LEVEL = 4;
+
+    public MockLevels(Dice dice, PlayerFigures queue) {
         super(new FigureTypesLevel(dice, queue,
-                        new GlassEvent<>(LINES_REMOVED, 4),
+                new GlassEvent<>(LINES_REMOVED, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        I),
+
+                new FigureTypesLevel(dice, queue,
+                        new GlassEvent<>(LINES_REMOVED, LINES_REMOVED_FOR_NEXT_LEVEL),
                         O),
 
                 new FigureTypesLevel(dice, queue,
-                        new GlassEvent<>(LINES_REMOVED, 4),
-                        O, I),
-
-                new FigureTypesLevel(dice, queue,
-                        new GlassEvent<>(LINES_REMOVED, 4),
-                        O, I, J, L),
-
-                new FigureTypesLevel(dice, queue,
-                        new GlassEvent<>(LINES_REMOVED, 4),
-                        O, I, J, L,
-                        S, Z, T));
+                        new GlassEvent<>(LINES_REMOVED, LINES_REMOVED_FOR_NEXT_LEVEL),
+                        I, O));
     }
 }

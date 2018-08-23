@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.random;
 
 /*-
  * #%L
@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.TrueRandomDice;
 import org.junit.Test;
 
 import java.util.HashMap;

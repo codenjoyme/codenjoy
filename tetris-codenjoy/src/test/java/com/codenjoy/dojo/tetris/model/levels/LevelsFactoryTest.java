@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels;
 
 /*-
  * #%L
@@ -25,15 +25,16 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.Levels;
-import com.codenjoy.dojo.tetris.model.LevelsFactory;
 import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
+import com.codenjoy.dojo.tetris.model.levels.level.EasyLevels;
+import com.codenjoy.dojo.tetris.model.levels.level.HardLevels;
 import org.junit.Test;
 
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
 public class LevelsFactoryTest {

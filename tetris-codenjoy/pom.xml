@@ -54,12 +54,7 @@
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-reflect</artifactId>
-            <!-- TODO try remove this scope>test</scope-->
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId> <!-- TODO try remove this -->
-            <artifactId>reflections</artifactId>
-            <version>0.9.8</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

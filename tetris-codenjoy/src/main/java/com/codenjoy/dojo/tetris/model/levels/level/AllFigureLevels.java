@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.level;
 
 /*-
  * #%L
@@ -23,23 +23,25 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
+
+import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 
 /**
  * User: oleksandr.baglai
- * Date: 9/25/12
- * Time: 10:36 AM
+ * Date: 9/23/12
+ * Time: 3:18 PM
  */
-public class EquiprobableRandomizer implements Randomizer {
+public class AllFigureLevels extends Levels {
 
-    private Dice dice;
-
-    public EquiprobableRandomizer(Dice dice) {
-        this.dice = dice;
-    }
-
-    @Override
-    public int getNextNumber(int count) {
-        return dice.next(count);
+    public AllFigureLevels(Dice dice, PlayerFigures queue) {
+        super(new FigureTypesLevel(dice, queue,
+                new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4),
+                O, I, J, L, S, Z, T));
     }
 }

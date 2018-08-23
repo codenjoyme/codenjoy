@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.random;
 
 /*-
  * #%L
@@ -23,21 +23,34 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-
 import com.codenjoy.dojo.services.Dice;
-
-import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 
 /**
  * User: oleksandr.baglai
- * Date: 9/23/12
- * Time: 3:18 PM
+ * Date: 9/25/12
+ * Time: 10:36 AM
  */
-public class AllFigureLevels extends Levels {
+public class ProbabilityRandomizer implements Randomizer {
 
-    public AllFigureLevels(Dice dice, PlayerFigures queue) {
-        super(new FigureTypesLevel(dice, queue,
-                new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4),
-                O, I, J, L, S, Z, T));
+    private Dice dice;
+    private int lastFigureProbability;
+
+    public ProbabilityRandomizer(Dice dice, int lastFigureProbability) {
+        this.dice = dice;
+        this.lastFigureProbability = lastFigureProbability;
+    }
+
+    @Override
+    public int getNextNumber(int count) {
+        int i = dice.next(count);
+        if (i == count - 1) {
+            int j = dice.next(100);
+            if (j <= lastFigureProbability) {
+                return i;
+            } else {
+                return dice.next(count - 1);
+            }
+        }
+        return i;
     }
 }

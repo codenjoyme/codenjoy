@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.gamelevel;
 
 /*-
  * #%L
@@ -24,6 +24,10 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 
 public class ProbabilityFigureTypesLevel extends FigureTypesLevel {
     private Randomizer randomizer;

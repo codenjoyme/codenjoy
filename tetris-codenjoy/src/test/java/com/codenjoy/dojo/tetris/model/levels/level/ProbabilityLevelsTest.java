@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.level;
 
 /*-
  * #%L
@@ -24,13 +24,16 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.*;
+import com.codenjoy.dojo.tetris.model.levels.random.ProbabilityRandomizerTest;
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.tetris.model.ProbabilityRandomizerTest.COUNT_ITERATIONS;
+import static com.codenjoy.dojo.tetris.model.levels.random.ProbabilityRandomizerTest.COUNT_ITERATIONS;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.fest.reflect.core.Reflection.field;

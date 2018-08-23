@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.tetris.model;
+package com.codenjoy.dojo.tetris.model.levels.level;
 
 /*-
  * #%L
@@ -24,6 +24,10 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
