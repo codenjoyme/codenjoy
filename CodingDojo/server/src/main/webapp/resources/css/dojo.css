@@ -65,7 +65,17 @@ label.error {
     margin:10px;
 }
 
-#adminSettings input {
+#adminSettings input[type="text"] {
+    width:150px;
+    height:24px;
+}
+
+#adminSettings input[type="checkbox"] {
+    width:19px;
+    height:24px;
+}
+
+#adminSettings select {
     width:150px;
     height:24px;
 }
