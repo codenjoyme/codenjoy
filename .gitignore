@@ -3,6 +3,7 @@
 **/bin
 **/obj
 **/Gemfile.lock
+/CodingDojo/repo
 /CodingDojo/repo/**
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game
