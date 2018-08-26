@@ -24,6 +24,7 @@
 /CodingDojo/games/**/webapp/resources/user/*.zip
 /CodingDojo/games/icancode
 /CodingDojo/games/expansion
+/CodingDojo/expansion-repo
 /CodingDojo/icancode-builder
 /CodingDojo/expansion-builder
 /CodingDojo/expansion-builder/gameData/*.*
