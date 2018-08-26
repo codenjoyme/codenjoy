@@ -108,11 +108,9 @@ public class ScreenResponseHandler implements ResponseHandler {
                 continue;
             }
 
-            if (!request.isAllPlayers() && !request.isFor(player)){
-                continue;
+            if (request.isAllPlayers() || request.isFor(player)) {
+                result.put(player, playerData);
             }
-
-            result.put(player, playerData);
         }
         return result;
     }
