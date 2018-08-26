@@ -66,9 +66,11 @@ public class ScreenResponseHandler implements ResponseHandler {
             return request.getBoolean("allPlayersScreen");
         }
 
-        public void forAllPlayers(Consumer<String> consumer) {
-            request.getJSONArray("players")
-                    .forEach((Object it) -> consumer.accept((String) it));
+        public List<String> getPlayers() {
+            return new LinkedList<String>(){{
+                request.getJSONArray("players")
+                        .forEach(it -> add((String)it));
+            }};
         }
 
         public String getGameName() {
@@ -80,12 +82,11 @@ public class ScreenResponseHandler implements ResponseHandler {
     public void onResponse(PlayerSocket socket, String message) {
         GetScreenJSONRequest request = new GetScreenJSONRequest(message);
         if (request.itsMine()) {
-            List<String> players = new LinkedList<>();
-            request.forAllPlayers(player -> players.add(player));
-
             transport.setFilterFor(socket,
                     data -> new JSONObject(filter((Map<Player, PlayerData>) data,
-                            request.isAllPlayersScreen(), players, request.getGameName())));
+                            request.isAllPlayersScreen(),
+                            request.getPlayers(),
+                            request.getGameName())));
         }
     }
 
