@@ -29,6 +29,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
+
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
@@ -72,19 +75,17 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Map<String, List<String>> getSprites() {
-        Map<String, List<String>> result = new TreeMap<>();
-        for (Map.Entry<String, GameType> gameTypeEntry : cache.entrySet()) {
-            List<String> sprites = new LinkedList<>();
-
-            GameType gameType = gameTypeEntry.getValue();
-
-            for (Enum e : gameType.getPlots()) {
-                sprites.add(e.name().toLowerCase());
-            }
-
-            result.put(gameType.name(), sprites);
-        }
-        return result;
+        return cache.entrySet().stream()
+                .map(entry -> new HashMap.SimpleEntry<>(
+                        entry.getValue().name(),
+                        Arrays.stream(entry.getValue().getPlots())
+                                .map(plot -> plot.name().toLowerCase())
+                                .collect(toList())
+                ))
+                .collect(toMap(
+                        entry -> entry.getKey(),
+                        entry -> entry.getValue()
+                ));
     }
 
     private GameType loadGameType(Class<? extends GameType> gameType) {
