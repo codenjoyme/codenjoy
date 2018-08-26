@@ -81,13 +81,16 @@ public class ScreenResponseHandler implements ResponseHandler {
     @Override
     public void onResponse(PlayerSocket socket, String message) {
         GetScreenJSONRequest request = new GetScreenJSONRequest(message);
-        if (request.itsMine()) {
-            transport.setFilterFor(socket,
-                    data -> new JSONObject(filter((Map<Player, PlayerData>) data,
-                            request.isAllPlayersScreen(),
-                            request.getPlayers(),
-                            request.getGameName())));
+        if (!request.itsMine()) {
+            return;
         }
+
+        transport.setFilterFor(socket,
+                data -> new JSONObject(filter(
+                        (Map<Player, PlayerData>) data,
+                        request.isAllPlayersScreen(),
+                        request.getPlayers(),
+                        request.getGameName())));
     }
 
     private Map<Player, PlayerData> filter(Map<Player, PlayerData> data, boolean allPlayersScreen, List<String> players, String gameName) {
