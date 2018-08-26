@@ -49,7 +49,7 @@ public class PlayerSocket {
     public void onWebSocketText(String message) {
         if (requested) {
             requested = false;
-            handler.onResponseComplete(this, message);
+            handler.onResponse(this, message);
         }
     }
 

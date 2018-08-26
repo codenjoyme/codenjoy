@@ -50,8 +50,8 @@ public class ScreenResponseHandler implements ResponseHandler {
     }
 
     @Override
-    public void onResponseComplete(PlayerSocket socket, String responseContent) {
-        JSONObject request = new JSONObject(responseContent);
+    public void onResponse(PlayerSocket socket, String message) {
+        JSONObject request = new JSONObject(message);
         if (request.getString("name").equals("getScreen")) {
             boolean allPlayersScreen = request.getBoolean("allPlayersScreen");
 

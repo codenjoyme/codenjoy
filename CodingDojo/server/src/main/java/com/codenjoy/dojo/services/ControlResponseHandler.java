@@ -42,10 +42,10 @@ public class ControlResponseHandler implements ResponseHandler {
     }
 
     @Override
-    public void onResponseComplete(PlayerSocket socket, String responseContent) {
+    public void onResponse(PlayerSocket socket, String message) {
         logger.debug("Received response: {} from player: {}",
-                responseContent, player.getName());
-        new PlayerCommand(joystick, responseContent).execute();
+                message, player.getName());
+        new PlayerCommand(joystick, message).execute();
     }
 
     @Override

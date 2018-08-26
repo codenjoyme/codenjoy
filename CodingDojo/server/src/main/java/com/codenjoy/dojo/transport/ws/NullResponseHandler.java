@@ -30,7 +30,7 @@ public class NullResponseHandler implements ResponseHandler {
     public static ResponseHandler NULL = new NullResponseHandler();
 
     @Override
-    public void onResponseComplete(PlayerSocket socket, String responseContent) {
+    public void onResponse(PlayerSocket socket, String message) {
         // do nothing
     }
 

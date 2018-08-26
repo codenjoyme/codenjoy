@@ -27,8 +27,7 @@ import org.eclipse.jetty.websocket.api.Session;
 
 public interface ResponseHandler {
 
-    // TODO название метода
-    void onResponseComplete(PlayerSocket socket, String responseContent);
+    void onResponse(PlayerSocket socket, String message);
 
     void onClose(PlayerSocket socket, int statusCode, String reason);
 
