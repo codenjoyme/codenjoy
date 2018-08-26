@@ -36,7 +36,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class ScreenResponseHandler implements ResponseHandler {
 
@@ -62,19 +61,27 @@ public class ScreenResponseHandler implements ResponseHandler {
             return request.getString("name").equals("getScreen");
         }
 
-        public boolean isAllPlayersScreen() {
+        public boolean isAllPlayers() {
             return request.getBoolean("allPlayersScreen");
         }
 
-        public List<String> getPlayers() {
+        private List<String> getPlayers() {
             return new LinkedList<String>(){{
                 request.getJSONArray("players")
                         .forEach(it -> add((String)it));
             }};
         }
 
+        public boolean isFor(Player player) {
+            return getPlayers().contains(player.getName());
+        }
+
         public String getGameName() {
             return request.getString("gameName");
+        }
+
+        public boolean isMyGame(Player player) {
+            return player.getGameName().equals(getGameName());
         }
     }
 
@@ -86,26 +93,26 @@ public class ScreenResponseHandler implements ResponseHandler {
         }
 
         transport.setFilterFor(socket,
-                data -> new JSONObject(filter(
-                        (Map<Player, PlayerData>) data,
-                        request.isAllPlayersScreen(),
-                        request.getPlayers(),
-                        request.getGameName())));
+                data -> new JSONObject(filter((Map<Player, PlayerData>) data, request)));
     }
 
-    private Map<Player, PlayerData> filter(Map<Player, PlayerData> data, boolean allPlayersScreen, List<String> players, String gameName) {
+    private Map<Player, PlayerData> filter(Map<Player, PlayerData> data,
+                                           GetScreenJSONRequest request)
+    {
         Map<Player, PlayerData> result = new HashMap<>();
         for (Map.Entry<Player, PlayerData> entry : data.entrySet()) {
             Player player = entry.getKey();
-            if (!player.getGameName().equals(gameName)) {
+            PlayerData playerData = entry.getValue();
+
+            if (!request.isMyGame(player)) {
                 continue;
             }
 
-            if (!allPlayersScreen && !players.contains(player.getName())) {
+            if (!request.isAllPlayers() && !request.isFor(player)){
                 continue;
             }
 
-            result.put(player, entry.getValue());
+            result.put(player, playerData);
         }
         return result;
     }
