@@ -45,7 +45,7 @@ public class Player implements ScreenRecipient, Closeable {
     public Player() {
     }
 
-    Player(String name) {
+    public Player(String name) {
         this.name = name;
     }
 

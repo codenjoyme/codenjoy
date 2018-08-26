@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
@@ -62,11 +63,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     @Qualifier("playerController")
-    protected PlayerController playerController;
+    protected Controller playerController;
 
     @Autowired
     @Qualifier("screenController")
-    protected PlayerController screenController;
+    protected Controller screenController;
 
     @Autowired
     protected GameService gameService;

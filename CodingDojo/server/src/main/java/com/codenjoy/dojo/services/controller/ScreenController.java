@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.controller;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
@@ -30,7 +31,7 @@ import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import java.io.IOException;
 import java.util.Map;
 
-public class ScreenControllerImpl implements PlayerController<Map<ScreenRecipient, ScreenData>, Void> {
+public class ScreenController implements Controller<Map<ScreenRecipient, ScreenData>, Void> {
 
     private PlayerTransport transport;
 

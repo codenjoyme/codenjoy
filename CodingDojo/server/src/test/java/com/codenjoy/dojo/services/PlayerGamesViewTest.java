@@ -23,13 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
-import com.codenjoy.dojo.services.lock.LockedGameTest;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -53,7 +52,7 @@ public class PlayerGamesViewTest {
     private PlayerGames playerGames;
     private List<Player> players;
     private List<Game> games;
-    private List<PlayerController> controllers;
+    private List<Controller> controllers;
     private List<GameType> gameTypes;
     private List<HeroData> heroesData;
     private List<GamePlayer> gamePlayers;
@@ -245,7 +244,7 @@ public class PlayerGamesViewTest {
         Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null);
         players.add(player);
 
-        PlayerController controller = mock(PlayerController.class);
+        Controller controller = mock(Controller.class);
         controllers.add(controller);
         PlayerGame playerGame = playerGames.add(player, null);
         games.add(playerGame.getGame());

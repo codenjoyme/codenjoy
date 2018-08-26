@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.controller;
 
 /*-
  * #%L
@@ -23,9 +23,11 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.Player;
+
 import java.io.IOException;
 
-public interface PlayerController<TData, TControl> {
+public interface Controller<TData, TControl> {
 
     /**
      * С помощью этого метода PlayerServiceImpl отправляет через ws

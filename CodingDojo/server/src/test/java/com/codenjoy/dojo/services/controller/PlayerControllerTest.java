@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.controller;
 
 /*-
  * #%L
@@ -24,6 +24,8 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.controller.PlayerController;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import org.junit.*;
 
@@ -42,7 +44,7 @@ public class PlayerControllerTest {
 
     private static String url;
 
-    private static PlayerControllerImpl controller;
+    private static PlayerController controller;
     private static TimerService timer;
     private static SpringMockerJettyRunner runner;
 
@@ -63,7 +65,7 @@ public class PlayerControllerTest {
         System.out.println("web application started at: " + url);
 
         timer = runner.getBean(TimerService.class, "timerService");
-        controller = runner.getBean(PlayerControllerImpl.class, "playerController");
+        controller = runner.getBean(PlayerController.class, "playerController");
 
         timer.pause();
 
