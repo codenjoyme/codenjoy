@@ -25,9 +25,6 @@ package com.codenjoy.dojo.services;
 
 import org.json.JSONObject;
 
-/**
- * Created by indigo on 2016-10-30.
- */
 public class GameData {
     private final int boardSize;
     private final GuiPlotColorDecoder decoder;
