@@ -24,11 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class GuiPlotColorDecoder {
 
@@ -40,21 +36,16 @@ public class GuiPlotColorDecoder {
     }
 
     private char getGuiChar(char consoleChar) {
-//        try {
-            return GUI.charAt(getIndex(consoleChar));
-//        } catch (Exception e) {
-//            System.out.println(consoleChar);
-//            return ' ';
-//        }
+        return GUI.charAt(getIndex(consoleChar));
     }
 
-    private int getIndex(char consoleChar) {
+    private int getIndex(char ch) {
         for (int index = 0; index < values.length; index++) {
-            if (values[index].toString().equals(String.valueOf(consoleChar))) {
+            if (values[index].toString().equals(String.valueOf(ch))) {
                 return index;
             }
         }
-        throw new IllegalArgumentException("Not enum symbol '" + consoleChar + "'");
+        throw new IllegalArgumentException("Not enum symbol '" + ch + "'");
     }
 
     public String encodeForClient(Object board) {
@@ -63,34 +54,30 @@ public class GuiPlotColorDecoder {
 
     public Object encodeForBrowser(Object board) {
         if (board instanceof String) {
-            return encodeBoard((String)board);
+            return encode((String)board);
         }
 
         if (!(board instanceof JSONObject)) {
             throw new IllegalArgumentException("You can use only String or JSONObject as board");
         }
 
-        JSONObject object = (JSONObject)board;
+        JSONObject result = (JSONObject)board;
 
-        // TODO а что если придумать другой формат и не делать этого двойного безобразия? 
+        // TODO а что если придумать другой формат и не делать этого двойного безобразия?
         String key = "layers";
-        if (object.has(key)) {
-            List<String> encodedLayers = new LinkedList<>();
-            JSONArray layers = object.getJSONArray(key);
-            for (int i = 0; i < layers.length(); i++) {
-                String layer = layers.getString(i);
-                String encoded = encodeBoard(layer);
-                encodedLayers.add(encoded);
-            }
-            object.remove(key);
-            object.put(key, new JSONArray(encodedLayers));
-            return object;
+        if (!result.has(key)) {
+            return result;
         }
 
-        return object;
+        JSONArray encoded = new JSONArray();
+        for (Object layer : result.getJSONArray(key)) {
+            encoded.put(encode((String)layer));
+        }
+        result.put(key, encoded);
+        return result;
     }
 
-    private String encodeBoard(String board) {
+    private String encode(String board) {
         char[] chars = board.replaceAll("\n", "").toCharArray();
         for (int index = 0; index < chars.length; index++) {
             chars[index] = getGuiChar(chars[index]);

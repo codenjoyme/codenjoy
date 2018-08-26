@@ -33,11 +33,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/23/13
- * Time: 3:53 PM
- */
 public class GuiPlotColorDecoderTest {
 
     enum Elements {
