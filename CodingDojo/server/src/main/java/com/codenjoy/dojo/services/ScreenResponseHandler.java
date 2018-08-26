@@ -32,10 +32,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.stream.Collectors.toMap;
 
 public class ScreenResponseHandler implements ResponseHandler {
 
@@ -99,20 +98,11 @@ public class ScreenResponseHandler implements ResponseHandler {
     private Map<Player, PlayerData> filter(Map<Player, PlayerData> data,
                                            GetScreenJSONRequest request)
     {
-        Map<Player, PlayerData> result = new HashMap<>();
-        for (Map.Entry<Player, PlayerData> entry : data.entrySet()) {
-            Player player = entry.getKey();
-            PlayerData playerData = entry.getValue();
-
-            if (!request.isMyGame(player)) {
-                continue;
-            }
-
-            if (request.isAllPlayers() || request.isFor(player)) {
-                result.put(player, playerData);
-            }
-        }
-        return result;
+        return data.entrySet().stream()
+                .filter(entry -> request.isMyGame(entry.getKey()))
+                .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()))
+                .collect(toMap(entry -> entry.getKey(),
+                        entry -> entry.getValue()));
     }
 
     @Override
