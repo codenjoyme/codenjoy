@@ -34,7 +34,7 @@ public class PlayerSocket {
     public static final boolean CLIENT_SEND_FIRST = true;
     public static final boolean SERVER_SEND_FIRST = !CLIENT_SEND_FIRST;
 
-    private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
+    private ResponseHandler handler = NullResponseHandler.NULL;
     private Session session;
     private String id;
     private boolean requested;
@@ -88,7 +88,7 @@ public class PlayerSocket {
         }
     }
 
-    public void setHandler(PlayerResponseHandler handler) {
+    public void setHandler(ResponseHandler handler) {
         this.handler = handler;
     }
 

@@ -44,7 +44,7 @@ public class PlayerControllerImpl implements PlayerController<String, Joystick> 
     @Override
     public void registerPlayerTransport(Player player, Joystick joystick) {
         transport.registerPlayerEndpoint(player.getName(),
-                new PlayerResponseHandlerImpl(player, joystick));
+                new ControlResponseHandler(player, joystick));
     }
 
     @Override

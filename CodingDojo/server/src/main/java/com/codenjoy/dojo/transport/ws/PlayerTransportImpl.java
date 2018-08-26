@@ -75,7 +75,7 @@ public class PlayerTransportImpl implements PlayerTransport {
     }
 
     @Override
-    public void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler) {
+    public void registerPlayerEndpoint(String id, ResponseHandler responseHandler) {
         lock.writeLock().lock();
         try {
             SocketsHandlerPair pair = endpoints.get(id);

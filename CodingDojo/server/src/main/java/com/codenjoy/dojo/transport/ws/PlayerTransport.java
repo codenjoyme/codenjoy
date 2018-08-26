@@ -23,9 +23,6 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import com.codenjoy.dojo.transport.screen.ScreenData;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.function.Function;
 
@@ -52,7 +49,7 @@ public interface PlayerTransport {
      * @param id идентификатор пользователя - его email
      * @param responseHandler обработчик
      */
-    void registerPlayerEndpoint(String id, PlayerResponseHandler responseHandler);
+    void registerPlayerEndpoint(String id, ResponseHandler responseHandler);
 
     /**
      * Случается, когда игрока удалили на админке

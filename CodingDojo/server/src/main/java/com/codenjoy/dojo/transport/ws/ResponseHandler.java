@@ -25,30 +25,14 @@ package com.codenjoy.dojo.transport.ws;
 
 import org.eclipse.jetty.websocket.api.Session;
 
-/**
- * Created by indigo on 2000-11-25.
- */
-public class NullPlayerResponseHandler implements PlayerResponseHandler {
+public interface ResponseHandler {
 
-    public static PlayerResponseHandler NULL = new NullPlayerResponseHandler();
+    // TODO название метода
+    void onResponseComplete(PlayerSocket socket, String responseContent);
 
-    @Override
-    public void onResponseComplete(PlayerSocket socket, String responseContent) {
-        // do nothing
-    }
+    void onClose(PlayerSocket socket, int statusCode, String reason);
 
-    @Override
-    public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        // do nothing
-    }
+    void onError(PlayerSocket socket, Throwable error);
 
-    @Override
-    public void onError(PlayerSocket socket, Throwable error) {
-        // do nothing
-    }
-
-    @Override
-    public void onConnect(PlayerSocket socket, Session session) {
-        // do nothing
-    }
+    void onConnect(PlayerSocket socket, Session session);
 }

@@ -35,7 +35,7 @@ public class SocketsHandlerPair {
 
     private Function<PlayerSocket, Function<Object, Object>> filters;
     private String id;
-    private PlayerResponseHandler handler = NullPlayerResponseHandler.NULL;
+    private ResponseHandler handler = NullResponseHandler.NULL;
     private List<PlayerSocket> sockets = new LinkedList<>();
 
     public SocketsHandlerPair(String id, Function<PlayerSocket, Function<Object, Object>> filters) {
@@ -52,7 +52,7 @@ public class SocketsHandlerPair {
         sockets.remove(socket);
     }
 
-    public void setHandler(PlayerResponseHandler handler) {
+    public void setHandler(ResponseHandler handler) {
         this.handler = handler;
         for (PlayerSocket socket : sockets) {
             socket.setHandler(handler);

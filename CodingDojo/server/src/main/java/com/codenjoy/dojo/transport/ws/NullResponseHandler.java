@@ -25,13 +25,27 @@ package com.codenjoy.dojo.transport.ws;
 
 import org.eclipse.jetty.websocket.api.Session;
 
-public interface PlayerResponseHandler {
+public class NullResponseHandler implements ResponseHandler {
 
-    void onResponseComplete(PlayerSocket socket, String responseContent);
+    public static ResponseHandler NULL = new NullResponseHandler();
 
-    void onClose(PlayerSocket socket, int statusCode, String reason);
+    @Override
+    public void onResponseComplete(PlayerSocket socket, String responseContent) {
+        // do nothing
+    }
 
-    void onError(PlayerSocket socket, Throwable error);
+    @Override
+    public void onClose(PlayerSocket socket, int statusCode, String reason) {
+        // do nothing
+    }
 
-    void onConnect(PlayerSocket socket, Session session);
+    @Override
+    public void onError(PlayerSocket socket, Throwable error) {
+        // do nothing
+    }
+
+    @Override
+    public void onConnect(PlayerSocket socket, Session session) {
+        // do nothing
+    }
 }

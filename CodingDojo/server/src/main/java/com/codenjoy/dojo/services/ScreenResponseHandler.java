@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
+import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.api.Session;
@@ -37,14 +37,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class ScreenResponseHandlerImpl implements PlayerResponseHandler {
+public class ScreenResponseHandler implements ResponseHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(ScreenResponseHandlerImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(ScreenResponseHandler.class);
 
     private PlayerTransport transport;
     private Player player;
 
-    public ScreenResponseHandlerImpl(PlayerTransport transport, Player player) {
+    public ScreenResponseHandler(PlayerTransport transport, Player player) {
         this.transport = transport;
         this.player = player;
     }

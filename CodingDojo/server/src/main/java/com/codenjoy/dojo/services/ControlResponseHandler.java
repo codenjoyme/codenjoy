@@ -23,18 +23,20 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
+import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
-    private static Logger logger = LoggerFactory.getLogger(PlayerResponseHandlerImpl.class);
+public class ControlResponseHandler implements ResponseHandler {
+
+    private static Logger logger = LoggerFactory.getLogger(ControlResponseHandler.class);
+
     private Player player;
     private Joystick joystick;
 
-    public PlayerResponseHandlerImpl(Player player, Joystick joystick) {
+    public ControlResponseHandler(Player player, Joystick joystick) {
         this.player = player;
         this.joystick = joystick;
     }
