@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class ScreenResponseHandler implements ResponseHandler {
 
@@ -49,20 +50,42 @@ public class ScreenResponseHandler implements ResponseHandler {
         this.player = player;
     }
 
+    static class GetScreenJSONRequest {
+
+        private JSONObject request;
+
+        public GetScreenJSONRequest(String message) {
+            request = new JSONObject(message);
+        }
+
+        public boolean itsMine() {
+            return request.getString("name").equals("getScreen");
+        }
+
+        public boolean isAllPlayersScreen() {
+            return request.getBoolean("allPlayersScreen");
+        }
+
+        public void forAllPlayers(Consumer<String> consumer) {
+            request.getJSONArray("players")
+                    .forEach((Object it) -> consumer.accept((String) it));
+        }
+
+        public String getGameName() {
+            return request.getString("gameName");
+        }
+    }
+
     @Override
     public void onResponse(PlayerSocket socket, String message) {
-        JSONObject request = new JSONObject(message);
-        if (request.getString("name").equals("getScreen")) {
-            boolean allPlayersScreen = request.getBoolean("allPlayersScreen");
-
+        GetScreenJSONRequest request = new GetScreenJSONRequest(message);
+        if (request.itsMine()) {
             List<String> players = new LinkedList<>();
-            request.getJSONArray("players").forEach(player -> players.add((String) player));
-
-            String gameName = request.getString("gameName");
+            request.forAllPlayers(player -> players.add(player));
 
             transport.setFilterFor(socket,
                     data -> new JSONObject(filter((Map<Player, PlayerData>) data,
-                            allPlayersScreen, players, gameName)));
+                            request.isAllPlayersScreen(), players, request.getGameName())));
         }
     }
 
