@@ -51,12 +51,7 @@ public class AutoSaver implements Tickable {
             count++;
             if (count % TICKS == (TICKS - 1)) {
                 // executor.submit потому что sqlite тормозит при сохранении
-                executor.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        save.saveAll();
-                    }
-                });
+                executor.submit(() -> save.saveAll());
             }
         }
     }
