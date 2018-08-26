@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.MockPlayerService;
 import com.codenjoy.dojo.services.mocks.MockTimerService;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

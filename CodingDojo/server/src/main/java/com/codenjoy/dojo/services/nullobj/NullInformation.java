@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.Information;
 import org.apache.commons.lang.StringUtils;
 
 public class NullInformation implements Information {

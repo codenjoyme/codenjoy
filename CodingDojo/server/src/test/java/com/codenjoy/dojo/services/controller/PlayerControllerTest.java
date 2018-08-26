@@ -25,8 +25,9 @@ package com.codenjoy.dojo.services.controller;
 
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.controller.PlayerController;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.nullobj.NullInformation;
+import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
 import org.junit.*;
 
 import java.util.Arrays;

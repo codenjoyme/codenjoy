@@ -24,10 +24,10 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;

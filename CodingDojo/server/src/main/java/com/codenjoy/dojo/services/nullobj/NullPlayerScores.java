@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -23,11 +23,28 @@ package com.codenjoy.dojo.services;
  */
 
 
-public class NullPlayerGame extends PlayerGame {
+import com.codenjoy.dojo.services.PlayerScores;
 
-    public static final PlayerGame INSTANCE = new NullPlayerGame();
+public class NullPlayerScores implements PlayerScores {
 
-    private NullPlayerGame() {
-        super(NullPlayer.INSTANCE, NullGame.INSTANCE);
+    public static final PlayerScores INSTANCE = new NullPlayerScores();
+
+    private NullPlayerScores() {
+        // do nothing
+    }
+
+    @Override
+    public Integer getScore() {
+        return 0;
+    }
+
+    @Override
+    public int clear() {
+        return 0;
+    }
+
+    @Override
+    public void event(Object event) {
+        // do nothing
     }
 }

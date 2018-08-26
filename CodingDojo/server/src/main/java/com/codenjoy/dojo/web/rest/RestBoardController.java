@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
