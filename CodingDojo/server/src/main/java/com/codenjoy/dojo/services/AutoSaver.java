@@ -28,7 +28,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Component
 public class AutoSaver implements Tickable {
@@ -36,7 +35,7 @@ public class AutoSaver implements Tickable {
     public static final int TICKS = 30;
 
     @Autowired
-    private SaveService saveService;
+    private SaveService save;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -47,7 +46,7 @@ public class AutoSaver implements Tickable {
     public void tick() {
         if (justStart) {
             justStart = false;
-            saveService.loadAll();
+            save.loadAll();
         } else {
             count++;
             if (count % TICKS == (TICKS - 1)) {
@@ -55,7 +54,7 @@ public class AutoSaver implements Tickable {
                 executor.submit(new Runnable() {
                     @Override
                     public void run() {
-                        saveService.saveAll();
+                        save.saveAll();
                     }
                 });
             }
