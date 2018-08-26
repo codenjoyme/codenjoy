@@ -23,8 +23,10 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.MockPlayerService;
 import com.codenjoy.dojo.services.mocks.MockTimerService;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,10 +82,22 @@ public class GameServiceTest {
     }
 
     @Test
+    public void shouldGetGame() {
+        assertEquals(FirstGameType.class,
+                gameService.getGame("first").getClass());
+
+        assertEquals(SecondGameType.class,
+                gameService.getGame("second").getClass());
+
+        assertEquals(NullGameType.class,
+                gameService.getGame("not-exists").getClass());
+    }
+
+    @Test
     public void shouldGetPngForSprites() {
         Map<String, List<String>> sprites = gameService.getSprites();
 
-        List<String> errors = new LinkedList<String>();
+        List<String> errors = new LinkedList<>();
         for (Map.Entry<String, List<String>> entry : sprites.entrySet()) {
             for (String sprite : entry.getValue()) {
                 File file = new File(String.format("target/test-classes/sprite/%s/%s.png", entry.getKey(), sprite));
