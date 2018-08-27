@@ -28,9 +28,6 @@ import org.springframework.stereotype.Component;
 
 import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-06.
- */
 @Component
 public class DebugService {
 

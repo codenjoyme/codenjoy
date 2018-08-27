@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.transport.ws;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -23,32 +23,16 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import org.eclipse.jetty.websocket.api.Session;
+import com.codenjoy.dojo.services.Player;
+import org.apache.commons.lang.StringUtils;
 
-/**
- * Created by indigo on 2000-11-25.
- */
-public class NullPlayerResponseHandler implements PlayerResponseHandler {
+public class NullPlayer extends Player {
 
-    public static PlayerResponseHandler NULL = new NullPlayerResponseHandler();
+    public static final Player INSTANCE = new NullPlayer();
 
-    @Override
-    public void onResponseComplete(PlayerSocket socket, String responseContent) {
-        // do nothing
-    }
-
-    @Override
-    public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        // do nothing
-    }
-
-    @Override
-    public void onError(PlayerSocket socket, Throwable error) {
-        // do nothing
-    }
-
-    @Override
-    public void onConnect(PlayerSocket socket, Session session) {
-        // do nothing
+    private NullPlayer() {
+       super(StringUtils.EMPTY, StringUtils.EMPTY, NullGameType.INSTANCE,
+               NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
     }
 }
+

@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class LinkService {
+
     private Map<String, Map<String, Object>> data = new ConcurrentHashMap<>();
     private long count = 0;
 

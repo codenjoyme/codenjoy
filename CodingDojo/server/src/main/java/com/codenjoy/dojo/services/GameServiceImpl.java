@@ -23,11 +23,15 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Component("gameService")
 public class GameServiceImpl implements GameService {
@@ -38,23 +42,27 @@ public class GameServiceImpl implements GameService {
     private Map<String, GameType> cache = new TreeMap<>();
 
     public GameServiceImpl() {
-        for (Class<? extends GameType> aClass : getGameClasses()) {
-            GameType gameType = loadGameType(aClass);
+        for (Class<? extends GameType> clazz : allGames()) {
+            GameType gameType = loadGameType(clazz);
             cache.put(gameType.name(), gameType);
         }
     }
 
-    private List<Class<? extends GameType>> getGameClasses() {
-        List<Class<? extends GameType>> games = new LinkedList<>();
-        games.addAll(findInPackage("com"));
-        games.addAll(findInPackage("org"));
-        games.addAll(findInPackage("net"));
-        Collections.sort(games, Comparator.comparing(Class::getName));
-        games.remove(NullGameType.class);
-        games.remove(AbstractGameType.class);
+    private List<Class<? extends GameType>> allGames() {
+        List<Class<? extends GameType>> result = new LinkedList<>();
+        result.addAll(findInPackage("com"));
+        result.addAll(findInPackage("org"));
+        result.addAll(findInPackage("net"));
+
+        Collections.sort(result, Comparator.comparing(Class::getName));
+
+        result.remove(NullGameType.class);
+        result.remove(AbstractGameType.class);
+
         // TODO исключить нерабочие игры
-        // games.stream().filter(it -> it.getPackage().toString().contains("chess")).findFirst().ifPresent(games::remove);
-        return games;
+        // result.stream().filter(it -> it.getPackage().toString().contains("chess")).findFirst().ifPresent(result::remove);
+
+        return result;
     }
 
     private Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
@@ -68,19 +76,17 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Map<String, List<String>> getSprites() {
-        Map<String, List<String>> result = new TreeMap<>();
-        for (Map.Entry<String, GameType> gameTypeEntry : cache.entrySet()) {
-            List<String> sprites = new LinkedList<>();
-
-            GameType gameType = gameTypeEntry.getValue();
-
-            for (Enum e : gameType.getPlots()) {
-                sprites.add(e.name().toLowerCase());
-            }
-
-            result.put(gameType.name(), sprites);
-        }
-        return result;
+        return cache.entrySet().stream()
+                .map(entry -> new HashMap.SimpleEntry<>(
+                        entry.getValue().name(),
+                        Arrays.stream(entry.getValue().getPlots())
+                                .map(plot -> plot.name().toLowerCase())
+                                .collect(toList())
+                ))
+                .collect(toMap(
+                        entry -> entry.getKey(),
+                        entry -> entry.getValue()
+                ));
     }
 
     private GameType loadGameType(Class<? extends GameType> gameType) {
@@ -92,7 +98,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameType getGame(String name) {   // TODO потестить
+    public GameType getGame(String name) {
         if (cache.containsKey(name)) {
             return cache.get(name);
         }

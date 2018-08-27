@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.transport.ws;
 
 /*-
  * #%L
@@ -23,14 +23,15 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.joystick.ActJoystick;
-import com.codenjoy.dojo.services.joystick.NoActJoystick;
+import org.eclipse.jetty.websocket.api.Session;
 
-public class NullJoystick implements ActJoystick, NoActJoystick {
+public interface ResponseHandler {
 
-    public static final Joystick INSTANCE = new NullJoystick();
+    void onResponse(PlayerSocket socket, String message);
 
-    private NullJoystick() {
-        // do nothing
-    }
+    void onClose(PlayerSocket socket, int statusCode, String reason);
+
+    void onError(PlayerSocket socket, Throwable error);
+
+    void onConnect(PlayerSocket socket, Session session);
 }

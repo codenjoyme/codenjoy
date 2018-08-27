@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.transport.ws;
 
 /*-
  * #%L
@@ -23,10 +23,29 @@ package com.codenjoy.dojo.services;
  */
 
 
-public interface Console {
+import org.eclipse.jetty.websocket.api.Session;
 
-    String read();
+public class NullResponseHandler implements ResponseHandler {
 
-    void print(String string);
+    public static ResponseHandler NULL = new NullResponseHandler();
 
+    @Override
+    public void onResponse(PlayerSocket socket, String message) {
+        // do nothing
+    }
+
+    @Override
+    public void onClose(PlayerSocket socket, int statusCode, String reason) {
+        // do nothing
+    }
+
+    @Override
+    public void onError(PlayerSocket socket, Throwable error) {
+        // do nothing
+    }
+
+    @Override
+    public void onConnect(PlayerSocket socket, Session session) {
+        // do nothing
+    }
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.controller;
 
 /*-
  * #%L
@@ -23,27 +23,54 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.transport.ws.PlayerResponseHandler;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
+import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.api.Session;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
-    private static Logger logger = LoggerFactory.getLogger(PlayerResponseHandlerImpl.class);
-    private Player player;
-    private Joystick joystick;
+import java.util.*;
 
-    public PlayerResponseHandlerImpl(Player player, Joystick joystick) {
+import static java.util.stream.Collectors.toMap;
+
+public class ScreenResponseHandler implements ResponseHandler {
+
+    private static Logger logger = LoggerFactory.getLogger(ScreenResponseHandler.class);
+
+    private PlayerTransport transport;
+    private Player player;
+
+    public ScreenResponseHandler(PlayerTransport transport, Player player) {
+        this.transport = transport;
         this.player = player;
-        this.joystick = joystick;
     }
 
     @Override
-    public void onResponseComplete(PlayerSocket socket, String responseContent) {
+    public void onResponse(PlayerSocket socket, String message) {
         logger.debug("Received response: {} from player: {}",
-                responseContent, player.getName());
-        new PlayerCommand(joystick, responseContent).execute();
+                message, player.getName());
+
+        GetScreenJSONRequest request = new GetScreenJSONRequest(message);
+        if (!request.itsMine()) {
+            return;
+        }
+
+        transport.setFilterFor(socket,
+                data -> new JSONObject(filter((Map<Player, PlayerData>) data, request)));
+    }
+
+    private Map<Player, PlayerData> filter(Map<Player, PlayerData> data,
+                                           GetScreenJSONRequest request)
+    {
+        return data.entrySet().stream()
+                .filter(entry -> request.isMyGame(entry.getKey()))
+                .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()))
+                .collect(toMap(entry -> entry.getKey(),
+                        entry -> entry.getValue()));
     }
 
     @Override
@@ -55,7 +82,7 @@ public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
         logger.error("Request error: player: {}, error: {}",
-                    new Object[]{player.getName(), error});
+                new Object[]{player.getName(), error});
     }
 
     @Override

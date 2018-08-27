@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
@@ -25,53 +25,76 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class NullGameType implements GameType {
-
-    public static final GameType INSTANCE = new NullGameType();
-
-    private NullGameType() {
-        // do nothing
-    }
-
+public class FirstGameType implements GameType {
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        throw exception();
-    }
-
-    private UnsupportedOperationException exception() {
-        return new UnsupportedOperationException("Oops! Trying to use NullGameType...");
+        return null;
     }
 
     @Override
     public GameField createGame() {
-        throw exception();
+        return null;
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        throw exception();
+        return null;
     }
 
     @Override
     public String name() {
-        throw exception();
+        return "first";
+    }
+
+    @Override
+    public void tick() {
+        // do nothing
+    }
+
+    public enum Elements implements CharElements {
+
+        NONE(' '),
+        WALL('☼'),
+        HERO('☺');
+
+        final char ch;
+
+        Elements(char ch) {
+            this.ch = ch;
+        }
+
+        @Override
+        public char ch() {
+            return ch;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(ch);
+        }
+
     }
 
     @Override
     public Enum[] getPlots() {
-        throw exception();
+        return Elements.values();
     }
 
     @Override
     public Settings getSettings() {
-        throw exception();
+        return null;
     }
 
     @Override
@@ -86,17 +109,12 @@ public class NullGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        throw exception();
+        return MultiplayerType.SINGLE;
     }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
-        throw exception();
-    }
-
-    @Override
-    public PrinterFactory getPrinterFactory() {
-        throw exception();
+        return null;
     }
 
     @Override
@@ -105,12 +123,12 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public String getVersion() {
-        throw exception();
+    public PrinterFactory getPrinterFactory() {
+        return null;
     }
 
     @Override
-    public void tick() {
-        // do nothing
+    public String getVersion() {
+        return null;
     }
 }

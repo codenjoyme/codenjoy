@@ -30,7 +30,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
-    private Deque<String> pool = new LinkedList<String>();
+
+    private Deque<String> pool = new LinkedList<>();
     private PlayerScores playerScores;
     private static final String LEVEL = "Level";
 
@@ -71,7 +72,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public String getMessage() {
-        List<String> result = new LinkedList<String>();
+        List<String> result = new LinkedList<>();
         String message;
         do {
             message = infoAboutLevelChangedMustBeLast(pool.pollFirst());

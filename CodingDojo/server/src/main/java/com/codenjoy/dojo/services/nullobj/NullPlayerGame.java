@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -23,15 +23,13 @@ package com.codenjoy.dojo.services;
  */
 
 
-import org.apache.commons.lang.StringUtils;
+import com.codenjoy.dojo.services.PlayerGame;
 
-public class NullPlayer extends Player {
+public class NullPlayerGame extends PlayerGame {
 
-    public static final Player INSTANCE = new NullPlayer();
+    public static final PlayerGame INSTANCE = new NullPlayerGame();
 
-    private NullPlayer() {
-       super(StringUtils.EMPTY, StringUtils.EMPTY, NullGameType.INSTANCE,
-               NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
+    private NullPlayerGame() {
+        super(NullPlayer.INSTANCE, NullGame.INSTANCE);
     }
 }
-

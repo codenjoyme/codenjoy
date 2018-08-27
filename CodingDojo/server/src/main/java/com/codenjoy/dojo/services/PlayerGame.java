@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 
 import java.util.function.Consumer;
 

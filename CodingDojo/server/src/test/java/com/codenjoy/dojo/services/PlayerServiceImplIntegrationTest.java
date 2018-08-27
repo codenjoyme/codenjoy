@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
@@ -51,8 +52,8 @@ public class PlayerServiceImplIntegrationTest {
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
     private GameService gameService;
-    private PlayerController screenController;
-    private PlayerController playerController;
+    private Controller screenController;
+    private Controller playerController;
     private PlayerGames playerGames;
     private Map<String, GameType> gameTypes = new HashMap<>();
     private Map<String, WebSocketRunner> runners = new HashMap<>();
@@ -65,10 +66,10 @@ public class PlayerServiceImplIntegrationTest {
                         = this.playerGames = new PlayerGames();
 
                 PlayerServiceImplIntegrationTest.this.playerController
-                        = this.playerController = mock(PlayerController.class);
+                        = this.playerController = mock(Controller.class);
 
                 PlayerServiceImplIntegrationTest.this.screenController
-                        = this.screenController = mock(PlayerController.class);
+                        = this.screenController = mock(Controller.class);
 
                 PlayerServiceImplIntegrationTest.this.gameService
                         = this.gameService = mock(GameService.class);

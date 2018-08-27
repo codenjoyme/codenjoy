@@ -24,6 +24,8 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.client.Closeable;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 
 public class Player implements ScreenRecipient, Closeable {
@@ -45,7 +47,7 @@ public class Player implements ScreenRecipient, Closeable {
     public Player() {
     }
 
-    Player(String name) {
+    public Player(String name) {
         this.name = name;
     }
 

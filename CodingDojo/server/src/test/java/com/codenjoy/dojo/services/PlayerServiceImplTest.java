@@ -24,11 +24,14 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
 import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.multiplayer.*;
+import com.codenjoy.dojo.services.nullobj.NullJoystick;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -83,8 +86,8 @@ public class PlayerServiceImplTest {
     private ArgumentCaptor<String> boardCaptor;
 
     @Autowired private PlayerServiceImpl playerService;
-    @Autowired private PlayerController screenController;
-    @Autowired private PlayerController playerController;
+    @Autowired private Controller screenController;
+    @Autowired private Controller playerController;
     @Autowired private GameService gameService;
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
@@ -1154,7 +1157,7 @@ public class PlayerServiceImplTest {
 //        verifyNoMoreInteractions(actionLogger);
     }
 
-    private Joystick getJoystick(PlayerController controller) {
+    private Joystick getJoystick(Controller controller) {
         ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
         verify(controller).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
         return joystickCaptor.getValue();

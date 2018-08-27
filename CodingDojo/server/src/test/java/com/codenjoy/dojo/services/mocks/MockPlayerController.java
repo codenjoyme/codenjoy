@@ -23,14 +23,14 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 
-import com.codenjoy.dojo.services.PlayerController;
+import com.codenjoy.dojo.services.controller.Controller;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
 
 public class MockPlayerController {
     @Bean(name = "playerController")
-    public PlayerController bean() throws Exception {
-        return mock(PlayerController.class);
+    public Controller bean() throws Exception {
+        return mock(Controller.class);
     }
 }

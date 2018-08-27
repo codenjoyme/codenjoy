@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.nullobj.*;
 import org.junit.Before;
 import org.junit.Test;
 

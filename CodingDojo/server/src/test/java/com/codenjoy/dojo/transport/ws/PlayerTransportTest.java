@@ -46,7 +46,7 @@ import static org.mockito.Mockito.*;
 public class PlayerTransportTest {
 
     private PlayerTransport transport;
-    private List<PlayerResponseHandler> handlers = new LinkedList<>();
+    private List<ResponseHandler> handlers = new LinkedList<>();
     private AuthenticationService authentication;
     private PlayerSocketCreator creator;
     private LinkedList<ServletUpgradeResponse> responses = new LinkedList<>();
@@ -130,7 +130,7 @@ public class PlayerTransportTest {
     }
 
     private void createServerWebSocket(String authId) {
-        PlayerResponseHandler handler = mock(PlayerResponseHandler.class);
+        ResponseHandler handler = mock(ResponseHandler.class);
         transport.registerPlayerEndpoint(authId, handler);
         handlers.add(handler);
     }

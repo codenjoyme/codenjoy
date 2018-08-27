@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.controller;
 
 /*-
  * #%L
@@ -23,11 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.BoardGameState;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 
 import java.io.IOException;
 
-public class PlayerControllerImpl implements PlayerController<String, Joystick> {
+public class PlayerController implements Controller<String, Joystick> {
 
     private PlayerTransport transport;
 
@@ -44,7 +47,7 @@ public class PlayerControllerImpl implements PlayerController<String, Joystick> 
     @Override
     public void registerPlayerTransport(Player player, Joystick joystick) {
         transport.registerPlayerEndpoint(player.getName(),
-                new PlayerResponseHandlerImpl(player, joystick));
+                new PlayerResponseHandler(player, joystick));
     }
 
     @Override

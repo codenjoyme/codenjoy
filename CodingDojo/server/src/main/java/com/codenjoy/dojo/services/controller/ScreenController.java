@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.controller;
 
 /*-
  * #%L
@@ -23,18 +23,15 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
-public class ScreenControllerImpl implements PlayerController<Map<ScreenRecipient, ScreenData>, Void> {
+public class ScreenController implements Controller<Map<ScreenRecipient, ScreenData>, Void> {
 
     private PlayerTransport transport;
 
@@ -55,7 +52,7 @@ public class ScreenControllerImpl implements PlayerController<Map<ScreenRecipien
     @Override
     public void registerPlayerTransport(Player player, Void nothing) {
         transport.registerPlayerEndpoint(player.getName(),
-                new ScreenResponseHandlerImpl(transport, player));
+                new ScreenResponseHandler(transport, player));
     }
 
     @Override
