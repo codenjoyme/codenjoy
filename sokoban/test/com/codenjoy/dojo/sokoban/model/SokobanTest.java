@@ -346,10 +346,12 @@ public class SokobanTest {
     }
 
     @Test
-    public void shouldReadLevelFromRtfResourceWithSpacesAtTheEnd() {
-        String testBoardInit = TextIOHelper.getStringFromResourcesRtf(1);
-        givenF(testBoardInit);
-        assertE(testBoardInit);
+    public void shouldReadLevelFromRtfResourceWithSpacesAtTheEnd5FirstLevels() {
+        for (int i = 1; i < 6; i++) {
+            String testBoardInit = TextIOHelper.getStringFromResourcesRtf(i);
+            givenF(testBoardInit);
+            assertE(testBoardInit);
+        }
     }
 
 
