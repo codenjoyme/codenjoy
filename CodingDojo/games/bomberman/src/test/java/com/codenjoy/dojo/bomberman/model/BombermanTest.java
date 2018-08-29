@@ -52,7 +52,7 @@ import static org.mockito.Mockito.*;
 public class BombermanTest {
 
     public int SIZE = 5;
-    private Single game;
+    private Game game;
     private Joystick hero;
     private Level level;
     private WallsImpl walls;

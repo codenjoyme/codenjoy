@@ -24,10 +24,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -46,13 +43,13 @@ import static org.mockito.Mockito.*;
 public class SingleTest {
 
     public static final int SIZE = 5;
-    private Single game2;
+    private Game game2;
     private Walls walls = emptyWalls();
     private Hero bomberman2;
     private Hero bomberman1;
     private GameSettings settings;
     private Level level;
-    private Single game1;
+    private Game game1;
     private Bomberman board;
     private EventListener listener1;
     private EventListener listener2;
@@ -221,7 +218,7 @@ public class SingleTest {
                 "☺♥   \n", game1);
     }
 
-    private void assertBoard(String board, Single game) {
+    private void assertBoard(String board, Game game) {
         assertEquals(board, game.getBoardAsString());
     }
 

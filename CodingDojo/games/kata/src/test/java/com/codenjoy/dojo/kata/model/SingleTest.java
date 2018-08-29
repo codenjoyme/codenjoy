@@ -30,6 +30,7 @@ import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -48,9 +49,9 @@ public class SingleTest {
     private EventListener listener1;
     private EventListener listener2;
     private EventListener listener3;
-    private Single game1;
-    private Single game2;
-    private Single game3;
+    private Game game1;
+    private Game game2;
+    private Game game3;
     private Dice dice;
     private Kata field;
 
@@ -102,7 +103,7 @@ public class SingleTest {
         assertField(expected, game1);
     }
 
-    private void assertField(String expected, Single game1) {
+    private void assertField(String expected, Game game1) {
         assertEquals(expected, JsonUtils.prettyPrint(game1.getBoardAsString().toString()).replace('\"', '\'').replaceAll("\\r", ""));
     }
 

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.utils;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -53,10 +54,10 @@ public class TestUtils {
         return result.toString();
     }
 
-    public static Single buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
+    public static Game buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
         GameField gameField = gameType.createGame();
         GamePlayer gamePlayer = gameType.createPlayer(listener, null, null);
-        Single game = new Single(gamePlayer, factory);
+        Game game = new Single(gamePlayer, factory);
         game.on(gameField);
         game.newGame();
         return game;

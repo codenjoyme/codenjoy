@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -44,8 +45,8 @@ public class SingleTest {
     private Battlecity field;
     private Dice dice1;
     private Dice dice2;
-    private Single tanks1;
-    private Single tanks2;
+    private Game tanks1;
+    private Game tanks2;
     private Player player1;
     private Player player2;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();

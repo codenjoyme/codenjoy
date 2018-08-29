@@ -26,6 +26,7 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -40,12 +41,12 @@ public class SingleTest {
 
     private Dice dice;
     private EventListener listener1;
-    private Single game1;
+    private Game game1;
     private EventListener listener2;
-    private Single game2;
+    private Game game2;
     private Loderunner field;
     private EventListener listener3;
-    private Single game3;
+    private Game game3;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     // появляется другие игроки, игра становится мультипользовательской
