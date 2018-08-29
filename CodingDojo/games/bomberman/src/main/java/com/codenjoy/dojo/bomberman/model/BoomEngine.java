@@ -23,12 +23,13 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.List;
 
 public interface BoomEngine {
 
-    List<Blast> boom(List<? extends PointImpl> barriers, int boardSize, PointImpl source, int radius);
+    List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius);
 
 }

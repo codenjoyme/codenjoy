@@ -142,7 +142,7 @@ public class PointImpl implements Point, Comparable<Point> {
         this.move(direction.change(this));
     }
 
-    public static PointImpl pt(int x, int y) {
+    public static Point pt(int x, int y) {
         return new PointImpl(x, y);
     }
 

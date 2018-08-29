@@ -517,7 +517,7 @@ public class RandomArtifactGeneratorTest {
         boolean growX = true;
         for (int y = 1; y < BOARD_SIZE; y++) {
             while (x <= BOARD_SIZE) {
-                PointImpl xy = pt(x, y);
+                Point xy = pt(x, y);
                 if (stone.itsMe(xy) || snake.itsMe(xy) || walls.itsMe(x, y)) {
                     if (growX) {
                         x++;

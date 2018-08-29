@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.LinkedList;
@@ -40,7 +41,7 @@ public class Line {
         //возвращает 0, если аргумент (x) равен нулю; -1, если x < 0 и 1, если x > 0.
     }
 
-    public List<PointImpl> draw(int xstart, int ystart, int xend, int yend)
+    public List<Point> draw(int xstart, int ystart, int xend, int yend)
     /**
      * xstart, ystart - начало;
      * xend, yend - конец;
@@ -93,7 +94,7 @@ public class Line {
         x = xstart;
         y = ystart;
         err = el / 2;
-        List<PointImpl> result = new LinkedList<>();
+        List<Point> result = new LinkedList<>();
         result.add(pt(x, y));//ставим первую точку
         //все последующие точки возможно надо сдвигать, поэтому первую ставим вне цикла
 
