@@ -303,8 +303,8 @@ public class PlayerServiceImpl implements PlayerService {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
-                GameType gameType = player.getGameType();
-                GameData gameData = gameDataMap.get(gameType.name());
+                String gameType = playerGame.getGameType().name();
+                GameData gameData = gameDataMap.get(gameType);
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
@@ -315,7 +315,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,
-                        gameType.name(),
+                        gameType,
                         player.getScore(),
                         player.getMessage(),
                         gameData.getScores(),
