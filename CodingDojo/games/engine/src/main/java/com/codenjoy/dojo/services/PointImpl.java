@@ -104,7 +104,7 @@ public class PointImpl implements Point, Comparable<Point> {
             return false;
         }
 
-        PointImpl p = (PointImpl)o;
+        Point p = (Point)o;
 
         return (p.itsMe(x, y));
     }
@@ -122,7 +122,7 @@ public class PointImpl implements Point, Comparable<Point> {
     }
 
     @Override
-    public PointImpl copy() {
+    public Point copy() {
         return new PointImpl(this);
     }
 

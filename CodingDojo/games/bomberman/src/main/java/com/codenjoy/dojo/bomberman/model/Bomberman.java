@@ -26,7 +26,6 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
@@ -43,7 +42,7 @@ public class Bomberman implements Field {
     private List<Bomb> bombs;
     private List<Blast> blasts;
     private GameSettings settings;
-    private List<PointImpl> destroyedWalls;
+    private List<Point> destroyedWalls;
     private List<Bomb> destroyedBombs;
 
     public Bomberman(GameSettings settings) {
@@ -83,7 +82,7 @@ public class Bomberman implements Field {
 
     private void removeBlasts() {
         blasts.clear();
-        for (PointImpl pt : destroyedWalls) {
+        for (Point pt : destroyedWalls) {
             walls.destroy(pt.getX(), pt.getY());
         }
         destroyedWalls.clear();

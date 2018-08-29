@@ -1320,16 +1320,16 @@ public class BombermanTest {
         Iterator<Wall> iterator2 = walls2.iterator();
         Iterator<Wall> iterator3 = walls3.iterator();
 
-        PointImpl wall11 = iterator1.next();
-        PointImpl wall12 = iterator2.next();
-        PointImpl wall13 = iterator3.next();
+        Point wall11 = iterator1.next();
+        Point wall12 = iterator2.next();
+        Point wall13 = iterator3.next();
         assertNotSame(wall11, wall12);
         assertNotSame(wall12, wall13);
         assertNotSame(wall13, wall11);
 
-        PointImpl wall21 = iterator1.next();
-        PointImpl wall22 = iterator2.next();
-        PointImpl wall23 = iterator3.next();
+        Point wall21 = iterator1.next();
+        Point wall22 = iterator2.next();
+        Point wall23 = iterator3.next();
         assertNotSame(wall21, wall22);
         assertNotSame(wall22, wall23);
         assertNotSame(wall23, wall21);
