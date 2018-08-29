@@ -508,7 +508,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             if (playerGames.isEmpty()) return NullGameType.INSTANCE;
 
-            return playerGames.iterator().next().getPlayer().getGameType();
+            return playerGames.iterator().next().getGameType();
         } finally {
             lock.readLock().unlock();
         }
