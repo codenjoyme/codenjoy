@@ -92,7 +92,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player>, 
             if (!field.isBarrier(newX, newY)) {
                 moveCount++;
                 Digit digit = field.getDigit(newX, newY);
-                digit.move(getX(), getY());
+                digit.move(Hero.this);
                 move(newX, newY);
 
                 if (new DigitHandler().isRightPosition(digit)) {

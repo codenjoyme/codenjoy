@@ -35,6 +35,7 @@ import org.mockito.stubbing.Answer;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -409,10 +410,10 @@ public class RandomArtifactGeneratorTest {
     }
 
     final int D = 1; // ширина стены
-    final Point a1 = new PointImpl(0 + D, 0 + D);
-    final Point a2 = new PointImpl(0 + D, BOARD_SIZE - 1 - D);
-    final Point a3 = new PointImpl(BOARD_SIZE - 1 - D, 0 + D);
-    final Point a4 = new PointImpl(BOARD_SIZE - 1 - D, BOARD_SIZE - 1 - D);
+    final Point a1 = pt(0 + D, 0 + D);
+    final Point a2 = pt(0 + D, BOARD_SIZE - 1 - D);
+    final Point a3 = pt(BOARD_SIZE - 1 - D, 0 + D);
+    final Point a4 = pt(BOARD_SIZE - 1 - D, BOARD_SIZE - 1 - D);
 
 
     // ха, только что нашел один момент, когда камень и яблоки взаиморасполагаются так, чтобы загнать змейку в тупик.
@@ -516,7 +517,7 @@ public class RandomArtifactGeneratorTest {
         boolean growX = true;
         for (int y = 1; y < BOARD_SIZE; y++) {
             while (x <= BOARD_SIZE) {
-                PointImpl xy = new PointImpl(x, y);
+                PointImpl xy = pt(x, y);
                 if (stone.itsMe(xy) || snake.itsMe(xy) || walls.itsMe(x, y)) {
                     if (growX) {
                         x++;

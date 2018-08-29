@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.Hero;
 import com.codenjoy.dojo.snake.model.Walls;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class RandomArtifactGenerator implements ArtifactGenerator {
 
     private Dice dice;
@@ -62,7 +64,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
             boolean onSnakeWayWhenGoUp = 0 <= y && y <= (snake.getY() - 1) && x == snake.getX() && snake.getDirection().equals(Direction.UP);
             boolean onSnakeWay = onSnakeWayWhenGoRight || onSnakeWayWhenGoLeft || onSnakeWayWhenGoDown || onSnakeWayWhenGoUp;
 
-            boolean whenStandstill = isStandstill(apple, new PointImpl(x, y), boardSize);
+            boolean whenStandstill = isStandstill(apple, pt(x, y), boardSize);
 
             noSoGoodPlace = onSnake || onSnakeWay || onApple || whenStandstill || onWall;
         } while (noSoGoodPlace);
@@ -114,7 +116,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
             boolean onWall = walls.itsMe(x, y);
             boolean onApple = apple != null && apple.itsMe(x, y);
 
-            boolean whenStandstill = isStandstill(new PointImpl(x, y), stone, boardSize);
+            boolean whenStandstill = isStandstill(pt(x, y), stone, boardSize);
 
             noSoGoodPlace = onSnake || onStone || whenStandstill || onWall || onApple;
         } while (noSoGoodPlace);

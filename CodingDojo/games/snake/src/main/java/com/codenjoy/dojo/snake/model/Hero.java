@@ -139,7 +139,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
     }
 
     public boolean itsMe(int x, int y) {
-        return itsMe(new PointImpl(x, y));
+        return itsMe(pt(x, y));
     }
     
     public boolean itsMyBody(Point point) {        
@@ -169,7 +169,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         place = teleport(board.getSize(), place);
         board.getAt(place).affect(this);
         validatePosition(board.getSize(), place);
-        move(place.getX(), place.getY());
+        move(place);
     }
 
     private void validatePosition(int boardSize, Point place) {
@@ -194,13 +194,13 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
             y = boardSize - 1;
         }
 
-        return new PointImpl(x, y);
+        return pt(x, y);
     }
 
     private Point whereToMove() {
         int x = direction.changeX(getX());
         int y = direction.changeY(getY());
-        return new PointImpl(x, y);
+        return pt(x, y);
     }
 
     public boolean itsMyTail(Point point) {

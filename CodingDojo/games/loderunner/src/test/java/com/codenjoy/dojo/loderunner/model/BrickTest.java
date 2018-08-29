@@ -26,13 +26,14 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.services.PointImpl;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
 public class BrickTest {
 
     @Test
     public void test() {
-        Brick brick = new Brick(new PointImpl(0, 0));
+        Brick brick = new Brick(pt(0, 0));
 
         assertEquals(Elements.BRICK, brick.state(null));
 

@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import static com.codenjoy.dojo.services.PointImpl.*;
 
 public class Football implements Field {
 
@@ -66,7 +67,7 @@ public class Football implements Field {
     public void tick() {
         for (Ball ball : balls) {
             for (Goal goal : topGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     for (Player player : players) {
                         player.event(Events.TOP_GOAL);
                     }
@@ -75,7 +76,7 @@ public class Football implements Field {
             }
 
             for (Goal goal : bottomGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     for (Player player : players) {
                         player.event(Events.BOTTOM_GOAL);
                     }
@@ -93,7 +94,7 @@ public class Football implements Field {
             ball.tick();
             for (Player player : players) {
                 Hero hero = player.getHero();
-                if (hero.itsMe(ball.getX(), ball.getY())) {
+                if (hero.itsMe(ball)) {
                     hero.setBall(ball);
                 } else {
                     hero.setBall(null);
@@ -101,13 +102,13 @@ public class Football implements Field {
             }
 
             for (Goal goal : topGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     goal.setBall(ball);
                 }
             }
 
             for (Goal goal : bottomGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     goal.setBall(ball);
                 }
             }
@@ -120,7 +121,7 @@ public class Football implements Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
     }
 
@@ -135,10 +136,10 @@ public class Football implements Field {
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return pt(0, 0);
         }
 
-        return PointImpl.pt(rndX, rndY);
+        return pt(rndX, rndY);
     }
 
     @Override
@@ -152,18 +153,18 @@ public class Football implements Field {
         } while (!isFreeAndOnMyHalf(rndX, rndY, player) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return pt(0, 0);
         }
 
         if (rndX == 0 && rndY == 0) {
             return getFreeRandom();
         }
 
-        return PointImpl.pt(rndX, rndY);
+        return pt(rndX, rndY);
     }
 
     private boolean isFreeAndOnMyHalf(int x, int y, Player player) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
 
         boolean yOnMyHalf;
         if (player.getMyGoal() == Elements.TOP_GOAL) {
@@ -179,7 +180,7 @@ public class Football implements Field {
 
     @Override
     public boolean isFree(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
 
         return !walls.contains(pt) &&
                 !getHeroes().contains(pt);
@@ -211,19 +212,19 @@ public class Football implements Field {
 
             ball.setImpulse(0);
             for (Goal goal : topGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     goal.setBall(null);
                     ball.move(size / 2, size / 2);
                 }
             }
             for (Goal goal : bottomGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     goal.setBall(null);
                     ball.move(size / 2, size / 2);
                 }
             }
             for (Goal goal : bottomGoals) {
-                if (goal.itsMe(ball.getX(), ball.getY())) {
+                if (goal.itsMe(ball)) {
                     goal.setBall(null);
                     ball.move(size / 2, size / 2);
                 }
@@ -265,13 +266,13 @@ public class Football implements Field {
 
     @Override
     public boolean isBall(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return balls.contains(pt);
     }
 
     @Override
     public Ball getBall(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         for (Ball ball : balls) {
             if (ball.itsMe(pt)) {
                 return ball;
@@ -286,13 +287,13 @@ public class Football implements Field {
 
     @Override
     public boolean isHero(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return getHeroes().contains(pt);
     }
 
     @Override
     public boolean isWall(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return x > size - 1 || x < 0 || y < 0 || y > size - 1 || getWalls().contains(pt);
     }
 }

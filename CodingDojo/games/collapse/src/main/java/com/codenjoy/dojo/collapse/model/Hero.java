@@ -66,8 +66,7 @@ public class Hero extends PlayerHero<Field> {
         if (check(p[0])) return;
         if (check(p[1])) return;
 
-        x = p[0];
-        y = p[1];
+        move(p[0], p[1]);
     }
 
     private boolean check(int i) {
@@ -77,8 +76,7 @@ public class Hero extends PlayerHero<Field> {
     @Override
     public void tick() {
         direction = null;
-        x = -1;
-        y = -1;
+        move(-1, -1);
     }
 
     public Point getAct() {

@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 
@@ -52,7 +53,7 @@ public class BoomEngineOriginalTest {
     @Test
     public void testOneBarrier() {
         List<Wall> barriers = Arrays.asList(new Wall(3, 3), new Wall(3, 2), new Wall(2, 3), new Wall(2, 2));
-        PointImpl source = new PointImpl(3, 0);
+        PointImpl source = pt(3, 0);
         int radius = 7;
         int countBlasts = radius + 1 + 1 + 3;
 
@@ -84,7 +85,7 @@ public class BoomEngineOriginalTest {
     public void testOneBarrierAtCenter() {
         List<Wall> barriers = Arrays.asList(new Wall(9, 9), new Wall(9, 8), new Wall(8, 9), new Wall(8, 8),
                 new Wall(12, 12), new Wall(13, 13), new Wall(12, 13), new Wall(13, 12));
-        PointImpl source = new PointImpl(9, 12);
+        PointImpl source = pt(9, 12);
         int radius = 7;
         int countBlasts = 2*radius + 2 + 2 + 1;
 
@@ -115,7 +116,7 @@ public class BoomEngineOriginalTest {
     @Test
     public void testOneBarrier2() {
         List<Wall> barriers = Arrays.asList(new Wall(9, 9), new Wall(9, 8), new Wall(8, 9), new Wall(8, 8));
-        PointImpl source = new PointImpl(13, 9);
+        PointImpl source = pt(13, 9);
         int radius = 4;
         int countBlasts = 3*radius + 1 + 3;
 
@@ -147,7 +148,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(11, 11);
+        PointImpl source = pt(11, 11);
         int radius = 3;
         int countBlasts = 4*radius + 1;
 
@@ -179,7 +180,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls2() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(12, 11);
+        PointImpl source = pt(12, 11);
         int radius = 3;
         int countBlasts = 2*radius + 1;
 
@@ -211,7 +212,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls3() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(11, 12);
+        PointImpl source = pt(11, 12);
         int radius = 3;
         int countBlasts = 2*radius + 1;
 
@@ -243,7 +244,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls4() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(1, 1);
+        PointImpl source = pt(1, 1);
         int radius = 15;
         int countBlasts = 2*radius + 1;
 
@@ -275,7 +276,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls5() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(11, 11);
+        PointImpl source = pt(11, 11);
         int radius = 15;
         int countBlasts = 2 * (SIZE - 2) - 1;
 
@@ -307,7 +308,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls6() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(12, 11);
+        PointImpl source = pt(12, 11);
         int radius = 15;
         int countBlasts = SIZE - 2;
 
@@ -339,7 +340,7 @@ public class BoomEngineOriginalTest {
     public void testBigBoomAtClassicWalls7() {
         List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
-        PointImpl source = new PointImpl(11, 12);
+        PointImpl source = pt(11, 12);
         int radius = 15;
         int countBlasts = SIZE - 2;
 

@@ -32,6 +32,8 @@ import com.codenjoy.dojo.spacerace.model.Elements;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class AI3Solver implements Solver<Board> {
 
     private int delay = 0;
@@ -107,7 +109,7 @@ public class AI3Solver implements Solver<Board> {
                 Point newMe;
                 double newDistance = (double) Integer.MAX_VALUE;
                 double distance;
-                newMe = new PointImpl(me.getX() + 1, me.getY());
+                newMe = pt(me.getX() + 1, me.getY());
 
                 distance = newMe.distance(box);
                 if (distance < newDistance) {
@@ -115,21 +117,21 @@ public class AI3Solver implements Solver<Board> {
                     result = Direction.RIGHT;
                 }
 
-                newMe = new PointImpl(me.getX(), me.getY() + 1);
+                newMe = pt(me.getX(), me.getY() + 1);
                 distance = newMe.distance(box);
                 if (distance < newDistance) {
                     newDistance = distance;
                     result = Direction.DOWN;
                 }
 
-                newMe = new PointImpl(me.getX() - 1, me.getY());
+                newMe = pt(me.getX() - 1, me.getY());
                 distance = newMe.distance(box);
                 if (distance < newDistance) {
                     newDistance = distance;
                     result = Direction.LEFT;
                 }
 
-                newMe = new PointImpl(me.getX(), me.getY() - 1);
+                newMe = pt(me.getX(), me.getY() - 1);
                 distance = newMe.distance(box);
                 if (distance < newDistance) {
                     newDistance = distance;

@@ -36,6 +36,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.*;
@@ -782,11 +783,11 @@ public class SnakeTest {
 
         board.tick();
 
-        assertEquals(new PointImpl(x, y), snake.getHead());
+        assertEquals(pt(x, y), snake.getHead());
 
         assertGameOver();
     }
-    
+
     // яблоко может появиться в любом месте поля
     @Test
     public void shouldBoardContainAppleWhenGameStart() {

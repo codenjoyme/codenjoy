@@ -33,6 +33,8 @@ import com.codenjoy.dojo.startandjump.services.HeroStatus;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class StartAndJump implements Field {
 
     public static final int MAX_PLATFORM_LENGTH = 3;
@@ -82,7 +84,7 @@ public class StartAndJump implements Field {
             // moving hero
             if (hero.getStatus() == HeroStatus.FALLING) {
                 //Very podozritelno
-                if (!platforms.contains(PointImpl.pt(hero.getX() + 1, hero.getY() - 1))) {
+                if (!platforms.contains(pt(hero.getX() + 1, hero.getY() - 1))) {
                     hero.falls();
                 }
             } else if (hero.getStatus() == HeroStatus.JUMPING) {
@@ -90,8 +92,8 @@ public class StartAndJump implements Field {
             }
 
             // status changing
-            boolean isPlatformUnderHero = platforms.contains(PointImpl.pt(hero.getX(), hero.getY() - 1));
-            boolean isPlatformUnderHeroOnNextStep = platforms.contains(PointImpl.pt(hero.getX() + 1, hero.getY() - 1));
+            boolean isPlatformUnderHero = platforms.contains(pt(hero.getX(), hero.getY() - 1));
+            boolean isPlatformUnderHeroOnNextStep = platforms.contains(pt(hero.getX() + 1, hero.getY() - 1));
             if (isPlatformUnderHero || isPlatformUnderHeroOnNextStep) {
                 hero.setStatus(HeroStatus.IDLE);
             } else {

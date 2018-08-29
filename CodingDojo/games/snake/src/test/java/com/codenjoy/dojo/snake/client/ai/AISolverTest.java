@@ -36,6 +36,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
 public class AISolverTest {
@@ -489,7 +490,7 @@ public class AISolverTest {
     }
 
     private Point to(int x, int y) {
-        return new PointImpl(x, y);
+        return pt(x, y);
     }
 
     private Point from(int x, int y) {

@@ -33,6 +33,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -123,7 +124,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperBeAtBoardDefaultPosition() {
-        assertEquals(sapper, new PointImpl(1, 1));
+        assertEquals(sapper, pt(1, 1));
     }
 
     @Test
@@ -193,7 +194,7 @@ public class SapperTheHeroTest {
     }
 
     private void placeMineUpFromSapper() {
-        Point result = new PointImpl(sapper.getX(), sapper.getY() + 1);
+        Point result = pt(sapper.getX(), sapper.getY() + 1);
         if (!mines.contains(result)) {
             board.createMineOnPositionIfPossible(result);
         }

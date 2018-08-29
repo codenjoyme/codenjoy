@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * Этот малый умеет печатать состояние борды на экране.
  * @see PrinterImpl#print(Object...)
@@ -118,7 +120,7 @@ class PrinterImpl implements Printer<String> {
                 int x = el.getX();
                 int y = el.getY();
 
-                if (PointImpl.pt(x, y).isOutOf(field.length)) {
+                if (pt(x, y).isOutOf(field.length)) {
                     continue; // TODO test me (пропускаем элементы за пределами борды)
                 }
                 Object[] existing = (Object[]) field[x][y];

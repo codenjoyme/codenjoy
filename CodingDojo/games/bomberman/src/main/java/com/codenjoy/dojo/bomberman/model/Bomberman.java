@@ -32,6 +32,8 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Bomberman implements Field {
 
     private List<Player> players = new LinkedList<>();
@@ -206,7 +208,7 @@ public class Bomberman implements Field {
     @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
         for (Hero bomberman : getBombermans()) {
-            if (bomberman.itsMe(new PointImpl(x, y))) {
+            if (bomberman.itsMe(pt(x, y))) {
                 return true;
             }
         }

@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * @author http://ru.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D0%91%D1%80%D0%B5%D0%B7%D0%B5%D0%BD%D1%85%D1%8D%D0%BC%D0%B0
  */
@@ -91,8 +93,8 @@ public class Line {
         x = xstart;
         y = ystart;
         err = el / 2;
-        List<PointImpl> result = new LinkedList<PointImpl>();
-        result.add(new PointImpl(x, y));//ставим первую точку
+        List<PointImpl> result = new LinkedList<>();
+        result.add(pt(x, y));//ставим первую точку
         //все последующие точки возможно надо сдвигать, поэтому первую ставим вне цикла
 
         for (int t = 0; t < el; t++)//идём по всем точкам, начиная со второй и до последней
@@ -107,7 +109,7 @@ public class Line {
                 y += pdy;//цикл идёт по иксу; сдвинуть вверх или вниз, если по y
             }
 
-            result.add(new PointImpl(x, y));
+            result.add(pt(x, y));
         }
         return result;
     }

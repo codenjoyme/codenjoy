@@ -141,7 +141,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void renew(Point pt, BulletCharger charger) {
         this.charger = charger;
         alive = true;
-        move(pt.getX(), pt.getY());
+        move(pt);
     }
 
     public void recharge() {

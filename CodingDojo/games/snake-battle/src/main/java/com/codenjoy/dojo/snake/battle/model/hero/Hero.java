@@ -102,13 +102,13 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public Point getHead() {
         if (elements.isEmpty())
-            return new PointImpl(-1, -1);
+            return pt(-1, -1);
         return elements.getLast();
     }
 
     public Point getNeck() {
         if (elements.size() < 2)
-            return new PointImpl(-1, -1);
+            return pt(-1, -1);
         return elements.get(elements.size() - 2);
     }
 

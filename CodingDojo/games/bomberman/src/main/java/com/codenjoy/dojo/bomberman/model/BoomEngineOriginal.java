@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.LinkedList;
 import java.util.List;
+import static com.codenjoy.dojo.services.PointImpl.*;
 
 public class BoomEngineOriginal implements BoomEngine {
 
@@ -80,7 +81,7 @@ public class BoomEngineOriginal implements BoomEngine {
     }
 
     private boolean add(List<? extends PointImpl> barriers, int boardSize, List<Blast> blasts, int x, int y) {
-        PointImpl pt = new PointImpl(x, y);
+        PointImpl pt = pt(x, y);
 
         if (!isOnBoard(pt, boardSize)) {
             return false;

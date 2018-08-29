@@ -55,8 +55,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         if (field.outOfField(newX, newY)) {
             onDestroy(); // TODO заимплементить взрыв
         } else {
-            x = newX;
-            y = newY;
+            move(newX, newY);
             field.affect(this);
         }
     }
