@@ -127,7 +127,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             Player player = getPlayer(name);
-            registerAI(player.getGameName(), player.getGameType(), name);
+            registerAI(name, player.getGameType());
         } finally {
             lock.writeLock().unlock();
         }
@@ -143,14 +143,14 @@ public class PlayerServiceImpl implements PlayerService {
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
-            registerAI(gameName, gameType, aiName);
+            registerAI(aiName, gameType);
         }
     }
 
-    private void registerAI(String gameName, GameType gameType, String aiName) {
-        Closeable ai = createAI(gameType, aiName);
+    private void registerAI(String aiName, GameType gameType) {
+        Closeable ai = createAI(aiName, gameType);
         if (ai != null) {
-            Player player = getPlayer(gameType, PlayerSave.get(aiName, "127.0.0.1", gameName, 0, null));
+            Player player = getPlayer(PlayerSave.get(aiName, "127.0.0.1", gameType.name(), 0, null), gameType);
             player.setAI(ai);
         }
     }
@@ -161,17 +161,17 @@ public class PlayerServiceImpl implements PlayerService {
         String gameName = playerSave.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
-        Player player = getPlayer(gameType, playerSave);
+        Player player = getPlayer(playerSave, gameType);
 
         if (name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
-            Closeable runner = createAI(gameType, name);
+            Closeable runner = createAI(name, gameType);
             player.setAI(runner);
         }
 
         return player;
     }
 
-    private Closeable createAI(GameType gameType, String aiName) {
+    private Closeable createAI(String aiName, GameType gameType) {
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
@@ -207,7 +207,7 @@ public class PlayerServiceImpl implements PlayerService {
         return WebSocketRunner.runAI(aiName, solver, board);
     }
 
-    private Player getPlayer(GameType gameType, PlayerSave playerSave) {
+    private Player getPlayer(PlayerSave playerSave, GameType gameType) {
         String name = playerSave.getName();
         String gameName = playerSave.getGameName();
         String callbackUrl = playerSave.getCallbackUrl();
