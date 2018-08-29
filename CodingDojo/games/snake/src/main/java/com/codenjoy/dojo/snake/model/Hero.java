@@ -72,7 +72,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         return direction;
     }
 
-    public void moveTo(int x, int y) {
+    public void move(int x, int y) {
         elements.addLast(new Tail(x, y, this));
         
         if (growBy < 0) {             
@@ -169,7 +169,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         place = teleport(board.getSize(), place);
         board.getAt(place).affect(this);
         validatePosition(board.getSize(), place);
-        moveTo(place.getX(), place.getY());
+        move(place.getX(), place.getY());
     }
 
     private void validatePosition(int boardSize, Point place) {

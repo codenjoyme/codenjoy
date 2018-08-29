@@ -104,9 +104,9 @@ public class PointImpl implements Point, Comparable<Point> {
             return false;
         }
 
-        Point p = (Point)o;
+        PointImpl p = (PointImpl)o;
 
-        return (p.itsMe(x, y));
+        return (p.x == x && p.y == y);
     }
 
     @Override
