@@ -34,7 +34,8 @@ public class PointImpl implements Point, Comparable<Point> {
     protected int y;
 
     public PointImpl(int x, int y) {
-        move(x, y);
+        this.x = x;
+        this.y = y;
     }
 
     public PointImpl(Point point) {
@@ -116,7 +117,8 @@ public class PointImpl implements Point, Comparable<Point> {
 
     @Override
     public void move(Point pt) {
-        move(pt.getX(), pt.getY());
+        this.x = pt.getX();
+        this.y = pt.getY();
     }
 
     @Override

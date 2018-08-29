@@ -72,6 +72,7 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         return direction;
     }
 
+    @Override
     public void move(int x, int y) {
         elements.addLast(new Tail(x, y, this));
         
