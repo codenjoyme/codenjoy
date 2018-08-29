@@ -178,7 +178,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         try {
-            Solver solver = null;
+            Solver solver;
 
             try {
                 solver = Reflection.constructor()
@@ -353,21 +353,10 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll(String gameName) {
         lock.readLock().lock();
         try {
-            return getAllPlayers(gameName);
+            return playerGames.getPlayers(gameName);
         } finally {
             lock.readLock().unlock();
         }
-    }
-
-    private List<Player> getAllPlayers(String gameName) {
-        List<Player> result = new LinkedList<>();
-        for (PlayerGame playerGame : playerGames) {
-            Player player = playerGame.getPlayer();
-            if (player.getGameName().equals(gameName)) {
-                result.add(player);
-            }
-        }
-        return result;
     }
 
     @Override
@@ -505,7 +494,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return playerGames.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = getAllPlayers(gameType).iterator();
+            Iterator<Player> iterator = playerGames.getPlayers(gameType).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {

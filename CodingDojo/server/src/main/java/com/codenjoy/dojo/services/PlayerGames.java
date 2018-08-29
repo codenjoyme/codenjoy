@@ -222,4 +222,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         new LinkedList<>(playerGames)
                 .forEach(pg -> remove(pg.getPlayer()));
     }
+
+    public List<Player> getPlayers(String gameName) {
+        return playerGames.stream()
+                .map(playerGame -> playerGame.getPlayer())
+                .filter(player -> player.getGameName().equals(gameName))
+                .collect(toList());
+    }
 }

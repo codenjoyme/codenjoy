@@ -163,6 +163,23 @@ public class PlayerGamesTest {
         assertSame(thirdPlayer, result2.get(0).getPlayer());
     }
 
+    @Test
+    public void testGetAllPlayersByType() throws Exception {
+        Player secondPlayer = addOtherPlayer();
+        Player thirdPlayer = addOtherPlayer("game2");
+
+        List<Player> result = playerGames.getPlayers("game");
+
+        assertEquals(2, result.size());
+        assertSame(player, result.get(0));
+        assertSame(secondPlayer, result.get(1));
+
+        List<Player> result2 = playerGames.getPlayers("game2");
+
+        assertEquals(1, result2.size());
+        assertSame(thirdPlayer, result2.get(0));
+    }
+
     private Player addOtherPlayer() {
         return addOtherPlayer("game");
     }
