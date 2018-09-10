@@ -52,8 +52,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         super.init(field);
         int count = 0;
         do {
-            x = dice.next(field.size());
-            y = dice.next(field.size());
+            move(dice.next(field.size()), dice.next(field.size()));
             while (isBusy(x, y) && !isOutOfBoard(x, y)) {
                 x++;
                 if (isBusy(x, y)) {

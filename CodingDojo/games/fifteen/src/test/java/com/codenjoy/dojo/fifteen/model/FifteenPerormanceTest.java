@@ -26,7 +26,6 @@ import com.codenjoy.dojo.fifteen.services.GameRunner;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -46,7 +45,7 @@ public class FifteenPerormanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            Single game = TestUtils.buildGame(sampleGame,
+            Game game = TestUtils.buildGame(sampleGame,
                     Mockito.mock(EventListener.class), factory);
             games.add(game);
         }

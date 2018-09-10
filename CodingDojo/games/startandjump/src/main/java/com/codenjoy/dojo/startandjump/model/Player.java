@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.startandjump.services.Events;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
@@ -42,7 +44,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(PointImpl.pt(0, 3));
+        hero = new Hero(pt(0, 3));
     }
 
     @Override

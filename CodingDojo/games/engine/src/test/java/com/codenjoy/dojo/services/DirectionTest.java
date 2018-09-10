@@ -72,10 +72,10 @@ public class DirectionTest {
 
     @Test
     public void test_change() {
-        check(new PointImpl(0, -1), Direction.DOWN, new PointImpl(0, 0));
-        check(new PointImpl(-1, 0), Direction.LEFT, new PointImpl(0, 0));
-        check(new PointImpl(0, 1), Direction.UP,   new PointImpl(0, 0));
-        check(new PointImpl(1, 0), Direction.RIGHT, new PointImpl(0, 0));
+        check(pt(0, -1), Direction.DOWN, pt(0, 0));
+        check(pt(-1, 0), Direction.LEFT, pt(0, 0));
+        check(pt(0, 1), Direction.UP, pt(0, 0));
+        check(pt(1, 0), Direction.RIGHT, pt(0, 0));
     }
 
     @Test

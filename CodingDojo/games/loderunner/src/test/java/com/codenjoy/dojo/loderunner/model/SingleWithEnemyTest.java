@@ -26,6 +26,7 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -40,7 +41,7 @@ public class SingleWithEnemyTest {
 
     private Dice dice;
     private EventListener listener;
-    private Single game;
+    private Game game;
     private Loderunner field;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 

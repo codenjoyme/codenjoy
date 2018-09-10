@@ -27,11 +27,12 @@ import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Collection;
 import java.util.LinkedList;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Collapse implements Field {
 
@@ -84,14 +85,14 @@ public class Collapse implements Field {
     private void fall() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                Point pt = PointImpl.pt(x, y);
+                Point pt = pt(x, y);
                 if (walls.contains(pt)) continue;
 
                 Cell cell = cells.get(pt);
                 if (cell == null) {
                     Cell cell2 = null;
                     for (int y2 = y + 1; y2 < size; y2++) {
-                        Point pt2 = PointImpl.pt(x, y2);
+                        Point pt2 = pt(x, y2);
                         if (walls.contains(pt2)) break;
 
                         cell2 = cells.get(pt2);
@@ -101,7 +102,7 @@ public class Collapse implements Field {
                     if (cell2 == null) break;
 
                     cells.remove(cell2);
-                    Cell newCell = new Cell(PointImpl.pt(x, y), cell2.getNumber());
+                    Cell newCell = new Cell(pt(x, y), cell2.getNumber());
                     cells.add(newCell);
                 }
             }
@@ -148,7 +149,7 @@ public class Collapse implements Field {
     private void fillNew() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                Point pt = PointImpl.pt(x, y);
+                Point pt = pt(x, y);
                 if (walls.contains(pt)) continue;
 
                 Cell cell = cells.get(pt);

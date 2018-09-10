@@ -73,7 +73,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         PlayerGame toRemove = playerGames.remove(index);
 
         List<PlayerGame> gamePlayers = remove(toRemove.getGame());
-        gamePlayers.forEach(gp -> spreader.play(gp.getGame(), gp.getPlayer().getGameType()));
+        gamePlayers.forEach(gp -> spreader.play(gp.getGame(), gp.getGameType()));
 
         toRemove.remove(onRemove);
         toRemove.getGame().on(null);
@@ -164,7 +164,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         List<GameType> result = new LinkedList<>();
 
         for (PlayerGame playerGame : playerGames) {
-            GameType gameType = playerGame.getPlayer().getGameType();
+            GameType gameType = playerGame.getGameType();
             if (!result.contains(gameType)) {
                 result.add(gameType);
             }
@@ -221,5 +221,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void clean() {
         new LinkedList<>(playerGames)
                 .forEach(pg -> remove(pg.getPlayer()));
+    }
+
+    public List<Player> getPlayers(String gameName) {
+        return playerGames.stream()
+                .map(playerGame -> playerGame.getPlayer())
+                .filter(player -> player.getGameName().equals(gameName))
+                .collect(toList());
     }
 }

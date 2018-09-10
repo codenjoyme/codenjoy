@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
@@ -128,7 +130,7 @@ public class Quake2D implements Field {
         for (Bullet elemBullet : bullets.toArray(new Bullet[bullets.size()])){
 
             if (isBulletHitHero(elemBullet.getDirection().changeX(elemBullet.getX()), elemBullet.getDirection().inverted().changeY(elemBullet.getY()))){
-                int heroIndex = getHeroes().indexOf(PointImpl.pt(elemBullet.getDirection().changeX(elemBullet.getX()),
+                int heroIndex = getHeroes().indexOf(pt(elemBullet.getDirection().changeX(elemBullet.getX()),
                         elemBullet.getDirection().inverted().changeY(elemBullet.getY())));
                 Hero tmpHero = getHeroes().get(heroIndex);
                 tmpHero.setDamage(elemBullet.getDamage());
@@ -152,7 +154,7 @@ public class Quake2D implements Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
     }
 
@@ -167,15 +169,15 @@ public class Quake2D implements Field {
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return pt(0, 0);
         }
 
-        return PointImpl.pt(rndX, rndY);
+        return pt(rndX, rndY);
     }
 
     @Override
     public boolean isFree(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
 
         return  !abilities.contains(pt) &&
                 !bullets.contains(pt) &&
@@ -185,12 +187,12 @@ public class Quake2D implements Field {
 
     @Override
     public boolean isBulletHitHero(int x, int y) {
-        return getHeroes().contains(PointImpl.pt(x, y));
+        return getHeroes().contains(pt(x, y));
     }
 
 //    @Override
 //    public void setBomb(int x, int y) {
-//        Point pt = PointImpl.pt(x, y);
+//        Point pt = pt(x, y);
 //        if (!bullets.contains(pt)) {
 //            bullets.add(new Bullet(x, y));
 //        }
@@ -198,7 +200,7 @@ public class Quake2D implements Field {
 
 //    @Override
 //    public void removeBomb(int x, int y) {
-//        bullets.remove(PointImpl.pt(x, y));
+//        bullets.remove(pt(x, y));
 //    }
 
     @Override
@@ -274,6 +276,6 @@ public class Quake2D implements Field {
 
     @Override
     public boolean catchAbility(int x, int y) {
-        return getAbilities().contains(PointImpl.pt(x, y));
+        return getAbilities().contains(pt(x, y));
     }
 }

@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class HeroDataImpl implements HeroData {
 
     private final Point coordinate;
@@ -39,7 +41,7 @@ public class HeroDataImpl implements HeroData {
 
     HeroDataImpl(int level, Point coordinate, boolean isMultiplayer, Object additionalData) {
         if (coordinate == null) {
-            this.coordinate = PointImpl.pt(-1, -1);
+            this.coordinate = pt(-1, -1);
         } else {
             this.coordinate = new PointImpl(coordinate);
         }

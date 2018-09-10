@@ -109,7 +109,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Collection<Point> getBombs() {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         result.addAll(get(BOMB_TIMER_1));
         result.addAll(get(BOMB_TIMER_2));
         result.addAll(get(BOMB_TIMER_3));
@@ -126,20 +126,20 @@ public class Board extends AbstractBoard<Elements> {
 
     public Collection<Point> getFutureBlasts() {        
         Collection<Point> bombs = getBombs();
-		Collection<Point> result = new LinkedList<Point>();
+        Collection<Point> result = new LinkedList<>();
         for (Point bomb : bombs) {
             result.add(bomb);
-			// TODO remove duplicate (check same logic inside parrent isNear for example)
-            result.add(new PointImpl(bomb.getX() - 1, bomb.getY()));  
-            result.add(new PointImpl(bomb.getX() + 1, bomb.getY()));
-            result.add(new PointImpl(bomb.getX()    , bomb.getY() - 1));
-            result.add(new PointImpl(bomb.getX()    , bomb.getY() + 1));
+            // TODO remove duplicate (check same logic inside parrent isNear for example)
+            result.add(pt(bomb.getX() - 1, bomb.getY()));
+            result.add(pt(bomb.getX() + 1, bomb.getY()));
+            result.add(pt(bomb.getX(), bomb.getY() - 1));
+            result.add(pt(bomb.getX(), bomb.getY() + 1));
         }
-		Collection<Point> result2 = new LinkedList<Point>();
+        Collection<Point> result2 = new LinkedList<Point>();
         for (Point blast : result) {
             if (blast.isOutOf(size) || getWalls().contains(blast)) {
-				continue;
-			}
+                continue;
+            }
             result2.add(blast);
         }
         return removeDuplicates(result2);

@@ -25,10 +25,12 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
 
@@ -59,7 +61,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             int y = dice.next(board.size());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.getBombermans().contains(PointImpl.pt(x, y))) {
+            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.getBombermans().contains(pt(x, y))) {
                 walls.add(new MeatChopper(x, y));
                 count++;
             }
@@ -94,7 +96,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
     }
 
-    private Direction tryToMove(PointImpl pt) {
+    private Direction tryToMove(Point pt) {
         int count = 0;
         int x = pt.getX();
         int y = pt.getY();

@@ -323,7 +323,7 @@ public class Spacerace implements Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
     }
 
@@ -338,15 +338,15 @@ public class Spacerace implements Field {
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return pt(0, 0);
         }
 
-        return PointImpl.pt(rndX, rndY);
+        return pt(rndX, rndY);
     }
 
     @Override
     public boolean isFree(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
 
         // TODO test me
         return  !walls.contains(pt) &&

@@ -27,13 +27,15 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * @author Kors
  */
 public class DirectionUtils {
 
     public static Point getPointAt(Point p, Direction d) {
-        return new PointImpl(d.changeX(p.getX()), d.changeY(p.getY()));
+        return pt(d.changeX(p.getX()), d.changeY(p.getY()));
     }
 
     static void movePointTo(Point p, Direction d) {

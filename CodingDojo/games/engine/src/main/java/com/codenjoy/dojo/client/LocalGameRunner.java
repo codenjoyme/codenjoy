@@ -54,21 +54,21 @@ public class LocalGameRunner { // TODO test me
     {
         GameField game = gameType.createGame();
 
-        List<Single> singles = solver.stream()
+        List<Game> games = solver.stream()
                 .map(slv -> createGame(gameType, game))
                 .collect(toList());
 
         Integer count = countIterations;
         while (count == null || (count != null && count-- > 0)) {
-            for (int index = 0; index < singles.size(); index++) {
+            for (int index = 0; index < games.size(); index++) {
                 processNextTick(index, solver.get(index),
                         board.get(index),
-                        singles.get(index));
+                        games.get(index));
             }
 
             game.tick();
-            for (int index = 0; index < singles.size(); index++) {
-                Game single = singles.get(index);
+            for (int index = 0; index < games.size(); index++) {
+                Game single = games.get(index);
                 if (single.isGameOver()) {
                     out.accept(player(index, "PLAYER_GAME_OVER -> START_NEW_GAME"));
                     single.newGame();
@@ -79,8 +79,8 @@ public class LocalGameRunner { // TODO test me
         }
     }
 
-    private static void processNextTick(int index, Solver solver, ClientBoard board, Single single) {
-        Object data = single.getBoardAsString();
+    private static void processNextTick(int index, Solver solver, ClientBoard board, Game game) {
+        Object data = game.getBoardAsString();
         board.forString(data.toString());
 
         out.accept(player(index, board.toString()));
@@ -89,7 +89,7 @@ public class LocalGameRunner { // TODO test me
 
         out.accept(player(index, "Answer: " + answer));
 
-        new PlayerCommand(single.getJoystick(), answer).execute();
+        new PlayerCommand(game.getJoystick(), answer).execute();
 
         if (timeout > 0) {
             try {
@@ -121,13 +121,13 @@ public class LocalGameRunner { // TODO test me
         return preffix + message.replaceAll("\\n", "\n" + preffix);
     }
 
-    private static Single createGame(GameType gameType, GameField field) {
+    private static Game createGame(GameType gameType, GameField field) {
         GamePlayer gamePlayer = gameType.createPlayer(
                 event -> out.accept("Fire Event: " + event.toString()),
                 null, null);
         PrinterFactory factory = gameType.getPrinterFactory();
 
-        Single game = new Single(gamePlayer, factory);
+        Game game = new Single(gamePlayer, factory);
         game.on(field);
         game.newGame();
         return game;

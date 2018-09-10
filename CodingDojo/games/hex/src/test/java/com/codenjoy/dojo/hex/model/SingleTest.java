@@ -25,6 +25,7 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -56,9 +57,9 @@ public class SingleTest {
         when(level.getSize()).thenReturn(5);
 
         game = new Hex(level, dice);
-        List<Single> games = new LinkedList<>();
+        List<Game> games = new LinkedList<>();
         for (int index = 0; index < count; index++) {
-            Single game = new Single(new Player(listener), printerFactory);
+            Game game = new Single(new Player(listener), printerFactory);
             game.on(this.game);
             games.add(game);
             game.newGame();

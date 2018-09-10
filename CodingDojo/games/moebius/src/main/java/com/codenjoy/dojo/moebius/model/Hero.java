@@ -43,8 +43,7 @@ public class Hero extends PlayerHero<Field> implements ActJoystick {
         if (p == null || p.length != 2) return;
         // TODO нельзя поворачивать границы поля
 
-        x = p[0];
-        y = p[1];
+        move(p[0], p[1]);
     }
 
     public boolean isAlive() {

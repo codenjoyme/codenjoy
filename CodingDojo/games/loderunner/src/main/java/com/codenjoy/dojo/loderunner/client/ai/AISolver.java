@@ -34,6 +34,8 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
@@ -62,7 +64,7 @@ public class AISolver implements Solver<Board> {
 
                 int yd = Direction.DOWN.changeY(y);
                 if (where != Direction.DOWN &&
-                        !new PointImpl(x, yd).isOutOf(board.size()) &&
+                        !pt(x, yd).isOutOf(board.size()) &&
                         !board.aWall(x, yd) &&
                         !board.aLadder(x, yd) &&
                         !board.aLadder(x, y) &&

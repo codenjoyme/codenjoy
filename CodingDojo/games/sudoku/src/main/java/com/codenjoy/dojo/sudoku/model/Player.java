@@ -26,12 +26,11 @@ package com.codenjoy.dojo.sudoku.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.sudoku.services.Events;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Player extends GamePlayer<PlayerHero, Field> {
 
@@ -72,7 +71,7 @@ public class Player extends GamePlayer<PlayerHero, Field> {
 
             int x = fix(p[0]);
             int y = fix(SIZE + 1 - p[1]);
-            Point pt = PointImpl.pt(x, y);
+            Point pt = pt(x, y);
 
             field.set(pt, p[2]);
         };

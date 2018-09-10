@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.snake.battle.model.hero.Hero.reducedValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -48,7 +49,7 @@ public class SnakeHeroTest {
 
     @Before
     public void setup() {
-        hero = new Hero(new PointImpl(0, 0));
+        hero = new Hero(pt(0, 0));
         game = mock(SnakeBoard.class);
         hero.init(game);
         hero.setActive(true);

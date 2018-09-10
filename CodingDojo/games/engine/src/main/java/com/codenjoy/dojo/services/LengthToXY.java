@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class LengthToXY { // TODO есть точно такой же в com.codenjoy.dojo.client; только вертикально зеркальный
     private int size;
 
@@ -34,7 +36,7 @@ public class LengthToXY { // TODO есть точно такой же в com.cod
         if (length == -1) {
             return null;
         }
-        return new PointImpl(length % size, size - 1 - length / size);
+        return pt(length % size, size - 1 - length / size);
     }
 
     public int getLength(int x, int y) {
@@ -72,7 +74,7 @@ public class LengthToXY { // TODO есть точно такой же в com.cod
         }
 
         public boolean isOutOf(int x, int y) {
-            return new PointImpl(x, y).isOutOf(getSize());
+            return pt(x, y).isOutOf(getSize());
         }
 
         public String getMap() {

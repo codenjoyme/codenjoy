@@ -27,13 +27,14 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.QDirection;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 
 
 public class BallDirectionTest {
 
-    Wall horisontalWall = new Wall(new PointImpl(0,0), BarrierOrientation.HORIZONTAL);
-    Wall verticalWall = new Wall(new PointImpl(0,0), BarrierOrientation.VERTICAL);
+    Wall horisontalWall = new Wall(pt(0, 0), BarrierOrientation.HORIZONTAL);
+    Wall verticalWall = new Wall(pt(0, 0), BarrierOrientation.VERTICAL);
 
     @Test
     public void shouldChangeDirection_WhenReflectedFromHorisontalUpToDown() {

@@ -146,15 +146,15 @@ public class QDirectionTest {
 
     @Test
     public void test_change() {
-        check(new PointImpl(0, -1), QDirection.DOWN, new PointImpl(0, 0));
-        check(new PointImpl(-1, 0), QDirection.LEFT, new PointImpl(0, 0));
-        check(new PointImpl(0, 1), QDirection.UP,   new PointImpl(0, 0));
-        check(new PointImpl(1, 0), QDirection.RIGHT, new PointImpl(0, 0));
-        check(new PointImpl(-1, 1), QDirection.LEFT_UP, new PointImpl(0, 0));
-        check(new PointImpl(1, 1), QDirection.RIGHT_UP, new PointImpl(0, 0));
-        check(new PointImpl(-1, -1), QDirection.LEFT_DOWN, new PointImpl(0, 0));
-        check(new PointImpl(1, -1), QDirection.RIGHT_DOWN, new PointImpl(0, 0));
-        check(new PointImpl(0, 0), QDirection.NONE, new PointImpl(0, 0));
+        check(pt(0, -1), QDirection.DOWN, pt(0, 0));
+        check(pt(-1, 0), QDirection.LEFT, pt(0, 0));
+        check(pt(0, 1), QDirection.UP, pt(0, 0));
+        check(pt(1, 0), QDirection.RIGHT, pt(0, 0));
+        check(pt(-1, 1), QDirection.LEFT_UP, pt(0, 0));
+        check(pt(1, 1), QDirection.RIGHT_UP, pt(0, 0));
+        check(pt(-1, -1), QDirection.LEFT_DOWN, pt(0, 0));
+        check(pt(1, -1), QDirection.RIGHT_DOWN, pt(0, 0));
+        check(pt(0, 0), QDirection.NONE, pt(0, 0));
     }
 
     @Test

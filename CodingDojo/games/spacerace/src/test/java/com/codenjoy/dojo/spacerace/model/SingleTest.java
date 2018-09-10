@@ -22,6 +22,7 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.services.Dice;
@@ -41,15 +42,15 @@ public class SingleTest {
     private EventListener listener1;
     private EventListener listener2;
     private EventListener listener3;
-    private Single game1;
-    private Single game2;
-    private Single game3;
+    private Game game1;
+    private Game game2;
+    private Game game3;
     private EventListener listener4;
     private EventListener listener5;
     private EventListener listener6;
-    private Single game4;
-    private Single game5;
-    private Single game6;
+    private Game game4;
+    private Game game5;
+    private Game game6;
     private Dice dice;
     private Spacerace field;
 

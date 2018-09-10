@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.LinkedList;
 import java.util.List;
+import static com.codenjoy.dojo.services.PointImpl.*;
 
 public class CellsAdapter {
     private Cube cube;
@@ -54,7 +55,7 @@ public class CellsAdapter {
         for (int x = 0; x < 3; x++) {
             Line row = faceValue.getRow(x);
             for (int y = 0; y < 3; y++) {
-                Point pt = PointImpl.pt(x + dx, y + dy);
+                Point pt = pt(x + dx, y + dy);
                 result.add(new Cell(pt, row.get(2 - y)));
             }
         }

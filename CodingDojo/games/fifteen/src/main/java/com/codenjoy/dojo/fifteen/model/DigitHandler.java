@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class DigitHandler {
     public static final Elements[] DIGITS =
             {
@@ -49,24 +51,24 @@ public class DigitHandler {
                     Elements.O
             };
 
-    private static final Map<Elements, Point> CORRECT_POSITION = new HashMap<Elements, Point>();
+    private static final Map<Elements, Point> CORRECT_POSITION = new HashMap<>();
 
     static {
-        CORRECT_POSITION.put(Elements.A, new PointImpl(1, 4));
-        CORRECT_POSITION.put(Elements.B, new PointImpl(2, 4));
-        CORRECT_POSITION.put(Elements.C, new PointImpl(3, 4));
-        CORRECT_POSITION.put(Elements.D, new PointImpl(4, 4));
-        CORRECT_POSITION.put(Elements.E, new PointImpl(1, 3));
-        CORRECT_POSITION.put(Elements.F, new PointImpl(2, 3));
-        CORRECT_POSITION.put(Elements.G, new PointImpl(3, 3));
-        CORRECT_POSITION.put(Elements.H, new PointImpl(4, 3));
-        CORRECT_POSITION.put(Elements.I, new PointImpl(1, 2));
-        CORRECT_POSITION.put(Elements.J, new PointImpl(2, 2));
-        CORRECT_POSITION.put(Elements.K, new PointImpl(3, 2));
-        CORRECT_POSITION.put(Elements.L, new PointImpl(4, 2));
-        CORRECT_POSITION.put(Elements.M, new PointImpl(1, 1));
-        CORRECT_POSITION.put(Elements.N, new PointImpl(2, 1));
-        CORRECT_POSITION.put(Elements.O, new PointImpl(3, 1));
+        CORRECT_POSITION.put(Elements.A, pt(1, 4));
+        CORRECT_POSITION.put(Elements.B, pt(2, 4));
+        CORRECT_POSITION.put(Elements.C, pt(3, 4));
+        CORRECT_POSITION.put(Elements.D, pt(4, 4));
+        CORRECT_POSITION.put(Elements.E, pt(1, 3));
+        CORRECT_POSITION.put(Elements.F, pt(2, 3));
+        CORRECT_POSITION.put(Elements.G, pt(3, 3));
+        CORRECT_POSITION.put(Elements.H, pt(4, 3));
+        CORRECT_POSITION.put(Elements.I, pt(1, 2));
+        CORRECT_POSITION.put(Elements.J, pt(2, 2));
+        CORRECT_POSITION.put(Elements.K, pt(3, 2));
+        CORRECT_POSITION.put(Elements.L, pt(4, 2));
+        CORRECT_POSITION.put(Elements.M, pt(1, 1));
+        CORRECT_POSITION.put(Elements.N, pt(2, 1));
+        CORRECT_POSITION.put(Elements.O, pt(3, 1));
     }
 
 

@@ -51,7 +51,7 @@ public interface Point extends Comparable<Point> {
     /**
      * @return cloned object.
      */
-    PointImpl copy();
+    Point copy();
 
     /**
      * @return true if points has equals X and Y coordinates.

@@ -29,7 +29,6 @@ import com.codenjoy.dojo.lunolet.model.VesselState;
 import com.codenjoy.dojo.lunolet.utility.PrintLevels;
 
 import java.awt.geom.Point2D;
-import java.util.Locale;
 
 public class DumbSolver implements Solver<Board> {
 
@@ -56,7 +55,7 @@ public class DumbSolver implements Solver<Board> {
         }
 
         boolean closeToTarget = closeToTarget(board, 2.0);
-        boolean hSpeedIsNotZero = hSpeedIsNotZero(board);
+        boolean hSpeedIsZero = hSpeedIsZero(board);
 
         if (highObstacleOnWay(board)) {
             vMass = calculateFuelMassForGoingUp(board, 4.62);
@@ -73,13 +72,13 @@ public class DumbSolver implements Solver<Board> {
         Point2D.Double target = board.getTarget();
 
         if (closeToTarget) {
-            if (hSpeedIsNotZero) {
+            if (hSpeedIsZero) {
+                if (vMass == 0.0)
+                    vMass = -0.1;
+            } else {
                 // braking
                 hMass = ((250 + board.getFuelMass()) * board.getHSpeed()) / (3660 + board.getHSpeed());
                 shouldBrake = false;
-            } else {
-                if (vMass == 0.0)
-                    vMass = -0.1;
             }
         } else {
             hMass = Math.abs(target.x - point.x) / 100.0;
@@ -145,7 +144,7 @@ public class DumbSolver implements Solver<Board> {
         return close || isCrossTarget;
     }
 
-    private boolean hSpeedIsNotZero(Board board) {
-        return Math.abs(board.getHSpeed()) >= 0.001;
+    private boolean hSpeedIsZero(Board board) {
+        return Math.abs(board.getHSpeed()) < 0.001;
     }
 }

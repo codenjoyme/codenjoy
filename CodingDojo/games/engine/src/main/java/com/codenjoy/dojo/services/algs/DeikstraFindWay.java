@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class DeikstraFindWay {
 
     private static final List<Direction> DIRECTIONS = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
@@ -113,12 +115,12 @@ public class DeikstraFindWay {
     }
 
     private void setupPossibleWays() {
-        possibleWays = new TreeMap<Point, List<Direction>>();
+        possibleWays = new TreeMap<>();
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                Point from = new PointImpl(x, y);
-                List<Direction> directions = new LinkedList<Direction>();
+                Point from = pt(x, y);
+                List<Direction> directions = new LinkedList<>();
                 for (Direction direction : DIRECTIONS) {
                     if (possible.possible(from, direction)) {
                         directions.add(direction);

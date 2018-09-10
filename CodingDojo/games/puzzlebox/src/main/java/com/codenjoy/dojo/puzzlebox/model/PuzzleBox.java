@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import static com.codenjoy.dojo.services.PointImpl.*;
 
 public class PuzzleBox implements Field {
 
@@ -67,18 +68,17 @@ public class PuzzleBox implements Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
+        Point pt = pt(x, y);
         return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getBoxes().contains(pt);
     }
 
     @Override
     public boolean isTarget(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
-        boolean isTarget = targets.contains(pt);
-        if(isTarget) {
+        boolean result = targets.contains(pt(x, y));
+        if (result) {
             players.get(0).event(Events.FILL);
         }
-        return isTarget;
+        return result;
     }
 
     public int size() {

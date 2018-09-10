@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.printer.Printer;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class LayeredViewPrinter implements Printer<PrinterData> {
 
     private static final int BOUND_DEFAULT = 4;
@@ -91,7 +93,7 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
 
     private PrinterData getPrinterData(StringBuilder[] builders) {
         PrinterData result = new PrinterData();
-        result.setOffset(new PointImpl(vx, vy));
+        result.setOffset(pt(vx, vy));
         for (int i = 0; i < countLayers; ++i) {
             result.addLayer(builders[i].toString());
         }

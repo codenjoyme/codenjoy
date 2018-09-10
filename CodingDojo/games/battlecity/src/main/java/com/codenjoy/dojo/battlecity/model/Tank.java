@@ -101,8 +101,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (field.isBarrier(newX, newY)) {
             // do nothing
         } else {
-            x = newX;
-            y = newY;
+            move(newX, newY);
         }
         moving = false;
     }
@@ -135,8 +134,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             xx = dice.next(field.size());
             yy = dice.next(field.size());
         }
-        x = xx;
-        y = yy;
+        move(xx, yy);
         alive = true;
     }
 

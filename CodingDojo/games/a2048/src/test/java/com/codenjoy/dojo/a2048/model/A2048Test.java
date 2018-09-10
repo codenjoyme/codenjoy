@@ -26,6 +26,7 @@ package com.codenjoy.dojo.a2048.model;
 import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -46,7 +47,7 @@ public class A2048Test {
     private static final boolean WITHOUT_BREAK = false;
     private static final int ADD_NEW_AT_CORNER = -1;
     private A2048 field;
-    private Single game;
+    private Game game;
     private Joystick joystick;
     private Dice dice;
     private EventListener listener;

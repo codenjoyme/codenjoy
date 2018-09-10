@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.hero.HeroData;
@@ -43,7 +44,7 @@ public class SingleTest {
     private GamePlayer player;
     private PrinterFactory factory;
     private Joystick joystick;
-    private Single single;
+    private Game game;
     private PlayerHero hero;
     private HeroData heroData;
 
@@ -58,8 +59,8 @@ public class SingleTest {
 
         when(player.getHero()).thenReturn(hero);
 
-        single = new Single(player, factory);
-        single.on(field);
+        game = new Single(player, factory);
+        game.on(field);
     }
 
     @Test
@@ -68,7 +69,7 @@ public class SingleTest {
         when(player.getJoystick()).thenReturn(joystick);
 
         // when
-        Joystick joystick = single.getJoystick();
+        Joystick joystick = game.getJoystick();
 
         // then
         assertSame(this.joystick, joystick);
@@ -80,7 +81,7 @@ public class SingleTest {
         when(player.getJoystick()).thenReturn(null);
 
         // when
-        Joystick joystick = single.getJoystick();
+        Joystick joystick = game.getJoystick();
 
         // then
         assertSame(this.hero, joystick);
@@ -92,7 +93,7 @@ public class SingleTest {
         when(player.getHeroData()).thenReturn(heroData);
 
         // when
-        HeroData heroData = single.getHero();
+        HeroData heroData = game.getHero();
 
         // then
         assertSame(this.heroData, heroData);
@@ -106,7 +107,7 @@ public class SingleTest {
         when(hero.getY()).thenReturn(5);
 
         // when
-        HeroData heroData = single.getHero();
+        HeroData heroData = game.getHero();
 
         // then
         assertEquals("HeroData[coordinate=[3,5], level=0, " +
@@ -117,15 +118,15 @@ public class SingleTest {
     @Test
     public void callHeroDataFromHero_ifNotRealizedInPlayer_multiplayer() {
         // given
-        single = new Single(player, factory, MultiplayerType.MULTIPLE);
-        single.on(field);
+        game = new Single(player, factory, MultiplayerType.MULTIPLE);
+        game.on(field);
 
         when(player.getHeroData()).thenReturn(null);
         when(hero.getX()).thenReturn(7);
         when(hero.getY()).thenReturn(9);
 
         // when
-        HeroData heroData = single.getHero();
+        HeroData heroData = game.getHero();
 
         // then
         assertEquals("HeroData[coordinate=[7,9], level=0, " +

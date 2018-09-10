@@ -110,4 +110,8 @@ public class PlayerGame implements Tickable {
     public Joystick getJoystick() {
         return joystick;
     }
+
+    public GameType getGameType() {
+        return player.getGameType();
+    }
 }

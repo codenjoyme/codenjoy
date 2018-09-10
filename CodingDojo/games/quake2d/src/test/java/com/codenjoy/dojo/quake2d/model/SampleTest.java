@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -584,7 +585,7 @@ public class SampleTest {
 
         makeTicks(Quake2D.ABILITY_TIME_EXIST);
         ability = game.getAbilities().get(0);
-        game.getAbilities().add(0, new Ability(new PointImpl(3,3), Ability.Type.HEALTH));
+        game.getAbilities().add(0, new Ability(pt(3, 3), Ability.Type.HEALTH));
 
         ability.move(3, 3);
         player.hero.up();

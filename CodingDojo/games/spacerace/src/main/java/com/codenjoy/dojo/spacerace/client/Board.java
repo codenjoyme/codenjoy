@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.spacerace.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard},
@@ -46,7 +48,7 @@ public class Board extends AbstractBoard<Elements> {
     public Point getMe() {
 
         if(get(Elements.DEAD_HERO,Elements.HERO).get(0) == null){
-            return new PointImpl(1,1);
+            return pt(1, 1);
         }else {
 
         return get(Elements.DEAD_HERO,

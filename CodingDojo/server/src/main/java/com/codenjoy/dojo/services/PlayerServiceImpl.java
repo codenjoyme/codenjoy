@@ -127,7 +127,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             Player player = getPlayer(name);
-            registerAI(player.getGameName(), player.getGameType(), name);
+            registerAI(name, player.getGameType());
         } finally {
             lock.writeLock().unlock();
         }
@@ -143,14 +143,14 @@ public class PlayerServiceImpl implements PlayerService {
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
-            registerAI(gameName, gameType, aiName);
+            registerAI(aiName, gameType);
         }
     }
 
-    private void registerAI(String gameName, GameType gameType, String aiName) {
-        Closeable ai = createAI(gameType, aiName);
+    private void registerAI(String aiName, GameType gameType) {
+        Closeable ai = createAI(aiName, gameType);
         if (ai != null) {
-            Player player = getPlayer(gameType, PlayerSave.get(aiName, "127.0.0.1", gameName, 0, null));
+            Player player = getPlayer(PlayerSave.get(aiName, "127.0.0.1", gameType.name(), 0, null), gameType);
             player.setAI(ai);
         }
     }
@@ -161,24 +161,24 @@ public class PlayerServiceImpl implements PlayerService {
         String gameName = playerSave.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
-        Player player = getPlayer(gameType, playerSave);
+        Player player = getPlayer(playerSave, gameType);
 
         if (name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
-            Closeable runner = createAI(gameType, name);
+            Closeable runner = createAI(name, gameType);
             player.setAI(runner);
         }
 
         return player;
     }
 
-    private Closeable createAI(GameType gameType, String aiName) {
+    private Closeable createAI(String aiName, GameType gameType) {
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
         }
 
         try {
-            Solver solver = null;
+            Solver solver;
 
             try {
                 solver = Reflection.constructor()
@@ -207,7 +207,7 @@ public class PlayerServiceImpl implements PlayerService {
         return WebSocketRunner.runAI(aiName, solver, board);
     }
 
-    private Player getPlayer(GameType gameType, PlayerSave playerSave) {
+    private Player getPlayer(PlayerSave playerSave, GameType gameType) {
         String name = playerSave.getName();
         String gameName = playerSave.getGameName();
         String callbackUrl = playerSave.getCallbackUrl();
@@ -303,8 +303,8 @@ public class PlayerServiceImpl implements PlayerService {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
-                GameType gameType = player.getGameType();
-                GameData gameData = gameDataMap.get(gameType.name());
+                String gameType = playerGame.getGameType().name();
+                GameData gameData = gameDataMap.get(gameType);
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
@@ -315,7 +315,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,
-                        gameType.name(),
+                        gameType,
                         player.getScore(),
                         player.getMessage(),
                         gameData.getScores(),
@@ -353,21 +353,10 @@ public class PlayerServiceImpl implements PlayerService {
     public List<Player> getAll(String gameName) {
         lock.readLock().lock();
         try {
-            return getAllPlayers(gameName);
+            return playerGames.getPlayers(gameName);
         } finally {
             lock.readLock().unlock();
         }
-    }
-
-    private List<Player> getAllPlayers(String gameName) {
-        List<Player> result = new LinkedList<>();
-        for (PlayerGame playerGame : playerGames) {
-            Player player = playerGame.getPlayer();
-            if (player.getGameName().equals(gameName)) {
-                result.add(player);
-            }
-        }
-        return result;
     }
 
     @Override
@@ -505,7 +494,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return playerGames.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = getAllPlayers(gameType).iterator();
+            Iterator<Player> iterator = playerGames.getPlayers(gameType).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {
@@ -519,7 +508,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             if (playerGames.isEmpty()) return NullGameType.INSTANCE;
 
-            return playerGames.iterator().next().getPlayer().getGameType();
+            return playerGames.iterator().next().getGameType();
         } finally {
             lock.readLock().unlock();
         }

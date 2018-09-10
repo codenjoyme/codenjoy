@@ -26,11 +26,12 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Bomberman implements Field {
 
@@ -41,7 +42,7 @@ public class Bomberman implements Field {
     private List<Bomb> bombs;
     private List<Blast> blasts;
     private GameSettings settings;
-    private List<PointImpl> destroyedWalls;
+    private List<Point> destroyedWalls;
     private List<Bomb> destroyedBombs;
 
     public Bomberman(GameSettings settings) {
@@ -81,7 +82,7 @@ public class Bomberman implements Field {
 
     private void removeBlasts() {
         blasts.clear();
-        for (PointImpl pt : destroyedWalls) {
+        for (Point pt : destroyedWalls) {
             walls.destroy(pt.getX(), pt.getY());
         }
         destroyedWalls.clear();
@@ -206,7 +207,7 @@ public class Bomberman implements Field {
     @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
         for (Hero bomberman : getBombermans()) {
-            if (bomberman.itsMe(new PointImpl(x, y))) {
+            if (bomberman.itsMe(pt(x, y))) {
                 return true;
             }
         }
