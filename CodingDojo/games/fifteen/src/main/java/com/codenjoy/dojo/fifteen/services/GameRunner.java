@@ -49,7 +49,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         level = new LevelImpl(new Randomizer().getRamdomMap(getDice()));
         return new Fifteen(level, getDice());
     }
@@ -85,7 +85,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         return new Player(listener);
     }
 }

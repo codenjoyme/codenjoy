@@ -48,7 +48,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         LevelBuilder builder = new LevelBuilder(40, getDice());
         builder.build();
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
@@ -86,7 +86,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         return new Player(listener);
     }
 }

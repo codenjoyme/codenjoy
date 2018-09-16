@@ -62,9 +62,9 @@ public class SmokeTest {
             }
 
             @Override
-            public GameField createGame() {
+            public GameField createGame(int levelNumber) {
                 settings.getParameter("Field size").type(Integer.class).update(5);
-                return super.createGame();
+                return super.createGame(levelNumber);
             }
         };
 

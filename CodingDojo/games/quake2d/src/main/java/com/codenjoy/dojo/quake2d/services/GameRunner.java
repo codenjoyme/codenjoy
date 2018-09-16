@@ -78,7 +78,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         return new Quake2D(level, getDice());
     }
 
@@ -118,7 +118,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         return new Player(listener);
     }
 }

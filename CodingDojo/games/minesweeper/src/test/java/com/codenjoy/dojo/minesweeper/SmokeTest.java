@@ -58,11 +58,11 @@ public class SmokeTest {
             }
 
             @Override
-            public GameField createGame() {
+            public GameField createGame(int levelNumber) {
                 settings.addEditBox("Board size").type(Integer.class).update(7);
                 settings.addEditBox("Mines on board").type(Integer.class).update(2);
 
-                return super.createGame();
+                return super.createGame(levelNumber);
             }
         };
 

@@ -47,9 +47,10 @@ public interface GameType extends Tickable {
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя
+     * @level уровень игры (опциональное поле, обычно == 0)
      * @return Экземпляр игры пользователя
      */
-    GameField createGame();
+    GameField createGame(int levelNumber);
 
     /**
      * @return Размер доски. Важно, чтобы у всех пользователей были одинаковые по размеру поля
@@ -98,11 +99,10 @@ public interface GameType extends Tickable {
     /**
      * Метод для создания игрового пользователя внутри игры
      * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
-     * @param save Если игре надо передать что-то чтобы ее настроить, например сейв игрока - это то самое место
      * @param playerName Имейл игровка зарегавшегося на сервере
      * @return Игрок
      */
-    GamePlayer createPlayer(EventListener listener, String save, String playerName);
+    GamePlayer createPlayer(EventListener listener, String playerName);
 
     /**
      * @return нормальный Random, но ты можешь переопределить его, например, для тестовых целей

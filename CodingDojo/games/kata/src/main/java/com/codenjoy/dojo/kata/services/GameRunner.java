@@ -62,7 +62,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         return new Kata(getDice());
     }
 
@@ -97,7 +97,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         LevelsPool pool = new LevelsPoolImpl(levels);
         return new Player(listener, pool);
     }
