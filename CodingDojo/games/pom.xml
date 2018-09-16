@@ -128,7 +128,6 @@
         <resources>
             <resource>
                 <directory>src/main/java</directory>
-                <filtering>true</filtering>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
@@ -136,10 +135,12 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
-                <filtering>true</filtering>
                 <includes>
                     <include>**/*</include>
                 </includes>
