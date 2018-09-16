@@ -79,8 +79,8 @@ public class PlayerGamesMultiplayerTest {
         when(result.getMultiplayerType()).thenReturn(type);
         when(result.name()).thenReturn(gameName);
         when(result.getPrinterFactory()).thenReturn(printerFactory);
-        when(result.createGame()).thenAnswer(inv -> createGameField());
-        when(result.createPlayer(any(EventListener.class), anyString(), anyString())).thenAnswer(inv -> createGamePlayer());
+        when(result.createGame(anyInt())).thenAnswer(inv -> createGameField());
+        when(result.createPlayer(any(EventListener.class), anyString())).thenAnswer(inv -> createGamePlayer());
         return result;
     }
 

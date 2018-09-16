@@ -44,7 +44,7 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         return null;
     }
 
@@ -114,7 +114,7 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         return null;
     }
 

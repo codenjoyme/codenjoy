@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -62,14 +63,14 @@ public class TestUtils {
         }
 
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
-        when(gameType.createGame()).thenAnswer(answerCreateGame);
+        when(gameType.createGame(anyInt())).thenAnswer(answerCreateGame);
         PrinterFactory printerFactory = mock(PrinterFactory.class);
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         Answer<Object> answerPrinter =
                 inv -> (Printer<String>) parameters -> "board" + ++index;
         when(printerFactory.getPrinter(any(BoardReader.class), any()))
                 .thenAnswer(answerPrinter);
-        when(gameType.createPlayer(any(EventListener.class), anyString(), anyString()))
+        when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> gamePlayer);
 
         PlayerGame playerGame = playerGames.add(player, null);
