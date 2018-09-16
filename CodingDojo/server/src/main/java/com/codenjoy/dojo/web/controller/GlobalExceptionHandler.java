@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
@@ -43,12 +45,25 @@ public class GlobalExceptionHandler {
     public ModelAndView defaultErrorHandler(HttpServletRequest req,
                                             Exception e) throws Exception
     {
-        logger.error("[URL] : {}", req.getRequestURL(), e);
+        logger.error("[URL] : {} {}", req.getRequestURL(), e);
+        e.printStackTrace();
 
         ModelAndView result = new ModelAndView();
+
         result.addObject("exception", e);
+
+        StringWriter writer = new StringWriter();
+        e.printStackTrace(new PrintWriter(writer));
+        String text = writer.toString()
+                .replaceAll("\\n\\r", "\n")
+                .replaceAll("\\n\\n", "\n")
+                .replaceAll("\\n", "<br>");
+        result.addObject("stacktrace", text);
+
         result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
+
         result.addObject("url", req.getRequestURL());
+
         result.setViewName("error");
         return result;
     }

@@ -41,6 +41,7 @@
         <h1>WTF! Something wrong...</h1>
     </div>
         <div>${message}</div></br>
+        <div>${stacktrace}</div></br>
         <a href="${ctx}">Go to main page</a>
     </div>
 <body>
