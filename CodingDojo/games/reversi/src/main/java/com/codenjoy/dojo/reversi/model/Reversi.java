@@ -210,7 +210,7 @@ public class Reversi implements Field {
 
     @Override
     public boolean stop() {
-        return players.size() != MultiplayerType.TOURNAMENT.getCount();
+        return players.size() != MultiplayerType.TOURNAMENT.getRoomSize();
     }
 
     @Override

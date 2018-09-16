@@ -23,6 +23,9 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import com.codenjoy.dojo.services.Game;
+import org.json.JSONObject;
+
 import java.util.function.Function;
 
 /**
@@ -106,10 +109,40 @@ public class MultiplayerType {
         }
     }
 
-    private int count;
+    /**
+     * Игроки играют каждый на своем уровне заданное количество уровней,
+     * затем они все переходят на одну и ту же карту (multiple) и она зацикливается.
+     */
+    public static final Function<Integer, MultiplayerType> TRAINING = TRAINING_::new;
+    static class TRAINING_ extends MultiplayerType {
+        TRAINING_(Integer levels) {
+            super(1, levels);
+        }
 
-    MultiplayerType(int count) {
-        this.count = count;
+        @Override
+        public int getRoomSize(Object data) {
+            if (data == null) {
+                return super.roomSize;
+            }
+            LevelProgress progress = (LevelProgress)data;
+            if (progress.getCurrent() < progress.getTotal()) {
+                return SINGLE.getRoomSize();
+            } else {
+                return MULTIPLE.getRoomSize();
+            }
+        }
+    }
+
+    private int roomSize;
+    private int levelsCount;
+
+    MultiplayerType(int roomSize) {
+        this(roomSize, 1);
+    }
+
+    public MultiplayerType(int roomSize, int levelsCount) {
+        this.roomSize = roomSize;
+        this.levelsCount = levelsCount;
     }
 
     public boolean isSingle() {
@@ -144,7 +177,32 @@ public class MultiplayerType {
         return !isSingle();
     }
 
-    public int getCount() {
-        return count;
+    public boolean isTraining() {
+        return this instanceof TRAINING_;
+    }
+
+    public int loadProgress(Game game, JSONObject save) {
+        int roomSize;
+        if (isTraining() && save.has("levelProgress")) {
+            LevelProgress progress = new LevelProgress(save);
+            roomSize = this.getRoomSize(progress);
+            game.setProgress(progress);
+        } else {
+            roomSize = this.getRoomSize();
+            game.setProgress(new LevelProgress(this));
+        }
+        return roomSize;
+    }
+
+    public int getRoomSize(Object data) {
+        return roomSize;
+    }
+
+    public int getRoomSize() {
+        return getRoomSize(null);
+    }
+
+    public int getLevelsCount() {
+        return levelsCount;
     }
 }

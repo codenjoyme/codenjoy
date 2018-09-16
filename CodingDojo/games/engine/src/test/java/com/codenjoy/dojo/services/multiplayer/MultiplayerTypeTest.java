@@ -23,6 +23,9 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.nullobj.NullGame;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -34,103 +37,208 @@ public class MultiplayerTypeTest {
         MultiplayerType team1 = MultiplayerType.TEAM.apply(1);
         MultiplayerType team2 = MultiplayerType.TEAM.apply(3);
 
-        assertEquals(1, team1.getCount());
-        assertEquals(3, team2.getCount());
+        assertEquals(1, team1.getRoomSize());
+        assertEquals(3, team2.getRoomSize());
     }
 
     @Test
     public void typeSingle() {
-        MultiplayerType single = MultiplayerType.SINGLE;
-        assertEquals(1, single.getCount());
+        MultiplayerType type = MultiplayerType.SINGLE;
 
-        assertEquals(true, single.isSingle());
-        assertEquals(false, single.isTournament());
-        assertEquals(false, single.isTriple());
-        assertEquals(false, single.isQuadro());
-        assertEquals(false, single.isTeam());
-        assertEquals(false, single.isMultiple());
+        assertEquals(1, type.getRoomSize());
+        assertEquals(1, type.getLevelsCount());
 
-        assertEquals(true, single.isSingleplayer());
-        assertEquals(false, single.isMultiplayer());
+        assertEquals(true, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+
+        assertEquals(true, type.isSingleplayer());
+        assertEquals(false, type.isMultiplayer());
     }
 
     @Test
     public void typeTournament() {
-        MultiplayerType tournament = MultiplayerType.TOURNAMENT;
-        assertEquals(2, tournament.getCount());
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
 
-        assertEquals(false, tournament.isSingle());
-        assertEquals(true, tournament.isTournament());
-        assertEquals(false, tournament.isTriple());
-        assertEquals(false, tournament.isQuadro());
-        assertEquals(false, tournament.isTeam());
-        assertEquals(false, tournament.isMultiple());
+        assertEquals(2, type.getRoomSize());
+        assertEquals(1, type.getLevelsCount());
 
-        assertEquals(false, tournament.isSingleplayer());
-        assertEquals(true, tournament.isMultiplayer());
+        assertEquals(false, type.isSingle());
+        assertEquals(true, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
     }
 
     @Test
     public void typeTriple() {
-        MultiplayerType triple = MultiplayerType.TRIPLE;
-        assertEquals(3, triple.getCount());
+        MultiplayerType type = MultiplayerType.TRIPLE;
 
-        assertEquals(false, triple.isSingle());
-        assertEquals(false, triple.isTournament());
-        assertEquals(true, triple.isTriple());
-        assertEquals(false, triple.isQuadro());
-        assertEquals(false, triple.isTeam());
-        assertEquals(false, triple.isMultiple());
+        assertEquals(3, type.getRoomSize());
+        assertEquals(1, type.getLevelsCount());
 
-        assertEquals(false, triple.isSingleplayer());
-        assertEquals(true, triple.isMultiplayer());
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(true, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
     }
 
     @Test
     public void typeQuadro() {
-        MultiplayerType quadro = MultiplayerType.QUADRO;
-        assertEquals(4, quadro.getCount());
+        MultiplayerType type = MultiplayerType.QUADRO;
 
-        assertEquals(false, quadro.isSingle());
-        assertEquals(false, quadro.isTournament());
-        assertEquals(false, quadro.isTriple());
-        assertEquals(true, quadro.isQuadro());
-        assertEquals(false, quadro.isTeam());
-        assertEquals(false, quadro.isMultiple());
+        assertEquals(4, type.getRoomSize());
+        assertEquals(1, type.getLevelsCount());
 
-        assertEquals(false, quadro.isSingleplayer());
-        assertEquals(true, quadro.isMultiplayer());
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(true, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
     }
 
     @Test
     public void typeTeam() {
-        MultiplayerType team = MultiplayerType.TEAM.apply(9);
-        assertEquals(9, team.getCount());
+        MultiplayerType type = MultiplayerType.TEAM.apply(9);
 
-        assertEquals(false, team.isSingle());
-        assertEquals(false, team.isTournament());
-        assertEquals(false, team.isTriple());
-        assertEquals(false, team.isQuadro());
-        assertEquals(true, team.isTeam());
-        assertEquals(false, team.isMultiple());
+        assertEquals(9, type.getRoomSize());
+        assertEquals(1, type.getLevelsCount());
 
-        assertEquals(false, team.isSingleplayer());
-        assertEquals(true, team.isMultiplayer());
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(true, type.isTeam());
+        assertEquals(false, type.isMultiple());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
     }
 
     @Test
     public void typeMultiple() {
-        MultiplayerType multiple = MultiplayerType.MULTIPLE;
-        assertEquals(Integer.MAX_VALUE, multiple.getCount());
+        MultiplayerType type = MultiplayerType.MULTIPLE;
 
-        assertEquals(false, multiple.isSingle());
-        assertEquals(false, multiple.isTournament());
-        assertEquals(false, multiple.isTriple());
-        assertEquals(false, multiple.isQuadro());
-        assertEquals(false, multiple.isTeam());
-        assertEquals(true, multiple.isMultiple());
+        assertEquals(Integer.MAX_VALUE, type.getRoomSize());
+        assertEquals(1, type.getLevelsCount());
 
-        assertEquals(false, multiple.isSingleplayer());
-        assertEquals(true, multiple.isMultiplayer());
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(true, type.isMultiple());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
+    }
+
+    @Test
+    public void typeTraining() {
+        MultiplayerType type = MultiplayerType.TRAINING.apply(3);
+
+        assertEquals(1, type.getRoomSize());
+        assertEquals(3, type.getLevelsCount());
+
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+        assertEquals(true, type.isTraining());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
+    }
+
+    @Test
+    public void typeTraining_lastLevelIsMultiple() {
+        MultiplayerType type = MultiplayerType.TRAINING.apply(3);
+
+        assertEquals(1, type.getRoomSize());
+
+        assertEquals(1, type.getRoomSize(new LevelProgress(3, 1, 2)));
+        assertEquals(1, type.getRoomSize(new LevelProgress(3, 2, 2)));
+        assertEquals(Integer.MAX_VALUE, type.getRoomSize(new LevelProgress(3, 3, 3)));
+    }
+
+    public class AGame extends NullGame {
+
+        private LevelProgress progress;
+
+        @Override
+        public void setProgress(LevelProgress progress) {
+            this.progress = progress;
+        }
+
+        @Override
+        public LevelProgress getProgress() {
+            return progress;
+        }
+    }
+
+    @Test
+    public void loadProgress_forAnyType() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Game game = new AGame();
+        JSONObject save = new JSONObject("{'any':'data'}");
+
+        // when
+        int roomSize = type.loadProgress(game, save);
+
+        // then
+        assertEquals(1, roomSize);
+        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+                game.getProgress().toString());
+    }
+
+    @Test
+    public void loadProgress_forTrainingType_atFirstSingleLevel() {
+        // given
+        MultiplayerType type = MultiplayerType.TRAINING.apply(3);
+        Game game = new AGame();
+        JSONObject save = new JSONObject("{'levelProgress':{'total':3,'current':1,'lastPassed':0}}");
+
+        // when
+        int roomSize = type.loadProgress(game, save);
+
+        // then
+        assertEquals(1, roomSize);
+        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
+                game.getProgress().toString());
+    }
+
+    @Test
+    public void loadProgress_forTrainingType_atLastMultipleLevel() {
+        // given
+        MultiplayerType type = MultiplayerType.TRAINING.apply(3);
+        Game game = new AGame();
+        JSONObject save = new JSONObject("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}");
+
+        // when
+        int roomSize = type.loadProgress(game, save);
+
+        // then
+        assertEquals(Integer.MAX_VALUE, roomSize);
+        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
+                game.getProgress().toString());
     }
 }

@@ -98,7 +98,7 @@ public class Quadro implements Field {
 
     @Override
     public boolean isGameStarted() {
-        return players.size() == MultiplayerType.TOURNAMENT.getCount();
+        return players.size() == MultiplayerType.TOURNAMENT.getRoomSize();
     }
 
     @Override

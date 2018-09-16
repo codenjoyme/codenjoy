@@ -52,7 +52,7 @@ public class LocalGameRunner { // TODO test me
                            List<Solver> solver,
                            List<ClientBoard> board)
     {
-        GameField game = gameType.createGame();
+        GameField game = gameType.createGame(0);
 
         List<Game> games = solver.stream()
                 .map(slv -> createGame(gameType, game))
@@ -124,7 +124,7 @@ public class LocalGameRunner { // TODO test me
     private static Game createGame(GameType gameType, GameField field) {
         GamePlayer gamePlayer = gameType.createPlayer(
                 event -> out.accept("Fire Event: " + event.toString()),
-                null, null);
+                null);
         PrinterFactory factory = gameType.getPrinterFactory();
 
         Game game = new Single(gamePlayer, factory);
