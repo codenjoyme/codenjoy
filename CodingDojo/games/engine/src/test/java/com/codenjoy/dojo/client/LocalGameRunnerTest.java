@@ -40,6 +40,7 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -111,7 +112,7 @@ public class LocalGameRunnerTest {
                 player.getHero().tick();
             }
         };
-        when(gameType.createGame()).thenReturn(field);
+        when(gameType.createGame(anyInt())).thenReturn(field);
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get((BoardReader reader, GamePlayer player) -> {
             return "PRINTER_PRINTS_BOARD{reader=" + reader + ",player=" + player + "}" + id();
         }));
@@ -177,8 +178,7 @@ public class LocalGameRunnerTest {
                 return "PLAYER" + id();
             }
         };
-        when(gameType.createPlayer(any(EventListener.class),
-                any(String.class), any(String.class)))
+        when(gameType.createPlayer(any(EventListener.class), any(String.class)))
                 .thenReturn(gamePlayer);
 
         solver = new Solver() {
