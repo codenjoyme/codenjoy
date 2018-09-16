@@ -54,7 +54,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         throw exception();
     }
 
@@ -94,7 +94,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         throw exception();
     }
 
