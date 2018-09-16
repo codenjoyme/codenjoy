@@ -80,7 +80,6 @@ public class PlayerGamesTest {
 
         assertSame(player, playerGame.getPlayer());
 //        assertSame(game, playerGame.getGame());
-
     }
 
     @Test

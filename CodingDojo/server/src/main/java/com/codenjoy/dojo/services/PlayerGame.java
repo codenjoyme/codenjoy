@@ -67,6 +67,12 @@ public class PlayerGame implements Tickable {
             return player.equals(pg.player);
         }
 
+        if (o instanceof GameField) {
+            GameField gf = (GameField)o;
+
+            return game.getField() == gf;
+        }
+
         return false;
     }
 
