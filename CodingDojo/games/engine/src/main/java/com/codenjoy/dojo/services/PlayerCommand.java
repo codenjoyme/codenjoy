@@ -23,28 +23,36 @@ package com.codenjoy.dojo.services;
  */
 
 
+import org.slf4j.Logger;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlayerCommand {
 
-    public static final String COMMAND = "(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))";
+    private static Logger logger = DLoggerFactory.getLogger(PlayerCommand.class);
+
+    private static final String COMMAND = "(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))";
+    private static Pattern PATTERN = Pattern.compile(COMMAND, Pattern.CASE_INSENSITIVE);
 
     private Joystick joystick;
-    private String commandString;
+    private String command;
 
-    public PlayerCommand(Joystick joystick, String commandString) {
+    public PlayerCommand(Joystick joystick, String command) {
         this.joystick = joystick;
-        if (!commandString.startsWith("message('")) {
-            this.commandString = commandString.replaceAll(", +", ",").replaceAll(" +,", ",");
+        if (!command.startsWith("message('")) {
+            this.command = command.replaceAll(", +", ",").replaceAll(" +,", ",");
         } else {
-            this.commandString = commandString.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
+            this.command = command.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
         }
     }
 
+    public static boolean isValid(String command) {
+        return command != null && PATTERN.matcher(command).find();
+    }
+
     public void execute(){
-        Pattern pattern = Pattern.compile(COMMAND, Pattern.CASE_INSENSITIVE);
-        Matcher matcher = pattern.matcher(commandString);
+        Matcher matcher = PATTERN.matcher(command);
         while (matcher.find()) {
             String command = matcher.group(0);
             if (command == null) {
@@ -81,11 +89,10 @@ public class PlayerCommand {
                         joystick.message(p.replaceAll("\\\\n", "\n").replaceAll("\\\\r", "\r"));
                     }
                 } else {
-                    System.out.println(commandString);
+                    logger.warn(String.format("Unexpected command part '%s' in command '%s'", command, this.command));
                 }
             } catch (Exception e) {
-                System.out.println("Error during process command + " + command);
-                e.printStackTrace();
+                logger.error(String.format("Error during process command '%s'", this.command), e);
             }
         }
     }

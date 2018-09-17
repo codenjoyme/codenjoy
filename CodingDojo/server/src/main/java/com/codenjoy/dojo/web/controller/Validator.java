@@ -44,7 +44,6 @@ public class Validator {
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
     public static final String CODE = "^[0-9]{1,50}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
-    public static final String COMMAND = PlayerCommand.COMMAND;
 
     @Autowired private Registration registration;
 
@@ -52,14 +51,12 @@ public class Validator {
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
-    private final Pattern command;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
-        command = Pattern.compile(COMMAND, Pattern.CASE_INSENSITIVE);
     }
 
     public void checkPlayerName(String input, boolean canBeNull) {
@@ -96,7 +93,7 @@ public class Validator {
     }
 
     public void checkCommand(String input) {
-        if (input == null || !command.matcher(input).matches()) {
+        if (!PlayerCommand.isValid(input)) {
             throw new IllegalArgumentException("Command is invalid: " + input);
         }
     }

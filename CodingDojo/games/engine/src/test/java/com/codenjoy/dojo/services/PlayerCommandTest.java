@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class PlayerCommandTest {
@@ -47,6 +48,7 @@ public class PlayerCommandTest {
 
     private void execute(String command) {
         new PlayerCommand(joystick, command).execute();
+        assertEquals(true, PlayerCommand.isValid(command));
     }
 
     @Test
