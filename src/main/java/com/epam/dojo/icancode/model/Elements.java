@@ -94,6 +94,10 @@ public enum Elements implements CharElements {
     LASER_UP(LAYER2, '↑'),
     LASER_DOWN(LAYER2, '↓'),
 
+    // zombie
+    FEMALE_ZOMBIE(LAYER2, '♀'),
+    MALE_ZOMBIE(LAYER2, '♂'),
+
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
     BACKGROUND(LAYER2, 'G');

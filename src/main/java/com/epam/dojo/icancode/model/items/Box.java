@@ -43,10 +43,10 @@ public class Box extends FieldItem {
     public Elements state(Player player, Object... alsoAtPoint) {
         List<Object> objects = Arrays.asList(alsoAtPoint);
         for (Object object : objects) {
-            if (object == player.getHero()) {
+            if (object == player.getHero().getItem()) {
                 return Elements.ROBO_FLYING_ON_BOX;
             }
-            if (object.getClass().equals(Hero.class)) {
+            if (object instanceof HeroItem) {
                 return Elements.ROBO_OTHER_FLYING_ON_BOX;
             }
         }

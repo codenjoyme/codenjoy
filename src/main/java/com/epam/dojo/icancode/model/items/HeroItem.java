@@ -1,10 +1,10 @@
-package com.epam.dojo.icancode.model.interfaces;
+package com.epam.dojo.icancode.model.items;
 
 /*-
  * #%L
  * iCanCode - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 EPAM
+ * Copyright (C) 2016 - 2018 EPAM
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,28 @@ package com.epam.dojo.icancode.model.interfaces;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.Player;
-import com.epam.dojo.icancode.model.items.BaseItem;
 
-public interface IField extends GameField<Player> {
+public class HeroItem extends FieldItem {
 
-    boolean isBarrier(int x, int y);
+    private Hero hero;
 
-    ICell getStartPosition();
+    public HeroItem(Elements element) {
+        super(element);
+    }
 
-    ICell getEndPosition();
+    public Hero getHero() {
+        return hero;
+    }
 
-    void move(IItem item, int x, int y);
+    public void init(Hero hero) {
+        this.hero = hero;
+    }
 
-    ICell getCell(int x, int y);
-
-    IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
-
-    boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
-
-    void reset();
-
-    boolean isMultiplayer();
-
-    LayeredBoardReader layeredReader();
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return hero.state(player, alsoAtPoint);
+    }
 }

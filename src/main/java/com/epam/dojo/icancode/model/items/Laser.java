@@ -26,6 +26,7 @@ package com.epam.dojo.icancode.model.items;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
 /**
@@ -67,12 +68,15 @@ public class Laser extends FieldItem implements Tickable {
 
     @Override
     public void action(IItem item) {
-        if (item instanceof Hero) {
-            Hero hero = (Hero) item;
-            if (!hero.isFlying()) {
-                removeFromCell();
-                hero.dieOnLaser();
-            }
+        HeroItem heroItem = get(item, HeroItem.class);
+        if (heroItem == null) {
+            return;
+        }
+
+        Hero hero = heroItem.getHero();
+        if (!hero.isFlying()) {
+            removeFromCell();
+            hero.dieOnLaser();
         }
     }
 

@@ -24,11 +24,10 @@ package com.epam.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.services.Game;
-import com.epam.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.icancode.services.GameRunner;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -47,9 +46,10 @@ public class ICanCodePerformanceTest {
 
         List<com.codenjoy.dojo.services.Game> games = new LinkedList<>();
 
-        PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            Game game = iCanCode.newGame(mock(EventListener.class), factory, null, null);
+            Game game = TestUtils.buildGame(iCanCode,
+                    mock(EventListener.class),
+                    iCanCode.getPrinterFactory());
             games.add(game);
         }
 

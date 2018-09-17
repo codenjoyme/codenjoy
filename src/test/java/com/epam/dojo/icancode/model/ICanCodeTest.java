@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
-import com.epam.dojo.icancode.model.items.Hero;
+import com.epam.dojo.icancode.model.items.HeroItem;
 import com.epam.dojo.icancode.services.Events;
 import com.epam.dojo.icancode.services.Levels;
 import org.junit.Before;
@@ -74,36 +74,35 @@ public class ICanCodeTest {
         }
     }
 
-    private void givenFl(String... boards) {
+    private void givenFl(String board) {
         Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
-        List<ILevel> levels = createLevels(boards);
-
-        game = new ICanCode(levels, dice, ICanCode.SINGLE);
+        ILevel level = createLevels(new String[]{board}).get(0);
+        game = new ICanCode(level, dice, ICanCode.SINGLE);
         listener = mock(EventListener.class);
-        player = new Player(listener, new ProgressBar(game, null));
+        player = new Player(listener);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
+        level.getItems(HeroItem.class) //
+                .forEach(item -> {
+                    HeroItem heroItem = (HeroItem) item;
+                    if (heroItem.getHero() == null) {
+                        Player player = new Player(mock(EventListener.class));
+                        game.newGame(player);
+                        Hero hero = player.getHero();
+                        heroItem.init(hero);
+                    }
+                });
 
-        printer = new LayeredViewPrinter(game.reader(), () -> player, Levels.size(), COUNT_LAYERS);
-    }
-
-    private void givenFlWithOnePlayer(String... boards) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
-        List<ILevel> levels = createLevels(boards);
-
-        game = new ICanCode(levels, dice, ICanCode.MULTIPLE);
-        listener = mock(EventListener.class);
-        player = new Player(listener, new ProgressBar(game, null));
-        otherPlayer = new Player(mock(EventListener.class), new ProgressBar(game, null));
-        game.newGame(player);
-        game.newGame(otherPlayer);
-        this.hero = game.getHeroes().get(0);
-
-        printer = new LayeredViewPrinter(game.reader(), () -> player, Levels.size(), COUNT_LAYERS);
+        printer = new LayeredViewPrinter(
+                game.reader().size(),
+                () -> game.layeredReader(),
+                () -> player,
+                Levels.size(),
+                COUNT_LAYERS);
     }
 
     private List<ILevel> createLevels(String[] boards) {
-        List<ILevel> levels = new LinkedList<ILevel>();
+        List<ILevel> levels = new LinkedList<>();
         for (String board : boards) {
             ILevel level = new LevelImpl(board);
             levels.add(level);
@@ -481,9 +480,11 @@ public class ICanCodeTest {
         game.tick();
 
         // then
-        assertTrue(hero.isWin());
+        assertEquals(true, player.isWin());
+        assertEquals(false, player.isAlive());
 
         // when
+        game.newGame(player);
         game.tick();
 
         // then
@@ -499,7 +500,8 @@ public class ICanCodeTest {
                 "└───┘" +
                 "     ");
 
-        assertFalse(hero.isWin());
+        assertEquals(false, player.isWin());
+        assertEquals(true, player.isAlive());
     }
 
     @Test
@@ -580,10 +582,6 @@ public class ICanCodeTest {
         givenFl("╔══┐" +
                 "║SE│" +
                 "║..│" +
-                "└──┘",
-                "╔══┐" +
-                "║S.│" +
-                "║E.│" +
                 "└──┘");
 
         // when
@@ -592,51 +590,8 @@ public class ICanCodeTest {
 
         verify(listener).event(Events.WIN(0));
 
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║S.│" +
-                "║E.│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-    }
-
-    @Test
-    public void shouldAllLevelsAreDone() {
-        // given
-        givenFl("╔══┐" +
-                        "║SE│" +
-                        "║..│" +
-                        "└──┘",
-                "╔══┐" +
-                        "║.S│" +
-                        "║.E│" +
-                        "└──┘",
-                "╔══┐" +
-                        "║..│" +
-                        "║ES│" +
-                        "└──┘",
-                "╔══┐" +
-                        "║E.│" +
-                        "║S.│" +
-                        "└──┘"
-        );
+        assertEquals(true, player.isWin());
+        assertEquals(false, player.isAlive());
 
         assertL("╔══┐" +
                 "║SE│" +
@@ -644,832 +599,20 @@ public class ICanCodeTest {
                 "└──┘");
 
         assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when done 1 level - go to 2
-        hero.right();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when done 2 level - go to 3
-        hero.down();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when done 3 level - go to 4
-        hero.left();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when done 4 level - start 4 again
-        hero.up();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when done 4 level - start 4 again
-        hero.up();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-    }
-
-    @Test
-    public void shouldChangeLevelWhenAllLevelsAreDone() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when try to change level 1  - success
-        hero.loadLevel(0);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 2  - success
-        hero.loadLevel(1);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 3  - success
-        hero.loadLevel(2);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 500 - fail
-        hero.right();
-        game.tick();
-        hero.loadLevel(500);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when try to change level 2 - success
-        hero.loadLevel(1);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-    }
-
-    @Test
-    public void shouldWinOnPassedLevelThanCanSelectAnother() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when win on level then try to change to last - success
-        hero.loadLevel(1);
-        game.tick();
-        hero.down();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-    }
-
-    @Test
-    public void shouldWinOnPassedLevelThanCanSelectAnother_caseWhenGoToMultiple() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when win on level then try to change to last - success
-        hero.loadLevel(2);
-        game.tick();
-        hero.left();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-    }
-
-    @Test
-    public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when win on level then try to change to last - success
-        hero.loadLevel(3);
-        game.tick();
-        hero.right();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when try to change level 3 (previous) - success
-        hero.loadLevel(2);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-    }
-
-    @Test
-    public void shouldResetLevelWhenAllLevelsAreDone() {
-        // given
-        givenFl("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘",
-                "╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘",
-                "╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘",
-                "╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘"
-        );
-
-        hero.down();
-        game.tick();
-
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when done 1 level - go to 2
-        hero.right();
-        game.tick();
-        game.tick();
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when done 2 level - go to 3
-        hero.down();
-        game.tick();
-        game.tick();
-        hero.up();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
                 "--☺-" +
                 "----" +
                 "----");
 
         // when
-        hero.reset();
+        game.newGame(player);
         game.tick();
 
         // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
+        verifyNoMoreInteractions(listener);
 
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
+        assertEquals(false, player.isWin());
+        assertEquals(true, player.isAlive());
 
-        // when done 3 level - go to 4
-        hero.left();
-        game.tick();
-        game.tick();
-        hero.right();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when done 4 level - start 4 again
-        hero.up();
-        game.tick();
-        game.tick();
-        hero.right();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 1  - success
-        hero.loadLevel(0);
-        game.tick();
-        game.tick();
-        hero.down();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level 2  - success
-        hero.loadLevel(1);
-        game.tick();
-        game.tick();
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when try to change level 3  - success
-        hero.loadLevel(2);
-        game.tick();
-        game.tick();
-        hero.up();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-        game.tick();
-        hero.right();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 500 - fail
-        hero.right();
-        game.tick();
-        game.tick();
-        hero.loadLevel(500);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-☺--" +
-                "----");
-
-        // when try to change level 2 - success
-        hero.loadLevel(1);
-        game.tick();
-        game.tick();
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-    }
-
-    @Test
-    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
-        // given
-        givenFl("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘",
-                "╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘",
-                "╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘",
-                "╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘"
-        );
-
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when done level 1 - go to level 2
-        hero.right();
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--☺-" +
-                "----" +
-                "----");
-
-        // when try to change level to 1 - success
-        hero.loadLevel(0);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level to 2 - success
-        hero.loadLevel(1);
-        game.tick();
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level to 3 - fail
-        hero.loadLevel(2);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level 4 - fail
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level to 1 - success
-        hero.loadLevel(0);
-        game.tick();
-
-        // then
         assertL("╔══┐" +
                 "║SE│" +
                 "║..│" +
@@ -1480,6 +623,870 @@ public class ICanCodeTest {
                 "----" +
                 "----");
     }
+
+//    @Test
+//    public void shouldAllLevelsAreDone() {
+//        // given
+//        givenFl("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘"
+//        );
+//
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when done 1 level - go to 2
+//        hero.right();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when done 2 level - go to 3
+//        hero.down();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when done 3 level - go to 4
+//        hero.left();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when done 4 level - start 4 again
+//        hero.up();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when done 4 level - start 4 again
+//        hero.up();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//    }
+//
+//    @Test
+//    public void shouldChangeLevelWhenAllLevelsAreDone() {
+//        // given
+//        shouldAllLevelsAreDone();
+//
+//        // when try to change level 1  - success
+//        hero.loadLevel(0);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level 4 - success
+//        hero.loadLevel(3);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 2  - success
+//        hero.loadLevel(1);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level 4 - success
+//        hero.loadLevel(3);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 3  - success
+//        hero.loadLevel(2);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when try to change level 4 - success
+//        hero.loadLevel(3);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 500 - fail
+//        hero.right();
+//        game.tick();
+//        hero.loadLevel(500);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when try to change level 2 - success
+//        hero.loadLevel(1);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//    }
+//
+//    @Test
+//    public void shouldWinOnPassedLevelThanCanSelectAnother() {
+//        // given
+//        shouldAllLevelsAreDone();
+//
+//        // when win on level then try to change to last - success
+//        hero.loadLevel(1);
+//        game.tick();
+//        hero.down();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when try to change level 4 - success
+//        hero.loadLevel(3);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//    }
+//
+//    @Test
+//    public void shouldWinOnPassedLevelThanCanSelectAnother_caseWhenGoToMultiple() {
+//        // given
+//        shouldAllLevelsAreDone();
+//
+//        // when win on level then try to change to last - success
+//        hero.loadLevel(2);
+//        game.tick();
+//        hero.left();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 4 - success
+//        hero.loadLevel(3);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//    }
+//
+//    @Test
+//    public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
+//        // given
+//        shouldAllLevelsAreDone();
+//
+//        // when win on level then try to change to last - success
+//        hero.loadLevel(3);
+//        game.tick();
+//        hero.right();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when try to change level 3 (previous) - success
+//        hero.loadLevel(2);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//    }
+//
+//    @Test
+//    public void shouldResetLevelWhenAllLevelsAreDone() {
+//        // given
+//        givenFl("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘"
+//        );
+//
+//        hero.down();
+//        game.tick();
+//
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when done 1 level - go to 2
+//        hero.right();
+//        game.tick();
+//        game.tick();
+//        hero.left();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when done 2 level - go to 3
+//        hero.down();
+//        game.tick();
+//        game.tick();
+//        hero.up();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when done 3 level - go to 4
+//        hero.left();
+//        game.tick();
+//        game.tick();
+//        hero.right();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when done 4 level - start 4 again
+//        hero.up();
+//        game.tick();
+//        game.tick();
+//        hero.right();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 1  - success
+//        hero.loadLevel(0);
+//        game.tick();
+//        game.tick();
+//        hero.down();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level 2  - success
+//        hero.loadLevel(1);
+//        game.tick();
+//        game.tick();
+//        hero.left();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level 3  - success
+//        hero.loadLevel(2);
+//        game.tick();
+//        game.tick();
+//        hero.up();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when try to change level 4 - success
+//        hero.loadLevel(3);
+//        game.tick();
+//        game.tick();
+//        hero.right();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 500 - fail
+//        hero.right();
+//        game.tick();
+//        game.tick();
+//        hero.loadLevel(500);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "--☺-" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "----" +
+//                "-☺--" +
+//                "----");
+//
+//        // when try to change level 2 - success
+//        hero.loadLevel(1);
+//        game.tick();
+//        game.tick();
+//        hero.left();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when
+//        hero.reset();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//    }
+//
+//    @Test
+//    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
+//        // given
+//        givenFl("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║..│" +
+//                "║ES│" +
+//                "└──┘",
+//                "╔══┐" +
+//                "║E.│" +
+//                "║S.│" +
+//                "└──┘"
+//        );
+//
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when done level 1 - go to level 2
+//        hero.right();
+//        game.tick();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "--☺-" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level to 1 - success
+//        hero.loadLevel(0);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level to 2 - success
+//        hero.loadLevel(1);
+//        game.tick();
+//        hero.left();
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level to 3 - fail
+//        hero.loadLevel(2);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level 4 - fail
+//        hero.loadLevel(3);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║.S│" +
+//                "║.E│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//
+//        // when try to change level to 1 - success
+//        hero.loadLevel(0);
+//        game.tick();
+//
+//        // then
+//        assertL("╔══┐" +
+//                "║SE│" +
+//                "║..│" +
+//                "└──┘");
+//
+//        assertE("----" +
+//                "-☺--" +
+//                "----" +
+//                "----");
+//    }
 
     @Test
     public void shouldAfterNextLevelHeroCanMove() {
@@ -1487,8 +1494,8 @@ public class ICanCodeTest {
         shouldNextLevelWhenFinishCurrent();
 
         assertL("╔══┐" +
-                "║S.│" +
-                "║E.│" +
+                "║SE│" +
+                "║..│" +
                 "└──┘");
 
         assertE("----" +
@@ -1497,18 +1504,18 @@ public class ICanCodeTest {
                 "----");
 
         // when
-        hero.right();
+        hero.down();
         game.tick();
 
         // then
         assertL("╔══┐" +
-                "║S.│" +
-                "║E.│" +
+                "║SE│" +
+                "║..│" +
                 "└──┘");
 
         assertE("----" +
-                "--☺-" +
                 "----" +
+                "-☺--" +
                 "----");
     }
 
@@ -1536,6 +1543,9 @@ public class ICanCodeTest {
                 "--o-" +
                 "----" +
                 "----");
+
+        assertEquals(false, player.isAlive());
+        assertEquals(false, player.isWin());
     }
 
     @Test
@@ -1553,10 +1563,17 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
+        assertEquals(false, player.isAlive());
+        assertEquals(false, player.isWin());
+
         // when
+        game.newGame(player);
         game.tick();
 
         // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
         assertL("╔══┐" +
                 "║SO│" +
                 "║.E│" +
@@ -2420,10 +2437,17 @@ public class ICanCodeTest {
                 "-------" +
                 "-------");
 
+        assertEquals(false, player.isAlive());
+        assertEquals(false, player.isWin());
+
         // when
+        game.newGame(player);
         game.tick();
 
         // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
         assertL("╔═════┐" +
                 "║˃....│" +
                 "║..S..│" +
@@ -2444,6 +2468,9 @@ public class ICanCodeTest {
         game.tick();
 
         // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
         verifyNoMoreInteractions(listener);
     }
 
@@ -2599,10 +2626,17 @@ public class ICanCodeTest {
                 "-------" +
                 "-------");
 
+        assertEquals(false, player.isAlive());
+        assertEquals(false, player.isWin());
+
         // when
+        game.newGame(player);
         game.tick();
 
         // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
         verifyNoMoreInteractions(listener);
 
         assertL("╔═════┐" +
@@ -2682,10 +2716,17 @@ public class ICanCodeTest {
                 "-------" +
                 "-------");
 
+        assertEquals(false, player.isAlive());
+        assertEquals(false, player.isWin());
+
         // when
+        game.newGame(player);
         game.tick();
 
         // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
         verifyNoMoreInteractions(listener);
 
         assertL("╔═════┐" +

@@ -113,7 +113,7 @@ public class LevelImpl implements ILevel {
 
     @Override
     public <T extends IItem> List<T> getItems(Class clazz) {
-        List<T> result = new LinkedList<T>();
+        List<T> result = new LinkedList<>();
         List<T> items;
 
         for (int i = 0; i < cells.length; ++i) {

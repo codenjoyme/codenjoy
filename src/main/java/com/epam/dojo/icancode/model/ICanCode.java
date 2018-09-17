@@ -27,71 +27,46 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
-import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.epam.dojo.icancode.model.interfaces.IField;
+import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
-import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.Exit;
-import com.epam.dojo.icancode.model.items.Floor;
-import com.epam.dojo.icancode.model.items.Gold;
-import com.epam.dojo.icancode.model.items.Hero;
-import com.epam.dojo.icancode.model.items.Start;
+import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.Events;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {ICanCode#tick()}
- */
 public class ICanCode implements Tickable, IField {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
     private Dice dice;
-    private List<ILevel> levels;
     private ILevel level;
 
-    private boolean isMultiple;
-
-    private int ticks;
     private List<Player> players;
+    private boolean isMultiplayer;
 
-    public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
+    public ICanCode(ILevel level, Dice dice, boolean isMultiplayer) {
+        this.level = level;
+        level.setField(this);
         this.dice = dice;
-        this.levels = new LinkedList(levels);
-
-        isMultiple = multiple;
-        ticks = 0;
-
+        this.isMultiplayer = isMultiplayer;
         players = new LinkedList();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
     @Override
     public void tick() {
-        if (isMultiple) {
-            ticks++;
-            if (ticks % players.size() != 0) {
-                return;
-            }
-            ticks = 0;
-        }
-
         for (Player player : players) {
             player.tick();
         }
 
         for (IItem item : level.getItems(Tickable.class)) {
-            if (item instanceof  Hero) {
+            if (item instanceof HeroItem) {
                 continue;
             }
 
@@ -101,13 +76,11 @@ public class ICanCode implements Tickable, IField {
         for (Player player : players) {
             Hero hero = player.getHero();
 
-            if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), isMultiple));
-                player.setNextLevel();
-            }
-
             if (!hero.isAlive()) {
                 player.event(Events.LOOSE());
+            } else if (hero.isWin()) {
+                player.event(Events.WIN(hero.getGoldCount(), isMultiplayer));
+                hero.die();
             }
         }
     }
@@ -170,13 +143,18 @@ public class ICanCode implements Tickable, IField {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);
 
-        if (isMultiple) {
+        if (isMultiplayer) {
             setRandomGold(golds); // TODO test me
         }
 
         for (BaseItem gold : golds) {
             ((Gold) gold).reset();
         }
+    }
+
+    @Override
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 
     private void setRandomGold(List<BaseItem> golds) {
@@ -228,26 +206,8 @@ public class ICanCode implements Tickable, IField {
         }
     }
 
-    public ILevel getCurrentLevel() {
-        return level;
-    }
 
-    public List<Player> getPlayers() {
-        return new LinkedList(players);
-    }
-
-    public List<ILevel> getLevels() {
-        return new LinkedList<>(levels);
-    }
-
-    public boolean isMultiple() {
-        return isMultiple;
-    }
-
-    public void setLevel(ILevel level) {
-        this.level = level;
-    }
-
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             @Override
@@ -256,8 +216,23 @@ public class ICanCode implements Tickable, IField {
             }
 
             @Override
+            public Iterable<? extends Point> elements() {
+                return null; // because layeredReader() implemented here
+            }
+        };
+    }
+
+    @Override
+    public LayeredBoardReader layeredReader() {
+        return new LayeredBoardReader() {
+            @Override
+            public int size() {
+                return ICanCode.this.size();
+            }
+
+            @Override
             public BiFunction<Integer, Integer, State> elements() {
-                ICell[] cells = ICanCode.this.getCurrentLevel().getCells();
+                ICell[] cells = ICanCode.this.level.getCells();
                 return (index, layer) -> cells[index].getItem(layer);
             }
 
