@@ -38,12 +38,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
-public class SampleTest {
+public class Quake2DTest {
 
     private Quake2D game;
     private Hero hero;
@@ -67,11 +62,9 @@ public class SampleTest {
         }
     }
 
-
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
-
 
         game = new Quake2D(level, dice);
         listener = mock(EventListener.class);

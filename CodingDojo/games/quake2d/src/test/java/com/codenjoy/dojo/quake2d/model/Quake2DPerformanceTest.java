@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.fifteen.model;
+package com.codenjoy.dojo.quake2d.model;
 
 /*-
  * #%L
@@ -22,31 +22,31 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-import com.codenjoy.dojo.fifteen.services.GameRunner;
 import com.codenjoy.dojo.profile.Profiler;
+import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class FifteenPerormanceTest {
+import static org.mockito.Mockito.mock;
+
+public class Quake2DPerformanceTest {
 
     @Test // TODO закончить как будет настроение :)
     public void test() {
-        GameRunner sampleGame = new GameRunner();
+        GameRunner gameType = new GameRunner();
 
-        List<Game> games = new LinkedList<>();
+        List<Game> games = new LinkedList<Game>();
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            Game game = TestUtils.buildGame(sampleGame,
-                    Mockito.mock(EventListener.class), factory);
+            Game game = TestUtils.buildGame(gameType, mock(EventListener.class), factory);
             games.add(game);
         }
 
@@ -61,5 +61,4 @@ public class FifteenPerormanceTest {
             profiler.print();
         }
     }
-
 }

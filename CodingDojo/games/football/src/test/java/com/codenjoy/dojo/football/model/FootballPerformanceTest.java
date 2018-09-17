@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.startandjump.model;
+package com.codenjoy.dojo.football.model;
 
 /*-
  * #%L
@@ -22,13 +22,12 @@ package com.codenjoy.dojo.startandjump.model;
  * #L%
  */
 
-
+import com.codenjoy.dojo.football.services.GameRunner;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.startandjump.services.GameRunner;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
@@ -37,7 +36,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-public class StartAndJumpPerormanceTest {
+public class FootballPerformanceTest {
 
     @Test // TODO закончить как будет настроение :)
     public void test() {
