@@ -289,19 +289,19 @@ public class LevelProgressTest {
     @Test
     public void nextLevel_skip_currentWillBeMoreThanPassed() {
         // given
-        JSONObject json = new JSONObject("{'levelProgress':{'total':3,'current':1,'lastPassed':0}}");
+        JSONObject json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':0}}");
 
         // when
-        JSONObject updated = LevelProgress.winLevel(json);
-
-        // then
-        String same = "{\"levelProgress\":{\"total\":3,\"current\":1,\"lastPassed\":0}}";
-        assertEquals(same, json.toString());
-        assertEquals(same, updated.toString());
+        try {
+            LevelProgress.winLevel(json);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("Progress is invalid: {'current':2,'passed':0,'total':3,'valid':false}", e.getMessage());
+        }
     }
 
     @Test
-    public void nextLevel_ok_currentCanBeEaualsTotal() {
+    public void nextLevel_ok_currentCanBeEqualsTotal() {
         // given
         JSONObject json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':2}}");
 
@@ -322,36 +322,61 @@ public class LevelProgressTest {
         JSONObject updated = LevelProgress.winLevel(json);
 
         // then
-        String same = "{\"levelProgress\":{\"total\":2,\"current\":2,\"lastPassed\":2}}";
-        assertEquals(same, json.toString());
-        assertEquals(same, updated.toString());
+        assertEquals("{\"levelProgress\":{\"total\":2,\"current\":2,\"lastPassed\":2}}", json.toString());
+        assertEquals(null, updated);
     }
 
     @Test
-    public void nextLevel_ok() {
+    public void nextLevel_ok_dontChangeLastPassed() {
         // given
-        JSONObject json = new JSONObject("{'a':'data','levelProgress':{'total':5,'current':2,'lastPassed':3}}");
+        JSONObject json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':3}}");
 
         // when
         JSONObject updated = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":5,\"current\":2,\"lastPassed\":3}}", json.toString());
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":5,\"current\":3,\"lastPassed\":3}}", updated.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":2,\"lastPassed\":3}}", json.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":3}}", updated.toString());
 
         // when
         JSONObject updated2 = LevelProgress.winLevel(updated);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":5,\"current\":3,\"lastPassed\":3}}", updated.toString());
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":5,\"current\":4,\"lastPassed\":3}}", updated2.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":3}}", updated.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
 
         // when
         JSONObject updated3 = LevelProgress.winLevel(updated2);
 
         // then
-        String same = "{\"a\":\"data\",\"levelProgress\":{\"total\":5,\"current\":4,\"lastPassed\":3}}";
-        assertEquals(same, updated2.toString());
-        assertEquals(same, updated3.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
+        assertEquals(null, updated3);
+    }
+
+    @Test
+    public void nextLevel_ok_increaseLassPassedWithCurrent() {
+        // given
+        JSONObject json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        JSONObject updated = LevelProgress.winLevel(json);
+
+        // then
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":2,\"lastPassed\":1}}", json.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":2}}", updated.toString());
+
+        // when
+        JSONObject updated2 = LevelProgress.winLevel(updated);
+
+        // then
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":2}}", updated.toString());
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
+
+        // when
+        JSONObject updated3 = LevelProgress.winLevel(updated2);
+
+        // then
+        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
+        assertEquals(null, updated3);
     }
 }
