@@ -99,7 +99,7 @@ namespace Loderunner.Api
 
         public override bool Equals(object obj)
         {
-            return (obj as BoardPoint) == this;
+            return (BoardPoint)obj == this;
         }
 
         public override int GetHashCode()
