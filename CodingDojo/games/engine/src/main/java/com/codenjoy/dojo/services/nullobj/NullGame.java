@@ -28,13 +28,16 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 public class NullGame implements Game {
 
     public static final Game INSTANCE = new NullGame();
 
-    private NullGame() {
+    protected NullGame() {
         // do nothing
     }
 
@@ -46,6 +49,11 @@ public class NullGame implements Game {
     @Override
     public boolean isGameOver() {
         return false; 
+    }
+
+    @Override
+    public boolean isWin() {
+        return false;
     }
 
     @Override
@@ -74,8 +82,8 @@ public class NullGame implements Game {
     }
 
     @Override
-    public String getSave() {
-        return StringUtils.EMPTY;
+    public JSONObject getSave() {
+        return new JSONObject();
     }
 
     @Override
@@ -91,5 +99,15 @@ public class NullGame implements Game {
     @Override
     public void on(GameField field) {
         // do nothing
+    }
+
+    @Override
+    public void setProgress(LevelProgress progress) {
+        // do nothing
+    }
+
+    @Override
+    public LevelProgress getProgress() {
+        return new LevelProgress(MultiplayerType.SINGLE);
     }
 }

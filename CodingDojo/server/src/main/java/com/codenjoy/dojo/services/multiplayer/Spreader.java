@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -72,6 +73,11 @@ public class Spreader {
         return result;
     }
 
+    /**
+     * @param game Игра что покидает борду
+     * @return Все пллера, что так же покинут эту борду в случае если им
+     * оставаться на борде не имеет смысла
+     */
     public List<GamePlayer> remove(Game game) {
         List<GamePlayer> removed = new LinkedList<>();
 
@@ -82,7 +88,7 @@ public class Spreader {
             List<GamePlayer> players = room.getPlayers();
             players.remove(player);
 
-            if (players.size() == 1) {
+            if (players.size() == 1) { // TODO тут может не надо выходить если тип игры MULTIPLAYER
                 GamePlayer lastPlayer = players.iterator().next();
                 removed.add(lastPlayer);
                 players.remove(lastPlayer);
@@ -107,13 +113,20 @@ public class Spreader {
                 .collect(toList());
     }
 
-    public void play(Game game, GameType gameType) {
+    public void play(Game game, GameType gameType, JSONObject save) {
+        game.close();
+
+        MultiplayerType type = gameType.getMultiplayerType();
+        int roomSize = type.loadProgress(game, save);
+        int levelNumber = game.getProgress().getCurrent();
         GameField field = getField(game.getPlayer(),
                 gameType.name(),
-                gameType.getMultiplayerType().getCount(),
-                gameType::createGame);
+                roomSize,
+                () -> gameType.createGame(levelNumber));
 
         game.on(field);
+
+        game.newGame();
     }
 
     public boolean contains(Game game) {

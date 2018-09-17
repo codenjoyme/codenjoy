@@ -25,10 +25,11 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.printer.Printer;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
+import org.json.JSONObject;
 
 /**
  * Этот малый является фасадом для трех объектов:
@@ -44,6 +45,7 @@ public class Single implements Game {
     private GamePlayer player;
     private GameField field;
     private MultiplayerType multiplayerType;
+    private LevelProgress progress;
 
     public Single(GamePlayer player, PrinterFactory factory) {
         this(player, factory, MultiplayerType.SINGLE);
@@ -52,6 +54,7 @@ public class Single implements Game {
     public Single(GamePlayer player, PrinterFactory factory, MultiplayerType multiplayerType) {
         this.player = player;
         this.multiplayerType = multiplayerType;
+        this.progress = new LevelProgress(multiplayerType);
         this.factory = factory;
     }
 
@@ -62,6 +65,16 @@ public class Single implements Game {
         } else {
             printer = factory.getPrinter(field.reader(), player);
         }
+    }
+
+    @Override
+    public void setProgress(LevelProgress progress) {
+        this.progress = progress;
+    }
+
+    @Override
+    public LevelProgress getProgress() {
+        return progress;
     }
 
     /**
@@ -82,6 +95,11 @@ public class Single implements Game {
     }
 
     @Override
+    public boolean isWin() {
+        return player.isWin();
+    }
+
+    @Override
     public void newGame() {
         field.newGame(player);
     }
@@ -92,12 +110,30 @@ public class Single implements Game {
             throw new IllegalStateException("No board for this player");
         }
 
-        return printer.print();
+        Object data = printer.print();
+
+        if (multiplayerType.isTraining()) { // TODO инкапсулировать
+            if (data instanceof JSONObject) {
+                JSONObject json = (JSONObject) data;
+                progress.saveTo(json);
+                return json;
+            } else {
+                JSONObject json = new JSONObject();
+                progress.saveTo(json);
+                json.put("board", data);
+                return json;
+            }
+        } else {
+            return data;
+        }
     }
 
     @Override
     public void close() {
-        field.remove(player);
+        if (field != null) {
+            field.remove(player);
+        }
+        on(null);
     }
 
     @Override
@@ -119,8 +155,16 @@ public class Single implements Game {
     }
 
     @Override
-    public String getSave() {
-        return field.getSave();
+    public JSONObject getSave() {
+        JSONObject save = (field == null) ? null : field.getSave();
+        if (multiplayerType.isTraining()) { // TODO это надо инкапсулировать
+            JSONObject result = new JSONObject();
+            result.put("field", save);
+            progress.saveTo(result);
+            return result;
+        } else {
+            return save;
+        }
     }
 
     @Override

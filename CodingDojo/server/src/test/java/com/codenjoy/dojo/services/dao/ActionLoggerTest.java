@@ -26,6 +26,8 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.Printer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,7 +93,10 @@ public class ActionLoggerTest {
         Player player = new Player(name, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null);
 
         TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player,
-                inv -> mock(GameField.class));
+                inv -> mock(GameField.class),
+                MultiplayerType.SINGLE,
+                null,
+                parameters -> board);
     }
 
     private PlayerScores getScore(int value) {

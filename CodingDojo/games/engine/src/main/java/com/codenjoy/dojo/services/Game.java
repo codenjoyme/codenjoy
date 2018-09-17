@@ -27,6 +27,8 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import org.json.JSONObject;
 
 public interface Game extends Closeable {
 
@@ -39,6 +41,11 @@ public interface Game extends Closeable {
      * @return true - если герой убит
      */
     boolean isGameOver();
+
+    /**
+     * @return true - если герой прошел уровень
+     */
+    boolean isWin();
 
     /**
      * Если герой убит, то в слудеющий такт фреймворк дернет за этот метод, чтобы создать новую игру для игрока.
@@ -77,7 +84,7 @@ public interface Game extends Closeable {
     /**
      * @return Если игра сохраняется, то у нее должно быть состояние, иначе null
      */
-    String getSave();
+    JSONObject getSave();
 
     /**
      * @return Возвращает игрока играющего в эту игру
@@ -93,4 +100,8 @@ public interface Game extends Closeable {
      * @param field указывает, что плеер хочет играть в эту игру
      */
     void on(GameField field);
+
+    void setProgress(LevelProgress progress);
+
+    LevelProgress getProgress();
 }

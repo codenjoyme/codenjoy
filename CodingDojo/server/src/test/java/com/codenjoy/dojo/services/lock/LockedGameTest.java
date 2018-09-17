@@ -33,9 +33,6 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-03.
- */
 public class LockedGameTest {
 
     public static LockedGame getLockedGame() {

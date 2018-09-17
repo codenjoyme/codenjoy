@@ -115,16 +115,17 @@ public class LevelProgress {
         this.current = level;
     }
 
-    public static JSONObject nextLevel(JSONObject json) {
+    public static JSONObject winLevel(JSONObject json) {
         LevelProgress progress = new LevelProgress(json);
         JSONObject clone = new JSONObject(json.toString());
 
-        progress.change(progress.current + 1);
+        progress.change(progress.current + 1,
+                Math.max(progress.passed, progress.current));
 
         if (progress.isValid()) {
             return progress.saveTo(clone);
         } else {
-            return clone;
+            return null;
         }
     }
 

@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import org.json.JSONObject;
 
 import java.util.concurrent.locks.ReadWriteLock;
 
@@ -58,6 +60,16 @@ public class LockedGame implements Game {
         lock.writeLock().lock();
         try {
             return game.isGameOver();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public boolean isWin() {
+        lock.writeLock().lock();
+        try {
+            return game.isWin();
         } finally {
             lock.writeLock().unlock();
         }
@@ -114,7 +126,7 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public String getSave() {
+    public JSONObject getSave() {
         lock.writeLock().lock();
         try {
             return game.getSave();
@@ -148,6 +160,26 @@ public class LockedGame implements Game {
         lock.writeLock().lock();
         try {
             game.on(field);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void setProgress(LevelProgress progress) {
+        lock.writeLock().lock();
+        try {
+            game.setProgress(progress);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public LevelProgress getProgress() {
+        lock.writeLock().lock();
+        try {
+            return game.getProgress();
         } finally {
             lock.writeLock().unlock();
         }

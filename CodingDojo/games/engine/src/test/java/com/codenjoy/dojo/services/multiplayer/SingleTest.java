@@ -35,9 +35,6 @@ import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by indigo on 2018-07-05.
- */
 public class SingleTest {
 
     private GameField field;

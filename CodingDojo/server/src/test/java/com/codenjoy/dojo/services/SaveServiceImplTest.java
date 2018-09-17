@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -95,7 +96,14 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, answerCreateGame, MultiplayerType.SINGLE, null);
+        TestUtils.Env env = TestUtils.getPlayerGame(
+                playerGames,
+                player,
+                answerCreateGame,
+                MultiplayerType.SINGLE,
+                null,
+                parameters -> "board"
+        );
         PlayerGame playerGame = env.playerGame;
 
         return playerGame.getPlayer();

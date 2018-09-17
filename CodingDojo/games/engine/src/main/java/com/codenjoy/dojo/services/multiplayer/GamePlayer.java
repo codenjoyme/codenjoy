@@ -88,6 +88,13 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      */
     public abstract boolean isAlive();
 
+    /**
+     * @return Победил ли герой на этом уровне.
+     */
+    public boolean isWin() { // TODO test me
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         return this == o;

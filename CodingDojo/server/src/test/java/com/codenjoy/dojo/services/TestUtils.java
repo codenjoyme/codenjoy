@@ -37,8 +37,6 @@ import static org.mockito.Mockito.when;
 
 public class TestUtils {
 
-    private static int index = 0;
-
     public static class Env {
         public PlayerGame playerGame;
         public Joystick joystick;
@@ -47,7 +45,9 @@ public class TestUtils {
         public PrinterFactory printerFactory;
     }
 
-    public static Env getPlayerGame(PlayerGames playerGames, Player player, Answer<Object> answerCreateGame) {
+    public static Env getPlayerGame(PlayerGames playerGames,
+                                    Player player,
+                                    Answer<Object> answerCreateGame, MultiplayerType type, PlayerSave save, Printer printer) {
         Joystick joystick = mock(Joystick.class);
         GamePlayer gamePlayer = mock(GamePlayer.class);
         when(gamePlayer.getJoystick()).thenReturn(joystick);
@@ -62,18 +62,16 @@ public class TestUtils {
             }
         }
 
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+        when(gameType.getMultiplayerType()).thenReturn(type);
         when(gameType.createGame(anyInt())).thenAnswer(answerCreateGame);
         PrinterFactory printerFactory = mock(PrinterFactory.class);
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
-        Answer<Object> answerPrinter =
-                inv -> (Printer<String>) parameters -> "board" + ++index;
         when(printerFactory.getPrinter(any(BoardReader.class), any()))
-                .thenAnswer(answerPrinter);
+                .thenAnswer(inv1 -> printer);
         when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> gamePlayer);
 
-        PlayerGame playerGame = playerGames.add(player, null);
+        PlayerGame playerGame = playerGames.add(player, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
         result.gameType = gameType;
