@@ -28,10 +28,7 @@ import com.codenjoy.dojo.services.State;
 
 import java.util.function.BiFunction;
 
-/**
- * Created by Oleksandr_Baglai on 2017-12-12.
- */
-public interface BoardReader {
+public interface LayeredBoardReader {
 
     int size();
 
