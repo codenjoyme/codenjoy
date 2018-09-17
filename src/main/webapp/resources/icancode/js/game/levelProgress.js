@@ -48,12 +48,19 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         }
 
         var level = element.attr('level');
-        if (currentLevel == level - 1) {
+        if (currentLevel == level) {
             return;
         }
 
-        socket.send('LEVEL' + level);
+        changeLevel(level);
     });
+
+    var changeLevel = function(level) {
+        var url = '/rest/player/' + game.playerName + '/' + game.code + '/level/' + level;
+        loadData(url, function(status) {
+             // do nothing
+        });
+    }
 
     var scrollProgress = function () {
         $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
@@ -69,9 +76,9 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         var board = data[game.playerName].board;
 
         var level = board.levelProgress.current;
-        var multiple = board.levelProgress.multiple;
+        var count = board.levelProgress.count;
         var lastPassed = board.levelProgress.lastPassed;
-        level = multiple ? (progressBar.length - 1) : level;
+        var multiple = (level >= count);
 
         onUpdate(level, multiple, lastPassed);
 
