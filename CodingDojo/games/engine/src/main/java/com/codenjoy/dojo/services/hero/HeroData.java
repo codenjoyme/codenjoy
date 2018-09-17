@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services.hero;
  */
 
 
-import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
-
-import java.util.List;
 
 public interface HeroData {
 
@@ -53,10 +50,4 @@ public interface HeroData {
      * @return Дополнительные данные в любом формате
      */
     Object getAdditionalData();
-
-    /**
-     * @return Другие игроки, с кем играет сейчас текущий игрок
-     * TODO стоит полностью пересмотреть архитектуру групповых баттлов и перенести ее в Codenjoy фреймворк
-     */
-    List<Game> playersGroup();
 }

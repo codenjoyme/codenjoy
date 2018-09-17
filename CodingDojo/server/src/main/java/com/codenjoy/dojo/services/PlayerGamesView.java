@@ -22,14 +22,17 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import static com.codenjoy.dojo.services.PlayerGame.by;
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class PlayerGamesView {
@@ -57,23 +60,12 @@ public class PlayerGamesView {
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             Game game = playerGame.getGame();
-            HeroData heroData = game.getHero();
-            List<Game> gamesGroup = heroData.playersGroup();
-            List<Player> playersGroup = new LinkedList<>();
-            if (gamesGroup == null) {
-                playersGroup.add(player);
-            } else {
-                for (Game game2 : gamesGroup) {
-                    int index = playerGames.indexOf(by(game2));
-                    if (index != -1) {
-                        playersGroup.add(playerGames.get(index).getPlayer());
-                    } else {
-                        // TODO этого не должн случиться, но лучше порефакторить
-                        throw new IllegalStateException("Игрок не в группе");
-                    }
-                }
-            }
-            playersMap.put(player, playersGroup);
+            GameField field = game.getField();
+            List<Player> group = playerGames.stream()
+                    .filter(pg -> pg.getField().equals(field))
+                    .map(pg -> pg.getPlayer())
+                    .collect(toList());
+            playersMap.put(player, group);
         }
 
         Map<String, JSONObject> heroesData = new HashMap<>();

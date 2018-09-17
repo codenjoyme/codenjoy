@@ -23,11 +23,8 @@ package com.codenjoy.dojo.services.hero;
  */
 
 
-import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-
-import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -37,7 +34,6 @@ public class HeroDataImpl implements HeroData {
     private final boolean isMultiplayer;
     private final Object additionalData;
     private final int level;
-    private final List<Game> playersGroup;
 
     HeroDataImpl(int level, Point coordinate, boolean isMultiplayer, Object additionalData) {
         if (coordinate == null) {
@@ -48,7 +44,6 @@ public class HeroDataImpl implements HeroData {
         this.level = level;
         this.isMultiplayer = isMultiplayer;
         this.additionalData = additionalData;
-        this.playersGroup = null;
     }
 
     @Override
@@ -85,11 +80,6 @@ public class HeroDataImpl implements HeroData {
     @Override
     public Object getAdditionalData() {
         return additionalData;
-    }
-
-    @Override
-    public List<Game> playersGroup() {
-        return playersGroup;
     }
 
     @Override

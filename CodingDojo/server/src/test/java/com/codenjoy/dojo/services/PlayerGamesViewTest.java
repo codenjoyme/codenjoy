@@ -36,13 +36,13 @@ import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.Answer;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -74,7 +74,8 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGamesDataMap_usersInSameGroup() {
         // given
-        GameType gameType = addNewGameType("gameName1", 1234);
+        GameField field = mock(GameField.class); // same group
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> field);
 
         addNewPlayer(gameType, 123, getHeroDataForAllPlayers(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroDataForAllPlayers(11, pt(3, 4), "data2"));
@@ -118,17 +119,15 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGamesDataMap_usersInGroup() {
         // given
-        GameType gameType = addNewGameType("gameName1", 1234);
+        GameField field1 = mock(GameField.class);
+        GameField field2 = mock(GameField.class);
+        List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
 
         addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
         addNewPlayer(gameType, 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
         addNewPlayer(gameType, 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
-
-        setHeroesGroup(heroesData.get(0), Arrays.asList(games.get(0), games.get(1)));
-        setHeroesGroup(heroesData.get(1), Arrays.asList(games.get(0), games.get(1)));
-        setHeroesGroup(heroesData.get(2), Arrays.asList(games.get(2), games.get(3)));
-        setHeroesGroup(heroesData.get(3), Arrays.asList(games.get(2), games.get(3)));
 
         // when
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
@@ -159,18 +158,13 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGamesDataMap_singleGames() {
         // given
-        GameType gameType = addNewGameType("gameName1", 1234);
+        // separate groups
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> mock(GameField.class));
 
         addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
         addNewPlayer(gameType, 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
         addNewPlayer(gameType, 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
-
-        // heroData.playersGroup == null
-        assertEquals(null, heroesData.get(0).playersGroup());
-        assertEquals(null, heroesData.get(1).playersGroup());
-        assertEquals(null, heroesData.get(2).playersGroup());
-        assertEquals(null, heroesData.get(3).playersGroup());
 
         // when
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
@@ -203,13 +197,7 @@ public class PlayerGamesViewTest {
     }
 
     private HeroData getHeroDataForAllPlayers(int level, Point coordinate, Object additionalData) {
-        HeroData result = getHeroData(level, coordinate, additionalData);
-        setHeroesGroup(result, games);
-        return result;
-    }
-
-    private void setHeroesGroup(HeroData result, List<Game> games) {
-        Reflection.field("playersGroup").ofType(Object.class).in(result).set(games);
+        return getHeroData(level, coordinate, additionalData);
     }
 
     private HeroData getHeroData(int level, Point coordinate, Object additionalData) {
@@ -219,15 +207,15 @@ public class PlayerGamesViewTest {
         return result;
     }
 
-    private GameType addNewGameType(String gameName, int boardSize) {
+    private GameType addNewGameType(String gameName, int boardSize, Answer<Object> fieldSupplier) {
         GameType result = mock(GameType.class);
         when(result.getBoardSize()).thenReturn(new SimpleParameter<>(boardSize));
         when(result.name()).thenReturn(gameName);
         when(result.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
         when(result.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
-        when(result.createPlayer(any(EventListener.class), anyString(), anyString()))
+        when(result.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> gamePlayers.get(gamePlayers.size() - 1));
-        when(result.createGame()).thenAnswer(inv -> mock(GameField.class));
+        when(result.createGame(anyInt())).thenAnswer(fieldSupplier);
         gameTypes.add(result);
         return result;
     }
