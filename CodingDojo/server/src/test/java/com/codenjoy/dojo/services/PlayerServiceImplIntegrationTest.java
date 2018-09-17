@@ -229,14 +229,14 @@ public class PlayerServiceImplIntegrationTest {
         runners.clear();
 
         // грузим плеера из сейва
-        player1 = service.register(new PlayerSave("player1", "callback1", "game1", 120, "save"));
+        player1 = service.register(new PlayerSave("player1", "callback1", "game1", 120, "{save:true}"));
         assertEquals("[player1]", service.getAll("game1").toString());
         assertEquals(0, runners.size());
 
         // а теперь AI из сейва
         verify(gameTypes.get("game1"), times(ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
-        player1 = service.register(new PlayerSave("bot-super-ai@codenjoy.com", "callback", "game1", 120, "save"));
+        player1 = service.register(new PlayerSave("bot-super-ai@codenjoy.com", "callback", "game1", 120, "{save:true}"));
         assertEquals("[player1, bot-super-ai@codenjoy.com]", service.getAll("game1").toString());
         verify(gameTypes.get("game1"), times(++ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
@@ -251,12 +251,12 @@ public class PlayerServiceImplIntegrationTest {
 
         GameType gameType = mock(GameType.class);
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
-        when(gameType.createGame()).thenAnswer(inv -> {
+        when(gameType.createGame(anyInt())).thenAnswer(inv -> {
             GameField field = mock(GameField.class);
             when(field.reader()).thenAnswer(inv2 -> mock(BoardReader.class));
             return field;
         });
-        when(gameType.createPlayer(any(EventListener.class), anyString(), anyString()))
+        when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> mock(GamePlayer.class));
         when(gameType.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);

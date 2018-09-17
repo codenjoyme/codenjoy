@@ -33,10 +33,10 @@ import java.util.*;
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
 
-    @Autowired private GameSaver saver;
-    @Autowired private PlayerService playerService;
-    @Autowired private Registration registration;
-    @Autowired private PlayerGames playerGames;
+    @Autowired protected GameSaver saver;
+    @Autowired protected PlayerService playerService;
+    @Autowired protected Registration registration;
+    @Autowired protected PlayerGames playerGames;
 
     @Override
     public void saveAll() {
@@ -62,7 +62,7 @@ public class SaveServiceImpl implements SaveService {
 
     private void saveGame(PlayerGame playerGame) {
         saver.saveGame(playerGame.getPlayer(),
-                playerGame.getGame().getSave());
+                playerGame.getGame().getSave().toString());
     }
 
     @Override

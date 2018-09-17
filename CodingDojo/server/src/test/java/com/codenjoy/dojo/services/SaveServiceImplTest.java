@@ -23,45 +23,32 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {
-        SaveServiceImpl.class,
-        MockPlayerService.class,
-        MockPlayerGames.class,
-        MockRegistration.class,
-        MockGameSaver.class})
-@RunWith(SpringJUnit4ClassRunner.class)
 public class SaveServiceImplTest {
 
-    @Autowired
+    private Registration registration;
     private SaveServiceImpl saveService;
-
-    @Autowired
     private PlayerService playerService;
-
-    @Autowired
     private PlayerGames playerGames;
-
-    @Autowired
     private GameSaver saver;
 
     private List<Player> players;
@@ -69,9 +56,16 @@ public class SaveServiceImplTest {
 
     @Before
     public void setUp() throws IOException {
-        reset(playerService, saver);
+        saveService = new SaveServiceImpl(){{
+            this.playerGames = SaveServiceImplTest.this.playerGames = new PlayerGames();
+            this.playerService = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
+            this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
+            this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
+        }};
+
         players = new LinkedList<>();
         fields = new LinkedList<>();
+
         when(playerService.getAll()).thenReturn(players);
         when(playerService.get(anyString())).thenReturn(NullPlayer.INSTANCE);
     }
@@ -79,11 +73,11 @@ public class SaveServiceImplTest {
     @Test
     public void shouldSavePlayerWhenExists() {
         Player player = createPlayer("vasia");
-        when(fields.get(0).getSave()).thenReturn("{'key':'value'}");
+        when(fields.get(0).getSave()).thenReturn(new JSONObject("{'key':'value'}"));
 
         saveService.save("vasia");
 
-        verify(saver).saveGame(player, "{'key':'value'}");
+        verify(saver).saveGame(player, "{\"key\":\"value\"}");
     }
 
     private Player createPlayer(String name) {
@@ -101,7 +95,7 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, answerCreateGame);
+        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, answerCreateGame, MultiplayerType.SINGLE, null);
         PlayerGame playerGame = env.playerGame;
 
         return playerGame.getPlayer();
@@ -245,13 +239,13 @@ public class SaveServiceImplTest {
     public void testSaveAll() {
         createPlayer("first");
         createPlayer("second");
-        when(fields.get(0).getSave()).thenReturn("{'key':'value1'}");
-        when(fields.get(1).getSave()).thenReturn("{'key':'value2'}");
+        when(fields.get(0).getSave()).thenReturn(new JSONObject("{'key':'value1'}"));
+        when(fields.get(1).getSave()).thenReturn(new JSONObject("{'key':'value2'}"));
 
         saveService.saveAll();
 
-        verify(saver).saveGame(players.get(0), "{'key':'value1'}");
-        verify(saver).saveGame(players.get(1), "{'key':'value2'}");
+        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}");
+        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}");
     }
 
     @Test

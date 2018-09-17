@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.Tickable;
+import org.json.JSONObject;
 
 /**
  * Любая игра должна реализовать этот интерфейс чтобы с ней мог работать фреймворк
@@ -42,7 +43,7 @@ public interface GameField<P extends GamePlayer> extends Tickable {
         // do nothing
     }
 
-    default String getSave(){
+    default JSONObject getSave(){
         return null;
     }
 }
