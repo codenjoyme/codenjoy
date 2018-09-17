@@ -23,7 +23,7 @@ package com.epam.dojo.icancode.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
@@ -33,18 +33,15 @@ import com.epam.dojo.icancode.client.Command;
 
 import java.util.List;
 
-import static com.epam.dojo.icancode.model.Elements.*;
 import static com.epam.dojo.icancode.client.Command.*;
+import static com.epam.dojo.icancode.model.Elements.*;
 
-/**
- * Your AI
- */
-public class ApofigBotSolver extends AbstractSolver {
+public class AISolver extends AbstractSolver {
 
-    /**
-     * @param board use it for find elements on board
-     * @return what hero should d o in this tick (for this board)
-     */
+    public AISolver(Dice dice) {
+        super(dice);
+    }
+
     @Override
     public Command whatToDo(Board board) {
         if (!board.isMeAlive()) return doNothing();
@@ -107,23 +104,4 @@ public class ApofigBotSolver extends AbstractSolver {
         List<Direction> shortestWay = findWay.getShortestWay(board.size(), board.getMe(), to, map);
         return shortestWay;
     }
-
-    /**
-     * Run this method for connect to Server
-     */
-    public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
-    }
-
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.run(host,
-                name,
-                null,
-                new ApofigBotSolver(),
-                new Board());
-    }
-
 }

@@ -23,6 +23,7 @@ package com.epam.dojo.icancode.client.ai;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.epam.dojo.icancode.client.Board;
 import org.junit.Before;
@@ -32,13 +33,15 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by Mikhail_Udalyi on 20.09.2016.
  */
-public class ApofigBotSolverTest {
+public class AISolverTest {
     private Board board;
-    private ApofigBotSolver solver;
+    private AISolver solver;
+    private Dice dice = mock(Dice.class);
 
     public static Board board(String... boardString) {
         return (Board) new Board().forString(boardString);
@@ -69,7 +72,7 @@ public class ApofigBotSolverTest {
                 "--------↓--" +
                 "--B---X^-%-" +
                 "-----------");
-        solver = new ApofigBotSolver();
+        solver = new AISolver(dice);
     }
 
     @Test
