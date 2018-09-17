@@ -161,6 +161,9 @@ public class PlayerServiceImpl implements PlayerService {
         String gameName = playerSave.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
+        if (gameType instanceof NullGameType) {
+            return NullPlayer.INSTANCE;
+        }
         Player player = getPlayer(playerSave, gameType);
 
         if (name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
@@ -475,8 +478,6 @@ public class PlayerServiceImpl implements PlayerService {
                 Player player = playerGame.getPlayer();
 
                 player.clearScore();
-
-                game.newGame();
                 game.clearScore();
             }
         } finally {

@@ -57,6 +57,7 @@ import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
@@ -134,7 +135,7 @@ public class PlayerServiceImplTest {
 
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
-        when(gameType.createGame()).thenAnswer(inv -> {
+        when(gameType.createGame(anyInt())).thenAnswer(inv -> {
             GameField gameField = mock(GameField.class);
             gameFields.add(gameField);
 
@@ -142,7 +143,7 @@ public class PlayerServiceImplTest {
             return gameField;
         });
         heroesData.addAll(Arrays.asList(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8)));
-        when(gameType.createPlayer(any(EventListener.class), anyString(), anyString()))
+        when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> {
                     Joystick joystick = mock(Joystick.class);
                     joysticks.add(joystick);
@@ -282,7 +283,8 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         assertSentToPlayers(vasia);
-        assertEquals("{\"layers\":[\"ABCD\",\"DCBA\"]}", getBoardFor(vasia));
+        assertEquals("{\"layers\":[\"ABCD\",\"DCBA\"]," +
+                "\"levelProgress\":{\"total\":1,\"current\":0,\"lastPassed\":-1}}", getBoardFor(vasia));
     }
 
     @Test
@@ -450,7 +452,7 @@ public class PlayerServiceImplTest {
         players.add(player);
 
         if (player != NullPlayer.INSTANCE) {
-            verify(gameType, atLeastOnce()).createGame();
+            verify(gameType, atLeastOnce()).createGame(anyInt());
         }
 
         return player;
@@ -790,6 +792,9 @@ public class PlayerServiceImplTest {
         // given
         createPlayer(VASYA);
 
+        verify(gameField(VASYA)).newGame(gamePlayer(VASYA));
+        reset(gameField(VASYA));
+
         Joystick j = getJoystick(playerController);
 
         // when
@@ -800,10 +805,12 @@ public class PlayerServiceImplTest {
         verify(joystick(VASYA)).down();
         verifyNoMoreInteractions(joystick(VASYA));
 
-        Joystick joystick2 = mock(Joystick.class);
+        // when
         when(gamePlayer(VASYA).isAlive()).thenReturn(false);
         playerService.tick();
         verify(gameField(VASYA)).newGame(gamePlayer(VASYA));
+
+        Joystick joystick2 = mock(Joystick.class);
         when(gamePlayer(VASYA).getJoystick()).thenReturn(joystick2);
 
         // when
@@ -1034,13 +1041,16 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
+        verify(gameField(VASYA)).newGame(any());
+        verify(gameField(PETYA)).newGame(any());
+
         playerService.cleanAllScores();
 
         verify(playerScores1).clear();
         verify(playerScores2).clear();
         verifyNoMoreInteractions(playerScores3);
 
-        verify(gameField(VASYA)).newGame(any());
+        verify(gameField(VASYA)).clearScore();
         verify(gameField(PETYA)).clearScore();
     }
 
