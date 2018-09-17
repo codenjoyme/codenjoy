@@ -29,6 +29,8 @@ import static org.junit.Assert.*;
 
 public class LevelProgressTest {
 
+    private JSONObject json;
+
     @Test
     public void constructFromInts_valid() {
         // given
@@ -243,14 +245,13 @@ public class LevelProgressTest {
     public void saveToJSON() {
         // given
         LevelProgress progress = new LevelProgress(5, 2, 1);
-        JSONObject json = new JSONObject("{'some':'data'}");
+        json = new JSONObject("{'some':'data'}");
 
         // when
         json = progress.saveTo(json);
 
         // then
-        assertEquals("{\"some\":\"data\",\"levelProgress\":{\"total\":5,\"current\":2,\"lastPassed\":1}}",
-                json.toString());
+        assertJson("{'some':'data','levelProgress':{'total':5,'current':2,'lastPassed':1}}");
     }
 
     @Test
@@ -302,7 +303,6 @@ public class LevelProgressTest {
         assertEquals(false, progress.canChange(30));
         progress.change(30); // bug
 
-
         // then
         assertEquals("{'current':30,'passed':4,'total':5,'valid':false}",
                 progress.toString());
@@ -311,7 +311,7 @@ public class LevelProgressTest {
     @Test
     public void nextLevel_skip_currentWillBeMoreThanPassed() {
         // given
-        JSONObject json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':0}}");
+        json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':0}}");
 
         // when
         try {
@@ -325,80 +325,216 @@ public class LevelProgressTest {
     @Test
     public void nextLevel_ok_currentCanBeEqualsTotal() {
         // given
-        JSONObject json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':2}}");
+        json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':2}}");
 
         // when
-        JSONObject updated = LevelProgress.winLevel(json);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"levelProgress\":{\"total\":3,\"current\":2,\"lastPassed\":2}}", json.toString());
-        assertEquals("{\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}", updated.toString());
+        assertJson("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}");
     }
 
     @Test
     public void nextLevel_skip_currentMoreThanTotal() {
         // given
-        JSONObject json = new JSONObject("{'levelProgress':{'total':2,'current':2,'lastPassed':2}}");
+        json = new JSONObject("{'levelProgress':{'total':2,'current':2,'lastPassed':2}}");
 
         // when
-        JSONObject updated = LevelProgress.winLevel(json);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"levelProgress\":{\"total\":2,\"current\":2,\"lastPassed\":2}}", json.toString());
-        assertEquals(null, updated);
+        assertEquals(null, json);
     }
 
     @Test
     public void nextLevel_ok_dontChangeLastPassed() {
         // given
-        JSONObject json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':3}}");
+        json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':3}}");
 
         // when
-        JSONObject updated = LevelProgress.winLevel(json);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":2,\"lastPassed\":3}}", json.toString());
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":3}}", updated.toString());
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':3,'lastPassed':3}}");
 
         // when
-        JSONObject updated2 = LevelProgress.winLevel(updated);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":3}}", updated.toString());
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
-        JSONObject updated3 = LevelProgress.winLevel(updated2);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
-        assertEquals(null, updated3);
+        assertEquals(null, json);
     }
 
     @Test
     public void nextLevel_ok_increaseLassPassedWithCurrent() {
         // given
-        JSONObject json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+        json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':0,'lastPassed':-1}}");
+
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':0,'lastPassed':-1}}");
 
         // when
-        JSONObject updated = LevelProgress.winLevel(json);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":2,\"lastPassed\":1}}", json.toString());
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":2}}", updated.toString());
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':1,'lastPassed':0}}");
 
         // when
-        JSONObject updated2 = LevelProgress.winLevel(updated);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":3,\"lastPassed\":2}}", updated.toString());
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':1}}");
 
         // when
-        JSONObject updated3 = LevelProgress.winLevel(updated2);
+        json = LevelProgress.winLevel(json);
 
         // then
-        assertEquals("{\"a\":\"data\",\"levelProgress\":{\"total\":4,\"current\":4,\"lastPassed\":3}}", updated2.toString());
-        assertEquals(null, updated3);
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':3,'lastPassed':2}}");
+
+        // when
+        json = LevelProgress.winLevel(json);
+
+        // then
+        assertJson("{'a':'data','levelProgress':{'total':4,'current':4,'lastPassed':3}}");
+
+        // when
+        json = LevelProgress.winLevel(json);
+
+        // then
+        assertEquals(null, json);
+    }
+
+    void assertJson(String expected) {
+        assertEquals(expected, json.toString().replace('"', '\''));
+    }
+
+    @Test
+    public void stateWhenGoFromMultipleToSingle() {
+        // given
+        json = new JSONObject("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
+
+        assertJson("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
+
+        // when
+        changeLevel(0);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':0,'lastPassed':3}}");
+
+        // when
+        changeLevel(1);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':1,'lastPassed':3}}");
+
+        // when
+        changeLevel(2);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':3}}");
+
+        // when
+        changeLevel(3);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':3,'lastPassed':3}}");
+
+        // when
+        changeLevel(4);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
+    }
+
+    @Test
+    public void shouldNoSelectBadLevelFromSingle() {
+        // given
+        json = new JSONObject("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        cantChangeLevel(3);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        cantChangeLevel(4);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+    }
+
+    @Test
+    public void canGoToSameSingleLevel() {
+        // given
+        json = new JSONObject("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        changeLevel(2);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+    }
+
+    @Test
+    public void shouldSelectSingleIfPassed() {
+        // given
+        json = new JSONObject("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        changeLevel(1);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':1,'lastPassed':1}}");
+    }
+
+    void changeLevel(int level) {
+        LevelProgress progress = LevelProgress.parse(json.toString());
+        assertEquals(true, progress.canChange(level));
+        progress.change(level);
+        json = progress.saveTo(new JSONObject());
+    }
+
+    void cantChangeLevel(int level) {
+        LevelProgress progress = LevelProgress.parse(json.toString());
+        assertEquals(false, progress.canChange(level));
+    }
+
+    @Test
+    public void shouldSelectSingleIfNotPassed() {
+        // given
+        json = new JSONObject("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        cantChangeLevel(3);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+    }
+
+    @Test
+    public void shouldSelectMultipleIfNotPassed() {
+        // given
+        json = new JSONObject("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
+
+        // when
+        changeLevel(0);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':0,'lastPassed':1}}");
     }
 }
