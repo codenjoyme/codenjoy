@@ -24,6 +24,8 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.dao.Registration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 
@@ -43,6 +45,8 @@ public class Validator {
     public static final String CODE = "^[0-9]{1,50}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
     public static final String COMMAND = PlayerCommand.COMMAND;
+
+    @Autowired private Registration registration;
 
     private final Pattern email;
     private final Pattern gameName;
@@ -94,6 +98,14 @@ public class Validator {
     public void checkCommand(String input) {
         if (input == null || !command.matcher(input).matches()) {
             throw new IllegalArgumentException("Command is invalid: " + input);
+        }
+    }
+
+    public void checkPlayerCode(String playerName, String code) {
+        checkPlayerName(playerName, CANT_BE_NULL);
+        checkCode(code, CANT_BE_NULL);
+        if (!registration.checkUser(playerName, code)) {
+            throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + playerName);
         }
     }
 }

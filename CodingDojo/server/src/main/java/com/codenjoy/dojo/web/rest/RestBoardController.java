@@ -28,13 +28,19 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.web.controller.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -44,6 +50,8 @@ public class RestBoardController {
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private ServletContext servletContext;
+    @Autowired private Validator validator;
+    @Autowired private PlayerGames playerGames;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -127,6 +135,17 @@ public class RestBoardController {
         GameType game = gameService.getGame(gameName);
 
         return new GameTypeInfo(game);
+    }
+
+    @RequestMapping(value = "/player/{playerName}/{code}/level/{level}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean changeLevel(@PathVariable("playerName") String playerName,
+                                @PathVariable("code") String code,
+                                @PathVariable("level") int level)
+    {
+        validator.checkPlayerCode(playerName, code);
+        playerGames.changeLevel(playerName, level);
+        return true;
     }
 
 }
