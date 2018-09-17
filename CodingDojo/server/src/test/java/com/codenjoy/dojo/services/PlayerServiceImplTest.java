@@ -283,8 +283,7 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         assertSentToPlayers(vasia);
-        assertEquals("{\"layers\":[\"ABCD\",\"DCBA\"]," +
-                "\"levelProgress\":{\"total\":1,\"current\":0,\"lastPassed\":-1}}", getBoardFor(vasia));
+        assertEquals("{\"layers\":[\"ABCD\",\"DCBA\"]}", getBoardFor(vasia));
     }
 
     @Test
