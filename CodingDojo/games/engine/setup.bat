@@ -13,8 +13,9 @@ echo        !   until the next step installation is complete)  !
 echo        +--------------------------------------------------+        
 echo [0m
 echo on
-pause >nul
-
+IF "%DEBUG%"=="true" (
+    pause >nul
+)
 
 call mvn install:install-file -Dfile=games-%CODENJOY_VERSION%-pom.xml -DpomFile=games-%CODENJOY_VERSION%-pom.xml -DgroupId=com.codenjoy -DartifactId=games -Dversion=%CODENJOY_VERSION% -Dpackaging=pom
 echo off
@@ -25,4 +26,6 @@ echo        !           Then press Enter to exit               !
 echo        +--------------------------------------------------+        
 echo [0m
 echo on
-pause >nul
+IF "%DEBUG%"=="true" (
+    pause >nul
+)

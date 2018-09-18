@@ -9,7 +9,9 @@ echo        !   So you can use it for registration after    !
 echo        +-----------------------------------------------+        
 echo [0m
 echo on
-pause >nul
+IF "%DEBUG%"=="true" ( 
+    pause >nul
+)
 
 call explorer http://127.0.0.1:8080/%CONTEXT%
 

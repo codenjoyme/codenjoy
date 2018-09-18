@@ -44,7 +44,9 @@ echo        !                 Press any key to continue                   !
 echo        +-------------------------------------------------------------+        
 echo [0m
 echo on
-pause >nul
+IF "%DEBUG%"=="true" ( 
+    pause >nul 
+)
 
 call %M2_HOME%\bin\mvn clean install -DskipTests=%SKIP_TESTS%
 
@@ -56,7 +58,9 @@ echo        !   Press any key to build games you want    !
 echo        +--------------------------------------------+        
 echo [0m
 echo on
-pause >nul
+IF "%DEBUG%"=="true" (
+    pause >nul
+)
 
 cd %ROOT%\codenjoy\CodingDojo\builder
 
@@ -78,7 +82,9 @@ echo        !      Press any key to deploy on Jetty      !
 echo        +--------------------------------------------+        
 echo [0m
 echo on
-pause >nul
+IF "%DEBUG%"=="true" ( 
+    pause >nul 
+)
 
 cd %ROOT%
 
