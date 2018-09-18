@@ -19,3 +19,46 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+gameName = 'Contest';
+game.onlyLeaderBoard = true;
+game.sprites = null;
+game.enableDonate = false;
+game.enableJoystick = false;
+game.enablePlayerInfo = false;
+game.enablePlayerInfoLevel = false;
+game.enableLeadersTable = false;
+game.enableChat = false;
+game.enableInfo = false;
+game.enableHotkeys = true;
+game.enableAdvertisement = false;
+game.showBody = false;
+game.debug = false;
+
+var initHelpLink = function() {
+    var pageName = gameName.split(' ').join('-').toLowerCase();
+    $('#help-link').attr('href', '/codenjoy-contest/resources/snake/landing-' + pageName + '.html')
+}
+var initAdditionalLink = function() {
+    if (game.onlyLeaderBoard) {
+        $('#additional-link').attr('href', '/codenjoy-contest/resources/user/snake-servers.zip')
+        $('#additional-link').text('Get client')
+    }
+}
+
+game.onBoardAllPageLoad = function() {
+    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
+        null,
+        ['js/game/loader/boardAllPageLoad.js'],
+        function() {
+            boardAllPageLoad();
+            initHelpLink();
+            initAdditionalLink();
+        });
+}
+
+if (game.onlyLeaderBoard) {
+    game.onBoardPageLoad = game.onBoardAllPageLoad;
+} else {
+    alert('Not implemented');
+}

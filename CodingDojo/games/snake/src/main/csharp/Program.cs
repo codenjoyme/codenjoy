@@ -32,11 +32,11 @@ namespace SnakeClient
     internal class Program
     {
         // Server name and port number -- ask orgs
-        private static string ServerNameAndPort = "epruryaw0576:8080";
+        private static string ServerNameAndPort = "dojo.lab.epam.com";
         // Register on the server, write down your registration name
-        private static string UserName = "nzeemin@gmail.com";
+        private static string UserName = "your@email.com";
         // Look up for the code in the browser url after the registration
-        private static string UserCode = "5654891111535248716";
+        private static string UserCode = "12345678901234567890";
 
         private static readonly object consoleLock = new object();
         private const int receiveChunkSize = 1024 * 10;
@@ -48,7 +48,7 @@ namespace SnakeClient
         static void Main(string[] args)
         {
             Thread.Sleep(1000);
-            Connect($"ws://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}").Wait();
+            Connect($"wss://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}").Wait();
         }
 
         public static async Task Connect(string uri)

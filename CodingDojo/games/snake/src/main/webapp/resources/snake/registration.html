@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html lang="en">
+  <head>
+    <title>Snake Codenjoy | Registration</title>
+    <link href="css/reset.css" rel="stylesheet"/>
+    <link href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="css/registration-style.css" rel="stylesheet"/>
+    <script src="js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="js/autofill-event.js"></script>
+    <script src="js/jquery/jquery.md5.js"></script>
+    <script src="./js/game/admin-settings.js"></script>
+    <script src="./js/scripts/registration.js" type="application/javascript"></script>
+    <!--<script>-->
+      <!---->
+    <!--</script>-->
+  </head>
+  <body>
+    <div class="header-container">
+      <div class="container-fluid">
+        <header class="header row">
+          <div class="col-xs-6">
+            <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+            <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            <a class="logo inline" href="#" title="Home"><img src="img/game-logo.png"></a>
+            <span class="title game-title">Snake Codenjoy</span>
+          </div>
+          <nav class="nav col-xs-6 pull-right text-right">
+            <ul class="nav-list">
+              <li class="title game-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
+              <li class="title game-title inline"><a id="help-link" target="_blank" href="#"></a></li>
+              <li class="logo title inline"><img src="img/profile.png"></li>
+              <li class="title inline"><a href="/codenjoy-contest/resources/snake/registration.html">Log out</a></li>
+            </ul>
+          </nav>
+        </header>
+    </div>
+    </div>
+    <div class="container-fluid">
+      <form class="form-registr" id="form" action="/codenjoy-contest/register" method="POST">
+        <h2 class="form-title">Sign up/Sign in</h2>
+        <div class="inputs">
+          <div id="data1" class="field not-valid" not-empty hidden>
+            <input type="text" placeholder="First name, last name"/>
+            <span class="icon fa"></span>
+          </div>
+          <div id="email" class="field not-valid">
+            <input type="email" placeholder="Email address (valid)" name="name"/>
+            <span class="icon fa"></span>
+          </div>	  			
+          <div id="password" class="field not-valid">
+            <input type="password" placeholder="Password" name="password"/>
+            <span class="icon fa"></span>
+          </div>
+          <!-- add attribute 'hidden' to the div if you want to hide this select box -->
+          <div id="game" class="field valid" hidden>
+            <select placeholder="Select your game" name="game">
+              <option value="Contest">Contest</option>
+            </select>
+          </div>
+          <div id="data" hidden>
+              <input type="text" name="data"/>
+          </div>
+          <!-- add attribute 'not-empty' to the div if you want to enable validation -->
+          <!-- add attribute 'hidden' to the div if you want to hide this edit box -->
+          <div id="data2" class="field not-valid" not-empty hidden>
+               <!-- also you can change input placeholder="Tech skills" -->
+              <input type="text" placeholder="Tech skills"/> 
+              <span class="icon fa"></span>
+          </div>
+          <div id="data3" class="field not-valid" hidden>
+            <input type="text" placeholder="University, specialty, course"/>
+            <span class="icon fa"></span>
+          </div>
+		  <input type="hidden" name="gameName" value="snake"/>
+          <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
+        </div>
+      </form>
+    </div>
+    <footer class="footer">
+      <div class="container-fluid">
+        <nav class="footer-nav">
+          <ul class="footer-list">
+              <li class="footer-item inline"><a href="https://epa.ms/dojo-about-en" target="blank">About DOJO</a></li>
+              <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
+              <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
+              <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
+              <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+
+  </body>
+</html>

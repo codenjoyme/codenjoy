@@ -69,6 +69,7 @@
         <module>quadro</module>
         <module>lunolet</module>
         <module>tetris</module>
+        <module>icancode</module>
     </modules>
 
     <dependencyManagement>
