@@ -26,6 +26,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class UrlParser {
+    public static final String WSS_PROTOCOL = "wss";
+    public static final String WS_PROTOCOL = "ws";
+    public static final String HTTPS_PROTOCOL = "https";
+
+    String protocol;
     String server;
     String code;
     String userName;
@@ -46,6 +51,7 @@ public class UrlParser {
                 throw new IllegalArgumentException("Bad URL");
             }
 
+            protocol = (url.getProtocol().equals(HTTPS_PROTOCOL))? WSS_PROTOCOL : WS_PROTOCOL;
             server = url.getHost() + portPart(url.getPort());
             code = queryParts[1];
             userName = urlParts[4];

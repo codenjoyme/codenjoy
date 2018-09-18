@@ -23,6 +23,8 @@ package com.codenjoy.dojo.client;
  */
 
 
+import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -39,7 +41,7 @@ public class WebSocketRunner implements Closeable {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
-    public static final String WS_URI_PATTERN = "ws://%s/%s/ws?user=%s&code=%s";
+    public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
     public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
     public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
@@ -57,6 +59,7 @@ public class WebSocketRunner implements Closeable {
     private ClientBoard board;
     private Runnable onClose;
     private boolean forceClose;
+    private URI uri;
 
     public WebSocketRunner(Solver solver, ClientBoard board) {
         this.solver = solver;
@@ -66,27 +69,27 @@ public class WebSocketRunner implements Closeable {
 
     public static WebSocketRunner runClient(String url, Solver solver, ClientBoard board) {
         UrlParser parser = new UrlParser(url);
-        return run(parser.server, parser.context,
+        return run(parser.protocol, parser.server, parser.context,
                 parser.userName, parser.code,
                 solver, board, ATTEMPTS);
     }
 
     public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
-        return run(LOCAL, CodenjoyContext.get(), aiName, BOT_CODE, solver, board, 1);
+        return run(UrlParser.WS_PROTOCOL, LOCAL, CodenjoyContext.get(), aiName, BOT_CODE, solver, board, 1);
     }
 
-    private static WebSocketRunner run(String server, String context,
+    private static WebSocketRunner run(String protocol,
+                                       String server, String context,
                                        String userName, String code,
                                        Solver solver, ClientBoard board,
-                                       int countAttempts)
-    {
-        return run(getUri(server, context, userName, code), solver, board, countAttempts);
+                                       int countAttempts) {
+        return run(getUri(protocol, server, context, userName, code), solver, board, countAttempts);
     }
 
-    private static URI getUri(String server, String context, String userName, String code) {
+    private static URI getUri(String protocol, String server, String context, String userName, String code) {
         try {
-            String url = String.format(WS_URI_PATTERN, server, context, userName, code);
+            String url = String.format(WS_URI_PATTERN, protocol, server, context, userName, code);
             if (url.contains(CODENJOY_COM_ALIAS)) { // TODO это костылек пока сервер не сделаем нормальный
                 url = url.replace(CODENJOY_COM_ALIAS, CODENJOY_COM_SERVER);
             }
@@ -113,7 +116,9 @@ public class WebSocketRunner implements Closeable {
     }
 
     private void start(URI uri, int countAttempts) throws Exception {
-        client = new WebSocketClient();
+        this.uri = uri;
+
+        client = createClient();
         client.start();
 
         onClose = () -> {
@@ -122,10 +127,24 @@ public class WebSocketRunner implements Closeable {
             }
 
             printReconnect();
-            connectLoop(uri, countAttempts);
+            connectLoop(countAttempts);
         };
 
-        connectLoop(uri, countAttempts);
+        connectLoop(countAttempts);
+    }
+
+    private WebSocketClient createClient() {
+        if (UrlParser.WSS_PROTOCOL.equals(uri.getScheme())) {
+            SslContextFactory ssl = new SslContextFactory(true);
+            ssl.setValidateCerts(false);
+            return new WebSocketClient(ssl);
+        }
+
+        if (UrlParser.WS_PROTOCOL.equals(uri.getScheme())) {
+            return new WebSocketClient();
+        }
+
+        throw new UnsupportedOperationException("Unsupported WebSocket protocol: " + uri.getScheme());
     }
 
     @Override
@@ -181,7 +200,12 @@ public class WebSocketRunner implements Closeable {
                 String answer = solver.get(board);
                 print("Answer: " + answer);
 
-                session.getRemote().sendString(answer);
+                RemoteEndpoint remote = session.getRemote();
+                if (remote == null) { // TODO to understand why this can happen?
+                    WebSocketRunner.this.tryToConnect();
+                    return;
+                }
+                remote.sendString(answer);
             } catch (Exception e) {
                 print(e);
             }
@@ -190,13 +214,13 @@ public class WebSocketRunner implements Closeable {
     }
 
     private boolean isUnauthorizedAccess(Throwable exception) {
-        return exception instanceof UpgradeException && ((UpgradeException)exception).getResponseStatusCode() == 401;
+        return exception instanceof UpgradeException && ((UpgradeException) exception).getResponseStatusCode() == 401;
     }
 
-    private void connectLoop(URI uri, int countAttempts) {
+    private void connectLoop(int countAttempts) {
         while (countAttempts-- > 0) {
             try {
-                tryToConnect(uri);
+                tryToConnect();
                 break;
             } catch (ExecutionException e) {
                 if (!isUnauthorizedAccess(e.getCause())) {
@@ -216,7 +240,7 @@ public class WebSocketRunner implements Closeable {
         sleep(TIMEOUT);
     }
 
-    private void tryToConnect(URI uri) throws Exception {
+    private void tryToConnect() throws Exception {
         print(String.format("Connecting to '%s'...", uri));
 
         if (session != null) {
