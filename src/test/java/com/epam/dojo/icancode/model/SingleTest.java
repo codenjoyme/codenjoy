@@ -1,5 +1,5 @@
 //package com.epam.dojo.icancode.model;
-// TODO надо переработать этот тест
+//
 ///*-
 // * #%L
 // * iCanCode - it's a dojo-like platform from developers to developers.
@@ -28,7 +28,6 @@
 //import com.codenjoy.dojo.utils.JsonUtils;
 //import com.codenjoy.dojo.utils.TestUtils;
 //import com.epam.dojo.icancode.model.interfaces.ILevel;
-//import com.epam.dojo.icancode.model.items.Hero;
 //import com.epam.dojo.icancode.services.Events;
 //import com.epam.dojo.icancode.services.Levels;
 //import org.json.JSONObject;
@@ -42,11 +41,6 @@
 //import static org.mockito.Matchers.anyInt;
 //import static org.mockito.Mockito.*;
 //
-///**
-// * User: sanja
-// * Date: 17.12.13
-// * Time: 4:47
-// */
 //public class SingleTest {
 //
 //    private Dice dice;
@@ -72,7 +66,7 @@
 //        Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
 //        String multiple = strings.removeLast();
 //        ILevel levelSingle1 = createLevels(strings).get(0);
-//        ILevel levelSingle2 = createLevels(strings).get(0);
+//        ILevel levelSingle2 = createLevels(strings).get(1);
 //        ILevel levelMultiple = createLevels(Arrays.asList(multiple));
 //
 //        ICanCode gameSingle1 = new ICanCode(levelsSingle1, dice, ICanCode.SINGLE);
@@ -96,7 +90,7 @@
 //        return (Hero)single2.getJoystick();
 //    }
 //
-//    private List<ILevel> createLevels(Collection<String> boards) {
+//    private List<ILevel> screateLevels(Collection<String> boards) {
 //        List<ILevel> levels = new LinkedList<ILevel>();
 //        for (String board : boards) {
 //            ILevel level = new LevelImpl(board);
