@@ -36,12 +36,21 @@ class YourKotlinSolver(private val dice: Dice) : Solver<Board> {
 
     var board: Board? = null
 
+    /**
+     * @param board use it for find elements on board
+     * @return what snake should do in this tick (for this board)
+     */
     override fun get(board: Board): String {
         this.board = board
+
+        // TODO write your AI code here
 
         return Direction.UP.toString()
     }
 
+    /**
+     * Run this method for connect to Server
+     */
     companion object {
         @JvmStatic fun main(args: Array<String>) {
             WebSocketRunner.runClient(

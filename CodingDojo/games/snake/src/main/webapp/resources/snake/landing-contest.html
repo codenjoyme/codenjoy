@@ -22,26 +22,26 @@
   -->
 
 <html lang="en">
-  <head>
+<head>
     <title>Snake Codenjoy | Contest: Rules</title>
-    <link href="css/reset.css" rel="stylesheet" />
-    <link href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/reset.css" rel="stylesheet"/>
+    <link href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="css/landing-style.css" rel="stylesheet" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="css/landing-style.css" rel="stylesheet"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <script src="js/jquery/jquery-3.1.0.min.js"></script>
     <script src="js/plugins-scroll.js"></script>
     <script src="../css/bootstrap/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
-          $('.dropdown-toggle').dropdown();
+            $('.dropdown-toggle').dropdown();
             var url = '/codenjoy-contest/resources/snake/registration.html';
             $('.go-registration').click(function() {
                window.location.href = url;
             });
 
-          $('#logo').dblclick(function() {
+            $('#logo').dblclick(function() {
                 var time = 256000;
                 var body = $("html, body");
 
@@ -55,389 +55,393 @@
                         body.animate({scrollTop:0}, time, 'linear');
                     },time);
                 },time*2);
-          });
+            });
 
-          $("#nav").on("click","a", function (event) {
-              event.preventDefault();
-              var id = $(this).attr('href'),
-              top = $(id).offset().top;
-              $('body,html').animate({scrollTop: top}, 1000);
-          });
+            $("#nav").on("click","a", function (event) {
+                event.preventDefault();
+                var id = $(this).attr('href'),
+                top = $(id).offset().top;
+                $('body,html').animate({scrollTop: top}, 1000);
+            });
 
-          try {
-              $.browserSelector();
-              if($("html").hasClass("chrome")) {
-                  $.smoothScroll();
-              }
-          } catch(err) {
+            try {
+                $.browserSelector();
+                if($("html").hasClass("chrome")) {
+                    $.smoothScroll();
+                }
+            } catch(err) {
+            };
 
-          };
+            $('#scrollup').mouseover( function(){
+                $( this ).animate({opacity: 0.8},100);
+            }).mouseout( function(){
+                $( this ).animate({opacity: 0.5},100);
+            }).click( function(){
+                window.scroll(0 ,0);
+                return false;
+            });
 
-          $('#scrollup').mouseover( function(){
-              $( this ).animate({opacity: 0.8},100);
-          }).mouseout( function(){
-              $( this ).animate({opacity: 0.5},100);
-          }).click( function(){
-              window.scroll(0 ,0);
-              return false;
-          });
+            $(window).scroll(function(){
+                if ( $(document).scrollTop() > 0 ) {
+                    $('#scrollup').fadeIn('fast');
+                } else {
+                    $('#scrollup').fadeOut('fast');
+                }
+            });
 
-          $(window).scroll(function(){
-              if ( $(document).scrollTop() > 0 ) {
-                  $('#scrollup').fadeIn('fast');
-              } else {
-                  $('#scrollup').fadeOut('fast');
-              }
-          });
+            var replaceHost = function(where, replacement) {
+                var oldHost = $('#' + where).html();
+                var newHost = oldHost.split('server:8080').join(replacement);
+                $('#' + where).html(newHost);
+            }
 
-          var replaceHost = function(where, replacement) {
-             var oldHost = $('#' + where).html();
-             var newHost = oldHost.split('server:8080').join(replacement);
-             $('#' + where).html(newHost);
-          }
-
-          var host = window.location.hostname + ':' + window.location.port;
-          if (host == ':') {
-              host = '127.0.0.1:8080';
-          }
-          replaceHost('registration-page', host);
-          replaceHost('connection-line', host);
-          replaceHost('start-code', host);
+            var host = window.location.hostname + ':' + window.location.port;
+            if (host == ':') {
+                host = '127.0.0.1:8080';
+            }
+            replaceHost('registration-page', host);
+            replaceHost('connection-line', host);
+            replaceHost('start-code', host);
         });
     </script>
-  </head>
-  <body>
-    <div class="wrapper wrapper-rules">
-      <div class="header-wrap">
+</head>
+<body>
+<div class="wrapper wrapper-rules">
+    <div class="header-wrap">
         <div class="container">
-		<header class="header row">
-          <div class="logo-container col-md-7 col-xs-12">
-            <div class="logo-epam inline" href="#" title="EPAM"><a target="_blank" href="https://www.epam.com/"><img src="img/epam_logo.jpg"></a></div>
-            <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo_logo.png"><span class="logo-title"><span class="text-uppercase after-line">EPAM DOJO</span>Snake Codenjoy</span></div>
-          </div>
-          <h1 class="nav col-md-5 col-xs-12 text-right rules-title">
-            <div class="dropdown navbar-right" id="nav">
-              <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="rules dr">Snake Codenjoy</span> <span></span>Rules<span class="caret"></span></div>
-               <ul class="dropdown-menu">
-                <li class="text-right"><a href="#overview">Game overview</a></li>
-                <li class="text-right"><a href="#command">Command methods</a></li>
-                <li class="text-right"><a href="#direction">Direction methods</a></li>
-                 <li class="text-right"><a href="#point">Point methods</a></li>
-                 <li class="text-right"><a href="#core">Core board methods</a></li>
-              </ul>
-            </div>
-          </h1>
-		</header>
-      </div>
-      </div>
-      
- <section class="section rules-section">
+            <header class="header row">
+                <div class="logo-container col-md-7 col-xs-12">
+                    <div class="logo-epam inline" href="#" title="EPAM">
+                        <a target="_blank" href="https://www.epam.com/">
+                            <img src="img/epam_logo.jpg">
+                        </a>
+                    </div>
+                    <div class="logo-dojo inline" href="#" title="DOJO">
+                        <img id="logo" src="img/dojo_logo.png">
+                        <span class="logo-title">
+                            <span class="text-uppercase after-line">EPAM DOJO</span>
+                            Snake Codenjoy
+                        </span>
+                    </div>
+                </div>
+                <h1 class="nav col-md-5 col-xs-12 text-right rules-title">
+                    <div class="dropdown navbar-right" id="nav">
+                        <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="rules dr">Snake Codenjoy</span>
+                            <span></span>
+                            Rules
+                            <span class="caret"></span>
+                        </div>
+                        <ul class="dropdown-menu">
+                            <li class="text-right"><a href="#overview">Game overview</a></li>
+                            <li class="text-right"><a href="#command">Command methods</a></li>
+                            <li class="text-right"><a href="#direction">Direction methods</a></li>
+                            <li class="text-right"><a href="#point">Point methods</a></li>
+                            <li class="text-right"><a href="#core">Core board methods</a></li>
+                        </ul>
+                    </div>
+                </h1>
+            </header>
+        </div>
+    </div>
+
+    <section class="section rules-section">
         <div class="container">
-          <h1 class="title text-uppercase">What you should know about the game?</h1>
-          <a id="overview"></a>
-          <h2 class="subtitle text-uppercase">game overview</h2>
-            <p>Select your language and <a class="load-link" href="/codenjoy-contest/resources/user/snake-servers.zip">download client</a>: Java/.NET/Python</p>
-            <p>Then register your game:</p>
-            <ul class="list">
-                <li><span class="list-values">Open in browser <span class="func" id="registration-page">http://server:8080/codenjoy-contest</span></span></li>
-                <li><span class="list-values">Register</span></li>
-                <li><span class="list-values">Then copy url from browser to clipboard - like <span class="func" id="connection-line">http://dojo.lab.epam.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890</span></span></li>
-            </ul>
 
-            <p>Then for Java:</p>
-            <ul class="list">
-                <li><span class="list-values">Install Java - JDK 8</span></li>
-                <li><span class="list-values">Create JAVA_HOME environment variable</span></li>
-                <li><span class="list-values">Install Maven3</span></li>
-                <li><span class="list-values">Create M2_HOME environment variable</span></li>
-                <li><span class="list-values">Add to the Path environment variable <span class="func">;%JAVA_HOME%/bin;%M2_HOME%/bin</span></span></li>
-                <li><span class="list-values">Check that command should return version of java <span class="func">java -version</span></span></li>
-                <li><span class="list-values">Check that command should return version of maven and java <span class="func">mvn -version</span></span></li>
-                <li><span class="list-values">Import project to IntellijIdea as Maven project</span></li>
-                <li><span class="list-values">Change console font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply</span></li>
-                <li><span class="list-values">Change ide font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply</span></li>
-                <li><span class="list-values">Go to YourSoljer.java (or YourSolver.kt for Kotlin)</span></li>
-                <li><span class="list-values">Replace connection url in the <span class="func" id="main-method">public static void main(String[] args)</span> method - you can copy if from browser url after registration</span></li>
-                <li><span class="list-values">Run YourSolver as main application</span></li>
-                <li><span class="list-values">Check in the console that client connected</span></li>
-                <li><span class="list-values">Do your changes in the YourSolver method <span class="func">Command whatToDo(Board board)</span></span></li>
-                <li><span class="list-values">Write your unit tests in the <span class="func" id="test-class">YourSolverTest/YourSolverKotlinTest</span></span></li>
-                <li><span class="list-values">Read help at this page bellow</span></li>
-                <li><span class="list-values">Restart java process when you want</span></li>
-                <li><span class="list-values">Codenjoy!</span></li>
-            </ul>
+<p>This is an open-source game. In order to create your own game, fix errors in the current version, or make any other changes, you must begin with <a href="https://github.com/codenjoyme/codenjoy">forking the project</a>. The root of the repository contains the file <em>readme.md</em> with a description of next steps.</p>
 
-            <p>Then for C#/.NET:</p>
-            <ul class="list">
-                <li><span class="list-values">Install Visual Studio 2017</span></li>
-                <li><span class="list-values">Import your project from <span class="func" id="dotnet-project">src/main/csharp</span></span></li>
-                <li><span class="list-values">Go to SnakeClient and replace variables values from url copied to clipboard: <span class="func" id="dotnet-player-variables">ServerNameAndPort, UserName, UserCode</span></span></li>
-                <li><span class="list-values">Implement AI logic in the <span class="func" id="dotnet-client">SnakeClient</span></span></li>
-                <li><span class="list-values">Run SnakeClient</span></li>
+<p>In case of any questions, contact <a href="skype:alexander.baglay">skype:alexander.baglay</a> or email <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
 
-            </ul>
+<h1 class="title text-uppercase">What you should know about the game?</h1>
+<a id="overview"></a>
+<h2 class="subtitle text-uppercase">game overview</h2>
+<p>Select your language and <a class="load-link" href="/codenjoy-contest/resources/user/snake-servers.zip">download client</a>: Java/.NET/Python</p>
+<p>Then register your game:</p>
+<ul class="list">
+    <li><span class="list-values">Open in browser <span class="func" id="registration-page">http://server:8080/codenjoy-contest</span></span></li>
+    <li><span class="list-values">Register</span></li>
+    <li><span class="list-values">Then copy url from browser to clipboard - like <span class="func" id="connection-line">http://dojo.lab.epam.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890</span></span></li>
+</ul>
 
-            <p>Then for Python:</p>
-            <ul class="list">
-                <li><span class="list-values">Install Python 3.x environment</span></li>
-                <li><span class="list-values">Import your project from <span class="func" id="python-project">src/main/python</span></span></li>
-                <li><span class="list-values">Go to main.py and replace connection url parameters from url copied to clipboard: <span class="func" id="python-player-variables"></span></span></li>
-                <li><span class="list-values">Implement AI logic in the <span class="func" id="python-client">dds.py</span></span></li>
-                <li><span class="list-values">Run main.py</span></li>
-            </ul>
+<p>For Java:</p>
+<ul class="list">
+    <li><span class="list-values">Install Java - JDK 8</span></li>
+    <li><span class="list-values">Create <span class="func">JAVA_HOME</span> environment variable</span></li>
+    <li><span class="list-values">Install Maven3</span></li>
+    <li><span class="list-values">Create <span class="func">M2_HOME</span> environment variable</span></li>
+    <li><span class="list-values">Add to the Path environment variable <span class="func">;%JAVA_HOME%/bin;%M2_HOME%/bin</span></span></li>
+    <li><span class="list-values">Check that command should return version of java <span class="func">java -version</span></span></li>
+    <li><span class="list-values">Check that command should return version of maven and java <span class="func">mvn -version</span></span></li>
+    <li><span class="list-values">Import project to IntellijIdea as Maven project</span></li>
+    <li><span class="list-values">Change console font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply</span></li>
+    <li><span class="list-values">Change ide font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply</span></li>
+    <li><span class="list-values">Go to <span class="func">YourSoljer.java</span> (or <span class="func">YourSolver.kt</span> for Kotlin)</span></li>
+    <li><span class="list-values">Replace connection url in the <span class="func" id="main-method">public static void main(String[] args)</span> method (you can copy it from browser url after registration).</span></li>
+    <li><span class="list-values">Run YourSolver as main application</span></li>
+    <li><span class="list-values">Check in the console that client connected</span></li>
+    <li><span class="list-values">Do your changes in the YourSolver method <span class="func">public String get(Board board)</span></span></li>
+    <li><span class="list-values">Write your unit tests in the <span class="func" id="test-class">YourSolverTest/YourSolverKotlinTest</span></span></li>
+    <li><span class="list-values">Read help at this page bellow</span></li>
+    <li><span class="list-values">Restart java process when you want</span></li>
+    <li><span class="list-values">Codenjoy!</span></li>
+</ul>
 
-            <p>Robot asks for new orders every second. He should know where to go.
-Help him to collect gold and bring it to finish point - write program and win the contest.
-Send program to Robot by running the YourSolver class as Main Application. 
-              Before that check that your email that you enter on registration page is on main method.</p>
+<p>For C#/.NET:</p>
+<ul class="list">
+    <li><span class="list-values">Install Visual Studio 2017</span></li>
+    <li><span class="list-values">Import your project from <span class="func" id="dotnet-project">src/main/csharp</span></span></li>
+    <li><span class="list-values">Go to SnakeClient and replace variables values from url copied to clipboard: <span class="func" id="dotnet-player-variables">ServerNameAndPort, UserName, UserCode</span></span></li>
+    <li><span class="list-values">Implement AI logic in the <span class="func" id="dotnet-client">SnakeClient</span></span></li>
+    <li><span class="list-values">Run SnakeClient</span></li>
+    <li><span class="list-values">Read help at this page bellow</span></li>
+    <li><span class="list-values">Restart java process when you want</span></li>
+    <li><span class="list-values">Codenjoy!</span></li>
+</ul>
+
+<p>For Python:</p>
+<ul class="list">
+    <li><span class="list-values">Install Python 3.x environment</span></li>
+    <li><span class="list-values">Import your project from <span class="func" id="python-project">src/main/python</span></span></li>
+    <li><span class="list-values">Go to <span class="func">main.py</span> and replace connection url parameters from url copied to clipboard: <span class="func" id="python-player-variables">wss://dojo.lab.epam.com:80/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</span></span></li>
+    <li><span class="list-values">Implement AI logic in the <span class="func" id="python-client">dds.py</span></span></li>
+    <li><span class="list-values">Run main.py</span></li>
+    <li><span class="list-values">Read help at this page bellow</span></li>
+    <li><span class="list-values">Restart java process when you want</span></li>
+    <li><span class="list-values">Codenjoy!</span></li>
+</ul>
+
+<p>You must create a custom bot for the snake to beat all the other bots by gathering the most points. Each player is playing on their own field. The snake can move to blank cells in all four directions.</p>
+<p>Snake asks for new orders every second. It should know where to go. Help th Snake to collect as many apples as possible - write program and win the contest.</p>
+<p>On its way, the snake can encounter an apple, a stone, its own tail and a wall. If the snake eats an apple, it grows longer by 1. If it hits a stone, it shrinks by 10 cells. If it is shorter than 10 cells and it hits a stone, it dies. If the snake runs into itself or a wall, it dies.</p>
+<p>Each eaten apple gives the player bonus points equal to the size of the snake at the time when the apple is eaten. Points may be deduced for letting the snake die (by default, the value is 0, confirm this rule with the event organizer). Points are cumulative. The winner is the player with the most points (within the predefined time limit). A dead snake disappears immediately and a new one appears on the field.</p>
+<p>Bellow you can find client api in java - for other languages there are similar procedures and functions.</p>
+<p>Players <a href="../../register?gameName=snake"> register on the server</a> using their email address.</p>
+<p>After that, they must connect <a href="../../resources/user/snake-servers.zip">from the code</a> to the server via websockets. This is a Maven project and it is suitable for playing using JVM languages.                            For instructions on how to launch it, see README.txt in the root of the project. It also contains all supported languages.</p>
+
 <pre id="start-code">    /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "server_ip:8080", new YourSolver());
+        WebSocketRunner.runClient(
+                // paste here board page url from browser after registration
+                "https://dojo.lab.epam.com/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+                new YourSolver(new RandomDice()),
+                new Board());
     }</pre>
 
-          <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
+<p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
 <pre>    /**
      * @param board use it for find elements on board
-     * @return what hero should do in this tick (for this board)
+     * @return what snake should do in this tick (for this board)
      */
     @Override
-    public Command whatToDo(Board board) {
-        if (!board.isMeAlive()) return Command.doNothing();
+    public String get(Board board) {
+        this.board = board;
 
-        if (!board.isMeAlive()) return doNothing();
-
-        List&lt;Point&gt; goals = board.getGold();
-        if (goals.isEmpty()) {
-            goals = board.getExits();
-        }
-
-        // TODO your code here
-        Direction direction = Direction.ACT;
-
-        return go(direction);
+        return Direction.UP.toString();
     }</pre>
 
-        <p>Robot can detect walls and other obstacles on board with help of Board class.
-        <p>Board can contain the following objects:</p>
-        <ul class="list">
-            <li><span class="list-values text-uppercase">start</span> - <span class="list-values">Starting point. Rebirth place.</span></li>
-            <li><span class="list-values text-uppercase">exit</span> - <span class="list-values"> Finishing point. Bring money here.</span></li>
-            <li><span class="list-values text-uppercase">wall</span> - <span class="list-values"> Board border. It's impossible to jump over it</span></li>
-            <li><span class="list-values text-uppercase">hole</span> - <span class="list-values"> Hole on the floor. Robot will die, if he steps on it. </span></li>
-            <li><span class="list-values text-uppercase">box</span> - <span class="list-values"> A barrier which can be moved. Robot can jump over it. </span></li>
-            <li><span class="list-values text-uppercase">gold</span> - <span class="list-values"> You should collect it and bring to finish point.</span></li>
-            <li><span class="list-values text-uppercase">my_robot</span> - <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
-            <li><span class="list-values text-uppercase">other_robot</span> - <span class="list-values"> Other players' robot</span></li>
-            <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values"> Laser machine produces laser beams which can kill robots if intersect him.</span></li>
-            <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
-            <li><span class="list-values text-uppercase">laser</span> - <span class="list-values"> Laser beam is moving in given direction.</span></li>
-        </ul>
-        <p>For check all board elements please check Elements enum</p>
-<pre>public enum Elements implements CharElements {
-    // empty space where player can go
-    EMPTY(LAYER2, '-'),
-    FLOOR(LAYER1, '.'),
+<p>After connecting, the client will receive a regular (every second) line of symbols which are the encoded value of the field. Format:</p>
+<pre>^board=(.*)$</pre>
+<p>Using this regexp you can bite out the line of the board. Example of a line from the server:</p>
+<pre>board=☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼             ☼☼      ☻      ☼☼            ☺☼☼            ▲☼☼            ║☼☼            ║☼☼            ║☼☼            ╙☼☼             ☼☼             ☼☼             ☼☼             ☼☼             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+<p>Line length equals the area of the field. Inserting a line break symbol                            each sqrt(length(string)) of symbols will produce a readable depiction of the field.</p>
+<pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
+☼             ☼
+☼      ☻      ☼
+☼            ☺☼
+☼            ▲☼
+☼            ║☼
+☼            ║☼
+☼            ║☼
+☼            ╙☼
+☼             ☼
+☼             ☼
+☼             ☼
+☼             ☼
+☼             ☼
+☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+<p>The first line symbol corresponds with the cell located in the top left corner and has the coordinates [0, 0]. In this example, this is the position of the snake's head (symbol ▲) — [13, 4].</p>
+<p>Snake can detect walls and other elements on board with help of Board class.
+<p>Board can contain the following objects:</p>
+            <ul class="list">
+                <li><span class="list-values text-uppercase">bad_apple</span> - <span class="list-values"> Apples that the snake can not eat. If the snake eats this apple, it will be shorter by 10. If its length is less than 10, it dies..</span></li>
+                <li><span class="list-values text-uppercase">good_apple</span> - <span class="list-values"> Apples that the snake can eat.</span></li>
+                <li><span class="list-values text-uppercase">break</span> - <span class="list-values"> Board border.</span></li>
+                <li><span class="list-values text-uppercase">none</span> - <span class="list-values"> Empty space on board.</span></li>
+                <li><span class="list-values text-uppercase">head_down, head_up, head_left, head_right</span> - <span class="list-values"> Snake's head depending on the direction of movement.</span></li>
+                <li><span class="list-values text-uppercase">tail_end_down, tail_end_left, tail_end_up, tail_end_right, tail_horizontal, tail_vertical, tail_left_down, tail_left_up, tail_right_down, tail_right_up</span> - <span class="list-values"> Depiction of the snake's body. </span></li>
+            </ul>
+<p>For check all board elements please check Elements</p>
+<pre>public enum Elements {
+    BAD_APPLE('☻'),
+    GOOD_APPLE('☺'),
 
-    // walls
-    ANGLE_IN_LEFT(LAYER1, '╔'),
-    WALL_FRONT(LAYER1, '═'),
-    ANGLE_IN_RIGHT(LAYER1, '┐'),
-    WALL_RIGHT(LAYER1, '│'),
-    ANGLE_BACK_RIGHT(LAYER1, '┘'),
-    WALL_BACK(LAYER1, '─'),
-    ANGLE_BACK_LEFT(LAYER1, '└'),
-    WALL_LEFT(LAYER1, '║'),
-    WALL_BACK_ANGLE_LEFT(LAYER1, '┌'),
-    WALL_BACK_ANGLE_RIGHT(LAYER1, '╗'),
-    ANGLE_OUT_RIGHT(LAYER1, '╝'),
-    ANGLE_OUT_LEFT(LAYER1, '╚'),
-    SPACE(LAYER1, ' '),
+    BREAK('☼'),
 
-    // laser machine
-    LASER_MACHINE_CHARGING_LEFT(LAYER1, '˂'),
-    LASER_MACHINE_CHARGING_RIGHT(LAYER1, '˃'),
-    LASER_MACHINE_CHARGING_UP(LAYER1, '˄'),
-    LASER_MACHINE_CHARGING_DOWN(LAYER1, '˅'),
+    HEAD_DOWN('▼'),
+    HEAD_LEFT('◄'),
+    HEAD_RIGHT('►'),
+    HEAD_UP('▲'),
 
-    // lase machine ready
-    LASER_MACHINE_READY_LEFT(LAYER1, '◄'),
-    LASER_MACHINE_READY_RIGHT(LAYER1, '►'),
-    LASER_MACHINE_READY_UP(LAYER1, '▲'),
-    LASER_MACHINE_READY_DOWN(LAYER1, '▼'),
+    TAIL_END_DOWN('╙'),
+    TAIL_END_LEFT('╘'),
+    TAIL_END_UP('╓'),
+    TAIL_END_RIGHT('╕'),
+    TAIL_HORIZONTAL('═'),
+    TAIL_VERTICAL('║'),
+    TAIL_LEFT_DOWN('╗'),
+    TAIL_LEFT_UP('╝'),
+    TAIL_RIGHT_DOWN('╔'),
+    TAIL_RIGHT_UP('╚'),
 
-    // other stuff
-    START(LAYER1, 'S'),
-    EXIT(LAYER1, 'E'),
-    HOLE(LAYER1, 'O'),
-    BOX(LAYER2, 'B'),
-    GOLD(LAYER1, '$'),
-
-    // your robot
-    ROBO(LAYER2, '☺'),
-    ROBO_FALLING(LAYER2, 'o'),
-    ROBO_FLYING(LAYER2, '*'),
-    ROBO_FLYING_ON_BOX(LAYER2, '№'),
-    ROBO_LASER(LAYER2, '☻'),
-
-    // other robot
-    ROBO_OTHER(LAYER2, 'X'),
-    ROBO_OTHER_FALLING(LAYER2, 'x'),
-    ROBO_OTHER_FLYING(LAYER2, '^'),
-    ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%'),
-    ROBO_OTHER_LASER(LAYER2, '&'),
-
-    // laser
-    LASER_LEFT(LAYER2, '←'),
-    LASER_RIGHT(LAYER2, '→'),
-    LASER_UP(LAYER2, '↑'),
-    LASER_DOWN(LAYER2, '↓')
+    NONE(' ');
 }</pre>
 
-        <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
-          
-<pre>public Command whatToDo(Board board) {
-    return Command.go("RIGHT");
-    // return Command.jump("RIGHT");
-    // return Command.pull("RIGHT");
-}</pre>
-          <p>You can use this method to detect Elements throughout the world:</p>
-          
-<pre>if (board.isAt(4, 8, Elements.HOLE)) {
+<p>If the client is made using your chosen software development language, you will have a chance to use a more high-level API: Board — incapsulating the line with useful methods for searching elements on the board, and YourSolver — an empty class with one method — you'll have to fill it with smart logic.</p>
+<p>The game is a step-by-step process which has the server send its client (bot) the present state of the updated field, and then wait for the response of the command for the snake. Within the next second the player much give a command to the snake. If they don't manage to give one in time, the snake will move automatically (until it finds a wall).</p>
+<p>There are several commands: UP, DOWN, LEFT, RIGHT which lead to turning the snake's head in the required direction. I would like to remind you that the snake moves mechanically under its own inertia.</p>
+<p>First, make the snake listen to your commands. If there is no client for your language, it becomes slightly more complicated — you will have to write a WebSocket for the client. Thus, you prepare for the main game. Your next job is to write a bot
+
+<p>Snake can walk with the following code:</p>
+<pre>public String get(Board board) {
+        this.board = board;
+
+        return Direction.UP.toString();
+        // return Direction.LEFT.toString();
+        // return Direction.RIGHT.toString();
+        // return Direction.DOWN.toString();
+    }</pre>
+<p>You can use this method to detect Elements throughout the world:</p>
+
+<pre>if (board.isAt(4, 8, Elements.BAD_APPLE)) {
     // some statement here
 }</pre>
-          <p>Coordinate {x:0, y:0} in the left-top corner of board.</p>
-          <p>Try this code for check Robot position.</p>
-<pre>Point me = board.getMe();
+<p>Coordinate {x:0, y:0} in the left-bottom corner of board.</p>
+<p>Try this code for check Snake head position.</p>
+<pre>Point head = board.getHead();
 System.out.println(me);</pre>
 
-            <p>You can use static import for good performance :).</p>
-            <pre>import static com.codenjoy.dojo.client.Direction.*;
+<p>You can use static import for good performance :).</p>
+<pre>import static com.codenjoy.dojo.client.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
 import static com.epam.dojo.snake.model.Elements.*;
 import static com.epam.dojo.snake.model.Elements.Layers.*;</pre>
 
-		<p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>
+<p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can write your own Unit test.</p>
 
-<!-- -----------------------------------------CORE COMMAND METHODS--------------------------------------------------- -->
-          <a id="command"></a>
-          <h2 class="subtitle text-uppercase">Command methods</h2>
-            <p>You should return Command from whatToDo method of YourSolver. There are several commands.</p>
-
-          <p><span class="func">Command go(Direction direction)</span> - Go to the direction specified.</p>
-<pre>public Command whatToDo(Board board) {
-    return Command.go(Direction.RIGHT);
-}</pre>
-          <p><span class="func">Command jump(Direction direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction. It is impossible to jump over multiple barriers in the row.</p>
-<pre>public Command whatToDo(Board board) {
-    return Command.jump(Direction.LEFT);
-}</pre>
-    	  <p><span class="func">Command jump()</span> - Jumps on a place. You should return result of this function from whatToDo method.</p>
-<pre>public Command whatToDo(Board board) {
-    return Command.jump();
-}</pre>
-          
-          <p><span class="func">Command pull(Direction direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.</p>
-<pre>public Command whatToDo(Board board) {
-    return Command.pull(Direction.UP);
-}</pre>
-    
 <!-------------------------------------------------------Core Direction methods--------------------------------------------- -->
-          <a id="direction"></a>
-          <h2 class="subtitle text-uppercase">Direction methods</h2>
-          
-          <p><span class="func">Direction direction.invert()</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
+<a id="direction"></a>
+<h2 class="subtitle text-uppercase">Direction methods</h2>
+
+<p>You should return direction.toString() from get method of YourSolver. There are 4 directions and several methods for work with it.</p>
+<p><span class="func">Direction direction.invert()</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
 <pre>Direction direction = Direction.LEFT.inverted();
 assert direction.inverted() == Direction.RIGHT;</pre>
-          
-          <p><span class="func">Direction direction.clockwise()</span> - Returns next clockwise direction. LEFT -> UP -> RIGHT -> DOWN -> LEFT.</p>
+
+<p><span class="func">Direction direction.clockwise()</span> - Returns next clockwise direction. LEFT -> UP -> RIGHT -> DOWN -> LEFT.</p>
 <pre>assert Direction.LEFT.clockwise() == Direction.UP;</pre>
 
-          <p><span class="func">Point direction.change(Point pt)</span> - Returns new point that will be after move from current point in given direction.</p>
+<p><span class="func">Point direction.change(Point pt)</span> - Returns new point that will be after move from current point in given direction.</p>
 <pre>assert Direction.LEFT.change(pt(1, 2)) == pt(0, 2);
 // To use import static com.codenjoy.dojo.services.PointImpl.pt;</pre>
 
-            <p><span class="func">int direction.changeX(int x)</span> - Returns new point.x that will be after move from current point.x in given direction.</p>
+<p><span class="func">int direction.changeX(int x)</span> - Returns new point.x that will be after move from current point.x in given direction.</p>
 <pre>assert Direction.RIGHT.changeX(1) == 2;
 assert Direction.LEFT.changeX(1) == 0;</pre>
 
-            <p><span class="func">int direction.changeY(int y)</span> - Returns new point.y that will be after move from current point.y in given direction. Remember, that coordinate {x:0, y:0} in the left-top corner of board.</p>
-            <pre>assert Direction.DOWN.changeY(1) == 2;
+<p><span class="func">int direction.changeY(int y)</span> - Returns new point.y that will be after move from current point.y in given direction. Remember, that coordinate {x:0, y:0} in the left-top corner of board.</p>
+<pre>assert Direction.DOWN.changeY(1) == 2;
 assert Direction.UP.changeY(1) == 0;</pre>
 
-        <!-------------------------------------------------------Core Point methods--------------------------------------------- -->
-          <a id="point"></a>
-        <h2 class="subtitle text-uppercase">Point methods</h2>
+<!-------------------------------------------------------Core Point methods--------------------------------------------- -->
+<a id="point"></a>
+<h2 class="subtitle text-uppercase">Point methods</h2>
 
-        <p><span class="func">new PointImpl(int x, int y)</span> - Creates new point objects with given x and y.</p>
-        <pre>Point pt1 = new PointImpl(1, 2);
+<p><span class="func">new PointImpl(int x, int y)</span> - Creates new point objects with given x and y.</p>
+<pre>Point pt1 = new PointImpl(1, 2);
 Point pt2 = pt(1, 2); // To use import static com.codenjoy.dojo.services.PointImpl.pt;
-assert pt1.eqals(pt2);</pre>
+assert pt1.equals(pt2);</pre>
 
-            <p>Please check com.codenjoy.dojo.services.Point for more details.</p>
+<p>Please check com.codenjoy.dojo.services.Point for more details.</p>
 
 <!-- -----------------------------------------------------Core Board methods--------------------------------------------- -->
-          <a id="core"></a>
-          <h2 class="subtitle text-uppercase">Core Board methods</h2>
-          
-          <p><span class="func">boolean isAt(int numLayer, int x, int y, Elements... elements))</span> - Says if at given position (X, Y) at given Layer has given elements.</p>
-          <pre>assert board.isAt(LAYER1, 3, 4, HOLE, START);
-assert board.isAt(LAYER2, 1, 2, HERO, OTHER_HERO);</pre>
+<a id="core"></a>
+<h2 class="subtitle text-uppercase">Core Board methods</h2>
 
-          <p><span class="func">boolean isAt(int numLayer, int x, int y, Elements element))</span> - Says if at given position (X, Y) at given layer has given element.</p>
-          <pre>assert board.isAt(LAYER1, 3, 4, HOLE);
-assert board.isAt(LAYER2, 1, 2, HERO);</pre>
+<p><span class="func">Point getHead()</span> - Returns position of your Snake head.</p>
+<pre>Point head = board.getHead();
+assert head.equals(pt(1, 2));</pre>
 
-          <p><span class="func">boolean isNear(int numLayer, int x, int y, E element)</span> - Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.</p>
-          <pre>assert board.isNear(LAYER1, 1, 2, HOLE);</pre>
-          
-          <p><span class="func">Point getMe()</span> - Returns position of your robot.</p>
-          <pre>Point me = board.getMe();
-assert me.equals(pt(1, 2));</pre>
+<p><span class="func">List&lt;Point&gt; getSnake()</span> - Returns all Snake parts.</p>
+<pre>List&lt;Point&gt; snake = board.getSnake();
+assert snake.get(0).equals(pt(1, 2));</pre>
 
-          <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns position of your robot.</p>
-          <pre>List&lt;Point&gt; heroes = board.getOtherHeroes();
-assert heroes.get(0).equals(pt(1, 2));</pre>
+<p><span class="func">List&lt;Point&gt; getStones()</span> - Returns all stones on board.</p>
+<pre>List&lt;Point&gt; stones = board.getStones();
+assert stones.get(0).equals(pt(1, 2));</pre>
 
-          <p><span class="func">Elements getAt(int numLayer, int x, int y) </span> - Returns element at position specified.</p>
-          <pre>assert board.getAt(LAYER1, 1, 2) == HERO</pre>
-          
-          <p><span class="func">List&lt;Point&gt; get(int numLayer, Elements... elements)</span> - Returns all positions of element specified.</p>
-          <pre>assert board.get(LAYER1, HOLE, START).get(0).equals(pt(1, 2));</pre>
-          
-          <p><span class="func">int countNear(int numLayer, int x, int y, Elements element)</span> - Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.</p>
-          <pre>assert board.countNear(LAYER1, 1, 2, HOLE) == 1;</pre>
-          
-          <p><span class="func">List&lt;Elements&gt; getNear(int numLayer, int x, int y)</span> - All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.</p>
-          <pre>assert scanner.getNear(LAYER1, 1, 2, OTHER_HERO).get(0).equals(pt(1, 2));</pre>
-          
-          <p><span class="func">boolean isBarrierAt(int x, int y)</span> - Is it possible to go through the cell with {x,y} coordinates.</p>
-          <pre>assert scanner.isBarrierAt(12, 7) == false;</pre>
+<p><span class="func">List&lt;Point&gt; getApples()</span> - Returns all apples on board.</p>
+<pre>List&lt;Point&gt; apples = board.getApples();
+assert apples.get(0).equals(pt(1, 2));</pre>
 
-          <p><span class="func">boolean isMeAlive()</span> - Checks if your robot is alive.</p>
-          <pre>assert scanner.isMyRobotAlive() = true; </pre>
-          
-          <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStarts,  getExits, getHoles</p>
-          <pre>List&lt;Point&gt; points = board.getOtherRobots();
-assert points.get(0).equals(pt(1, 2));</pre>
-        </div>    
-      </section>
-      
-      <footer class="footer">
-        <div class="container">
-          <nav class="footer-nav">
-            <ul class="footer-list inline">
-                <li class="footer-item inline"><a href="https://epa.ms/dojo-about-en" target="blank">About DOJO</a></li>
-                <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
-                <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
-                <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a></li>
-                <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
-            </ul>
-      </nav>
+<p><span class="func">List&lt;Point&gt; getWalls()</span> - Returns all walls on board.</p>
+<pre>List&lt;Point&gt; walls = board.getWalls();
+assert walls.get(0).equals(pt(1, 2));</pre>
+
+<p><span class="func">Direction getSnakeDirection()</span> - Returns snake direction.</p>
+<pre>Direction direction = board.getSnakeDirection();
+assert direction.equals(Direction.RIGHT);</pre>
+
+<p><span class="func">boolean isBarrierAt(int x, int y)</span> - Is it possible to go through the cell with {x,y} coordinates.</p>
+<pre>assert board.isBarrierAt(12, 7) == false;</pre>
+
+<p><span class="func">boolean isSnakeAlive()</span> - Checks if your snake is alive.</p>
+<pre>assert board.isSnakeAlive() = true; </pre>
+
+<p><span class="func">boolean isAt(int x, int y, Elements... elements))</span> - Says if at given position (X, Y) at given Layer has given elements.</p>
+<pre>assert board.isAt(3, 4, BAD_APPLE, GOOD_APPLE);
+assert board.isAt(1, 2, BREAK);</pre>
+
+<p><span class="func">boolean isAt(int x, int y, Elements element))</span> - Says if at given position (X, Y) at given layer has given element.</p>
+<pre>assert board.isAt(3, 4, BAD_APPLE);
+assert board.isAt(1, 2, TAIL_END_DOWN);</pre>
+
+<p><span class="func">boolean isNear(int x, int y, E element)</span> - Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.</p>
+<pre>assert board.isNear(1, 2, BAD_APPLE);</pre>
+
+<p><span class="func">Elements getAt(int x, int y) </span> - Returns element at position specified.</p>
+<pre>assert board.getAt(1, 2) == TAIL_END_DOWN</pre>
+
+<p><span class="func">List&lt;Point&gt; get(Elements... elements)</span> - Returns all positions of element specified.</p>
+<pre>assert board.get(BAD_APPLE, GOOD_APPLE).get(0).equals(pt(1, 2));</pre>
+
+<p><span class="func">int countNear(int x, int y, Elements element)</span> - Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.</p>
+<pre>assert board.countNear(1, 2, BAD_APPLE) == 1;</pre>
+
+<p><span class="func">List&lt;Elements&gt; getNear(int x, int y)</span> - All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.</p>
+<pre>assert board.getNear(1, 2, TAIL_END_UP).get(0).equals(pt(1, 2));</pre>
+
         </div>
-      </footer>
-    </div>
-    <div class="scroll-up" id="scrollup"><i class="fa fa-angle-up"></i></div>
-  </body>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <nav class="footer-nav">
+                <ul class="footer-list inline">
+                    <li class="footer-item inline"><a href="https://epa.ms/dojo-about-en" target="blank">About DOJO</a>
+                    </li>
+                    <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
+                    <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
+                    <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on
+                        GitHub</a></li>
+                    <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me
+                        anything</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</div>
+<div class="scroll-up" id="scrollup"><i class="fa fa-angle-up"></i></div>
+</body>
 </html>

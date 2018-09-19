@@ -47,7 +47,7 @@ public class BoardTest {
         assertEquals("[[1,2]]", board.getApples().toString());
         assertEquals("[2,2]", board.getHead().toString());
         assertEquals(4, board.size());
-        assertEquals(false, board.isGameOver());
+        assertEquals(true, board.isSnakeAlive());
         assertEquals("[[1,1]]", board.getStones().toString());
 
         assertTrue(board.isAt(0, 3, Elements.BREAK));
@@ -126,6 +126,6 @@ public class BoardTest {
                 "☼ ╙☼" +
                 "☼  ☼" +
                 "☼☼☼☼");
-        assertEquals(true, board.isGameOver());
+        assertEquals(false, board.isSnakeAlive());
     }
 }

@@ -41,13 +41,22 @@ public class YourSolver implements Solver<Board> {
         this.dice = dice;
     }
 
+    /**
+     * @param board use it for find elements on board
+     * @return what snake should do in this tick (for this board)
+     */
     @Override
     public String get(Board board) {
         this.board = board;
 
+        // TODO write your AI code here
+
         return Direction.UP.toString();
     }
 
+    /**
+     * Run this method for connect to Server
+     */
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
