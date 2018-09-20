@@ -34,6 +34,10 @@ echo on
 cd %ROOT%\codenjoy\CodingDojo
 call %GIT_HOME%\cmd\git pull origin master
 
+if "%GIT_REVISION%"=="" (
+	call %GIT_HOME%\cmd\git checkout "%GIT_REVISION%"
+)
+
 echo off
 echo [44;93m
 echo        +-------------------------------------------------------------+        
