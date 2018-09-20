@@ -122,6 +122,28 @@ public final class Levels {
             " #B...O$..O......#  " +
             " #################  ";
 
+    public static final String MULTI_LEVEL_SIMPLE_ZOMBIES =
+            "    ############### " +
+            "    #Z.....O...$.Z# " +
+            "    #B...O###B.S..# " +
+            "  ###.B.B.# #.....# " +
+            "  #.$.S...# #B.$..# " +
+            "  #...B#### ##..O.# " +
+            "  #.O..#     ###..# " +
+            "  #..$.#####   #.O# " +
+            "  #BB......#####..# " +
+            "  ######.B........# " +
+            "       ##..E.###### " +
+            " #####  #.O..#      " +
+            " #.$.#  #.$.B###### " +
+            " #...####.......O.# " +
+            " #....O...####B.$.# " +
+            " ####B.$..#  ###### " +
+            "    #.S.O.#         " +
+            " ####....B########  " +
+            " #B...O$..O......#  " +
+            " #################  ";
+
     public static final String MULTI_LEVEL_SIMPLE =
             "    ############### " +
             "    #˃.........$.˅# " +
@@ -325,7 +347,7 @@ public final class Levels {
     }
 
     public static ILevel getMultiple() {
-        return load(MULTI_LEVEL_SIMPLE_WITHOUT_LASERS);
+        return load(MULTI_LEVEL_SIMPLE_ZOMBIES);
     }
 
     public static ILevel load(String levelMap) {
