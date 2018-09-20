@@ -28,6 +28,9 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Zombie;
+
+import java.util.List;
 
 public interface IField extends GameField<Player> {
 
@@ -56,4 +59,6 @@ public interface IField extends GameField<Player> {
     ILevel getLevel();
 
     int size();
+
+    List<Zombie> zombies();
 }

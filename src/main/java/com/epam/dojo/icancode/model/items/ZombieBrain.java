@@ -61,19 +61,15 @@ public class ZombieBrain {
                 int x = from.getX();
                 int y = from.getY();
 
-                if (field.isBarrier(x, y)) return false;
-                if (field.isAt(x, y, Hole.class)) return false;
-                if (field.isAt(x, y, Box.class)) return false;
+                if (isNotFree(x, y, field)) return false;
 
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
+                Point to = where.change(from);
+                int nx = to.getX();
+                int ny = to.getY();
 
-                if (newPt.isOutOf(field.size())) return false;
+                if (to.isOutOf(field.size())) return false;
 
-                if (field.isBarrier(nx, ny)) return false;
-                if (field.isAt(x, y, Hole.class)) return false;
-                if (field.isAt(x, y, Box.class)) return false;
+                if (isNotFree(nx, ny, field)) return false;
 
                 return true;
             }
@@ -83,5 +79,11 @@ public class ZombieBrain {
                 return true;
             }
         };
+    }
+
+    boolean isNotFree(int x, int y, IField field) {
+        return field.isBarrier(x, y)
+                || field.isAt(x, y, Hole.class)
+                || field.isAt(x, y, Box.class);
     }
 }

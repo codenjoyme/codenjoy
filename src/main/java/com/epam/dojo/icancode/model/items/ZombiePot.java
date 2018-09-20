@@ -28,6 +28,8 @@ import com.epam.dojo.icancode.model.Elements;
 public class ZombiePot extends FieldItem implements Tickable {
 
     public static int TICKS = 5;
+    public static int COUNT = 6;
+
     private int time = 0;
 
     public ZombiePot(Elements el) {
@@ -37,12 +39,14 @@ public class ZombiePot extends FieldItem implements Tickable {
     @Override
     public void tick() {
         if (++time % TICKS == 0) {
-            field.move(newZombie(), this.getCell().getX(), this.getCell().getY());
+            if (field.zombies().size() < COUNT) {
+                field.move(newZombie(), this.getCell().getX(), this.getCell().getY());
+            }
         }
     }
 
     private Zombie newZombie() {
-        boolean gender = field.dice().next(1) == 0;
+        boolean gender = field.dice().next(2) == 0;
         Zombie zombie = new Zombie(gender);
         zombie.setField(field);
         return zombie;

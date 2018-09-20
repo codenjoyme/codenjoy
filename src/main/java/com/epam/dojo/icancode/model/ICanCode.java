@@ -91,6 +91,11 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
+    public List<Zombie> zombies() {
+        return level.getItems(Zombie.class);
+    }
+
+    @Override
     public boolean isBarrier(int x, int y) {
         return level.isBarrier(x, y);
     }
