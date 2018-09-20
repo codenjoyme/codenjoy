@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-builder</artifactId>
-    <version>1.0.26</version>
+    <version>1.0.27-snake</version>
     <packaging>war</packaging>
 
     <properties>
@@ -55,7 +55,7 @@
         <exclude.quadro>true</exclude.quadro>
         <exclude.lunolet>true</exclude.lunolet>
         <exclude.tetris>true</exclude.tetris>
-        <exclude.icancode>true</exclude.icancode>
+        <!--exclude.icancode>true</exclude.icancode-->
     </properties>
 
     <repositories>
@@ -572,7 +572,7 @@
                 </dependency>
             </dependencies>
         </profile>
-        <profile>
+        <!--profile>
             <id>icancode</id>
             <activation>
                 <property>
@@ -589,7 +589,7 @@
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
-        </profile>
+        </profile-->
     </profiles>
 
     <build>
@@ -1280,7 +1280,7 @@
                             </artifactItems>
                         </configuration>
                     </execution>
-                    <execution>
+                    <!--execution>
                         <id>unpack-icancode</id>
                         <phase>compile</phase>
                         <goals>
@@ -1300,7 +1300,7 @@
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
-                    </execution>
+                    </execution-->
                 </executions>
             </plugin>
         </plugins>
