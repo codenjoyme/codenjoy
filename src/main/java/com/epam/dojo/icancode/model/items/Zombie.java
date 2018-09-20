@@ -30,7 +30,9 @@ import com.epam.dojo.icancode.model.interfaces.IItem;
 
 public class Zombie extends FieldItem implements Tickable {
 
+    public static final int PER_TICK = 2;
     public static ZombieBrain BRAIN = new ZombieBrain();
+    private int ticks = 0;
 
     public Zombie(boolean gender) {
         super(getElement(gender));
@@ -56,6 +58,10 @@ public class Zombie extends FieldItem implements Tickable {
 
     @Override
     public void tick() {
+        if (++ticks % PER_TICK == 0) {
+            return;
+        }
+
         Direction direction = BRAIN.whereToGo(getCell(), field);
         if (direction == null) {
             return;

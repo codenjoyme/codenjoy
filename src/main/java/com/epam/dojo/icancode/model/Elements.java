@@ -72,6 +72,7 @@ public enum Elements implements CharElements {
     EXIT(LAYER1, 'E'),
     HOLE(LAYER1, 'O'),
     BOX(LAYER2, 'B'),
+    ZOMBIE_START(LAYER1, 'Z'),
     GOLD(LAYER1, '$'),
 
     // your robot
@@ -95,7 +96,6 @@ public enum Elements implements CharElements {
     LASER_DOWN(LAYER2, '↓'),
 
     // zombie
-    ZOMBIE_START(LAYER1, 'Z'),
     FEMALE_ZOMBIE(LAYER2, '♀'),
     MALE_ZOMBIE(LAYER2, '♂'),
 
