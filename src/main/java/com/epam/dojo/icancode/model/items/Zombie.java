@@ -49,6 +49,7 @@ public class Zombie extends FieldItem implements Tickable {
 
         Hero hero = heroItem.getHero();
         if (!hero.isFlying()) {
+            removeFromCell();
             hero.dieOnZombie();
         }
     }
