@@ -69,7 +69,7 @@ public class Zombie extends FieldItem implements Tickable {
         int newX = direction.changeX(getCell().getX());
         int newY = direction.changeY(getCell().getY());
 
-        if (!field.isBarrier(newX, newY)) {
+        if (!field.isBarrier(newX, newY) && !field.isAt(newX, newY, Zombie.class)) {
             field.move(this, newX, newY);
         }
     }
