@@ -202,8 +202,8 @@
 <ul class="list">
     <li><span class="list-values">Install Python 3.x environment</span></li>
     <li><span class="list-values">Import your project from <span class="func" id="python-project">src/main/python</span></span></li>
-    <li><span class="list-values">Go to <span class="func">main.py</span> and replace connection url parameters from url copied to clipboard: <span class="func" id="python-player-variables">wss://dojo.lab.epam.com:80/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</span></span></li>
-    <li><span class="list-values">Implement AI logic in the <span class="func" id="python-client">dds.py</span></span></li>
+    <li><span class="list-values">Go to <span class="func">main.py</span> and replace connection url parameters from url copied to clipboard: <span class="func" id="python-player-variables">wcl.run("wss", "dojo.lab.epam.com", 'your@email.com', '12345678901234567890')</span></span></li>
+    <li><span class="list-values">Implement AI logic in the <span class="func" id="python-client">solver.py</span></span></li>
     <li><span class="list-values">Run main.py</span></li>
     <li><span class="list-values">Read help at this page bellow</span></li>
     <li><span class="list-values">Restart java process when you want</span></li>
@@ -216,7 +216,7 @@
 <p>Each eaten apple gives the player bonus points equal to the size of the snake at the time when the apple is eaten. Points may be deduced for letting the snake die (by default, the value is 0, confirm this rule with the event organizer). Points are cumulative. The winner is the player with the most points (within the predefined time limit). A dead snake disappears immediately and a new one appears on the field.</p>
 <p>Bellow you can find client api in java - for other languages there are similar procedures and functions.</p>
 <p>Players <a href="../../register?gameName=snake"> register on the server</a> using their email address.</p>
-<p>After that, they must connect <a href="../../resources/user/snake-servers.zip">from the code</a> to the server via websockets. This is a Maven project and it is suitable for playing using JVM languages.                            For instructions on how to launch it, see README.txt in the root of the project. It also contains all supported languages.</p>
+<p>After that, they must connect <a href="../../resources/user/snake-servers.zip">from the code</a> to the server via websockets. This is a Maven project and it is suitable for playing using JVM languages. For instructions on how to launch it, see README.txt in the root of the project. It also contains all supported languages.</p>
 
 <pre id="start-code">    /**
      * Run this method for connect to Server
