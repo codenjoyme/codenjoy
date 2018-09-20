@@ -23,6 +23,215 @@ package com.epam.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
+import com.epam.dojo.icancode.model.interfaces.IField;
+import com.epam.dojo.icancode.model.items.Zombie;
+import com.epam.dojo.icancode.model.items.ZombieBrain;
+import com.epam.dojo.icancode.model.items.ZombiePot;
+import com.epam.dojo.icancode.services.Events;
+import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
+
+import static com.codenjoy.dojo.services.Direction.LEFT;
+import static com.codenjoy.dojo.services.Direction.UP;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 public class ICanCodeZombieTest extends AbstractGameTest {
 
+    @Test
+    public void shouldZombieFemaleStart() {
+        // given
+        ZombiePot.TICKS = 3;
+
+        givenFl("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║...Z│" +
+                "└────┘");
+
+        // when
+        dice(1); // female
+        game.tick();
+        game.tick();
+
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        game.tick(); // 3rd tick
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "----♀-" +
+                "------");
+    }
+
+    @Test
+    public void shouldZombieCanWalk() {
+        // given
+        givenZombie().thenReturn(UP);
+
+        shouldZombieFemaleStart();
+
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "----♀-" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "----♀-" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "----♀-" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldZombiePotGeneratesAnotherOne() {
+        // given
+        shouldZombieCanWalk();
+
+        assertEquals(3, ZombiePot.TICKS);
+
+        assertE("------" +
+                "-☺----" +
+                "----♀-" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        generateMale();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺--♀-" +
+                "------" +
+                "------" +
+                "----♂-" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺--♀-" +
+                "------" +
+                "----♂-" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldZombieKillHero() {
+        // given
+        ZombiePot.TICKS = 3;
+        givenZombie().thenReturn(UP, LEFT);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..Z.│" +
+                "║....│" +
+                "└────┘");
+
+        hero.down();
+        generateFemale();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("------" +
+                "------" +
+                "--☺---" +
+                "---♀--" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "------" +
+                "--☺♀--" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "------" +
+                "--☻---" +
+                "------" +
+                "------" +
+                "------");
+
+        verify(listener).event(Events.LOOSE());
+        assertEquals(false, hero.isAlive());
+        assertEquals(false, hero.isWin());
+
+        // when
+        selectStartSpot().thenReturn(1); // and female zombie
+        game.newGame(player);
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "-♀----" +
+                "---♀--" +
+                "------" +
+                "------");
+    }
+
+    OngoingStubbing<Integer> selectStartSpot() {
+        return dice(0);
+    }
+
+    OngoingStubbing<Integer> generateFemale() {
+        return dice(1);
+    }
+
+    OngoingStubbing<Integer> generateMale() {
+        return dice(0);
+    }
+
+    OngoingStubbing<Direction> givenZombie() {
+        Zombie.BRAIN = mock(ZombieBrain.class);
+        return when(Zombie.BRAIN.whereToGo(any(IField.class)));
+    }
 }

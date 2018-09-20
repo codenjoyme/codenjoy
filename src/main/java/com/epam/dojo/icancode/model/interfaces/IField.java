@@ -23,6 +23,7 @@ package com.epam.dojo.icancode.model.interfaces;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.epam.dojo.icancode.model.Player;
@@ -49,4 +50,6 @@ public interface IField extends GameField<Player> {
     boolean isMultiplayer();
 
     LayeredBoardReader layeredReader();
+
+    Dice dice();
 }

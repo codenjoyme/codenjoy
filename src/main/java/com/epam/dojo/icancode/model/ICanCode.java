@@ -248,6 +248,11 @@ public class ICanCode implements Tickable, IField {
         };
     }
 
+    @Override
+    public Dice dice() {
+        return dice;
+    }
+
     public ILevel getLevel() {
         return level;
     }

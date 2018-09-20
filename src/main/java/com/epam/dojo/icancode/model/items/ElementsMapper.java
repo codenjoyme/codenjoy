@@ -88,6 +88,10 @@ public class ElementsMapper {
         put(LASER_UP, Laser.class);
         put(LASER_DOWN, Laser.class);
 
+        put(ZOMBIE_START, ZombiePot.class);
+        put(FEMALE_ZOMBIE, Zombie.class);
+        put(MALE_ZOMBIE, Zombie.class);
+
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);
     }};

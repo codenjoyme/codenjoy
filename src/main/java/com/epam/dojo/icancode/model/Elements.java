@@ -95,6 +95,7 @@ public enum Elements implements CharElements {
     LASER_DOWN(LAYER2, '↓'),
 
     // zombie
+    ZOMBIE_START(LAYER1, 'Z'),
     FEMALE_ZOMBIE(LAYER2, '♀'),
     MALE_ZOMBIE(LAYER2, '♂'),
 

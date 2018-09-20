@@ -38,11 +38,12 @@ public class AbstractGameTest {
         dice = mock(Dice.class);
     }
 
-    void dice(int... ints) {
+    OngoingStubbing<Integer> dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
         }
+        return when;
     }
 
     void givenFl(String board) {

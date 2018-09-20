@@ -365,4 +365,8 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         die();
     }
 
+    public void dieOnZombie() {
+        laser = true; // TODO может сделать зеленым его?
+        die();
+    }
 }
