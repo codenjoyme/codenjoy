@@ -22,8 +22,6 @@
 # #L%
 ###
 
-# from sys import exc_info
-from traceback import print_exception
 from websocket import WebSocketApp
 
 def _on_open(webclient):
@@ -42,7 +40,6 @@ def _on_message(webclient, message):
     except Exception as e:
         print("Exception occurred")
         print(e)
-        # print_exception(*exc_info())
 
 def _on_error(webclient, error):
     print(error)
@@ -50,7 +47,6 @@ def _on_error(webclient, error):
 class WebClient(WebSocketApp):
 
     def __init__(self, solver):
-        #assert solver not None
         self._solver = solver
         self._server = None
         self._user = None

@@ -28,7 +28,7 @@ from board import Board
 from element import Element
 from direction import Direction
 
-class DirectionSolver:
+class YourSolver:
     """ This class should contain the movement generation algorythm."""
     
     def __init__(self):

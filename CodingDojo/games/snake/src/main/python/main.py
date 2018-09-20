@@ -22,18 +22,15 @@
 # #L%
 ###
 
-# from sys import version_info
 from webclient import WebClient
-from solver import DirectionSolver
+from solver import YourSolver
 
 def main():
 
-    # assert version_info[0] == 3, "You should run me with Python 3.x"
-
-    dds = DirectionSolver()
+    dds = YourSolver()
     wcl = WebClient(dds)
 
-    wcl.run("wss", "dojo.lab.epam.com:80", 'apoddssssw3dfdid3s3g@gmail.com', '12734056061901410172')
+    wcl.run("wss", "dojo.lab.epam.com", 'your@email.com', '12345678901234567890')
 
 if __name__ == '__main__':
     main()
