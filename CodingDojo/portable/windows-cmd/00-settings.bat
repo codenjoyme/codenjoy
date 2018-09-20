@@ -7,7 +7,7 @@ set ROOT=%CD%
 set SKIP_TESTS=true
 set CONTEXT=codenjoy-contest
 set DEBUG=false
-rem set GIT_REVISION=7812aa6
+set GIT_REVISION=9b51a26
 
 set MAVEN_OPTS="-Dmaven.repo.local=%M2_HOME%\.m2\repository"
 
