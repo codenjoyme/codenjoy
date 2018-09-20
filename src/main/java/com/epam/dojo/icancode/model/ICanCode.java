@@ -247,4 +247,8 @@ public class ICanCode implements Tickable, IField {
             }
         };
     }
+
+    public ILevel getLevel() {
+        return level;
+    }
 }

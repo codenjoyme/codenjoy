@@ -43,7 +43,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     private boolean jump;
     private boolean pull;
     private boolean flying;
-    private Integer resetToLevel;
+    private boolean reset;
     private boolean laser;
     private boolean hole;
     private boolean landOn;
@@ -71,7 +71,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         jump = false;
         pull = false;
         landOn = false;
-        resetToLevel = null;
+        reset = false;
         flying = false;
         laser = false;
         alive = true;
@@ -167,10 +167,6 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         act(0);
     }
 
-    public void loadLevel(int level) {
-        act(0, level);
-    } // TODO implement wia framework
-
     public void jump() {
         act(1);
     }
@@ -192,11 +188,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
         } else if (p[0] == 0) {
-            if (p.length == 2) {
-                resetToLevel = p[1];
-            } else {
-                resetToLevel = -1;
-            }
+            reset = true;
         } else if (p[0] == -1) { // TODO test me
             ICell end = field.getEndPosition();
             field.move(this.item, end.getX(), end.getY());
@@ -240,8 +232,8 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             return;
         }
 
-        if (resetToLevel != null) {
-            resetToLevel = null;
+        if (reset) {
+            reset = false;
             reset(field);
             return;
         }
@@ -371,16 +363,6 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     public void dieOnLaser() {
         laser = true;
         die();
-    }
-
-    public boolean isChangeLevel() {
-        return resetToLevel != null;
-    }
-
-    public int getLevel() {
-        int result = resetToLevel;
-        resetToLevel = null;
-        return result;
     }
 
 }
