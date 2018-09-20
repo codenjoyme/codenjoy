@@ -22,6 +22,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -31,24 +32,26 @@ namespace SnakeClient
 {
     internal class Program
     {
+        // Server protool htts -> ws, https -> wss
+        private static string Protocol = "wss";
         // Server name and port number -- ask orgs
         private static string ServerNameAndPort = "dojo.lab.epam.com";
         // Register on the server, write down your registration name
         private static string UserName = "your@email.com";
         // Look up for the code in the browser url after the registration
-        private static string UserCode = "12345678901234567890";
+        private static string UserCode = "18899199021366816317";
 
         private static readonly object consoleLock = new object();
         private const int receiveChunkSize = 1024 * 10;
         private const bool verbose = true;
         private static readonly Encoding encoder = new UTF8Encoding(false);
 
-        private static readonly MySnakeBot mybot = new MySnakeBot();
+        private static readonly YourSolver solver = new YourSolver();
 
         static void Main(string[] args)
         {
             Thread.Sleep(1000);
-            Connect($"wss://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}").Wait();
+            Connect($"{Protocol}://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}").Wait();
         }
 
         public static async Task Connect(string uri)
@@ -57,6 +60,10 @@ namespace SnakeClient
 
             try
             {
+                if (Protocol.Equals("wss"))
+                {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
+                }
                 webSocket = new ClientWebSocket();
                 await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
                 await Receive(webSocket);
@@ -106,7 +113,7 @@ namespace SnakeClient
                     }
 
                     LogStatus(true, buffer, result.Count);
-                    string command = mybot.Process(encoder.GetString(buffer, 0, result.Count));
+                    string command = solver.Process(encoder.GetString(buffer, 0, result.Count));
 
                     Send(webSocket, command);
                 }
@@ -117,20 +124,14 @@ namespace SnakeClient
         {
             lock (consoleLock)
             {
-                //if (verbose && receiving)
-                //{
-                //    Console.WriteLine(encoder.GetString(buffer, 0, length));
-                //}
-
                 if (verbose && !receiving)
                 {
                     Console.Clear();
                     Console.Write(DateTime.Now.ToString());
                     Console.Write("  ");
 
-                    Console.WriteLine(mybot.HeadlineText);
-                    Console.WriteLine(mybot.DisplayText);
-                    Console.WriteLine(mybot.CommandText);
+                    Console.WriteLine(solver.DisplayText);
+                    Console.WriteLine(solver.CommandText);
                 }
 
                 Console.ResetColor();
