@@ -61,7 +61,7 @@ public class Gold extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        if (hidden) return; // TODO test me		
+        if (hidden) return; // TODO test me
 
         HeroItem heroItem = get(item, HeroItem.class);
         if (heroItem == null) {
