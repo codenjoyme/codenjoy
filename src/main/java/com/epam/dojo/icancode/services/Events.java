@@ -102,4 +102,13 @@ public class Events {
         result = 31 * result + goldCount;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Events{" +
+                "type=" + type +
+                ", goldCount=" + goldCount +
+                ", multiple=" + multiple +
+                '}';
+    }
 }

@@ -24,6 +24,7 @@ package com.epam.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.items.Zombie;
 import com.epam.dojo.icancode.model.items.ZombieBrain;
@@ -232,6 +233,6 @@ public class ICanCodeZombieTest extends AbstractGameTest {
 
     OngoingStubbing<Direction> givenZombie() {
         Zombie.BRAIN = mock(ZombieBrain.class);
-        return when(Zombie.BRAIN.whereToGo(any(IField.class)));
+        return when(Zombie.BRAIN.whereToGo(any(Point.class), any(IField.class)));
     }
 }

@@ -52,4 +52,8 @@ public interface IField extends GameField<Player> {
     LayeredBoardReader layeredReader();
 
     Dice dice();
+
+    ILevel getLevel();
+
+    int size();
 }

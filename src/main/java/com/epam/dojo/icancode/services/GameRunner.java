@@ -94,7 +94,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
         return MultiplayerType.TRAINING.apply(getSingleMaps().size());
     }
 
-    private ILevel loadLevel(int level) {
+    public ILevel loadLevel(int level) {
         return Levels.loadLevel(level);
     }
 

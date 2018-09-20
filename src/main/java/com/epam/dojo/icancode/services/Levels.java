@@ -31,12 +31,8 @@ import com.epam.dojo.icancode.model.interfaces.ILevel;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by oleksandr.baglai on 18.06.2016.
- */
 public final class Levels {
 
     public static int VIEW_SIZE = 20;
@@ -332,7 +328,7 @@ public final class Levels {
         return load(MULTI_LEVEL_SIMPLE_WITHOUT_LASERS);
     }
 
-    private static ILevel load(String levelMap) {
+    public static ILevel load(String levelMap) {
         return new LevelImpl(resize(decorate(levelMap), size()));
     }
 

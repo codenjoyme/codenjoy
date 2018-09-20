@@ -85,6 +85,7 @@ public class ICanCode implements Tickable, IField {
         }
     }
 
+    @Override
     public int size() {
         return level.getSize();
     }
@@ -253,6 +254,7 @@ public class ICanCode implements Tickable, IField {
         return dice;
     }
 
+    @Override
     public ILevel getLevel() {
         return level;
     }
