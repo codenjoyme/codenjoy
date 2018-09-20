@@ -22,7 +22,7 @@
 # #L%
 ###
 
-from sys import exc_info
+# from sys import exc_info
 from traceback import print_exception
 from websocket import WebSocketApp
 
@@ -42,7 +42,7 @@ def _on_message(webclient, message):
     except Exception as e:
         print("Exception occurred")
         print(e)
-        print_exception(*exc_info())
+        # print_exception(*exc_info())
 
 def _on_error(webclient, error):
     print(error)
@@ -55,8 +55,8 @@ class WebClient(WebSocketApp):
         self._server = None
         self._user = None
 
-    def run(self, server, user):
-        super().__init__("{}?user={}".format(server, user))
+    def run(self, protocol, server, user, code):
+        super().__init__("{}://{}/codenjoy-contest/ws?user={}&code={}".format(protocol, server, user, code))
         self.on_message = _on_message
         self.on_open = _on_open
         self._server = server

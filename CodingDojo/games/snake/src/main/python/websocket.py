@@ -1,8 +1,9 @@
 ###
 # #%L
 # websocket - WebSocket client library for Python
+# (https://github.com/websocket-client/websocket-client/blob/master/websocket/_core.py)
 # %%
-# Copyright (C) 2018 Codenjoy
+# Copyright (C) 2010 Hiroki Ohtani(liris)
 # %%
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public

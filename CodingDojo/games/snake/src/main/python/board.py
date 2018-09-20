@@ -25,13 +25,14 @@
 from math import sqrt
 from point import Point
 from element import Element
+from direction import Direction
 
 class Board:
     """ Class describes the Board field for Snake game."""
     def __init__(self, board_string):
         self._string = board_string.replace('\n', '')
         self._len = len(self._string)  # the length of the string
-        self._size = int(sqrt(self._len))  # size of the board 
+        self._size = int(sqrt(self._len))  # size of the board
         #print("Board size is sqrt", self._len, self._size)
 
     def _find_all(self, element):
@@ -51,81 +52,6 @@ class Board:
         """ Return True if Element is at x,y coordinates."""
         return element_object == self.get_at(x, y)
 
-    def is_barrier_at(self, x, y):
-        """ Return true if barrier is at x,y."""
-        return Point(x, y) in self.get_barriers()
-
-    def is_my_bomberman_dead(self):
-        """ Returns False if your bomberman still alive."""
-        return Element('DEAD_BOMBERMAN').get_char() in self._string
-
-    def get_bomberman(self):
-        """ Return the point where your bombermain is."""
-        points = set()
-        points.update(self._find_all(Element('BOMBERMAN')))
-        points.update(self._find_all(Element('BOMB_BOMBERMAN')))
-        points.update(self._find_all(Element('DEAD_BOMBERMAN')))
-        assert len(points) <= 1, "There should be only one bomberman"
-        return list(points)[0]
-
-    def get_other_bombermans(self):
-        """ Return the list of points for other bombermans."""
-        points = set()
-        points.update(self._find_all(Element('OTHER_BOMBERMAN')))
-        points.update(self._find_all(Element('OTHER_BOMB_BOMBERMAN')))
-        points.update(self._find_all(Element('OTHER_DEAD_BOMBERMAN')))
-        return list(points)
-
-    def get_meat_choppers(self):
-        return self._find_all(Element('MEAT_CHOPPER'))
-
-    def get_barriers(self):
-        """ Return the list of barriers Points."""
-        points = set()
-        points.update(self.get_walls())
-        points.update(self.get_bombs())
-        points.update(self.get_destroy_walls())
-        points.update(self.get_meat_choppers())
-        points.update(self.get_other_bombermans())
-        return list(points)
-        
-    def get_walls(self):
-        """ Retuns the list of walls Element Points."""
-        return self._find_all(Element('WALL'))
-
-    def get_destroy_walls(self):
-        """ """
-        return  self._find_all(Element('DESTROY_WALL'))
-        
-    def get_bombs(self):
-        """ Returns the list of bombs points."""
-        points = set()
-        points.update(self._find_all(Element('BOMB_TIMER_1')))
-        points.update(self._find_all(Element('BOMB_TIMER_2')))
-        points.update(self._find_all(Element('BOMB_TIMER_3')))
-        points.update(self._find_all(Element('BOMB_TIMER_4')))
-        points.update(self._find_all(Element('BOMB_TIMER_5')))
-        points.update(self._find_all(Element('BOMB_BOMBERMAN')))
-        return list(points)
-
-    def get_blasts(self):
-        return self._find_all(Element('BOOM'))
-
-    def get_future_blasts(self):
-        _bombs = set()
-        _bombs.update(self.get_bombs())
-        _bombs.update(self._find_all(Element('OTHER_BOMB_BOMBERMAN')))
-        _points = set()
-        for _bomb in _bombs:
-            _bx, _by = _bomb.get_x(), _bomb.get_y()
-            _points.update(_bomb)
-            _points.update([Point(x, y) for x, y in ((_bx + 1, _by),
-                                                     (_bx - 1, _by),
-                                                     (_bx, _by + 1),
-                                                     (_bx, _by - 1))])
-        return ([_pt for _pt in _points if not (_pt.is_bad(self._size) or
-                                                _pt in self.get_walls())])
-        
     def is_near(self, x, y, elem):
         _is_near = False
         if not Point(x, y).is_bad(self._size):
@@ -144,18 +70,95 @@ class Board:
                     _near_count += 1
         return _near_count
 
+    def get_snake_direction(self):
+        """ Return the snake head direction."""
+        head = self.get_head()
+        if not head:
+            return None
+
+        if self.is_at(head.get_x(), head.get_y(), Element('HEAD_LEFT')):
+            return Direction('LEFT')
+        elif self.is_at(head.get_x(), head.get_y(), Element('HEAD_RIGHT')):
+            return Direction('RIGHT')
+        elif self.is_at(head.get_x(), head.get_y(), Element('HEAD_UP')):
+            return Direction('UP')
+        else:
+            return Direction('DOWN')
+
+    def get_head(self):
+        """ Return the point where your snake head is."""
+        points = set()
+        points.update(self._find_all(Element('HEAD_UP')))
+        points.update(self._find_all(Element('HEAD_DOWN')))
+        points.update(self._find_all(Element('HEAD_LEFT')))
+        points.update(self._find_all(Element('HEAD_RIGHT')))
+        if not points:
+            return None
+        else:
+            return list(points)[0]
+
+    def get_snake(self):
+        """ Return all points where your snake body (with head) is."""
+        head = self.get_head()
+        if not head:
+            return None
+        else:
+            result = set();
+            result.update(self._find_all(Element('TAIL_END_DOWN')))
+            result.update(self._find_all(Element('TAIL_END_DOWN')))
+            result.update(self._find_all(Element('TAIL_END_LEFT')))
+            result.update(self._find_all(Element('TAIL_END_UP')))
+            result.update(self._find_all(Element('TAIL_END_RIGHT')))
+            result.update(self._find_all(Element('TAIL_HORIZONTAL')))
+            result.update(self._find_all(Element('TAIL_VERTICAL')))
+            result.update(self._find_all(Element('TAIL_LEFT_DOWN')))
+            result.update(self._find_all(Element('TAIL_LEFT_UP')))
+            result.update(self._find_all(Element('TAIL_RIGHT_DOWN')))
+            result.update(self._find_all(Element('TAIL_RIGHT_UP')))
+            return list(result)
+
+    def get_apples(self):
+        """ Return the list of points for apples."""
+        return self._find_all(Element('GOOD_APPLE'))
+
+    def get_stones(self):
+        """ Return the list of points for stones."""
+        return self._find_all(Element('BAD_APPLE'))
+
+    def get_barriers(self):
+        """ Return the list of points for barriers."""
+        points = set()
+        points.update(self.get_stones())
+        points.update(self.get_walls())
+        return list(points)
+
+    def is_barrier_at(self, x, y):
+        """ Return true if barrier is at x,y."""
+        return Point(x, y) in self.get_barriers()
+
+    def is_snake_alive(self):
+        """ Returns True if your snake still alive."""
+        if self.get_head():
+            return True
+        else:
+            return False
+
+    def get_walls(self):
+        """ Retuns the list of walls."""
+        return self._find_all(Element('BREAK'))
+
     def to_string(self):
-        return ("Board:\n{brd}\nBomberman at: {mbm}\nOther Bombermans "
-                "at: {obm}\nMeat Choppers at: {mcp}\nDestroy Walls at:"
-                " {dwl}\nBombs at: {bmb}\nBlasts at: {bls}\nExpected "
-                "Blasts at: {ebl}".format(brd=self._line_by_line(),
-                                          mbm=self.get_bomberman(),
-                                          obm=self.get_other_bombermans(),
-                                          mcp=self.get_meat_choppers(),
-                                          dwl=self.get_destroy_walls(),
-                                          bmb=self.get_bombs(),
-                                          bls=self.get_blasts(),
-                                          ebl=self.get_future_blasts())
+        return ("Board:\n{brd}\n"
+                "Apple at: {apl}\n"
+                "Stones at: {stn}\n"
+                'Head at: {hed}\n'
+                "Snake at: {snk}\n"
+                "Current direction: {dir}".format(brd=self._line_by_line(),
+                                          apl=self.get_apples(),
+                                          stn=self.get_stones(),
+                                          hed=self.get_head(),
+                                          snk=self.get_snake(),
+                                          dir=self.get_snake_direction())
         )
 
     def _line_by_line(self):
@@ -170,7 +173,6 @@ class Board:
 
     def _xy2strpos(self, x, y):
         return self._size * y + x
-
 
 if __name__ == '__main__':
     raise RuntimeError("This module is not designed to be ran from CLI")
