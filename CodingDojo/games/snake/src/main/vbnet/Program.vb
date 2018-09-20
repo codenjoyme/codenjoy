@@ -9,7 +9,7 @@ Imports System.Threading.Tasks
 Module Program
 
     'Server name and port number -- ask orgs
-    Private Property ServerNameAndPort As String = "epruryaw0576:8080"
+    Private Property ServerNameAndPort As String = "dojo.lab.epam.com"
 
     'Register on the server, write down your registration name
     Private Property UserName As String = "your@email.com"
