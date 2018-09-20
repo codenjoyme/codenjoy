@@ -1,5 +1,24 @@
-# Copyright (c) 2010-2018 Benjamin Peterson
+###
+# #%L
+# Six is a Python 2 and 3 compatibility library. It provides utility functions
+# for smoothing over the differences between the Python versions with the goal
+# of writing Python code that is compatible on both Python versions. See the
+# documentation for more information on what is provided.
 #
+# Six supports every Python version since 2.6. It is contained in only one
+# Python file, so it can be easily copied into your project. (The copyright
+# and license notice must be retained.)
+#
+# Online documentation is at https://six.readthedocs.io/.
+#
+# Bugs can be reported to https://github.com/benjaminp/six. The code can also
+# be found there.
+#
+# For questions about six or porting in general, email the python-porting
+# mailing list: https://mail.python.org/mailman/listinfo/python-porting
+# %%
+# Copyright (C) 2010-2018 Benjamin Peterson
+# %%
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -17,6 +36,8 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+# #L%
+###
 
 """Utilities for writing code that runs on Python 2 and 3"""
 
