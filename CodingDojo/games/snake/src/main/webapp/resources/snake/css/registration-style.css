@@ -74,6 +74,7 @@ input:-webkit-autofill {
 
 .logo img {
     vertical-align: middle;
+    width: 45px;
 }
 
 .logo::before {
@@ -101,14 +102,14 @@ input:-webkit-autofill {
     margin-left: 15px;
 }
 
-a {
-    color: #fff;
-    text-decoration: none;
+body a {
+  color: #fff;
+  text-decoration: none;
 }
 
-a:hover,
+body a:hover,
 a:visited {
-    color: #fff;
+  color: #fff;
 }
 
 .form-registr {

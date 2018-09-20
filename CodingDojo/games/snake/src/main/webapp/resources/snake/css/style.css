@@ -91,6 +91,7 @@ ul {
 
 .logo img {
   vertical-align: middle;
+  width: 45px;
 }
 
 .logo::before {
@@ -183,16 +184,13 @@ ul {
   color: #fff;
 }
 
-a {
+body a {
   color: #fff;
   text-decoration: none;
 }
 
-a:hover!important {
-  color: #fff;
-}
-
-a:visited!important {
+body a:hover,
+a:visited {
   color: #fff;
 }
 
