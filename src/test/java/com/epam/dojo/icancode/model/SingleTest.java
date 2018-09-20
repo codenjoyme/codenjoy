@@ -89,10 +89,10 @@ public class SingleTest {
 
         MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length - 1);
         single1 = new Single(player1, gameRunner.getPrinterFactory(), type);
-        player1LoadLevel(0);
+        player1TryLoadLevel(0);
 
         single2 = new Single(player2, gameRunner.getPrinterFactory(), type);
-        player2LoadLevel(0);
+        player2TryLoadLevel(0);
     }
 
     private Hero hero1() {
@@ -621,12 +621,17 @@ public class SingleTest {
         }
 
         int index = levels.indexOf(field.getLevel());
-        loadLevel(single, levels, index + 1);
+        loadLevel(single, levels, index + 1, false);
     }
 
-    private boolean loadLevel(Single single, List<ILevel> levels, int index) {
+    private boolean loadLevel(Single single, List<ILevel> levels, int index, boolean ask) {
         LevelProgress progress = single.getProgress();
-        progress.change(index, index - 1);
+        if (ask) {
+            if (!progress.canChange(index)) {
+                return false;
+            }
+        }
+        progress.change(index, Math.max(progress.getPassed(), index - 1));
         if (!progress.isValid()) {
             return false;
         }
@@ -1431,7 +1436,7 @@ public class SingleTest {
         shouldAllLevelsAreDone();
 
         // when try to change level 1  - success from multiple to single
-        player1LoadLevel(0);
+        player1TryLoadLevel(0);
         tick();
 
         // then
@@ -1448,7 +1453,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success from single to single
-        player1LoadLevel(1);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -1465,7 +1470,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success from single to single
-        player1LoadLevel(2);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -1482,7 +1487,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success from single to multiple
-        player1LoadLevel(3);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -1501,7 +1506,7 @@ public class SingleTest {
         // when try to change level 500 - fail
         hero1().right();
         tick();
-        player1LoadLevel(500);
+        player1TryLoadLevel(500);
         tick();
 
         // then
@@ -1518,7 +1523,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success from multiple to single
-        player1LoadLevel(1);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -1536,14 +1541,14 @@ public class SingleTest {
 
     }
 
-    void player1LoadLevel(int index) {
-        if (loadLevel(single1, singles1, index)) {
+    void player1TryLoadLevel(int index) {
+        if (loadLevel(single1, singles1, index, true)) {
             single1.newGame();
         }
     }
 
-    void player2LoadLevel(int index) {
-        if (loadLevel(single2, singles2, index)) {
+    void player2TryLoadLevel(int index) {
+        if (loadLevel(single2, singles2, index, true)) {
             single2.newGame();
         }
     }
@@ -1554,7 +1559,7 @@ public class SingleTest {
         shouldAllLevelsAreDone();
 
         // when win on level then try to change to last - success
-        player1LoadLevel(3);
+        player1TryLoadLevel(3);
         tick();
         tick();
         hero1().right();
@@ -1574,7 +1579,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3 (previous) - success
-        player1LoadLevel(2);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -2075,7 +2080,7 @@ public class SingleTest {
                 "----");
 
         // when
-        player2LoadLevel(0);
+        player2TryLoadLevel(0);
         tick(single1);
         tick(single2);
 
@@ -2105,4 +2110,965 @@ public class SingleTest {
                 "----");
     }
 
+    @Test
+    public void shouldAllLevelsAreDone_case2() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘",
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘",
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘"
+        );
+
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when done 1 level - go to 2
+        hero1().right();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when done 2 level - go to 3
+        hero1().down();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when done 3 level - go to 4
+        hero1().left();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when done 4 level - start 4 again
+        hero1().up();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when done 4 level - start 4 again
+        hero1().up();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+    }
+
+    @Test
+    public void shouldChangeLevelWhenAllLevelsAreDone() {
+        // given
+        shouldAllLevelsAreDone_case2();
+
+        // when try to change level 1  - success
+        player1TryLoadLevel(0);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level 4 - success
+        player1TryLoadLevel(3);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 2  - success
+        player1TryLoadLevel(1);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when try to change level 4 - success
+        player1TryLoadLevel(3);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 3  - success
+        player1TryLoadLevel(2);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 4 - success
+        player1TryLoadLevel(3);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 500 - fail
+        hero1().right();
+        tick();
+        player1TryLoadLevel(500);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 2 - success
+        player1TryLoadLevel(1);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+    }
+
+    @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother() {
+        // given
+        shouldAllLevelsAreDone_case2();
+
+        // when win on level then try to change to last - success
+        player1TryLoadLevel(1);
+        tick();
+        hero1().down();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 4 - success
+        player1TryLoadLevel(3);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+    }
+
+    @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother_caseWhenGoToMultiple() {
+        // given
+        shouldAllLevelsAreDone_case2();
+
+        // when win on level then try to change to last - success
+        player1TryLoadLevel(2);
+        tick();
+        hero1().left();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 4 - success
+        player1TryLoadLevel(3);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+    }
+
+    @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple_case2() {
+        // given
+        shouldAllLevelsAreDone_case2();
+
+        // when win on level then try to change to last - success
+        player1TryLoadLevel(3);
+        tick();
+        hero1().right();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 3 (previous) - success
+        player1TryLoadLevel(2);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+    }
+
+    @Test
+    public void shouldResetLevelWhenAllLevelsAreDone() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘",
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘",
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘"
+        );
+
+        hero1().down();
+        tick();
+
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when done 1 level - go to 2
+        hero1().right();
+        tick();
+        tick();
+        hero1().left();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when done 2 level - go to 3
+        hero1().down();
+        tick();
+        tick();
+        hero1().up();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when done 3 level - go to 4
+        hero1().left();
+        tick();
+        tick();
+        hero1().right();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when done 4 level - start 4 again
+        hero1().up();
+        tick();
+        tick();
+        hero1().right();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 1  - success
+        player1TryLoadLevel(0);
+        tick();
+        tick();
+        hero1().down();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level 2  - success
+        player1TryLoadLevel(1);
+        tick();
+        tick();
+        hero1().left();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when try to change level 3  - success
+        player1TryLoadLevel(2);
+        tick();
+        tick();
+        hero1().up();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 4 - success
+        player1TryLoadLevel(3);
+        tick();
+        tick();
+        hero1().right();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 500 - fail
+        hero1().right();
+        tick();
+        tick();
+        player1TryLoadLevel(500);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 2 - success
+        player1TryLoadLevel(1);
+        tick();
+        tick();
+        hero1().left();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero1().reset();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+    }
+
+    @Test
+    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘",
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘",
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘"
+        );
+
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when done level 1 - go to level 2
+        hero1().right();
+        tick();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when try to change level to 1 - success
+        player1TryLoadLevel(0);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level to 2 - success
+        player1TryLoadLevel(1);
+        tick();
+        hero1().left();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level to 3 - fail
+        player1TryLoadLevel(2);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level 4 - fail
+        player1TryLoadLevel(3);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level to 1 - success
+        player1TryLoadLevel(0);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+    }
 }
