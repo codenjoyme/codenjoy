@@ -27,8 +27,8 @@ import com.epam.dojo.icancode.model.Elements;
 
 public class ZombiePot extends FieldItem implements Tickable {
 
-    public static int TICKS = 5;
-    public static int COUNT = 6;
+    public static int TICKS = 10*2;
+    public static int COUNT = 4;
 
     private int time = 0;
 
