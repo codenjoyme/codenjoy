@@ -28,9 +28,6 @@ import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
-/**
- * Created by Mikhail_Udalyi on 09.06.2016.
- */
 public class Gold extends BaseItem {
 
     private boolean hidden;

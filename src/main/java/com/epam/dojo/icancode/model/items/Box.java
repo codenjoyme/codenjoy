@@ -30,9 +30,6 @@ import com.epam.dojo.icancode.model.enums.FeatureItem;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by oleksandr.baglai on 24.06.2016.
- */
 public class Box extends FieldItem {
 
     public Box(Elements el) {

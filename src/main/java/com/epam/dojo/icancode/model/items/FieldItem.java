@@ -27,9 +27,6 @@ import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.enums.FeatureItem;
 import com.epam.dojo.icancode.model.interfaces.IField;
 
-/**
- * Created by Mikhail_Udalyi on 05.07.2016.
- */
 public class FieldItem extends BaseItem {
 
     protected IField field;

@@ -30,9 +30,6 @@ import java.util.Map;
 
 import static com.epam.dojo.icancode.model.Elements.*;
 
-/**
- * Created by indigo on 2016-09-22.
- */
 public class ElementsMapper {
 
     public static Map<Elements, Class<? extends BaseItem>> map =
