@@ -122,28 +122,6 @@ public final class Levels {
             " #B...O$..O......#  " +
             " #################  ";
 
-    public static final String MULTI_LEVEL_SIMPLE_ZOMBIES =
-            "    ############### " +
-            "    #Z.....E...$.Z# " +
-            "    #B...O###B....# " +
-            "  ###.B.B.# #.....# " +
-            "  #.$.....# #B.$..# " +
-            "  #...B#### ##..O.# " +
-            "  #.O..#     ###..# " +
-            "  #..$.#####   #.O# " +
-            "  #BB......#####..# " +
-            "  ######.B........# " +
-            "       ##....###### " +
-            " #####  #.O..#      " +
-            " #.$.#  #.$.B###### " +
-            " #...####.......O.# " +
-            " #....O...####B...# " +
-            " ####..$..#  ###### " +
-            "    #...O.#         " +
-            " ####....B########  " +
-            " #S...O$........S#  " +
-            " #################  ";
-
     public static final String MULTI_LEVEL_SIMPLE =
             "    ############### " +
             "    #˃.........$.˅# " +
@@ -336,14 +314,100 @@ public final class Levels {
             "                " +
             "                ";
 
+    public static final String LEVEL_ZOMBIE_1 =
+            "              " +
+            "              " +
+            " ############ " +
+            " #......$...# " +
+            " #.########.# " +
+            " #.#      #.# " +
+            " #$# #### #.# " +
+            " #.# #.Z# #E# " +
+            " #.# #.## #.# " +
+            " #.# #.#  #.# " +
+            " #.# #.####.# " +
+            " #S# #......# " +
+            " ### ######## " +
+            "              ";
+
+    public static final String LEVEL_ZOMBIE_2 =
+            "          " +
+            " ######## " +
+            " #S.....# " +
+            " #..###.# " +
+            " #..# #.# " +
+            " #.$###.# " +
+            " #......# " +
+            " #..$..E# " +
+            " ######## " +
+            "          ";
+
+    public static final String LEVEL_ZOMBIE_3 =
+            "             " +
+            "   #######   " +
+            "   #S.O..#   " +
+            "   ####.$#   " +
+            "      #..#   " +
+            "   ####..### " +
+            "   #$B.OO..# " +
+            "   #.###...# " +
+            "   #$# #$..# " +
+            "   #.###..E# " +
+            "   #Z...$..# " +
+            "   ######### " +
+            "             ";
+
+    public static final String LEVEL_ZOMBIE_4 =
+            "              " +
+            "   ########   " +
+            "   #S...B.#   " +
+            "   ###B...#   " +
+            "     #B...#   " +
+            "   ###$B..####" +
+            "   #$...B...B#" +
+            "   #.#####...#" +
+            "   #.#   #..Z#" +
+            "   #.#####B..#" +
+            "   #.E.....B.#" +
+            "   ###########" +
+            "              " +
+            "              ";
+
+    public static final String MULTI_LEVEL_SIMPLE_ZOMBIES =
+            "    ############### " +
+            "    #Z.....E...$.Z# " +
+            "    #B...O###B....# " +
+            "  ###.B.B.# #.....# " +
+            "  #.$.....# #B.$..# " +
+            "  #...B#### ##..O.# " +
+            "  #.O..#     ###..# " +
+            "  #..$.#####   #.O# " +
+            "  #BB......#####..# " +
+            "  ######.B........# " +
+            "       ##....###### " +
+            " #####  #.O..#      " +
+            " #.$.#  #.$.B###### " +
+            " #...####.......O.# " +
+            " #....O...####B...# " +
+            " ####..$..#  ###### " +
+            "    #...O.#         " +
+            " ####....B########  " +
+            " #S...O$........S#  " +
+            " #################  ";
+
     public static ILevel loadLevel(int level) {
-        return load(getSingleMaps().get(level));
+        return load(getSingleZombieMaps().get(level));
     }
 
     public static List<String> getSingleMaps() {
         return Arrays.asList(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                 LEVEL_7A, LEVEL_8A, LEVEL_9A,
                 LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C, LEVEL_1D);
+    }
+
+    public static List<String> getSingleZombieMaps() {
+        return Arrays.asList(LEVEL_ZOMBIE_1, LEVEL_ZOMBIE_2,
+                LEVEL_ZOMBIE_3, LEVEL_ZOMBIE_4);
     }
 
     public static ILevel getMultiple() {
