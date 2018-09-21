@@ -45,6 +45,8 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     private boolean flying;
     private boolean reset;
     private boolean laser;
+    private boolean fire;
+    private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
     private int goldCount;
@@ -69,6 +71,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         direction = null;
         win = false;
         jump = false;
+        fire = false;
         pull = false;
         landOn = false;
         reset = false;
@@ -175,6 +178,10 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         act(2);
     }
 
+    public void fire() {
+        act(3);
+    }
+
     @Override
     public void act(int... p) {
         if (!alive) {
@@ -187,6 +194,8 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             }
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
+        } else if (p.length == 1 && p[0] == 3) { // TODO test me
+            fire = true;
         } else if (p[0] == 0) {
             reset = true;
         } else if (p[0] == -1) { // TODO test me
@@ -246,6 +255,13 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         if (jump) {
             flying = true;
             jump = false;
+        }
+
+        if (fire) {
+            fireDirection = direction;
+            fire = false;
+            direction = null;
+            fireLaser();
         }
 
         if (direction != null) {
@@ -368,5 +384,12 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     public void dieOnZombie() {
         laser = true; // TODO может сделать зеленым его?
         die();
+    }
+
+    private void fireLaser() {
+        if (fireDirection != null) {
+            field.fire(fireDirection, item.getCell());
+            fireDirection = null;
+        }
     }
 }

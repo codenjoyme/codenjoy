@@ -29,9 +29,6 @@ import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
-/**
- * Created by oleksandr.baglai on 20.06.2016.
- */
 public class Laser extends FieldItem implements Tickable {
 
     private final Direction direction;

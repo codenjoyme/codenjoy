@@ -24,6 +24,8 @@ package com.epam.dojo.icancode.model.interfaces;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.epam.dojo.icancode.model.Player;
@@ -57,6 +59,8 @@ public interface IField extends GameField<Player> {
     Dice dice();
 
     ILevel getLevel();
+
+    void fire(Direction direction, Point from);
 
     int size();
 

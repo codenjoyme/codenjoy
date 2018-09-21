@@ -23,10 +23,7 @@ package com.epam.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.epam.dojo.icancode.model.interfaces.IField;
@@ -57,6 +54,18 @@ public class ICanCode implements Tickable, IField {
         this.dice = dice;
         this.isMultiplayer = isMultiplayer;
         players = new LinkedList();
+    }
+
+    @Override
+    public void fire(Direction direction, Point from) {
+        Point to = direction.change(from);
+        move(newLaser(direction), to.getX(), to.getY());
+    }
+
+    private Laser newLaser(Direction direction) {
+        Laser laser = new Laser(direction);
+        laser.setField(this);
+        return laser;
     }
 
     @Override

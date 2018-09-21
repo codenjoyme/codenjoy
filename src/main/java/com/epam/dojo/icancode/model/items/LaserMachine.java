@@ -29,9 +29,6 @@ import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.enums.FeatureItem;
 
-/**
- * Created by oleksandr.baglai on 20.06.2016.
- */
 public class LaserMachine extends FieldItem implements Tickable {
 
     private static final int CHARGED = 6;
@@ -78,18 +75,10 @@ public class LaserMachine extends FieldItem implements Tickable {
         if (timer == CHARGED) {
             timer = 0;
 
-            int newX = direction.changeX(getCell().getX());
-            int newY = direction.changeY(getCell().getY());
-
-            field.move(newLaser(), newX, newY);
+            field.fire(direction, getCell());
         } else {
             timer++;
         }
     }
 
-    private Laser newLaser() {
-        Laser laser = new Laser(direction);
-        laser.setField(field);
-        return laser;
-    }
 }
