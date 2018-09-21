@@ -55,7 +55,13 @@ function initJoystick(playerName, registered, code, contextPath) {
             case 39 : return "right";
             case 40 : return "down";
             case 32 : return "act";
-            default : null;
+            default : {
+                if (keyCode >= 48 && keyCode <= 57) {
+                    return "act(" + (keyCode - 48) + ")"
+                } else {
+                    return null;
+                }
+            };
         }
     }
 
