@@ -89,7 +89,7 @@ public class Player extends GamePlayer<Hero, IField> {
 
         @Override
         public int getLevel() {
-            return 0;
+            return 0; // TODO а тут что вернуть?
         }
 
         @Override
