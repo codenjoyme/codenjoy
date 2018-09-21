@@ -19,3 +19,5 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+ var doNothing = true;
