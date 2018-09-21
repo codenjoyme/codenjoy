@@ -174,8 +174,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var drawChar = function(plotIndex) {
                 var x = 0;
                 var y = boardSize - 1;
-                for (var charIndex in layers[0]) {
-                    for (var layerIndex in layers) {
+                for (var charIndex = 0; charIndex < layers[0].length; charIndex++) {
+                    for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
                         var layer = layers[layerIndex];
                         var color = layer[charIndex];
                         if (!isDrawByOrder || plotIndex == color) {
@@ -250,7 +250,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 }
 
                 var board = getBoard();
-                if (isMultiplayer || !!board.showName) {
+                if (isMultiplayer || !!board.showName) { // TODO а точно тут это надо showName
                     var currentPoint = null;
                     var currentHeroData = null;
                     var heroesData = getHeroesData(isMultiplayer);
@@ -267,7 +267,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             currentPoint = point;
                             currentHeroData = heroData;
                         }
-                        if (!board.onlyMyName && !!heroData.multiplayer) {
+                        var progress = board.levelProgress; // TODO это тоже относится к TRAINING типу игры
+                        var isPlayerOnSingleBoard = progress.current < progress.total;
+                        if (!isPlayerOnSingleBoard && !!heroData.multiplayer) {
                             drawName(name, point, font, heroData);
                         }
                     }
