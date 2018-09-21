@@ -117,7 +117,17 @@ var initLevelInfo = function() {
         'Coordinate {x:0, y:0} in the left-top corner of board.<br>' +
         'Try this code for check Robot position.<br>' +
         '<pre>robot.log(scanner.getMe());</pre>\n' +
-        'So you should collect all the golden bags in the Maze.<br>',
+        'So you should collect all the golden bags in the Maze.<br>' +
+        'On this Maze you can also see a laser machines ("LASER_MACHINE").<br>' +
+        'Each machine is periodically fired lasers.<br>' +
+        'When laser machine is ready to fire ("LASER_MACHINE_READY") it shoots after the second. ' +
+        'You can check the direction of laser by "LASER_UP", "LASER_DOWN", ' +
+        '"LASER_LEFT" or "LASER_RIGHT" element.<br>' +
+        'There are 3 ways to cheat laser: move the box in front of laser, ' +
+        'jump over laser and jump in place:<br>' +
+        '<pre>robot.jump();\n' +
+        'robot.jumpLeft();\n' +
+        'robot.pullLeft();</pre>',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    var dest = scanner.getGold();\n' +
