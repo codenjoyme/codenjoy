@@ -357,6 +357,8 @@ button:focus {
 
 .help-description {
   margin: 10px;
+  height: 400px;
+  overflow-y: auto;
 }
 
 a.modalCloseImg {
