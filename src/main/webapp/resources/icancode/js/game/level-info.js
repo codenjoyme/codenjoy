@@ -127,7 +127,13 @@ var initLevelInfo = function() {
         'jump over laser and jump in place:<br>' +
         '<pre>robot.jump();\n' +
         'robot.jumpLeft();\n' +
-        'robot.pullLeft();</pre>',
+        'robot.pullLeft();</pre>' +
+        'Another way to get lasershow on board - fire. There are several method for the Robot:' +
+        '<pre>robot.fireLeft();\n' +
+        'robot.fireRight();\n' +
+        'robot.fireUp();\n' +
+        'robot.fireDown();\n' +
+        'robot.fire("LEFT");</pre>',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    var dest = scanner.getGold();\n' +
@@ -138,6 +144,14 @@ var initLevelInfo = function() {
         '}',
         'winCode':'',
         'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['fireLeft()', 'fireUp()', 'fireLeft()', 'fireRight()', 'fire()']
+            },
+            '.fire(':{
+                'synonyms':[],
+                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
+            },
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
                 'values':['getGold()', 'getExit()', 'getShortestWay()', 'getMe()']

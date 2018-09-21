@@ -138,6 +138,21 @@ function initRobot(logger, controller) {
         pullDown : function() {
             this.pull(Direction.DOWN.name());
         },
+        fire : function(direction) {
+            doTogether(direction, 'FIRE');
+        },
+        fireLeft : function() {
+            this.fire(Direction.LEFT.name());
+        },
+        fireRight : function() {
+            this.fire(Direction.RIGHT.name());
+        },
+        fireUp : function() {
+            this.fire(Direction.UP.name());
+        },
+        fireDown : function() {
+            this.fire(Direction.DOWN.name());
+        },
         getMemory : function() {
             return {
                 has : function(key) {

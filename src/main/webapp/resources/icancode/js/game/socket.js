@@ -105,6 +105,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
         command = replace(command, 'WAIT', 'STOP');
         command = replace(command, 'JUMP', 'ACT(1)');
         command = replace(command, 'PULL', 'ACT(2)');
+        command = replace(command, 'FIRE', 'ACT(3)');
         command = replace(command, 'RESET', 'ACT(0)');
         command = replace(command, 'WIN', 'ACT(-1)');
         return command;
