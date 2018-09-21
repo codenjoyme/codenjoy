@@ -48,6 +48,7 @@ var initLevelInfo = function() {
     levelInfo[1] = {
         'help':'Robot asks for new orders every second. He should know where to go.<br>' +
         'Help him - write program and save him from the Maze. <br>' +
+        'Hurry, the zombies are not as fast as you.<br>' +
         'The code looks like this:<br>' +
         '<pre>function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -91,7 +92,7 @@ var initLevelInfo = function() {
                 'synonyms':[],
                 'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()', 'getScanner()',
                         'cameFrom()', 'previousDirection()', 'go()', 'log()']
-            }
+            },
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
                 'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()', 'at()']
@@ -99,7 +100,7 @@ var initLevelInfo = function() {
             ' == ':{
                 'synonyms':[' != '],
                 'values':['\'WALL\'', '\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'', 'null']
-            }
+            },
             '.at(':{
                 'synonyms':['.go('],
                 'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
@@ -131,7 +132,11 @@ var initLevelInfo = function() {
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
                 'values':['getGold()', 'getExit()', 'getShortestWay()', 'getMe()']
-            }
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'GOLD\'']
+            },
         }
     };
 
@@ -148,14 +153,15 @@ var initLevelInfo = function() {
         'robot.jumpUp();\n' +
         'robot.jumpDown();\n' +
         'robot.jump("LEFT");</pre>' +
-        'Also you can add new method to robot by:' +
+        'By the way, we did not tell you, but through zombies you can also jump over.<br>' +
+        'If you want to find Zombie on map - try use "FEMALE_ZOMBIE" or "MALE_ZOMBIE" element.<br>' +
+        'Also you can add your own method to robot by:' +
         '<pre>robot.doSmthNew = function(parameter) {\n' +
         '    // some statement here\n' +
         '}</pre>' +
         'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[2].winCode,
-        '}',
-        'winCode':'' +
+        'winCode':'',
         'autocomplete':{
             'robot.':{
                 'synonyms':[],
@@ -167,7 +173,7 @@ var initLevelInfo = function() {
             },
             ' == ':{
                 'synonyms':[' != '],
-                'values':['\'HOLE\'']
+                'values':['\'HOLE\'', '\'FEMALE_ZOMBIE\'', '\'MALE_ZOMBIE\'']
             }
         }
     };
@@ -183,7 +189,7 @@ var initLevelInfo = function() {
         'robot.pullUp();</pre>' +
         'If you want to find box on map - try use "BOX" element.<br>' +
         'Remember! Your program should work for all previous levels too.',
-        'defaultCode':levelInfo[12].winCode,
+        'defaultCode':levelInfo[3].winCode,
         'winCode':'',
         'autocomplete':{
             'robot.':{
