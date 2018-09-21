@@ -725,4 +725,24 @@ public class PlayerGamesTest {
                 playerGames.get("player2")
                         .getGame().getProgress().toString());
     }
+
+    @Test
+    public void whatIfTwoPlayersForDifferentTrainings() {
+        // given
+        // TODO обрати внимание, тут 3 и 5 - для ожной игры, нельзя такого допускать
+        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(5));
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':5,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
 }
