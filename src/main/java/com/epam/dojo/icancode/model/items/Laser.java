@@ -65,15 +65,19 @@ public class Laser extends FieldItem implements Tickable {
 
     @Override
     public void action(IItem item) {
-        HeroItem heroItem = get(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
+        HeroItem heroItem = getIf(item, HeroItem.class);
+        if (heroItem != null) {
+            Hero hero = heroItem.getHero();
+            if (!hero.isFlying()) {
+                removeFromCell();
+                hero.dieOnLaser();
+            }
         }
 
-        Hero hero = heroItem.getHero();
-        if (!hero.isFlying()) {
+        Zombie zombie = getIf(item, Zombie.class); // TODO test me
+        if (zombie != null) {
             removeFromCell();
-            hero.dieOnLaser();
+            zombie.removeFromCell();
         }
     }
 

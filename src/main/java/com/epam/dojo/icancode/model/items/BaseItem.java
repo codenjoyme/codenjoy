@@ -71,7 +71,7 @@ public abstract class BaseItem implements IItem {
         return items;
     }
 
-    protected <T> T get(Object item, Class<T> clazz) {
+    protected <T> T getIf(Object item, Class<T> clazz) {
         if (item == null) {
             return null;
         }

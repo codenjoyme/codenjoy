@@ -22,11 +22,12 @@ package com.epam.dojo.icancode.model.items;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.Player;
 
-public class HeroItem extends FieldItem {
+public class HeroItem extends FieldItem implements Tickable {
 
     private Hero hero;
 
@@ -45,5 +46,10 @@ public class HeroItem extends FieldItem {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return hero.state(player, alsoAtPoint);
+    }
+
+    @Override
+    public void tick() {
+        hero.tick();
     }
 }

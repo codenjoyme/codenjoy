@@ -30,7 +30,7 @@ import com.epam.dojo.icancode.model.interfaces.IItem;
 
 public class Zombie extends FieldItem implements Tickable {
 
-    public static final int PER_TICK = 2;
+    public static int WALK_EACH_TICKS = 2;
     public static ZombieBrain BRAIN = new ZombieBrain();
     private int ticks = 0;
 
@@ -44,7 +44,7 @@ public class Zombie extends FieldItem implements Tickable {
 
     @Override
     public void action(IItem item) {
-        HeroItem heroItem = get(item, HeroItem.class);
+        HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem == null) {
             return;
         }
@@ -58,7 +58,7 @@ public class Zombie extends FieldItem implements Tickable {
 
     @Override
     public void tick() {
-        if (++ticks % PER_TICK == 0) {
+        if (ticks++ % WALK_EACH_TICKS == 0) {
             return;
         }
 

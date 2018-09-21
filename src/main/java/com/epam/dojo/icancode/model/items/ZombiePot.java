@@ -27,8 +27,8 @@ import com.epam.dojo.icancode.model.Elements;
 
 public class ZombiePot extends FieldItem implements Tickable {
 
-    public static int TICKS = 10*2;
-    public static int COUNT = 4;
+    public static int TICKS_PER_NEW_ZOMBIE = 20;
+    public static int COUNT_ZOMBIES_ON_MAP = 4;
 
     private int time = 0;
 
@@ -38,8 +38,8 @@ public class ZombiePot extends FieldItem implements Tickable {
 
     @Override
     public void tick() {
-        if (++time % TICKS == 0) {
-            if (field.zombies().size() < COUNT) {
+        if (++time % TICKS_PER_NEW_ZOMBIE == 0) {
+            if (field.zombies().size() < COUNT_ZOMBIES_ON_MAP) {
                 field.move(newZombie(), this.getCell().getX(), this.getCell().getY());
             }
         }

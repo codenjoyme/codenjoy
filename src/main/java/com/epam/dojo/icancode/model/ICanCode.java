@@ -68,16 +68,27 @@ public class ICanCode implements Tickable, IField {
         return laser;
     }
 
+    int priority(Object o) {
+        if (o instanceof HeroItem) return 12;
+        if (o instanceof ZombiePot) return 10;
+        if (o instanceof Zombie) return 8;
+        if (o instanceof LaserMachine) return 6;
+        if (o instanceof Box) return 5;
+        if (o instanceof Laser) return 4;
+        return 2;
+    }
+
     @Override
     public void tick() {
-        for (Player player : players) {
-            player.tick();
-        }
+        level.getItems(HeroItem.class).stream()
+                .map(it -> (HeroItem)it)
+                .forEach(HeroItem::tick);
 
-        for (IItem item : level.getItems(Tickable.class)) {
-            if (item instanceof HeroItem) {
-                continue;
-            }
+        List<IItem> items = level.getItems(Tickable.class);
+//        Collections.sort(items,
+//                (o1, o2) -> Integer.compare(priority(o2), priority(o1)));
+        for (IItem item : items) {
+            if (item instanceof HeroItem) continue;
 
             ((Tickable) item).tick();
         }

@@ -46,7 +46,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombieFemaleStart() {
         // given
-        ZombiePot.TICKS = 3;
+        ZombiePot.TICKS_PER_NEW_ZOMBIE = 3;
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -81,9 +81,29 @@ public class ICanCodeZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombieCanWalk() {
         // given
+        ZombiePot.TICKS_PER_NEW_ZOMBIE = 10;
+        Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP);
 
-        shouldZombieFemaleStart();
+        givenFl("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║...Z│" +
+                "└────┘");
+
+        // when
+        dice(1); // female
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         assertE("------" +
                 "-☺----" +
@@ -93,6 +113,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
                 "------");
 
         // when
+        game.tick();
         game.tick();
 
         // then
@@ -104,6 +125,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
                 "------");
 
         // when
+        game.tick();
         game.tick();
 
         // then
@@ -118,30 +140,57 @@ public class ICanCodeZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombiePotGeneratesAnotherOne() {
         // given
-        shouldZombieCanWalk();
+        ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
+        Zombie.WALK_EACH_TICKS = 2;
+        givenZombie().thenReturn(UP);
 
-        assertEquals(3, ZombiePot.TICKS);
+        givenFl("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║...Z│" +
+                "└────┘");
+
+        // when
+        dice(1); // female
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         assertE("------" +
                 "-☺----" +
-                "----♀-" +
                 "------" +
+                "------" +
+                "----♀-" +
+                "------");
+
+        // when
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "----♀-" +
                 "------" +
                 "------");
 
         // when
+        game.tick();
         generateMale();
         game.tick();
 
         // then
         assertE("------" +
-                "-☺--♀-" +
-                "------" +
+                "-☺----" +
+                "----♀-" +
                 "------" +
                 "----♂-" +
                 "------");
 
-        // when
+        game.tick();
         game.tick();
 
         // then
@@ -156,7 +205,8 @@ public class ICanCodeZombieTest extends AbstractGameTest {
     @Test
     public void shouldZombieKillHero() {
         // given
-        ZombiePot.TICKS = 3;
+        ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
+        Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP, LEFT);
 
         givenFl("╔════┐" +
@@ -167,9 +217,12 @@ public class ICanCodeZombieTest extends AbstractGameTest {
                 "└────┘");
 
         hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
         generateFemale();
-        game.tick();
-        game.tick();
         game.tick();
 
         assertE("------" +
@@ -181,6 +234,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
 
         // when
         game.tick();
+        game.tick();
 
         // then
         assertE("------" +
@@ -191,6 +245,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
                 "------");
 
         // when
+        game.tick();
         game.tick();
 
         // then
@@ -209,11 +264,12 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         selectStartSpot().thenReturn(1); // and female zombie
         game.newGame(player);
         game.tick();
+        game.tick();
 
         // then
         assertE("------" +
                 "--☺---" +
-                "-♀----" +
+                "------" +
                 "---♀--" +
                 "------" +
                 "------");

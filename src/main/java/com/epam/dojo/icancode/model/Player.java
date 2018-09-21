@@ -58,10 +58,6 @@ public class Player extends GamePlayer<Hero, IField> {
         return hero != null && hero.isAlive();
     }
 
-    public void tick() {
-        hero.tick();
-    }
-
     @Override
     public boolean isWin() {
         return hero != null && hero.isWin();

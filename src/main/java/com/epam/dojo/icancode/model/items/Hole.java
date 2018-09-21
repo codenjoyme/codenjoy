@@ -35,7 +35,7 @@ public class Hole extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        HeroItem heroItem = get(item, HeroItem.class);
+        HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem == null) {
             return;
         }

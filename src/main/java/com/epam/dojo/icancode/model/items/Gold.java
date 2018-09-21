@@ -60,7 +60,7 @@ public class Gold extends BaseItem {
     public void action(IItem item) {
         if (hidden) return; // TODO test me
 
-        HeroItem heroItem = get(item, HeroItem.class);
+        HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem == null) {
             return;
         }
