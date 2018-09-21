@@ -39,6 +39,11 @@ public class MultiplayerType {
      * В случае окончания и стартановой игры он получит новую борду.
      */
     public static final MultiplayerType SINGLE = new SINGLE();
+
+    public boolean isLastLevel(int levelNumber) {
+        return levelNumber == levelsCount;
+    }
+
     static class SINGLE extends MultiplayerType {
         SINGLE() {
             super(1);

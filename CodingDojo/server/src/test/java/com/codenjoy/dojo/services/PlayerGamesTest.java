@@ -667,4 +667,62 @@ public class PlayerGamesTest {
         assertEquals("board",
                 playerGames.get("player").getGame().getBoardAsString().toString());
     }
+
+    @Test
+    public void shouldNewPlayerGoToFirstLEvel_evenIfOtherOnMultiplayer_forTraining() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3),
+                new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
+
+        // when
+        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
+
+    @Test
+    public void shouldNewPlayerGoToFirstLevel_forTraining() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
+
+    @Test
+    public void shouldNewPlayerGoToFirstLevel_forSingle() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.SINGLE);
+        createPlayer("game", "player2", MultiplayerType.SINGLE);
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
 }

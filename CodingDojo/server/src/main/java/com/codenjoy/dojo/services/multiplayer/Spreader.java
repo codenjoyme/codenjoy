@@ -38,10 +38,17 @@ public class Spreader {
 
     private Map<String, List<Room>> rooms = new HashMap<>();
 
-    public GameField getField(GamePlayer player, String gameType, int count, Supplier<GameField> supplier) {
-        Room room = findUnfilled(gameType);
+    public GameField getField(GamePlayer player, String gameType,
+                              MultiplayerType type,
+                              int roomSize, int levelNumber,
+                              Supplier<GameField> supplier)
+    {
+        Room room = null;
+        if (!type.isTraining() || type.isLastLevel(levelNumber)) {
+            room = findUnfilled(gameType);
+        }
         if (room == null) {
-            room = new Room(supplier.get(), count);
+            room = new Room(supplier.get(), roomSize);
             add(gameType, room);
         }
 
@@ -121,7 +128,9 @@ public class Spreader {
         int levelNumber = game.getProgress().getCurrent();
         GameField field = getField(game.getPlayer(),
                 gameType.name(),
+                type,
                 roomSize,
+                levelNumber,
                 () -> gameType.createGame(levelNumber));
 
         game.on(field);
