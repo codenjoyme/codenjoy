@@ -229,7 +229,8 @@
                         <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;</td>
-                    <td class="header">LoadAI</td>&nbsp;&nbsp;
+                    <td class="header">LoadAI&nbsp;&nbsp;</td>
+                    <td class="header">Save&nbsp;&nbsp;</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
@@ -272,6 +273,14 @@
                                         <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
+                                <c:choose>
+                                    <c:when test="${player.data == null}">
+                                        <td></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
                             <c:otherwise>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>
@@ -295,6 +304,16 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td>GameOver</td>
+                                <td></td>
+                                <td></td>
+                                <c:choose>
+                                    <c:when test="${player.data == null}">
+                                        <td></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </tr>

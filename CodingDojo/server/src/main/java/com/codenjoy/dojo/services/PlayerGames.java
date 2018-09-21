@@ -262,4 +262,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             reload(game, progress.saveTo(new JSONObject()));
         }
     }
+
+    public void setLevel(String playerName, JSONObject save) { // TODO test me
+        PlayerGame playerGame = get(playerName);
+        Game game = playerGame.getGame();
+        reload(game, save);
+    }
+
+    public PlayerGame get(int index) { // TODO test me
+        return playerGames.get(index);
+    }
 }

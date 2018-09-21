@@ -37,6 +37,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.fest.reflect.core.Reflection;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -399,11 +400,24 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             for (int index = 0; index < playerGames.size(); index ++) {
-                Player playerToUpdate = playerGames.players().get(index);
+                PlayerGame playerGame = playerGames.get(index);
+                Player playerToUpdate = playerGame.getPlayer();
                 Player newPlayer = players.get(index);
 
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
+
+
+                Game game = playerGame.getGame(); // TODO test me
+                if (game != null && game.getSave() != null) {
+                    String oldSave = game.getSave().toString();
+                    String newSave = newPlayer.getData();
+                    if (newSave != null && !newSave.equals(oldSave)) {
+                        playerGames.setLevel(
+                                newPlayer.getName(),
+                                new JSONObject(newSave));
+                    }
+                }
             }
         } finally {
             lock.writeLock().unlock();
