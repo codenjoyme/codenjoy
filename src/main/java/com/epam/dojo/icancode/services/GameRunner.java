@@ -44,7 +44,6 @@ import com.epam.dojo.icancode.model.interfaces.ILevel;
 import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static com.epam.dojo.icancode.services.Levels.getSingleMaps;
 
 public class GameRunner extends AbstractGameType implements GameType  {
 
@@ -91,7 +90,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TRAINING.apply(getSingleMaps().size());
+        return MultiplayerType.TRAINING.apply(Levels.getSingleZombieMaps().size());
     }
 
     public ILevel loadLevel(int level) {
@@ -139,9 +138,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
             result.put("offset", data.getOffset());
-//            JSONObject progress = player.printProgress(); // TODO это подсчитать на UI
-//            result.put("showName", true);
-//            result.put("onlyMyName", !progress.getBoolean("multiple"));
+            result.put("showName", true);
             return result;
         });
     }
