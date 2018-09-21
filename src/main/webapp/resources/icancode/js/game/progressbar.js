@@ -32,7 +32,6 @@ function initProgressbar(container) {
         progressBar.remove(level, "level-current");
         progressBar.remove(level, "level-not-active");
         progressBar.remove(level, "level-during");
-        progressBar.remove(level, "hidden");
     }
     progressBar.notActive = function(level) {
         progressBar.change(level, "level-not-active");
@@ -43,6 +42,12 @@ function initProgressbar(container) {
     progressBar.process = function(level) {
         progressBar.change(level, "level-during");
     }
+    progressBar.hide = function(level) {
+        progressBar.set(level, "hidden");
+    }
+    progressBar.show = function(level) {
+        progressBar.remove(level, "hidden");
+    }
     progressBar.countLevels = function(count) {
         progressBar.countLevelsChanged = true;
         for (var level = 0; level < progressBar.length; level++) {
@@ -51,9 +56,9 @@ function initProgressbar(container) {
                 progressBar.name(level, "Contest");
             }
             if (level <= count) {
-                progressBar.remove(level, "hidden");
+                progressBar.hide(level);
             } else {
-                progressBar.set(level, "hidden");
+                progressBar.show(level);
             }
         }
     }
@@ -73,8 +78,10 @@ function initProgressbar(container) {
     progressBar.name = function(level, name) {
         $(progressBar[level]).html(name);
     }
+
     progressBar.each(function(index) {
         progressBar.notActive(index);
+        progressBar.hide(index);
     });
 
     $(".trainings").mCustomScrollbar({
