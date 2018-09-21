@@ -56,9 +56,9 @@ function initProgressbar(container) {
                 progressBar.name(level, "Contest");
             }
             if (level <= count) {
-                progressBar.hide(level);
-            } else {
                 progressBar.show(level);
+            } else {
+                progressBar.hide(level);
             }
         }
     }

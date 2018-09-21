@@ -117,8 +117,7 @@ var initLevelInfo = function() {
         'Coordinate {x:0, y:0} in the left-top corner of board.<br>' +
         'Try this code for check Robot position.<br>' +
         '<pre>robot.log(scanner.getMe());</pre>\n' +
-        'So you should collect all the golden bags in the Maze.<br>' +
-        'Remember! Your program should work for all previous levels too.',
+        'So you should collect all the golden bags in the Maze.<br>',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    var dest = scanner.getGold();\n' +
@@ -158,8 +157,7 @@ var initLevelInfo = function() {
         'Also you can add your own method to robot by:' +
         '<pre>robot.doSmthNew = function(parameter) {\n' +
         '    // some statement here\n' +
-        '}</pre>' +
-        'Remember! Your program should work for all previous levels too.',
+        '}</pre>',
         'defaultCode':levelInfo[2].winCode,
         'winCode':'',
         'autocomplete':{
@@ -187,8 +185,7 @@ var initLevelInfo = function() {
         '<pre>robot.pull("UP");\n' +
         '// same as\n' +
         'robot.pullUp();</pre>' +
-        'If you want to find box on map - try use "BOX" element.<br>' +
-        'Remember! Your program should work for all previous levels too.',
+        'If you want to find box on map - try use "BOX" element.<br>',
         'defaultCode':levelInfo[3].winCode,
         'winCode':'',
         'autocomplete':{
