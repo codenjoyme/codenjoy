@@ -63,6 +63,7 @@ var initLevelInfo = function() {
         '    }\n' +
         '}</pre>' +
         'Scanner will help robot to detect walls and other obstacles.<br>' +
+        '<br>' +
         'You also can use methods for refactoring:<br>' +
         '<pre>scanner.at("RIGHT");\n' +
         'robot.go("LEFT");</pre>' +
@@ -70,11 +71,13 @@ var initLevelInfo = function() {
         '<pre>robot.cameFrom() == "LEFT"</pre>' +
         'If you want to know where we came to on our previous step, use:<br>' +
         '<pre>robot.previousDirection() == "RIGHT"</pre>' +
+        '<br>' +
         'You can use these commands with previous to tell robot to go on one direction, like:<br>' +
         '<pre>robot.go(robot.previousDirection());</pre>' +
         'To show data in console you can use this method:<br>' +
         '<pre>var someVariable = "someData";\n' +
         'robot.log(someVariable);</pre>' +
+        '<br>' +
         'Send program to Robot by clicking the Commit button.<br>' +
         'If something is wrong - check Robot message in the Console (the rightmost field).<br>' +
         'You can always stop the program by clicking the Reset button.',
@@ -115,9 +118,11 @@ var initLevelInfo = function() {
         'var exitPoint = scanner.getExit();\n' +
         'var robotPoint = scanner.getMe();</pre>' +
         'Coordinate {x:0, y:0} in the left-top corner of board.<br>' +
+        '<br>' +
         'Try this code for check Robot position.<br>' +
         '<pre>robot.log(scanner.getMe());</pre>\n' +
         'So you should collect all the golden bags in the Maze.<br>' +
+        '<br>' +
         'On this Maze you can also see a laser machines ("LASER_MACHINE").<br>' +
         'Each machine is periodically fired lasers.<br>' +
         'When laser machine is ready to fire ("LASER_MACHINE_READY") it shoots after the second. ' +
@@ -128,6 +133,7 @@ var initLevelInfo = function() {
         '<pre>robot.jump();\n' +
         'robot.jumpLeft();\n' +
         'robot.pullLeft();</pre>' +
+        '<br>' +
         'Another way to get lasershow on board - fire. There are several method for the Robot:' +
         '<pre>robot.fireLeft();\n' +
         'robot.fireRight();\n' +
@@ -176,6 +182,7 @@ var initLevelInfo = function() {
         'robot.jumpUp();\n' +
         'robot.jumpDown();\n' +
         'robot.jump("LEFT");</pre>' +
+        '<br>' +
         'By the way, we did not tell you, but through zombies you can also jump over.<br>' +
         'If you want to find Zombie on map - try use "FEMALE_ZOMBIE" or "MALE_ZOMBIE" element.<br>' +
         'Also you can add your own method to robot by:' +

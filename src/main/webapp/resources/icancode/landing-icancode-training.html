@@ -215,7 +215,10 @@ assert robot.previousDirection() == "UP";</pre>
           
           <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.</p>
           <pre>robot.pull("UP");</pre>
-          
+
+          <p><span class="func">function fire(direction)</span> - Shoot in a given direction. There are 4 corresponding functions for each direction: fireLeft, fireRight, fireUp, fireDown.</p>
+          <pre>robot.fire("DOWN");</pre>
+
           <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function has(key)</span> - Check if data/value with key specified exist</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function save(key, value)</span> - Saves value with key specified</p>
