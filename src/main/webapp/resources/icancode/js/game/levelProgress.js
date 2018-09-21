@@ -89,7 +89,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         currentLevelIsMultiple = multiple;
 
         if (!progressBar.countLevelsChanged) {
-            progressBar.countLevels(countLevels + 1);  // +1 because of multiple
+            progressBar.countLevels(countLevels);
         }
         progressBar.setProgress(currentLevel, lastPassed);
 
