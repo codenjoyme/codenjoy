@@ -92,6 +92,8 @@ public class SaveServiceImpl implements SaveService {
             info.setCode(registration.getCode(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
             info.setAIPlayer(player.getAI() != null);
+
+            copySave(player, info);
             map.put(player.getName(), info);
         }
 
@@ -120,6 +122,14 @@ public class SaveServiceImpl implements SaveService {
         });
 
         return result;
+    }
+
+    void copySave(Player player, PlayerInfo info) {
+        PlayerGame playerGame = playerGames.get(player.getName());
+        Game game = playerGame.getGame();
+        if (game != null && game.getSave() != null) {
+            info.setData(game.getSave().toString());
+        }
     }
 
     @Override
