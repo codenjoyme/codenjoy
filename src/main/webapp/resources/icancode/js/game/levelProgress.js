@@ -76,7 +76,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         var board = data[game.playerName].board;
 
         var level = board.levelProgress.current;
-        var countLevels = board.levelProgress.total + 1; // +1 because of multiple
+        var countLevels = board.levelProgress.total;
         var lastPassed = board.levelProgress.lastPassed;
         var multiple = (level >= countLevels);
 
@@ -89,7 +89,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         currentLevelIsMultiple = multiple;
 
         if (!progressBar.countLevelsChanged) {
-            progressBar.countLevels(countLevels);
+            progressBar.countLevels(countLevels + 1);  // +1 because of multiple
         }
         progressBar.setProgress(currentLevel, lastPassed);
 
