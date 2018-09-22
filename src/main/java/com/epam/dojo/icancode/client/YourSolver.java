@@ -67,7 +67,7 @@ public class YourSolver extends AbstractSolver {
     public static void main(String[] args) {
         connectClient(
                 // paste here board page url from browser after registration
-                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+                "http://192.168.1.102:80/codenjoy-contest/board/player/your@email.com?code=18899199021366816317",
                 // and solver here
                 new YourSolver(new RandomDice()));
     }
