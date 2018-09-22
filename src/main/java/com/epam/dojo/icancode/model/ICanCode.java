@@ -33,6 +33,7 @@ import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.Events;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -85,8 +86,8 @@ public class ICanCode implements Tickable, IField {
                 .forEach(HeroItem::tick);
 
         List<IItem> items = level.getItems(Tickable.class);
-//        Collections.sort(items,
-//                (o1, o2) -> Integer.compare(priority(o2), priority(o1)));
+        Collections.sort(items,
+                (o1, o2) -> Integer.compare(priority(o2), priority(o1)));
         for (IItem item : items) {
             if (item instanceof HeroItem) continue;
 
