@@ -341,12 +341,22 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         assertE("------" +
                 "--☺---" +
                 "------" +
-                "------" +
+                "--✝---" +
                 "------" +
                 "------");
 
         // when
         game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
         game.tick();
         game.tick();
         generateMale();

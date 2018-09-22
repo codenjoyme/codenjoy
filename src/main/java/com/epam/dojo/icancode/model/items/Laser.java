@@ -82,7 +82,7 @@ public class Laser extends FieldItem implements Tickable {
         Zombie zombie = getIf(item, Zombie.class);
         if (zombie != null) {
             removeFromCell();
-            zombie.removeFromCell();
+            zombie.die();
         }
     }
 

@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Hero;
+import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
 public class Zombie extends FieldItem implements Tickable {
@@ -33,9 +34,11 @@ public class Zombie extends FieldItem implements Tickable {
     public static int WALK_EACH_TICKS = 2;
     public static ZombieBrain BRAIN = new ZombieBrain();
     private int ticks = 0;
+    private boolean die;
 
     public Zombie(boolean gender) {
         super(getElement(gender));
+        die = false;
     }
 
     private static Elements getElement(boolean gender) {
@@ -43,7 +46,17 @@ public class Zombie extends FieldItem implements Tickable {
     }
 
     @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        if (die) {
+            return Elements.ZOMBIE_DIE;
+        }
+        return super.state(player, alsoAtPoint);
+    }
+
+    @Override
     public void action(IItem item) {
+        if (die) return;
+
         HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem == null) {
             return;
@@ -58,6 +71,10 @@ public class Zombie extends FieldItem implements Tickable {
 
     @Override
     public void tick() {
+        if (die) {
+            removeFromCell();
+        }
+
         if (ticks++ % WALK_EACH_TICKS == 0) {
             return;
         }
@@ -72,5 +89,9 @@ public class Zombie extends FieldItem implements Tickable {
         if (!field.isBarrier(newX, newY) && !field.isAt(newX, newY, Zombie.class)) {
             field.move(this, newX, newY);
         }
+    }
+
+    public void die() {
+        this.die = true;
     }
 }
