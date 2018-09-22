@@ -113,7 +113,11 @@ var Element = {
     },
 
     getElement: function (char) {
-        return elementsByChar[char];
+        var el = elementsByChar[char];
+        if (!el) {
+            throw "Element not found for: " + char;
+        }
+        return el;
     },
 
     getElementsTypes: function () {
