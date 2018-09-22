@@ -88,7 +88,7 @@ public class Laser extends FieldItem implements Tickable {
 
     @Override
     public void tick() {
-        if (direction == null) return; // TODO почему-то тут был NPE
+        if (getCell() == null) return; // TODO почему-то тут был NPE
         int newX = direction.changeX(getCell().getX());
         int newY = direction.changeY(getCell().getY());
 
