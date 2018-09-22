@@ -177,7 +177,7 @@ var initLevelInfo = function() {
         'robot.jumpDown();\n' +
         'robot.jump("LEFT");</pre>' +
         'By the way, we did not tell you, but through zombies you can also jump over.<br>' +
-        'If you want to find Zombie on map - try use "FEMALE_ZOMBIE" or "MALE_ZOMBIE" element.<br>' +
+        'If you want to find Zombie on map - try use "ZOMBIE" element.<br>' +
         'Also you can add your own method to robot by:' +
         '<pre>robot.doSmthNew = function(parameter) {\n' +
         '    // some statement here\n' +
@@ -195,7 +195,7 @@ var initLevelInfo = function() {
             },
             ' == ':{
                 'synonyms':[' != '],
-                'values':['\'HOLE\'', '\'FEMALE_ZOMBIE\'', '\'MALE_ZOMBIE\'']
+                'values':['\'HOLE\'', '\'ZOMBIE\'']
             }
         }
     };

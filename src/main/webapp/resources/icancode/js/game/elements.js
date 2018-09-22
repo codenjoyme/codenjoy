@@ -84,7 +84,7 @@ var Element = {
     EXIT: el('E', 'EXIT'),
     HOLE: el('O', 'HOLE'),
     BOX: el('B', 'BOX'),
-    ZOMBIE_START(LAYER1, 'Z'),
+    ZOMBIE_START: el('Z', 'ZOMBIE_START'),
     GOLD: el('$', 'GOLD'),
 
     ROBOT: el('☺', 'MY_ROBOT'),
@@ -104,9 +104,9 @@ var Element = {
     LASER_UP: el('↑', 'LASER_UP', Direction.UP),
     LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
 
-    FEMALE_ZOMBIE(LAYER2, '♀'),
-    MALE_ZOMBIE(LAYER2, '♂'),
-    ZOMBIE_DIE(LAYER2, '✝'),
+    FEMALE_ZOMBIE: el('♀', 'ZOMBIE'),
+    MALE_ZOMBIE: el('♂', 'ZOMBIE'),
+    ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
     getElements: function () {
         return elements.slice(0);
