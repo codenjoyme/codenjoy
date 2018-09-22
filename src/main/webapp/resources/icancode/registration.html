@@ -69,16 +69,16 @@
           <div id="email" class="field not-valid">
             <input type="email" placeholder="Email address (valid)" name="name"/>
             <span class="icon fa"></span>
-          </div>	  			
+          </div>                  
           <div id="password" class="field not-valid">
             <input type="password" placeholder="Password" name="password"/>
             <span class="icon fa"></span>
           </div>
           <!-- add attribute 'hidden' to the div if you want to hide this select box -->
-          <div id="game" class="field valid">
+          <div id="game" class="field valid" hidden>
             <select placeholder="Select your game" name="game">
-              <option value="iCanCode Contest">iCanCode Contest</option>
-              <option value="iCanCode Training">iCanCode Training</option>
+              <option value="iCanCode Contest" >iCanCode Contest</option>
+              <option value="iCanCode Training" selected>iCanCode Training</option>
               <option value="eKids">eKids</option>
             </select>
           </div>
@@ -96,7 +96,7 @@
             <input type="text" placeholder="University, specialty, course"/>
             <span class="icon fa"></span>
           </div>
-		  <input type="hidden" name="gameName" value="icancode"/>
+          <input type="hidden" name="gameName" value="icancode"/>
           <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
         </div>
       </form>
