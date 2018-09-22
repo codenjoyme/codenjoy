@@ -86,7 +86,7 @@ public class ICanCode implements Tickable, IField {
 
         level.getItems(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
-                .filter(it -> !(it instanceof Laser && ((Laser)it).owner() instanceof Hero))
+                .filter(it -> !(it instanceof Laser && ((Laser)it).skipFirstTick()) ) // TODO это хак, надо разобраться!
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);

@@ -34,6 +34,7 @@ public class Laser extends FieldItem implements Tickable {
 
     private Direction direction;
     private State owner;
+    private boolean skip;
 
     public Laser(Elements element) {
         super(element);
@@ -43,6 +44,7 @@ public class Laser extends FieldItem implements Tickable {
     public Laser(State owner, Direction direction) {
         super(getElement(direction));
         this.owner = owner;
+        skip = (owner instanceof Hero);
         this.direction = direction;
     }
 
@@ -98,5 +100,13 @@ public class Laser extends FieldItem implements Tickable {
 
     public State owner() {
         return owner;
+    }
+
+    public boolean skipFirstTick() {
+        if (skip) {
+            skip = false;
+            return true;
+        }
+        return false;
     }
 }
