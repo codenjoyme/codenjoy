@@ -85,14 +85,11 @@ public class ICanCode implements Tickable, IField {
                 .map(it -> (HeroItem)it)
                 .forEach(HeroItem::tick);
 
-        List<IItem> items = level.getItems(Tickable.class);
-        Collections.sort(items,
-                (o1, o2) -> Integer.compare(priority(o2), priority(o1)));
-        for (IItem item : items) {
-            if (item instanceof HeroItem) continue;
-
-            ((Tickable) item).tick();
-        }
+        level.getItems(Tickable.class).stream()
+                .filter(it -> !(it instanceof HeroItem))
+                .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
+                .map(it -> (Tickable)it)
+                .forEach(Tickable::tick);
 
         for (Player player : players) {
             Hero hero = player.getHero();
