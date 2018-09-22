@@ -24,6 +24,7 @@ package com.epam.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Hero;
@@ -31,15 +32,17 @@ import com.epam.dojo.icancode.model.interfaces.IItem;
 
 public class Laser extends FieldItem implements Tickable {
 
-    private final Direction direction;
+    private Direction direction;
+    private State owner;
 
     public Laser(Elements element) {
         super(element);
         this.direction = getDirection(element);
     }
 
-    public Laser(Direction direction) {
+    public Laser(State owner, Direction direction) {
         super(getElement(direction));
+        this.owner = owner;
         this.direction = direction;
     }
 
@@ -74,7 +77,7 @@ public class Laser extends FieldItem implements Tickable {
             }
         }
 
-        Zombie zombie = getIf(item, Zombie.class); // TODO test me
+        Zombie zombie = getIf(item, Zombie.class);
         if (zombie != null) {
             removeFromCell();
             zombie.removeFromCell();
@@ -91,5 +94,9 @@ public class Laser extends FieldItem implements Tickable {
         } else {
             removeFromCell();
         }
+    }
+
+    public State owner() {
+        return owner;
     }
 }

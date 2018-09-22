@@ -291,4 +291,75 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         Zombie.BRAIN = mock(ZombieBrain.class);
         return when(Zombie.BRAIN.whereToGo(any(Point.class), any(IField.class)));
     }
+
+    @Test
+    public void shouldHeroKillZombie() {
+        // given
+        ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
+        Zombie.WALK_EACH_TICKS = 2;
+        givenZombie().thenReturn(UP);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.Z..│" +
+                "└────┘");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        generateFemale();
+        game.tick();
+        hero.down();
+        hero.fire();
+
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "--♀---" +
+                "------");
+
+        // when
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "--↓---" +
+                "--♀---" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+        game.tick();
+        game.tick();
+        generateMale();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "--♂---" +
+                "------");
+
+        // when
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "--♂---" +
+                "------" +
+                "------");
+    }
 }

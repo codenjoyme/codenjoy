@@ -388,7 +388,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
 
     private void fireLaser() {
         if (fireDirection != null) {
-            field.fire(fireDirection, item.getCell());
+            field.fire(this, fireDirection, item.getCell());
             fireDirection = null;
         }
     }

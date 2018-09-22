@@ -33,7 +33,6 @@ import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.Events;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -58,13 +57,13 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public void fire(Direction direction, Point from) {
+    public void fire(State owner, Direction direction, Point from) {
         Point to = direction.change(from);
-        move(newLaser(direction), to.getX(), to.getY());
+        move(newLaser(owner, direction), to.getX(), to.getY());
     }
 
-    private Laser newLaser(Direction direction) {
-        Laser laser = new Laser(direction);
+    private Laser newLaser(State owner, Direction direction) {
+        Laser laser = new Laser(owner, direction);
         laser.setField(this);
         return laser;
     }
@@ -87,6 +86,7 @@ public class ICanCode implements Tickable, IField {
 
         level.getItems(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
+                .filter(it -> !(it instanceof Laser && ((Laser)it).owner() instanceof Hero))
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
