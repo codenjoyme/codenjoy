@@ -372,4 +372,72 @@ public class ICanCodeZombieTest extends AbstractGameTest {
                 "------" +
                 "------");
     }
+
+
+    @Test
+    public void shouldPlayerJumpOverZombie() {
+        // given
+        ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
+        Zombie.WALK_EACH_TICKS = 2;
+        givenZombie().thenReturn(UP);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.Z..│" +
+                "└────┘");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        generateFemale();
+        game.tick();
+
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "--♀---" +
+                "------");
+
+        // when
+        hero.down();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "------" +
+                "--☺---" +
+                "--♀---" +
+                "------" +
+                "------");
+
+        // when
+        hero.jump();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "------" +
+                "------" +
+                "--♀---" + // TODO тут плеер пропал, он над зомби летит
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "------" +
+                "--♀---" +
+                "------" +
+                "--☺---" +
+                "------");
+    }
 }
