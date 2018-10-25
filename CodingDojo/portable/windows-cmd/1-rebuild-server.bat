@@ -116,6 +116,8 @@ copy %ROOT%\files\%CONTEXT%.war %JETTY_HOME%\webapps\*.*
 
 cd %ROOT%
 
+rem TODO copy all clients for all games from codenjoy\CodingDojo\games\bomberman\src\main\webapp\resources\user\bomberman-servers.zip to  clients\*.* and unzip
+
 echo off
 echo [44;93m
 echo        +--------------------------------------------+        
