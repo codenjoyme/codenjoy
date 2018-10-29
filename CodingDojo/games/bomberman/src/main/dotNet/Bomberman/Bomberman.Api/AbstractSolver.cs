@@ -49,7 +49,7 @@ namespace Bomberman.Api
 
         public void Play()
         {
-            var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}?code={2}", 
+            var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}", 
                 Server, 
 				Uri.EscapeDataString(UserName),
 				Code));
