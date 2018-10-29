@@ -20,6 +20,8 @@
  * #L%
  */
 using System;
+using System.Web;
+using System.Linq;
 using System.Text;
 
 namespace Bomberman.Api
@@ -28,19 +30,18 @@ namespace Bomberman.Api
     {
         private const string ResponsePrefix = "board=";
 
-        public AbstractSolver(string userName, string code, string server)
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="server">server http address including email and code</param>
+        public AbstractSolver(string server)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            UserName = userName;
-            Code = code;
-            Server = server;
+            ServerUrl = server;
         }
 
-        public string UserName { get; private set; }
-		
-		public string Code { get; private set; }
-
-        public string Server { get; private set; }
+        public string ServerUrl { get; private set; }
+        
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -49,12 +50,9 @@ namespace Bomberman.Api
 
         public void Play()
         {
-            var uri = new Uri(string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}", 
-                Server, 
-				Uri.EscapeDataString(UserName),
-				Code));
+            string url = GetWebSocketUrl(this.ServerUrl);
 
-            using (var socket = new WebSocket(uri))
+            using (var socket = new WebSocket(new Uri(url)))
             {
                 socket.Connect();
 
@@ -88,7 +86,25 @@ namespace Bomberman.Api
             }
         }
 
-        protected abstract string Get(Board gameBoard);
+        public static string GetWebSocketUrl(string serverUrl)
+        {
+            Uri uri = new Uri(serverUrl);
+
+            var server = $"{uri.Host}:{uri.Port}";
+            var userName = uri.Segments.Last();
+            var code = HttpUtility.ParseQueryString(uri.Query).Get("code");
+
+            return GetWebSocketUrl(userName, code, server);
+        }
+        private static string GetWebSocketUrl(string userName, string code, string server)
+        {
+            return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
+                            server,
+                            Uri.EscapeDataString(userName),
+                            code);
+        }
+
+        protected internal abstract string Get(Board gameBoard);
         
         /// <summary>
         /// Starts bomberman's client shutdown.

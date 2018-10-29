@@ -25,23 +25,22 @@ using System.Threading;
 namespace Demo
 {
     class Program
-    {        
-        static string Server = "192.168.1.1:8080";              // to use for server on LAN
-        // static string Server = "127.0.0.1:8080";             // to use for localhost server
-        // static string Server = "tetrisj.jvmhost.net:12270";  // to use for codenjoy.com server
-
-        // this is your email
-		static string UserName = "user@email.com";
+    {
+        // tetrisj.jvmhost.net:12270  // to use for codenjoy.com server
+        // 127.0.0.1:8080               // to use for localhost server
+        static string ServerUrl = "http://127.0.0.1:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+        
 		// you can get this code after registration on the server with your email
 		// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890    
-        static string Code = "01234567890123456789";
 
         static void Main(string[] args)
         {
             Console.SetWindowSize(Console.LargestWindowWidth - 3, Console.LargestWindowHeight - 3);
 
             // creating custom bomberman's Ai client
-            var bomber = new YourSolver(UserName, Code, Server);
+
+
+            var bomber = new DashasSolver(ServerUrl);
 
             // starting thread with playing bomberman
             Thread thread = new Thread(bomber.Play);

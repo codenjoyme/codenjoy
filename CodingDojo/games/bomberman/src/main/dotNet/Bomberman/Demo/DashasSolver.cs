@@ -32,8 +32,8 @@ namespace Demo
     {
         private int moveNumber = 0;
 
-        public DashasSolver(string name, string code, string server)
-            : base(name, code, server)
+        public DashasSolver(string server)
+            : base(server)
         {            
         }
 
@@ -44,7 +44,7 @@ namespace Demo
         {
             var action = $"{Direction.Act},{Direction.Up}";
 
-            if (moveNumber++ % 7 == 0)
+            if (moveNumber++ % 7 != 0)
             {
                 action = Direction.Up.ToString();
             }
