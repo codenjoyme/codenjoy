@@ -24,11 +24,15 @@ using Bomberman.Api;
 namespace Demo
 {
     /// <summary>
-    /// This is BombermanAI client demo.
+    /// This is BombermanAI client proposed and written by Daria Lutsyk
+    /// strategy is the following:
+    /// plant a bomb and move up :)
     /// </summary>
-    internal class YourSolver : AbstractSolver
+    internal class DashasSolver : AbstractSolver
     {
-        public YourSolver(string server)
+        private int moveNumber = 0;
+
+        public DashasSolver(string server)
             : base(server)
         {            
         }
@@ -38,7 +42,13 @@ namespace Demo
         /// </summary>
         protected override string Get(Board board)
         {
-            var action = Direction.Act.ToString();            
+            var action = $"{Direction.Act},{Direction.Up}";
+
+            if (moveNumber++ % 7 != 0)
+            {
+                action = Direction.Up.ToString();
+            }
+            
             return action;
         }
     }
