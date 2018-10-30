@@ -55,7 +55,7 @@ namespace Loderunner.Api
                     .Concat(FindAllElements(BoardElement.HeroLeft))
                     .Concat(FindAllElements(BoardElement.HeroRight))
                     .Concat(FindAllElements(BoardElement.HeroPipeLeft))
-                    .Concat(FindAllElements(BoardElement.HeropipeRight))
+                    .Concat(FindAllElements(BoardElement.HeroPipeRight))
                     .Single();
             }
         }
@@ -66,14 +66,6 @@ namespace Loderunner.Api
             {
                 return BoardString.Contains((char)BoardElement.HeroDie);
             }
-        }
-
-        public List<BoardPoint> GetOtherHeroesPositions()
-        {
-            return FindAllElements(BoardElement.OtherLoderunner)
-                .Concat(FindAllElements(BoardElement.OtherBombLoderunner))
-                .Concat(FindAllElements(BoardElement.OtherDeadLoderunner))
-                .ToList();
         }
 
         public bool HasElementAt(BoardPoint point, BoardElement element)
@@ -128,39 +120,39 @@ namespace Loderunner.Api
         }
 
         public List<BoardPoint> GetOtherHeroPositions()
-                {
+        {
             return FindAllElements(BoardElement.OtherHeroLadder)
                 .Concat(FindAllElements(BoardElement.OtherHeroLeft))
                 .Concat(FindAllElements(BoardElement.OtherHeroPipeLeft))
                 .Concat(FindAllElements(BoardElement.OtherHeroPipeRight))
                 .Concat(FindAllElements(BoardElement.OtherHeroRight))
-                .Concat(FindAllElements(BoardElement.OtherHeroPit))
+                //.Concat(FindAllElements(BoardElement.OtherHeroPit))
                 .ToList();
         }
 
         public List<BoardPoint> GetWallPositions()
         {
-            FindAllElements(BoardElement.Brick)
+            return FindAllElements(BoardElement.Brick)
             .Concat(FindAllElements(BoardElement.UndestroyableWall))
             .ToList();
         }
 
         public List<BoardPoint> GetLadderPositions()
         {
-            FindAllElements(BoardElement.Ladder)
+            return FindAllElements(BoardElement.Ladder)
             .Concat(FindAllElements(BoardElement.HeroLadder))
             .ToList();
         }
 
         public List<BoardPoint> GetGoldPositions()
         {
-            FindAllElements(BoardElement.Gold)
+            return FindAllElements(BoardElement.Gold)
             .ToList();
         }
 
         public List<BoardPoint> GetPipePositions()
         {
-            FindAllElements(BoardElement.Pipe)
+            return FindAllElements(BoardElement.Pipe)
             .Concat(FindAllElements(BoardElement.HeroPipeLeft))
             .Concat(FindAllElements(BoardElement.HeroPipeRight))
             .Concat(FindAllElements(BoardElement.OtherHeroPipeLeft))
