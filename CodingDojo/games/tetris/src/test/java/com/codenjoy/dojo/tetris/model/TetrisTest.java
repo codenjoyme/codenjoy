@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.tetris.services.Events;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -39,8 +40,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TetrisTest {
 
@@ -525,5 +525,70 @@ public class TetrisTest {
                 "......" +
                 "..ZZ.." +
                 "...ZZ.");
+    }
+
+    @Test
+    public void shouldRemoveLine_whenO() {
+        int level = 1;
+        int figure = Type.O.getColor().index();
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.O.create());
+        game.tick();
+
+        assrtDr("..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.left();
+        hero.left();
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "OO...." +
+                "OO....");
+
+        verify(listener).event(Events.figuresDropped(level, figure));
+        reset(listener);
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "OOOO.." +
+                "OOOO..");
+
+        verify(listener).event(Events.figuresDropped(level, figure));
+        reset(listener);
+
+        hero.right();
+        hero.right();
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        verify(listener).event(Events.figuresDropped(level, figure));
+        verify(listener).event(Events.linesRemoved(level, 2));
     }
 }
