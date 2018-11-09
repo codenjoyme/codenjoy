@@ -26,9 +26,8 @@
 
 <div id="advertisement" style="display:none;">
     <h3>
-        Our friends&nbsp;&nbsp;
         <a href="http://www.jetbrains.com" target="blank">
-            <img src="${ctx}/resources/advertisement/logo_intellij_idea.png"/>
+            <img src="${ctx}/resources/advertisement/advertisement.png"/>
         </a>
     </h3>
 </div>
