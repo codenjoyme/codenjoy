@@ -32,19 +32,21 @@ import com.codenjoy.dojo.services.printer.CharElements;
  */
 public enum Elements implements CharElements {
 
-    BLUE('I'),   // 2
-    CYAN('J'),   // 3
-    ORANGE('L'), // 4
-    YELLOW('O'), // 1
-    GREEN('S'),  // 5
-    PURPLE('T'), // 7
-    RED('Z'),    // 6
-    NONE('.');
+    BLUE('I', 2),
+    CYAN('J', 3),
+    ORANGE('L', 4),
+    YELLOW('O', 1),
+    GREEN('S', 5),
+    PURPLE('T', 7),
+    RED('Z', 6),
+    NONE('.', 0);
 
     final char ch;
+    final int index;
 
-    Elements(char ch) {
+    Elements(char ch, int index) {
         this.ch = ch;
+        this.index = index;
     }
 
     @Override
@@ -58,12 +60,7 @@ public enum Elements implements CharElements {
     }
 
     public int index() {
-        for (int i = 0; i < values().length; i++) {
-            if (values()[i] == this) {
-                return i;
-            }
-        }
-        throw new IllegalStateException();
+        return index;
     }
 
     public static Elements valueOf(char ch) {

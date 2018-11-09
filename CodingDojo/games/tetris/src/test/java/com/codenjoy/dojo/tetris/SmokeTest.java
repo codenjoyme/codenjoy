@@ -166,7 +166,7 @@ public class SmokeTest {
                         "1:}\n" +
                         "DICE:2\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: Event[figuresDropped:1:0]\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -228,7 +228,7 @@ public class SmokeTest {
                         "1:}\n" +
                         "DICE:0\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:1]\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -261,7 +261,7 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "Fire Event: Event[figuresDropped:1:4]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -354,7 +354,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:2\n" +
                         "1:Answer: ACT(2)\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "Fire Event: Event[figuresDropped:1:5]\n" +
                         "DICE:4\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -477,7 +477,7 @@ public class SmokeTest {
                         "1:}\n" +
                         "DICE:0\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:1]\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -570,7 +570,7 @@ public class SmokeTest {
                         "1:}\n" +
                         "DICE:0\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:0]\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -664,7 +664,7 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:0]\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -696,7 +696,7 @@ public class SmokeTest {
                         "1:}\n" +
                         "DICE:0\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "Fire Event: Event[figuresDropped:1:5]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
