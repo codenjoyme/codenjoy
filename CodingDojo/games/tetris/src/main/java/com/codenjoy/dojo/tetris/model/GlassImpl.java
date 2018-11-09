@@ -220,6 +220,7 @@ public class GlassImpl implements Glass {
         return plots;
     }
 
+    @Override
     public boolean isEmpty() {
         for (long anOccupied : occupied) {
             if (anOccupied != 0) {

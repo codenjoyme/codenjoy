@@ -41,5 +41,7 @@ public interface Glass {
 
     List<Plot> currentFigure();
 
+    boolean isEmpty();
+
     void setListener(EventListener listener);
 }
