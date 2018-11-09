@@ -22,22 +22,18 @@ package com.codenjoy.dojo.client;
  * #L%
  */
 
-import org.json.JSONObject;
-
-public abstract class AbstractJsonSolver<T> implements Solver<AbstractTextBoard> {
+public abstract class AbstractJsonSolver<T extends AbstractTextBoard> implements Solver<AbstractTextBoard> {
 
     private AbstractTextBoard board;
 
-    public abstract String getAnswer(JSONObject question);
+    public abstract String getAnswer(T board);
 
     @Override
     public String get(AbstractTextBoard board) {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        JSONObject data = new JSONObject(board.getData());
-
-        String answer = getAnswer(data);
+        String answer = getAnswer((T)board);
 
         return answer;
     }

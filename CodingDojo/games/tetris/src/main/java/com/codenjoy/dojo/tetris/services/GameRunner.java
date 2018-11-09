@@ -151,7 +151,11 @@ public class GameRunner extends AbstractGameType implements GameType {
             result.put("layers", Arrays.asList(board));
 
             result.put("currentFigureType", hero.currentFigureType());
-            result.put("currentFigurePoint", hero.currentFigurePoint());
+
+            Point point = hero.currentFigurePoint();
+            result.put("currentFigurePoint",
+                    (point == null) ? null : new JSONObject(new PointImpl(point)));
+
             result.put("futureFigures", hero.future());
 
             return result;

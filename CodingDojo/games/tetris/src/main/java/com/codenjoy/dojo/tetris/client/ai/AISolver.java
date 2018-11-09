@@ -26,9 +26,9 @@ package com.codenjoy.dojo.tetris.client.ai;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.AbstractJsonSolver;
-import org.json.JSONObject;
+import com.codenjoy.dojo.tetris.client.Board;
 
-public class AISolver extends AbstractJsonSolver {
+public class AISolver extends AbstractJsonSolver<Board> {
 
     private Dice dice;
 
@@ -37,7 +37,7 @@ public class AISolver extends AbstractJsonSolver {
     }
 
     @Override
-    public String getAnswer(JSONObject question) {
+    public String getAnswer(Board board) {
         switch (dice.next(4)) {
             case 0 : return Direction.DOWN.toString();
             case 1 : return Direction.LEFT.toString();

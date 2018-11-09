@@ -35,7 +35,7 @@ import org.json.JSONObject;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class YourSolver extends AbstractJsonSolver {
+public class YourSolver extends AbstractJsonSolver<Board> {
 
     private Dice dice;
 
@@ -44,7 +44,7 @@ public class YourSolver extends AbstractJsonSolver {
     }
 
     @Override
-    public String getAnswer(JSONObject question) {
+    public String getAnswer(Board board) {
         return "DOWN";
     }
 
