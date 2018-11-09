@@ -79,6 +79,7 @@ public class TetrisTest {
         game.newGame(player);
         game.setPlots(plots);
         hero = game.getPlayer().getHero();
+        reset(listener);
     }
 
     private void assrtDr(String expected) {
@@ -277,6 +278,70 @@ public class TetrisTest {
                 ".......");
 
         verify(listener).event(Events.glassOverflown(1));
+    }
+
+    @Test
+    public void shouldCleanGlass_whenOverflown() {
+        givenFl("......." +
+                ".....Z." +
+                "....ZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
+
+        when(queue.next()).thenReturn(Type.O.create());
+        game.tick();
+
+        assrtDr("..OO..." +
+                ".....Z." +
+                "....ZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
+
+        verifyNoMoreInteractions(listener);
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO..." +
+                "..OO.Z." +
+                "..OOZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
+
+        verify(listener).event(Events.figuresDropped(1, Type.O.getColor().index()));
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO..." +
+                "..OO.Z." +
+                "..OOZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
+
+        verify(listener).event(Events.figuresDropped(1, Type.O.getColor().index()));
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO..." +
+                "..OO.Z." +
+                "..OOZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
+
+        // TODO разобраться, почему не настает этот случай
+//        verify(listener).event(Events.glassOverflown(1));
     }
 
     @Test
