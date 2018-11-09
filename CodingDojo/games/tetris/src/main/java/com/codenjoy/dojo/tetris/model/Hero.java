@@ -73,8 +73,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void act(int... p) {
         if (p.length == 0) {
             act(1);
-        } else {
+        } else if (p.length == 1) {
             act(p[0]);
+        } else if (p.length == 2) {
+            glass.empty();
         }
     }
 

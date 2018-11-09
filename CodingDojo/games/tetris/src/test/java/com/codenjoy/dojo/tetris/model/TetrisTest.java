@@ -255,6 +255,31 @@ public class TetrisTest {
     }
 
     @Test
+    public void shouldCleanGlass_whenAct00() {
+        givenFl("......." +
+                "...SSZ." +
+                "..SSZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
+
+        when(queue.next()).thenReturn(Type.O.create());
+        hero.act(0, 0);
+        game.tick();
+
+        assrtDr("..OO..." +
+                "......." +
+                "......." +
+                "......." +
+                "......." +
+                "......." +
+                ".......");
+
+        verify(listener).event(Events.glassOverflown(1));
+    }
+
+    @Test
     public void shouldDropFirstFigure_whenO() {
         givenFl("......" +
                 "......" +
@@ -528,7 +553,7 @@ public class TetrisTest {
     }
 
     @Test
-    public void shouldRemoveLine_whenO() {
+    public void shouldRemoveLine_whenO_and6x6() {
         int level = 1;
         int figure = Type.O.getColor().index();
         givenFl("......" +
@@ -587,6 +612,77 @@ public class TetrisTest {
                 "......" +
                 "......" +
                 "......");
+
+        verify(listener).event(Events.figuresDropped(level, figure));
+        verify(listener).event(Events.linesRemoved(level, 2));
+    }
+
+    @Test
+    public void shouldRemoveLine_whenO_and18x18() {
+        int level = 1;
+        int figure = Type.O.getColor().index();
+        givenFl(".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                "OOOOOOOO..OOOOOOOO" +
+                "OOOOOOOO..OOOOOOOO");
+
+        when(queue.next()).thenReturn(Type.O.create());
+        game.tick();
+
+        assrtDr("........OO........" +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                "OOOOOOOO..OOOOOOOO" +
+                "OOOOOOOO..OOOOOOOO");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("........OO........" +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                "..................");
 
         verify(listener).event(Events.figuresDropped(level, figure));
         verify(listener).event(Events.linesRemoved(level, 2));
