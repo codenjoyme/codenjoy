@@ -126,6 +126,11 @@ public class FigureImpl implements Figure, Cloneable {
     }
 
     @Override
+    public int height() {
+        return top() + bottom() + 1;
+    }
+
+    @Override
     public Figure copy() {
         try {
             return (Figure) clone();
@@ -137,5 +142,14 @@ public class FigureImpl implements Figure, Cloneable {
     @Override
     public Type type() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("'%s' WH(%s:%s) LR(%s,%s) TB(%s,%s)",
+                type.getColor().ch,
+                width(), height(),
+                left(), right(),
+                top(), bottom());
     }
 }

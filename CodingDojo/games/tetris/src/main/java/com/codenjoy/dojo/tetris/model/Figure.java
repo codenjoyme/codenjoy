@@ -41,5 +41,7 @@ public interface Figure {
 
     int width();
 
+    int height();
+
     Figure copy();
 }
