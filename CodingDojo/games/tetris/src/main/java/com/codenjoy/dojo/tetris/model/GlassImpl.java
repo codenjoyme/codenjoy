@@ -26,7 +26,7 @@ package com.codenjoy.dojo.tetris.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.tetris.services.Events;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class GlassImpl implements Glass {
     private int width;
     private int height;
     private EventListener eventListener;
-    private long occupied[];
+    private List<Long> occupied = new ArrayList<>();
     private Figure currentFigure;
     private int currentX;
     private int currentY;
@@ -44,7 +44,9 @@ public class GlassImpl implements Glass {
     public GlassImpl(int width, int height) {
         this.width = width;
         this.height = height;
-        occupied = new long[height];
+        for (int i = 0; i < height; i++) {
+            occupied.add(0L);
+        }
     }
 
     public boolean accept(Figure figure, int x, int y) {
@@ -60,7 +62,7 @@ public class GlassImpl implements Glass {
             if (rowPosition >= height) {
                 continue;
             }
-            isOccupied |= (occupied[rowPosition] & alignedRow) > 0;
+            isOccupied |= (occupied.get(rowPosition) & alignedRow) > 0;
         }
         return !isOccupied;
     }
@@ -106,10 +108,10 @@ public class GlassImpl implements Glass {
         long[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x, false);
         for (int i = 0; i < alignedRows.length; i++) {
             int rowPosition = position + alignedRows.length - i - 1;
-            if (rowPosition >= occupied.length) {
+            if (rowPosition >= occupied.size()) {
                 continue;
             }
-            occupied[rowPosition] |= alignedRows[i];
+            occupied.set(rowPosition, occupied.get(rowPosition) | alignedRows[i]);
         }
 
         if (eventListener != null) {
@@ -121,10 +123,10 @@ public class GlassImpl implements Glass {
 
     private void removeLines() {
         int removedLines = 0;
-        for (int i = 0; i < occupied.length; i++) {
+        for (int i = 0; i < occupied.size(); i++) {
             while (wholeLine(i)) {
-                System.arraycopy(occupied, i + 1, occupied, i, occupied.length - i - 1);
-                occupied[occupied.length - 1] = 0;
+                occupied.remove(i);
+                occupied.add(0L);
                 removedLines++;
             }
         }
@@ -139,7 +141,7 @@ public class GlassImpl implements Glass {
 
     private boolean wholeLine(int rowNum) {
         for (int i = 0; i < width; i++) {
-            if ((occupied[rowNum] & (0b111 << ((i + 1) * BITS_PER_POINT))) == 0) {
+            if ((occupied.get(rowNum) & (0b111 << ((i + 1) * BITS_PER_POINT))) == 0) {
                 return false;
             }
         }
@@ -164,7 +166,9 @@ public class GlassImpl implements Glass {
     }
 
     public void empty() {
-        Arrays.fill(occupied, 0);
+        for (int i = 0; i < occupied.size(); i++) {
+            occupied.set(i, 0L);
+        }
         if (eventListener != null) {
             // TODO и где я тут достану номер уровня?
             int levelNumber = 1;
@@ -182,9 +186,9 @@ public class GlassImpl implements Glass {
     @Override
     public List<Plot> dropped() {
         LinkedList<Plot> plots = new LinkedList<>();
-        for (int y = 0; y < occupied.length; y++) {
+        for (int y = 0; y < occupied.size(); y++) {
             for (int x = width; x >= 0; x--) {
-                long colorNumber = (occupied[y] >> (x * BITS_PER_POINT)) & 0b111;
+                long colorNumber = (occupied.get(y) >> (x * BITS_PER_POINT)) & 0b111;
                 if (colorNumber == 0) {
                     continue;
                 }
