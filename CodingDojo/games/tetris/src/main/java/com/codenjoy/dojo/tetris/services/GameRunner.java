@@ -55,7 +55,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         gameLevels = settings.addSelect("Game Levels", (List)levels())
                 .type(String.class)
                 .def(ProbabilityLevels.class.getSimpleName());
-        glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(20);
+        glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(18);
     }
 
     private List<String> levels() {
@@ -139,7 +139,6 @@ public class GameRunner extends AbstractGameType implements GameType {
                 @Override
                 public Iterable<? extends Point> elements() {
                     return new LinkedList<Point>() {{
-                        // TODO перекрываются фигурки которые падают с теми, что уже упали - надо пофиксить но не тут, а в момент появления фигурки, она должна появляться не полностью а только 1 ее уровень
                         List<Plot> droppedPlots = hero.dropped();
                         List<Plot> currentFigurePlots = hero.currentFigure();
                         droppedPlots.removeAll(currentFigurePlots);
@@ -148,7 +147,7 @@ public class GameRunner extends AbstractGameType implements GameType {
                     }};
                 }
             }, player);
-            String board = graphicPrinter.print().replace("\n", "");
+            String board = graphicPrinter.print().replace("\n", "").replace(" ", ".");
             result.put("layers", Arrays.asList(board));
 
             result.put("currentFigureType", hero.currentFigureType());

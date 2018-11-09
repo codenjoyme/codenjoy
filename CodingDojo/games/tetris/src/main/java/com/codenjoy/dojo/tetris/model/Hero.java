@@ -152,11 +152,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void setFigure(Figure figure) {
         this.figure = figure;
-        move(field.size() / 2 - 1, initialYPosition());
+        move(field.size() / 2 - 1 + figure.left(), initialYPosition());
     }
 
     private int initialYPosition() {
-        return field.size() - figure.top();
+        return (field.size() - 1) + figure.bottom();
     }
 
     public void showCurrentFigure() {

@@ -34,6 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -89,165 +90,440 @@ public class TetrisTest {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return hero.dropped();
+                return new LinkedList<Plot>() {{
+                    addAll(hero.dropped());
+                    addAll(hero.currentFigure());
+                }};
             }
         }, player);
 
         assertEquals(com.codenjoy.dojo.utils.TestUtils.injectN(expected),
-                printer.print());
+                printer.print().toString().replaceAll(" ", "."));
     }
 
     @Test
     public void shouldEmptyFieldAtStart() {
-        givenFl("     " +
-                "     " +
-                "     " +
-                "     " +
-                "     ");
+        givenFl("....." +
+                "....." +
+                "....." +
+                "....." +
+                ".....");
 
-        assrtDr("     " +
-                "     " +
-                "     " +
-                "     " +
-                "     ");
+        assrtDr("....." +
+                "....." +
+                "....." +
+                "....." +
+                ".....");
     }
 
     @Test
     public void shouldOFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                " OO   " +
-                " OO   ");
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                ".OO..." +
+                ".OO...");
 
-        assrtDr("      " +
-                "      " +
-                "      " +
-                "      " +
-                " OO   " +
-                " OO   ");
+        assrtDr("......" +
+                "......" +
+                "......" +
+                "......" +
+                ".OO..." +
+                ".OO...");
     }
 
     @Test
     public void shouldIFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                " I    " +
-                " I    " +
-                " I    " +
-                " I    ");
+        givenFl("......" +
+                "......" +
+                ".I...." +
+                ".I...." +
+                ".I...." +
+                ".I....");
 
-        assrtDr("      " +
-                "      " +
-                " I    " +
-                " I    " +
-                " I    " +
-                " I    ");
+        assrtDr("......" +
+                "......" +
+                ".I...." +
+                ".I...." +
+                ".I...." +
+                ".I....");
     }
 
     @Test
     public void shouldJFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                " J    " +
-                " J    " +
-                "JJ    ");
+        givenFl("......" +
+                "......" +
+                "......" +
+                ".J...." +
+                ".J...." +
+                "JJ....");
 
-        assrtDr("      " +
-                "      " +
-                "      " +
-                " J    " +
-                " J    " +
-                "JJ    ");
+        assrtDr("......" +
+                "......" +
+                "......" +
+                ".J...." +
+                ".J...." +
+                "JJ....");
     }
 
     @Test
     public void shouldLFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                " L    " +
-                " L    " +
-                " LL   ");
+        givenFl("......" +
+                "......" +
+                "......" +
+                ".L...." +
+                ".L...." +
+                ".LL...");
 
-        assrtDr("      " +
-                "      " +
-                "      " +
-                " L    " +
-                " L    " +
-                " LL   ");
+        assrtDr("......" +
+                "......" +
+                "......" +
+                ".L...." +
+                ".L...." +
+                ".LL...");
     }
 
     @Test
     public void shouldSFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "  SS  " +
-                " SSO  ");
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "..SS.." +
+                ".SSO..");
 
-        assrtDr("      " +
-                "      " +
-                "      " +
-                "      " +
-                "  SS  " +
-                " SSO  ");
+        assrtDr("......" +
+                "......" +
+                "......" +
+                "......" +
+                "..SS.." +
+                ".SSO..");
     }
 
     @Test
     public void shouldZFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "  ZZ  " +
-                "  OZZ ");
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "..ZZ.." +
+                "..OZZ.");
 
-        assrtDr("      " +
-                "      " +
-                "      " +
-                "      " +
-                "  ZZ  " +
-                "  OZZ ");
+        assrtDr("......" +
+                "......" +
+                "......" +
+                "......" +
+                "..ZZ.." +
+                "..OZZ.");
     }
 
     @Test
     public void shouldTFiguresAtStart() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "   T  " +
-                "  TTT ");
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "...T.." +
+                "..TTT.");
 
-        assrtDr("      " +
-                "      " +
-                "      " +
-                "      " +
-                "   T  " +
-                "  TTT ");
+        assrtDr("......" +
+                "......" +
+                "......" +
+                "......" +
+                "...T.." +
+                "..TTT.");
     }
 
     @Test
     public void shouldSomeFiguresAtStart() {
-        givenFl("       " +
-                "   SSZ " +
-                "  SSZZ " +
-                "ILOIZI " +
-                "ILLIJI " +
-                "IOOIJI " +
-                "IOOJJI ");
+        givenFl("......." +
+                "...SSZ." +
+                "..SSZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
 
-        assrtDr("       " +
-                "   SSZ " +
-                "  SSZZ " +
-                "ILOIZI " +
-                "ILLIJI " +
-                "IOOIJI " +
-                "IOOJJI ");
+        assrtDr("......." +
+                "...SSZ." +
+                "..SSZZ." +
+                "ILOIZI." +
+                "ILLIJI." +
+                "IOOIJI." +
+                "IOOJJI.");
     }
 
+    @Test
+    public void shouldDropFirstFigure_whenO() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.O.create());
+        game.tick();
+
+        assrtDr("..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("..OO.." +
+                "..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..OO.." +
+                "......" +
+                "......" +
+                "......" +
+                "..OO.." +
+                "..OO..");
+    }
+
+    @Test
+    public void shouldDropFirstFigure_whenI() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.I.create());
+        game.tick();
+
+        assrtDr("..I..." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("..I..." +
+                "..I..." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..I..." +
+                "......" +
+                "..I..." +
+                "..I..." +
+                "..I..." +
+                "..I...");
+    }
+
+    @Test
+    public void shouldDropFirstFigure_whenJ() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.J.create());
+        game.tick();
+
+        assrtDr("..JJ.." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("...J.." +
+                "..JJ.." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..JJ.." +
+                "......" +
+                "......" +
+                "...J.." +
+                "...J.." +
+                "..JJ..");
+    }
+
+    @Test
+    public void shouldDropFirstFigure_whenL() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.L.create());
+        game.tick();
+
+        assrtDr("..LL.." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("..L..." +
+                "..LL.." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..LL.." +
+                "......" +
+                "......" +
+                "..L..." +
+                "..L..." +
+                "..LL..");
+    }
+
+    @Test
+    public void shouldDropFirstFigure_whenT() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.T.create());
+        game.tick();
+
+        assrtDr("..TTT." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("...T.." +
+                "..TTT." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..TTT." +
+                "......" +
+                "......" +
+                "......" +
+                "...T.." +
+                "..TTT.");
+    }
+
+    @Test
+    public void shouldDropFirstFigure_whenS() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.S.create());
+        game.tick();
+
+        assrtDr("..SS.." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("...SS." +
+                "..SS.." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("..SS.." +
+                "......" +
+                "......" +
+                "......" +
+                "...SS." +
+                "..SS..");
+    }
+
+    @Test
+    public void shouldDropFirstFigure_whenZ() {
+        givenFl("......" +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        when(queue.next()).thenReturn(Type.Z.create());
+        game.tick();
+
+        assrtDr("...ZZ." +
+                "......" +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        game.tick();
+
+        assrtDr("..ZZ.." +
+                "...ZZ." +
+                "......" +
+                "......" +
+                "......" +
+                "......");
+
+        hero.down();
+        game.tick();
+
+        assrtDr("...ZZ." +
+                "......" +
+                "......" +
+                "......" +
+                "..ZZ.." +
+                "...ZZ.");
+    }
 }

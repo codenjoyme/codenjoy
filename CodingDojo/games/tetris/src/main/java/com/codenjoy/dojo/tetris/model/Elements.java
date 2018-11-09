@@ -32,14 +32,14 @@ import com.codenjoy.dojo.services.printer.CharElements;
  */
 public enum Elements implements CharElements {
 
-    BLUE('I'),
-    CYAN('J'),
-    ORANGE('L'),
-    YELLOW('O'),
-    GREEN('S'),
-    PURPLE('T'),
-    RED('Z'),
-    NONE(' ');
+    BLUE('I'),   // 2
+    CYAN('J'),   // 3
+    ORANGE('L'), // 4
+    YELLOW('O'), // 1
+    GREEN('S'),  // 5
+    PURPLE('T'), // 7
+    RED('Z'),    // 6
+    NONE('.');
 
     final char ch;
 
