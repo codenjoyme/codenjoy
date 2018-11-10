@@ -34,6 +34,8 @@ import java.util.List;
 public class GlassImpl implements Glass {
 
     public static final int BITS = 3; // per point
+    public static final BigInteger Ob111 = new BigInteger("111", 2);
+
     private int width;
     private int height;
     private EventListener listener;
@@ -146,7 +148,7 @@ public class GlassImpl implements Glass {
     private boolean wholeLine(int y) {
         for (int i = 0; i < width; i++) {
             BigInteger line = occupied.get(y);
-            BigInteger atPos = BigInteger.valueOf(0b111 << ((i + 1) * BITS));
+            BigInteger atPos = Ob111.shiftLeft((i + 1)*BITS);
             if ((line.and(atPos).equals(BigInteger.ZERO))) {
                 return false;
             }
@@ -163,7 +165,7 @@ public class GlassImpl implements Glass {
 
     private BigInteger[] alignRowWithGlass(Figure figure, int x, boolean ignoreColors) {
         int[] rows = figure.rowCodes(ignoreColors);
-        BigInteger[] result = new BigInteger[figure.rowCodes(false).length];
+        BigInteger[] result = new BigInteger[rows.length];
         for (int i = 0; i < rows.length; i++) {
             result[i] = BigInteger.valueOf((long) rows[i])
                     .shiftLeft((width - x - figure.right()) * BITS);

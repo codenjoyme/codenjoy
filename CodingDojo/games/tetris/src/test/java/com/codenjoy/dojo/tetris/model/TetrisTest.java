@@ -729,6 +729,7 @@ public class TetrisTest {
         verify(listener).event(Events.linesRemoved(level, 2));
     }
 
+    // тут начиналось переполнение long внутри glass
     @Test
     public void shouldRemoveLine_whenO_and11x11() {
         int level = 1;
