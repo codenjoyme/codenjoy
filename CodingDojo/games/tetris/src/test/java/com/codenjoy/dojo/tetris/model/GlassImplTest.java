@@ -61,7 +61,7 @@ public class GlassImplTest {
 
     @Before
     public void setUp() throws Exception {
-        glass = new GlassImpl(WIDTH, HEIGHT);
+        glass = new GlassImpl(WIDTH, HEIGHT, () -> 1);
         glass.setListener(listener);
         point = new FigureImpl();
         glassWidthFigure = new FigureImpl(0, 0, StringUtils.repeat("#", WIDTH));
@@ -359,9 +359,6 @@ public class GlassImplTest {
 
     @Test
     public void shouldTriggerAllListenersWhenOverflow() {
-        Glass glass = new GlassImpl(WIDTH, HEIGHT);
-        glass.setListener(listener);
-
         glass.empty();
 
         verify(listener).event(Events.glassOverflown(1));
@@ -369,9 +366,6 @@ public class GlassImplTest {
 
     @Test
     public void shouldNotifyAllListenersScoreBoardWhenDropped() {
-        Glass glass = new GlassImpl(WIDTH, HEIGHT);
-        glass.setListener(listener);
-        
         glass.drop(point, 0, HEIGHT);
 
         verify(listener).event(Events.figuresDropped(1, point.type().getColor().index()));
@@ -379,9 +373,6 @@ public class GlassImplTest {
 
     @Test
     public void shouldNotifyAllListenersScoreBoardWhenLinesRemoved() {
-        Glass glass = new GlassImpl(WIDTH, HEIGHT);
-        glass.setListener(listener);
-
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
         verify(listener).event(Events.figuresDropped(1, glassWidthFigure.type().getColor().index()));

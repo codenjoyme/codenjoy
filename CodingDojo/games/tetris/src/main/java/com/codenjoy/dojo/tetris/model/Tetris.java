@@ -38,8 +38,10 @@ public class Tetris implements Field {
     protected FigureQueue queue;
     private int size;
     private Player player;
+    private Levels levels;
 
-    public Tetris(FigureQueue queue, int size) {
+    public Tetris(Levels levels, FigureQueue queue, int size) {
+        this.levels = levels;
         this.queue = queue;
         this.size = size;
         take();
@@ -56,6 +58,11 @@ public class Tetris implements Field {
     @Override
     public List<Type> getFuture() {
         return queue.future();
+    }
+
+    @Override
+    public Levels getLevels() {
+        return levels;
     }
 
     @Override

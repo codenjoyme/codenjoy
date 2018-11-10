@@ -30,6 +30,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class GlassImpl implements Glass {
 
@@ -43,10 +44,12 @@ public class GlassImpl implements Glass {
     private Figure figure;
     private int x;
     private int y;
+    private Supplier<Integer> getLevel;
 
-    public GlassImpl(int width, int height) {
+    public GlassImpl(int width, int height, Supplier<Integer> supplier) {
         this.width = width;
         this.height = height;
+        this.getLevel = supplier;
         for (int i = 0; i < height; i++) {
             occupied.add(BigInteger.ZERO);
         }
@@ -121,9 +124,7 @@ public class GlassImpl implements Glass {
         }
 
         if (listener != null) {
-            // TODO и где я тут достану номер уровня?
-            int level = 1;
-            listener.event(Events.figuresDropped(level, figure.type().getColor().index()));
+            listener.event(Events.figuresDropped(getLevel.get(), figure.type().getColor().index()));
         }
     }
 
@@ -138,9 +139,7 @@ public class GlassImpl implements Glass {
         }
         if (removed > 0) {
             if (listener != null) {
-                // TODO и где я тут достану номер уровня?
-                int level = 1;
-                listener.event(Events.linesRemoved(level, removed));
+                listener.event(Events.linesRemoved(getLevel.get(), removed));
             }
         }
     }
@@ -178,9 +177,7 @@ public class GlassImpl implements Glass {
             occupied.set(i, BigInteger.ZERO);
         }
         if (listener != null) {
-            // TODO и где я тут достану номер уровня?
-            int level = 1;
-            listener.event(Events.glassOverflown(level));
+            listener.event(Events.glassOverflown(getLevel.get()));
         }
     }
 

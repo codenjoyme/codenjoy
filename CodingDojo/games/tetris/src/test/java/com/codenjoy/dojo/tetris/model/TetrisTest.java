@@ -68,12 +68,15 @@ public class TetrisTest {
     private void givenFl(String board) {
         printerFactory = new PrinterFactoryImpl<>();
 
-        LevelImpl level = new LevelImpl(board);
+        Level level = new LevelImpl(board);
         List<Plot> plots = level.plots();
 
         queue = mock(FigureQueue.class);
 
-        game = new Tetris(queue, level.size());
+        Levels levels = mock(Levels.class);
+        when(levels.getCurrentLevelNumber()).thenReturn(0);
+
+        game = new Tetris(levels, queue, level.size());
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);

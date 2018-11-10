@@ -24,7 +24,11 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.tetris.services.Events;
 
 public class Player extends GamePlayer<Hero, Field> {
 
@@ -39,10 +43,31 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
+    public HeroData getHeroData() {
+        return new HeroDataImpl(hero.level(),
+                MultiplayerType.SINGLE.isSingle());
+    }
+
+    @Override
     public void newHero(Field field) {
         hero = new Hero();
         hero.init(field);
         hero.glass().setListener(listener);
+    }
+
+    @Override
+    public void event(Object object) {
+        super.event(object);
+
+        Events event = (Events)object;
+        GlassEventListener listener = hero.levelsListener();
+        if (event.isLinesRemoved()) {
+            listener.linesRemoved(event.getRemovedLines());
+        } else if (event.isFiguresDropped()) {
+            listener.figureDropped(Type.getByIndex(event.getFigureIndex()));
+        } else if (event.isGlassOverflown()) {
+            listener.glassOverflown();
+        }
     }
 
     @Override

@@ -36,10 +36,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean drop;
     private Figure figure;
+    private Levels levels;
 
     @Override
     public void init(Field field) {
-        glass = new GlassImpl(field.size(), field.size());
+        this.levels = field.getLevels();
+        glass = new GlassImpl(field.size(), field.size(),
+                () -> levels.getCurrentLevelNumber() + 1);
         this.field = field;
     }
 
@@ -188,5 +191,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public int boardSize() {
         return field.size();
+    }
+
+    public int level() {
+        return levels.getCurrentLevelNumber();
+    }
+
+    public GlassEventListener levelsListener() {
+        return levels;
     }
 }

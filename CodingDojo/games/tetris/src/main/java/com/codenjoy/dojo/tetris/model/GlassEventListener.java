@@ -28,5 +28,5 @@ public interface GlassEventListener {
 
     void linesRemoved(int amount);
 
-    void figureDropped(Figure figure);
+    void figureDropped(Type figureType);
 }
