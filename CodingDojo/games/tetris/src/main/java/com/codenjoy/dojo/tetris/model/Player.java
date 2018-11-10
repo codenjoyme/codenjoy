@@ -52,22 +52,21 @@ public class Player extends GamePlayer<Hero, Field> {
     public void newHero(Field field) {
         hero = new Hero();
         hero.init(field);
-        hero.glass().setListener(listener);
-    }
 
-    @Override
-    public void event(Object object) {
-        super.event(object);
+        // TODO упростить эту систему коммуникации
+        hero.glass().setListener(object -> {
+            listener.event(object);
 
-        Events event = (Events)object;
-        GlassEventListener listener = hero.levelsListener();
-        if (event.isLinesRemoved()) {
-            listener.linesRemoved(event.getRemovedLines());
-        } else if (event.isFiguresDropped()) {
-            listener.figureDropped(Type.getByIndex(event.getFigureIndex()));
-        } else if (event.isGlassOverflown()) {
-            listener.glassOverflown();
-        }
+            Events event = (Events)object;
+            GlassEventListener listener = hero.levelsListener();
+            if (event.isLinesRemoved()) {
+                listener.linesRemoved(event.getRemovedLines());
+            } else if (event.isFiguresDropped()) {
+                listener.figureDropped(Type.getByIndex(event.getFigureIndex()));
+            } else if (event.isGlassOverflown()) {
+                listener.glassOverflown();
+            }
+        });
     }
 
     @Override
