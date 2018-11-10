@@ -10,12 +10,12 @@ package com.codenjoy.dojo.tetris.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -78,19 +78,22 @@ public class BoardTest {
     public static Board getBoard(String glass, String figureType,
                                  Point point, String[] futureFigures)
     {
-        JSONObject result = new JSONObject(){{
-            put("layers", new JSONArray(){{
-                put(glass);
-            }});
-            put("currentFigureType", figureType);
-            put("currentFigurePoint", new JSONObject(point));
-            put("futureFigures", new JSONArray(){{
-                Arrays.stream(futureFigures)
-                        .forEach(s -> this.put(s));
-            }});
-        }};
-
+        JSONObject result = getJson(glass, figureType, point, futureFigures);
         return (Board) new Board().forString(result.toString());
+    }
+
+    public static JSONObject getJson(final String glass, final String figureType, final Point point, final String[] futureFigures) {
+        return new JSONObject(){{
+                put("layers", new JSONArray(){{
+                    put(glass);
+                }});
+                put("currentFigureType", figureType);
+                put("currentFigurePoint", new JSONObject(point));
+                put("futureFigures", new JSONArray(){{
+                    Arrays.stream(futureFigures)
+                            .forEach(s -> this.put(s));
+                }});
+            }};
     }
 
 }
