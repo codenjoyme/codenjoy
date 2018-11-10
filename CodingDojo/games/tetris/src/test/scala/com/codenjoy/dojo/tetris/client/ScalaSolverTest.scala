@@ -22,17 +22,12 @@ package com.codenjoy.dojo.tetris.client
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction
-import com.codenjoy.dojo.client.{ClientBoard, Solver}
-import com.codenjoy.dojo.services.Dice
-import com.codenjoy.dojo.services.Point
-import org.junit.Before
-import org.junit.Test
+import com.codenjoy.dojo.services.{Dice, Direction, Point}
 import com.codenjoy.dojo.services.PointImpl.pt
 import org.junit.Assert.assertEquals
+import org.junit.{Before, Test}
 import org.mockito.Matchers.anyInt
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{mock, when}
 
 class SolverScalaTest {
   private var dice: Dice = null

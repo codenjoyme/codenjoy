@@ -23,11 +23,11 @@ package com.codenjoy.dojo.tetris.client
  */
 
 import com.codenjoy.dojo.services.Point
+import com.codenjoy.dojo.services.PointImpl.pt
 import com.codenjoy.dojo.tetris.model.Elements
 import org.json.JSONObject
-import org.junit.Test
-import com.codenjoy.dojo.services.PointImpl.pt
 import org.junit.Assert.assertEquals
+import org.junit.Test
 
 object BoardScalaTest {
   def getBoard(glass: String, figureType: String, point: Point, futureFigures: Array[String]): Board = {

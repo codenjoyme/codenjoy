@@ -22,10 +22,8 @@ package com.codenjoy.dojo.tetris.client
  * #L%
  */
 
-import com.codenjoy.dojo.client.AbstractJsonSolver
-import com.codenjoy.dojo.client.WebSocketRunner
-import com.codenjoy.dojo.services.Dice
-import com.codenjoy.dojo.services.RandomDice
+import com.codenjoy.dojo.client.{AbstractJsonSolver, WebSocketRunner}
+import com.codenjoy.dojo.services.{Dice, RandomDice}
 
 /**
   * User: your name
