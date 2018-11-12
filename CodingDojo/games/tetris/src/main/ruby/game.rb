@@ -22,7 +22,7 @@
 # encoding: utf-8
 
 require 'websocket-client-simple'
-
+require 'json'
 
 # Check ARGS
 usage = %Q(\n\nPlease run 'ruby game.rb GAME_HOST USERNAME CODE'\n\nExample:\nruby game.rb 127.0.0.1:8080 root@localhost.local\n\n)
@@ -413,6 +413,7 @@ ws.on :message do |msg|
     # Receive board from Server and update game board
     msg.data =~ /^board=(.*)$/
     board = $1.force_encoding('UTF-8')
+    puts JSON.pretty_generate(JSON.parse(board))
     game.board = board
 
     # # Bomberman object
