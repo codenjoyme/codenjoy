@@ -26,14 +26,16 @@ load 'solver.rb'
 require 'websocket-client-simple'
 
 # Check ARGS
-usage = %Q(\n\nPlease run 'ruby runner.rb GAME_HOST USERNAME CODE'\n\nExample:\nruby runner.rb 127.0.0.1:8080 your@email.com 20010765231070354251\n\n)
+usage = %Q(\n\nPlease run 'ruby runner.rb BOARD_URL'\n\nExample:\nruby runner.rb http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890\n\n)
 
 raise usage unless ARGV[0]
-raise usage unless ARGV[1]
-raise usage unless ARGV[2]
 
 # WebSocket object to connect to Codenjoy server
-ws = WebSocket::Client::Simple.connect "ws://#{ARGV[0]}/codenjoy-contest/ws?user=#{ARGV[1]}&code=#{ARGV[2]}"
+ws_url = ARGV[0].dup
+ws_url["http"] = "ws"
+ws_url["board/player/"] = "ws?user="
+ws_url["?code="] = "&code="
+ws = WebSocket::Client::Simple.connect ws_url
 
 # Board object
 board = Board.new
@@ -50,6 +52,7 @@ ws.on :message do |msg|
 
     board.process(json)
     answer = solver.process(board)
+    puts "answer: " + answer
 
     # Send command to server
     ws.send answer
