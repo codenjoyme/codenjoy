@@ -1,3 +1,24 @@
+###
+# #%L
+# Codenjoy - it's a dojo-like platform from developers to developers.
+# %%
+# Copyright (C) 2018 Codenjoy
+# %%
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/gpl-3.0.html>.
+# #L%
+###
 require 'json'
 
 ##################################### ELEMENTS TYPES #########################################################
@@ -96,20 +117,19 @@ end
 # Game class
 class Board
   attr_accessor :board
-  attr_accessor :currentFigureType
-  attr_accessor :futureFigures
-  attr_accessor :currentFigurePoint
+  attr_accessor :current_figure_type
+  attr_accessor :future_figures
+  attr_accessor :current_figure_point
 
   def process(str)
     puts "-------------------------------------------------------------------------------------------"
-    puts str
     json = JSON.parse(str)
     @board = json["layers"][0]
-    @currentFigureType = json["currentFigureType"]
-    @futureFigures = json["futureFigures"]
-    @currentFigurePoint = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
-    puts "currentFigure: \"" + @currentFigureType + "\" at: " + @currentFigurePoint.to_s
-    puts "futureFigures: " + @futureFigures.to_s
+    @current_figure_type = json["currentFigureType"]
+    @future_figures = json["futureFigures"]
+    @current_figure_point = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
+    puts "currentFigure: \"" + @current_figure_type + "\" at: " + @current_figure_point.to_s
+    puts "futureFigures: " + @future_figures.to_s
     puts "board:"
     puts @board.scan(/.{18}|.+/).join("\n")
   end

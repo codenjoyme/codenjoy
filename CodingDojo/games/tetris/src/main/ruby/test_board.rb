@@ -1,3 +1,24 @@
+###
+# #%L
+# Codenjoy - it's a dojo-like platform from developers to developers.
+# %%
+# Copyright (C) 2018 Codenjoy
+# %%
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public
+# License along with this program.  If not, see
+# <http://www.gnu.org/licenses/gpl-3.0.html>.
+# #L%
+###
 # encoding: utf-8
 
 load 'board.rb'
@@ -45,8 +66,13 @@ str = "{\"currentFigureType\":\"T\",\"futureFigures\":[\"I\",\"O\",\"L\",\"Z\"],
 "..OOIOO" +
 "\"],\"currentFigurePoint\":{\"x\":1,\"y\":2}}"
 
+
 board = Board.new
 board.process(str)
+
+test.assert("T", board.current_figure_type)
+test.assert("[1,2]", board.current_figure_point)
+test.assert('["I", "O", "L", "Z"]', board.future_figures)
 
 pt1 = Point.new(0, 0)
 test.assert(ELEMENTS[:NONE], board.get_at(pt1))
