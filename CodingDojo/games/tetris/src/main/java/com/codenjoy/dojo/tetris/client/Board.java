@@ -23,10 +23,8 @@ package com.codenjoy.dojo.tetris.client;
  */
 
 
-import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.tetris.model.Elements;
 import org.json.JSONObject;
 
@@ -62,33 +60,17 @@ public class Board extends AbstractTextBoard {
         return result;
     }
 
-    public boolean isFree(int x, int y) {
-        return getGlass().isAt(x, y, Elements.NONE);
-    }
-
     private JSONObject getJson() {
         return new JSONObject(data);
     }
 
-    public AbstractBoard<Elements> getGlass() {
+    public GlassBoard getGlass() {
         String glassString = getJson().getJSONArray("layers").getString(0);
-        return (AbstractBoard) new AbstractBoard(){
-            @Override
-            public CharElements valueOf(char ch) {
-                return Elements.valueOf(ch);
-            }
-
-            @Override
-            protected int inversionY(int y) {
-                return size() - 1 - y;
-            }
-        }.forString(glassString);
+        return (GlassBoard) new GlassBoard().forString(glassString);
     }
 
     private Elements getElement(String figureType) {
         char ch = figureType.charAt(0);
         return Elements.valueOf(ch);
     }
-
-
 }

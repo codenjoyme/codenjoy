@@ -36,6 +36,18 @@ def indexes(s, char)
   (0 ... s.length).find_all { |i| s[i,1] == char }
 end
 
+def compare(pt1, pt2)
+  if (pt1.x <=> pt2.x) != 0
+    pt1.x <=> pt2.x
+  else
+    pt1.y <=> pt2.y
+  end
+end
+
+def sort(array)
+  array.sort { |pt1, pt2| compare(pt1, pt2) }
+end
+
 # Point class
 class Point
   attr_accessor :x
@@ -149,7 +161,7 @@ class Board
       res << Point.new(x, y - sh) if is_at?(Point.new(x, y - sh), element)
     end
 
-    res.empty? ? nil : res
+    res.empty? ? nil : sort(res)
   end
 
   # Count how many objects of specified type around position
@@ -190,7 +202,7 @@ class Board
       pos += 1
     end
 
-    res.sort { |pt1, pt2| pt1.y <=> pt2.y && pt1.x <=> pt2.x}
+    sort(res)
   end
 
   # List of busy spaces in the glass
@@ -204,7 +216,7 @@ class Board
       pos += 1
     end
 
-    res
+    sort(res)
   end
 
   # Return list of free spaces in the glass
@@ -218,7 +230,7 @@ class Board
       pos += 1
     end
 
-    res
+    sort(res)
   end
 
   # How far specified element from position (strait direction)

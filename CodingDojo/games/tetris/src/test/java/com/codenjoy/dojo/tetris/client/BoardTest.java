@@ -52,45 +52,62 @@ public class BoardTest {
                 pt(1, 2),
                 new String[]{"I", "O", "L", "Z"});
 
-        assertEquals(Elements.NONE, board.getGlass().getAt(0, 0));
-        assertEquals(false, board.getGlass().isAt(0, 0, Elements.YELLOW));
-        assertEquals(true, board.getGlass().isAt(0, 0, Elements.NONE));
-        assertEquals(true, board.getGlass().isAt(0, 0, Elements.ORANGE, Elements.NONE));
-        assertEquals(true, board.isFree(0, 0));
+        GlassBoard glass = board.getGlass();
 
-        assertEquals(Elements.YELLOW, board.getGlass().getAt(2, 0));
-        assertEquals(true, board.getGlass().isAt(2, 0, Elements.YELLOW));
-        assertEquals(false, board.getGlass().isAt(2, 0, Elements.NONE));
-        assertEquals(false, board.getGlass().isAt(2, 0, Elements.ORANGE, Elements.NONE));
-        assertEquals(false, board.isFree(2, 0));
+        assertEquals(Elements.NONE, glass.getAt(0, 0));
+        assertEquals(false, glass.isAt(0, 0, Elements.YELLOW));
+        assertEquals(true, glass.isAt(0, 0, Elements.NONE));
+        assertEquals(true, glass.isAt(0, 0, Elements.ORANGE, Elements.NONE));
+        assertEquals(true, glass.isFree(0, 0));
 
-        assertEquals(Elements.GREEN, board.getGlass().getAt(2, 2));
-        assertEquals(false, board.getGlass().isAt(2, 2, Elements.YELLOW));
-        assertEquals(false, board.getGlass().isAt(2, 2, Elements.NONE));
-        assertEquals(false, board.getGlass().isAt(2, 2, Elements.ORANGE, Elements.NONE));
-        assertEquals(false, board.isFree(2, 2));
+        assertEquals(Elements.YELLOW, glass.getAt(2, 0));
+        assertEquals(true, glass.isAt(2, 0, Elements.YELLOW));
+        assertEquals(false, glass.isAt(2, 0, Elements.NONE));
+        assertEquals(false, glass.isAt(2, 0, Elements.ORANGE, Elements.NONE));
+        assertEquals(false, glass.isFree(2, 0));
 
-        assertEquals(Elements.ORANGE, board.getGlass().getAt(3, 4));
-        assertEquals(false, board.getGlass().isAt(3, 4, Elements.YELLOW));
-        assertEquals(false, board.getGlass().isAt(3, 4, Elements.NONE));
-        assertEquals(true, board.getGlass().isAt(3, 4, Elements.ORANGE, Elements.NONE));
-        assertEquals(false, board.isFree(3, 0));
+        assertEquals(Elements.GREEN, glass.getAt(2, 2));
+        assertEquals(false, glass.isAt(2, 2, Elements.YELLOW));
+        assertEquals(false, glass.isAt(2, 2, Elements.NONE));
+        assertEquals(false, glass.isAt(2, 2, Elements.ORANGE, Elements.NONE));
+        assertEquals(false, glass.isFree(2, 2));
+
+        assertEquals(Elements.ORANGE, glass.getAt(3, 4));
+        assertEquals(false, glass.isAt(3, 4, Elements.YELLOW));
+        assertEquals(false, glass.isAt(3, 4, Elements.NONE));
+        assertEquals(true, glass.isAt(3, 4, Elements.ORANGE, Elements.NONE));
+        assertEquals(false, glass.isFree(3, 0));
 
         assertEquals("[[0,1], [1,1], [1,2], [2,2]]",
-                board.getGlass().get(Elements.GREEN).toString());
+                glass.get(Elements.GREEN).toString());
 
         assertEquals("[[2,4], [3,2], [3,3], [3,4]]",
-                board.getGlass().get(Elements.ORANGE).toString());
+                glass.get(Elements.ORANGE).toString());
 
         assertEquals("[[0,1], [1,1], [1,2], [2,2], [2,4], [3,2], [3,3], [3,4]]",
-                board.getGlass().get(Elements.GREEN, Elements.ORANGE).toString());
+                glass.get(Elements.GREEN, Elements.ORANGE).toString());
 
         assertEquals("[., L, ., L, L, ., I, ., .]",
-                board.getGlass().getNear(pt(3, 4)).toString());
+                glass.getNear(pt(3, 4)).toString());
 
         assertEquals("[1,2]", board.getCurrentFigurePoint().toString());
         assertEquals("T", board.getCurrentFigureType().toString());
         assertEquals("[I, O, L, Z]", board.getFutureFigures().toString());
+
+        assertEquals("[[0,1], [1,1], [1,2], [2,0], " +
+                "[2,1], [2,2], [2,4], [3,0], " +
+                "[3,1], [3,2], [3,3], [3,4], " +
+                "[4,0], [4,1], [4,2], [4,3], " +
+                "[5,0], [5,1], [6,0], [6,1], " +
+                "[6,2], [6,3], [6,4], [6,5]]", glass.getFigures().toString());
+
+        assertEquals("[[0,0], [0,2], [0,3], [0,4], " +
+                "[0,5], [0,6], [1,0], [1,3], " +
+                "[1,4], [1,5], [1,6], [2,3], " +
+                "[2,5], [2,6], [3,5], [3,6], " +
+                "[4,4], [4,5], [4,6], [5,2], " +
+                "[5,3], [5,4], [5,5], [5,6], " +
+                "[6,6]]", glass.getFreeSpace().toString());
     }
 
     public static Board getBoard(String glass, String figureType,
