@@ -87,8 +87,19 @@ public class BoardTest {
         assertEquals("[[0,1], [1,1], [1,2], [2,2], [2,4], [3,2], [3,3], [3,4]]",
                 glass.get(Elements.GREEN, Elements.ORANGE).toString());
 
-        assertEquals("[., L, ., L, L, ., I, ., .]",
-                glass.getNear(pt(3, 4)).toString());
+        assertEquals("[., L, ., L, ., I, ., .]",
+                glass.getNear(3, 4).toString());
+        assertEquals(false, glass.isNear(3, 4, Elements.PURPLE));
+        assertEquals(true, glass.isNear(3, 4, Elements.BLUE));
+        assertEquals(1, glass.countNear(3, 4, Elements.BLUE));
+        assertEquals(2, glass.countNear(3, 4, Elements.ORANGE));
+
+        assertEquals("[S, S, ., O, ., O, L, L]",
+                glass.getNear(pt(2, 2)).toString());
+        assertEquals(true, glass.isNear(pt(2, 2), Elements.ORANGE));
+        assertEquals(false, glass.isNear(pt(2, 2), Elements.BLUE));
+        assertEquals(2, glass.countNear(pt(2, 2), Elements.ORANGE));
+        assertEquals(2, glass.countNear(pt(2, 2), Elements.GREEN));
 
         assertEquals("[1,2]", board.getCurrentFigurePoint().toString());
         assertEquals("T", board.getCurrentFigureType().toString());
@@ -108,6 +119,7 @@ public class BoardTest {
                 "[4,4], [4,5], [4,6], [5,2], " +
                 "[5,3], [5,4], [5,5], [5,6], " +
                 "[6,6]]", glass.getFreeSpace().toString());
+
     }
 
     public static Board getBoard(String glass, String figureType,

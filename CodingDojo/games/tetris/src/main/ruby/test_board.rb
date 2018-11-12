@@ -85,6 +85,20 @@ test.assert('["[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
 test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]", "[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
             board.get([ELEMENTS[:L_ORANGE], ELEMENTS[:S_GREEN]]).map {|it| it.to_s })
 
+pt5 = Point.new(3, 4)
+test.assert('[".", "L", ".", "L", ".", "I", ".", "."]', board.get_near(pt5).to_s)
+test.assert(false, board.is_near?(pt5, ELEMENTS[:T_PURPLE]))
+test.assert(true, board.is_near?(pt5, ELEMENTS[:I_BLUE]))
+test.assert(1, board.count_near(pt5, ELEMENTS[:I_BLUE]))
+test.assert(2, board.count_near(pt5, ELEMENTS[:L_ORANGE]))
+
+pt6 = Point.new(2, 2)
+test.assert('["S", "S", ".", "O", ".", "O", "L", "L"]', board.get_near(pt6).to_s)
+test.assert(true, board.is_near?(pt6, ELEMENTS[:L_ORANGE]))
+test.assert(false, board.is_near?(pt6, ELEMENTS[:I_BLUE]))
+test.assert(2, board.count_near(pt6, ELEMENTS[:L_ORANGE]))
+test.assert(2, board.count_near(pt6, ELEMENTS[:S_GREEN]))
+
 test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,0]", ' +
                 '"[2,1]", "[2,2]", "[2,4]", "[3,0]", ' +
                 '"[3,1]", "[3,2]", "[3,3]", "[3,4]", ' +

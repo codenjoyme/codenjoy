@@ -76,13 +76,27 @@ class BoardScalaTest {
     assertEquals(true, glass.isAt(3, 4, Elements.ORANGE, Elements.NONE))
     assertEquals(false, glass.isFree(3, 0))
 
-    assertEquals("[[0,1], [1,1], [1,2], [2,2]]", glass.get(Elements.GREEN).toString)
+    assertEquals("[[0,1], [1,1], [1,2], [2,2]]",
+      glass.get(Elements.GREEN).toString)
 
-    assertEquals("[[2,4], [3,2], [3,3], [3,4]]", glass.get(Elements.ORANGE).toString)
+    assertEquals("[[2,4], [3,2], [3,3], [3,4]]",
+      glass.get(Elements.ORANGE).toString)
 
-    assertEquals("[[0,1], [1,1], [1,2], [2,2], [2,4], [3,2], [3,3], [3,4]]", glass.get(Elements.GREEN, Elements.ORANGE).toString)
+    assertEquals("[[0,1], [1,1], [1,2], [2,2], " +
+      "[2,4], [3,2], [3,3], [3,4]]",
+      glass.get(Elements.GREEN, Elements.ORANGE).toString)
 
-    assertEquals("[., L, ., L, L, ., I, ., .]", glass.getNear(pt(3, 4)).toString)
+    assertEquals("[., L, ., L, ., I, ., .]", glass.getNear(3, 4).toString)
+    assertEquals(false, glass.isNear(3, 4, Elements.PURPLE))
+    assertEquals(true, glass.isNear(3, 4, Elements.BLUE))
+    assertEquals(1, glass.countNear(3, 4, Elements.BLUE))
+    assertEquals(2, glass.countNear(3, 4, Elements.ORANGE))
+
+    assertEquals("[S, S, ., O, ., O, L, L]", glass.getNear(pt(2, 2)).toString)
+    assertEquals(true, glass.isNear(pt(2, 2), Elements.ORANGE))
+    assertEquals(false, glass.isNear(pt(2, 2), Elements.BLUE))
+    assertEquals(2, glass.countNear(pt(2, 2), Elements.ORANGE))
+    assertEquals(2, glass.countNear(pt(2, 2), Elements.GREEN))
 
     assertEquals("[1,2]", board.getCurrentFigurePoint.toString)
     assertEquals("T", board.getCurrentFigureType.toString)
