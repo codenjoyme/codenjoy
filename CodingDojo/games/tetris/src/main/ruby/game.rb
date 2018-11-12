@@ -162,6 +162,9 @@ end
 # Game class
 class Game
   attr_accessor :board
+  attr_accessor :currentFigureType
+  attr_accessor :futureFigures
+  attr_accessor :currentFigurePoint
   # attr_reader :bomberman
 
   # Returns board size
@@ -413,8 +416,16 @@ ws.on :message do |msg|
     # Receive board from Server and update game board
     msg.data =~ /^board=(.*)$/
     board = $1.force_encoding('UTF-8')
-    puts JSON.pretty_generate(JSON.parse(board))
-    game.board = board
+    puts "---------------------------------------------------------------------"
+    json = JSON.parse(board)
+    game.board = json["layers"][0]
+    game.currentFigureType = json["currentFigureType"]
+    game.futureFigures = json["futureFigures"]
+    game.currentFigurePoint = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
+    puts "currentFigure: \"" + game.currentFigureType + "\" at: " + game.currentFigurePoint.to_s
+    puts "futureFigures: " + game.futureFigures.to_s
+    puts "board:"
+    puts game.board.scan(/.{18}|.+/).join("\n")
 
     # # Bomberman object
     # bomber = game.bomberman
@@ -433,7 +444,7 @@ ws.on :message do |msg|
     # Place bomb if wall nearby
     # act = game.count_near(bomber.position, ELEMENTS[:DESTROY_WALL]) > 0
 
-    direction = 'DOWN'
+    direction = 'UP'
 
     # Change direction if bomberman can't move in specified direction
     # if direction.empty? || !bomber.can_move?(direction)
