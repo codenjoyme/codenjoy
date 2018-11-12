@@ -182,7 +182,9 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
     }
 
     /**
-     * Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.
+     * Says if near (at left, right, down, up,
+     * left-down, left-up, right-down, right-up)
+     * given position (X, Y) at given layer exists given element.
      *
      * @param numLayer Layer number (from 0).
      * @param x        X coordinate.
@@ -194,11 +196,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         if (pt(x, y).isOutOf(size)) {
             return false;
         }
-		// TODO remove duplicate with countNear method
-        return isAt(numLayer, x + 1, y, element) ||
-                isAt(numLayer, x - 1, y, element) ||
-                isAt(numLayer, x, y + 1, element) ||
-                isAt(numLayer, x, y - 1, element);
+		return countNear(numLayer, x, y, element) > 0;
     }
 
 
@@ -207,25 +205,26 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
      * @param x        X coordinate.
      * @param y        Y coordinate.
      * @param element  Element that we try to detect on near point.
-     * @return Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.
+     * @return Returns count of elements with type specified near
+     * (at left, right, down, up,
+     * left-down, left-up, right-down, right-up) {x,y} point.
      */
     protected int countNear(int numLayer, int x, int y, E element) {
         if (pt(x, y).isOutOf(size)) {
             return 0;
         }
-        int count = 0;
-        if (isAt(numLayer, x + 1, y, element)) count++;
-        if (isAt(numLayer, x - 1, y, element)) count++;
-        if (isAt(numLayer, x, y + 1, element)) count++;
-        if (isAt(numLayer, x, y - 1, element)) count++;
-        return count;
+        return (int) getNear(numLayer, x, y).stream()
+                .filter( it -> it.equals(element))
+                .count();
     }
 
     /**
      * @param numLayer Layer number (from 0).
      * @param x        X coordinate.
      * @param y        Y coordinate.
-     * @return All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.
+     * @return All elements around
+     * (at left, right, down, up,
+     * left-down, left-up, right-down, right-up) position.
      */
     protected List<E> getNear(int numLayer, int x, int y) {
         List<E> result = new LinkedList<E>();
@@ -234,6 +233,9 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
                 if (pt(x + dx, y + dy).isOutOf(size)) {
+                    continue;
+                }
+                if (dx == 0 && dy == 0) {
                     continue;
                 }
                 result.add(getAt(numLayer, x + dx, y + dy));

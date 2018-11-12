@@ -147,32 +147,39 @@ class Board
   #
   # @param [Point] point position
   # @param [String, Array] element one or array of +ELEMENTS[...]+
-  # @param [Integer] radius radius to check
-  def get_near(point, element, radius = 1)
+  def get_near(point)
     res = []
 
-    x = point.x
-    y = point.y
-
-    (1..radius).each do |sh|
-      res << Point.new(x - sh, y) if is_at?(Point.new(x - sh, y), element)
-      res << Point.new(x + sh, y) if is_at?(Point.new(x + sh, y), element)
-      res << Point.new(x, y + sh) if is_at?(Point.new(x, y + sh), element)
-      res << Point.new(x, y - sh) if is_at?(Point.new(x, y - sh), element)
+    for dx in -1..1
+      for dy in -1..1
+        if dx == 0 && dy == 0
+          next
+        end
+        res << get_at(Point.new(point.x + dx, point.y + dy))
+      end
     end
 
-    res.empty? ? nil : sort(res)
+    res.empty? ? nil : res
   end
 
   # Count how many objects of specified type around position
   #
   # @param [Point] point position
   # @param [String, Array] element  one or array of +ELEMENTS[...]+
-  # @param [Integer] radius radius
   # @return [Integer] number of objects around
-  def count_near(point, element, radius = 1)
-    res = get_near(point, element, radius)
-    res ? res.size : 0
+  def count_near(point, element)
+    res = get_near(point)
+    res.count { |it| it == element }
+  end
+
+  # Count how many objects of specified type around position
+  #
+  # @param [Point] point position
+  # @param [String, Array] element  one or array of +ELEMENTS[...]+
+  # @return [Integer] number of objects around
+  def is_near?(point, element)
+    res = get_near(point)
+    res.find { |it| it == element } != nil
   end
 
   # Check if figures (elements of +FIGURES+ array) at position
