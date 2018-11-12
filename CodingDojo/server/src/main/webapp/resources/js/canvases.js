@@ -402,10 +402,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var ctx = canvas[0].getContext("2d");
             if (!font) {
                 font = {
-                    font: "15px 'Verdana, sans-serif'",
-                    fillStyle: "#0FF",
+                    font: "15px 'Roboto'",
+                    fillStyle: "#E11916",
                     textAlign: "left",
-                    shadowColor: "#000",
+                    shadowColor: "#3A4354",
                     shadowOffsetX: 0,
                     shadowOffsetY: 0,
                     shadowBlur: 7

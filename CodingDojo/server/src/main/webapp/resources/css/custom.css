@@ -1,0 +1,95 @@
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+.label-primary,
+.singular .entry-title,
+#title {
+    background-color: #e11916 !important;
+}
+
+a,
+a:hover,
+a:focus {
+    color: #3a4354 !important;
+    text-decoration: underline !important;
+}
+
+.label-default {
+    background-color: #3a4354 !important;
+}
+
+@font-face {
+    font-family: Roboto;
+    src: url(/font/Roboto-Regular.ttf);
+}
+
+* {
+    font-family: Roboto !important;
+}
+
+#advertisement img {
+    width: 379px !important;
+    margin-left: 17px !important;
+    margin-top: -30px !important;
+}
+
+#fork-me {
+    display: none !important;
+}
+
+.page-header {
+    background-color: #e11916 !important;
+    color: #fff !important;
+    height: 72px !important;
+    text-align: center !important;
+    margin-top: -20px !important;
+}
+
+h1 {
+    padding-top: 16px !important;
+    color: #fff !important;
+    background-color: #e11916 !important;
+    text-align: center !important;
+}
+
+body {
+    font-size: 20px !important;
+}
+
+h2, .h2 {
+    font-size: 25px !important;
+}
+
+h3, .h3 {
+    font-size: 30px !important;
+}
+
+.page-restrict-output p {
+    text-align: justify !important;
+}
+
+pre {
+    font: 18px monospace !important;
+}
+
+p {
+    margin-bottom: 15px !important;
+}
