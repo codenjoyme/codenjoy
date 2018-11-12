@@ -145,7 +145,11 @@ public class SingleTest {
 
         asrtFl1("{'history':[],'nextQuestion':'question1'}");
         asrtFl2("{'history':[],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        try {
+            asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        } catch (IllegalStateException e) {
+            assertEquals("No board for this player", e.getMessage());
+        }
     }
 
     // игрока можно ресетнуть

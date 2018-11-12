@@ -136,12 +136,16 @@ public class SingleTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        atGame3("☼☼☼☼☼☼\n" +
-                "☼ (  ☼\n" +
-                "☼##*#☼\n" +
-                "☼)  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+        try {
+            atGame3("☼☼☼☼☼☼\n" +
+                    "☼ (  ☼\n" +
+                    "☼##*#☼\n" +
+                    "☼)  $☼\n" +
+                    "☼####☼\n" +
+                    "☼☼☼☼☼☼\n");
+        } catch (IllegalStateException e) {
+            assertEquals("No board for this player", e.getMessage());
+        }
 
         game1.getJoystick().right();
 
