@@ -45,8 +45,13 @@ str = "{\"currentFigureType\":\"T\",\"futureFigures\":[\"I\",\"O\",\"L\",\"Z\"],
 "..OOIOO" +
 "\"],\"currentFigurePoint\":{\"x\":1,\"y\":2}}"
 
+
 board = Board.new
 board.process(str)
+
+test.assert("T", board.current_figure_type)
+test.assert("[1,2]", board.current_figure_point)
+test.assert('["I", "O", "L", "Z"]', board.future_figures)
 
 pt1 = Point.new(0, 0)
 test.assert(ELEMENTS[:NONE], board.get_at(pt1))

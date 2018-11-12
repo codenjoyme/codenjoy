@@ -96,20 +96,20 @@ end
 # Game class
 class Board
   attr_accessor :board
-  attr_accessor :currentFigureType
-  attr_accessor :futureFigures
-  attr_accessor :currentFigurePoint
+  attr_accessor :current_figure_type
+  attr_accessor :future_figures
+  attr_accessor :current_figure_point
 
   def process(str)
     puts "-------------------------------------------------------------------------------------------"
     puts str
     json = JSON.parse(str)
     @board = json["layers"][0]
-    @currentFigureType = json["currentFigureType"]
-    @futureFigures = json["futureFigures"]
-    @currentFigurePoint = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
-    puts "currentFigure: \"" + @currentFigureType + "\" at: " + @currentFigurePoint.to_s
-    puts "futureFigures: " + @futureFigures.to_s
+    @current_figure_type = json["currentFigureType"]
+    @future_figures = json["futureFigures"]
+    @current_figure_point = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
+    puts "currentFigure: \"" + @current_figure_type + "\" at: " + @current_figure_point.to_s
+    puts "futureFigures: " + @future_figures.to_s
     puts "board:"
     puts @board.scan(/.{18}|.+/).join("\n")
   end
