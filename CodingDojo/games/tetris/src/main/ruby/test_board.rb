@@ -76,16 +76,13 @@ test.assert(false, board.is_at?(pt4, ELEMENTS[:NONE]))
 test.assert(true, board.is_at?(pt4, [ELEMENTS[:L_ORANGE], ELEMENTS[:NONE]]))
 test.assert(false, board.is_free?(pt4))
 
-test.assert("[\"[1,2]\", \"[2,2]\", \"[0,1]\", \"[1,1]\"]",
+test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]"]',
             board.get(ELEMENTS[:S_GREEN]).map {|it| it.to_s })
 
-test.assert("[\"[2,4]\", \"[3,4]\", \"[3,3]\", \"[3,2]\"]",
+test.assert('["[2,4]", "[3,3]", "[3,2]", "[3,4]"]',
             board.get(ELEMENTS[:L_ORANGE]).map {|it| it.to_s })
 
-test.assert("[\"[1,2]\", \"[2,2]\", \"[0,1]\", \"[1,1]\"]",
-            board.get(ELEMENTS[:S_GREEN]).map {|it| it.to_s })
-
-test.assert("[\"[2,4]\", \"[3,4]\", \"[3,3]\", \"[1,2]\", \"[2,2]\", \"[3,2]\", \"[0,1]\", \"[1,1]\"]",
+test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]", "[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
             board.get([ELEMENTS[:L_ORANGE], ELEMENTS[:S_GREEN]]).map {|it| it.to_s })
 
 test.print

@@ -190,7 +190,7 @@ class Board
       pos += 1
     end
 
-    res
+    res.sort { |pt1, pt2| pt1.y <=> pt2.y && pt1.x <=> pt2.x}
   end
 
   # List of busy spaces in the glass
