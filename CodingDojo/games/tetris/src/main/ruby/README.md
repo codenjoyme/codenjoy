@@ -1,33 +1,9 @@
-# Ruby client for Bomberman game
-
-## How to setup Codenjoy server localy
-
-Maven, Git and JDK should be installed
-
-```
-git clone https://github.com/codenjoyme/codenjoy-builder.git
-cd codenjoy-build/
-mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war
-```
-
-If build failed for some reasons, change version of server to build in `pom.xml`:
-
-```
-     <groupId>com.codenjoy</groupId>
-     <artifactId>codenjoy-builder</artifactId>
--    <version>1.0.22</version>
-+    <version>1.0.23</version>
-     <packaging>war</packaging>
-```
-
+# Ruby client for Tetris game
 
 ## How to start your client
 
-1. Register in Codenjoy server, remember your e-mail
-2. Clone repo with client:
-```
-git clone https://github.com/codenjoyme/codenjoy.git
-```
+1. Register in Codenjoy server, remember your e-mail and copy code from board url
+2. Read game instructions 
 3. Install WebSocket gem (Ruby and `bundler` gem should be installed):
 ```
 cd codenjoy/CodingDojo/games/bomberman/src/main/Ruby/
@@ -35,23 +11,18 @@ bundle install
 ```
 4. Run your client:
 ```
-ruby game.rb 127.0.0.1:8080 root1@localhost.local
+ruby game.rb 127.0.0.1:8080 your@email.com 20010765231070354251
 ```
 
-Now you can code your bot, change code of `game.rb` after block
+Now you can code your bot, change code of `solver.rb` after block
  
 ```
 
-    ############################################################################################################
+    #######################################################################
     #
-    #                               YOUR ALGORITHM HERE
+    #                     YOUR ALGORITHM HERE
     #
-    #    Set variables:
-    #     * +act+ (true/false) - Place bomb or not in current iteration
-    #     * +direction+ - Direction to move (UP, DOWN, LEFT, RIGHT)
-    #
-    ############################################################################################################
-
+    #######################################################################
 ```
 
 ## Documentation for methods
