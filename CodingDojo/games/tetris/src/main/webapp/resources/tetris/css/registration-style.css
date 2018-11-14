@@ -1,0 +1,283 @@
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+@font-face {
+    font-family: Roboto;
+    src: url(/codenjoy-contest/resources/font/Roboto-Regular.ttf);
+}
+ 
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #fff;
+    min-height: 100%;
+    position: relative;
+    padding-bottom: 50px;
+}
+
+ul {
+    margin-bottom: 0;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0 50px #323132 !important;
+    -webkit-text-fill-color: #fff !important;
+    color: #999 !important;
+}
+
+.header {
+    color: #fff !important;
+    text-shadow: none !important;
+}
+
+.header-container {
+    background-color: #e11916;
+    border-bottom: 6px solid #e11916;
+}
+
+.header .container {
+    height: 50px;
+}
+
+.nav-item a {
+    transition: color .5s;
+}
+
+.nav-item:hover a {
+    color: rgba(255, 255, 255, .5);
+    text-decoration: none;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.logo {
+    height: 50px;
+}
+
+.logo img {
+    vertical-align: middle;
+	width: 149px
+}
+
+.logo::before {
+    content: "";
+    vertical-align: middle;
+    display: inline-block;
+    height: 50px;
+}
+
+.title {
+    margin-left: 5px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    font-family: Roboto;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.nav-item {
+    font-family: Roboto;
+    line-height: 50px;
+    font-weight: 300;
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-left: 15px;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
+a:hover,
+a:visited {
+    color: #fff;
+}
+
+.form-registr {
+    width: 90%;
+    max-width: 485px;
+    background-color: #e119163d;
+    margin: 30px auto 0;
+    box-sizing: border-box;
+}
+
+.form-registr input, .form-registr select {
+    width: 100%;
+    margin-bottom: 11px;
+    height: 50px;
+    background-color: #FFF;
+    border: 1px solid #FFF;
+    padding: 0 15px;
+    color: #3a4354;
+    font-family: Roboto;
+}
+
+.form-registr .not-valid input {
+    border-color: #e11916;
+}
+
+.field {
+    position: relative;
+}
+
+.not-valid .icon {
+    color: #e11916;
+}
+
+.not-valid .icon::before {
+    content: "\f057";
+}
+
+.valid .icon {
+    color: #0c0;
+}
+
+.valid .icon::before {
+    content: "\f058";
+}
+
+.icon {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    line-height: 50px;
+    font-size: 25px;
+}
+
+.form-title {
+    margin: 0;
+    color: #fff;
+    border-bottom: 1px solid #5c5b5d;
+    background-color: #e11916;
+	padding: 0 35px;
+    padding: 0 25px;
+    height: 60px;
+    line-height: 60px;
+    font-family: Roboto;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.inputs {
+    padding: 25px 25px 25px;
+}
+
+.btn-submit {
+    margin-top: 10px;
+    height: 50px;
+    width: 100%;
+    background-color: #e11916;
+    border: none;
+    color: #fff;
+    font-family: Roboto;
+    text-transform: uppercase;
+}
+
+.logo inline
+
+.btn-submit:hover {
+    background-color: #e11916a3;
+}
+
+footer {
+    height: 40px;
+    background-color: #f8c8c7;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.footer-item a {
+    transition: color .5s;
+    color: #e119166b;
+    font-size: 14px;
+    font-family: Roboto;
+}
+
+.footer-item:hover a {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+}
+
+.footer-item {
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid #5c5b5d;
+}
+
+.footer-item:last-child {
+    border: none;
+}
+
+.footer-nav {
+    height: 40px;
+    display: table;
+}
+
+.footer-list {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+@media screen and (max-width: 1200px) {
+    .game {
+        position: relative;
+        width: 100%;
+        padding: 0 15px 0 845px;
+        position: relative;
+    }
+
+    .game img {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .main {
+        padding-left: 15px;
+    }
+
+    .console {
+        display: inline-block;
+        width: 100%;
+        height: 800px;
+        margin-top: 0;
+    }
+
+    .editor-block {
+        height: 310px;
+    }
+
+    .editor {
+        height: 250px;
+    }
+}
+
+.game-title {
+    text-transform: none;
+}

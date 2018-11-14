@@ -1256,7 +1256,7 @@
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
-                                    <includes>resources/**/*</includes>
+                                    <includes>resources/**/*,WEB-INF/classes/com/codenjoy/dojo/server/*</includes>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
