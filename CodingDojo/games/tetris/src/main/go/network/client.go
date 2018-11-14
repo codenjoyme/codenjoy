@@ -34,11 +34,10 @@ import (
 
 type Client struct {
 	Url string
-	Id  int
 }
 
-func NewClient(id int, url string) *Client {
-	c := &Client{Url: url, Id: id}
+func NewClient(url string) *Client {
+	c := &Client{Url: url}
 
 	go c.run()
 
