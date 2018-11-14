@@ -60,7 +60,7 @@ func (c *Client) run() {
 		log.Fatal("dial:", err)
 	}
 
-	player := player.NewPlayer(c.Id)
+	player := player.NewSolver()
 	go func() {
 		defer conn.Close()
 		for {
@@ -76,7 +76,7 @@ func (c *Client) run() {
 
 			log.Println(board.ToString())
 
-			t := player.MakeTurn(board)
+			t := player.GetAnswer(board)
 
 			log.Println("answer: " + t)
 

@@ -25,22 +25,13 @@ import (
 	"../game"
 )
 
-type Player struct {
-	id        int
+type YourSolver struct {
 }
 
-// NewPlayer const
-func NewPlayer(id int) *Player {
-	p := &Player{id: id}
-
-	return p
+func NewSolver() *YourSolver {
+	return &YourSolver{}
 }
 
-func (p *Player) MakeTurn(board *game.Board) string {
-
-	if board.CurrentFigureType == "O" {
-		return "DOWN"
-	}
+func (p *YourSolver) GetAnswer(board *game.Board) string {
 	return "DOWN"
-
 }
