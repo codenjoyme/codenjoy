@@ -52,6 +52,10 @@ class XUnit
 
 end
 
+def to_string(array)
+  array.map {|it| it.to_s }
+end
+
 test = XUnit.new
 
 str = '{"currentFigureType":"T","futureFigures":["I","O","L","Z"],"layers":["' +
@@ -101,13 +105,13 @@ test.assert(true, board.is_at?(pt4, [ELEMENTS[:L_ORANGE], ELEMENTS[:NONE]]))
 test.assert(false, board.is_free?(pt4))
 
 test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]"]',
-            board.get(ELEMENTS[:S_GREEN]).map {|it| it.to_s })
+            to_string(board.get(ELEMENTS[:S_GREEN])))
 
 test.assert('["[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
-            board.get(ELEMENTS[:L_ORANGE]).map {|it| it.to_s })
+            to_string(board.get(ELEMENTS[:L_ORANGE])))
 
 test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]", "[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
-            board.get([ELEMENTS[:L_ORANGE], ELEMENTS[:S_GREEN]]).map {|it| it.to_s })
+            to_string(board.get([ELEMENTS[:L_ORANGE], ELEMENTS[:S_GREEN]])))
 
 pt5 = Point.new(3, 4)
 test.assert('[".", "L", ".", "L", ".", "I", ".", "."]', board.get_near(pt5).to_s)
@@ -129,7 +133,7 @@ test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,0]", ' +
                 '"[4,0]", "[4,1]", "[4,2]", "[4,3]", ' +
                 '"[5,0]", "[5,1]", "[6,0]", "[6,1]", ' +
                 '"[6,2]", "[6,3]", "[6,4]", "[6,5]"]',
-            board.get_figures.map {|it| it.to_s })
+            to_string(board.get_figures))
 
             test.assert('["[0,0]", "[0,2]", "[0,3]", "[0,4]", ' +
                 '"[0,5]", "[0,6]", "[1,0]", "[1,3]", ' +
@@ -138,6 +142,6 @@ test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,0]", ' +
                 '"[4,4]", "[4,5]", "[4,6]", "[5,2]", ' +
                 '"[5,3]", "[5,4]", "[5,5]", "[5,6]", ' +
                 '"[6,6]"]',
-            board.get_free_space.map {|it| it.to_s })
+            to_string(board.get_free_space))
 
 test.print
