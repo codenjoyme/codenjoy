@@ -106,3 +106,6 @@ func (b *Board) Neighbours(p Point, f func(int, Point) bool) {
 		}
 	}
 }
+func (b *Board) GetAt(x int, y int) string {
+	return "."
+}
