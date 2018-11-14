@@ -48,7 +48,7 @@ func NewBoard(t *Question) *Board {
 
 func (b *Board) ToString() string {
 	return "-------------------------------------------------------------------------------------------" + "\n" +
-			 "currentFigure: \"" + b.CurrentFigureType + "\" at: " + b.CurrentFigurePoint.ToString() + "\n" +
+			 "currentFigure: \"" + b.CurrentFigureType + "\" at: " + b.CurrentFigurePoint.String() + "\n" +
 			"futureFigures: [\"" + strings.Join(b.FutureFigures, "\",\"") + "\"]" + "\n" +
 			"board:" + "\n" +
 			insertNth(b.Glass, b.Width, '\n')

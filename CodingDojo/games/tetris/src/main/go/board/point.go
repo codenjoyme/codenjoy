@@ -97,6 +97,6 @@ func (p1 *Point) Move(dir string) {
 	}
 }
 
-func (p *Point) ToString() string {
+func (p Point) String() string {
 	return "[" + strconv.Itoa(p.X) + "," + strconv.Itoa(p.Y) + "]"
 }

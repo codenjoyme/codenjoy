@@ -1,9 +1,10 @@
 package main
 
 import (
+	"./board"
 	"fmt"
 	"log"
-	"./board"
+	"strings"
 )
 
 type XUnit struct {
@@ -18,9 +19,10 @@ func NewTest() *XUnit {
 	return t
 }
 
-func (t *XUnit) assertEquals(expected interface{}, actual interface{}) {
+func (t *XUnit) assert(expected interface{}, actual interface{}) {
 	t.Index += 1
-	if expected != actual {
+	if expected == actual {
+	} else {
 		message := fmt.Sprintf("[%v] \"%v\" != \"%v\"", t.Index, expected, actual)
 		t.Failures = append(t.Failures, message)
 	}
@@ -39,6 +41,9 @@ func (t *XUnit) print() {
 }
 
 func main() {
+
+	test := NewTest()
+
 	question := board.Question{}
 	question.FutureFigures = []string{"I", "O", "L", "Z"}
 	question.CurrentFigurePoint = board.Point{1, 2}
@@ -52,11 +57,13 @@ func main() {
 		"SSOOIOO" +
 		"..OOIOO"}
 
-	brd := board.NewBoard(&question)
-	brd.ToString()
+	board := board.NewBoard(&question)
+	board.ToString()
 
-	test := NewTest()
-	test.assertEquals(".", brd.GetAt(0, 0))
+	test.assert("T", board.CurrentFigureType)
+	test.assert("[1,2]", board.CurrentFigurePoint.String())
+	test.assert("I,O,L,Z", strings.Join(board.FutureFigures, ","))
+	test.assert(".", board.GetAt(0, 0))
 
 	test.print()
 }
