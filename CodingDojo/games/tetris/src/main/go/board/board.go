@@ -79,26 +79,6 @@ func (b *Board) parse(t *Question) {
 	b.FutureFigures = t.FutureFigures
 }
 
-// Neighbours enumerates all neighbours cells with f(func)
-// if func failed - returns
-func (b *Board) Neighbours(p Point, f func(int, Point) bool) {
-	for i := -1; i <= 1; i++ {
-		for j := -1; j <= 1; j++ {
-			if i == 0 && j == 0 {
-				continue
-			}
-			p1 := p.Add(i, j)
-			if p1.X < 0 || p1.Y < 0 || p1.X >= b.Size || p1.Y >= b.Size {
-				continue
-			}
-			pos := p1.GetPos(b.Size)
-			if !f(pos, p1) {
-				return
-			}
-		}
-	}
-}
-
 func (b *Board) CordsToPos(x int, y int) int {
 	return (b.Size - 1 - y) * b.Size + x
 }
@@ -136,6 +116,34 @@ func (b *Board) Get(elements []string) []Point {
 	}
 	return b.Sort(result);
 }
+
+func (b *Board) GetFigures() []Point {
+	return b.Get(FIGURES)
+}
+
+func (b *Board) GetFreeSpace() []Point {
+	return b.Get([]string { NONE })
+}
+
+func (b *Board) GetNear(x int, y int) []string {
+	result := []string{}
+	p := Point{X : x, Y : y}
+	for dx := -1; dx <= 1; dx++ {
+		for dy := -1; dy <= 1; dy++ {
+			if dx == 0 && dy == 0 {
+				continue
+			}
+			pos := p.Add(dx, dy)
+			if pos.X < 0 || pos.Y < 0 || pos.X >= b.Size || pos.Y >= b.Size {
+				continue
+			}
+			result = append(result, b.GetAt(pos.X, pos.Y))
+		}
+	}
+	return result
+}
+
+// soring array of Point
 
 type byPoint []Point
 
