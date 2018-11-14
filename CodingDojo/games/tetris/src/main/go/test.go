@@ -99,9 +99,17 @@ func main() {
 		ToString(board.Get([]string { b.L_ORANGE, b.S_GREEN } )))
 
 	test.assert(".,L,.,L,.,I,.,.", strings.Join(board.GetNear(3, 4), ","))
+	test.assert(false, board.IsNear(3, 4, []string{ b.T_PURPLE }))
+	test.assert(true, board.IsNear(3, 4, []string{ b.I_BLUE }))
+	test.assert(1, board.CountNear(3, 4, []string{ b.I_BLUE }))
+	test.assert(2, board.CountNear(3, 4, []string{ b.L_ORANGE }))
 
 	test.assert("S,S,.,O,.,O,L,L", strings.Join(board.GetNear(2, 2), ","))
-
+	test.assert(true, board.IsNear(2, 2, []string{ b.L_ORANGE }))
+	test.assert(false, board.IsNear(2, 2, []string{ b.I_BLUE }))
+	test.assert(2, board.CountNear(2, 2, []string{ b.L_ORANGE }))
+	test.assert(2, board.CountNear(2, 2, []string{ b.S_GREEN }))
+	
 	test.assert("[[0,1], [1,1], [1,2], [2,0], " +
 		"[2,1], [2,2], [2,4], [3,0], " +
 		"[3,1], [3,2], [3,3], [3,4], " +
@@ -118,10 +126,6 @@ func main() {
 		"[5,3], [5,4], [5,5], [5,6], " +
 		"[6,6]]",
 		ToString(board.GetFreeSpace()))
-
-	// TODO реализоватьget_near
-	// TODO реализоватьis_near?
-	// TODO реализоватьcount_near
 
 	test.print()
 }
