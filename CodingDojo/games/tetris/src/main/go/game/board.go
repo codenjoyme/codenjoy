@@ -23,6 +23,7 @@
 package game
 
 import (
+	"bytes"
 	"math"
 	//"strconv"
 
@@ -47,6 +48,23 @@ func NewBoard(t *m.TurnInfo) *Board {
 	b.parse(t)
 
 	return b
+}
+
+func (b *Board) ToString() string {
+	return insertNth(b.Glass, b.Width, '\n')
+}
+
+func insertNth(s string, n int, r rune) string {
+	var buffer bytes.Buffer
+	var n_1 = n - 1
+	var l_1 = len(s) - 1
+	for i,rune := range s {
+		buffer.WriteRune(rune)
+		if i % n == n_1 && i != l_1  {
+			buffer.WriteRune(r)
+		}
+	}
+	return buffer.String()
 }
 
 func (b *Board) rotate(i int) int {
