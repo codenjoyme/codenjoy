@@ -35,9 +35,7 @@ class XUnit
 
   def assert(expected, actual)
     @index += 1
-    if expected.to_s == actual.to_s
-      # do nothing
-    else
+    if expected.to_s != actual.to_s
       @failures.push "[" + @index.to_s + "] '" + expected.to_s + "' != '" + actual.to_s + "'"
     end
   end
