@@ -82,8 +82,7 @@ func main() {
 	test.assert(b.L_ORANGE, board.GetAt(3, 4))
 	test.assert(false, board.IsAt(3, 4, []string { b.O_YELLOW }))
 	test.assert(false, board.IsAt(3, 4, []string { b.NONE }))
-	// TODO понять почему тут true а в ruby false
-	test.assert(false, board.IsAt(3, 4, []string { b.L_ORANGE, b.NONE }))
+	test.assert(true, board.IsAt(3, 4, []string { b.L_ORANGE, b.NONE }))
 
 	// TODO реализоватьis_free?
 	// TODO реализоватьget
