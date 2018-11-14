@@ -25,6 +25,7 @@ package board
 import (
 	"bytes"
 	"math"
+	"sort"
 	"strings"
 )
 
@@ -122,4 +123,39 @@ func (b *Board) IsAt(x int, y int, elements []string) bool {
 
 func (b *Board) IsFree(x int, y int) bool {
 	return b.IsAt(x, y, []string{ NONE })
+}
+
+func (b *Board) Get(elements []string) []Point {
+	result := []Point{}
+	for pos, char := range b.Glass {
+		for _, element := range elements {
+			if (string(char) == element) {
+				result = append(result, b.PosToCords(pos))
+			}
+		}
+	}
+	return b.Sort(result);
+}
+
+type byPoint []Point
+
+func (s byPoint) Len() int {
+	return len(s)
+}
+
+func (s byPoint) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s byPoint) Less(i, j int) bool {
+	return Index(s[i]) < Index(s[j])
+}
+
+func Index(pt Point) int {
+	return pt.X * 1000 + pt.Y;
+}
+
+func (b *Board) Sort(array []Point) []Point {
+	sort.Sort(byPoint(array))
+	return array;
 }

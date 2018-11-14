@@ -2,6 +2,7 @@ package main
 
 import (
 	b "./board"
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
@@ -88,8 +89,15 @@ func main() {
 	test.assert(true, board.IsAt(3, 4, []string { b.L_ORANGE, b.NONE }))
 	test.assert(false, board.IsFree(3, 4))
 
-	// TODO реализоватьIsFree
-	// TODO реализоватьget
+	test.assert("[[0,1], [1,1], [1,2], [2,2]]",
+		ToString(board.Get([]string { b.S_GREEN })))
+
+	test.assert("[[2,4], [3,2], [3,3], [3,4]]",
+		ToString(board.Get([]string { b.L_ORANGE })))
+
+	test.assert("[[0,1], [1,1], [1,2], [2,2], [2,4], [3,2], [3,3], [3,4]]",
+		ToString(board.Get([]string { b.L_ORANGE, b.S_GREEN } )))
+	
 	// TODO реализоватьget_near
 	// TODO реализоватьis_near?
 	// TODO реализоватьcount_near
@@ -97,4 +105,15 @@ func main() {
 	// TODO реализоватьget_free_space
 
 	test.print()
+}
+
+func ToString(array []b.Point) string {
+	b, _ := json.Marshal(array);
+	s := string(b)
+	s = strings.Replace(s, "\"x\":", "", -1)
+	s = strings.Replace(s, "\"y\":", "", -1)
+	s = strings.Replace(s, "{", "[", -1)
+	s = strings.Replace(s, "}", "]", -1)
+	s = strings.Replace(s, "],[", "], [", -1)
+	return s
 }
