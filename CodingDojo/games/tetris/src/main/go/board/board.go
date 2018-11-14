@@ -109,11 +109,11 @@ func (b *Board) Get(elements []string) []Point {
 	result := []Point{}
 	for pos, char := range b.Glass {
 		for _, element := range elements {
-			if (string(char) == element) {
-				result = append(result, b.PosToCords(pos))
-			}
+		if (string(char) == element) {
+			result = append(result, b.PosToCords(pos))
 		}
 	}
+}
 	return b.Sort(result);
 }
 
@@ -141,6 +141,23 @@ func (b *Board) GetNear(x int, y int) []string {
 		}
 	}
 	return result
+}
+
+func (b *Board) CountNear(x int, y int, elements []string) int {
+	result := 0
+	near := b.GetNear(x, y)
+	for _, e1 := range near {
+		for _, e2 := range elements {
+			if (e1 == e2) {
+				result ++
+			}
+		}
+	}
+	return result
+}
+
+func (b *Board) IsNear(x int, y int, elements []string) bool {
+	return b.CountNear(x, y, elements) > 0
 }
 
 // soring array of Point
