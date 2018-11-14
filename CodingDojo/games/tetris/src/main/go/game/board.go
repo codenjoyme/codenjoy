@@ -33,9 +33,11 @@ type Board struct {
 	Size     int
 	Width    int
 
-	CurrentFigureType	string
+	Glass    string
+
+	CurrentFigureType	  string
 	FutureFigures         []string
-	CurrentFigurePoint     m.Point
+	CurrentFigurePoint    m.Point
 }
 
 // NewBoard instance creation
@@ -53,9 +55,9 @@ func (b *Board) rotate(i int) int {
 
 // parse all data from server package
 func (b *Board) parse(t *m.TurnInfo) {
-	glass := []rune(t.Layers[0])
+	b.Glass = t.Layers[0]
 
-	mapSize := len(glass)
+	mapSize := len(b.Glass)
 	mapWidth := int(math.Sqrt(float64(mapSize)))
 
 	b.Size = mapSize
