@@ -98,6 +98,10 @@ func main() {
 	test.assert("[[0,1], [1,1], [1,2], [2,2], [2,4], [3,2], [3,3], [3,4]]",
 		ToString(board.Get([]string { b.L_ORANGE, b.S_GREEN } )))
 
+	test.assert(".,L,.,L,.,I,.,.", strings.Join(board.GetNear(3, 4), ","))
+
+	test.assert("S,S,.,O,.,O,L,L", strings.Join(board.GetNear(2, 2), ","))
+
 	test.assert("[[0,1], [1,1], [1,2], [2,0], " +
 		"[2,1], [2,2], [2,4], [3,0], " +
 		"[3,1], [3,2], [3,3], [3,4], " +
