@@ -128,10 +128,13 @@ class Board
     @current_figure_type = json["currentFigureType"]
     @future_figures = json["futureFigures"]
     @current_figure_point = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
-    puts "currentFigure: \"" + @current_figure_type + "\" at: " + @current_figure_point.to_s
-    puts "futureFigures: " + @future_figures.to_s
-    puts "board:"
-    puts @board.scan(/.{18}|.+/).join("\n")
+  end
+
+  def to_s
+    return ("currentFigure: \"" + @current_figure_type + "\" at: " + @current_figure_point.to_s + "\n" +
+       "futureFigures: " + @future_figures.to_s + "\n" +
+       "board:" + "\n" +
+       @board.scan(/.{18}|.+/).join("\n"))
   end
 
   # Returns board size

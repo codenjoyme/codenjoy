@@ -51,6 +51,8 @@ ws.on :message do |msg|
     json = $1.force_encoding('UTF-8')
 
     board.process(json)
+    puts board.to_s
+
     answer = solver.process(board)
     puts "answer: " + answer
 
