@@ -68,9 +68,9 @@ func (c *Client) run() {
 				return
 			}
 
-			turnInfo := board.Question{}
-			json.Unmarshal(message[6:], &turnInfo)
-			brd := board.NewBoard(&turnInfo)
+			question := board.Question{}
+			json.Unmarshal(message[6:], &question)
+			brd := board.NewBoard(&question)
 
 			log.Println(brd.ToString())
 
