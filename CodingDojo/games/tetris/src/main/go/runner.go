@@ -30,17 +30,17 @@ import (
 	"strings"
 )
 
-var urlStr = flag.String("url", "ws://127.0.0.1:8080/codenjoy-contest/ws?user=apofig@gmail.com&code=20010765231070354251", "server url")
+var url = "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
 
 func main() {
 	flag.Parse()
 	log.SetFlags(0)
 
-	urls := strings.Split(*urlStr, " ")
+	url = strings.Replace(url, "http", "ws", -1)
+	url = strings.Replace(url, "board/player/", "ws?user=", -1)
+	url = strings.Replace(url, "?code=", "&code=", -1)
 
-	for id, url := range urls {
-		network.NewClient(id, url)
-	}
+	network.NewClient(url)
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
