@@ -46,9 +46,7 @@ type Board struct {
 // NewBoard instance creation
 func NewBoard(t *m.TurnInfo) *Board {
 	b := new(Board)
-
 	b.parse(t)
-
 	return b
 }
 
@@ -60,6 +58,7 @@ func (b *Board) ToString() string {
 			insertNth(b.Glass, b.Width, '\n')
 }
 
+// Thanks to https://stackoverflow.com/a/33633451/4728425
 func insertNth(s string, n int, r rune) string {
 	var buffer bytes.Buffer
 	var n_1 = n - 1
