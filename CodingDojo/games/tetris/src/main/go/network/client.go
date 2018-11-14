@@ -69,25 +69,15 @@ func (c *Client) run() {
 				return
 			}
 
-			msg := ""
-
 			turnInfo := models.TurnInfo{}
-			//fmt.Printf("%s", message)
 			json.Unmarshal(message[6:], &turnInfo)
 
 			t := player.MakeTurn(&turnInfo)
-			if t != "" {
-				//payload, _ := json.Marshal(t)
-				msg = fmt.Sprintf("%s", t)
-			} else {
-				//log.Println("Sending act(0)!")
-				//msg = "act(0)"
-			}
-			//log.Printf("%s\n", msg)
-			//time.Sleep(100 * time.Millisecond)
+
+			log.Println("answer: " + t)
+
+			msg := fmt.Sprintf("%s", t)
 			conn.WriteMessage(websocket.TextMessage, []byte(msg))
-			//log.Printf("recv: %s", message)
-			//log.Printf("turn info: %+v", turnInfo)
 		}
 	}()
 }

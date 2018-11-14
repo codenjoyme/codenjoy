@@ -46,43 +46,4 @@ func (p *Player) MakeTurn(turnInfo *models.TurnInfo) string {
 	}
 	return "DOWN"
 
-	//if b.Turn == -1 {
-	//	log.Println("waiting for game in lobby...")
-	//	return &models.Turn{}
-	//}
-	//if b.Turn == 0 {
-	//	p.NewGame()
-	//	log.Printf("total mines is %d\n", b.TotalMines)
-	//}
-
-	//if b.TotalWalkCells == b.MyInfo.TerritorySize {
-	//	log.Println("won game")
-	//	return nil
-	//}
-
-	//playerTurn := &models.Turn{
-	//	Increase:  []models.Increase{},
-	//	Movements: []models.Movement{},
-	//}
-
-	//fmt.Printf("T[%d] inc: %d space: %d freeForces: %d occup: %f stage: %+v\n",
-	//	b.Turn, b.ForcesAvailable, b.MyInfo.TerritorySize,
-	//	b.MyInfo.ForcesFree, b.OccupationRate, p.gameStage)
-	//
-	//if b.OccupationRate > 0.9 {
-	//	p.gameStage = lateGame
-	//}
-
-	//if b.MyInfo.ForcesTotal > 0 {
-	//	var advSet = p.advisors[p.gameStage]
-	//
-	//	for _, adv := range advSet {
-	//		adv.MakeTurn(b, playerTurn)
-	//	}
-	//} else {
-	//	fmt.Println("I've done")
-	//}
-	//fmt.Printf("P%d making turn\n", p.id)
-	//fmt.Printf("player turn is %+v\n", playerTurn)
-
 }
