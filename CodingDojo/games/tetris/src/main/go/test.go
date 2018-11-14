@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./board"
+	b "./board"
 	"fmt"
 	"log"
 	"strings"
@@ -44,9 +44,9 @@ func main() {
 
 	test := NewTest()
 
-	question := board.Question{}
+	question := b.Question{}
 	question.FutureFigures = []string{"I", "O", "L", "Z"}
-	question.CurrentFigurePoint = board.Point{1, 2}
+	question.CurrentFigurePoint = b.Point{1, 2}
 	question.CurrentFigureType = "T"
 	question.Layers = []string{
 		"......." +
@@ -57,13 +57,18 @@ func main() {
 		"SSOOIOO" +
 		"..OOIOO"}
 
-	board := board.NewBoard(&question)
+	board := b.NewBoard(&question)
 	board.ToString()
 
-	test.assert("T", board.CurrentFigureType)
+	test.assert(b.T_PURPLE, board.CurrentFigureType)
 	test.assert("[1,2]", board.CurrentFigurePoint.String())
 	test.assert("I,O,L,Z", strings.Join(board.FutureFigures, ","))
-	test.assert(".", board.GetAt(0, 0))
+
+	test.assert(b.NONE, board.GetAt(0, 0))
+	test.assert(b.O_YELLOW, board.GetAt(2, 0))
+	test.assert(b.S_GREEN, board.GetAt(2, 2))
+	test.assert(b.L_ORANGE, board.GetAt(3, 4))
+
 
 	test.print()
 }
