@@ -79,7 +79,7 @@ func (c *Client) run() {
 			log.Println("currentFigure: \"" + board.CurrentFigureType + "\" at: " + board.CurrentFigurePoint.ToString())
 			log.Println("futureFigures: [" + strings.Join(board.FutureFigures, ",") + "]")
 			log.Println("board:")
-			log.Println(board.Glass)
+			log.Println(board.ToString())
 
 			t := player.MakeTurn(board)
 
