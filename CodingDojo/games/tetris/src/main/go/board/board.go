@@ -29,14 +29,11 @@ import (
 )
 
 type Board struct {
-	Size     int
-	Width    int
-
-	Glass    string
-
-	CurrentFigureType	  string
-	FutureFigures         []string
-	CurrentFigurePoint    Point
+	Size  			   int
+	Glass 			   string
+	CurrentFigureType  string
+	FutureFigures      []string
+	CurrentFigurePoint Point
 }
 
 // NewBoard instance creation
@@ -51,7 +48,7 @@ func (b *Board) ToString() string {
 			 "currentFigure: \"" + b.CurrentFigureType + "\" at: " + b.CurrentFigurePoint.String() + "\n" +
 			"futureFigures: [\"" + strings.Join(b.FutureFigures, "\",\"") + "\"]" + "\n" +
 			"board:" + "\n" +
-			insertNth(b.Glass, b.Width, '\n')
+			insertNth(b.Glass, b.Size, '\n')
 }
 
 // Thanks to https://stackoverflow.com/a/33633451/4728425
@@ -68,20 +65,14 @@ func insertNth(s string, n int, r rune) string {
 	return buffer.String()
 }
 
-func (b *Board) rotate(i int) int {
-	return (i % b.Width) + (b.Width-1-i/b.Width)*b.Width
+func (b *Board) size() int {
+	return b.Size
 }
 
 // parse all data from server package
 func (b *Board) parse(t *Question) {
 	b.Glass = t.Layers[0]
-
-	mapSize := len(b.Glass)
-	mapWidth := int(math.Sqrt(float64(mapSize)))
-
-	b.Size = mapSize
-	b.Width = mapWidth
-
+	b.Size = int(math.Sqrt(float64(len(b.Glass))))
 	b.CurrentFigurePoint = t.CurrentFigurePoint
 	b.CurrentFigureType = t.CurrentFigureType
 	b.FutureFigures = t.FutureFigures
@@ -96,16 +87,21 @@ func (b *Board) Neighbours(p Point, f func(int, Point) bool) {
 				continue
 			}
 			p1 := p.Add(i, j)
-			if p1.X < 0 || p1.Y < 0 || p1.X >= b.Width || p1.Y >= b.Width {
+			if p1.X < 0 || p1.Y < 0 || p1.X >= b.Size || p1.Y >= b.Size {
 				continue
 			}
-			pos := p1.GetPos(b.Width)
+			pos := p1.GetPos(b.Size)
 			if !f(pos, p1) {
 				return
 			}
 		}
 	}
 }
+
+func (b *Board) CordsToPos(x int, y int) int {
+	return (b.Size - 1 - y) * b.Size + x
+}
+
 func (b *Board) GetAt(x int, y int) string {
-	return "."
+	return string(b.Glass[b.CordsToPos(x, y)])
 }
