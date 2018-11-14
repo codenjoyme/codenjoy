@@ -27,9 +27,8 @@ import (
 	"log"
 	"net/url"
 
-	"../game"
-	"../models"
-	"../player"
+	"../board"
+	"../solver"
 	"github.com/gorilla/websocket"
 )
 
@@ -60,7 +59,7 @@ func (c *Client) run() {
 		log.Fatal("dial:", err)
 	}
 
-	player := player.NewSolver()
+	player := solver.NewSolver()
 	go func() {
 		defer conn.Close()
 		for {
@@ -70,13 +69,13 @@ func (c *Client) run() {
 				return
 			}
 
-			turnInfo := models.TurnInfo{}
+			turnInfo := board.Question{}
 			json.Unmarshal(message[6:], &turnInfo)
-			board := game.NewBoard(&turnInfo)
+			brd := board.NewBoard(&turnInfo)
 
-			log.Println(board.ToString())
+			log.Println(brd.ToString())
 
-			t := player.GetAnswer(board)
+			t := player.GetAnswer(brd)
 
 			log.Println("answer: " + t)
 
