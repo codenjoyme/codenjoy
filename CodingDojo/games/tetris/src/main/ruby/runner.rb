@@ -53,7 +53,7 @@ ws.on :message do |msg|
     board.process(json)
     puts board.to_s
 
-    answer = solver.process(board)
+    answer = solver.get_answer(board)
     puts "answer: " + answer
 
     # Send command to server

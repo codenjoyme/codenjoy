@@ -35,7 +35,7 @@ class YourSolver
   #   * left - move your figure left
   #   * right - move your figure right
   #   * down - drop figure
-  def process(board)
+  def get_answer(board)
 
     #######################################################################
     #

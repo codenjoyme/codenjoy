@@ -117,6 +117,7 @@ end
 # Game class
 class Board
   attr_accessor :board
+  attr_accessor :size
   attr_accessor :current_figure_type
   attr_accessor :future_figures
   attr_accessor :current_figure_point
@@ -125,6 +126,7 @@ class Board
     puts "-------------------------------------------------------------------------------------------"
     json = JSON.parse(str)
     @board = json["layers"][0]
+    @size = Math.sqrt(@board.length).round
     @current_figure_type = json["currentFigureType"]
     @future_figures = json["futureFigures"]
     @current_figure_point = Point.new(json["currentFigurePoint"]["x"], json["currentFigurePoint"]["y"])
@@ -134,7 +136,7 @@ class Board
     return ("currentFigure: \"" + @current_figure_type + "\" at: " + @current_figure_point.to_s + "\n" +
        "futureFigures: " + @future_figures.to_s + "\n" +
        "board:" + "\n" +
-       @board.scan(/.{18}|.+/).join("\n"))
+       @board.scan(/.{#{@size}}|.+/).join("\n"))
   end
 
   # Returns board size

@@ -68,6 +68,7 @@ str = '{"currentFigureType":"T","futureFigures":["I","O","L","Z"],"layers":["' +
 
 board = Board.new
 board.process(str)
+puts board.to_s
 
 test.assert("T", board.current_figure_type)
 test.assert("[1,2]", board.current_figure_point)
