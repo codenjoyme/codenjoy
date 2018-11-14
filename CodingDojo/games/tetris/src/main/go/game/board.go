@@ -25,6 +25,8 @@ package game
 import (
 	"bytes"
 	"math"
+	"strings"
+
 	//"strconv"
 
 	m "../models"
@@ -51,7 +53,11 @@ func NewBoard(t *m.TurnInfo) *Board {
 }
 
 func (b *Board) ToString() string {
-	return insertNth(b.Glass, b.Width, '\n')
+	return "-------------------------------------------------------------------------------------------" + "\n" +
+			 "currentFigure: \"" + b.CurrentFigureType + "\" at: " + b.CurrentFigurePoint.ToString() + "\n" +
+			"futureFigures: [\"" + strings.Join(b.FutureFigures, "\",\"") + "\"]" + "\n" +
+			"board:" + "\n" +
+			insertNth(b.Glass, b.Width, '\n')
 }
 
 func insertNth(s string, n int, r rune) string {
