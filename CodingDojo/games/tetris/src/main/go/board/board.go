@@ -20,16 +20,12 @@
  * #L%
  */
 
-package game
+package board
 
 import (
 	"bytes"
 	"math"
 	"strings"
-
-	//"strconv"
-
-	m "../models"
 )
 
 type Board struct {
@@ -40,11 +36,11 @@ type Board struct {
 
 	CurrentFigureType	  string
 	FutureFigures         []string
-	CurrentFigurePoint    m.Point
+	CurrentFigurePoint    Point
 }
 
 // NewBoard instance creation
-func NewBoard(t *m.TurnInfo) *Board {
+func NewBoard(t *Question) *Board {
 	b := new(Board)
 	b.parse(t)
 	return b
@@ -77,7 +73,7 @@ func (b *Board) rotate(i int) int {
 }
 
 // parse all data from server package
-func (b *Board) parse(t *m.TurnInfo) {
+func (b *Board) parse(t *Question) {
 	b.Glass = t.Layers[0]
 
 	mapSize := len(b.Glass)
@@ -93,7 +89,7 @@ func (b *Board) parse(t *m.TurnInfo) {
 
 // Neighbours enumerates all neighbours cells with f(func)
 // if func failed - returns
-func (b *Board) Neighbours(p m.Point, f func(int, m.Point) bool) {
+func (b *Board) Neighbours(p Point, f func(int, Point) bool) {
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
 			if i == 0 && j == 0 {

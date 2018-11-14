@@ -19,9 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package models
+package board
 
-type TurnInfo struct {
+type Question struct {
 	CurrentFigureType	string
 	FutureFigures         []string
 	CurrentFigurePoint     Point

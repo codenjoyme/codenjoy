@@ -19,10 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package player
+package solver
 
 import (
-	"../game"
+	"../board"
 )
 
 type YourSolver struct {
@@ -32,6 +32,6 @@ func NewSolver() *YourSolver {
 	return &YourSolver{}
 }
 
-func (p *YourSolver) GetAnswer(board *game.Board) string {
+func (p *YourSolver) GetAnswer(board *board.Board) string {
 	return "DOWN"
 }
