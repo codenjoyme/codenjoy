@@ -23,7 +23,6 @@ package player
 
 import (
 	"../game"
-	"../models"
 )
 
 type Player struct {
@@ -37,11 +36,9 @@ func NewPlayer(id int) *Player {
 	return p
 }
 
-func (p *Player) MakeTurn(turnInfo *models.TurnInfo) string {
+func (p *Player) MakeTurn(board *game.Board) string {
 
-	b := game.NewBoard(turnInfo)
-
-	if b.CurrentFigureType == "O" {
+	if board.CurrentFigureType == "O" {
 		return "DOWN"
 	}
 	return "DOWN"
