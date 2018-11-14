@@ -119,3 +119,7 @@ func (b *Board) IsAt(x int, y int, elements []string) bool {
 	}
 	return found
 }
+
+func (b *Board) IsFree(x int, y int) bool {
+	return b.IsAt(x, y, []string{ NONE })
+}
