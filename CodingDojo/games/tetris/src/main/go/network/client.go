@@ -23,12 +23,14 @@ package network
 
 import (
 	"encoding/json"
+	"strings"
 	"fmt"
 	"log"
 	"net/url"
 
 	"../models"
 	"../player"
+	"../game"
 	"github.com/gorilla/websocket"
 )
 
@@ -71,8 +73,15 @@ func (c *Client) run() {
 
 			turnInfo := models.TurnInfo{}
 			json.Unmarshal(message[6:], &turnInfo)
+			board := game.NewBoard(&turnInfo)
 
-			t := player.MakeTurn(&turnInfo)
+			log.Println("-------------------------------------------------------------------------------------------")
+			log.Println("currentFigure: \"" + board.CurrentFigureType + "\" at: " + board.CurrentFigurePoint.ToString())
+			log.Println("futureFigures: [" + strings.Join(board.FutureFigures, ",") + "]")
+			log.Println("board:")
+			//log.Println(board.scan(/.{18}|.+/).join("\n")
+
+			t := player.MakeTurn(board)
 
 			log.Println("answer: " + t)
 

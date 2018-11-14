@@ -21,6 +21,10 @@
  */
 package models
 
+import (
+	"strconv"
+)
+
 type Point struct {
 	X int `json:"x"`
 	Y int `json:"y"`
@@ -91,4 +95,8 @@ func (p1 *Point) Move(dir string) {
 		p1.X--
 		p1.Y++
 	}
+}
+
+func (p *Point) ToString() string {
+	return "[" + strconv.Itoa(p.X) + "," + strconv.Itoa(p.Y) + "]"
 }
