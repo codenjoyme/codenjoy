@@ -10,3 +10,5 @@ const (
 	Z_RED = "Z"
 	NONE = "."
 )
+
+var FIGURES = []string { I_BLUE, J_CYAN, L_ORANGE, O_YELLOW, S_GREEN, T_PURPLE, Z_RED }

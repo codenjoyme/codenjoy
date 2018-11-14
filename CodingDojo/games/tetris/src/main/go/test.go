@@ -68,23 +68,27 @@ func main() {
 	test.assert(false, board.IsAt(0, 0, []string { b.O_YELLOW }))
 	test.assert(true, board.IsAt(0, 0, []string { b.NONE }))
 	test.assert(true, board.IsAt(0, 0, []string { b.L_ORANGE, b.NONE }))
+	test.assert(true, board.IsFree(0, 0))
 
 	test.assert(b.O_YELLOW, board.GetAt(2, 0))
 	test.assert(true, board.IsAt(2, 0, []string { b.O_YELLOW }))
 	test.assert(false, board.IsAt(2, 0, []string { b.NONE }))
 	test.assert(false, board.IsAt(2, 0, []string { b.L_ORANGE, b.NONE }))
+	test.assert(false, board.IsFree(2, 0))
 
 	test.assert(b.S_GREEN, board.GetAt(2, 2))
 	test.assert(false, board.IsAt(2, 2, []string { b.O_YELLOW }))
 	test.assert(false, board.IsAt(2, 2, []string { b.NONE }))
 	test.assert(false, board.IsAt(2, 2, []string { b.L_ORANGE, b.NONE }))
-	
+	test.assert(false, board.IsFree(2, 2))
+
 	test.assert(b.L_ORANGE, board.GetAt(3, 4))
 	test.assert(false, board.IsAt(3, 4, []string { b.O_YELLOW }))
 	test.assert(false, board.IsAt(3, 4, []string { b.NONE }))
 	test.assert(true, board.IsAt(3, 4, []string { b.L_ORANGE, b.NONE }))
+	test.assert(false, board.IsFree(3, 4))
 
-	// TODO реализоватьis_free?
+	// TODO реализоватьIsFree
 	// TODO реализоватьget
 	// TODO реализоватьget_near
 	// TODO реализоватьis_near?
