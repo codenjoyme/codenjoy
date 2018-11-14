@@ -193,8 +193,8 @@ class Board
   # @param [String, Array] element  one or array of +ELEMENTS[...]+
   # @return [Integer] number of objects around
   def count_near(point, element)
-    res = get_near(point)
-    res.count { |it| it == element }
+    elements = get_near(point)
+    elements.count { |it| it == element }
   end
 
   # Count how many objects of specified type around position
@@ -203,8 +203,8 @@ class Board
   # @param [String, Array] element  one or array of +ELEMENTS[...]+
   # @return [Integer] number of objects around
   def is_near?(point, element)
-    res = get_near(point)
-    res.find { |it| it == element } != nil
+    elements = get_near(point)
+    elements.find { |it| it == element } != nil
   end
 
   # Check if figures (elements of +FIGURES+ array) at position
