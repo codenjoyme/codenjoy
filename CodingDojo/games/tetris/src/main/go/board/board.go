@@ -102,6 +102,20 @@ func (b *Board) CordsToPos(x int, y int) int {
 	return (b.Size - 1 - y) * b.Size + x
 }
 
+func (b *Board) PosToCords(pos int) Point {
+	x := (pos % b.Size)
+	y := b.Size - 1 - (pos / b.Size)
+	return Point{X : x, Y : y}
+}
+
 func (b *Board) GetAt(x int, y int) string {
 	return string(b.Glass[b.CordsToPos(x, y)])
+}
+
+func (b *Board) IsAt(x int, y int, elements []string) bool {
+	found := false
+	for _, element := range elements {
+		found = found || (element == b.GetAt(x, y))
+	}
+	return found
 }

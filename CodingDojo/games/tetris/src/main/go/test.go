@@ -65,10 +65,33 @@ func main() {
 	test.assert("I,O,L,Z", strings.Join(board.FutureFigures, ","))
 
 	test.assert(b.NONE, board.GetAt(0, 0))
-	test.assert(b.O_YELLOW, board.GetAt(2, 0))
-	test.assert(b.S_GREEN, board.GetAt(2, 2))
-	test.assert(b.L_ORANGE, board.GetAt(3, 4))
+	test.assert(false, board.IsAt(0, 0, []string { b.O_YELLOW }))
+	test.assert(true, board.IsAt(0, 0, []string { b.NONE }))
+	test.assert(true, board.IsAt(0, 0, []string { b.L_ORANGE, b.NONE }))
 
+	test.assert(b.O_YELLOW, board.GetAt(2, 0))
+	test.assert(true, board.IsAt(2, 0, []string { b.O_YELLOW }))
+	test.assert(false, board.IsAt(2, 0, []string { b.NONE }))
+	test.assert(false, board.IsAt(2, 0, []string { b.L_ORANGE, b.NONE }))
+
+	test.assert(b.S_GREEN, board.GetAt(2, 2))
+	test.assert(false, board.IsAt(2, 2, []string { b.O_YELLOW }))
+	test.assert(false, board.IsAt(2, 2, []string { b.NONE }))
+	test.assert(false, board.IsAt(2, 2, []string { b.L_ORANGE, b.NONE }))
+	
+	test.assert(b.L_ORANGE, board.GetAt(3, 4))
+	test.assert(false, board.IsAt(3, 4, []string { b.O_YELLOW }))
+	test.assert(false, board.IsAt(3, 4, []string { b.NONE }))
+	// TODO понять почему тут true а в ruby false
+	test.assert(false, board.IsAt(3, 4, []string { b.L_ORANGE, b.NONE }))
+
+	// TODO реализоватьis_free?
+	// TODO реализоватьget
+	// TODO реализоватьget_near
+	// TODO реализоватьis_near?
+	// TODO реализоватьcount_near
+	// TODO реализоватьget_figures
+	// TODO реализоватьget_free_space
 
 	test.print()
 }
