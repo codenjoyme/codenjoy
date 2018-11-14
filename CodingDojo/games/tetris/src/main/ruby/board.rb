@@ -241,28 +241,14 @@ class Board
   #
   # @return [Array[Point]] list of barriers on the filed
   def get_figures
-    res = []
-    pos = 0
-    board.chars.each do |ch|
-      res << pos_to_coords(pos) if FIGURES.include? ch
-      pos += 1
-    end
-
-    sort(res)
+    get(FIGURES)
   end
 
   # Return list of free spaces in the glass
   #
   # @return [Array[Point]] array of walls positions
   def get_free_space
-    res = []
-    pos = 0
-    board.chars.each do |ch|
-      res << pos_to_coords(pos) if ch == ELEMENTS[:NONE]
-      pos += 1
-    end
-
-    sort(res)
+    get(ELEMENTS[:NONE])
   end
 
   # How far specified element from position (strait direction)
