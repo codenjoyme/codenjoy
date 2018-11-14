@@ -56,16 +56,15 @@ end
 
 test = XUnit.new
 
-str = "{\"currentFigureType\":\"T\",\"futureFigures\":[\"I\",\"O\",\"L\",\"Z\"],\"layers\":[\"" +
-"......." +
-"......I" +
-"..LL..I" +
-"...LI.I" +
-".SSLI.I" +
-"SSOOIOO" +
-"..OOIOO" +
-"\"],\"currentFigurePoint\":{\"x\":1,\"y\":2}}"
-
+str = '{"currentFigureType":"T","futureFigures":["I","O","L","Z"],"layers":["' +
+'.......' +
+'......I' +
+'..LL..I' +
+'...LI.I' +
+'.SSLI.I' +
+'SSOOIOO' +
+'..OOIOO' +
+'"],"currentFigurePoint":{"x":1,"y":2}}'
 
 board = Board.new
 board.process(str)
