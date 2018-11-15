@@ -43,8 +43,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AISolver extends AbstractJsonSolver<Board> {
 
-    private static final int GAPS_FACTOR = 50;
-    private static final int HEIGHT_FACTOR = 1;
+    private static final int GAPS_FACTOR = 100;
+    private static final int HEIGHT_FACTOR = 50;
     private Dice dice;
     private int size;
 
@@ -193,11 +193,14 @@ public class AISolver extends AbstractJsonSolver<Board> {
         int height = 0;
         for (int x = 0; x < size; x++) {
             boolean start = false;
+            int deep = 0;
             for (int y = size - 1; y >= 0; y--) {
                 if (start) {
                     height++;
+                    deep++;
                     if (!occupied[x][y]) {
-                        gaps++;
+                        gaps += deep;
+                        deep = 0;
                     }
                 } else {
                     if (occupied[x][y]) {
