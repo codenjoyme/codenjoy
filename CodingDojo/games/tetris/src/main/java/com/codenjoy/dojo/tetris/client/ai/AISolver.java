@@ -31,6 +31,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.model.*;
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jetty.util.StringUtil;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -41,6 +43,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AISolver extends AbstractJsonSolver<Board> {
 
+    private static final int GAPS_FACTOR = 50;
+    private static final int HEIGHT_FACTOR = 1;
     private Dice dice;
     private int size;
 
@@ -71,10 +75,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
 
         List<Combination> combos = getPointToDrop(size, glass, figure);
 
-        Combination combo = combos.stream()
-                .sorted(Comparator.comparingInt(Combination::getGaps))
-                .findFirst()
-                .get();
+        Combination combo = findBest(combos);
 
         if (combo == null) {
             System.out.println(); // не должно случиться
@@ -88,14 +89,35 @@ public class AISolver extends AbstractJsonSolver<Board> {
         } else if (dx < 0) {
             direction = Direction.LEFT;
         } else {
-            String rotate = (combo.getRotate() == 0) ? "" : String.format("ACT(%s),", combo.getRotate());
-            return rotate + "DOWN";
+            direction = null;
         }
 
         final String[] result = {""};
-        IntStream.rangeClosed(1, Math.abs(dx))
-                .forEach(i -> result[0] += (((result[0].length() > 0)?",":"") + direction.toString()));
-        return result[0];
+        if (direction != null) {
+            IntStream.rangeClosed(1, Math.abs(dx))
+                    .forEach(i -> result[0] += (((result[0].length() > 0) ? "," : "") + direction.toString()));
+        }
+        String rotate = (combo.getRotate() == 0) ? "" : String.format("ACT(%s)", combo.getRotate());
+        String comma = (StringUtils.isEmpty(rotate) || StringUtils.isEmpty(result[0])) ? "" : ",";
+        String part = rotate + comma + result[0];
+        String comma2 = (StringUtils.isEmpty(part)) ? "" : ",";
+        return part + comma2 + "DOWN";
+    }
+
+    private Combination findBest(List<Combination> combos) {
+        return combos.stream()
+                    .sorted(compareCombos())
+                    .findFirst()
+                    .get();
+    }
+
+    private Comparator<? super Combination> compareCombos() {
+        return (o1, o2) -> Float.compare(getPenalty(o1), getPenalty(o2));
+    }
+
+    private int getPenalty(Combination o1) {
+        return o1.getGaps() * GAPS_FACTOR +
+                o1.getHeight() * HEIGHT_FACTOR;
     }
 
     private void removeCurrentFigure(Glass glass, Figure figure, Point point, List<Plot> plots) {
@@ -107,13 +129,18 @@ public class AISolver extends AbstractJsonSolver<Board> {
 
     static class Combination {
         private Point point;
-        private int gaps;
         private int rotate;
+        private int gaps;
+        private int height;
 
-        public Combination(int rotate, Point point, int gaps) {
+        public Combination(int rotate, Point point) {
             this.rotate = rotate;
             this.point = point;
+        }
+
+        public void setScore(int gaps, int height) {
             this.gaps = gaps;
+            this.height = height;
         }
 
         public Point getPoint() {
@@ -127,6 +154,10 @@ public class AISolver extends AbstractJsonSolver<Board> {
         public int getGaps() {
             return gaps;
         }
+
+        public int getHeight() {
+            return height;
+        }
     }
 
     private List<Combination> getPointToDrop(int size, Glass glass, Figure figure) {
@@ -137,8 +168,9 @@ public class AISolver extends AbstractJsonSolver<Board> {
                     if (glass.accept(figure, x, y)) {
                         Glass clone = glass.clone();
                         clone.drop(figure, x, y);
-                        int gaps = calculateGaps(clone);
-                        result.add(new Combination(r, pt(x, y), gaps));
+                        Combination combo = new Combination(r, pt(x, y));
+                        calculateScore(clone, combo);
+                        result.add(combo);
                     }
                 }
             }
@@ -147,7 +179,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
         return result;
     }
 
-    private int calculateGaps(Glass glass) {
+    private void calculateScore(Glass glass, Combination combo) {
         List<Plot> dropped = glass.dropped();
         boolean[][] occupied = new boolean[size][size];
         for (int x = 0; x < size; x++) {
@@ -158,10 +190,12 @@ public class AISolver extends AbstractJsonSolver<Board> {
         }
         dropped.forEach(point -> occupied[point.getX()][point.getY()] = true);
         int gaps = 0;
+        int height = 0;
         for (int x = 0; x < size; x++) {
             boolean start = false;
             for (int y = size - 1; y >= 0; y--) {
                 if (start) {
+                    height++;
                     if (!occupied[x][y]) {
                         gaps++;
                     }
@@ -172,7 +206,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
                 }
             }
         }
-        return gaps;
+        combo.setScore(gaps, height);
     }
 
     public static void main(String[] args) {

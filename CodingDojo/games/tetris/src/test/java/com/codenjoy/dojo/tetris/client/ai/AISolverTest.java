@@ -62,7 +62,7 @@ public class AISolverTest {
                 "O",
                 pt(3, 8),
                 new String[] {"O", "O", "O", "O"},
-                "LEFT,LEFT,LEFT");
+                "LEFT,LEFT,LEFT,DOWN");
 
         asertAI("..OO...." +
                 "..OO...." +
@@ -75,7 +75,7 @@ public class AISolverTest {
                 "O",
                 pt(2, 7),
                 new String[] {"O", "O", "O", "O"},
-                "LEFT,LEFT");
+                "LEFT,LEFT,DOWN");
 
         asertAI("........" +
                 ".OO....." +
@@ -88,7 +88,7 @@ public class AISolverTest {
                 "O",
                 pt(1, 6),
                 new String[] {"O", "O", "O", "O"},
-                "LEFT");
+                "LEFT,DOWN");
 
         asertAI("........" +
                 "........" +
@@ -114,7 +114,7 @@ public class AISolverTest {
                 "O",
                 pt(3, 8),
                 new String[] {"O", "O", "O", "O"},
-                "LEFT");
+                "LEFT,DOWN");
 
         asertAI("..OO...." +
                 "..OO...." +
@@ -140,7 +140,7 @@ public class AISolverTest {
                 "O",
                 pt(3, 8),
                 new String[] {"O", "O", "O", "O"},
-                "RIGHT");
+                "RIGHT,DOWN");
 
         asertAI("....OO.." +
                 "....OO.." +
@@ -166,7 +166,7 @@ public class AISolverTest {
                 "O",
                 pt(3, 8),
                 new String[] {"O", "O", "O", "O"},
-                "RIGHT,RIGHT,RIGHT");
+                "RIGHT,RIGHT,RIGHT,DOWN");
 
         asertAI("....OO.." +
                 "....OO.." +
@@ -179,7 +179,7 @@ public class AISolverTest {
                 "O",
                 pt(4, 7),
                 new String[] {"O", "O", "O", "O"},
-                "RIGHT,RIGHT");
+                "RIGHT,RIGHT,DOWN");
 
         asertAI("........" +
                 ".....OO." +
@@ -192,20 +192,30 @@ public class AISolverTest {
                 "O",
                 pt(5, 6),
                 new String[] {"O", "O", "O", "O"},
-                "RIGHT");
+                "RIGHT,DOWN");
 
-        asertAI("........" +
-                "........" +
-                "......OO" +
-                "......OO" +
-                "........" +
-                "........" +
-                "OOOOOO.." +
-                "OOOOOO..",
-                "O",
-                pt(6, 4),
+        asertAI(".................." + // TODO не может у стенки развернуться
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                "................L." +
+                "................L." +
+                "................LL" +
+                ".................." +
+                ".................." +
+                "I......I..I.I....." +
+                "I.....II..I.I...I." +
+                "IJOOOOIILLI.IIOOI." +
+                ".IOOOOJILLJIIIJIJJ" +
+                ".IIIJJJIIJJIIJJIJI",
+                "L",
+                pt(16, 8),
                 new String[] {"O", "O", "O", "O"},
-                "DOWN");
+                "ACT(2),RIGHT,DOWN");
     }
 
     private void asertAI(String glass, String figureType,
