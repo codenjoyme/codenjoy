@@ -80,7 +80,8 @@ public class TetrisTest {
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        game.setPlots(plots);
+        Glass glass = game.getPlayer().getHero().glass();
+        game.setPlots(glass, plots);
         hero = game.getPlayer().getHero();
         reset(listener);
     }
