@@ -110,9 +110,9 @@ public class AbstractBoardTest {
 
     @Test
     public void shouldWork_getNear() {
-        assertEquals("[1, 1, 1, 1, 2, 3, 1, 2, 3]", board.getNear(1, 1).toString());
-        assertEquals("[2, 3, 1, 2, 3, 1, 1, 1, 1]", board.getNear(2, 2).toString());
-        assertEquals("[3, 1, 1, 1]", board.getNear(3, 3).toString());
+        assertEquals("[1, 1, 1, 1, 3, 1, 2, 3]", board.getNear(1, 1).toString());
+        assertEquals("[2, 3, 1, 2, 1, 1, 1, 1]", board.getNear(2, 2).toString());
+        assertEquals("[3, 1, 1]", board.getNear(3, 3).toString());
         assertEquals("[]", board.getNear(5, 5).toString());
         assertEquals("[1]", board.getNear(-1, -1).toString());
     }
@@ -133,20 +133,20 @@ public class AbstractBoardTest {
     @Test
     public void shouldWork_countNear() {
         assertEquals(2, board.countNear(0, 0, Elements.ONE));
-        assertEquals(0, board.countNear(0, 0, Elements.TWO));
+        assertEquals(1, board.countNear(0, 0, Elements.TWO));
         assertEquals(0, board.countNear(0, 0, Elements.THREE));
 
-        assertEquals(2, board.countNear(1, 1, Elements.ONE));
+        assertEquals(5, board.countNear(1, 1, Elements.ONE));
         assertEquals(1, board.countNear(1, 1, Elements.TWO));
-        assertEquals(1, board.countNear(1, 1, Elements.THREE));
+        assertEquals(2, board.countNear(1, 1, Elements.THREE));
 
-        assertEquals(2, board.countNear(2, 2, Elements.ONE));
-        assertEquals(1, board.countNear(2, 2, Elements.TWO));
+        assertEquals(5, board.countNear(2, 2, Elements.ONE));
+        assertEquals(2, board.countNear(2, 2, Elements.TWO));
         assertEquals(1, board.countNear(2, 2, Elements.THREE));
 
         assertEquals(2, board.countNear(3, 3, Elements.ONE));
         assertEquals(0, board.countNear(3, 3, Elements.TWO));
-        assertEquals(0, board.countNear(3, 3, Elements.THREE));
+        assertEquals(1, board.countNear(3, 3, Elements.THREE));
 
         assertEquals(0, board.countNear(-1, -1, Elements.THREE));
     }
