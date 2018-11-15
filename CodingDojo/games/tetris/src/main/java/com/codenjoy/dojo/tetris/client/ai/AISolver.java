@@ -32,6 +32,8 @@ import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.model.*;
 
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -40,6 +42,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class AISolver extends AbstractJsonSolver<Board> {
 
     private Dice dice;
+    private int size;
 
     public AISolver(Dice dice) {
         this.dice = dice;
@@ -48,8 +51,8 @@ public class AISolver extends AbstractJsonSolver<Board> {
     @Override
     public String getAnswer(Board board) {
         String glassString = board.getGlass().getLayersString().get(0);
-        int size = board.getGlass().size();
-        GlassImpl glass = new GlassImpl(size, size, () -> 0);
+        size = board.getGlass().size();
+        Glass glass = new GlassImpl(size, size, () -> 0);
 
         Elements current = board.getCurrentFigureType();
         if (current == null) {
@@ -66,11 +69,17 @@ public class AISolver extends AbstractJsonSolver<Board> {
 
         Tetris.setPlots(glass, plots);
 
-        Point to = getPointToDrop(size, glass, figure);
+        List<Combination> combos = getPointToDrop(size, glass, figure);
 
-        if (to == null) {
+        Combination combo = combos.stream()
+                .sorted(Comparator.comparingInt(Combination::getGaps))
+                .findFirst()
+                .get();
+
+        if (combo == null) {
             System.out.println(); // не должно случиться
         }
+        Point to = combo.getPoint();
 
         int dx = to.getX() - point.getX();
         Direction direction;
@@ -79,31 +88,91 @@ public class AISolver extends AbstractJsonSolver<Board> {
         } else if (dx < 0) {
             direction = Direction.LEFT;
         } else {
-            return Direction.DOWN.toString();
+            String rotate = (combo.getRotate() == 0) ? "" : String.format("ACT(%s),", combo.getRotate());
+            return rotate + "DOWN";
         }
 
         final String[] result = {""};
         IntStream.rangeClosed(1, Math.abs(dx))
-                .forEach(i -> result[0] += (((i > 1)?",":"") + direction.toString()));
+                .forEach(i -> result[0] += (((result[0].length() > 0)?",":"") + direction.toString()));
         return result[0];
     }
 
-    private void removeCurrentFigure(GlassImpl glass, Figure figure, Point point, List<Plot> plots) {
+    private void removeCurrentFigure(Glass glass, Figure figure, Point point, List<Plot> plots) {
         glass.figureAt(figure, point.getX(), point.getY());
         List<Plot> toRemove = glass.currentFigure();
         plots.removeAll(toRemove);
         glass.figureAt(null, 0, 0);
     }
 
-    private Point getPointToDrop(int size, GlassImpl glass, Figure figure) {
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                if (glass.accept(figure, x, y)) {
-                    return pt(x, y);
+    static class Combination {
+        private Point point;
+        private int gaps;
+        private int rotate;
+
+        public Combination(int rotate, Point point, int gaps) {
+            this.rotate = rotate;
+            this.point = point;
+            this.gaps = gaps;
+        }
+
+        public Point getPoint() {
+            return point;
+        }
+
+        public int getRotate() {
+            return rotate;
+        }
+
+        public int getGaps() {
+            return gaps;
+        }
+    }
+
+    private List<Combination> getPointToDrop(int size, Glass glass, Figure figure) {
+        List<Combination> result = new LinkedList<>();
+        for (int r = 0; r < 2; r++) {
+            for (int y = 0; y < size; y++) {
+                for (int x = 0; x < size; x++) {
+                    if (glass.accept(figure, x, y)) {
+                        Glass clone = glass.clone();
+                        clone.drop(figure, x, y);
+                        int gaps = calculateGaps(clone);
+                        result.add(new Combination(r, pt(x, y), gaps));
+                    }
+                }
+            }
+            figure.rotate(1);
+        }
+        return result;
+    }
+
+    private int calculateGaps(Glass glass) {
+        List<Plot> dropped = glass.dropped();
+        boolean[][] occupied = new boolean[size][size];
+        for (int x = 0; x < size; x++) {
+            occupied[x] = new boolean[size];
+            for (int y = 0; y < size; y++) {
+                occupied[x][y] = false;
+            }
+        }
+        dropped.forEach(point -> occupied[point.getX()][point.getY()] = true);
+        int gaps = 0;
+        for (int x = 0; x < size; x++) {
+            boolean start = false;
+            for (int y = size - 1; y >= 0; y--) {
+                if (start) {
+                    if (!occupied[x][y]) {
+                        gaps++;
+                    }
+                } else {
+                    if (occupied[x][y]) {
+                        start = true;
+                    }
                 }
             }
         }
-        return null;
+        return gaps;
     }
 
     public static void main(String[] args) {

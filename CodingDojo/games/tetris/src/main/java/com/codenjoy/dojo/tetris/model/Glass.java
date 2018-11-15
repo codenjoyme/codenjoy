@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.EventListener;
 import java.util.List;
 
 public interface Glass {
+
     boolean accept(Figure figure, int x, int y);
 
     void drop(Figure figure, int x, int y);
@@ -43,4 +44,6 @@ public interface Glass {
     boolean isEmpty();
 
     void setListener(EventListener listener);
+
+    Glass clone();
 }

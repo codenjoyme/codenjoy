@@ -61,17 +61,17 @@ public class GlassImpl implements Glass {
         }
 
         BigInteger[] aligned = alignRowWithGlass(figure, x, true);
-        boolean isOccupied = false;
+        boolean occupied = false;
         for (int i = 0; i < aligned.length; i++) {
             BigInteger figureLine = aligned[i];
             int pos = y - i + figure.top();
             if (pos >= height) {
                 continue;
             }
-            BigInteger line = occupied.get(pos);
-            isOccupied |= (line.and(figureLine).compareTo(BigInteger.ZERO) == 1);
+            BigInteger line = this.occupied.get(pos);
+            occupied |= (line.and(figureLine).compareTo(BigInteger.ZERO) == 1);
         }
-        return !isOccupied;
+        return !occupied;
     }
 
     private boolean isOutside(Figure figure, int x, int y) {
@@ -245,4 +245,14 @@ public class GlassImpl implements Glass {
     public void setListener(EventListener listener) {
         this.listener = listener;
     }
+
+    @Override
+    public Glass clone() {
+        GlassImpl result = new GlassImpl(width, height, getLevel);
+        result.setListener(listener);
+        result.figureAt(figure, x, y);
+        result.occupied = new LinkedList<>(occupied);
+        return result;
+    }
+
 }
