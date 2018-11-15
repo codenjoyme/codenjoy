@@ -131,7 +131,7 @@ public class AISolver extends AbstractJsonSolver<Board> {
 
     private List<Combination> getPointToDrop(int size, Glass glass, Figure figure) {
         List<Combination> result = new LinkedList<>();
-        for (int r = 0; r < 2; r++) {
+        for (int r = 0; r <= 2; r++) {
             for (int y = 0; y < size; y++) {
                 for (int x = 0; x < size; x++) {
                     if (glass.accept(figure, x, y)) {
