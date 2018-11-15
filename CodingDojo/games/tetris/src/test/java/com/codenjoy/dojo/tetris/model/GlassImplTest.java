@@ -203,7 +203,7 @@ public class GlassImplTest {
 
     @Test
     public void shouldReturnPlotCoordinateSimpleFigure() {
-        glass.isAt(point, 1, 1);
+        glass.figureAt(point, 1, 1);
 
         Plot plot = glass.currentFigure().get(0);
         assertContainsPlot(1, 1, Elements.BLUE, plot);
@@ -211,7 +211,7 @@ public class GlassImplTest {
 
     @Test
     public void shouldReturnPlotCoordinateSimpleRedFigure() {
-        glass.isAt(createLine(Type.Z, "#"), 1, 1);
+        glass.figureAt(createLine(Type.Z, "#"), 1, 1);
 
         Plot plot = glass.currentFigure().get(0);
         assertContainsPlot(1, 1, Elements.RED, plot);
@@ -219,7 +219,7 @@ public class GlassImplTest {
 
     @Test
     public void shouldReturnPlotCoordinateHorizontalFigure() {
-        glass.isAt(new FigureImpl(1, 0, "###"), 1, 1);
+        glass.figureAt(new FigureImpl(1, 0, "###"), 1, 1);
 
         List<Plot> plots = glass.currentFigure();
         TestUtils.assertContainsPlot(1 - 1, 1, Elements.BLUE, plots);
@@ -229,7 +229,7 @@ public class GlassImplTest {
 
     @Test
     public void shouldReturnPlotCoordinateVerticalFigure() {
-        glass.isAt(new FigureImpl(0, 1, "#", "#", "#"), 1, 3);
+        glass.figureAt(new FigureImpl(0, 1, "#", "#", "#"), 1, 3);
 
         List<Plot> plots = glass.currentFigure();
         TestUtils.assertContainsPlot(1, 3 + 1, Elements.BLUE, plots);
@@ -239,7 +239,7 @@ public class GlassImplTest {
 
     @Test
     public void shouldReturnPlotCoordinateAsymetricFigure() {
-        glass.isAt(new FigureImpl(1, 0, " #"), 1, 0);
+        glass.figureAt(new FigureImpl(1, 0, " #"), 1, 0);
 
         List<Plot> plots = glass.currentFigure();
         assertEquals(1, plots.size());
@@ -248,7 +248,7 @@ public class GlassImplTest {
 
     @Test
     public void shouldReturnPlotCoordinateAsymetricFigure2() {
-        glass.isAt(new FigureImpl(0, 0, " #"), 1, 0);
+        glass.figureAt(new FigureImpl(0, 0, " #"), 1, 0);
 
         List<Plot> plots = glass.currentFigure();
         assertEquals(1, plots.size());

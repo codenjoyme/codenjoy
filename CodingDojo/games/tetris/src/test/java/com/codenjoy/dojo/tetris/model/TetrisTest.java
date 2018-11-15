@@ -274,7 +274,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO..." +
-                "......." +
+                "..OO..." +
                 "......." +
                 "......." +
                 "......." +
@@ -298,7 +298,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO..." +
-                ".....Z." +
+                "..OO.Z." +
                 "....ZZ." +
                 "ILOIZI." +
                 "ILLIJI." +
@@ -324,28 +324,15 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO..." +
-                "..OO.Z." +
-                "..OOZZ." +
-                "ILOIZI." +
-                "ILLIJI." +
-                "IOOIJI." +
-                "IOOJJI.");
-
-        verify(listener).event(Events.figuresDropped(1, Type.O.getColor().index()));
-
-        hero.down();
-        game.tick();
-
-        assrtDr("..OO..." +
-                "..OO.Z." +
-                "..OOZZ." +
-                "ILOIZI." +
-                "ILLIJI." +
-                "IOOIJI." +
-                "IOOJJI.");
+                "..OO..." +
+                "......." +
+                "......." +
+                "......." +
+                "......." +
+                ".......");
 
         // TODO разобраться, почему не настает этот случай
-//        verify(listener).event(Events.glassOverflown(1));
+        verify(listener).event(Events.glassOverflown(1));
     }
 
     @Test
@@ -361,15 +348,6 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO.." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
-        assrtDr("..OO.." +
                 "..OO.." +
                 "......" +
                 "......" +
@@ -380,7 +358,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO.." +
-                "......" +
+                "..OO.." +
                 "......" +
                 "......" +
                 "..OO.." +
@@ -400,15 +378,6 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..I..." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
-        assrtDr("..I..." +
                 "..I..." +
                 "......" +
                 "......" +
@@ -419,7 +388,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..I..." +
-                "......" +
+                "..I..." +
                 "..I..." +
                 "..I..." +
                 "..I..." +
@@ -438,15 +407,6 @@ public class TetrisTest {
         when(queue.next()).thenReturn(Type.J.create());
         game.tick();
 
-        assrtDr("..JJ.." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
         assrtDr("...J.." +
                 "..JJ.." +
                 "......" +
@@ -457,8 +417,8 @@ public class TetrisTest {
         hero.down();
         game.tick();
 
-        assrtDr("..JJ.." +
-                "......" +
+        assrtDr("...J.." +
+                "..JJ.." +
                 "......" +
                 "...J.." +
                 "...J.." +
@@ -477,15 +437,6 @@ public class TetrisTest {
         when(queue.next()).thenReturn(Type.L.create());
         game.tick();
 
-        assrtDr("..LL.." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
         assrtDr("..L..." +
                 "..LL.." +
                 "......" +
@@ -496,8 +447,8 @@ public class TetrisTest {
         hero.down();
         game.tick();
 
-        assrtDr("..LL.." +
-                "......" +
+        assrtDr("..L..." +
+                "..LL.." +
                 "......" +
                 "..L..." +
                 "..L..." +
@@ -516,15 +467,6 @@ public class TetrisTest {
         when(queue.next()).thenReturn(Type.T.create());
         game.tick();
 
-        assrtDr("..TTT." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
         assrtDr("...T.." +
                 "..TTT." +
                 "......" +
@@ -535,8 +477,8 @@ public class TetrisTest {
         hero.down();
         game.tick();
 
-        assrtDr("..TTT." +
-                "......" +
+        assrtDr("...T.." +
+                "..TTT." +
                 "......" +
                 "......" +
                 "...T.." +
@@ -555,15 +497,6 @@ public class TetrisTest {
         when(queue.next()).thenReturn(Type.S.create());
         game.tick();
 
-        assrtDr("..SS.." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
         assrtDr("...SS." +
                 "..SS.." +
                 "......" +
@@ -574,8 +507,8 @@ public class TetrisTest {
         hero.down();
         game.tick();
 
-        assrtDr("..SS.." +
-                "......" +
+        assrtDr("...SS." +
+                "..SS.." +
                 "......" +
                 "......" +
                 "...SS." +
@@ -594,15 +527,6 @@ public class TetrisTest {
         when(queue.next()).thenReturn(Type.Z.create());
         game.tick();
 
-        assrtDr("...ZZ." +
-                "......" +
-                "......" +
-                "......" +
-                "......" +
-                "......");
-
-        game.tick();
-
         assrtDr("..ZZ.." +
                 "...ZZ." +
                 "......" +
@@ -613,8 +537,8 @@ public class TetrisTest {
         hero.down();
         game.tick();
 
-        assrtDr("...ZZ." +
-                "......" +
+        assrtDr("..ZZ.." +
+                "...ZZ." +
                 "......" +
                 "......" +
                 "..ZZ.." +
@@ -636,7 +560,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO.." +
-                "......" +
+                "..OO.." +
                 "......" +
                 "......" +
                 "......" +
@@ -648,7 +572,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO.." +
-                "......" +
+                "..OO.." +
                 "......" +
                 "......" +
                 "OO...." +
@@ -661,7 +585,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO.." +
-                "......" +
+                "..OO.." +
                 "......" +
                 "......" +
                 "OOOO.." +
@@ -676,7 +600,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("..OO.." +
-                "......" +
+                "..OO.." +
                 "......" +
                 "......" +
                 "......" +
@@ -705,7 +629,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("....OO...." +
-                ".........." +
+                "....OO...." +
                 ".........." +
                 ".........." +
                 ".........." +
@@ -719,7 +643,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("....OO...." +
-                ".........." +
+                "....OO...." +
                 ".........." +
                 ".........." +
                 ".........." +
@@ -754,7 +678,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("....OO....." +
-                "..........." +
+                "....OO....." +
                 "..........." +
                 "..........." +
                 "..........." +
@@ -769,7 +693,7 @@ public class TetrisTest {
         game.tick();
 
         assrtDr("....OO....." +
-                "..........." +
+                "....OO....." +
                 "..........." +
                 "..........." +
                 "..........." +
@@ -782,5 +706,71 @@ public class TetrisTest {
 
         verify(listener).event(Events.figuresDropped(level, figure));
         verify(listener).event(Events.linesRemoved(level, 2));
+    }
+
+    @Test
+    public void shouldBugWithOverflow() {
+        givenFl(".....I.III........" +
+                ".....I.IJOOOO....." +
+                "....IIIIJOOOO....." +
+                "....IIIJJOOJOO...." +
+                "....IIIIOOOJOO...." +
+                "....IIIIOOJJOJ...." +
+                ".I..IIIIIOOOOJ...." +
+                ".I..IIIIIOOJJJ...." +
+                ".II.IIIIIOJJOOO..." +
+                ".II.IIIIIOOOOOO..." +
+                ".IIOOIIIOOOOOJO..." +
+                ".IIOOJIIOOIOOJO..." +
+                ".IJIOJIJOJIOJJOJO." +
+                ".IJIJJIJOJIJOOOJO." +
+                "IJJIJIJJJJIJOOJJJ." +
+                "IOIIJIOOOIJJIOOOJ." +
+                "IJIJJIJOOIOJIOOJJ." +
+                "IJIOOIJOOIOJIOOOO.");
+
+        when(queue.next()).thenReturn(Type.O.create());
+        game.tick();
+
+        assrtDr(".....I.III........" +
+                ".....I.IJOOOO....." +
+                "....IIIIJOOOO....." +
+                "....IIIJJOOJOO...." +
+                "....IIIIOOOJOO...." +
+                "....IIIIOOJJOJ...." +
+                ".I..IIIIIOOOOJ...." +
+                ".I..IIIIIOOJJJ...." +
+                ".II.IIIIIOJJOOO..." +
+                ".II.IIIIIOOOOOO..." +
+                ".IIOOIIIOOOOOJO..." +
+                ".IIOOJIIOOIOOJO..." +
+                ".IJIOJIJOJIOJJOJO." +
+                ".IJIJJIJOJIJOOOJO." +
+                "IJJIJIJJJJIJOOJJJ." +
+                "IOIIJIOOOIJJIOOOJ." +
+                "IJIJJIJOOIOJIOOJJ." +
+                "IJIOOIJOOIOJIOOOO.");
+
+        hero.right();
+        game.tick();
+
+        assrtDr("........OO........" +
+                "........OO........" +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                ".................." +
+                "..................");
     }
 }

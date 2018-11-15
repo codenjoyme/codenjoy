@@ -182,7 +182,7 @@ public class GlassImpl implements Glass {
     }
 
     @Override
-    public void isAt(Figure figure, int x, int y) {
+    public void figureAt(Figure figure, int x, int y) {
         this.figure = figure;
         this.x = x;
         this.y = y;

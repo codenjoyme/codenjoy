@@ -52,6 +52,9 @@ public class AISolver extends AbstractJsonSolver<Board> {
         GlassImpl glass = new GlassImpl(size, size, () -> 0);
 
         Elements current = board.getCurrentFigureType();
+        if (current == null) {
+            return "";
+        }
         Figure figure = Type.getByIndex(current.index()).create();
 
         Point point = board.getCurrentFigurePoint();
@@ -86,10 +89,10 @@ public class AISolver extends AbstractJsonSolver<Board> {
     }
 
     private void removeCurrentFigure(GlassImpl glass, Figure figure, Point point, List<Plot> plots) {
-        glass.isAt(figure, point.getX(), point.getY());
+        glass.figureAt(figure, point.getX(), point.getY());
         List<Plot> toRemove = glass.currentFigure();
         plots.removeAll(toRemove);
-        glass.isAt(null, 0, 0);
+        glass.figureAt(null, 0, 0);
     }
 
     private Point getPointToDrop(int size, GlassImpl glass, Figure figure) {
