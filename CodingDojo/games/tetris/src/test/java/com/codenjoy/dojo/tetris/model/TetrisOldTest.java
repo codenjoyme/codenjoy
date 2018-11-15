@@ -23,6 +23,7 @@
 // */
 //
 //
+//import com.codenjoy.dojo.services.EventListener;
 //import org.junit.Before;
 //import org.junit.Rule;
 //import org.junit.Test;
@@ -46,7 +47,7 @@
 // * @author serhiy.zelenin
 // */
 //@RunWith(MockitoJUnitRunner.class)
-//public class TetrisGameTest {
+//public class TetrisOldTest {
 //    public static final int WIDTH = 10;
 //    public static final int CENTER_X = WIDTH /2 - 1;
 //    public static final int TOP_Y = 20;
@@ -58,15 +59,15 @@
 //    @Captor ArgumentCaptor<Figure> figureCaptor;
 //
 //    //field value will be initialized in GameSetupRule
-//    private TetrisGame game;
+//    private Tetris game;
 //
-//    @Rule public GameSetupRule gameSetup = new GameSetupRule(TetrisGame.class);
-//    private TetrisFigure letterIFigure;
+//    @Rule public GameSetupRule gameSetup = new GameSetupRule(Tetris.class);
+//    private Figure letterIFigure;
 //
 //
 //    @Before
 //    public void setUp() throws Exception {
-//        letterIFigure = new TetrisFigure(0, 1, Figure.Type.I, "#", "#", "#", "#");
+//        letterIFigure = new FigureImpl(0, 1, Type.I, "#", "#", "#", "#");
 //    }
 //
 //    @Test
@@ -78,16 +79,20 @@
 //    @Test
 //    @GivenFiguresInQueue({@FigureProperties})
 //    public void shouldBeMovedLeftWhenAsked() {
-//        game.left();
+//        hero().left();
 //        game.tick();
 //
 //        assertCoordinates(CENTER_X - 1, TOP_Y - 1);
 //    }
 //
+//    private Hero hero() {
+//        return game.getPlayer().getHero();
+//    }
+//
 //    @Test
 //    @GivenFiguresInQueue({@FigureProperties})
 //    public void shouldChangePositionWhenOnlyNextStep(){
-//        game.left();
+//        hero().left();
 //
 //        assertCoordinates(CENTER_X, TOP_Y);
 //    }
@@ -95,7 +100,7 @@
 //    @Test
 //    @GivenFiguresInQueue({@FigureProperties})
 //    public void shouldBeMovedRightWhenAsked() {
-//        game.right();
+//        hero().right();
 //        game.tick();
 //
 //        assertCoordinates(CENTER_X + 1, TOP_Y - 1);
@@ -158,11 +163,11 @@
 //    @Test
 //    @GivenFiguresInQueue({@FigureProperties(bottom = 1), @FigureProperties(bottom = 2)})
 //    public void shouldTakeNextFigureWhenCurrentIsDropped() {
-//        game.down();
+//        hero().down();
 //        game.tick();
 //
 //        assertCoordinates(CENTER_X, HEIGHT);
-//        assertEquals(2, figureCaptor.getValue().getBottom());
+//        assertEquals(2, figureCaptor.getValue().bottom());
 //    }
 //
 //    @Test
@@ -239,7 +244,7 @@
 //
 //        captureFigureAtValues();
 //        assertThat(yCaptor.getAllValues()).isEqualTo(Arrays.asList(HEIGHT, HEIGHT));
-//        assertEquals(1, figureCaptor.getValue().getLeft());
+//        assertEquals(1, figureCaptor.getValue().left());
 //    }
 //
 //    @Test
@@ -267,36 +272,43 @@
 //
 //    @Test
 //    public void shouldRotateOnce(){
-//        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
+//        Tetris game = createGameWithOneFigureInQueue(letterIFigure);
 //        glassToAcceptFigure();
 //        game.tick();
 //
-//        game.act(1);
+//        hero().act(1);
 //
 //        captureFigureAtValues();
 //        Figure capturedFigure = figureCaptor.getValue();
-//        assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b001001001001});
+//        assertThat(capturedFigure.rowCodes(false)).isEqualTo(new int[]{0b001001001001});
 //    }
 //
 //    @Test
 //    public void shouldIgnoreRotationWhenNotAccepted(){
-//        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
+//        Tetris game = createGameWithOneFigureInQueue(letterIFigure);
 //        glassToAcceptFigure();
 //        game.tick();
 //
 //        glassToRejectFigure();
-//        game.act(1);
+//        hero().act(1);
 //
 //        captureFigureAtValues();
 //        Figure capturedFigure = figureCaptor.getValue();
-//        assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
+//        assertThat(capturedFigure.rowCodes(false)).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
 //    }
 //
-//    private TetrisGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
+//    private Tetris createGameWithOneFigureInQueue(final Figure figure) {
 //        FigureQueue figureQueue = mock(FigureQueue.class);
 //        when(figureQueue.next()).thenReturn(figure);
 //
-//        return new TetrisGame(figureQueue, glass, new PrinterFactoryImpl());
+//        Levels levels = mock(Levels.class);
+//        Tetris game = new Tetris(levels, figureQueue, 10);
+//
+//        EventListener listener = mock(EventListener.class);
+//        Player player = new Player(listener);
+//        game.newGame(player);
+//
+//        return game;
 //    }
 //
 //    private void assertCoordinates(int x, int y) {
@@ -311,13 +323,13 @@
 //
 //    private void left(int times) {
 //        for (int i = 0; i< times;i++) {
-//            game.left();
+//            hero().left();
 //        }
 //    }
 //
 //    private void right(int times) {
 //        for (int i = 0; i< times;i++) {
-//            game.right();
+//            hero().right();
 //        }
 //    }
 //}

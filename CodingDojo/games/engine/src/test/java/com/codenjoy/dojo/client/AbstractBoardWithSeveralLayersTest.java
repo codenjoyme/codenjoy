@@ -131,12 +131,11 @@ public class AbstractBoardWithSeveralLayersTest {
 
     @Test
     public void shouldWork_getNear() {
-        assertEquals("[1, 1, 1, 1, 2, 3, 1, 2, 3, " +
-                      "4, 4, 4, 4, 5, 6, 4, 5, 6]", board.getNear(1, 1).toString());
-        assertEquals("[2, 3, 1, 2, 3, 1, 1, 1, 1, " +
-                      "5, 6, 4, 5, 6, 4, 4, 4, 4]", board.getNear(2, 2).toString());
-        assertEquals("[3, 1, 1, 1, " +
-                      "6, 4, 4, 4]", board.getNear(3, 3).toString());
+        assertEquals("[1, 1, 1, 1, 3, 1, 2, 3, " +
+                        "4, 4, 4, 4, 6, 4, 5, 6]", board.getNear(1, 1).toString());
+        assertEquals("[2, 3, 1, 2, 1, 1, 1, 1, " +
+                        "5, 6, 4, 5, 4, 4, 4, 4]", board.getNear(2, 2).toString());
+        assertEquals("[3, 1, 1, 6, 4, 4]", board.getNear(3, 3).toString());
         assertEquals("[]", board.getNear(5, 5).toString());
         assertEquals("[1, 4]", board.getNear(-1, -1).toString());
     }
@@ -159,28 +158,28 @@ public class AbstractBoardWithSeveralLayersTest {
         assertEquals(2, board.countNear(0, 0, ONE));
         assertEquals(2, board.countNear(0, 0, FOUR));
 
-        assertEquals(0, board.countNear(0, 0, TWO));
-        assertEquals(0, board.countNear(0, 0, FIVE));
+        assertEquals(1, board.countNear(0, 0, TWO));
+        assertEquals(1, board.countNear(0, 0, FIVE));
 
         assertEquals(0, board.countNear(0, 0, THREE));
         assertEquals(0, board.countNear(0, 0, SIX));
 
         // -
-        assertEquals(2, board.countNear(1, 1, ONE));
-        assertEquals(2, board.countNear(1, 1, FOUR));
+        assertEquals(5, board.countNear(1, 1, ONE));
+        assertEquals(5, board.countNear(1, 1, FOUR));
 
         assertEquals(1, board.countNear(1, 1, TWO));
         assertEquals(1, board.countNear(1, 1, FIVE));
 
-        assertEquals(1, board.countNear(1, 1, THREE));
-        assertEquals(1, board.countNear(1, 1, SIX));
+        assertEquals(2, board.countNear(1, 1, THREE));
+        assertEquals(2, board.countNear(1, 1, SIX));
 
         // -
-        assertEquals(2, board.countNear(2, 2, ONE));
-        assertEquals(2, board.countNear(2, 2, FOUR));
+        assertEquals(5, board.countNear(2, 2, ONE));
+        assertEquals(5, board.countNear(2, 2, FOUR));
 
-        assertEquals(1, board.countNear(2, 2, TWO));
-        assertEquals(1, board.countNear(2, 2, FIVE));
+        assertEquals(2, board.countNear(2, 2, TWO));
+        assertEquals(2, board.countNear(2, 2, FIVE));
 
         assertEquals(1, board.countNear(2, 2, THREE));
         assertEquals(1, board.countNear(2, 2, SIX));
@@ -192,8 +191,8 @@ public class AbstractBoardWithSeveralLayersTest {
         assertEquals(0, board.countNear(3, 3, TWO));
         assertEquals(0, board.countNear(3, 3, FIVE));
 
-        assertEquals(0, board.countNear(3, 3, THREE));
-        assertEquals(0, board.countNear(3, 3, SIX));
+        assertEquals(1, board.countNear(3, 3, THREE));
+        assertEquals(1, board.countNear(3, 3, SIX));
 
         // -
         assertEquals(0, board.countNear(-1, -1, THREE));

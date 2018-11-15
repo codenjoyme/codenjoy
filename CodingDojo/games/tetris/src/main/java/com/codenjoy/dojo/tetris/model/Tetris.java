@@ -90,8 +90,7 @@ public class Tetris implements Field {
         return player;
     }
 
-    void setPlots(List<Plot> plots) {
-        Glass glass = player.getHero().glass();
+    public static void setPlots(Glass glass, List<Plot> plots) {
         Collections.sort(plots, Comparator.comparingInt(Point::getY));
         for (Plot plot : plots) {
             Type type = Type.valueOf(String.valueOf(plot.getColor().ch()));

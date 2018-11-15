@@ -24,18 +24,18 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
 public interface Glass {
+
     boolean accept(Figure figure, int x, int y);
 
     void drop(Figure figure, int x, int y);
 
     void empty();
 
-    void isAt(Figure figure, int x, int y);
+    void figureAt(Figure figure, int x, int y);
 
     List<Plot> dropped();
 
@@ -44,4 +44,6 @@ public interface Glass {
     boolean isEmpty();
 
     void setListener(EventListener listener);
+
+    Glass clone();
 }

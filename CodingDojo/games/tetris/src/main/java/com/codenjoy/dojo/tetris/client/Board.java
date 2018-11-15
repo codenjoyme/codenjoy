@@ -48,6 +48,9 @@ public class Board extends AbstractTextBoard {
     }
 
     public Elements getCurrentFigureType() {
+        if (!getJson().has("currentFigureType")) {
+            return null;
+        }
         String figureType = getJson().getString("currentFigureType");
         return getElement(figureType);
     }
