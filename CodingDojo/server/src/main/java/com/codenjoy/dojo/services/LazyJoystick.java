@@ -25,6 +25,10 @@ package com.codenjoy.dojo.services;
 
 import org.springframework.util.StringUtils;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * Когда пользователь зарегистрировался в игре создается новая игра в движке и джойстик игрока где-то там сохраняется во фреймворке.
  * Часто джойстик неразрывно связан с героем игрока, который бегает по полю. Так вот если этот герой помрет, и на его место появится новый
@@ -34,17 +38,9 @@ import org.springframework.util.StringUtils;
  */
 public class LazyJoystick implements Joystick, Tickable {
 
-    enum Direction {
-        DOWN, LEFT, RIGHT, UP;
-
-    }
     private final Game game;
 
-    private Direction direction;
-
-    private String message;
-    private int[] parameters;
-    private boolean firstAct;
+    private List<Consumer<Joystick>> commands = new LinkedList<>();
 
     public LazyJoystick(Game game) {
         this.game = game;
@@ -52,68 +48,46 @@ public class LazyJoystick implements Joystick, Tickable {
 
     @Override
     public void down() {
-        direction = Direction.DOWN;
-        firstAct = (parameters != null);
+        commands.add(Joystick::down);
     }
 
     @Override
     public void up() {
-        direction = Direction.UP;
-        firstAct = (parameters != null);
+        commands.add(Joystick::up);
     }
 
     @Override
     public void left() {
-        direction = Direction.LEFT;
-        firstAct = (parameters != null);
+        commands.add(Joystick::left);
     }
 
     @Override
     public void right() {
-        direction = Direction.RIGHT;
-        firstAct = (parameters != null);
+        commands.add(Joystick::right);
     }
 
     @Override
-    public void act(int... p) {
-        parameters = p;
-        firstAct = (direction == null);
+    public void act(int... parameters) {
+        if (parameters == null) {
+            return;
+        }
+        commands.add(joystick -> joystick.act(parameters));
     }
 
     @Override
-    public void message(String command) {
-        message = command;
+    public void message(String message) {
+        if (StringUtils.isEmpty(message)) {
+            return;
+        }
+        commands.add(joystick -> joystick.message(message));
     }
 
     @Override
     public void tick() {
-        if (direction == null && parameters == null && message == null) return; // TODO test me
-
         Joystick joystick = game.getJoystick();
 
-        if (!StringUtils.isEmpty(message)) {
-            joystick.message(message);
-        }
+        commands.forEach(command -> command.accept(joystick));
 
-        if (parameters != null && firstAct) {
-            joystick.act(parameters);
-        }
-
-        if (direction != null) {
-            switch (direction) {
-                case DOWN: joystick.down(); break;
-                case LEFT: joystick.left(); break;
-                case RIGHT: joystick.right(); break;
-                case UP: joystick.up(); break;
-            }
-        }
-
-        if (parameters != null && !firstAct) {
-            joystick.act(parameters);
-        }
-
-        parameters = null;
-        direction = null;
-        message = null;
+        commands.clear();
     }
 }

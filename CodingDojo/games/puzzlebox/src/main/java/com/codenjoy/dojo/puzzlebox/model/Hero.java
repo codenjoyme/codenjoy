@@ -47,7 +47,7 @@ public class Hero extends PlayerHero<Field> {
     }
 
     @Override
-    public void down() {
+    public void down() { // TODO надо сохранять тут только куда двигать а действие провожить в тике потому что клиент теперь может вызвать эту команду много раз
         Box box = getBox();
         box.down();
         if(box.isMoving) return;

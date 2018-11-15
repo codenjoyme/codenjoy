@@ -847,7 +847,7 @@ public class PlayerServiceImplTest {
 
 
     @Test
-    public void shouldOnlyLastJoystickWorks_lazyJoystick() throws IOException {
+    public void shouldAllJoystickCommandsWorks_lazyJoystick() throws IOException {
         // given
         createPlayer(VASYA);
 
@@ -863,7 +863,13 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(joystick(VASYA)).right();
+        Joystick joystick = joystick(VASYA);
+        InOrder inOrder = inOrder(joystick);
+
+        inOrder.verify(joystick).down();
+        inOrder.verify(joystick(VASYA)).up();
+        inOrder.verify(joystick(VASYA)).left();
+        inOrder.verify(joystick(VASYA)).right();
         verifyNoMoreInteractions(joystick(VASYA));
     }
 
@@ -887,6 +893,8 @@ public class PlayerServiceImplTest {
         // then
         InOrder inOrder = inOrder(joystick);
         inOrder.verify(joystick).act(1, 2, 3);
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).left();
         inOrder.verify(joystick).right();
         verifyNoMoreInteractions(joystick);
     }
@@ -911,7 +919,10 @@ public class PlayerServiceImplTest {
 
         // then
         InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
         inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5);
         inOrder.verify(joystick).act(5, 6);
         verifyNoMoreInteractions(joystick);
     }
@@ -937,6 +948,10 @@ public class PlayerServiceImplTest {
 
         // then
         InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5);
         inOrder.verify(joystick).act(5, 6);
         inOrder.verify(joystick).left();
         verifyNoMoreInteractions(joystick);
@@ -964,6 +979,11 @@ public class PlayerServiceImplTest {
 
         // then
         InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5);
+        inOrder.verify(joystick).act(5, 6);
         inOrder.verify(joystick).left();
         inOrder.verify(joystick).act(7);
         verifyNoMoreInteractions(joystick);
