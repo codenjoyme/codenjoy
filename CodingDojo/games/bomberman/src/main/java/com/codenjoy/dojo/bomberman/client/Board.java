@@ -47,6 +47,11 @@ public class Board extends AbstractBoard<Elements> {
         return size - 1 - y;
     }
 
+    @Override
+    protected boolean withoutCorners() {
+        return true;
+    }
+
     public Elements getAt(int x, int y) {
         if (x < 0 || y < 0 || x >= size || y >= size) {
             return WALL;

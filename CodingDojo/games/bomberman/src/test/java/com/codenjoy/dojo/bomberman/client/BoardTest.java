@@ -99,16 +99,16 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getNear() {
-        assertEquals("[҉, H,  , ҉, ☻,  , ☼, ☼, ☼]", board.getNear(7, 3).toString());
-        assertEquals("[☼, ☼, 1, ☼]", board.getNear(0, 8).toString());
-        assertEquals("[ ,  ,  , ♣, &,  ,  ,  ,  ]", board.getNear(5, 6).toString());
+        assertEquals("[H, ҉,  , ☼]", board.getNear(7, 3).toString());
+        assertEquals("[☼, ☼]", board.getNear(0, 8).toString());
+        assertEquals("[ , ♣,  ,  ]", board.getNear(5, 6).toString());
     }
 
     @Test
     public void shouldWork_getNear_point() {
-        assertEquals("[҉, H,  , ҉, ☻,  , ☼, ☼, ☼]", board.getNear(pt(7, 3)).toString());
-        assertEquals("[☼, ☼, 1, ☼]", board.getNear(pt(0, 8)).toString());
-        assertEquals("[ ,  ,  , ♣, &,  ,  ,  ,  ]", board.getNear(pt(5, 6)).toString());
+        assertEquals("[H, ҉,  , ☼]", board.getNear(pt(7, 3)).toString());
+        assertEquals("[☼, ☼]", board.getNear(pt(0, 8)).toString());
+        assertEquals("[ , ♣,  ,  ]", board.getNear(pt(5, 6)).toString());
     }
 
     @Test
