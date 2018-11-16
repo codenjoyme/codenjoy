@@ -121,8 +121,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     JSONObject parseSave(PlayerSave save) {
-        String saveString = (save == null || save.getSave() == null) ? "{}" : save.getSave();
-        return new JSONObject(saveString);
+        if (save == null || PlayerSave.isSaveNull(save.getSave())) {
+            return new JSONObject();
+        }
+        return new JSONObject(save.getSave());
     }
 
     private List<PlayerGame> removeAndLeaveAlone(Game game) {

@@ -54,6 +54,14 @@ public interface Game extends Closeable {
     void newGame();
 
     /**
+     * Если игра имеет состояние и может быть сохранена,
+     * то она может и загрузиться из этого состояния с помощью этого метода.
+     * Этот метод вызывается сразу после созлания игры методом {@see #newGame()}
+     * @param save Загружаемый save
+     */
+    void loadSave(JSONObject save);
+
+    /**
      * Board =
      * "******" +
      * "*    *" +
@@ -83,6 +91,7 @@ public interface Game extends Closeable {
 
     /**
      * @return Если игра сохраняется, то у нее должно быть состояние, иначе null
+     *
      */
     JSONObject getSave();
 

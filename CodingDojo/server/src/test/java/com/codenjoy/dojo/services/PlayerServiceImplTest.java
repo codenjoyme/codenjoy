@@ -76,6 +76,7 @@ public class PlayerServiceImplTest {
     public static final String VASYA_AI = "vasya-super-ai@codenjoy.com";
     public static final String PETYA = "petya@mail.com";
     public static final String KATYA = "katya@mail.com";
+    public static final String OLIA = "olia@mail.com";
     public static final String VASYA_URL = "http://vasya@mail.com:1234";
     public static final String PETYA_URL = "http://petya@mail.com:1234";
 
@@ -108,7 +109,7 @@ public class PlayerServiceImplTest {
 
     @Before
     public void setUp() throws IOException {
-        Mockito.reset(actionLogger, autoSaver, gameService, playerController);
+        Mockito.reset(actionLogger, autoSaver, gameService, playerController, playerGames);
         playerGames.clean();
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
@@ -1174,6 +1175,92 @@ public class PlayerServiceImplTest {
         assertEquals(PETYA_URL, player2.getCallbackUrl());
         assertNull(player2.getCode());
         assertEquals(null, player2.getPassword());
+    }
+
+    @Test
+    public void shouldUpdateAll_loadFromSave() {
+        // given
+        Player player1 = createPlayer(VASYA);
+        Player player2 = createPlayer(PETYA);
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
+            add(new PlayerInfo(player1){{
+                setData("{\"some\":\"data1\"}");
+            }});
+            add(new PlayerInfo(player2){{
+                setData("{\"some\":\"data2\"}");
+            }});
+        }};
+        playerService.updateAll(infos);
+
+        // then
+        assertSaveLoaded(player1, "[{\"some\":\"data1\"}]");
+        assertSaveLoaded(player2, "[{\"some\":\"data2\"}]");
+    }
+
+    private void assertSaveLoaded(Player player, String save) {
+        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
+        verify(playerGames).setLevel(eq(player.getName()), captor.capture());
+        assertEquals(save, captor.getAllValues().toString());
+    }
+
+    @Test
+    public void shouldUpdateAll_loadFromSave_onlyIfSaveIsNotSame() {
+        // given
+        Player player1 = createPlayer(VASYA);
+        Player player2 = createPlayer(PETYA);
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
+            add(new PlayerInfo(player1){{
+                setData("{\"some\":\"data1\"}");
+            }});
+            add(new PlayerInfo(player2){{
+                setData("{}"); // same
+            }});
+        }};
+        playerService.updateAll(infos);
+
+        // then
+        assertSaveLoaded(player1, "[{\"some\":\"data1\"}]");
+        assertSaveNotLoaded(player2);
+    }
+
+    @Test
+    public void shouldUpdateAll_loadFromSave_onlyIfSaveIsNotEmptyOrNull() {
+        // given
+        Player player1 = createPlayer(VASYA);
+        Player player2 = createPlayer(PETYA);
+        Player player3 = createPlayer(KATYA);
+        Player player4 = createPlayer(OLIA);
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
+            add(new PlayerInfo(player1){{
+                setData("{\"some\":\"data1\"}");
+            }});
+            add(new PlayerInfo(player2){{
+                setData(""); // empty
+            }});
+            add(new PlayerInfo(player3){{
+                setData(null); // null
+            }});
+            add(new PlayerInfo(player4){{
+                setData("null"); // "null"
+            }});
+        }};
+        playerService.updateAll(infos);
+
+        // then
+        assertSaveLoaded(player1, "[{\"some\":\"data1\"}]");
+        assertSaveNotLoaded(player2);
+        assertSaveNotLoaded(player3);
+        assertSaveNotLoaded(player4);
+    }
+
+    private void assertSaveNotLoaded(Player player) {
+        verify(playerGames, never()).setLevel(eq(player.getName()), any(JSONObject.class));
     }
 
     @Test

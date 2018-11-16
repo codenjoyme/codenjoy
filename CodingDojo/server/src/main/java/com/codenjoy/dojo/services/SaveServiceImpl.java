@@ -112,14 +112,8 @@ public class SaveServiceImpl implements SaveService {
             }
         }
 
-
         List<PlayerInfo> result = new LinkedList<>(map.values());
-        Collections.sort(result, new Comparator<PlayerInfo>() {
-            @Override
-            public int compare(PlayerInfo o1, PlayerInfo o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        Collections.sort(result, Comparator.comparing(Player::getName));
 
         return result;
     }

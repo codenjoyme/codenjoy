@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 import java.util.*;
@@ -574,6 +575,101 @@ public class PlayerGamesTest {
         assertEquals(1, fields.size());
     }
 
+
+    @Test
+    public void testLoadFromSave_whenNullPlayerSave() {
+        // given when
+        PlayerSave save = null;
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenNullSaveInPlayerSave() {
+        // given when
+        String stringSave = null;
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenEmptyStringSaveInPlayerSave() {
+        // given when
+        String stringSave = "";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenNullStringSaveInPlayerSave() {
+        // given when
+        String stringSave = "null";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenEmptyJsonSaveInPlayerSave() {
+        // given when
+        String stringSave = "{}";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_saveGoesToField() {
+        // given when
+        String stringSave = "{\"some\":\"data\"}";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
+        verify(fields.get(0)).loadSave(captor.capture());
+        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+    }
+
+    @Test
+    public void testLoadFromSave_saveGoesToField_anyLevelProgressWillRemove() {
+        // given when
+        String stringSave = "{'levelProgress':{'total':3,'current':3,'lastPassed':2},'some':'data'}";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
+        verify(fields.get(0)).loadSave(captor.capture());
+        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+    }
+
     @Test
     public void testGetGameSave_forTrainingMultiplayerType_caseNullFieldSave() {
         // given
@@ -617,6 +713,22 @@ public class PlayerGamesTest {
 
         // when then
         assertEquals("{\"some\":\"data\"}",
+                playerGames.get("player").getGame().getSave().toString());
+
+    }
+
+    @Test
+    public void testGetGameSave_forOtherMultiplayerTypes_caseIfNullSave() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+
+        Player player = createPlayer("game", "player", type,
+                new PlayerSave("{'save':'data'}"));
+
+        when(fields.get(0).getSave()).thenReturn(null);
+
+        // when then
+        assertEquals("{}",
                 playerGames.get("player").getGame().getSave().toString());
 
     }

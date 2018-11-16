@@ -136,6 +136,9 @@ public class Spreader {
         game.on(field);
 
         game.newGame();
+        if (save != null && !save.keySet().isEmpty()) {
+            game.loadSave(save);
+        }
     }
 
     public boolean contains(Game game) {

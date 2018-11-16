@@ -407,12 +407,11 @@ public class PlayerServiceImpl implements PlayerService {
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
 
-
-                Game game = playerGame.getGame(); // TODO test me
+                Game game = playerGame.getGame();
                 if (game != null && game.getSave() != null) {
                     String oldSave = game.getSave().toString();
                     String newSave = newPlayer.getData();
-                    if (newSave != null && !newSave.equals(oldSave)) {
+                    if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
                         playerGames.setLevel(
                                 newPlayer.getName(),
                                 new JSONObject(newSave));
