@@ -27,6 +27,7 @@ import com.codenjoy.dojo.sampletext.services.Events;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -42,9 +43,9 @@ public class SingleTest {
     private EventListener listener1;
     private EventListener listener2;
     private EventListener listener3;
-    private Single game1;
-    private Single game2;
-    private Single game3;
+    private Game game1;
+    private Game game2;
+    private Game game3;
     private Dice dice;
     private SampleText field;
 
@@ -90,7 +91,7 @@ public class SingleTest {
         assertField(expected, game1);
     }
 
-    private void assertField(String expected, Single game) {
+    private void assertField(String expected, Game game) {
         assertEquals(expected, JsonUtils.toStringSorted(game.getBoardAsString().toString()).replace('\"', '\''));
     }
 
@@ -144,7 +145,11 @@ public class SingleTest {
 
         asrtFl1("{'history':[],'nextQuestion':'question1'}");
         asrtFl2("{'history':[],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        try {
+            asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        } catch (IllegalStateException e) {
+            assertEquals("No board for this player", e.getMessage());
+        }
     }
 
     // игрока можно ресетнуть

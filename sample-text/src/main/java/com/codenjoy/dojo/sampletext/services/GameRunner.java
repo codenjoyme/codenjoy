@@ -73,7 +73,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public SampleText createGame() {
+    public SampleText createGame(int levelNumber) {
         return new SampleText(level, getDice());
     }
 
@@ -113,7 +113,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         return new Player(listener);
     }
 

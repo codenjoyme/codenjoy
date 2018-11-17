@@ -25,7 +25,9 @@
 /quadro/**
 /tetris/**
 /lunolet/**
+/expansion/**
 /reversi/**
+/sokoban/**
 /engine/src/**
 /engine/target/**
 /engine/.idea/**
