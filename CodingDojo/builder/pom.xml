@@ -585,7 +585,7 @@
                     <images>
                         <image>
                             <name>apofig/codenjoy:${project.version}</name>
-                            <alias>apofig/codenjoy</alias>
+                            <alias>codenjoy</alias>
                             <build>
                                 <dockerFileDir>${project.basedir}</dockerFileDir>
                             </build>
