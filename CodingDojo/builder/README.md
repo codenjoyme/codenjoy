@@ -29,7 +29,7 @@ Choose codenjoy server/engine/games version
 The latest version as of now
 ```
 <properties>
-    <codenjoy.version>1.0.26</codenjoy.version>
+    <codenjoy.version>1.0.27</codenjoy.version>
 </properties>
 ```
 If you want to add your new game - please do thing bellow.

@@ -1,5 +1,5 @@
-def fromVersion = '1.0.27-tetris'
-def toVersion = '1.0.26'
+def fromVersion = '1.0.27'
+def toVersion = '1.0.28'
 
 // select root directories
 def base = '..\\..\\..\\..\\..\\..\\..\\..\\';
