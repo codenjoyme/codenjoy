@@ -30,11 +30,13 @@ function initRobot(logger, controller) {
 
     memory = [];
     goThere = null;
-    var doTogether = function(direction, command) {
-        if (!validateDirection(direction)) {
+    var doTogether = function(direction, command, move) {
+        if (!!direction && !validateDirection(direction)) {
             return;
         }
-        goThere = direction;
+        if (['JUMP', 'PULL'].includes(command) && !!direction) {
+            goThere = direction;
+        }
         controller.cleanCommand();
         if (!direction) {
             controller.addCommand(command);
@@ -48,7 +50,8 @@ function initRobot(logger, controller) {
     var validateDirection = function(direction) {
         var d = Direction.get(direction);
         if (!d) {                
-            logger.print('Bad value for command. Expected Direction but was: "' + direction + '"');
+            logger.print("Unexpected direction value '" + direction +
+                            "' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.");
             return false;
         }
         return true;
@@ -58,6 +61,10 @@ function initRobot(logger, controller) {
         nextLevel: function() {
             controller.winCommand();
             controller.waitCommand();
+        },
+        reset: function() {
+            goThere = null;
+            controller.cleanCommand();
         },
         log : function(message) {
             if (typeof message == 'function') {
@@ -69,10 +76,10 @@ function initRobot(logger, controller) {
             logger.print("Robot says: " + message);
         },
         invert : function(direction) {
-            if (direction == "LEFT") return "RIGHT"; // TODO to use Direction.inverted()
-            if (direction == "RIGHT") return "LEFT";
-            if (direction == "DOWN") return "UP";
-            if (direction == "UP") return "DOWN";
+            if (!validateDirection(direction)) {
+                return;
+            }
+            return Direction.get(direction).inverted().name();
         },
         cameFrom : function() {
             if (goThere == null) {
@@ -178,12 +185,18 @@ function initRobot(logger, controller) {
             var b = new Board(board);
             var hero = b.getHero();
 
-            var forAll = function(elementType, doThat) {
-                var elements = Element.getElementsOfType(elementType);
-                for (var index in elements) {
-                    var element = elements[index];
-                    if (!!doThat) {
-                        doThat(element);
+            var forAll = function(elementTypes, doThat) {
+                if (!Array.isArray(elementTypes)) {
+                    elementTypes = [elementTypes];
+                }
+                for (var index in elementTypes) {
+                    var elementType = elementTypes[index];
+                    var elements = Element.getElementsOfType(elementType);
+                    for (var index in elements) {
+                        var element = elements[index];
+                        if (!!doThat) {
+                            doThat(element);
+                        }
                     }
                 }
             }
@@ -204,9 +217,9 @@ function initRobot(logger, controller) {
                 return hero;
             }
 
-            var isAt = function(x, y, elementType) {
+            var isAt = function(x, y, elementTypes) {
                 var found = false;
-                forAll(elementType, function(element) {
+                forAll(elementTypes, function(element) {
                     if (b.isAt(x, y, LAYER1, element) ||
                         b.isAt(x, y, LAYER2, element))
                     {
@@ -232,9 +245,9 @@ function initRobot(logger, controller) {
                 return result;
             }
 
-            var findAll = function(elementType) {
+            var findAll = function(elementTypes) {
                 var result = [];
-                forAll(elementType, function(element) {
+                forAll(elementTypes, function(element) {
                     var found = b.findAll(element, LAYER1);
                     for (var index in found) {
                         result.push(found[index]);
@@ -249,12 +262,9 @@ function initRobot(logger, controller) {
 
             var isAnyOfAt = function(x, y, elementTypes) {
                 var elements = [];
-                for (var index in elementTypes) {
-                    var elementType = elementTypes[index];
-                    forAll(elementType, function(element) {
-                        elements.push(element);
-                    });
-                }
+                forAll(elementTypes, function(element) {
+                    elements.push(element);
+                });
 
                 if (b.isAnyOfAt(x, y, LAYER1, elements) ||
                     b.isAnyOfAt(x, y, LAYER2, elements))
@@ -265,19 +275,14 @@ function initRobot(logger, controller) {
             }
 
             var isNear = function(x, y, elementTypes) {
-                if (!Array.isArray(elementTypes)) {
-                    elementTypes = [elementTypes];
-                }
                 var found = false;
-                for(var index in elementTypes) {
-                    forAll(elementTypes[index], function(element) {
-                        if (b.isNear(x, y, LAYER1, element) ||
-                            b.isNear(x, y, LAYER2, element))
-                        {
-                            found = true;
-                        }
-                    });
-                }
+                forAll(elementTypes, function(element) {
+                    if (b.isNear(x, y, LAYER1, element) ||
+                        b.isNear(x, y, LAYER2, element))
+                    {
+                        found = true;
+                    }
+                });
                 return found;
             }
 
@@ -285,13 +290,12 @@ function initRobot(logger, controller) {
                 return b.isBarrierAt(x, y);
             }
 
-            var countNear = function(x, y, elementType) {
+            var countNear = function(x, y, elementTypes) {
                 var count = 0;
-                forAll(elementType, function(element) {
+                forAll(elementTypes, function(element) {
                     count += b.countNear(x, y, LAYER1, element);
                     count += b.countNear(x, y, LAYER2, element);
                 });
-
                 return count;
             }
 
