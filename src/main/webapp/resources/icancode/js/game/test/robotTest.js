@@ -69,6 +69,10 @@ assertCommand = function(name, wasMoved){
     assertMoved("LEFT", "RIGHT", wasMoved);
     assertActions("", controllerActions);
 
+    robot[name]();
+    assertMoved("null", "null", false);
+    assertActions("clean,command[" + upper + "],wait", controllerActions);
+
     // jumpUp, jumpLeft, jumpDown, jumpRight
     robot[name + "Up"]();
     assertMoved("DOWN", "UP", wasMoved);

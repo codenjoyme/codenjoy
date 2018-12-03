@@ -34,7 +34,7 @@ function initRobot(logger, controller) {
         if (!!direction && !validateDirection(direction)) {
             return;
         }
-        if (['JUMP', 'PULL'].includes(command) && !!direction) {
+        if (['JUMP', 'PULL'].includes(command)) {
             goThere = direction;
         }
         controller.cleanCommand();
