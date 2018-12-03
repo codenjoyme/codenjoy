@@ -151,6 +151,8 @@ runTest = function() {
 
     // --------- getScanner --------------
     // findAll
+    resetMocks();
+
     assertEquals("[2,3],[3,1]",
         scanner.findAll("GOLD"));
 
@@ -164,6 +166,8 @@ runTest = function() {
         scanner.findAll(["GOLD","START","EXIT"]));
 
     // at point
+    resetMocks();
+
     assertEquals("GOLD",
         scanner.at(new Point(2, 3)));
 
@@ -183,6 +187,8 @@ runTest = function() {
     assertActions("Expected direction or point but was 'QWE' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
 
     // at direction
+    resetMocks();
+
     assertEquals("START",
         scanner.at("LEFT"));
 
@@ -196,6 +202,8 @@ runTest = function() {
         scanner.at("RIGHT"));
 
     // atLeft, atRight, atUp, atDown
+    resetMocks();
+
     assertEquals("START",
         scanner.atLeft());
 
@@ -207,6 +215,24 @@ runTest = function() {
 
     assertEquals("NONE,GOLD",
         scanner.atRight());
+
+    // atNearRobot
+    resetMocks();
+
+    assertEquals("NONE,OTHER_ROBOT",
+        scanner.atNearRobot(-1, 1));
+
+    assertEquals(null,
+        scanner.atNearRobot());
+    assertActions("Expected two numbers but was [].", loggerActions);
+
+    assertEquals(null,
+        scanner.atNearRobot("1", "2"));
+    assertActions("Expected two numbers but was [1,2].", loggerActions);
+
+    assertEquals(null,
+        scanner.atNearRobot("ASD", "QWE", false));
+    assertActions("Expected two numbers but was [ASD,QWE,false].", loggerActions);
 
 
     // ------------- other Robot methods ---------------

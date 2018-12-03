@@ -65,11 +65,19 @@ function initRobot(logger, controller) {
     }
 
     var validateDirection = function(direction) {
-        var result = isDirection(direction);
-        if (!result) {
+        var valid = isDirection(direction);
+        if (!valid) {
             badDirection(direction);
         }
-        return result;
+        return valid;
+    }
+
+    var validateTwoInteger = function(arg) {
+        var valid = (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
+        if (!valid) {
+            logger.print("Expected two numbers but was [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
     }
 
     var isPoint = function(object) {
@@ -225,6 +233,10 @@ function initRobot(logger, controller) {
             }
 
             var atNearRobot = function(dx, dy) {
+                if (!validateTwoInteger(arguments)) {
+                    return null;
+                }
+
                 var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
                 var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
 
