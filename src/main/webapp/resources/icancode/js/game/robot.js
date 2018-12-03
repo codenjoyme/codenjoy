@@ -75,7 +75,7 @@ function initRobot(logger, controller) {
     var validateTwoInteger = function(arg) {
         var valid = (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
         if (!valid) {
-            logger.print("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [" + Array.from(arg).join(',') + "].");
+            logger.print("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [" + Array.from(arg).join(',') + "].");
         }
         return valid;
     }
@@ -88,7 +88,7 @@ function initRobot(logger, controller) {
                     Array.isArray(arg[2])
                 ));
         if (!valid) {
-            logger.print("You try to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
+            logger.print("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
         }
         return valid;
     }
@@ -100,7 +100,21 @@ function initRobot(logger, controller) {
         return (typeof object.getX == 'function' &&
             typeof object.getY == 'function');
     }
-    
+
+    var collect = function(e1, e2) {
+        var result = [];
+        if (e1 != 'NONE') {
+            result.push(e1);
+        }
+        if (e2 != 'NONE') {
+            result.push(e2);
+        }
+        if (result.length == 0) {
+            result.push('NONE');
+        }
+        return result;
+    }
+
     return {
         nextLevel: function() {
             controller.winCommand();
@@ -253,12 +267,7 @@ function initRobot(logger, controller) {
                 var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
                 var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
 
-                var result = [];
-                result.push(element1.type);
-                if (element2.type != 'NONE') {
-                    result.push(element2.type);
-                }
-                return result;
+                return collect(element1.type, element2.type);
             }
 
             var getMe = function() {
@@ -284,19 +293,14 @@ function initRobot(logger, controller) {
             }
 
             var getAt = function(x, y) {
-                var result = [];
-                var atLayer1 = b.getAt(x, y, LAYER1).type;
-                var atLayer2 = b.getAt(x, y, LAYER2).type;
-                if (atLayer1 != 'NONE') {
-                    result.push(atLayer1);
+                if (!validateTwoInteger(arguments)) {
+                    return null;
                 }
-                if (atLayer2 != 'NONE') {
-                    result.push(atLayer2);
-                }
-                if (result.length == 0) {
-                    result.push('NONE');
-                }
-                return result;
+
+                var element1 = b.getAt(x, y, LAYER1);
+                var element2 = b.getAt(x, y, LAYER2);
+
+                return collect(element1.type, element2.type);
             }
 
             var findAll = function(elementTypes) {

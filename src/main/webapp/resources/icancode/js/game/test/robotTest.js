@@ -198,7 +198,7 @@ runTest = function() {
     assertEquals("NONE",
         scanner.at("DOWN"));
 
-    assertEquals("NONE,GOLD",
+    assertEquals("GOLD",
         scanner.at("RIGHT"));
 
     // atLeft, atRight, atUp, atDown
@@ -213,26 +213,26 @@ runTest = function() {
     assertEquals("NONE",
         scanner.atDown());
 
-    assertEquals("NONE,GOLD",
+    assertEquals("GOLD",
         scanner.atRight());
 
     // atNearRobot
     resetMocks();
 
-    assertEquals("NONE,OTHER_ROBOT",
+    assertEquals("OTHER_ROBOT",
         scanner.atNearRobot(-1, 1));
 
     assertEquals(null,
         scanner.atNearRobot());
-    assertActions("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
 
     assertEquals(null,
         scanner.atNearRobot("1", "2"));
-    assertActions("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2].", loggerActions);
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2].", loggerActions);
 
     assertEquals(null,
         scanner.atNearRobot("ASD", "QWE", false));
-    assertActions("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
 
     // getMe
     resetMocks();
@@ -261,12 +261,34 @@ runTest = function() {
 
     assertEquals(false,
         scanner.isAt(2, 1));
-    assertActions("You try to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
 
     assertEquals(false,
         scanner.isAt());
-    assertActions("You try to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
 
+    // getAt
+    resetMocks();
+
+    assertEquals("MY_ROBOT",
+        scanner.getAt(2, 1));
+
+    assertEquals("NONE",
+        scanner.getAt(2, 2));
+
+    assertEquals("EXIT",
+        scanner.getAt(3, 3));
+
+    assertEquals("GOLD",
+        scanner.getAt(3, 1));
+
+    assertEquals(null,
+        scanner.getAt());
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
+
+    assertEquals(null,
+        scanner.getAt("1", "HERO"));
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,HERO].", loggerActions);
 
 
     // ------------- other Robot methods ---------------
