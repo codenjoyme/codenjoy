@@ -182,7 +182,6 @@ runTest = function() {
         scanner.at("QWE"));
     assertActions("Expected direction or point but was 'QWE' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
 
-
     // at direction
     assertEquals("START",
         scanner.at("LEFT"));
@@ -195,6 +194,19 @@ runTest = function() {
 
     assertEquals("NONE,GOLD",
         scanner.at("RIGHT"));
+
+    // atLeft, atRight, atUp, atDown
+    assertEquals("START",
+        scanner.atLeft());
+
+    assertEquals("WALL",
+        scanner.atUp());
+
+    assertEquals("NONE",
+        scanner.atDown());
+
+    assertEquals("NONE,GOLD",
+        scanner.atRight());
 
 
     // ------------- other Robot methods ---------------
