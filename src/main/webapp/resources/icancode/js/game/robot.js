@@ -46,15 +46,27 @@ function initRobot(logger, controller) {
             controller.waitCommand();
         }
     }
-    
+
+    var badDirection = function(direction) {
+        logger.print("Unexpected direction value '" + direction +
+                        "' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.");
+    }
+
+    var badDirectionOrPoint = function(directionOrPoint) {
+        logger.print("Expected direction or point but was '" + directionOrPoint +
+                        "' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.");
+    }
+
+    var isDirectionValid = function(direction) {
+        return Direction.get(direction) != null;
+    }
+
     var validateDirection = function(direction) {
-        var d = Direction.get(direction);
-        if (!d) {                
-            logger.print("Unexpected direction value '" + direction +
-                            "' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.");
-            return false;
+        var result = isDirectionValid(direction);
+        if (!result) {
+            badDirection(direction);
         }
-        return true;
+        return result;
     }
     
     return {
@@ -347,13 +359,21 @@ function initRobot(logger, controller) {
                 return Element.getElementsTypes();
             }
 
-            var at = function(direction) {
-                if (!!direction && typeof direction.getX == 'function') {
-                    var point = direction;
+            var at = function(directionOrPoint) {
+                if (arguments.length == 0 || !directionOrPoint) {
+                    badDirectionOrPoint(directionOrPoint);
+                    return null;
+                }
+                if (!!directionOrPoint && typeof directionOrPoint.getX == 'function') {
+                    var point = directionOrPoint;
                     return getAt(point.getX(), point.getY());
                 } else {
-                    var d = Direction.get(direction);
-                    return atNearRobot(d.changeX(0), d.changeY(0));
+                    if (!isDirectionValid(directionOrPoint)) {
+                        badDirectionOrPoint(directionOrPoint);
+                        return null;
+                    }
+                    var direction = Direction.get(directionOrPoint);
+                    return atNearRobot(direction.changeX(0), direction.changeY(0));
                 }
             }
 

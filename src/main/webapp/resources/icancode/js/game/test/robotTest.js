@@ -149,8 +149,8 @@ runTest = function() {
     robot = initRobot(logger, controller);
     var scanner = robot.getScanner();
 
+    // --------- getScanner --------------
     // findAll
-
     assertEquals("[2,3],[3,1]",
         scanner.findAll("GOLD"));
 
@@ -163,6 +163,41 @@ runTest = function() {
     assertEquals("[2,3],[3,1],[1,1],[3,3]",
         scanner.findAll(["GOLD","START","EXIT"]));
 
+    // at point
+    assertEquals("GOLD",
+        scanner.at(new Point(2, 3)));
+
+    assertEquals("OTHER_ROBOT",
+        scanner.at(new Point(1, 2)));
+
+    assertEquals(null,
+        scanner.at(null));
+    assertActions("Expected direction or point but was 'null' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
+
+    assertEquals(null,
+        scanner.at());
+    assertActions("Expected direction or point but was 'undefined' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
+
+    assertEquals(null,
+        scanner.at("QWE"));
+    assertActions("Expected direction or point but was 'QWE' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
+
+
+    // at direction
+    assertEquals("START",
+        scanner.at("LEFT"));
+
+    assertEquals("WALL",
+        scanner.at("UP"));
+
+    assertEquals("NONE",
+        scanner.at("DOWN"));
+
+    assertEquals("NONE,GOLD",
+        scanner.at("RIGHT"));
+
+
+    // ------------- other Robot methods ---------------
     // nextLevel
     robot.nextLevel();
     assertActions("win,wait", controllerActions);
@@ -261,7 +296,7 @@ runTest = function() {
     resetMocks();
     assertCommand("fire", false);
 
-    // getMemory
+    // ------------  getMemory ---------------
     var memory = robot.getMemory();
     assertEquals(false, memory.has("key"));
 
@@ -293,5 +328,4 @@ runTest = function() {
     assertEquals(undefined, memory.load("key"));
     assertEquals(undefined, memory.load("key2"));
 
-    //
 }
