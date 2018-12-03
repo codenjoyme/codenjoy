@@ -234,6 +234,8 @@ runTest = function() {
         scanner.atNearRobot("ASD", "QWE", false));
     assertActions("Expected two numbers but was [ASD,QWE,false].", loggerActions);
 
+    // getMe
+    assertEquals("[2,1]", scanner.getMe());
 
     // ------------- other Robot methods ---------------
     // nextLevel
