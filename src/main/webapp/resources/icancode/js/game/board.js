@@ -26,6 +26,11 @@
 // ========================== board ==========================
 
 var LengthToXY = function (boardSize) {
+    var inversion = function (y) {
+        return y;
+//        return size - 1 - y; TODO думаю стоит проинвертировать y тут
+    }
+
     return {
         getXY: function (length) {
             if (length == -1) {
@@ -35,7 +40,7 @@ var LengthToXY = function (boardSize) {
         },
 
         getLength: function (x, y) {
-            return y * boardSize + x;
+            return inversion(y) * boardSize + x;
         }
     };
 };
@@ -44,7 +49,7 @@ var LAYER1 = 0;
 var LAYER2 = 1;
 
 var Board = function (boardString) {
-    var board = eval(boardString);
+    var board = JSON.parse(boardString);
     var layers = board.layers;
     var size = Math.sqrt(layers[LAYER1].length);
     var xyl = new LengthToXY(size);
