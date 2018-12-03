@@ -83,12 +83,33 @@ function initRobot(logger, controller) {
     var validateTwoIntegerAndElements = function(arg) {
         var valid = (arg.length == 3 &&
                 typeof arg[0] == 'number' &&
-                typeof arg[1] == 'number' && (
-                    typeof arg[2] == 'string' ||
-                    Array.isArray(arg[2])
-                ));
+                typeof arg[1] == 'number' &&
+                isValidElements(arg[2]));
         if (!valid) {
             logger.print("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
+    var isArrayTypeIs = function(array, type) {
+        for (var index in array) {
+            if (typeof array[index] != type) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var isValidElements = function(object) {
+        var type = 'string';
+        return (typeof object == type) ||
+            (Array.isArray(object) && isArrayTypeIs(object, type));
+    }
+
+    var validateElements = function(arg) {
+        var valid = (arg.length == 1 && isValidElements(arg[0]));
+        if (!valid) {
+            logger.print("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
         }
         return valid;
     }
@@ -304,6 +325,10 @@ function initRobot(logger, controller) {
             }
 
             var findAll = function(elementTypes) {
+                if (!validateElements(arguments)) {
+                    return null;
+                }
+
                 var result = [];
                 forAll(elementTypes, function(element) {
                     var found = b.findAll(element, LAYER1);

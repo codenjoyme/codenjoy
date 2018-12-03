@@ -165,6 +165,18 @@ runTest = function() {
     assertEquals("[2,3],[3,1],[1,1],[3,3]",
         scanner.findAll(["GOLD","START","EXIT"]));
 
+    assertEquals(null,
+            scanner.findAll());
+    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+    assertEquals(null,
+            scanner.findAll(1, 2));
+    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
+
+    assertEquals(null,
+            scanner.findAll([1, 2]));
+    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
+
     // at point
     resetMocks();
 
@@ -266,6 +278,10 @@ runTest = function() {
     assertEquals(false,
         scanner.isAt());
     assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+    assertEquals(false,
+        scanner.isAt(1, 2, [3, 4]));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
 
     // getAt
     resetMocks();
