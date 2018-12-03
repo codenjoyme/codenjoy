@@ -57,16 +57,27 @@ function initRobot(logger, controller) {
                         "' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.");
     }
 
-    var isDirectionValid = function(direction) {
-        return Direction.get(direction) != null;
+    var isDirection = function(object) {
+        if (!object) {
+            return null;
+        }
+        return Direction.get(object) != null;
     }
 
     var validateDirection = function(direction) {
-        var result = isDirectionValid(direction);
+        var result = isDirection(direction);
         if (!result) {
             badDirection(direction);
         }
         return result;
+    }
+
+    var isPoint = function(object) {
+        if (!object) {
+            return null;
+        }
+        return (typeof object.getX == 'function' &&
+            typeof object.getY == 'function');
     }
     
     return {
@@ -360,21 +371,18 @@ function initRobot(logger, controller) {
             }
 
             var at = function(directionOrPoint) {
-                if (arguments.length == 0 || !directionOrPoint) {
-                    badDirectionOrPoint(directionOrPoint);
-                    return null;
-                }
-                if (!!directionOrPoint && typeof directionOrPoint.getX == 'function') {
+                if (isPoint(directionOrPoint)) {
                     var point = directionOrPoint;
                     return getAt(point.getX(), point.getY());
-                } else {
-                    if (!isDirectionValid(directionOrPoint)) {
-                        badDirectionOrPoint(directionOrPoint);
-                        return null;
-                    }
+                }
+
+                if (isDirection(directionOrPoint)) {
                     var direction = Direction.get(directionOrPoint);
                     return atNearRobot(direction.changeX(0), direction.changeY(0));
                 }
+
+                badDirectionOrPoint(directionOrPoint);
+                return null;
             }
 
             var atLeft = function() {
