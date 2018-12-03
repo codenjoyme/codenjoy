@@ -260,4 +260,38 @@ runTest = function() {
     // fire
     resetMocks();
     assertCommand("fire", false);
+
+    // getMemory
+    var memory = robot.getMemory();
+    assertEquals(false, memory.has("key"));
+
+    memory.save("key", "value");
+    assertEquals(true, memory.has("key"));
+    assertEquals(false, memory.has("key2"));
+
+    assertEquals("value", memory.load("key"));
+    assertEquals(undefined, memory.load("key2"));
+
+    memory.save("key2", "value2");
+    assertEquals(true, memory.has("key"));
+    assertEquals(true, memory.has("key2"));
+
+    assertEquals("value", memory.load("key"));
+    assertEquals("value2", memory.load("key2"));
+
+    memory.remove("key");
+    assertEquals(false, memory.has("key"));
+    assertEquals(true, memory.has("key2"));
+
+    assertEquals(undefined, memory.load("key"));
+    assertEquals("value2", memory.load("key2"));
+
+    memory.clean();
+    assertEquals(false, memory.has("key"));
+    assertEquals(false, memory.has("key2"));
+
+    assertEquals(undefined, memory.load("key"));
+    assertEquals(undefined, memory.load("key2"));
+
+    //
 }
