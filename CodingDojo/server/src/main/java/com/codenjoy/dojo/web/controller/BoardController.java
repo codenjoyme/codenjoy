@@ -122,7 +122,7 @@ public class BoardController {
             return "redirect:/register?" + GAME_NAME + "=" + gameName;
         }
         GameType gameType = player.getGameType();
-        if (gameType.getMultiplayerType() != MultiplayerType.SINGLE) {
+        if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
             return "redirect:/board/player/" + player.getName();
         }
 
