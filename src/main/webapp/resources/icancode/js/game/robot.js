@@ -75,7 +75,20 @@ function initRobot(logger, controller) {
     var validateTwoInteger = function(arg) {
         var valid = (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
         if (!valid) {
-            logger.print("Expected two numbers but was [" + Array.from(arg).join(',') + "].");
+            logger.print("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
+    var validateTwoIntegerAndElements = function(arg) {
+        var valid = (arg.length == 3 &&
+                typeof arg[0] == 'number' &&
+                typeof arg[1] == 'number' && (
+                    typeof arg[2] == 'string' ||
+                    Array.isArray(arg[2])
+                ));
+        if (!valid) {
+            logger.print("You try to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
         }
         return valid;
     }
@@ -253,12 +266,18 @@ function initRobot(logger, controller) {
             }
 
             var isAt = function(x, y, elementTypes) {
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
+                }
+
                 var found = false;
                 forAll(elementTypes, function(element) {
                     if (b.isAt(x, y, LAYER1, element) ||
                         b.isAt(x, y, LAYER2, element))
                     {
-                        found = true;
+                        if (!found) {
+                            found = true;
+                        }
                     }
                 });
                 return found;

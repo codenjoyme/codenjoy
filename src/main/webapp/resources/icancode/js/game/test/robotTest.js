@@ -224,18 +224,50 @@ runTest = function() {
 
     assertEquals(null,
         scanner.atNearRobot());
-    assertActions("Expected two numbers but was [].", loggerActions);
+    assertActions("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
 
     assertEquals(null,
         scanner.atNearRobot("1", "2"));
-    assertActions("Expected two numbers but was [1,2].", loggerActions);
+    assertActions("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2].", loggerActions);
 
     assertEquals(null,
         scanner.atNearRobot("ASD", "QWE", false));
-    assertActions("Expected two numbers but was [ASD,QWE,false].", loggerActions);
+    assertActions("You try to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
 
     // getMe
+    resetMocks();
+
     assertEquals("[2,1]", scanner.getMe());
+
+    // TODO what if Hero not on board?
+    // TODO what if Hero is flying
+    // TODO ...or falling to hole
+    // TODO ...or die on laser?
+
+    // isAt
+    resetMocks();
+
+    assertEquals(false,
+        scanner.isAt(2, 1, 'OTHER_ROBOT'));
+
+    assertEquals(true,
+        scanner.isAt(2, 1, 'MY_ROBOT'));
+
+    assertEquals(true,
+        scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+
+    assertEquals(false,
+        scanner.isAt(2, 1, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
+
+    assertEquals(false,
+        scanner.isAt(2, 1));
+    assertActions("You try to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
+
+    assertEquals(false,
+        scanner.isAt());
+    assertActions("You try to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+
 
     // ------------- other Robot methods ---------------
     // nextLevel
