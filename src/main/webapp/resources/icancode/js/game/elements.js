@@ -39,10 +39,9 @@ var el = function(char, type, direction) {
 
     if (!elementsByType[type]) {
         elementsByType[type] = [];
-    } else {
-        elementsByType[type].push(result);
     }
 
+    elementsByType[type].push(result);
     elements.push(result);
 
     if (elementsTypes.indexOf(type) == -1) {
