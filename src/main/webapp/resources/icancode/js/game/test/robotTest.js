@@ -135,16 +135,18 @@ runTest = function() {
         }
     };
 
-    board = '{"layers":["╔═══┐' +
-                        '║S..│' +
-                        '║...│' +
-                        '║..E│' +
-                        '└───┘",' +
-                        '"-----' +
-                        '--☺$-' +
-                        '-X---' +
-                        '--$--' +
-                        '-----"]}';
+    board = '{"layers":["╔════┐' +
+                        '║S..◄│' +
+                        '║....│' +
+                        '║..E.│' +
+                        '║˃..O│' +
+                        '└────┘",' +
+                        '"------' +
+                        '--☺$--' +
+                        '-X----' +
+                        '--$---' +
+                        '--→B--' +
+                        '------"]}';
 
     robot = initRobot(logger, controller);
     var scanner = robot.getScanner();
@@ -375,12 +377,22 @@ runTest = function() {
     assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
 
     // isBarrierAt
+    resetMocks();
 
     assertEquals(false,
         scanner.isBarrierAt(2, 2));
 
     assertEquals(true,
-            scanner.isBarrierAt(0, 0));
+        scanner.isBarrierAt(0, 0));
+
+    assertEquals(true,
+        scanner.isBarrierAt(0, 0));
+
+    assertEquals(true,
+        scanner.isBarrierAt(3, 4));
+
+    assertEquals(true,
+        scanner.isBarrierAt(4, 1));
 
     assertEquals(false,
         scanner.isBarrierAt());
