@@ -43,6 +43,25 @@ var boardAllPageLoad = function() {
                 '<td class="center">' + score + '</td>' +
                 '</tr>';
         });
+
+    // TODO перенести в codenjoy
+    $('.player-canvas canvas').mousewheel(function(event) {
+        var delta;
+        if (event.originalEvent.wheelDelta !== undefined) {
+            delta = event.originalEvent.wheelDelta;
+        } else {
+            delta = event.originalEvent.deltaY * -1;
+        }
+
+        if (delta > 0) {
+            $(".player-canvas canvas").css("width", "+=10");
+        } else {
+            $(".player-canvas canvas").css("width", "-=10");
+        }
+
+        event.preventDefault();
+    });
+
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');
     $(document.body).show();

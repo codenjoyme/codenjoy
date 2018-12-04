@@ -36,14 +36,14 @@
   color: #fff;
 }
 
-.player-canvas {
-  height: 400px;
-}
-
 .leader {
   transition: none;
 }
 
 canvas {
-    width:400px!important;
+    width:400px;
+}
+
+#glasses {
+    width: 100%!important;
 }
