@@ -136,9 +136,9 @@ runTest = function() {
     };
 
     board = '{"layers":["╔═══════┐' + // 0
-                        '║S..◄...│' + // 1
-                        '║.....O.│' + // 2
-                        '║..E....│' + // 3
+                        '║S.$◄...│' + // 1
+                        '║....$O.│' + // 2
+                        '║.$E....│' + // 3
                         '║˃..O...│' + // 4
                         '║.O...Z.│' + // 5
                         '║..˄....│' + // 6
@@ -146,9 +146,9 @@ runTest = function() {
                         '└───────┘",' + // 8
                       // 012345678
                        '"---------' + // 0
-                        '--☺$--^--' + // 1
-                        '-X---$x--' + // 2
-                        '-X$--B---' + // 3
+                        '--☺---^--' + // 1
+                        '-X----x--' + // 2
+                        '-X---B---' + // 3
                         '--→B-↓%--' + // 4
                         '-♂♂♀✝B---' + // 5
                         '--&--↑←--' + // 6
@@ -470,43 +470,43 @@ runTest = function() {
     // getBoxes
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[3,4],[5,3],[5,5],[6,4]",
         scanner.getBoxes());
 
     // getGold
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[2,3],[3,1],[5,2]",
         scanner.getGold());
 
     // getStart
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[1,1]",
         scanner.getStart());
 
     // getExit
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[3,3]",
         scanner.getExit());
 
     // getHoles
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[2,5],[4,4],[6,2]",
         scanner.getHoles());
 
     // getBarriers
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[1,0],[1,8],[2,0],[2,8],[3,0],[3,8],[4,0],[4,8],[5,0],[5,8],[6,0],[6,8],[7,0],[7,8],[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,6],[8,7],[8,8],[1,4,RIGHT],[3,6,UP],[3,7,DOWN],[4,1,LEFT],[4,7,LEFT],[5,7,DOWN],[6,7,RIGHT],[7,7,UP],[3,4],[5,3],[5,5],[6,4]",
         scanner.getBarriers());
 
     // getElements
     resetMocks();
 
-    assertEquals("",
+    assertEquals("NONE,WALL,LASER_MACHINE,LASER_MACHINE_READY,START,EXIT,HOLE,BOX,ZOMBIE_START,GOLD,MY_ROBOT,OTHER_ROBOT,LASER_LEFT,LASER_RIGHT,LASER_UP,LASER_DOWN,ZOMBIE,ZOMBIE_DIE",
         scanner.getElements());
 
     // ------------- other Robot methods ---------------
