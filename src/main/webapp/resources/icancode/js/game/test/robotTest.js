@@ -485,6 +485,12 @@ runTest = function() {
     assertEquals("[1,1]",
         scanner.getStart());
 
+    // getZombieStart
+    resetMocks();
+
+    assertEquals("[6,5]",
+        scanner.getZombieStart());
+
     // getExit
     resetMocks();
 

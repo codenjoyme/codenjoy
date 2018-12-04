@@ -433,6 +433,10 @@ function initRobot(logger, controller) {
                 return b.getGold();
             }
 
+            var getZombieStart = function() {
+                return b.getZombieStart();
+            }
+
             var getStart = function() {
                 return b.getStart();
             }
@@ -514,6 +518,7 @@ function initRobot(logger, controller) {
                 getBoxes : getBoxes,
                 getGold : getGold,
                 getStart : getStart,
+                getZombieStart : getZombieStart,
                 getExit : getExit,
                 getHoles : getHoles,
                 isMyRobotAlive : isMyRobotAlive,

@@ -208,6 +208,10 @@ var Board = function (boardString) {
         return findAll(Element.START, LAYER1);
     };
 
+    var getZombieStart = function () {
+        return findAll(Element.ZOMBIE_START, LAYER1);
+    };
+
     var getExit = function () {
         return findAll(Element.EXIT, LAYER1);
     };
@@ -366,6 +370,7 @@ var Board = function (boardString) {
         getBoxes: getBoxes,
         getGold: getGold,
         getStart: getStart,
+        getZombieStart: getZombieStart,
         getExit: getExit,
         getHoles: getHoles,
         isMyRobotAlive: isMyRobotAlive,
