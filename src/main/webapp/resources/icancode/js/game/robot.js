@@ -300,17 +300,28 @@ function initRobot(logger, controller) {
                     return false;
                 }
 
-                var found = false;
-                forAll(elementTypes, function(element) {
-                    if (b.isAt(x, y, LAYER1, element) ||
-                        b.isAt(x, y, LAYER2, element))
-                    {
-                        if (!found) {
-                            found = true;
+                if (!Array.isArray(elementTypes)) {
+                    elementTypes = [elementTypes];
+                }
+
+                for (var index in elementTypes) {
+                    var elementType = elementTypes[index];
+
+                    var found = false;
+                    forAll(elementType, function(element) {
+                        if (b.isAt(x, y, LAYER1, element) ||
+                            b.isAt(x, y, LAYER2, element))
+                        {
+                            if (!found) {
+                                found = true;
+                            }
                         }
+                    });
+                    if (!found) {
+                        return false;
                     }
-                });
-                return found;
+                }
+                return true;
             }
 
             var getAt = function(x, y) {
@@ -344,6 +355,10 @@ function initRobot(logger, controller) {
             }
 
             var isAnyOfAt = function(x, y, elementTypes) {
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
+                }
+
                 var elements = [];
                 forAll(elementTypes, function(element) {
                     elements.push(element);

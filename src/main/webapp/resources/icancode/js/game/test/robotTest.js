@@ -150,33 +150,6 @@ runTest = function() {
     var scanner = robot.getScanner();
 
     // --------- getScanner --------------
-    // findAll
-    resetMocks();
-
-    assertEquals("[2,3],[3,1]",
-        scanner.findAll("GOLD"));
-
-    assertEquals("[2,3],[3,1]",
-        scanner.findAll(["GOLD"]));
-
-    assertEquals("",
-        scanner.findAll([]));
-
-    assertEquals("[2,3],[3,1],[1,1],[3,3]",
-        scanner.findAll(["GOLD","START","EXIT"]));
-
-    assertEquals(null,
-            scanner.findAll());
-    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [].", loggerActions);
-
-    assertEquals(null,
-            scanner.findAll(1, 2));
-    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
-
-    assertEquals(null,
-            scanner.findAll([1, 2]));
-    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
-
     // at point
     resetMocks();
 
@@ -265,8 +238,13 @@ runTest = function() {
     assertEquals(true,
         scanner.isAt(2, 1, 'MY_ROBOT'));
 
-    assertEquals(true,
+    assertEquals(false,
         scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+    assertEquals(true,
+        scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
+
+    assertEquals(true,
+        scanner.isAt(2, 1, ['MY_ROBOT', 'NONE']));
 
     assertEquals(false,
         scanner.isAt(2, 1, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
@@ -305,6 +283,63 @@ runTest = function() {
     assertEquals(null,
         scanner.getAt("1", "HERO"));
     assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,HERO].", loggerActions);
+
+    // findAll
+    resetMocks();
+
+    assertEquals("[2,3],[3,1]",
+        scanner.findAll("GOLD"));
+
+    assertEquals("[2,3],[3,1]",
+        scanner.findAll(["GOLD"]));
+
+    assertEquals("",
+        scanner.findAll([]));
+
+    assertEquals("[2,3],[3,1],[1,1],[3,3]",
+        scanner.findAll(["GOLD","START","EXIT"]));
+
+    assertEquals(null,
+            scanner.findAll());
+    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+    assertEquals(null,
+            scanner.findAll(1, 2));
+    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
+
+    assertEquals(null,
+            scanner.findAll([1, 2]));
+    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
+
+
+    // isAnyOfAt
+    resetMocks();
+
+    assertEquals(false,
+        scanner.isAnyOfAt(2, 1, 'OTHER_ROBOT'));
+
+    assertEquals(true,
+        scanner.isAnyOfAt(2, 1, 'MY_ROBOT'));
+
+    assertEquals(true,
+        scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
+    assertEquals(false,
+        scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+
+    assertEquals(false,
+        scanner.isAnyOfAt(2, 1, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
+
+    assertEquals(false,
+        scanner.isAnyOfAt(2, 1));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
+
+    assertEquals(false,
+        scanner.isAnyOfAt());
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+    assertEquals(false,
+        scanner.isAnyOfAt(1, 2, [3, 4]));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
 
 
     // ------------- other Robot methods ---------------
