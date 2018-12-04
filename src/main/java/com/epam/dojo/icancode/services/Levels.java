@@ -396,18 +396,16 @@ public final class Levels {
             " #################  ";
 
     public static ILevel loadLevel(int level) {
-        return load(getSingleZombieMaps().get(level));
+        return load(getSingleMaps().get(level));
     }
 
     public static List<String> getSingleMaps() {
         return Arrays.asList(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                 LEVEL_7A, LEVEL_8A, LEVEL_9A,
                 LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C, LEVEL_1D);
-    }
-
-    public static List<String> getSingleZombieMaps() {
-        return Arrays.asList(LEVEL_ZOMBIE_1, LEVEL_ZOMBIE_2,
-                LEVEL_ZOMBIE_3, LEVEL_ZOMBIE_4);
+        // TODO this is for zombie levels - create config for this
+//        return Arrays.asList(LEVEL_ZOMBIE_1, LEVEL_ZOMBIE_2,
+//                LEVEL_ZOMBIE_3, LEVEL_ZOMBIE_4);
     }
 
     public static ILevel getMultiple() {

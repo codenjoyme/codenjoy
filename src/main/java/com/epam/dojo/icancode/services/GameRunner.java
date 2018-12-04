@@ -90,7 +90,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TRAINING.apply(Levels.getSingleZombieMaps().size());
+        return MultiplayerType.TRAINING.apply(Levels.getSingleMaps().size());
     }
 
     public ILevel loadLevel(int level) {
