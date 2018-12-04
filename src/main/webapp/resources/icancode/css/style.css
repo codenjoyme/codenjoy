@@ -357,7 +357,7 @@ button:focus {
 
 .help-description {
   margin: 10px;
-  height: 400px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
