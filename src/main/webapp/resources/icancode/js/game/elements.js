@@ -87,15 +87,15 @@ var Element = {
     GOLD: el('$', 'GOLD'),
 
     ROBOT: el('☺', 'MY_ROBOT'),
-    ROBOT_FALLING: el('o', 'HOLE'),
+    ROBOT_FALLING: el('o', ['MY_ROBOT', 'HOLE']),
     ROBOT_FLYING: el('*', 'MY_ROBOT'),
-    ROBOT_FLYING_ON_BOX: el('№', 'BOX'),
+    ROBOT_FLYING_ON_BOX: el('№', ['MY_ROBOT', 'BOX']),
     ROBOT_LASER: el('☻', 'MY_ROBOT'),
 
     ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FALLING: el('x', 'HOLE'),
+    ROBOT_OTHER_FALLING: el('x', ['OTHER_ROBOT', 'HOLE']),
     ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FLYING_ON_BOX: el('%', 'BOX'),
+    ROBOT_OTHER_FLYING_ON_BOX: el('%', ['OTHER_ROBOT', 'BOX']),
     ROBOT_OTHER_LASER: el('&', 'OTHER_ROBOT'),
 
     LASER_LEFT: el('←', 'LASER_LEFT', Direction.LEFT),
@@ -120,7 +120,23 @@ var Element = {
     },
 
     getElementsTypes: function () {
-        return elementsTypes.slice(0);
+        var elements = [];
+        elementsTypes.forEach(function(e) {
+            if (Array.isArray(e)) {
+                elements = elements.concat(e);
+            } else {
+                elements.push(e);
+            }
+        });
+
+        var result = [];
+        elements.forEach(function(e) {
+            if (result.indexOf(e) < 0) {
+                result.push(e);
+            }
+        });
+
+        return result;
     },
 
     getElementsOfType: function (type) {

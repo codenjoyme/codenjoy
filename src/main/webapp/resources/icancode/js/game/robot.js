@@ -127,13 +127,27 @@ function initRobot(logger, controller) {
     }
 
     var collect = function(e1, e2) {
+        var elements = [];
+
+        if (Array.isArray(e1)) {
+            elements = elements.concat(e1);
+        } else {
+            elements.push(e1);
+        }
+
+        if (Array.isArray(e2)) {
+            elements = elements.concat(e2);
+        } else {
+            elements.push(e2);
+        }
+
         var result = [];
-        if (e1 != 'NONE') {
-            result.push(e1);
-        }
-        if (e2 != 'NONE') {
-            result.push(e2);
-        }
+        elements.forEach(function(e) {
+            if (e != 'NONE' && result.indexOf(e) < 0) {
+                result.push(e);
+            }
+        });
+
         if (result.length == 0) {
             result.push('NONE');
         }

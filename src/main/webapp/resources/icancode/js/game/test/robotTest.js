@@ -135,7 +135,8 @@ runTest = function() {
         }
     };
 
-    board = 'board={"layers":["╔═══════┐' + // 0
+    board = 'board={"layers":["' +
+                        '╔═══════┐' + // 0
                         '║S.$◄...│' + // 1
                         '║....$O.│' + // 2
                         '║.$E....│' + // 3
@@ -174,6 +175,15 @@ runTest = function() {
 
     assertEquals("OTHER_ROBOT",
         scanner.at(1, 2));
+
+    assertEquals("HOLE,OTHER_ROBOT",
+        scanner.at(6, 2));
+
+    assertEquals("OTHER_ROBOT,BOX",
+        scanner.at(6, 4));
+
+    assertEquals("OTHER_ROBOT", //TODO here also laser
+        scanner.at(2, 6));
 
     assertEquals(null,
         scanner.at(null));
