@@ -116,12 +116,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
             templateData.push({name : name, id : id, visible : visible })
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
-        playersList.forEach(function (player) {
-             var playerName = player.name;
-             var id = toId(playerName);
-             var width = $('#players_container .player-canvas:first-child').css("width");
-             $('#div_' + id).css("width", width);
-        });
         if (!enablePlayerInfo) {
             $(".player_info").hide();
         }
@@ -359,6 +353,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function createCanvas(canvasName) {
         var canvas = $("#" + canvasName);
+
+        var width = $('#players_container canvas').first().css("width");
+        if (width != "0px" && width != "0") {
+            canvas.css("width", width);
+        }
 
         var plotSize = 0;
         var canvasSize = 0;
