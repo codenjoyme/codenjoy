@@ -491,6 +491,12 @@ runTest = function() {
     assertEquals("[6,5]",
         scanner.getZombieStart());
 
+    // isMyRobotAlive
+    resetMocks();
+
+    assertEquals(true,
+        scanner.isMyRobotAlive());
+
     // getExit
     resetMocks();
 
