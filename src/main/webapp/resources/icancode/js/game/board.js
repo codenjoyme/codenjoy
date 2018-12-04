@@ -49,7 +49,7 @@ var LAYER1 = 0;
 var LAYER2 = 1;
 
 var Board = function (boardString) {
-    var board = JSON.parse(boardString);
+    var board = eval(boardString);
     var layers = board.layers;
     var size = Math.sqrt(layers[LAYER1].length);
     var xyl = new LengthToXY(size);
