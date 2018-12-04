@@ -341,6 +341,39 @@ runTest = function() {
         scanner.isAnyOfAt(1, 2, [3, 4]));
     assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
 
+    // isNear
+    resetMocks();
+
+    assertEquals(true,
+        scanner.isNear(2, 2, 'OTHER_ROBOT'));
+
+    assertEquals(true,
+        scanner.isNear(2, 2, 'MY_ROBOT'));
+
+    assertEquals(false,
+        scanner.isNear(2, 2, 'ZOMBIE'));
+
+    assertEquals(false,
+        scanner.isNear(2, 2, ['ZOMBIE', 'HOLE']));
+
+    assertEquals(true,
+        scanner.isNear(2, 2, ['MY_ROBOT', 'GOLD']));
+
+    assertEquals(true,
+        scanner.isNear(2, 2, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
+
+    assertEquals(false,
+        scanner.isNear(2, 2));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2].", loggerActions);
+
+    assertEquals(false,
+        scanner.isNear());
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+    assertEquals(false,
+        scanner.isNear(1, 2, [3, 4]));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
+
 
     // ------------- other Robot methods ---------------
     // nextLevel

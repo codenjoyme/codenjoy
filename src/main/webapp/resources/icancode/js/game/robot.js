@@ -373,6 +373,10 @@ function initRobot(logger, controller) {
             }
 
             var isNear = function(x, y, elementTypes) {
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
+                }
+
                 var found = false;
                 forAll(elementTypes, function(element) {
                     if (b.isNear(x, y, LAYER1, element) ||
