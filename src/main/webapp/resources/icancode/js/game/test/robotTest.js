@@ -534,6 +534,9 @@ runTest = function() {
     // getShortestWay
     resetMocks();
 
+    assertEquals("[2,1]",
+            scanner.getShortestWay(scanner.getMe()));
+
     assertEquals("[2,1],[2,2],[2,3],[3,3]",
         scanner.getShortestWay(scanner.getExit()[0]));
 

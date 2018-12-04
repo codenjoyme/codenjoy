@@ -242,6 +242,9 @@ var Board = function (boardString) {
     };
 
     var getShortestWay = function (from, to) {
+        if (from.getX() == to.getX() && from.getY() == to.getY()) {
+            return [from];
+        }
         var mask = Array(size);
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
