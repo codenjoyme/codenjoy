@@ -406,6 +406,36 @@ runTest = function() {
         scanner.isBarrierAt("ASD", "QWE", false));
     assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
 
+    // countNear
+    resetMocks();
+
+    assertEquals(1,
+        scanner.countNear(2, 2, "GOLD"));
+
+    assertEquals(1,
+        scanner.countNear(2, 2, "MY_ROBOT"));
+
+    assertEquals(1,
+        scanner.countNear(2, 2, "OTHER_ROBOT"));
+
+    assertEquals(6, // TODO should be 3
+        scanner.countNear(3, 2, "NONE"));
+
+    assertEquals(2, // TODO should be 3
+            scanner.countNear(1, 1, "WALL"));
+
+    assertEquals(false,
+        scanner.countNear(2, 2));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2].", loggerActions);
+
+    assertEquals(false,
+        scanner.countNear());
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+
+    assertEquals(false,
+        scanner.countNear(1, 2, [3, 4]));
+    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
+
 
     // ------------- other Robot methods ---------------
     // nextLevel

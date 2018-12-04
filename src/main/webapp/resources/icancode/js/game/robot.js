@@ -397,6 +397,10 @@ function initRobot(logger, controller) {
             }
 
             var countNear = function(x, y, elementTypes) {
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
+                }
+
                 var count = 0;
                 forAll(elementTypes, function(element) {
                     count += b.countNear(x, y, LAYER1, element);
