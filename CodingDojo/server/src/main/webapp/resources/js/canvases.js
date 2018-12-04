@@ -116,6 +116,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
             templateData.push({name : name, id : id, visible : visible })
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
+        playersList.forEach(function (player) {
+             var playerName = player.name;
+             var id = toId(playerName);
+             var width = $('#players_container .player-canvas:first-child').css("width");
+             $('#div_' + id).css("width", width);
+        });
         if (!enablePlayerInfo) {
             $(".player_info").hide();
         }
