@@ -491,12 +491,6 @@ runTest = function() {
     assertEquals("[6,5]",
         scanner.getZombieStart());
 
-    // isMyRobotAlive
-    resetMocks();
-
-    assertEquals(true,
-        scanner.isMyRobotAlive());
-
     // getExit
     resetMocks();
 
@@ -520,6 +514,24 @@ runTest = function() {
 
     assertEquals("NONE,WALL,LASER_MACHINE,LASER_MACHINE_READY,START,EXIT,HOLE,BOX,ZOMBIE_START,GOLD,MY_ROBOT,OTHER_ROBOT,LASER_LEFT,LASER_RIGHT,LASER_UP,LASER_DOWN,ZOMBIE,ZOMBIE_DIE",
         scanner.getElements());
+
+    // getShortestWay
+    resetMocks();
+
+    assertEquals("[2,1],[2,2],[2,3],[3,3]",
+        scanner.getShortestWay(scanner.getExit()[0]));
+
+    assertEquals("[2,1],[1,1]",
+        scanner.getShortestWay(scanner.getStart()[0]));
+
+    assertEquals("[2,1],[2,2],[2,3],[2,4],[2,5],[3,5],[4,5],[4,6],[5,6],[6,6]",
+        scanner.getShortestWay(new Point(6, 6)));
+
+    // isMyRobotAlive
+    resetMocks();
+
+    assertEquals(true,
+        scanner.isMyRobotAlive());
 
     // ------------- other Robot methods ---------------
     // nextLevel
