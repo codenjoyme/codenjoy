@@ -389,6 +389,10 @@ function initRobot(logger, controller) {
             }
 
             var isBarrierAt = function(x, y) {
+                if (!validateTwoInteger(arguments)) {
+                    return false;
+                }
+
                 return b.isBarrierAt(x, y);
             }
 

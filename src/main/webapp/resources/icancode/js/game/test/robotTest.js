@@ -374,6 +374,26 @@ runTest = function() {
         scanner.isNear(1, 2, [3, 4]));
     assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
 
+    // isBarrierAt
+
+    assertEquals(false,
+        scanner.isBarrierAt(2, 2));
+
+    assertEquals(true,
+            scanner.isBarrierAt(0, 0));
+
+    assertEquals(false,
+        scanner.isBarrierAt());
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
+
+    assertEquals(false,
+        scanner.isBarrierAt("1", "2"));
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2].", loggerActions);
+
+    assertEquals(false,
+        scanner.isBarrierAt("ASD", "QWE", false));
+    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
+
 
     // ------------- other Robot methods ---------------
     // nextLevel
