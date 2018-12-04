@@ -20,11 +20,11 @@
  * #L%
  */
 function initLogger() {
-    $(".content").mCustomScrollbar({
-        theme:'dark-2',
-        axis: 'yx',
-        mouseWheel : { enable : true }
-    });
+//    $(".content").mCustomScrollbar({
+//        theme:'dark-2',
+//        axis: 'yx',
+//        mouseWheel : { enable : true }
+//    });
 
     // ----------------------- init logger -------------------
     var container = $('#ide-console');

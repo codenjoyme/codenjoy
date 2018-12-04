@@ -406,9 +406,25 @@ a.modalCloseImg {
 }
 
 .console-wrapper {
-  padding: 15px 0px 0px 40px;
+  padding: 7px 2px 0px 30px;
   height: 550px;
-  overflow: hidden;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .open-panel { 
