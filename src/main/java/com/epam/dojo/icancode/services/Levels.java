@@ -409,7 +409,7 @@ public final class Levels {
     }
 
     public static ILevel getMultiple() {
-        return load(MULTI_LEVEL_SIMPLE_ZOMBIES);
+        return load(MULTI_LEVEL_SIMPLE);
     }
 
     public static ILevel load(String levelMap) {
