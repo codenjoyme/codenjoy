@@ -151,9 +151,10 @@ runTest = function() {
                         '-X$--B---' + // 3
                         '--→B-↓%--' + // 4
                         '-♂♂♀✝B---' + // 5
-                        '--&--↑↓--' + // 6
+                        '--&--↑←--' + // 6
                         '---------' + // 7
                         '---------"]}'; // 8
+
 
     robot = initRobot(logger, controller);
     var scanner = robot.getScanner();
@@ -457,13 +458,13 @@ runTest = function() {
     // getLasers
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[2,4,RIGHT],[5,4,DOWN],[5,6,UP],[6,6,LEFT]",
         scanner.getLasers());
 
     // getWalls
     resetMocks();
 
-    assertEquals("",
+    assertEquals("[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[1,0],[1,8],[2,0],[2,8],[3,0],[3,8],[4,0],[4,8],[5,0],[5,8],[6,0],[6,8],[7,0],[7,8],[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,6],[8,7],[8,8]",
         scanner.getWalls());
 
     // getBoxes
