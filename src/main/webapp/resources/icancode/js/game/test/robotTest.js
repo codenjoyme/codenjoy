@@ -135,18 +135,25 @@ runTest = function() {
         }
     };
 
-    board = '{"layers":["╔════┐' +
-                        '║S..◄│' +
-                        '║....│' +
-                        '║..E.│' +
-                        '║˃..O│' +
-                        '└────┘",' +
-                        '"------' +
-                        '--☺$--' +
-                        '-X----' +
-                        '--$---' +
-                        '--→B--' +
-                        '------"]}';
+    board = '{"layers":["╔═══════┐' + // 0
+                        '║S..◄...│' + // 1
+                        '║.....O.│' + // 2
+                        '║..E....│' + // 3
+                        '║˃..O...│' + // 4
+                        '║.O...Z.│' + // 5
+                        '║..˄....│' + // 6
+                        '║..˅˂▼►▲│' + // 7
+                        '└───────┘",' + // 8
+                      // 012345678
+                       '"---------' + // 0
+                        '--☺$--^--' + // 1
+                        '-X---$x--' + // 2
+                        '-X$--B---' + // 3
+                        '--→B-↓%--' + // 4
+                        '-♂♂♀✝B---' + // 5
+                        '--&--↑↓--' + // 6
+                        '---------' + // 7
+                        '---------"]}'; // 8
 
     robot = initRobot(logger, controller);
     var scanner = robot.getScanner();
@@ -289,16 +296,16 @@ runTest = function() {
     // findAll
     resetMocks();
 
-    assertEquals("[2,3],[3,1]",
+    assertEquals("[2,3],[3,1],[5,2]",
         scanner.findAll("GOLD"));
 
-    assertEquals("[2,3],[3,1]",
+    assertEquals("[2,3],[3,1],[5,2]",
         scanner.findAll(["GOLD"]));
 
     assertEquals("",
         scanner.findAll([]));
 
-    assertEquals("[2,3],[3,1],[1,1],[3,3]",
+    assertEquals("[2,3],[3,1],[5,2],[1,1],[3,3]",
         scanner.findAll(["GOLD","START","EXIT"]));
 
     assertEquals(null,
@@ -312,7 +319,6 @@ runTest = function() {
     assertEquals(null,
             scanner.findAll([1, 2]));
     assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
-
 
     // isAnyOfAt
     resetMocks();
@@ -436,6 +442,71 @@ runTest = function() {
         scanner.countNear(1, 2, [3, 4]));
     assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
 
+    // getOtherRobots
+    resetMocks();
+
+    assertEquals("[1,2],[1,3],[2,6],[6,1],[6,2],[6,4]",
+        scanner.getOtherRobots());
+
+    // getLaserMachines
+    resetMocks();
+
+    assertEquals("[1,4,RIGHT],[3,6,UP],[3,7,DOWN],[4,1,LEFT],[4,7,LEFT],[5,7,DOWN],[6,7,RIGHT],[7,7,UP]",
+        scanner.getLaserMachines());
+
+    // getLasers
+    resetMocks();
+
+    assertEquals("",
+        scanner.getLasers());
+
+    // getWalls
+    resetMocks();
+
+    assertEquals("",
+        scanner.getWalls());
+
+    // getBoxes
+    resetMocks();
+
+    assertEquals("",
+        scanner.getBoxes());
+
+    // getGold
+    resetMocks();
+
+    assertEquals("",
+        scanner.getGold());
+
+    // getStart
+    resetMocks();
+
+    assertEquals("",
+        scanner.getStart());
+
+    // getExit
+    resetMocks();
+
+    assertEquals("",
+        scanner.getExit());
+
+    // getHoles
+    resetMocks();
+
+    assertEquals("",
+        scanner.getHoles());
+
+    // getBarriers
+    resetMocks();
+
+    assertEquals("",
+        scanner.getBarriers());
+
+    // getElements
+    resetMocks();
+
+    assertEquals("",
+        scanner.getElements());
 
     // ------------- other Robot methods ---------------
     // nextLevel

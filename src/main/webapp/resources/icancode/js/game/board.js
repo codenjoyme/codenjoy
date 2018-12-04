@@ -163,13 +163,14 @@ var Board = function (boardString) {
     };
 
     var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_LASER];
+        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_FLYING_ON_BOX, Element.ROBOT_LASER];
         var result = findAllElements(elements, LAYER2);
         return result[0];
     };
 
     var getOtherHeroes = function () {
-        return findAll(Element.ROBOT_OTHER, LAYER2);
+        var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_FLYING, Element.ROBOT_OTHER_FLYING_ON_BOX, Element.ROBOT_OTHER_LASER];
+        return findAllElements(elements, LAYER2);
     };
 
     var getLaserMachines = function () {
