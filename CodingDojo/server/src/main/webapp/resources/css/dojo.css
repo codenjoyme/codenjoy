@@ -25,8 +25,8 @@
 }
 
 .score-info {
-    color:#e11916;
-    text-shadow: 6px 6px 10px #3a4354, 4px 4px 4px #e11916;
+    color:yellow;
+    text-shadow: 6px 6px 10px black, 4px 4px 4px red;
     font-size:90px;
     display:none;
     line-height:0.8;
