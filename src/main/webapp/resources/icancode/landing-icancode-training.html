@@ -246,6 +246,10 @@ assert scanner.atLeft() == "WALL";
 assert scanner.atRight() == "BOX";
 assert scanner.atUp() == "HOLE";
 assert scanner.atDown() == "GOLD";</pre>
+
+            <p><span class="func">function at(point)</span> - Returns elements at the cell.</p>
+            <pre>assert scanner.at(new Point(6, 2)) == "HOLE,OTHER_ROBOT";
+assert scanner.at(1, 2) == "START,MY_ROBOT";</pre>
           
           <p><span class="func">function atNearRobot(dx, dy)</span> - Returns element at the cell with coordinates</p>
           <pre>var scanner = robot.getScanner();
