@@ -72,8 +72,12 @@ function initRobot(logger, controller) {
         return valid;
     }
 
+    var isTwoInteger = function(arg) {
+        return (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
+    }
+
     var validateTwoInteger = function(arg) {
-        var valid = (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
+        var valid = isTwoInteger(arg);
         if (!valid) {
             logger.print("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [" + Array.from(arg).join(',') + "].");
         }
@@ -462,6 +466,10 @@ function initRobot(logger, controller) {
             }
 
             var at = function(directionOrPoint) {
+                if (isTwoInteger(arguments)) {
+                    directionOrPoint = new Point(arguments[0], arguments[1]);
+                }
+
                 if (isPoint(directionOrPoint)) {
                     var point = directionOrPoint;
                     return getAt(point.getX(), point.getY());

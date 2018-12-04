@@ -166,8 +166,14 @@ runTest = function() {
     assertEquals("GOLD",
         scanner.at(new Point(2, 3)));
 
+    assertEquals("GOLD",
+        scanner.at(2, 3));
+
     assertEquals("OTHER_ROBOT",
         scanner.at(new Point(1, 2)));
+
+    assertEquals("OTHER_ROBOT",
+        scanner.at(1, 2));
 
     assertEquals(null,
         scanner.at(null));

@@ -118,21 +118,22 @@ var Direction = {
     STOP : D(5, 0, 0, ''),
 
     get : function(direction) {
-        if (typeof direction == 'string') {
-            direction = direction.toUpperCase();
-            for (var name in Direction) {
-                var d = Direction[name];
-                if (typeof d == 'function') {
-                    continue;
-                }
-                if (direction == d.name()) {
-                    return Direction[name];
-                }
-            }
-            return null;
-        } else {
+        if (typeof direction.getIndex == 'function') {
             return direction;
         }
+
+        direction = String(direction);
+        direction = direction.toUpperCase();
+        for (var name in Direction) {
+            var d = Direction[name];
+            if (typeof d == 'function') {
+                continue;
+            }
+            if (direction == d.name()) {
+                return Direction[name];
+            }
+        }
+        return null;
     }
 };
 
