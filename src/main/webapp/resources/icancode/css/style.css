@@ -41,7 +41,7 @@ body {
 .wrapper {
   min-height: 100vh; 
   box-sizing: border-box; 
-  padding-bottom: 55px; 
+/*  padding-bottom: 55px; */
   position: relative; 
   min-width: 800px;
 }
@@ -695,7 +695,7 @@ a.modalCloseImg {
 .footer {
   height: 40px;
   background-color: #323132;
-  margin-top: 30px;
+  margin-top: 10px;
   position: absolute;
   bottom: 0;
   left: 0;

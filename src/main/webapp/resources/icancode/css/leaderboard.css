@@ -42,8 +42,10 @@
 
 canvas {
     width:400px;
+    margin-bottom:-5px;
 }
 
 #glasses {
     width: 100%!important;
 }
+
