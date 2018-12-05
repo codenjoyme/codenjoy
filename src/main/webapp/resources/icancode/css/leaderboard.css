@@ -27,8 +27,6 @@
 
 .board {
   width: 500px;
-  position: absolute;
-  right: 0px;
   box-sizing: border-box;
   color: #fff;
 }
@@ -40,9 +38,5 @@
 canvas {
     width:400px;
     margin-bottom:-5px;
-}
-
-.glasses {
-    position: absolute;
 }
 

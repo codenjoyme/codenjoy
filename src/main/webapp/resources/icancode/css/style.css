@@ -1000,15 +1000,3 @@ canvas {
   }
   
 }
-
-/*
-@media screen and (max-width: 1000px) { 
-  .board {
-    width: 90%;
-    left: 15px;
-    position: absolute;
-    top: 565px;
-    right: 15px;
-  }
-}
-*/
