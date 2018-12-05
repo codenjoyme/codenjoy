@@ -30,9 +30,9 @@
 .game {
   background-position: center;
   position: absolute;
-  left: 15px;
+  left: 0px;
+  width:550px!important;
 }
-
 
 .board {
   position: relative;

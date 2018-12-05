@@ -25,13 +25,10 @@
   position: relative;
 }
 
-.game {
-  width: calc(100% - 500px); float: left;
-}
-
 .board {
   width: 500px;
-  float: right;
+  position: absolute;
+  right: 0px;
   box-sizing: border-box;
   color: #fff;
 }
@@ -45,7 +42,7 @@ canvas {
     margin-bottom:-5px;
 }
 
-#glasses {
-    width: 100%!important;
+.glasses {
+    position: absolute;
 }
 
