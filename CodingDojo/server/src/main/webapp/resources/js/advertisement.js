@@ -19,8 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initAdvertisement(){
+function initAdvertisement(contextPath){
     var advertisement = $("#advertisement");
     advertisement.prependTo($("#leaderboard"));
     advertisement.show();
+    advertisement.find("a").attr("href", "http://www.jetbrains.com");
+    advertisement.find("img").attr("src",
+        contextPath + "/resources/advertisement/advertisement.png");
 }

@@ -26,7 +26,7 @@
 
 <div id="advertisement" style="display:none;">
     <h3>
-        <a href="http://www.jetbrains.com" target="blank">
+        <a href="http://codenjoy.com" target="blank">
             <img src="${ctx}/resources/advertisement/advertisement.png"/>
         </a>
     </h3>
