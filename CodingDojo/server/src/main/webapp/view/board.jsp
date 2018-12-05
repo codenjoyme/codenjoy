@@ -36,12 +36,14 @@
 
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.mousewheel-3.1.13.min.js"></script>
     <script src="${ctx}/resources/js/jcanvas/jcanvas.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.simplemodal-1.4.4.js"></script>
 
     <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/ajax-loader.js"></script>
     <script src="${ctx}/resources/js/board-data-ws.js"></script>
+    <script src="${ctx}/resources/js/board-scroll.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
     <script src="${ctx}/resources/js/canvases-text.js"></script>
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>

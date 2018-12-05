@@ -354,9 +354,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
     function createCanvas(canvasName) {
         var canvas = $("#" + canvasName);
 
-        var width = $('#players_container canvas').first().css("width");
-        if (width != "0px" && width != "0") {
-            canvas.css("width", width);
+        if (!!setupCanvasMouseWheel) {
+            setupCanvasMouseWheel(canvas);
         }
 
         var plotSize = 0;
