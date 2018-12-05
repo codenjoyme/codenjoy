@@ -102,15 +102,17 @@ label.error {
 
 .board {
     width: 400px;
-    float: right;
     padding-right: 75px;
     padding-top: 25px;
+    position: absolute;
+    right: 0px;
 }
 
 .glasses {
     width: calc(100% - 500px);
     float: left;
     padding-left: 20px;
+    position: absolute;
 }
 
 #want-donate {

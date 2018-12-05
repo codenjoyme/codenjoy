@@ -46,4 +46,5 @@
             -->
         </tbody>
     </table>
+    <%@include file="info.jsp"%>
 </div>

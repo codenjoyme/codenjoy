@@ -67,7 +67,6 @@
         </div>
         <%@include file="canvases.jsp"%>
         <%@include file="leaderstable.jsp"%>
-        <%@include file="info.jsp"%>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>
