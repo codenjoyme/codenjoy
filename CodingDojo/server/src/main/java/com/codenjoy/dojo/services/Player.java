@@ -165,7 +165,6 @@ public class Player implements ScreenRecipient, Closeable {
         return eventListener;
     }
 
-
     public void setGameType(GameType gameType) {
         this.gameType = gameType;
     }

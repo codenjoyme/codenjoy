@@ -125,13 +125,19 @@ public class Spreader {
 
         MultiplayerType type = gameType.getMultiplayerType();
         int roomSize = type.loadProgress(game, save);
-        int levelNumber = game.getProgress().getCurrent();
+        LevelProgress progress = game.getProgress();
+        int levelNumber = progress.getCurrent();
         GameField field = getField(game.getPlayer(),
                 gameType.name(),
                 type,
                 roomSize,
                 levelNumber,
-                () -> gameType.createGame(levelNumber));
+                () -> {
+                    game.getPlayer().setProgress(progress);
+                    // TODO если раскоментировать эту строчку то будет отображаться переход на новый уровень, но уж как-то некрасиво все сделано
+                    // ((InformationCollector)game.getPlayer().listener).levelChanged(progress);
+                    return gameType.createGame(levelNumber);
+                });
 
         game.on(field);
 

@@ -31,7 +31,7 @@ public class LevelProgress {
     private int current;
     private int passed;
 
-    protected LevelProgress(int total, int current, int passed) {
+    public LevelProgress(int total, int current, int passed) {
         this.total = total;
         this.current = current;
         this.passed = passed;
@@ -143,4 +143,5 @@ public class LevelProgress {
     public String toString() {
         return JsonUtils.toStringSorted(this).replace('"', '\'');
     }
+
 }

@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.hero.HeroData;
 public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
 
     protected EventListener listener;
+    private LevelProgress progress;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты
@@ -49,6 +50,10 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
      * @param event тип ивента
      */
     public void event(Object event) {
+        if (progress != null && progress.getCurrent() <= progress.getPassed()) {
+            return; // TODO test me
+        }
+
         if (listener != null) {
             listener.event(event);
         }
@@ -103,5 +108,9 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    public void setProgress(LevelProgress progress) {
+        this.progress = progress;
     }
 }
