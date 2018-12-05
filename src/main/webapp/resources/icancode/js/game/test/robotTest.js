@@ -546,6 +546,23 @@ runTest = function() {
     assertEquals("[2,1],[2,2],[2,3],[2,4],[2,5],[3,5],[4,5],[4,6],[5,6],[6,6]",
         scanner.getShortestWay(new Point(6, 6)));
 
+    assertEquals("null",
+        scanner.getShortestWay(1, 2));
+    assertActions("You tried to call function(point) with parameters [1,2].", loggerActions);
+
+    assertEquals("null",
+        scanner.getShortestWay(null));
+    assertActions("You tried to call function(point) with parameters [].", loggerActions);
+
+    assertEquals("null",
+        scanner.getShortestWay([new Point(1, 2)]));
+    assertActions("You tried to call function(point) with parameters [[1,2]].", loggerActions);
+
+    assertEquals("null",
+        scanner.getShortestWay(new Point(1, 2), 3));
+    assertActions("You tried to call function(point) with parameters [[1,2],3].", loggerActions);
+
+
     // isMyRobotAlive
     resetMocks();
 
