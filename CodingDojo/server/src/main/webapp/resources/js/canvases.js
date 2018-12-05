@@ -354,10 +354,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
     function createCanvas(canvasName) {
         var canvas = $("#" + canvasName);
 
-        if (!!setupCanvasMouseWheel) {
-            setupCanvasMouseWheel(canvas);
-        }
-
         var plotSize = 0;
         var canvasSize = 0;
         var firstSprite = null;

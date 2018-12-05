@@ -22,7 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard" style="display:none;">
+<div id="leaderboard" style="display:none;" class="zoom-on-whell-scroll">
     <table id="table-logs" class="table table-striped leaderboard-table">
         <thead>
             <th width="5%">

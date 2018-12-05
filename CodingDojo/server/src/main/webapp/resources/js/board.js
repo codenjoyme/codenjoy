@@ -101,7 +101,7 @@ function initBoardComponents(game) {
     }
 
     if (game.enableAdvertisement) {
-        initAdvertisement();
+        initAdvertisement(game.contextPath);
     }
 
     if (game.showBody) {
@@ -116,6 +116,10 @@ function initBoardComponents(game) {
         if (!!game.onBoardPageLoad) {
             game.onBoardPageLoad();
         }
+    }
+
+    if (!!setupMouseWheelZoom) {
+        setupMouseWheelZoom();
     }
 }
 

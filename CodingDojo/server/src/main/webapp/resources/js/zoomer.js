@@ -19,27 +19,25 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function setupCanvasMouseWheel(canvas) {
-    var width = $('#players_container canvas').first().css("width");
-    if (width != "0px" && width != "0") {
-        canvas.css("width", width);
+function setupMouseWheelZoom() {
+    function getScrollDelta(event) {
+        if (event.originalEvent.wheelDelta !== undefined) {
+            return event.originalEvent.wheelDelta;
+        } else {
+            return event.originalEvent.deltaY * -1;
+        }
     }
-    canvas.mousewheel(function(event) {
+
+    var component = $(".zoom-on-whell-scroll");
+    component.mousewheel(function(event) {
         if (!event.originalEvent.ctrlKey) {
             return;
         }
 
-        var delta;
-        if (event.originalEvent.wheelDelta !== undefined) {
-            delta = event.originalEvent.wheelDelta;
+        if (getScrollDelta(event) > 0) {
+            component.css("zoom", "+=0.02");
         } else {
-            delta = event.originalEvent.deltaY * -1;
-        }
-
-        if (delta > 0) {
-            $(".player-canvas canvas").css("width", "+=10");
-        } else {
-            $(".player-canvas canvas").css("width", "-=10");
+            component.css("zoom", "-=0.02");
         }
 
         event.preventDefault();

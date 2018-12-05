@@ -22,7 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="glasses">
+<div id="glasses" class="zoom-on-whell-scroll">
     <span class="score-info width-calculator" id="width_calculator_container"></span>
     <div id="showdata"></div>
     <div id="donate" style="display:none;">
