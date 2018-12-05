@@ -181,6 +181,7 @@ ul {
   padding: 10px 0;
   line-height: 52px;
   color: #fff;
+  text-shadow: 2px 2px #464547;
 }
 
 #leaderboard {
@@ -195,6 +196,10 @@ a {
 a:hover,
 a:visited {
   color: #fff;
+}
+
+.board a {
+  text-shadow: 2px 2px #464547;
 }
 
 .star {

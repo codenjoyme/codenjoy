@@ -86,7 +86,7 @@ var boardAllPageLoad = function() {
     }
     $('body').keydown(function(ev) {
         if (ev.ctrlKey && ev.altKey && ev.keyCode == 83) { // Ctrl-Alt-S
-            leaderKey = true;
+            leaderKey = !leaderKey;
         } else if (leaderKey && ev.keyCode == 49) { // ... + 1 // show hide leaderboard
             showHide(leader);
         } else if (leaderKey && ev.keyCode == 50) { // ... + 2 // show hide glasses
