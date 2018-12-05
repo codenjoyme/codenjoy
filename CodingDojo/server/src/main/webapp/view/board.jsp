@@ -62,6 +62,9 @@
     <%@include file="forkMe.jsp"%>
 
     <div id="board_page">
+        <div id="donate" style="display:none;">
+            <input type="button" id="want-donate" value="Помочь проекту..."/>
+        </div>
         <%@include file="canvases.jsp"%>
         <%@include file="leaderstable.jsp"%>
         <%@include file="info.jsp"%>

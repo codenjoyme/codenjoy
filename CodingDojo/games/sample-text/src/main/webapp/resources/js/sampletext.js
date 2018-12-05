@@ -37,11 +37,11 @@ game.showBody = false;
 game.onBoardPageLoad = function() {
     initLayout(game.gameName, 'board.html', game.contextPath,
         function() {
-            $("#main_board").empty();
-            $("#glasses").prependTo($("#main_board"));
+            $("#glasses").before($("#main_board"));
+            $("#main_board").remove();
 
-            $("#main_leaderboard").empty();
-            $("#leaderboard").prependTo($("#main_leaderboard"));
+            $("#leaderboard").before($("#main_leaderboard"));
+            $("#main_leaderboard").remove();
         },
         ['js/lib1/script1.js',
             'js/lib2/script1.js',

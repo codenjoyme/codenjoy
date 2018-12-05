@@ -21,25 +21,36 @@
  */
 function setupMouseWheelZoom() {
     function getScrollDelta(event) {
-        if (event.originalEvent.wheelDelta !== undefined) {
-            return event.originalEvent.wheelDelta;
+        if (event.wheelDelta !== undefined) {
+            return event.wheelDelta;
         } else {
-            return event.originalEvent.deltaY * -1;
+            return event.deltaY * -1;
         }
     }
 
-    var component = $(".zoom-on-whell-scroll");
-    component.mousewheel(function(event) {
-        if (!event.originalEvent.ctrlKey) {
-            return;
-        }
-
-        if (getScrollDelta(event) > 0) {
-            component.css("zoom", "+=0.02");
+    function change(component, delta, css, value) {
+        if (delta > 0) {
+            component.css(css, '+=' + value);
         } else {
-            component.css("zoom", "-=0.02");
+            component.css(css, '-=' + value);
         }
+    }
 
-        event.preventDefault();
+    $('[zoom-on-wheel]').mousewheel(function(event) {
+        var element = $(event.target);
+
+        var component = element.parents('[zoom-on-wheel]');
+        var delta = getScrollDelta(event.originalEvent);
+        if (event.originalEvent.ctrlKey) {
+            change(component, delta, 'zoom', "0.02");
+            event.preventDefault();
+        } else if (event.originalEvent.altKey) {
+            change(component, delta, 'width', "20");
+            event.preventDefault();
+        } else if (event.originalEvent.shiftKey) {
+            var attribute = (component.css('position') == 'absolute') ? "left" : 'margin-left';
+            change(component, delta, attribute, "10");
+            event.preventDefault();
+        }
     });
 }

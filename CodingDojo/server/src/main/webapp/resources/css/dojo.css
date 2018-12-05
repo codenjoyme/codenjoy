@@ -100,14 +100,14 @@ label.error {
     height: 20px;
 }
 
-#leaderboard {
-    width: 500px;
+.board {
+    width: 400px;
     float: right;
     padding-right: 75px;
     padding-top: 25px;
 }
 
-#glasses {
+.glasses {
     width: calc(100% - 500px);
     float: left;
     padding-left: 20px;

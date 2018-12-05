@@ -22,12 +22,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="glasses" class="zoom-on-whell-scroll">
+<div id="glasses" class="glasses game" zoom-on-wheel>
     <span class="score-info width-calculator" id="width_calculator_container"></span>
     <div id="showdata"></div>
-    <div id="donate" style="display:none;">
-        <input type="button" id="want-donate" value="Помочь проекту..."/>
-    </div>
     <div id="players_container">
         <script template type="text/x-jquery-tmpl">
             <div id="div_{%= id %}" class="player-canvas">
