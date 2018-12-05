@@ -183,6 +183,10 @@ ul {
   color: #fff;
 }
 
+#leaderboard {
+  padding: 0px!important;
+}
+
 a {
   color: #fff;
   text-decoration: none;
@@ -696,7 +700,6 @@ a.modalCloseImg {
   height: 40px;
   background-color: #323132;
   margin-top: 10px;
-  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
