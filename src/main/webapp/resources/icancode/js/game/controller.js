@@ -36,7 +36,6 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
         command = null;
         board = null;
         runner.cleanProgram();
-        buttons.enableAll();
     }
 
     var currentCommand = function() {
@@ -64,6 +63,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
         var stopped = currentCommand() == 'STOP';
         if (!controlling || stopped || finished) {
             finish();
+            buttons.enableAll();
             if (finished) {
                 logger.clean();
                 logger.printCongrats();
@@ -87,7 +87,8 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
                     runner.runProgram(getRobot());
                 } catch (e) {
                     logger.error(e, 'runProgram');
-                    buttons.enableAll();
+                    finish();
+                    buttons.error();
                     return;
                 }
             } else {
@@ -248,14 +249,14 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
             logger.print('Hero do "' + command + '"');
-			if (game.demo) {
-				if (command == 'RESET') {
-					runner.cleanProgram();
-				}
-			}
+            if (game.demo) {
+                if (command == 'RESET') {
+                    runner.cleanProgram();
+                }
+            }
         } else {
-			// logger.print('Waiting for next command...');
-		}
+            // logger.print('Waiting for next command...');
+        }
         processCommands(data);
     }
 
