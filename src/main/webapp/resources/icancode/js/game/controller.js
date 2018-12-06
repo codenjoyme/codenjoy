@@ -68,8 +68,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
                 logger.clean();
                 logger.printCongrats();
             } else if (stopped) {
-                logger.clean();
-                logger.printHello();
+                // do nothing
             }
             return;
         }
@@ -204,6 +203,8 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
     }
 
     var reset = function() {
+        logger.clean();
+        logger.printHello();
         resetCommand();
         stopCommand();
         if (!controlling) {
