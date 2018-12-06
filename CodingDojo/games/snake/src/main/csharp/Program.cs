@@ -19,122 +19,33 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.WebSockets;
-using System.Text;
+using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace SnakeClient
 {
-    internal class Program
+    class Program
     {
-        // Server name and port number -- ask orgs
-        private static string ServerNameAndPort = "epruryaw0576:8080";
-        // Register on the server, write down your registration name
-        private static string UserName = "nzeemin@gmail.com";
-        // Look up for the code in the browser url after the registration
-        private static string UserCode = "5654891111535248716";
-
-        private static readonly object consoleLock = new object();
-        private const int receiveChunkSize = 1024 * 10;
-        private const bool verbose = true;
-        private static readonly Encoding encoder = new UTF8Encoding(false);
-
-        private static readonly MySnakeBot mybot = new MySnakeBot();
+        // tetrisj.jvmhost.net:12270  // to use for codenjoy.com server
+        // 127.0.0.1:8080               // to use for localhost server
+        static string ServerUrl = "http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+        
+        // you can get this code after registration on the server with your email
+        // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
 
         static void Main(string[] args)
         {
-            Thread.Sleep(1000);
-            Connect($"ws://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}").Wait();
-        }
+            Console.SetWindowSize(Console.LargestWindowWidth - 3, Console.LargestWindowHeight - 3);
 
-        public static async Task Connect(string uri)
-        {
-            ClientWebSocket webSocket = null;
+            // creating custom Snake's Ai client
 
-            try
-            {
-                webSocket = new ClientWebSocket();
-                await webSocket.ConnectAsync(new Uri(uri), CancellationToken.None);
-                await Receive(webSocket);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception: {0}", ex);
-            }
-            finally
-            {
-                if (webSocket != null)
-                    webSocket.Dispose();
-                Console.WriteLine();
 
-                lock (consoleLock)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("WebSocket closed.");
-                    Console.ResetColor();
-                }
-            }
-        }
+            var snake = new YourSolver(ServerUrl);
 
-        private static async Task Send(ClientWebSocket webSocket, string command)
-        {
-
-            byte[] buffer = encoder.GetBytes(command);
-            await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-            LogStatus(false, buffer, buffer.Length);
-        }
-
-        private static async Task Receive(ClientWebSocket webSocket)
-        {
-            byte[] buffer = new byte[receiveChunkSize];
-            while (webSocket.State == WebSocketState.Open)
-            {
-                var result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                if (result.MessageType == WebSocketMessageType.Close)
-                {
-                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, string.Empty, CancellationToken.None);
-                }
-                else
-                {
-                    for (int i = result.Count; i < buffer.Length; i++)
-                    {
-                        buffer[i] = 0;
-                    }
-
-                    LogStatus(true, buffer, result.Count);
-                    string command = mybot.Process(encoder.GetString(buffer, 0, result.Count));
-
-                    Send(webSocket, command);
-                }
-            }
-        }
-
-        private static void LogStatus(bool receiving, byte[] buffer, int length)
-        {
-            lock (consoleLock)
-            {
-                //if (verbose && receiving)
-                //{
-                //    Console.WriteLine(encoder.GetString(buffer, 0, length));
-                //}
-
-                if (verbose && !receiving)
-                {
-                    Console.Clear();
-                    Console.Write(DateTime.Now.ToString());
-                    Console.Write("  ");
-
-                    Console.WriteLine(mybot.HeadlineText);
-                    Console.WriteLine(mybot.DisplayText);
-                    Console.WriteLine(mybot.CommandText);
-                }
-
-                Console.ResetColor();
-            }
+            // starting thread with playing Snake
+            Thread thread = new Thread(snake.Play);
+            thread.Start();
+            thread.Join();
         }
     }
 }

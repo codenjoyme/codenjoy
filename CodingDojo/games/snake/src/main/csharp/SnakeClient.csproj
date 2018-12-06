@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,8 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractSolver.cs" />
     <Compile Include="Board.cs" />
-    <Compile Include="MySnakeBot.cs" />
+    <Compile Include="Direction.cs" />
+    <Compile Include="Element.cs" />
+    <Compile Include="LengthToXY.cs" />
+    <Compile Include="Point.cs" />
+    <Compile Include="WebSocket.cs" />
+    <Compile Include="YourSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
