@@ -121,7 +121,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
             runner.compileProgram(robot);
         } catch (e) {
             logger.error(e, 'compileProgram');
-            buttons.enableAll();
+            buttons.error();
             return;
         }
         onSuccess();
