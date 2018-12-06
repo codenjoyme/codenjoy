@@ -31,9 +31,7 @@ function initLogger() {
         container.append('> ' + message + '<br>');
 
         if (autoScroll) {
-            wrapper.animate({
-                scrollTop: wrapper[0].scrollHeight
-            }, 1000);
+            wrapper.scrollTop(wrapper[0].scrollHeight);
         }
     }
 
