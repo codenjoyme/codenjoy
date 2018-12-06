@@ -26,7 +26,7 @@ function initLogger() {
     container.empty();
 
     var print = function(message) {
-        var autoScroll = true;
+        var autoScroll = Math.abs(wrapper.scrollTop() + wrapper.height() - wrapper[0].scrollHeight) < 20;
 
         container.append('> ' + message + '<br>');
 
