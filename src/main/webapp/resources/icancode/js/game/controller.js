@@ -203,8 +203,6 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
     }
 
     var reset = function() {
-        logger.clean();
-        logger.printHello();
         resetCommand();
         stopCommand();
         if (!controlling) {
@@ -214,6 +212,8 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
     }
 
     var commit = function() {
+        logger.clean();
+        logger.printHello();
         cleanCommand();
         compileCommands(function() {
             resetCommand();
