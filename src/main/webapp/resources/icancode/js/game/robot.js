@@ -522,7 +522,7 @@ function initRobot(logger, controller) {
                 return at(Direction.DOWN);
             }
 
-            var getShortestWa   = function(to) {
+            var getShortestWay = function(to) {
                 if (!validatePoint(arguments)) {
                     return null;
                 }
