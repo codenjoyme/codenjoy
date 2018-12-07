@@ -47,7 +47,7 @@ public class SnakeTest {
     private static final int BOARD_SIZE = 9;
     private static final int SNAKE_SIZE = 2;
     private Field board;
-    private Hero snake;
+    private Hero hero;
     private Stone stone;
     private ArtifactGenerator generator = new HaveNothing();
     private EventListener listener;
@@ -85,8 +85,8 @@ public class SnakeTest {
      * @param y координата Y
      */
     private void assertSnakeAt(int x, int y) {
-        assertEquals("позиция X змейки", x, snake.getX());
-        assertEquals("позиция Y змейки", y, snake.getY());
+        assertEquals("позиция X змейки", x, hero.getX());
+        assertEquals("позиция Y змейки", y, hero.getY());
     }
     
     // теперь мне надо воспользоваться методом триангуляции и сделать так, чтобы змейка 
@@ -122,7 +122,7 @@ public class SnakeTest {
         board = new Snake(generator, walls, size, snakeSize);
         listener = mock(EventListener.class);
         board.newGame(new Player(listener));
-        snake = board.snake();
+        hero = board.snake();
         stone = board.getStone();
     }
 
@@ -140,7 +140,7 @@ public class SnakeTest {
     // Змейка размером в две клеточки. 
     @Test
     public void shouldSnakeLengthIs2_whenStartGame() {
-        assertEquals(2, snake.getLength());
+        assertEquals(2, hero.getLength());
     }
 
     // Если змейка изначально размером в три клеточки, то она проявится не сразу
@@ -160,7 +160,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(4, 4);
-        assertEquals(5, snake.getLength());
+        assertEquals(5, hero.getLength());
 
         // when
         board.tick();
@@ -176,7 +176,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(5, 4);
-        assertEquals(5, snake.getLength());
+        assertEquals(5, hero.getLength());
 
         // when
         board.tick();
@@ -192,7 +192,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(6, 4);
-        assertEquals(5, snake.getLength());
+        assertEquals(5, hero.getLength());
 
         // when
         board.tick();
@@ -208,10 +208,10 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(7, 4);
-        assertEquals(5, snake.getLength());
+        assertEquals(5, hero.getLength());
 
         // when
-        snake.up();
+        hero.up();
         board.tick();
 
         // then
@@ -225,10 +225,10 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(7, 5);
-        assertEquals(5, snake.getLength());
+        assertEquals(5, hero.getLength());
 
         // when
-        snake.up();
+        hero.up();
         board.tick();
 
         // then
@@ -242,7 +242,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(7, 6);
-        assertEquals(5, snake.getLength());
+        assertEquals(5, hero.getLength());
     }
     
     // Направление движеня змейки изначально в право.
@@ -258,7 +258,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
-        assertEquals(Direction.RIGHT, snake.getDirection());
+        assertEquals(Direction.RIGHT, hero.getDirection());
     }
 
     // Если камня нет, то его координаты -1, -1
@@ -321,37 +321,56 @@ public class SnakeTest {
     }
 
     @Test
-    public void shouldTurnDown_whenCallSnakeDown() {
-        int oldY = snake.getY();
-        
-        snake.down();
+    public void shouldGoDown_inertia() {
+        // given
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        hero.down();
         board.tick();
-        int newY = snake.getY();
-        
-        assertEquals(oldY - 1, newY);
-    }
-    
-    // теперь я могу проверить как змейка двигается по инерции вниз
-    @Test 
-    public void shouldGoDownInertia() {
-        snake.down();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼   ▼   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
-        
-        int oldY = snake.getY();        
-        board.tick();
-        int newY = snake.getY();
-        
-        assertEquals("новая позиция по Y при движении змейки вниз должна увеличится", oldY - 1, newY);
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼   ▼   ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
     
     // проверить что при перемещении вниз координата X не меняется
     @Test
     public void shouldNotChangeXPositionWhenMoveDown() {
-        int oldX = snake.getX();
+        int oldX = hero.getX();
         
-        snake.down();
+        hero.down();
         board.tick();
-        int newX = snake.getX();
+        int newX = hero.getX();
         
         assertEquals("новая позиция по X при повороте змейки вниз не должна меняться", oldX, newX);
     }
@@ -360,11 +379,11 @@ public class SnakeTest {
     // координата 0,0 размещена в левом верхнем углу. Почему так? не знаю, наверное из прошлого привычка
     @Test
     public void shouldTurnUpWhenCallSnakeUp() {
-        int oldY = snake.getY();
+        int oldY = hero.getY();
         
-        snake.up();
+        hero.up();
         board.tick();
-        int newY = snake.getY();
+        int newY = hero.getY();
         
         assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшиться", oldY + 1, newY);
     }
@@ -372,11 +391,11 @@ public class SnakeTest {
     // проверить что при перемещении вверх координата X не меняется
     @Test // как обычно - ломаем
     public void shouldNotChangeXPositionWhenMoveUp() {
-        int oldX = snake.getX();
+        int oldX = hero.getX();
         
-        snake.up();
+        hero.up();
         board.tick();
-        int newX = snake.getX();
+        int newX = hero.getX();
         
         assertEquals("новая позиция по X при повороте змейки вверх не должна меняться", oldX, newX);
     }
@@ -384,12 +403,12 @@ public class SnakeTest {
     // проверить движение вверх по инерции
     @Test 
     public void shouldGoUpInertia() {
-        snake.up();
+        hero.up();
         board.tick();
         
-        int oldY = snake.getY();        
+        int oldY = hero.getY();
         board.tick();
-        int newY = snake.getY();
+        int newY = hero.getY();
         
         assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY + 1, newY);
     }
@@ -398,19 +417,19 @@ public class SnakeTest {
     // если длинна змейки 2 клетки (голова и хвост) то она может развернуться
     @Test  
     public void shouldTurn180LeftRightWhenSnakeSizeIs2() {
-        snake.left();
+        hero.left();
         board.tick();
         board.tick();
-        snake.right();
+        hero.right();
         board.tick();
         board.tick();        
-        snake.down();
+        hero.down();
         board.tick();
         board.tick();
-        snake.up();
+        hero.up();
         board.tick();
         board.tick();
-        snake.down();
+        hero.down();
         board.tick();
         board.tick();
     }
@@ -421,7 +440,7 @@ public class SnakeTest {
     public void shouldGameOverWhenSnakeEatItself() {
         getLong3Snake();
         
-        snake.left();
+        hero.left();
         board.tick();    
         
         assertGameOver();
@@ -431,7 +450,7 @@ public class SnakeTest {
      * Метод првоеряет, что игра окончена
      */
     private void assertGameOver() {
-        assertTrue("Ожидается конец игры", !snake.isAlive());
+        assertTrue("Ожидается конец игры", !hero.isAlive());
     }
     
     // Умрет - значит конец игры. Если конец игры, значит любое обращение 
@@ -440,33 +459,33 @@ public class SnakeTest {
     public void shouldDoNothingWhenTryToTurnSnakeUpAfterGameOver() {
         killSnake();
 
-        Direction direction = snake.getDirection();
+        Direction direction = hero.getDirection();
 
-        snake.up();
+        hero.up();
 
-        assertEquals(direction, snake.getDirection());
+        assertEquals(direction, hero.getDirection());
     }
 
     @Test
     public void shouldDoNothingWhenTryToTurnSnakeDownAfterGameOver() {
         killSnake();
 
-        Direction direction = snake.getDirection();
+        Direction direction = hero.getDirection();
 
-        snake.down();
+        hero.down();
 
-        assertEquals(direction, snake.getDirection());
+        assertEquals(direction, hero.getDirection());
     }
 
     @Test
     public void shouldDoNothingWhenTryToTurnSnakeLeftAfterGameOver() {
         killSnakeWhenMoveRight();
 
-        Direction direction = snake.getDirection();
+        Direction direction = hero.getDirection();
 
-        snake.left();
+        hero.left();
 
-        assertEquals(direction, snake.getDirection());
+        assertEquals(direction, hero.getDirection());
     }
 
     /**
@@ -475,12 +494,12 @@ public class SnakeTest {
     private void killSnake() {
         // тут нам надо съесть хоть одно яблоко
         generator = new HaveApples();
-        ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
         setup();
         board.tick();
 
         // а потом укусить себя :)
-        snake.left();
+        hero.left();
         board.tick();
         
         assertGameOver();
@@ -489,16 +508,16 @@ public class SnakeTest {
     private void killSnakeWhenMoveRight() {
         // тут нам надо съесть хоть одно яблоко
         generator = new HaveApples();
-        ((HaveApples)generator).addApple(snake.getX() - 1, snake.getY());
+        ((HaveApples)generator).addApple(hero.getX() - 1, hero.getY());
         setup();
         board.tick();
 
-        snake.left();
+        hero.left();
         board.tick();
         board.tick();
 
         // а потом укусить себя :)
-        snake.right();
+        hero.right();
         board.tick();
 
         assertGameOver();
@@ -507,15 +526,15 @@ public class SnakeTest {
     // проверить поворот вправо    
     @Test  
     public void shouldMoveRightWhenTurnRight() {
-        snake.down();
+        hero.down();
         board.tick();
 
-        int oldX = snake.getX();
+        int oldX = hero.getX();
         
-        snake.right();
+        hero.right();
         board.tick();
                 
-        int newX = snake.getX();
+        int newX = hero.getX();
         
         assertEquals("новая позиция по X после поворота вправо должна увеличиться", oldX + 1, newX);
     }
@@ -524,11 +543,11 @@ public class SnakeTest {
     public void shouldDoNothingWhenTryToTurnSnakeRightAfterGameOver() {
         killSnake();
 
-        Direction direction = snake.getDirection();
+        Direction direction = hero.getDirection();
 
-        snake.right();
+        hero.right();
 
-        assertEquals(direction, snake.getDirection());
+        assertEquals(direction, hero.getDirection());
     }
         
     // проверить как змея ест сама себя при движении вниз
@@ -537,11 +556,11 @@ public class SnakeTest {
         // given
         getLong3Snake();
                 
-        snake.down();
+        hero.down();
         board.tick();
         
         // when
-        snake.up();
+        hero.up();
         board.tick();
  
         //then
@@ -553,11 +572,11 @@ public class SnakeTest {
     public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
         // given
         getLong3Snake();        
-        snake.up();
+        hero.up();
         board.tick();
         
         // when
-        snake.down();
+        hero.down();
         board.tick();
         
         // then
@@ -570,13 +589,13 @@ public class SnakeTest {
         // given
         getLong3Snake();
         
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
+        hero.left();
         board.tick();
         
         //when 
-        snake.right();
+        hero.right();
         board.tick();
         
         //then
@@ -589,13 +608,13 @@ public class SnakeTest {
         // given
         getLong3Snake();
         
-        snake.down();
+        hero.down();
         board.tick();
-        snake.right();
+        hero.right();
         board.tick();
         
         //when
-        snake.left();
+        hero.left();
         board.tick();
         
         //then
@@ -605,14 +624,14 @@ public class SnakeTest {
     // проверить что при перемещении влево меняется координата X  в меньшую сторону
     @Test
     public void shouldChangeXPositionWhenTurnLeft() {
-        snake.down();
+        hero.down();
         board.tick();
         
-        int oldX = snake.getX();
+        int oldX = hero.getX();
         
-        snake.left();
+        hero.left();
         board.tick();
-        int newX = snake.getX();
+        int newX = hero.getX();
         
         assertEquals("новая позиция по X после перемещения влево уменьшается", oldX - 1, newX);
     }
@@ -620,14 +639,14 @@ public class SnakeTest {
     // проверить что при перемещении влево координата Y не меняется
     @Test
     public void shouldNotChangeYPositionWhenTurnLeft() {
-        snake.down();
+        hero.down();
         board.tick();
         
-        int oldY = snake.getY();
+        int oldY = hero.getY();
         
-        snake.left();
+        hero.left();
         board.tick();
-        int newY = snake.getY();
+        int newY = hero.getY();
         
         assertEquals("новая позиция по Y после перемещения влево не должна меняться", oldY, newY);
     } 
@@ -635,30 +654,30 @@ public class SnakeTest {
     // проверить движение влево по инерции
     @Test
     public void shouldNotChangeYPositionWhenTurnLeftInertia() {
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
+        hero.left();
         board.tick();
         
-        int oldY = snake.getY();
+        int oldY = hero.getY();
         
         board.tick();
-        int newY = snake.getY();
+        int newY = hero.getY();
         
         assertEquals("новая позиция по Y при движении влево по инерции не должна меняться", oldY, newY);
     }
     
     @Test
     public void shouldChangeXPositionWhenTurnLeftInertia() {
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
+        hero.left();
         board.tick();
         
-        int oldX = snake.getX();
+        int oldX = hero.getX();
         
         board.tick();
-        int newX = snake.getX();
+        int newX = hero.getX();
         
         assertEquals("новая позиция по X при движении влево по инерции уменьшается", oldX - 1, newX);
     } 
@@ -668,7 +687,7 @@ public class SnakeTest {
     // начнем с простого - 1) змейка движется по инерции вправо и натыкается на камень
     @Test
     public void shouldGameOverWhenEatStoneDurringMoveRight() {        
-        startGameWithStoneAt(snake.getX() + 1, snake.getY()); // прямо на пути камень        
+        startGameWithStoneAt(hero.getX() + 1, hero.getY()); // прямо на пути камень
 
         board.tick();
 
@@ -680,8 +699,8 @@ public class SnakeTest {
     // 2) двигаясь по инерции вниз пока не наткнется на камень
     @Test
     public void shouldGameOverWhenEatStoneDurringMoveDown() {
-        startGameWithStoneAt(snake.getX(), snake.getY() - 1); // внизу камень
-        snake.down();
+        startGameWithStoneAt(hero.getX(), hero.getY() - 1); // внизу камень
+        hero.down();
         
         board.tick();
 
@@ -693,8 +712,8 @@ public class SnakeTest {
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
     public void shouldGameOverWhenEatStoneDurringMoveUp() {        
-        startGameWithStoneAt(snake.getX(), snake.getY() + 1); // вверху камень
-        snake.up();
+        startGameWithStoneAt(hero.getX(), hero.getY() + 1); // вверху камень
+        hero.up();
         
         board.tick();
 
@@ -706,10 +725,10 @@ public class SnakeTest {
     // 4) двигаясь по инерции влево пока не наткнется на стену
     @Test
     public void shouldGameOverWhenEatStoneDurringMoveLeft() {        
-        startGameWithStoneAt(snake.getX() - 1, snake.getY() - 1); // слева снизу камень
-        snake.down();
+        startGameWithStoneAt(hero.getX() - 1, hero.getY() - 1); // слева снизу камень
+        hero.down();
         board.tick(); 
-        snake.left();
+        hero.left();
         
         board.tick();
 
@@ -862,9 +881,9 @@ public class SnakeTest {
     // 1) двигаясь по инерции влево пока не наткнется на стену
     @Test
     public void shouldGameOverWhenEatWallDurringMoveLeft() {
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
+        hero.left();
         
         board.tick();
         board.tick();
@@ -880,7 +899,7 @@ public class SnakeTest {
     // 2) двигаясь по инерции вниз пока не наткнется на стену
     @Test
     public void shouldGameOverWhenEatWallDurringMoveDown() {                
-        snake.down();
+        hero.down();
         
         board.tick();
         board.tick();
@@ -895,7 +914,7 @@ public class SnakeTest {
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
     public void shouldGameOverWhenEatWallDurringMoveUp() {                
-        snake.up();
+        hero.up();
         
         board.tick(); 
         board.tick();
@@ -924,13 +943,13 @@ public class SnakeTest {
         killSnake();
         assertGameOver();
 
-        Point head = snake.getHead();
+        Point head = hero.getHead();
         int x = head.getX();
         int y = head.getY();
 
         board.tick();
 
-        assertEquals(pt(x, y), snake.getHead());
+        assertEquals(pt(x, y), hero.getHead());
 
         assertGameOver();
     }
@@ -945,8 +964,8 @@ public class SnakeTest {
     // после съедения яблока появляется тут же другое яблоко.
     @Test
     public void shouldAppearNewAppleWhenEatApple() {
-        int appleX = snake.getX() + 1;
-        int appleY = snake.getY();
+        int appleX = hero.getX() + 1;
+        int appleY = hero.getY();
         startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко (оно там будет всегда появляться)
         board.tick();        
         
@@ -958,12 +977,12 @@ public class SnakeTest {
     // после съедения камня появляется тут же другой камень.
     @Test
     public void shouldAppearNewStoneWhenEatStone() {
-        int stoneX = snake.getX();
-        int stoneY = snake.getY() + 1;
+        int stoneX = hero.getX();
+        int stoneY = hero.getY() + 1;
 
         getLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
 
-        snake.up();
+        hero.up();
         board.tick();
         board.tick();
 
@@ -976,10 +995,10 @@ public class SnakeTest {
     // Змейка может съесть яблоки и при этом ее длинна увеличится на 1. 
     @Test
     public void shouldSnakeIncreaseLengthWhenEatApple() {
-        startGameWithAppleAt(snake.getX() + 1, snake.getY()); // на пути змейки есть яблоко
+        startGameWithAppleAt(hero.getX() + 1, hero.getY()); // на пути змейки есть яблоко
         board.tick();        
         
-        assertEquals("Длинна змеи", 3, snake.getLength());
+        assertEquals("Длинна змеи", 3, hero.getLength());
     }
     
     // теперь скушаем два раза яблоко :)
@@ -987,15 +1006,15 @@ public class SnakeTest {
     public void shouldSnakeIncreaseLengthTwiceWhenEatAppleTwice() {
         // на пути змейки есть два подряд яблока
         generator = new HaveApples();
-        ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY()); // немного криво, но пока так TODO 
-        ((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY()); // немного криво, но пока так TODO
+        ((HaveApples)generator).addApple(hero.getX() + 2, hero.getY());
         setup();
         
         board.tick();
         board.tick();
         board.tick();
         
-        assertEquals("Длинна змеи", 4, snake.getLength());
+        assertEquals("Длинна змеи", 4, hero.getLength());
     }
     
     // Если змейка съест сама себя - она умрет. 
@@ -1005,11 +1024,11 @@ public class SnakeTest {
         getLong5Snake();        
         
         // теперь попробуем укусить себя за хвост        
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
+        hero.left();
         board.tick();
-        snake.up();
+        hero.up();
         board.tick();
         
         assertGameOver();     
@@ -1020,15 +1039,15 @@ public class SnakeTest {
      */
     private void getLong5Snake() {
         generator = new HaveApples();
-        ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
-        ((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
-        ((HaveApples)generator).addApple(snake.getX() + 3, snake.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 2, hero.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 3, hero.getY());
         setup();
         
         board.tick();
         board.tick();
         board.tick();        
-        assertEquals("Длинна змеи", 5, snake.getLength());
+        assertEquals("Длинна змеи", 5, hero.getLength());
     } 
     
     // хочу проверить, что змейка длинной в 4 никогда себя не съест.
@@ -1040,17 +1059,17 @@ public class SnakeTest {
         goOneCircle();
         goOneCircle();
         
-        assertTrue("Змея должна быть жива!", snake.isAlive());
+        assertTrue("Змея должна быть жива!", hero.isAlive());
     }
 
     private void goOneCircle() {
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
+        hero.left();
         board.tick();
-        snake.up();
+        hero.up();
         board.tick();
-        snake.right();
+        hero.right();
         board.tick();
     }
 
@@ -1059,14 +1078,14 @@ public class SnakeTest {
      */
     private void getLong4Snake() {
         generator = new HaveApples();
-        ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
-        ((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
+        ((HaveApples)generator).addApple(hero.getX() + 2, hero.getY());
         setup();
         
         board.tick();
         board.tick();
         board.tick();        
-        assertEquals("Длинна змеи", 4, snake.getLength());
+        assertEquals("Длинна змеи", 4, hero.getLength());
     }
     
     /**
@@ -1074,25 +1093,25 @@ public class SnakeTest {
      */
     private void getLong3Snake() {
         generator = new HaveApples();
-        ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
+        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
         setup();
         
         board.tick();
         board.tick();        
-        assertEquals("Длинна змеи", 3, snake.getLength());
+        assertEquals("Длинна змеи", 3, hero.getLength());
     }
     
     // теперь давайте попробуем реализовать другое поведение - змейка может кушать камни, 
     // но тогда она сокращается в размере на 10 квадратиков.
     @Test
     public void shouldDivSnakeWhenEatStone (){ 
-        getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 11);
+        getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 11);
 
-        snake.up();
+        hero.up();
         board.tick();
         board.tick();
                 
-        assertEquals("Длинна змеи после съедения камня", 1, snake.getLength());
+        assertEquals("Длинна змеи после съедения камня", 1, hero.getLength());
     }  
         
     /**
@@ -1101,15 +1120,15 @@ public class SnakeTest {
     private void getLongSnakeWithStoneAt(int x, int y, int snakeLength) {
         assertTrue(snakeLength <= 11);
         HaveApples appleGenerator = new HaveApples();
-        if (snakeLength >= 3) appleGenerator.addApple(snake.getX() + 1, snake.getY());
-        if (snakeLength >= 4) appleGenerator.addApple(snake.getX() + 2, snake.getY());
-        if (snakeLength >= 5) appleGenerator.addApple(snake.getX() + 3, snake.getY());
-        if (snakeLength >= 6) appleGenerator.addApple(snake.getX() + 4, snake.getY());
-        if (snakeLength >= 7) appleGenerator.addApple(snake.getX() + 4, snake.getY() - 1);
-        if (snakeLength >= 8) appleGenerator.addApple(snake.getX() + 3, snake.getY() - 1);
-        if (snakeLength >= 9) appleGenerator.addApple(snake.getX() + 2, snake.getY() - 1);
-        if (snakeLength >= 10) appleGenerator.addApple(snake.getX() + 1, snake.getY() - 1);
-        if (snakeLength >= 11) appleGenerator.addApple(snake.getX()    , snake.getY() - 1);
+        if (snakeLength >= 3) appleGenerator.addApple(hero.getX() + 1, hero.getY());
+        if (snakeLength >= 4) appleGenerator.addApple(hero.getX() + 2, hero.getY());
+        if (snakeLength >= 5) appleGenerator.addApple(hero.getX() + 3, hero.getY());
+        if (snakeLength >= 6) appleGenerator.addApple(hero.getX() + 4, hero.getY());
+        if (snakeLength >= 7) appleGenerator.addApple(hero.getX() + 4, hero.getY() - 1);
+        if (snakeLength >= 8) appleGenerator.addApple(hero.getX() + 3, hero.getY() - 1);
+        if (snakeLength >= 9) appleGenerator.addApple(hero.getX() + 2, hero.getY() - 1);
+        if (snakeLength >= 10) appleGenerator.addApple(hero.getX() + 1, hero.getY() - 1);
+        if (snakeLength >= 11) appleGenerator.addApple(hero.getX()    , hero.getY() - 1);
         
         HaveStones stoneGenerator = new HaveStones();
         stoneGenerator.addStone(x, y);
@@ -1123,19 +1142,19 @@ public class SnakeTest {
         board.tick();
         board.tick();
         board.tick();
-        snake.down();
+        hero.down();
         board.tick();
-        snake.left();
-        board.tick();
-        board.tick();
+        hero.left();
         board.tick();
         board.tick();
         board.tick();
         board.tick();
         board.tick();
-        snake.up();
+        board.tick();
+        board.tick();
+        hero.up();
         board.tick();    
-        snake.right();
+        hero.right();
         board.tick();
         board.tick();
         board.tick();
@@ -1152,7 +1171,7 @@ public class SnakeTest {
 //        *       *
 //        *********
 
-        assertEquals("Длинна змеи", snakeLength, snake.getLength());
+        assertEquals("Длинна змеи", snakeLength, hero.getLength());
     }
 
     // когда змейка наткнется на стену на пределых поля - она умрет
@@ -1169,7 +1188,7 @@ public class SnakeTest {
     // когда змейка наткнется на стену на пределых поля - она умрет
     @Test
     public void shouldNoMoreTactWhenGameOver() {
-        board.getWalls().add(snake.getX() + 1, snake.getY()); // прямо на пути пользовательская стена
+        board.getWalls().add(hero.getX() + 1, hero.getY()); // прямо на пути пользовательская стена
 
         board.tick();
 
@@ -1179,9 +1198,9 @@ public class SnakeTest {
     // а что, если змейка скушает камень а ее размер был 10? По идее геймовер
     @Test
     public void shouldGameOverWhen10LengthSnakeEatStone (){
-        getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 10);
+        getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 10);
 
-        snake.up();
+        hero.up();
         board.tick();
 
         assertGameOver();
@@ -1196,46 +1215,46 @@ public class SnakeTest {
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertEquals(Direction.RIGHT, snake.getDirection());
+        assertEquals(Direction.RIGHT, hero.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnDown() {
         startGameWithoutWalls();
-        snake.down();
+        hero.down();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertEquals(Direction.DOWN, snake.getDirection());
+        assertEquals(Direction.DOWN, hero.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnUp() {
         startGameWithoutWalls();
-        snake.up();
+        hero.up();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertEquals(Direction.UP, snake.getDirection());
+        assertEquals(Direction.UP, hero.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnLeft() {
         startGameWithoutWalls();
-        snake.left();
+        hero.left();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertEquals(Direction.LEFT, snake.getDirection());
+        assertEquals(Direction.LEFT, hero.getDirection());
     }
 
     private void boardSizeTacts() {
@@ -1259,7 +1278,7 @@ public class SnakeTest {
 
         boardSizeTacts();  // в какой-то момент мы телепортируемся прям на яблочко
 
-        assertEquals(3, snake.getLength());
+        assertEquals(3, hero.getLength());
     }
 
     private void appleAt(int x, int y) {
