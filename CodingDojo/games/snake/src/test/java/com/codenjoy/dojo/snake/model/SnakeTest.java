@@ -555,27 +555,7 @@ public class SnakeTest {
         Direction direction = hero.getDirection();
 
         hero.up();
-
-        assertEquals(direction, hero.getDirection());
-    }
-
-    @Test
-    public void shouldDoNothingWhenTryToTurnSnakeDownAfterGameOver() {
-        killSnake();
-
-        Direction direction = hero.getDirection();
-
         hero.down();
-
-        assertEquals(direction, hero.getDirection());
-    }
-
-    @Test
-    public void shouldDoNothingWhenTryToTurnSnakeLeftAfterGameOver() {
-        killSnakeWhenMoveRight();
-
-        Direction direction = hero.getDirection();
-
         hero.left();
 
         assertEquals(direction, hero.getDirection());
