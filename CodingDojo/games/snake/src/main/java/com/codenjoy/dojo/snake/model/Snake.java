@@ -37,7 +37,6 @@ public class Snake implements Field {
     private Apple apple;
     private ArtifactGenerator generator;
     private int startLength;
-    private int maxLength;
     private Player player;
 
     public Snake(ArtifactGenerator generator, Walls walls, int size, int startLength) {
@@ -115,8 +114,8 @@ public class Snake implements Field {
     }
 
     @Override
-    public void clearScore(){
-
+    public void clearScore() {
+        newGame(player);
     }
 
     @Override
@@ -161,7 +160,6 @@ public class Snake implements Field {
         if (!snake().isAlive()) return;
 
         snake().walk(this);
-        maxLength = Math.max(maxLength, snake().getLength());
     }
 
     @Override

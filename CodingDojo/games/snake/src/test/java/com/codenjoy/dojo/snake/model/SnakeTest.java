@@ -1667,6 +1667,7 @@ public class SnakeTest {
         HaveStones stoneGenerator = new HaveStones();
         stoneGenerator.addStone(x, y);
         stoneGenerator.addStone(2, 2); // второй камень, так чтобы если вдруг съели его то он появился в другом месте
+        stoneGenerator.addStone(x, y); // третий камень будет в изначальном месте
 
         generator = new MixGenerators(stoneGenerator, appleGenerator);
         
@@ -2111,5 +2112,104 @@ public class SnakeTest {
                 board.reader(), null).print());
     }
 
+    @Test
+    public void shouldResetSnakeLength_whenClearScores_caseEatApple() {
+        shouldSnakeIncreaseLength_whenEatApple();
 
+        hero.up();
+        board.tick();
+        board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼    ▲  ☼\n" +
+                "☼    ║  ☼\n" +
+                "☼    ╙  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.clearScore();
+        hero = board.snake();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►☺  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        assertEquals(3, hero.getLength());
+    }
+
+    @Test
+    public void shouldResetSnakeLength_whenClearScores_caseEatStone() {
+        shouldAppearNewStone_whenEatStone();
+
+        hero.up();
+        board.tick();
+        board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.clearScore();
+        hero = board.snake();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ☻   ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        hero.up();
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼   ╙   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        assertGameOver();
+    }
 }
