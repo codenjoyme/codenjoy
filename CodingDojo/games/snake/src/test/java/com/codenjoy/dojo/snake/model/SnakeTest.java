@@ -1885,12 +1885,53 @@ public class SnakeTest {
     @Test
     public void shouldTeleport_whenTurnDown() {
         givenBoardWithoutWalls();
+
         hero.down();
-        assertSnakeAt(4, 4);
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
-        boardSizeTicks();
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "    ╓    \n" +
+                "    ▼    \n");
 
-        assertSnakeAt(4, 4);
+        // when
+        board.tick();
+
+        asrtBrd("    ▼    \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "    ╙    \n");  // TODO что-то не так с хвостом
+
+        assertEquals(true, hero.isAlive());
+        assertEquals(Direction.DOWN, hero.getDirection());
+
+        // when
+        board.tick();
+
+        asrtBrd("    ╓    \n" +
+                "    ▼    \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
+
+        assertEquals(true, hero.isAlive());
         assertEquals(Direction.DOWN, hero.getDirection());
     }
 
@@ -1898,12 +1939,53 @@ public class SnakeTest {
     @Test
     public void shouldTeleport_whenTurnUp() {
         givenBoardWithoutWalls();
+
         hero.up();
-        assertSnakeAt(4, 4);
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
-        boardSizeTicks();
+        asrtBrd("    ▲    \n" +
+                "    ╙    \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
 
-        assertSnakeAt(4, 4);
+        // when
+        board.tick();
+
+        asrtBrd("    ╓    \n" + // TODO что-то не так с хвостом
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "    ▲    \n");
+
+        assertEquals(true, hero.isAlive());
+        assertEquals(Direction.UP, hero.getDirection());
+
+        // when
+        board.tick();
+
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "    ▲    \n" +
+                "    ╙    \n");
+
+        assertEquals(true, hero.isAlive());
         assertEquals(Direction.UP, hero.getDirection());
     }
 
@@ -1911,27 +1993,53 @@ public class SnakeTest {
     @Test
     public void shouldTeleport_whenTurnLeft() {
         givenBoardWithoutWalls();
+
         hero.left();
-        assertSnakeAt(4, 4);
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "◄╕       \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
 
         // when
         board.tick();
-        board.tick();
-        board.tick();
+
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "╘       ◄\n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
+
+        assertEquals(true, hero.isAlive());
+        assertEquals(Direction.LEFT, hero.getDirection());
+
+        // when
         board.tick();
 
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "       ◄╕\n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
 
-        // then
-        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼   ▲   ☼\n" +
-                "☼╔══╝   ☼\n" +
-                "☼╚═══╕  ☼\n" +
-                "☼ ☻     ☼\n" +
-                "☼       ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
-
+        assertEquals(true, hero.isAlive());
         assertEquals(Direction.LEFT, hero.getDirection());
     }
 
