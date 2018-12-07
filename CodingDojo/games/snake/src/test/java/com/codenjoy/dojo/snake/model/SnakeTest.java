@@ -1344,7 +1344,7 @@ public class SnakeTest {
         int stoneX = hero.getX();
         int stoneY = hero.getY() + 1;
 
-        getLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
+        givenLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
 
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -1359,13 +1359,12 @@ public class SnakeTest {
         // when
         hero.up();
         board.tick();
-        board.tick();
 
         // then
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
-                "☼   ▲   ☼\n" +
                 "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼ ☻     ☼\n" +
@@ -1600,7 +1599,7 @@ public class SnakeTest {
     // но тогда она сокращается в размере на 10 квадратиков.
     @Test
     public void shouldDivSnake_whenEatStone (){ 
-        getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 11);
+        givenLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 11);
 
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -1615,13 +1614,12 @@ public class SnakeTest {
         // when
         hero.up();
         board.tick();
-        board.tick();
 
         // then
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
-                "☼   ▲   ☼\n" +
                 "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼ ☻     ☼\n" +
@@ -1638,8 +1636,8 @@ public class SnakeTest {
         // она еще жива
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
-                "☼    ►  ☼\n" +
                 "☼       ☼\n" +
+                "☼    ►  ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼ ☻     ☼\n" +
@@ -1652,7 +1650,8 @@ public class SnakeTest {
     /**
      * Получаем змейку длинной в 11 и кмнем в заданной позиции
      */
-    private void getLongSnakeWithStoneAt(int x, int y, int snakeLength) {
+    // TODO зменить на более привычный способ получения змейки путем парсинга из срокового предсталения
+    private void givenLongSnakeWithStoneAt(int x, int y, int snakeLength) {
         assertTrue(snakeLength <= 11);
         HaveApples appleGenerator = new HaveApples();
         if (snakeLength >= 3) appleGenerator.addApple(hero.getX() + 1, hero.getY());
@@ -1694,28 +1693,40 @@ public class SnakeTest {
         board.tick();
         board.tick();
 
-// это так, чтобы было видно что на поле. Вообще такие тесты не стоит писать, потому что они очень сложные в поддержке        
-//        System.out.println(new SnakePrinter().print(board));
-//        @********
-//        *       *
-//        *       *
-//        *   X   *
-//        *000#   *
-//        *0000000*
-//        *       *
-//        *       *
-//        *********
-
-        assertEquals("Длинна змеи", snakeLength, hero.getLength());
+        assertEquals(snakeLength, hero.getLength());
     }
 
     // когда змейка наткнется на стену на пределых поля - она умрет
     @Test
     public void shouldKill_whenEatWalls() {
+        // given
         board.tick();
         board.tick();
         board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼     ╘►☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      ╘☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         assertGameOver();
     }
@@ -1723,9 +1734,32 @@ public class SnakeTest {
     // когда змейка наткнется на стену на пределых поля - она умрет
     @Test
     public void shouldNoMoreTact_whenGameOver() {
+        // given
         board.getWalls().add(hero.getX() + 1, hero.getY()); // прямо на пути пользовательская стена
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►☼  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘☼  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         assertGameOver();
     }
@@ -1733,10 +1767,53 @@ public class SnakeTest {
     // а что, если змейка скушает камень а ее размер был 10? По идее геймовер
     @Test
     public void shouldGameOver_when10LengthSnakeEatStone (){
-        getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 10);
+        // given
+        int snakeLength = 10; // этого недостаточно чтобы выжить после съедения камня
 
+        givenLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, snakeLength);
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ☻   ☼\n" +
+                "☼╔══►   ☼\n" +
+                "☼╚════╕ ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         hero.up();
         board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼╔══╝   ☼\n" +
+                "☼╚═══╕  ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        assertGameOver();
+
+        // when
+        // дальше ничего не работает
+        hero.left();
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼╔══╝   ☼\n" +
+                "☼╚═══╕  ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         assertGameOver();
     }
@@ -1744,23 +1821,74 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleport_whenTurnRight() {
-        startGameWithoutWalls();
-        assertSnakeAt(4, 4);
+        givenBoardWithoutWalls();
 
-        boardSizeTacts();
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "   ╘►    \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
 
-        assertSnakeAt(4, 4);
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "       ╘►\n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
+
+        // when
+        board.tick();
+
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "►       ╕\n" + // TODO тут что-то не то с хвотом
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
+
+        assertEquals(true, hero.isAlive());
+        assertEquals(Direction.RIGHT, hero.getDirection());
+
+        // when
+        board.tick();
+
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "╘►       \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
+
+        assertEquals(true, hero.isAlive());
         assertEquals(Direction.RIGHT, hero.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleport_whenTurnDown() {
-        startGameWithoutWalls();
+        givenBoardWithoutWalls();
         hero.down();
         assertSnakeAt(4, 4);
 
-        boardSizeTacts();
+        boardSizeTicks();
 
         assertSnakeAt(4, 4);
         assertEquals(Direction.DOWN, hero.getDirection());
@@ -1769,11 +1897,11 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleport_whenTurnUp() {
-        startGameWithoutWalls();
+        givenBoardWithoutWalls();
         hero.up();
         assertSnakeAt(4, 4);
 
-        boardSizeTacts();
+        boardSizeTicks();
 
         assertSnakeAt(4, 4);
         assertEquals(Direction.UP, hero.getDirection());
@@ -1782,24 +1910,39 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleport_whenTurnLeft() {
-        startGameWithoutWalls();
+        givenBoardWithoutWalls();
         hero.left();
         assertSnakeAt(4, 4);
 
-        boardSizeTacts();
+        // when
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
-        assertSnakeAt(4, 4);
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼╔══╝   ☼\n" +
+                "☼╚═══╕  ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(Direction.LEFT, hero.getDirection());
     }
 
-    private void boardSizeTacts() {
+    private void boardSizeTicks() {
         // за это время змейка должна была вернуться на свое место
         for (int count = 0; count < BOARD_SIZE; count++) {
             board.tick();
         }
     }
 
-    private void startGameWithoutWalls() {
+    private void givenBoardWithoutWalls() {
         givenBoard(BOARD_SIZE, new Walls(), SNAKE_SIZE);
     }
 
@@ -1808,10 +1951,10 @@ public class SnakeTest {
     @Test
     public void shouldEatApple_whenTeleported() {
         appleAt(0, 4); // яблоко на границе
-        startGameWithoutWalls();
+        givenBoardWithoutWalls();
         assertSnakeAt(4, 4);
 
-        boardSizeTacts();  // в какой-то момент мы телепортируемся прям на яблочко
+        boardSizeTicks();  // в какой-то момент мы телепортируемся прям на яблочко
 
         assertEquals(3, hero.getLength());
     }
