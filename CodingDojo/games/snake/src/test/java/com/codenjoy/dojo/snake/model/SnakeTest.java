@@ -248,18 +248,10 @@ public class SnakeTest {
     // Направление движеня змейки изначально в право.
     @Test
     public void shouldSnakeHasRightDirectionWhenGameStart() {
-        assertSnakeDirection(Direction.RIGHT);         
+        assertEquals(Direction.RIGHT, snake.getDirection());
     }
 
-    /**
-     * Метод проверяет куда направлена змейка сейчас. 
-     */
-    private void assertSnakeDirection(Direction expectedDirection) {
-        assertEquals("направление движения змейки", 
-                expectedDirection, snake.getDirection());        
-    }
-    
-    // Поле содержит один камень для начала. 
+    // Поле содержит один камень для начала.
     @Test
     public void shouldBoardContainStoneWhenGameStart() {
         Stone stone = board.getStone();
@@ -1178,7 +1170,7 @@ public class SnakeTest {
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertSnakeDirection(Direction.RIGHT);
+        assertEquals(Direction.RIGHT, snake.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
@@ -1191,7 +1183,7 @@ public class SnakeTest {
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertSnakeDirection(Direction.DOWN);
+        assertEquals(Direction.DOWN, snake.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
@@ -1204,7 +1196,7 @@ public class SnakeTest {
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertSnakeDirection(Direction.UP);
+        assertEquals(Direction.UP, snake.getDirection());
     }
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
@@ -1217,7 +1209,7 @@ public class SnakeTest {
         boardSizeTacts();
 
         assertSnakeAt(4, 4);
-        assertSnakeDirection(Direction.LEFT);
+        assertEquals(Direction.LEFT, snake.getDirection());
     }
 
     private void boardSizeTacts() {
