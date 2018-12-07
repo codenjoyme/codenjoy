@@ -609,7 +609,7 @@ public class SnakeTest {
 
     // проверить как змея ест сама себя при движении вниз
     @Test  
-    public void shouldGameOver_whenSnakeEatItselfDuringMoveDown() {
+    public void shouldGameOver_whenSnakeEatItself_duringMoveDown() {
         // given
         givenBoardWithSnakeSize(3);
 
@@ -645,7 +645,7 @@ public class SnakeTest {
     
     // проверить как змея ест сама себя при движении вверх
     @Test  
-    public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
+    public void shouldGameOverWhenSnakeEatItself_duringMoveUp() {
         // given
         givenBoardWithSnakeSize(3);
 
@@ -681,7 +681,7 @@ public class SnakeTest {
     
     // проверить как змея ест сама себя при движении влево
     @Test  
-    public void shouldGameOver_whenSnakeEatItselfDuringMoveLeft() {
+    public void shouldGameOver_whenSnakeEatItself_duringMoveLeft() {
         // given
         givenBoardWithSnakeSize(3);
 
@@ -719,7 +719,7 @@ public class SnakeTest {
     
     // проверить как змея ест сама себя при движении вправо
     @Test  
-    public void shouldGameOver_whenSnakeEatItselfDuringMoveRight() {
+    public void shouldGameOver_whenSnakeEatItself_duringMoveRight() {
         // given
         givenBoardWithSnakeSize(3);
 
@@ -808,7 +808,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов 
     // начнем с простого - 1) змейка движется по инерции вправо и натыкается на камень
     @Test
-    public void shouldGameOver_whenEatStoneDuringMoveRight() {
+    public void shouldGameOver_whenEatStone_duringMoveRight() {
         givenBoardWithStoneAt(hero.getX() + 1, hero.getY()); // прямо на пути камень
 
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
@@ -841,7 +841,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 2) двигаясь по инерции вниз пока не наткнется на камень
     @Test
-    public void shouldGameOver_whenEatStoneDurringMoveDown() {
+    public void shouldGameOver_whenEatStone_duringMoveDown() {
         givenBoardWithStoneAt(hero.getX(), hero.getY() - 1); // внизу камень
         hero.down();
 
@@ -875,7 +875,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatStoneDuringMoveUp() {
+    public void shouldGameOver_whenEatStone_duringMoveUp() {
         givenBoardWithStoneAt(hero.getX(), hero.getY() + 1); // вверху камень
         hero.up();
 
@@ -909,7 +909,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 4) двигаясь по инерции влево пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatStoneDuringMoveLeft() {
+    public void shouldGameOver_whenEatStone_duringMoveLeft() {
         givenBoardWithStoneAt(hero.getX() - 1, hero.getY() - 1); // слева снизу камень
         hero.down();
         board.tick(); 
@@ -941,28 +941,18 @@ public class SnakeTest {
         assertGameOver();
     }
     
-    /**
-     * Метод стартует игру с камнем в заданной позиции
-     * @param x позиция X камня 
-     * @param y позиция Y камня 
-     */
     private void givenBoardWithStoneAt(int x, int y) {
         generator = new HaveStone(x, y);
         setup();
     }
     
-    /**
-     * Метод стартует игру с яблоком в заданной позиции (яблоко несъедаемое!)
-     * @param x позиция X яблока 
-     * @param y позиция Y яблока 
-     */
     private void startGameWithAppleAt(int x, int y) {
         appleAt(x, y);
         setup();
     }
         
     class HaveNothing implements ArtifactGenerator {
-
+        
         @Override
         public Apple generateApple(Hero snake, Apple apple, Stone stone, Walls walls, int boardSize) {
             return new Apple(-1, -1);
@@ -976,7 +966,7 @@ public class SnakeTest {
     }
     
     class HaveApple implements ArtifactGenerator {
-            
+        
         private int x;
         private int y;
 
@@ -998,7 +988,7 @@ public class SnakeTest {
     
     class HaveApples implements ArtifactGenerator {
         
-        private Queue<Apple> apples = new LinkedList<Apple>();
+        private Queue<Apple> apples = new LinkedList<>();
 
         public void addApple(int x, int y) {
             apples.add(new Apple(x, y));            
@@ -1086,25 +1076,47 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 1) двигаясь по инерции влево пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWallDurringMoveLeft() {
+    public void shouldGameOver_whenEatWall_duringMoveLeft() {
+        // given
         hero.down();
         board.tick();
-        hero.left();
-        
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();            
 
+        hero.left();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼◄╕     ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼╕      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
-    
     
     // если змейка наткнется на одну из 4х стен, то она умрет. 
     // насткнуться на стену она может одним из 12 способов:
     // 2) двигаясь по инерции вниз пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWallDurringMoveDown() {                
+    public void shouldGameOver_whenEatWall_duringMoveDown() {                
         hero.down();
         
         board.tick();
@@ -1119,7 +1131,7 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWallDurringMoveUp() {                
+    public void shouldGameOver_whenEatWall_duringMoveUp() {                
         hero.up();
         
         board.tick(); 
@@ -1134,7 +1146,7 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 4) двигаясь по инерции вправо пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWallDurringMoveRight() {                            
+    public void shouldGameOver_whenEatWall_duringMoveRight() {                            
         board.tick();
         board.tick();
         board.tick();    
