@@ -362,57 +362,50 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
     }
-    
-    // проверить что при перемещении вниз координата X не меняется
+
     @Test
-    public void shouldNotChangeXPositionWhenMoveDown() {
-        int oldX = hero.getX();
-        
-        hero.down();
-        board.tick();
-        int newX = hero.getX();
-        
-        assertEquals("новая позиция по X при повороте змейки вниз не должна меняться", oldX, newX);
-    }
-    
-    // проверить что при перемещении вверх меняется координата Y в большую сторону
-    // координата 0,0 размещена в левом верхнем углу. Почему так? не знаю, наверное из прошлого привычка
-    @Test
-    public void shouldTurnUpWhenCallSnakeUp() {
-        int oldY = hero.getY();
-        
+    public void shouldGoUp_inertia() {
+        // given
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         hero.up();
         board.tick();
-        int newY = hero.getY();
-        
-        assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшиться", oldY + 1, newY);
-    }
-    
-    // проверить что при перемещении вверх координата X не меняется
-    @Test // как обычно - ломаем
-    public void shouldNotChangeXPositionWhenMoveUp() {
-        int oldX = hero.getX();
-        
-        hero.up();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼   ╙   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
-        int newX = hero.getX();
-        
-        assertEquals("новая позиция по X при повороте змейки вверх не должна меняться", oldX, newX);
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼   ╙   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
-    
-    // проверить движение вверх по инерции
-    @Test 
-    public void shouldGoUpInertia() {
-        hero.up();
-        board.tick();
-        
-        int oldY = hero.getY();
-        board.tick();
-        int newY = hero.getY();
-        
-        assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY + 1, newY);
-    }
-    
+
     // При движении в противоположном направлении 
     // если длинна змейки 2 клетки (голова и хвост) то она может развернуться
     @Test  
