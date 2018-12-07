@@ -45,16 +45,18 @@ import static org.mockito.Mockito.mock;
 public class SnakeTest {
 
     private static final int BOARD_SIZE = 9;
+    private static final int SNAKE_SIZE = 2;
     private Field board;
     private Hero snake;
     private Stone stone;
     private ArtifactGenerator generator = new HaveNothing();
     private Walls walls = new BasicWalls(BOARD_SIZE);
     private EventListener listener;
+    private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void startGame() {
-        board = new Snake(generator, walls, BOARD_SIZE);
+        board = new Snake(generator, walls, BOARD_SIZE, SNAKE_SIZE);
         listener = mock(EventListener.class);
         board.newGame(new Player(listener));
         snake = board.snake();
@@ -88,7 +90,7 @@ public class SnakeTest {
     // появлялась не в позиции 4,4 а все таки в центре доски игральной
     @Test
     public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
-        board = new Snake(generator, walls, 3);
+        board = new Snake(generator, walls, 3, SNAKE_SIZE);
         board.newGame(new Player(mock(EventListener.class)));
         snake = board.snake();
         
@@ -101,19 +103,117 @@ public class SnakeTest {
         assertSnakeSize(2);
     }
 
+    // Если змейка изначально размером в три клеточки, то она проявится не сразу
+    // она как бы выползает из пещеры
+    @Test
+    public void shouldSnakeLengthIs5_isYouWant() {
+        // given
+        int startLength = 5;
+
+        // when
+        board = new Snake(generator, walls, BOARD_SIZE, startLength);
+        board.newGame(new Player(mock(EventListener.class)));
+        snake = board.snake();
+
+        // then
+        assertSnakeAt(4, 4);
+        assertSnakeSize(5);
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘══► ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═══►☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        snake.up();
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      ▲☼\n" +
+                "☼   ╘══╝☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        snake.up();
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼      ▲☼\n" +
+                "☼      ║☼\n" +
+                "☼    ╘═╝☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
     /**
-     * Метод проверит, что змейка длинной в две клеточки. 
+     * Метод проверит, что змейка длинной в две клеточки.
      * @param expectedLength ожидаемая ждлинна змейки
      */
     private void assertSnakeSize(int expectedLength) {
-        assertEquals("длинна змейки", expectedLength, snake.getLength());        
+        assertEquals("длинна змейки", expectedLength, snake.getLength());
     }
     
     // Поле имеет квадрутную форму, кратную двум + 1. 
     // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
     @Test
     public void shouldExceptionWhenBadBoardSize() {
-        assertEquals(5, new Snake(generator, walls, 4).getSize());
+        assertEquals(5, new Snake(generator, walls, 4, SNAKE_SIZE).getSize());
     }
     
     // Направление движеня змейки изначально в право.
@@ -1133,5 +1233,11 @@ public class SnakeTest {
         // then
         assertNotSame(joystick, board.snake());
     }
+
+    private void asrtBrd(String expected) {
+        assertEquals(expected, printer.getPrinter(
+                board.reader(), null).print());
+    }
+
 
 }

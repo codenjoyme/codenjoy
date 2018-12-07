@@ -55,7 +55,15 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         direction = RIGHT;
         alive = true;
     }
-    
+
+    public static Hero createHero(int size, int startLength) {
+        int x = (size - 1)/2;
+        int y = (size - 1)/2;
+        Hero hero = new Hero(x, y);
+        hero.growBy = Math.max(0, startLength - 2);
+        return hero;
+    }
+
     public int getX() {
         return getHead().getX();
     }
@@ -79,12 +87,12 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
             for (int count = 0; count <= -growBy; count++) {
                 elements.removeFirst();
             }
+            growBy = 0;
         } else if (growBy > 0) {
-            
+            growBy--;
         } else { // == 0
             elements.removeFirst();
         }
-        growBy = 0;        
     }
 
     @Override

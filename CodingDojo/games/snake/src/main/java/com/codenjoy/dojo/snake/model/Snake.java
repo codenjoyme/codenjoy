@@ -36,11 +36,13 @@ public class Snake implements Field {
     private int size;
     private Apple apple;
     private ArtifactGenerator generator;
+    private int startLength;
     private int maxLength;
     private Player player;
 
-    public Snake(ArtifactGenerator generator, Walls walls, int size) {
+    public Snake(ArtifactGenerator generator, Walls walls, int size, int startLength) {
         this.generator = generator;
+        this.startLength = startLength;
         if (size%2 == 0) {
             size++;
         }
@@ -112,14 +114,18 @@ public class Snake implements Field {
     }
 
     @Override
+    public void clearScore(){
+
+    }
+
+    @Override
     public void remove(Player player) {
         player = null;
     }
 
     @Override
     public Hero createSnake() {
-        int position = (size - 1)/2;
-        Hero snake = new Hero(position, position);
+        Hero snake = Hero.createHero(size, startLength);
         generateNewStone(snake);
         generateNewApple(snake);
         return snake;
