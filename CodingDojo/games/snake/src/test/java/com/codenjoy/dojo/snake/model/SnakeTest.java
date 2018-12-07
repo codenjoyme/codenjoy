@@ -147,7 +147,7 @@ public class SnakeTest {
     // она как бы выползает из пещеры
     @Test
     public void shouldSnakeLengthIs5_ifYouWant() {
-        givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE), 5);
+        givenBoardWithSnakeSize(5);
 
         // then
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
@@ -244,7 +244,11 @@ public class SnakeTest {
         assertSnakeAt(7, 6);
         assertEquals(5, hero.getLength());
     }
-    
+
+    void givenBoardWithSnakeSize(int snakeSize) {
+        givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE), snakeSize);
+    }
+
     // Направление движеня змейки изначально в право.
     @Test
     public void shouldSnakeHasRightDirection_whenGameStart() {
@@ -506,17 +510,38 @@ public class SnakeTest {
     // если длинна змейки 3 клетки (голова и хвост) то она себя съедает
     @Test  
     public void shouldGameOverWhenSnakeEatItself() {
-        getLong3Snake();
-        
+        givenBoardWithSnakeSize(4);
+
+        board.tick();
+        board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘══► ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         hero.left();
-        board.tick();    
-        
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘◄║ ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
-        
-    /**
-     * Метод првоеряет, что игра окончена
-     */
+
     private void assertGameOver() {
         assertTrue("Ожидается конец игры", !hero.isAlive());
     }
@@ -525,7 +550,7 @@ public class SnakeTest {
     // к доске (методам доски) ничего не меняет.
     @Test
     public void shouldDoNothingWhenTryToTurnSnakeUpAfterGameOver() {
-        killSnake();
+        shouldGameOverWhenSnakeEatItself();
 
         Direction direction = hero.getDirection();
 
@@ -759,7 +784,7 @@ public class SnakeTest {
 
         board.tick();
 
-        assertGameOver(); 
+        assertGameOver();
     }
     
     // Если змейка наткнется на камень, то она умрет. 
