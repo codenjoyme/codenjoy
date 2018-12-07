@@ -681,7 +681,7 @@ public class SnakeTest {
     
     // проверить как змея ест сама себя при движении влево
     @Test  
-    public void shouldGameOverWhenSnakeEatItselfDuringMoveLeft() {
+    public void shouldGameOver_whenSnakeEatItselfDuringMoveLeft() {
         // given
         givenBoardWithSnakeSize(3);
 
@@ -689,12 +689,31 @@ public class SnakeTest {
         board.tick();
         hero.left();
         board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼  ◄╝   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         
-        //when 
+        // when
         hero.right();
         board.tick();
         
-        //then
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ║►   ☼\n" + // TODO проверить расположение туловища, какое-то оно не ок
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
