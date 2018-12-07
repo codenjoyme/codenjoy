@@ -36,7 +36,6 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.*;
@@ -273,6 +272,16 @@ public class SnakeTest {
 
         // then
         assertEquals("[-1,-1]", stone.toString());
+    }
+
+    // Если яблока нет, то его координаты -1, -1
+    @Test
+    public void shouldBoardContainApple_whenGameStart() {
+        // when
+        Apple apple = board.getApple();
+
+        // then
+        assertEquals("[-1,-1]", apple.toString());
     }
         
     // камень (при каждом обращении к нему через доску)
@@ -946,7 +955,7 @@ public class SnakeTest {
         setup();
     }
     
-    private void startGameWithAppleAt(int x, int y) {
+    private void givenBoardWithAppleAt(int x, int y) {
         appleAt(x, y);
         setup();
     }
@@ -1252,22 +1261,56 @@ public class SnakeTest {
                 "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
-
-    // яблоко может появиться в любом месте поля
-    @Test
-    public void shouldBoardContainApple_whenGameStart() {
-        Apple apple = board.getApple();
-        assertNotNull("Поле должно содержать яблоко", apple);    
-    }
     
     // после съедения яблока появляется тут же другое яблоко.
     @Test
     public void shouldAppearNewApple_whenEatApple() {
+        // given
         int appleX = hero.getX() + 1;
         int appleY = hero.getY();
-        startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко (оно там будет всегда появляться)
-        board.tick();        
-        
+        givenBoardWithAppleAt(appleX, appleY); // на пути змейки есть яблоко (они там будут всегда)
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►☺  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        hero.up();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼    ▲  ☼\n" +
+                "☼    ║  ☼\n" +
+                "☼    ╙  ☼\n" +
+                "☼    ☺  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
         Apple newApple = board.getApple();
         assertEquals(appleX, newApple.getX()); // потому координаты старого и нового яблока совпадают
         assertEquals(appleY, newApple.getY());
@@ -1276,44 +1319,139 @@ public class SnakeTest {
     // после съедения камня появляется тут же другой камень.
     @Test
     public void shouldAppearNewStone_whenEatStone() {
+        // given
         int stoneX = hero.getX();
         int stoneY = hero.getY() + 1;
 
         getLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ☻   ☼\n" +
+                "☼╔══►   ☼\n" +
+                "☼╚═════╕☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         hero.up();
         board.tick();
         board.tick();
 
-        Stone newStone = board.getStone();
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        assertNotSame(stoneX, newStone.getX()); // потому координаты после съедания должны отличаться
+        Stone newStone = board.getStone();
+        assertNotSame(stoneX, newStone.getX());
         assertNotSame(stoneY, newStone.getY());
     }
     
     // Змейка может съесть яблоки и при этом ее длинна увеличится на 1. 
     @Test
     public void shouldSnakeIncreaseLength_whenEatApple() {
-        startGameWithAppleAt(hero.getX() + 1, hero.getY()); // на пути змейки есть яблоко
-        board.tick();        
-        
-        assertEquals("Длинна змеи", 3, hero.getLength());
+        givenBoardWithAppleAt(hero.getX() + 1, hero.getY()); // на пути змейки есть яблоко
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►☺  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+        assertEquals(3, hero.getLength());
     }
     
     // теперь скушаем два раза яблоко :)
     @Test
     public void shouldSnakeIncreaseLengthTwice_whenEatAppleTwice() {
+        // given
         // на пути змейки есть два подряд яблока
         generator = new HaveApples();
         ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY()); // немного криво, но пока так TODO
         ((HaveApples)generator).addApple(hero.getX() + 2, hero.getY());
         setup();
-        
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►☺  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+        assertEquals(2, hero.getLength());
+
+        // when
         board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═►☺ ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+        assertEquals(3, hero.getLength());
+
+        // when
         board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘══► ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+        assertEquals(4, hero.getLength());
+
+        // when
         board.tick();
-        
-        assertEquals("Длинна змеи", 4, hero.getLength());
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘══►☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+        assertEquals(4, hero.getLength());
     }
     
     // Если змейка съест сама себя - она умрет. 
