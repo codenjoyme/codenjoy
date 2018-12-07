@@ -100,6 +100,8 @@ public class SnakeTest {
                 "☼☼☼\n");
     }
 
+    // Поле имеет квадрутную форму, кратную двум + 1.
+    // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
     @Test
     public void shouldSnakeAtCenter_sizeIsOdd() {
         givenBoard(4);
@@ -241,14 +243,6 @@ public class SnakeTest {
                 "☼☼☼☼☼☼☼☼☼\n");
         assertSnakeAt(7, 6);
         assertEquals(5, snake.getLength());
-    }
-
-    // Поле имеет квадрутную форму, кратную двум + 1.
-    // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
-    @Test
-    public void shouldExceptionWhenBadBoardSize() {
-        int size = 4;
-        assertEquals(5, new Snake(generator, new BasicWalls(size), size, SNAKE_SIZE).getSize());
     }
     
     // Направление движеня змейки изначально в право.
