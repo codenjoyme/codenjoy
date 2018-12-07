@@ -2058,11 +2058,33 @@ public class SnakeTest {
     // она телепортировавшись натыкается на яблоко, которое должна съесть!
     @Test
     public void shouldEatApple_whenTeleported() {
+        // given
         appleAt(0, 4); // яблоко на границе
         givenBoardWithoutWalls();
-        assertSnakeAt(4, 4);
 
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "☺  ╘►    \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
+
+        // when
         boardSizeTicks();  // в какой-то момент мы телепортируемся прям на яблочко
+
+        // then
+        asrtBrd("         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "☺ ╘═►    \n" +
+                "         \n" +
+                "         \n" +
+                "         \n" +
+                "         \n");
 
         assertEquals(3, hero.getLength());
     }
