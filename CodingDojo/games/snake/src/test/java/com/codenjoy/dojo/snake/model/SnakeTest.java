@@ -139,14 +139,14 @@ public class SnakeTest {
     
     // Змейка размером в две клеточки. 
     @Test
-    public void shouldSnakeLengthIs2WhenStartGame() {
+    public void shouldSnakeLengthIs2_whenStartGame() {
         assertEquals(2, snake.getLength());
     }
 
     // Если змейка изначально размером в три клеточки, то она проявится не сразу
     // она как бы выползает из пещеры
     @Test
-    public void shouldSnakeLengthIs5_isYouWant() {
+    public void shouldSnakeLengthIs5_ifYouWant() {
         givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE), 5);
 
         // then
@@ -247,7 +247,7 @@ public class SnakeTest {
     
     // Направление движеня змейки изначально в право.
     @Test
-    public void shouldSnakeHasRightDirectionWhenGameStart() {
+    public void shouldSnakeHasRightDirection_whenGameStart() {
         // then
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -263,7 +263,7 @@ public class SnakeTest {
 
     // Если камня нет, то его координаты -1, -1
     @Test
-    public void shouldBoardContainStoneWhenGameStart() {
+    public void shouldBoardContainStone_whenGameStart() {
         // when
         Stone stone = board.getStone();
 
@@ -271,51 +271,64 @@ public class SnakeTest {
         assertEquals("[-1,-1]", stone.toString());
     }
         
-    // камень будет (при каждом обращении к нему через доску) 
-    // иметь разные координаты что недопустимо 
+    // камень (при каждом обращении к нему через доску)
+    // убдет возвращать один и тот же объект
     @Test
-    public void shouldSnakeAtOnePositionDurringOnegame() {
-        assertSame(stone, board.getStone()); // если объект один и тот же, то и будет там те же координаты
+    public void shouldSnakeAtOnePosition_duringOneGame() {
+        assertSame(stone, board.getStone());
     }
         
-    // при перемещении в право не должна меняться Y координата 
     @Test
-    public void shouldChangeXPositionWhenTurnRight() {
-        int oldX = snake.getX();
-        
+    public void shouldGoRight_inertia() {
+        // given
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
-        int newX = snake.getX();
-        
-        assertEquals("новая позиция по X после перемещения должна увеличиться", oldX + 1, newX);
-    }
-    
-    // при перемещении вправо не должна меняться Y координата
-    @Test
-    public void shouldNotChangeYPositionWhenTurnRight() {
-        int oldY = snake.getY();
-        
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
-        int newY = snake.getY();
-        
-        assertEquals("новая позиция по Y после перемещения не должна меняться", oldY, newY);
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼    ╘► ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
-    
-    // Управлять змейкой можно движениями влево, вправо, вверх, вниз и ускорение. 
-    // Ускорение можно реализовать на UI путем учеличения числа циклов в секунду, 
-    // модель наша будет оперировать циклами - одним перемещением змейки) 
-    // так как это модель, то тут нет никаких UI кнопок и прочих штук - реализуем 
-    // один едиственный метод down() который будет перемещать змейку за следующий такт вниз.
-    // такты будем отсчитывать соовтествующим методом.    
-    // при перемещении вниз меняется координата Y в меньшую сторону - это и проверяем
+
     @Test
-    public void shouldTurnDownWhenCallSnakeDown() {
+    public void shouldTurnDown_whenCallSnakeDown() {
         int oldY = snake.getY();
         
         snake.down();
         board.tick();
         int newY = snake.getY();
         
-        assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшаться", oldY - 1, newY);
+        assertEquals(oldY - 1, newY);
     }
     
     // теперь я могу проверить как змейка двигается по инерции вниз
