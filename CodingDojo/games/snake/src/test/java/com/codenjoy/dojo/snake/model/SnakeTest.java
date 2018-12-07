@@ -534,7 +534,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
-                "☼   ╘◄║ ☼\n" +
+                "☼   ╘◄║ ☼\n" + // TODO тут как-то не совсем правильное расположение туловища
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -648,14 +648,34 @@ public class SnakeTest {
     public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
         // given
         givenBoardWithSnakeSize(3);
+
         hero.up();
         board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼  ╘╝   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         
         // when
         hero.down();
         board.tick();
         
         // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ║   ☼\n" +
+                "☼   ▼   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
