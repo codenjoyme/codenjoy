@@ -1491,42 +1491,41 @@ public class SnakeTest {
                 "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();     
     }
-
-    /**
-     * на пути змейки есть три подряд яблока, она увеличивается до размера, когда может себя съесть - 5
-     */
-    private void getLong5Snake() {
-        generator = new HaveApples();
-        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
-        ((HaveApples)generator).addApple(hero.getX() + 2, hero.getY());
-        ((HaveApples)generator).addApple(hero.getX() + 3, hero.getY());
-        setup();
-        
-        board.tick();
-        board.tick();
-        board.tick();        
-        assertEquals("Длинна змеи", 5, hero.getLength());
-    } 
     
     // хочу проверить, что змейка длинной в 4 никогда себя не съест.
     @Test
-    public void shouldNotEatItself_whenlengthIs4() {        
-        getLong4Snake();        
+    public void shouldNotEatItself_whenLengthIs4() {
+        givenBoardWithSnakeSize(4);
         
-        // теперь попробуем укусить себя за хвост - это не должно получиться        
+        // when
+        // теперь попробуем укусить себя за хвост - это не должно получиться
         goOneCircle();
         goOneCircle();
-        
-        assertTrue("Змея должна быть жива!", hero.isAlive());
+        goOneCircle();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╔►   ☼\n" +
+                "☼  ╚╕   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+        assertEquals(true, hero.isAlive());
     }
 
     private void goOneCircle() {
         hero.down();
         board.tick();
+
         hero.left();
         board.tick();
+
         hero.up();
         board.tick();
+
         hero.right();
         board.tick();
     }
