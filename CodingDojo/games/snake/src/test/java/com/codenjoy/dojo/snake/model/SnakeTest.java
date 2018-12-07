@@ -809,7 +809,6 @@ public class SnakeTest {
     // начнем с простого - 1) змейка движется по инерции вправо и натыкается на камень
     @Test
     public void shouldGameOver_whenEatStoneDuringMoveRight() {
-        // given
         givenBoardWithStoneAt(hero.getX() + 1, hero.getY()); // прямо на пути камень
 
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
@@ -845,9 +844,30 @@ public class SnakeTest {
     public void shouldGameOver_whenEatStoneDurringMoveDown() {
         givenBoardWithStoneAt(hero.getX(), hero.getY() - 1); // внизу камень
         hero.down();
-        
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘▼   ☼\n" + // TODO обрати внимание на то что у змейки сернутая шея :)
+                "☼   ☻   ☼\n" + // наверное надо применять direction после того как тик следующий начнется
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
 
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼   ▼   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     } 
     
@@ -855,12 +875,33 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatStoneDurringMoveUp() {        
+    public void shouldGameOver_whenEatStoneDuringMoveUp() {
         givenBoardWithStoneAt(hero.getX(), hero.getY() + 1); // вверху камень
         hero.up();
-        
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ☻   ☼\n" +
+                "☼  ╘▲   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
 
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼   ╙   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     } 
     
@@ -868,14 +909,35 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 4) двигаясь по инерции влево пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatStoneDurringMoveLeft() {        
+    public void shouldGameOver_whenEatStoneDuringMoveLeft() {
         givenBoardWithStoneAt(hero.getX() - 1, hero.getY() - 1); // слева снизу камень
         hero.down();
         board.tick(); 
         hero.left();
-        
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼  ☻◄   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
 
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ◄╕   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
