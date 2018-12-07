@@ -609,10 +609,10 @@ public class SnakeTest {
 
     // проверить как змея ест сама себя при движении вниз
     @Test  
-    public void shouldGameOverWhenSnakeEatItselfDuringMoveDown() {
+    public void shouldGameOver_whenSnakeEatItselfDuringMoveDown() {
         // given
-        getLong3Snake();
-                
+        givenBoardWithSnakeSize(3);
+
         hero.down();
         board.tick();
         
@@ -628,7 +628,7 @@ public class SnakeTest {
     @Test  
     public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
         // given
-        getLong3Snake();        
+        givenBoardWithSnakeSize(3);
         hero.up();
         board.tick();
         
@@ -644,8 +644,8 @@ public class SnakeTest {
     @Test  
     public void shouldGameOverWhenSnakeEatItselfDuringMoveLeft() {
         // given
-        getLong3Snake();
-        
+        givenBoardWithSnakeSize(3);
+
         hero.down();
         board.tick();
         hero.left();
@@ -663,8 +663,8 @@ public class SnakeTest {
     @Test  
     public void shouldGameOverWhenSnakeEatItselfDuringMoveRight() {
         // given
-        getLong3Snake();
-        
+        givenBoardWithSnakeSize(3);
+
         hero.down();
         board.tick();
         hero.right();
@@ -1143,21 +1143,8 @@ public class SnakeTest {
         board.tick();        
         assertEquals("Длинна змеи", 4, hero.getLength());
     }
-    
-    /**
-     * на пути змейки есть одно яблоко, она увеличивается до размера когда может себя укусить разворачиваясь на 180 
-     */
-    private void getLong3Snake() {
-        generator = new HaveApples();
-        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
-        setup();
-        
-        board.tick();
-        board.tick();        
-        assertEquals("Длинна змеи", 3, hero.getLength());
-    }
-    
-    // теперь давайте попробуем реализовать другое поведение - змейка может кушать камни, 
+
+    // теперь давайте попробуем реализовать другое поведение - змейка может кушать камни,
     // но тогда она сокращается в размере на 10 квадратиков.
     @Test
     public void shouldDivSnakeWhenEatStone (){ 
