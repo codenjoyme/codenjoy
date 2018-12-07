@@ -248,14 +248,27 @@ public class SnakeTest {
     // Направление движеня змейки изначально в право.
     @Test
     public void shouldSnakeHasRightDirectionWhenGameStart() {
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertEquals(Direction.RIGHT, snake.getDirection());
     }
 
-    // Поле содержит один камень для начала.
+    // Если камня нет, то его координаты -1, -1
     @Test
     public void shouldBoardContainStoneWhenGameStart() {
+        // when
         Stone stone = board.getStone();
-        assertNotNull("Поле должно содержать камень", stone);    
+
+        // then
+        assertEquals("[-1,-1]", stone.toString());
     }
         
     // камень будет (при каждом обращении к нему через доску) 
