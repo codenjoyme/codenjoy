@@ -413,7 +413,7 @@ public class SnakeTest {
     // При движении в противоположном направлении 
     // если длинна змейки 2 клетки (голова и хвост) то она может развернуться
     @Test  
-    public void shouldTurn180LeftRightWhenSnakeSizeIs2() {
+    public void shouldTurn180LeftRight_whenSnakeSizeIs2() {
         // given
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -509,7 +509,7 @@ public class SnakeTest {
     // При движении в противоположном направлении 
     // если длинна змейки 3 клетки (голова и хвост) то она себя съедает
     @Test  
-    public void shouldGameOverWhenSnakeEatItself() {
+    public void shouldGameOver_whenSnakeEatItself() {
         givenBoardWithSnakeSize(4);
 
         board.tick();
@@ -549,56 +549,23 @@ public class SnakeTest {
     // Умрет - значит конец игры. Если конец игры, значит любое обращение 
     // к доске (методам доски) ничего не меняет.
     @Test
-    public void shouldDoNothingWhenTryToTurnSnakeUpAfterGameOver() {
-        shouldGameOverWhenSnakeEatItself();
+    public void shouldDoNothing_whenTryToTurnSnakeUpAfterGameOver() {
+        shouldGameOver_whenSnakeEatItself();
 
         Direction direction = hero.getDirection();
 
         hero.up();
         hero.down();
         hero.left();
+        hero.right();
+        hero.up();
 
         assertEquals(direction, hero.getDirection());
-    }
-
-    /**
-     * Метод убивающий змейку в начале игры.
-     */
-    private void killSnake() {
-        // тут нам надо съесть хоть одно яблоко
-        generator = new HaveApples();
-        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
-        setup();
-        board.tick();
-
-        // а потом укусить себя :)
-        hero.left();
-        board.tick();
-        
-        assertGameOver();
-    }
-
-    private void killSnakeWhenMoveRight() {
-        // тут нам надо съесть хоть одно яблоко
-        generator = new HaveApples();
-        ((HaveApples)generator).addApple(hero.getX() - 1, hero.getY());
-        setup();
-        board.tick();
-
-        hero.left();
-        board.tick();
-        board.tick();
-
-        // а потом укусить себя :)
-        hero.right();
-        board.tick();
-
-        assertGameOver();
     }
     
     // проверить поворот вправо    
     @Test  
-    public void shouldMoveRightWhenTurnRight() {
+    public void shouldMoveRight_whenTurnRight() {
         hero.down();
         board.tick();
 
@@ -611,18 +578,7 @@ public class SnakeTest {
         
         assertEquals("новая позиция по X после поворота вправо должна увеличиться", oldX + 1, newX);
     }
-    
-    @Test
-    public void shouldDoNothingWhenTryToTurnSnakeRightAfterGameOver() {
-        killSnake();
 
-        Direction direction = hero.getDirection();
-
-        hero.right();
-
-        assertEquals(direction, hero.getDirection());
-    }
-        
     // проверить как змея ест сама себя при движении вниз
     @Test  
     public void shouldGameOverWhenSnakeEatItselfDuringMoveDown() {
@@ -1012,9 +968,8 @@ public class SnakeTest {
 
     // проверить что tick ничего не делает, когда игра закончена
     @Test
-    public void shouldDoNothingWhenTryTotactAfterGameOver() {
-        killSnake();
-        assertGameOver();
+    public void shouldDoNothingWhenTryTotActAfterGameOver() {
+        shouldGameOver_whenSnakeEatItself();
 
         Point head = hero.getHead();
         int x = head.getX();
@@ -1360,9 +1315,8 @@ public class SnakeTest {
 
     @Test
     public void shouldGameReturnsRealJoystick() {
-        killSnake();
+        shouldGameOver_whenSnakeEatItself();
 
-        assertGameOver();
         Joystick joystick = board.snake();
 
         // when
