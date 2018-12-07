@@ -615,12 +615,31 @@ public class SnakeTest {
 
         hero.down();
         board.tick();
-        
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘╗   ☼\n" +
+                "☼   ▼   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
         // when
         hero.up();
         board.tick();
  
-        //then
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼   ║   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
