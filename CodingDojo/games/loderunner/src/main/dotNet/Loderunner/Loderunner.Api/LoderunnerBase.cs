@@ -19,13 +19,14 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
+using System;
+using WebSocketSharp;
 
 namespace Loderunner.Api
 {
     public abstract class LoderunnerBase
     {
-        protected readonly string Server = @"ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+        protected readonly string Server = @"ws://loderunner.luxoft.com:8080/codenjoy-contest/ws";
         private const string ResponsePrefix = "board=";
 
         public LoderunnerBase(string userName)
@@ -42,29 +43,33 @@ namespace Loderunner.Api
 
         public void Play()
         {
-            var uri = new Uri(Server + "?user=" + Uri.EscapeDataString(UserName));
+            var socket = new WebSocket(Server + "?user=" + UserName);
+            socket.OnMessage += Socket_OnMessage;
+            socket.Connect();
 
-            using (var socket = new WebSocket(uri))
+            while (!ShouldExit && socket.ReadyState != WebSocketState.Closed)
             {
-                socket.Connect();
+            }
+        }
 
-                while (!ShouldExit)
+        private void Socket_OnMessage(object sender, MessageEventArgs e)
+        {
+            if (!ShouldExit)
+            {
+                var response = e.Data;
+
+                if (!response.StartsWith(ResponsePrefix))
                 {
-                    var response = socket.Recv();
+                    Console.WriteLine("Something strange is happening on the server... Response:\n{0}", response);
+                    ShouldExit = true;
+                }
+                else
+                {
+                    var boardString = response.Substring(ResponsePrefix.Length);
 
-                    if (!response.StartsWith(ResponsePrefix))
-                    {
-                        Console.WriteLine("Something strange is happening on the server... Response:\n{0}", response);
-                        ShouldExit = true;
-                    }
-                    else
-                    {
-                        var boardString = response.Substring(ResponsePrefix.Length);
+                    var action = DoMove(new GameBoard(boardString));
 
-                        var action = DoMove(new GameBoard(boardString));
-
-                        socket.Send(action);
-                    }
+                    ((WebSocket)sender).Send(action);
                 }
             }
         }
