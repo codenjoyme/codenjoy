@@ -287,6 +287,10 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         // do nothing
     }
 
+    public int getGrowBy() {
+        return growBy;
+    }
+
     public void init(Player player) {
         this.player = player;
     }

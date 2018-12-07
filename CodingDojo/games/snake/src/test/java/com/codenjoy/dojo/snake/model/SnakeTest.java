@@ -158,6 +158,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertSnakeAt(4, 4);
         assertEquals(5, hero.getLength());
 
@@ -174,6 +175,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertSnakeAt(5, 4);
         assertEquals(5, hero.getLength());
 
@@ -190,6 +192,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertSnakeAt(6, 4);
         assertEquals(5, hero.getLength());
 
@@ -206,6 +209,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertSnakeAt(7, 4);
         assertEquals(5, hero.getLength());
 
@@ -223,6 +227,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertSnakeAt(7, 5);
         assertEquals(5, hero.getLength());
 
@@ -240,6 +245,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertSnakeAt(7, 6);
         assertEquals(5, hero.getLength());
     }
@@ -261,6 +267,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(Direction.RIGHT, hero.getDirection());
     }
 
@@ -548,6 +555,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
 
@@ -649,6 +657,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -685,6 +694,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -723,6 +733,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -761,6 +772,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
 
@@ -843,6 +855,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -877,6 +890,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     } 
     
@@ -911,6 +925,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     } 
     
@@ -947,6 +962,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -1118,6 +1134,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -1155,6 +1172,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼   ╓   ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -1192,6 +1210,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }    
     
@@ -1228,6 +1247,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }    
 
@@ -1259,6 +1279,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();
     }
     
@@ -1384,6 +1405,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(3, hero.getLength());
     }
     
@@ -1406,6 +1428,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(2, hero.getLength());
 
         // when
@@ -1421,6 +1444,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(3, hero.getLength());
 
         // when
@@ -1436,6 +1460,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(4, hero.getLength());
 
         // when
@@ -1451,6 +1476,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(4, hero.getLength());
     }
     
@@ -1489,9 +1515,48 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertGameOver();     
     }
-    
+
+    @Test
+    public void shouldGameOver_whenEatItself_case2() {
+        givenBoardWithSnakeSize(5);
+        board.tick();
+
+        hero.down();
+        board.tick();
+        hero.left();
+        board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘═╗  ☼\n" +
+                "☼   ◄╝  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        hero.up();
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲╗  ☼\n" +
+                "☼   ╚╝  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        assertGameOver();
+    }
+
     // хочу проверить, что змейка длинной в 4 никогда себя не съест.
     @Test
     public void shouldNotEatItself_whenLengthIs4() {
@@ -1513,6 +1578,7 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
         assertEquals(true, hero.isAlive());
     }
 
@@ -1530,32 +1596,57 @@ public class SnakeTest {
         board.tick();
     }
 
-    /**
-     * на пути змейки есть подряд два яблока, она увеличивается до размера, когда еще не может себя съесть - 4 
-     */
-    private void getLong4Snake() {
-        generator = new HaveApples();
-        ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY());
-        ((HaveApples)generator).addApple(hero.getX() + 2, hero.getY());
-        setup();
-        
-        board.tick();
-        board.tick();
-        board.tick();        
-        assertEquals("Длинна змеи", 4, hero.getLength());
-    }
-
     // теперь давайте попробуем реализовать другое поведение - змейка может кушать камни,
     // но тогда она сокращается в размере на 10 квадратиков.
     @Test
     public void shouldDivSnake_whenEatStone (){ 
         getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 11);
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ☻   ☼\n" +
+                "☼╔══►   ☼\n" +
+                "☼╚═════╕☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         hero.up();
         board.tick();
         board.tick();
-                
-        assertEquals("Длинна змеи после съедения камня", 1, hero.getLength());
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        assertEquals(1, hero.getLength());
+
+        // when
+        hero.right();
+        board.tick();
+
+        // then
+        // она еще жива
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼    ►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☻     ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        assertEquals(true, hero.isAlive());
     }  
         
     /**

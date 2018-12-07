@@ -85,8 +85,9 @@ public class Snake implements Field {
         }
         
         // получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
+        // но только если мы не растем сейчас (на старте или от съеденного яблока)
         // вроде логично
-        if (snake().itsMyTail(point)) {
+        if (snake().itsMyTail(point) && snake().getGrowBy() == 0) {
             return new EmptySpace(point);
         }        
         
