@@ -50,30 +50,33 @@ public class SnakeTest {
     private Hero snake;
     private Stone stone;
     private ArtifactGenerator generator = new HaveNothing();
-    private Walls walls = new BasicWalls(BOARD_SIZE);
     private EventListener listener;
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
-    public void startGame() {
-        board = new Snake(generator, walls, BOARD_SIZE, SNAKE_SIZE);
-        listener = mock(EventListener.class);
-        board.newGame(new Player(listener));
-        snake = board.snake();
-        stone = board.getStone();
+    public void setup() {
+        givenBoard(BOARD_SIZE);
     }
         
     // На поле появляется змейка 
     @Test
     public void shouldSnakeAtBoardWhenGameStart() {        
-        assertNotNull("змейка должна быть", board.snake());
+        assertNotSame(null, board.snake());
     }
     
     // змейка находится в центре экрана при старте игры
     // исправить координаты центры змейки на старте    
     @Test
-    public void shouldSnakeAtCenterOfBoardWhenGameStart() {        
-        assertSnakeAt(4, 4);
+    public void shouldSnakeAtCenterOfBoardWhenGameStart() {
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
 
     /**
@@ -90,11 +93,46 @@ public class SnakeTest {
     // появлялась не в позиции 4,4 а все таки в центре доски игральной
     @Test
     public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
-        board = new Snake(generator, walls, 3, SNAKE_SIZE);
-        board.newGame(new Player(mock(EventListener.class)));
+        givenBoard(3);
+
+        asrtBrd("☼☼☼\n" +
+                "☼►☼\n" +
+                "☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSnakeAtCenter_sizeIsOdd() {
+        givenBoard(4);
+
+        // TODO сам понимаешь что-то тут не то :)
+        asrtBrd("     \n" +
+                "☼☼☼☼ \n" +
+                "☼╘►☼ \n" +
+                "☼  ☼ \n" +
+                "☼☼☼☼ \n");
+    }
+
+    void givenBoard(int size) {
+        givenBoard(size, new BasicWalls(size), SNAKE_SIZE);
+    }
+
+    private void givenBoard(int size, Walls walls, int snakeSize) {
+        board = new Snake(generator, walls, size, snakeSize);
+        listener = mock(EventListener.class);
+        board.newGame(new Player(listener));
         snake = board.snake();
-        
-        assertSnakeAt(1, 1);        
+        stone = board.getStone();
+    }
+
+    @Test
+    public void shouldSnakeAtCenter_sizeIs5() {
+        givenBoard(5);
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼╘► ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
     }
     
     // Змейка размером в две клеточки. 
@@ -107,13 +145,7 @@ public class SnakeTest {
     // она как бы выползает из пещеры
     @Test
     public void shouldSnakeLengthIs5_isYouWant() {
-        // given
-        int startLength = 5;
-
-        // when
-        board = new Snake(generator, walls, BOARD_SIZE, startLength);
-        board.newGame(new Player(mock(EventListener.class)));
-        snake = board.snake();
+        givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE), 5);
 
         // then
         assertSnakeAt(4, 4);
@@ -213,7 +245,8 @@ public class SnakeTest {
     // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
     @Test
     public void shouldExceptionWhenBadBoardSize() {
-        assertEquals(5, new Snake(generator, walls, 4, SNAKE_SIZE).getSize());
+        int size = 4;
+        assertEquals(5, new Snake(generator, new BasicWalls(size), size, SNAKE_SIZE).getSize());
     }
     
     // Направление движеня змейки изначально в право.
@@ -429,7 +462,7 @@ public class SnakeTest {
         // тут нам надо съесть хоть одно яблоко
         generator = new HaveApples();
         ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());
-        startGame();
+        setup();
         board.tick();
 
         // а потом укусить себя :)
@@ -443,7 +476,7 @@ public class SnakeTest {
         // тут нам надо съесть хоть одно яблоко
         generator = new HaveApples();
         ((HaveApples)generator).addApple(snake.getX() - 1, snake.getY());
-        startGame();
+        setup();
         board.tick();
 
         snake.left();
@@ -676,7 +709,7 @@ public class SnakeTest {
      */
     private void startGameWithStoneAt(int x, int y) {             
         generator = new HaveStone(x, y);
-        startGame();
+        setup();
     }
     
     /**
@@ -686,7 +719,7 @@ public class SnakeTest {
      */
     private void startGameWithAppleAt(int x, int y) {
         appleAt(x, y);
-        startGame();
+        setup();
     }
         
     class HaveNothing implements ArtifactGenerator {
@@ -942,7 +975,7 @@ public class SnakeTest {
         generator = new HaveApples();
         ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY()); // немного криво, но пока так TODO 
         ((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
-        startGame(); 
+        setup();
         
         board.tick();
         board.tick();
@@ -976,7 +1009,7 @@ public class SnakeTest {
         ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
         ((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
         ((HaveApples)generator).addApple(snake.getX() + 3, snake.getY());
-        startGame(); 
+        setup();
         
         board.tick();
         board.tick();
@@ -1014,7 +1047,7 @@ public class SnakeTest {
         generator = new HaveApples();
         ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
         ((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
-        startGame(); 
+        setup();
         
         board.tick();
         board.tick();
@@ -1028,7 +1061,7 @@ public class SnakeTest {
     private void getLong3Snake() {
         generator = new HaveApples();
         ((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
-        startGame(); 
+        setup();
         
         board.tick();
         board.tick();        
@@ -1070,7 +1103,7 @@ public class SnakeTest {
 
         generator = new MixGenerators(stoneGenerator, appleGenerator);
         
-        startGame(); 
+        setup();
         
         board.tick();
         board.tick();
@@ -1199,8 +1232,7 @@ public class SnakeTest {
     }
 
     private void startGameWithoutWalls() {
-        walls = new Walls();
-        startGame();
+        givenBoard(BOARD_SIZE, new Walls(), SNAKE_SIZE);
     }
 
     // проверить что если нет стен, и змейка проходит сквозь стены
