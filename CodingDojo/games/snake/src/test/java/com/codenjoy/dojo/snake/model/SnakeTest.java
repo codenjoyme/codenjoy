@@ -54,7 +54,7 @@ public class SnakeTest {
 
     @Before
     public void setup() {
-        givenBoard(BOARD_SIZE);
+        givenBoardSize(BOARD_SIZE);
     }
         
     // На поле появляется змейка 
@@ -92,7 +92,7 @@ public class SnakeTest {
     // появлялась не в позиции 4,4 а все таки в центре доски игральной
     @Test
     public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
-        givenBoard(3);
+        givenBoardSize(3);
 
         asrtBrd("☼☼☼\n" +
                 "☼►☼\n" +
@@ -103,7 +103,7 @@ public class SnakeTest {
     // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
     @Test
     public void shouldSnakeAtCenter_sizeIsOdd() {
-        givenBoard(4);
+        givenBoardSize(4);
 
         // TODO сам понимаешь что-то тут не то :)
         asrtBrd("     \n" +
@@ -113,7 +113,7 @@ public class SnakeTest {
                 "☼☼☼☼ \n");
     }
 
-    void givenBoard(int size) {
+    void givenBoardSize(int size) {
         givenBoard(size, new BasicWalls(size), SNAKE_SIZE);
     }
 
@@ -127,7 +127,7 @@ public class SnakeTest {
 
     @Test
     public void shouldSnakeAtCenter_sizeIs5() {
-        givenBoard(5);
+        givenBoardSize(5);
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -1457,17 +1457,38 @@ public class SnakeTest {
     // Если змейка съест сама себя - она умрет. 
     // Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.    
     @Test
-    public void shouldGameOver_whenEatItself() {        
-        getLong5Snake();        
-        
-        // теперь попробуем укусить себя за хвост        
+    public void shouldGameOver_whenEatItself() {
+        givenBoardWithSnakeSize(5);
+
         hero.down();
         board.tick();
         hero.left();
         board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘╗   ☼\n" +
+                "☼  ◄╝   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         hero.up();
         board.tick();
-        
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ▲╗   ☼\n" +
+                "☼  ╚╝   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();     
     }
 
