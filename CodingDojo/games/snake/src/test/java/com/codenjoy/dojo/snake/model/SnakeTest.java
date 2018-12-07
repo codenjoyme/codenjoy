@@ -754,77 +754,87 @@ public class SnakeTest {
                 "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
-    
-    // проверить что при перемещении влево меняется координата X  в меньшую сторону
-    @Test
-    public void shouldChangeXPosition_whenTurnLeft() {
-        hero.down();
-        board.tick();
-        
-        int oldX = hero.getX();
-        
-        hero.left();
-        board.tick();
-        int newX = hero.getX();
-        
-        assertEquals("новая позиция по X после перемещения влево уменьшается", oldX - 1, newX);
-    }
-    
-    // проверить что при перемещении влево координата Y не меняется
-    @Test
-    public void shouldNotChangeYPosition_whenTurnLeft() {
-        hero.down();
-        board.tick();
-        
-        int oldY = hero.getY();
-        
-        hero.left();
-        board.tick();
-        int newY = hero.getY();
-        
-        assertEquals("новая позиция по Y после перемещения влево не должна меняться", oldY, newY);
-    } 
-    
+
     // проверить движение влево по инерции
     @Test
     public void shouldNotChangeYPosition_whenTurnLeftInertia() {
+        // given
         hero.down();
         board.tick();
+
         hero.left();
         board.tick();
-        
-        int oldY = hero.getY();
-        
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ◄╕   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
-        int newY = hero.getY();
-        
-        assertEquals("новая позиция по Y при движении влево по инерции не должна меняться", oldY, newY);
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼ ◄╕    ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼◄╕     ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
-    
-    @Test
-    public void shouldChangeXPosition_whenTurnLeftInertia() {
-        hero.down();
-        board.tick();
-        hero.left();
-        board.tick();
-        
-        int oldX = hero.getX();
-        
-        board.tick();
-        int newX = hero.getX();
-        
-        assertEquals("новая позиция по X при движении влево по инерции уменьшается", oldX - 1, newX);
-    } 
     
     // Если змейка наткнется на камень, то она умрет. 
     // наткнуться на камень можно одним из 4 способов 
     // начнем с простого - 1) змейка движется по инерции вправо и натыкается на камень
     @Test
-    public void shouldGameOver_whenEatStoneDurringMoveRight() {        
-        startGameWithStoneAt(hero.getX() + 1, hero.getY()); // прямо на пути камень
+    public void shouldGameOver_whenEatStoneDuringMoveRight() {
+        // given
+        givenBoardWithStoneAt(hero.getX() + 1, hero.getY()); // прямо на пути камень
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼  ╘►☻  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
         board.tick();
 
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
@@ -833,7 +843,7 @@ public class SnakeTest {
     // 2) двигаясь по инерции вниз пока не наткнется на камень
     @Test
     public void shouldGameOver_whenEatStoneDurringMoveDown() {
-        startGameWithStoneAt(hero.getX(), hero.getY() - 1); // внизу камень
+        givenBoardWithStoneAt(hero.getX(), hero.getY() - 1); // внизу камень
         hero.down();
         
         board.tick();
@@ -846,7 +856,7 @@ public class SnakeTest {
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
     public void shouldGameOver_whenEatStoneDurringMoveUp() {        
-        startGameWithStoneAt(hero.getX(), hero.getY() + 1); // вверху камень
+        givenBoardWithStoneAt(hero.getX(), hero.getY() + 1); // вверху камень
         hero.up();
         
         board.tick();
@@ -859,7 +869,7 @@ public class SnakeTest {
     // 4) двигаясь по инерции влево пока не наткнется на стену
     @Test
     public void shouldGameOver_whenEatStoneDurringMoveLeft() {        
-        startGameWithStoneAt(hero.getX() - 1, hero.getY() - 1); // слева снизу камень
+        givenBoardWithStoneAt(hero.getX() - 1, hero.getY() - 1); // слева снизу камень
         hero.down();
         board.tick(); 
         hero.left();
@@ -874,7 +884,7 @@ public class SnakeTest {
      * @param x позиция X камня 
      * @param y позиция Y камня 
      */
-    private void startGameWithStoneAt(int x, int y) {             
+    private void givenBoardWithStoneAt(int x, int y) {
         generator = new HaveStone(x, y);
         setup();
     }
