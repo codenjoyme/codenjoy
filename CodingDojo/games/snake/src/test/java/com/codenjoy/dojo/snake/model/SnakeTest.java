@@ -1116,14 +1116,36 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 2) двигаясь по инерции вниз пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWall_duringMoveDown() {                
+    public void shouldGameOver_whenEatWall_duringMoveDown() {
+        // given
         hero.down();
-        
-        board.tick();
         board.tick();
         board.tick();
         board.tick();
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼   ▼   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
@@ -1131,14 +1153,36 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWall_duringMoveUp() {                
+    public void shouldGameOver_whenEatWall_duringMoveUp() {
+        // given
         hero.up();
-        
         board.tick(); 
         board.tick();
         board.tick();
-        board.tick();                     
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼   ▲   ☼\n" +
+                "☼   ╙   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼   ╙   ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }    
     
@@ -1146,12 +1190,35 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 4) двигаясь по инерции вправо пока не наткнется на стену
     @Test
-    public void shouldGameOver_whenEatWall_duringMoveRight() {                            
+    public void shouldGameOver_whenEatWall_duringMoveRight() {
+        // given
         board.tick();
         board.tick();
-        board.tick();    
         board.tick();
 
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼     ╘►☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        // when
+        board.tick();
+
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      ╘☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }    
 
@@ -1160,14 +1227,29 @@ public class SnakeTest {
     public void shouldDoNothing_whenTryTotActAfterGameOver() {
         shouldGameOver_whenSnakeEatItself();
 
-        Point head = hero.getHead();
-        int x = head.getX();
-        int y = head.getY();
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘◄║ ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
+        // when
         board.tick();
 
-        assertEquals(pt(x, y), hero.getHead());
-
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╘◄║ ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
 
