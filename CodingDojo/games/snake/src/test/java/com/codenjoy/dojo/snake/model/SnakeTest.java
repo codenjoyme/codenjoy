@@ -138,7 +138,7 @@ public class SnakeTest {
     // Змейка размером в две клеточки. 
     @Test
     public void shouldSnakeLengthIs2WhenStartGame() {
-        assertSnakeSize(2);
+        assertEquals(2, snake.getLength());
     }
 
     // Если змейка изначально размером в три клеточки, то она проявится не сразу
@@ -148,8 +148,6 @@ public class SnakeTest {
         givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE), 5);
 
         // then
-        assertSnakeAt(4, 4);
-        assertSnakeSize(5);
         asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -159,6 +157,8 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+        assertSnakeAt(4, 4);
+        assertEquals(5, snake.getLength());
 
         // when
         board.tick();
@@ -173,6 +173,8 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+        assertSnakeAt(5, 4);
+        assertEquals(5, snake.getLength());
 
         // when
         board.tick();
@@ -187,6 +189,8 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+        assertSnakeAt(6, 4);
+        assertEquals(5, snake.getLength());
 
         // when
         board.tick();
@@ -201,6 +205,8 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+        assertSnakeAt(7, 4);
+        assertEquals(5, snake.getLength());
 
         // when
         snake.up();
@@ -216,6 +222,8 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+        assertSnakeAt(7, 5);
+        assertEquals(5, snake.getLength());
 
         // when
         snake.up();
@@ -231,17 +239,11 @@ public class SnakeTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+        assertSnakeAt(7, 6);
+        assertEquals(5, snake.getLength());
     }
 
-    /**
-     * Метод проверит, что змейка длинной в две клеточки.
-     * @param expectedLength ожидаемая ждлинна змейки
-     */
-    private void assertSnakeSize(int expectedLength) {
-        assertEquals("длинна змейки", expectedLength, snake.getLength());
-    }
-    
-    // Поле имеет квадрутную форму, кратную двум + 1. 
+    // Поле имеет квадрутную форму, кратную двум + 1.
     // Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
     @Test
     public void shouldExceptionWhenBadBoardSize() {
@@ -1245,7 +1247,7 @@ public class SnakeTest {
 
         boardSizeTacts();  // в какой-то момент мы телепортируемся прям на яблочко
 
-        assertSnakeSize(3); // и длинна должна стать на 1 больше
+        assertEquals(3, snake.getLength());
     }
 
     private void appleAt(int x, int y) {
