@@ -719,7 +719,7 @@ public class SnakeTest {
     
     // проверить как змея ест сама себя при движении вправо
     @Test  
-    public void shouldGameOverWhenSnakeEatItselfDuringMoveRight() {
+    public void shouldGameOver_whenSnakeEatItselfDuringMoveRight() {
         // given
         givenBoardWithSnakeSize(3);
 
@@ -727,18 +727,37 @@ public class SnakeTest {
         board.tick();
         hero.right();
         board.tick();
+
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ╓   ☼\n" +
+                "☼   ╚►  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         
-        //when
+        // when
         hero.left();
         board.tick();
         
-        //then
+        // then
+        asrtBrd("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼   ◄║  ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
         assertGameOver();
     }
     
     // проверить что при перемещении влево меняется координата X  в меньшую сторону
     @Test
-    public void shouldChangeXPositionWhenTurnLeft() {
+    public void shouldChangeXPosition_whenTurnLeft() {
         hero.down();
         board.tick();
         
@@ -753,7 +772,7 @@ public class SnakeTest {
     
     // проверить что при перемещении влево координата Y не меняется
     @Test
-    public void shouldNotChangeYPositionWhenTurnLeft() {
+    public void shouldNotChangeYPosition_whenTurnLeft() {
         hero.down();
         board.tick();
         
@@ -768,7 +787,7 @@ public class SnakeTest {
     
     // проверить движение влево по инерции
     @Test
-    public void shouldNotChangeYPositionWhenTurnLeftInertia() {
+    public void shouldNotChangeYPosition_whenTurnLeftInertia() {
         hero.down();
         board.tick();
         hero.left();
@@ -783,7 +802,7 @@ public class SnakeTest {
     }
     
     @Test
-    public void shouldChangeXPositionWhenTurnLeftInertia() {
+    public void shouldChangeXPosition_whenTurnLeftInertia() {
         hero.down();
         board.tick();
         hero.left();
@@ -801,7 +820,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов 
     // начнем с простого - 1) змейка движется по инерции вправо и натыкается на камень
     @Test
-    public void shouldGameOverWhenEatStoneDurringMoveRight() {        
+    public void shouldGameOver_whenEatStoneDurringMoveRight() {        
         startGameWithStoneAt(hero.getX() + 1, hero.getY()); // прямо на пути камень
 
         board.tick();
@@ -813,7 +832,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 2) двигаясь по инерции вниз пока не наткнется на камень
     @Test
-    public void shouldGameOverWhenEatStoneDurringMoveDown() {
+    public void shouldGameOver_whenEatStoneDurringMoveDown() {
         startGameWithStoneAt(hero.getX(), hero.getY() - 1); // внизу камень
         hero.down();
         
@@ -826,7 +845,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
-    public void shouldGameOverWhenEatStoneDurringMoveUp() {        
+    public void shouldGameOver_whenEatStoneDurringMoveUp() {        
         startGameWithStoneAt(hero.getX(), hero.getY() + 1); // вверху камень
         hero.up();
         
@@ -839,7 +858,7 @@ public class SnakeTest {
     // наткнуться на камень можно одним из 4 способов
     // 4) двигаясь по инерции влево пока не наткнется на стену
     @Test
-    public void shouldGameOverWhenEatStoneDurringMoveLeft() {        
+    public void shouldGameOver_whenEatStoneDurringMoveLeft() {        
         startGameWithStoneAt(hero.getX() - 1, hero.getY() - 1); // слева снизу камень
         hero.down();
         board.tick(); 
@@ -995,7 +1014,7 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 1) двигаясь по инерции влево пока не наткнется на стену
     @Test
-    public void shouldGameOverWhenEatWallDurringMoveLeft() {
+    public void shouldGameOver_whenEatWallDurringMoveLeft() {
         hero.down();
         board.tick();
         hero.left();
@@ -1013,7 +1032,7 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 2) двигаясь по инерции вниз пока не наткнется на стену
     @Test
-    public void shouldGameOverWhenEatWallDurringMoveDown() {                
+    public void shouldGameOver_whenEatWallDurringMoveDown() {                
         hero.down();
         
         board.tick();
@@ -1028,7 +1047,7 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 3) двигаясь по инерции вверх пока не наткнется на стену
     @Test
-    public void shouldGameOverWhenEatWallDurringMoveUp() {                
+    public void shouldGameOver_whenEatWallDurringMoveUp() {                
         hero.up();
         
         board.tick(); 
@@ -1043,7 +1062,7 @@ public class SnakeTest {
     // насткнуться на стену она может одним из 12 способов:
     // 4) двигаясь по инерции вправо пока не наткнется на стену
     @Test
-    public void shouldGameOverWhenEatWallDurringMoveRight() {                            
+    public void shouldGameOver_whenEatWallDurringMoveRight() {                            
         board.tick();
         board.tick();
         board.tick();    
@@ -1054,7 +1073,7 @@ public class SnakeTest {
 
     // проверить что tick ничего не делает, когда игра закончена
     @Test
-    public void shouldDoNothingWhenTryTotActAfterGameOver() {
+    public void shouldDoNothing_whenTryTotActAfterGameOver() {
         shouldGameOver_whenSnakeEatItself();
 
         Point head = hero.getHead();
@@ -1070,14 +1089,14 @@ public class SnakeTest {
 
     // яблоко может появиться в любом месте поля
     @Test
-    public void shouldBoardContainAppleWhenGameStart() {
+    public void shouldBoardContainApple_whenGameStart() {
         Apple apple = board.getApple();
         assertNotNull("Поле должно содержать яблоко", apple);    
     }
     
     // после съедения яблока появляется тут же другое яблоко.
     @Test
-    public void shouldAppearNewAppleWhenEatApple() {
+    public void shouldAppearNewApple_whenEatApple() {
         int appleX = hero.getX() + 1;
         int appleY = hero.getY();
         startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко (оно там будет всегда появляться)
@@ -1090,7 +1109,7 @@ public class SnakeTest {
 
     // после съедения камня появляется тут же другой камень.
     @Test
-    public void shouldAppearNewStoneWhenEatStone() {
+    public void shouldAppearNewStone_whenEatStone() {
         int stoneX = hero.getX();
         int stoneY = hero.getY() + 1;
 
@@ -1108,7 +1127,7 @@ public class SnakeTest {
     
     // Змейка может съесть яблоки и при этом ее длинна увеличится на 1. 
     @Test
-    public void shouldSnakeIncreaseLengthWhenEatApple() {
+    public void shouldSnakeIncreaseLength_whenEatApple() {
         startGameWithAppleAt(hero.getX() + 1, hero.getY()); // на пути змейки есть яблоко
         board.tick();        
         
@@ -1117,7 +1136,7 @@ public class SnakeTest {
     
     // теперь скушаем два раза яблоко :)
     @Test
-    public void shouldSnakeIncreaseLengthTwiceWhenEatAppleTwice() {
+    public void shouldSnakeIncreaseLengthTwice_whenEatAppleTwice() {
         // на пути змейки есть два подряд яблока
         generator = new HaveApples();
         ((HaveApples)generator).addApple(hero.getX() + 1, hero.getY()); // немного криво, но пока так TODO
@@ -1134,7 +1153,7 @@ public class SnakeTest {
     // Если змейка съест сама себя - она умрет. 
     // Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.    
     @Test
-    public void shouldGameOverWhenEatItself() {        
+    public void shouldGameOver_whenEatItself() {        
         getLong5Snake();        
         
         // теперь попробуем укусить себя за хвост        
@@ -1166,7 +1185,7 @@ public class SnakeTest {
     
     // хочу проверить, что змейка длинной в 4 никогда себя не съест.
     @Test
-    public void shouldNotEatItselfWhenlengthIs4() {        
+    public void shouldNotEatItself_whenlengthIs4() {        
         getLong4Snake();        
         
         // теперь попробуем укусить себя за хвост - это не должно получиться        
@@ -1205,7 +1224,7 @@ public class SnakeTest {
     // теперь давайте попробуем реализовать другое поведение - змейка может кушать камни,
     // но тогда она сокращается в размере на 10 квадратиков.
     @Test
-    public void shouldDivSnakeWhenEatStone (){ 
+    public void shouldDivSnake_whenEatStone (){ 
         getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 11);
 
         hero.up();
@@ -1277,7 +1296,7 @@ public class SnakeTest {
 
     // когда змейка наткнется на стену на пределых поля - она умрет
     @Test
-    public void shouldKillWhenEatWalls() {
+    public void shouldKill_whenEatWalls() {
         board.tick();
         board.tick();
         board.tick();
@@ -1288,7 +1307,7 @@ public class SnakeTest {
 
     // когда змейка наткнется на стену на пределых поля - она умрет
     @Test
-    public void shouldNoMoreTactWhenGameOver() {
+    public void shouldNoMoreTact_whenGameOver() {
         board.getWalls().add(hero.getX() + 1, hero.getY()); // прямо на пути пользовательская стена
 
         board.tick();
@@ -1298,7 +1317,7 @@ public class SnakeTest {
 
     // а что, если змейка скушает камень а ее размер был 10? По идее геймовер
     @Test
-    public void shouldGameOverWhen10LengthSnakeEatStone (){
+    public void shouldGameOver_when10LengthSnakeEatStone (){
         getLongSnakeWithStoneAt(hero.getX(), hero.getY() + 1, 10);
 
         hero.up();
@@ -1309,7 +1328,7 @@ public class SnakeTest {
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
-    public void shouldTeleportWhenTurnRight() {
+    public void shouldTeleport_whenTurnRight() {
         startGameWithoutWalls();
         assertSnakeAt(4, 4);
 
@@ -1321,7 +1340,7 @@ public class SnakeTest {
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
-    public void shouldTeleportWhenTurnDown() {
+    public void shouldTeleport_whenTurnDown() {
         startGameWithoutWalls();
         hero.down();
         assertSnakeAt(4, 4);
@@ -1334,7 +1353,7 @@ public class SnakeTest {
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
-    public void shouldTeleportWhenTurnUp() {
+    public void shouldTeleport_whenTurnUp() {
         startGameWithoutWalls();
         hero.up();
         assertSnakeAt(4, 4);
@@ -1347,7 +1366,7 @@ public class SnakeTest {
 
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
-    public void shouldTeleportWhenTurnLeft() {
+    public void shouldTeleport_whenTurnLeft() {
         startGameWithoutWalls();
         hero.left();
         assertSnakeAt(4, 4);
@@ -1372,7 +1391,7 @@ public class SnakeTest {
     // проверить что если нет стен, и змейка проходит сквозь стены
     // она телепортировавшись натыкается на яблоко, которое должна съесть!
     @Test
-    public void shouldEatAppleWhenTeleported() {
+    public void shouldEatApple_whenTeleported() {
         appleAt(0, 4); // яблоко на границе
         startGameWithoutWalls();
         assertSnakeAt(4, 4);
