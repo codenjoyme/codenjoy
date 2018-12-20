@@ -27,6 +27,11 @@
 
     <script src="../../resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="../../resources/js/game-rules.js"></script>
+    <style>
+        .entry-content div img {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body style="background-color: white;"
       class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
@@ -56,7 +61,7 @@
                         <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
                             или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
 
-                        <p><b>Проект игры (для написания своего бота) брать <a href="resources/user/snake-battle-servers.zip">ЗДЕСЬ</a></b></p>
+                        <p><b>Проект игры (для написания своего бота) брать <a href="resources/user/snakebattle-servers.zip">ЗДЕСЬ</a></b></p>
                         <p>Читая инструкцию, помните: процессе написания бота Вам необходимо заботится только о логике перемещений вашего бота.
                             Все необходимые вспомогательные вещи уже сделаны за Вас.</p>
 
@@ -74,9 +79,9 @@
                             Мертвая змейка тут же появляется на одном из свободных стартовых полей и ждёт начала
                             следующего раунда (события старта).</p>
 
-                        <p>Итак, игрок <a href="register?gameName=snake-battle">
+                        <p>Итак, игрок <a href="register?gameName=snakebattle">
                             регистрируется на сервере</a>, указывая свой email</p>
-                        <p>Далее необходимо подключиться <a href="resources/user/snake-battle-servers.zip">из кода</a>
+                        <p>Далее необходимо подключиться <a href="resources/user/snakebattle-servers.zip">из кода</a>
                             к серверу через вебсокеты. Это Maven проект и подойдет он для игры на JVM языках.
                             Как его запустить смотри в корне проекта в файле README.txt</p>
                         <p>Для других языков придется написать свой клиент (а после пошарить с нами на почту: apofig@gmail.com)</p>
@@ -114,71 +119,153 @@
                              ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
                         <p>UI из спрайтов:</p>
                         <img src="./board.JPG"/>
+
                         <p>Расшифровка символов в файле Elements:</p>
-                        <p>Пустое место – по которому может двигаться герой</p>
-                        <pre>NONE(' ')</pre>
-                        <img src="../sprite/snake-battle/none.png"/>
-                        <p>Cтена, через которую нельзя пройти</p>
-                        <pre>WALL('☼')</pre>
-                        <img src="../sprite/snake-battle/wall.png"/>
-                        <p>Стартовая точка. Отсюда начинает движение змейка</p>
-                        <pre>START_FLOOR('#')</pre>
-                        <img src="../sprite/snake-battle/start_floor.png"/>
-                        <p>Яблоко</p>
-                        <pre>APPLE('○')</pre>
-                        <img src="../sprite/snake-battle/apple.png"/>
-                        <p>Гиря (Камень)</p>
-                        <pre>STONE('●')</pre>
-                        <img src="../sprite/snake-battle/stone.png"/>
-                        <p>Ангельские крылья (Таблетка полёта)</p>
-                        <pre>FLYING_PILL('%')</pre>
-                        <img src="../sprite/snake-battle/flying_pill.png"/>
-                        <p>Маска дьявола (Таблетка ярости)</p>
-                        <pre>FURY_PILL('@')</pre>
-                        <img src="../sprite/snake-battle/fury_pill.png"/>
-                        <p>Золото</p>
-                        <pre>GOLD('$')</pre>
-                        <img src="../sprite/snake-battle/gold.png"/>
-                        <p>Голова змейки игрока (в разных направлениях)</p>
-                        <pre>HEAD_DOWN('▼')</pre>
-                        <img src="../sprite/snake-battle/head_down.png"/>
-                        <pre>HEAD_LEFT('◄')</pre>
-                        <img src="../sprite/snake-battle/head_left.png"/>
-                        <pre>HEAD_RIGHT('►')</pre>
-                        <img src="../sprite/snake-battle/head_right.png"/>
-                        <pre>HEAD_UP('▲')</pre>
-                        <img src="../sprite/snake-battle/head_up.png"/>
-                        <p>Голова змейки игрока (со сверхспособностями)</p>
-                        <pre>HEAD_EVIL('⊕')</pre>
-                        <img src="../sprite/snake-battle/head_evil.png"/>
-                        <pre>HEAD_FLY('⊖')</pre>
-                        <img src="../sprite/snake-battle/head_fly.png"/>
-                        <p>Голова неактивной змейки (игрока)</p>
-                        <pre>HEAD_SLEEP('⬢')</pre>
-                        <img src="../sprite/snake-battle/head_sleep.png"/>
-                        <p>Голова мёртвой змейки (игрока)</p>
-                        <pre>HEAD_DEAD('☻')</pre>
-                        <img src="../sprite/snake-battle/head_dead.png"/>
-                        <p>Голова змейки соперника (в разных направлениях)</p>
-                        <pre>ENEMY_HEAD_DOWN('∨')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_down.png"/>
-                        <pre>ENEMY_HEAD_LEFT('<')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_left.png"/>
-                        <pre>ENEMY_HEAD_RIGHT('>')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_right.png"/>
-                        <pre>ENEMY_HEAD_UP('∧')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_up.png"/>
-                        <p>Голова змейки игрока (со сверхспособностями)</p>
-                        <pre>ENEMY_HEAD_EVIL('⊗')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_evil.png"/>
-                        <pre>ENEMY_HEAD_FLY('⊘')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_fly.png"/>
-                        <p>Голова неактивной змейки (соперника)</p>
-                        <pre>ENEMY_HEAD_SLEEP('⬡')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_sleep.png"/>
-                        <p>Голова мёртвой змейки (соперника)</p>
-                        <pre>ENEMY_HEAD_DEAD('☺')</pre>
-                        <img src="../sprite/snake-battle/enemy_head_dead.png"/>
+
+                        <div>
+                            <img src="../sprite/snakebattle/none.png"/>
+                            <span>Пустое место – по которому может двигаться герой</span>
+                            <pre>NONE(' ')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/wall.png"/>
+                            <span>Cтена, через которую нельзя пройти</span>
+                            <pre>WALL('☼')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/start_floor.png"/>
+                            <span>Стартовая точка. Отсюда начинает движение змейка</span>
+                            <pre>START_FLOOR('#')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/apple.png"/>
+                            <span>Яблоко</span>
+                            <pre>APPLE('○')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/stone.png"/>
+                            <span>Гиря (Камень)</span>
+                            <pre>STONE('●')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/flying_pill.png"/>
+                            <span>Ангельские крылья (Таблетка полёта)</span>
+                            <pre>FLYING_PILL('%')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/fury_pill.png"/>
+                            <span>Маска дьявола (Таблетка ярости)</span>
+                            <pre>FURY_PILL('@')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/gold.png"/>
+                            <span>Золото</span>
+                            <pre>GOLD('$')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_down.png"/>
+                            <span>Голова змейки игрока в направлении вниз</span>
+                            <pre>HEAD_DOWN('▼')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_left.png"/>
+                            <span>Голова змейки игрока в направлении влево</span>
+                            <pre>HEAD_LEFT('◄')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_right.png"/>
+                            <span>Голова змейки игрока в направлении вправо</span>
+                            <pre>HEAD_RIGHT('►')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_up.png"/>
+                            <span>Голова змейки игрока в направлении вверх</span>
+                            <pre>HEAD_UP('▲')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_evil.png"/>
+                            <span>Голова змейки игрока со сверхспособностью "ярость"</span>
+                            <pre>HEAD_EVIL('⊕')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_fly.png"/>
+                            <span>Голова змейки игрока со сверхспособностью "полет"</span>
+                            <pre>HEAD_FLY('⊖')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_sleep.png"/>
+                            <span>Голова неактивной змейки игрока</span>
+                            <pre>HEAD_SLEEP('⬢')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_dead.png"/>
+                            <span>Голова мёртвой змейки игрока</span>
+                            <pre>HEAD_DEAD('☻')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_down.png"/>
+                            <span>Голова змейки соперника в направлении вниз</span>
+                            <pre>ENEMY_HEAD_DOWN('∨')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_left.png"/>
+                            <span>Голова змейки соперника в направлении влево</span>
+                            <pre>ENEMY_HEAD_LEFT('<')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_right.png"/>
+                            <span>Голова змейки соперника в направлении вправо</span>
+                            <pre>ENEMY_HEAD_RIGHT('>')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_up.png"/>
+                            <span>Голова змейки соперника в направлении вверх</span>
+                            <pre>ENEMY_HEAD_UP('∧')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_evil.png"/>
+                            <span>Голова змейки соперника со сверхспособностью "ярость"</span>
+                            <pre>ENEMY_HEAD_EVIL('⊗')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_fly.png"/>
+                            <span>Голова змейки соперника со сверхспособностью "полет"</span>
+                            <pre>ENEMY_HEAD_FLY('⊘')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_sleep.png"/>
+                            <span>Голова неактивной змейки соперника</span>
+                            <pre>ENEMY_HEAD_SLEEP('⬡')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_dead.png"/>
+                            <span>Голова мёртвой змейки соперника</span>
+                            <pre>ENEMY_HEAD_DEAD('☺')</pre>
+                        </div>
+
                         <p>Элементы туловища и хвоста змеек можно посмотреть в файле Elements.</p>
                         <p>Игра пошаговая, каждую секунду сервер посылает твоему клиенту (боту)
                             состояние обновленного поля на текущий момент и ожидает ответа команды герою.
