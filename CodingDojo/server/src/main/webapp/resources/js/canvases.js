@@ -26,7 +26,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, drawBoard)
 {
-    var isMultiplayer = multiplayerType.multiplayer;
     var canvases = {};
     var infoPools = {};
     currentBoardSize = boardSize;
@@ -156,16 +155,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var getBoard = function() {
             return playerData.board;
         }
-        var getHeroesData = function(isAll) {
-            if (isAll) {
-                var result = {};
-                for (var name in playerData.heroesData) {
-                    result[name] = playerData.heroesData[name][name];
-                }
-                return result;
-            } else {
-                return playerData.heroesData[playerName];
-            }
+        var getHeroesData = function() {
+            return playerData.heroesData[playerName];
         }
 
         var drawAllLayers = function(layers, onDrawItem){
@@ -250,10 +241,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 }
 
                 var board = getBoard();
-                if (isMultiplayer || !!board.showName) { // TODO а точно тут это надо showName
+                if (typeof board.showName == 'undefined' || board.showName) {
                     var currentPoint = null;
                     var currentHeroData = null;
-                    var heroesData = getHeroesData(isMultiplayer);
+                    var heroesData = getHeroesData();
                     for (var name in heroesData) {
                         var heroData = heroesData[name];
                         var point = heroData.coordinate;
@@ -267,9 +258,16 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             currentPoint = point;
                             currentHeroData = heroData;
                         }
-                        var progress = board.levelProgress; // TODO это тоже относится к TRAINING типу игры
-                        var isPlayerOnSingleBoard = progress.current < progress.total;
-                        if (!isPlayerOnSingleBoard && !!heroData.multiplayer) {
+
+                        // TODO это тоже относится к TRAINING типу игры
+                        var isPlayerOnSingleBoard = function(board) {
+                            var progress = board.levelProgress;
+                            if (!progress) {
+                                return false;
+                            }
+                            return   progress.current < progress.total;
+                        }
+                        if (!!heroData.multiplayer && !isPlayerOnSingleBoard(board)) {
                             drawName(name, point, font, heroData);
                         }
                     }
