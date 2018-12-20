@@ -65,7 +65,7 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public boolean isAlive() {
-        return hero != null && isActive() && hero.isAlive();
+        return hero != null && hero.isAlive();
     }
 
     public boolean isActive() {

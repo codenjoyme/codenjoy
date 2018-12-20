@@ -75,7 +75,7 @@ public class SnakeBoard implements Field {
         if (startCounter >= 0) {
             setStartCounter(startCounter - 1);
         }
-        int aliveBefore = countAliveHeroes(); // количество живых с прошлого хода
+        int aliveBefore = countActiveHeroes(); // количество живых с прошлого хода
 
         // победа последнего игрока и рестарт игры
         if (players.size() > 1 && aliveBefore < 2 && startCounter < 0) {
@@ -90,7 +90,7 @@ public class SnakeBoard implements Field {
 
         snakesMove(); // продвижение живых змеек
         snakesCollisionDetection(); // реакция на столкновения змей друг с другом
-        int aliveAfter = countAliveHeroes(); // сколько осталось живо после хода
+        int aliveAfter = countActiveHeroes(); // сколько осталось живо после хода
         fireDieEvents();
         fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
         setNewObjects();
@@ -119,12 +119,11 @@ public class SnakeBoard implements Field {
         }
     }
 
-    private int countAliveHeroes() {
+    private int countActiveHeroes() {
         int counter = 0;
         for (Player player : players) {
-            if (!player.isAlive())
-                continue;
-            counter++;
+            if (player.isAlive() && player.isActive())
+                counter++;
         }
         return counter;
     }

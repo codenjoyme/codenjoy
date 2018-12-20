@@ -173,132 +173,6 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:3\n" +
-                        "DICE_CORRECTED < 3 :0\n" +
-                        "DICE:2\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 3 :1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "DICE_CORRECTED < 3 :0\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼☼      ☼\n" +
-                        "1:ᓚ⬡      ☼\n" +
-                        "1:☼☼ ☼# ○ ☼\n" +
-                        "1:☼☼○    $☼\n" +
-                        "1:☼☼   ●  ☼\n" +
-                        "1:ᓕ⬢      ☼\n" +
-                        "1:☼☼○ ●   ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 4 :0\n" +
-                        "DICE:1\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "1:Answer: RIGHT\n" +
-                        "2:Board:\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:☼☼      ☼\n" +
-                        "2:ᓕ⬢      ☼\n" +
-                        "2:☼☼ ☼# ○ ☼\n" +
-                        "2:☼☼○    $☼\n" +
-                        "2:☼☼   ●  ☼\n" +
-                        "2:ᓚ⬡      ☼\n" +
-                        "2:☼☼○ ●   ☼\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "2:Answer: RIGHT\n" +
-                        "DICE:2\n" +
-                        "DICE:0\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:0\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "DICE:2\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:1\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼☼      ☼\n" +
-                        "1:☼#      ☼\n" +
-                        "1:☼☼ ᓕ⬢ ○ ☼\n" +
-                        "1:☼☼○    $☼\n" +
-                        "1:☼☼   ●  ☼\n" +
-                        "1:ᓚ⬡○     ☼\n" +
-                        "1:☼☼○ ●   ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "1:Answer: RIGHT\n" +
-                        "2:Board:\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:☼☼      ☼\n" +
-                        "2:☼#      ☼\n" +
-                        "2:☼☼ ᓚ⬡ ○ ☼\n" +
-                        "2:☼☼○    $☼\n" +
-                        "2:☼☼   ●  ☼\n" +
-                        "2:ᓕ⬢○     ☼\n" +
-                        "2:☼☼○ ●   ☼\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:0\n" +
-                        "DICE:1\n" +
-                        "2:Answer: RIGHT\n" +
-                        "DICE:2\n" +
-                        "DICE:2\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "DICE:4\n" +
-                        "DICE:3\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 3 :1\n" +
-                        "DICE:1\n" +
-                        "DICE:3\n" +
-                        "DICE_CORRECTED < 3 :0\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:2\n" +
-                        "DICE:4\n" +
-                        "DICE_CORRECTED < 3 :1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
@@ -306,18 +180,19 @@ public class SmokeTest {
                         "1:ᓕ⬢      ☼\n" +
                         "1:☼☼ ᓚ⬡ ○ ☼\n" +
                         "1:☼☼○    $☼\n" +
-                        "1:☼☼  ○●  ☼\n" +
-                        "1:☼#○     ☼\n" +
+                        "1:☼☼   ●  ☼\n" +
+                        "1:☼#      ☼\n" +
                         "1:☼☼○ ●   ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:4\n" +
+                        "DICE_CORRECTED < 4 :0\n" +
                         "DICE:1\n" +
-                        "DICE:0\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
+                        "DICE:2\n" +
                         "1:Answer: RIGHT\n" +
                         "2:Board:\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
@@ -325,285 +200,155 @@ public class SmokeTest {
                         "2:ᓚ⬡      ☼\n" +
                         "2:☼☼ ᓕ⬢ ○ ☼\n" +
                         "2:☼☼○    $☼\n" +
-                        "2:☼☼  ○●  ☼\n" +
+                        "2:☼☼   ●  ☼\n" +
+                        "2:☼#      ☼\n" +
+                        "2:☼☼○ ●   ☼\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:\n" +
+                        "DICE:4\n" +
+                        "DICE_CORRECTED < 4 :0\n" +
+                        "DICE:1\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "2:Answer: RIGHT\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:☼☼      ☼\n" +
+                        "1:ᓕ⬢      ☼\n" +
+                        "1:☼☼ ᓚ⬡ ○ ☼\n" +
+                        "1:☼☼○    $☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#      ☼\n" +
+                        "1:☼☼○ ●   ☼\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "1:Answer: RIGHT\n" +
+                        "2:Board:\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:☼☼      ☼\n" +
+                        "2:ᓚ⬡      ☼\n" +
+                        "2:☼☼ ᓕ⬢ ○ ☼\n" +
+                        "2:☼☼○    $☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
+                        "2:☼#      ☼\n" +
+                        "2:☼☼○ ●   ☼\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:\n" +
+                        "DICE:0\n" +
+                        "DICE:0\n" +
+                        "DICE:2\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "2:Answer: RIGHT\n" +
+                        "DICE:1\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:☼☼      ☼\n" +
+                        "1:ᓕ⬢      ☼\n" +
+                        "1:☼☼ ᓚ⬡ ○ ☼\n" +
+                        "1:☼☼○    $☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#○     ☼\n" +
+                        "1:☼☼○ ●   ☼\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "DICE:1\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
+                        "DICE:1\n" +
+                        "DICE:0\n" +
+                        "1:Answer: RIGHT\n" +
+                        "2:Board:\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:☼☼      ☼\n" +
+                        "2:ᓚ⬡      ☼\n" +
+                        "2:☼☼ ᓕ⬢ ○ ☼\n" +
+                        "2:☼☼○    $☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
                         "2:☼#○     ☼\n" +
                         "2:☼☼○ ●   ☼\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
                         "DICE:1\n" +
+                        "DICE:2\n" +
+                        "DICE:2\n" +
                         "DICE:1\n" +
+                        "DICE:0\n" +
                         "DICE:1\n" +
+                        "DICE:2\n" +
+                        "2:Answer: RIGHT\n" +
+                        "DICE:2\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "2:Answer: DOWN\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:4\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼☼      ☼\n" +
-                        "1:ᓚ⬡      ☼\n" +
-                        "1:☼☼ ☼# ○ ☼\n" +
-                        "1:☼☼○    $☼\n" +
-                        "1:☼☼  ○●  ☼\n" +
-                        "1:ᓕ⬢○     ☼\n" +
+                        "1:ᓕ⬢      ☼\n" +
+                        "1:☼☼ ᓚ⬡ ○ ☼\n" +
+                        "1:☼☼○○   $☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#○     ☼\n" +
                         "1:☼☼○ ●   ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "DICE:3\n" +
+                        "DICE:4\n" +
+                        "DICE_CORRECTED < 4 :0\n" +
                         "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "DICE:4\n" +
+                        "DICE_CORRECTED < 4 :0\n" +
                         "DICE:1\n" +
                         "1:Answer: RIGHT\n" +
                         "2:Board:\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼☼      ☼\n" +
-                        "2:ᓕ⬢      ☼\n" +
-                        "2:☼☼ ☼# ○ ☼\n" +
-                        "2:☼☼○    $☼\n" +
-                        "2:☼☼  ○●  ☼\n" +
-                        "2:ᓚ⬡○     ☼\n" +
+                        "2:ᓚ⬡      ☼\n" +
+                        "2:☼☼ ᓕ⬢ ○ ☼\n" +
+                        "2:☼☼○○   $☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
+                        "2:☼#○     ☼\n" +
                         "2:☼☼○ ●   ☼\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
+                        "DICE:0\n" +
+                        "DICE:1\n" +
+                        "DICE:3\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "2:Answer: RIGHT\n" +
+                        "2:Answer: DOWN\n" +
                         "Fire Event: START\n" +
-                        "Fire Event: APPLE\n" +
                         "Fire Event: START\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -812,14 +557,16 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼☼      ☼\n" +
-                        "1:☼⇒>     ☼\n" +
-                        "1:☼☼ ☼# ○ ☼\n" +
-                        "1:☼☼○    $☼\n" +
-                        "1:☼☼  ○●  ☼\n" +
-                        "1:→═►     ☼\n" +
+                        "1:☼→►     ☼\n" +
+                        "1:☼☼ ☼⇒>○ ☼\n" +
+                        "1:☼☼○○   $☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#○     ☼\n" +
                         "1:☼☼○ ●   ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -836,11 +583,11 @@ public class SmokeTest {
                         "2:Board:\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼☼      ☼\n" +
-                        "2:☼→►     ☼\n" +
-                        "2:☼☼ ☼# ○ ☼\n" +
-                        "2:☼☼○    $☼\n" +
-                        "2:☼☼  ○●  ☼\n" +
-                        "2:⇒—∨     ☼\n" +
+                        "2:☼⇒∨     ☼\n" +
+                        "2:☼☼ ☼→►○ ☼\n" +
+                        "2:☼☼○○   $☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
+                        "2:☼#○     ☼\n" +
                         "2:☼☼○ ●   ☼\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
@@ -856,9 +603,7 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "2:Answer: DOWN, ACT\n" +
+                        "2:Answer: RIGHT\n" +
                         "Fire Event: APPLE\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -1067,12 +812,12 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼☼      ☼\n" +
-                        "1:☼#⇓     ☼\n" +
-                        "1:☼☼∨☼# ○ ☼\n" +
-                        "1:☼☼○    $☼\n" +
-                        "1:☼☼  ○●  ☼\n" +
-                        "1:→═╗     ☼\n" +
-                        "1:☼☼▼ ●   ☼\n" +
+                        "1:☼#↓     ☼\n" +
+                        "1:☼☼▼☼⇒—> ☼\n" +
+                        "1:☼☼○○   $☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#○     ☼\n" +
+                        "1:☼☼○ ●   ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:1\n" +
@@ -1089,18 +834,548 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "1:Answer: RIGHT\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "1:Answer: DOWN\n" +
                         "2:Board:\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼☼      ☼\n" +
-                        "2:☼#↓     ☼\n" +
-                        "2:☼☼▼☼# ○ ☼\n" +
-                        "2:☼☼○    $☼\n" +
-                        "2:☼☼  ○●  ☼\n" +
-                        "2:⇒—╕     ☼\n" +
-                        "2:☼☼> ●   ☼\n" +
+                        "2:☼#⇓     ☼\n" +
+                        "2:☼☼∨☼→═► ☼\n" +
+                        "2:☼☼○○   $☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
+                        "2:☼#○     ☼\n" +
+                        "2:☼☼○ ●   ☼\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "2:Answer: DOWN\n" +
+                        "Fire Event: APPLE\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:☼☼      ☼\n" +
+                        "1:☼#↓     ☼\n" +
+                        "1:☼☼║☼#⇒╕ ☼\n" +
+                        "1:☼☼▼○  ∨$☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#○     ☼\n" +
+                        "1:☼☼○ ●   ☼\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "1:Answer: RIGHT, ACT\n" +
+                        "2:Board:\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:☼☼      ☼\n" +
+                        "2:☼#⇓     ☼\n" +
+                        "2:☼☼|☼#→╗ ☼\n" +
+                        "2:☼☼>○  ▼$☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
+                        "2:☼#○     ☼\n" +
+                        "2:☼☼○ ●   ☼\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "2:Answer: RIGHT, ACT\n" +
+                        "Fire Event: APPLE\n" +
+                        "Fire Event: GOLD\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:☼☼      ☼\n" +
+                        "1:☼#↓     ☼\n" +
+                        "1:☼☼║☼# ⇓ ☼\n" +
+                        "1:☼☼╚►  ╙>☼\n" +
+                        "1:☼☼ ○ ●  ☼\n" +
+                        "1:☼#○     ☼\n" +
+                        "1:☼☼○ ●   ☼\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "1:Answer: DOWN\n" +
+                        "2:Board:\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:☼☼      ☼\n" +
+                        "2:☼#⇓     ☼\n" +
+                        "2:☼☼|☼# ↓ ☼\n" +
+                        "2:☼☼╙∨  ╚►☼\n" +
+                        "2:☼☼ ○ ●  ☼\n" +
+                        "2:☼#○     ☼\n" +
+                        "2:☼☼○ ●   ☼\n" +
+                        "2:☼☼☼☼☼☼☼☼☼\n" +
+                        "2:\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -1326,12 +1601,12 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼☼      ☼\n" +
-                        "1:☼#⇓     ☼\n" +
-                        "1:☼☼|☼# ○ ☼\n" +
-                        "1:☼☼∨    $☼\n" +
-                        "1:☼☼  ○●  ☼\n" +
-                        "1:☼→╗     ☼\n" +
-                        "1:☼☼╚►●   ☼\n" +
+                        "1:☼#↓     ☼\n" +
+                        "1:☼☼║☼#   ☼\n" +
+                        "1:☼☼╚╗  ⇒╕☼\n" +
+                        "1:☼☼ ▼ ● ∨☼\n" +
+                        "1:☼#○     ☼\n" +
+                        "1:☼☼○ ●   ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:1\n" +
@@ -1349,534 +1624,6 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:Answer: UP\n" +
-                        "2:Board:\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:☼☼      ☼\n" +
-                        "2:☼#↓     ☼\n" +
-                        "2:☼☼║☼# ○ ☼\n" +
-                        "2:☼☼▼    $☼\n" +
-                        "2:☼☼  ○●  ☼\n" +
-                        "2:☼⇒╕     ☼\n" +
-                        "2:☼☼╙∧●   ☼\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "2:Answer: DOWN, ACT\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼☼      ☼\n" +
-                        "1:☼#      ☼\n" +
-                        "1:☼☼⇓☼# ○ ☼\n" +
-                        "1:☼☼|    $☼\n" +
-                        "1:☼☼∨ ○●  ☼\n" +
-                        "1:☼#↓▲    ☼\n" +
-                        "1:☼☼╚╝●   ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:Answer: UP\n" +
-                        "2:Board:\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:☼☼      ☼\n" +
-                        "2:☼#      ☼\n" +
-                        "2:☼☼↓☼# ○ ☼\n" +
-                        "2:☼☼║    $☼\n" +
-                        "2:☼☼▼ ○●  ☼\n" +
-                        "2:☼#⇓∧    ☼\n" +
-                        "2:☼☼╙╜●   ☼\n" +
-                        "2:☼☼☼☼☼☼☼☼☼\n" +
-                        "2:\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "2:Answer: RIGHT\n" +
-                        "Fire Event: DIE\n" +
-                        "Fire Event: DIE\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:1\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "DICE:1\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼☼      ☼\n" +
-                        "1:ᓚ⬡      ☼\n" +
-                        "1:☼☼ ᓕ⬢ ○ ☼\n" +
-                        "1:☼☼     $☼\n" +
-                        "1:☼☼  ○●  ☼\n" +
-                        "1:☼#      ☼\n" +
-                        "1:☼☼  ●   ☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -1888,12 +1635,12 @@ public class SmokeTest {
                         "2:Board:\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼☼      ☼\n" +
-                        "2:ᓕ⬢      ☼\n" +
-                        "2:☼☼ ᓚ⬡ ○ ☼\n" +
-                        "2:☼☼     $☼\n" +
-                        "2:☼☼  ○●  ☼\n" +
-                        "2:☼#      ☼\n" +
-                        "2:☼☼  ●   ☼\n" +
+                        "2:☼#⇓     ☼\n" +
+                        "2:☼☼|☼#   ☼\n" +
+                        "2:☼☼╙╕  →╗☼\n" +
+                        "2:☼☼ ∨ ● ▼☼\n" +
+                        "2:☼#○     ☼\n" +
+                        "2:☼☼○ ●   ☼\n" +
                         "2:☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
                         "DICE:1\n" +
@@ -1903,8 +1650,6 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "2:Answer: RIGHT\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -1915,7 +1660,214 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "2:Answer: DOWN\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
+                        "DICE:1\n" +
                         "DICE:1\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
