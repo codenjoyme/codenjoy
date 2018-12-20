@@ -44,7 +44,7 @@ public class WebSocketRunner implements Closeable {
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
     public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
-    public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
+    public static final String CODENJOY_COM_ALIAS = "codenjoy.com:80";
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
     public static String BOT_CODE = "12345678901234567890";
 

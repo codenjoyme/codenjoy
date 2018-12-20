@@ -30,7 +30,7 @@ import (
 	"strings"
 )
 
-var url = "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+var url = "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
 
 func main() {
 	flag.Parse()
