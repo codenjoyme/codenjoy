@@ -98,7 +98,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public String name() {
-        return "snake-battle";
+        return "snakebattle";
     }
 
     @Override
