@@ -42,7 +42,7 @@
         <exclude.minesweeper>true</exclude.minesweeper>
         <exclude.rubicscube>true</exclude.rubicscube>
         <exclude.snake>true</exclude.snake>
-        <exclude.snake-battle>true</exclude.snake-battle>
+        <exclude.snakebattle>true</exclude.snakebattle>
         <exclude.sudoku>true</exclude.sudoku>
         <exclude.moebius>true</exclude.moebius>
         <exclude.football>true</exclude.football>
@@ -321,19 +321,19 @@
             </dependencies>
         </profile>
         <profile>
-            <id>snake-battle</id>
+            <id>snakebattle</id>
             <activation>
                 <property>
                     <name>allGames</name>
                 </property>
             </activation>
             <properties>
-                <exclude.snake-battle>false</exclude.snake-battle>
+                <exclude.snakebattle>false</exclude.snakebattle>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>snake-battle-engine</artifactId>
+                    <artifactId>snakebattle-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -998,17 +998,17 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-snake-battle</id>
+                        <id>unpack-snakebattle</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <skip>${exclude.snake-battle}</skip>
+                            <skip>${exclude.snakebattle}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>snake-battle-engine</artifactId>
+                                    <artifactId>snakebattle-engine</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
