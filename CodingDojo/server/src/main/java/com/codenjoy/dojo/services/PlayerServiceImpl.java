@@ -232,7 +232,7 @@ public class PlayerServiceImpl implements PlayerService {
             player = playerGame.getPlayer();
 
             if (logger.isDebugEnabled()) {
-                logger.info("Player {} starting new game {}", name, playerGame.getGame());
+                logger.debug("Player {} starting new game {}", name, playerGame.getGame());
             }
         } else {
           // do nothing
@@ -246,8 +246,8 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             long time = 0;
             if (logger.isDebugEnabled()) {
-                logger.info("==================================================================================");
-                logger.info("PlayerService.tick() starts");
+                logger.debug("==================================================================================");
+                logger.debug("PlayerService.tick() starts");
                 time = System.currentTimeMillis();
             }
 

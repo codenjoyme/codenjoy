@@ -43,8 +43,6 @@ import static java.util.stream.Collectors.toSet;
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
-    private static Logger logger = LoggerFactory.getLogger(PlayerGames.class);
-
     private List<PlayerGame> playerGames = new LinkedList<>();
 
     private Consumer<PlayerGame> onAdd;

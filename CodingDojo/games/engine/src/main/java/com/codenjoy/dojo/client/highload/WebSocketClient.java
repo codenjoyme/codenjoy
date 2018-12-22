@@ -60,7 +60,7 @@ public class WebSocketClient implements Closeable {
 
             Runtime.getRuntime().addShutdownHook(new Thread(() -> this.close()));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

@@ -35,8 +35,6 @@ public class Runner {
     private int count;
     private Map<String, List<Character>> status;
     private List<String> processed = new CopyOnWriteArrayList<>();
-    private List<Session> connected = new CopyOnWriteArrayList<>();
-    private boolean started = false;
 
     public Runner(String host, int count) {
         this.count = count;
@@ -70,17 +68,6 @@ public class Runner {
         public void onConnect(Session session) {
             System.out.println(StringUtils.leftPad(name, 21) + "> !");
             this.session = session;
-            connected.add(session);
-            if (connected.size() == count) {
-                started = true;
-                connected.forEach(s -> {
-                    try {
-                        s.getRemote().sendString("DOWN");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
             statusLine.add('!');
         }
 
@@ -96,9 +83,6 @@ public class Runner {
 
         @OnWebSocketMessage
         public void onMessage(String data) throws IOException {
-            if (!started) {
-                return;
-            }
 
             if (processed.contains(name)) {
                 processed.clear();
