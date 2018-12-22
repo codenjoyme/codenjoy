@@ -25,8 +25,10 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,6 +56,7 @@ public class AdminController {
     @Autowired private GameService gameService;
     @Autowired private ActionLogger actionLogger;
     @Autowired private DebugService debugService;
+    @Autowired private Registration registration;
 
     public AdminController() {
     }
@@ -241,23 +244,34 @@ public class AdminController {
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
             int count = Integer.valueOf(settings.getGenerateCount());
+            int numLength = String.valueOf(count).length();
 
             int created = 0;
             int index = 0;
             while (created != count) {
-                String name = mask.replaceAll("%", String.valueOf(++index));
+                String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
+                String playerName = mask.replaceAll("%", number);
 
-                if (playerService.contains(name) && index < playerService.getAll().size()) {
+                if (playerService.contains(playerName) && index < playerService.getAll().size()) {
                     continue;
                 }
 
                 created++;
-                playerService.register(name, "127.0.0.1", settings.getGameName());
+                playerService.register(playerName, "127.0.0.1", settings.getGameName());
+                String code = getCode(playerName);
             }
         }
 
         request.setAttribute(GAME_NAME, settings.getGameName());
         return getAdmin(settings.getGameName());
+    }
+
+    private String getCode(String playerName) {
+        if (registration.registered(playerName)) {
+            return registration.login(playerName, playerName);
+        } else {
+            return registration.register(playerName, playerName, "");
+        }
     }
 
     private Object fixForCheckbox(Parameter parameter, Object value) {
