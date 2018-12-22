@@ -130,6 +130,21 @@
         </tr>
     </table>
 
+    <table class="admin-table" id="auto-save">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${autoSave}">
+                        <b>The auto save in progress</b></br> <a href="${ctx}/admin31415?stopAutoSave&gameName=${gameName}">Stop auto save</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin31415?startAutoSave&gameName=${gameName}">Start auto save</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
     <table class="admin-table" id="closeRegistration">
         <tr>
             <td>

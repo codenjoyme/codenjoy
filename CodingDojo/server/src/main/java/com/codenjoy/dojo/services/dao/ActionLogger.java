@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.BoardLog;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerGame;
-import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +36,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class ActionLogger {
+public class ActionLogger implements Suspendable {
 
     private final int ticksPerSave;
 
@@ -62,15 +59,18 @@ public class ActionLogger {
         count = 0;
     }
 
+    @Override
     public void pause() {
         active = false;
     }
 
+    @Override
     public void resume() {
         active = true;
     }
 
-    public boolean isRecording() {
+    @Override
+    public boolean isWorking() {
         return active;
     }
 

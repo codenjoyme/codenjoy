@@ -22,40 +22,11 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+public interface Suspendable {
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+    void pause();
 
-import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
+    void resume();
 
-@Component
-public class DebugService implements Suspendable {
-
-    @Override
-    public void pause() {
-        if (isWorking()) {
-            DLoggerFactory.settings.remove(DEBUG_KEY);
-        }
-    }
-
-    @Override
-    public boolean isWorking() {
-        return DLoggerFactory.settings.containsKey(DEBUG_KEY);
-    }
-
-    @Override
-    public void resume() {
-        if (!isWorking()) {
-            DLoggerFactory.settings.put(DEBUG_KEY, true);
-        }
-    }
-
-    @Value("${debugEnable}")
-    public void setDebugEnable(boolean debugEnable) {
-        if (debugEnable) {
-            resume();
-        } else {
-            pause();
-        }
-    }
+    boolean isWorking();
 }

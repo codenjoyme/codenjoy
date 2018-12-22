@@ -24,18 +24,22 @@ package com.codenjoy.dojo.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class AutoSaver implements Tickable {
+public class AutoSaver implements Tickable, Suspendable {
 
     public static final int TICKS = 30;
 
     @Autowired
     private SaveService save;
+
+    @Value("${autoSave}")
+    protected boolean active;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -44,6 +48,10 @@ public class AutoSaver implements Tickable {
 
     @Override
     public void tick() {
+        if (!active) {
+            return;
+        }
+
         if (justStart) {
             justStart = false;
             save.loadAll();
@@ -54,5 +62,20 @@ public class AutoSaver implements Tickable {
                 executor.submit(() -> save.saveAll());
             }
         }
+    }
+
+    @Override
+    public void pause() {
+        active = false;
+    }
+
+    @Override
+    public void resume() {
+        active = true;
+    }
+
+    @Override
+    public boolean isWorking() {
+        return active;
     }
 }

@@ -55,6 +55,7 @@ public class AdminController {
     @Autowired private SaveService saveService;
     @Autowired private GameService gameService;
     @Autowired private ActionLogger actionLogger;
+    @Autowired private AutoSaver autoSaver;
     @Autowired private DebugService debugService;
     @Autowired private Registration registration;
 
@@ -171,18 +172,36 @@ public class AdminController {
 
     @RequestMapping(params = "stopDebug", method = RequestMethod.GET)
     public String stopDebug(Model model, HttpServletRequest request) {
-        debugService.stop();
+        debugService.pause();
         return getAdmin(request);
     }
 
     @RequestMapping(params = "startDebug", method = RequestMethod.GET)
     public String startDebug(Model model, HttpServletRequest request) {
-        debugService.start();
+        debugService.resume();
         return getAdmin(request);
     }
 
     private void checkDebugStatus(Model model) {
-        model.addAttribute("debug", debugService.isStarted());
+        model.addAttribute("debug", debugService.isWorking());
+    }
+
+    // ----------------
+
+    @RequestMapping(params = "stopAutoSave", method = RequestMethod.GET)
+    public String stopAutoSave(Model model, HttpServletRequest request) {
+        autoSaver.pause();
+        return getAdmin(request);
+    }
+
+    @RequestMapping(params = "startAutoSave", method = RequestMethod.GET)
+    public String startAutoSave(Model model, HttpServletRequest request) {
+        autoSaver.resume();
+        return getAdmin(request);
+    }
+
+    private void checkAutoSaveStatus(Model model) {
+        model.addAttribute("autoSave", autoSaver.isWorking());
     }
 
     // ----------------
@@ -200,7 +219,7 @@ public class AdminController {
     }
 
     private void checkRecordingStatus(Model model) {
-        model.addAttribute("recording", actionLogger.isRecording());
+        model.addAttribute("recording", actionLogger.isWorking());
     }
 
     // ----------------
@@ -325,6 +344,7 @@ public class AdminController {
 
         checkGameStatus(model);
         checkRecordingStatus(model);
+        checkAutoSaveStatus(model);
         checkDebugStatus(model);
         checkRegistrationClosed(model);
         prepareList(model, settings, gameName);

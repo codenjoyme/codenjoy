@@ -82,9 +82,6 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     protected ActionLogger actionLogger;
 
-    @Value("${autoSaverEnable}")
-    protected boolean autoSaverEnable;
-
     @PostConstruct
     public void init() {
         playerGames.init(lock);
@@ -247,20 +244,19 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            long time = 0;
             if (logger.isDebugEnabled()) {
                 logger.info("==================================================================================");
                 logger.info("PlayerService.tick() starts");
+                time = System.currentTimeMillis();
             }
 
-            long time = System.currentTimeMillis();
-
-            if (autoSaverEnable) {
-                autoSaver.tick();
-            }
+            autoSaver.tick();
 
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
+
             actionLogger.log(playerGames);
 
             if (logger.isDebugEnabled()) {
@@ -527,4 +523,5 @@ public class PlayerServiceImpl implements PlayerService {
             lock.readLock().unlock();
         }
     }
+
 }
