@@ -36,14 +36,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class ActionLogger implements Suspendable {
+public class ActionLogger extends Suspendable {
 
     private final int ticksPerSave;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
     private int count;
-    private boolean active;
 
     private CrudConnectionThreadPool pool;
 
@@ -57,21 +56,6 @@ public class ActionLogger implements Suspendable {
                     "board varchar(10000));");
         active = false;
         count = 0;
-    }
-
-    @Override
-    public void pause() {
-        active = false;
-    }
-
-    @Override
-    public void resume() {
-        active = true;
-    }
-
-    @Override
-    public boolean isWorking() {
-        return active;
     }
 
     void removeDatabase() {

@@ -22,11 +22,27 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-public interface Suspendable {
+public abstract class Suspendable {
 
-    void pause();
+    protected boolean active;
 
-    void resume();
+    public void pause() {
+        active = false;
+    }
 
-    boolean isWorking();
+    public void resume() {
+        active = true;
+    }
+
+    public boolean isWorking() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        if (active) {
+            resume();
+        } else {
+            pause();
+        }
+    }
 }

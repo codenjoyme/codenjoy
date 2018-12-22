@@ -31,20 +31,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class AutoSaver implements Tickable, Suspendable {
+public class AutoSaver extends Suspendable implements Tickable {
 
     public static final int TICKS = 30;
 
-    @Autowired
-    private SaveService save;
-
-    @Value("${autoSave}")
-    protected boolean active;
-
+    @Autowired private SaveService save;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-
     private boolean justStart = true;
     private int count = 0;
+
+    @Value("${autoSave}")
+    public void setActive(boolean active) {
+        super.setActive(active);
+    }
 
     @Override
     public void tick() {
@@ -62,20 +61,5 @@ public class AutoSaver implements Tickable, Suspendable {
                 executor.submit(() -> save.saveAll());
             }
         }
-    }
-
-    @Override
-    public void pause() {
-        active = false;
-    }
-
-    @Override
-    public void resume() {
-        active = true;
-    }
-
-    @Override
-    public boolean isWorking() {
-        return active;
     }
 }
