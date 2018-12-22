@@ -43,8 +43,6 @@ public class WebSocketRunner implements Closeable {
     private static final String LOCAL = "127.0.0.1:8080";
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
-    public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
-    public static final String CODENJOY_COM_ALIAS = "codenjoy.com:80";
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
     public static String BOT_CODE = "12345678901234567890";
 
@@ -90,9 +88,6 @@ public class WebSocketRunner implements Closeable {
     private static URI getUri(String protocol, String server, String context, String userName, String code) {
         try {
             String url = String.format(WS_URI_PATTERN, protocol, server, context, userName, code);
-            if (url.contains(CODENJOY_COM_ALIAS)) { // TODO это костылек пока сервер не сделаем нормальный
-                url = url.replace(CODENJOY_COM_ALIAS, CODENJOY_COM_SERVER);
-            }
             return new URI(url);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
