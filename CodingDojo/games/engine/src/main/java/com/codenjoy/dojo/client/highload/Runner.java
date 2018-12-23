@@ -32,12 +32,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Runner {
 
-    private int count;
+    private int iteration;
     private Map<String, List<Character>> status;
     private List<String> processed = new CopyOnWriteArrayList<>();
 
     public Runner(String host, int count) {
-        this.count = count;
         status = new HashMap<>();
 
         int numLength = String.valueOf(count).length();
@@ -83,9 +82,10 @@ public class Runner {
 
         @OnWebSocketMessage
         public void onMessage(String data) throws IOException {
-
             if (processed.contains(name)) {
                 processed.clear();
+                iteration++;
+
                 status.entrySet().stream()
                         .sorted(Comparator.comparing(entry -> entry.getKey()))
                         .forEach(entry -> {
@@ -98,7 +98,7 @@ public class Runner {
             processed.add(name);
             statusLine.add('+');
 
-            session.getRemote().sendString("DOWN");
+            session.getRemote().sendString("DOWN,ACT(" + iteration + ")");
         }
     };
 
