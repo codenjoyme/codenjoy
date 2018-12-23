@@ -20,6 +20,18 @@
  * #L%
  */
 
+body, input, textarea {
+    color: black !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #dededead !important;
+}
+
+.table>tbody>tr>td {
+    border-top: 0px !important;
+}
+
 #settings {
     display: none;
 }
