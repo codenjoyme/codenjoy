@@ -156,27 +156,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             return playerData.board;
         }
         var getHeroesData = function() {
-            var result = {};
-            var groups = playerData.heroesData.groups;
-            var group = null;
-            for (var index in groups) {
-                group = groups[index];
-                if (group.indexOf(playerName) === -1) {
-                    continue;
-                }
-                break;
-            }
-            if (!group) {
-                group = []; // TODO этого не должно случиться
-                group.push(playerName);
-            }
-            for (var index in group) {
-                var player = group[index];
-
-                var coordinate = playerData.heroesData.coordinates[player];
-                result[player] = coordinate;
-            }
-            return result;
+            return playerData.heroesData.coordinates;
         }
 
         var drawAllLayers = function(layers, onDrawItem){
@@ -546,7 +526,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         showScoreInformation(playerName, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
+            $("#level_" + toId(playerName)).text(data.heroesData.coordinates[playerName].level + 1);
         }
     }
 

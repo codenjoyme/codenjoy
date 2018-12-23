@@ -27,11 +27,12 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
@@ -271,5 +272,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public PlayerGame get(int index) { // TODO test me
         return playerGames.get(index);
+    }
+
+    public List<PlayerGame> all() {
+        return playerGames;
     }
 }

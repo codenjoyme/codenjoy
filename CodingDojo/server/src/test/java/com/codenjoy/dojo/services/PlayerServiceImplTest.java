@@ -330,31 +330,22 @@ public class PlayerServiceImplTest {
         verify(screenController).requestControlToAll(screenSendCaptor.capture());
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
-        Map<String, String> expected = new TreeMap<>();
-        String heroesData = "HeroesData:'" +
-                "{\"coordinates\":" +
-                    "{\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"level\":0,\"multiplayer\":false}," +
-                    "\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"level\":0,\"multiplayer\":false}}," +
-                "\"groups\":" +
-                    "[[\"petya@mail.com\"],[\"vasya@mail.com\"]]}'";
-        String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
-        expected.put(VASYA, "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', GameName:'game', Score:123, Info:'', " +
-                scores + ", " +
-                heroesData + "]");
-
-        expected.put(PETYA, "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', GameName:'game', Score:234, Info:'', " +
-                scores + ", " +
-                heroesData + "]");
-
-        assertEquals(2, data.size());
-
-        for (Map.Entry<ScreenRecipient, Object> entry : data.entrySet()) {
-            assertEquals(
-                    expected.get(entry.getKey().toString()),
-                    entry.getValue().toString());
-        }
+        assertEquals(
+                "{vasya@mail.com=PlayerData[" +
+                    "BoardSize:15, Board:'ABCD', GameName:'game', " +
+                    "Score:123, Info:'', " +
+                    "Scores:'{'vasya@mail.com':123}', " +
+                    "HeroesData:'{" +
+                        "'coordinates':{'vasya@mail.com':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
+                        "'group':['vasya@mail.com']}'], " +
+                "petya@mail.com=PlayerData[" +
+                    "BoardSize:15, Board:'DCBA', GameName:'game', " +
+                    "Score:234, Info:'', " +
+                    "Scores:'{'petya@mail.com':234}', " +
+                    "HeroesData:'{" +
+                        "'coordinates':{'petya@mail.com':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
+                        "'group':['petya@mail.com']}']}",
+                data.toString().replaceAll("\"", "'"));
     }
 
     @Test
