@@ -56,16 +56,16 @@ public class PlayerGamesView {
     private JSONObject getCoordinatesJSON(String gameType) {
         List<PlayerGame> playerGames = service.getAll(gameType);
 
-        Map<Player, List<Player>> playersMap = new HashMap<>();
+        Map<String, List<String>> playersMap = new HashMap<>();
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             Game game = playerGame.getGame();
             GameField field = game.getField();
-            List<Player> group = playerGames.stream()
+            List<String> group = playerGames.stream()
                     .filter(pg -> pg.getField().equals(field))
-                    .map(pg -> pg.getPlayer())
+                    .map(pg -> pg.getPlayer().getName())
                     .collect(toList());
-            playersMap.put(player, group);
+            playersMap.put(player.getName(), group);
         }
 
         Map<String, JSONObject> heroesData = new HashMap<>();
@@ -75,17 +75,8 @@ public class PlayerGamesView {
         }
 
         JSONObject result = new JSONObject();
-        for (Map.Entry<Player, List<Player>> entry : playersMap.entrySet()) {
-            Player player1 = entry.getKey();
-
-            JSONObject map = new JSONObject();
-            result.put(player1.getName(), map);
-
-            for (Player player2 : entry.getValue()) {
-                String name = player2.getName();
-                map.put(name, heroesData.get(name));
-            }
-        }
+        result.put("coordinates", heroesData);
+        result.put("groups", playersMap);
         return result;
     }
 

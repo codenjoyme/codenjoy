@@ -156,7 +156,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
             return playerData.board;
         }
         var getHeroesData = function() {
-            return playerData.heroesData[playerName];
+            var result = {};
+            var group = playerData.heroesData.groups[playerName];
+            for (var index in group) {
+                var player = group[index];
+
+                var coordinate = playerData.heroesData.coordinates[player];
+                result[player] = coordinate;
+            }
+            return result;
         }
 
         var drawAllLayers = function(layers, onDrawItem){

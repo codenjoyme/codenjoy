@@ -88,30 +88,17 @@ public class PlayerGamesViewTest {
         // then
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'user1':{" +
+                    "'coordinates':{" +
                         "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
                         "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'user2':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'user3':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'user4':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}" +
+                    "'groups':{" +
+                        "'user1':['user1','user2','user3','user4']," +
+                        "'user2':['user1','user2','user3','user4']," +
+                        "'user3':['user1','user2','user3','user4']," +
+                        "'user4':['user1','user2','user3','user4']}" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
     }
@@ -135,21 +122,17 @@ public class PlayerGamesViewTest {
         // then
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'user1':{" +
+                    "'coordinates':{" +
                         "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                    "}," +
-                    "'user2':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                    "}," +
-                    "'user3':{" +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'user4':{" +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
+                    "'groups':{" +
+                        "'user1':['user1','user2']," +
+                        "'user2':['user1','user2']," +
+                        "'user3':['user3','user4']," +
+                        "'user4':['user3','user4']" +
                     "}" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
@@ -172,17 +155,17 @@ public class PlayerGamesViewTest {
         // then
         assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
                         "'heroesData':{" +
-                            "'user1':{" +
-                                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
-                            "}," +
-                            "'user2':{" +
-                                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                            "}," +
-                            "'user3':{" +
-                                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
-                            "}," +
-                            "'user4':{" +
+                            "'coordinates':{" +
+                                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
+                                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
+                                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                                 "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
+                            "}," +
+                            "'groups':{" +
+                                "'user1':['user1']," +
+                                "'user2':['user2']," +
+                                "'user3':['user3']," +
+                                "'user4':['user4']" +
                             "}" +
                         "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
