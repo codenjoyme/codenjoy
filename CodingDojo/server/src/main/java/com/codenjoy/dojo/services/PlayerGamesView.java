@@ -40,36 +40,32 @@ public class PlayerGamesView {
     protected PlayerGames service;
 
     public Map<String, GameData> getGamesDataMap() {
-        Map<String, GameData> result = new LinkedHashMap<>();
-
         Map<GameType, GuiPlotColorDecoder> decoders = getDecoders();
         Map<String, List<String>> groupsMap = getGroupsMap();
-        Map<String, Object> allScores = getScores();
-        Map<String, HeroData> allCoordinates = getCoordinates();
+        Map<String, Object> scores = getScores();
+        Map<String, HeroData> coordinates = getCoordinates();
 
-        for (PlayerGame playerGame : service) {
-            String player = playerGame.getPlayer().getName();
-            GameType gameType = playerGame.getGameType();
-            int boardSize = gameType.getBoardSize().getValue();
-            GuiPlotColorDecoder decoder = decoders.get(gameType);
-            List<String> group = groupsMap.get(player);
-            Map<String, Object> scores = filterByGroup(allScores, group);
-            Map<String, HeroData> coordinates = filterByGroup(allCoordinates, group);
+        return service.all().stream()
+                .collect(toMap(
+                        pg -> pg.getPlayer().getName(),
+                        pg -> {
+                            GameType gameType = pg.getGameType();
+                            String player = pg.getPlayer().getName();
+                            List<String> group = groupsMap.get(player);
 
-            result.put(player, new GameData(boardSize, decoder,
-                    scores, group, coordinates));
-        }
-
-        return result;
+                            return new GameData(
+                                    gameType.getBoardSize().getValue(),
+                                    decoders.get(gameType),
+                                    filterByGroup(scores, group),
+                                    group,
+                                    filterByGroup(coordinates, group));
+                        }));
     }
 
     private Map<GameType, GuiPlotColorDecoder> getDecoders() {
-        Map<GameType, GuiPlotColorDecoder> result = new HashMap<>();
-        for (GameType gameType : service.getGameTypes()) {
-            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-            result.put(gameType, decoder);
-        }
-        return result;
+        return service.getGameTypes().stream()
+                .collect(toMap(type -> type,
+                        type -> new GuiPlotColorDecoder(type.getPlots())));
     }
 
     private <K, V> Map<K, V> filterByGroup(Map<K, V> map, List<String> group) {
@@ -80,12 +76,9 @@ public class PlayerGamesView {
     }
 
     private Map<String, HeroData> getCoordinates() {
-        Map<String, HeroData> result = new HashMap<>();
-        for (PlayerGame playerGame : service) {
-            result.put(playerGame.getPlayer().getName(),
-                    playerGame.getGame().getHero());
-        }
-        return result;
+        return service.all().stream()
+                .collect(toMap(pg -> pg.getPlayer().getName(),
+                        pg -> pg.getGame().getHero()));
     }
 
     private Map<String, List<String>> getGroupsMap() {
@@ -109,11 +102,8 @@ public class PlayerGamesView {
     }
 
     private Map<String, Object> getScores() {
-        Map<String, Object> result = new HashMap<>();
-        for (PlayerGame playerGame : service.all()) {
-            Player player = playerGame.getPlayer();
-            result.put(player.getName(), player.getScore());
-        }
-        return result;
+        return service.all().stream()
+                .collect(toMap(pg -> pg.getPlayer().getName(),
+                        pg -> pg.getPlayer().getScore()));
     }
 }
