@@ -157,7 +157,19 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
         var getHeroesData = function() {
             var result = {};
-            var group = playerData.heroesData.groups[playerName];
+            var groups = playerData.heroesData.groups;
+            var group = null;
+            for (var index in groups) {
+                group = groups[index];
+                if (group.indexOf(playerName) === -1) {
+                    continue;
+                }
+                break;
+            }
+            if (!group) {
+                group = []; // TODO этого не должно случиться
+                group.push(playerName);
+            }
             for (var index in group) {
                 var player = group[index];
 

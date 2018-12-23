@@ -330,13 +330,13 @@ public class PlayerServiceImplTest {
         verify(screenController).requestControlToAll(screenSendCaptor.capture());
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
-        Map<String, String> expected = new TreeMap<String, String>();
+        Map<String, String> expected = new TreeMap<>();
         String heroesData = "HeroesData:'" +
                 "{\"coordinates\":" +
                     "{\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"level\":0,\"multiplayer\":false}," +
                     "\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"level\":0,\"multiplayer\":false}}," +
                 "\"groups\":" +
-                    "{\"petya@mail.com\":[\"petya@mail.com\"],\"vasya@mail.com\":[\"vasya@mail.com\"]}}'";
+                    "[[\"petya@mail.com\"],[\"vasya@mail.com\"]]}'";
         String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, Info:'', " +

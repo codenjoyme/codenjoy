@@ -31,7 +31,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -56,17 +58,13 @@ public class PlayerGamesView {
     private JSONObject getCoordinatesJSON(String gameType) {
         List<PlayerGame> playerGames = service.getAll(gameType);
 
-        Map<String, List<String>> playersMap = new HashMap<>();
-        for (PlayerGame playerGame : playerGames) {
-            Player player = playerGame.getPlayer();
-            Game game = playerGame.getGame();
-            GameField field = game.getField();
-            List<String> group = playerGames.stream()
-                    .filter(pg -> pg.getField().equals(field))
-                    .map(pg -> pg.getPlayer().getName())
-                    .collect(toList());
-            playersMap.put(player.getName(), group);
-        }
+        List<List<String>> groups = playerGames.stream()
+                .collect(groupingBy(PlayerGame::getField))
+                .values().stream()
+                .map(group -> group.stream()
+                        .map(pg -> pg.getPlayer().getName())
+                        .collect(toList()))
+                .collect(toList());
 
         Map<String, JSONObject> heroesData = new HashMap<>();
         for (PlayerGame playerGame : playerGames) {
@@ -76,7 +74,7 @@ public class PlayerGamesView {
 
         JSONObject result = new JSONObject();
         result.put("coordinates", heroesData);
-        result.put("groups", playersMap);
+        result.put("groups", groups);
         return result;
     }
 

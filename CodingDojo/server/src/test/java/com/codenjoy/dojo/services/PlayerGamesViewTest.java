@@ -94,11 +94,9 @@ public class PlayerGamesViewTest {
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'groups':{" +
-                        "'user1':['user1','user2','user3','user4']," +
-                        "'user2':['user1','user2','user3','user4']," +
-                        "'user3':['user1','user2','user3','user4']," +
-                        "'user4':['user1','user2','user3','user4']}" +
+                    "'groups':[" +
+                        "['user1','user2','user3','user4']" +
+                    "]" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
     }
@@ -128,12 +126,10 @@ public class PlayerGamesViewTest {
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'groups':{" +
-                        "'user1':['user1','user2']," +
-                        "'user2':['user1','user2']," +
-                        "'user3':['user3','user4']," +
-                        "'user4':['user3','user4']" +
-                    "}" +
+                    "'groups':[" +
+                        "['user1','user2']," +
+                        "['user3','user4']" +
+                    "]" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
     }
@@ -161,12 +157,12 @@ public class PlayerGamesViewTest {
                                 "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                                 "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                             "}," +
-                            "'groups':{" +
-                                "'user1':['user1']," +
-                                "'user2':['user2']," +
-                                "'user3':['user3']," +
-                                "'user4':['user4']" +
-                            "}" +
+                            "'groups':[" +
+                                "['user1']," +
+                                "['user2']," +
+                                "['user3']," +
+                                "['user4']" +
+                            "]" +
                         "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
                 toString(dataMap));
     }
