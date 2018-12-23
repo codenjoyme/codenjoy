@@ -28,7 +28,7 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy</title>
 
-    <script src="${ctx}/resources/js/google-analytics.js"></script>
+    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
 
     <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">

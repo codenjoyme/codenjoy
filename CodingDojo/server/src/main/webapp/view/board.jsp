@@ -32,7 +32,7 @@
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/google-analytics.js"></script>
+    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
 
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
