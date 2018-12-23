@@ -42,12 +42,7 @@ public class PlayerGamesView {
     public Map<String, GameData> getGamesDataMap() {
         Map<String, GameData> result = new LinkedHashMap<>();
 
-        Map<GameType, GuiPlotColorDecoder> decoders = new HashMap<>();
-        for (GameType gameType : service.getGameTypes()) {
-            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-            decoders.put(gameType, decoder);
-        }
-
+        Map<GameType, GuiPlotColorDecoder> decoders = getDecoders();
         Map<String, List<String>> groupsMap = getGroupsMap();
         Map<String, Object> allScores = getScores();
         Map<String, HeroData> allCoordinates = getCoordinates();
@@ -55,28 +50,33 @@ public class PlayerGamesView {
         for (PlayerGame playerGame : service) {
             String player = playerGame.getPlayer().getName();
             GameType gameType = playerGame.getGameType();
-
             int boardSize = gameType.getBoardSize().getValue();
-
             GuiPlotColorDecoder decoder = decoders.get(gameType);
-
             List<String> group = groupsMap.get(player);
-
-            Map<String, Object> scores = allScores.entrySet().stream()
-                    .filter(entry -> group.contains(entry.getKey()))
-                    .collect(toMap(entry -> entry.getKey(),
-                            entry -> entry.getValue()));
-
-            Map<String, HeroData> coordinates = allCoordinates.entrySet().stream()
-                    .filter(entry -> group.contains(entry.getKey()))
-                    .collect(toMap(entry -> entry.getKey(),
-                            entry -> entry.getValue()));
+            Map<String, Object> scores = filterByGroup(allScores, group);
+            Map<String, HeroData> coordinates = filterByGroup(allCoordinates, group);
 
             result.put(player, new GameData(boardSize, decoder,
                     scores, group, coordinates));
         }
 
         return result;
+    }
+
+    private Map<GameType, GuiPlotColorDecoder> getDecoders() {
+        Map<GameType, GuiPlotColorDecoder> result = new HashMap<>();
+        for (GameType gameType : service.getGameTypes()) {
+            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
+            result.put(gameType, decoder);
+        }
+        return result;
+    }
+
+    private <K, V> Map<K, V> filterByGroup(Map<K, V> map, List<String> group) {
+        return map.entrySet().stream()
+                .filter(entry -> group.contains(entry.getKey()))
+                .collect(toMap(entry -> entry.getKey(),
+                        entry -> entry.getValue()));
     }
 
     private Map<String, HeroData> getCoordinates() {
