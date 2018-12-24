@@ -44,36 +44,36 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function reloadCanvasesData() {
         reloading = true;
+        loadPlayers(rebuildCanvasesForPlayers);
+    }
 
-        loadPlayers(function(newPlayers) {
-            var remove = [];
-            var create = [];
-            var playerNames = getNames(players);
-            var newPlayerNames = getNames(newPlayers);
-            newPlayers.forEach(function (newPlayer) {
-                if ($.inArray(newPlayer.name, playerNames) == -1) {
-                    create.push(newPlayer);
-                }
-            });
-            players.forEach(function (player) {
-                if ($.inArray(player.name, newPlayerNames) == -1) {
-                    remove.push(player);
-                }
-            });
-
-            players = newPlayers;
-
-            removeHtml(remove);
-            removeCanvases(remove);
-
-            buildHtml(create);
-            buildCanvases(create);
-
-            if (players.length == 0) {
-                goToHomePage();
+    function notIn(playersWhere, playersWhat) {
+        var result = [];
+        var names = getNames(playersWhere);
+        playersWhat.forEach(function (player) {
+            if ($.inArray(player.name, names) == -1) {
+                result.push(player);
             }
-            reloading = false;
         });
+        return result;
+    }
+
+    function rebuildCanvasesForPlayers(newPlayers) {
+        var create = notIn(players, newPlayers);
+        var remove = notIn(newPlayers, players);
+
+        players = newPlayers;
+
+        removeHtml(remove);
+        removeCanvases(remove);
+
+        buildHtml(create);
+        buildCanvases(create);
+
+        if (players.length == 0) {
+            goToHomePage();
+        }
+        reloading = false;
     }
 
     function loadCanvasesData() {
@@ -465,8 +465,27 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return result;
     }
 
+    function getPlayers(data) {
+        return Object.keys(data);
+    }
+
+    function getAllPlayersFromGroups(data) {
+        var result = [];
+        var keys = getPlayers(data);
+        for (var player in keys) {
+            result = result.concat(data[keys[player]].heroesData.group);
+        }
+        return result;
+    }
+
+    function isPlayersInGroups(data) {
+        var playersOnTop = getPlayers(data);
+        var playersInGroups = getAllPlayersFromGroups(data);
+        return playersOnTop != playersInGroups;
+    }
+
     function isPlayersListChanged(data) {
-        var newPlayers = Object.keys(data);
+        var newPlayers = getPlayers(data);
         var oldPlayers = getNames(players);
 
         if (newPlayers.length != oldPlayers.length) {
@@ -493,6 +512,18 @@ function initCanvases(contextPath, players, allPlayersScreen,
         if (isPlayerListEmpty(data)) {
             goToHomePage();
             return;
+        }
+
+        if (allPlayersScreen && isPlayersInGroups(data)) {
+            var playersOnTop = [];
+            var names = getPlayers(data);
+            for (var index in names) {
+                var name = names[index];
+                playersOnTop.push({ 'name':name });
+            }
+
+            reloading = true;
+            rebuildCanvasesForPlayers(playersOnTop);
         }
 
         if (allPlayersScreen && isPlayersListChanged(data)) {
