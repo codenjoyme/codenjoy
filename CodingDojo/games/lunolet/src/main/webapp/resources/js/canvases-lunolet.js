@@ -635,7 +635,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         showScoreInformation(playerName, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
+            $("#level_" + toId(playerName)).text(data.heroesData.coordinates[playerName] .level + 1);
         }
     }
 
