@@ -34,6 +34,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -68,11 +72,20 @@ public class ScreenResponseHandler implements ResponseHandler {
     private Map<Player, PlayerData> filter(Map<Player, PlayerData> data,
                                            GetScreenJSONRequest request)
     {
-        return data.entrySet().stream()
+        Stream<Map.Entry<Player, PlayerData>> stream = data.entrySet().stream()
                 .filter(entry -> request.isMyGame(entry.getKey()))
-                .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()))
+                .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()));
+        if (request.isAllPlayers()) {
+            stream = stream.filter(distinctByKey(entry -> entry.getValue().getHeroesData().get("group").toString()));
+        }
+        return stream
                 .collect(toMap(entry -> entry.getKey(),
                         entry -> entry.getValue()));
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
     }
 
     @Override

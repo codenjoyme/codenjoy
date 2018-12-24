@@ -57,7 +57,7 @@ public class ScreenResponseHandlerTest {
     }
 
     @Test
-    public void shouldOnResponse_whenOnResponse_caseAllPlayersScreen() {
+    public void shouldOnResponse_whenOnResponse_caseAllPlayersScreen_distinctByGroups() {
         // given
 
         // when
@@ -75,17 +75,81 @@ public class ScreenResponseHandlerTest {
 
         // then
         assertEquals("{\n" +
+                "  'player2':{\n" +
+                "    'board':'some_board2',\n" +
+                "    'boardSize':12,\n" +
+                "    'gameName':'game',\n" +
+                "    'heroesData':{\n" +
+                "      'coordinates':'coordinates1',\n" +
+                "      'group':[\n" +
+                "        'player1',\n" +
+                "        'player2'\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    'info':'some_info2',\n" +
+                "    'score':546,\n" +
+                "    'scores':{\n" +
+                "      'player1':100,\n" +
+                "      'player2':200\n" +
+                "    }\n" +
+                "  },\n" +
+                "  'player4':{\n" +
+                "    'board':'some_board4',\n" +
+                "    'boardSize':45,\n" +
+                "    'gameName':'game',\n" +
+                "    'heroesData':{\n" +
+                "      'coordinates':'coordinates4',\n" +
+                "      'group':[\n" +
+                "        'player4'\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    'info':'some_info4',\n" +
+                "    'score':765,\n" +
+                "    'scores':{\n" +
+                "      'player4':400\n" +
+                "    }\n" +
+                "  }\n" +
+                "}", JsonUtils.prettyPrint(result));
+    }
+
+    @Test
+    public void shouldOnResponse_whenOnResponse_caseAllPlayersScreen_noGroupsAllSelected() {
+        // given
+
+        // when
+        handler.onResponse(socket,
+                "{'name':getScreen, 'allPlayersScreen':true, " +
+                        "'players':[], 'gameName':'game'}");
+
+        // then
+        Function function = verifySetFilterFor();
+
+        Map<Player, PlayerData> map = getDummyPlayers();
+        map.get(new Player("player1")).getHeroesData().getJSONArray("group").remove(1);
+        map.get(new Player("player1")).getScores().remove("player2");
+
+        map.get(new Player("player2")).getHeroesData().getJSONArray("group").remove(0);
+        map.get(new Player("player2")).getScores().remove("player1");
+
+        // when
+        JSONObject result = (JSONObject)function.apply(map);
+
+        // then
+        assertEquals("{\n" +
                 "  'player1':{\n" +
                 "    'board':'some_board1',\n" +
                 "    'boardSize':10,\n" +
                 "    'gameName':'game',\n" +
                 "    'heroesData':{\n" +
-                "      'hero':'herodata1'\n" +
+                "      'coordinates':'coordinates1',\n" +
+                "      'group':[\n" +
+                "        'player1'\n" +
+                "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info1',\n" +
                 "    'score':134,\n" +
                 "    'scores':{\n" +
-                "      'score':'data1'\n" +
+                "      'player1':100\n" +
                 "    }\n" +
                 "  },\n" +
                 "  'player2':{\n" +
@@ -93,17 +157,73 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':12,\n" +
                 "    'gameName':'game',\n" +
                 "    'heroesData':{\n" +
-                "      'hero':'herodata2'\n" +
+                "      'coordinates':'coordinates1',\n" +
+                "      'group':[\n" +
+                "        'player2'\n" +
+                "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info2',\n" +
                 "    'score':546,\n" +
                 "    'scores':{\n" +
-                "      'score':'data2'\n" +
+                "      'player2':200\n" +
+                "    }\n" +
+                "  },\n" +
+                "  'player4':{\n" +
+                "    'board':'some_board4',\n" +
+                "    'boardSize':45,\n" +
+                "    'gameName':'game',\n" +
+                "    'heroesData':{\n" +
+                "      'coordinates':'coordinates4',\n" +
+                "      'group':[\n" +
+                "        'player4'\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    'info':'some_info4',\n" +
+                "    'score':765,\n" +
+                "    'scores':{\n" +
+                "      'player4':400\n" +
                 "    }\n" +
                 "  }\n" +
                 "}", JsonUtils.prettyPrint(result));
     }
 
+    @Test
+    public void shouldOnResponse_whenOnResponse_caseSelectedPlayer_fromOtherGame() {
+        // given
+
+        // when
+        handler.onResponse(socket,
+                "{'name':getScreen, 'allPlayersScreen':false, " +
+                        "'players':['player3'], 'gameName':'other_game'}");
+
+        // then
+        Function function = verifySetFilterFor();
+
+        Map<Player, PlayerData> map = getDummyPlayers();
+
+        // when
+        JSONObject result = (JSONObject)function.apply(map);
+
+        // then
+        assertEquals("{\n" +
+                "  'player3':{\n" +
+                "    'board':'some_board3',\n" +
+                "    'boardSize':14,\n" +
+                "    'gameName':'other_game',\n" +
+                "    'heroesData':{\n" +
+                "      'coordinates':'coordinates1',\n" +
+                "      'group':[\n" +
+                "        'player3'\n" +
+                "      ]\n" +
+                "    },\n" +
+                "    'info':'some_info3',\n" +
+                "    'score':235,\n" +
+                "    'scores':{\n" +
+                "      'player3':300\n" +
+                "    }\n" +
+                "  }\n" +
+                "}", JsonUtils.prettyPrint(result));
+    }
 
     @Test
     public void shouldOnResponse_whenOnResponse_caseSelectedPlayer() {
@@ -129,12 +249,17 @@ public class ScreenResponseHandlerTest {
                 "    'boardSize':12,\n" +
                 "    'gameName':'game',\n" +
                 "    'heroesData':{\n" +
-                "      'hero':'herodata2'\n" +
+                "      'coordinates':'coordinates1',\n" +
+                "      'group':[\n" +
+                "        'player1',\n" +
+                "        'player2'\n" +
+                "      ]\n" +
                 "    },\n" +
                 "    'info':'some_info2',\n" +
                 "    'score':546,\n" +
                 "    'scores':{\n" +
-                "      'score':'data2'\n" +
+                "      'player1':100,\n" +
+                "      'player2':200\n" +
                 "    }\n" +
                 "  }\n" +
                 "}", JsonUtils.prettyPrint(result));
@@ -146,20 +271,27 @@ public class ScreenResponseHandlerTest {
         Player player1 = new Player("player1");
         player1.setGameName("game");
         map.put(player1, new PlayerData(10, "some_board1", "game",
-                134, "some_info1", new JSONObject("{'score':'data1'}"),
-                new JSONObject("{'hero':'herodata1'}")));
+                134, "some_info1", new JSONObject("{'player1':100,'player2':200}"),
+                new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}")));
 
         Player player2 = new Player("player2");
         player2.setGameName("game");
         map.put(player2, new PlayerData(12, "some_board2", "game",
-                546, "some_info2", new JSONObject("{'score':'data2'}"),
-                new JSONObject("{'hero':'herodata2'}")));
+                546, "some_info2", new JSONObject("{'player1':100,'player2':200}"),
+                new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}")));
+
+        Player player4 = new Player("player4");
+        player4.setGameName("game");
+        map.put(player4, new PlayerData(45, "some_board4", "game",
+                765, "some_info4", new JSONObject("{'player4':400}"),
+                new JSONObject("{'coordinates':'coordinates4','group':['player4']}")));
 
         Player player3 = new Player("player3");
         player3.setGameName("other_game");
         map.put(player3, new PlayerData(14, "some_board3", "other_game",
-                235, "some_info3", new JSONObject("{'score':'data3'}"),
-                new JSONObject("{'hero':'herodata3'}")));
+                235, "some_info3", new JSONObject("{'player3':300}"),
+                new JSONObject("{'coordinates':'coordinates1','group':['player3']}")));
+
         return map;
     }
 
