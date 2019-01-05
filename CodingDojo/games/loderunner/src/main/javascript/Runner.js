@@ -21,21 +21,28 @@
  */
 var log = function(string) {
     console.log(string);
+    if (!!printBoardOnTextArea) {
+        printLogOnTextArea(string);
+    }
 };
 
 var printArray = function (array) {
-   var result = [];
-   for (var index in array) {
-       var element = array[index];
-       result.push(element.toString());
-   }
-   return "[" + result + "]";
+    var result = [];
+    for (var index in array) {
+        var element = array[index];
+        result.push(element.toString());
+    }
+    return "[" + result + "]";
 };
 var util = require('util');
 
-//var hostIp = '127.0.0.1';
-var hostIp = 'tetrisj.jvmhost.net';
+// to use for local server
+var hostIP = '192.168.1.1';
 
+// to use for codenjoy.com server
+// var hostIP = 'codenjoy.com';
+
+// this is your email
 var userName = 'user@gmail.com';
 // you can get this code after registration on the server with your email
 // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
@@ -45,14 +52,16 @@ var protocol = 'WS';
 
 var processBoard = function(boardString) {
     var board = new Board(boardString);
-    log("Board: " + board);
     if (!!printBoardOnTextArea) {
         printBoardOnTextArea(board.boardAsString());
     }
 
+    var logMessage = board + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
-    log("Answer: " + answer);
-    log("-----------------------------------");
+    logMessage += "Answer: " + answer + "\n";
+    logMessage += "-----------------------------------\n";
+
+    log(logMessage);
 
     return answer;
 };
@@ -61,10 +70,10 @@ if (protocol == 'HTTP') {
     // unsupported
 } else {
     var port = 8080;
-    if (hostIp == 'tetrisj.jvmhost.net') {
-        port = 12270;
+    if (hostIp == 'codenjoy.com') {
+        port = 80;
     }
-    var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
+    var server = 'ws://' + hostIP + ':' + port + '/codenjoy-contest/ws';
     var WSocket = require('ws');
     var ws = new WSocket(server + '?user=' + userName + '&code=' + code);
 
@@ -77,14 +86,10 @@ if (protocol == 'HTTP') {
     });
 
     ws.on('message', function(message) {
-        log('Received data');
-
         var pattern = new RegExp(/^board=(.*)$/);
         var parameters = message.match(pattern);
         var boardString = parameters[1];
-
         var answer = processBoard(boardString);
-
         ws.send(answer);
     });
 
@@ -215,7 +220,7 @@ var Point = function (x, y) {
             return '[' + x + ',' + y + ']';
         },
 
-        isBad : function(boardSize) {
+        isOutOf : function(boardSize) {
             return x >= boardSize || y >= boardSize || x < 0 || y < 0;
         },
 
@@ -234,16 +239,28 @@ var pt = function(x, y) {
 };
 
 var LengthToXY = function(boardSize) {
+    function inversionY(y) {
+        return boardSize - 1 - y;
+    }
+
+    function inversionX(x) {
+        return x;
+    }
+
     return {
         getXY : function(length) {
             if (length == -1) {
                 return null;
             }
-            return new Point(length % boardSize, Math.ceil(length / boardSize));
+            var x = inversionX(length % boardSize);
+            var y = inversionY(Math.ceil(length / boardSize));
+            return new Point(x, y);
         },
 
         getLength : function(x, y) {
-            return y*boardSize + x;
+            var xx = inversionX(x);
+            var yy = inversionY(y);
+            return yy*boardSize + xx;
         }
     };
 };
@@ -252,9 +269,9 @@ var Board = function(board){
     var contains  = function(a, obj) {
         var i = a.length;
         while (i--) {
-           if (a[i].equals(obj)) {
-               return true;
-           }
+            if (a[i].equals(obj)) {
+                return true;
+            }
         }
         return false;
     };
@@ -348,19 +365,22 @@ var Board = function(board){
     };
 
     var isAt = function(x, y, element) {
-       if (pt(x, y).isBad(size)) {
-           return false;
-       }
-       return getAt(x, y) == element;
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
+        return getAt(x, y) == element;
     };
 
     var getAt = function(x, y) {
+        if (pt(x, y).isOutOf(size)) {
+            return Element.WALL;
+        }
         return board.charAt(xyl.getLength(x, y));
     };
 
     var boardAsString = function() {
         var result = "";
-        for (var i = 0; i <= size - 1; i++) {
+        for (var i = 0; i < size; i++) {
             result += board.substring(i * size, (i + 1) * size);
             result += "\n";
         }
@@ -390,50 +410,53 @@ var Board = function(board){
     };
 
     var findAll = function(element) {
-       var result = [];
-       for (var i = 0; i < size*size; i++) {
-           var point = xyl.getXY(i);
-           if (isAt(point.getX(), point.getY(), element)) {
-               result.push(point);
-           }
-       }
-       return result;
-   };
+        var result = [];
+        for (var i = 0; i < size*size; i++) {
+            var point = xyl.getXY(i);
+            if (isAt(point.getX(), point.getY(), element)) {
+                result.push(point);
+            }
+        }
+        return result;
+    };
 
-   var isAnyOfAt = function(x, y, elements) {
-       for (var index in elements) {
-           var element = elements[index];
-           if (isAt(x, y,element)) {
-               return true;
-           }
-       }
-       return false;
-   };
+    var isAnyOfAt = function(x, y, elements) {
+        for (var index in elements) {
+            var element = elements[index];
+            if (isAt(x, y,element)) {
+                return true;
+            }
+        }
+        return false;
+    };
 
-   var isNear = function(x, y, element) {
-       if (pt(x, y).isBad(size)) {
-           return false;
-       }
-       return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
-   };
+    var isNear = function(x, y, element) {
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
+        return isAt(x + 1, y, element) || // TODO to remove duplicate
+            isAt(x - 1, y, element) ||
+            isAt(x, y + 1, element) ||
+            isAt(x, y - 1, element);
+    };
 
-   var isBarrierAt = function(x, y) {
-       return contains(getBarriers(), pt(x, y));
-   };
+    var isBarrierAt = function(x, y) {
+        return contains(getBarriers(), pt(x, y));
+    };
 
-   var countNear = function(x, y, element) {
-       if (pt(x, y).isBad(size)) {
-           return 0;
-       }
-       var count = 0;
-       if (isAt(x - 1, y    , element)) count ++;
-       if (isAt(x + 1, y    , element)) count ++;
-       if (isAt(x    , y - 1, element)) count ++;
-       if (isAt(x    , y + 1, element)) count ++;
-       return count;
-   };
+    var countNear = function(x, y, element) {
+        if (pt(x, y).isOutOf(size)) {
+            return 0;
+        }
+        var count = 0;
+        if (isAt(x - 1, y    , element)) count ++; // TODO to remove duplicate
+        if (isAt(x + 1, y    , element)) count ++;
+        if (isAt(x    , y - 1, element)) count ++;
+        if (isAt(x    , y + 1, element)) count ++;
+        return count;
+    };
 
-   return {
+    return {
         size : boardSize,
         getMe : getMe,
         getOtherHeroes : getOtherHeroes,
@@ -450,7 +473,7 @@ var Board = function(board){
         isBarrierAt : isBarrierAt,
         countNear : countNear,
         getAt : getAt
-   };
+    };
 };
 
 var random = function(n){
@@ -462,8 +485,13 @@ var direction;
 var DirectionSolver = function(board){
 
     return {
+        /**
+         * @return next hero action
+         */
         get : function() {
             var me = board.getMe();
+
+            // TODO your code here
 
             return Direction.DRILL_LEFT;
         }
