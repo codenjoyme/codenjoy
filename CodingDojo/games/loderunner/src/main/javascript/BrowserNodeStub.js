@@ -20,7 +20,23 @@
  * #L%
  */
 var printBoardOnTextArea = function(data) {
-    document.getElementById("board").value = data;
+    var textarea = document.getElementById("board");
+    if (!textarea) return;
+    var size = data.split('\n')[0].length;
+    textarea.cols = size;
+    textarea.rows = size + 1;
+    textarea.value = data;
+}
+
+var printLogOnTextArea = function(data) {
+    var textarea = document.getElementById("log-area");
+    var addToEnd = document.getElementById("add-to-end");
+    if (!textarea) return;
+    if (addToEnd.checked) {
+        textarea.value = textarea.value + "\n" + data;
+    } else {
+        textarea.value = data + "\n" + textarea.value;
+    }
 }
 
 var require = function(string) {
@@ -35,7 +51,7 @@ var require = function(string) {
                     return typeof args[number] != 'undefined'
                         ? args[number]
                         : match
-                    ;
+                        ;
                 });
             }
         }
@@ -55,7 +71,7 @@ var require = function(string) {
                             callback(message.data);
                         }
                     }
-                }, 
+                },
                 "send" : function(message) {
                     socket.send(message);
                 }

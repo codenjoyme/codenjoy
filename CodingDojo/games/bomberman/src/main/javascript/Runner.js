@@ -38,10 +38,9 @@ var util = require('util');
 
 // to use for local server
 var hostIP = '192.168.1.1';
-//var hostIP = '127.0.0.1';
 
 // to use for codenjoy.com server
-// var hostIP = 'tetrisj.jvmhost.net';
+// var hostIP = 'codenjoy.com';
 
 // this is your email
 var userName = 'user@gmail.com';
@@ -71,8 +70,8 @@ if (protocol == 'HTTP') {
     // unsupported
 } else {
     var port = 8080;
-    if (hostIP == 'tetrisj.jvmhost.net') {
-        port = 12270;
+    if (hostIp == 'codenjoy.com') {
+        port = 80;
     }
     var server = 'ws://' + hostIP + ':' + port + '/codenjoy-contest/ws';
     var WSocket = require('ws');
@@ -488,6 +487,9 @@ var DirectionSolver = function(board){
          */
         get : function() {
             var bomberman = board.getBomberman();
+
+            // TODO your code here
+
             return Direction.ACT;
         }
     };
