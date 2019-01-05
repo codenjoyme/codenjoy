@@ -113,7 +113,7 @@ public class Single implements Game {
         }
 
         @Override
-        public boolean isSingleBoardGame() {
+        public boolean isMultiplayer() {
             return progressBar.isMultiple();
         }
 
