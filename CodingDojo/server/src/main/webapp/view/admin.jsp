@@ -68,7 +68,7 @@
             </td>
         </tr>
         <tr>
-            <td style="width:300px;">
+            <td style="width:500px;">
                 <b>Game version is</b> ${gameVersion}
             </td>
         </tr>

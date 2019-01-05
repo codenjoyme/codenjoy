@@ -11,6 +11,8 @@
     <packaging>pom</packaging>
 
     <properties>
+        <build.time>${maven.build.timestamp}</build.time>
+
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <commons-collections.version>3.2.2</commons-collections.version>
