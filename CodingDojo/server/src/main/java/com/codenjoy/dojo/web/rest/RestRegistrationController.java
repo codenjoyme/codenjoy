@@ -100,9 +100,9 @@ public class RestRegistrationController {
     }
 
     static class MType {
-        private int levelsCount;
-        private int roomSize;
         private String type;
+        private int roomSize;
+        private int levelsCount;
 
         public MType(com.codenjoy.dojo.services.multiplayer.MultiplayerType multiplayer) {
             this.type = multiplayer.getType();
@@ -124,15 +124,15 @@ public class RestRegistrationController {
     }
 
     static class PlayerDetailInfo {
-        private MType multiplayer;
-        private HeroData hero;
-        private List<String> group;
-        private String save;
-        private LevelProgress progress;
         private String name;
-        private String gameType;
         private String callbackUrl;
+        private String gameType;
+        private MType multiplayer;
         private String score;
+        private String save;
+        private HeroData hero;
+        private LevelProgress progress;
+        private List<String> group;
         private Registration.User registration;
 
         PlayerDetailInfo(Player player, Registration.User registration,
