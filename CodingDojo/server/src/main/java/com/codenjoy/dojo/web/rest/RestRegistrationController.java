@@ -25,6 +25,8 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +34,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -42,6 +46,8 @@ public class RestRegistrationController {
 
     @Autowired private Registration registration;
     @Autowired private PlayerService playerService;
+    @Autowired private PlayerGames playerGamesService;
+    @Autowired private PlayerGamesView playerGamesViewService;
 
     @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
@@ -91,5 +97,123 @@ public class RestRegistrationController {
         return playerService.getAll(gameName).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
+    }
+
+    static class MType {
+        private int levelsCount;
+        private int roomSize;
+        private String type;
+
+        public MType(com.codenjoy.dojo.services.multiplayer.MultiplayerType multiplayer) {
+            this.type = multiplayer.getType();
+            roomSize = multiplayer.getRoomSize();
+            levelsCount = multiplayer.getLevelsCount();
+        }
+
+        public int getLevelsCount() {
+            return levelsCount;
+        }
+
+        public int getRoomSize() {
+            return roomSize;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
+
+    static class PlayerDetailInfo {
+        private MType multiplayer;
+        private HeroData hero;
+        private List<String> group;
+        private String save;
+        private LevelProgress progress;
+        private String name;
+        private String gameType;
+        private String callbackUrl;
+        private String score;
+        private Registration.User registration;
+
+        PlayerDetailInfo(Player player, Registration.User registration,
+                         Game game, List<String> group)
+        {
+            gameType = player.getGameType().name();
+            multiplayer = new MType(player.getGameType().getMultiplayerType());
+
+            callbackUrl = player.getCallbackUrl();
+            score = String.valueOf(player.getScore());
+            name = player.getName();
+
+            this.registration = registration;
+
+            progress = game.getProgress();
+            save = game.getSave().toString();
+            hero = game.getHero();
+            this.group = group;
+        }
+
+        public String getGameType() {
+            return gameType;
+        }
+
+        public String getCallbackUrl() {
+            return callbackUrl;
+        }
+
+        public String getScore() {
+            return score;
+        }
+
+        public Registration.User getRegistration() {
+            return registration;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public LevelProgress getProgress() {
+            return progress;
+        }
+
+        public String getSave() {
+            return save;
+        }
+
+        public HeroData getHero() {
+            return hero;
+        }
+
+        public List<String> getGroup() {
+            return group;
+        }
+
+        public MType getMultiplayer() {
+            return multiplayer;
+        }
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/player/all/info", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PlayerDetailInfo> getPlayersForMigrate() {
+        List<Player> players = playerService.getAll();
+        List<Registration.User> users = registration.getUsers();
+        Map<String, List<String>> groups = playerGamesViewService.getGroupsMap();
+
+        List<PlayerDetailInfo> result = new LinkedList<>();
+        for (Player player : players) {
+            Registration.User user = users.stream()
+                    .filter(it -> it.getEmail().equals(player.getName()))
+                    .findFirst()
+                    .orElse(null);
+            Game game = playerGamesService.get(player.getName()).getGame();
+
+            List<String> group = groups.get(player.getName());
+            result.add(new PlayerDetailInfo(player, user, game, group));
+        }
+
+        return result;
     }
 }

@@ -81,7 +81,7 @@ public class PlayerGamesView {
                         pg -> pg.getGame().getHero()));
     }
 
-    private Map<String, List<String>> getGroupsMap() {
+    public Map<String, List<String>> getGroupsMap() {
         Map<String, List<String>> result = new LinkedHashMap<>();
         for (List<String> group : getGroups()) {
             for (String player : group) {
