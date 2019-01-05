@@ -1,0 +1,318 @@
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+.wrapper {
+  min-width: 460px;
+}
+
+.wrapper-rules {
+  background-color: #efefef;
+}
+
+ul {margin: 0;}
+
+.inline { display: inline-block; }
+
+.header { height: 100px; color: #464547; }
+.header a { color: #464547; }
+
+.after-line::after {
+  display: inline-block;
+  content: "";
+  width: 1px;
+  height: 30px;
+  background-color: #ccc;
+  margin: 0 15px;
+  position: relative;
+  top: 5px;
+  
+}
+
+.nav-item { line-height: 100px; }
+
+.logo-container {
+  overflow: hidden;
+}
+.logo-epam {
+  float: left;
+  width: 115px;
+}
+.logo-dojo {
+  padding-top: 10px;
+}
+.logo-dojo:hover { text-decoration: none; }
+.logo-title { 
+  font-family: sans-serif;
+  font-size: 24px;
+  margin-left: 10px; 
+  vertical-align: middle;
+}
+
+.nav-item { 
+  font-family: sans-serif;
+  font-size: 16px;
+  margin-left: 30px;
+}
+
+.nav-item:hover { cursor: pointer; }
+.nav-item:first-child { margin-left: 0; }
+
+
+.promo-title { 
+  font-family: sans-serif;
+  font-size: 30px; 
+  line-height: 48px;
+  color: #fff; 
+}
+
+.promo-img { max-width: 675px; width: 100%; height: auto;}
+.section { padding: 70px 0; position: relative; }
+
+.section::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 50%;
+  margin-left: -100px;
+  bottom: -30px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 30px 100px 0 100px;
+  z-index: 2;
+}
+
+.promo { background-color: #f6c135; padding: 50px 0;}
+
+.promo::after {
+  border-color: #f6c135 transparent transparent transparent;
+}
+
+.title {
+  font-family: sans-serif;
+  font-size: 24px;
+  color: #1a9cb0;
+  margin-bottom: 50px;
+}
+
+.description::after {
+  border-color: #fff transparent transparent transparent;
+}
+
+.section p { 
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 30px;
+  color: #3c3c3f;
+}
+
+.action-link {
+  display: inline-block;
+  height: 50px;
+  width: 100%;
+  margin-top: 50px;
+  line-height: 50px;
+  background-color: #a3c644;
+  color: #fff;
+  font-size: 18px;
+  transition: background .5s;
+  font-family: sans-serif;
+}
+
+.action-link:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: #fff;
+  background-color: #8cad35;
+}
+
+.action-link i { margin-left: 15px; font-size: 24px; }
+
+.galery { margin-top: 80px; }
+.galery-img { width: 100%; height: auto; }
+
+.important-text { 
+  color: #1a9cb0;
+  font-weight: bold;
+}
+
+.about { background-color: #efefef; }
+.about::after { border-color: #efefef transparent transparent transparent; }
+
+.rules::after {display: none; }
+
+.subtitle { margin-top: 0; font-family: sans-serif; color: #3c3c3f; font-size: 20px; margin-bottom: 20px;}
+
+.icon {
+  background: url('../img/sprite2.png') no-repeat;
+  width: 101px;
+  height: 101px;
+}
+
+.game-elements { background-position: -15px -4px; }
+
+.rules-list {
+  margin-top: 60px;
+}
+
+.rule { margin-bottom: 50px; }
+.rule:last-child { margin-bottom: 0px; }
+.single { background-position: -134px -4px; }
+.multi { background-position: -252px -4px; }
+
+.scroll-up {
+  width: 50px;
+  height: 40px;
+  background-color: #464547;
+  position: fixed; 
+  opacity: 0.5;
+  color: #fff;
+  border-radius: 5px 5px 0 0; 
+  left: 20px;
+  bottom: 0;
+  text-align: center;
+  font-size: 30px;
+  line-height: 40px;
+  display: none; 
+  cursor: pointer;
+}
+
+.footer {
+  background-color: #464547;
+  height: 50px;
+  padding: 10px 0;
+}
+
+.footer-nav {
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+}
+
+.footer-item a { color: #fff; font-size: 16px; font-family: sans-serif;  }
+.footer-item { margin-right: 15px; padding-right: 15px; border-right: 1px solid #fff;  }
+.footer-item:last-child { border: none; }
+
+.rules-title { 
+  font-family: sans-serif;
+  font-size: 24px;
+  line-height: 100px;
+  margin-top: 0;
+}
+
+.rules { font-family: sans-serif; }
+
+.rules-section::after {
+  display: none;
+}
+
+.rules-section .title {
+  margin: 0;
+  font-size: 28px
+}
+
+.header-wrap { background-color: #fff; }
+
+.rules-section {
+  padding: 50px 0 90px 0;
+  font: 16px/2 sans-serif;
+}
+
+.wrapper-rules p {
+  white-space: pre-line;
+}
+
+.rules-section .subtitle {
+  margin-top: 40px;
+  font: 28px sans-serif;
+  color: #464547;
+}
+
+pre {
+  margin: 20px 0;
+  border-radius: 0;
+}
+
+.list {
+  list-style-type: disc;
+  color: #1A9CB0;
+  font-size: 20px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
+
+.list li { line-height: 20px; }
+
+.list-values { color: #333; font-size: 14px;}
+
+.button {
+  padding: 0 10px;
+  border-radius: 0;
+  margin: 0 10px;
+  border: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.commit { background-color: #a3c644; }
+.reset { background-color: #eb6a5a; }
+
+.func {
+  color:#1A9CB0; 
+  font-weight: bold;
+}
+
+.dropdown-menu li a {
+  font: 18px/30px sans-serif;
+}
+
+.dropdown-menu {
+  border-radius: 0;
+  top: 70px;
+}
+
+.load-link {
+  font: 18px/1 sans-serif;
+  color: #1a9cb0;
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 992px) {
+  .icon { display: inline-block; margin-bottom: 30px;}
+  .rule { text-align: center; }
+  .subtitle, .rule p { text-align: center; }
+  .header, .nav-list { text-align: center; }
+  .header { height: 50px; }
+  .nav-list { border-top: 1px solid #e8e8e8; text-align: center; width: 100%;}
+}
+
+@media screen and (max-width: 600px) {
+  .footer-item { width: 100%; padding: 0; margin: 0; border-right: none; }
+  .footer { height: 120px; }
+}
+
+@media screen and (max-width: 440px) {
+  .logo-epam { width: 100%; }
+}
+
