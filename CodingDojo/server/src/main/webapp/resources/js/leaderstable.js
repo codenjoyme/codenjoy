@@ -24,8 +24,20 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
     var leaderboard = $("#leaderboard");
     leaderboard.show();
 
-    function getFirstValue(data) {
-        return data[Object.keys(data)[0]];
+    function getAllValues(data) {
+        var result = {};
+        var players = Object.keys(data);
+        for (var index in players) {
+            var player = players[index];
+            var scores = data[player].scores;
+            var scoresPlayers = Object.keys(scores);
+            for (var index2 in scoresPlayers) {
+                var player2 = scoresPlayers[index2];
+                var score = scores[player2];
+                result[player2] = score;
+            }
+        }
+        return result;
     }
 
     function sortByScore(data) {
@@ -56,14 +68,13 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
             $("#table-logs-body").empty();
             return;
         }
-        data = getFirstValue(data);
-        data = data.scores;
-        if (data == null) {
+        var scores = getAllValues(data);
+        if (scores == null) {
             $("#table-logs-body").empty();
             return;
         }
 
-        data = sortByScore(data);
+        scores = sortByScore(scores);
 
         if (!onDrawItem) {
             onDrawItem = function(count, you, link, name, score) {
@@ -77,7 +88,7 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
 
         var tbody = '';
         var count = 0;
-        $.each(data, function (email, score) {
+        $.each(scores, function (email, score) {
             var name = email.substring(0, email.indexOf('@'));
 
             var you = (name == playerName)?"=> ":"";

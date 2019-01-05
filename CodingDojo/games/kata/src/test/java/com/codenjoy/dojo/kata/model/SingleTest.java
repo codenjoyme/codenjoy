@@ -241,15 +241,19 @@ public class SingleTest {
                 "  ]\n" +
                 "}");
 
-        asrtFl3("{\n" +
-                "  'description':'description',\n" +
-                "  'history':[],\n" +
-                "  'level':0,\n" +
-                "  'nextQuestion':'question1',\n" +
-                "  'questions':[\n" +
-                "    'question1'\n" +
-                "  ]\n" +
-                "}");
+        try {
+            asrtFl3("{\n" +
+                    "  'description':'description',\n" +
+                    "  'history':[],\n" +
+                    "  'level':0,\n" +
+                    "  'nextQuestion':'question1',\n" +
+                    "  'questions':[\n" +
+                    "    'question1'\n" +
+                    "  ]\n" +
+                    "}");
+        } catch (IllegalStateException e) {
+            assertEquals("No board for this player", e.getMessage());
+        }
     }
 
     // игрока можно ресетнуть

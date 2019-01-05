@@ -90,4 +90,13 @@ public enum Type {
     }
 
     public abstract Figure create();
+
+    public static Type getByIndex(int figureIndex) {
+        for (Type type : values()) {
+            if (type.getColor().index() == figureIndex) {
+                return type;
+            }
+        }
+        throw new RuntimeException("Type not found by FigureIndex:" + figureIndex);
+    }
 }

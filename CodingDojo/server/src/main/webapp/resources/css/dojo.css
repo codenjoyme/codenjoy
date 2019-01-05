@@ -20,6 +20,18 @@
  * #L%
  */
 
+body, input, textarea {
+    color: black !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #dededead !important;
+}
+
+.table>tbody>tr>td {
+    border-top: 0px !important;
+}
+
 #settings {
     display: none;
 }
@@ -70,6 +82,11 @@ label.error {
     height:24px;
 }
 
+#adminSettings .player-save {
+    width: 300px!important;
+    font-size: 12px;
+}
+
 #adminSettings input[type="checkbox"] {
     width:19px;
     height:24px;
@@ -95,17 +112,19 @@ label.error {
     height: 20px;
 }
 
-#leaderboard {
-    width: 500px;
-    float: right;
+.board {
+    width: 400px;
     padding-right: 75px;
     padding-top: 25px;
+    position: absolute;
+    right: 0px;
 }
 
-#glasses {
+.glasses {
     width: calc(100% - 500px);
     float: left;
     padding-left: 20px;
+    position: absolute;
 }
 
 #want-donate {

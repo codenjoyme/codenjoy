@@ -23,8 +23,6 @@
 // */
 //
 //
-//import com.codenjoy.dojo.services.PrinterFactory;
-//import com.codenjoy.dojo.services.PrinterFactoryImpl;
 //import org.apache.commons.lang.ArrayUtils;
 //import org.junit.rules.MethodRule;
 //import org.junit.runners.model.FrameworkMethod;
@@ -41,9 +39,9 @@
 //
 //public class GameSetupRule implements MethodRule {
 //
-//    private final Class<? extends TetrisGame> gameClass;
+//    private final Class<? extends Tetris> gameClass;
 //
-//    public GameSetupRule(Class<? extends TetrisGame> gameClass) {
+//    public GameSetupRule(Class<? extends Tetris> gameClass) {
 //        this.gameClass = gameClass;
 //    }
 //
@@ -59,8 +57,11 @@
 //            Glass glass = (Glass) getFieldValue(Glass.class, target);
 //            when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
 //
+//            Levels levels = mock(Levels.class);
+//            when(levels.getCurrentLevelNumber()).thenReturn(0);
+//
 //            try {
-//                gameField.set(target, gameClass.getConstructor(FigureQueue.class, Glass.class, PrinterFactory.class).newInstance(figureQueue, glass, new PrinterFactoryImpl()));
+//                gameField.figureAt(target, gameClass.getConstructor(Levels.class, FigureQueue.class, int.class).newInstance(levels, figureQueue, 0));
 //            } catch (Exception e) {
 //                throw new RuntimeException(e);
 //            }
@@ -81,11 +82,11 @@
 //        List<Figure> result = new ArrayList<Figure>();
 //        for (FigureProperties figure : figures) {
 //            Figure figureMock = mock(Figure.class);
-//            when(figureMock.getLeft()).thenReturn(figure.left());
-//            when(figureMock.getRight()).thenReturn(figure.right());
-//            when(figureMock.getTop()).thenReturn(figure.top());
-//            when(figureMock.getBottom()).thenReturn(figure.bottom());
-//            when(figureMock.getType()).thenReturn(figure.type());
+//            when(figureMock.left()).thenReturn(figure.left());
+//            when(figureMock.right()).thenReturn(figure.right());
+//            when(figureMock.top()).thenReturn(figure.top());
+//            when(figureMock.bottom()).thenReturn(figure.bottom());
+//            when(figureMock.type()).thenReturn(figure.type());
 //            result.add(figureMock);
 //        }
 //        Figure[] values = result.toArray(new Figure[result.size()]);

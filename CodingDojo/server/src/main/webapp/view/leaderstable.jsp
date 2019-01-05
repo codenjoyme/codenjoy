@@ -22,7 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard" style="display:none;">
+<div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
     <table id="table-logs" class="table table-striped leaderboard-table">
         <thead>
             <th width="5%">
@@ -46,4 +46,5 @@
             -->
         </tbody>
     </table>
+    <%@include file="info.jsp"%>
 </div>

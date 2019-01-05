@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.mockito.Mockito.*;
@@ -40,6 +41,9 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {
         AutoSaver.class,
         MockSaveService.class})
+@TestPropertySource(properties = {
+        "autoSave=true"
+})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AutoSaverTest {
 

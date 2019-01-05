@@ -30,6 +30,7 @@
     <title>Admin page</title>
     <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
 
@@ -123,6 +124,21 @@
                     </c:when>
                     <c:otherwise>
                         <b>The debug was suspended</b></br> <a href="${ctx}/admin31415?startDebug&gameName=${gameName}">Start debug</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="auto-save">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${autoSave}">
+                        <b>The auto save in progress</b></br> <a href="${ctx}/admin31415?stopAutoSave&gameName=${gameName}">Stop auto save</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin31415?startAutoSave&gameName=${gameName}">Start auto save</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -229,7 +245,8 @@
                         <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;</td>
-                    <td class="header">LoadAI</td>&nbsp;&nbsp;
+                    <td class="header">LoadAI&nbsp;&nbsp;</td>
+                    <td class="header">Save&nbsp;&nbsp;</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
@@ -272,6 +289,14 @@
                                         <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
+                                <c:choose>
+                                    <c:when test="${player.data == null}">
+                                        <td></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:when>
                             <c:otherwise>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>
@@ -295,6 +320,16 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td>GameOver</td>
+                                <td></td>
+                                <td></td>
+                                <c:choose>
+                                    <c:when test="${player.data == null}">
+                                        <td></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><form:input class="player-save" path="players[${status.index}].data"/></td>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:otherwise>
                         </c:choose>
                     </tr>

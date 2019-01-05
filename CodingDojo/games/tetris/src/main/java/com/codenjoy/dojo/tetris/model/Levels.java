@@ -75,8 +75,8 @@ public class Levels implements GlassEventListener {
     }
 
     @Override
-    public void figureDropped(Figure figure) {
-        applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.FIGURE_DROPPED, figure));
+    public void figureDropped(Type figureType) {
+        applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.FIGURE_DROPPED, figureType));
     }
 
     public GameLevel getCurrentLevel() {

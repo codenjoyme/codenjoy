@@ -76,6 +76,7 @@ public class PlayerServiceImplTest {
     public static final String VASYA_AI = "vasya-super-ai@codenjoy.com";
     public static final String PETYA = "petya@mail.com";
     public static final String KATYA = "katya@mail.com";
+    public static final String OLIA = "olia@mail.com";
     public static final String VASYA_URL = "http://vasya@mail.com:1234";
     public static final String PETYA_URL = "http://petya@mail.com:1234";
 
@@ -108,7 +109,7 @@ public class PlayerServiceImplTest {
 
     @Before
     public void setUp() throws IOException {
-        Mockito.reset(actionLogger, autoSaver, gameService, playerController);
+        Mockito.reset(actionLogger, autoSaver, gameService, playerController, playerGames);
         playerGames.clean();
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
@@ -329,30 +330,22 @@ public class PlayerServiceImplTest {
         verify(screenController).requestControlToAll(screenSendCaptor.capture());
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
-        Map<String, String> expected = new TreeMap<String, String>();
-        String heroesData = "HeroesData:'" +
-                "{\"petya@mail.com\":" +
-                    "{\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"level\":0,\"multiplayer\":false}}," +
-                "\"vasya@mail.com\":" +
-                    "{\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"level\":0,\"multiplayer\":false}}}'";
-        String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
-        expected.put(VASYA, "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', GameName:'game', Score:123, Info:'', " +
-                scores + ", " +
-                heroesData + "]");
-
-        expected.put(PETYA, "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', GameName:'game', Score:234, Info:'', " +
-                scores + ", " +
-                heroesData + "]");
-
-        assertEquals(2, data.size());
-
-        for (Map.Entry<ScreenRecipient, Object> entry : data.entrySet()) {
-            assertEquals(
-                    expected.get(entry.getKey().toString()),
-                    entry.getValue().toString());
-        }
+        assertEquals(
+                "{vasya@mail.com=PlayerData[" +
+                    "BoardSize:15, Board:'ABCD', GameName:'game', " +
+                    "Score:123, Info:'', " +
+                    "Scores:'{'vasya@mail.com':123}', " +
+                    "HeroesData:'{" +
+                        "'coordinates':{'vasya@mail.com':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
+                        "'group':['vasya@mail.com']}'], " +
+                "petya@mail.com=PlayerData[" +
+                    "BoardSize:15, Board:'DCBA', GameName:'game', " +
+                    "Score:234, Info:'', " +
+                    "Scores:'{'petya@mail.com':234}', " +
+                    "HeroesData:'{" +
+                        "'coordinates':{'petya@mail.com':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
+                        "'group':['petya@mail.com']}']}",
+                data.toString().replaceAll("\"", "'"));
     }
 
     @Test
@@ -574,6 +567,7 @@ public class PlayerServiceImplTest {
         checkInfo("");
     }
 
+
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() throws IOException {
         // given
@@ -581,7 +575,7 @@ public class PlayerServiceImplTest {
 
         // when, then
         when(playerScores1.getScore()).thenReturn(10, 13);
-        informationCollector.levelChanged(1, null);
+        informationCollector.levelChanged(new LevelProgress(2, 1, 1));
         informationCollector.event("event1");
         checkInfo("+3, Level 2");
     }
@@ -847,7 +841,7 @@ public class PlayerServiceImplTest {
 
 
     @Test
-    public void shouldOnlyLastJoystickWorks_lazyJoystick() throws IOException {
+    public void shouldAllJoystickCommandsWorks_lazyJoystick() throws IOException {
         // given
         createPlayer(VASYA);
 
@@ -863,7 +857,13 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         // then
-        verify(joystick(VASYA)).right();
+        Joystick joystick = joystick(VASYA);
+        InOrder inOrder = inOrder(joystick);
+
+        inOrder.verify(joystick).down();
+        inOrder.verify(joystick(VASYA)).up();
+        inOrder.verify(joystick(VASYA)).left();
+        inOrder.verify(joystick(VASYA)).right();
         verifyNoMoreInteractions(joystick(VASYA));
     }
 
@@ -887,6 +887,8 @@ public class PlayerServiceImplTest {
         // then
         InOrder inOrder = inOrder(joystick);
         inOrder.verify(joystick).act(1, 2, 3);
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).left();
         inOrder.verify(joystick).right();
         verifyNoMoreInteractions(joystick);
     }
@@ -911,7 +913,10 @@ public class PlayerServiceImplTest {
 
         // then
         InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
         inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5);
         inOrder.verify(joystick).act(5, 6);
         verifyNoMoreInteractions(joystick);
     }
@@ -937,6 +942,10 @@ public class PlayerServiceImplTest {
 
         // then
         InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5);
         inOrder.verify(joystick).act(5, 6);
         inOrder.verify(joystick).left();
         verifyNoMoreInteractions(joystick);
@@ -964,6 +973,11 @@ public class PlayerServiceImplTest {
 
         // then
         InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5);
+        inOrder.verify(joystick).act(5, 6);
         inOrder.verify(joystick).left();
         inOrder.verify(joystick).act(7);
         verifyNoMoreInteractions(joystick);
@@ -1154,6 +1168,92 @@ public class PlayerServiceImplTest {
         assertEquals(PETYA_URL, player2.getCallbackUrl());
         assertNull(player2.getCode());
         assertEquals(null, player2.getPassword());
+    }
+
+    @Test
+    public void shouldUpdateAll_loadFromSave() {
+        // given
+        Player player1 = createPlayer(VASYA);
+        Player player2 = createPlayer(PETYA);
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
+            add(new PlayerInfo(player1){{
+                setData("{\"some\":\"data1\"}");
+            }});
+            add(new PlayerInfo(player2){{
+                setData("{\"some\":\"data2\"}");
+            }});
+        }};
+        playerService.updateAll(infos);
+
+        // then
+        assertSaveLoaded(player1, "[{\"some\":\"data1\"}]");
+        assertSaveLoaded(player2, "[{\"some\":\"data2\"}]");
+    }
+
+    private void assertSaveLoaded(Player player, String save) {
+        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
+        verify(playerGames).setLevel(eq(player.getName()), captor.capture());
+        assertEquals(save, captor.getAllValues().toString());
+    }
+
+    @Test
+    public void shouldUpdateAll_loadFromSave_onlyIfSaveIsNotSame() {
+        // given
+        Player player1 = createPlayer(VASYA);
+        Player player2 = createPlayer(PETYA);
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
+            add(new PlayerInfo(player1){{
+                setData("{\"some\":\"data1\"}");
+            }});
+            add(new PlayerInfo(player2){{
+                setData("{}"); // same
+            }});
+        }};
+        playerService.updateAll(infos);
+
+        // then
+        assertSaveLoaded(player1, "[{\"some\":\"data1\"}]");
+        assertSaveNotLoaded(player2);
+    }
+
+    @Test
+    public void shouldUpdateAll_loadFromSave_onlyIfSaveIsNotEmptyOrNull() {
+        // given
+        Player player1 = createPlayer(VASYA);
+        Player player2 = createPlayer(PETYA);
+        Player player3 = createPlayer(KATYA);
+        Player player4 = createPlayer(OLIA);
+
+        // when
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>(){{
+            add(new PlayerInfo(player1){{
+                setData("{\"some\":\"data1\"}");
+            }});
+            add(new PlayerInfo(player2){{
+                setData(""); // empty
+            }});
+            add(new PlayerInfo(player3){{
+                setData(null); // null
+            }});
+            add(new PlayerInfo(player4){{
+                setData("null"); // "null"
+            }});
+        }};
+        playerService.updateAll(infos);
+
+        // then
+        assertSaveLoaded(player1, "[{\"some\":\"data1\"}]");
+        assertSaveNotLoaded(player2);
+        assertSaveNotLoaded(player3);
+        assertSaveNotLoaded(player4);
+    }
+
+    private void assertSaveNotLoaded(Player player) {
+        verify(playerGames, never()).setLevel(eq(player.getName()), any(JSONObject.class));
     }
 
     @Test

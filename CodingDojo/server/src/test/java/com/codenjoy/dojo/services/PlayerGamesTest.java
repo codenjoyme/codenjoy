@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
 import java.util.*;
@@ -574,6 +575,101 @@ public class PlayerGamesTest {
         assertEquals(1, fields.size());
     }
 
+
+    @Test
+    public void testLoadFromSave_whenNullPlayerSave() {
+        // given when
+        PlayerSave save = null;
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenNullSaveInPlayerSave() {
+        // given when
+        String stringSave = null;
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenEmptyStringSaveInPlayerSave() {
+        // given when
+        String stringSave = "";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenNullStringSaveInPlayerSave() {
+        // given when
+        String stringSave = "null";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_whenEmptyJsonSaveInPlayerSave() {
+        // given when
+        String stringSave = "{}";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        verify(fields.get(0), never()).loadSave(anyObject());
+    }
+
+    @Test
+    public void testLoadFromSave_saveGoesToField() {
+        // given when
+        String stringSave = "{\"some\":\"data\"}";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
+        verify(fields.get(0)).loadSave(captor.capture());
+        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+    }
+
+    @Test
+    public void testLoadFromSave_saveGoesToField_anyLevelProgressWillRemove() {
+        // given when
+        String stringSave = "{'levelProgress':{'total':3,'current':3,'lastPassed':2},'some':'data'}";
+        PlayerSave save = new PlayerSave(stringSave);
+
+        MultiplayerType type = MultiplayerType.SINGLE;
+        Player player = createPlayer("game", "player1", type, save);
+
+        // then
+        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
+        verify(fields.get(0)).loadSave(captor.capture());
+        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+    }
+
     @Test
     public void testGetGameSave_forTrainingMultiplayerType_caseNullFieldSave() {
         // given
@@ -617,6 +713,22 @@ public class PlayerGamesTest {
 
         // when then
         assertEquals("{\"some\":\"data\"}",
+                playerGames.get("player").getGame().getSave().toString());
+
+    }
+
+    @Test
+    public void testGetGameSave_forOtherMultiplayerTypes_caseIfNullSave() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+
+        Player player = createPlayer("game", "player", type,
+                new PlayerSave("{'save':'data'}"));
+
+        when(fields.get(0).getSave()).thenReturn(null);
+
+        // when then
+        assertEquals("{}",
                 playerGames.get("player").getGame().getSave().toString());
 
     }
@@ -666,5 +778,83 @@ public class PlayerGamesTest {
         // when then
         assertEquals("board",
                 playerGames.get("player").getGame().getBoardAsString().toString());
+    }
+
+    @Test
+    public void shouldNewPlayerGoToFirstLEvel_evenIfOtherOnMultiplayer_forTraining() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3),
+                new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
+
+        // when
+        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
+
+    @Test
+    public void shouldNewPlayerGoToFirstLevel_forTraining() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
+
+    @Test
+    public void shouldNewPlayerGoToFirstLevel_forSingle() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.SINGLE);
+        createPlayer("game", "player2", MultiplayerType.SINGLE);
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
+    }
+
+    @Test
+    public void whatIfTwoPlayersForDifferentTrainings() {
+        // given
+        // TODO обрати внимание, тут 3 и 5 - для ожной игры, нельзя такого допускать
+        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(5));
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
+                playerGames.get("player1")
+                        .getGame().getProgress().toString());
+
+        assertEquals("{'current':0,'passed':-1,'total':5,'valid':true}",
+                playerGames.get("player2")
+                        .getGame().getProgress().toString());
     }
 }

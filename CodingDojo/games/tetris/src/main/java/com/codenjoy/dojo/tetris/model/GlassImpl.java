@@ -26,25 +26,33 @@ package com.codenjoy.dojo.tetris.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.tetris.services.Events;
 
-import java.util.Arrays;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class GlassImpl implements Glass {
 
-    public static final int BITS_PER_POINT = 3;
+    public static final int BITS = 3; // per point
+    public static final BigInteger Ob111 = new BigInteger("111", 2);
+
     private int width;
     private int height;
-    private EventListener eventListener;
-    private long occupied[];
-    private Figure currentFigure;
-    private int currentX;
-    private int currentY;
+    private EventListener listener;
+    private List<BigInteger> occupied = new ArrayList<>();
+    private Figure figure;
+    private int x;
+    private int y;
+    private Supplier<Integer> getLevel;
 
-    public GlassImpl(int width, int height) {
+    public GlassImpl(int width, int height, Supplier<Integer> supplier) {
         this.width = width;
         this.height = height;
-        occupied = new long[height];
+        this.getLevel = supplier;
+        for (int i = 0; i < height; i++) {
+            occupied.add(BigInteger.ZERO);
+        }
     }
 
     public boolean accept(Figure figure, int x, int y) {
@@ -52,17 +60,18 @@ public class GlassImpl implements Glass {
             return false;
         }
 
-        long[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x, true);
-        boolean isOccupied = false;
-        for (int i = 0; i < alignedRows.length; i++) {
-            long alignedRow = alignedRows[i];
-            int rowPosition = y - i + figure.top();
-            if (rowPosition >= height) {
+        BigInteger[] aligned = alignRowWithGlass(figure, x, true);
+        boolean occupied = false;
+        for (int i = 0; i < aligned.length; i++) {
+            BigInteger figureLine = aligned[i];
+            int pos = y - i + figure.top();
+            if (pos >= height) {
                 continue;
             }
-            isOccupied |= (occupied[rowPosition] & alignedRow) > 0;
+            BigInteger line = this.occupied.get(pos);
+            occupied |= (line.and(figureLine).compareTo(BigInteger.ZERO) == 1);
         }
-        return !isOccupied;
+        return !occupied;
     }
 
     private boolean isOutside(Figure figure, int x, int y) {
@@ -94,52 +103,52 @@ public class GlassImpl implements Glass {
         if (isOutside(figure, x, y)) {
             return;
         }
-        int availablePosition = findAvailableYPosition(figure, x, y);
-        if (availablePosition >= height) {
+        int available = findAvailableYPosition(figure, x, y);
+        if (available >= height) {
             return;
         }
-        performDrop(figure, x, availablePosition - figure.bottom());
+        performDrop(figure, x, available - figure.bottom());
         removeLines();
     }
 
     private void performDrop(Figure figure, int x, int position) {
-        long[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x, false);
-        for (int i = 0; i < alignedRows.length; i++) {
-            int rowPosition = position + alignedRows.length - i - 1;
-            if (rowPosition >= occupied.length) {
+        BigInteger[] aligned = alignRowWithGlass(figure, x, false);
+        for (int i = 0; i < aligned.length; i++) {
+            int row = position + aligned.length - i - 1;
+            if (row >= occupied.size()) {
                 continue;
             }
-            occupied[rowPosition] |= alignedRows[i];
+            BigInteger line = occupied.get(row);
+            BigInteger figureLine = aligned[i];
+            occupied.set(row, line.or(figureLine));
         }
 
-        if (eventListener != null) {
-            // TODO и где я тут достану номер уровня?
-            int levelNumber = 1;
-            eventListener.event(Events.figuresDropped(levelNumber, figure.type().getColor().index()));
+        if (listener != null) {
+            listener.event(Events.figuresDropped(getLevel.get(), figure.type().getColor().index()));
         }
     }
 
     private void removeLines() {
-        int removedLines = 0;
-        for (int i = 0; i < occupied.length; i++) {
+        int removed = 0;
+        for (int i = 0; i < occupied.size(); i++) {
             while (wholeLine(i)) {
-                System.arraycopy(occupied, i + 1, occupied, i, occupied.length - i - 1);
-                occupied[occupied.length - 1] = 0;
-                removedLines++;
+                occupied.remove(i);
+                occupied.add(BigInteger.ZERO);
+                removed++;
             }
         }
-        if (removedLines > 0) {
-            if (eventListener != null) {
-                // TODO и где я тут достану номер уровня?
-                int levelNumber = 1;
-                eventListener.event(Events.linesRemoved(levelNumber, removedLines));
+        if (removed > 0) {
+            if (listener != null) {
+                listener.event(Events.linesRemoved(getLevel.get(), removed));
             }
         }
     }
 
-    private boolean wholeLine(int rowNum) {
+    private boolean wholeLine(int y) {
         for (int i = 0; i < width; i++) {
-            if ((occupied[rowNum] & (0b111 << ((i + 1) * BITS_PER_POINT))) == 0) {
+            BigInteger line = occupied.get(y);
+            BigInteger atPos = Ob111.shiftLeft((i + 1)*BITS);
+            if ((line.and(atPos).equals(BigInteger.ZERO))) {
                 return false;
             }
         }
@@ -147,48 +156,49 @@ public class GlassImpl implements Glass {
     }
 
     private int findAvailableYPosition(Figure figure, int x, int y) {
-        int myPosition = y;
-        while (accept(figure, x, --myPosition)) {
-        }
-        myPosition++;
-        return myPosition;
+        int yy = y;
+        while (accept(figure, x, --yy)) {}
+        yy++;
+        return yy;
     }
 
-    private long[] alignFigureRowCoordinatesWithGlass(Figure figure, int x, boolean ignoreColors) {
+    private BigInteger[] alignRowWithGlass(Figure figure, int x, boolean ignoreColors) {
         int[] rows = figure.rowCodes(ignoreColors);
-        long[] result = new long[figure.rowCodes(false).length];
+        BigInteger[] result = new BigInteger[rows.length];
         for (int i = 0; i < rows.length; i++) {
-            result[i] = ((long) rows[i]) << ((width - x - figure.right()) * BITS_PER_POINT);
+            result[i] = BigInteger.valueOf((long) rows[i])
+                    .shiftLeft((width - x - figure.right()) * BITS);
         }
         return result;
     }
 
     public void empty() {
-        Arrays.fill(occupied, 0);
-        if (eventListener != null) {
-            // TODO и где я тут достану номер уровня?
-            int levelNumber = 1;
-            eventListener.event(Events.glassOverflown(levelNumber));
+        for (int i = 0; i < occupied.size(); i++) {
+            occupied.set(i, BigInteger.ZERO);
+        }
+        if (listener != null) {
+            listener.event(Events.glassOverflown(getLevel.get()));
         }
     }
 
     @Override
-    public void isAt(Figure figure, int x, int y) {
-        currentFigure = figure;
-        this.currentX = x;
-        this.currentY = y;
+    public void figureAt(Figure figure, int x, int y) {
+        this.figure = figure;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
     public List<Plot> dropped() {
         LinkedList<Plot> plots = new LinkedList<>();
-        for (int y = 0; y < occupied.length; y++) {
+        for (int y = 0; y < occupied.size(); y++) {
             for (int x = width; x >= 0; x--) {
-                long colorNumber = (occupied[y] >> (x * BITS_PER_POINT)) & 0b111;
-                if (colorNumber == 0) {
+                BigInteger line = occupied.get(y);
+                int color = line.shiftRight(x * BITS).and(new BigInteger("111", 2)).intValue();
+                if (color == 0) {
                     continue;
                 }
-                plots.add(new Plot(0 - x + width, y, findColor(colorNumber - 1)));
+                plots.add(new Plot(0 - x + width, y, findColor(color - 1)));
             }
         }
         return plots;
@@ -201,28 +211,30 @@ public class GlassImpl implements Glass {
     @Override
     public List<Plot> currentFigure() {
         LinkedList<Plot> plots = new LinkedList<>();
-        if (currentFigure == null) {
+        if (figure == null) {
             return plots;
         }
-        final int[] rowCodes = currentFigure.rowCodes(false);
-        int rowWidth = currentFigure.width();
+        int[] rowCodes = figure.rowCodes(false);
+        int rowWidth = figure.width();
 
         for (int i = 0; i < rowCodes.length; i++) {
             for (int x = rowWidth; x >= 0; x--) {
-                int colorNumber = (rowCodes[i] >> (x * BITS_PER_POINT)) & 0b111;
-                if (colorNumber == 0) {
+                int color = (rowCodes[i] >> (x * BITS)) & 0b111;
+                if (color == 0) {
                     continue;
                 }
-                int y = currentFigure.top() - i;
-                plots.add(new Plot(currentX - x + currentFigure.right(), currentY + y, findColor(colorNumber - 1)));
+                int y = figure.top() - i;
+                plots.add(new Plot(this.x - x + figure.right(),
+                        this.y + y, findColor(color - 1)));
             }
         }
         return plots;
     }
 
+    @Override
     public boolean isEmpty() {
-        for (long anOccupied : occupied) {
-            if (anOccupied != 0) {
+        for (BigInteger row : occupied) {
+            if (!row.equals(BigInteger.ZERO)) {
                 return false;
             }
         }
@@ -231,6 +243,16 @@ public class GlassImpl implements Glass {
 
     @Override
     public void setListener(EventListener listener) {
-        this.eventListener = listener;
+        this.listener = listener;
     }
+
+    @Override
+    public Glass clone() {
+        GlassImpl result = new GlassImpl(width, height, getLevel);
+        result.setListener(listener);
+        result.figureAt(figure, x, y);
+        result.occupied = new LinkedList<>(occupied);
+        return result;
+    }
+
 }

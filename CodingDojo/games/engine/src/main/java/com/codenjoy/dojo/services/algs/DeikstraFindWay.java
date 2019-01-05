@@ -87,6 +87,9 @@ public class DeikstraFindWay {
         Point current = from;
         do {
             if (current == null) {
+                if (toProcess.isEmpty()) { // TODO test me
+                    break;
+                }
                 current = toProcess.remove();
             }
             List<Direction> before = path.get(current);

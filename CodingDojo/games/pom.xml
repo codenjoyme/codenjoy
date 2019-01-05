@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.27-snake</version>
+    <version>1.0.27</version>
 
     <packaging>pom</packaging>
 

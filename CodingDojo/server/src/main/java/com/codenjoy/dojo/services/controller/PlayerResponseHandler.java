@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerCommand;
@@ -30,11 +31,10 @@ import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import org.eclipse.jetty.websocket.api.Session;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PlayerResponseHandler implements ResponseHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(PlayerResponseHandler.class);
+    private static Logger logger = DLoggerFactory.getLogger(PlayerResponseHandler.class);
 
     private Player player;
     private Joystick joystick;
@@ -46,27 +46,35 @@ public class PlayerResponseHandler implements ResponseHandler {
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
-        logger.debug("Received response: {} from player: {}",
-                message, player.getName());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received response: {} from player: {}",
+                    message, player.getName());
+        }
 
         new PlayerCommand(joystick, message).execute();
     }
 
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
-                new Object[]{player.getName(), statusCode, reason});
+        if (logger.isDebugEnabled()) {
+            logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
+                    new Object[]{player.getName(), statusCode, reason});
+        }
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
-        logger.error("Request error: player: {}, error: {}",
+        if (logger.isDebugEnabled()) {
+            logger.error("Request error: player: {}, error: {}",
                     new Object[]{player.getName(), error});
+        }
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
-        logger.debug("Connected: player: {}, session: {}",
-                new Object[]{player.getName(), session});
+        if (logger.isDebugEnabled()) {
+            logger.debug("Connected: player: {}, session: {}",
+                    new Object[]{player.getName(), session});
+        }
     }
 }

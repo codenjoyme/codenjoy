@@ -28,8 +28,8 @@ namespace Demo
     /// </summary>
     internal class YourSolver : AbstractSolver
     {
-        public YourSolver(string name, string code, string server)
-            : base(name, code, server)
+        public YourSolver(string server)
+            : base(server)
         {            
         }
 

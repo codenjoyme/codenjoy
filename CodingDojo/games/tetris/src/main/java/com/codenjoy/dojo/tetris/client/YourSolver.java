@@ -35,7 +35,7 @@ import org.json.JSONObject;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class YourSolver extends AbstractJsonSolver {
+public class YourSolver extends AbstractJsonSolver<Board> {
 
     private Dice dice;
 
@@ -44,14 +44,14 @@ public class YourSolver extends AbstractJsonSolver {
     }
 
     @Override
-    public String getAnswer(JSONObject question) {
+    public String getAnswer(Board board) {
         return "DOWN";
     }
 
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
-                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+                "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 new YourSolver(new RandomDice()),
                 new Board());
     }

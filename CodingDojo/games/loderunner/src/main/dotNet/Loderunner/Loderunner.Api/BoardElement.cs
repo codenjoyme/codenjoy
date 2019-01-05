@@ -56,7 +56,7 @@
 
         OtherHeroDie = (short)'Z',
         OtherHeroLeft = (short)')',
-        OtherHeroRight = (short)' = (short)',
+        OtherHeroRight = (short)'(',
         OtherHeroLadder = (short)'U',
         OtherHeroPipeLeft = (short)'Э',
         OtherHeroPipeRight = (short)'Є',

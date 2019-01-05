@@ -39,7 +39,7 @@ import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
-import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityLevels;
+import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityWithoutOverflownLevels;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -54,8 +54,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameRunner() {
         gameLevels = settings.addSelect("Game Levels", (List)levels())
                 .type(String.class)
-                .def(ProbabilityLevels.class.getSimpleName());
-        glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(20);
+                .def(ProbabilityWithoutOverflownLevels.class.getSimpleName());
+        glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(18);
     }
 
     private List<String> levels() {
@@ -71,13 +71,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GameField createGame(int levelNumber) {
         Figures queue = new Figures();
-        Levels levels = getLevels(queue);
-        // TODO не понятно что делать с этим levels
-        return new Tetris(queue, glassSize.getValue());
+        Levels levels = loadLevelsFor(queue, gameLevels.getValue());
+        return new Tetris(levels, queue, glassSize.getValue());
     }
 
-    private Levels getLevels(Figures queue) {
-        String levelName = gameLevels.getValue();
+    private Levels loadLevelsFor(Figures queue, String levelName) {
         return new LevelsFactory().createLevels(levelName, getDice(), queue);
     }
 
@@ -139,7 +137,6 @@ public class GameRunner extends AbstractGameType implements GameType {
                 @Override
                 public Iterable<? extends Point> elements() {
                     return new LinkedList<Point>() {{
-                        // TODO перекрываются фигурки которые падают с теми, что уже упали - надо пофиксить но не тут, а в момент появления фигурки, она должна появляться не полностью а только 1 ее уровень
                         List<Plot> droppedPlots = hero.dropped();
                         List<Plot> currentFigurePlots = hero.currentFigure();
                         droppedPlots.removeAll(currentFigurePlots);
@@ -148,11 +145,15 @@ public class GameRunner extends AbstractGameType implements GameType {
                     }};
                 }
             }, player);
-            String board = graphicPrinter.print().replace("\n", "");
+            String board = graphicPrinter.print().replace("\n", "").replace(" ", ".");
             result.put("layers", Arrays.asList(board));
 
             result.put("currentFigureType", hero.currentFigureType());
-            result.put("currentFigurePoint", hero.currentFigurePoint());
+
+            Point point = hero.currentFigurePoint();
+            result.put("currentFigurePoint",
+                    (point == null) ? null : new JSONObject(new PointImpl(point)));
+
             result.put("futureFigures", hero.future());
 
             return result;

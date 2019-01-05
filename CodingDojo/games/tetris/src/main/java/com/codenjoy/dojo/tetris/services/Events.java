@@ -78,4 +78,21 @@ public class Events {
     public int getRemovedLines() {
         return data;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Events events = (Events) o;
+
+        if (level != events.level) return false;
+        if (data != events.data) return false;
+        return type.equals(events.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return type.hashCode();
+    }
 }

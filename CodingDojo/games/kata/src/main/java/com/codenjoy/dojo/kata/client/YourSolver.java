@@ -74,7 +74,7 @@ public class YourSolver extends AbstractTextSolver {
     private static void run(Solver solver) {
             WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
-                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+                "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 solver,
                 new Board());
     }

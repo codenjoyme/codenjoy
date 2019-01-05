@@ -29,9 +29,6 @@ import org.mockito.InOrder;
 
 import static org.mockito.Mockito.*;
 
-/**
- * Created by indigo on 2016-11-23.
- */
 public class LazyJoystickTest {
     private Game game;
     private LazyJoystick lazy;
@@ -126,12 +123,15 @@ public class LazyJoystickTest {
     }
 
     @Test
-    public void testSendOnlyLastDirectionAfterTick() {
+    public void testSendAllCommandsInOrgerAfterTick() {
         // when
         lazy.up();
+        lazy.act(2);
         lazy.down();
         lazy.left();
+        lazy.act();
         lazy.right();
+        lazy.message("data");
 
         verifyNoMoreInteractions(original);
 
@@ -139,7 +139,14 @@ public class LazyJoystickTest {
         lazy.tick();
 
         // then
-        verify(original).right();
+        InOrder inOrder = inOrder(original);
+        inOrder.verify(original).up();
+        inOrder.verify(original).act(2);
+        inOrder.verify(original).down();
+        inOrder.verify(original).left();
+        inOrder.verify(original).act();
+        inOrder.verify(original).right();
+        inOrder.verify(original).message("data");
 
         verifyNoMoreInteractions(original);
     }

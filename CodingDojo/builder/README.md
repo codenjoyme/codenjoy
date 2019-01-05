@@ -29,7 +29,7 @@ Choose codenjoy server/engine/games version
 The latest version as of now
 ```
 <properties>
-    <codenjoy.version>1.0.27-snake</codenjoy.version>
+    <codenjoy.version>1.0.27</codenjoy.version>
 </properties>
 ```
 If you want to add your new game - please do thing bellow.
@@ -45,7 +45,7 @@ Add your game dependency.
             </property>
         </activation>
         <properties>
-            <exclude.YOURGAME>false</exclude.battlecity>
+            <exclude.YOURGAME>false</exclude.YOURGAME>
         </properties>
         <dependencies>
             <dependency>
@@ -83,13 +83,13 @@ Add game resources part in plugin[maven-dependency-plugin].executions tag
 ```
 Then
 ```
-mvn clean jetty:run-war -Pyourgame
+mvn clean jetty:run-war -PYOURGAME
 ```
 You can add multiple games at the same time, and remove existing ones
 
 Launch your project
 --------------
-To launch your project, run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war` from the project builder's root
+To launch your project, run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war -Pgame1,game2,game3` from the project builder's root
 If you create your own game, you should have it pre-installed by running `mvn clean install` from the project root. If you use a game kit that already exists, you don't have to do anything - the builder will retrieve the games from the remote repository for you.
 
 Other materials

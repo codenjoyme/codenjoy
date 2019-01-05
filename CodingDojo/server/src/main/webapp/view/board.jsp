@@ -30,17 +30,20 @@
     <title>Game boards</title>
     <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/google-analytics.js"></script>
+    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
 
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.mousewheel-3.1.13.min.js"></script>
     <script src="${ctx}/resources/js/jcanvas/jcanvas.min.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.simplemodal-1.4.4.js"></script>
 
     <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/ajax-loader.js"></script>
     <script src="${ctx}/resources/js/board-data-ws.js"></script>
+    <script src="${ctx}/resources/js/zoomer.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
     <script src="${ctx}/resources/js/canvases-text.js"></script>
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
@@ -59,9 +62,11 @@
     <%@include file="forkMe.jsp"%>
 
     <div id="board_page">
+        <div id="donate" style="display:none;">
+            <input type="button" id="want-donate" value="Помочь проекту..."/>
+        </div>
         <%@include file="canvases.jsp"%>
         <%@include file="leaderstable.jsp"%>
-        <%@include file="info.jsp"%>
         <%@include file="advertisement.jsp"%>
         <%@include file="donate.jsp"%>
         <%@include file="widgets.jsp"%>

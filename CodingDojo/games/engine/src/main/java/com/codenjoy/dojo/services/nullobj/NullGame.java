@@ -62,6 +62,11 @@ public class NullGame implements Game {
     }
 
     @Override
+    public void loadSave(JSONObject save) {
+        // do nothing
+    }
+
+    @Override
     public String getBoardAsString() {
         return StringUtils.EMPTY;
     }

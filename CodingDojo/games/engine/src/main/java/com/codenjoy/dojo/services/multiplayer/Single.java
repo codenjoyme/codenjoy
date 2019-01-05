@@ -105,6 +105,14 @@ public class Single implements Game {
     }
 
     @Override
+    public void loadSave(JSONObject save) {
+        if (save.has("levelProgress")) {
+            save.remove("levelProgress");
+        }
+        field.loadSave(save);
+    }
+
+    @Override
     public Object getBoardAsString() {
         if (printer == null) {
             throw new IllegalStateException("No board for this player");
@@ -163,6 +171,9 @@ public class Single implements Game {
             progress.saveTo(result);
             return result;
         } else {
+            if (save == null) {
+                return new JSONObject();
+            }
             return save;
         }
     }

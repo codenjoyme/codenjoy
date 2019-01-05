@@ -120,560 +120,616 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    '\n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Answer: \n" +
                         "DICE:0\n" +
-                        "1:Answer: DOWN\n" +
-                        "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':10\n" +
+                        "1:  },\n" +
                         "1:  'currentFigureType':'I',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'J',\n" +
                         "1:    'L',\n" +
                         "1:    'S',\n" +
+                        "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....I.....\n" +
+                        "....I.....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: ACT(1),LEFT,LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'L',\n" +
+                        "1:    'S',\n" +
+                        "1:    'O',\n" +
                         "1:    'J'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    '\n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
+                        ".....J....\n" +
+                        "....JJ....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "IIII......\n" +
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Answer: ACT(1),DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:2\n" +
-                        "1:Answer: RIGHT\n" +
-                        "Fire Event: Event[figuresDropped:1:0]\n" +
-                        "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'J',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'L',\n" +
-                        "1:    'S',\n" +
-                        "1:    'J',\n" +
-                        "1:    'L'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "    J     \n" +
-                        "   JJ     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "     I    \n" +
-                        "     I    \n" +
-                        "     I    \n" +
-                        "     I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[3,8]',\n" +
-                        "1:  'currentFigureType':'J',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'L',\n" +
-                        "1:    'S',\n" +
-                        "1:    'J',\n" +
-                        "1:    'L'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   J      \n" +
-                        "   J      \n" +
-                        "  JJ      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "     I    \n" +
-                        "     I    \n" +
-                        "     I    \n" +
-                        "     I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:0\n" +
-                        "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:1]\n" +
-                        "DICE:1\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
                         "1:  'currentFigureType':'L',\n" +
                         "1:  'futureFigures':[\n" +
                         "1:    'S',\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....L.....\n" +
+                        "....LL....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "....J.....\n" +
+                        "IIIIJJJ...\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: RIGHT,RIGHT,RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':8\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'O',\n" +
+                        "1:    'J',\n" +
+                        "1:    'J',\n" +
+                        "1:    'L'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....SS...\n" +
+                        "....SS....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".......L..\n" +
+                        "....J..L..\n" +
+                        "IIIIJJJLL.\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: ACT(1),RIGHT,RIGHT,RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:5]\n" +
+                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'O',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
                         "1:    'J',\n" +
                         "1:    'L',\n" +
                         "1:    'I'\n" +
                         "1:  ],\n" +
                         "1:  'layers':[\n" +
                         "1:    '\n" +
-                        "    L     \n" +
-                        "    LL    \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "     I    \n" +
-                        "   J I    \n" +
-                        "   J I    \n" +
-                        "  JJ I    \n" +
+                        "....OO....\n" +
+                        "....OO....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".......LS.\n" +
+                        "....J..LSS\n" +
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:1]\n" +
+                        "DICE:0\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....J....\n" +
+                        "....JJ....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "OO.....LS.\n" +
+                        "OO..J..LSS\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: LEFT,LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'L',\n" +
+                        "1:    'I',\n" +
+                        "1:    'O',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....J....\n" +
+                        "....JJ....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "...J......\n" +
+                        "OO.J...LS.\n" +
+                        "OOJJJ..LSS\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:4\n" +
-                        "DICE_CORRECTED < 4 :0\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'L',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'O',\n" +
+                        "1:    'I',\n" +
+                        "1:    'S'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....L.....\n" +
+                        "....LL....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "...J..J...\n" +
+                        "OO.J..JLS.\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
                         "1:Answer: DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':10\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'I',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'O',\n" +
+                        "1:    'I',\n" +
+                        "1:    'S',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....I.....\n" +
+                        "....I.....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "....L.....\n" +
+                        "...JL.J...\n" +
+                        "OO.JLLJLS.\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: LEFT,LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'O',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'S',\n" +
+                        "1:    'I',\n" +
+                        "1:    'J'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....OO....\n" +
+                        "....OO....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..I.......\n" +
+                        "..I.L.....\n" +
+                        "..IJL.J...\n" +
+                        "OOIJLLJLS.\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:1]\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':10\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'I',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'S',\n" +
+                        "1:    'I',\n" +
+                        "1:    'J',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....I.....\n" +
+                        "....I.....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..I.......\n" +
+                        "OOI.L.....\n" +
+                        "OOIJL.J...\n" +
+                        "OOIJLLJLS.\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: RIGHT,RIGHT,RIGHT,RIGHT,RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':8\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'J',\n" +
+                        "1:    'I',\n" +
+                        "1:    'L'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....SS...\n" +
+                        "....SS....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..I......I\n" +
+                        "OOI.L....I\n" +
+                        "OOIJL.J..I\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: ACT(1),RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:5]\n" +
+                        "DICE:2\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':10\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'I',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
+                        "1:    'I',\n" +
+                        "1:    'L',\n" +
+                        "1:    'J'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....I.....\n" +
+                        "....I.....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..I...S..I\n" +
+                        "OOI.L.SS.I\n" +
+                        "OOIJL.JS.I\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "DICE:4\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'L',\n" +
+                        "1:    'J',\n" +
+                        "1:    'S'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....J....\n" +
+                        "....JJ....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".....I....\n" +
+                        "..I..IS..I\n" +
+                        "OOI.LISS.I\n" +
+                        "OOIJLIJS.I\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':10\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'I',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'L',\n" +
+                        "1:    'J',\n" +
+                        "1:    'S',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....I.....\n" +
+                        "....I.....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".J........\n" +
+                        ".J...I....\n" +
+                        "JJI..IS..I\n" +
+                        "OOI.LISS.I\n" +
+                        "OOIJLIJS.I\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: RIGHT,RIGHT,RIGHT,RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "DICE:1\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'L',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'J',\n" +
+                        "1:    'S',\n" +
+                        "1:    'I',\n" +
+                        "1:    'I'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....L.....\n" +
+                        "....LL....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".J........\n" +
+                        ".J...I..I.\n" +
+                        "JJI..IS.II\n" +
+                        "OOI.LISSII\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: ACT(2),LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "DICE:3\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':9\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'J',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'S',\n" +
+                        "1:    'I',\n" +
+                        "1:    'I',\n" +
+                        "1:    'L'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....J....\n" +
+                        "....JJ....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".J........\n" +
+                        ".JLL.I..I.\n" +
+                        "JJIL.IS.II\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: ACT(2),LEFT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "DICE:0\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':5,\n" +
+                        "1:    'y':8\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'S',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'I',\n" +
+                        "1:    'L',\n" +
+                        "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        ".....SS...\n" +
+                        "....SS....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".J..JJ....\n" +
+                        ".JLLJI..I.\n" +
+                        "JJILJIS.II\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: ACT(1),RIGHT,DOWN\n" +
+                        "Fire Event: Event[figuresDropped:1:5]\n" +
+                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "DICE:0\n" +
+                        "------------------------------------------\n" +
+                        "1:BoardData {\n" +
+                        "1:  'currentFigurePoint':{\n" +
+                        "1:    'x':4,\n" +
+                        "1:    'y':10\n" +
+                        "1:  },\n" +
+                        "1:  'currentFigureType':'I',\n" +
+                        "1:  'futureFigures':[\n" +
+                        "1:    'I',\n" +
+                        "1:    'L',\n" +
+                        "1:    'O',\n" +
+                        "1:    'O'\n" +
+                        "1:  ],\n" +
+                        "1:  'layers':[\n" +
+                        "1:    '\n" +
+                        "....I.....\n" +
+                        "....I.....\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        "..........\n" +
+                        ".J..JJS...\n" +
+                        ".JLLJISSI.\n" +
+                        "'\n" +
+                        "1:  ]\n" +
+                        "1:}\n" +
+                        "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
                         "Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:1\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   SS     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "    L     \n" +
-                        "    L     \n" +
-                        "    LL    \n" +
-                        "     I    \n" +
-                        "   J I    \n" +
-                        "   J I    \n" +
-                        "  JJ I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:2\n" +
-                        "1:Answer: RIGHT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[5,8]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "     SS   \n" +
-                        "    SS    \n" +
-                        "          \n" +
-                        "    L     \n" +
-                        "    L     \n" +
-                        "    LL    \n" +
-                        "     I    \n" +
-                        "   J I    \n" +
-                        "   J I    \n" +
-                        "  JJ I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,7]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'J',\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "          \n" +
-                        "    SS    \n" +
-                        "   SS     \n" +
-                        "    L     \n" +
-                        "    L     \n" +
-                        "    LL    \n" +
-                        "     I    \n" +
-                        "   J I    \n" +
-                        "   J I    \n" +
-                        "  JJ I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:3\n" +
-                        "DICE:2\n" +
-                        "1:Answer: ACT(2)\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
-                        "DICE:4\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'J',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'L',\n" +
-                        "1:    'I',\n" +
-                        "1:    'I',\n" +
-                        "1:    'S'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "    J     \n" +
-                        "   JJS    \n" +
-                        "   SS     \n" +
-                        "    L     \n" +
-                        "    L     \n" +
-                        "    LL    \n" +
-                        "     I    \n" +
-                        "   J I    \n" +
-                        "   J I    \n" +
-                        "  JJ I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "Fire Event: Event[figuresDropped:1:1]\n" +
-                        "DICE:1\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'L',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'I',\n" +
-                        "1:    'S',\n" +
-                        "1:    'I'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   JL     \n" +
-                        "  JJLL    \n" +
-                        "   SS     \n" +
-                        "    L     \n" +
-                        "    L     \n" +
-                        "    LL    \n" +
-                        "     I    \n" +
-                        "   J I    \n" +
-                        "   J I    \n" +
-                        "  JJ I    \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:3\n" +
-                        "DICE:0\n" +
-                        "1:Answer: ACT(0)\n" +
-                        "Fire Event: Event[glassOverflown:1:0]\n" +
-                        "DICE:0\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'I',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'S',\n" +
-                        "1:    'I',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[3,8]',\n" +
-                        "1:  'currentFigureType':'I',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'S',\n" +
-                        "1:    'I',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:0\n" +
-                        "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:0]\n" +
-                        "DICE:0\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'I',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'S',\n" +
-                        "1:    'I',\n" +
-                        "1:    'O',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "    I     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[3,8]',\n" +
-                        "1:  'currentFigureType':'I',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'S',\n" +
-                        "1:    'I',\n" +
-                        "1:    'O',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:0\n" +
-                        "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:0]\n" +
-                        "DICE:2\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'O',\n" +
-                        "1:    'O',\n" +
-                        "1:    'J'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   SS     \n" +
-                        "          \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[3,8]',\n" +
-                        "1:  'currentFigureType':'S',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'I',\n" +
-                        "1:    'O',\n" +
-                        "1:    'O',\n" +
-                        "1:    'J'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   SS     \n" +
-                        "  SS      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:3\n" +
-                        "DICE:2\n" +
-                        "1:Answer: ACT(2)\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
-                        "DICE:4\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,9]',\n" +
-                        "1:  'currentFigureType':'I',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'O',\n" +
-                        "1:    'O',\n" +
-                        "1:    'J',\n" +
-                        "1:    'S'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   SI     \n" +
-                        "  SSI     \n" +
-                        "   II     \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "   I      \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "Fire Event: Event[glassOverflown:1:0]\n" +
-                        "DICE:0\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[4,10]',\n" +
-                        "1:  'currentFigureType':'O',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'O',\n" +
-                        "1:    'J',\n" +
-                        "1:    'S',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "    OO    \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[3,9]',\n" +
-                        "1:  'currentFigureType':'O',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'O',\n" +
-                        "1:    'J',\n" +
-                        "1:    'S',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "   OO     \n" +
-                        "   OO     \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:1\n" +
-                        "1:Answer: LEFT\n" +
-                        "------------------------------------------\n" +
-                        "1:BoardData {\n" +
-                        "1:  'currentFigurePoint':'[2,8]',\n" +
-                        "1:  'currentFigureType':'O',\n" +
-                        "1:  'futureFigures':[\n" +
-                        "1:    'O',\n" +
-                        "1:    'J',\n" +
-                        "1:    'S',\n" +
-                        "1:    'O'\n" +
-                        "1:  ],\n" +
-                        "1:  'layers':[\n" +
-                        "1:    '\n" +
-                        "          \n" +
-                        "  OO      \n" +
-                        "  OO      \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "          \n" +
-                        "'\n" +
-                        "1:  ]\n" +
-                        "1:}\n" +
-                        "DICE:3\n" +
-                        "DICE:3\n" +
-                        "1:Answer: ACT(3)\n" +
                         "------------------------------------------",
                 join);
 

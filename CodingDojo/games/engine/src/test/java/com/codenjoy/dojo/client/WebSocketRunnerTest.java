@@ -30,11 +30,11 @@ import static org.junit.Assert.assertEquals;
 public class WebSocketRunnerTest {
     @Test
     public void testUrlParser() {
-        assertURL("UrlParser{server='codenjoy.com:8080', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
-                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        assertURL("UrlParser{server='codenjoy.com:80', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
+                "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
 
-        assertURL("UrlParser{server='codenjoy.com:8080', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
-                "https://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        assertURL("UrlParser{server='codenjoy.com:80', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
+                "https://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
 
         assertURL("UrlParser{server='127.0.0.1:8080', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
                 "http://127.0.0.1:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");

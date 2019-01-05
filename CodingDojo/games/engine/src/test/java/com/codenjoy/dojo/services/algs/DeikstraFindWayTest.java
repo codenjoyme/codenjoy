@@ -34,9 +34,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by indigo on 03.08.2016.
- */
 public class DeikstraFindWayTest {
 
     @Test

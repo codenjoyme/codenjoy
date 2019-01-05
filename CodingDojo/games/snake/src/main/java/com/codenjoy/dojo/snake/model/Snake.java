@@ -36,11 +36,12 @@ public class Snake implements Field {
     private int size;
     private Apple apple;
     private ArtifactGenerator generator;
-    private int maxLength;
+    private int startLength;
     private Player player;
 
-    public Snake(ArtifactGenerator generator, Walls walls, int size) {
+    public Snake(ArtifactGenerator generator, Walls walls, int size, int startLength) {
         this.generator = generator;
+        this.startLength = startLength;
         if (size%2 == 0) {
             size++;
         }
@@ -83,8 +84,9 @@ public class Snake implements Field {
         }
         
         // получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
+        // но только если мы не растем сейчас (на старте или от съеденного яблока)
         // вроде логично
-        if (snake().itsMyTail(point)) {
+        if (snake().itsMyTail(point) && snake().getGrowBy() == 0) {
             return new EmptySpace(point);
         }        
         
@@ -112,14 +114,18 @@ public class Snake implements Field {
     }
 
     @Override
+    public void clearScore() {
+        newGame(player);
+    }
+
+    @Override
     public void remove(Player player) {
         player = null;
     }
 
     @Override
     public Hero createSnake() {
-        int position = (size - 1)/2;
-        Hero snake = new Hero(position, position);
+        Hero snake = Hero.createHero(size, startLength);
         generateNewStone(snake);
         generateNewApple(snake);
         return snake;
@@ -154,7 +160,6 @@ public class Snake implements Field {
         if (!snake().isAlive()) return;
 
         snake().walk(this);
-        maxLength = Math.max(maxLength, snake().getLength());
     }
 
     @Override

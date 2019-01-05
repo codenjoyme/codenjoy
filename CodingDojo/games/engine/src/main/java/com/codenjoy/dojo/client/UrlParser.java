@@ -30,11 +30,11 @@ public class UrlParser {
     public static final String WS_PROTOCOL = "ws";
     public static final String HTTPS_PROTOCOL = "https";
 
-    String protocol;
-    String server;
-    String code;
-    String userName;
-    String context;
+    public String protocol;
+    public String server;
+    public String code;
+    public String userName;
+    public String context;
 
     public UrlParser(String uri) {
         try {

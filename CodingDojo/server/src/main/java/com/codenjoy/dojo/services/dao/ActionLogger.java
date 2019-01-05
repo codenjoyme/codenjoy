@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.BoardLog;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerGame;
-import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
@@ -39,14 +36,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Component
-public class ActionLogger {
+public class ActionLogger extends Suspendable {
 
     private final int ticksPerSave;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
     private int count;
-    private boolean active;
 
     private CrudConnectionThreadPool pool;
 
@@ -60,18 +56,6 @@ public class ActionLogger {
                     "board varchar(10000));");
         active = false;
         count = 0;
-    }
-
-    public void pause() {
-        active = false;
-    }
-
-    public void resume() {
-        active = true;
-    }
-
-    public boolean isRecording() {
-        return active;
     }
 
     void removeDatabase() {

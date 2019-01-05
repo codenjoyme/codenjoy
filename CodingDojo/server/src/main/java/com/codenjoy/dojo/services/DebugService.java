@@ -29,30 +29,29 @@ import org.springframework.stereotype.Component;
 import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
 
 @Component
-public class DebugService {
+public class DebugService extends Suspendable {
 
-    public void stop() {
-        if (isStarted()) {
+    @Value("${debugEnable}")
+    public void setDebugEnable(boolean active) {
+        super.setActive(active);
+    }
+
+    @Override
+    public void pause() {
+        if (isWorking()) {
             DLoggerFactory.settings.remove(DEBUG_KEY);
         }
     }
 
-    public boolean isStarted() {
+    @Override
+    public boolean isWorking() {
         return DLoggerFactory.settings.containsKey(DEBUG_KEY);
     }
 
-    public void start() {
-        if (!isStarted()) {
+    @Override
+    public void resume() {
+        if (!isWorking()) {
             DLoggerFactory.settings.put(DEBUG_KEY, true);
-        }
-    }
-
-    @Value("${debugEnable}")
-    public void setDebugEnable(boolean debugEnable) {
-        if (debugEnable) {
-            start();
-        } else {
-            stop();
         }
     }
 }

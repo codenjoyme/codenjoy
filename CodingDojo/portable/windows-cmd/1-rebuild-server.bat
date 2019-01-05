@@ -32,10 +32,13 @@ echo [0m
 echo on
 
 cd %ROOT%\codenjoy\CodingDojo
-call %GIT_HOME%\cmd\git pull origin master
 
-if NOT "%GIT_REVISION%"=="" (
+if "%GIT_REVISION%"=="" (
+	set GIT_REVISION=master
+)
+if not "%GIT_REVISION%"=="local" (
 	call %GIT_HOME%\cmd\git stash --all
+	call %GIT_HOME%\cmd\git pull origin master
 	call %GIT_HOME%\cmd\git checkout "%GIT_REVISION%"
 )
 
@@ -112,6 +115,8 @@ copy %ROOT%\codenjoy\CodingDojo\builder\target\%CONTEXT%.war %ROOT%\files\*.*
 copy %ROOT%\files\%CONTEXT%.war %JETTY_HOME%\webapps\*.*
 
 cd %ROOT%
+
+rem TODO copy all clients for all games from codenjoy\CodingDojo\games\bomberman\src\main\webapp\resources\user\bomberman-servers.zip to  clients\*.* and unzip
 
 echo off
 echo [44;93m

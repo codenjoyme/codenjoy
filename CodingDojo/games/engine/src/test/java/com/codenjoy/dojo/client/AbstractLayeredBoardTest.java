@@ -221,23 +221,23 @@ public class AbstractLayeredBoardTest {
     @Test
     public void shouldWork_isNear_layer2() {
         assertEquals(true, board.isNear(LAYER_2, 1, 1, Elements.NONE));
-        assertEquals(false, board.isNear(LAYER_2, 2, 2, Elements.FOUR));
+        assertEquals(false, board.isNear(LAYER_2, 0, 3, Elements.FOUR));
     }
 
     @Test
     public void shouldWork_getNear_layer1() {
-        assertEquals("[1, 1, 1, 1, 2, 3, 1, 2, 3]", board.getNear(LAYER_1, 1, 1).toString());
-        assertEquals("[2, 3, 1, 2, 3, 1, 1, 1, 1]", board.getNear(LAYER_1, 2, 2).toString());
-        assertEquals("[3, 1, 1, 1]", board.getNear(LAYER_1, 3, 3).toString());
+        assertEquals("[1, 1, 1, 1, 3, 1, 2, 3]", board.getNear(LAYER_1, 1, 1).toString());
+        assertEquals("[2, 3, 1, 2, 1, 1, 1, 1]", board.getNear(LAYER_1, 2, 2).toString());
+        assertEquals("[3, 1, 1]", board.getNear(LAYER_1, 3, 3).toString());
         assertEquals("[]", board.getNear(LAYER_1, 5, 5).toString());
         assertEquals("[1]", board.getNear(LAYER_1, -1, -1).toString());
     }
 
     @Test
     public void shouldWork_getNear_layer2() {
-        assertEquals("[ ,  ,  ,  , 4,  ,  ,  , 4]", board.getNear(LAYER_2, 1, 1).toString());
-        assertEquals("[4,  ,  ,  , 4,  ,  ,  ,  ]", board.getNear(LAYER_2, 2, 2).toString());
-        assertEquals("[4,  ,  ,  ]", board.getNear(LAYER_2, 3, 3).toString());
+        assertEquals("[ ,  ,  ,  ,  ,  ,  , 4]", board.getNear(LAYER_2, 1, 1).toString());
+        assertEquals("[4,  ,  ,  ,  ,  ,  ,  ]", board.getNear(LAYER_2, 2, 2).toString());
+        assertEquals("[4,  ,  ]", board.getNear(LAYER_2, 3, 3).toString());
         assertEquals("[]", board.getNear(LAYER_2, 5, 5).toString());
         assertEquals("[ ]", board.getNear(LAYER_2, -1, -1).toString());
     }
@@ -258,20 +258,20 @@ public class AbstractLayeredBoardTest {
     @Test
     public void shouldWork_countNear_layer1() {
         assertEquals(2, board.countNear(LAYER_1, 0, 0, Elements.ONE));
-        assertEquals(0, board.countNear(LAYER_1, 0, 0, Elements.TWO));
+        assertEquals(1, board.countNear(LAYER_1, 0, 0, Elements.TWO));
         assertEquals(0, board.countNear(LAYER_1, 0, 0, Elements.THREE));
 
-        assertEquals(2, board.countNear(LAYER_1, 1, 1, Elements.ONE));
+        assertEquals(5, board.countNear(LAYER_1, 1, 1, Elements.ONE));
         assertEquals(1, board.countNear(LAYER_1, 1, 1, Elements.TWO));
-        assertEquals(1, board.countNear(LAYER_1, 1, 1, Elements.THREE));
+        assertEquals(2, board.countNear(LAYER_1, 1, 1, Elements.THREE));
 
-        assertEquals(2, board.countNear(LAYER_1, 2, 2, Elements.ONE));
-        assertEquals(1, board.countNear(LAYER_1, 2, 2, Elements.TWO));
+        assertEquals(5, board.countNear(LAYER_1, 2, 2, Elements.ONE));
+        assertEquals(2, board.countNear(LAYER_1, 2, 2, Elements.TWO));
         assertEquals(1, board.countNear(LAYER_1, 2, 2, Elements.THREE));
 
         assertEquals(2, board.countNear(LAYER_1, 3, 3, Elements.ONE));
         assertEquals(0, board.countNear(LAYER_1, 3, 3, Elements.TWO));
-        assertEquals(0, board.countNear(LAYER_1, 3, 3, Elements.THREE));
+        assertEquals(1, board.countNear(LAYER_1, 3, 3, Elements.THREE));
 
         assertEquals(0, board.countNear(LAYER_1, -1, -1, Elements.THREE));
     }
@@ -279,19 +279,19 @@ public class AbstractLayeredBoardTest {
     @Test
     public void shouldWork_countNear_layer2() {
         assertEquals(0, board.countNear(LAYER_2, 0, 0, Elements.ONE));
-        assertEquals(0, board.countNear(LAYER_2, 0, 0, Elements.FOUR));
+        assertEquals(1, board.countNear(LAYER_2, 0, 0, Elements.FOUR));
         assertEquals(2, board.countNear(LAYER_2, 0, 0, Elements.NONE));
 
         assertEquals(0, board.countNear(LAYER_2, 1, 1, Elements.ONE));
-        assertEquals(0, board.countNear(LAYER_2, 1, 1, Elements.FOUR));
-        assertEquals(4, board.countNear(LAYER_2, 1, 1, Elements.NONE));
+        assertEquals(1, board.countNear(LAYER_2, 1, 1, Elements.FOUR));
+        assertEquals(7, board.countNear(LAYER_2, 1, 1, Elements.NONE));
 
         assertEquals(0, board.countNear(LAYER_2, 2, 1, Elements.ONE));
         assertEquals(2, board.countNear(LAYER_2, 2, 1, Elements.FOUR));
-        assertEquals(2, board.countNear(LAYER_2, 2, 1, Elements.NONE));
+        assertEquals(6, board.countNear(LAYER_2, 2, 1, Elements.NONE));
 
         assertEquals(0, board.countNear(LAYER_2, 3, 3, Elements.ONE));
-        assertEquals(0, board.countNear(LAYER_2, 3, 3, Elements.FOUR));
+        assertEquals(1, board.countNear(LAYER_2, 3, 3, Elements.FOUR));
         assertEquals(2, board.countNear(LAYER_2, 3, 3, Elements.NONE));
 
         assertEquals(0, board.countNear(LAYER_2, -1, -1, Elements.THREE));

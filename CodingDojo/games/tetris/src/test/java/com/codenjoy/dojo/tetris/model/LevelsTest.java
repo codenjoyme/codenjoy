@@ -62,7 +62,7 @@ public class LevelsTest {
         verify(levelChangedListener).levelChanged(0, level0);
         acceptLevels(true, false);
 
-        levels.figureDropped(new FigureImpl());
+        levels.figureDropped(new FigureImpl().type());
 
         verify(levelChangedListener).levelChanged(1, level1);
         verifyNoMoreInteractions(levelChangedListener);
@@ -73,7 +73,7 @@ public class LevelsTest {
         acceptLevels(true, false);
 
         levels.glassOverflown();
-        levels.figureDropped(new FigureImpl());
+        levels.figureDropped(new FigureImpl().type());
 
         verify(level1, times(1)).apply();
         verify(level2, never()).apply();
@@ -94,12 +94,12 @@ public class LevelsTest {
 
         levels.glassOverflown();
         FigureImpl droppedFigure = new FigureImpl();
-        levels.figureDropped(droppedFigure);
+        levels.figureDropped(droppedFigure.type());
         levels.linesRemoved(12);
 
         verify(level1, times(3)).accept(eventCaptor.capture());
         assertEventValues(eventCaptor.getAllValues().get(0), GlassEvent.Type.GLASS_OVERFLOW, null);
-        assertEventValues(eventCaptor.getAllValues().get(1), GlassEvent.Type.FIGURE_DROPPED, droppedFigure);
+        assertEventValues(eventCaptor.getAllValues().get(1), GlassEvent.Type.FIGURE_DROPPED, droppedFigure.type());
         assertEventValues(eventCaptor.getAllValues().get(2), GlassEvent.Type.LINES_REMOVED, 12);
     }
 
@@ -171,7 +171,7 @@ public class LevelsTest {
     public void shouldStayOnLastLevelWhenNoMoreLevels(){
         acceptLevels(true, true);
         levels.linesRemoved(1);
-        levels.figureDropped(new FigureImpl());
+        levels.figureDropped(new FigureImpl().type());
 
         levels.glassOverflown();
 
@@ -196,7 +196,7 @@ public class LevelsTest {
 
     private void gotoNextLevel() {
         acceptLevel(level1, true);
-        levels.figureDropped(new FigureImpl());
+        levels.figureDropped(new FigureImpl().type());
         acceptLevel(level2, false);
     }
 
@@ -206,7 +206,7 @@ public class LevelsTest {
         acceptLevels(true, false);
 
         levels.onChangeLevel(null);
-        levels.figureDropped(new FigureImpl());
+        levels.figureDropped(new FigureImpl().type());
 
         verifyNoMoreInteractions(levelChangedListener);
     }

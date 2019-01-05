@@ -26,7 +26,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, drawBoard)
 {
-    var isMultiplayer = multiplayerType.multiplayer;
     var canvases = {};
     var infoPools = {};
     currentBoardSize = boardSize;
@@ -45,36 +44,36 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function reloadCanvasesData() {
         reloading = true;
+        loadPlayers(rebuildCanvasesForPlayers);
+    }
 
-        loadPlayers(function(newPlayers) {
-            var remove = [];
-            var create = [];
-            var playerNames = getNames(players);
-            var newPlayerNames = getNames(newPlayers);
-            newPlayers.forEach(function (newPlayer) {
-                if ($.inArray(newPlayer.name, playerNames) == -1) {
-                    create.push(newPlayer);
-                }
-            });
-            players.forEach(function (player) {
-                if ($.inArray(player.name, newPlayerNames) == -1) {
-                    remove.push(player);
-                }
-            });
-
-            players = newPlayers;
-
-            removeHtml(remove);
-            removeCanvases(remove);
-
-            buildHtml(create);
-            buildCanvases(create);
-
-            if (players.length == 0) {
-                goToHomePage();
+    function notIn(playersWhere, playersWhat) {
+        var result = [];
+        var names = getNames(playersWhere);
+        playersWhat.forEach(function (player) {
+            if ($.inArray(player.name, names) == -1) {
+                result.push(player);
             }
-            reloading = false;
         });
+        return result;
+    }
+
+    function rebuildCanvasesForPlayers(newPlayers) {
+        var create = notIn(players, newPlayers);
+        var remove = notIn(newPlayers, players);
+
+        players = newPlayers;
+
+        removeHtml(remove);
+        removeCanvases(remove);
+
+        buildHtml(create);
+        buildCanvases(create);
+
+        if (players.length == 0) {
+            goToHomePage();
+        }
+        reloading = false;
     }
 
     function loadCanvasesData() {
@@ -156,26 +155,18 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var getBoard = function() {
             return playerData.board;
         }
-        var getHeroesData = function(isAll) {
-            if (isAll) {
-                var result = {};
-                for (var name in playerData.heroesData) {
-                    result[name] = playerData.heroesData[name][name];
-                }
-                return result;
-            } else {
-                return playerData.heroesData[playerName];
-            }
+        var getHeroesData = function() {
+            return playerData.heroesData.coordinates;
         }
 
         var drawAllLayers = function(layers, onDrawItem){
-            var isDrawByOrder = true;
+            var isDrawByOrder = false; // TODO вероятно тут надо очень сильно упростить, я не могу всспомнить где мне надо послойно печатать
 
             var drawChar = function(plotIndex) {
                 var x = 0;
                 var y = boardSize - 1;
-                for (var charIndex in layers[0]) {
-                    for (var layerIndex in layers) {
+                for (var charIndex = 0; charIndex < layers[0].length; charIndex++) {
+                    for (var layerIndex = 0; layerIndex < layers.length; layerIndex++) {
                         var layer = layers[layerIndex];
                         var color = layer[charIndex];
                         if (!isDrawByOrder || plotIndex == color) {
@@ -250,10 +241,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 }
 
                 var board = getBoard();
-                if (isMultiplayer || !!board.showName) {
+                if (typeof board.showName == 'undefined' || board.showName) {
                     var currentPoint = null;
                     var currentHeroData = null;
-                    var heroesData = getHeroesData(isMultiplayer);
+                    var heroesData = getHeroesData();
                     for (var name in heroesData) {
                         var heroData = heroesData[name];
                         var point = heroData.coordinate;
@@ -267,7 +258,16 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             currentPoint = point;
                             currentHeroData = heroData;
                         }
-                        if (!board.onlyMyName && !!heroData.multiplayer) {
+
+                        // TODO это тоже относится к TRAINING типу игры
+                        var isPlayerOnSingleBoard = function(board) {
+                            var progress = board.levelProgress;
+                            if (!progress) {
+                                return false;
+                            }
+                            return   progress.current < progress.total;
+                        }
+                        if (!!heroData.multiplayer && !isPlayerOnSingleBoard(board)) {
                             drawName(name, point, font, heroData);
                         }
                     }
@@ -465,8 +465,27 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return result;
     }
 
+    function getPlayers(data) {
+        return Object.keys(data);
+    }
+
+    function getAllPlayersFromGroups(data) {
+        var result = [];
+        var keys = getPlayers(data);
+        for (var player in keys) {
+            result = result.concat(data[keys[player]].heroesData.group);
+        }
+        return result;
+    }
+
+    function isPlayersInGroups(data) {
+        var playersOnTop = getPlayers(data);
+        var playersInGroups = getAllPlayersFromGroups(data);
+        return playersOnTop != playersInGroups;
+    }
+
     function isPlayersListChanged(data) {
-        var newPlayers = Object.keys(data);
+        var newPlayers = getPlayers(data);
         var oldPlayers = getNames(players);
 
         if (newPlayers.length != oldPlayers.length) {
@@ -493,6 +512,18 @@ function initCanvases(contextPath, players, allPlayersScreen,
         if (isPlayerListEmpty(data)) {
             goToHomePage();
             return;
+        }
+
+        if (allPlayersScreen && isPlayersInGroups(data)) {
+            var playersOnTop = [];
+            var names = getPlayers(data);
+            for (var index in names) {
+                var name = names[index];
+                playersOnTop.push({ 'name':name });
+            }
+
+            reloading = true;
+            rebuildCanvasesForPlayers(playersOnTop);
         }
 
         if (allPlayersScreen && isPlayersListChanged(data)) {
@@ -526,7 +557,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         showScoreInformation(playerName, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
+            $("#level_" + toId(playerName)).text(data.heroesData.coordinates[playerName].level + 1);
         }
     }
 

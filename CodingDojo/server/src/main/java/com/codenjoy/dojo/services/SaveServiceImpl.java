@@ -92,6 +92,8 @@ public class SaveServiceImpl implements SaveService {
             info.setCode(registration.getCode(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
             info.setAIPlayer(player.getAI() != null);
+
+            copySave(player, info);
             map.put(player.getName(), info);
         }
 
@@ -110,16 +112,18 @@ public class SaveServiceImpl implements SaveService {
             }
         }
 
-
         List<PlayerInfo> result = new LinkedList<>(map.values());
-        Collections.sort(result, new Comparator<PlayerInfo>() {
-            @Override
-            public int compare(PlayerInfo o1, PlayerInfo o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
+        Collections.sort(result, Comparator.comparing(Player::getName));
 
         return result;
+    }
+
+    void copySave(Player player, PlayerInfo info) {
+        PlayerGame playerGame = playerGames.get(player.getName());
+        Game game = playerGame.getGame();
+        if (game != null && game.getSave() != null) {
+            info.setData(game.getSave().toString());
+        }
     }
 
     @Override

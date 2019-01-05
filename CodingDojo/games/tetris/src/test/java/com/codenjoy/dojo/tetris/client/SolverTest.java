@@ -27,9 +27,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.tetris.model.Hero;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,37 +47,26 @@ public class SolverTest {
         ai = new YourSolver(dice);
     }
 
-    private Board board(String board) {
-        return (Board) new Board().forString(board);
-    }
-
     @Test
     public void should() {
-        asertAI("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       ",
+        asertAI("......." +
+                "......I" +
+                "..LL..I" +
+                "...LI.I" +
+                ".SSLI.I" +
+                "SSOOIOO" +
+                "..OOIOO",
                 "T",
                 pt(1, 2),
+                new String[] {"I", "O", "L", "Z"},
                 Direction.DOWN);
     }
 
-    private void asertAI(String board, String figureType, Point point, Direction expected) {
-        JSONObject result = new JSONObject();
-
-        JSONArray array = new JSONArray();
-        result.put("layers", array);
-        array.put(board);
-        array.put(board);
-
-        result.put("currentFigureType", figureType);
-        result.put("currentFigurePoint", point);
-        result.put("futureFigures", "[]");
-
-        String actual = ai.get(board(result.toString()));
+    private void asertAI(String glass, String figureType,
+                         Point point, String[] futureFigures,
+                         Direction expected)
+    {
+        String actual = ai.get(BoardTest.getBoard(glass, figureType, point, futureFigures));
         assertEquals(expected.toString(), actual);
     }
 

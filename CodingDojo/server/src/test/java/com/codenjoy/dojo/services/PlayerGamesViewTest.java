@@ -86,34 +86,18 @@ public class PlayerGamesViewTest {
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
 
         // then
-        assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
+        String expectedGroup = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'user1':{" +
+                    "'coordinates':{" +
                         "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
                         "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'user2':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'user3':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}," +
-                    "'user4':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}," +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}" +
-                "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
-                toString(dataMap));
+                    "'group':['user1','user2','user3','user4']" +
+                "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}";
+
+        assertEquals(expectedGroup, toString(dataMap.get("user1")));
     }
 
     @Test
@@ -133,26 +117,29 @@ public class PlayerGamesViewTest {
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
 
         // then
-        assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
+        String expectedGroup1 = "{'boardSize':1234,'decoder':{}," +
                 "'heroesData':{" +
-                    "'user1':{" +
+                    "'coordinates':{" +
                         "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
                         "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
                     "}," +
-                    "'user2':{" +
-                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
-                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                    "}," +
-                    "'user3':{" +
+                    "'group':['user1','user2']" +
+                "},'scores':{'user1':123,'user2':234}}";
+
+        assertEquals(expectedGroup1, toString(dataMap.get("user1")));
+        assertEquals(expectedGroup1, toString(dataMap.get("user2")));
+
+        String expectedGroup2 = "{'boardSize':1234,'decoder':{}," +
+                "'heroesData':{" +
+                    "'coordinates':{" +
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'user4':{" +
-                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
-                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                    "}" +
-                "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
-                toString(dataMap));
+                    "'group':['user3','user4']" +
+                "},'scores':{'user3':345,'user4':456}}";
+
+        assertEquals(expectedGroup2, toString(dataMap.get("user3")));
+        assertEquals(expectedGroup2, toString(dataMap.get("user4")));
     }
 
     @Test
@@ -170,30 +157,49 @@ public class PlayerGamesViewTest {
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
 
         // then
-        assertEquals("{gameName1={'boardSize':1234,'decoder':{}," +
-                        "'heroesData':{" +
-                            "'user1':{" +
-                                "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
-                            "}," +
-                            "'user2':{" +
-                                "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
-                            "}," +
-                            "'user3':{" +
-                                "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
-                            "}," +
-                            "'user4':{" +
-                                "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
-                            "}" +
-                        "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}}",
-                toString(dataMap));
+        String expectedGroup1 = "{'boardSize':1234,'decoder':{}," +
+                "'heroesData':{" +
+                    "'coordinates':{" +
+                        "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
+                    "}," +
+                    "'group':['user1']" +
+                "},'scores':{'user1':123}}";
+
+        assertEquals(expectedGroup1, toString(dataMap.get("user1")));
+
+        String expectedGroup2 = "{'boardSize':1234,'decoder':{}," +
+                "'heroesData':{" +
+                    "'coordinates':{" +
+                        "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
+                    "}," +
+                    "'group':['user2']" +
+                "},'scores':{'user2':234}}";
+
+        assertEquals(expectedGroup2, toString(dataMap.get("user2")));
+
+        String expectedGroup3 = "{'boardSize':1234,'decoder':{}," +
+                "'heroesData':{" +
+                    "'coordinates':{" +
+                        "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
+                    "}," +
+                    "'group':['user3']" +
+                "},'scores':{'user3':345}}";
+
+        assertEquals(expectedGroup3, toString(dataMap.get("user3")));
+
+        String expectedGroup4 = "{'boardSize':1234,'decoder':{}," +
+                "'heroesData':{" +
+                    "'coordinates':{" +
+                        "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
+                    "}," +
+                    "'group':['user4']" +
+                "},'scores':{'user4':456}}";
+
+        assertEquals(expectedGroup4, toString(dataMap.get("user4")));
     }
 
-    private String toString(Map<String, GameData> dataMap) {
-        Map<String, String> result = new LinkedHashMap<>();
-        for (Map.Entry<String, GameData> entry : dataMap.entrySet()) {
-            result.put(entry.getKey(), JsonUtils.clean(JsonUtils.toStringSorted(entry.getValue())));
-        }
-        return result.toString();
+    private String toString(GameData gameData) {
+        return JsonUtils.clean(JsonUtils.toStringSorted(gameData));
     }
 
     private HeroData getHeroDataForAllPlayers(int level, Point coordinate, Object additionalData) {

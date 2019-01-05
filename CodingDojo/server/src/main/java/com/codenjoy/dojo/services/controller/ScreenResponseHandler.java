@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
@@ -31,15 +32,18 @@ import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
 public class ScreenResponseHandler implements ResponseHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(ScreenResponseHandler.class);
+    private static Logger logger = DLoggerFactory.getLogger(ScreenResponseHandler.class);
 
     private PlayerTransport transport;
     private Player player;
@@ -51,8 +55,10 @@ public class ScreenResponseHandler implements ResponseHandler {
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
-        logger.debug("Received response: {} from player: {}",
-                message, player.getName());
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received response: {} from player: {}",
+                    message, player.getName());
+        }
 
         GetScreenJSONRequest request = new GetScreenJSONRequest(message);
         if (!request.itsMine()) {
@@ -66,28 +72,43 @@ public class ScreenResponseHandler implements ResponseHandler {
     private Map<Player, PlayerData> filter(Map<Player, PlayerData> data,
                                            GetScreenJSONRequest request)
     {
-        return data.entrySet().stream()
+        Stream<Map.Entry<Player, PlayerData>> stream = data.entrySet().stream()
                 .filter(entry -> request.isMyGame(entry.getKey()))
-                .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()))
+                .filter(entry -> request.isAllPlayers() || request.isFor(entry.getKey()));
+        if (request.isAllPlayers()) {
+            stream = stream.filter(distinctByKey(entry -> entry.getValue().getHeroesData().get("group").toString()));
+        }
+        return stream
                 .collect(toMap(entry -> entry.getKey(),
                         entry -> entry.getValue()));
     }
 
+    public static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
-                new Object[]{player.getName(), statusCode, reason});
+        if (logger.isDebugEnabled()) {
+            logger.debug("Websocket closed: {} from player: {} status code: {} reason: {}",
+                    new Object[]{player.getName(), statusCode, reason});
+        }
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
-        logger.error("Request error: player: {}, error: {}",
-                new Object[]{player.getName(), error});
+        if (logger.isDebugEnabled()) {
+            logger.error("Request error: player: {}, error: {}",
+                    new Object[]{player.getName(), error});
+        }
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
-        logger.debug("Connected: player: {}, session: {}",
-                new Object[]{player.getName(), session});
+        if (logger.isDebugEnabled()) {
+            logger.debug("Connected: player: {}, session: {}",
+                    new Object[]{player.getName(), session});
+        }
     }
 }

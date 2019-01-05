@@ -125,7 +125,6 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
 
     var getBoardDrawer = function(canvas, playerName, playerData) {
         var data = playerData.board;
-        var heroesData = playerData.heroesData[playerName];
 
         var clear = function() {
             canvas.resizeHeight(data.history.length + 1);
@@ -330,7 +329,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         showScoreInformation(playerName, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
+            $("#level_" + toId(playerName)).text(data.heroesData.coordinates[playerName].level + 1);
         }
     }
 }

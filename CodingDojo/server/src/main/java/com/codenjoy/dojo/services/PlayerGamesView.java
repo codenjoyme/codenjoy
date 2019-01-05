@@ -22,8 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import org.json.JSONObject;
+import com.codenjoy.dojo.services.hero.HeroData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,7 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 @Component
 public class PlayerGamesView {
@@ -41,60 +40,70 @@ public class PlayerGamesView {
     protected PlayerGames service;
 
     public Map<String, GameData> getGamesDataMap() {
-        Map<String, GameData> result = new LinkedHashMap<>();
-        for (GameType gameType : service.getGameTypes()) {
-            int boardSize = gameType.getBoardSize().getValue();
-            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-            JSONObject scores = getScoresJSON(gameType.name());
-            JSONObject heroesData = getCoordinatesJSON(gameType.name());
+        Map<GameType, GuiPlotColorDecoder> decoders = getDecoders();
+        Map<String, List<String>> groupsMap = getGroupsMap();
+        Map<String, Object> scores = getScores();
+        Map<String, HeroData> coordinates = getCoordinates();
 
-            result.put(gameType.name(), new GameData(boardSize, decoder, scores, heroesData));
-        }
-        return result;
+        return service.all().stream()
+                .collect(toMap(
+                        pg -> pg.getPlayer().getName(),
+                        pg -> {
+                            GameType gameType = pg.getGameType();
+                            String player = pg.getPlayer().getName();
+                            List<String> group = groupsMap.get(player);
+
+                            return new GameData(
+                                    gameType.getBoardSize().getValue(),
+                                    decoders.get(gameType),
+                                    filterByGroup(scores, group),
+                                    group,
+                                    filterByGroup(coordinates, group));
+                        }));
     }
 
-    private JSONObject getCoordinatesJSON(String gameType) {
-        List<PlayerGame> playerGames = service.getAll(gameType);
+    private Map<GameType, GuiPlotColorDecoder> getDecoders() {
+        return service.getGameTypes().stream()
+                .collect(toMap(type -> type,
+                        type -> new GuiPlotColorDecoder(type.getPlots())));
+    }
 
-        Map<Player, List<Player>> playersMap = new HashMap<>();
-        for (PlayerGame playerGame : playerGames) {
-            Player player = playerGame.getPlayer();
-            Game game = playerGame.getGame();
-            GameField field = game.getField();
-            List<Player> group = playerGames.stream()
-                    .filter(pg -> pg.getField().equals(field))
-                    .map(pg -> pg.getPlayer())
-                    .collect(toList());
-            playersMap.put(player, group);
-        }
+    private <K, V> Map<K, V> filterByGroup(Map<K, V> map, List<String> group) {
+        return map.entrySet().stream()
+                .filter(entry -> group.contains(entry.getKey()))
+                .collect(toMap(entry -> entry.getKey(),
+                        entry -> entry.getValue()));
+    }
 
-        Map<String, JSONObject> heroesData = new HashMap<>();
-        for (PlayerGame playerGame : playerGames) {
-            heroesData.put(playerGame.getPlayer().getName(),
-                    new JSONObject(playerGame.getGame().getHero()));
-        }
+    private Map<String, HeroData> getCoordinates() {
+        return service.all().stream()
+                .collect(toMap(pg -> pg.getPlayer().getName(),
+                        pg -> pg.getGame().getHero()));
+    }
 
-        JSONObject result = new JSONObject();
-        for (Map.Entry<Player, List<Player>> entry : playersMap.entrySet()) {
-            Player player1 = entry.getKey();
-
-            JSONObject map = new JSONObject();
-            result.put(player1.getName(), map);
-
-            for (Player player2 : entry.getValue()) {
-                String name = player2.getName();
-                map.put(name, heroesData.get(name));
+    private Map<String, List<String>> getGroupsMap() {
+        Map<String, List<String>> result = new LinkedHashMap<>();
+        for (List<String> group : getGroups()) {
+            for (String player : group) {
+                result.put(player, group);
             }
         }
         return result;
     }
 
-    private JSONObject getScoresJSON(String gameType) {
-        JSONObject result = new JSONObject();
-        for (PlayerGame playerGame : service.getAll(gameType)) {
-            Player player = playerGame.getPlayer();
-            result.put(player.getName(), player.getScore());
-        }
-        return result;
+    private List<List<String>> getGroups() {
+        return service.all().stream()
+                    .collect(groupingBy(PlayerGame::getField))
+                    .values().stream()
+                    .map(group -> group.stream()
+                            .map(pg -> pg.getPlayer().getName())
+                            .collect(toList()))
+                    .collect(toList());
+    }
+
+    private Map<String, Object> getScores() {
+        return service.all().stream()
+                .collect(toMap(pg -> pg.getPlayer().getName(),
+                        pg -> pg.getPlayer().getScore()));
     }
 }

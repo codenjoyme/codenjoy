@@ -86,6 +86,16 @@ public class LockedGame implements Game {
     }
 
     @Override
+    public void loadSave(JSONObject save) {
+        lock.writeLock().lock();
+        try {
+            game.loadSave(save);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public Object getBoardAsString() {
         lock.writeLock().lock();
         try {

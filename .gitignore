@@ -1,3 +1,4 @@
+/repo
 **/.idea
 **/.vs
 **/bin
@@ -24,6 +25,7 @@
 /CodingDojo/games/**/webapp/resources/user/*.zip
 /CodingDojo/games/icancode
 /CodingDojo/games/expansion
+/CodingDojo/games/sokoban/
 /CodingDojo/expansion-repo
 /CodingDojo/icancode-builder
 /CodingDojo/expansion-builder
@@ -41,3 +43,4 @@
 /CodingDojo/portable/windows-cmd/jetty*/**
 /CodingDojo/portable/windows-cmd/maven/**
 /CodingDojo/portable/windows-cmd/tools/**
+/CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**

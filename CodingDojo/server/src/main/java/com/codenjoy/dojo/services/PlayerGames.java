@@ -27,11 +27,12 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
@@ -42,8 +43,6 @@ import static java.util.stream.Collectors.toSet;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
-
-    private static Logger logger = LoggerFactory.getLogger(PlayerGames.class);
 
     private List<PlayerGame> playerGames = new LinkedList<>();
 
@@ -121,8 +120,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     JSONObject parseSave(PlayerSave save) {
-        String saveString = (save == null || save.getSave() == null) ? "{}" : save.getSave();
-        return new JSONObject(saveString);
+        if (save == null || PlayerSave.isSaveNull(save.getSave())) {
+            return new JSONObject();
+        }
+        return new JSONObject(save.getSave());
     }
 
     private List<PlayerGame> removeAndLeaveAlone(Game game) {
@@ -261,5 +262,19 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             progress.change(level);
             reload(game, progress.saveTo(new JSONObject()));
         }
+    }
+
+    public void setLevel(String playerName, JSONObject save) { // TODO test me
+        PlayerGame playerGame = get(playerName);
+        Game game = playerGame.getGame();
+        reload(game, save);
+    }
+
+    public PlayerGame get(int index) { // TODO test me
+        return playerGames.get(index);
+    }
+
+    public List<PlayerGame> all() {
+        return playerGames;
     }
 }

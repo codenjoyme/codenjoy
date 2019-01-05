@@ -36,10 +36,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean drop;
     private Figure figure;
+    private Levels levels;
 
     @Override
     public void init(Field field) {
-        glass = new GlassImpl(field.size(), field.size());
+        this.levels = field.getLevels();
+        glass = new GlassImpl(field.size(), field.size(),
+                () -> levels.getCurrentLevelNumber() + 1);
         this.field = field;
     }
 
@@ -73,8 +76,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void act(int... p) {
         if (p.length == 0) {
             act(1);
-        } else {
+        } else if (p.length == 1) {
             act(p[0]);
+        } else if (p.length == 2) {
+            glass.empty();
         }
     }
 
@@ -85,43 +90,47 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (!glass.accept(figure, x, y)) {
             figure = clonedFigure;
         }
-        glass.isAt(figure, x, y);
+        glass.figureAt(figure, x, y);
     }
 
-    private boolean theFirstStep() {
+    private boolean isFirstStep() {
         return figure == null;
     }
     
     @Override
     public void tick() {
-        if (theFirstStep()) {
-            Figure figure = field.take();
-            setFigure(figure);
-            showCurrentFigure();
-            return;
+        if (processFigure()) {
+            takeNewFigure();
         }
 
-        if (!glass.accept(figure, x, y)) {
+        drop = false;
+    }
+
+    private boolean processFigure() {
+        if (isFirstStep()) {
+            return true;
+        } else if (!glass.accept(figure, x, y)) {
             glass.empty();
-            figure = null;
-            tick();
-            return;
+            return true;
+        } else if (drop) {
+            glass.drop(figure, x, y);
+            return true;
+        } else if (!glass.accept(figure, x, y - 1)) {
+            glass.drop(figure, x, y);
+            return true;
+        } else {
+            y--;
+            if (!showCurrentFigure()) {
+                glass.empty();
+                return true;
+            }
+            return false;
         }
+    }
 
-        if (drop) {
-            drop = false;
-            glass.drop(figure, x, y);
-            figure = null;
-            tick();
-            return;
-        }
-        if (!glass.accept(figure, x, y - 1)) {
-            glass.drop(figure, x, y);
-            figure = null;
-            tick();
-            return;
-        }
-        y--;
+    private void takeNewFigure() {
+        Figure figure = field.take();
+        setFigure(figure);
         showCurrentFigure();
     }
 
@@ -152,15 +161,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void setFigure(Figure figure) {
         this.figure = figure;
-        move(field.size() / 2 - 1, initialYPosition());
+        move(field.size() / 2 - 1 + figure.left(), initialYPosition());
     }
 
     private int initialYPosition() {
-        return field.size() - figure.top();
+        return (field.size() - 1) + figure.bottom() - 1;
     }
 
-    public void showCurrentFigure() {
-        glass.isAt(figure, x, y);
+    public boolean showCurrentFigure() {
+        boolean accept = glass.accept(figure, x, y);
+        if (accept) {
+            glass.figureAt(figure, x, y);
+        }
+        return accept;
     }
 
     public Type currentFigureType() {
@@ -186,5 +199,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public int boardSize() {
         return field.size();
+    }
+
+    public int level() {
+        return levels.getCurrentLevelNumber();
+    }
+
+    public GlassEventListener levelsListener() {
+        return levels;
     }
 }

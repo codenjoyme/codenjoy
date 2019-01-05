@@ -211,6 +211,9 @@ public class SaveServiceImplTest {
         when(saver.loadGame("active")).thenReturn(save2);
         when(saver.loadGame("saved")).thenReturn(save3);
 
+        when(fields.get(0).getSave()).thenReturn(new JSONObject("{'data':1}"));
+        when(fields.get(1).getSave()).thenReturn(new JSONObject("{'data':2}"));
+
         // when
         List<PlayerInfo> games = saveService.getSaves();
 
@@ -224,14 +227,14 @@ public class SaveServiceImplTest {
         assertEquals("active", active.getName());
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("active game", active.getGameName());
-        assertNull(active.getData());
+        assertEquals("{\"data\":2}", active.getData());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
         assertEquals("activeSaved", activeSaved.getName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("activeSaved game", activeSaved.getGameName());
-        assertNull(activeSaved.getData());
+        assertEquals("{\"data\":1}", activeSaved.getData());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 

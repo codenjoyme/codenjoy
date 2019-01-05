@@ -38,8 +38,10 @@ public class Tetris implements Field {
     protected FigureQueue queue;
     private int size;
     private Player player;
+    private Levels levels;
 
-    public Tetris(FigureQueue queue, int size) {
+    public Tetris(Levels levels, FigureQueue queue, int size) {
+        this.levels = levels;
         this.queue = queue;
         this.size = size;
         take();
@@ -56,6 +58,11 @@ public class Tetris implements Field {
     @Override
     public List<Type> getFuture() {
         return queue.future();
+    }
+
+    @Override
+    public Levels getLevels() {
+        return levels;
     }
 
     @Override
@@ -83,8 +90,7 @@ public class Tetris implements Field {
         return player;
     }
 
-    void setPlots(List<Plot> plots) {
-        Glass glass = player.getHero().glass();
+    public static void setPlots(Glass glass, List<Plot> plots) {
         Collections.sort(plots, Comparator.comparingInt(Point::getY));
         for (Plot plot : plots) {
             Type type = Type.valueOf(String.valueOf(plot.getColor().ch()));

@@ -37,6 +37,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.fest.reflect.core.Reflection;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -80,9 +81,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     protected ActionLogger actionLogger;
-
-    @Value("${autoSaverEnable}")
-    protected boolean autoSaverEnable;
 
     @PostConstruct
     public void init() {
@@ -234,7 +232,7 @@ public class PlayerServiceImpl implements PlayerService {
             player = playerGame.getPlayer();
 
             if (logger.isDebugEnabled()) {
-                logger.info("Player {} starting new game {}", name, playerGame.getGame());
+                logger.debug("Player {} starting new game {}", name, playerGame.getGame());
             }
         } else {
           // do nothing
@@ -246,20 +244,19 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            long time = 0;
             if (logger.isDebugEnabled()) {
-                logger.info("==================================================================================");
-                logger.info("PlayerService.tick() starts");
+                logger.debug("==================================================================================");
+                logger.debug("PlayerService.tick() starts");
+                time = System.currentTimeMillis();
             }
 
-            long time = System.currentTimeMillis();
-
-            if (autoSaverEnable) {
-                autoSaver.tick();
-            }
+            autoSaver.tick();
 
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
+
             actionLogger.log(playerGames);
 
             if (logger.isDebugEnabled()) {
@@ -307,7 +304,7 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = playerGame.getPlayer();
             try {
                 String gameType = playerGame.getGameType().name();
-                GameData gameData = gameDataMap.get(gameType);
+                GameData gameData = gameDataMap.get(player.getName());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
@@ -399,11 +396,23 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             for (int index = 0; index < playerGames.size(); index ++) {
-                Player playerToUpdate = playerGames.players().get(index);
+                PlayerGame playerGame = playerGames.get(index);
+                Player playerToUpdate = playerGame.getPlayer();
                 Player newPlayer = players.get(index);
 
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
+
+                Game game = playerGame.getGame();
+                if (game != null && game.getSave() != null) {
+                    String oldSave = game.getSave().toString();
+                    String newSave = newPlayer.getData();
+                    if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
+                        playerGames.setLevel(
+                                newPlayer.getName(),
+                                new JSONObject(newSave));
+                    }
+                }
             }
         } finally {
             lock.writeLock().unlock();
@@ -514,4 +523,5 @@ public class PlayerServiceImpl implements PlayerService {
             lock.readLock().unlock();
         }
     }
+
 }

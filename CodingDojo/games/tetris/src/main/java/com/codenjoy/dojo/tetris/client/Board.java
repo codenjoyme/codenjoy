@@ -24,6 +24,14 @@ package com.codenjoy.dojo.tetris.client;
 
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.tetris.model.Elements;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
  * Класс, обрабатывающий строковое представление доски в виде JSON.
@@ -32,7 +40,40 @@ import com.codenjoy.dojo.client.AbstractTextBoard;
  */
 public class Board extends AbstractTextBoard {
 
-    public String getData() {
-        return data;
+    public Point getCurrentFigurePoint() {
+        JSONObject point = getJson().getJSONObject("currentFigurePoint");
+        int x = point.getInt("x");
+        int y = point.getInt("y");
+        return pt(x, y);
+    }
+
+    public Elements getCurrentFigureType() {
+        if (!getJson().has("currentFigureType")) {
+            return null;
+        }
+        String figureType = getJson().getString("currentFigureType");
+        return getElement(figureType);
+    }
+
+    public List<Elements> getFutureFigures() {
+        List<Elements> result = new LinkedList<>();
+        for (Object figure : getJson().getJSONArray("futureFigures")) {
+            result.add(getElement((String)figure));
+        }
+        return result;
+    }
+
+    private JSONObject getJson() {
+        return new JSONObject(data);
+    }
+
+    public GlassBoard getGlass() {
+        String glassString = getJson().getJSONArray("layers").getString(0);
+        return (GlassBoard) new GlassBoard().forString(glassString);
+    }
+
+    private Elements getElement(String figureType) {
+        char ch = figureType.charAt(0);
+        return Elements.valueOf(ch);
     }
 }

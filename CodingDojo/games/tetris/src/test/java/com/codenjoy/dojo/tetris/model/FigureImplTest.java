@@ -25,6 +25,9 @@ package com.codenjoy.dojo.tetris.model;
 
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -66,167 +69,187 @@ public class FigureImplTest {
     @Test
     public void shouldRotateFigureI() {
         Figure figure = Type.I.create();
-        assertDimensions(figure, 1, 2, 1, 0, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b001, 0b001, 0b001, 0b001});
+        assertDimensions("'I' WH(1:4) LR(0,0) TB(1,2)", figure);
+        assertEqCodes(new int[]{0b001, 0b001, 0b001, 0b001}, figure);
+        
+        figure.rotate(1);
+
+        assertDimensions("'I' WH(4:1) LR(2,1) TB(0,0)", figure);
+        assertEqCodes(new int[]{0b001001001001}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 4, 0, 0, 2, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b001001001001});
+        assertDimensions("'I' WH(1:4) LR(0,0) TB(2,1)", figure);
+        assertEqCodes(new int[]{0b001, 0b001, 0b001, 0b001}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 1, 1, 2, 0, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b001, 0b001, 0b001, 0b001});
+        assertDimensions("'I' WH(4:1) LR(1,2) TB(0,0)", figure);
+        assertEqCodes(new int[]{0b001001001001}, figure);
+    }
 
-        figure.rotate(1);
+    private void assertEqCodes(int[] codes, Figure figure) {
+        int[] actual = figure.rowCodes(false);
+        assertEquals(convert(codes).toString(),
+                convert(actual).toString());
+    }
 
-        assertDimensions(figure, 4, 0, 0, 1, 2);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b001001001001});
+    private List<String> convert(int[] codes) {
+        List<String> result = new LinkedList<>();
+        for (int code : codes) {
+            result.add(Integer.toBinaryString(code));            
+        }
+        return result;
     }
 
     @Test
     public void shouldRotateFigureJ() {
         Figure figure = Type.J.create();
-        assertDimensions(figure, 2, 1, 1, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b0000010, 0b000010, 0b010010});
+
+        assertDimensions("'J' WH(2:3) LR(1,0) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b0000010, 0b000010, 0b010010}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b010000000, 0b010010010});
+        assertDimensions("'J' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b010000000, 0b010010010}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b010010, 0b010000, 0b010000});
+        assertDimensions("'J' WH(2:3) LR(0,1) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b010010, 0b010000, 0b010000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 1, 0, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b010010010, 0b000000010});
+        assertDimensions("'J' WH(3:2) LR(1,1) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b010010010, 0b000000010}, figure);
     }
 
     @Test
     public void shouldRotateFigureL() {
         Figure figure = Type.L.create();
-        assertDimensions(figure, 2, 1, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b011000, 0b011000, 0b011011});
+
+        assertDimensions("'L' WH(2:3) LR(0,1) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b011000, 0b011000, 0b011011}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 1, 0, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b011011011, 0b011000000});
+        assertDimensions("'L' WH(3:2) LR(1,1) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b011011011, 0b011000000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b011011, 0b000011, 0b000011});
+        assertDimensions("'L' WH(2:3) LR(1,0) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b011011, 0b000011, 0b000011}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b011, 0b011011011});
+        assertDimensions("'L' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b011, 0b011011011}, figure);
     }
 
     @Test
     public void shouldRotateFigureO() {
         Figure figure = Type.O.create();
-        assertDimensions(figure, 2, 1, 0, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b100100, 0b100100});
+
+        assertDimensions("'O' WH(2:2) LR(0,1) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b100100, 0b100100}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 0, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b100100, 0b100100});
+        assertDimensions("'O' WH(2:2) LR(1,0) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b100100, 0b100100}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 0, 1, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b100100, 0b100100});
+        assertDimensions("'O' WH(2:2) LR(1,0) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b100100, 0b100100}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 0, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b100100, 0b100100});
+        assertDimensions("'O' WH(2:2) LR(0,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b100100, 0b100100}, figure);
     }
 
     @Test
     public void shouldRotateFigureS() {
         Figure figure = Type.S.create();
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000101101, 0b101101000});
+
+        assertDimensions("'S' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b000101101, 0b101101000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b101000, 0b101101, 0b000101});
+        assertDimensions("'S' WH(2:3) LR(0,1) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b101000, 0b101101, 0b000101}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 1, 0, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000101101, 0b101101000});
+        assertDimensions("'S' WH(3:2) LR(1,1) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b000101101, 0b101101000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b101000, 0b101101, 0b000101});
+        assertDimensions("'S' WH(2:3) LR(1,0) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b101000, 0b101101, 0b000101}, figure);
     }
 
     @Test
     public void shouldRotateFigureT() {
         Figure figure = Type.T.create();
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000110000, 0b110110110});
+
+        assertDimensions("'T' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b000110000, 0b110110110}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b110000, 0b110110, 0b110000});
+        assertDimensions("'T' WH(2:3) LR(0,1) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b110000, 0b110110, 0b110000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 1, 0, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b110110110, 0b000110000});
+        assertDimensions("'T' WH(3:2) LR(1,1) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b110110110, 0b000110000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000110, 0b110110, 0b000110});
+        assertDimensions("'T' WH(2:3) LR(1,0) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b000110, 0b110110, 0b000110}, figure);
     }
 
     @Test
     public void shouldRotateFigureT_NoNegativeRotatesSupported() {
         Figure figure = Type.T.create();
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000110000, 0b110110110});
+        assertDimensions("'T' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b000110000, 0b110110110}, figure);
 
         figure.rotate(-1);
 
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000110000, 0b110110110});
+        assertDimensions("'T' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b000110000, 0b110110110}, figure);
     }
 
     @Test
     public void shouldRotateFigureZ() {
         Figure figure = Type.Z.create();
-        assertDimensions(figure, 3, 0, 1, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b111111000, 0b000111111});
+
+        assertDimensions("'Z' WH(3:2) LR(1,1) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b111111000, 0b000111111}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000111, 0b111111, 0b111000});
+        assertDimensions("'Z' WH(2:3) LR(0,1) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b000111, 0b111111, 0b111000}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 3, 1, 0, 1, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b111111000, 0b000111111});
+        assertDimensions("'Z' WH(3:2) LR(1,1) TB(0,1)", figure);
+        assertEqCodes(new int[]{0b111111000, 0b000111111}, figure);
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 1, 1, 1, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b000111, 0b111111, 0b111000});
+        assertDimensions("'Z' WH(2:3) LR(1,0) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b000111, 0b111111, 0b111000}, figure);
     }
 
     @Test
@@ -235,8 +258,8 @@ public class FigureImplTest {
 
         figure.rotate(1);
 
-        assertDimensions(figure, 2, 0, 0, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b001001});
+        assertDimensions("'I' WH(2:1) LR(0,1) TB(0,0)", figure);
+        assertEqCodes(new int[]{0b001001}, figure);
     }
 
     @Test
@@ -245,8 +268,8 @@ public class FigureImplTest {
 
         figure.rotate(1);
 
-        assertDimensions(figure, 1, 0, 1, 0, 0);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b1, 0b1});
+        assertDimensions("'I' WH(1:2) LR(0,0) TB(1,0)", figure);
+        assertEqCodes(new int[]{0b1, 0b1}, figure);
     }
 
     @Test
@@ -255,14 +278,14 @@ public class FigureImplTest {
 
         figure.rotate(2);
 
-        assertDimensions(figure, 2, 1, 1, 0, 1);
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b001000, 0b000001, 0b001000});
+        assertDimensions("'I' WH(2:3) LR(0,1) TB(1,1)", figure);
+        assertEqCodes(new int[]{0b001000, 0b000001, 0b001000}, figure);
     }
 
     @Test
     public void shouldParseRowCodesWhenColorCyan() {
         FigureImpl figure = new FigureImpl(0, 0, Type.J, "#");
-        assertThat(figure.rowCodes(false)).isEqualTo(new int[]{0b010});
+        assertEqCodes(new int[]{0b010}, figure);
     }
 
     @Test
@@ -279,12 +302,8 @@ public class FigureImplTest {
         figure.rotate(Integer.MAX_VALUE);
     }
 
-    private void assertDimensions(Figure figure, int expectedWidth, int expectedBottom, int expectedTop, int expectedLeft, int expectedRight) {
-        assertEquals(expectedWidth, figure.width());
-        assertEquals(expectedBottom, figure.bottom());
-        assertEquals(expectedTop, figure.top());
-        assertEquals(expectedLeft, figure.left());
-        assertEquals(expectedRight, figure.right());
+    private void assertDimensions(String expected, Figure figure) {
+        assertEquals(expected, figure.toString());
     }
 
     private int[] rowCodes(String... rows) {

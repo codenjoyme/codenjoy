@@ -34,4 +34,6 @@ public interface Field extends GameField<Player> {
     Figure take();
 
     List<Type> getFuture();
+
+    Levels getLevels();
 }

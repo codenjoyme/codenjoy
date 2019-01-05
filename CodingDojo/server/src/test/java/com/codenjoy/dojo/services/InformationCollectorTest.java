@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +66,7 @@ public class InformationCollectorTest {
     }
 
     private void levelChanged(int levelNumber) {
-        collector.levelChanged(levelNumber, null);
+        collector.levelChanged(new LevelProgress(levelNumber + 1, levelNumber, levelNumber - 1));
     }
 
     @Test

@@ -38,10 +38,17 @@ public class Spreader {
 
     private Map<String, List<Room>> rooms = new HashMap<>();
 
-    public GameField getField(GamePlayer player, String gameType, int count, Supplier<GameField> supplier) {
-        Room room = findUnfilled(gameType);
+    public GameField getField(GamePlayer player, String gameType,
+                              MultiplayerType type,
+                              int roomSize, int levelNumber,
+                              Supplier<GameField> supplier)
+    {
+        Room room = null;
+        if (!type.isTraining() || type.isLastLevel(levelNumber)) {
+            room = findUnfilled(gameType);
+        }
         if (room == null) {
-            room = new Room(supplier.get(), count);
+            room = new Room(supplier.get(), roomSize);
             add(gameType, room);
         }
 
@@ -118,15 +125,26 @@ public class Spreader {
 
         MultiplayerType type = gameType.getMultiplayerType();
         int roomSize = type.loadProgress(game, save);
-        int levelNumber = game.getProgress().getCurrent();
+        LevelProgress progress = game.getProgress();
+        int levelNumber = progress.getCurrent();
         GameField field = getField(game.getPlayer(),
                 gameType.name(),
+                type,
                 roomSize,
-                () -> gameType.createGame(levelNumber));
+                levelNumber,
+                () -> {
+                    game.getPlayer().setProgress(progress);
+                    // TODO если раскоментировать эту строчку то будет отображаться переход на новый уровень, но уж как-то некрасиво все сделано
+                    // ((InformationCollector)game.getPlayer().listener).levelChanged(progress);
+                    return gameType.createGame(levelNumber);
+                });
 
         game.on(field);
 
         game.newGame();
+        if (save != null && !save.keySet().isEmpty()) {
+            game.loadSave(save);
+        }
     }
 
     public boolean contains(Game game) {

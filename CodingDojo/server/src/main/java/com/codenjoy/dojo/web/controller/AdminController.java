@@ -25,8 +25,10 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,7 +55,9 @@ public class AdminController {
     @Autowired private SaveService saveService;
     @Autowired private GameService gameService;
     @Autowired private ActionLogger actionLogger;
+    @Autowired private AutoSaver autoSaver;
     @Autowired private DebugService debugService;
+    @Autowired private Registration registration;
 
     public AdminController() {
     }
@@ -168,18 +172,36 @@ public class AdminController {
 
     @RequestMapping(params = "stopDebug", method = RequestMethod.GET)
     public String stopDebug(Model model, HttpServletRequest request) {
-        debugService.stop();
+        debugService.pause();
         return getAdmin(request);
     }
 
     @RequestMapping(params = "startDebug", method = RequestMethod.GET)
     public String startDebug(Model model, HttpServletRequest request) {
-        debugService.start();
+        debugService.resume();
         return getAdmin(request);
     }
 
     private void checkDebugStatus(Model model) {
-        model.addAttribute("debug", debugService.isStarted());
+        model.addAttribute("debug", debugService.isWorking());
+    }
+
+    // ----------------
+
+    @RequestMapping(params = "stopAutoSave", method = RequestMethod.GET)
+    public String stopAutoSave(Model model, HttpServletRequest request) {
+        autoSaver.pause();
+        return getAdmin(request);
+    }
+
+    @RequestMapping(params = "startAutoSave", method = RequestMethod.GET)
+    public String startAutoSave(Model model, HttpServletRequest request) {
+        autoSaver.resume();
+        return getAdmin(request);
+    }
+
+    private void checkAutoSaveStatus(Model model) {
+        model.addAttribute("autoSave", autoSaver.isWorking());
     }
 
     // ----------------
@@ -197,7 +219,7 @@ public class AdminController {
     }
 
     private void checkRecordingStatus(Model model) {
-        model.addAttribute("recording", actionLogger.isRecording());
+        model.addAttribute("recording", actionLogger.isWorking());
     }
 
     // ----------------
@@ -241,23 +263,34 @@ public class AdminController {
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
             int count = Integer.valueOf(settings.getGenerateCount());
+            int numLength = String.valueOf(count).length();
 
             int created = 0;
             int index = 0;
             while (created != count) {
-                String name = mask.replaceAll("%", String.valueOf(++index));
+                String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
+                String playerName = mask.replaceAll("%", number);
 
-                if (playerService.contains(name) && index < playerService.getAll().size()) {
+                if (playerService.contains(playerName) && index < playerService.getAll().size()) {
                     continue;
                 }
 
                 created++;
-                playerService.register(name, "127.0.0.1", settings.getGameName());
+                playerService.register(playerName, "127.0.0.1", settings.getGameName());
+                String code = getCode(playerName);
             }
         }
 
         request.setAttribute(GAME_NAME, settings.getGameName());
         return getAdmin(settings.getGameName());
+    }
+
+    private String getCode(String playerName) {
+        if (registration.registered(playerName)) {
+            return registration.login(playerName, playerName);
+        } else {
+            return registration.register(playerName, playerName, "");
+        }
     }
 
     private Object fixForCheckbox(Parameter parameter, Object value) {
@@ -311,6 +344,7 @@ public class AdminController {
 
         checkGameStatus(model);
         checkRecordingStatus(model);
+        checkAutoSaveStatus(model);
         checkDebugStatus(model);
         checkRegistrationClosed(model);
         prepareList(model, settings, gameName);
