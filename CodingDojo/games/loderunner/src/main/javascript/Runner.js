@@ -19,6 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+var util = require('util');
+var WSocket = require('ws');
+
 var log = function(string) {
     console.log(string);
     if (!!printBoardOnTextArea) {
@@ -34,21 +37,6 @@ var printArray = function (array) {
     }
     return "[" + result + "]";
 };
-var util = require('util');
-
-// to use for local server
-var hostIP = '192.168.1.1';
-
-// to use for codenjoy.com server
-// var hostIP = 'codenjoy.com';
-
-// this is your email
-var userName = 'user@gmail.com';
-// you can get this code after registration on the server with your email
-// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-var code = '12345678901234567890';
-
-var protocol = 'WS';
 
 var processBoard = function(boardString) {
     var board = new Board(boardString);
@@ -66,35 +54,32 @@ var processBoard = function(boardString) {
     return answer;
 };
 
-if (protocol == 'HTTP') {
-    // unsupported
-} else {
-    var port = 8080;
-    if (hostIp == 'codenjoy.com') {
-        port = 80;
-    }
-    var server = 'ws://' + hostIP + ':' + port + '/codenjoy-contest/ws';
-    var WSocket = require('ws');
-    var ws = new WSocket(server + '?user=' + userName + '&code=' + code);
+// you can get this code after registration on the server with your email
+var url = "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
 
-    ws.on('open', function() {
-        log('Opened');
-    });
+url = url.replace("http", "ws");
+url = url.replace("board/player/", "ws?user=");
+url = url.replace("?code=", "&code=");
 
-    ws.on('close', function() {
-        log('Closed');
-    });
+var ws = new WSocket(url);
 
-    ws.on('message', function(message) {
-        var pattern = new RegExp(/^board=(.*)$/);
-        var parameters = message.match(pattern);
-        var boardString = parameters[1];
-        var answer = processBoard(boardString);
-        ws.send(answer);
-    });
+ws.on('open', function() {
+    log('Opened');
+});
 
-    log('Web socket client running at ' + server);
-}
+ws.on('close', function() {
+    log('Closed');
+});
+
+ws.on('message', function(message) {
+    var pattern = new RegExp(/^board=(.*)$/);
+    var parameters = message.match(pattern);
+    var boardString = parameters[1];
+    var answer = processBoard(boardString);
+    ws.send(answer);
+});
+
+log('Web socket client running at ' + url);
 
 var Elements = {
     /// a void
