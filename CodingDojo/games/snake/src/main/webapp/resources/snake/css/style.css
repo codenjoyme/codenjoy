@@ -25,9 +25,9 @@ input {
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: inset 0 0 0 50px #323132 !important; 
-  -webkit-text-fill-color: #999 !important; 
-  color: #999 !important; 
+  -webkit-box-shadow: inset 0 0 0 50px #323132 !important;
+  -webkit-text-fill-color: #999 !important;
+  color: #999 !important;
 }
 
 canvas {
@@ -39,10 +39,10 @@ body {
 }
 
 .wrapper {
-  min-height: 100vh; 
-  box-sizing: border-box; 
-  padding-bottom: 55px; 
-  position: relative; 
+  min-height: 100vh;
+  box-sizing: border-box;
+  /*  padding-bottom: 55px; */
+  position: relative;
   min-width: 800px;
 }
 
@@ -69,7 +69,7 @@ ul {
 }
 
 .header .container {
-  height: 50px; 
+  height: 50px;
 }
 
 .nav-item a {
@@ -82,7 +82,7 @@ ul {
 }
 
 .inline {
-  display: inline-block; 
+  display: inline-block;
 }
 
 .logo {
@@ -182,16 +182,25 @@ ul {
   padding: 10px 0;
   line-height: 52px;
   color: #fff;
+  text-shadow: 2px 2px #464547;
 }
 
-body a {
+#leaderboard {
+  padding: 0px!important;
+}
+
+a {
   color: #fff;
   text-decoration: none;
 }
 
-body a:hover,
+a:hover,
 a:visited {
   color: #fff;
+}
+
+.board a {
+  text-shadow: 2px 2px #464547;
 }
 
 .star {
@@ -262,7 +271,7 @@ button:focus {
   transition: background .5s;
 }
 
-.commit, 
+.commit,
 .help {
   float: right;
 }
@@ -281,7 +290,7 @@ button:focus {
   float: right;
 }
 
-.previous { 
+.previous {
   float: left;
   margin-left: 0;
 }
@@ -358,6 +367,8 @@ button:focus {
 
 .help-description {
   margin: 10px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 a.modalCloseImg {
@@ -405,12 +416,29 @@ a.modalCloseImg {
 }
 
 .console-wrapper {
-  padding: 15px 0px 0px 40px;
+  padding: 7px 2px 0px 30px;
   height: 550px;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
-.open-panel { 
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #323132;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #626262;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+.open-panel {
   transition: background .5s;
   position: absolute;
   left: 0;
@@ -678,7 +706,7 @@ a.modalCloseImg {
 .footer {
   height: 40px;
   background-color: #323132;
-  margin-top: 30px;
+  margin-top: 10px;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -920,7 +948,7 @@ canvas {
     width: auto;
     padding: 0 15px;
   }
-  
+
   .leader-item {
     font-size: 24px;
   }
@@ -930,15 +958,15 @@ canvas {
   .button {
     font-size: 12px;
   }
-  
+
   .console {
     width: 170px;
   }
-  
+
   .console.close {
     right: -150px;
 }
-  
+
   .main-block.console-open {
     padding-right: 170px;
   }
@@ -948,12 +976,12 @@ canvas {
   .bottom-panel {
     padding-left: 0;
   }
-  
+
   .game {
     position: static;
     margin-bottom: 15px;
   }
-  
+
   .main {
     text-align: center;
     padding-left: 15px;
@@ -962,36 +990,21 @@ canvas {
   .console {
     width: 250px;
   }
-  
+
   .main-block.console-open {
     padding-right: 250px;
   }
-  
+
   .main-block {
     text-align: left;
   }
-  
+
   .console.close {
     right: -230px;
   }
-  
+
   .editor-block .open-panel {
     display: none;
   }
-  
+
 }
-
-/*
-@media screen and (max-width: 1000px) { 
-  .board {
-    width: 90%;
-    left: 15px;
-    position: absolute;
-    top: 565px;
-    right: 15px;
-  }
-}
-*/
-
-
-
