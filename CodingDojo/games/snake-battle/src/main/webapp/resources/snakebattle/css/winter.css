@@ -1,0 +1,237 @@
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2019 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+body {
+    background-color: #263852!important;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #192433;
+}
+
+::-webkit-scrollbar-track {
+    background: #455975;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #111923;
+}
+
+.footer {
+    background-color: #080c10;
+}
+
+.header-container {
+    background-color: #192433;
+    border-bottom: 6px solid #39C2D7;
+}
+
+.btn-submit:hover {
+    background-color: #0b1017;
+}
+
+.btn-submit {
+    background-color: #111923;
+}
+
+.form-registr {
+    background-color: #192433;
+    border: 1px solid #111923;
+}
+
+.form-registr input, .form-registr select {
+    background-color: #263852;
+    border: 1px solid #263852;
+}
+
+.form-title {
+    border-bottom: 1px solid #39c2d7;
+}
+
+.wrapper-rules {
+    background-color: #263852;
+}
+
+.wrapper-rules .title {
+    color: #39C2D7;
+}
+
+.wrapper-rules a {
+    color: #39C2D7;
+    text-decoration: underline;
+}
+
+.wrapper-rules a:hover,
+.wrapper-rules a:focus {
+    color: #2a6496;
+}
+
+.wrapper-rules .section p {
+    color: #ffffff;
+}
+
+.wrapper-rules pre {
+    color: #fff;
+    background-color: #455975;
+    border: 0px solid #fff;
+}
+
+.wrapper-rules .func {
+    color: #39C2D7;
+}
+
+.wrapper-rules .list-values {
+    color: #fff;
+}
+
+.wrapper-rules .rules-section .subtitle {
+    color: #39C2D7;
+}
+
+.wrapper-rules .footer-item a {
+    transition: color .5s;
+    color: rgba(255, 255, 255, .5);
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+.wrapper-rules .footer-item:hover a {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+}
+
+.wrapper-rules .header {
+    color: #ffffff;
+}
+
+.wrapper-rules .header-wrap {
+    background-color: #192433;
+}
+
+.wrapper-rules .dropdown-menu {
+    background-color: #192433;
+    border: 1px solid #263852;
+}
+
+.wrapper-rules .dropdown-menu>li>a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.wrapper-rules .dropdown-menu>li>a:hover,
+.wrapper-rules .dropdown-menu>li>a:focus {
+    text-decoration: none;
+    color: #000000;
+    background-color: #39C2D7;
+}
+
+.wrapper-rules .dojo-title,
+.wrapper-rules .game-title {
+    color: #ffffff;
+}
+
+.wrapper-rules .logo img {
+    vertical-align: middle;
+    width: 55px;
+}
+
+.wrapper-rules .footer-item a {
+    transition: color .5s;
+    color: rgba(255, 255, 255, .5);
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+.wrapper-rules .footer-item:hover a {
+    color: rgba(255, 255, 255, 1);
+    text-decoration: none;
+}
+
+.wrapper-rules .rules-title {
+    line-height: initial;
+}
+
+.wrapper-rules .title {
+    margin-left: 5px;
+    text-transform: none;
+    vertical-align: middle;
+    font-family: sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.wrapper-rules .dropdown-toggle {
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+.wrapper-rules .header {
+    height: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.wrapper-rules .logo img {
+    vertical-align: middle;
+    width: 45px;
+}
+
+.wrapper-rules .dojo-title {
+    margin-right: 15px;
+}
+
+.wrapper-rules .dropdown-menu {
+    top: 41px;
+    right: 0px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.wrapper-rules .navbar-right {
+    margin-right: 0px;
+}
+
+.wrapper-rules .footer-item {;
+    border-right: 1px solid #5c5b5d;
+}
+
+.wrapper-rules .footer-item:last-child {
+    border: none;
+}
+
+.scroll-up {
+    background-color: #192433;
+    left: 95%;
+}
+
+.wrapper-rules .footer {
+    height: 40px;
+    margin-top: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

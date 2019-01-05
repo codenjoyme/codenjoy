@@ -28,10 +28,10 @@
     <link href="../css/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="css/landing-style.css" rel="stylesheet"/>
+    <link href="css/winter.css" rel="stylesheet"/>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <script src="js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="js/plugins-scroll.js"></script>
     <script src="../css/bootstrap/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -107,28 +107,18 @@
 </head>
 <body>
 <div class="wrapper wrapper-rules">
-    <div class="header-wrap">
-        <div class="container">
+    <div class="header-container">
+        <div class="container-fluid">
             <header class="header row">
-                <div class="logo-container col-md-7 col-xs-12">
-                    <div class="logo-epam inline" href="#" title="EPAM">
-                        <a target="_blank" href="https://www.epam.com/">
-                            <img src="img/epam_logo.jpg">
-                        </a>
-                    </div>
-                    <div class="logo-dojo inline" href="#" title="DOJO">
-                        <img id="logo" src="img/dojo_logo.png">
-                        <span class="logo-title">
-                            <span class="text-uppercase after-line">EPAM DOJO</span>
-                            SnakeBattle Codenjoy
-                        </span>
-                    </div>
+                <div class="col-xs-6">
+                    <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+                    <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a class="logo inline" href="#" title="Home"><img src="img/game-logo.png"></a>
+                    <span class="title game-title">SnakeBattle Codenjoy</span>
                 </div>
-                <h1 class="nav col-md-5 col-xs-12 text-right rules-title">
+                <nav class="nav col-xs-6 pull-right text-right rules-title">
                     <div class="dropdown navbar-right" id="nav">
                         <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="rules dr">SnakeBattle Codenjoy</span>
-                            <span></span>
                             Rules
                             <span class="caret"></span>
                         </div>
@@ -140,7 +130,7 @@
                             <li class="text-right"><a href="#core">Core board methods</a></li>
                         </ul>
                     </div>
-                </h1>
+                </nav>
             </header>
         </div>
     </div>
@@ -427,17 +417,14 @@ assert board.isAt(1, 2, TAIL_END_DOWN);</pre>
     </section>
 
     <footer class="footer">
-        <div class="container">
+        <div class="container-fluid">
             <nav class="footer-nav">
-                <ul class="footer-list inline">
-                    <li class="footer-item inline"><a href="https://epa.ms/dojo-about-en" target="blank">About DOJO</a>
-                    </li>
+                <ul class="footer-list">
+                    <li class="footer-item inline"><a href="https://epa.ms/dojo-about-en" target="blank">About DOJO</a></li>
                     <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
                     <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
-                    <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on
-                        GitHub</a></li>
-                    <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me
-                        anything</a></li>
+                    <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
+                    <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
                 </ul>
             </nav>
         </div>
