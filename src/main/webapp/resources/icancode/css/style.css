@@ -41,7 +41,7 @@ body {
 .wrapper {
   min-height: 100vh; 
   box-sizing: border-box; 
-  padding-bottom: 55px; 
+/*  padding-bottom: 55px; */
   position: relative; 
   min-width: 800px;
 }
@@ -181,6 +181,11 @@ ul {
   padding: 10px 0;
   line-height: 52px;
   color: #fff;
+  text-shadow: 2px 2px #464547;
+}
+
+#leaderboard {
+  padding: 0px!important;
 }
 
 a {
@@ -191,6 +196,10 @@ a {
 a:hover,
 a:visited {
   color: #fff;
+}
+
+.board a {
+  text-shadow: 2px 2px #464547;
 }
 
 .star {
@@ -357,6 +366,8 @@ button:focus {
 
 .help-description {
   margin: 10px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 a.modalCloseImg {
@@ -404,9 +415,26 @@ a.modalCloseImg {
 }
 
 .console-wrapper {
-  padding: 15px 0px 0px 40px;
+  padding: 7px 2px 0px 30px;
   height: 550px;
-  overflow: hidden;
+  overflow-y: auto;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #323132;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #626262;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
 
 .open-panel { 
@@ -677,8 +705,7 @@ a.modalCloseImg {
 .footer {
   height: 40px;
   background-color: #323132;
-  margin-top: 30px;
-  position: absolute;
+  margin-top: 10px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -979,18 +1006,3 @@ canvas {
   }
   
 }
-
-/*
-@media screen and (max-width: 1000px) { 
-  .board {
-    width: 90%;
-    left: 15px;
-    position: absolute;
-    top: 565px;
-    right: 15px;
-  }
-}
-*/
-
-
-

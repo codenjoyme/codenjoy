@@ -23,52 +23,59 @@ package com.epam.dojo.icancode.services;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.ICanCode;
-import com.epam.dojo.icancode.model.Single;
+import com.epam.dojo.icancode.model.Player;
+import com.epam.dojo.icancode.model.interfaces.ILevel;
+import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
- */
 public class GameRunner extends AbstractGameType implements GameType  {
 
     private Parameter<Integer> isTrainingMode;
-    private ICanCode multiple;
 
     public GameRunner() {
         setupSettings();
-        multiple = new ICanCode(Levels.collectMultiple(), new RandomDice(), ICanCode.MULTIPLE);
     }
 
     private void setupSettings() {
         new Scores(0, settings);
         isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(1);
     }
-
-    private ICanCode newSingleGame() {
-        return new ICanCode(Levels.collectSingle(), new RandomDice(), ICanCode.SINGLE);
-    }
-
+    
     @Override
     public PlayerScores getPlayerScores(Object score) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
-        if (isTrainingMode.getValue() == 0) {
-            int total = Levels.collectSingle().size();
-            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+    public GameField createGame(int levelNumber) {
+        boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
+        if (isSingle) {
+            ILevel levels = loadLevel(levelNumber);
+            return new ICanCode(levels,
+                    getDice(),
+                    ICanCode.SINGLE);
+        } else {
+            return new ICanCode(Levels.getMultiple(),
+                    getDice(),
+                    ICanCode.MULTIPLE);
         }
-        Game single = new Single(newSingleGame(), multiple, listener, factory, save);
-        single.newGame();
-        return single;
     }
 
     @Override
@@ -82,8 +89,58 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
+    public MultiplayerType getMultiplayerType() {
+        return MultiplayerType.TRAINING.apply(Levels.getSingleMaps().size());
+    }
+
+    public ILevel loadLevel(int level) {
+        return Levels.loadLevel(level);
+    }
+
+    @Override
     public Enum[] getPlots() {
         return Elements.values();
+    }
+
+    @Override
+    public Class<? extends Solver> getAI() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return null;
+    }
+
+    @Override
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
+        if (isTrainingMode.getValue() == 0) { // TODO найти как это загрузить
+//            int total = Levels.collectSingle().size();
+//            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+        }
+        return new Player(listener);
+    }
+
+    @Override
+    public PrinterFactory getPrinterFactory() {
+        return PrinterFactory.get((BoardReader reader, Player player) -> {
+            // TODO тут ой как некрасиво, при каждой прорисовке создается принтер
+            // TODO да и само по себе это layered как-то сложно вышло
+            LayeredViewPrinter printer = new LayeredViewPrinter(
+                    reader.size(),
+                    () -> player.getField().layeredReader(),
+                    () -> player,
+                    Levels.size(),
+                    2);
+
+            PrinterData data = printer.print();
+
+            JSONObject result = new JSONObject();
+            result.put("layers", data.getLayers());
+            result.put("offset", data.getOffset());
+            result.put("showName", true);
+            return result;
+        });
     }
 
 }

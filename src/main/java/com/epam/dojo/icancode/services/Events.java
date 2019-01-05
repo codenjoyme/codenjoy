@@ -23,6 +23,8 @@ package com.epam.dojo.icancode.services;
  */
 
 
+import com.epam.dojo.icancode.model.ICanCode;
+
 /**
  * Ивенты, которые могут возникать в игре опиши тут. Что есть ивенты? ну убили твоего героя и ты хочешь ему очков начислить штрафных
  * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
@@ -30,7 +32,7 @@ package com.epam.dojo.icancode.services;
 public class Events {
 
     public static Events WIN(int goldCount) {
-        return WIN(goldCount, false);
+        return WIN(goldCount, ICanCode.SINGLE);
     }
 
     public static Events WIN(int goldCount, boolean multiple) {
@@ -99,5 +101,14 @@ public class Events {
 
         result = 31 * result + goldCount;
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Events{" +
+                "type=" + type +
+                ", goldCount=" + goldCount +
+                ", multiple=" + multiple +
+                '}';
     }
 }

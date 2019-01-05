@@ -29,9 +29,7 @@ import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
-import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.ElementsMapper;
-import com.epam.dojo.icancode.model.items.FieldItem;
+import com.epam.dojo.icancode.model.items.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -113,7 +111,7 @@ public class LevelImpl implements ILevel {
 
     @Override
     public <T extends IItem> List<T> getItems(Class clazz) {
-        List<T> result = new LinkedList<T>();
+        List<T> result = new LinkedList<>();
         List<T> items;
 
         for (int i = 0; i < cells.length; ++i) {
@@ -128,6 +126,8 @@ public class LevelImpl implements ILevel {
 
         return result;
     }
+
+
 
     @Override
     public void setField(IField field) {

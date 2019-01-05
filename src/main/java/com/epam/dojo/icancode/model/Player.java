@@ -24,90 +24,76 @@ package com.epam.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.epam.dojo.icancode.model.interfaces.IField;
-import com.epam.dojo.icancode.model.items.Hero;
-import com.epam.dojo.icancode.services.Events;
+import org.json.JSONObject;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
- */
-public class Player {
+public class Player extends GamePlayer<Hero, IField> {
 
-    private EventListener listener;
-    private int maxScore;
-    private int score;
     Hero hero;
-    private ProgressBar progressBar;
+    private IField field;
 
-    /**
-     * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
-     */
-    public Player(EventListener listener, ProgressBar progressBar) {
-        this.listener = listener;
-        this.progressBar = progressBar;
-        progressBar.setPlayer(this);
-        clearScore();
-    }
-
-    private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
-    }
-
-    public int getMaxScore() {
-        return maxScore;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    /**
-     * Борда может файрить ивенты юзера с помощью этого метода
-     * @param event тип ивента
-     */
-    public void event(Events event) {
-        switch (event.getType()) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
-        }
-
-        if (listener != null && progressBar.enableWinScore()) {
-            listener.event(event);
-        }
-    }
-
-    private void gameOver() {
-        score = 0;
-    }
-
-    public void clearScore() {
-        score = 0;
-        maxScore = 0;
+    public Player(EventListener listener) {
+        super(listener);
     }
 
     public Hero getHero() {
         return hero;
     }
 
-    /**
-     * Когда создается новая игра для пользователя, кто-то должен создать героя
-     * @param field борда
-     */
     public void newHero(IField field) {
+        this.field = field;
         if (hero == null) {
             hero = new Hero(Elements.ROBO);
         }
 
-        hero.setField(field);
+        hero.init(field);
     }
 
-    public void tick() {
-        progressBar.checkLevel();
-        hero.tick();
+    @Override
+    public boolean isAlive() {
+        return hero != null && hero.isAlive();
     }
 
-    public void setNextLevel() {
-        progressBar.setNextLevel();
+    @Override
+    public boolean isWin() {
+        return hero != null && hero.isWin();
     }
+
+    @Override
+    public HeroData getHeroData() {
+        return new ICanCodeHeroData();
+    }
+
+    public IField getField() {
+        return field;
+    }
+
+    public class ICanCodeHeroData implements HeroData {
+        @Override
+        public Point getCoordinate() {
+            return new PointImpl(Player.this.getHero().getPosition());
+        }
+
+        @Override
+        public boolean isMultiplayer() {
+            return Player.this.field.isMultiplayer();
+        }
+
+        @Override
+        public int getLevel() {
+            return 0; // TODO а тут что вернуть?
+        }
+
+        @Override
+        public Object getAdditionalData() {
+            JSONObject result = new JSONObject();
+            result.put("hello", "world"); // TODO remove me :)
+            return result;
+        }
+
+    };
 }

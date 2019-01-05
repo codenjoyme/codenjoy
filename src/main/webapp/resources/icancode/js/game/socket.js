@@ -105,11 +105,8 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
         command = replace(command, 'WAIT', 'STOP');
         command = replace(command, 'JUMP', 'ACT(1)');
         command = replace(command, 'PULL', 'ACT(2)');
+        command = replace(command, 'FIRE', 'ACT(3)');
         command = replace(command, 'RESET', 'ACT(0)');
-        while (command.indexOf('LEVEL') != -1) {
-            var level = command.substring(command.indexOf('LEVEL') + 'level'.length);
-            command = replace(command, 'LEVEL' + level, 'ACT(0,' + (level - 1) + ')');
-        }
         command = replace(command, 'WIN', 'ACT(-1)');
         return command;
     }

@@ -23,15 +23,18 @@ package com.epam.dojo.icancode.client
  */
 
 
-import com.codenjoy.dojo.services.Direction.*
-import com.codenjoy.dojo.client.WebSocketRunner
 import com.codenjoy.dojo.services.Dice
 import com.codenjoy.dojo.services.RandomDice
 
 /**
  * Your AI
  */
-class YourKotlinSolver() : AbstractSolver() {
+class YourKotlinSolver : AbstractSolver {
+
+    constructor(dice: Dice) : super(dice) {
+        this.dice = dice;
+    }
+
     override fun whatToDo(board: Board): Command {
         with(board) {
             if (!board.isMeAlive) return Command.doNothing()
@@ -46,19 +49,13 @@ class YourKotlinSolver() : AbstractSolver() {
         }
     }
 }
-
-// this is your email
-val USER_NAME = "your@email.com"
-// you can get this code after registration on the server with your email
-// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-val CODE = "12345678901234567890"
-
 /**
  * Run this method for connect to the server and start the game
  */
 fun main(args: Array<String>) {
-    AbstractSolver.start(USER_NAME,
-            CODE,
-            "dojo.lab.epam.com:80",
-            YourKotlinSolver())
+    AbstractSolver.connectClient(
+            // paste here board page url from browser after registration
+            "http://192.168.1.102:80/codenjoy-contest/board/player/your@email.com?code=18899199021366816317",
+            // and solver here
+            YourKotlinSolver(RandomDice()))
 }

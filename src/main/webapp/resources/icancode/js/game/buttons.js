@@ -30,6 +30,7 @@ function initButtons(onCommitClick, onResetClick, onHelpClick) {
 
     var enableAll = function() {
         enable(resetButton, true);
+        commitButton.text('Commit');
         enable(commitButton, true);
     }
 
@@ -45,6 +46,10 @@ function initButtons(onCommitClick, onResetClick, onHelpClick) {
     return {
         disableAll : disableAll,
         enableAll : enableAll,
+        error : function() {
+            commitButton.text('Error');
+            enable(commitButton, false);
+        },
         enableReset : function() {
             enable(resetButton, true);
         }

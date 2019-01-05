@@ -24,33 +24,64 @@ function initProgressbar(container) {
     var progressBar = $('#' + container + ' li.training');
     progressBar.all = function(aClass) {
         for (var level = 0; level < progressBar.length; level++) {
-            progressBar.set(level, aClass);
+            progressBar.change(level, aClass);
         }
     }
     progressBar.clean = function(level) {
-        $(progressBar[level]).removeClass("level-done");
-        $(progressBar[level]).removeClass("level-current");
-        $(progressBar[level]).removeClass("level-not-active");
-        $(progressBar[level]).removeClass("level-during")
+        progressBar.remove(level, "level-done");
+        progressBar.remove(level, "level-current");
+        progressBar.remove(level, "level-not-active");
+        progressBar.remove(level, "level-during");
     }
     progressBar.notActive = function(level) {
-        progressBar.set(level, "level-not-active");
+        progressBar.change(level, "level-not-active");
     }
     progressBar.active = function(level) {
-        progressBar.set(level, "level-current");
+        progressBar.change(level, "level-current");
     }
     progressBar.process = function(level) {
-        progressBar.set(level, "level-during");
+        progressBar.change(level, "level-during");
+    }
+    progressBar.hide = function(level) {
+        progressBar.set(level, "hidden");
+    }
+    progressBar.show = function(level) {
+        progressBar.remove(level, "hidden");
+    }
+    progressBar.countLevels = function(count) {
+        progressBar.countLevelsChanged = true;
+        for (var level = 0; level < progressBar.length; level++) {
+            progressBar.name(level, "Level " + (level + 1));
+            if (level == count) {
+                progressBar.name(level, "Contest");
+            }
+            if (level <= count) {
+                progressBar.show(level);
+            } else {
+                progressBar.hide(level);
+            }
+        }
     }
     progressBar.done = function(level) {
-        progressBar.set(level, "level-done");
+        progressBar.change(level, "level-done");
+    }
+    progressBar.change = function(level, aClass) {
+        progressBar.clean(level);
+        progressBar.set(level, aClass);
     }
     progressBar.set = function(level, aClass) {
-        progressBar.clean(level);
         $(progressBar[level]).addClass(aClass);
     }
+    progressBar.remove = function(level, aClass) {
+        $(progressBar[level]).removeClass(aClass);
+    }
+    progressBar.name = function(level, name) {
+        $(progressBar[level]).html(name);
+    }
+
     progressBar.each(function(index) {
         progressBar.notActive(index);
+        progressBar.hide(index);
     });
 
     $(".trainings").mCustomScrollbar({

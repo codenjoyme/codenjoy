@@ -23,6 +23,7 @@ package com.epam.dojo.icancode.client;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class YourSolverTest {
 
     @Before
     public void setup() {
-        ai = new YourSolver();
+        ai = new YourSolver(mock(Dice.class));
     }
 
     private Board board(String layer1, String layer2) {

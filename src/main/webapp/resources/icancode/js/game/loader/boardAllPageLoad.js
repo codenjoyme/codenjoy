@@ -43,6 +43,71 @@ var boardAllPageLoad = function() {
                 '<td class="center">' + score + '</td>' +
                 '</tr>';
         });
+
+    var leader = $('.board');
+    var glasses = $('.glasses');
+    leaderPosition = 1;
+    glassesPosition = 2;
+    leaderKey = false;
+    var changeAlignment = function(element, position) {
+        switch (position) {
+            case 0:
+                element.css({
+                    left: 0,
+                    right: 0,
+                    'margin-left': 'auto',
+                    'margin-right': 'auto'
+                });
+            break;
+            case 1:
+                element.css({
+                    left: 0,
+                    right: 0,
+                    'margin-left': 'auto',
+                    'margin-right': ''
+                });
+            break;
+            case 2:
+                element.css({
+                    left: 0,
+                    right: 0,
+                    'margin-left': '',
+                    'margin-right': 'auto'
+                });
+            break;
+        }
+    };
+    var showHide = function(element) {
+        if (element.is(':visible')) {
+            element.hide();
+        } else {
+            element.show();
+        }
+    }
+    $('body').keydown(function(ev) {
+        if (ev.ctrlKey && ev.altKey && ev.keyCode == 83) { // Ctrl-Alt-S
+            leaderKey = !leaderKey;
+        } else if (leaderKey && ev.keyCode == 49) { // ... + 1 // show hide leaderboard
+            showHide(leader);
+        } else if (leaderKey && ev.keyCode == 50) { // ... + 2 // show hide glasses
+            showHide(glasses);
+        } else if (leaderKey && ev.keyCode == 51) { // ... + 3
+            showHide($('.header-container'));
+        } else if (leaderKey && ev.keyCode == 52) { // ... + 4 // leaderboard position
+            if (++leaderPosition > 2) {
+                leaderPosition = 0;
+            }
+            changeAlignment(leader, leaderPosition);
+        } else if (leaderKey && ev.keyCode == 53) { // ... + 5
+            if (++glassesPosition > 2) {
+                glassesPosition = 0;
+            }
+            changeAlignment(glasses, glassesPosition);
+        } else {
+            leaderKey = false;
+        }
+    });
+
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');
     $(document.body).show();

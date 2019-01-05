@@ -24,12 +24,10 @@ package com.epam.dojo.icancode.model.items;
 
 
 import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
-/**
- * Created by Mikhail_Udalyi on 09.06.2016.
- */
 public class Gold extends BaseItem {
 
     private boolean hidden;
@@ -60,14 +58,17 @@ public class Gold extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        if (hidden) return; // TODO test me		
-		
-		if (item instanceof Hero) {
-            Hero hero = (Hero) item;
-            if (!hero.isFlying()) {
-                hero.pickUpGold();
-                hidden = true;
-            }
+        if (hidden) return; // TODO test me
+
+        HeroItem heroItem = getIf(item, HeroItem.class);
+        if (heroItem == null) {
+            return;
+        }
+
+        Hero hero = heroItem.getHero();
+        if (!hero.isFlying()) {
+            hero.pickUpGold();
+            hidden = true;
         }
     }
 

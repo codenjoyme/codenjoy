@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.model.items;
+package com.epam.dojo.icancode.model;
 
 /*-
  * #%L
@@ -24,23 +24,18 @@ package com.epam.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
-import com.epam.dojo.icancode.model.Elements;
-import com.epam.dojo.icancode.model.Player;
-import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.epam.dojo.icancode.model.interfaces.IField;
+import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
+import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.CodeSaver;
 
 import java.util.Arrays;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- */
-public class Hero extends FieldItem implements Joystick, Tickable {
+public class Hero extends PlayerHero<IField> implements State<Elements, Player> {
 
     private boolean alive;
     private boolean win;
@@ -48,14 +43,26 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private boolean jump;
     private boolean pull;
     private boolean flying;
-    private Integer resetToLevel;
+    private boolean reset;
     private boolean laser;
+    private boolean fire;
+    private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
     private int goldCount;
+    private HeroItem item;
+
+    public void removeFromCell() {
+        item.removeFromCell();
+    }
+
+    public FieldItem getItem() {
+        return item;
+    }
 
     public Hero(Elements el) {
-        super(el);
+        item = new HeroItem(el);
+        item.init(this);
 
         resetFlags();
     }
@@ -64,9 +71,10 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         direction = null;
         win = false;
         jump = false;
+        fire = false;
         pull = false;
         landOn = false;
-        resetToLevel = null;
+        reset = false;
         flying = false;
         laser = false;
         alive = true;
@@ -74,20 +82,21 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     }
 
     @Override
-    public void setField(IField field) {
-        super.setField(field);
+    public void init(IField field) {
+        super.init(field);
+        item.setField(field);
         reset(field);
     }
 
     private void reset(IField field) {
         resetFlags();
-        field.getStartPosition().addItem(this);
+        field.getStartPosition().addItem(this.item);
         field.reset();
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (player.getHero() == this || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
+        if (player.getHero() == this || Arrays.asList(alsoAtPoint).contains(player.getHero().item)) {
             if (flying) {
                 return Elements.ROBO_FLYING;
             }
@@ -161,16 +170,16 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         act(0);
     }
 
-    public void loadLevel(int level) {
-        act(0, level);
-    }
-
     public void jump() {
         act(1);
     }
 
     public void pull() {
         act(2);
+    }
+
+    public void fire() {
+        act(3);
     }
 
     @Override
@@ -185,18 +194,15 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             }
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
+        } else if (p.length == 1 && p[0] == 3) { // TODO test me
+            fire = true;
         } else if (p[0] == 0) {
-            if (p.length == 2) {
-                resetToLevel = p[1];
-            } else {
-                resetToLevel = -1;
-            }
+            reset = true;
         } else if (p[0] == -1) { // TODO test me
             ICell end = field.getEndPosition();
-            field.move(this, end.getX(), end.getY());
+            field.move(this.item, end.getX(), end.getY());
         }
     }
-
 
     @Override
     public void message(String command) {
@@ -235,8 +241,8 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (resetToLevel != null) {
-            resetToLevel = null;
+        if (reset) {
+            reset = false;
             reset(field);
             return;
         }
@@ -251,9 +257,16 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             jump = false;
         }
 
+        if (fire) {
+            fireDirection = direction;
+            fire = false;
+            direction = null;
+            fireLaser();
+        }
+
         if (direction != null) {
-            int x = getCell().getX();
-            int y = getCell().getY();
+            int x = item.getCell().getX();
+            int y = item.getCell().getY();
 
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
@@ -264,18 +277,18 @@ public class Hero extends FieldItem implements Joystick, Tickable {
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {
-                    field.move(this, newX, newY);
+                    field.move(this.item, newX, newY);
                 }
             } else if (!field.isBarrier(newX, newY)) {
                 if (!wasPush) {
                     pullBox(x, y);
                 }
-                field.move(this, newX, newY);
+                field.move(this.item, newX, newY);
 
             } else {
                 if (landOn) {
                     landOn = false;
-                    getCell().comeIn(this);
+                    item.getCell().comeIn(this.item);
                 }
             }
         }
@@ -318,7 +331,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return false;
         }
 
-        if (field.isAt(newX, newY, Gold.class, Hero.class)) {
+        if (field.isAt(newX, newY, Gold.class, HeroItem.class)) {
             return false;
         }
 
@@ -327,16 +340,11 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     }
 
     public Point getPosition() {
-        return getCell();
+        return item.getCell();
     }
 
     public boolean isAlive() {
         return alive;
-    }
-
-    @Override
-    public void action(IItem item) {
-        //empty
     }
 
     public void setWin() {
@@ -373,14 +381,15 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         die();
     }
 
-    public boolean isChangeLevel() {
-        return resetToLevel != null;
+    public void dieOnZombie() {
+        laser = true; // TODO может сделать зеленым его?
+        die();
     }
 
-    public int getLevel() {
-        int result = resetToLevel;
-        resetToLevel = null;
-        return result;
+    private void fireLaser() {
+        if (fireDirection != null) {
+            field.fire(this, fireDirection, item.getCell());
+            fireDirection = null;
+        }
     }
-
 }

@@ -23,29 +23,26 @@ package com.epam.dojo.icancode.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.epam.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.services.PointImpl.*;
-import static com.epam.dojo.icancode.model.Elements.*;
-import static com.epam.dojo.icancode.model.Elements.Layers.*;
-import static com.epam.dojo.icancode.client.Command.*;
+import static com.epam.dojo.icancode.client.Command.doNothing;
+import static com.epam.dojo.icancode.client.Command.jump;
 
 /**
  * Your AI
  */
 public class YourSolver extends AbstractSolver {
 
-    // this is your email
-    private static final String USER_NAME = "your@email.com";
-    // you can get this code after registration on the server with your email
-    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-    private static final String CODE = "12345678901234567890";
+    /**
+     * @param dice DIP (SOLID) for Random dependency in your Solver realization
+     */
+    public YourSolver(Dice dice) {
+        super(dice);
+    }
 
     /**
      * @param board use it for find elements on board
@@ -68,9 +65,10 @@ public class YourSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start(USER_NAME, CODE,
-                "dojo.lab.epam.com:80",
-                new YourSolver());
+        connectClient(
+                // paste here board page url from browser after registration
+                "http://192.168.1.102:80/codenjoy-contest/board/player/your@email.com?code=18899199021366816317",
+                // and solver here
+                new YourSolver(new RandomDice()));
     }
-
 }

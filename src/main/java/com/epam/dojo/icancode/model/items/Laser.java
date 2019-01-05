@@ -24,24 +24,27 @@ package com.epam.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Hero;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
-/**
- * Created by oleksandr.baglai on 20.06.2016.
- */
 public class Laser extends FieldItem implements Tickable {
 
-    private final Direction direction;
+    private Direction direction;
+    private State owner;
+    private boolean skip;
 
     public Laser(Elements element) {
         super(element);
         this.direction = getDirection(element);
     }
 
-    public Laser(Direction direction) {
+    public Laser(State owner, Direction direction) {
         super(getElement(direction));
+        this.owner = owner;
+        skip = (owner instanceof Hero);
         this.direction = direction;
     }
 
@@ -67,17 +70,25 @@ public class Laser extends FieldItem implements Tickable {
 
     @Override
     public void action(IItem item) {
-        if (item instanceof Hero) {
-            Hero hero = (Hero) item;
+        HeroItem heroItem = getIf(item, HeroItem.class);
+        if (heroItem != null) {
+            Hero hero = heroItem.getHero();
             if (!hero.isFlying()) {
                 removeFromCell();
                 hero.dieOnLaser();
             }
         }
+
+        Zombie zombie = getIf(item, Zombie.class);
+        if (zombie != null) {
+            removeFromCell();
+            zombie.die();
+        }
     }
 
     @Override
     public void tick() {
+        if (getCell() == null) return; // TODO почему-то тут был NPE
         int newX = direction.changeX(getCell().getX());
         int newY = direction.changeY(getCell().getY());
 
@@ -86,5 +97,17 @@ public class Laser extends FieldItem implements Tickable {
         } else {
             removeFromCell();
         }
+    }
+
+    public State owner() {
+        return owner;
+    }
+
+    public boolean skipFirstTick() {
+        if (skip) {
+            skip = false;
+            return true;
+        }
+        return false;
     }
 }

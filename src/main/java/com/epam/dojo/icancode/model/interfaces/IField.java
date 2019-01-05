@@ -23,10 +23,19 @@ package com.epam.dojo.icancode.model.interfaces;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.Gold;
+import com.epam.dojo.icancode.model.items.Zombie;
 
-public interface IField {
+import java.util.List;
+
+public interface IField extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
@@ -43,4 +52,18 @@ public interface IField {
     boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 
     void reset();
+
+    boolean isMultiplayer();
+
+    LayeredBoardReader layeredReader();
+
+    Dice dice();
+
+    ILevel getLevel();
+
+    void fire(State owner, Direction direction, Point from);
+
+    int size();
+
+    List<Zombie> zombies();
 }

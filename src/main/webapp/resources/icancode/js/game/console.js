@@ -20,24 +20,19 @@
  * #L%
  */
 function initLogger() {
-    $(".content").mCustomScrollbar({
-        theme:'dark-2',
-        axis: 'yx',
-        mouseWheel : { enable : true }
-    });
-
     // ----------------------- init logger -------------------
     var container = $('#ide-console');
+    var wrapper = $('.console-wrapper');
     container.empty();
 
     var print = function(message) {
+        var autoScroll = Math.abs(wrapper.scrollTop() + wrapper.height() - wrapper[0].scrollHeight) < 20;
 
-    container.append('> ' + message + '<br>');
+        container.append('> ' + message + '<br>');
 
-    //var scroll = $(".content"); // TODO разобраться со скролом
-    //scroll.mCustomScrollbar({
-    //    setTop: scroll.height() + "px"
-    //});
+        if (autoScroll) {
+            wrapper.scrollTop(wrapper[0].scrollHeight);
+        }
     }
 
     var error = function(error, functionName) {

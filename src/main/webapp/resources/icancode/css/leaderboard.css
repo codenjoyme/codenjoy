@@ -25,19 +25,10 @@
   position: relative;
 }
 
-.game {
-  width: calc(100% - 500px); float: left;
-}
-
 .board {
   width: 500px;
-  float: right;
   box-sizing: border-box;
   color: #fff;
-}
-
-.player-canvas {
-  height: 400px;
 }
 
 .leader {
@@ -45,5 +36,7 @@
 }
 
 canvas {
-    width:400px!important;
+    width:400px;
+    margin-bottom:-5px;
 }
+

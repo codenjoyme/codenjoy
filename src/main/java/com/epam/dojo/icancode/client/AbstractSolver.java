@@ -23,14 +23,17 @@ package com.epam.dojo.icancode.client;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.Dice;
 
-/**
- * Created by indigo on 2016-10-12.
- */
 public abstract class AbstractSolver implements Solver<Board>  {
+
+    protected Dice dice;
+
+    public AbstractSolver(Dice dice) {
+        this.dice = dice;
+    }
 
     @Override
     public String get(Board board) {
@@ -43,19 +46,7 @@ public abstract class AbstractSolver implements Solver<Board>  {
 
     public abstract Command whatToDo(Board board);
 
-    /**
-     * @param host Server url
-     * @param userName Your email entered at http://dojo.lab.epam.com/codenjoy-contest/resources/icancode/registration.html
-     */
-    public static void start(String userName, String code, String host, Solver solver) {
-        try {
-            WebSocketRunner.run("ws://" + host + "/codenjoy-contest/ws",
-                    userName,
-                    code,
-                    solver,
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    protected static void connectClient(String url, Solver solver) {
+        WebSocketRunner.runClient(url, solver, new Board());
     }
 }

@@ -36,11 +36,10 @@ import java.util.List;
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
 public abstract class BaseItem implements IItem {
+
     private ICell cell;
     private FeatureItem[] features;
     private Elements element;
-
-    //================================ Constructors ================================
 
     public BaseItem(Elements element) {
         this.element = element;
@@ -51,8 +50,6 @@ public abstract class BaseItem implements IItem {
         this.element = element;
         this.features = features.clone();
     }
-
-    //================================ Implements ================================
 
     @Override
     public void action(IItem item) {
@@ -74,6 +71,16 @@ public abstract class BaseItem implements IItem {
         return items;
     }
 
+    protected <T> T getIf(Object item, Class<T> clazz) {
+        if (item == null) {
+            return null;
+        }
+        if (item.getClass().equals(clazz)) {
+            return (T)item;
+        }
+        return null;
+    }
+
     public Elements getState() {
         return element;
     }
@@ -90,8 +97,6 @@ public abstract class BaseItem implements IItem {
             setCell(null);
         }
     }
-
-    //================================ Overrides ================================
 
     @Override
     public boolean equals(Object o) {

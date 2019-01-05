@@ -96,7 +96,7 @@
     <div class="wrapper wrapper-rules">
       <div class="header-wrap">
         <div class="container">
-		<header class="header row">
+        <header class="header row">
           <div class="logo-container col-md-6 col-xs-12">
             <div class="logo-epam inline" href="#" title="EPAM"><a target="_blank" href="https://www.epam.com/"><img src="img/epam_logo.jpg"></a></div>
             <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo_logo.png"><span class="logo-title"><span class="text-uppercase after-line">EPAM DOJO</span>iCanCode</span></div>
@@ -111,7 +111,7 @@
               </ul>
             </div>
           </h1>
-		</header>
+        </header>
       </div>
       </div>
       
@@ -148,6 +148,7 @@ You can always stop the program by clicking the <button class="button reset">Res
             <li><span class="list-values text-uppercase">box</span> - <span class="list-values"> A barrier which can be moved. Robot can jump over it. </span></li>
             <li><span class="list-values text-uppercase">gold</span> - <span class="list-values"> You should collect it and bring to finish point.</span></li>
             <li><span class="list-values text-uppercase">my_robot</span> - <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
+            <li><span class="list-values text-uppercase">zombie</span> - <span class="list-values"> This is zombie.</span></li>
             <li><span class="list-values text-uppercase">other_robot</span> - <span class="list-values"> Other players' robot</span></li>
             <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values">Laser machine produces laser beams which can kill robots if intersect  him.</span></li>
             <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
@@ -213,7 +214,10 @@ assert robot.previousDirection() == "UP";</pre>
           
           <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.</p>
           <pre>robot.pull("UP");</pre>
-          
+
+          <p><span class="func">function fire(direction)</span> - Shoot in a given direction. There are 4 corresponding functions for each direction: fireLeft, fireRight, fireUp, fireDown.</p>
+          <pre>robot.fire("DOWN");</pre>
+
           <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function has(key)</span> - Check if data/value with key specified exist</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function save(key, value)</span> - Saves value with key specified</p>
@@ -242,6 +246,10 @@ assert scanner.atLeft() == "WALL";
 assert scanner.atRight() == "BOX";
 assert scanner.atUp() == "HOLE";
 assert scanner.atDown() == "GOLD";</pre>
+
+            <p><span class="func">function at(point)</span> - Returns elements at the cell.</p>
+            <pre>assert scanner.at(new Point(6, 2)) == "HOLE,OTHER_ROBOT";
+assert scanner.at(1, 2) == "START,MY_ROBOT";</pre>
           
           <p><span class="func">function atNearRobot(dx, dy)</span> - Returns element at the cell with coordinates</p>
           <pre>var scanner = robot.getScanner();

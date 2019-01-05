@@ -30,11 +30,13 @@ function initRobot(logger, controller) {
 
     memory = [];
     goThere = null;
-    var doTogether = function(direction, command) {
-        if (!validateDirection(direction)) {
-			return;
-		}
-		goThere = direction;
+    var doTogether = function(direction, command, move) {
+        if (!!direction && !validateDirection(direction)) {
+            return;
+        }
+        if (['JUMP', 'PULL'].includes(command)) {
+            goThere = direction;
+        }
         controller.cleanCommand();
         if (!direction) {
             controller.addCommand(command);
@@ -44,20 +46,130 @@ function initRobot(logger, controller) {
             controller.waitCommand();
         }
     }
-	
-	var validateDirection = function(direction) {
-		var d = Direction.get(direction);
-		if (!d) {				
-			logger.print('Bad value for command. Expected Direction but was: "' + direction + '"');
-			return false;
-		}
-		return true;
-	}
-	
+
+    var badDirection = function(direction) {
+        logger.print("Unexpected direction value '" + direction +
+                        "' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.");
+    }
+
+    var badDirectionOrPoint = function(directionOrPoint) {
+        logger.print("Expected direction or point but was '" + directionOrPoint +
+                        "' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.");
+    }
+
+    var isDirection = function(object) {
+        if (!object) {
+            return null;
+        }
+        return Direction.get(object) != null;
+    }
+
+    var validateDirection = function(direction) {
+        var valid = isDirection(direction);
+        if (!valid) {
+            badDirection(direction);
+        }
+        return valid;
+    }
+
+    var isTwoInteger = function(arg) {
+        return (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
+    }
+
+    var validateTwoInteger = function(arg) {
+        var valid = isTwoInteger(arg);
+        if (!valid) {
+            logger.print("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
+    var validateTwoIntegerAndElements = function(arg) {
+        var valid = (arg.length == 3 &&
+                typeof arg[0] == 'number' &&
+                typeof arg[1] == 'number' &&
+                isValidElements(arg[2]));
+        if (!valid) {
+            logger.print("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
+    var isArrayTypeIs = function(array, type) {
+        for (var index in array) {
+            if (typeof array[index] != type) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    var isValidElements = function(object) {
+        var type = 'string';
+        return (typeof object == type) ||
+            (Array.isArray(object) && isArrayTypeIs(object, type));
+    }
+
+    var validateElements = function(arg) {
+        var valid = (arg.length == 1 && isValidElements(arg[0]));
+        if (!valid) {
+            logger.print("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
+    var isPoint = function(object) {
+        if (!object) {
+            return null;
+        }
+        return (typeof object.getX == 'function' &&
+            typeof object.getY == 'function');
+    }
+
+    var validatePoint = function(arg) {
+        var valid = (arg.length == 1 && isPoint(arg[0]));
+        if (!valid) {
+            logger.print("You tried to call function(point) with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
+    var collect = function(e1, e2) {
+        var elements = [];
+
+        if (Array.isArray(e1)) {
+            elements = elements.concat(e1);
+        } else {
+            elements.push(e1);
+        }
+
+        if (Array.isArray(e2)) {
+            elements = elements.concat(e2);
+        } else {
+            elements.push(e2);
+        }
+
+        var result = [];
+        elements.forEach(function(e) {
+            if (e != 'NONE' && result.indexOf(e) < 0) {
+                result.push(e);
+            }
+        });
+
+        if (result.length == 0) {
+            result.push('NONE');
+        }
+        return result;
+    }
+
     return {
         nextLevel: function() {
             controller.winCommand();
             controller.waitCommand();
+        },
+        reset: function() {
+            goThere = null;
+            controller.cleanCommand();
         },
         log : function(message) {
             if (typeof message == 'function') {
@@ -69,10 +181,10 @@ function initRobot(logger, controller) {
             logger.print("Robot says: " + message);
         },
         invert : function(direction) {
-            if (direction == "LEFT") return "RIGHT"; // TODO to use Direction.inverted()
-            if (direction == "RIGHT") return "LEFT";
-            if (direction == "DOWN") return "UP";
-            if (direction == "UP") return "DOWN";
+            if (!validateDirection(direction)) {
+                return;
+            }
+            return Direction.get(direction).inverted().name();
         },
         cameFrom : function() {
             if (goThere == null) {
@@ -89,9 +201,9 @@ function initRobot(logger, controller) {
             return goThere;
         },
         go : function(direction) {
-			if (!validateDirection(direction)) {
-				return;
-			}
+            if (!validateDirection(direction)) {
+                return;
+            }
             goThere = direction;
             controller.cleanCommand();
             controller.addCommand(direction);
@@ -138,6 +250,21 @@ function initRobot(logger, controller) {
         pullDown : function() {
             this.pull(Direction.DOWN.name());
         },
+        fire : function(direction) {
+            doTogether(direction, 'FIRE');
+        },
+        fireLeft : function() {
+            this.fire(Direction.LEFT.name());
+        },
+        fireRight : function() {
+            this.fire(Direction.RIGHT.name());
+        },
+        fireUp : function() {
+            this.fire(Direction.UP.name());
+        },
+        fireDown : function() {
+            this.fire(Direction.DOWN.name());
+        },
         getMemory : function() {
             return {
                 has : function(key) {
@@ -163,63 +290,84 @@ function initRobot(logger, controller) {
             var b = new Board(board);
             var hero = b.getHero();
 
-            var forAll = function(elementType, doThat) {
-                var elements = Element.getElementsOfType(elementType);
-                for (var index in elements) {
-                    var element = elements[index];
-                    if (!!doThat) {
-                        doThat(element);
+            var forAll = function(elementTypes, doThat) {
+                if (!Array.isArray(elementTypes)) {
+                    elementTypes = [elementTypes];
+                }
+                for (var index in elementTypes) {
+                    var elementType = elementTypes[index];
+                    var elements = Element.getElementsOfType(elementType);
+                    for (var index in elements) {
+                        var element = elements[index];
+                        if (!!doThat) {
+                            doThat(element);
+                        }
                     }
                 }
             }
 
             var atNearRobot = function(dx, dy) {
+                if (!validateTwoInteger(arguments)) {
+                    return null;
+                }
+
                 var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
                 var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
 
-                var result = [];
-                result.push(element1.type);
-                if (element2.type != 'NONE') {
-                    result.push(element2.type);
-                }
-                return result;
+                return collect(element1.type, element2.type);
             }
 
             var getMe = function() {
                 return hero;
             }
 
-            var isAt = function(x, y, elementType) {
-                var found = false;
-                forAll(elementType, function(element) {
-                    if (b.isAt(x, y, LAYER1, element) ||
-                        b.isAt(x, y, LAYER2, element))
-                    {
-                        found = true;
+            var isAt = function(x, y, elementTypes) {
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
+                }
+
+                if (!Array.isArray(elementTypes)) {
+                    elementTypes = [elementTypes];
+                }
+
+                for (var index in elementTypes) {
+                    var elementType = elementTypes[index];
+
+                    var found = false;
+                    forAll(elementType, function(element) {
+                        if (b.isAt(x, y, LAYER1, element) ||
+                            b.isAt(x, y, LAYER2, element))
+                        {
+                            if (!found) {
+                                found = true;
+                            }
+                        }
+                    });
+                    if (!found) {
+                        return false;
                     }
-                });
-                return found;
+                }
+                return true;
             }
 
             var getAt = function(x, y) {
-                var result = [];
-                var atLayer1 = b.getAt(x, y, LAYER1).type;
-                var atLayer2 = b.getAt(x, y, LAYER2).type;
-                if (atLayer1 != 'NONE') {
-                    result.push(atLayer1);
+                if (!validateTwoInteger(arguments)) {
+                    return null;
                 }
-                if (atLayer2 != 'NONE') {
-                    result.push(atLayer2);
-                }
-                if (result.length == 0) {
-                    result.push('NONE');
-                }
-                return result;
+
+                var element1 = b.getAt(x, y, LAYER1);
+                var element2 = b.getAt(x, y, LAYER2);
+
+                return collect(element1.type, element2.type);
             }
 
-            var findAll = function(elementType) {
+            var findAll = function(elementTypes) {
+                if (!validateElements(arguments)) {
+                    return null;
+                }
+
                 var result = [];
-                forAll(elementType, function(element) {
+                forAll(elementTypes, function(element) {
                     var found = b.findAll(element, LAYER1);
                     for (var index in found) {
                         result.push(found[index]);
@@ -233,13 +381,14 @@ function initRobot(logger, controller) {
             }
 
             var isAnyOfAt = function(x, y, elementTypes) {
-                var elements = [];
-                for (var index in elementTypes) {
-                    var elementType = elementTypes[index];
-                    forAll(elementType, function(element) {
-                        elements.push(element);
-                    });
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
                 }
+
+                var elements = [];
+                forAll(elementTypes, function(element) {
+                    elements.push(element);
+                });
 
                 if (b.isAnyOfAt(x, y, LAYER1, elements) ||
                     b.isAnyOfAt(x, y, LAYER2, elements))
@@ -250,33 +399,39 @@ function initRobot(logger, controller) {
             }
 
             var isNear = function(x, y, elementTypes) {
-                if (!Array.isArray(elementTypes)) {
-                    elementTypes = [elementTypes];
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
                 }
+
                 var found = false;
-                for(var index in elementTypes) {
-                    forAll(elementTypes[index], function(element) {
-                        if (b.isNear(x, y, LAYER1, element) ||
-                            b.isNear(x, y, LAYER2, element))
-                        {
-                            found = true;
-                        }
-                    });
-                }
+                forAll(elementTypes, function(element) {
+                    if (b.isNear(x, y, LAYER1, element) ||
+                        b.isNear(x, y, LAYER2, element))
+                    {
+                        found = true;
+                    }
+                });
                 return found;
             }
 
             var isBarrierAt = function(x, y) {
+                if (!validateTwoInteger(arguments)) {
+                    return false;
+                }
+
                 return b.isBarrierAt(x, y);
             }
 
-            var countNear = function(x, y, elementType) {
+            var countNear = function(x, y, elementTypes) {
+                if (!validateTwoIntegerAndElements(arguments)) {
+                    return false;
+                }
+
                 var count = 0;
-                forAll(elementType, function(element) {
+                forAll(elementTypes, function(element) {
                     count += b.countNear(x, y, LAYER1, element);
                     count += b.countNear(x, y, LAYER2, element);
                 });
-
                 return count;
             }
 
@@ -304,6 +459,10 @@ function initRobot(logger, controller) {
                 return b.getGold();
             }
 
+            var getZombieStart = function() {
+                return b.getZombieStart();
+            }
+
             var getStart = function() {
                 return b.getStart();
             }
@@ -328,14 +487,23 @@ function initRobot(logger, controller) {
                 return Element.getElementsTypes();
             }
 
-            var at = function(direction) {
-                if (!!direction && typeof direction.getX == 'function') {
-                    var point = direction;
-                    return getAt(point.getX(), point.getY());
-                } else {
-                    var d = Direction.get(direction);
-                    return atNearRobot(d.changeX(0), d.changeY(0));
+            var at = function(directionOrPoint) {
+                if (isTwoInteger(arguments)) {
+                    directionOrPoint = new Point(arguments[0], arguments[1]);
                 }
+
+                if (isPoint(directionOrPoint)) {
+                    var point = directionOrPoint;
+                    return getAt(point.getX(), point.getY());
+                }
+
+                if (isDirection(directionOrPoint)) {
+                    var direction = Direction.get(directionOrPoint);
+                    return atNearRobot(direction.changeX(0), direction.changeY(0));
+                }
+
+                badDirectionOrPoint(directionOrPoint);
+                return null;
             }
 
             var atLeft = function() {
@@ -355,6 +523,9 @@ function initRobot(logger, controller) {
             }
 
             var getShortestWay = function(to) {
+                if (!validatePoint(arguments)) {
+                    return null;
+                }
                 return b.getShortestWay(getMe(), to);
             }
 
@@ -380,6 +551,7 @@ function initRobot(logger, controller) {
                 getBoxes : getBoxes,
                 getGold : getGold,
                 getStart : getStart,
+                getZombieStart : getZombieStart,
                 getExit : getExit,
                 getHoles : getHoles,
                 isMyRobotAlive : isMyRobotAlive,

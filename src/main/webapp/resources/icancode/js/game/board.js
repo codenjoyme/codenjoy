@@ -26,6 +26,11 @@
 // ========================== board ==========================
 
 var LengthToXY = function (boardSize) {
+    var inversion = function (y) {
+        return y;
+//        return size - 1 - y; TODO думаю стоит проинвертировать y тут
+    }
+
     return {
         getXY: function (length) {
             if (length == -1) {
@@ -35,7 +40,7 @@ var LengthToXY = function (boardSize) {
         },
 
         getLength: function (x, y) {
-            return y * boardSize + x;
+            return inversion(y) * boardSize + x;
         }
     };
 };
@@ -158,13 +163,14 @@ var Board = function (boardString) {
     };
 
     var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_LASER];
+        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_FLYING_ON_BOX, Element.ROBOT_LASER];
         var result = findAllElements(elements, LAYER2);
         return result[0];
     };
 
     var getOtherHeroes = function () {
-        return findAll(Element.ROBOT_OTHER, LAYER2);
+        var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_FLYING, Element.ROBOT_OTHER_FLYING_ON_BOX, Element.ROBOT_OTHER_LASER];
+        return findAllElements(elements, LAYER2);
     };
 
     var getLaserMachines = function () {
@@ -202,6 +208,10 @@ var Board = function (boardString) {
         return findAll(Element.START, LAYER1);
     };
 
+    var getZombieStart = function () {
+        return findAll(Element.ZOMBIE_START, LAYER1);
+    };
+
     var getExit = function () {
         return findAll(Element.EXIT, LAYER1);
     };
@@ -232,6 +242,9 @@ var Board = function (boardString) {
     };
 
     var getShortestWay = function (from, to) {
+        if (from.getX() == to.getX() && from.getY() == to.getY()) {
+            return [from];
+        }
         var mask = Array(size);
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
@@ -360,6 +373,7 @@ var Board = function (boardString) {
         getBoxes: getBoxes,
         getGold: getGold,
         getStart: getStart,
+        getZombieStart: getZombieStart,
         getExit: getExit,
         getHoles: getHoles,
         isMyRobotAlive: isMyRobotAlive,

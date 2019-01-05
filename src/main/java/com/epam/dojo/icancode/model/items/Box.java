@@ -30,9 +30,6 @@ import com.epam.dojo.icancode.model.enums.FeatureItem;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by oleksandr.baglai on 24.06.2016.
- */
 public class Box extends FieldItem {
 
     public Box(Elements el) {
@@ -43,10 +40,10 @@ public class Box extends FieldItem {
     public Elements state(Player player, Object... alsoAtPoint) {
         List<Object> objects = Arrays.asList(alsoAtPoint);
         for (Object object : objects) {
-            if (object == player.getHero()) {
+            if (object == player.getHero().getItem()) {
                 return Elements.ROBO_FLYING_ON_BOX;
             }
-            if (object.getClass().equals(Hero.class)) {
+            if (object instanceof HeroItem) {
                 return Elements.ROBO_OTHER_FLYING_ON_BOX;
             }
         }

@@ -30,9 +30,6 @@ import java.util.Map;
 
 import static com.epam.dojo.icancode.model.Elements.*;
 
-/**
- * Created by indigo on 2016-09-22.
- */
 public class ElementsMapper {
 
     public static Map<Elements, Class<? extends BaseItem>> map =
@@ -71,22 +68,26 @@ public class ElementsMapper {
         put(BOX, Box.class);
         put(GOLD, Gold.class);
 
-        put(ROBO, Hero.class);
-        put(ROBO_FALLING, Hero.class);
-        put(ROBO_FLYING, Hero.class);
-        put(ROBO_FLYING_ON_BOX, Hero.class);
-        put(ROBO_LASER, Hero.class);
+        put(ROBO, HeroItem.class);
+        put(ROBO_FALLING, HeroItem.class);
+        put(ROBO_FLYING, HeroItem.class);
+        put(ROBO_FLYING_ON_BOX, HeroItem.class);
+        put(ROBO_LASER, HeroItem.class);
 
-        put(ROBO_OTHER, Hero.class);
-        put(ROBO_OTHER_FALLING, Hero.class);
-        put(ROBO_OTHER_FLYING, Hero.class);
-        put(ROBO_OTHER_FLYING_ON_BOX, Hero.class);
-        put(ROBO_OTHER_LASER, Hero.class);
+        put(ROBO_OTHER, HeroItem.class);
+        put(ROBO_OTHER_FALLING, HeroItem.class);
+        put(ROBO_OTHER_FLYING, HeroItem.class);
+        put(ROBO_OTHER_FLYING_ON_BOX, HeroItem.class);
+        put(ROBO_OTHER_LASER, HeroItem.class);
 
         put(LASER_LEFT, Laser.class);
         put(LASER_RIGHT, Laser.class);
         put(LASER_UP, Laser.class);
         put(LASER_DOWN, Laser.class);
+
+        put(ZOMBIE_START, ZombiePot.class);
+        put(FEMALE_ZOMBIE, Zombie.class);
+        put(MALE_ZOMBIE, Zombie.class);
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);

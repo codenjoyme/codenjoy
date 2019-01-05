@@ -23,7 +23,7 @@ package com.epam.dojo.icancode.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -32,13 +32,9 @@ import com.epam.dojo.icancode.client.Board;
 import com.epam.dojo.icancode.client.Command;
 
 import java.util.List;
-import java.util.Random;
 
 import static com.codenjoy.dojo.services.Direction.*;
 
-/**
- * Your AI
- */
 public class BotSolver extends AbstractSolver {
 
     private BotBoard board;
@@ -46,10 +42,10 @@ public class BotSolver extends AbstractSolver {
     private boolean wasExit = false;
     private DirectionJump previousCommand;
 
-    /**
-     * @param board use it for find elements on board
-     * @return what hero should do in this tick (for this board)
-     */
+    public BotSolver(Dice dice) {
+        super(dice);
+    }
+
     @Override
     public Command whatToDo(Board board) {
         this.board = (BotBoard) new BotBoard().forString(board.getLayersString().toArray(new String[0]));
@@ -211,21 +207,4 @@ public class BotSolver extends AbstractSolver {
 
         return result;
     }
-
-    public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
-    }
-
-    public static void start(String name, WebSocketRunner.Host host) {
-        WebSocketRunner.printToConsole = false;
-        WebSocketRunner.run(host,
-                name,
-                null,
-                new BotSolver(),
-                new Board());
-    }
-
 }

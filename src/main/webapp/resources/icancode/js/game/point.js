@@ -34,7 +34,7 @@ var Point = function (x, y, direction) {
         },
 
         toString: function () {
-            return '[' + x + ',' + y + (direction ? +',' + direction : '') + ']';
+            return '[' + x + ',' + y + (!!direction ? (',' + direction) : '') + ']';
         },
 
         isBad: function (boardSize) {

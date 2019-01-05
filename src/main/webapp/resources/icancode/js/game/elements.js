@@ -39,10 +39,9 @@ var el = function(char, type, direction) {
 
     if (!elementsByType[type]) {
         elementsByType[type] = [];
-    } else {
-        elementsByType[type].push(result);
     }
 
+    elementsByType[type].push(result);
     elements.push(result);
 
     if (elementsTypes.indexOf(type) == -1) {
@@ -70,18 +69,6 @@ var Element = {
     ANGLE_OUT_LEFT: el('╚', 'WALL'),
     SPACE: el(' ', 'WALL'),
 
-    ROBOT: el('☺', 'MY_ROBOT'),
-    ROBOT_FALLING: el('o', 'HOLE'),
-    ROBOT_FLYING: el('*', 'MY_ROBOT'),
-    ROBOT_FLYING_ON_BOX: el('№', 'BOX'),
-    ROBOT_LASER: el('☻', 'MY_ROBOT'),
-
-    ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FALLING: el('x', 'HOLE'),
-    ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FLYING_ON_BOX: el('%', 'BOX'),
-    ROBOT_OTHER_LASER: el('&', 'OTHER_ROBOT'),
-
     LASER_MACHINE_CHARGING_LEFT: el('˂', 'LASER_MACHINE', Direction.LEFT),
     LASER_MACHINE_CHARGING_RIGHT: el('˃', 'LASER_MACHINE', Direction.RIGHT),
     LASER_MACHINE_CHARGING_UP: el('˄', 'LASER_MACHINE', Direction.UP),
@@ -92,27 +79,64 @@ var Element = {
     LASER_MACHINE_READY_UP: el('▲', 'LASER_MACHINE_READY', Direction.UP),
     LASER_MACHINE_READY_DOWN: el('▼', 'LASER_MACHINE_READY', Direction.DOWN),
 
+    START: el('S', 'START'),
+    EXIT: el('E', 'EXIT'),
+    HOLE: el('O', 'HOLE'),
+    BOX: el('B', 'BOX'),
+    ZOMBIE_START: el('Z', 'ZOMBIE_START'),
+    GOLD: el('$', 'GOLD'),
+
+    ROBOT: el('☺', 'MY_ROBOT'),
+    ROBOT_FALLING: el('o', ['MY_ROBOT', 'HOLE']),
+    ROBOT_FLYING: el('*', 'MY_ROBOT'),
+    ROBOT_FLYING_ON_BOX: el('№', ['MY_ROBOT', 'BOX']),
+    ROBOT_LASER: el('☻', 'MY_ROBOT'),
+
+    ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
+    ROBOT_OTHER_FALLING: el('x', ['OTHER_ROBOT', 'HOLE']),
+    ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
+    ROBOT_OTHER_FLYING_ON_BOX: el('%', ['OTHER_ROBOT', 'BOX']),
+    ROBOT_OTHER_LASER: el('&', 'OTHER_ROBOT'),
+
     LASER_LEFT: el('←', 'LASER_LEFT', Direction.LEFT),
     LASER_RIGHT: el('→', 'LASER_RIGHT', Direction.RIGHT),
     LASER_UP: el('↑', 'LASER_UP', Direction.UP),
     LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
 
-    START: el('S', 'START'),
-    EXIT: el('E', 'EXIT'),
-    GOLD: el('$', 'GOLD'),
-    HOLE: el('O', 'HOLE'),
-    BOX: el('B', 'BOX'),
+    FEMALE_ZOMBIE: el('♀', 'ZOMBIE'),
+    MALE_ZOMBIE: el('♂', 'ZOMBIE'),
+    ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
     getElements: function () {
         return elements.slice(0);
     },
 
     getElement: function (char) {
-        return elementsByChar[char];
+        var el = elementsByChar[char];
+        if (!el) {
+            throw "Element not found for: " + char;
+        }
+        return el;
     },
 
     getElementsTypes: function () {
-        return elementsTypes.slice(0);
+        var elements = [];
+        elementsTypes.forEach(function(e) {
+            if (Array.isArray(e)) {
+                elements = elements.concat(e);
+            } else {
+                elements.push(e);
+            }
+        });
+
+        var result = [];
+        elements.forEach(function(e) {
+            if (result.indexOf(e) < 0) {
+                result.push(e);
+            }
+        });
+
+        return result;
     },
 
     getElementsOfType: function (type) {

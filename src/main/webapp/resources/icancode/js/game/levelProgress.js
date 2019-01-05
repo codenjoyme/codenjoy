@@ -29,7 +29,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
     var currentLevelIsMultiple = false;
 
     var progressBar = initProgressbar('progress-bar');
-    progressBar.setProgress = function (current, lastPassed) {
+    progressBar.setProgress = function(current, lastPassed) {
         for (var i = 0; i <= lastPassed; ++i) {
             this.done(i);
         }
@@ -48,12 +48,19 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         }
 
         var level = element.attr('level');
-        if (currentLevel == level - 1) {
+        if (currentLevel == level) {
             return;
         }
 
-        socket.send('LEVEL' + level);
+        changeLevel(level);
     });
+
+    var changeLevel = function(level) {
+        var url = '/rest/player/' + game.playerName + '/' + game.code + '/level/' + level;
+        loadData(url, function(status) {
+             // do nothing
+        });
+    }
 
     var scrollProgress = function () {
         $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
@@ -69,9 +76,9 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         var board = data[game.playerName].board;
 
         var level = board.levelProgress.current;
-        var multiple = board.levelProgress.multiple;
+        var countLevels = board.levelProgress.total;
         var lastPassed = board.levelProgress.lastPassed;
-        level = multiple ? (progressBar.length - 1) : level;
+        var multiple = (level >= countLevels);
 
         onUpdate(level, multiple, lastPassed);
 
@@ -81,6 +88,9 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         currentLevel = level;
         currentLevelIsMultiple = multiple;
 
+        if (!progressBar.countLevelsChanged) {
+            progressBar.countLevels(countLevels);
+        }
         progressBar.setProgress(currentLevel, lastPassed);
 
         scrollProgress();

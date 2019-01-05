@@ -23,97 +23,94 @@ package com.epam.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.printer.layeredview.BoardReader;
-import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.epam.dojo.icancode.model.interfaces.IField;
+import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
-import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.Exit;
-import com.epam.dojo.icancode.model.items.Floor;
-import com.epam.dojo.icancode.model.items.Gold;
-import com.epam.dojo.icancode.model.items.Hero;
-import com.epam.dojo.icancode.model.items.Start;
+import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.Events;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {ICanCode#tick()}
- */
 public class ICanCode implements Tickable, IField {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
     private Dice dice;
-    private List<ILevel> levels;
     private ILevel level;
 
-    private boolean isMultiple;
-
-    private int ticks;
     private List<Player> players;
+    private boolean isMultiplayer;
 
-    public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
+    public ICanCode(ILevel level, Dice dice, boolean isMultiplayer) {
+        this.level = level;
+        level.setField(this);
         this.dice = dice;
-        this.levels = new LinkedList(levels);
-
-        isMultiple = multiple;
-        ticks = 0;
-
+        this.isMultiplayer = isMultiplayer;
         players = new LinkedList();
     }
 
-    /**
-     * @see Tickable#tick()
-     */
+    @Override
+    public void fire(State owner, Direction direction, Point from) {
+        Point to = direction.change(from);
+        move(newLaser(owner, direction), to.getX(), to.getY());
+    }
+
+    private Laser newLaser(State owner, Direction direction) {
+        Laser laser = new Laser(owner, direction);
+        laser.setField(this);
+        return laser;
+    }
+
+    int priority(Object o) {
+        if (o instanceof HeroItem) return 12;
+        if (o instanceof ZombiePot) return 10;
+        if (o instanceof Zombie) return 8;
+        if (o instanceof LaserMachine) return 6;
+        if (o instanceof Box) return 5;
+        if (o instanceof Laser) return 4;
+        return 2;
+    }
+
     @Override
     public void tick() {
-        if (isMultiple) {
-            ticks++;
-            if (ticks % players.size() != 0) {
-                return;
-            }
-            ticks = 0;
-        }
+        level.getItems(HeroItem.class).stream()
+                .map(it -> (HeroItem)it)
+                .forEach(HeroItem::tick);
 
-        for (Player player : players) {
-            player.tick();
-        }
-
-        for (IItem item : level.getItems(Tickable.class)) {
-            if (item instanceof  Hero) {
-                continue;
-            }
-
-            ((Tickable) item).tick();
-        }
+        level.getItems(Tickable.class).stream()
+                .filter(it -> !(it instanceof HeroItem))
+                .filter(it -> !(it instanceof Laser && ((Laser)it).skipFirstTick()) ) // TODO это хак, надо разобраться!
+                .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
+                .map(it -> (Tickable)it)
+                .forEach(Tickable::tick);
 
         for (Player player : players) {
             Hero hero = player.getHero();
 
-            if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), isMultiple));
-                player.setNextLevel();
-            }
-
             if (!hero.isAlive()) {
                 player.event(Events.LOOSE());
+            } else if (hero.isWin()) {
+                player.event(Events.WIN(hero.getGoldCount(), isMultiplayer));
+                hero.die();
             }
         }
     }
 
+    @Override
     public int size() {
         return level.getSize();
+    }
+
+    @Override
+    public List<Zombie> zombies() {
+        return level.getItems(Zombie.class);
     }
 
     @Override
@@ -170,13 +167,18 @@ public class ICanCode implements Tickable, IField {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);
 
-        if (isMultiple) {
+        if (isMultiplayer) {
             setRandomGold(golds); // TODO test me
         }
 
         for (BaseItem gold : golds) {
             ((Gold) gold).reset();
         }
+    }
+
+    @Override
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 
     private void setRandomGold(List<BaseItem> golds) {
@@ -228,26 +230,8 @@ public class ICanCode implements Tickable, IField {
         }
     }
 
-    public ILevel getCurrentLevel() {
-        return level;
-    }
 
-    public List<Player> getPlayers() {
-        return new LinkedList(players);
-    }
-
-    public List<ILevel> getLevels() {
-        return new LinkedList<>(levels);
-    }
-
-    public boolean isMultiple() {
-        return isMultiple;
-    }
-
-    public void setLevel(ILevel level) {
-        this.level = level;
-    }
-
+    @Override
     public BoardReader reader() {
         return new BoardReader() {
             @Override
@@ -256,8 +240,23 @@ public class ICanCode implements Tickable, IField {
             }
 
             @Override
+            public Iterable<? extends Point> elements() {
+                return null; // because layeredReader() implemented here
+            }
+        };
+    }
+
+    @Override
+    public LayeredBoardReader layeredReader() {
+        return new LayeredBoardReader() {
+            @Override
+            public int size() {
+                return ICanCode.this.size();
+            }
+
+            @Override
             public BiFunction<Integer, Integer, State> elements() {
-                ICell[] cells = ICanCode.this.getCurrentLevel().getCells();
+                ICell[] cells = ICanCode.this.level.getCells();
                 return (index, layer) -> cells[index].getItem(layer);
             }
 
@@ -271,5 +270,15 @@ public class ICanCode implements Tickable, IField {
                 return ((IItem) item).getItemsInSameCell().toArray();
             }
         };
+    }
+
+    @Override
+    public Dice dice() {
+        return dice;
+    }
+
+    @Override
+    public ILevel getLevel() {
+        return level;
     }
 }

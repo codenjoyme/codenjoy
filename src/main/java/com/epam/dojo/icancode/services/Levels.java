@@ -30,12 +30,9 @@ import com.epam.dojo.icancode.model.LevelImpl;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by oleksandr.baglai on 18.06.2016.
- */
 public final class Levels {
 
     public static int VIEW_SIZE = 20;
@@ -317,22 +314,106 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static List<ILevel> collectSingle() {
-        return collect(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
+    public static final String LEVEL_ZOMBIE_1 =
+            "              " +
+            "              " +
+            " ############ " +
+            " #......$..E# " +
+            " #.########.# " +
+            " #.#      #.# " +
+            " #$# #### #.# " +
+            " #.# #.Z# #.# " +
+            " #.# #.## #.# " +
+            " #.# #.#  #.# " +
+            " #.# #.####.# " +
+            " #S# #......# " +
+            " ### ######## " +
+            "              ";
+
+    public static final String LEVEL_ZOMBIE_2 =
+            " #########" +
+            " #S....˅.#" +
+            " #..$....#" +
+            " #..###$.#" +
+            " #..# #..#" +
+            " #.$###.$#" +
+            " #˃......#" +
+            " #..$...E#" +
+            " #########" +
+            "          ";
+
+    public static final String LEVEL_ZOMBIE_3 =
+            "             " +
+            "   #######   " +
+            "   #S.O..#   " +
+            "   ####.$#   " +
+            "      #..#   " +
+            "   ####..### " +
+            "   #$B.OO..# " +
+            "   #.###...# " +
+            "   #$# #$..# " +
+            "   #.###..E# " +
+            "   #Z...$..# " +
+            "   ######### " +
+            "             ";
+
+    public static final String LEVEL_ZOMBIE_4 =
+            "              " +
+            "   ########   " +
+            "   #S...B.#   " +
+            "   ###B...#   " +
+            "     #B...#   " +
+            "   ###$B..####" +
+            "   #$...B...B#" +
+            "   #.#####...#" +
+            "   #.#   #..Z#" +
+            "   #.#####B..#" +
+            "   #.E.....B.#" +
+            "   ###########" +
+            "              " +
+            "              ";
+
+    public static final String MULTI_LEVEL_SIMPLE_ZOMBIES =
+            "    ############### " +
+            "    #Z.....E...$.Z# " +
+            "    #B...O###B....# " +
+            "  ###.B.B.# #.....# " +
+            "  #.$.....# #B.$..# " +
+            "  #...B#### ##..O.# " +
+            "  #.O..#     ###..# " +
+            "  #..$.#####   #.O# " +
+            "  #BB......#####..# " +
+            "  ######.B........# " +
+            "       ##....###### " +
+            " #####  #.O..#      " +
+            " #.$.#  #.$.B###### " +
+            " #...####.......O.# " +
+            " #....O...####B...# " +
+            " ####..$..#  ###### " +
+            "    #...O.#         " +
+            " ####....B########  " +
+            " #S...O$........S#  " +
+            " #################  ";
+
+    public static ILevel loadLevel(int level) {
+        return load(getSingleMaps().get(level));
+    }
+
+    public static List<String> getSingleMaps() {
+        return Arrays.asList(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                 LEVEL_7A, LEVEL_8A, LEVEL_9A,
                 LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C, LEVEL_1D);
+        // TODO this is for zombie levels - create config for this
+//        return Arrays.asList(LEVEL_ZOMBIE_1, LEVEL_ZOMBIE_2,
+//                LEVEL_ZOMBIE_3, LEVEL_ZOMBIE_4);
     }
 
-    public static List<ILevel> collectMultiple() {
-        return collect(MULTI_LEVEL_SIMPLE_WITHOUT_LASERS);
+    public static ILevel getMultiple() {
+        return load(MULTI_LEVEL_SIMPLE);
     }
 
-    private static List<ILevel> collect(String... levels) {
-        List<ILevel> result = new LinkedList<>();
-        for (String level : levels) {
-            result.add(new LevelImpl(resize(decorate(level), size())));
-        }
-        return result;
+    public static ILevel load(String levelMap) {
+        return new LevelImpl(resize(decorate(levelMap), size()));
     }
 
     static String resize(String level, int toSize) {
