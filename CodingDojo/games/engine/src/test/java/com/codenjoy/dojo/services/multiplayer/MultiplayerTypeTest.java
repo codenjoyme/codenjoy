@@ -57,6 +57,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(true, type.isSingleplayer());
         assertEquals(false, type.isMultiplayer());
+
+        assertEquals("single", type.getType());
     }
 
     @Test
@@ -75,6 +77,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
+
+        assertEquals("tournament", type.getType());
     }
 
     @Test
@@ -93,6 +97,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
+
+        assertEquals("triple", type.getType());
     }
 
     @Test
@@ -111,6 +117,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
+
+        assertEquals("quadro", type.getType());
     }
 
     @Test
@@ -129,6 +137,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
+
+        assertEquals("team", type.getType());
     }
 
     @Test
@@ -147,6 +157,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
+
+        assertEquals("multiple", type.getType());
     }
 
     @Test
@@ -166,6 +178,8 @@ public class MultiplayerTypeTest {
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
+
+        assertEquals("training", type.getType());
     }
 
     @Test

@@ -186,6 +186,10 @@ public class MultiplayerType {
         return this instanceof TRAINING_;
     }
 
+    public String getType() {
+        return this.getClass().getSimpleName().toLowerCase().replace("_", "");
+    }
+
     public int loadProgress(Game game, JSONObject save) {
         int roomSize;
         if (isTraining() && save.has("levelProgress")) {
