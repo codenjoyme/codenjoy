@@ -707,7 +707,7 @@ a.modalCloseImg {
   height: 40px;
   background-color: #323132;
   margin-top: 10px;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
