@@ -85,13 +85,16 @@ public class PlayerGamesView {
         Map<String, List<String>> result = new LinkedHashMap<>();
         for (List<String> group : getGroups()) {
             for (String player : group) {
+                if (result.containsKey(player)) {
+                    continue;
+                }
                 result.put(player, group);
             }
         }
         return result;
     }
 
-    private List<List<String>> getGroups() {
+    public List<List<String>> getGroups() {
         return service.all().stream()
                     .collect(groupingBy(PlayerGame::getField))
                     .values().stream()
@@ -101,7 +104,7 @@ public class PlayerGamesView {
                     .collect(toList());
     }
 
-    private Map<String, Object> getScores() {
+    public Map<String, Object> getScores() {
         return service.all().stream()
                 .collect(toMap(pg -> pg.getPlayer().getName(),
                         pg -> pg.getPlayer().getScore()));

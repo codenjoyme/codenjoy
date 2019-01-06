@@ -216,4 +216,16 @@ public class RestRegistrationController {
 
         return result;
     }
+
+    @RequestMapping(value = "/player/all/groups", method = RequestMethod.GET)
+    @ResponseBody
+    public List<List<String>> getPlayersGroups() {
+        return playerGamesViewService.getGroups();
+    }
+
+    @RequestMapping(value = "/player/all/scores", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getPlayersScores() {
+        return playerGamesViewService.getScores();
+    }
 }
