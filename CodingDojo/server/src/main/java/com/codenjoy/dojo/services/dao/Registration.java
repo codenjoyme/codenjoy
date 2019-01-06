@@ -202,4 +202,9 @@ public class Registration {
         }
     }
 
+    public void remove(String email) {
+        pool.update("DELETE FROM users WHERE email = ?;",
+                new Object[]{email});
+    }
+
 }

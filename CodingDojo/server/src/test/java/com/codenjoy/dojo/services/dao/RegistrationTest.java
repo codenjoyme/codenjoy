@@ -280,4 +280,34 @@ public class RegistrationTest {
                 service.getUsers().toString());
     }
 
+    @Test
+    public void shouldRemoveUser() {
+        // given
+        String code1 = service.register("user1", "pass1", "someData1");
+        String code2 = service.register("user2", "pass2", "someData2");
+
+        assertEquals("[User{email='user1', " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                        "User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+
+        // when
+        service.remove("user1");
+
+        // then
+        assertEquals("[User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+    }
+
 }

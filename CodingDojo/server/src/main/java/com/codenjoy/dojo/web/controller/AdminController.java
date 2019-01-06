@@ -128,6 +128,12 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @RequestMapping(params = "removeRegistration", method = RequestMethod.GET)
+    public String removePlayerRegistration(@RequestParam("removeRegistration") String name, Model model, HttpServletRequest request) {
+        registration.remove(name);
+        return getAdmin(request);
+    }
+
     @RequestMapping(params = "removeSaveAll", method = RequestMethod.GET)
     public String removePlayerSave(Model model, HttpServletRequest request) {
         saveService.removeAllSaves();

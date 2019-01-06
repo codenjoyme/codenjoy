@@ -242,6 +242,9 @@
                         <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
+                        Registration&nbsp;&nbsp;
+                    </td>
+                    <td>
                         <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;</td>
@@ -279,6 +282,7 @@
                                         <td>RemoveSave</td>
                                     </c:otherwise>
                                 </c:choose>
+                                <td><a href="${ctx}/admin31415?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
                                 <td><a href="${ctx}/admin31415?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.name}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
