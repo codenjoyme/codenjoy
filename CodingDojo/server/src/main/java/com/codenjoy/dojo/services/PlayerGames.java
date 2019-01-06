@@ -264,13 +264,16 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public void setLevel(String playerName, JSONObject save) { // TODO test me
+    public void setLevel(String playerName, JSONObject save) {
+        if (save == null) {
+            return;
+        }
         PlayerGame playerGame = get(playerName);
         Game game = playerGame.getGame();
         reload(game, save);
     }
 
-    public PlayerGame get(int index) { // TODO test me
+    public PlayerGame get(int index) {
         return playerGames.get(index);
     }
 
