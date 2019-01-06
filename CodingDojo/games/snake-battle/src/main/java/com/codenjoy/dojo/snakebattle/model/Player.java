@@ -36,24 +36,12 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public Player(EventListener listener) {
         super(listener);
-    }
-
-    public void event(Events event) {
-        switch (event) {
-            case START:
-                start();
-                break;
-            case DIE:
-                shouldLeave = true;
-                break;
-        }
-
-        super.event(event);
-    }
-
-    private void start() {
-        hero.setActive(true);
         shouldLeave = false;
+    }
+
+    public void start() {
+        event(Events.START);
+        hero.setActive(true);
     }
 
     public Hero getHero() {
@@ -80,5 +68,10 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public boolean shouldLeave() {
         return shouldLeave;
+    }
+
+    public void die(boolean lastRound) {
+        event(Events.DIE);
+        shouldLeave = lastRound;
     }
 }
