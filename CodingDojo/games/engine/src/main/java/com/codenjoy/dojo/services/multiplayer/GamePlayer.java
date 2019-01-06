@@ -94,9 +94,17 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     public abstract boolean isAlive();
 
     /**
-     * @return Победил ли герой на этом уровне.
+     * @return Победил ли герой на этом уровне. TODO ##2 работает пока только с multiplayerType.isTraining()
      */
-    public boolean isWin() { // TODO test me
+    public boolean isWin() {
+        return false;
+    }
+
+    /**
+     * @return Проиграл ли герой этот матч и должен ли покинуть борду.
+     *          Работает только с multiplayerType.isDisposable()
+     */
+    public boolean shouldLeave() {
         return false;
     }
 

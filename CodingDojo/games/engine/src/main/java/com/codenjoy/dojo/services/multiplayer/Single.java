@@ -100,6 +100,11 @@ public class Single implements Game {
     }
 
     @Override
+    public boolean shouldLeave() {
+        return player.shouldLeave();
+    }
+
+    @Override
     public void newGame() {
         field.newGame(player);
     }

@@ -982,4 +982,57 @@ public class PlayerGamesTest {
                 playerGames.get("player2")
                         .getGame().getProgress().toString());
     }
+
+    @Test
+    public void shouldRemovePlayerFromBoard_whenShouldLeaveIsTrue() {
+        // given
+        createPlayer("game", "player1", MultiplayerType.TRIPLE);
+        createPlayer("game", "player2", MultiplayerType.TRIPLE);
+        createPlayer("game", "player3", MultiplayerType.TRIPLE);
+
+        reset(fields.get(0));
+        assertEquals(1, fields.size());
+
+        setPlayerStatus(0, true);  // still play on board
+        setPlayerStatus(1, true);  // still play on board
+        setPlayerStatus(2, false); // should leave + game over
+
+        // when
+        // shouldLeave + gameOver > remove player3 from board and crate on new board
+        playerGames.tick();
+
+        // then
+        int newField = fields.size() - 1;
+        assertEquals(2, fields.size());
+        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(2));
+
+        assertEquals(3, playerGames.size());
+        assertSame(fields.get(0), playerGames.get("player1").getField());
+        assertSame(fields.get(0), playerGames.get("player2").getField());
+        assertSame(fields.get(1), playerGames.get("player3").getField());
+
+        // when
+        // add another player
+        createPlayer("game", "player4", MultiplayerType.TRIPLE);
+        createPlayer("game", "player5", MultiplayerType.TRIPLE);
+
+        // then
+        assertEquals(2, fields.size());
+        assertEquals(5, playerGames.size());
+
+        // это старая борда, там осталось 2 юзера, но она была заполенна в прошлом тремя и места там нет
+        assertSame(fields.get(0), playerGames.get("player1").getField());
+        assertSame(fields.get(0), playerGames.get("player2").getField());
+
+        // а это новая и она наполняется новыми юзерами
+        assertSame(fields.get(1), playerGames.get("player3").getField());
+        assertSame(fields.get(1), playerGames.get("player4").getField());
+        assertSame(fields.get(1), playerGames.get("player5").getField());
+    }
+
+    private void setPlayerStatus(int index, boolean stillPlay) {
+        when(gamePlayers.get(index).isAlive()).thenReturn(stillPlay);
+        when(gamePlayers.get(index).isWin()).thenReturn(!stillPlay);
+        when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
+    }
 }

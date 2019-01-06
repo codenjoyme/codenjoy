@@ -32,6 +32,7 @@ import com.codenjoy.dojo.snakebattle.services.Events;
 public class Player extends GamePlayer<Hero, Field> {
 
     private Hero hero;
+    private boolean shouldLeave;
 
     public Player(EventListener listener) {
         super(listener);
@@ -42,6 +43,9 @@ public class Player extends GamePlayer<Hero, Field> {
             case START:
                 start();
                 break;
+            case DIE:
+                shouldLeave = true;
+                break;
         }
 
         super.event(event);
@@ -49,6 +53,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     private void start() {
         hero.setActive(true);
+        shouldLeave = false;
     }
 
     public Hero getHero() {
@@ -70,5 +75,10 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public boolean isActive() {
         return hero != null && hero.isActive();
+    }
+
+    @Override
+    public boolean shouldLeave() {
+        return shouldLeave;
     }
 }

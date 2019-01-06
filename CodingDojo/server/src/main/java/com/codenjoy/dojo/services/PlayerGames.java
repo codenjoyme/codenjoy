@@ -188,23 +188,30 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // по всем джойстикам отправили сообщения играм
         playerGames.forEach(PlayerGame::quietTick);
 
-        // создаем новые игры для тех, кто уже game over
-        // если при этом в TRAINING кто-то isWin то мы его относим на следующий уровень
+        // если в TRAINING кто-то isWin то мы его относим на следующий уровень
+        // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
+        // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
+            MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
-                    GameType gameType = getPlayer(game).getGameType();
-                    if (gameType.getMultiplayerType().isTraining()) {
-                        if (game.isWin()) {
-                            JSONObject from = game.getSave();
-                            JSONObject to = LevelProgress.winLevel(from);
-                            if (to != null) {
-                                reload(game, to);
-                                return;
-                            }
+                    JSONObject level = game.getSave();
+
+                    // TODO ##2 попробовать какой-то другой тип с несколькими уровнями, а не только isTraining
+                    if (game.isWin() && multiplayerType.isTraining()) {
+                        level = LevelProgress.winLevel(level);
+                        if (level != null) {
+                            reload(game, level);
+                            return;
                         }
                     }
+
+                    if (game.shouldLeave() && multiplayerType.isDisposable()) {
+                        reload(game, level);
+                        return;
+                    }
+
                     game.newGame();
                 });
             }
