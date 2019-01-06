@@ -34,11 +34,14 @@ public class MultiplayerTypeTest {
 
     @Test
     public void twoTeamTypesShouldBeDifferent() {
-        MultiplayerType team1 = MultiplayerType.TEAM.apply(1);
-        MultiplayerType team2 = MultiplayerType.TEAM.apply(3);
+        MultiplayerType team1 = MultiplayerType.TEAM.apply(1, !MultiplayerType.DISPOSABLE);
+        MultiplayerType team2 = MultiplayerType.TEAM.apply(3, MultiplayerType.DISPOSABLE);
 
         assertEquals(1, team1.getRoomSize());
+        assertEquals(false, team1.isDisposable());
+
         assertEquals(3, team2.getRoomSize());
+        assertEquals(true, team2.isDisposable());
     }
 
     @Test
@@ -59,6 +62,7 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isMultiplayer());
 
         assertEquals("single", type.getType());
+        assertEquals(true, type.isDisposable());
     }
 
     @Test
@@ -79,6 +83,7 @@ public class MultiplayerTypeTest {
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("tournament", type.getType());
+        assertEquals(true, type.isDisposable());
     }
 
     @Test
@@ -99,6 +104,7 @@ public class MultiplayerTypeTest {
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("triple", type.getType());
+        assertEquals(true, type.isDisposable());
     }
 
     @Test
@@ -119,11 +125,12 @@ public class MultiplayerTypeTest {
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("quadro", type.getType());
+        assertEquals(true, type.isDisposable());
     }
 
     @Test
     public void typeTeam() {
-        MultiplayerType type = MultiplayerType.TEAM.apply(9);
+        MultiplayerType type = MultiplayerType.TEAM.apply(9, !MultiplayerType.DISPOSABLE);
 
         assertEquals(9, type.getRoomSize());
         assertEquals(1, type.getLevelsCount());
@@ -139,6 +146,7 @@ public class MultiplayerTypeTest {
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("team", type.getType());
+        assertEquals(false, type.isDisposable());
     }
 
     @Test
@@ -159,6 +167,7 @@ public class MultiplayerTypeTest {
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("multiple", type.getType());
+        assertEquals(false, type.isDisposable());
     }
 
     @Test
@@ -180,6 +189,7 @@ public class MultiplayerTypeTest {
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("training", type.getType());
+        assertEquals(false, type.isDisposable());
     }
 
     @Test

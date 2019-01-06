@@ -24,9 +24,11 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.verification.VerificationMode;
@@ -54,7 +56,9 @@ public class PlayerGamesMultiplayerTest {
     private GameType tournament;
     private GameType triple;
     private GameType quadro;
-    private GameType team4;
+    private GameType team4NotDisposable;
+    private GameType team5Disposable;
+    private GameType training3;
 
     private List<GameField> fields = new LinkedList<>();
     private List<GamePlayer> gamePlayers = new LinkedList<>();
@@ -70,8 +74,10 @@ public class PlayerGamesMultiplayerTest {
         tournament = setupGameType("tournament", MultiplayerType.TOURNAMENT);
         triple = setupGameType("triple", MultiplayerType.TRIPLE);
         quadro = setupGameType("quadro", MultiplayerType.QUADRO);
-        team4 = setupGameType("team4", MultiplayerType.TEAM.apply(4));
+        team4NotDisposable = setupGameType("team4", MultiplayerType.TEAM.apply(4, !MultiplayerType.DISPOSABLE));
+        team5Disposable = setupGameType("team5", MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE));
         multiple = setupGameType("multiple", MultiplayerType.MULTIPLE);
+        training3 = setupGameType("training3", MultiplayerType.TRAINING.apply(3));
     }
 
     private GameType setupGameType(String gameName, MultiplayerType type) {
@@ -253,11 +259,11 @@ public class PlayerGamesMultiplayerTest {
     @Test
     public void shouldXPlayerOnBoard_whenTeam() {
         // given
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
 
         assertGroup(0, 1, 2, 3)
                 .notIn(4)
@@ -341,15 +347,15 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(tournament);
         playerWantsToPlay(tournament);
 
-        assertGroup(0, 1)
-                .notIn(2)
+        assertGroup(0, 1) // двое первых забили комнату сразу
+                .notIn(2) // а третий ждет в своей отдельной, у него 1 место свободно
                 .check();
 
         // when
         remove(0);
 
         // then
-        assertGroup(1, 2)
+        assertGroup(2, 1)  // так как я удалил 0 и 1 остался сам, то он сразу перешел в новую комнату к 2
                 .isNull(0)
                 .check();
 
@@ -358,8 +364,8 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(tournament);
 
         // then
-        assertGroup(1, 2)
-                .notIn(3, 4)
+        assertGroup(2, 1)    // старая забитая комната
+                .notIn(3, 4) // и двое новых тоже забили комнату
                 .isNull(0)
                 .check();
 
@@ -367,8 +373,8 @@ public class PlayerGamesMultiplayerTest {
         remove(1);
 
         // then
-        assertGroup(3, 4)
-                .notIn(2)
+        assertGroup(3, 4)  // старая забитая комната
+                .notIn(2)  // удаляя 1 я оставляю 2 в комнате самого, и потому для него сразу создается новая комната
                 .isNull(0, 1)
                 .check();
 
@@ -376,8 +382,8 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(tournament);
 
         // then
-        assertGroup(3, 4)
-                .notIn(2, 5)
+        assertGroup(3, 4)    // старая забитая комната
+                .notIn(2, 5) // новенький подселяется к одиночке
                 .isNull(0, 1)
                 .check();
     }
@@ -391,26 +397,27 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(triple);
         playerWantsToPlay(triple);
 
-        assertGroup(0, 1, 2)
-                .notIn(3, 4)
+        assertGroup(0, 1, 2) // комната забита, сюда больше не зайдут
+                .notIn(3, 4) // сюда может зайти еще один
                 .check();
 
         // when
         remove(0);
 
         // then
-        assertGroup(1, 2)
-                .notIn(3, 4)
+        assertGroup(1, 2)    // комната вроде бы и свободна, но сюда больше не зайдут потому что она одноразовая
+                .notIn(3, 4) // а сюда еще можно одного добавить
                 .isNull(0)
                 .check();
 
         // when
-        playerWantsToPlay(triple);
-        playerWantsToPlay(triple);
+        playerWantsToPlay(triple); // добвится к 3, 4
+        playerWantsToPlay(triple); // будет один ждать
 
         // then
-        assertGroup(1, 2, 5) // TODO подумать, может не стоит лепить нового юзера к уже играющим
-                .notIn(3, 4, 6)
+        assertGroup(1, 2)       // комната забита, в ней было трое раньше
+                .notIn(3, 4, 5) // и эта комната теперь тоже забита
+                .notIn(6)       // а это новенький, к нему можно двоих подселить еще
                 .isNull(0)
                 .check();
 
@@ -418,8 +425,17 @@ public class PlayerGamesMultiplayerTest {
         remove(1);
 
         // then
-        assertGroup(2, 5)
-                .notIn(3, 4, 6)
+        assertGroup(3, 4, 5)  // старая комната, забитая уже
+                .notIn(6, 2)  // так как 2 после удаления 1 оставался один в комнате, то для него новая комната создана и она свободна - тут еще один подселиться может
+                .isNull(0, 1) // а это удаленные ребята
+                .check();
+
+        // when
+        playerWantsToPlay(triple);
+
+        // then
+        assertGroup(3, 4, 5)    // старая комната, забитая уже
+                .notIn(6, 2, 7) // последний прибыл и все мест больше нет
                 .isNull(0, 1)
                 .check();
 
@@ -427,8 +443,9 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(triple);
 
         // then
-        assertGroup(2, 5, 7)
-                .notIn(3, 4, 6)
+        assertGroup(3, 4, 5)     // старая комната, забитая уже
+                .notIn(6, 7, 2)  // старая комната, забитая уже
+                .notIn(8)        // новому и новая комната
                 .isNull(0, 1)
                 .check();
     }
@@ -442,16 +459,16 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(quadro);
         playerWantsToPlay(quadro);
 
-        assertGroup(0, 1, 2, 3)
-                .notIn(4)
+        assertGroup(0, 1, 2, 3) // все 4 сразу же забили комнату под себя
+                .notIn(4)       // у последнего прибывшего в комнате есть еще 3 места
                 .check();
 
         // when
         remove(0);
 
         // then
-        assertGroup(1, 2, 3)
-                .notIn(4)
+        assertGroup(1, 2, 3)   // тут хоть и трое, но комната забита
+                .notIn(4)      // тут как и раньше 3 места вакантных
                 .isNull(0)
                 .check();
 
@@ -461,8 +478,8 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(quadro);
 
         // then
-        assertGroup(1, 2, 3, 5)
-                .notIn(4, 6, 7)
+        assertGroup(1, 2, 3)       // страя команата была забита доверху, потому и не заполняется больше
+                .notIn(4, 5, 6, 7) // а вот ствободная - пожалуйста. кстати она уже тоже забита
                 .isNull(0)
                 .check();
 
@@ -470,8 +487,8 @@ public class PlayerGamesMultiplayerTest {
         remove(1);
 
         // then
-        assertGroup(2, 3, 5)
-                .notIn(4, 6, 7)
+        assertGroup(2, 3)           // старая забитая комната
+                .notIn(4, 5, 6, 7)  // старая забитая комната
                 .isNull(0, 1)
                 .check();
 
@@ -481,43 +498,123 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(quadro);
 
         // then
-        assertGroup(2, 3, 5, 8)
-                .notIn(4, 6, 7, 9)
-                .notIn(10)
+        assertGroup(2, 3)          // старая забитая комната
+                .notIn(4, 5, 6, 7) // старая забитая комната
+                .notIn(8, 9, 10)   // а тут еще место есть
+                .isNull(0, 1)
+                .check();
+
+        // when
+        remove(10);
+
+        // then
+        assertGroup(2, 3)          // старая забитая комната
+                .notIn(4, 5, 6, 7) // старая забитая комната
+                .notIn(8, 9)       // а тут еще место есть, но только одно потому что тут было трое
+                .isNull(0, 1, 10)
+                .check();
+
+        // when
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+        playerWantsToPlay(quadro);
+
+        // then
+        assertGroup(2, 3)          // старая забитая комната
+                .notIn(4, 5, 6, 7) // старая забитая комната
+                .notIn(8, 9, 11)   // последний пришел и место занял, в комнате всего было 4 юзера
+                .notIn(12, 13)     // а это новая, тут еще два места есть
+                .isNull(0, 1, 10)
+                .check();
+    }
+
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTeam4NotDisposable_whenRemove() {
+        // given
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+
+        assertGroup(0, 1, 2, 3) // комната забита, но она многоразовая
+                .notIn(4)       // новенький пока сам по себе
+                .check();
+
+        // when
+        remove(0);
+
+        // then
+        assertGroup(1, 2, 3)   // так как комната многоразовая тут появилась 1 вакансия
+                .notIn(4)      // новенький все так же в ожидании
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+
+        // then
+        assertGroup(1, 2, 3, 5)  // все новоприбывшие равномерно...
+                .notIn(4, 6, 7)  // ... заняли все свободные комнаты
+                .isNull(0)
+                .check();
+
+        // when
+        remove(1);
+
+        // then
+        assertGroup(2, 3, 5)     // снова в первой комнате вакансия
+                .notIn(4, 6, 7)  // и тут тоже
+                .isNull(0, 1)
+                .check();
+
+        // when
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+
+        // then
+        assertGroup(2, 3, 5, 8)     // все вакансии ...
+                .notIn(4, 6, 7, 9)  // ... Успешно забили
+                .notIn(10)          // одному не хватило
                 .isNull(0, 1)
                 .check();
     }
 
     @Test
-    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTeam4_whenRemove() {
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTeam5Disposable_whenRemove() {
         // given
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
 
-        assertGroup(0, 1, 2, 3)
-                .notIn(4)
+        assertGroup(0, 1, 2, 3, 4) // комната забита, она одноразовая
+                .notIn(5)          // новенький пока сам по себе
                 .check();
 
         // when
         remove(0);
 
         // then
-        assertGroup(1, 2, 3)
-                .notIn(4)
+        assertGroup(1, 2, 3, 4)   // комната хоть и кажется что свободна для одного, но она одноразовая
+                .notIn(5)         // новенький все так же в ожидании
                 .isNull(0)
                 .check();
 
         // when
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
 
         // then
-        assertGroup(1, 2, 3, 5)
-                .notIn(4, 6, 7)
+        assertGroup(1, 2, 3, 4)         // это старя забитая комната
+                .notIn(5, 6, 7, 8, 9)   // новые занимают свободные вакансии
                 .isNull(0)
                 .check();
 
@@ -525,22 +622,150 @@ public class PlayerGamesMultiplayerTest {
         remove(1);
 
         // then
-        assertGroup(2, 3, 5)
-                .notIn(4, 6, 7)
+        assertGroup(2, 3, 4)           // это старя забитая комната
+                .notIn(5, 6, 7, 8, 9)  // это старя забитая комната
                 .isNull(0, 1)
                 .check();
 
         // when
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
-        playerWantsToPlay(team4);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
 
         // then
-        assertGroup(2, 3, 5, 8)
-                .notIn(4, 6, 7, 9)
-                .notIn(10)
+        assertGroup(2, 3, 4)           // это старя забитая комната
+                .notIn(5, 6, 7, 8, 9)  // это старя забитая комната
+                .notIn(10, 11, 12)     // а вот тут еще три места будет
                 .isNull(0, 1)
                 .check();
+    }
+
+    @Test
+    public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTraining_whenRemove() {
+        // given
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+
+        assertGroup(0)     // все комнаты на первом уровне одиночные как single
+                .notIn(1)  // -- " --
+                .notIn(2)  // -- " --
+                .notIn(3)  // -- " --
+                .check();
+
+        // when
+        remove(0);
+
+        // then
+        assertGroup(1)     // все комнаты на первом уровне одиночные как single
+                .notIn(2)  // -- " --
+                .notIn(3)  // -- " --
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(training3);
+
+        // then
+        assertGroup(1)     // все комнаты на первом уровне одиночные как single
+                .notIn(2)  // -- " --
+                .notIn(3)  // -- " --
+                .notIn(4)  // -- " --
+                .isNull(0)
+                .check();
+
+        // when
+        nextLevel(1);
+        nextLevel(2);
+        nextLevel(4);
+
+        // then
+        // then
+        assertGroup(1)     // второй уровень single
+                .notIn(2)  // второй уровень single
+                .notIn(3)  // все там же - первый уровень single
+                .notIn(4)  // второй уровень single
+                .isNull(0)
+                .check();
+
+        //
+        nextLevel(1);
+        nextLevel(2);
+        nextLevel(4);
+
+        // then
+        // then
+        assertGroup(1)     // третий предпоследний уровень single
+                .notIn(2)  // третий предпоследний уровень single
+                .notIn(3)  // все там же - первый уровень single
+                .notIn(4)  // третий предпоследний уровень single
+                .isNull(0)
+                .check();
+
+        // when
+        nextLevel(1);
+        nextLevel(2);
+//        nextLevel(4); // этот не и дет дальше
+
+        // then
+        assertGroup(3)        // все там же - первый уровень single
+                .notIn(4)     // этот остался на третьем предпоследнем уровне single
+                .notIn(1, 2)  // а эти двое перешли на multiple
+                .isNull(0)
+                .check();
+
+        // when
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+
+        // then
+        assertGroup(3)        // все там же - первый уровень single
+                .notIn(4)     // этот остался на третьем предпоследнем уровне single
+                .notIn(1, 2)  // а эти двое перешли на multiple
+                .notIn(5)     // первый уровень single
+                .notIn(6)     // первый уровень single
+                .isNull(0)
+                .check();
+
+        // when
+        nextLevel(4);
+
+        // then
+        assertGroup(3)        // все там же - первый уровень single
+                .notIn(1, 2, 4)  // 4 тоже дошел до multiple
+                .notIn(5)     // первый уровень single
+                .notIn(6)     // первый уровень single
+                .isNull(0)
+                .check();
+
+        // when
+        nextLevel(3);
+        nextLevel(3);
+        nextLevel(3);
+
+        nextLevel(5);
+        nextLevel(5);
+        nextLevel(5);
+
+        nextLevel(6);
+        nextLevel(6);
+//        nextLevel(6); // этот не и дет дальше
+
+        // then
+        assertGroup(6)                       // завис на предпоследнем
+                .notIn(1, 2, 4, 3, 5)        // все дошли до конца кроме 6
+                .isNull(0)
+                .check();
+
+        // when
+        nextLevel(6);
+
+        // then
+        assertGroup(1, 2, 4, 3, 5, 6)        // все дошли до конца
+                .isNull(0)
+                .check();
+
     }
 
     @Test
@@ -552,7 +777,7 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(multiple);
         playerWantsToPlay(multiple);
 
-        assertGroup(0, 1, 2, 3, 4)
+        assertGroup(0, 1, 2, 3, 4) // multiple - тут комната многоразовая и безразмерная
                 .check();
 
         // when
@@ -569,7 +794,7 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(multiple);
 
         // then
-        assertGroup(1, 2, 3, 4, 5, 6, 7)
+        assertGroup(1, 2, 3, 4, 5, 6, 7) // multiple - тут комната многоразовая и безразмерная
                 .isNull(0)
                 .check();
 
@@ -577,7 +802,7 @@ public class PlayerGamesMultiplayerTest {
         remove(5);
 
         // then
-        assertGroup(1, 2, 3, 4, 6, 7)
+        assertGroup(1, 2, 3, 4, 6, 7) // multiple - тут комната многоразовая и безразмерная
                 .isNull(0, 5)
                 .check();
 
@@ -587,13 +812,25 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(multiple);
 
         // then
-        assertGroup(1, 2, 3, 4, 6, 7, 8, 9, 10)
+        assertGroup(1, 2, 3, 4, 6, 7, 8, 9, 10) // multiple - тут комната многоразовая и безразмерная
                 .isNull(0, 5)
                 .check();
     }
 
     private void remove(int index) {
         playerGames.remove(players.get(index));
+    }
+
+    private void nextLevel(int index) {
+        String name = players.get(index).getName();
+        PlayerGame playerGame = playerGames.get(name);
+
+        LevelProgress progress = playerGame.getGame().getProgress();
+        progress.change(progress.getCurrent() + 1, progress.getCurrent());
+
+        JSONObject save = new JSONObject();
+        progress.saveTo(save);
+        playerGames.setLevel(name, save);
     }
 
     @Test
@@ -605,7 +842,7 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(multiple);
         playerWantsToPlay(multiple);
 
-        assertGroup(0, 1, 2, 3, 4)
+        assertGroup(0, 1, 2, 3, 4)   // multiple - тут комната многоразовая и безразмерная
                 .check();
 
         // when
@@ -614,17 +851,17 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(quadro);
 
         // then
-        assertGroup(0, 1, 2, 3, 4)
-                .notIn(5, 6, 7)
+        assertGroup(0, 1, 2, 3, 4)   // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 6, 7)      // quadro - комната одноразовая по 4 за раз
                 .check();
 
         // when
         playerWantsToPlay(single);
 
         // then
-        assertGroup(0, 1, 2, 3, 4)
-                .notIn(5, 6, 7)
-                .notIn(8)
+        assertGroup(0, 1, 2, 3, 4) // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 6, 7)    // quadro - комната одноразовая по 4 за раз. осталось 1 место
+                .notIn(8)          // single - одноразовая одноместная комната
                 .check();
 
         // when
@@ -632,10 +869,10 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(tournament);
 
         // then
-        assertGroup(0, 1, 2, 3, 4)
-                .notIn(5, 6, 7)
-                .notIn(8)
-                .notIn(9, 10)
+        assertGroup(0, 1, 2, 3, 4) // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 6, 7)    // quadro - комната одноразовая по 4 за раз. осталось 1 место
+                .notIn(8)          // single - одноразовая одноместная комната
+                .notIn(9, 10)      // tournament - двухместная одноразовая комната, уже занята
                 .check();
 
         // when
@@ -644,11 +881,11 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(triple);
 
         // then
-        assertGroup(0, 1, 2, 3, 4)
-                .notIn(5, 6, 7)
-                .notIn(8)
-                .notIn(9, 10)
-                .notIn(11, 12, 13)
+        assertGroup(0, 1, 2, 3, 4) // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 6, 7)    // quadro - комната одноразовая по 4 за раз. осталось 1 место
+                .notIn(8)          // single - одноразовая одноместная комната
+                .notIn(9, 10)      // tournament - двухместная одноразовая комната, уже занята
+                .notIn(11, 12, 13) // triple - трехместная одноразовая комната, уже занята
                 .check();
 
         // when
@@ -658,11 +895,11 @@ public class PlayerGamesMultiplayerTest {
         remove(13);
 
         // then
-        assertGroup(1, 2, 3, 4)
-                .notIn(5, 7)
-                .notIn(8)
-                .notIn(9)
-                .notIn(11, 12)
+        assertGroup(1, 2, 3, 4)       // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 7)          // quadro - комната одноразовая по 4 за раз. осталось 1 место
+                .notIn(8)             // single - одноразовая одноместная комната
+                .notIn(9)             // tournament - двухместная одноразовая комната, хоть и была занята, но после удаления напарника пеесоздалась. свободно 1 место
+                .notIn(11, 12)        // triple - трехместная одноразовая комната, уже была занята
                 .isNull(0, 6, 10, 13)
                 .check();
 
@@ -671,11 +908,11 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(multiple);
 
         // then
-        assertGroup(1, 2, 3, 4, 14, 15)
-                .notIn(5, 7)
-                .notIn(8)
-                .notIn(9)
-                .notIn(11, 12)
+        assertGroup(1, 2, 3, 4, 14, 15) // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 7)            // quadro - комната одноразовая по 4 за раз. осталось 1 место
+                .notIn(8)               // single - одноразовая одноместная комната
+                .notIn(9)               // tournament - двухместная одноразовая комната, хоть и была занята, но после удаления напарника пеесоздалась. свободно 1 место
+                .notIn(11, 12)          // triple - трехместная одноразовая комната, уже была занята
                 .isNull(0, 6, 10, 13)
                 .check();
 
@@ -685,12 +922,12 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(quadro);
 
         // then
-        assertGroup(1, 2, 3, 4, 14, 15)
-                .notIn(5, 7, 16, 17)
-                .notIn(8)
-                .notIn(9)
-                .notIn(11, 12)
-                .notIn(18)
+        assertGroup(1, 2, 3, 4, 14, 15)  // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 7, 16)         // quadro - комната одноразовая по 4 за раз. все забито уже, тут было за все время 4 игрока
+                .notIn(8)                // single - одноразовая одноместная комната
+                .notIn(9)                // tournament - двухместная одноразовая комната, хоть и была занята, но после удаления напарника пеесоздалась. свободно 1 место
+                .notIn(11, 12)           // triple - трехместная одноразовая комната, уже была занята
+                .notIn(17, 18)           // quadro - комната одноразовая по 4 за раз. осталось 2 места
                 .isNull(0, 6, 10, 13)
                 .check();
 
@@ -699,14 +936,14 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(single);
 
         // then
-        assertGroup(1, 2, 3, 4, 14, 15)
-                .notIn(5, 7, 16, 17)
-                .notIn(8)
-                .notIn(9)
-                .notIn(11, 12)
-                .notIn(18)
-                .notIn(19)
-                .notIn(20)
+        assertGroup(1, 2, 3, 4, 14, 15)  // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 7, 16)         // quadro - комната одноразовая по 4 за раз. все забито уже, тут было за все время 4 игрока
+                .notIn(8)                // single - одноразовая одноместная комната
+                .notIn(9)                // tournament - двухместная одноразовая комната, хоть и была занята, но после удаления напарника пеесоздалась. свободно 1 место
+                .notIn(11, 12)           // triple - трехместная одноразовая комната, уже была занята
+                .notIn(17, 18)           // quadro - комната одноразовая по 4 за раз. осталось 2 места
+                .notIn(19)               // single - одноразовая одноместная комната
+                .notIn(20)               // single - одноразовая одноместная комната
                 .isNull(0, 6, 10, 13)
                 .check();
 
@@ -715,15 +952,15 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(tournament);
 
         // then
-        assertGroup(1, 2, 3, 4, 14, 15)
-                .notIn(5, 7, 16, 17)
-                .notIn(8)
-                .notIn(9, 21)
-                .notIn(11, 12)
-                .notIn(18)
-                .notIn(19)
-                .notIn(20)
-                .notIn(22)
+        assertGroup(1, 2, 3, 4, 14, 15)  // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 7, 16)         // quadro - комната одноразовая по 4 за раз. все забито уже, тут было за все время 4 игрока
+                .notIn(8)                // single - одноразовая одноместная комната
+                .notIn(9, 21)            // tournament - двухместная одноразовая комната. уже занята
+                .notIn(11, 12)           // triple - трехместная одноразовая комната, уже была занята
+                .notIn(17, 18)           // quadro - комната одноразовая по 4 за раз. осталось 2 места
+                .notIn(19)               // single - одноразовая одноместная комната
+                .notIn(20)               // single - одноразовая одноместная комната
+                .notIn(22)               // tournament - двухместная одноразовая комната, пока есть 1 место
                 .isNull(0, 6, 10, 13)
                 .check();
 
@@ -732,16 +969,16 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(triple);
 
         // then
-        assertGroup(1, 2, 3, 4, 14, 15)
-                .notIn(5, 7, 16, 17)
-                .notIn(8)
-                .notIn(9, 21)
-                .notIn(11, 12, 23)
-                .notIn(18)
-                .notIn(19)
-                .notIn(20)
-                .notIn(22)
-                .notIn(24)
+        assertGroup(1, 2, 3, 4, 14, 15)  // multiple - тут комната многоразовая и безразмерная
+                .notIn(5, 7, 16)         // quadro - комната одноразовая по 4 за раз. все забито уже, тут было за все время 4 игрока
+                .notIn(8)                // single - одноразовая одноместная комната
+                .notIn(9, 21)            // tournament - двухместная одноразовая комната. уже занята
+                .notIn(11, 12)           // triple - трехместная одноразовая комната, уже была занята
+                .notIn(17, 18)           // quadro - комната одноразовая по 4 за раз. осталось 2 места
+                .notIn(19)               // single - одноразовая одноместная комната
+                .notIn(20)               // single - одноразовая одноместная комната
+                .notIn(22)                // tournament - двухместная одноразовая комната, пока есть 1 место
+                .notIn(23, 24)           // triple - трехместная одноразовая комната, свободно 1 место
                 .isNull(0, 6, 10, 13)
                 .check();
     }

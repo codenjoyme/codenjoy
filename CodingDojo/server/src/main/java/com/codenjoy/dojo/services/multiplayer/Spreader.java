@@ -48,7 +48,7 @@ public class Spreader {
             room = findUnfilled(gameType);
         }
         if (room == null) {
-            room = new Room(supplier.get(), roomSize);
+            room = new Room(supplier.get(), roomSize, type.isDisposable());
             add(gameType, room);
         }
 
@@ -95,7 +95,7 @@ public class Spreader {
             List<GamePlayer> players = room.getPlayers();
             players.remove(player);
 
-            if (players.size() == 1) { // TODO тут может не надо выходить если тип игры MULTIPLAYER
+            if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
                 GamePlayer lastPlayer = players.iterator().next();
                 removed.add(lastPlayer);
                 players.remove(lastPlayer);
