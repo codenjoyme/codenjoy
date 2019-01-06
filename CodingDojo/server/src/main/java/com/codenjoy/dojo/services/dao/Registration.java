@@ -115,12 +115,16 @@ public class Registration {
                 new Object[]{1, code});
     }
 
-    public class User {
+    public static class User {
         private String email;
         private int approved;
         private String password;
         private String code;
         private String data;
+
+        public User() {
+            // do nothing
+        }
 
         public User(String email, int approved, String password, String code, String data) {
             this.email = email;
@@ -186,4 +190,16 @@ public class Registration {
                 }
         );
     }
+
+    public void replace(User user) {
+        Object[] parameters = {1, user.getPassword(), user.getCode(), user.getData(), user.getEmail()};
+        if (getCode(user.getEmail()) == null) {
+            pool.update("INSERT INTO users (email_approved, password, code, data, email) VALUES (?,?,?,?,?);",
+                    parameters);
+        } else {
+            pool.update("UPDATE users SET email_approved = ?, password = ?, code = ?, data = ? WHERE email = ?;",
+                    parameters);
+        }
+    }
+
 }
