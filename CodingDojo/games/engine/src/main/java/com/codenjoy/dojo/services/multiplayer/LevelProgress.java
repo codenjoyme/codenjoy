@@ -27,9 +27,15 @@ import org.json.JSONObject;
 
 public class LevelProgress {
 
-    private int total;
-    private int current;
-    private int passed;
+    protected int total;
+    protected int current;
+    protected int passed;
+
+    public LevelProgress() {
+        this.current = 0;
+        this.passed = -1;
+        this.total = 1;
+    }
 
     public LevelProgress(int total, int current, int passed) {
         this.total = total;
@@ -38,14 +44,11 @@ public class LevelProgress {
     }
 
     public LevelProgress(MultiplayerType type) {
+        this();
         if (type.isTraining()) {
             this.current = 0;
             this.passed = -1;
             this.total = type.getLevelsCount();
-        } else {
-            this.current = 0;
-            this.passed = -1;
-            this.total = 1;
         }
     }
 
