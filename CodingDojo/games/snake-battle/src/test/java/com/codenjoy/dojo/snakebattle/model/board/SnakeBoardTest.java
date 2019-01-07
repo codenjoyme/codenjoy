@@ -105,6 +105,7 @@ public class SnakeBoardTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "→►     ☼" +
@@ -113,7 +114,9 @@ public class SnakeBoardTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "☼→►    ☼" +
@@ -122,7 +125,9 @@ public class SnakeBoardTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "☼#→►   ☼" +
@@ -155,6 +160,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
         verify(listener).event(Events.GOLD);
         game.tick();
@@ -162,6 +168,7 @@ public class SnakeBoardTest {
         game.tick();
         verify(listener).event(Events.STONE);
         verify(listener).event(Events.DIE);
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  →═☻☼" +
@@ -169,7 +176,9 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -195,7 +204,9 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼  →► ☼" +
                 "☼     ☼" +
@@ -203,7 +214,9 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼   →►☼" +
                 "☼     ☼" +
@@ -224,8 +237,10 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ↓   ☼" +
                 "☼ ▼   ☼" +
@@ -233,8 +248,10 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.right();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
@@ -242,8 +259,10 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.up();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼  ▲  ☼" +
                 "☼  ↑  ☼" +
@@ -251,8 +270,10 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ◄←  ☼" +
                 "☼     ☼" +
@@ -274,8 +295,10 @@ public class SnakeBoardTest {
                 "☼  ○  ☼" +
                 "☼  ○  ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.right();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼→═►  ☼" +
@@ -283,8 +306,10 @@ public class SnakeBoardTest {
                 "☼  ○  ☼" +
                 "☼  ○  ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →╗  ☼" +
@@ -292,8 +317,10 @@ public class SnakeBoardTest {
                 "☼  ○  ☼" +
                 "☼  ○  ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →╗  ☼" +
@@ -301,8 +328,10 @@ public class SnakeBoardTest {
                 "☼  ▼  ☼" +
                 "☼  ○  ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ↓  ☼" +
@@ -310,8 +339,10 @@ public class SnakeBoardTest {
                 "☼ ◄╝  ☼" +
                 "☼  ○  ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -319,8 +350,10 @@ public class SnakeBoardTest {
                 "☼ ╔╝  ☼" +
                 "☼ ▼○  ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.right();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -328,7 +361,9 @@ public class SnakeBoardTest {
                 "☼ ╔╝  ☼" +
                 "☼ ╚►  ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -348,9 +383,11 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
         verify(listener).event(Events.STONE);
         verify(listener).event(Events.DIE);
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -358,7 +395,9 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -378,10 +417,12 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick(); // удлинняем змею (иначе будет не ясно исчезла змея или просто вся вошла в стену)
         verify(listener).event(Events.APPLE);
         game.tick();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -389,8 +430,10 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         verify(listener).event(Events.DIE);
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -410,8 +453,10 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.setActive(false);
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -419,8 +464,10 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.up();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -428,12 +475,14 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
 
         hero.setActive(true);
         hero.left();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -453,8 +502,10 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -462,10 +513,12 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.up();
         game.tick();
         hero.down();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼   ▲ ☼" +
                 "☼   ↑ ☼" +
@@ -473,10 +526,12 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
         hero.right();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ◄←  ☼" +
                 "☼     ☼" +
@@ -484,10 +539,12 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
         hero.up();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ↓   ☼" +
@@ -507,6 +564,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
         assertEquals("Змейка не съела пилюлю полёта!", 10, hero.getFlyingCount());
         hero.down();
@@ -515,6 +573,7 @@ public class SnakeBoardTest {
         assertTrue("Змейка умерла от камня в полёте!", hero.isAlive());
         game.tick();
         game.tick();
+
         // камень остался на месте
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -535,6 +594,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         // удлиннение
         game.tick();
         game.tick();
@@ -545,6 +605,7 @@ public class SnakeBoardTest {
         game.tick();
         game.tick();
         game.tick();
+
         // закручиваемся
         hero.up();
         game.tick();
@@ -557,6 +618,7 @@ public class SnakeBoardTest {
         hero.down();
         game.tick();
         game.tick();
+
         // змея не укоротилась
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ╔╗  ☼" +
@@ -565,6 +627,7 @@ public class SnakeBoardTest {
                 "☼   ⊖ ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         assertEquals("Змейка укоротила себя в полёте!", 8, hero.size());
     }
 
@@ -578,6 +641,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
         assertEquals("Змейка не съела пилюлю ярости!", 10, hero.getFuryCount());
         hero.down();
@@ -586,6 +650,7 @@ public class SnakeBoardTest {
         assertEquals("Змейка не съела камень при ярости!", 1, hero.getStonesCount());
         game.tick();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
