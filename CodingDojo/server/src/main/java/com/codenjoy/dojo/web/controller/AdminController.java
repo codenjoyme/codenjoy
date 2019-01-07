@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang.StringUtils;
@@ -330,6 +331,11 @@ public class AdminController {
         }
 
         GameType game = gameService.getGame(gameName);
+
+        if (game instanceof NullGameType) {
+            return getAdmin();
+        }
+
         Settings gameSettings = game.getSettings();
         List<Parameter<?>> parameters = gameSettings.getParameters();
 
