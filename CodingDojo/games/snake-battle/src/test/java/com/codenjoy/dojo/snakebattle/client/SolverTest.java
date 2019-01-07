@@ -31,7 +31,9 @@ import org.junit.Test;
 
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author K.ilya
@@ -40,58 +42,66 @@ import static org.mockito.Mockito.mock;
  *         Затем создавай свои тесты, улучшай бота и проверяй что не испортил предыдущие достижения.
  */
 
-public class YourSolverTest {
-
-    Solver<Board> yourSolver;
-    Board b;
+public class SolverTest {
 
     private Dice dice;
+    private Solver ai;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        yourSolver = new YourSolver(dice);
+        ai = new YourSolver(dice);
     }
 
-    private void givenFl(String board) {
-        b = new Board();
-        b.forString(board);
-//      System.out.println("Размер доски: " + b.size());
+    private Board board(String board) {
+        return (Board) new Board().forString(board);
     }
 
-    private void testSolution(Direction expected) {
-        testSolution(expected.toString());
-    }
-
-    private void testSolution(String expected) {
-        assertEquals(expected, yourSolver.get(b));
-    }
-
-    // корректный старт змейки из "стартового бокса"
     @Test
-    public void startFromBox() {
-        givenFl("☼☼☼☼☼☼☼☼" +
+    public void should() {
+        asertAI("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "→►     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
-                "☼☼☼☼☼☼☼☼");
-        testSolution(RIGHT);
+                "☼☼☼☼☼☼☼☼", Direction.RIGHT);
+
+        asertAI("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼→►    ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼", Direction.RIGHT);
+
+        asertAI("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼→►   ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼", Direction.RIGHT);
+
+        asertAI("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼ →►  ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼", Direction.RIGHT);
     }
 
-//    // некуда поворачивать кроме как вверх
-//    @Test
-//    public void onlyUpTurn() {
-//        givenFl("☼☼☼☼☼☼☼☼" +
-//                "☼☼     ☼" +
-//                "☼#     ☼" +
-//                "☼☼     ☼" +
-//                "☼☼ →►☼ ☼" +
-//                "☼☼  ☼☼ ☼" +
-//                "☼☼     ☼" +
-//                "☼☼☼☼☼☼☼☼");
-//        testSolution(UP);
-//    }
+    private void asertAI(String board, Direction expected) {
+        String actual = ai.get(board(board));
+        assertEquals(expected.toString(), actual);
+    }
+
+    private void dice(Direction direction) {
+        when(dice.next(anyInt())).thenReturn(direction.value());
+    }
 }
