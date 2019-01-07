@@ -58,8 +58,7 @@ public class BoardAddObjectsTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        List<Hero> heroes = level.getHero();
-        Hero hero = heroes.isEmpty() ? null : heroes.get(0);
+        Hero hero = level.getHero();
 
         game = new SnakeBoard(level, mock(Dice.class));
         game.debugMode = true;

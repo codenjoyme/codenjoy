@@ -33,6 +33,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
+import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
     static final int reducedValue = 4;
@@ -47,11 +48,15 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private int furyCount;
 
     public Hero(Point xy) {
-        elements = new LinkedList<>();
+        this(RIGHT);
         elements.add(new Tail(xy.getX() - 1, xy.getY(), this));
         elements.add(new Tail(xy, this));
+    }
+
+    public Hero(Direction direction) {
+        elements = new LinkedList<>();
         growBy = 0;
-        direction = RIGHT;
+        this.direction = direction;
         alive = true;
         active = false;
         stonesCount = 0;
@@ -347,5 +352,11 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public boolean isFury() {
         return furyCount > 0;
+    }
+
+    public void addTail(List<Point> tail) {
+        elements.addAll(tail.stream()
+                .map(pt -> new Tail(pt, this))
+                .collect(toList()));
     }
 }

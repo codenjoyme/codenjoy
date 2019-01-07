@@ -40,9 +40,9 @@ public interface Level {
 
     List<StartFloor> getStartPoints();
 
-    List<Hero> getHero();
+    Hero getHero();
 
-    List<Hero> getEnemy();
+    Hero getEnemy();
 
     List<Apple> getApples();
 

@@ -59,21 +59,24 @@ public class PlayerCommunicationTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
-        hero.setActive(true);
-        Hero enemy = level.getEnemy().get(0);
-        enemy.setActive(true);
+
         game = new SnakeBoard(level, dice);
         listener = mock(EventListener.class);
+
+        Hero hero = level.getHero();
+        hero.setActive(true);
         player = new Player(listener);
-        Player player2 = new Player(mock(EventListener.class));
         game.newGame(player);
-        game.newGame(player2);
-        player2.setHero(enemy);
         player.setHero(hero);
         hero.init(game);
-        enemy.init(game);
         this.hero = game.getHeroes().get(0);
+
+        Hero enemy = level.getEnemy();
+        enemy.setActive(true);
+        Player player2 = new Player(mock(EventListener.class));
+        game.newGame(player2);
+        player2.setHero(enemy);
+        enemy.init(game);
         this.enemy = game.getHeroes().get(1);
     }
 
