@@ -108,11 +108,17 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
         return false;
     }
 
+    /**
+     * Никогда не переопределяй этот метод
+     */
     @Override
     public boolean equals(Object o) {
         return this == o;
     }
 
+    /**
+     * Никогда не переопределяй этот метод
+     */
     @Override
     public int hashCode() {
         return super.hashCode();
