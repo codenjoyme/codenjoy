@@ -84,8 +84,15 @@ public class SnakeBoardTest {
     // карта со своей змейкой
     @Test
     public void testStartField() {
-        // самый простой начальный случай
-        testField("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
@@ -141,7 +148,15 @@ public class SnakeBoardTest {
     // карта с яблоками, камнями, пилюлями полёта, пилюлями ярости, деньгами
     @Test
     public void testStartFieldWithApples() {
-        testField("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼ $ @ ☼" +
+                "☼  ●  ☼" +
+                "☼  % ○☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼ $ @ ☼" +
@@ -152,26 +167,94 @@ public class SnakeBoardTest {
 
     // тест событий
     @Test
-    public void eventsTest() {
-        testField("☼☼☼☼☼☼☼" +
+    public void eventsTest_gold() {
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►$○●☼" +
+                "☼→►$  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►$  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
+
         verify(listener).event(Events.GOLD);
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // тест событий
+    @Test
+    public void eventsTest_apple() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►○  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►○  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         game.tick();
+
         verify(listener).event(Events.APPLE);
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→═►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void eventsTest_stone() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►●  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►●  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         game.tick();
+
         verify(listener).event(Events.STONE);
         verify(listener).event(Events.DIE);
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  →═☻☼" +
+                "☼ →☻  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -187,12 +270,6 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
-
-    private void testField(String field) {
-        givenFl(field);
-        assertE(field);
-    }
-
 
     // тест продолжения движения без дополнительных указаний
     @Test
