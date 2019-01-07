@@ -189,6 +189,8 @@ public class SmokeTest {
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
                         "2:Answer: RIGHT\n" +
+                        "Fire Event: [....4....]\n" +
+                        "Fire Event: [....4....]\n" +
                         "DICE:2\n" +
                         "DICE:4\n" +
                         "DICE:3\n" +
@@ -233,6 +235,8 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "2:Answer: DOWN\n" +
+                        "Fire Event: [...3...]\n" +
+                        "Fire Event: [...3...]\n" +
                         "DICE:1\n" +
                         "DICE:0\n" +
                         "DICE:2\n" +
@@ -282,6 +286,8 @@ public class SmokeTest {
                         "DICE:0\n" +
                         "DICE:2\n" +
                         "2:Answer: DOWN\n" +
+                        "Fire Event: [..2..]\n" +
+                        "Fire Event: [..2..]\n" +
                         "DICE:4\n" +
                         "DICE:2\n" +
                         "DICE:0\n" +
@@ -336,6 +342,8 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "2:Answer: DOWN\n" +
+                        "Fire Event: [.1.]\n" +
+                        "Fire Event: [.1.]\n" +
                         "DICE:1\n" +
                         "DICE:4\n" +
                         "DICE:1\n" +
