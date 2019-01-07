@@ -202,6 +202,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                         level = LevelProgress.winLevel(level);
                         if (level != null) {
                             reload(game, level);
+                            // TODO test me
+                            playerGame.getPlayer().getEventListener().levelChanged(game.getProgress());
                             return;
                         }
                     }

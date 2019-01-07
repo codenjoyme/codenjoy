@@ -134,8 +134,6 @@ public class Spreader {
                 levelNumber,
                 () -> {
                     game.getPlayer().setProgress(progress);
-                    // TODO если раскоментировать эту строчку то будет отображаться переход на новый уровень, но уж как-то некрасиво все сделано
-                    // ((InformationCollector)game.getPlayer().listener).levelChanged(progress);
                     return gameType.createGame(levelNumber);
                 });
 
