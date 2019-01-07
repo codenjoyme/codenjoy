@@ -54,10 +54,25 @@ public class Room {
         }
     }
 
+    public boolean isStuffed() {
+        if (disposable) {
+            return wasCount == count;
+        } else {
+            return true;
+        }
+    }
+
     public boolean contains(GamePlayer player) {
         return players.stream()
                 .filter(p -> p.equals(player))
                 .count() != 0;
+    }
+
+    public boolean isFor(GameField field) {
+        if (this.field == null) { // TODO точно такое может быть?
+            return field == null;
+        }
+        return this.field.equals(field);
     }
 
     public List<GamePlayer> getPlayers() {

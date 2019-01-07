@@ -39,7 +39,6 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -219,13 +218,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // собираем все уникальные борды
         // независимо от типа игры нам нужно тикнуть все
+        //      но только те, которые не DISPOSABLE и одновременно
+        //      недокомплектованные пользователями
         playerGames.stream()
                 .map(PlayerGame::getField)
-                .collect(toSet())
+                .distinct()
+                .filter(this::isMatchCanBeStarted)
                 .forEach(GameField::quietTick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private boolean isMatchCanBeStarted(GameField field) {
+        return spreader.isRoomStaffed(field);
     }
 
     public void reload(Game game, JSONObject save) {

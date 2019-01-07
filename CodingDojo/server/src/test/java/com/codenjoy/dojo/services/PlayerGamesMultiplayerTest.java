@@ -40,6 +40,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -63,7 +64,7 @@ public class PlayerGamesMultiplayerTest {
     private List<GameField> fields = new LinkedList<>();
     private List<GamePlayer> gamePlayers = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
-    private List<Supplier<GameField>> filedSuppliers = new LinkedList<>();;
+    private List<Supplier<GameField>> getFileds = new LinkedList<>();
 
     @Before
     public void setup() {
@@ -105,7 +106,15 @@ public class PlayerGamesMultiplayerTest {
     }
 
     private void verifyAllFieldsTicks(VerificationMode count) {
-        filedSuppliers.forEach(s -> verify(s.get(), count).quietTick());
+        getFileds.forEach(field -> verifyFieldTicks(field.get(), count));
+    }
+
+    private void resetAllFields() {
+        getFileds.forEach(field -> reset(field.get()));
+    }
+
+    private void verifyFieldTicks(GameField field, VerificationMode count) {
+        verify(field, count).quietTick();
     }
 
     private void playerWantsToPlay(GameType gameType) {
@@ -113,7 +122,7 @@ public class PlayerGamesMultiplayerTest {
         Player player = new Player("player" + index);
         players.add(player);
         PlayerGame playerGame = playerWantsToPlay(gameType, player, null);
-        filedSuppliers.add(() -> playerGame.getGame().getField());
+        getFileds.add(() -> playerGame.getGame().getField());
     }
 
     private PlayerGame playerWantsToPlay(GameType gameType, Player player, Object data) {
@@ -191,7 +200,7 @@ public class PlayerGamesMultiplayerTest {
     }
 
     private GroupsAsserter assertGroup(Integer... group) {
-        return new GroupsAsserter(index -> filedSuppliers.get(index).get())
+        return new GroupsAsserter(index -> getFileds.get(index).get())
                 .notIn(group);
     }
 
@@ -203,9 +212,9 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(single);
 
         // then
-        assertGroup(0)
-                .notIn(1)
-                .notIn(2)
+        assertGroup(0)     // тикнется
+                .notIn(1)  // тикнется
+                .notIn(2)  // тикнется
                 .check();
 
         // when
@@ -224,16 +233,24 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(tournament);
         playerWantsToPlay(tournament);
 
-        assertGroup(0, 1)
-                .notIn(2, 3)
-                .notIn(4)
+        assertGroup(0, 1)    // эта борда тикнется ибо укомплектована
+                .notIn(2, 3) // эта борда тикнется ибо укомплектована
+                .notIn(4)    // а эта будет ждать комплектации
                 .check();
 
         // when
         playerGames.tick();
 
         // then
-        verifyAllFieldsTicks(times(1));
+        assertEquals(5, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(4).get(), never());
     }
 
     @Test
@@ -245,8 +262,35 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(triple);
         playerWantsToPlay(triple);
 
-        assertGroup(0, 1, 2)
-                .notIn(3, 4)
+        assertGroup(0, 1, 2)   // эта борда тикнется ибо укомплектована
+                .notIn(3, 4)   // а эта будет ждать комплектации
+                .check();
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(5, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(3).get(), never());
+        verifyFieldTicks(getFileds.get(4).get(), never());
+    }
+
+    @Test
+    public void shouldXPlayerOnBoard_whenTeamNotDisposable() {
+        // given
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team4NotDisposable);
+
+        assertGroup(0, 1, 2, 3)  // все тикнутся, потому что поле NotDisposable
+                .notIn(4)        // все тикнутся, потому что поле NotDisposable
                 .check();
 
         // when
@@ -257,23 +301,34 @@ public class PlayerGamesMultiplayerTest {
     }
 
     @Test
-    public void shouldXPlayerOnBoard_whenTeam() {
+    public void shouldXPlayerOnBoard_whenTeamDisposable() {
         // given
-        playerWantsToPlay(team4NotDisposable);
-        playerWantsToPlay(team4NotDisposable);
-        playerWantsToPlay(team4NotDisposable);
-        playerWantsToPlay(team4NotDisposable);
-        playerWantsToPlay(team4NotDisposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
+        playerWantsToPlay(team5Disposable);
 
-        assertGroup(0, 1, 2, 3)
-                .notIn(4)
+        assertGroup(0, 1, 2, 3, 4)  // все тикнутся, поле укомплектовано
+                .notIn(5, 6)        // не тикнутся, ждем комплектации
                 .check();
 
         // when
         playerGames.tick();
 
         // then
-        verifyAllFieldsTicks(times(1));
+        assertEquals(7, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+        verifyFieldTicks(getFileds.get(4).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(5).get(), never());
+        verifyFieldTicks(getFileds.get(6).get(), never());
     }
 
     @Test
@@ -285,15 +340,220 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(quadro);
         playerWantsToPlay(quadro);
 
-        assertGroup(0, 1, 2, 3)
-                .notIn(4)
+        assertGroup(0, 1, 2, 3)   // эта борда тикнется ибо укомплектована
+                .notIn(4)         // а эта будет ждать комплектации
                 .check();
 
         // when
         playerGames.tick();
 
         // then
-        verifyAllFieldsTicks(times(1));
+        assertEquals(5, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(4).get(), never());
+    }
+
+    // независимо от того кто где в training все комнаты будут тикаться независимо
+    // а multiple одна для всех
+    @Test
+    public void shouldSeveralTrainings_whenTraining() {
+        // given
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+
+        assertGroup(0)     // все комнаты на первом уровне одиночные как single
+                .notIn(1)  // -- " --
+                .notIn(2)  // -- " --
+                .notIn(3)  // -- " --
+                .check();
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(4, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        resetAllFields();
+
+        // when
+        nextLevel(1);
+        nextLevel(2);
+        nextLevel(3);
+        playerGames.tick();
+
+        // then
+        assertGroup(0)     // все там же - первый уровень single
+                .notIn(1)  // второй уровень single
+                .notIn(2)  // второй уровень single
+                .notIn(3)  // второй уровень single
+                .check();
+
+        assertEquals(4, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        resetAllFields();
+
+        //
+        nextLevel(1);
+        nextLevel(2);
+        nextLevel(3);
+        playerGames.tick();
+
+        // then
+        // then
+        assertGroup(0)     // все там же - первый уровень single
+                .notIn(1)  // третий предпоследний уровень single
+                .notIn(2)  // третий предпоследний уровень single
+                .notIn(3)  // третий предпоследний уровень single
+                .check();
+
+        assertEquals(4, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        resetAllFields();
+
+        // when
+        nextLevel(1);
+        nextLevel(2);
+//        nextLevel(3); // этот не и дет дальше
+        playerGames.tick();
+
+        // then
+        assertGroup(0)        // все там же - первый уровень single
+                .notIn(3)     // этот остался на третьем предпоследнем уровне single
+                .notIn(1, 2)  // а эти двое перешли на multiple
+                .check();
+
+        assertEquals(4, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+
+        assertSame(getFileds.get(1).get(), getFileds.get(2).get());
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        resetAllFields();
+
+        // when
+        playerWantsToPlay(training3);
+        playerWantsToPlay(training3);
+
+        // then
+        assertGroup(0)        // все там же - первый уровень single
+                .notIn(3)     // этот остался на третьем предпоследнем уровне single
+                .notIn(1, 2)  // а эти двое перешли на multiple
+                .notIn(4)     // первый уровень single
+                .notIn(5)     // первый уровень single
+                .check();
+
+        // when
+        nextLevel(3);
+        playerGames.tick();
+
+        // then
+        assertGroup(0)        // все там же - первый уровень single
+                .notIn(1, 2, 3)  // 3 тоже дошел до multiple
+                .notIn(4)     // первый уровень single
+                .notIn(5)     // первый уровень single
+                .check();
+
+        assertEquals(6, getFileds.size());
+
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+
+        assertSame(getFileds.get(1).get(), getFileds.get(2).get());
+        assertSame(getFileds.get(1).get(), getFileds.get(3).get());
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(4).get(), times(1));
+        verifyFieldTicks(getFileds.get(5).get(), times(1));
+
+        resetAllFields();
+
+        // when
+        nextLevel(0);
+        nextLevel(0);
+        nextLevel(0);
+
+        nextLevel(4);
+        nextLevel(4);
+        nextLevel(4);
+
+        nextLevel(5);
+        nextLevel(5);
+//        nextLevel(5); // этот не и дет дальше
+
+        playerGames.tick();
+
+        // then
+        assertGroup(5)                       // завис на предпоследнем
+                .notIn(0, 1, 2, 3, 4)        // все дошли до конца кроме 5
+                .check();
+
+        assertEquals(6, getFileds.size());
+
+        assertSame(getFileds.get(0).get(), getFileds.get(1).get());
+        assertSame(getFileds.get(1).get(), getFileds.get(2).get());
+        assertSame(getFileds.get(2).get(), getFileds.get(3).get());
+        assertSame(getFileds.get(3).get(), getFileds.get(4).get());
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+        verifyFieldTicks(getFileds.get(4).get(), times(1));
+
+        verifyFieldTicks(getFileds.get(5).get(), times(1));
+
+        resetAllFields();
+
+        // when
+        nextLevel(5);
+
+        playerGames.tick();
+
+        // then
+        assertGroup(0, 1, 2, 3, 4, 5)        // все дошли до конца
+                .check();
+
+        assertEquals(6, getFileds.size());
+
+        assertSame(getFileds.get(0).get(), getFileds.get(1).get());
+        assertSame(getFileds.get(1).get(), getFileds.get(2).get());
+        assertSame(getFileds.get(2).get(), getFileds.get(3).get());
+        assertSame(getFileds.get(3).get(), getFileds.get(4).get());
+        assertSame(getFileds.get(4).get(), getFileds.get(5).get());
+        verifyFieldTicks(getFileds.get(0).get(), times(1));
+        verifyFieldTicks(getFileds.get(1).get(), times(1));
+        verifyFieldTicks(getFileds.get(2).get(), times(1));
+        verifyFieldTicks(getFileds.get(3).get(), times(1));
+        verifyFieldTicks(getFileds.get(4).get(), times(1));
+        verifyFieldTicks(getFileds.get(5).get(), times(1));
+
+        resetAllFields();
     }
 
     @Test
@@ -303,7 +563,7 @@ public class PlayerGamesMultiplayerTest {
         playerWantsToPlay(multiple);
         playerWantsToPlay(multiple);
 
-        assertGroup(0, 1, 2)
+        assertGroup(0, 1, 2)   // тикнтся так как она not disposable
                 .check();
 
         // when

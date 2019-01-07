@@ -150,4 +150,14 @@ public class Spreader {
     public boolean contains(Game game) {
         return !roomsFor(game.getPlayer()).isEmpty();
     }
+
+    public boolean isRoomStaffed(GameField field) {
+        List<Room> rooms = allRooms().stream()
+                .filter(r -> r.isFor(field))
+                .collect(toList());
+        if (rooms.size() != 1) {
+            throw new IllegalArgumentException("Почему-то комната для поля не одна: " + rooms.size());
+        }
+        return rooms.get(0).isStuffed();
+    }
 }
