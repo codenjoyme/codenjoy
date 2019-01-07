@@ -23,6 +23,7 @@ package com.codenjoy.dojo.snakebattle.model;
  */
 
 
+import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
@@ -39,8 +40,9 @@ public class Player extends GamePlayer<Hero, Field> {
         shouldLeave = false;
     }
 
-    public void start() {
+    public void start(int round) {
         event(Events.START);
+        printMessage("Round " + round);
         hero.setActive(true);
     }
 

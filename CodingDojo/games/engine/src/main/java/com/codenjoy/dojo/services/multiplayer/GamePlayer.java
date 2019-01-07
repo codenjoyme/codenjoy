@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 
+import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.hero.HeroData;
@@ -57,6 +58,13 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
         if (listener != null) {
             listener.event(event);
         }
+    }
+
+    /**
+     * @param message Сообщение, которое будет напечатано на борде игрока в этом тике
+     */
+    public void printMessage(String message) {
+        event(new CustomMessage(message));
     }
 
     /**

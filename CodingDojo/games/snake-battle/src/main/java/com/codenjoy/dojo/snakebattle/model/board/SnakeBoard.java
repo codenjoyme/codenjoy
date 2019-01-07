@@ -30,6 +30,7 @@ import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,8 +40,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class SnakeBoard implements Field {
 
-    private static final int PAUSE_BEFORE_START = 5;
-    private static final int MAX_ROUNDS_PER_MATCH = 5;
+    public static int PAUSE_BEFORE_START = 5;
+    public static int MAX_ROUNDS_PER_MATCH = 5;
 
     public boolean debugMode = false;
 
@@ -78,8 +79,16 @@ public class SnakeBoard implements Field {
     public void tick() {
         // отсчёт "секунд" до старта
         if (pause >= 0) {
-            setPause(pause - 1);
+            pause--;
         }
+
+        // TODO test me
+        if (pause > 0) {
+            String pad = StringUtils.leftPad("", pause, '.');
+            String message = pad + pause + pad;
+            players.forEach(player -> player.printMessage(message));
+        }
+
         int aliveBefore = countActiveHeroes(); // количество живых с прошлого хода
 
         // победа последнего игрока и рестарт игры
@@ -91,6 +100,11 @@ public class SnakeBoard implements Field {
         if (aliveBefore < 1 && pause < 0) {
             setPause(PAUSE_BEFORE_START);
             return;
+        }
+
+        if (pause == 0) {
+            round++;
+            players.forEach(player -> player.start(round));
         }
 
         snakesMove(); // продвижение живых змеек
@@ -134,13 +148,7 @@ public class SnakeBoard implements Field {
     }
 
     private void snakesMove() {
-        if (pause == 0) {
-            round++;
-        }
         for (Player player : players) {
-            if (pause == 0) {
-                player.start();
-            }
             if (!player.isActive()) {
                 continue;
             }

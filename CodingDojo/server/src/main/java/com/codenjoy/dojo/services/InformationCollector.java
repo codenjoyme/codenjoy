@@ -42,9 +42,13 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void event(Object event) {
-        Object before = playerScores.getScore();
-        playerScores.event(event);
-        add(before);
+        if (event instanceof CustomMessage) {
+            pool.add(((CustomMessage) event).getMessage());
+        } else {
+            Object before = playerScores.getScore();
+            playerScores.event(event);
+            add(before);
+        }
     }
 
     private void add(Object before) {
