@@ -171,3 +171,7 @@ label.error {
     float: left;
 }
 
+canvas {
+    border: 1px solid;
+}
+
