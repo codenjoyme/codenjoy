@@ -215,14 +215,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawLayers = function(onDrawItem) {
             var board = getBoard();
+            var toDraw = (!board.layers) ? [board] : board.layers;
             try {
-                drawAllLayers(board.layers, onDrawItem);
+                drawAllLayers(toDraw, onDrawItem);
             } catch (err) {
-                try {
-                    drawAllLayers([board], onDrawItem);
-                } catch (err) {
-                    console.log(err);
-                }
+                console.log(err);
             }
         }
 
@@ -310,6 +307,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function showScoreInformation(playerName, information) {
         var infoPool = infoPools[playerName];
+
+        // TODO это костыль, а возникает оно в момент переходов с поле на поле для игры http://127.0.0.1:8080/codenjoy-contest/board/game/snakebattle
+        if (typeof infoPool == 'undefined') {
+            infoPools[playerName] = [];
+            infoPool = infoPools[playerName];
+        }
 
         if (information != '') {
             var arr = information.split(', ');
