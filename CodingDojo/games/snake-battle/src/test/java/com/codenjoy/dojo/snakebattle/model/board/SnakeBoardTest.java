@@ -90,7 +90,7 @@ public class SnakeBoardTest {
     public void shouldSnakeOnBoard() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -98,7 +98,7 @@ public class SnakeBoardTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -119,7 +119,7 @@ public class SnakeBoardTest {
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "→►     ☼" +
+                "╘►     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -130,7 +130,7 @@ public class SnakeBoardTest {
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "☼→►    ☼" +
+                "☼╘►    ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -141,7 +141,7 @@ public class SnakeBoardTest {
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "☼#→►   ☼" +
+                "☼#╘►   ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -153,7 +153,7 @@ public class SnakeBoardTest {
     @Test
     public void shouldBoardWithElements() {
         givenFl("☼☼☼☼☼☼☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ $ ® ☼" +
                 "☼  ●  ☼" +
@@ -161,7 +161,7 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼");
 
         assertE("☼☼☼☼☼☼☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ $ ® ☼" +
                 "☼  ●  ☼" +
@@ -175,7 +175,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►$  ☼" +
+                "☼╘►$  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -183,7 +183,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►$  ☼" +
+                "☼╘►$  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -195,7 +195,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -207,7 +207,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►○  ☼" +
+                "☼╘►○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -215,7 +215,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►○  ☼" +
+                "☼╘►○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -227,7 +227,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→═►  ☼" +
+                "☼╘═►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -238,7 +238,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►●  ☼" +
+                "☼╘►●  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -246,7 +246,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►●  ☼" +
+                "☼╘►●  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -261,7 +261,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →☻  ☼" +
+                "☼ ╘☻  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -286,7 +286,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
+                "☼╘►   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -296,7 +296,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -306,7 +306,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
+                "☼  ╘► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -316,7 +316,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   →►☼" +
+                "☼   ╘►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -327,7 +327,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ◄←☼" +
+                "☼   ◄╕☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -337,7 +337,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ◄← ☼" +
+                "☼  ◄╕ ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -347,7 +347,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ ◄←  ☼" +
+                "☼ ◄╕  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -357,7 +357,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼◄←   ☼" +
+                "☼◄╕   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -366,7 +366,7 @@ public class SnakeBoardTest {
     @Test
     public void shouldMoveByInertia_whenNoCommand_directionUpToDown() {
         givenFl("☼☼☼☼☼☼☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -377,7 +377,7 @@ public class SnakeBoardTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -388,7 +388,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -399,7 +399,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -411,7 +411,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
+                "☼  ╙  ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
@@ -420,7 +420,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
+                "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -429,7 +429,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
+                "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -438,7 +438,7 @@ public class SnakeBoardTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
+                "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -451,7 +451,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
+                "☼  ╘► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -462,7 +462,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ↓ ☼" +
+                "☼   ╓ ☼" +
                 "☼   ▼ ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -472,7 +472,7 @@ public class SnakeBoardTest {
     public void shouldTurnRight() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -484,7 +484,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
+                "☼  ╘► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -495,7 +495,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
+                "☼  ╘► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -506,7 +506,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼   ▲ ☼" +
-                "☼   ↑ ☼" +
+                "☼   ╙ ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -516,7 +516,7 @@ public class SnakeBoardTest {
     public void shouldTurnLeft() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -528,7 +528,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ ◄←  ☼" +
+                "☼ ◄╕  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -542,7 +542,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼→►○ ○ ○  ☼" +
+                "☼╘►○ ○ ○  ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -556,7 +556,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼→═► ○ ○  ☼" +
+                "☼╘═► ○ ○  ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -570,7 +570,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼ →═►○ ○  ☼" +
+                "☼ ╘═►○ ○  ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -584,7 +584,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼ →══► ○  ☼" +
+                "☼ ╘══► ○  ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -598,7 +598,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼  →══►○  ☼" +
+                "☼  ╘══►○  ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -612,7 +612,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼  →═══►  ☼" +
+                "☼  ╘═══►  ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -626,7 +626,7 @@ public class SnakeBoardTest {
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
-                "☼   →═══► ☼" +
+                "☼   ╘═══► ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
                 "☼         ☼" +
@@ -640,7 +640,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →═► ☼" +
+                "☼ ╘═► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -650,7 +650,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →═►☼" +
+                "☼  ╘═►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -664,7 +664,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   →═☻" +
+                "☼   ╘═☻" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -689,7 +689,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -726,7 +726,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
+                "☼  ╘► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -738,7 +738,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -749,7 +749,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
+                "☼  ╘► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -760,7 +760,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ◄← ☼" +
+                "☼  ◄╕ ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -771,7 +771,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ ◄←  ☼" +
+                "☼ ◄╕  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -783,7 +783,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
+                "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -793,7 +793,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
+                "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -803,7 +803,7 @@ public class SnakeBoardTest {
     public void shouldCantMovingBack_fromDownToUp() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -815,7 +815,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -826,7 +826,7 @@ public class SnakeBoardTest {
     public void flyingOverStones() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►© ☼" +
+                "☼ ╘►© ☼" +
                 "☼   ● ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -846,7 +846,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼   ● ☼" +
-                "☼   ↓ ☼" +
+                "☼   ╓ ☼" +
                 "☼   ♠ ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -855,7 +855,7 @@ public class SnakeBoardTest {
     @Test
     public void flyingOverMyself() {
         givenFl("☼☼☼☼☼☼☼" +
-                "☼→►○○○☼" +
+                "☼╘►○○○☼" +
                 "☼ ©○○○☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -889,7 +889,7 @@ public class SnakeBoardTest {
         // змея не укоротилась
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ╔╗  ☼" +
-                "☼ ╚←╗ ☼" +
+                "☼ ╚╕╗ ☼" +
                 "☼   ║ ☼" +
                 "☼   ♠ ☼" +
                 "☼     ☼" +
@@ -903,7 +903,7 @@ public class SnakeBoardTest {
     public void furyEatingStones() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►® ☼" +
+                "☼ ╘►® ☼" +
                 "☼   ● ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -922,7 +922,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ↓ ☼" +
+                "☼   ╓ ☼" +
                 "☼   ♥ ☼" +
                 "☼☼☼☼☼☼☼");
     }

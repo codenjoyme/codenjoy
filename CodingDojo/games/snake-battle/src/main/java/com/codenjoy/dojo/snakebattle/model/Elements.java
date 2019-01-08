@@ -34,7 +34,7 @@ public enum Elements implements CharElements {
     NONE(' '),       // например это пустое место, куда можно перейти герою
     WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
     START_FLOOR('#'),       // место старта змей
-    OTHER('?'),
+    OTHER('?'), // TODO а это что за чудо?
 
     APPLE('○'),
     STONE('●'),
@@ -52,10 +52,10 @@ public enum Elements implements CharElements {
     HEAD_FLY('♠'),
     HEAD_SLEEP('&'),
 
-    TAIL_END_DOWN('↑'),
-    TAIL_END_LEFT('→'),
-    TAIL_END_UP('↓'),
-    TAIL_END_RIGHT('←'),
+    TAIL_END_DOWN('╙'),
+    TAIL_END_LEFT('╘'),
+    TAIL_END_UP('╓'),
+    TAIL_END_RIGHT('╕'),
     TAIL_INACTIVE('~'),
 
     BODY_HORIZONTAL('═'),
@@ -81,13 +81,12 @@ public enum Elements implements CharElements {
     ENEMY_TAIL_END_RIGHT('⇐'),
     ENEMY_TAIL_INACTIVE('*'),
 
-    ENEMY_BODY_HORIZONTAL('—'),
-    ENEMY_BODY_VERTICAL('|'),
-    ENEMY_BODY_LEFT_DOWN('╕'),
-    ENEMY_BODY_LEFT_UP('╜'),
-    ENEMY_BODY_RIGHT_DOWN('╓'),
-    ENEMY_BODY_RIGHT_UP('╙'),
-    ;
+    ENEMY_BODY_HORIZONTAL('─'),
+    ENEMY_BODY_VERTICAL('│'),
+    ENEMY_BODY_LEFT_DOWN('┐'),
+    ENEMY_BODY_LEFT_UP('┘'),
+    ENEMY_BODY_RIGHT_DOWN('┌'),
+    ENEMY_BODY_RIGHT_UP('└');
 
     final char ch;
 

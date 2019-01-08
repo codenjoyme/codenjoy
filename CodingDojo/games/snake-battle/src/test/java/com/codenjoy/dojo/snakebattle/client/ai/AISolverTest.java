@@ -96,7 +96,7 @@ public class AISolverTest {
     public void startFromBox() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "→►     ☼" +
+                "╘►     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -112,7 +112,7 @@ public class AISolverTest {
                 "☼☼     ☼" +
                 "☼#     ☼" +
                 "☼☼     ☼" +
-                "☼☼→►☼  ☼" +
+                "☼☼╘►☼  ☼" +
                 "☼☼ ☼☼  ☼" +
                 "☼☼    ○☼" +
                 "☼☼☼☼☼☼☼☼");

@@ -61,7 +61,7 @@ public class SolverTest {
     public void should() {
         asertAI("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "→►     ☼" +
+                "╘►     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -70,7 +70,7 @@ public class SolverTest {
 
         asertAI("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "☼→►    ☼" +
+                "☼╘►    ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -79,7 +79,7 @@ public class SolverTest {
 
         asertAI("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "☼#→►   ☼" +
+                "☼#╘►   ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -88,7 +88,7 @@ public class SolverTest {
 
         asertAI("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "☼☼ →►  ☼" +
+                "☼☼ ╘►  ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +

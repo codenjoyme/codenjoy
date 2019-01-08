@@ -85,7 +85,7 @@ public class PlayerCommunicationTest {
     public void enemyOnField() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ ⇒>  ☼" +
                 "☼     ☼" +
@@ -93,7 +93,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ ⇒>  ☼" +
                 "☼     ☼" +
@@ -105,7 +105,7 @@ public class PlayerCommunicationTest {
     public void testSleepingSnake() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ ⇒>  ☼" +
                 "☼     ☼" +
@@ -139,7 +139,7 @@ public class PlayerCommunicationTest {
     public void diedBothHeroes() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ ⇒>  ☼" +
                 "☼     ☼" +
@@ -151,7 +151,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ☻  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
@@ -177,7 +177,7 @@ public class PlayerCommunicationTest {
     public void diedSmallerHero() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼ ⇒>○○☼" +
                 "☼     ☼" +
@@ -191,9 +191,9 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼    ↓☼" +
+                "☼    ╓☼" +
                 "☼    ☻☼" +
-                "☼  ⇒—╜☼" +
+                "☼  ⇒─┘☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -225,7 +225,7 @@ public class PlayerCommunicationTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►○  ☼" +
+                "☼╘►○  ☼" +
                 "☼⇒>   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -238,7 +238,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →═► ☼" +
+                "☼ ╘═► ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -249,7 +249,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  →═►☼" +
+                "☼  ╘═►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -259,7 +259,7 @@ public class PlayerCommunicationTest {
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
+                "☼╘►   ☼" +
                 "☼⇒>○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -271,7 +271,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼ ⇒☻> ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -283,7 +283,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ⇒—>☼" +
+                "☼  ⇒─>☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -295,7 +295,7 @@ public class PlayerCommunicationTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
+                "☼╘►   ☼" +
                 "☼⇒>○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -307,8 +307,8 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
-                "☼ ⇒╜  ☼" +
+                "☼  ╘► ☼" +
+                "☼ ⇒┘  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -317,7 +317,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼   →►☼" +
+                "☼   ╘►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -327,7 +327,7 @@ public class PlayerCommunicationTest {
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
+                "☼╘►   ☼" +
                 "☼⇒>   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -339,7 +339,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ☻> ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -362,7 +362,7 @@ public class PlayerCommunicationTest {
     public void flyOverEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►©  ☼" +
+                "☼╘►©  ☼" +
                 "☼     ☼" +
                 "☼⇒>   ☼" +
                 "☼     ☼" +
@@ -375,7 +375,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ♠  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
@@ -386,7 +386,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ˄  ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ♠  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -397,7 +397,7 @@ public class PlayerCommunicationTest {
                 "☼  ˄  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ♠  ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -407,7 +407,7 @@ public class PlayerCommunicationTest {
     public void flyOverHero() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
+                "☼╘►   ☼" +
                 "☼     ☼" +
                 "☼⇒>©  ☼" +
                 "☼     ☼" +
@@ -420,7 +420,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
@@ -431,7 +431,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ♦  ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -442,7 +442,7 @@ public class PlayerCommunicationTest {
                 "☼  ♦  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -452,7 +452,7 @@ public class PlayerCommunicationTest {
     public void eatEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►® ☼" +
+                "☼ ╘►® ☼" +
                 "☼     ☼" +
                 "☼ ⇒>○○☼" +
                 "☼     ☼" +
@@ -466,9 +466,9 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼    ↓☼" +
+                "☼    ╓☼" +
                 "☼    ♥☼" +
-                "☼  ⇒—╜☼" +
+                "☼  ⇒─┘☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -477,7 +477,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼    ↓☼" +
+                "☼    ╓☼" +
                 "☼    ♥☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -489,7 +489,7 @@ public class PlayerCommunicationTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►○○ ☼" +
+                "☼╘►○○ ☼" +
                 "☼     ☼" +
                 "☼⇒>®  ☼" +
                 "☼     ☼" +
@@ -504,7 +504,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ♣→►☼" +
+                "☼  ♣╘►☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -514,7 +514,7 @@ public class PlayerCommunicationTest {
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►®  ☼" +
+                "☼╘►®  ☼" +
                 "☼     ☼" +
                 "☼⇒>○  ☼" +
                 "☼     ☼" +
@@ -528,7 +528,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ♥⇒>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
