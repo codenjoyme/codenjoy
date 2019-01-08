@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.hero;
+package com.codenjoy.dojo.snakebattle.model;
 
 /*-
  * #%L
@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snakebattle.model.hero;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.hero.Tail;
 import org.junit.Before;
 import org.junit.Test;

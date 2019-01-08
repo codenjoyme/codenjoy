@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.board;
+package com.codenjoy.dojo.snakebattle.model;
 
 /*-
  * #©L
@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snakebattle.model.board;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snakebattle.model.Player;
+import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.objects.*;

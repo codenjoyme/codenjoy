@@ -43,7 +43,7 @@ import static org.mockito.Mockito.verify;
 /**
  * ®author Kors
  */
-public class PlayerCommunicationTest {
+public class SnakeMultiplayerTest {
     private SnakeBoard game;
     private Hero hero;
     private Hero enemy;

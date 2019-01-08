@@ -32,7 +32,7 @@ import com.codenjoy.dojo.snakebattle.model.Player;
 
 import static com.codenjoy.dojo.snakebattle.model.Elements.*;
 
-class Tail extends PointImpl implements State<Elements, Object> {
+public class Tail extends PointImpl implements State<Elements, Object> {
 
     private Hero snake;
 

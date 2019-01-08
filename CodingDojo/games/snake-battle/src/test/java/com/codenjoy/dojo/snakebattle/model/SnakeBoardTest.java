@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.board;
+package com.codenjoy.dojo.snakebattle.model;
 
 /*-
  * #©L
@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snakebattle.model.Player;
+import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
