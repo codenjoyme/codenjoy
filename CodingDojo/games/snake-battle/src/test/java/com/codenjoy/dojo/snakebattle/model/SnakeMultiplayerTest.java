@@ -64,7 +64,6 @@ public class SnakeMultiplayerTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-
         game = new SnakeBoard(level, dice);
 
         Hero hero = level.getHero();
@@ -104,6 +103,14 @@ public class SnakeMultiplayerTest {
                 "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
     }
 
     // спящие змеи
@@ -125,6 +132,15 @@ public class SnakeMultiplayerTest {
                 "☼ ~&  ☼" +
                 "☼     ☼" +
                 "☼ *ø  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ *ø  ☼" +
+                "☼     ☼" +
+                "☼ ~&  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -163,9 +179,25 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  æ  ☼" +
+                "☼  ☺  ☼" +
+                "☼  ╙  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         verify(heroEvents).event(Events.DIE);
 
         game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
 
         assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -189,6 +221,22 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼ ×──>☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼ ╘══►☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         hero.down();
         enemy.up();
         game.tick();
@@ -201,6 +249,14 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    æ☼" +
+                "☼    ☺☼" +
+                "☼  ╘═╝☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         verify(heroEvents).event(Events.DIE);
         game.tick();
 
@@ -208,6 +264,14 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼    ˄☼" +
                 "☼    ¤☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    ▲☼" +
+                "☼    ╙☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -229,14 +293,28 @@ public class SnakeMultiplayerTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼╘►○  ☼" +
-                "☼×>   ☼" +
+                "☼╘═►  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
-        verify(heroEvents).event(Events.APPLE);
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╘═►  ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼×─>  ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         enemy.up();
         game.tick();
 
@@ -244,6 +322,14 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼ ╘═► ☼" +
                 "☼  ¤  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×─> ☼" +
+                "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -259,6 +345,19 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ×─>☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // TODO продолжить дальше улучшать тесты
+
+    @Test
+    public void diedByBody2() {
         // такой же тест, но врезается игрок в противника
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
