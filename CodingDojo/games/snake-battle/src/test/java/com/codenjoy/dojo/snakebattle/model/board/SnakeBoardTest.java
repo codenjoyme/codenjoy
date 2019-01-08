@@ -689,7 +689,7 @@ public class SnakeBoardTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ ╘►  ☼" +
+                "☼ ╘═► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -700,7 +700,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ ~&  ☼" +
+                "☼ ~═& ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -711,7 +711,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ ~&  ☼" +
+                "☼ ~═& ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -726,7 +726,7 @@ public class SnakeBoardTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ╘► ☼" +
+                "☼  ╘═►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -824,31 +824,78 @@ public class SnakeBoardTest {
     // съедая пилюлю полёта, змейка перелетает камни
     @Test
     public void flyingOverStones() {
-        givenFl("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼ ╘►© ☼" +
-                "☼   ● ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼");
+        givenFl("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼╘►© ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
 
         game.tick();
-        assertEquals("Змейка не съела пилюлю полёта!", 10, hero.getFlyingCount());
-        hero.down();
+
+        assertEquals(10, hero.getFlyingCount());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼ ╘♠ ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
         game.tick();
-        assertEquals("Змейка съела камень в полёте!", 0, hero.getStonesCount());
-        assertTrue("Змейка умерла от камня в полёте!", hero.isAlive());
+
+        assertEquals(9, hero.getFlyingCount());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼  ╘♠●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(8, hero.getFlyingCount());
+        assertEquals(0, hero.getStonesCount());
+        assertEquals(true, hero.isAlive());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼   ╘♠  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
         game.tick();
         game.tick();
+
+        assertEquals(6, hero.getFlyingCount());
+        assertEquals(0, hero.getStonesCount());
+        assertEquals(true, hero.isAlive());
 
         // камень остался на месте
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼   ● ☼" +
-                "☼   ╓ ☼" +
-                "☼   ♠ ☼" +
-                "☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼    ●╘♠☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
     }
 
     // съедая пилюлю полёта, змейка может летать над собой
