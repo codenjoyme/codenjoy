@@ -290,7 +290,7 @@ public class SnakeMultiplayerTest {
 
     // проверяем что змейка умирает, когда врезается в тело другой змейки
     @Test
-    public void shouldDie_whenCrashToOtherSnake_enemyDie() {
+    public void shouldDie_whenBodyCrashToOtherSnake_enemyDie() {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -357,7 +357,7 @@ public class SnakeMultiplayerTest {
     }
 
     @Test
-    public void shouldDie_whenCrashToOtherSnake_heroDie() {
+    public void shouldDie_whenBodyCrashToOtherSnake_heroDie() {
         // такой же тест, но врезается игрок в противника
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
@@ -425,28 +425,52 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // TODO продолжить дальше
-
     // проверяем что змейка умирает, когда врезается в хвост другой змейки
     @Test
-    public void diedByTail() {
+    public void shouldDie_whenTailCrashToOtherSnake_enemyDie() {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼╘►   ☼" +
-                "☼×>○  ☼" +
+                "☼ ╘►  ☼" +
+                "☼×─>  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼×─>  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼╘═►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         enemy.up();
         game.tick();
+
+        verify(heroEvents).event(Events.ALIVE);
+        verify(enemyEvents).event(Events.DIE);
 
         assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╘► ☼" +
                 "☼ ×┘  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ×> ☼" +
+                "☼ ╘╝  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -461,17 +485,43 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        // такой же тест, но врезается игрок в противника
-        // (последовательность героев в списке может оказывать значение на результат)
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // такой же тест, но врезается игрок в противника
+    // (последовательность героев в списке может оказывать значение на результат)
+    @Test
+    public void shouldDie_whenTailCrashToOtherSnake_heroDie() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼╘►   ☼" +
-                "☼×>   ☼" +
+                "☼ ╘►  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
 
@@ -483,7 +533,17 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  æ  ☼" +
+                "☼  ☺► ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         verify(heroEvents).event(Events.DIE);
+        verify(enemyEvents).event(Events.ALIVE);
+
         game.tick();
 
         assertH("☼☼☼☼☼☼☼" +
@@ -493,7 +553,17 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
     }
+
+    // TODO продолжить дальше улучшать
 
     // в полёте змейки не вредят друг-другу (летишь сам)
     @Test
