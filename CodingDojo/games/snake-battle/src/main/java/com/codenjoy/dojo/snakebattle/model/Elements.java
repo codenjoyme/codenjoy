@@ -66,10 +66,10 @@ public enum Elements implements CharElements {
     BODY_RIGHT_UP('╚'),
 
     // противник
-    ENEMY_HEAD_DOWN('∨'),
+    ENEMY_HEAD_DOWN('˅'),
     ENEMY_HEAD_LEFT('<'),
     ENEMY_HEAD_RIGHT('>'),
-    ENEMY_HEAD_UP('∧'),
+    ENEMY_HEAD_UP('˄'),
     ENEMY_HEAD_DEAD('☺'),
     ENEMY_HEAD_EVIL('♣'),
     ENEMY_HEAD_FLY('♦'),

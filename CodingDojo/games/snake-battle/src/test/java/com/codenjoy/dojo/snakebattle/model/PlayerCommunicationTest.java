@@ -128,7 +128,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ~&  ☼" +
                 "☼     ☼" +
-                "☼ ø*  ☼" +
+                "☼ *ø  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -202,7 +202,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼    ∧☼" +
+                "☼    ˄☼" +
                 "☼    ⇑☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -211,7 +211,7 @@ public class PlayerCommunicationTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
-                "☼    ∧☼" +
+                "☼    ˄☼" +
                 "☼    ⇑☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -385,7 +385,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ∧  ☼" +
+                "☼  ˄  ☼" +
                 "☼  ↓  ☼" +
                 "☼  ♠  ☼" +
                 "☼     ☼" +
@@ -394,7 +394,7 @@ public class PlayerCommunicationTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
-                "☼  ∧  ☼" +
+                "☼  ˄  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼  ↓  ☼" +
