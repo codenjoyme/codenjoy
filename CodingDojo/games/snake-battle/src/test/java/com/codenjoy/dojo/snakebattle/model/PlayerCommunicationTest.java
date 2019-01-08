@@ -376,7 +376,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ↓  ☼" +
-                "☼  ⊖  ☼" +
+                "☼  ♠  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -387,7 +387,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼  ∧  ☼" +
                 "☼  ↓  ☼" +
-                "☼  ⊖  ☼" +
+                "☼  ♠  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -398,7 +398,7 @@ public class PlayerCommunicationTest {
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼  ↓  ☼" +
-                "☼  ⊖  ☼" +
+                "☼  ♠  ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
@@ -430,7 +430,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ⊘  ☼" +
+                "☼  ♦  ☼" +
                 "☼  ↓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
@@ -439,7 +439,7 @@ public class PlayerCommunicationTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
-                "☼  ⊘  ☼" +
+                "☼  ♦  ☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼  ↓  ☼" +
@@ -467,7 +467,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼    ↓☼" +
-                "☼    ⊕☼" +
+                "☼    ♥☼" +
                 "☼  ⇒—╜☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -478,7 +478,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼    ↓☼" +
-                "☼    ⊕☼" +
+                "☼    ♥☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -504,7 +504,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ⊗→►☼" +
+                "☼  ♣→►☼" +
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -529,7 +529,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ↓  ☼" +
-                "☼  ⊕⇒>☼" +
+                "☼  ♥⇒>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
