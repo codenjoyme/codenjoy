@@ -75,11 +75,11 @@ public enum Elements implements CharElements {
     ENEMY_HEAD_FLY('♦'),
     ENEMY_HEAD_SLEEP('ø'),
 
-    ENEMY_TAIL_END_DOWN('⇑'),
-    ENEMY_TAIL_END_LEFT('⇒'),
-    ENEMY_TAIL_END_UP('⇓'),
-    ENEMY_TAIL_END_RIGHT('⇐'),
-    ENEMY_TAIL_INACTIVE('*'),
+    ENEMY_TAIL_END_DOWN('¤'),
+    ENEMY_TAIL_END_LEFT('×'),
+    ENEMY_TAIL_END_UP('æ'),
+    ENEMY_TAIL_END_RIGHT('ö'),
+    ENEMY_TAIL_INACTIVE('*' ),
 
     ENEMY_BODY_HORIZONTAL('─'),
     ENEMY_BODY_VERTICAL('│'),

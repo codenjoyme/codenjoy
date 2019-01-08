@@ -87,7 +87,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -95,7 +95,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -107,7 +107,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -141,7 +141,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -153,7 +153,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ☻  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -179,7 +179,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>○○☼" +
+                "☼ ×>○○☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -193,7 +193,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼    ╓☼" +
                 "☼    ☻☼" +
-                "☼  ⇒─┘☼" +
+                "☼  ×─┘☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -203,7 +203,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼    ˄☼" +
-                "☼    ⇑☼" +
+                "☼    ¤☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -212,7 +212,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼    ˄☼" +
-                "☼    ⇑☼" +
+                "☼    ¤☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -226,7 +226,7 @@ public class PlayerCommunicationTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼╘►○  ☼" +
-                "☼⇒>   ☼" +
+                "☼×>   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -239,7 +239,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ╘═► ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -260,7 +260,7 @@ public class PlayerCommunicationTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼╘►   ☼" +
-                "☼⇒>○  ☼" +
+                "☼×>○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -272,7 +272,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
-                "☼ ⇒☻> ☼" +
+                "☼ ×☻> ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -283,7 +283,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ⇒─>☼" +
+                "☼  ×─>☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -296,7 +296,7 @@ public class PlayerCommunicationTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼╘►   ☼" +
-                "☼⇒>○  ☼" +
+                "☼×>○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -308,7 +308,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╘► ☼" +
-                "☼ ⇒┘  ☼" +
+                "☼ ×┘  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -328,7 +328,7 @@ public class PlayerCommunicationTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼╘►   ☼" +
-                "☼⇒>   ☼" +
+                "☼×>   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -351,7 +351,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ⇒>☼" +
+                "☼   ×>☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -364,7 +364,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼╘►©  ☼" +
                 "☼     ☼" +
-                "☼⇒>   ☼" +
+                "☼×>   ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -377,7 +377,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ♠  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -395,7 +395,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼  ˄  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ♠  ☼" +
@@ -409,7 +409,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼╘►   ☼" +
                 "☼     ☼" +
-                "☼⇒>©  ☼" +
+                "☼×>©  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -422,7 +422,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -440,7 +440,7 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼  ♦  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
@@ -454,7 +454,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼ ╘►® ☼" +
                 "☼     ☼" +
-                "☼ ⇒>○○☼" +
+                "☼ ×>○○☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -468,7 +468,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼    ╓☼" +
                 "☼    ♥☼" +
-                "☼  ⇒─┘☼" +
+                "☼  ×─┘☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -491,7 +491,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼╘►○○ ☼" +
                 "☼     ☼" +
-                "☼⇒>®  ☼" +
+                "☼×>®  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -505,7 +505,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ♣╘►☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -516,7 +516,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼╘►®  ☼" +
                 "☼     ☼" +
-                "☼⇒>○  ☼" +
+                "☼×>○  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -529,7 +529,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
-                "☼  ♥⇒>☼" +
+                "☼  ♥×>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
