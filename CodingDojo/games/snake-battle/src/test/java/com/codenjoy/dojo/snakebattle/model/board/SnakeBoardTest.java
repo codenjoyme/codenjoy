@@ -971,49 +971,71 @@ public class SnakeBoardTest {
 
     // съедая пилюлю полёта, змейка может летать над собой
     @Test
-    public void flyingOverMyself() {
+    public void shouldFlyingOverMyself_whenEatFlyingPill() {
         givenFl("☼☼☼☼☼☼☼" +
-                "☼╘►○○○☼" +
-                "☼ ©○○○☼" +
-                "☼     ☼" +
-                "☼     ☼" +
+                "☼╓    ☼" +
+                "☼║    ☼" +
+                "☼╚═══╗☼" +
+                "☼  ©◄╝☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        // удлиннение
-        game.tick();
-        game.tick();
-        game.tick();
-        hero.down();
-        game.tick();
-        hero.left();
-        game.tick();
-        game.tick();
         game.tick();
 
-        // закручиваемся
+        assertEquals(9, hero.size());
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╓    ☼" +
+                "☼╚═══╗☼" +
+                "☼  ♠═╝☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         hero.up();
-        game.tick();
-        hero.right();
-        game.tick();
-        hero.down();
-        game.tick();
-        hero.right();
-        game.tick();
-        hero.down();
-        game.tick();
         game.tick();
 
         // змея не укоротилась
         assertE("☼☼☼☼☼☼☼" +
-                "☼ ╔╗  ☼" +
-                "☼ ╚╕╗ ☼" +
-                "☼   ║ ☼" +
-                "☼   ♠ ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼╘═♠═╗☼" +
+                "☼  ╚═╝☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        assertEquals("Змейка укоротила себя в полёте!", 8, hero.size());
+        assertEquals(9, hero.size());
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ♠  ☼" +
+                "☼ ╘══╗☼" +  // TODO надо сделать наложение когда змея через себя перелетает вначале рисуется то что ближе к голове, а потом ближе к хвосту
+                "☼  ╚═╝☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  ♠  ☼" +
+                "☼  ║  ☼" +
+                "☼  ╘═╗☼" +
+                "☼  ╚═╝☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ♠╗  ☼" +
+                "☼  ║  ☼" +
+                "☼  ║╘╗☼" +
+                "☼  ╚═╝☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
     }
 
     // съедая пилюлю ярости, змейка ест камни без ущерба
