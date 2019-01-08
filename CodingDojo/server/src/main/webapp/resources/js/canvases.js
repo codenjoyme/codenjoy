@@ -31,6 +31,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
     currentBoardSize = boardSize;
     var plots = {};
     var plotsUrls = {};
+    var plotSize = 0;
+    var canvasSize = 0;
+    var images = {};
     loadCanvasesData();
     var reloading = false;
 
@@ -76,24 +79,41 @@ function initCanvases(contextPath, players, allPlayersScreen,
         reloading = false;
     }
 
+    function loadSpriteImages(elements, alphabet, onImageLoad) {
+        for (var index in elements) {
+            var char = alphabet[index];
+            var color = elements[index];
+            plots[char] = color;
+            var subFolder = (!!sprites) ? sprites + '/' : '';
+            plotsUrls[color] = contextPath + '/resources/sprite/' + gameName + '/' + subFolder + color + '.png';
+
+            var image = new Image();
+            image.onload = function() {
+                if (plotSize == 0) {
+                    plotSize = this.width;
+                    canvasSize = plotSize * boardSize;
+                    if (!!onImageLoad) {
+                        onImageLoad();
+                    }
+                }
+            }
+            image.src = plotsUrls[color];
+            images[color] = image;
+        }
+    }
+
     function loadCanvasesData() {
         loadData('/rest/sprites/alphabet', function(alphabet) {
             loadData('/rest/sprites/' + gameName, function(elements) {
-                for (var index in elements) {
-                    var char = alphabet[index];
-                    var color = elements[index];
-                    plots[char] = color;
-                    var subFolder = (!!sprites) ? sprites + '/' : '';
-                    plotsUrls[color] = contextPath + '/resources/sprite/' + gameName + '/' + subFolder + color + '.png';
-                }
+                loadSpriteImages(elements, alphabet, function() {
+                    buildHtml(players);
+                    buildCanvases(players);
 
-                buildHtml(players);
-                buildCanvases(players);
-
-                $('body').on('board-updated', function(events, data) {
-                    if (!reloading) {
-                        drawUsersCanvas(data);
-                    }
+                    $('body').on('board-updated', function(events, data) {
+                        if (!reloading) {
+                            drawUsersCanvas(data);
+                        }
+                    });
                 });
             });
         });
@@ -215,14 +235,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawLayers = function(onDrawItem) {
             var board = getBoard();
+            var toDraw = (!board.layers) ? [board] : board.layers;
             try {
-                drawAllLayers(board.layers, onDrawItem);
+                drawAllLayers(toDraw, onDrawItem);
             } catch (err) {
-                try {
-                    drawAllLayers([board], onDrawItem);
-                } catch (err) {
-                    console.log(err);
-                }
+                console.log(err);
             }
         }
 
@@ -311,6 +328,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
     function showScoreInformation(playerName, information) {
         var infoPool = infoPools[playerName];
 
+        // TODO это костыль, а возникает оно в момент переходов с поле на поле для игры http://127.0.0.1:8080/codenjoy-contest/board/game/snakebattle
+        if (typeof infoPool == 'undefined') {
+            infoPools[playerName] = [];
+            infoPool = infoPools[playerName];
+        }
+
         if (information != '') {
             var arr = information.split(', ');
             for (var i in arr) {
@@ -352,32 +375,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
     function createCanvas(canvasName) {
         var canvas = $("#" + canvasName);
 
-        var plotSize = 0;
-        var canvasSize = 0;
-        var firstSprite = null;
-        var calcSize = function(image) {
-            plotSize = image.width;
-            canvasSize = plotSize * boardSize;
-            if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
-                canvas[0].width = canvasSize;
-                canvas[0].height = canvasSize;
-            }
-        }
-
-        // TODO а обязательно загружать каждый раз все рисунки снова?
-        var images = {};
-        for (var color in plotsUrls) {
-            var image = new Image();
-            image.onload = function() {
-                if (this == firstSprite) {
-                    calcSize(this);
-                }
-            }
-            image.src = plotsUrls[color];
-            images[color] = image;
-            if (!firstSprite) {
-                firstSprite = image;
-            }
+        if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
+            canvas[0].width = canvasSize;
+            canvas[0].height = canvasSize;
         }
 
         var drawPlot = function(color, x, y) {

@@ -59,26 +59,34 @@ public class RegistrationTest {
     }
 
     @Test
-    public void shouldNotExistsUser() throws InterruptedException {
+    public void shouldNotExistsUser() {
         assertFalse(service.registered("not_exists"));
     }
 
     @Test
-    public void shouldRegister() throws InterruptedException {
+    public void shouldRegister() {
+        // given
         String code = service.register("user", "pass", "data");
 
+        // then
         assertTrue(service.registered("user"));
         assertFalse(service.approved("user"));
 
+        // when
         service.approve(code);
 
+        // then
         assertTrue(service.registered("user"));
         assertTrue(service.approved("user"));
     }
 
     @Test
-    public void shouldRegisterWithData() throws InterruptedException {
+    public void shouldRegisterWithData() {
+        // when
         String code = service.register("user", "pass", "someData");
+
+        // then
+        assertEquals("35993073433489", code);
 
         List<Registration.User> users = service.getUsers();
 
@@ -91,85 +99,215 @@ public class RegistrationTest {
     }
 
     @Test
-    public void shouldUnRegisteredUserIsNotApproved() throws InterruptedException {
+    public void shouldUnRegisteredUserIsNotApproved() {
+        // when then
         assertFalse(service.approved("user"));
     }
 
     @Test
-    public void shouldSuccessLogin() throws InterruptedException {
+    public void shouldSuccessLogin() {
+        // given
         service.approve(service.register("user", "pass", "data"));
 
+        // when
         String code = service.login("user", "pass");
 
+        // then
         assertEquals("35993073433489", code);
     }
 
     @Test
-    public void shouldUnSuccessLogin_whenNoApproveEmail() throws InterruptedException {
+    public void shouldUnSuccessLogin_whenNoApproveEmail() {
+        // given
         service.register("user", "pass", "data");
 
+        // when
         String code = service.login("user", "pass");
 
+        // then
         assertEquals(null, code);
     }
 
     @Test
-    public void shouldUnSuccessLogin() throws InterruptedException {
+    public void shouldUnSuccessLogin() {
+        // given
         service.register("user", "pass", "data");
 
+        // when
         String code = service.login("user", "bad_pass");
 
-        assertNull(code);
+        // then
+        assertEquals(null, code);
     }
 
     @Test
-    public void shouldGetCodeByName() throws InterruptedException {
+    public void shouldGetCodeByName() {
+        // given
         service.register("user", "pass", "data");
 
+        // when
         String code = service.getCode("user");
 
+        // then
         assertEquals("35993073433489", code);
     }
 
     @Test
-    public void shouldGetCodeByName_ifNotFound() throws InterruptedException {
+    public void shouldGetCodeByName_ifNotFound() {
+        // given
         service.register("user", "pass", "data");
 
+        // when
         String code = service.getCode("other_user");
 
-        assertNull(code);
+        // then
+        assertEquals(null, code);
     }
 
     @Test
-    public void shouldGetEmailByCode() throws InterruptedException {
+    public void shouldGetEmailByCode() {
+        // given
         service.register("user", "pass", "data");
 
+        // when
         String email = service.getEmail("35993073433489");
 
+        // then
         assertEquals("user", email);
     }
 
     @Test
-    public void shouldGetEmailByCode_ifNotFound() throws InterruptedException {
+    public void shouldGetEmailByCode_ifNotFound() {
+        // given
         service.register("user", "pass", "data");
 
+        // when
         String email = service.getEmail("bad_code");
 
+        // then
         assertNull(email);
     }
 
     @Test
     public void shouldChangePasswordsToMD5() {
+        // given
         service.approve(service.register("user", "pass", "data"));
         service.approve(service.register("user2", "pass2", "data2"));
 
         assertEquals("35993073433489", service.login("user", "pass"));
         assertEquals("111578567106438209", service.login("user2", "pass2"));
 
+        // when
         service.changePasswordsToMD5();
 
+        // then
         assertEquals("35993073433489", service.login("user", "1a1dc91c907325c69271ddf0c944bc72"));
         assertEquals("111578567106438209", service.login("user2", "c1572d05424d0ecb2a65ec6a82aeacbf"));
+    }
+
+    @Test
+    public void shouldReplaceExistingUser() {
+        // given
+        String code1 = service.register("user1", "pass1", "someData1");
+        String code2 = service.register("user2", "pass2", "someData2");
+
+        assertEquals("[User{email='user1', " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                      "User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+
+        // when
+        service.replace(new Registration.User("user1", 1, "newPassword1", "newCode1", "newData1"));
+
+        // then
+        assertEquals("[User{email='user1', " +
+                        "email_approved=1, " +
+                        "password='newPassword1', " +
+                        "code='newCode1', " +
+                        "data='newData1'}, " +
+                      "User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+    }
+
+    @Test
+    public void shouldReplaceNonExistingUser() {
+        // given
+        String code1 = service.register("user1", "pass1", "someData1");
+        String code2 = service.register("user2", "pass2", "someData2");
+
+        assertEquals("[User{email='user1', " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                      "User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+
+        // when
+        service.replace(new Registration.User("user3", 1, "newPassword3", "newCode3", "newData3"));
+
+        // then
+        assertEquals("[User{email='user1', " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                      "User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}, " +
+                      "User{email='user3', " +
+                        "email_approved=1, " +
+                        "password='newPassword3', " +
+                        "code='newCode3', " +
+                        "data='newData3'}]",
+                service.getUsers().toString());
+    }
+
+    @Test
+    public void shouldRemoveUser() {
+        // given
+        String code1 = service.register("user1", "pass1", "someData1");
+        String code2 = service.register("user2", "pass2", "someData2");
+
+        assertEquals("[User{email='user1', " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                        "User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+
+        // when
+        service.remove("user1");
+
+        // then
+        assertEquals("[User{email='user2', " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
     }
 
 }

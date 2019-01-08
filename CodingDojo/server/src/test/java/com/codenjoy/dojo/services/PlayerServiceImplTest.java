@@ -621,8 +621,8 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        Game game1 = createGame();
-        Game game2 = createGame();
+        Game game1 = createGame(gameField(VASYA));
+        Game game2 = createGame(gameField(PETYA));
         setNewGames(game1, game2);
 
         playerService.removeAll();
@@ -636,8 +636,8 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        Game game1 = createGame();
-        Game game2 = createGame();
+        Game game1 = createGame(gameField(VASYA));
+        Game game2 = createGame(gameField(PETYA));
 
         setNewGames(game1, game2);
 
@@ -652,9 +652,9 @@ public class PlayerServiceImplTest {
         verify(game2.getField()).quietTick();
     }
 
-    private Game createGame() {
+    private Game createGame(GameField gameField) {
         Game game = mock(Game.class);
-        when(game.getField()).thenReturn(mock(GameField.class));
+        when(game.getField()).thenReturn(gameField);
         return game;
     }
 
@@ -663,8 +663,8 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        Game game1 = createGame();
-        Game game2 = createGame();
+        Game game1 = createGame(gameField(VASYA));
+        Game game2 = createGame(gameField(PETYA));
 
         setNewGames(game1, game2);
 
@@ -700,8 +700,8 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        Game game1 = createGame();
-        Game game2 = createGame();
+        Game game1 = createGame(gameField(VASYA));
+        Game game2 = createGame(gameField(PETYA));
         setNewGames(game1, game2);
 
         setup(game1);
@@ -722,8 +722,8 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        Game game1 = createGame();
-        Game game2 = createGame();
+        Game game1 = createGame(gameField(VASYA));
+        Game game2 = createGame(gameField(PETYA));
         setNewGames(game1, game2);
 
         setup(game1);
@@ -742,7 +742,7 @@ public class PlayerServiceImplTest {
     public void shouldContinueTicksWhenExceptionInPlayerGameTick() {
         createPlayer(VASYA);
 
-        Game game1 = createGame();
+        Game game1 = createGame(gameField(VASYA));
         setNewGames(game1);
 
         setup(game1);
@@ -764,8 +764,8 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        Game game1 = createGame();
-        Game game2 = createGame();
+        Game game1 = createGame(gameField(VASYA));
+        Game game2 = createGame(gameField(PETYA));
         setNewGames(game1, game2);
 
         setup(game1);

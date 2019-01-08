@@ -25,10 +25,10 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,9 +38,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -52,6 +50,7 @@ public class RestBoardController {
     @Autowired private ServletContext servletContext;
     @Autowired private Validator validator;
     @Autowired private PlayerGames playerGames;
+    @Autowired private PlayerGamesView playerGamesView;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -90,42 +89,6 @@ public class RestBoardController {
         return contextPath;
     }
 
-    static class GameTypeInfo {
-        private final String version;
-        private final String info;
-        private final int boardSize;
-        private final List<Parameter<?>> parameters;
-        private final MultiplayerType multiplayerType;
-
-        GameTypeInfo(GameType gameType) {
-            version = gameType.getVersion();
-            info = gameType.toString();
-            boardSize = gameType.getBoardSize().getValue();
-            parameters = gameType.getSettings().getParameters();
-            multiplayerType = gameType.getMultiplayerType();
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public String getInfo() {
-            return info;
-        }
-
-        public int getBoardSize() {
-            return boardSize;
-        }
-
-        public List<Parameter<?>> getParameters() {
-            return parameters;
-        }
-
-        public MultiplayerType getMultiplayerType() {
-            return multiplayerType;
-        }
-    }
-
     @RequestMapping(value = "/game/{gameName}/type", method = RequestMethod.GET)
     @ResponseBody
     public GameTypeInfo getGameType(@PathVariable("gameName") String gameName) {
@@ -146,6 +109,35 @@ public class RestBoardController {
         validator.checkPlayerCode(playerName, code);
         playerGames.changeLevel(playerName, level);
         return true;
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/player/all/groups", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, List<List<String>>> getPlayersGroups() {
+        Map<String, List<List<String>>> result = new HashMap<>();
+        List<Player> players = playerService.getAll();
+        List<List<String>> groups = playerGamesView.getGroups();
+        for (List<String> group : groups) {
+            String playerName = group.get(0);
+            Player player = players.stream()
+                    .filter(p -> p.getName().equals(playerName))
+                    .findFirst()
+                    .orElse(NullPlayer.INSTANCE);
+
+            String gameName = player.getGameName();
+            if (!result.containsKey(gameName)) {
+                result.put(gameName, new LinkedList<>());
+            }
+            result.get(gameName).add(group);
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/player/all/scores", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getPlayersScores() {
+        return playerGamesView.getScores();
     }
 
 }

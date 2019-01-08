@@ -85,7 +85,7 @@ public interface GameType extends Tickable {
     Class<? extends ClientBoard> getBoard();
 
     /**
-     * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку 'version=${project.version}'
+     * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку '${project.version}_${build.time}'
      * то ее потом мождно будет прочитать с помощью VersionReader.getCurrentVersion();
      * @return версия игры
      */

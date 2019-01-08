@@ -39,7 +39,6 @@ import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -188,23 +187,32 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // по всем джойстикам отправили сообщения играм
         playerGames.forEach(PlayerGame::quietTick);
 
-        // создаем новые игры для тех, кто уже game over
-        // если при этом в TRAINING кто-то isWin то мы его относим на следующий уровень
+        // если в TRAINING кто-то isWin то мы его относим на следующий уровень
+        // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
+        // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
+            MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
-                    GameType gameType = getPlayer(game).getGameType();
-                    if (gameType.getMultiplayerType().isTraining()) {
-                        if (game.isWin()) {
-                            JSONObject from = game.getSave();
-                            JSONObject to = LevelProgress.winLevel(from);
-                            if (to != null) {
-                                reload(game, to);
-                                return;
-                            }
+                    JSONObject level = game.getSave();
+
+                    // TODO ##2 попробовать какой-то другой тип с несколькими уровнями, а не только isTraining
+                    if (game.isWin() && multiplayerType.isTraining()) {
+                        level = LevelProgress.winLevel(level);
+                        if (level != null) {
+                            reload(game, level);
+                            // TODO test me
+                            playerGame.getPlayer().getEventListener().levelChanged(game.getProgress());
+                            return;
                         }
                     }
+
+                    if (game.shouldLeave() && multiplayerType.isDisposable()) {
+                        reload(game, level);
+                        return;
+                    }
+
                     game.newGame();
                 });
             }
@@ -212,13 +220,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // собираем все уникальные борды
         // независимо от типа игры нам нужно тикнуть все
+        //      но только те, которые не DISPOSABLE и одновременно
+        //      недокомплектованные пользователями
         playerGames.stream()
                 .map(PlayerGame::getField)
-                .collect(toSet())
+                .distinct()
+                .filter(this::isMatchCanBeStarted)
                 .forEach(GameField::quietTick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private boolean isMatchCanBeStarted(GameField field) {
+        return spreader.isRoomStaffed(field);
     }
 
     public void reload(Game game, JSONObject save) {
@@ -264,13 +279,16 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public void setLevel(String playerName, JSONObject save) { // TODO test me
+    public void setLevel(String playerName, JSONObject save) {
+        if (save == null) {
+            return;
+        }
         PlayerGame playerGame = get(playerName);
         Game game = playerGame.getGame();
         reload(game, save);
     }
 
-    public PlayerGame get(int index) { // TODO test me
+    public PlayerGame get(int index) {
         return playerGames.get(index);
     }
 

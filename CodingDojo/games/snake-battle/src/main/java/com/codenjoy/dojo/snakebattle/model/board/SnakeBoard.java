@@ -30,6 +30,7 @@ import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -39,8 +40,11 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class SnakeBoard implements Field {
 
+    public static int PAUSE_BEFORE_START = 5;
+    public static int MAX_ROUNDS_PER_MATCH = 5;
+
     public boolean debugMode = false;
-    private static final int pause = 5;
+
     private List<Wall> walls;
     private List<StartFloor> starts;
     private List<Apple> apples;
@@ -50,13 +54,15 @@ public class SnakeBoard implements Field {
     private List<Gold> gold;
 
     private List<Player> players;
-    private int startCounter;
+    private int pause;
+    private int round;
 
-    private final int size;
+    private int size;
     private Dice dice;
 
     public SnakeBoard(Level level, Dice dice) {
         this.dice = dice;
+        round = 0;
         walls = level.getWalls();
         starts = level.getStartPoints();
         apples = level.getApples();
@@ -66,26 +72,39 @@ public class SnakeBoard implements Field {
         gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<>();
-        startCounter = pause;
+        pause = PAUSE_BEFORE_START;
     }
 
     @Override
     public void tick() {
         // отсчёт "секунд" до старта
-        if (startCounter >= 0) {
-            setStartCounter(startCounter - 1);
+        if (pause >= 0) {
+            pause--;
         }
+
+        // TODO test me
+        if (pause > 0) {
+            String pad = StringUtils.leftPad("", pause, '.');
+            String message = pad + pause + pad;
+            players.forEach(player -> player.printMessage(message));
+        }
+
         int aliveBefore = countActiveHeroes(); // количество живых с прошлого хода
 
         // победа последнего игрока и рестарт игры
-        if (players.size() > 1 && aliveBefore < 2 && startCounter < 0) {
+        if (players.size() > 1 && aliveBefore < 2 && pause < 0) {
             fireWinEventAndRestartGame();
             return;
         }
         // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
-        if (aliveBefore < 1 && startCounter < 0) {
-            setStartCounter(pause);
+        if (aliveBefore < 1 && pause < 0) {
+            setPause(PAUSE_BEFORE_START);
             return;
+        }
+
+        if (pause == 0) {
+            round++;
+            players.forEach(player -> player.start(round));
         }
 
         snakesMove(); // продвижение живых змеек
@@ -114,7 +133,7 @@ public class SnakeBoard implements Field {
     private void fireDieEvents() {
         for (Player player : players) {
             if (player.isActive() && !player.isAlive()) {
-                player.event(Events.DIE);
+                player.die(round == MAX_ROUNDS_PER_MATCH);
             }
         }
     }
@@ -130,10 +149,9 @@ public class SnakeBoard implements Field {
 
     private void snakesMove() {
         for (Player player : players) {
-            if (startCounter == 0)
-                player.event(Events.START);
-            if (!player.isActive())
+            if (!player.isActive()) {
                 continue;
+            }
             Hero hero = player.getHero();
             Point head = hero.getNextPoint();
             hero.tick();
@@ -202,7 +220,7 @@ public class SnakeBoard implements Field {
                 player.event(Events.WIN);
                 newGame(player);
             }
-        setStartCounter(pause);
+        setPause(PAUSE_BEFORE_START);
     }
 
     public int size() {
@@ -456,9 +474,9 @@ public class SnakeBoard implements Field {
         };
     }
 
-    public void setStartCounter(int newValue) {
+    public void setPause(int newValue) {
         if (!debugMode)
-            this.startCounter = newValue;
+            this.pause = newValue;
     }
 
     private void fail(String message) {

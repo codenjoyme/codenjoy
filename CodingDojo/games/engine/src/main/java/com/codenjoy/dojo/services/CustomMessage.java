@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.snakebattle.model.level;
+package com.codenjoy.dojo.services;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,20 @@ package com.codenjoy.dojo.snakebattle.model.level;
  * #L%
  */
 
+public class CustomMessage {
 
-import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.model.objects.*;
+    private String message;
 
-import java.util.List;
+    public CustomMessage(String message) {
+        this.message = message;
+    }
 
-public interface Level {
+    public String getMessage() {
+        return message;
+    }
 
-    int getSize();
-
-    List<FuryPill> getFuryPills();
-
-    List<Gold> getGold();
-
-    List<Wall> getWalls();
-
-    List<StartFloor> getStartPoints();
-
-    Hero getHero();
-
-    Hero getEnemy();
-
-    List<Apple> getApples();
-
-    List<Stone> getStones();
-
-    List<FlyingPill> getFlyingPills();
+    @Override
+    public String toString() {
+        return "[" + message + "]";
+    }
 }

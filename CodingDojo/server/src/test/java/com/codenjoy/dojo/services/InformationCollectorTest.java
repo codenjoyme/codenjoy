@@ -182,4 +182,15 @@ public class InformationCollectorTest {
         assertNull(collector.getMessage());
     }
 
+    @Test
+    public void shouldPrintCustomMessage() {
+        collector.event(new CustomMessage("3"));
+        collector.event(new CustomMessage("2"));
+        collector.event(new CustomMessage("1"));
+        collector.event(new CustomMessage("Fight!!!"));
+
+        assertEquals("3, 2, 1, Fight!!!", collector.getMessage());
+        assertNull(collector.getMessage());
+    }
+
 }

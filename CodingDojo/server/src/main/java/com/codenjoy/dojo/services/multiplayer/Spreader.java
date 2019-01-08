@@ -48,7 +48,7 @@ public class Spreader {
             room = findUnfilled(gameType);
         }
         if (room == null) {
-            room = new Room(supplier.get(), roomSize);
+            room = new Room(supplier.get(), roomSize, type.isDisposable());
             add(gameType, room);
         }
 
@@ -95,7 +95,7 @@ public class Spreader {
             List<GamePlayer> players = room.getPlayers();
             players.remove(player);
 
-            if (players.size() == 1) { // TODO тут может не надо выходить если тип игры MULTIPLAYER
+            if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
                 GamePlayer lastPlayer = players.iterator().next();
                 removed.add(lastPlayer);
                 players.remove(lastPlayer);
@@ -134,8 +134,6 @@ public class Spreader {
                 levelNumber,
                 () -> {
                     game.getPlayer().setProgress(progress);
-                    // TODO если раскоментировать эту строчку то будет отображаться переход на новый уровень, но уж как-то некрасиво все сделано
-                    // ((InformationCollector)game.getPlayer().listener).levelChanged(progress);
                     return gameType.createGame(levelNumber);
                 });
 
@@ -149,5 +147,15 @@ public class Spreader {
 
     public boolean contains(Game game) {
         return !roomsFor(game.getPlayer()).isEmpty();
+    }
+
+    public boolean isRoomStaffed(GameField field) {
+        List<Room> rooms = allRooms().stream()
+                .filter(r -> r.isFor(field))
+                .collect(toList());
+        if (rooms.size() != 1) {
+            throw new IllegalArgumentException("Почему-то комната для поля не одна: " + rooms.size());
+        }
+        return rooms.get(0).isStuffed();
     }
 }

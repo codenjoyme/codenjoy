@@ -25,14 +25,16 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
+import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -42,6 +44,8 @@ public class RestRegistrationController {
 
     @Autowired private Registration registration;
     @Autowired private PlayerService playerService;
+    @Autowired private PlayerGames playerGames;
+    @Autowired private PlayerGamesView playerGamesView;
 
     @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
@@ -49,47 +53,50 @@ public class RestRegistrationController {
         return registration.checkUser(playerName, code);
     }
 
-    static class PlayerInfo {
-        private final String gameType;
-        private final String callbackUrl;
-        private final String name;
-        private final String score;
-        private final String code;
-
-        PlayerInfo(Player player) {
-            gameType = player.getGameType().name();
-            callbackUrl = player.getCallbackUrl();
-            name = player.getName();
-            score = String.valueOf(player.getScore());
-            code = player.getCode();
-        }
-
-        public String getGameType() {
-            return gameType;
-        }
-
-        public String getCallbackUrl() {
-            return callbackUrl;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getScore() {
-            return score;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
+    // TODO test me
     @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlayerInfo> getPlayerForGame(@PathVariable("gameName") String gameName) {
+    public List<com.codenjoy.dojo.web.rest.pojo.PlayerInfo> getPlayerForGame(@PathVariable("gameName") String gameName) {
         return playerService.getAll(gameName).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/player/all/info", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PlayerDetailInfo> getPlayersForMigrate() {
+        List<Player> players = playerService.getAll();
+        List<Registration.User> users = registration.getUsers();
+        Map<String, List<String>> groups = playerGamesView.getGroupsMap();
+
+        List<PlayerDetailInfo> result = new LinkedList<>();
+        for (Player player : players) {
+            Registration.User user = users.stream()
+                    .filter(it -> it.getEmail().equals(player.getName()))
+                    .findFirst()
+                    .orElse(null);
+            Game game = playerGames.get(player.getName()).getGame();
+
+            List<String> group = groups.get(player.getName());
+            result.add(new PlayerDetailInfo(player, user, game, group));
+        }
+
+        return result;
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/player/create", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean checkUserLogin(@RequestBody PlayerDetailInfo playerInfo) {
+        registration.replace(playerInfo.getRegistration());
+
+        PlayerSave playerSave = playerInfo.buildPlayerSave();
+        playerService.register(playerSave);
+
+        playerGames.setLevel(playerInfo.getName(),
+                new JSONObject(playerInfo.getSave()));
+
+        return true;
     }
 }

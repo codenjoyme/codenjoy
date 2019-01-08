@@ -28,26 +28,51 @@ import java.util.List;
 public class Room {
     private GameField field;
     private int count;
+    private int wasCount;
+    private boolean disposable;
     private List<GamePlayer> players = new LinkedList<>();
 
-    public Room(GameField field, int count) {
+    public Room(GameField field, int count, boolean disposable) {
         this.field = field;
         this.count = count;
+        this.disposable = disposable;
     }
 
     public GameField getField(GamePlayer player) {
-        players.add(player);
+        if (!players.contains(player)) {
+            wasCount++;
+            players.add(player);
+        }
         return field;
     }
 
     public boolean isFree() {
-        return players.size() < count;
+        if (disposable) {
+            return wasCount < count;
+        } else {
+            return players.size() < count;
+        }
+    }
+
+    public boolean isStuffed() {
+        if (disposable) {
+            return wasCount == count;
+        } else {
+            return true;
+        }
     }
 
     public boolean contains(GamePlayer player) {
         return players.stream()
                 .filter(p -> p.equals(player))
                 .count() != 0;
+    }
+
+    public boolean isFor(GameField field) {
+        if (this.field == null) { // TODO точно такое может быть?
+            return field == null;
+        }
+        return this.field.equals(field);
     }
 
     public List<GamePlayer> getPlayers() {

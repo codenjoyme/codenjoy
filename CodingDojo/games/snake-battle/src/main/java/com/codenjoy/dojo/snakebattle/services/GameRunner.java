@@ -118,7 +118,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(15);
+        return MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE);
     }
 
     @Override

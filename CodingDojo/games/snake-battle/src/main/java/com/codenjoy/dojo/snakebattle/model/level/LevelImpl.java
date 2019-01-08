@@ -23,6 +23,7 @@ package com.codenjoy.dojo.snakebattle.model.level;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snakebattle.model.Elements;
@@ -33,10 +34,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.snakebattle.model.Elements.*;
+import static com.codenjoy.dojo.snakebattle.model.Elements.ENEMY_HEAD_SLEEP;
+import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
-    private final LengthToXY xy;
 
+    private LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
@@ -50,103 +53,163 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<>();
-        addHeroesToList(result, HEAD_DOWN,
+    public Hero getHero() {
+        Point point = getPointsOf(
+                HEAD_DOWN,
+                HEAD_UP,
                 HEAD_LEFT,
                 HEAD_RIGHT,
-                HEAD_UP,
                 HEAD_SLEEP,
                 HEAD_DEAD,
                 HEAD_EVIL,
-                HEAD_FLY);
-        return result;
+                HEAD_FLY)
+                .stream()
+                .findAny()
+                .orElse(null);
+
+        if (point == null) {
+            return null;
+        }
+
+        Direction direction = getDirection(point);
+
+        Hero hero = new Hero(direction);
+
+        List<Point> tail = getPointsOf(
+                TAIL_END_DOWN,
+                TAIL_END_LEFT,
+                TAIL_END_UP,
+                TAIL_END_RIGHT,
+                TAIL_INACTIVE,
+                BODY_HORIZONTAL,
+                BODY_VERTICAL,
+                BODY_LEFT_DOWN,
+                BODY_LEFT_UP,
+                BODY_RIGHT_DOWN,
+                BODY_RIGHT_UP);
+
+        tail.add(point);
+        hero.addTail(tail);
+
+        return hero;
     }
 
     @Override
-    public List<Hero> getEnemy() {
-        List<Hero> result = new LinkedList<>();
-        addHeroesToList(result, ENEMY_HEAD_DOWN,
+    public Hero getEnemy() {
+        Point point = getPointsOf(
+                ENEMY_HEAD_DOWN,
+                ENEMY_HEAD_UP,
                 ENEMY_HEAD_LEFT,
                 ENEMY_HEAD_RIGHT,
-                ENEMY_HEAD_UP,
                 ENEMY_HEAD_SLEEP,
                 ENEMY_HEAD_DEAD,
                 ENEMY_HEAD_EVIL,
-                ENEMY_HEAD_FLY);
-        return result;
+                ENEMY_HEAD_FLY)
+                .stream()
+                .findAny()
+                .orElse(null);
+
+        if (point == null) {
+            return null;
+        }
+
+        Direction direction = getDirection(point);
+
+        Hero hero = new Hero(direction);
+
+        List<Point> tail = getPointsOf(
+                ENEMY_TAIL_END_DOWN,
+                ENEMY_TAIL_END_LEFT,
+                ENEMY_TAIL_END_UP,
+                ENEMY_TAIL_END_RIGHT,
+                ENEMY_TAIL_INACTIVE,
+                ENEMY_BODY_HORIZONTAL,
+                ENEMY_BODY_VERTICAL,
+                ENEMY_BODY_LEFT_DOWN,
+                ENEMY_BODY_LEFT_UP,
+                ENEMY_BODY_RIGHT_DOWN,
+                ENEMY_BODY_RIGHT_UP);
+
+        tail.add(point);
+        hero.addTail(tail);
+
+        return hero;
     }
 
-    private void addHeroesToList(List<Hero> list, Elements... elements) {
-        for (Elements element : elements)
-            for (Point pt : getPointsOf(element))
-                list.add(new Hero(pt));
+    private Direction getDirection(Point point) {
+        switch (getAt(point)) {
+            case HEAD_DOWN : return Direction.DOWN;
+            case ENEMY_HEAD_DOWN : return Direction.DOWN;
+            case HEAD_UP : return Direction.UP;
+            case ENEMY_HEAD_UP : return Direction.UP;
+            case HEAD_LEFT : return Direction.LEFT;
+            case ENEMY_HEAD_LEFT : return Direction.LEFT;
+            default : return Direction.RIGHT;
+        }
     }
 
     @Override
     public List<Apple> getApples() {
-        List<Apple> result = new LinkedList<>();
-        for (Point pt : getPointsOf(APPLE))
-            result.add(new Apple(pt));
-        return result;
+        return getPointsOf(APPLE).stream()
+                .map(Apple::new)
+                .collect(toList());
     }
 
     @Override
     public List<Stone> getStones() {
-        List<Stone> result = new LinkedList<>();
-        for (Point pt : getPointsOf(STONE))
-            result.add(new Stone(pt));
-
-        return result;
+        return getPointsOf(STONE).stream()
+                .map(Stone::new)
+                .collect(toList());
     }
 
     @Override
     public List<FlyingPill> getFlyingPills() {
-        List<FlyingPill> result = new LinkedList<>();
-        for (Point pt : getPointsOf(FLYING_PILL))
-            result.add(new FlyingPill(pt));
-        return result;
+        return getPointsOf(FLYING_PILL).stream()
+                .map(FlyingPill::new)
+                .collect(toList());
     }
 
     @Override
     public List<FuryPill> getFuryPills() {
-        List<FuryPill> result = new LinkedList<>();
-        for (Point pt : getPointsOf(FURY_PILL))
-            result.add(new FuryPill(pt));
-        return result;
+        return getPointsOf(FURY_PILL).stream()
+                .map(FuryPill::new)
+                .collect(toList());
     }
 
     @Override
     public List<Gold> getGold() {
-        List<Gold> result = new LinkedList<>();
-        for (Point pt : getPointsOf(GOLD))
-            result.add(new Gold(pt));
-        return result;
+        return getPointsOf(GOLD).stream()
+                .map(Gold::new)
+                .collect(toList());
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
-        for (Point pt : getPointsOf(WALL))
-            result.add(new Wall(pt));
-        return result;
+        return getPointsOf(WALL).stream()
+                .map(Wall::new)
+                .collect(toList());
     }
 
     @Override
     public List<StartFloor> getStartPoints() {
-        List<StartFloor> result = new LinkedList<>();
-        for (Point pt : getPointsOf(START_FLOOR))
-            result.add(new StartFloor(pt));
-        return result;
+        return getPointsOf(START_FLOOR).stream()
+                .map(StartFloor::new)
+                .collect(toList());
     }
 
-    private List<Point> getPointsOf(Elements element) {
+    private List<Point> getPointsOf(Elements... elements) {
         List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch()) {
-                result.add(xy.getXY(index));
+            for (Elements element : elements) {
+                if (map.charAt(index) == element.ch()) {
+                    result.add(xy.getXY(index));
+                }
             }
         }
         return result;
+    }
+
+    private Elements getAt(Point pt) {
+        return Elements.valueOf(map.charAt(xy.getLength(pt.getX(), pt.getY())));
     }
 }

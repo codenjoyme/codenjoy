@@ -57,6 +57,11 @@ public class NullGame implements Game {
     }
 
     @Override
+    public boolean shouldLeave() {
+        return false;
+    }
+
+    @Override
     public void newGame() {
         // do nothing
     }

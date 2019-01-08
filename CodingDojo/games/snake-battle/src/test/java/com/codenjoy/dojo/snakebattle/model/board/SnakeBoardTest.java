@@ -59,9 +59,13 @@ public class SnakeBoardTest {
     }
 
     private void givenFl(String board) {
+        given(board);
+        assertE(board);
+    }
+
+    private void given(String board) {
         LevelImpl level = new LevelImpl(board);
-        List<Hero> heroes = level.getHero();
-        Hero hero = heroes.isEmpty() ? null : heroes.get(0);
+        Hero hero = level.getHero();
 
         game = new SnakeBoard(level, dice);
         game.debugMode = true;
@@ -83,9 +87,16 @@ public class SnakeBoardTest {
 
     // карта со своей змейкой
     @Test
-    public void testStartField() {
-        // самый простой начальный случай
-        testField("☼☼☼☼☼☼☼" +
+    public void shouldSnakeOnBoard() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
@@ -96,8 +107,8 @@ public class SnakeBoardTest {
 
     // старт змейки из "стартового бокса"
     @Test
-    public void startFromBox() {
-        givenFl("☼☼☼☼☼☼☼☼" +
+    public void shouldGetOutFromStartPoint() {
+        given("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "☼#     ☼" +
                 "☼☼     ☼" +
@@ -105,6 +116,7 @@ public class SnakeBoardTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "→►     ☼" +
@@ -113,7 +125,9 @@ public class SnakeBoardTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "☼→►    ☼" +
@@ -122,7 +136,9 @@ public class SnakeBoardTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
                 "☼#→►   ☼" +
@@ -135,8 +151,16 @@ public class SnakeBoardTest {
 
     // карта с яблоками, камнями, пилюлями полёта, пилюлями ярости, деньгами
     @Test
-    public void testStartFieldWithApples() {
-        testField("☼☼☼☼☼☼☼" +
+    public void shouldBoardWithElements() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼ $ @ ☼" +
+                "☼  ●  ☼" +
+                "☼  % ○☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼ $ @ ☼" +
@@ -147,353 +171,653 @@ public class SnakeBoardTest {
 
     // тест событий
     @Test
-    public void eventsTest() {
-        testField("☼☼☼☼☼☼☼" +
+    public void shouldGoldEvent_whenEatIt() {
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►$○●☼" +
                 "☼     ☼" +
+                "☼→►$  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼→►$  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         game.tick();
+
         verify(listener).event(Events.GOLD);
-        game.tick();
-        verify(listener).event(Events.APPLE);
-        game.tick();
-        verify(listener).event(Events.STONE);
-        verify(listener).event(Events.DIE);
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼  →═☻☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼");
-        game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼");
-    }
-
-    private void testField(String field) {
-        givenFl(field);
-        assertE(field);
-    }
-
-
-    // тест продолжения движения без дополнительных указаний
-    @Test
-    public void moveAfterStart() {
-        givenFl("☼☼☼☼☼☼☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼  →► ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼   →►☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
     }
 
-
-    // тест движения в заданную сторону
+    // тест событий
     @Test
-    public void moveByCommand() {
+    public void shouldAppleEvent_whenEatIt() {
         givenFl("☼☼☼☼☼☼☼" +
-                "☼→►   ☼" +
                 "☼     ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-        hero.down();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼ ↓   ☼" +
-                "☼ ▼   ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-        hero.right();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼ →►  ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-        hero.up();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼  ▲  ☼" +
-                "☼  ↑  ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-        hero.left();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼ ◄←  ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼  ●  ☼" +
-                "☼    ○☼" +
-                "☼☼☼☼☼☼☼");
-    }
-
-
-    // тест роста
-    // заодно, тест отображения тела змейки
-    @Test
-    public void growUpTest() {
-        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼→►○  ☼" +
                 "☼     ☼" +
-                "☼  ○  ☼" +
-                "☼  ○  ☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-        hero.right();
-        game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼→►○  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verify(listener).event(Events.APPLE);
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
                 "☼     ☼" +
                 "☼→═►  ☼" +
                 "☼     ☼" +
-                "☼  ○  ☼" +
-                "☼  ○  ☼" +
-                "☼☼☼☼☼☼☼");
-        hero.down();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →╗  ☼" +
-                "☼  ▼  ☼" +
-                "☼  ○  ☼" +
-                "☼  ○  ☼" +
-                "☼☼☼☼☼☼☼");
-        hero.down();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼ →╗  ☼" +
-                "☼  ║  ☼" +
-                "☼  ▼  ☼" +
-                "☼  ○  ☼" +
-                "☼☼☼☼☼☼☼");
-        hero.left();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼  ║  ☼" +
-                "☼ ◄╝  ☼" +
-                "☼  ○  ☼" +
-                "☼☼☼☼☼☼☼");
-        hero.down();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼ ╔╝  ☼" +
-                "☼ ▼○  ☼" +
-                "☼☼☼☼☼☼☼");
-        hero.right();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼ ╔╝  ☼" +
-                "☼ ╚►  ☼" +
-                "☼☼☼☼☼☼☼");
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼ ╔←  ☼" +
-                "☼ ╚═► ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
-    // тест смерти маленькой змейки об камень
     @Test
-    public void dieByStone() {
+    public void shouldStoneAndDieEvents_whenEatStone_lengthIsTooShort() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼→►●  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼→►●  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         game.tick();
+
         verify(listener).event(Events.STONE);
         verify(listener).event(Events.DIE);
+        assertEquals(false, hero.isAlive());
+        assertEquals(true, hero.isActive());
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ →☻  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        assertEquals(false, hero.isAlive());
+        assertEquals(true, hero.isActive());
+    }
+
+    // тест продолжения движения без дополнительных указаний
+    @Test
+    public void shouldMoveByInertia_whenNoCommand_directionLeftToRight() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼→►   ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   →►☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldMoveByInertia_whenNoCommand_directionRightToLeft() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ◄←☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ◄← ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ ◄←  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼◄←   ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldMoveByInertia_whenNoCommand_directionUpToDown() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldMoveByInertia_whenNoCommand_directionDownToUp() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // тесты движения в заданную сторону
+    @Test
+    public void shouldTurnDown() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ↓ ☼" +
+                "☼   ▼ ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldTurnRight() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldTurnUp() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ▲ ☼" +
+                "☼   ↑ ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldTurnLeft() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ ◄←  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // тест роста
+    @Test
+    public void shouldGrow_whenEatApple() {
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼→►○ ○ ○  ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼→═► ○ ○  ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼ →═►○ ○  ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼ →══► ○  ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼  →══►○  ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼  →═══►  ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼   →═══► ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
     }
 
     // тест смерти об стену
     @Test
-    public void dieByWall() {
+    public void shouldDie_whenEatWall() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼ →►○ ☼" +
+                "☼ →═► ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-        game.tick(); // удлинняем змею (иначе будет не ясно исчезла змея или просто вся вошла в стену)
-        verify(listener).event(Events.APPLE);
+
         game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →═►☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         game.tick();
+
+        verify(listener).event(Events.DIE);
+        assertEquals(false, hero.isAlive());
+        assertEquals(true, hero.isActive());
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼   →═☻" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-        verify(listener).event(Events.DIE);
+
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
+        assertEquals(false, hero.isAlive());
+        assertEquals(true, hero.isActive());
     }
 
     // пока змея не активна, её направление "последнего движения" не меняется
     @Test
-    public void deniedTurnWhenInactive() {
+    public void shouldStopAndDontMove_whenNotActive() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.setActive(false);
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ ᓕ⬢  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.up();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ ᓕ⬢  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
 
         hero.setActive(true);
         hero.left();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  →► ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
     // змея не может разворачиваться в противоположную сторону
     @Test
-    public void deniedMovingBack() {
+    public void shouldCantMovingBack_fromRightToLeft() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         hero.left();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  →► ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-        hero.up();
-        game.tick();
-        hero.down();
-        game.tick();
-        assertE("☼☼☼☼☼☼☼" +
-                "☼   ▲ ☼" +
-                "☼   ↑ ☼" +
+    }
+
+    @Test
+    public void shouldCantMovingBack_fromLeftToRight() {
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼  ◄← ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
-        hero.left();
-        game.tick();
+
         hero.right();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
                 "☼ ◄←  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼     ☼" +
-                "☼    ○☼" +
                 "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldCantMovingBack_fromUpToDown() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         hero.down();
         game.tick();
-        hero.up();
-        game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ↓   ☼" +
-                "☼ ▼   ☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
                 "☼     ☼" +
-                "☼    ○☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldCantMovingBack_fromDownToUp() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
@@ -507,6 +831,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
         assertEquals("Змейка не съела пилюлю полёта!", 10, hero.getFlyingCount());
         hero.down();
@@ -515,6 +840,7 @@ public class SnakeBoardTest {
         assertTrue("Змейка умерла от камня в полёте!", hero.isAlive());
         game.tick();
         game.tick();
+
         // камень остался на месте
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -535,6 +861,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         // удлиннение
         game.tick();
         game.tick();
@@ -545,6 +872,7 @@ public class SnakeBoardTest {
         game.tick();
         game.tick();
         game.tick();
+
         // закручиваемся
         hero.up();
         game.tick();
@@ -557,6 +885,7 @@ public class SnakeBoardTest {
         hero.down();
         game.tick();
         game.tick();
+
         // змея не укоротилась
         assertE("☼☼☼☼☼☼☼" +
                 "☼ ╔╗  ☼" +
@@ -565,6 +894,7 @@ public class SnakeBoardTest {
                 "☼   ⊖ ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         assertEquals("Змейка укоротила себя в полёте!", 8, hero.size());
     }
 
@@ -578,6 +908,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+
         game.tick();
         assertEquals("Змейка не съела пилюлю ярости!", 10, hero.getFuryCount());
         hero.down();
@@ -586,6 +917,7 @@ public class SnakeBoardTest {
         assertEquals("Змейка не съела камень при ярости!", 1, hero.getStonesCount());
         game.tick();
         game.tick();
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +

@@ -63,24 +63,24 @@ public class AISolverTest {
     private void givenFl(String board) {
         b = new Board();
         b.forString(board);
-//      System.out.println("Размер доски: " + b.size());
 
         // этот весь код ниже используется сейчас только для распечатки изображения доски (для наглядности)
         // можно смело убирать, если мешает
         LevelImpl level = new LevelImpl(board);
-        List<Hero> heroes = level.getHero();
-        Hero hero = heroes.isEmpty() ? null : heroes.get(0);
+        Hero hero = level.getHero();
+
         SnakeBoard game = new SnakeBoard(level, dice);
         game.debugMode = true;
+
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);
+
         game.newGame(player);
         if (hero != null) {
             player.setHero(hero);
             hero.init(game);
             hero.setActive(true);
         }
-        System.out.println(printer.getPrinter(game.reader(), player).print());
     }
 
     private void testSolution(Direction expected) {

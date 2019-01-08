@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.snakebattle.model.level;
+package com.codenjoy.dojo.web.rest.pojo;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,29 @@ package com.codenjoy.dojo.snakebattle.model.level;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 
-import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.model.objects.*;
+public class PLevelProgress extends LevelProgress {
 
-import java.util.List;
+    public PLevelProgress() {
+        super();
+    }
 
-public interface Level {
+    public PLevelProgress(LevelProgress progress) {
+        super(progress.getTotal(), progress.getCurrent(), progress.getPassed());
+    }
 
-    int getSize();
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
-    List<FuryPill> getFuryPills();
+    public void setCurrent(int current) {
+        this.current = current;
+    }
 
-    List<Gold> getGold();
+    public void setPassed(int passed) {
+        this.passed = passed;
+    }
 
-    List<Wall> getWalls();
-
-    List<StartFloor> getStartPoints();
-
-    Hero getHero();
-
-    Hero getEnemy();
-
-    List<Apple> getApples();
-
-    List<Stone> getStones();
-
-    List<FlyingPill> getFlyingPills();
 }

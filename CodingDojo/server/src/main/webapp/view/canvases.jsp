@@ -51,7 +51,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <canvas id="{%= id %}" style="border:1px solid">
+                            <canvas id="{%= id %}">
                                 Your browser does not support the canvas element.
                             </canvas>
 
