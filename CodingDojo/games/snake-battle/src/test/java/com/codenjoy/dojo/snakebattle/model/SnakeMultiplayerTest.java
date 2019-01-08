@@ -45,11 +45,16 @@ import static org.mockito.Mockito.verify;
  */
 public class SnakeMultiplayerTest {
     private SnakeBoard game;
-    private Hero hero;
-    private Hero enemy;
     private Dice dice;
-    private EventListener listener;
-    private Player player;
+
+    private Hero hero;
+    private EventListener heroEvents;
+    private Player heroPlayer;
+
+    private Hero enemy;
+    private EventListener enemyEvents;
+    private Player enemyPlayer;
+
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
@@ -61,21 +66,22 @@ public class SnakeMultiplayerTest {
         LevelImpl level = new LevelImpl(board);
 
         game = new SnakeBoard(level, dice);
-        listener = mock(EventListener.class);
 
         Hero hero = level.getHero();
         hero.setActive(true);
-        player = new Player(listener);
-        game.newGame(player);
-        player.setHero(hero);
+        heroEvents = mock(EventListener.class);
+        heroPlayer = new Player(heroEvents);
+        game.newGame(heroPlayer);
+        heroPlayer.setHero(hero);
         hero.init(game);
         this.hero = game.getHeroes().get(0);
 
         Hero enemy = level.getEnemy();
         enemy.setActive(true);
-        Player player2 = new Player(mock(EventListener.class));
-        game.newGame(player2);
-        player2.setHero(enemy);
+        enemyEvents = mock(EventListener.class);
+        enemyPlayer = new Player(enemyEvents);
+        game.newGame(enemyPlayer);
+        enemyPlayer.setHero(enemy);
         enemy.init(game);
         this.enemy = game.getHeroes().get(1);
     }
@@ -91,7 +97,7 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
@@ -114,7 +120,7 @@ public class SnakeMultiplayerTest {
         hero.setActive(false);
         enemy.setActive(false);
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ~&  ☼" +
                 "☼     ☼" +
@@ -124,7 +130,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ~&  ☼" +
                 "☼     ☼" +
@@ -149,7 +155,7 @@ public class SnakeMultiplayerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ☻  ☼" +
@@ -157,11 +163,11 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        verify(heroEvents).event(Events.DIE);
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -177,19 +183,17 @@ public class SnakeMultiplayerTest {
     public void diedSmallerHero() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ╘►  ☼" +
+                "☼   ╘►☼" +
                 "☼     ☼" +
-                "☼ ×>○○☼" +
+                "☼ ×──>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
         hero.down();
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼    ╓☼" +
                 "☼    ☻☼" +
@@ -197,10 +201,10 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        verify(heroEvents).event(Events.DIE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼    ˄☼" +
                 "☼    ¤☼" +
@@ -210,7 +214,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼    ˄☼" +
                 "☼    ¤☼" +
                 "☼     ☼" +
@@ -232,11 +236,11 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
 
         game.tick();
-        verify(listener).event(Events.APPLE);
+        verify(heroEvents).event(Events.APPLE);
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ╘═► ☼" +
                 "☼  ¤  ☼" +
@@ -244,10 +248,10 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.ALIVE);
+        verify(heroEvents).event(Events.ALIVE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╘═►☼" +
                 "☼     ☼" +
@@ -269,7 +273,7 @@ public class SnakeMultiplayerTest {
         hero.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼ ×☻> ☼" +
@@ -277,10 +281,10 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        verify(heroEvents).event(Events.DIE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ×─>☼" +
@@ -305,7 +309,7 @@ public class SnakeMultiplayerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╘► ☼" +
                 "☼ ×┘  ☼" +
@@ -315,7 +319,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼   ╘►☼" +
                 "☼     ☼" +
@@ -337,7 +341,7 @@ public class SnakeMultiplayerTest {
         hero.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ☻> ☼" +
@@ -345,10 +349,10 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        verify(heroEvents).event(Events.DIE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼   ×>☼" +
@@ -373,7 +377,7 @@ public class SnakeMultiplayerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ♠  ☼" +
@@ -383,7 +387,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ˄  ☼" +
                 "☼  ╓  ☼" +
@@ -393,7 +397,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼  ˄  ☼" +
                 "☼  ¤  ☼" +
                 "☼     ☼" +
@@ -418,7 +422,7 @@ public class SnakeMultiplayerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
@@ -428,7 +432,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ♦  ☼" +
                 "☼  ╓  ☼" +
@@ -438,7 +442,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼  ♦  ☼" +
                 "☼  ¤  ☼" +
                 "☼     ☼" +
@@ -464,7 +468,7 @@ public class SnakeMultiplayerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼    ╓☼" +
                 "☼    ♥☼" +
@@ -474,7 +478,7 @@ public class SnakeMultiplayerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼    ╓☼" +
@@ -496,13 +500,13 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
 
         game.tick();
-        verify(listener).event(Events.APPLE);
+        verify(heroEvents).event(Events.APPLE);
         enemy.up();
         game.tick();
-        verify(listener, times(2)).event(Events.APPLE);
+        verify(heroEvents, times(2)).event(Events.APPLE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼  ♣╘►☼" +
                 "☼  ¤  ☼" +
@@ -525,7 +529,7 @@ public class SnakeMultiplayerTest {
         game.tick();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ╓  ☼" +
@@ -534,8 +538,16 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    private void assertE(String expected) {
+    private void assertH(String expected) {
+        assertBoard(expected, heroPlayer);
+    }
+
+    private void assertBoard(String expected, Player player) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
+    }
+
+    private void assertE(String expected) {
+        assertBoard(expected, enemyPlayer);
     }
 }
