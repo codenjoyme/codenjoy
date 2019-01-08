@@ -50,7 +50,7 @@ public enum Elements implements CharElements {
     HEAD_DEAD('☻'),
     HEAD_EVIL('♥'),
     HEAD_FLY('♠'),
-    HEAD_SLEEP('⬢'),
+    HEAD_SLEEP('&'),
 
     TAIL_END_DOWN('↑'),
     TAIL_END_LEFT('→'),
@@ -73,7 +73,7 @@ public enum Elements implements CharElements {
     ENEMY_HEAD_DEAD('☺'),
     ENEMY_HEAD_EVIL('♣'),
     ENEMY_HEAD_FLY('♦'),
-    ENEMY_HEAD_SLEEP('⬡'),
+    ENEMY_HEAD_SLEEP('*'),
 
     ENEMY_TAIL_END_DOWN('⇑'),
     ENEMY_TAIL_END_LEFT('⇒'),
