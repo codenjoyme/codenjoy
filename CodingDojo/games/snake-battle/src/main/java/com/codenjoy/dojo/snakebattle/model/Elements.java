@@ -38,8 +38,8 @@ public enum Elements implements CharElements {
 
     APPLE('○'),
     STONE('●'),
-    FLYING_PILL('%'),
-    FURY_PILL('@'),
+    FLYING_PILL('©'),
+    FURY_PILL('®'),
     GOLD('$'),
 
     // игрок

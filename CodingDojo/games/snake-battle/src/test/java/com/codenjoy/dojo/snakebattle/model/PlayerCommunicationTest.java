@@ -1,11 +1,11 @@
 package com.codenjoy.dojo.snakebattle.model;
 
 /*-
- * #%L
+ * #©L
  * Codenjoy - it's a dojo-like platform from developers to developers.
- * %%
+ * ©©
  * Copyright (C) 2018 Codenjoy
- * %%
+ * ©©
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,7 +19,7 @@ package com.codenjoy.dojo.snakebattle.model;
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
+ * #L©
  */
 
 
@@ -41,7 +41,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * @author Kors
+ * ®author Kors
  */
 public class PlayerCommunicationTest {
     private SnakeBoard game;
@@ -362,7 +362,7 @@ public class PlayerCommunicationTest {
     public void flyOverEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►%  ☼" +
+                "☼→►©  ☼" +
                 "☼     ☼" +
                 "☼⇒>   ☼" +
                 "☼     ☼" +
@@ -409,7 +409,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼→►   ☼" +
                 "☼     ☼" +
-                "☼⇒>%  ☼" +
+                "☼⇒>©  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -452,7 +452,7 @@ public class PlayerCommunicationTest {
     public void eatEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►@ ☼" +
+                "☼ →►® ☼" +
                 "☼     ☼" +
                 "☼ ⇒>○○☼" +
                 "☼     ☼" +
@@ -491,7 +491,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼→►○○ ☼" +
                 "☼     ☼" +
-                "☼⇒>@  ☼" +
+                "☼⇒>®  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -514,7 +514,7 @@ public class PlayerCommunicationTest {
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►@  ☼" +
+                "☼→►®  ☼" +
                 "☼     ☼" +
                 "☼⇒>○  ☼" +
                 "☼     ☼" +
