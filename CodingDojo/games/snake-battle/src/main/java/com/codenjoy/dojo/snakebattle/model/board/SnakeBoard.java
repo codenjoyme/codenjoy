@@ -349,7 +349,7 @@ public class SnakeBoard implements Field {
         return null;
     }
 
-    void addToPoint(Point p) {
+    public void addToPoint(Point p) {
         if (p instanceof Apple)
             setApple(p);
         else if (p instanceof Stone)
@@ -483,7 +483,7 @@ public class SnakeBoard implements Field {
         throw new RuntimeException(message);
     }
 
-    Point getObjOn(Point additionObject) {
+    public Point getObjOn(Point additionObject) {
         if (apples.contains(additionObject))
             return new Apple(additionObject);
         if (stones.contains(additionObject))

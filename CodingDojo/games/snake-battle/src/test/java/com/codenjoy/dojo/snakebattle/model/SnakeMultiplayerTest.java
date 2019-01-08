@@ -1,11 +1,11 @@
 package com.codenjoy.dojo.snakebattle.model;
 
 /*-
- * #%L
+ * #©L
  * Codenjoy - it's a dojo-like platform from developers to developers.
- * %%
+ * ©©
  * Copyright (C) 2018 Codenjoy
- * %%
+ * ©©
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,7 +19,7 @@ package com.codenjoy.dojo.snakebattle.model;
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
+ * #L©
  */
 
 
@@ -41,15 +41,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * @author Kors
+ * ®author Kors
  */
-public class PlayerCommunicationTest {
+public class SnakeMultiplayerTest {
     private SnakeBoard game;
-    private Hero hero;
-    private Hero enemy;
     private Dice dice;
-    private EventListener listener;
-    private Player player;
+
+    private Hero hero;
+    private EventListener heroEvents;
+    private Player heroPlayer;
+
+    private Hero enemy;
+    private EventListener enemyEvents;
+    private Player enemyPlayer;
+
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
@@ -59,23 +64,23 @@ public class PlayerCommunicationTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-
         game = new SnakeBoard(level, dice);
-        listener = mock(EventListener.class);
 
         Hero hero = level.getHero();
         hero.setActive(true);
-        player = new Player(listener);
-        game.newGame(player);
-        player.setHero(hero);
+        heroEvents = mock(EventListener.class);
+        heroPlayer = new Player(heroEvents);
+        game.newGame(heroPlayer);
+        heroPlayer.setHero(hero);
         hero.init(game);
         this.hero = game.getHeroes().get(0);
 
         Hero enemy = level.getEnemy();
         enemy.setActive(true);
-        Player player2 = new Player(mock(EventListener.class));
-        game.newGame(player2);
-        player2.setHero(enemy);
+        enemyEvents = mock(EventListener.class);
+        enemyPlayer = new Player(enemyEvents);
+        game.newGame(enemyPlayer);
+        enemyPlayer.setHero(enemy);
         enemy.init(game);
         this.enemy = game.getHeroes().get(1);
     }
@@ -85,17 +90,25 @@ public class PlayerCommunicationTest {
     public void enemyOnField() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -105,30 +118,39 @@ public class PlayerCommunicationTest {
     public void testSleepingSnake() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         hero.setActive(false);
         enemy.setActive(false);
 
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ~&  ☼" +
+                "☼     ☼" +
+                "☼ *ø  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ᓕ⬢  ☼" +
+                "☼ *ø  ☼" +
                 "☼     ☼" +
-                "☼ ᓚ⬡  ☼" +
+                "☼ ~&  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ᓕ⬢  ☼" +
+                "☼ ~&  ☼" +
                 "☼     ☼" +
-                "☼ ᓚ⬡  ☼" +
+                "☼ *ø  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -139,9 +161,9 @@ public class PlayerCommunicationTest {
     public void diedBothHeroes() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼ ⇒>  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -149,19 +171,35 @@ public class PlayerCommunicationTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ☻  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  æ  ☼" +
+                "☼  ☺  ☼" +
+                "☼  ╙  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        verify(heroEvents).event(Events.DIE);
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -177,42 +215,72 @@ public class PlayerCommunicationTest {
     public void diedSmallerHero() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►  ☼" +
+                "☼   ╘►☼" +
                 "☼     ☼" +
-                "☼ ⇒>○○☼" +
+                "☼ ×──>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
-        game.tick();
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼ ×──>☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼ ╘══►☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         hero.down();
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼    ↓☼" +
+                "☼    ╓☼" +
                 "☼    ☻☼" +
-                "☼  ⇒—╜☼" +
+                "☼  ×─┘☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    æ☼" +
+                "☼    ☺☼" +
+                "☼  ╘═╝☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        verify(heroEvents).event(Events.DIE);
         game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    ˄☼" +
+                "☼    ¤☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼    ∧☼" +
-                "☼    ⇑☼" +
+                "☼    ▲☼" +
+                "☼    ╙☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
-                "☼    ∧☼" +
-                "☼    ⇑☼" +
+        assertH("☼☼☼☼☼☼☼" +
+                "☼    ˄☼" +
+                "☼    ¤☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -225,42 +293,77 @@ public class PlayerCommunicationTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►○  ☼" +
-                "☼⇒>   ☼" +
+                "☼╘═►  ☼" +
+                "☼ ×>  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        game.tick();
-        verify(listener).event(Events.APPLE);
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╘═►  ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼×─>  ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →═► ☼" +
-                "☼  ⇑  ☼" +
+                "☼ ╘═► ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.ALIVE);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×─> ☼" +
+                "☼  ╙  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        verify(heroEvents).event(Events.ALIVE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  →═►☼" +
+                "☼  ╘═►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ×─>☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // TODO продолжить дальше улучшать тесты
+
+    @Test
+    public void diedByBody2() {
         // такой же тест, но врезается игрок в противника
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
-                "☼⇒>○  ☼" +
+                "☼╘►   ☼" +
+                "☼×>○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -269,21 +372,21 @@ public class PlayerCommunicationTest {
         hero.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼ ⇒☻> ☼" +
+                "☼  ╓  ☼" +
+                "☼ ×☻> ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        verify(heroEvents).event(Events.DIE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ⇒—>☼" +
+                "☼  ×─>☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -295,8 +398,8 @@ public class PlayerCommunicationTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
-                "☼⇒>○  ☼" +
+                "☼╘►   ☼" +
+                "☼×>○  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -305,19 +408,19 @@ public class PlayerCommunicationTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  →► ☼" +
-                "☼ ⇒╜  ☼" +
+                "☼  ╘► ☼" +
+                "☼ ×┘  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼   →►☼" +
+                "☼   ╘►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -327,8 +430,8 @@ public class PlayerCommunicationTest {
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
-                "☼⇒>   ☼" +
+                "☼╘►   ☼" +
+                "☼×>   ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -337,21 +440,21 @@ public class PlayerCommunicationTest {
         hero.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ☻> ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener).event(Events.DIE);
+        verify(heroEvents).event(Events.DIE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ⇒>☼" +
+                "☼   ×>☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -362,9 +465,9 @@ public class PlayerCommunicationTest {
     public void flyOverEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►%  ☼" +
+                "☼╘►©  ☼" +
                 "☼     ☼" +
-                "☼⇒>   ☼" +
+                "☼×>   ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -373,32 +476,32 @@ public class PlayerCommunicationTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼  ⊖  ☼" +
-                "☼  ⇑  ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼");
-
-        game.tick();
-
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼  ∧  ☼" +
-                "☼  ↓  ☼" +
-                "☼  ⊖  ☼" +
+                "☼  ╓  ☼" +
+                "☼  ♠  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
-                "☼  ∧  ☼" +
-                "☼  ⇑  ☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼  ⊖  ☼" +
+                "☼  ˄  ☼" +
+                "☼  ╓  ☼" +
+                "☼  ♠  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼  ˄  ☼" +
+                "☼  ¤  ☼" +
+                "☼     ☼" +
+                "☼  ╓  ☼" +
+                "☼  ♠  ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
@@ -407,9 +510,9 @@ public class PlayerCommunicationTest {
     public void flyOverHero() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►   ☼" +
+                "☼╘►   ☼" +
                 "☼     ☼" +
-                "☼⇒>%  ☼" +
+                "☼×>©  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -418,31 +521,31 @@ public class PlayerCommunicationTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
-                "☼  ⇑  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ⊘  ☼" +
-                "☼  ↓  ☼" +
+                "☼  ♦  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
-                "☼  ⊘  ☼" +
-                "☼  ⇑  ☼" +
+        assertH("☼☼☼☼☼☼☼" +
+                "☼  ♦  ☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
+                "☼  ╓  ☼" +
                 "☼  ▼  ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -452,9 +555,9 @@ public class PlayerCommunicationTest {
     public void eatEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →►@ ☼" +
+                "☼ ╘►® ☼" +
                 "☼     ☼" +
-                "☼ ⇒>○○☼" +
+                "☼ ×>○○☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -464,21 +567,21 @@ public class PlayerCommunicationTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼    ↓☼" +
-                "☼    ⊕☼" +
-                "☼  ⇒—╜☼" +
+                "☼    ╓☼" +
+                "☼    ♥☼" +
+                "☼  ×─┘☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼    ↓☼" +
-                "☼    ⊕☼" +
+                "☼    ╓☼" +
+                "☼    ♥☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
@@ -489,23 +592,23 @@ public class PlayerCommunicationTest {
         // когда в игрока врезается противник
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►○○ ☼" +
+                "☼╘►○○ ☼" +
                 "☼     ☼" +
-                "☼⇒>@  ☼" +
+                "☼×>®  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
         game.tick();
-        verify(listener).event(Events.APPLE);
+        verify(heroEvents).event(Events.APPLE);
         enemy.up();
         game.tick();
-        verify(listener, times(2)).event(Events.APPLE);
+        verify(heroEvents, times(2)).event(Events.APPLE);
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ⊗→►☼" +
-                "☼  ⇑  ☼" +
+                "☼  ♣╘►☼" +
+                "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -514,9 +617,9 @@ public class PlayerCommunicationTest {
         // (последовательность героев в списке может оказывать значение на результат)
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼→►@  ☼" +
+                "☼╘►®  ☼" +
                 "☼     ☼" +
-                "☼⇒>○  ☼" +
+                "☼×>○  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -525,17 +628,25 @@ public class PlayerCommunicationTest {
         game.tick();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼  ↓  ☼" +
-                "☼  ⊕⇒>☼" +
+                "☼  ╓  ☼" +
+                "☼  ♥×>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
-    private void assertE(String expected) {
+    private void assertH(String expected) {
+        assertBoard(expected, heroPlayer);
+    }
+
+    private void assertBoard(String expected, Player player) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
+    }
+
+    private void assertE(String expected) {
+        assertBoard(expected, enemyPlayer);
     }
 }

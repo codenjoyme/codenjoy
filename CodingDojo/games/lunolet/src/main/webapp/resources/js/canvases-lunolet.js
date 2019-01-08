@@ -435,7 +435,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
 
         score.html(text);
 
-        score.show().delay(300).fadeOut(1600, function() {
+        score.show().delay(700).fadeOut(200, function() {
             score.hide();
 
             showScoreInformation(playerName, '');
