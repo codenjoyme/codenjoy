@@ -116,9 +116,9 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ᓕ&  ☼" +
+                "☼ ~&  ☼" +
                 "☼     ☼" +
-                "☼ ᓚ*  ☼" +
+                "☼ *ø  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
@@ -126,9 +126,9 @@ public class PlayerCommunicationTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ᓕ&  ☼" +
+                "☼ ~&  ☼" +
                 "☼     ☼" +
-                "☼ ᓚ*  ☼" +
+                "☼ ø*  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
