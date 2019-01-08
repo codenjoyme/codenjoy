@@ -823,7 +823,7 @@ public class SnakeBoardTest {
 
     // съедая пилюлю полёта, змейка перелетает камни
     @Test
-    public void flyingOverStones() {
+    public void shouldFlyingOverStones_whenEatFlyingPill() {
         givenFl("☼☼☼☼☼☼☼☼☼" +
                 "☼       ☼" +
                 "☼       ☼" +
@@ -834,9 +834,12 @@ public class SnakeBoardTest {
                 "☼       ☼" +
                 "☼☼☼☼☼☼☼☼☼");
 
+        assertEquals(false, hero.isFlying());
+
         game.tick();
 
         assertEquals(10, hero.getFlyingCount());
+        assertEquals(true, hero.isFlying());
 
         assertE("☼☼☼☼☼☼☼☼☼" +
                 "☼       ☼" +
@@ -851,6 +854,7 @@ public class SnakeBoardTest {
         game.tick();
 
         assertEquals(9, hero.getFlyingCount());
+        assertEquals(true, hero.isFlying());
 
         assertE("☼☼☼☼☼☼☼☼☼" +
                 "☼       ☼" +
@@ -865,7 +869,9 @@ public class SnakeBoardTest {
         game.tick();
 
         assertEquals(8, hero.getFlyingCount());
+        assertEquals(0, hero.getFuryCount());
         assertEquals(0, hero.getStonesCount());
+        assertEquals(true, hero.isFlying());
         assertEquals(true, hero.isAlive());
 
         assertE("☼☼☼☼☼☼☼☼☼" +
@@ -883,6 +889,7 @@ public class SnakeBoardTest {
 
         assertEquals(6, hero.getFlyingCount());
         assertEquals(0, hero.getStonesCount());
+        assertEquals(true, hero.isFlying());
         assertEquals(true, hero.isAlive());
 
         // камень остался на месте
@@ -895,7 +902,71 @@ public class SnakeBoardTest {
                 "☼       ☼" +
                 "☼       ☼" +
                 "☼☼☼☼☼☼☼☼☼");
+    }
 
+    @Test
+    public void shouldDisableFlyingPillEffect_when10Ticks() {
+        shouldFlyingOverStones_whenEatFlyingPill();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼    ●╘♠☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertEquals(3, hero.getFlyingCount());
+        assertEquals(true, hero.isFlying());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼      ♠☼" +
+                "☼      ╙☼" +
+                "☼       ☼" +
+                "☼    ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+        game.tick();
+
+        assertEquals(1, hero.getFlyingCount());
+        assertEquals(true, hero.isFlying());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼    ♠╕ ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼    ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(0, hero.getFlyingCount());
+        assertEquals(false, hero.isFlying());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼   ◄╕  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼    ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
     }
 
     // съедая пилюлю полёта, змейка может летать над собой
@@ -947,30 +1018,149 @@ public class SnakeBoardTest {
 
     // съедая пилюлю ярости, змейка ест камни без ущерба
     @Test
-    public void furyEatingStones() {
-        givenFl("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼ ╘►® ☼" +
-                "☼   ● ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼");
+    public void shouldEatStones_whenEatFuryPill() {
+        givenFl("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼╘►® ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        assertEquals(false, hero.isFury());
 
         game.tick();
-        assertEquals("Змейка не съела пилюлю ярости!", 10, hero.getFuryCount());
-        hero.down();
+
+        assertEquals(10, hero.getFuryCount());
+        assertEquals(true, hero.isFury());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼ ╘♥ ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
         game.tick();
-        assertTrue("Змейка умерла от камня при ярости!", hero.isAlive());
-        assertEquals("Змейка не съела камень при ярости!", 1, hero.getStonesCount());
+
+        assertEquals(9, hero.getFuryCount());
+        assertEquals(true, hero.isFury());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼  ╘♥●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(8, hero.getFuryCount());
+        assertEquals(0, hero.getFlyingCount());
+        assertEquals(1, hero.getStonesCount());
+        assertEquals(true, hero.isFury());
+        assertEquals(true, hero.isAlive());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼   ╘♥  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
         game.tick();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼   ╓ ☼" +
-                "☼   ♥ ☼" +
-                "☼☼☼☼☼☼☼");
+        assertEquals(6, hero.getFuryCount());
+        assertEquals(1, hero.getStonesCount());
+        assertEquals(true, hero.isFury());
+        assertEquals(true, hero.isAlive());
+
+        // камень пропал
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼     ╘♥☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldDisableFuryPillEffect_when10Ticks() {
+        shouldEatStones_whenEatFuryPill();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼     ╘♥☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertEquals(3, hero.getFuryCount());
+        assertEquals(true, hero.isFury());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+        game.tick();
+
+        assertEquals(1, hero.getFuryCount());
+        assertEquals(true, hero.isFury());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼    ♥╕ ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertEquals(0, hero.getFuryCount());
+        assertEquals(false, hero.isFury());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼   ◄╕  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
     }
 }
