@@ -24,12 +24,20 @@ socket.addEventListener('message', function (event) {
 });
 
 function processBoard(board) {
-    var answer = getNextSnakeMove(board);
+    var programLogs = "";
+    function logger(message) {
+        programLogs += message + "\n"
+    }
+    var answer = getNextSnakeMove(board, logger);
     var boardString = getBoardAsString(board);
 
     var logMessage = boardString + "\n\n";
-    logMessage += "Answer: " + answer + "\n";
+    if (programLogs) {
+        logMessage += "-----------------------------------\n";
+        logMessage += programLogs;
+    }
     logMessage += "-----------------------------------\n";
+    logMessage += "Answer: " + answer + "\n";
 
     printBoard(boardString);
     printLog(logMessage);

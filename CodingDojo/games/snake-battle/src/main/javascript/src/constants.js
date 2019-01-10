@@ -1,24 +1,24 @@
 export const ELEMENT = {
-      NONE: ' ',        // empty space where user can get into
-      WALL: '0',        // wall cannot get through
+      NONE: ' ',
+      WALL: '☼',
       START_FLOOR: '#', // snake start
       OTHER: '?',
 
-      APPLE: '0',
-      STONE: '?',
-      FLYING_PILL: '©',
-      FURY_PILL: '®',
+      APPLE: '○',
+      STONE: '●',
+      FLYING_PILL: '%',
+      FURY_PILL: '@',
       GOLD: '$',
 
       // player
-      HEAD_DOWN: 'Ў',
-      HEAD_LEFT: '<',
-      HEAD_RIGHT: '>',
-      HEAD_UP: '^',
-      HEAD_DEAD: 'O',
-      HEAD_EVIL: '¦',
-      HEAD_FLY: '¦',
-      HEAD_SLEEP: '&',
+      HEAD_DOWN: '▼',
+      HEAD_LEFT: '◄',
+      HEAD_RIGHT: '►',
+      HEAD_UP: '▲',
+      HEAD_DEAD: '☻',
+      HEAD_EVIL: '⊕',
+      HEAD_FLY: '⊖',
+      HEAD_SLEEP: '⬢',
 
       TAIL_END_DOWN: 'L',
       TAIL_END_LEFT: 'L',
@@ -34,14 +34,14 @@ export const ELEMENT = {
       BODY_RIGHT_UP: 'L',
 
       // enemy
-      ENEMY_HEAD_DOWN: '?',
+      ENEMY_HEAD_DOWN: '∨',
       ENEMY_HEAD_LEFT: '<',
       ENEMY_HEAD_RIGHT: '>',
-      ENEMY_HEAD_UP: '?',
-      ENEMY_HEAD_DEAD: 'O',
-      ENEMY_HEAD_EVIL: '¦',
-      ENEMY_HEAD_FLY: '¦',
-      ENEMY_HEAD_SLEEP: 'o',
+      ENEMY_HEAD_UP: '∧',
+      ENEMY_HEAD_DEAD: '☺',
+      ENEMY_HEAD_EVIL: '⊗',
+      ENEMY_HEAD_FLY: '⊘',
+      ENEMY_HEAD_SLEEP: '⬡',
 
       ENEMY_TAIL_END_DOWN: '¤',
       ENEMY_TAIL_END_LEFT: '?',
