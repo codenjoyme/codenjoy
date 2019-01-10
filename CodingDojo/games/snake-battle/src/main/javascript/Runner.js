@@ -8,12 +8,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -81,42 +81,63 @@ ws.on('message', function (message) {
 
 log('Web socket client running at ' + url);
 
-// TODO:BATTLE исправить все Elements (взять из https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/snake-battle/src/main/java/com/codenjoy/dojo/snakebattle/model/Elements.java)
 var Element = {
-    /// This is your Bomberman
-    BOMBERMAN: '☺',             // this is what he usually looks like
-    BOMB_BOMBERMAN: '☻',        // this is if he is sitting on own bomb
-    DEAD_BOMBERMAN: 'Ѡ',        // oops, your Bomberman is dead (don't worry, he will appear somewhere in next move)
-                                // you're getting -200 for each death
+      NONE: ' ',        // например это пустое место, куда можно перейти герою
+      WALL: '0',        // а это стенка, через которую я хочу чтобы проходить нельзя было
+      START_FLOOR: '#', // место старта змей
+      OTHER: '?',       // TODO а это что за чудо?
 
-    /// this is other players Bombermans
-    OTHER_BOMBERMAN: '♥',       // this is what other Bombermans looks like
-    OTHER_BOMB_BOMBERMAN: '♠',  // this is if player just set the bomb
-    OTHER_DEAD_BOMBERMAN: '♣',  // enemy corpse (it will disappear shortly, right on the next move)
-                                // if you've done it you'll get +1000
+      APPLE: '0',
+      STONE: '?',
+      FLYING_PILL: '©',
+      FURY_PILL: '®',
+      GOLD: '$',
 
-    /// the bombs
-    BOMB_TIMER_5: '5',          // after bomberman set the bomb, the timer starts (5 tacts)
-    BOMB_TIMER_4: '4',          // this will blow up after 4 tacts
-    BOMB_TIMER_3: '3',          // this after 3
-    BOMB_TIMER_2: '2',          // two
-    BOMB_TIMER_1: '1',          // one
-    BOOM: '҉',                  // Boom! this is what is bomb does, everything that is destroyable got destroyed
+      // игрок
+      HEAD_DOWN: 'Ў',
+      HEAD_LEFT: '<',
+      HEAD_RIGHT: '>',
+      HEAD_UP: '^',
+      HEAD_DEAD: 'O',
+      HEAD_EVIL: '¦',
+      HEAD_FLY: '¦',
+      HEAD_SLEEP: '&',
 
-    /// walls
-    WALL: '☼',                  // indestructible wall - it will not fall from bomb
-    DESTROYABLE_WALL: '#',      // this wall could be blowed up
-    DESTROYED_WALL: 'H',        // this is how broken wall looks like, it will dissapear on next move
-                                // if it's you did it - you'll get +10 points.
+      TAIL_END_DOWN: 'L',
+      TAIL_END_LEFT: 'L',
+      TAIL_END_UP: 'г',
+      TAIL_END_RIGHT: '¬',
+      TAIL_INACTIVE: '~',
 
-    /// meatchoppers
-    MEAT_CHOPPER: '&',          // this guys runs over the board randomly and gets in the way all the time
-                                // if it will touch bomberman - it will die
-                                // you'd better kill this piece of ... meat, you'll get +100 point for it
-    DEAD_MEAT_CHOPPER: 'x',     // this is chopper corpse
+      BODY_HORIZONTAL: '=',
+      BODY_VERTICAL: '¦',
+      BODY_LEFT_DOWN: '¬',
+      BODY_LEFT_UP: '-',
+      BODY_RIGHT_DOWN: 'г',
+      BODY_RIGHT_UP: 'L',
 
-    /// a void
-    NONE: ' '                  // this is the only place where you can move your Bomberman
+      // противник
+      ENEMY_HEAD_DOWN: '?',
+      ENEMY_HEAD_LEFT: '<',
+      ENEMY_HEAD_RIGHT: '>',
+      ENEMY_HEAD_UP: '?',
+      ENEMY_HEAD_DEAD: 'O',
+      ENEMY_HEAD_EVIL: '¦',
+      ENEMY_HEAD_FLY: '¦',
+      ENEMY_HEAD_SLEEP: 'o',
+
+      ENEMY_TAIL_END_DOWN: '¤',
+      ENEMY_TAIL_END_LEFT: '?',
+      ENEMY_TAIL_END_UP: '?',
+      ENEMY_TAIL_END_RIGHT: 'o',
+      ENEMY_TAIL_INACTIVE: '*',
+
+      ENEMY_BODY_HORIZONTAL: '-',
+      ENEMY_BODY_VERTICAL: '¦',
+      ENEMY_BODY_LEFT_DOWN: '¬',
+      ENEMY_BODY_LEFT_UP: '-',
+      ENEMY_BODY_RIGHT_DOWN: '-',
+      ENEMY_BODY_RIGHT_UP: 'L'
 };
 
 var D = function (index, dx, dy, name) {
@@ -497,4 +518,3 @@ var DirectionSolver = function (board) {
         }
     };
 };
-
