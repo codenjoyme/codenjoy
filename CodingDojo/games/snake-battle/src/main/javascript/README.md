@@ -1,25 +1,23 @@
-Registration:
-- on page http://server/codenjoy-contest/help
-    + you can read game instructions
-        * server = server_host_ip:8080 server ip inside your LAN
-        * server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
-- register your hero on server http://server/codenjoy-contest/register
-- change variable at Runner.js
-    + var hostIp = server_host_ip;
-        * to use 'tetrisj.jvmhost.net' for play on http://codenjoy.com/codenjoy-contest
-        * to use server_host_ip for play on LAN
-- change your email at Runner.js
-    + var userName = 'user@gmail.com';
-- write your own bot at 'get' function
+# Snake battle
+JavaScript Bot example for UI challenge
 
-For JavaScript with browser:
-- write bot
-- run run-client.html
+## Useful Links
+ * [Game rules](http://codenjoy.com/codenjoy-contest/resources/help/snakebattle.html)
+ * [Registration page](http://codenjoy.com/codenjoy-contest/register)
+ * Bot example (this source code)
 
-For JavaScript with node.js:
-- install Node.js from http://nodejs.org/
-- update Path System variable - add node.js root folder
-- setup new node.js library - run
-    + npm install ws
-- write bot
-- run run-client.bat
+## Quick Start
+Following steps will execute demo bot in browser and will connect it to game server
+  * Install [NodeJS](https://nodejs.org/en/)
+  * Install dependencies: `npm install`
+  * Start test page: `npm run start`
+  * Open browser in http://localhost:8080/
+  * Login to game server and copy URL (insert to demo page)
+
+## How to write your bot
+Enter bot.js file and replace code with your own
+```javascript
+function giveNextStep(board) {
+    // Your code goes here
+}
+```

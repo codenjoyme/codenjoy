@@ -85,7 +85,7 @@ var Element = {
       NONE: ' ',        // например это пустое место, куда можно перейти герою
       WALL: '0',        // а это стенка, через которую я хочу чтобы проходить нельзя было
       START_FLOOR: '#', // место старта змей
-      OTHER: '?',       // TODO а это что за чудо?
+      OTHER: '?',
 
       APPLE: '0',
       STONE: '?',
@@ -190,7 +190,6 @@ var Direction = {
     LEFT: D(0, -1, 0, 'left'),
     RIGHT: D(1, 1, 0, 'right'),
     ACT: D(4, 0, 0, 'act'),                // drop bomb
-    STOP: D(5, 0, 0, '')                   // stay
 };
 
 Direction.values = function () {
@@ -292,7 +291,7 @@ var Board = function (board) {
     var size = boardSize();
     var xyl = new LengthToXY(size);
 
-    // TODO:BATTLE исправить метод на аналогичный для snakebattle
+    // @TODO :BATTLE исправить метод на аналогичный для snakebattle
     var getBomberman = function () {
         var result = [];
         result = result.concat(findAll(Element.BOMBERMAN));
@@ -301,7 +300,7 @@ var Board = function (board) {
         return result[0];
     };
 
-    // TODO:BATTLE исправить метод на аналогичный для snakebattle
+    // @TODO :BATTLE исправить метод на аналогичный для snakebattle
     var getOtherBombermans = function () {
         var result = [];
         result = result.concat(findAll(Element.OTHER_BOMBERMAN));
@@ -510,10 +509,10 @@ var DirectionSolver = function (board) {
          * @return next hero action
          */
         get: function () {
-            var bomberman = board.getBomberman();
-
-            // TODO your code here
-
+            var r = random(100);
+            if (r < 10) {
+                return Direction.LEFT;
+            }
             return Direction.ACT;
         }
     };
