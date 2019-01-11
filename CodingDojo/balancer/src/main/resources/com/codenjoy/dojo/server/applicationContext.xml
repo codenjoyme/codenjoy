@@ -1,0 +1,53 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.codenjoy.dojo.services"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
+    </bean>
+
+    <import resource="applicationContext-database.xml"/>
+
+    <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
+        <constructor-arg index="0" value="100" type="int"/>
+    </bean>
+
+    <bean name="controlPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
+    <bean name="playerController" class="com.codenjoy.dojo.services.controller.PlayerController" >
+        <property name="transport" ref="controlPlayerTransport"/>
+    </bean>
+
+    <bean name="screenPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
+    <bean name="screenController" class="com.codenjoy.dojo.services.controller.ScreenController" init-method="init">
+        <property name="transport" ref="screenPlayerTransport"/>
+    </bean>
+
+</beans>
