@@ -24,6 +24,7 @@
     <modules>
         <module>games</module>
         <module>server</module>
+        <module>balancer</module>
         <module>builder</module>
         <module>utilities</module>
     </modules>
