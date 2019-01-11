@@ -9,6 +9,7 @@ import { BattleFrame, DaysPanel, RatingTable } from 'components';
 // own
 import Styles from './styles.module.css';
 
+// TODO set env variables
 const period = {
     start: '2019-01-01T10:00:00.000Z',
     end:   '2019-01-16T10:00:00.000Z',

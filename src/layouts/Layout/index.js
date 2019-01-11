@@ -10,7 +10,7 @@ import { Header } from 'layouts';
 
 class LayoutComponent extends Component {
     render() {
-        const { children } = this.props;
+        const { children, logout } = this.props;
 
         return (
             <DocumentTitle title='Codenjoy event'>
@@ -23,11 +23,11 @@ class LayoutComponent extends Component {
     }
 }
 
-const mapStateToProps = state => ({});
+// const mapStateToProps = state => ({});
 
 const mapDispatchToProps = { logout };
 
 export const ConnectedLayout = connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps,
 )(LayoutComponent);

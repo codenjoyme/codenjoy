@@ -12,7 +12,6 @@ export default class Public extends Component {
             <Switch>
                 <Route exact component={ BoardPage } path={ book.board } />
                 <Route exact component={ LoginPage } path={ book.login } />
-                <Route exact component={ ExceptionPage } path={ book.error } />
                 <Route component={ ExceptionPage } path={ book.exceptionStatusCode } />
                 <Redirect to={ book.login } />
             </Switch>
