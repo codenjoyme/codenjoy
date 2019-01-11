@@ -1,0 +1,61 @@
+.dayPanel {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dayPanel .item {
+    margin: 10px;
+}
+
+.dayPanel button {
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none;
+    background-color: white;
+    border: none;
+    font-size: 16px;
+    padding: 10px;
+}
+
+.wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    font-weight: bold;
+    text-align: center;
+}
+
+.wrapper>* {
+    padding: 10px;
+    flex: 1 100%;
+}
+
+.main {
+    text-align: left;
+    background-color: rgb(68, 101, 148);
+}
+
+.aside {
+    padding-top: 20px;
+    font-size: 30px;
+    background-color: rgb(57, 194, 215);
+}
+
+@media all and (min-width: 600px) {
+    .aside {
+        flex: 1 0 0;
+    }
+}
+
+@media all and (min-width: 800px) {
+    .main {
+        flex: 3 0px;
+    }
+
+    .aside-1 {
+        order: 1;
+    }
+
+    .main {
+        order: 2;
+    }
+}

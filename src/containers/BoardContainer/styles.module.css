@@ -1,0 +1,39 @@
+.wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    font-weight: bold;
+    text-align: center;
+}
+
+.wrapper>* {
+    padding: 10px;
+    flex: 1 100%;
+}
+
+.rating {
+    background-color: rgb(58, 84, 120);
+}
+
+.frame {
+    background-color: rgb(58, 84, 120);
+}
+
+@media all and (min-width: 600px) {
+    .frame {
+        flex: 1 0 0;
+    }
+}
+
+@media all and (min-width: 800px) {
+    .rating {
+        flex: 1 0px;
+    }
+
+    .rating {
+        order: 1;
+    }
+
+    .frame {
+        order: 2;
+    }
+}

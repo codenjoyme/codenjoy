@@ -1,0 +1,137 @@
+// vendor
+import { all, call, put, take } from 'redux-saga/effects';
+import { replace } from 'connected-react-router';
+
+// proj
+import { book } from 'routes';
+import { fetchAPI, setToken, setUsername, removeToken, removeUsername } from 'utils';
+
+/**
+ * Constants
+ **/
+export const moduleName = 'auth';
+const prefix = `codenjoy/${moduleName}`;
+
+export const LOGIN = `${prefix}/LOGIN`;
+export const LOGIN_SUCCESS = `${prefix}/LOGIN_SUCCESS`;
+export const LOGIN_FAIL = `${prefix}/LOGIN_FAIL`;
+
+export const AUTHENTICATE = `${prefix}/AUTHENTICATE`;
+export const AUTHENTICATE_SUCCESS = `${prefix}/AUTHENTICATE_SUCCESS`;
+export const AUTHENTICATE_FAIL = `${prefix}/AUTHENTICATE_FAIL`;
+
+export const LOGOUT = `${prefix}/LOGOUT`;
+export const LOGOUT_SUCCESS = `${prefix}/LOGOUT_SUCCESS`;
+export const LOGOUT_FAIL = `${prefix}/LOGOUT_FAIL`;
+
+/**
+ * Reducer
+ **/
+const ReducerState = {};
+
+export default function reducer(state = ReducerState, action) {
+    const { type, payload } = action;
+
+    switch (type) {
+        case AUTHENTICATE:
+            return { ...state, ...payload };
+
+        case LOGOUT_SUCCESS:
+            return ReducerState;
+
+        default:
+            return state;
+    }
+}
+/**
+ * Selectors
+ **/
+
+export const selectToken = state => state.auth.token;
+
+/**
+ * Action Creators
+ **/
+
+export const login = credentials => ({
+    type:    LOGIN,
+    payload: credentials,
+});
+
+export const loginSuccess = () => ({
+    type: LOGIN_SUCCESS,
+});
+
+export const authenticate = user => ({
+    type:    AUTHENTICATE,
+    payload: user,
+});
+
+export const authenticateSuccess = () => ({
+    type: AUTHENTICATE_SUCCESS,
+});
+
+export const logout = () => ({
+    type: LOGOUT,
+});
+
+export const logoutSuccess = () => ({
+    type: LOGOUT_SUCCESS,
+});
+
+export const logoutFail = error => ({
+    type:    LOGOUT_FAIL,
+    payload: error,
+    error:   true,
+});
+
+/**
+ * Saga
+ **/
+
+export function* loginFormSaga() {
+    while (true) {
+        const {
+            payload: { ...credentials },
+        } = yield take(LOGIN);
+        const user = yield call(
+            fetchAPI,
+            'POST',
+            'login',
+            null,
+            credentials,
+            // false,
+        );
+
+        yield put(authenticate(user));
+        yield put(loginSuccess());
+        yield put(replace(book.board));
+    }
+}
+
+export function* authenticateSaga() {
+    while (true) {
+        const { payload: user } = yield take(AUTHENTICATE);
+
+        yield setToken(user.token);
+        yield setUsername(user.name);
+
+        yield put(authenticateSuccess());
+    }
+}
+
+export function* logoutSaga() {
+    while (true) {
+        yield take(LOGOUT);
+
+        yield removeToken();
+        yield removeUsername();
+
+        yield put(replace(`${book.login}`));
+        yield put(logoutSuccess());
+    }
+}
+
+export function* saga() {
+    yield all([ call(loginFormSaga), call(authenticateSaga), call(logoutSaga) ]);
+}
