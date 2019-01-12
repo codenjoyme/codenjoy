@@ -48,12 +48,14 @@ public class Dispatcher {
     @Autowired private Scores scores;
 
     private List<String> servers = new CopyOnWriteArrayList<>();
+    private String urlCreatePlayer;
+    private String urlGetPlayers;
     private String gameType;
-    private String urlPattern;
 
     public Dispatcher() {
         // TODO move to admin
-        urlPattern = "http://%s/codenjoy-contest/rest/game/%s/players";
+        urlGetPlayers = "http://%s/codenjoy-contest/rest/game/%s/players";
+        urlCreatePlayer = "http://%s/codenjoy-contest/rest/player/create";
         gameType = "snakebattle";
         servers.add("codenjoy.juja.com.ua");
 //        servers.add("server2.codenjoy.juja.com.ua");
@@ -63,22 +65,33 @@ public class Dispatcher {
     public ServerLocation register(Player player, String callbackUrl) {
         String server = getNextServer();
 
-        String code = createNewPlayer(player, callbackUrl, server);
+        String code = createNewPlayer(
+                server,
+                player.getEmail(),
+                player.getPassword(),
+                callbackUrl);
 
         return new ServerLocation(player.getEmail(), code, server);
     }
 
-    private String createNewPlayer(String email, String callbackUrl, String server) {
+    private String createNewPlayer(String server, String email,
+                                   String password, String callbackUrl)
+    {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> entity = rest.postForEntity(
-                getUrl(server),
+                createPlayerUrl(server),
                 new PlayerDetailInfo(
                         email,
                         callbackUrl,
                         gameType,
                         "0",
                         "{}",
-                        new User()
+                        new User(
+                                email,
+                                1,
+                                password,
+                                null,
+                                null)
 
                 ),
                 String.class);
@@ -101,21 +114,26 @@ public class Dispatcher {
     private List<PlayerInfo> getPlayersInfos(String server) {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<List<PlayerInfo>> entity = rest.exchange(
-                getUrl(server),
+                getPlayersUrl(server),
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<PlayerInfo>>(){});
         return entity.getBody();
     }
 
-    private String getUrl(String server) {
-        return String.format(urlPattern,
+    private String getPlayersUrl(String server) {
+        return String.format(urlGetPlayers,
                 server,
                 gameType);
     }
 
+    private String createPlayerUrl(String server) {
+        return String.format(urlCreatePlayer,
+                server);
+    }
+
     public static void main(String[] args) {
         Dispatcher dispatcher = new Dispatcher();
-        System.out.println(dispatcher.getPlayersInfos(dispatcher.getNextServer()));
+        System.out.println(dispatcher.createNewPlayer(dispatcher.getNextServer(), "apofig@gmail.com", "342859181532890275408", "127.0.0.2"));
     }
 }
