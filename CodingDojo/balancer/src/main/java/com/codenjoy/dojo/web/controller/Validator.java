@@ -24,7 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.PlayerCommand;
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.Players;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -44,22 +44,25 @@ public class Validator {
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
     public static final String CODE = "^[0-9]{1,50}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
+    public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
 
-    @Autowired private Registration registration;
+    @Autowired private Players registration;
 
     private final Pattern email;
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
+    private final Pattern day;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
+        day = Pattern.compile(DAY);
     }
 
-    public void checkPlayerName(String input, boolean canBeNull) {
+    public void checkEmail(String input, boolean canBeNull) {
         boolean empty = StringUtils.isEmpty(input);
         if (!(empty && canBeNull ||
                 !empty && email.matcher(input).matches()))
@@ -98,11 +101,18 @@ public class Validator {
         }
     }
 
-    public void checkPlayerCode(String playerName, String code) {
-        checkPlayerName(playerName, CANT_BE_NULL);
-        checkCode(code, CANT_BE_NULL);
-        if (!registration.checkUser(playerName, code)) {
-            throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + playerName);
+
+    public void checkDay(String input) {
+        if (StringUtils.isEmpty(input) ||
+                !day.matcher(input).matches())
+        {
+            throw new IllegalArgumentException("Day is invalid: " + input);
+        }
+    }
+
+    public void checkString(String input) {
+        if (StringUtils.isEmpty(input)) {
+            throw new IllegalArgumentException("String can be empty: " + input);
         }
     }
 }

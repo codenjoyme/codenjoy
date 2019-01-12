@@ -40,14 +40,4 @@
         <constructor-arg index="0" value="100" type="int"/>
     </bean>
 
-    <bean name="controlPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
-    <bean name="playerController" class="com.codenjoy.dojo.services.controller.PlayerController" >
-        <property name="transport" ref="controlPlayerTransport"/>
-    </bean>
-
-    <bean name="screenPlayerTransport" class="com.codenjoy.dojo.transport.ws.PlayerTransportImpl"/>
-    <bean name="screenController" class="com.codenjoy.dojo.services.controller.ScreenController" init-method="init">
-        <property name="transport" ref="screenPlayerTransport"/>
-    </bean>
-
 </beans>

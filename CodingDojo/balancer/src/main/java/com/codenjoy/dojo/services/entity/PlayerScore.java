@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.rest.pojo;
+package com.codenjoy.dojo.services.entity;
 
 /*-
  * #%L
@@ -22,44 +22,47 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+public class PlayerScore {
 
-public class PMuptiplayerType {
-    private String type;
-    private int roomSize;
-    private int levelsCount;
+    private String day;
+    private long time;
+    private String email;
+    private int score;
 
-    public PMuptiplayerType() {
+    public PlayerScore() {
         // do nothing
     }
 
-    public PMuptiplayerType(MultiplayerType multiplayer) {
-        type = multiplayer.getType();
-        roomSize = multiplayer.getRoomSize();
-        levelsCount = multiplayer.getLevelsCount();
+    public PlayerScore(String day, long time, String email, int score) {
+        this.day = day;
+        this.time = time;
+        this.email = email;
+        this.score = score;
     }
 
-    public int getLevelsCount() {
-        return levelsCount;
+    public String getDay() {
+        return day;
     }
 
-    public int getRoomSize() {
-        return roomSize;
+    public long getTime() {
+        return time;
     }
 
-    public String getType() {
-        return type;
+    public String getEmail() {
+        return email;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public int getScore() {
+        return score;
     }
 
-    public void setRoomSize(int roomSize) {
-        this.roomSize = roomSize;
-    }
-
-    public void setLevelsCount(int levelsCount) {
-        this.levelsCount = levelsCount;
+    @Override
+    public String toString() {
+        return "PlayerScore{" +
+                "day='" + day + '\'' +
+                ", time='" + time + '\'' +
+                ", email='" + email + '\'' +
+                ", score='" + score + '\'' +
+                '}';
     }
 }

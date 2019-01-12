@@ -41,13 +41,13 @@ public class TimerService implements Runnable {
     private ScheduledFuture<?> future;
 
     @Autowired
-    private PlayerService playerService;
+    private Dispatcher dispatcher;
 
     private volatile boolean paused;
     private long period;
 
     public void start() {
-        period = 1000;
+        period = 10000;
         paused = true;
         executor = new ScheduledThreadPoolExecutor(1);
         schedule();
@@ -64,7 +64,7 @@ public class TimerService implements Runnable {
         }
 
         try {
-            playerService.tick();
+            dispatcher.updateScores();
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error while processing next step", e);

@@ -23,12 +23,13 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,66 +39,53 @@ public class Scores {
 
     private CrudConnectionThreadPool pool;
 
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
-                "CREATE TABLE IF NOT EXISTS saves (" +
+                "CREATE TABLE IF NOT EXISTS scores (" +
+                        "day varchar(255), " +
                         "time varchar(255), " +
-                        "name varchar(255), " +
-                        "callbackUrl varchar(255)," +
-                        "gameName varchar(255)," +
-                        "score int," +
-                        "save varchar(255));");
+                        "email varchar(255), " +
+                        "score int);");
     }
 
     void removeDatabase() {
         pool.removeDatabase();
     }
 
-    public void saveGame(final Player player, final String save) {
-        pool.update("INSERT INTO saves " +
-                        "(time, name, callbackUrl, gameName, score, save) " +
-                        "VALUES (?,?,?,?,?,?);",
-                new Object[]{JDBCTimeUtils.toString(new Date(System.currentTimeMillis())),
-                        player.getName(),
-                        player.getCallbackUrl(),
-                        player.getGameName(),
-                        player.getScore(),
-                        save
+    public void saveScore(long time, String email, int score) {
+        Date date = new Date(time);
+        pool.update("INSERT INTO scores " +
+                        "(day, time, email, score) " +
+                        "VALUES (?,?,?,?);",
+                new Object[]{
+                        formatter.format(date),
+                        JDBCTimeUtils.toString(date),
+                        email,
+                        score
                 });
     }
 
-    public PlayerSave loadGame(final String name) {
-        return pool.select("SELECT * FROM saves WHERE name = ? ORDER BY time DESC LIMIT 1;",
-                new Object[]{name},
+    public List<PlayerScore> getScores(String day) {
+        return pool.select("SELECT * FROM scores WHERE day = ? ORDER BY time DESC LIMIT 1;",
+                new Object[]{day},
                 rs -> {
-                    if (rs.next()) {
-                        String callbackUrl = rs.getString("callbackUrl");
-                        int score = rs.getInt("score");
-                        String gameName = rs.getString("gameName");
-                        String save = rs.getString("save");
-                        return new PlayerSave(name, callbackUrl, gameName, score, save);
-                    } else {
-                        return PlayerSave.NULL;
-                    }
-                }
-        );
-    }
-
-    public List<String> getSavedList() {
-        return pool.select("SELECT DISTINCT name FROM saves;", // TODO убедиться, что загружены самые последние
-                rs -> {
-                    List<String> result = new LinkedList<>();
+                    List<PlayerScore> result = new LinkedList<>();
                     while (rs.next()) {
-                        String name = rs.getString("name");
-                        result.add(name);
+                        result.add(new PlayerScore(
+                                rs.getString("day"),
+                                rs.getLong("time"),
+                                rs.getString("email"),
+                                rs.getInt("score")));
                     }
                     return result;
                 }
         );
     }
 
-    public void delete(final String name) {
-        pool.update("DELETE FROM saves WHERE name = ?;",
+    public void delete(String name) {
+        pool.update("DELETE FROM scores WHERE name = ?;",
                 new Object[]{name});
     }
 }

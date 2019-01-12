@@ -35,11 +35,11 @@
 
     <bean id="scores" class="com.codenjoy.dojo.services.dao.Scores">
         <constructor-arg ref="connectionThreadPollFactory"/>
-        <constructor-arg value="20"/>
     </bean>
 
-    <bean id="registration" class="com.codenjoy.dojo.services.dao.Registration">
+    <bean id="players" class="com.codenjoy.dojo.services.dao.Players">
         <constructor-arg ref="connectionThreadPollFactory"/>
     </bean>
+
 
 </beans>
