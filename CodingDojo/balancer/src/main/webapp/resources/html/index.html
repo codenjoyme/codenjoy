@@ -1,0 +1,80 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 - 2019 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="jquery.md5.js"></script>
+    <script>
+        var registerUser = function(email, firstName,
+                                    lastName, password,
+                                    city, skills, comment)
+        {
+            $.ajax({
+                type: 'POST',
+                url: $("#server").val() + '/register',
+                dataType: 'json',
+                async: false,
+                data: '{"email": "' + email + '", ' +
+                        '"firstName" : "' + firstName + '", ' +
+                        '"lastName" : "' + lastName + '", ' +
+                        '"password" : "' + password + '", ' +
+                        '"city" : "' + city + '", ' +
+                        '"skills" : "' + skills + '", ' +
+                        '"comment" : "' + comment + '"}',
+                success: function(data) {
+                    $("#register-result").val(data);
+                }
+            })
+        };
+
+        $(document).ready(function() {
+            $("#register").click(function() {
+                var preffix = $("#preffix").val();
+                registerUser(
+                    preffix + $("#email").val(),
+                    preffix + $("#first-name").val(),
+                    preffix + $("#last-name").val(),
+                    $.md5(preffix + $("#password").val()),
+                    preffix + $("#city").val(),
+                    preffix + $("#skills").val(),
+                    preffix + $("#comment").val()
+                );
+            });
+        });
+    </script>
+</head>
+<body>
+    Server:    <input id="server" value="http://codenjoy.juja.com.ua/codenjoy-balancer/rest"/></br>
+    Preffix:   <input id="preffix" value="a1_"/></br>
+    <div>
+        Email:     <input id="email" value="test@gmail.com"/></br>
+        FirstName: <input id="first-name" value="Stiven"/></br>
+        LastName:  <input id="last-name" value="Pupkin"/></br>
+        Password:  <input id="password" value="password"/></br>
+        City:      <input id="city" value="city"/></br>
+        Skills:    <input id="skills" value="Si Senior"/></br>
+        Comment:   <input id="comment" value="no comment"/></br>
+        <button id="register">Register</button></br>
+        Result:    <input id="register-result"/></br>
+    </div>
+</body>
+</html>
