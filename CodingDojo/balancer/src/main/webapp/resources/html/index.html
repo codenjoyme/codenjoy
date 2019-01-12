@@ -30,7 +30,7 @@
         {
             $.ajax({
                 type: 'POST',
-                url: $("#server").val().replace('THIS_SERVER', window.location.host) + '/register',
+                url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/register',
                 dataType: 'json',
                 async: false,
                 contentType: "application/json; charset=utf-8",
@@ -50,7 +50,7 @@
         var loginUser = function(email, password) {
             $.ajax({
                 type: 'POST',
-                url: $("#server").val().replace('THIS_SERVER', window.location.host) + '/login',
+                url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/login',
                 dataType: 'json',
                 async: false,
                 contentType: "application/json; charset=utf-8",
@@ -58,6 +58,30 @@
                     '"password" : "' + password + '"}',
                 success: function(data) {
                     $("#login-result").val(JSON.stringify(data));
+                }
+            })
+        };
+
+        var getScores = function(day) {
+            $.ajax({
+                type: 'GET',
+                url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/score/day/' + day,
+                dataType: 'json',
+                async: false,
+                success: function(data) {
+                    $("#scores-result").val(JSON.stringify(data));
+                }
+            })
+        };
+
+        var getUsers = function(day) {
+            $.ajax({
+                type: 'GET',
+                url: $("#game-server").val().replace('THIS_SERVER', window.location.host) + '//game/snakebattle/players',
+                dataType: 'json',
+                async: false,
+                success: function(data) {
+                    $("#scores-result").val(JSON.stringify(data));
                 }
             })
         };
@@ -83,18 +107,29 @@
                     $.md5(preffix + $("#password").val())
                 );
             });
+
+            $("#scores").click(function() {
+                getScores(
+                    $("#scores_day").val()
+                );
+            });
+
+            $("#users").click(function() {
+                getUsers();
+            });
         });
     </script>
     <style>
-        input {
+        input, textarea {
             width: 600px;
             position: absolute;
-            left: 84px;
+            left: 120px;
         }
     </style>
 </head>
 <body>
-    Server:        <input id="server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
+    BalancerServer:<input id="balancer-server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
+    GameServer:    <input id="game-server" value="http://THIS_SERVER/codenjoy-contest/rest"/></br>
     Preffix:       <input id="preffix" value="a1_"/></br>
 
     <h2>Register user</h2>
@@ -117,6 +152,37 @@
         <button id="login">Login</button></br>
         Result:    <input id="login-result"/></br>
     </div>
+
+    <h2>Login user</h2>
+    <div>
+        Day:       <input id="scores_day" value="2019-01-12"/></br>
+        <button id="scores">Score</button></br>
+        Result:    <textarea rows="5" id="scores-result"></textarea></br>
+        </br>
+        </br>
+        </br>
+        </br>
+    </div>
+
+    <h2>Get users</h2>
+    <div>
+        <button id="users">Users</button></br>
+        Result:    <textarea rows="15" id="users-result"></textarea></br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+    </div>
+
 
 </body>
 </html>
