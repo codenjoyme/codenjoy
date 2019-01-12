@@ -131,9 +131,4 @@ public class Dispatcher {
         return String.format(urlCreatePlayer,
                 server);
     }
-
-    public static void main(String[] args) {
-        Dispatcher dispatcher = new Dispatcher();
-        System.out.println(dispatcher.createNewPlayer(dispatcher.getNextServer(), "apofig@gmail.com", "342859181532890275408", "127.0.0.2"));
-    }
 }
