@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
+import _ from 'lodash';
 
 // proj
 import { login } from '../../redux/auth';
@@ -19,11 +20,13 @@ const LoginSchema = Yup.object().shape({
 
 class LoginForm extends Component {
     render() {
-        const { login } = this.props;
+        const { login, loginErrors } = this.props;
 
         return (
             <div>
                 <h1>Логін</h1>
+                { _.get(loginErrors, 'credentials') && <div>Неправильний емейл або пароль</div> }
+                { _.get(loginErrors, 'system') && <div>Сервіс тимчасово недоступний</div> }
                 <Formik initialValues={ { email: '', password: '' } } validationSchema={ LoginSchema } onSubmit={ login }>
                     { () => (
                         <Form>
@@ -41,7 +44,7 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    failed: state.auth.failed,
+    loginErrors: state.auth.loginErrors,
 });
 
 export default connect(

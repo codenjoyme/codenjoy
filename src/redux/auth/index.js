@@ -1,6 +1,7 @@
 // vendor
 import { all, call, put, take } from 'redux-saga/effects';
 import { replace } from 'connected-react-router';
+import md5 from 'md5';
 
 // proj
 import { book } from '../../routes';
@@ -27,7 +28,9 @@ export const LOGOUT_FAIL = `${prefix}/LOGOUT_FAIL`;
 /**
  * Reducer
  **/
-const ReducerState = {};
+const ReducerState = {
+    loginErrors: void 0,
+};
 
 export default function reducer(state = ReducerState, action) {
     const { type, payload } = action;
@@ -35,6 +38,12 @@ export default function reducer(state = ReducerState, action) {
     switch (type) {
         case AUTHENTICATE:
             return { ...state, ...payload };
+
+        case LOGIN_SUCCESS:
+            return { ...state, loginErrors: void 0 };
+
+        case LOGIN_FAIL:
+            return { ...state, loginErrors: payload };
 
         case LOGOUT_SUCCESS:
             return ReducerState;
@@ -56,6 +65,11 @@ export const selectToken = state => state.auth.token;
 export const login = credentials => ({
     type:    LOGIN,
     payload: credentials,
+});
+
+export const loginFail = payload => ({
+    type: LOGIN_FAIL,
+    payload,
 });
 
 export const loginSuccess = () => ({
@@ -89,28 +103,24 @@ export const logoutFail = error => ({
  * Saga
  **/
 
-// TODO add try-catch
 export function* loginFormSaga() {
     while (true) {
-        const { payload: credentials } = yield take(LOGIN);
-        // const user = yield call(
-        //     fetchAPI,
-        //     'POST',
-        //     'login',
-        //     null,
-        //     credentials,
-        //     // false,
-        // );
-
-        const user = {
-            server: 'server.domain.ua',
-            code:   '10073530731990011788',
-            email:  'user_71_2019-01-12',
-        };
-
-        yield put(authenticate(user));
-        yield put(loginSuccess());
-        yield put(replace(book.board));
+        const {
+            payload: { email, password },
+        } = yield take(LOGIN);
+        const credentials = { email, password: md5(password) };
+        const user = yield call(fetchAPI, 'POST', 'rest/login', null, credentials, { noRedirect: true });
+        if (user instanceof Error) {
+            yield put(loginFail({ system: true }));
+        } else {
+            if (!user.code) {
+                yield put(loginFail({ credentials: true }));
+            } else {
+                yield put(authenticate(user));
+                yield put(loginSuccess());
+                yield put(replace(book.board));
+            }
+        }
     }
 }
 

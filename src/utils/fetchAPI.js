@@ -7,16 +7,10 @@ import qs from 'qs';
 import store from '../store';
 import { book } from '../routes';
 
-const apiC = '/api';
+const apiC = '/codenjoy-balancer';
 
 /* eslint-disable */
-export async function fetchAPI(
-    method,
-    endpoint,
-    query,
-    body,
-    { rawResponse, url, headers } = {},
-) {
+export async function fetchAPI(method, endpoint, query, body, { rawResponse, url, headers, noRedirect } = {}) {
     const endpointC = trim(endpoint, "/"); // trim all spaces and '/'
     const handler = endpointC ? `/${endpointC}` : ""; // be sure that after api will be only one /
     const methodU = toUpper(method);
@@ -28,7 +22,10 @@ export async function fetchAPI(
 
     const request = {
         method: methodU,
-        headers: headers,
+        headers: headers || {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache",
+        },
     };
 
     if (methodU === "POST" || methodU === "PUT" || methodU === "DELETE") {
@@ -47,7 +44,22 @@ export async function fetchAPI(
 
     switch (true) {
         case status >= 200 && status < 300:
-            return rawResponse ? await response : await response.json();
+            try {
+                return rawResponse ? await response : await response.json();
+            } catch (err) {
+                if (noRedirect) {
+                    return err;
+                }
+                dispatch(replace(`${book.exception}/500`));
+                return;
+            }
+
+        case noRedirect:
+            const err = new Error("httpError");
+            err.status = status;
+            err.response = await response;
+
+            return err;
 
         case status === 400:
             dispatch(replace(`${book.exception}/400`));

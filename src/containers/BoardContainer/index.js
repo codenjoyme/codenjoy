@@ -13,8 +13,8 @@ import Styles from './styles.module.css';
 
 // TODO set env variables
 const period = {
-    start: '2019-01-01T10:00:00.000Z',
-    end:   '2019-01-16T10:00:00.000Z',
+    start: process.env.REACT_APP_EVENT_START || '2019-01-01T10:00:00.000Z',
+    end:   process.env.REACT_APP_EVENT_END || '2019-01-31T10:00:00.000Z',
 };
 
 class BoardContainer extends Component {
@@ -25,14 +25,19 @@ class BoardContainer extends Component {
     render() {
         const { setSelectedDay, setSelectedParticipant } = this.props;
         const { selectedDay, rating, email, selectedParticipant } = this.props;
-        const participant = _.get(selectedParticipant, 'email') || email || _.get(rating, '[0].email');
+
+        const ratingContainsEmail = email && _.find(rating, { email });
+        const participantEmail = ratingContainsEmail && email;
+        const battleParticipant = _.get(selectedParticipant, 'email') || participantEmail || _.get(rating, '[0].email');
 
         return (
             <>
                 <DaysPanel selectedDay={ selectedDay } onDaySelect={ setSelectedDay } period={ period } />
                 <div className={ Styles.wrapper }>
                     <div className={ Styles.frame }>
-                        { moment(selectedDay).isSame(new Date(), 'day') && <BattleFrame participant={ participant } /> }
+                        { moment(selectedDay).isSame(new Date(), 'day') && (
+                            <BattleFrame participant={ battleParticipant } />
+                        ) }
                     </div>
                     <div className={ Styles.rating }>
                         <RatingTable email={ email } rating={ rating } setSelectedParticipant={ setSelectedParticipant } />

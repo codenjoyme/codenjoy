@@ -1,8 +1,10 @@
 // vendor
 import { all, put, call, take } from 'redux-saga/effects';
 import moment from 'moment';
+import _ from 'lodash';
 
 // proj
+import { fetchAPI } from 'utils';
 
 /**
  * Constants
@@ -101,16 +103,24 @@ export function* fetchRatingSaga() {
             payload: { selectedDay },
         } = yield take(FETCH_RATING);
 
-        // const data = yield call(fetchAPI, "GET", "rating");
-        const data = Array(1000)
-            .fill(null)
-            .map((_, index) => ({
-                email:  'user_' + index + '_' + selectedDay,
-                score:  Math.ceil(Math.random() * 10000),
-                server: 'Таразед',
-            }));
+        const data = yield call(fetchAPI, 'GET', `rest/score/day/${selectedDay}`);
 
-        yield put(fetchRatingSuccess(data));
+        // Stub data
+        // const data = Array(1000)
+        //     .fill(null)
+        //     .map((_, index) => ({
+        //         email:  'user_' + index + '_' + selectedDay,
+        //         score:  Math.ceil(Math.random() * 10000),
+        //         server: 'Таразед',
+        //     }));
+
+        const processedData = _.chain(data)
+            .filter('server')
+            .orderBy('score', 'desc')
+            .map((value, index) => ({ ...value, index: index + 1 }))
+            .value();
+
+        yield put(fetchRatingSuccess(processedData));
     }
 }
 
