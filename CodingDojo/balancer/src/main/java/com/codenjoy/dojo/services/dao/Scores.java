@@ -67,9 +67,10 @@ public class Scores {
                 });
     }
 
-    public List<PlayerScore> getScores(String day) {
-        return pool.select("SELECT * FROM scores WHERE day = ? ORDER BY time DESC LIMIT 1;",
-                new Object[]{day},
+    public List<PlayerScore> getScores(String day, long time) {
+        return pool.select("SELECT * FROM scores WHERE day = ? AND time = ?;" +
+//                        "(SELECT MAX(time) FROM scores WHERE day = ?);",
+                new Object[]{day, time},
                 rs -> {
                     List<PlayerScore> result = new LinkedList<>();
                     while (rs.next()) {

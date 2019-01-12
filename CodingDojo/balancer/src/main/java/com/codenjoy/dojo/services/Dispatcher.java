@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
@@ -51,6 +52,7 @@ public class Dispatcher {
     private String urlCreatePlayer;
     private String urlGetPlayers;
     private String gameType;
+    private volatile long lastTime;
 
     public Dispatcher() {
         // TODO move to admin
@@ -95,6 +97,7 @@ public class Dispatcher {
 
                 ),
                 String.class);
+
         return entity.getBody();
     }
 
@@ -109,6 +112,10 @@ public class Dispatcher {
 
         long time = Calendar.getInstance().getTimeInMillis();
         playersInfos.forEach(it -> scores.saveScore(time, it.getName(), Integer.valueOf(it.getScore())));
+
+        // теперь любой может пользоваться этим данными для считывания
+        // внимание! тут нельзя ничего другого делать с перменной кроме как читать/писать
+        lastTime = time;
     }
 
     private List<PlayerInfo> getPlayersInfos(String server) {
@@ -130,5 +137,9 @@ public class Dispatcher {
     private String createPlayerUrl(String server) {
         return String.format(urlCreatePlayer,
                 server);
+    }
+
+    public List<PlayerScore> getScores(String day) {
+        return scores.getScores(day, lastTime);
     }
 }
