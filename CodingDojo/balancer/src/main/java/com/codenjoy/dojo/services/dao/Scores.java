@@ -74,8 +74,6 @@ public class Scores {
                     List<PlayerScore> result = new LinkedList<>();
                     while (rs.next()) {
                         result.add(new PlayerScore(
-                                rs.getString("day"),
-                                rs.getLong("time"),
                                 rs.getString("email"),
                                 rs.getInt("score")));
                     }

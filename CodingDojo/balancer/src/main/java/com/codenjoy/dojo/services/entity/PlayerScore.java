@@ -24,28 +24,17 @@ package com.codenjoy.dojo.services.entity;
 
 public class PlayerScore {
 
-    private String day;
-    private long time;
     private String email;
     private int score;
+    private String server;
 
     public PlayerScore() {
         // do nothing
     }
 
-    public PlayerScore(String day, long time, String email, int score) {
-        this.day = day;
-        this.time = time;
+    public PlayerScore(String email, int score) {
         this.email = email;
         this.score = score;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public long getTime() {
-        return time;
     }
 
     public String getEmail() {
@@ -56,13 +45,20 @@ public class PlayerScore {
         return score;
     }
 
+    public String getServer() {
+        return server;
+    }
+
     @Override
     public String toString() {
         return "PlayerScore{" +
-                "day='" + day + '\'' +
-                ", time='" + time + '\'' +
                 ", email='" + email + '\'' +
                 ", score='" + score + '\'' +
+                ", server='" + score + '\'' +
                 '}';
+    }
+
+    public void setServer(String server) {
+        this.server = server;
     }
 }
