@@ -38,6 +38,11 @@ public class Player {
         // do nothing
     }
 
+    public Player(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public Player(String email, String code, String server) {
         this.email = email;
         this.code = code;
@@ -108,5 +113,13 @@ public class Player {
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
                 '}';
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setServer(String server) {
+        this.server = server;
     }
 }

@@ -56,7 +56,7 @@ public class RestController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public Player register(@RequestBody Player player, HttpServletRequest request) {
+    public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
         validator.checkEmail(email, false);
         validator.checkString(player.getFirstName());
@@ -66,14 +66,16 @@ public class RestController {
         validator.checkString(player.getSkills());
 
         if (players.getCode(email) != null) {
-            return new Player(email, null, null); // TODO return 401
+            return new ServerLocation(email, null, null); // TODO return 401
         }
-
-        players.create(player);
 
         ServerLocation location = dispatcher.register(player, getIp(request));
 
-        return new Player(email, location.getCode(), location.getServer());
+        player.setCode(location.getCode());
+        player.setServer(location.getServer());
+        players.create(player);
+
+        return location;
     }
 
     private String getIp(HttpServletRequest request) {

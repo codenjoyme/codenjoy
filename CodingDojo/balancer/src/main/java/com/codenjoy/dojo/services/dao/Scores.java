@@ -92,6 +92,6 @@ public class Scores {
         String day = formatter.format(date);
         return pool.select("SELECT time FROM scores WHERE day = ? ORDER BY time DESC LIMIT 1;",
                 new Object[]{day},
-                rs -> JDBCTimeUtils.getTimeLong(rs));
+                rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 }
