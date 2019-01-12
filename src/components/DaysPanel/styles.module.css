@@ -3,11 +3,9 @@
     flex-wrap: wrap;
 }
 
-.dayPanel .item {
-    margin: 10px;
-}
 
-.dayPanel button {
+.dayButton {
+    margin: 10px;
     border-radius: 12px;
     text-align: center;
     text-decoration: none;
@@ -15,6 +13,17 @@
     border: none;
     font-size: 16px;
     padding: 10px;
+    cursor: pointer;
+    width: 140px;
+}
+
+.dayButton:not(.dayButtonDisabled):hover {
+    background-color: rgb(24, 36, 50);
+    color: white;
+}
+
+.dayButtonDisabled {
+    cursor: not-allowed;
 }
 
 .wrapper {
@@ -24,7 +33,7 @@
     text-align: center;
 }
 
-.wrapper>* {
+.wrapper > * {
     padding: 10px;
     flex: 1 100%;
 }
@@ -35,7 +44,9 @@
 }
 
 .aside {
-    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 30px;
     background-color: rgb(57, 194, 215);
 }

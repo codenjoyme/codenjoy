@@ -32,3 +32,19 @@
 .navigation a:hover {
   background: darken(deepskyblue, 2%);
 }
+
+.link {
+  display: flex;
+  align-items: center;
+}
+
+.activeNavLink {
+  color: darken(deepskyblue, 2%);
+}
+
+.copyButton {
+  background: rgb(68, 101, 148);
+  color: white;
+  border-radius: 4px;
+  border-color: rgb(57, 84, 120);
+}

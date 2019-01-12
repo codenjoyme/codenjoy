@@ -12,6 +12,8 @@ const prefix = `codenjoy/${moduleName}`;
 
 export const SET_SELECTED_DAY = `${prefix}/SET_SELECTED_DAY`;
 
+export const SET_SELECTED_PARTICIPANT = `${prefix}/SET_SELECTED_PARTICIPANT`;
+
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
 
@@ -32,6 +34,12 @@ export default function reducer(state = ReducerState, action) {
                 ...state,
                 selectedDay: payload,
                 rating:      void 0,
+            };
+
+        case SET_SELECTED_PARTICIPANT:
+            return {
+                ...state,
+                selectedParticipant: payload,
             };
 
         case FETCH_RATING:
@@ -58,6 +66,11 @@ export default function reducer(state = ReducerState, action) {
 export const setSelectedDay = selectedDay => ({
     type:    SET_SELECTED_DAY,
     payload: selectedDay,
+});
+
+export const setSelectedParticipant = selectedParticipant => ({
+    type:    SET_SELECTED_PARTICIPANT,
+    payload: selectedParticipant,
 });
 
 export const fetchRating = selectedDay => ({

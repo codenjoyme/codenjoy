@@ -1,6 +1,7 @@
 // vendor
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // proj
 import { book } from '../../routes';
@@ -13,24 +14,54 @@ export class Header extends Component {
         return (
             <>
                 <ul className={ Styles.navigation }>
-                    <li>
-                        <Link to={ book.board }>Home</Link>
+                    <li className={ Styles.link }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
+                            Home
+                        </NavLink>
                     </li>
-                    <li>
-                        <Link to={ book.board }>About</Link>
+                    <li className={ Styles.link }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
+                            About
+                        </NavLink>
                     </li>
-                    <li>
-                        <Link to={ book.board }>Products</Link>
+                    <li className={ Styles.link }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
+                            Products
+                        </NavLink>
                     </li>
-                    <li>
-                        <Link to={ book.board }>Contact</Link>
+                    <li className={ Styles.link }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
+                            Contact
+                        </NavLink>
                     </li>
-                    <li>
-                        { server ? <Link to={ book.board }>Сервер: { server }</Link> : <Link to={ book.login }>Логін</Link> }
+                    <li className={ Styles.link }>
+                        { server ? (
+                            <Link to={ book.board }>Server: { server }</Link>
+                        ) : (
+                            <Link to={ book.login }>Login</Link>
+                        ) }
+                        <CopyToClipboard text={ server }>
+                            <button className={ Styles.copyButton }>Copy</button>
+                        </CopyToClipboard>
                     </li>
                     { server && (
-                        <li>
-                            <div className={ Styles.action } onClick={ () => logout() }>
+                        <li className={ Styles.link }>
+                            <div
+                                className={ Styles.action }
+                                onClick={ () => logout() }
+                            >
                                 Logout
                             </div>
                         </li>

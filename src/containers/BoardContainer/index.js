@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // proj
-import { setSelectedDay, fetchRating } from '../../redux/board';
+import {
+    setSelectedDay,
+    setSelectedParticipant,
+    fetchRating,
+} from '../../redux/board';
 import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 
 // own
@@ -21,18 +25,25 @@ class BoardContainer extends Component {
     }
 
     render() {
-        const { setSelectedDay } = this.props;
+        const { setSelectedDay, setSelectedParticipant } = this.props;
         const { selectedDay, rating } = this.props;
 
         return (
             <>
-                <DaysPanel selectedDay={ selectedDay } onDaySelect={ setSelectedDay } period={ period } />
+                <DaysPanel
+                    selectedDay={ selectedDay }
+                    onDaySelect={ setSelectedDay }
+                    period={ period }
+                />
                 <div className={ Styles.wrapper }>
                     <div className={ Styles.frame }>
                         <BattleFrame />
                     </div>
                     <div className={ Styles.rating }>
-                        <RatingTable rating={ rating } />
+                        <RatingTable
+                            rating={ rating }
+                            setSelectedParticipant={ setSelectedParticipant }
+                        />
                     </div>
                 </div>
             </>
@@ -45,7 +56,13 @@ const mapStateToProps = state => ({
     rating:      state.board.rating,
 });
 
+const mapDispatchToProps = {
+    setSelectedDay,
+    setSelectedParticipant,
+    fetchRating,
+};
+
 export default connect(
     mapStateToProps,
-    { setSelectedDay, fetchRating },
+    mapDispatchToProps,
 )(BoardContainer);

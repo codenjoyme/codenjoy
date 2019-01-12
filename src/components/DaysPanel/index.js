@@ -1,9 +1,11 @@
 // vendor
 import React, { Component } from 'react';
 import moment from 'moment';
+import classNames from 'classnames/bind';
 
+// own
 import Styles from './styles.module.css';
-
+const cx = classNames.bind(Styles);
 const DATE_FORMAT = 'YYYY-MM-DD';
 
 class DaysPanelHandler extends Component {
@@ -20,6 +22,12 @@ class DaysPanelHandler extends Component {
             return { disabled, label, day };
         });
     }
+
+    _dayButtonStyles = disabled =>
+        cx({
+            dayButtonDisabled: disabled,
+            dayButton:         true,
+        });
 
     render() {
         const {
@@ -49,7 +57,9 @@ class DaysPanelHandler extends Component {
                     <div className={ Styles.dayPanel }>
                         { daysRangeConfig.map(({ label, disabled, day }) => (
                             <button
-                                className={ Styles.item }
+                                className={ this._dayButtonStyles(
+                                    selectedDay === day || disabled,
+                                ) }
                                 key={ day }
                                 onClick={ () => onDaySelect(day) }
                                 disabled={ selectedDay === day || disabled }
