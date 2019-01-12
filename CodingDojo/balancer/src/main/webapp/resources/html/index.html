@@ -47,6 +47,21 @@
             })
         };
 
+        var loginUser = function(email, password) {
+            $.ajax({
+                type: 'POST',
+                url: $("#server").val().replace('THIS_SERVER', window.location.host) + '/login',
+                dataType: 'json',
+                async: false,
+                contentType: "application/json; charset=utf-8",
+                data: '{"email": "' + email + '", ' +
+                    '"password" : "' + password + '"}',
+                success: function(data) {
+                    $("#login-result").val(JSON.stringify(data));
+                }
+            })
+        };
+
         $(document).ready(function() {
             $("#register").click(function() {
                 var preffix = $("#preffix").val();
@@ -60,11 +75,19 @@
                     preffix + $("#comment").val()
                 );
             });
+
+            $("#login").click(function() {
+                var preffix = $("#preffix").val();
+                loginUser(
+                    preffix + $("#email").val(),
+                    $.md5(preffix + $("#password").val())
+                );
+            });
         });
     </script>
     <style>
         input {
-            width: 400px;
+            width: 600px;
             position: absolute;
             left: 84px;
         }
@@ -73,6 +96,8 @@
 <body>
     Server:        <input id="server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
     Preffix:       <input id="preffix" value="a1_"/></br>
+
+    <h2>Register user</h2>
     <div>
         Email:     <input id="email" value="test@gmail.com"/></br>
         FirstName: <input id="first-name" value="Stiven"/></br>
@@ -84,5 +109,14 @@
         <button id="register">Register</button></br>
         Result:    <input id="register-result"/></br>
     </div>
+
+    <h2>Login user</h2>
+    <div>
+        Email:     <input id="login_email" value="test@gmail.com"/></br>
+        Password:  <input id="login_password" value="password"/></br>
+        <button id="login">Login</button></br>
+        Result:    <input id="login-result"/></br>
+    </div>
+
 </body>
 </html>

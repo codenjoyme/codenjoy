@@ -88,18 +88,18 @@ public class RestController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public Player login(@RequestBody Player player) {
+    public ServerLocation login(@RequestBody Player player) {
         String email = player.getEmail();
         validator.checkEmail(email, false);
         validator.checkMD5(player.getPassword());
 
         String code = players.getCode(email);
         if (code == null) {
-            return new Player(email, null, null); // TODO return 401
+            return new ServerLocation(email, null, null); // TODO return 401
         }
         String server = players.getServer(email);
 
-        return new Player(email, code, server);
+        return new ServerLocation(email, code, server);
     }
 
 }
