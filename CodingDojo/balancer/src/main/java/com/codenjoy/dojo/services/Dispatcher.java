@@ -46,8 +46,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class Dispatcher {
 
-    @Autowired private Players players;
-    @Autowired private Scores scores;
+    @Autowired Players players;
+    @Autowired Scores scores;
 
     private List<String> servers = new CopyOnWriteArrayList<>();
     private String urlCreatePlayer;
@@ -151,7 +151,7 @@ public class Dispatcher {
     }
 
     public List<PlayerScore> getScores(String day) {
-        List<PlayerScore> result = this.scores.getScores(day, lastTime);
+        List<PlayerScore> result = scores.getScores(day, lastTime);
 
         // TODO вот тут надо оптимизнуть хорошенько и не делать N+1 запрос
         result.forEach(score -> score.setServer(players.getServer(score.getEmail())));

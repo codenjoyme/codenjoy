@@ -60,14 +60,14 @@ public class Players {
                 rs -> {
                     List<Player> result = new LinkedList<>();
                     while (rs.next()) {
-                        result.add(
-                                new Player(rs.getString("email"),
+                        result.add(new Player(
+                                rs.getString("email"),
                                 rs.getString("firstName"),
-                                rs.getString("lastName"), 
+                                rs.getString("lastName"),
                                 rs.getString("password"),
                                 rs.getString("city"),
                                 rs.getString("skills"),
-                                rs.getString("comment"), 
+                                rs.getString("comment"),
                                 rs.getString("code"),
                                 rs.getString("server")));
                     }
@@ -108,15 +108,31 @@ public class Players {
     }
 
     public void create(Player player) {
-        Object[] parameters = {player.getPassword(), player.getCode(), player.getServer(), player.getEmail()};
-        pool.update("INSERT INTO players (password, code, server, email) VALUES (?,?,?,?);",
-                parameters);
+        pool.update("INSERT INTO players (first_name, last_name, password, " +
+                        "city, skills, comment, code, server, email) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?);",
+                getObjects(player));
     }
 
     public void update(Player player) {
-        Object[] parameters = {player.getPassword(), player.getCode(), player.getServer(), player.getEmail()};
-        pool.update("UPDATE players SET password = ?, code = ?, server = ? WHERE email = ?;",
-                parameters);
+        pool.update("UPDATE players SET first_name = ?, last_name = ?, " +
+                        "password = ?, coty = ?, skills = ?, comment = ?, " +
+                        "code = ?, server = ? WHERE email = ?;",
+                getObjects(player));
+    }
+
+    private Object[] getObjects(Player player) {
+        return new Object[]{
+                player.getFirstName(),
+                player.getLastName(),
+                player.getPassword(),
+                player.getCity(),
+                player.getSkills(),
+                player.getComment(),
+                player.getCode(),
+                player.getServer(),
+                player.getEmail(),
+        };
     }
 
     public void remove(String email) {

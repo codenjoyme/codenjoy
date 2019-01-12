@@ -1,0 +1,92 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 - 2019 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.md5.js"></script>
+    <script src="index.js"></script>
+    <style>
+        input, textarea {
+            width: 600px;
+            position: absolute;
+            left: 120px;
+        }
+    </style>
+</head>
+<body>
+    BalancerServer:<input id="balancer-server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
+    GameServer:    <input id="game-server" value="http://THIS_SERVER/codenjoy-contest/rest"/></br>
+    Preffix:       <input id="preffix" value="a1_"/></br>
+
+    <h2>Register user</h2>
+    <div>
+        Email:     <input id="email" value="test@gmail.com"/></br>
+        FirstName: <input id="first-name" value="Stiven"/></br>
+        LastName:  <input id="last-name" value="Pupkin"/></br>
+        Password:  <input id="password" value="password"/></br>
+        City:      <input id="city" value="city"/></br>
+        Skills:    <input id="skills" value="Si Senior"/></br>
+        Comment:   <input id="comment" value="no comment"/></br>
+        <button id="register">Register</button></br>
+        Result:    <input id="register-result"/></br>
+    </div>
+
+    <h2>Login user</h2>
+    <div>
+        Email:     <input id="login_email" value="test@gmail.com"/></br>
+        Password:  <input id="login_password" value="password"/></br>
+        <button id="login">Login</button></br>
+        Result:    <input id="login-result"/></br>
+    </div>
+
+    <h2>Login user</h2>
+    <div>
+        Day:       <input id="scores_day" value="2019-01-12"/></br>
+        <button id="scores">Score</button></br>
+        Result:    <textarea rows="5" id="scores-result"></textarea></br>
+        </br>
+        </br>
+        </br>
+        </br>
+    </div>
+
+    <h2>Get users</h2>
+    <div>
+        <button id="users">Users</button></br>
+        Result:    <textarea rows="15" id="users-result"></textarea></br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+    </div>
+
+</body>
+</html>
