@@ -72,11 +72,11 @@ var getScores = function(day) {
 var getUsers = function(day) {
     $.ajax({
         type: 'GET',
-        url: $("#game-server").val().replace('THIS_SERVER', window.location.host) + '//game/snakebattle/players',
+        url: $("#game-server").val().replace('THIS_SERVER', window.location.host) + '/game/snakebattle/players',
         dataType: 'json',
         async: false,
         success: function(data) {
-            $("#scores-result").val(JSON.stringify(data));
+            $("#users-result").val(JSON.stringify(data));
         }
     })
 };
