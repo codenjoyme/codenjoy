@@ -32,8 +32,9 @@ export default function reducer(state = ReducerState, action) {
         case SET_SELECTED_DAY:
             return {
                 ...state,
-                selectedDay: payload,
-                rating:      void 0,
+                selectedDay:         payload,
+                rating:              void 0,
+                selectedParticipant: void 0,
             };
 
         case SET_SELECTED_PARTICIPANT:
