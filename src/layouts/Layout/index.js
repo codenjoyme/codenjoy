@@ -13,12 +13,12 @@ import Styles from './styles.module.css';
 
 class LayoutComponent extends Component {
     render() {
-        const { children, logout, email, server } = this.props;
+        const { children, logout, email, server, code } = this.props;
 
         return (
             <DocumentTitle title='Codenjoy event'>
                 <div className={ Styles.layout }>
-                    <Header email={ email } server={ server } logout={ logout } />
+                    <Header code={ code } email={ email } server={ server } logout={ logout } />
                     { children }
                 </div>
             </DocumentTitle>

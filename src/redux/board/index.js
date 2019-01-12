@@ -4,7 +4,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 // proj
-import { fetchAPI } from 'utils';
+import { fetchAPI } from '../../utils';
 
 /**
  * Constants
