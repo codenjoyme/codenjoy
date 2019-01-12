@@ -1,0 +1,16 @@
+sudo: false
+language: node_js
+
+node_js:
+- '10'
+
+addons:
+  ssh_known_hosts: jschallenge.vreshch.com
+
+script:
+- npm install
+- npm run build
+
+
+notifications:
+  email: false
