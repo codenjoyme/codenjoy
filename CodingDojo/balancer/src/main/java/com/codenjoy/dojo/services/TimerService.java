@@ -48,7 +48,7 @@ public class TimerService implements Runnable {
 
     public void start() {
         period = 10000;
-        paused = true;
+        paused = false;
         executor = new ScheduledThreadPoolExecutor(1);
         schedule();
     }

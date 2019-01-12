@@ -1,11 +1,11 @@
 package com.codenjoy.dojo.snakebattle.model;
 
 /*-
- * #©L
+ * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
- * ©©
- * Copyright (C) 2018 Codenjoy
- * ©©
+ * %%
+ * Copyright (C) 2018 - 2019 Codenjoy
+ * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
@@ -19,7 +19,7 @@ package com.codenjoy.dojo.snakebattle.model;
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L©
+ * #L%
  */
 
 

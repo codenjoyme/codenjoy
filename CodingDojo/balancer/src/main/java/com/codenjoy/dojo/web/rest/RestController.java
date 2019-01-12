@@ -25,9 +25,8 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.Dispatcher;
 import com.codenjoy.dojo.services.dao.Players;
-import com.codenjoy.dojo.services.dao.Scores;
-import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.controller.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +35,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 @RequestMapping(value = "/rest")
 public class RestController {
 
     @Autowired private Players players;
-    @Autowired private Scores scores;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
 
@@ -52,7 +51,7 @@ public class RestController {
     public List<PlayerScore> dayScores(@PathVariable("day") String day) {
         validator.checkDay(day);
 
-        return scores.getScores(day);
+        return dispatcher.getScores(day);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

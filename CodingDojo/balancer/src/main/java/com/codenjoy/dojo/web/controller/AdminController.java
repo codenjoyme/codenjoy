@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.Players;
@@ -41,7 +40,6 @@ public class AdminController {
     public static final int PASS = 31415;
 
     @Autowired private TimerService timerService;
-    @Autowired private AutoSaver autoSaver;
     @Autowired private DebugService debugService;
     @Autowired private Players registration;
 

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
@@ -36,6 +37,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +53,13 @@ public class Dispatcher {
     private String urlCreatePlayer;
     private String urlGetPlayers;
     private String gameType;
+    private volatile long lastTime;
+
+    @PostConstruct
+    public void postConstruct() {
+        // в случае если сегодня сервер потушен был
+        lastTime = scores.getLastTime(now());
+    }
 
     public Dispatcher() {
         // TODO move to admin
@@ -95,6 +104,7 @@ public class Dispatcher {
 
                 ),
                 String.class);
+
         return entity.getBody();
     }
 
@@ -107,8 +117,16 @@ public class Dispatcher {
                 .map(s -> getPlayersInfos(s))
                 .collect(LinkedList::new, List::addAll, List::addAll);
 
-        long time = Calendar.getInstance().getTimeInMillis();
+        long time = now();
         playersInfos.forEach(it -> scores.saveScore(time, it.getName(), Integer.valueOf(it.getScore())));
+
+        // теперь любой может пользоваться этим данными для считывания
+        // внимание! тут нельзя ничего другого делать с перменной кроме как читать/писать
+        lastTime = time;
+    }
+
+    private long now() {
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     private List<PlayerInfo> getPlayersInfos(String server) {
@@ -130,5 +148,14 @@ public class Dispatcher {
     private String createPlayerUrl(String server) {
         return String.format(urlCreatePlayer,
                 server);
+    }
+
+    public List<PlayerScore> getScores(String day) {
+        List<PlayerScore> result = this.scores.getScores(day, lastTime);
+
+        // TODO вот тут надо оптимизнуть хорошенько и не делать N+1 запрос
+        result.forEach(score -> score.setServer(players.getServer(score.getEmail())));
+
+        return result;
     }
 }
