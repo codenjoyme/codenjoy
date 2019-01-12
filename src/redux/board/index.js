@@ -104,9 +104,9 @@ export function* fetchRatingSaga() {
         const data = Array(1000)
             .fill(null)
             .map((_, index) => ({
-                name:        'user_' + index + '_' + selectedDay,
-                score:       Math.ceil(Math.random() * 10000),
-                'board-url': 'http://server/url',
+                email:  'user_' + index + '_' + selectedDay,
+                score:  Math.ceil(Math.random() * 10000),
+                server: 'Таразед',
             }));
 
         yield put(fetchRatingSuccess(data));

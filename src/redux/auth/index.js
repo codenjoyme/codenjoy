@@ -105,7 +105,7 @@ export function* loginFormSaga() {
         const user = {
             server: 'server.domain.ua',
             code:   '10073530731990011788',
-            email:  'test@mail.com',
+            email:  'user_71_2019-01-12',
         };
 
         yield put(authenticate(user));
