@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as Yup from 'yup';
 
 // proj
-import { login } from 'redux/auth';
+import { login } from '../../redux/auth';
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // proj
-import { LoginForm } from 'forms';
+import { LoginForm } from '../../forms';
 
 class AuthContainer extends Component {
     render() {

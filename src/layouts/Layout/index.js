@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 
 // proj
-import { logout } from 'redux/auth';
+import { logout } from '../../redux/auth';
 
-import { Header } from 'layouts';
+import { Header } from '../../layouts';
 
 class LayoutComponent extends Component {
     render() {

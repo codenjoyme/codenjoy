@@ -4,8 +4,8 @@ import { replace } from 'connected-react-router';
 import _ from 'lodash';
 import qs from 'qs';
 
-import store from 'store';
-import { book } from 'routes';
+import store from '../store';
+import { book } from '../routes';
 
 const apiC = '/api';
 

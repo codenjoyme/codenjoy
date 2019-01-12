@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // proj
-import { setSelectedDay, fetchRating } from 'redux/board';
-import { BattleFrame, DaysPanel, RatingTable } from 'components';
+import { setSelectedDay, fetchRating } from '../../redux/board';
+import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 
 // own
 import Styles from './styles.module.css';

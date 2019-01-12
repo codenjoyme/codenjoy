@@ -6,8 +6,8 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 // proj
-import authReducer, { moduleName as authModule } from 'redux/auth';
-import boardReducer, { moduleName as boardModule } from 'redux/board';
+import authReducer, { moduleName as authModule } from '../redux/auth';
+import boardReducer, { moduleName as boardModule } from '../redux/board';
 
 // own
 import { history } from './middleware';

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 // proj
-import { book } from 'routes';
+import { book } from '../../routes';
 import Styles from './styles.module.css';
 
 export class Header extends Component {

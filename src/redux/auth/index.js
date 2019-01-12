@@ -3,8 +3,8 @@ import { all, call, put, take } from 'redux-saga/effects';
 import { replace } from 'connected-react-router';
 
 // proj
-import { book } from 'routes';
-import { fetchAPI, setCode, setEmail, removeCode, removeEmail, setServer, removeServer } from 'utils';
+import { book } from '../../routes';
+import { fetchAPI, setCode, setEmail, removeCode, removeEmail, setServer, removeServer } from '../../utils';
 
 /**
  * Constants
