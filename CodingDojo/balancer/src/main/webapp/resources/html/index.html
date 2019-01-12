@@ -30,9 +30,10 @@
         {
             $.ajax({
                 type: 'POST',
-                url: $("#server").val() + '/register',
+                url: $("#server").val().replace('THIS_SERVER', window.location.host) + '/register',
                 dataType: 'json',
                 async: false,
+                contentType: "application/json; charset=utf-8",
                 data: '{"email": "' + email + '", ' +
                         '"firstName" : "' + firstName + '", ' +
                         '"lastName" : "' + lastName + '", ' +
@@ -41,7 +42,7 @@
                         '"skills" : "' + skills + '", ' +
                         '"comment" : "' + comment + '"}',
                 success: function(data) {
-                    $("#register-result").val(data);
+                    $("#register-result").val(JSON.stringify(data));
                 }
             })
         };
@@ -61,10 +62,17 @@
             });
         });
     </script>
+    <style>
+        input {
+            width: 400px;
+            position: absolute;
+            left: 84px;
+        }
+    </style>
 </head>
 <body>
-    Server:    <input id="server" value="http://codenjoy.juja.com.ua/codenjoy-balancer/rest"/></br>
-    Preffix:   <input id="preffix" value="a1_"/></br>
+    Server:        <input id="server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
+    Preffix:       <input id="preffix" value="a1_"/></br>
     <div>
         Email:     <input id="email" value="test@gmail.com"/></br>
         FirstName: <input id="first-name" value="Stiven"/></br>
