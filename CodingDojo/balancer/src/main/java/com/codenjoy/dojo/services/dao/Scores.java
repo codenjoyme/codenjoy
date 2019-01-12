@@ -68,9 +68,8 @@ public class Scores {
     }
 
     public List<PlayerScore> getScores(String day, long time) {
-        return pool.select("SELECT * FROM scores WHERE day = ? AND time = ?;" +
-//                        "(SELECT MAX(time) FROM scores WHERE day = ?);",
-                new Object[]{day, time},
+        return pool.select("SELECT * FROM scores WHERE day = ? AND time = ?;",
+                new Object[]{day, JDBCTimeUtils.toString(new Date(time))},
                 rs -> {
                     List<PlayerScore> result = new LinkedList<>();
                     while (rs.next()) {
@@ -88,5 +87,13 @@ public class Scores {
     public void delete(String name) {
         pool.update("DELETE FROM scores WHERE name = ?;",
                 new Object[]{name});
+    }
+
+    public long getLastTime(long time) {
+        Date date = new Date(time);
+        String day = formatter.format(date);
+        return pool.select("SELECT time FROM scores WHERE day = ? ORDER BY time DESC LIMIT 1;",
+                new Object[]{day},
+                rs -> JDBCTimeUtils.getTimeLong(rs));
     }
 }
