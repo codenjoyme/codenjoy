@@ -1,6 +1,5 @@
 // vendor
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 
 // proj
 // import { book } from 'routes';

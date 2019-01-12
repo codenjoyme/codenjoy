@@ -1,10 +1,11 @@
 // vendor
 import React, { Component } from 'react';
 
-// own
+// proj
+import { LoginContainer } from 'containers';
 
 export default class LoginPage extends Component {
     render() {
-        return <div>Login form</div>;
+        return <LoginContainer />;
     }
 }

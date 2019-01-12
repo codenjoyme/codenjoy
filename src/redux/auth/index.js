@@ -4,7 +4,7 @@ import { replace } from 'connected-react-router';
 
 // proj
 import { book } from 'routes';
-import { fetchAPI, setToken, setUsername, removeToken, removeUsername } from 'utils';
+import { fetchAPI, setCode, setEmail, removeCode, removeEmail, setServer, removeServer } from 'utils';
 
 /**
  * Constants
@@ -92,17 +92,21 @@ export const logoutFail = error => ({
 // TODO add try-catch
 export function* loginFormSaga() {
     while (true) {
-        const {
-            payload: { ...credentials },
-        } = yield take(LOGIN);
-        const user = yield call(
-            fetchAPI,
-            'POST',
-            'login',
-            null,
-            credentials,
-            // false,
-        );
+        const { payload: credentials } = yield take(LOGIN);
+        // const user = yield call(
+        //     fetchAPI,
+        //     'POST',
+        //     'login',
+        //     null,
+        //     credentials,
+        //     // false,
+        // );
+
+        const user = {
+            server: 'server.domain.ua',
+            code:   '10073530731990011788',
+            email:  'test@mail.com',
+        };
 
         yield put(authenticate(user));
         yield put(loginSuccess());
@@ -114,8 +118,9 @@ export function* authenticateSaga() {
     while (true) {
         const { payload: user } = yield take(AUTHENTICATE);
 
-        yield setToken(user.token);
-        yield setUsername(user.name);
+        yield setCode(user.code);
+        yield setEmail(user.email);
+        yield setServer(user.server);
 
         yield put(authenticateSuccess());
     }
@@ -125,8 +130,9 @@ export function* logoutSaga() {
     while (true) {
         yield take(LOGOUT);
 
-        yield removeToken();
-        yield removeUsername();
+        yield removeCode();
+        yield removeEmail();
+        yield removeServer();
 
         yield put(replace(`${book.login}`));
         yield put(logoutSuccess());

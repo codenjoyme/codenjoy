@@ -21,6 +21,14 @@
   color: white;
 }
 
+.navigation .action {
+  text-decoration: none;
+  display: block;
+  padding: 1em;
+  color: white;
+  cursor: pointer;
+}
+
 .navigation a:hover {
   background: darken(deepskyblue, 2%);
 }

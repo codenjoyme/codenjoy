@@ -6,7 +6,6 @@ import qs from 'qs';
 
 import store from 'store';
 import { book } from 'routes';
-import { getToken } from 'utils';
 
 const apiC = '/api';
 
@@ -16,7 +15,7 @@ export async function fetchAPI(
     endpoint,
     query,
     body,
-    { rawResponse, handleErrorInternally, url, noAuth, headers } = {},
+    { rawResponse, url, headers } = {},
 ) {
     const endpointC = trim(endpoint, "/"); // trim all spaces and '/'
     const handler = endpointC ? `/${endpointC}` : ""; // be sure that after api will be only one /
@@ -31,8 +30,6 @@ export async function fetchAPI(
         method: methodU,
         headers: headers,
     };
-
-    const token = getToken();
 
     if (methodU === "POST" || methodU === "PUT" || methodU === "DELETE") {
         request.body = JSON.stringify(body || {});

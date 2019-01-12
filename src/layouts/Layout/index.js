@@ -10,12 +10,12 @@ import { Header } from 'layouts';
 
 class LayoutComponent extends Component {
     render() {
-        const { children, logout } = this.props;
+        const { children, logout, email, server } = this.props;
 
         return (
             <DocumentTitle title='Codenjoy event'>
                 <div>
-                    <Header logout={ logout } />
+                    <Header email={ email } server={ server } logout={ logout } />
                     { children }
                 </div>
             </DocumentTitle>
@@ -23,11 +23,15 @@ class LayoutComponent extends Component {
     }
 }
 
-// const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    email:  state.auth.email,
+    server: state.auth.server,
+    code:   state.auth.code,
+});
 
 const mapDispatchToProps = { logout };
 
 export const ConnectedLayout = connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps,
 )(LayoutComponent);

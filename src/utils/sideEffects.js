@@ -1,16 +1,23 @@
 //
 // localStorage
 //
-// token
-export const setToken = token => localStorage.setItem('__codenjoy_token__', token);
+// code
+export const setCode = code => localStorage.setItem('__codenjoy_code__', code);
 
-export const getToken = () => localStorage.getItem('__codenjoy_token__');
+export const getCode = () => localStorage.getItem('__codenjoy_code__');
 
-export const removeToken = () => localStorage.removeItem('__codenjoy_token__');
+export const removeCode = () => localStorage.removeItem('__codenjoy_code__');
 
-// username
-export const setUsername = username => localStorage.setItem('__codenjoy_username__', username);
+// email
+export const setEmail = email => localStorage.setItem('__codenjoy_email__', email);
 
-export const getUsername = () => localStorage.getItem('__codenjoy_username__');
+export const getEmail = () => localStorage.getItem('__codenjoy_email__');
 
-export const removeUsername = () => localStorage.removeItem('__codenjoy_username__');
+export const removeEmail = () => localStorage.removeItem('__codenjoy_email__');
+
+// server
+export const setServer = server => localStorage.setItem('__codenjoy_server__', server);
+
+export const getServer = () => localStorage.getItem('__codenjoy_server__');
+
+export const removeServer = () => localStorage.removeItem('__codenjoy_server__');
