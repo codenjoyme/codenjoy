@@ -30,11 +30,11 @@ import java.util.List;
 
 public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
-    public CrudConnectionThreadPool(int count, final Get get) {
+    public CrudConnectionThreadPool(int count, Get get) {
        super(count, get);
     }
 
-    public <T> T select(final String query, final Object[] parameters, final ObjectMapper<T> mapper) {
+    public <T> T select(String query, Object[] parameters, ObjectMapper<T> mapper) {
         return run(connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 for (int index = 0; index < parameters.length; index++) {
@@ -48,15 +48,15 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
         });
     }
 
-    public <T> T select(final String query, final ObjectMapper<T> mapper) {
+    public <T> T select(String query, ObjectMapper<T> mapper) {
         return select(query, new Object[0], mapper);
     }
 
-    public void update(final String query) {
+    public void update(String query) {
         update(query, new Object[0]);
     }
 
-    public void update(final String query, final Object[] parameters) {
+    public void update(String query, Object[] parameters) {
         run((For<Void>) connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 for (int index = 0; index < parameters.length; index++) {
@@ -70,7 +70,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
         });
     }
 
-    public <T> void batchUpdate(final String query, final List<T> parameters, final ForStmt<T> forStmt) {
+    public <T> void batchUpdate(String query, List<T> parameters, ForStmt<T> forStmt) {
         run((For<Void>) connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 for (T parameter : parameters) {
