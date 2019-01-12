@@ -89,8 +89,7 @@ export const logoutFail = error => ({
  * Saga
  **/
 
-
- // TODO add try-catch
+// TODO add try-catch
 export function* loginFormSaga() {
     while (true) {
         const {
