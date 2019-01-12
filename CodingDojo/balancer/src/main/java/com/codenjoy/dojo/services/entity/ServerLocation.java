@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.rest.pojo;
+package com.codenjoy.dojo.services.entity;
 
 /*-
  * #%L
@@ -22,29 +22,40 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
-import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+public class ServerLocation {
 
-public class PLevelProgress extends LevelProgress {
+    private String email;
+    private String code;
+    private String server;
 
-    public PLevelProgress() {
-        super();
+    public ServerLocation() {
+        // do nothing
     }
 
-    public PLevelProgress(LevelProgress progress) {
-        super(progress.getTotal(), progress.getCurrent(), progress.getPassed());
+    public ServerLocation(String email, String code, String server) {
+        this.email = email;
+        this.code = code;
+        this.server = server;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public String getCode() {
+        return code;
     }
 
-    public void setCurrent(int current) {
-        this.current = current;
+    public String getServer() {
+        return server;
     }
 
-    public void setPassed(int passed) {
-        this.passed = passed;
+    public String getEmail() {
+        return email;
     }
 
+    @Override
+    public String toString() {
+        return "ServerLocation{" +
+                "email='" + email + '\'' +
+                ", code='" + code + '\'' +
+                ", server='" + server + '\'' +
+                '}';
+    }
 }

@@ -86,7 +86,7 @@ public class RegistrationController {
         player.setGameName(gameName);
         model.addAttribute("player", player);
 
-        player.setCallbackUrl("http://" + ip + ":8888");
+        player.setCallbackUrl("http://" + ip + ":80");
 
         return getRegister(model);
     }
@@ -104,11 +104,11 @@ public class RegistrationController {
     }
 
     private String getIp(HttpServletRequest request) {
-        String ip = request.getRemoteAddr();
-        if (ip.equals("0:0:0:0:0:0:0:1")) {
-            ip = "127.0.0.1";
+        String result = request.getRemoteAddr();
+        if (result.equals("0:0:0:0:0:0:0:1")) {
+            result = "127.0.0.1";
         }
-        return ip;
+        return result;
     }
 
     private String getLocalIp(HttpServletRequest request) {

@@ -164,6 +164,10 @@ public class Registration {
                     ", data='" + data + '\'' +
                     '}';
         }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
     }
 
     public void changePasswordsToMD5() {

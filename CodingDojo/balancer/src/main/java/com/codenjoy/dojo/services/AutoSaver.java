@@ -35,7 +35,7 @@ public class AutoSaver extends Suspendable implements Tickable {
 
     public static final int TICKS = 30;
 
-    @Autowired private SaveService save;
+    @Autowired private Dispatcher dispatcher;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private boolean justStart = true;
     private int count = 0;
@@ -53,12 +53,12 @@ public class AutoSaver extends Suspendable implements Tickable {
 
         if (justStart) {
             justStart = false;
-            save.loadAll();
+//            save.loadAll();
         } else {
             count++;
             if (count % TICKS == (TICKS - 1)) {
                 // executor.submit потому что sqlite тормозит при сохранении
-                executor.submit(() -> save.saveAll());
+//                executor.submit(() -> save.saveAll());
             }
         }
     }

@@ -56,7 +56,7 @@ public class RestRegistrationController {
     // TODO test me
     @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
     @ResponseBody
-    public List<com.codenjoy.dojo.web.rest.pojo.PlayerInfo> getPlayerForGame(@PathVariable("gameName") String gameName) {
+    public List<com.codenjoy.dojo.web.rest.pojo.PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
         return playerService.getAll(gameName).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
@@ -88,8 +88,14 @@ public class RestRegistrationController {
     // TODO test me
     @RequestMapping(value = "/player/create", method = RequestMethod.POST)
     @ResponseBody
-    public boolean checkUserLogin(@RequestBody PlayerDetailInfo playerInfo) {
-        registration.replace(playerInfo.getRegistration());
+    public String createPlayer(@RequestBody PlayerDetailInfo playerInfo) {
+
+        Registration.User user = playerInfo.getRegistration();
+
+        String code = Registration.makeCode(user.getEmail(), user.getPassword());
+        user.setCode(code);
+
+        registration.replace(user);
 
         PlayerSave playerSave = playerInfo.buildPlayerSave();
         playerService.register(playerSave);
@@ -97,6 +103,6 @@ public class RestRegistrationController {
         playerGames.setLevel(playerInfo.getName(),
                 new JSONObject(playerInfo.getSave()));
 
-        return true;
+        return code;
     }
 }

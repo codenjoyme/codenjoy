@@ -33,17 +33,17 @@
         <constructor-arg value="database/scores.db"/>
         <constructor-arg ref="contextPathGetter"/>
     </bean>
-    <bean id="playerGameSaver" class="com.codenjoy.dojo.services.dao.Scores">
-        <constructor-arg ref="playerPoolFactory"/>
+    <bean id="scores" class="com.codenjoy.dojo.services.dao.Scores">
+        <constructor-arg ref="scoresPoolFactory"/>
     </bean>
 
-    <bean id="registrationPoolFactory"
+    <bean id="playersPoolFactory"
           class="com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory">
-        <constructor-arg value="database/users.db"/>
+        <constructor-arg value="database/players.db"/>
         <constructor-arg ref="contextPathGetter"/>
     </bean>
-    <bean id="registration" class="com.codenjoy.dojo.services.dao.Registration">
-        <constructor-arg ref="registrationPoolFactory"/>
+    <bean id="players" class="com.codenjoy.dojo.services.dao.Players">
+        <constructor-arg ref="playersPoolFactory"/>
     </bean>
 
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.rest.pojo;
+package com.codenjoy.dojo.services.entity.server;
 
 /*-
  * #%L
@@ -22,21 +22,25 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Player;
-
 public class PlayerInfo {
+
     private String gameType;
     private String callbackUrl;
     private String name;
     private String score;
     private String code;
 
-    public PlayerInfo(Player player) {
-        gameType = player.getGameType().name();
-        callbackUrl = player.getCallbackUrl();
-        name = player.getName();
-        score = String.valueOf(player.getScore());
-        code = player.getCode();
+    public PlayerInfo() {
+        // do nothing
+    }
+
+    public PlayerInfo(String gameType, String callbackUrl, String name, String score, String code) {
+        this.gameType = gameType;
+        this.callbackUrl = callbackUrl;
+        // do nothing
+        this.name = name;
+        this.score = score;
+        this.code = code;
     }
 
     public String getGameType() {
@@ -57,5 +61,16 @@ public class PlayerInfo {
 
     public String getCode() {
         return code;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerInfo{" +
+                "gameType='" + gameType + '\'' +
+                ", callbackUrl='" + callbackUrl + '\'' +
+                ", name='" + name + '\'' +
+                ", score='" + score + '\'' +
+                ", code='" + code + '\'' +
+                '}';
     }
 }
