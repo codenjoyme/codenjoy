@@ -69,6 +69,21 @@ var getScores = function(day) {
     })
 };
 
+var removeUser = function(email, password) {
+    $.ajax({
+        type: 'GET',
+        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/remove',
+        dataType: 'json',
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        data: '{"email": "' + email + '", ' +
+            '"password" : "' + password + '"}',
+        success: function(data) {
+            $("#remove-result").val(JSON.stringify(data));
+        }
+    })
+};
+
 var getUsers = function(day) {
     $.ajax({
         type: 'GET',
@@ -105,7 +120,14 @@ $(document).ready(function() {
 
     $("#scores").click(function() {
         getScores(
-            $("#scores_day").val()
+            $("#scores-day").val()
+        );
+    });
+
+    $("#remove").click(function() {
+        removeUser(
+            $("#revmove-email").val(),
+            $("#revmove-password").val()
         );
     });
 

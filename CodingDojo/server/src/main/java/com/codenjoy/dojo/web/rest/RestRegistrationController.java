@@ -46,11 +46,27 @@ public class RestRegistrationController {
     @Autowired private PlayerService playerService;
     @Autowired private PlayerGames playerGames;
     @Autowired private PlayerGamesView playerGamesView;
+    @Autowired private SaveService saveService;
 
     @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
     public boolean checkUserLogin(@PathVariable("playerName") String playerName, @PathVariable("code") String code) {
         return registration.checkUser(playerName, code);
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/player/{playerName}/remove/{code}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean removeUser(@PathVariable("playerName") String playerName, @PathVariable("code") String code) {
+        if (!registration.checkUser(playerName, code)) {
+            return false;
+        }
+
+        playerService.remove(playerName);
+        saveService.removeSave(playerName);
+        registration.remove(playerName);
+
+        return true;
     }
 
     // TODO test me

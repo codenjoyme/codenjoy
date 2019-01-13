@@ -133,6 +133,7 @@ public class RestController {
             @Override
             public Boolean onSuccess(ServerLocation data) {
                 players.remove(data.getEmail());
+                dispatcher.remove(data.getServer(), data.getEmail(), data.getCode());
                 return true;
             }
 
