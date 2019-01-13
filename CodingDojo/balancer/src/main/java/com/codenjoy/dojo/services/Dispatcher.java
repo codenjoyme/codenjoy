@@ -51,6 +51,7 @@ public class Dispatcher {
 
     private List<String> servers = new CopyOnWriteArrayList<>();
     private String urlCreatePlayer;
+    private String urlRemovePlayer;
     private String urlGetPlayers;
     private String gameType;
     private volatile long lastTime;
@@ -65,6 +66,7 @@ public class Dispatcher {
         // TODO move to admin
         urlGetPlayers = "http://%s/codenjoy-contest/rest/game/%s/players";
         urlCreatePlayer = "http://%s/codenjoy-contest/rest/player/create";
+        urlRemovePlayer = "http://%s/codenjoy-contest/rest/player/%s/remove/%s";
         gameType = "snakebattle";
         servers.add("codenjoy.juja.com.ua");
 //        servers.add("server2.codenjoy.juja.com.ua");
@@ -150,6 +152,13 @@ public class Dispatcher {
                 server);
     }
 
+    private String removePlayerUrl(String server, String email, String code) {
+        return String.format(urlRemovePlayer,
+                server,
+                email,
+                code);
+    }
+
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> result = scores.getScores(day, lastTime);
 
@@ -157,5 +166,15 @@ public class Dispatcher {
         result.forEach(score -> score.setServer(players.getServer(score.getEmail())));
 
         return result;
+    }
+
+    public Boolean remove(String server, String email, String code) {
+        RestTemplate rest = new RestTemplate();
+        ResponseEntity<Boolean> entity = rest.exchange(
+                removePlayerUrl(server, email, code),
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Boolean>(){});
+        return entity.getBody();
     }
 }
