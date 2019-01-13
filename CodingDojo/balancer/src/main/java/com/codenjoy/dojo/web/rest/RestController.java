@@ -86,9 +86,30 @@ public class RestController {
         return result;
     }
 
+    interface OnLogin<T> {
+        T onSuccess(ServerLocation data);
+
+        T onFailed(ServerLocation data);
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation login(@RequestBody Player player) {
+        return tryLogin(player, new OnLogin<ServerLocation>(){
+
+            @Override
+            public ServerLocation onSuccess(ServerLocation data) {
+                return data;
+            }
+
+            @Override
+            public ServerLocation onFailed(ServerLocation data) {
+                return data;
+            }
+        });
+    }
+
+    private <T> T tryLogin(Player player, OnLogin<T> onLogin) {
         String email = player.getEmail();
         String password = player.getPassword();
 
@@ -97,11 +118,29 @@ public class RestController {
 
         Player exist = players.get(email);
         if (exist == null || !password.equals(exist.getPassword())) {
-            return unauthorized(email);
+            return onLogin.onFailed(unauthorized(email));
         }
         String server = players.getServer(email);
 
-        return new ServerLocation(email, exist.getCode(), server);
+        return onLogin.onSuccess(new ServerLocation(email, exist.getCode(), server));
+    }
+
+    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean remove(@RequestBody Player player) {
+        return tryLogin(player, new OnLogin<Boolean>(){
+
+            @Override
+            public Boolean onSuccess(ServerLocation data) {
+                players.remove(data.getEmail());
+                return true;
+            }
+
+            @Override
+            public Boolean onFailed(ServerLocation data) {
+                return false;
+            }
+        });
     }
 
     private ServerLocation unauthorized(String email) {
