@@ -9,11 +9,11 @@
     "repository": "https://github.com/codenjoyme/codenjoy/tree/snake-new-ui/CodingDojo/games/snake-battle/src/main/javascript",
     "private": true,
     "scripts": {
-        "//start": "webpack-cli --config webpack.config.js --mode production",
         "start": "webpack-serve  --config ./webpack.config.js"
     },
     "dependencies": {
-        "ws": "6.1.2"
+        "ws": "6.1.2",
+        "dotenv": "6.2.0"
     },
     "devDependencies": {
         "webpack": "4.28.3",

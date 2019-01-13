@@ -1,7 +1,7 @@
 import { getNextSnakeMove } from './bot';
 import { getBoardAsString } from './utils';
 
-var URL = "http://codenjoy.com/codenjoy-contest/board/player/vreshch@gmail.com?code=16021902521521292064";
+var URL = process.env.GAME_URL || '';
 var url = URL.replace("http", "ws").replace("board/player/", "ws?user=").replace("?code=", "&code=");
 
 var socket = new WebSocket(url);
