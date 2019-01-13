@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,20 +62,24 @@ public class Players {
                 rs -> {
                     List<Player> result = new LinkedList<>();
                     while (rs.next()) {
-                        result.add(new Player(
-                                rs.getString("email"),
-                                rs.getString("firstName"),
-                                rs.getString("lastName"),
-                                rs.getString("password"),
-                                rs.getString("city"),
-                                rs.getString("skills"),
-                                rs.getString("comment"),
-                                rs.getString("code"),
-                                rs.getString("server")));
+                        result.add(getPlayer(rs));
                     }
                     return result;
                 }
         );
+    }
+
+    private Player getPlayer(ResultSet rs) throws SQLException {
+        return new Player(
+                rs.getString("email"),
+                rs.getString("firstName"),
+                rs.getString("lastName"),
+                rs.getString("password"),
+                rs.getString("city"),
+                rs.getString("skills"),
+                rs.getString("comment"),
+                rs.getString("code"),
+                rs.getString("server"));
     }
 
     public List<ServerLocation> getPlayersLocations() {
@@ -89,6 +95,13 @@ public class Players {
                     }
                     return result;
                 }
+        );
+    }
+
+    public Player get(String email) {
+        return pool.select("SELECT * FROM players WHERE email = ?;",
+                new Object[]{email},
+                rs -> rs.next() ? getPlayer(rs) : null
         );
     }
 
