@@ -66,7 +66,7 @@ public class RestController {
         validator.checkString(player.getSkills());
 
         if (players.getCode(email) != null) {
-            return new ServerLocation(email, null, null); // TODO return 401
+            return unauthorized(email);
         }
 
         ServerLocation location = dispatcher.register(player, getIp(request));
@@ -90,16 +90,22 @@ public class RestController {
     @ResponseBody
     public ServerLocation login(@RequestBody Player player) {
         String email = player.getEmail();
-        validator.checkEmail(email, false);
-        validator.checkMD5(player.getPassword());
+        String password = player.getPassword();
 
-        String code = players.getCode(email);
-        if (code == null) {
-            return new ServerLocation(email, null, null); // TODO return 401
+        validator.checkEmail(email, false);
+        validator.checkMD5(password);
+
+        Player exist = players.get(email);
+        if (exist == null || !password.equals(exist.getPassword())) {
+            return unauthorized(email);
         }
         String server = players.getServer(email);
 
-        return new ServerLocation(email, code, server);
+        return new ServerLocation(email, exist.getCode(), server);
+    }
+
+    private ServerLocation unauthorized(String email) {
+        return new ServerLocation(email, null, null);
     }
 
 }
