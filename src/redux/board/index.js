@@ -35,7 +35,6 @@ export default function reducer(state = ReducerState, action) {
             return {
                 ...state,
                 selectedDay:         payload,
-                rating:              void 0,
                 selectedParticipant: void 0,
             };
 
