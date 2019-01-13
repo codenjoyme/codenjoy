@@ -52,7 +52,7 @@ class DaysPanelHandler extends Component {
 
         return (
             <div className={ Styles.wrapper }>
-                <div className={ Styles.aside }>Leaderboard</div>
+                <div className={ Styles.aside }>Leader Board</div>
                 <div className={ Styles.main }>
                     <div className={ Styles.dayPanel }>
                         { daysRangeConfig.map(({ label, disabled, day }) => (
