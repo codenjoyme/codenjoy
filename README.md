@@ -1,5 +1,6 @@
 # JS Challenge 2019
 [![Build Status](https://travis-ci.com/vreshch/jschallenge.svg?branch=master)](https://travis-ci.org/vreshch/jschallenge)
+
 UI project that support JS Challenge 2019 start
 
 ## Available Scripts
