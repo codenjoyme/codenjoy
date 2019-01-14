@@ -1,0 +1,24 @@
+{
+    "name": "codenjoy-snake-battle",
+    "version": "1.0.0",
+    "description": "Snake example",
+    "keywords": [],
+    "engines": {
+        "node": ">=6.0.0"
+    },
+    "repository": "https://github.com/codenjoyme/codenjoy/tree/snake-new-ui/CodingDojo/games/snake-battle/src/main/javascript",
+    "private": true,
+    "scripts": {
+        "start": "webpack-serve  --config ./webpack.config.js"
+    },
+    "dependencies": {
+        "ws": "6.1.2",
+        "dotenv": "6.2.0"
+    },
+    "devDependencies": {
+        "webpack": "4.28.3",
+        "webpack-cli": "3.1.2",
+        "webpack-serve": "2.0.3",
+        "html-webpack-plugin": "3.2.0"
+    }
+}
