@@ -18,15 +18,10 @@ class RatingTableHandler extends Component {
 
     render() {
         const { setSelectedParticipant } = this.props;
-        const { rating, email, selectedParticipant } = this.props;
+        const { rating, email, watchEmail } = this.props;
 
-        const participantEmail = _.get(selectedParticipant, 'email');
         const ownIndex = _.findIndex(rating, { email }); // Index of logged in user
-
-        // Index of selected participant
-        const selectedRatingIndex = _.findIndex(rating, {
-            email: participantEmail || email,
-        });
+        const selectedRatingIndex = _.findIndex(rating, { email: watchEmail }); // Index of selected participant
 
         const selectedIndex =
             selectedRatingIndex === -1 ? 0 : selectedRatingIndex;

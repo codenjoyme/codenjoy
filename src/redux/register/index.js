@@ -71,7 +71,7 @@ export function* registerFormSaga() {
         } = yield take(REGISTER);
         const payload = { ...restPayload, password: md5(password) };
 
-        const result = yield call(
+        const response = yield call(
             fetchAPI,
             'POST',
             'rest/register',
@@ -79,10 +79,15 @@ export function* registerFormSaga() {
             payload,
             { noRedirect: true },
         );
-        if (result instanceof Error) {
-            yield put(registerFail({ system: true }));
+        if (response instanceof Error) {
+            const failParams =
+                response.status === 400
+                    ? { credentials: true }
+                    : { system: true };
+
+            yield put(registerFail(failParams));
         } else {
-            if (!result.code) {
+            if (!response.code) {
                 yield put(registerFail({ credentials: true }));
             } else {
                 yield put(registerSuccess());

@@ -53,7 +53,7 @@ class BoardContainer extends Component {
                     <div className={ Styles.rating }>
                         <RatingTable
                             email={ email }
-                            selectedParticipant={ selectedParticipant }
+                            watchEmail={ battleParticipant }
                             rating={ rating }
                             setSelectedParticipant={ setSelectedParticipant }
                         />

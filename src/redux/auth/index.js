@@ -5,7 +5,15 @@ import md5 from 'md5';
 
 // proj
 import { book } from '../../routes';
-import { fetchAPI, setCode, setEmail, removeCode, removeEmail, setServer, removeServer } from '../../utils';
+import {
+    fetchAPI,
+    setCode,
+    setEmail,
+    removeCode,
+    removeEmail,
+    setServer,
+    removeServer,
+} from '../../utils';
 
 /**
  * Constants
@@ -109,14 +117,26 @@ export function* loginFormSaga() {
             payload: { email, password },
         } = yield take(LOGIN);
         const credentials = { email, password: md5(password) };
-        const user = yield call(fetchAPI, 'POST', 'rest/login', null, credentials, { noRedirect: true });
-        if (user instanceof Error) {
-            yield put(loginFail({ system: true }));
+        const response = yield call(
+            fetchAPI,
+            'POST',
+            'rest/login',
+            null,
+            credentials,
+            { noRedirect: true },
+        );
+        if (response instanceof Error) {
+            const failParams =
+                response.status === 401
+                    ? { credentials: true }
+                    : { system: true };
+
+            yield put(loginFail(failParams));
         } else {
-            if (!user.code) {
+            if (!response.code) {
                 yield put(loginFail({ credentials: true }));
             } else {
-                yield put(authenticate(user));
+                yield put(authenticate(response));
                 yield put(loginSuccess());
                 yield put(replace(book.board));
             }
