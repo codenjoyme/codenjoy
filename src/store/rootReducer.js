@@ -8,6 +8,9 @@ import storage from 'redux-persist/lib/storage';
 // proj
 import authReducer, { moduleName as authModule } from '../redux/auth';
 import boardReducer, { moduleName as boardModule } from '../redux/board';
+import registerReducer, {
+    moduleName as registerModule,
+} from '../redux/register';
 
 // own
 import { history } from './middleware';
@@ -23,10 +26,14 @@ const persistedState = {
 };
 
 const appState = {
-    [ boardModule ]: boardReducer,
-    router:          connectRouter(history),
+    [ boardModule ]:    boardReducer,
+    [ registerModule ]: registerReducer,
+    router:             connectRouter(history),
 };
 
-const rootReducer = persistReducer(persistConfig, combineReducers({ ...persistedState, ...appState }));
+const rootReducer = persistReducer(
+    persistConfig,
+    combineReducers({ ...persistedState, ...appState }),
+);
 
 export default rootReducer;

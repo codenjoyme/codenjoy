@@ -47,7 +47,7 @@ export default function reducer(state = ReducerState, action) {
         case FETCH_RATING:
             return {
                 ...state,
-                rating: void 0,
+                // rating: void 0,
             };
 
         case FETCH_RATING_SUCCESS:

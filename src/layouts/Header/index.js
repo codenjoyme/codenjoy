@@ -16,38 +16,62 @@ export class Header extends Component {
             <>
                 <ul className={ Styles.navigation }>
                     <li className={ Styles.link }>
-                        <NavLink to={ book.board } activeClassName={ Styles.activeNavLink }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
                             Home
                         </NavLink>
                     </li>
                     <li className={ Styles.link }>
-                        <NavLink to={ book.board } activeClassName={ Styles.activeNavLink }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
                             About
                         </NavLink>
                     </li>
                     <li className={ Styles.link }>
-                        <NavLink to={ book.board } activeClassName={ Styles.activeNavLink }>
-                            Products
-                        </NavLink>
-                    </li>
-                    <li className={ Styles.link }>
-                        <NavLink to={ book.board } activeClassName={ Styles.activeNavLink }>
+                        <NavLink
+                            to={ book.board }
+                            activeClassName={ Styles.activeNavLink }
+                        >
                             Contact
                         </NavLink>
                     </li>
                     <li className={ Styles.link }>
-                        { server ? <Link to={ book.board }>Server: { server }</Link> : <Link to={ book.login }>Login</Link> }
+                        { server ? (
+                            <Link to={ book.board }>Сервер: { server }</Link>
+                        ) : (
+                            <Link to={ book.login }>Увійти</Link>
+                        ) }
                         { server && (
-                            <CopyToClipboard text={ getGameConnectionString(server, code, email) }>
-                                <button className={ Styles.copyButton }>Copy</button>
+                            <CopyToClipboard
+                                text={ getGameConnectionString(
+                                    server,
+                                    code,
+                                    email,
+                                ) }
+                            >
+                                <button className={ Styles.copyButton }>
+                                    Copy
+                                </button>
                             </CopyToClipboard>
                         ) }
                     </li>
                     { server && (
                         <li className={ Styles.link }>
-                            <div className={ Styles.action } onClick={ () => logout() }>
-                                Logout
+                            <div
+                                className={ Styles.action }
+                                onClick={ () => logout() }
+                            >
+                                Вийти
                             </div>
+                        </li>
+                    ) }
+                    { !server && (
+                        <li className={ Styles.link }>
+                            <Link to={ book.register }>Реєстрація</Link>
                         </li>
                     ) }
                 </ul>

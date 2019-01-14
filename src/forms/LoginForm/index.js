@@ -25,9 +25,17 @@ class LoginForm extends Component {
         return (
             <div>
                 <h1>Логін</h1>
-                { _.get(loginErrors, 'credentials') && <div>Неправильний емейл або пароль</div> }
-                { _.get(loginErrors, 'system') && <div>Сервіс тимчасово недоступний</div> }
-                <Formik initialValues={ { email: '', password: '' } } validationSchema={ LoginSchema } onSubmit={ login }>
+                { _.get(loginErrors, 'credentials') && (
+                    <div>Неправильний емейл або пароль</div>
+                ) }
+                { _.get(loginErrors, 'system') && (
+                    <div>Сервіс тимчасово недоступний</div>
+                ) }
+                <Formik
+                    initialValues={ { email: '', password: '' } }
+                    validationSchema={ LoginSchema }
+                    onSubmit={ login }
+                >
                     { () => (
                         <Form>
                             <ErrorMessage name='email' component='div' />
@@ -47,7 +55,9 @@ const mapStateToProps = state => ({
     loginErrors: state.auth.loginErrors,
 });
 
+const mapDispatchToProps = { login };
+
 export default connect(
     mapStateToProps,
-    { login },
+    mapDispatchToProps,
 )(LoginForm);

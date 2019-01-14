@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 // proj
-import { LoginPage, BoardPage, ExceptionPage } from '../pages';
+import { LoginPage, BoardPage, ExceptionPage, RegisterPage } from '../pages';
 import { book } from './index.js';
 
 export default class Public extends Component {
@@ -12,7 +12,11 @@ export default class Public extends Component {
             <Switch>
                 <Route exact component={ BoardPage } path={ book.board } />
                 <Route exact component={ LoginPage } path={ book.login } />
-                <Route component={ ExceptionPage } path={ book.exceptionStatusCode } />
+                <Route exact component={ RegisterPage } path={ book.register } />
+                <Route
+                    component={ ExceptionPage }
+                    path={ book.exceptionStatusCode }
+                />
                 <Redirect to={ book.login } />
             </Switch>
         );
