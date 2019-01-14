@@ -2,3 +2,11 @@
     width: 100%;
     color: white;
 }
+
+.selectedRow {
+    border: 1px solid black;
+}
+
+.ownRow {
+    border: 1px solid white;
+}
