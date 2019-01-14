@@ -12,7 +12,7 @@ class RatingTableHandler extends Component {
     _rowStyles(rowIndex, selectedIndex, ownIndex) {
         return cx({
             ownRow:      ownIndex !== -1 && ownIndex === rowIndex,
-            selectedRow: selectedIndex === rowIndex,
+            selectedRow: selectedIndex !== -1 && selectedIndex === rowIndex,
         });
     }
 
@@ -21,10 +21,7 @@ class RatingTableHandler extends Component {
         const { rating, email, watchEmail } = this.props;
 
         const ownIndex = _.findIndex(rating, { email }); // Index of logged in user
-        const selectedRatingIndex = _.findIndex(rating, { email: watchEmail }); // Index of selected participant
-
-        const selectedIndex =
-            selectedRatingIndex === -1 ? 0 : selectedRatingIndex;
+        const selectedIndex = _.findIndex(rating, { email: watchEmail }); // Index of selected participant
 
         return rating ? (
             <div className={ Styles.rating }>
