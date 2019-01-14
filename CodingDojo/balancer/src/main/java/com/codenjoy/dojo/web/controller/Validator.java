@@ -25,8 +25,10 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
@@ -114,5 +116,15 @@ public class Validator {
         if (StringUtils.isEmpty(input)) {
             throw new IllegalArgumentException("String can be empty: " + input);
         }
+    }
+
+    public void validateAdmin(Player player, String adminPassword) {
+        if ("admin".equals(player.getEmail()) ||
+                DigestUtils.md5DigestAsHex(adminPassword.getBytes()).equals(player.getPassword()))
+        {
+            return;
+        }
+
+        throw new IllegalArgumentException("Unauthorized admin access");
     }
 }

@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.controller.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,12 @@ public class RestController {
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
 
+    private boolean adminPassword;
+
+    @Value("${admin.password}")
+    public void setActive(boolean adminPassword) {
+        this.adminPassword = adminPassword;
+    }
 
     @RequestMapping(value = "/score/day/{day}", method = RequestMethod.GET)
     @ResponseBody
@@ -148,4 +155,11 @@ public class RestController {
         return new ServerLocation(email, null, null);
     }
 
+
+    @RequestMapping(value = "/players", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Player> getPlayers(@RequestBody Player player) {
+        validator.validateAdmin(player, adminPassword);
+        return players.getPlayersDetails();
+    }
 }
