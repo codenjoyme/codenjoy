@@ -63,13 +63,18 @@ public class BoardController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", method = RequestMethod.GET)
-    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName) {
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}",
+                    method = RequestMethod.GET)
+    public String boardPlayer(ModelMap model,
+                              @PathVariable("playerName") String playerName,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
 
-        return boardPlayer(model, playerName, null);
+        return boardPlayer(model, playerName, null, justBoard);
     }
 
+    // TODO а тут точно надо 'remove' в params = {"code", "remove"} ?
     @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = {"code", "remove"}, method = RequestMethod.GET)
     public String removePlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
@@ -83,8 +88,13 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = "code", method = RequestMethod.GET)
-    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}",
+                    params = "code",
+                    method = RequestMethod.GET)
+    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName,
+                              @RequestParam("code") String code,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -97,7 +107,8 @@ public class BoardController {
         model.addAttribute(GAME_NAME, player.getGameName());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", false);
-        return "board";
+
+        return (justBoard == null || !justBoard) ? "board" : "board-only";
     }
 
     @RequestMapping(value = "/board", method = RequestMethod.GET)
