@@ -119,12 +119,12 @@ public class Validator {
     }
 
     public void validateAdmin(Player player, String adminPassword) {
-        if ("admin".equals(player.getEmail()) ||
+        if ("admin".equals(player.getEmail()) &&
                 DigestUtils.md5DigestAsHex(adminPassword.getBytes()).equals(player.getPassword()))
         {
             return;
         }
 
-        throw new IllegalArgumentException("Unauthorized admin access");
+        throw new LoginException("Unauthorized admin access");
     }
 }

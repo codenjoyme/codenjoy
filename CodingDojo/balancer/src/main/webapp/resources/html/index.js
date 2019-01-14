@@ -38,6 +38,9 @@ var registerUser = function(email, firstName,
             '"comment" : "' + comment + '"}',
         success: function(data) {
             $("#register-result").val(JSON.stringify(data));
+        },
+        error : function(data) {
+            $("#register-result").val(data.status + " " + data.responseText);
         }
     })
 };
@@ -53,6 +56,9 @@ var loginUser = function(email, password) {
             '"password" : "' + password + '"}',
         success: function(data) {
             $("#login-result").val(JSON.stringify(data));
+        },
+        error : function(data) {
+            $("#login-result").val(data.status + " " + data.responseText);
         }
     })
 };
@@ -65,13 +71,16 @@ var getScores = function(day) {
         async: false,
         success: function(data) {
             $("#scores-result").val(JSON.stringify(data));
+        },
+        error : function(data) {
+            $("#scores-result").val(data.status + " " + data.responseText);
         }
     })
 };
 
 var removeUser = function(email, password) {
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/remove',
         dataType: 'json',
         async: false,
@@ -80,6 +89,9 @@ var removeUser = function(email, password) {
             '"password" : "' + password + '"}',
         success: function(data) {
             $("#remove-result").val(JSON.stringify(data));
+        },
+        error : function(data) {
+            $("#remove-result").val(data.status + " " + data.responseText);
         }
     })
 };
@@ -92,6 +104,9 @@ var getUsersOnGameServer = function() {
         async: false,
         success: function(data) {
             $("#users-game-result").val(JSON.stringify(data));
+        },
+        error : function(data) {
+            $("#users-game-result").val(data.status + " " + data.responseText);
         }
     })
 };
@@ -106,7 +121,10 @@ var getUsersOnBalancerServer = function(email, password) {
         data: '{"email": "' + email + '", ' +
             '"password" : "' + password + '"}',
         success: function(data) {
-            $("#users-game-result").val(JSON.stringify(data));
+            $("#users-balancer-result").val(JSON.stringify(data));
+        },
+        error : function(data) {
+            $("#users-balancer-result").val(data.status + " " + data.responseText);
         }
     })
 };
@@ -128,8 +146,8 @@ $(document).ready(function() {
     $("#login").click(function() {
         var preffix = $("#preffix").val();
         loginUser(
-            preffix + $("#email").val(),
-            $.md5(preffix + $("#password").val())
+            preffix + $("#login-email").val(),
+            $.md5(preffix + $("#login-password").val())
         );
     });
 
@@ -140,9 +158,10 @@ $(document).ready(function() {
     });
 
     $("#remove").click(function() {
+        var preffix = $("#preffix").val();
         removeUser(
-            $("#revmove-email").val(),
-            $("#revmove-password").val()
+            preffix + $("#revmove-email").val(),
+            preffix + $("#revmove-password").val()
         );
     });
 
@@ -153,7 +172,7 @@ $(document).ready(function() {
     $("#users-balancer").click(function() {
         getUsersOnBalancerServer(
             $("#admin-email").val(),
-            $("#admin-password").val()
+            $.md5($("#admin-password").val())
         );
     });
 });

@@ -28,15 +28,18 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
+import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -69,7 +72,7 @@ public class RestController {
         validator.checkString(player.getSkills());
 
         if (players.getCode(email) != null) {
-            return unauthorized(email);
+            throw new IllegalArgumentException("User already registered");
         }
 
         ServerLocation location = dispatcher.register(player, getIp(request));
@@ -107,7 +110,7 @@ public class RestController {
 
             @Override
             public ServerLocation onFailed(ServerLocation data) {
-                return data;
+               throw new LoginException("User name or password is incorrect");
             }
         });
     }
@@ -121,7 +124,7 @@ public class RestController {
 
         Player exist = players.get(email);
         if (exist == null || !password.equals(exist.getPassword())) {
-            return onLogin.onFailed(unauthorized(email));
+            return onLogin.onFailed(new ServerLocation(email, null, null));
         }
         String server = players.getServer(email);
 
@@ -142,15 +145,10 @@ public class RestController {
 
             @Override
             public Boolean onFailed(ServerLocation data) {
-                return false;
+                throw new LoginException("User name or password is incorrect");
             }
         });
     }
-
-    private ServerLocation unauthorized(String email) {
-        return new ServerLocation(email, null, null);
-    }
-
 
     @RequestMapping(value = "/players", method = RequestMethod.POST)
     @ResponseBody
@@ -158,4 +156,19 @@ public class RestController {
         validator.validateAdmin(player, adminPassword);
         return players.getPlayersDetails();
     }
+
+    // 400 for bad registration and validation error
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    // 401 for bad login
+    @ExceptionHandler({LoginException.class})
+    public ResponseEntity<String> handleFailedLoginException(LoginException e) {
+        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+                HttpStatus.UNAUTHORIZED);
+    }
+
 }
