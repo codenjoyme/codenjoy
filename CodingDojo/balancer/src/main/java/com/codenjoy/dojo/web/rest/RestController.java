@@ -216,12 +216,14 @@ public class RestController {
 
     @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.POST)
     @ResponseBody
-    public void saveSettings(@PathVariable("adminPassword") String adminPassword,
+    public boolean saveSettings(@PathVariable("adminPassword") String adminPassword,
                                    @RequestBody DispatcherSettings settings)
     {
         validator.validateAdmin(this.adminPassword, adminPassword);
 
         dispatcher.saveSettings(settings);
+
+        return true;
     }
 
     @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.GET)

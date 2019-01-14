@@ -33,8 +33,10 @@
     </style>
 </head>
 <body>
-    BalancerServer:<input id="balancer-server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
-    GameServer:    <input id="game-server" value="http://THIS_SERVER/codenjoy-contest/rest"/></br>
+    BalancerServer:<input id="balancer-server"
+                          value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
+    GameServer:    <input id="game-server"
+                          value="http://THIS_SERVER/codenjoy-contest/rest"/></br>
     </br>
     Preffix:       <input id="preffix" value="a1_"/></br>
     </br>
@@ -51,6 +53,7 @@
         Comment:   <input id="comment" value="no comment"/></br>
         <button id="register">Register</button></br>
         Result:    <input id="register-result"/></br>
+        Error:     <input id="register-error" value=""/></br></br>
     </div>
 
     <h2>Login user</h2>
@@ -59,6 +62,7 @@
         Password:  <input id="login-password" value="password"/></br>
         <button id="login">Login</button></br>
         Result:    <input id="login-result"/></br>
+        Error:     <input id="login-error" value=""/></br></br>
     </div>
 
     <h2>Remove user</h2>
@@ -67,19 +71,21 @@
         Admin password (already set)</br>
         <button id="remove">Remove</button></br>
         Result:    <input id="remove-result"/></br>
+        Error:     <input id="remove-error" value=""/></br></br>
     </div>
 
     <h2>Scores</h2>
     <div>
         Day:       <input id="scores-day" value="2019-01-12"/></br>
         <button id="scores">Score</button></br>
-        Result:    <textarea rows="5" id="scores-result"></textarea></br>
+        Result:    <textarea rows="8" id="scores-result"></textarea></br>
         </br>
         </br>
         </br>
         </br>
         </br>
         </br>
+        Error:     <input id="scores-error" value=""/></br></br>
     </div>
 
     <h2>All users on balancer</h2>
@@ -99,7 +105,7 @@
         </br>
         </br>
         </br>
-        </br>
+        Error:     <input id="users-balancer-error" value=""/></br></br>
     </div>
 
     <h2>All users on game server</h2>
@@ -118,7 +124,22 @@
         </br>
         </br>
         </br>
+        Error:     <input id="users-game-error" value=""/></br></br>
+    </div>
+
+    <h2>Scores</h2>
+    <div>
+        Admin password (already set)</br>
+        <button id="get-settings">Get</button></br>
+        <button id="set-settings">Set</button></br>
+        Result:    <textarea rows="8" id="settings-result"></textarea></br>
         </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        Error:     <input id="settings-error" value=""/></br></br>
     </div>
 
 </body>

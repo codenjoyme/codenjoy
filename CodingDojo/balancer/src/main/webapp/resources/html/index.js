@@ -19,16 +19,31 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+var error = function(partOfId, data) {
+    $('#' + partOfId + '-result').val('');
+    $('#' + partOfId + '-error').val(data.status + ' ' + data.responseText);
+}
+
+var result = function(partOfId, data) {
+    $('#' + partOfId + '-result').val(JSON.stringify(data));
+    $('#' + partOfId + '-error').val('');
+}
+
+var server = function(name) {
+    return $('#' + name + '-server').val().replace('THIS_SERVER', window.location.host)
+}
+
 var registerUser = function(email, firstName,
                             lastName, password,
                             city, skills, comment)
 {
     $.ajax({
         type: 'POST',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/register',
+        url: server('balancer') + '/register',
         dataType: 'json',
         async: false,
-        contentType: "application/json; charset=utf-8",
+        contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
             '"firstName" : "' + firstName + '", ' +
             '"lastName" : "' + lastName + '", ' +
@@ -37,10 +52,10 @@ var registerUser = function(email, firstName,
             '"skills" : "' + skills + '", ' +
             '"comment" : "' + comment + '"}',
         success: function(data) {
-            $("#register-result").val(JSON.stringify(data));
+            result('register', data);
         },
         error : function(data) {
-            $("#register-result").val(data.status + " " + data.responseText);
+            error('register', data);
         }
     })
 };
@@ -48,17 +63,17 @@ var registerUser = function(email, firstName,
 var loginUser = function(email, password) {
     $.ajax({
         type: 'POST',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/login',
+        url: server('balancer') + '/login',
         dataType: 'json',
         async: false,
-        contentType: "application/json; charset=utf-8",
+        contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
             '"password" : "' + password + '"}',
         success: function(data) {
-            $("#login-result").val(JSON.stringify(data));
+            result('login', data);
         },
         error : function(data) {
-            $("#login-result").val(data.status + " " + data.responseText);
+            error('login', data);
         }
     })
 };
@@ -66,14 +81,14 @@ var loginUser = function(email, password) {
 var getScores = function(day) {
     $.ajax({
         type: 'GET',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/score/day/' + day,
+        url: server('balancer') + '/score/day/' + day,
         dataType: 'json',
         async: false,
         success: function(data) {
-            $("#scores-result").val(JSON.stringify(data));
+            result('scores', data);
         },
         error : function(data) {
-            $("#scores-result").val(data.status + " " + data.responseText);
+            error('scores', data);
         }
     })
 };
@@ -81,14 +96,14 @@ var getScores = function(day) {
 var removeUser = function(email, adminPassword) {
     $.ajax({
         type: 'GET',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/remove/' + email + '/' + adminPassword,
+        url: server('balancer') + '/remove/' + email + '/' + adminPassword,
         dataType: 'json',
         async: false,
         success: function(data) {
-            $("#remove-result").val(JSON.stringify(data));
+            result('remove', data);
         },
         error : function(data) {
-            $("#remove-result").val(data.status + " " + data.responseText);
+            error('remove', data);
         }
     })
 };
@@ -96,14 +111,14 @@ var removeUser = function(email, adminPassword) {
 var getUsersOnGameServer = function() {
     $.ajax({
         type: 'GET',
-        url: $("#game-server").val().replace('THIS_SERVER', window.location.host) + '/game/snakebattle/players',
+        url: server('game') + '/game/snakebattle/players',
         dataType: 'json',
         async: false,
         success: function(data) {
-            $("#users-game-result").val(JSON.stringify(data));
+            result('users-game', data);
         },
         error : function(data) {
-            $("#users-game-result").val(data.status + " " + data.responseText);
+            error('users-game', data);
         }
     })
 };
@@ -111,61 +126,106 @@ var getUsersOnGameServer = function() {
 var getUsersOnBalancerServer = function(adminPassword) {
     $.ajax({
         type: 'GET',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/players/' + adminPassword,
+        url: server('balancer') + '/players/' + adminPassword,
         dataType: 'json',
         async: false,
         success: function(data) {
-            $("#users-balancer-result").val(JSON.stringify(data));
+            result('users-balancer', data);
         },
         error : function(data) {
-            $("#users-balancer-result").val(data.status + " " + data.responseText);
+            error('users-balancer', data);
+        }
+    })
+};
+
+var getSettings = function(adminPassword) {
+    $.ajax({
+        type: 'GET',
+        url: server('balancer') + '/settings/' + adminPassword,
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            result('settings', data);
+        },
+        error : function(data) {
+            error('settings', data);
+        }
+    })
+};
+
+var setSettings = function(settings, adminPassword) {
+    $.ajax({
+        type: 'POST',
+        url: server('balancer') + '/settings/' + adminPassword,
+        dataType: 'json',
+        async: false,
+        contentType: 'application/json; charset=utf-8',
+        data: settings,
+        success: function(data) {
+            result('settings', data);
+        },
+        error : function(data) {
+            error('settings', data);
         }
     })
 };
 
 $(document).ready(function() {
-    $("#register").click(function() {
-        var preffix = $("#preffix").val();
+    $('#register').click(function() {
+        var preffix = $('#preffix').val();
         registerUser(
-            preffix + $("#email").val(),
-            preffix + $("#first-name").val(),
-            preffix + $("#last-name").val(),
-            $.md5(preffix + $("#password").val()),
-            preffix + $("#city").val(),
-            preffix + $("#skills").val(),
-            preffix + $("#comment").val()
+            preffix + $('#email').val(),
+            preffix + $('#first-name').val(),
+            preffix + $('#last-name').val(),
+            $.md5(preffix + $('#password').val()),
+            preffix + $('#city').val(),
+            preffix + $('#skills').val(),
+            preffix + $('#comment').val()
         );
     });
 
-    $("#login").click(function() {
-        var preffix = $("#preffix").val();
+    $('#login').click(function() {
+        var preffix = $('#preffix').val();
         loginUser(
-            preffix + $("#login-email").val(),
-            $.md5(preffix + $("#login-password").val())
+            preffix + $('#login-email').val(),
+            $.md5(preffix + $('#login-password').val())
         );
     });
 
-    $("#scores").click(function() {
+    $('#scores').click(function() {
         getScores(
-            $("#scores-day").val()
+            $('#scores-day').val()
         );
     });
 
-    $("#remove").click(function() {
-        var preffix = $("#preffix").val();
+    $('#remove').click(function() {
+        var preffix = $('#preffix').val();
         removeUser(
-            preffix + $("#remove-email").val(),
-            $.md5($("#admin-password").val())
+            preffix + $('#remove-email').val(),
+            $.md5($('#admin-password').val())
         );
     });
 
-    $("#users-game").click(function() {
+    $('#users-game').click(function() {
         getUsersOnGameServer();
     });
 
-    $("#users-balancer").click(function() {
+    $('#users-balancer').click(function() {
         getUsersOnBalancerServer(
-            $.md5($("#admin-password").val())
+            $.md5($('#admin-password').val())
+        );
+    });
+
+    $('#get-settings').click(function() {
+        getSettings(
+            $.md5($('#admin-password').val())
+        );
+    });
+
+    $('#set-settings').click(function() {
+        setSettings(
+            $('#settings-result').val(),
+            $.md5($('#admin-password').val())
         );
     });
 });
