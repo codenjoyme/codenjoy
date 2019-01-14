@@ -37,6 +37,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -147,13 +148,18 @@ public class Dispatcher {
     }
 
     private List<PlayerInfo> getPlayersInfos(String server) {
-        RestTemplate rest = new RestTemplate();
-        ResponseEntity<List<PlayerInfo>> entity = rest.exchange(
-                getPlayersUrl(server),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<PlayerInfo>>(){});
-        return entity.getBody();
+        try {
+            RestTemplate rest = new RestTemplate();
+            ResponseEntity<List<PlayerInfo>> entity = rest.exchange(
+                    getPlayersUrl(server),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<PlayerInfo>>(){});
+            return entity.getBody();
+        } catch (RestClientException e) {
+            logger.error("Error processing scores from server: " + server, e);
+            return Arrays.asList();
+        }
     }
 
     private String getPlayersUrl(String server) {
