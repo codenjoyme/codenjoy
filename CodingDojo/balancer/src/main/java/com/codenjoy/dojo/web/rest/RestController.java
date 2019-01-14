@@ -40,6 +40,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
 import java.util.List;
 
 @Controller
@@ -143,8 +144,23 @@ public class RestController {
         if (player == null) {
             throw new IllegalArgumentException("Attempt to delete non-existing user");
         }
-        players.remove(email);
-        dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+
+        List<String> errors = new LinkedList<>();
+        try {
+            players.remove(email);
+        } catch (Exception e) {
+            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+        }
+
+        try {
+            dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+        } catch (Exception e) {
+            errors.add("At game server: " +GlobalExceptionHandler.getPrintableMessage(e));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new RuntimeException(errors.toString());
+        }
     }
 
     @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
