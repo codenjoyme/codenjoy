@@ -34,15 +34,37 @@ var server = function(name) {
     return $('#' + name + '-server').val().replace('THIS_SERVER', window.location.host)
 }
 
+var _ajax = function(name, ajaxObject) {
+    if (!ajaxObject.success) {
+        ajaxObject.success = function(data) {
+            result(name, data);
+        };
+    }
+
+    if (!ajaxObject.error) {
+        ajaxObject.error = function(data) {
+            error(name, data);
+        };
+    }
+
+    ajaxObject.dataType = 'json';
+    ajaxObject.async = false;
+
+    $('#' + name + '-request').val(
+        "[" + ajaxObject.type + "] " + ajaxObject.url +
+        ((!!ajaxObject.data) ? (" > " + ajaxObject.data) : "")
+    );
+
+    $.ajax(ajaxObject);
+}
+
 var registerUser = function(email, firstName,
                             lastName, password,
                             city, skills, comment)
 {
-    $.ajax({
+    _ajax('register', {
         type: 'POST',
         url: server('balancer') + '/register',
-        dataType: 'json',
-        async: false,
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
             '"firstName" : "' + firstName + '", ' +
@@ -50,154 +72,82 @@ var registerUser = function(email, firstName,
             '"password" : "' + password + '", ' +
             '"city" : "' + city + '", ' +
             '"skills" : "' + skills + '", ' +
-            '"comment" : "' + comment + '"}',
-        success: function(data) {
-            result('register', data);
-        },
-        error : function(data) {
-            error('register', data);
-        }
-    })
+            '"comment" : "' + comment + '"}'
+    });
 };
 
 var loginUser = function(email, password) {
-    $.ajax({
+    _ajax('login', {
         type: 'POST',
         url: server('balancer') + '/login',
-        dataType: 'json',
-        async: false,
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
-            '"password" : "' + password + '"}',
-        success: function(data) {
-            result('login', data);
-        },
-        error : function(data) {
-            error('login', data);
-        }
-    })
+            '"password" : "' + password + '"}'
+    });
 };
 
 var getScores = function(day) {
-    $.ajax({
+    _ajax('scores', {
         type: 'GET',
-        url: server('balancer') + '/score/day/' + day,
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-            result('scores', data);
-        },
-        error : function(data) {
-            error('scores', data);
-        }
-    })
+        url: server('balancer') + '/score/day/' + day
+    });
 };
 
 var removeUser = function(email, adminPassword) {
-    $.ajax({
+    _ajax('remove', {
         type: 'GET',
-        url: server('balancer') + '/remove/' + email + '/' + adminPassword,
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-            result('remove', data);
-        },
-        error : function(data) {
-            error('remove', data);
-        }
-    })
+        url: server('balancer') + '/remove/' + email + '/' + adminPassword
+    });
 };
 
 var getUsersOnGameServer = function() {
-    $.ajax({
+    _ajax('users-game', {
         type: 'GET',
-        url: server('game') + '/game/snakebattle/players',
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-            result('users-game', data);
-        },
-        error : function(data) {
-            error('users-game', data);
-        }
-    })
+        url: server('game') + '/game/snakebattle/players'
+    });
 };
 
 var getUsersOnBalancerServer = function(adminPassword) {
-    $.ajax({
+    _ajax('users-balancer', {
         type: 'GET',
-        url: server('balancer') + '/players/' + adminPassword,
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-            result('users-balancer', data);
-        },
-        error : function(data) {
-            error('users-balancer', data);
-        }
-    })
+        url: server('balancer') + '/players/' + adminPassword
+    });
 };
 
 var getSettings = function(adminPassword) {
-    $.ajax({
+    _ajax('settings', {
         type: 'GET',
-        url: server('balancer') + '/settings/' + adminPassword,
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-            result('settings', data);
-        },
-        error : function(data) {
-            error('settings', data);
-        }
-    })
+        url: server('balancer') + '/settings/' + adminPassword
+    });
 };
 
 var setSettings = function(settings, adminPassword) {
-    $.ajax({
+    _ajax('settings', {
         type: 'POST',
         url: server('balancer') + '/settings/' + adminPassword,
-        dataType: 'json',
-        async: false,
         contentType: 'application/json; charset=utf-8',
-        data: settings,
-        success: function(data) {
-            result('settings', data);
-        },
-        error : function(data) {
-            error('settings', data);
-        }
-    })
+        data: settings
+    });
 };
 
 var getDebug = function(adminPassword) {
-    $.ajax({
+    _ajax('debug', {
         type: 'GET',
         url: server('balancer') + '/debug/get/' + adminPassword,
-        dataType: 'json',
-        async: false,
         success: function(data) {
             $('#debug-result').attr("checked", data);
-        },
-        error : function(data) {
-            error('debug', data);
         }
-    })
+    });
 };
 
 var setDebug = function(enabled, adminPassword) {
-    $.ajax({
+    _ajax('debug', {
         type: 'GET',
         url: server('balancer') + '/debug/set/' + enabled + '/' + adminPassword,
-        dataType: 'json',
-        async: false,
         success: function(data) {
             $('#debug-result').attr("checked", data);
-        },
-        error : function(data) {
-            error('debug', data);
         }
-    })
+    });
 };
 
 $(document).ready(function() {
