@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ScheduledFuture;
@@ -44,10 +45,11 @@ public class TimerService implements Runnable {
     private Dispatcher dispatcher;
 
     private volatile boolean paused;
+
+    @Value("${score.update}")
     private long period;
 
     public void start() {
-        period = 10000;
         paused = false;
         executor = new ScheduledThreadPoolExecutor(1);
         schedule();

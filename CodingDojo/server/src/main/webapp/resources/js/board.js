@@ -84,8 +84,10 @@ function initBoardComponents(game) {
         initDonate(game.contextPath);
     }
 
-    initJoystick(game.playerName, game.registered,
+    if (typeof initJoystick == 'function') {
+        initJoystick(game.playerName, game.registered,
             game.code, game.contextPath);
+    }
 
     if (game.enableLeadersTable) {
         initLeadersTable(game.contextPath, game.playerName, game.code);
@@ -118,7 +120,7 @@ function initBoardComponents(game) {
         }
     }
 
-    if (!!setupMouseWheelZoom) {
+    if (typeof setupMouseWheelZoom == 'function') {
         setupMouseWheelZoom();
     }
 }
