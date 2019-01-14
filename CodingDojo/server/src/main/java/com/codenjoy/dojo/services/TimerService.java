@@ -44,7 +44,7 @@ public class TimerService implements Runnable {
     private PlayerService playerService;
 
     private volatile boolean paused;
-    private long period;
+    private volatile long period;
 
     public void start() {
         period = 1000;
