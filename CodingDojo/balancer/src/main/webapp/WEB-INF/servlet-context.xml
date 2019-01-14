@@ -55,7 +55,4 @@
         <property name="redirectHttp10Compatible" value="false" />
     </bean>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
-    </bean>
 </beans>

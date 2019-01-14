@@ -32,9 +32,17 @@
     <context:component-scan base-package="com.codenjoy.dojo.services"/>
     <context:component-scan base-package="com.codenjoy.dojo.transport"/>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
-    </bean>
+    <!-- https://stackoverflow.com/a/37483225/4728425 -->
+    <!--location="classpath:/config/codenjoy-contest.properties"-->
+    <context:property-placeholder
+            location="file:src/main/resources/config/codenjoy-contest.properties"
+            ignore-unresolvable="true"
+            ignore-resource-not-found="true"
+            order="1" />
+    <context:property-placeholder
+            location="file:config/codenjoy-contest.properties"
+            ignore-resource-not-found="true"
+            order="2" />
 
     <import resource="applicationContext-database.xml"/>
 
