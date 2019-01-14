@@ -50,14 +50,18 @@ public class RestRegistrationController {
 
     @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean checkUserLogin(@PathVariable("playerName") String playerName, @PathVariable("code") String code) {
+    public boolean checkUserLogin(@PathVariable("playerName") String playerName,
+                                  @PathVariable("code") String code)
+    {
         return registration.checkUser(playerName, code);
     }
 
     // TODO test me
     @RequestMapping(value = "/player/{playerName}/remove/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean removeUser(@PathVariable("playerName") String playerName, @PathVariable("code") String code) {
+    public boolean removeUser(@PathVariable("playerName") String playerName,
+                              @PathVariable("code") String code)
+    {
         if (!registration.checkUser(playerName, code)) {
             return false;
         }
@@ -72,7 +76,7 @@ public class RestRegistrationController {
     // TODO test me
     @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
     @ResponseBody
-    public List<com.codenjoy.dojo.web.rest.pojo.PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
+    public List<PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
         return playerService.getAll(gameName).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());

@@ -33,9 +33,14 @@
     </style>
 </head>
 <body>
-    BalancerServer:<input id="balancer-server" value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
-    GameServer:    <input id="game-server" value="http://THIS_SERVER/codenjoy-contest/rest"/></br>
+    BalancerServer:<input id="balancer-server"
+                          value="http://THIS_SERVER/codenjoy-balancer/rest"/></br>
+    GameServer:    <input id="game-server"
+                          value="http://THIS_SERVER/codenjoy-contest/rest"/></br>
+    </br>
     Preffix:       <input id="preffix" value="a1_"/></br>
+    </br>
+    Admin Password:<input id="admin-password" value="securePassword"/></br>
 
     <h2>Register user</h2>
     <div>
@@ -46,43 +51,53 @@
         City:      <input id="city" value="city"/></br>
         Skills:    <input id="skills" value="Si Senior"/></br>
         Comment:   <input id="comment" value="no comment"/></br>
-        <button id="register">Register</button></br>
+        <button id="register">Register</button>
+            <input type="text" id="register-request"/></br>
         Result:    <input id="register-result"/></br>
+        Error:     <input id="register-error" value=""/></br></br>
     </div>
 
     <h2>Login user</h2>
     <div>
         Email:     <input id="login-email" value="test@gmail.com"/></br>
         Password:  <input id="login-password" value="password"/></br>
-        <button id="login">Login</button></br>
+        <button id="login">Login</button>
+            <input type="text" id="login-request"/></br>
         Result:    <input id="login-result"/></br>
+        Error:     <input id="login-error" value=""/></br></br>
     </div>
 
     <h2>Remove user</h2>
     <div>
         Email:     <input id="remove-email" value="test@gmail.com"/></br>
-        Password:  <input id="remove-password" value="password"/></br>
-        <button id="remove">Remove</button></br>
+        Admin password (already set)</br>
+        <button id="remove">Remove</button>
+            <input type="text" id="remove-request"/></br>
         Result:    <input id="remove-result"/></br>
+        Error:     <input id="remove-error" value=""/></br></br>
     </div>
 
     <h2>Scores</h2>
     <div>
         Day:       <input id="scores-day" value="2019-01-12"/></br>
-        <button id="scores">Score</button></br>
-        Result:    <textarea rows="5" id="scores-result"></textarea></br>
+        <button id="scores">Score</button>
+            <input type="text" id="scores-request"/></br>
+        Result:    <textarea rows="8" id="scores-result"></textarea></br>
         </br>
         </br>
         </br>
         </br>
         </br>
         </br>
+        Error:     <input id="scores-error" value=""/></br></br>
     </div>
 
-    <h2>Get users</h2>
+    <h2>All users on balancer</h2>
     <div>
-        <button id="users">Users</button></br>
-        Result:    <textarea rows="15" id="users-result"></textarea></br>
+        Admin password (already set)</br>
+        <button id="users-balancer">Users</button>
+            <input type="text" id="users-balancer-request"/></br>
+        Result:    <textarea rows="15" id="users-balancer-result"></textarea></br>
         </br>
         </br>
         </br>
@@ -95,7 +110,51 @@
         </br>
         </br>
         </br>
+        Error:     <input id="users-balancer-error" value=""/></br></br>
+    </div>
+
+    <h2>All users on game server</h2>
+    <div>
+        <button id="users-game">Users</button>
+            <input type="text" id="users-game-request"/></br>
+        Result:    <textarea rows="15" id="users-game-result"></textarea></br>
         </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        Error:     <input id="users-game-error" value=""/></br></br>
+    </div>
+
+    <h2>Scores</h2>
+    <div>
+        Admin password (already set)</br>
+        <button id="get-settings">Get</button></br>
+        <button id="set-settings">Set</button>
+            <input type="text" id="settings-request"/></br>
+        Result:    <textarea rows="8" id="settings-result"></textarea></br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        </br>
+        Error:     <input id="settings-error" value=""/></br></br>
+    </div>
+
+    <h2>Debug</h2>
+    <div>
+        Admin password (already set)</br>
+        Result:    <input type="checkbox" id="debug-result"/></br>
+                        <input type="text" id="debug-request"/></br>
+        Error:     <input id="debug-error" value=""/></br></br>
     </div>
 
 </body>

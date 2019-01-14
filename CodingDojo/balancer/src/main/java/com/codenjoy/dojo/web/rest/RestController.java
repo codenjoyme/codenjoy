@@ -23,19 +23,26 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
+import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.Dispatcher;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
+import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -44,7 +51,10 @@ public class RestController {
     @Autowired private Players players;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
+    @Autowired private DebugService debug;
 
+    @Value("${admin.password}")
+    private String adminPassword;
 
     @RequestMapping(value = "/score/day/{day}", method = RequestMethod.GET)
     @ResponseBody
@@ -66,16 +76,25 @@ public class RestController {
         validator.checkString(player.getSkills());
 
         if (players.getCode(email) != null) {
-            return unauthorized(email);
+            throw new IllegalArgumentException("User already registered");
         }
 
-        ServerLocation location = dispatcher.register(player, getIp(request));
+        final ServerLocation[] location = {null};
+        doIt(new DoItOnServers() {
+            @Override
+            public void onBalancer() {
+                location[0] = dispatcher.register(player, getIp(request));
+            }
 
-        player.setCode(location.getCode());
-        player.setServer(location.getServer());
-        players.create(player);
+            @Override
+            public void onGame() {
+                player.setCode(location[0].getCode());
+                player.setServer(location[0].getServer());
+                players.create(player);
+            }
+        });
 
-        return location;
+        return location[0];
     }
 
     private String getIp(HttpServletRequest request) {
@@ -92,6 +111,12 @@ public class RestController {
         T onFailed(ServerLocation data);
     }
 
+    interface DoItOnServers {
+        void onBalancer();
+
+        void onGame();
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation login(@RequestBody Player player) {
@@ -104,7 +129,7 @@ public class RestController {
 
             @Override
             public ServerLocation onFailed(ServerLocation data) {
-                return data;
+               throw new LoginException("User name or password is incorrect");
             }
         });
     }
@@ -118,34 +143,117 @@ public class RestController {
 
         Player exist = players.get(email);
         if (exist == null || !password.equals(exist.getPassword())) {
-            return onLogin.onFailed(unauthorized(email));
+            return onLogin.onFailed(new ServerLocation(email, null, null));
         }
         String server = players.getServer(email);
 
         return onLogin.onSuccess(new ServerLocation(email, exist.getCode(), server));
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
-    @ResponseBody
-    public boolean remove(@RequestBody Player player) {
-        return tryLogin(player, new OnLogin<Boolean>(){
+    private void doIt(DoItOnServers action) {
+        List<String> errors = new LinkedList<>();
+        try {
+            action.onBalancer();
+        } catch (Exception e) {
+            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+        }
 
+        try {
+            action.onGame();
+        } catch (Exception e) {
+            errors.add("At game server: " +GlobalExceptionHandler.getPrintableMessage(e));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new RuntimeException(errors.toString());
+        }
+    }
+
+    @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public void remove(@PathVariable("player") String email,
+                          @PathVariable("adminPassword") String adminPassword)
+    {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        Player player = players.get(email);
+        if (player == null) {
+            throw new IllegalArgumentException("Attempt to delete non-existing user");
+        }
+
+        doIt(new DoItOnServers() {
             @Override
-            public Boolean onSuccess(ServerLocation data) {
-                players.remove(data.getEmail());
-                dispatcher.remove(data.getServer(), data.getEmail(), data.getCode());
-                return true;
+            public void onBalancer() {
+                players.remove(email);
             }
 
             @Override
-            public Boolean onFailed(ServerLocation data) {
-                return false;
+            public void onGame() {
+                dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
             }
         });
     }
 
-    private ServerLocation unauthorized(String email) {
-        return new ServerLocation(email, null, null);
+    @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Player> getPlayers(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        return players.getPlayersDetails();
+    }
+
+    // 400 for bad registration and validation error
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    // 401 for bad login
+    @ExceptionHandler({LoginException.class})
+    public ResponseEntity<String> handleFailedLoginException(LoginException e) {
+        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+                HttpStatus.UNAUTHORIZED);
+    }
+
+    @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean saveSettings(@PathVariable("adminPassword") String adminPassword,
+                                   @RequestBody DispatcherSettings settings)
+    {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        dispatcher.saveSettings(settings);
+
+        return true;
+    }
+
+    @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public DispatcherSettings getSettings(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        return dispatcher.getSettings();
+    }
+
+    @RequestMapping(value = "/debug/get/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean getDebug(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        return debug.isWorking();
+    }
+
+    @RequestMapping(value = "/debug/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean setDebug(@PathVariable("adminPassword") String adminPassword,
+                                          @PathVariable("enabled") boolean enabled)
+    {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        debug.setDebugEnable(enabled);
+
+        return debug.isWorking();
     }
 
 }

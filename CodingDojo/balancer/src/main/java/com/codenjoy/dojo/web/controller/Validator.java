@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Players;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
@@ -113,6 +114,12 @@ public class Validator {
     public void checkString(String input) {
         if (StringUtils.isEmpty(input)) {
             throw new IllegalArgumentException("String can be empty: " + input);
+        }
+    }
+
+    public void validateAdmin(String expected, String actual) {
+        if (!DigestUtils.md5DigestAsHex(expected.getBytes()).equals(actual)){
+            throw new LoginException("Unauthorized admin access");
         }
     }
 }

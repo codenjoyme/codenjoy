@@ -24,12 +24,14 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
+import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -38,6 +40,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,15 +49,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class Dispatcher {
 
+    private static Logger logger = DLoggerFactory.getLogger(Dispatcher.class);
+
     @Autowired Players players;
     @Autowired Scores scores;
 
     private List<String> servers = new CopyOnWriteArrayList<>();
-    private String urlCreatePlayer;
-    private String urlRemovePlayer;
-    private String urlGetPlayers;
-    private String gameType;
+    private volatile DispatcherSettings settings;
     private volatile long lastTime;
+    private volatile int currentServer;
 
     @PostConstruct
     public void postConstruct() {
@@ -63,18 +66,23 @@ public class Dispatcher {
     }
 
     public Dispatcher() {
-        // TODO move to admin
-        urlGetPlayers = "http://%s/codenjoy-contest/rest/game/%s/players";
-        urlCreatePlayer = "http://%s/codenjoy-contest/rest/player/create";
-        urlRemovePlayer = "http://%s/codenjoy-contest/rest/player/%s/remove/%s";
-        gameType = "snakebattle";
-        servers.add("codenjoy.juja.com.ua");
-//        servers.add("server2.codenjoy.juja.com.ua");
-//        servers.add("server3.codenjoy.juja.com.ua");
+        settings = new DispatcherSettings(
+            "http://%s/codenjoy-contest/rest/player/create",
+            "http://%s/codenjoy-contest/rest/player/%s/remove/%s",
+            "http://%s/codenjoy-contest/rest/game/%s/players",
+            "snakebattle",
+            Arrays.asList("codenjoy.juja.com.ua")
+        );
+        servers.addAll(settings.getServers());
+        currentServer = 0;
     }
 
     public ServerLocation register(Player player, String callbackUrl) {
         String server = getNextServer();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("User {} go to {}", player.getEmail(), server);
+        }
 
         String code = createNewPlayer(
                 server,
@@ -94,7 +102,7 @@ public class Dispatcher {
                 new PlayerDetailInfo(
                         email,
                         callbackUrl,
-                        gameType,
+                        settings.getGameType(),
                         "0",
                         "{}",
                         new User(
@@ -110,8 +118,15 @@ public class Dispatcher {
         return entity.getBody();
     }
 
-    private String getNextServer() {
-        return servers.get(0); // TODO impelment me
+    // несколько потоков могут параллельно регаться, и этот инкремент по кругу
+    // должн быть многопоточнобезопасным
+    private synchronized String getNextServer() {
+        String result = servers.get(currentServer);
+        currentServer++;
+        if (currentServer >= servers.size()) {
+            currentServer = 0;
+        }
+        return result;
     }
 
     public void updateScores() {
@@ -142,18 +157,18 @@ public class Dispatcher {
     }
 
     private String getPlayersUrl(String server) {
-        return String.format(urlGetPlayers,
+        return String.format(settings.getUrlGetPlayers(),
                 server,
-                gameType);
+                settings.getGameType());
     }
 
     private String createPlayerUrl(String server) {
-        return String.format(urlCreatePlayer,
+        return String.format(settings.getUrlCreatePlayer(),
                 server);
     }
 
     private String removePlayerUrl(String server, String email, String code) {
-        return String.format(urlRemovePlayer,
+        return String.format(settings.getUrlRemovePlayer(),
                 server,
                 email,
                 code);
@@ -176,5 +191,18 @@ public class Dispatcher {
                 null,
                 new ParameterizedTypeReference<Boolean>(){});
         return entity.getBody();
+    }
+
+    public void saveSettings(DispatcherSettings settings) {
+        this.settings = settings;
+
+        if (settings.getServers() != null) {
+            servers.clear();
+            servers.addAll(settings.getServers());
+        }
+    }
+
+    public DispatcherSettings getSettings() {
+        return settings;
     }
 }

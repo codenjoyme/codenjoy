@@ -72,8 +72,8 @@ public class Players {
     private Player getPlayer(ResultSet rs) throws SQLException {
         return new Player(
                 rs.getString("email"),
-                rs.getString("firstName"),
-                rs.getString("lastName"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
                 rs.getString("password"),
                 rs.getString("city"),
                 rs.getString("skills"),

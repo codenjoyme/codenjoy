@@ -25,13 +25,12 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.DLoggerFactory;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
@@ -42,30 +41,16 @@ public class GlobalExceptionHandler {
     private static Logger logger = DLoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req,
-                                            Exception e) throws Exception
-    {
-        logger.error("[URL] : {} {}", req.getRequestURL(), e);
+    public ResponseEntity<String> defaultErrorHandler(HttpServletRequest request, Exception e) {
+        logger.error("[URL] : {} {}", request.getRequestURL(), e);
         e.printStackTrace();
 
-        ModelAndView result = new ModelAndView();
+        return new ResponseEntity<>(getPrintableMessage(e),
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
-        result.addObject("exception", e);
-
-        StringWriter writer = new StringWriter();
-        e.printStackTrace(new PrintWriter(writer));
-        String text = writer.toString()
-                .replaceAll("\\n\\r", "\n")
-                .replaceAll("\\n\\n", "\n")
-                .replaceAll("\\n", "<br>");
-        result.addObject("stacktrace", text);
-
-        result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
-
-        result.addObject("url", req.getRequestURL());
-
-        result.setViewName("error");
-        return result;
+    public static String getPrintableMessage(Exception e) {
+        return e.getClass().getSimpleName() + ": " + e.getMessage();
     }
 
 }
