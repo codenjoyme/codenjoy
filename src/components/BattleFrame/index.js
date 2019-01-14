@@ -12,8 +12,8 @@ class BattleFrameHandler extends Component {
                 <br />
                 <Iframe
                     url='http://www.youtube.com/embed/xDMP3i36naA'
-                    width='450px'
-                    height='450px'
+                    width='400px'
+                    height='400px'
                     id='myId'
                     display='initial'
                     position='relative'

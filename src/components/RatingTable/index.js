@@ -1,6 +1,6 @@
 // vendor
 import React, { Component } from 'react';
-import { Column, Table } from 'react-virtualized';
+import { Column, Table, AutoSizer } from 'react-virtualized';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 
@@ -33,26 +33,50 @@ class RatingTableHandler extends Component {
 
         return rating ? (
             <div className={ Styles.rating }>
-                <Table
-                    rowClassName={ ({ index }) =>
-                        this._rowStyles(index, selectedIndex, ownIndex)
-                    }
-                    scrollToIndex={ selectedIndex }
-                    width={ 720 }
-                    height={ 400 }
-                    headerHeight={ 20 }
-                    rowHeight={ 30 }
-                    rowCount={ rating.length }
-                    rowGetter={ ({ index }) => rating[ index ] }
-                    onRowClick={ ({ rowData }) =>
-                        setSelectedParticipant(rowData)
-                    }
-                >
-                    <Column label='#' dataKey='index' width={ 100 } />
-                    <Column label='Name' dataKey='email' width={ 220 } />
-                    <Column label='Score' dataKey='score' width={ 100 } />
-                    <Column label='Server' dataKey='server' width={ 300 } />
-                </Table>
+                <AutoSizer disableHeight>
+                    { ({ width }) => (
+                        <Table
+                            rowClassName={ ({ index }) =>
+                                this._rowStyles(index, selectedIndex, ownIndex)
+                            }
+                            scrollToIndex={ selectedIndex }
+                            height={ 300 }
+                            width={ width }
+                            headerHeight={ 20 }
+                            rowHeight={ 30 }
+                            rowCount={ rating.length }
+                            rowGetter={ ({ index }) => rating[ index ] }
+                            onRowClick={ ({ rowData }) =>
+                                setSelectedParticipant(rowData)
+                            }
+                        >
+                            <Column
+                                label='#'
+                                dataKey='index'
+                                flexGrow={ 1 }
+                                width={ 100 }
+                            />
+                            <Column
+                                label='Name'
+                                dataKey='email'
+                                flexGrow={ 2 }
+                                width={ 200 }
+                            />
+                            <Column
+                                label='Score'
+                                dataKey='score'
+                                flexGrow={ 1 }
+                                width={ 100 }
+                            />
+                            <Column
+                                label='Server'
+                                dataKey='server'
+                                width={ 300 }
+                                flexGrow={ 3 }
+                            />
+                        </Table>
+                    ) }
+                </AutoSizer>
             </div>
         ) : (
             <div>Oooops, no rating yet</div>
