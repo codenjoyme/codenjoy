@@ -78,15 +78,12 @@ var getScores = function(day) {
     })
 };
 
-var removeUser = function(email, password) {
+var removeUser = function(email, adminPassword) {
     $.ajax({
-        type: 'POST',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/remove',
+        type: 'GET',
+        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/remove/' + email + '/' + adminPassword,
         dataType: 'json',
         async: false,
-        contentType: "application/json; charset=utf-8",
-        data: '{"email": "' + email + '", ' +
-            '"password" : "' + password + '"}',
         success: function(data) {
             $("#remove-result").val(JSON.stringify(data));
         },
@@ -111,15 +108,12 @@ var getUsersOnGameServer = function() {
     })
 };
 
-var getUsersOnBalancerServer = function(email, password) {
+var getUsersOnBalancerServer = function(adminPassword) {
     $.ajax({
-        type: 'POST',
-        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/players',
+        type: 'GET',
+        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/players/' + adminPassword,
         dataType: 'json',
         async: false,
-        contentType: "application/json; charset=utf-8",
-        data: '{"email": "' + email + '", ' +
-            '"password" : "' + password + '"}',
         success: function(data) {
             $("#users-balancer-result").val(JSON.stringify(data));
         },
@@ -160,8 +154,8 @@ $(document).ready(function() {
     $("#remove").click(function() {
         var preffix = $("#preffix").val();
         removeUser(
-            preffix + $("#revmove-email").val(),
-            preffix + $("#revmove-password").val()
+            preffix + $("#remove-email").val(),
+            $.md5($("#admin-password").val())
         );
     });
 
@@ -171,7 +165,6 @@ $(document).ready(function() {
 
     $("#users-balancer").click(function() {
         getUsersOnBalancerServer(
-            $("#admin-email").val(),
             $.md5($("#admin-password").val())
         );
     });

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.Dispatcher;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
@@ -131,29 +132,26 @@ public class RestController {
         return onLogin.onSuccess(new ServerLocation(email, exist.getCode(), server));
     }
 
-    @RequestMapping(value = "/remove", method = RequestMethod.POST)
+    @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean remove(@RequestBody Player player) {
-        return tryLogin(player, new OnLogin<Boolean>(){
+    public void remove(@PathVariable("player") String email,
+                          @PathVariable("adminPassword") String adminPassword)
+    {
+        validator.validateAdmin(this.adminPassword, adminPassword);
 
-            @Override
-            public Boolean onSuccess(ServerLocation data) {
-                players.remove(data.getEmail());
-                dispatcher.remove(data.getServer(), data.getEmail(), data.getCode());
-                return true;
-            }
-
-            @Override
-            public Boolean onFailed(ServerLocation data) {
-                throw new LoginException("User name or password is incorrect");
-            }
-        });
+        Player player = players.get(email);
+        if (player == null) {
+            throw new IllegalArgumentException("Attempt to delete non-existing user");
+        }
+        players.remove(email);
+        dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
     }
 
-    @RequestMapping(value = "/players", method = RequestMethod.POST)
+    @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public List<Player> getPlayers(@RequestBody Player player) {
-        validator.validateAdmin(player, adminPassword);
+    public List<Player> getPlayers(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
         return players.getPlayersDetails();
     }
 
@@ -169,6 +167,24 @@ public class RestController {
     public ResponseEntity<String> handleFailedLoginException(LoginException e) {
         return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
                 HttpStatus.UNAUTHORIZED);
+    }
+
+    @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveSettings(@PathVariable("adminPassword") String adminPassword,
+                                   @RequestBody DispatcherSettings settings)
+    {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        dispatcher.saveSettings(settings);
+    }
+
+    @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public DispatcherSettings getSettings(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        return dispatcher.getSettings();
     }
 
 }

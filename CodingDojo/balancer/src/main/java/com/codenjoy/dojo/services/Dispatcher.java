@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
+import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
@@ -38,6 +39,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,10 +52,7 @@ public class Dispatcher {
     @Autowired Scores scores;
 
     private List<String> servers = new CopyOnWriteArrayList<>();
-    private String urlCreatePlayer;
-    private String urlRemovePlayer;
-    private String urlGetPlayers;
-    private String gameType;
+    private volatile DispatcherSettings settings;
     private volatile long lastTime;
 
     @PostConstruct
@@ -63,14 +62,14 @@ public class Dispatcher {
     }
 
     public Dispatcher() {
-        // TODO move to admin
-        urlGetPlayers = "http://%s/codenjoy-contest/rest/game/%s/players";
-        urlCreatePlayer = "http://%s/codenjoy-contest/rest/player/create";
-        urlRemovePlayer = "http://%s/codenjoy-contest/rest/player/%s/remove/%s";
-        gameType = "snakebattle";
-        servers.add("codenjoy.juja.com.ua");
-//        servers.add("server2.codenjoy.juja.com.ua");
-//        servers.add("server3.codenjoy.juja.com.ua");
+        settings = new DispatcherSettings(
+            "http://%s/codenjoy-contest/rest/player/create",
+            "http://%s/codenjoy-contest/rest/player/%s/remove/%s",
+            "http://%s/codenjoy-contest/rest/game/%s/players",
+            "snakebattle",
+            Arrays.asList("codenjoy.juja.com.ua")
+        );
+        servers.addAll(settings.getServers());
     }
 
     public ServerLocation register(Player player, String callbackUrl) {
@@ -94,7 +93,7 @@ public class Dispatcher {
                 new PlayerDetailInfo(
                         email,
                         callbackUrl,
-                        gameType,
+                        settings.getGameType(),
                         "0",
                         "{}",
                         new User(
@@ -142,18 +141,18 @@ public class Dispatcher {
     }
 
     private String getPlayersUrl(String server) {
-        return String.format(urlGetPlayers,
+        return String.format(settings.getUrlGetPlayers(),
                 server,
-                gameType);
+                settings.getGameType());
     }
 
     private String createPlayerUrl(String server) {
-        return String.format(urlCreatePlayer,
+        return String.format(settings.getUrlCreatePlayer(),
                 server);
     }
 
     private String removePlayerUrl(String server, String email, String code) {
-        return String.format(urlRemovePlayer,
+        return String.format(settings.getUrlRemovePlayer(),
                 server,
                 email,
                 code);
@@ -176,5 +175,18 @@ public class Dispatcher {
                 null,
                 new ParameterizedTypeReference<Boolean>(){});
         return entity.getBody();
+    }
+
+    public void saveSettings(DispatcherSettings settings) {
+        this.settings = settings;
+
+        if (settings.getServers() != null) {
+            servers.clear();
+            servers.addAll(settings.getServers());
+        }
+    }
+
+    public DispatcherSettings getSettings() {
+        return settings;
     }
 }
