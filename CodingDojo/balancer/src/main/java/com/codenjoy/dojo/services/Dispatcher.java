@@ -54,6 +54,7 @@ public class Dispatcher {
     private List<String> servers = new CopyOnWriteArrayList<>();
     private volatile DispatcherSettings settings;
     private volatile long lastTime;
+    private volatile int currentServer;
 
     @PostConstruct
     public void postConstruct() {
@@ -70,6 +71,7 @@ public class Dispatcher {
             Arrays.asList("codenjoy.juja.com.ua")
         );
         servers.addAll(settings.getServers());
+        currentServer = 0;
     }
 
     public ServerLocation register(Player player, String callbackUrl) {
@@ -109,8 +111,15 @@ public class Dispatcher {
         return entity.getBody();
     }
 
-    private String getNextServer() {
-        return servers.get(0); // TODO impelment me
+    // несколько потоков могут параллельно регаться, и этот инкремент по кругу
+    // должн быть многопоточнобезопасным
+    private synchronized String getNextServer() {
+        String result = servers.get(currentServer);
+        currentServer++;
+        if (currentServer >= servers.size()) {
+            currentServer = 0;
+        }
+        return result;
     }
 
     public void updateScores() {
