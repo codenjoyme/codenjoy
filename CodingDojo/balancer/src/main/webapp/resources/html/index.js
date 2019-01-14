@@ -84,14 +84,29 @@ var removeUser = function(email, password) {
     })
 };
 
-var getUsers = function(day) {
+var getUsersOnGameServer = function() {
     $.ajax({
         type: 'GET',
         url: $("#game-server").val().replace('THIS_SERVER', window.location.host) + '/game/snakebattle/players',
         dataType: 'json',
         async: false,
         success: function(data) {
-            $("#users-result").val(JSON.stringify(data));
+            $("#users-game-result").val(JSON.stringify(data));
+        }
+    })
+};
+
+var getUsersOnBalancerServer = function(email, password) {
+    $.ajax({
+        type: 'POST',
+        url: $("#balancer-server").val().replace('THIS_SERVER', window.location.host) + '/players',
+        dataType: 'json',
+        async: false,
+        contentType: "application/json; charset=utf-8",
+        data: '{"email": "' + email + '", ' +
+            '"password" : "' + password + '"}',
+        success: function(data) {
+            $("#users-game-result").val(JSON.stringify(data));
         }
     })
 };
@@ -131,7 +146,14 @@ $(document).ready(function() {
         );
     });
 
-    $("#users").click(function() {
-        getUsers();
+    $("#users-game").click(function() {
+        getUsersOnGameServer();
+    });
+
+    $("#users-balancer").click(function() {
+        getUsersOnBalancerServer(
+            $("#admin-email").val(),
+            $("#admin-password").val()
+        );
     });
 });

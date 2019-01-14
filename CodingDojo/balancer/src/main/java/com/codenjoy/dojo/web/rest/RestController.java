@@ -46,12 +46,8 @@ public class RestController {
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
 
-    private boolean adminPassword;
-
     @Value("${admin.password}")
-    public void setActive(boolean adminPassword) {
-        this.adminPassword = adminPassword;
-    }
+    private String adminPassword;
 
     @RequestMapping(value = "/score/day/{day}", method = RequestMethod.GET)
     @ResponseBody
@@ -156,7 +152,7 @@ public class RestController {
     }
 
 
-    @RequestMapping(value = "/players", method = RequestMethod.GET)
+    @RequestMapping(value = "/players", method = RequestMethod.POST)
     @ResponseBody
     public List<Player> getPlayers(@RequestBody Player player) {
         validator.validateAdmin(player, adminPassword);
