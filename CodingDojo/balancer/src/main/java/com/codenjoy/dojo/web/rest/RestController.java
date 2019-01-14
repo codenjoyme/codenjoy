@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
+import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.Dispatcher;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.DispatcherSettings;
@@ -50,6 +51,7 @@ public class RestController {
     @Autowired private Players players;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
+    @Autowired private DebugService debug;
 
     @Value("${admin.password}")
     private String adminPassword;
@@ -232,6 +234,26 @@ public class RestController {
         validator.validateAdmin(this.adminPassword, adminPassword);
 
         return dispatcher.getSettings();
+    }
+
+    @RequestMapping(value = "/debug/get/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean getDebug(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        return debug.isWorking();
+    }
+
+    @RequestMapping(value = "/debug/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean setDebug(@PathVariable("adminPassword") String adminPassword,
+                                          @PathVariable("enabled") boolean enabled)
+    {
+        validator.validateAdmin(this.adminPassword, adminPassword);
+
+        debug.setDebugEnable(enabled);
+
+        return debug.isWorking();
     }
 
 }

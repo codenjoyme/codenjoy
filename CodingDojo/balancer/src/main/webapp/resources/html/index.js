@@ -170,6 +170,36 @@ var setSettings = function(settings, adminPassword) {
     })
 };
 
+var getDebug = function(adminPassword) {
+    $.ajax({
+        type: 'GET',
+        url: server('balancer') + '/debug/get/' + adminPassword,
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            $('#debug-result').attr("checked", data);
+        },
+        error : function(data) {
+            error('debug', data);
+        }
+    })
+};
+
+var setDebug = function(enabled, adminPassword) {
+    $.ajax({
+        type: 'GET',
+        url: server('balancer') + '/debug/set/' + enabled + '/' + adminPassword,
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            $('#debug-result').attr("checked", data);
+        },
+        error : function(data) {
+            error('debug', data);
+        }
+    })
+};
+
 $(document).ready(function() {
     $('#register').click(function() {
         var preffix = $('#preffix').val();
@@ -228,4 +258,12 @@ $(document).ready(function() {
             $.md5($('#admin-password').val())
         );
     });
+
+    $('#debug-result').change(function() {
+        setDebug(
+            $('#debug-result').is(':checked'),
+            $.md5($('#admin-password').val())
+        );
+    });
+    getDebug($.md5($('#admin-password').val()));
 });

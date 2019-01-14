@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -47,6 +48,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class Dispatcher {
+
+    private static Logger logger = DLoggerFactory.getLogger(Dispatcher.class);
 
     @Autowired Players players;
     @Autowired Scores scores;
@@ -76,6 +79,10 @@ public class Dispatcher {
 
     public ServerLocation register(Player player, String callbackUrl) {
         String server = getNextServer();
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("User {} go to {}", player.getEmail(), server);
+        }
 
         String code = createNewPlayer(
                 server,
