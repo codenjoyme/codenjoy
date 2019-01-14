@@ -77,13 +77,22 @@ public class RestController {
             throw new IllegalArgumentException("User already registered");
         }
 
-        ServerLocation location = dispatcher.register(player, getIp(request));
+        final ServerLocation[] location = {null};
+        doIt(new DoItOnServers() {
+            @Override
+            public void onBalancer() {
+                location[0] = dispatcher.register(player, getIp(request));
+            }
 
-        player.setCode(location.getCode());
-        player.setServer(location.getServer());
-        players.create(player);
+            @Override
+            public void onGame() {
+                player.setCode(location[0].getCode());
+                player.setServer(location[0].getServer());
+                players.create(player);
+            }
+        });
 
-        return location;
+        return location[0];
     }
 
     private String getIp(HttpServletRequest request) {
@@ -98,6 +107,12 @@ public class RestController {
         T onSuccess(ServerLocation data);
 
         T onFailed(ServerLocation data);
+    }
+
+    interface DoItOnServers {
+        void onBalancer();
+
+        void onGame();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -133,6 +148,25 @@ public class RestController {
         return onLogin.onSuccess(new ServerLocation(email, exist.getCode(), server));
     }
 
+    private void doIt(DoItOnServers action) {
+        List<String> errors = new LinkedList<>();
+        try {
+            action.onBalancer();
+        } catch (Exception e) {
+            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+        }
+
+        try {
+            action.onGame();
+        } catch (Exception e) {
+            errors.add("At game server: " +GlobalExceptionHandler.getPrintableMessage(e));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new RuntimeException(errors.toString());
+        }
+    }
+
     @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public void remove(@PathVariable("player") String email,
@@ -145,22 +179,17 @@ public class RestController {
             throw new IllegalArgumentException("Attempt to delete non-existing user");
         }
 
-        List<String> errors = new LinkedList<>();
-        try {
-            players.remove(email);
-        } catch (Exception e) {
-            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
-        }
+        doIt(new DoItOnServers() {
+            @Override
+            public void onBalancer() {
+                players.remove(email);
+            }
 
-        try {
-            dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
-        } catch (Exception e) {
-            errors.add("At game server: " +GlobalExceptionHandler.getPrintableMessage(e));
-        }
-
-        if (!errors.isEmpty()) {
-            throw new RuntimeException(errors.toString());
-        }
+            @Override
+            public void onGame() {
+                dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+            }
+        });
     }
 
     @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
