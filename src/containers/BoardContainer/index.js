@@ -5,7 +5,11 @@ import _ from 'lodash';
 import moment from 'moment';
 
 // proj
-import { setSelectedDay, setSelectedParticipant, fetchRating } from '../../redux/board';
+import {
+    setSelectedDay,
+    setSelectedParticipant,
+    fetchRating,
+} from '../../redux/board';
 import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 
 // own
@@ -28,11 +32,18 @@ class BoardContainer extends Component {
 
         const ratingContainsEmail = email && _.find(rating, { email });
         const participantEmail = ratingContainsEmail && email;
-        const battleParticipant = _.get(selectedParticipant, 'email') || participantEmail || _.get(rating, '[0].email');
+        const battleParticipant =
+            _.get(selectedParticipant, 'email') ||
+            participantEmail ||
+            _.get(rating, '[0].email');
 
         return (
             <>
-                <DaysPanel selectedDay={ selectedDay } onDaySelect={ setSelectedDay } period={ period } />
+                <DaysPanel
+                    selectedDay={ selectedDay }
+                    onDaySelect={ setSelectedDay }
+                    period={ period }
+                />
                 <div className={ Styles.wrapper }>
                     <div className={ Styles.frame }>
                         { moment(selectedDay).isSame(new Date(), 'day') && (
@@ -40,7 +51,12 @@ class BoardContainer extends Component {
                         ) }
                     </div>
                     <div className={ Styles.rating }>
-                        <RatingTable email={ email } rating={ rating } setSelectedParticipant={ setSelectedParticipant } />
+                        <RatingTable
+                            email={ email }
+                            selectedParticipant={ selectedParticipant }
+                            rating={ rating }
+                            setSelectedParticipant={ setSelectedParticipant }
+                        />
                     </div>
                 </div>
             </>
