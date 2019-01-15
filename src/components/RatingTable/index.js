@@ -25,14 +25,15 @@ class RatingTableHandler extends Component {
 
         return rating ? (
             <div className={ Styles.rating }>
-                <AutoSizer disableHeight>
-                    { ({ width }) => (
+                <AutoSizer>
+                    { ({ width, height }) => (
                         <Table
+                            className={ Styles.ratingTable }
                             rowClassName={ ({ index }) =>
                                 this._rowStyles(index, selectedIndex, ownIndex)
                             }
                             scrollToIndex={ selectedIndex }
-                            height={ 300 }
+                            height={ height }
                             width={ width }
                             headerHeight={ 20 }
                             rowHeight={ 30 }

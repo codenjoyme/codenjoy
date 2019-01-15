@@ -60,11 +60,6 @@ class BoardContainer extends Component {
                 />
 
                 <div className={ Styles.wrapper }>
-                    { moment(selectedDay).isSame(moment(), 'day') && (
-                        <div className={ Styles.frame }>
-                            <BattleFrame participant={ battleParticipantEmail } />
-                        </div>
-                    ) }
                     <div className={ Styles.rating }>
                         <RatingTable
                             email={ email }
@@ -73,6 +68,11 @@ class BoardContainer extends Component {
                             setSelectedParticipant={ setSelectedParticipant }
                         />
                     </div>
+                    { moment(selectedDay).isSame(moment(), 'day') && (
+                        <div className={ Styles.frame }>
+                            <BattleFrame participant={ battleParticipantEmail } />
+                        </div>
+                    ) }
                 </div>
             </div>
         );
