@@ -1,72 +1,46 @@
 .dayPanel {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: 80px;
 }
 
+.dayName {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(161, 176, 187);
+    font-size: 18px;
+}
 
 .dayButton {
     margin: 10px;
-    border-radius: 12px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
     text-align: center;
     text-decoration: none;
-    background-color: white;
-    border: none;
-    font-size: 16px;
-    padding: 10px;
+    background-color: transparent;
+    border: 1.5px solid rgb(65, 199, 220);
+    color: rgb(65, 199, 220);
+    font-weight: bold;
+    font-size: 12px;
     cursor: pointer;
-    width: 140px;
 }
 
 .dayButton:not(.dayButtonDisabled):hover {
-    background-color: rgb(24, 36, 50);
+    background-color: rgb(65, 199, 220);
+    color: white;
+}
+
+.dayButtonSelected {
+    background-color: rgb(65, 199, 220);
     color: white;
 }
 
 .dayButtonDisabled {
+    border: 1.5px solid rgb(48, 113, 137);
+    color: rgb(48, 113, 137);
     cursor: not-allowed;
-}
-
-.wrapper {
-    display: flex;
-    flex-flow: row wrap;
-    font-weight: bold;
-    text-align: center;
-}
-
-.wrapper > * {
-    padding: 10px;
-    flex: 1 100%;
-}
-
-.main {
-    text-align: left;
-    background-color: rgb(68, 101, 148);
-}
-
-.aside {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    background-color: rgb(57, 194, 215);
-}
-
-@media all and (min-width: 600px) {
-    .aside {
-        flex: 1 0 0;
-    }
-}
-
-@media all and (min-width: 800px) {
-    .main {
-        flex: 3 0px;
-    }
-
-    .aside-1 {
-        order: 1;
-    }
-
-    .main {
-        order: 2;
-    }
 }
