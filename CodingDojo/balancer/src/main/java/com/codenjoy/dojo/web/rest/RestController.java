@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.Dispatcher;
 import com.codenjoy.dojo.services.dao.Players;
@@ -52,9 +53,7 @@ public class RestController {
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
     @Autowired private DebugService debug;
-
-    @Value("${admin.password}")
-    private String adminPassword;
+    @Autowired private ConfigProperties properties;
 
     @RequestMapping(value = "/score/day/{day}", method = RequestMethod.GET)
     @ResponseBody
@@ -171,10 +170,10 @@ public class RestController {
 
     @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public void remove(@PathVariable("player") String email,
+    public boolean remove(@PathVariable("player") String email,
                           @PathVariable("adminPassword") String adminPassword)
     {
-        validator.validateAdmin(this.adminPassword, adminPassword);
+        verifyIsAdmin(adminPassword);
 
         Player player = players.get(email);
         if (player == null) {
@@ -192,12 +191,14 @@ public class RestController {
                 dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
             }
         });
+
+        return true;
     }
 
     @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public List<Player> getPlayers(@PathVariable("adminPassword") String adminPassword) {
-        validator.validateAdmin(this.adminPassword, adminPassword);
+        verifyIsAdmin(adminPassword);
 
         return players.getPlayersDetails();
     }
@@ -221,7 +222,7 @@ public class RestController {
     public boolean saveSettings(@PathVariable("adminPassword") String adminPassword,
                                    @RequestBody DispatcherSettings settings)
     {
-        validator.validateAdmin(this.adminPassword, adminPassword);
+        verifyIsAdmin(adminPassword);
 
         dispatcher.saveSettings(settings);
 
@@ -231,7 +232,7 @@ public class RestController {
     @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public DispatcherSettings getSettings(@PathVariable("adminPassword") String adminPassword) {
-        validator.validateAdmin(this.adminPassword, adminPassword);
+        verifyIsAdmin(adminPassword);
 
         return dispatcher.getSettings();
     }
@@ -239,7 +240,7 @@ public class RestController {
     @RequestMapping(value = "/debug/get/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public boolean getDebug(@PathVariable("adminPassword") String adminPassword) {
-        validator.validateAdmin(this.adminPassword, adminPassword);
+        verifyIsAdmin(adminPassword);
 
         return debug.isWorking();
     }
@@ -249,11 +250,15 @@ public class RestController {
     public boolean setDebug(@PathVariable("adminPassword") String adminPassword,
                                           @PathVariable("enabled") boolean enabled)
     {
-        validator.validateAdmin(this.adminPassword, adminPassword);
+        verifyIsAdmin(adminPassword);
 
         debug.setDebugEnable(enabled);
 
         return debug.isWorking();
+    }
+
+    private void verifyIsAdmin(@PathVariable("adminPassword") String adminPassword) {
+        validator.validateAdmin(properties.getAdminPassword(), adminPassword);
     }
 
 }

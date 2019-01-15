@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,36 +22,24 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
-
+/**
+ * Тут собраны только те проперти, которые важны в контроллерах.
+ * Все дело в том, что я не хочу делать второго конфига который будет уметь
+ * находить properties файлы вокруг приложения еще и в spring-context.xml
+ * а это потому, что он не обрабатывается фильтрами maven при сборке в war.
+ * Единственное место, где конфигурится *.properties - applicationContext.xml
+ */
 @Component
-public class DebugService extends Suspendable {
+public class ConfigProperties {
 
-    @Value("${log.debug}")
-    public void setDebugEnable(boolean active) {
-        super.setActive(active);
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    public String getAdminPassword() {
+        return adminPassword;
     }
 
-    @Override
-    public void pause() {
-        if (isWorking()) {
-            DLoggerFactory.settings.remove(DEBUG_KEY);
-        }
-    }
-
-    @Override
-    public boolean isWorking() {
-        return DLoggerFactory.settings.containsKey(DEBUG_KEY);
-    }
-
-    @Override
-    public void resume() {
-        if (!isWorking()) {
-            DLoggerFactory.settings.put(DEBUG_KEY, true);
-        }
-    }
 }

@@ -46,7 +46,7 @@ public class TimerService implements Runnable {
 
     private volatile boolean paused;
 
-    @Value("${score.update}")
+    @Value("${score.update.time}")
     private long period;
 
     public void start() {
