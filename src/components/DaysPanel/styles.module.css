@@ -34,6 +34,10 @@
     color: white;
 }
 
+.dayButton:focus {
+    outline: 0;
+}
+
 .dayButtonSelected {
     background-color: rgb(65, 199, 220);
     color: white;
