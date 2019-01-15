@@ -30,7 +30,7 @@
 
     <bean id="connectionThreadPollFactory"
           class="com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPoolFactory">
-        <constructor-arg value="localhost/${database.name}?user=${database.user}&amp;password=${database.password}"/>
+        <constructor-arg value="${database.url}/${database.name}?user=${database.user}&amp;password=${database.password}"/>
     </bean>
 
     <bean id="scores" class="com.codenjoy.dojo.services.dao.Scores">

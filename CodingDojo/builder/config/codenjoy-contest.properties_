@@ -29,6 +29,7 @@ email.verification=false
 email.password=
 email.name=info@codenjoy.com
 donate.code=
+database.url=
 database.name=
 database.user=
 database.password=
