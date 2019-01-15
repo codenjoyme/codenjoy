@@ -6,6 +6,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 // proj
 import { book } from '../../routes';
 import { getGameConnectionString } from '../../utils';
+
+// own
 import Styles from './styles.module.css';
 
 export class Header extends Component {
@@ -13,7 +15,7 @@ export class Header extends Component {
         const { server, logout, email, code } = this.props;
 
         return (
-            <>
+            <div style={ Styles.header }>
                 <ul className={ Styles.navigation }>
                     <li className={ Styles.link }>
                         <NavLink
@@ -75,7 +77,7 @@ export class Header extends Component {
                         </li>
                     ) }
                 </ul>
-            </>
+            </div>
         );
     }
 }

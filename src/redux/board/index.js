@@ -102,7 +102,11 @@ export function* fetchRatingSaga() {
             payload: { selectedDay },
         } = yield take(FETCH_RATING);
 
-        const data = yield call(fetchAPI, 'GET', `rest/score/day/${selectedDay}`);
+        const data = yield call(
+            fetchAPI,
+            'GET',
+            `rest/score/day/${selectedDay}`,
+        );
 
         // Stub data
         // const data = Array(1000)

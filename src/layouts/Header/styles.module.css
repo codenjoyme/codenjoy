@@ -1,50 +1,47 @@
 .navigation {
-  list-style: none;
-  margin: 0;
-
-  background: #192433;
-
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-
-  -webkit-flex-flow: row wrap;
-  justify-content: flex-end;
+    list-style: none;
+    margin: 0;
+    background: #192433;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-flow: row wrap;
+    justify-content: flex-end;
 }
 
 .navigation a {
-  text-decoration: none;
-  display: block;
-  padding: 1em;
-  color: white;
+    text-decoration: none;
+    display: block;
+    padding: 1em;
+    color: white;
 }
 
 .navigation .action {
-  text-decoration: none;
-  display: block;
-  padding: 1em;
-  color: white;
-  cursor: pointer;
+    text-decoration: none;
+    display: block;
+    padding: 1em;
+    color: white;
+    cursor: pointer;
 }
 
 .navigation a:hover {
-  background: darken(deepskyblue, 2%);
+    background: darken(deepskyblue, 2%);
 }
 
 .link {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .activeNavLink {
-  color: darken(deepskyblue, 2%);
+    color: darken(deepskyblue, 2%);
 }
 
 .copyButton {
-  background: rgb(68, 101, 148);
-  color: white;
-  border-radius: 4px;
-  border-color: rgb(57, 84, 120);
+    background: rgb(68, 101, 148);
+    color: white;
+    border-radius: 4px;
+    border-color: rgb(57, 84, 120);
 }

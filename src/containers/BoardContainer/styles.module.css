@@ -1,3 +1,7 @@
+.boardContainer {
+    flex-direction: column;
+}
+
 .wrapper {
     display: flex;
     flex: 1;
@@ -6,7 +10,7 @@
     text-align: center;
 }
 
-.wrapper > * {
+.wrapper>* {
     padding: 10px;
     flex: 1 100%;
 }
@@ -29,11 +33,9 @@
     .rating {
         flex: 1 0px;
     }
-
     .rating {
         order: 1;
     }
-
     .frame {
         order: 2;
     }
