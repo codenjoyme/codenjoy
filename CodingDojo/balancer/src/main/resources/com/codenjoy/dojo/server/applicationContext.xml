@@ -48,9 +48,12 @@
     -->
     <context:property-placeholder
             ignore-resource-not-found="true"
-            location="classpath:/config/${project.artifactId}.properties,file:config/${project.artifactId}.properties"/>
+            location="classpath:/config/${project.artifactId}.properties,file:config/${project.artifactId}.properties"
+            system-properties-mode="OVERRIDE"/>
 
-    <import resource="applicationContext-database.xml"/>
+    <!-- Ключик ${database.type:sqlite} нужен для запуска джетти с -Ddatabase.type=postgre|sqlite
+          sqlite по умолчанию если ничего не вводить -->
+    <import resource="applicationContext-database-${database.type:sqlite}.xml"/>
 
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
         <constructor-arg index="0" value="100" type="int"/>
