@@ -32,9 +32,25 @@
     <context:component-scan base-package="com.codenjoy.dojo.services"/>
     <context:component-scan base-package="com.codenjoy.dojo.transport"/>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
-    </bean>
+    <!-- https://stackoverflow.com/a/37483225/4728425 -->
+    <!-- https://stackoverflow.com/a/21015489/4728425 -->
+    <!--
+        Этот малый будет искать папку config с файлом *.properties в нескольких местах:
+            1. codenjoy-contest.war\WEB-INF\classes\config\codenjoy-contest.properties
+                Так же стоит понимать что этот конфиг берется изначально из сырцов
+                server\src\main\resources\config\codenjoy-contest.properties
+                Он читается первым, а второй по счету конфиг если будет найден вне war не перетрет его
+            2.1. в корне builder проекта, рядом с src - в случае запуска builder c mvn jetty:run-war
+            2.2. в jetty папке, рядом с webapps - В случае запуска на внешнем джетти
+        Тут codenjoy-contest может быть другим, в зависимости что указано в artifactId pom.xml
+           Вместо ${project.artifactId} мейвен подставит в codenjoy-contest
+           или что будет указано в pom.xml, для этого нельзя убирать filtering=true
+           c src/main/resources ресурсов в блоке ресурсов server/pom.xml
+        Не загружай properties из servlet-context.xml юзай ConfigProperties класс вместо этого
+    -->
+    <context:property-placeholder
+            ignore-resource-not-found="true"
+            location="classpath:/config/${project.artifactId}.properties,file:config/${project.artifactId}.properties"/>
 
     <import resource="applicationContext-database.xml"/>
 

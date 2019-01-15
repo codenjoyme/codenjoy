@@ -32,7 +32,7 @@ public class MockPropertyPlaceholderConfigurer {
     @Bean(name = "propertyPlaceholderConfigurer")
     public PropertyPlaceholderConfigurer bean() throws Exception {
         PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
-        configurer.setLocation(new ClassPathResource("/com/codenjoy/dojo/server/codenjoy.properties"));
+        configurer.setLocation(new ClassPathResource("/config/codenjoy-contest.properties"));
         return configurer;
     }
 }

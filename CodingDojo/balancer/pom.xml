@@ -241,6 +241,8 @@
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
+                <!--это не сработает потому что war союирается из WEB-INF из src-->
+                <!--<filtering>true</filtering>-->
                 <includes>
                     <include>**/*</include>
                 </includes>

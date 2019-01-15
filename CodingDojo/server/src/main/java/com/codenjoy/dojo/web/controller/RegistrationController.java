@@ -56,12 +56,7 @@ public class RegistrationController {
     @Autowired private MailService mailService;
     @Autowired private LinkService linkService;
     @Autowired private Validator validator;
-
-    @Value("${email.verification}")
-    private boolean isEmailVerificationNeeded;
-
-    @Value("${page.registration}")
-    private String registrationPage;
+    @Autowired private ConfigProperties properties;
 
     public RegistrationController() {
     }
@@ -95,10 +90,10 @@ public class RegistrationController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", gameService.getGameNames());
 
-        if (StringUtils.isEmpty(registrationPage)) {
+        if (StringUtils.isEmpty(properties.getRegistrationPage())) {
             return "register";
         } else {
-            model.addAttribute("url", registrationPage);
+            model.addAttribute("url", properties.getRegistrationPage());
             return "redirect";
         }
     }
@@ -185,7 +180,7 @@ public class RegistrationController {
             }
 
             if (!approved) {
-                if (isEmailVerificationNeeded) {
+                if (properties.isEmailVerificationNeeded()) {
                     LinkService.LinkStorage storage = linkService.forLink();
                     Map<String, Object> map = storage.getMap();
                     String email = playerName;
