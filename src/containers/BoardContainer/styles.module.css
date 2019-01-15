@@ -1,40 +1,29 @@
+.boardContainer {
+    flex-direction: column;
+    width: 100%;
+}
+
 .wrapper {
     display: flex;
     flex: 1;
-    flex-flow: row wrap;
     font-weight: bold;
-    text-align: center;
-}
-
-.wrapper > * {
-    padding: 10px;
-    flex: 1 100%;
-}
-
-.rating {
-    background-color: rgb(58, 84, 120);
 }
 
 .frame {
-    background-color: rgb(58, 84, 120);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    flex: 1;
 }
 
-@media all and (min-width: 600px) {
-    .frame {
-        flex: 1 0 0;
-    }
+.rating {
+    padding: 50px;
+    flex: 1;
 }
 
-@media all and (min-width: 800px) {
-    .rating {
-        flex: 1 0px;
-    }
-
-    .rating {
-        order: 1;
-    }
-
-    .frame {
-        order: 2;
+@media all and (max-width: 900px) {
+    .wrapper {
+        flex-direction: column;
     }
 }

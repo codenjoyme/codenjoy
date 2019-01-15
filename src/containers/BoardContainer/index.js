@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // proj
 import {
@@ -52,7 +52,7 @@ class BoardContainer extends Component {
             _.get(rating, '[0].email');
 
         return (
-            <>
+            <div className={ Styles.boardContainer }>
                 <DaysPanel
                     selectedDay={ selectedDay }
                     onDaySelect={ setSelectedDay }
@@ -60,11 +60,6 @@ class BoardContainer extends Component {
                 />
 
                 <div className={ Styles.wrapper }>
-                    { moment(selectedDay).isSame(moment(), 'day') && (
-                        <div className={ Styles.frame }>
-                            <BattleFrame participant={ battleParticipantEmail } />
-                        </div>
-                    ) }
                     <div className={ Styles.rating }>
                         <RatingTable
                             email={ email }
@@ -73,8 +68,13 @@ class BoardContainer extends Component {
                             setSelectedParticipant={ setSelectedParticipant }
                         />
                     </div>
+                    { moment(selectedDay).isSame(moment(), 'day') && (
+                        <div className={ Styles.frame }>
+                            <BattleFrame participant={ battleParticipantEmail } />
+                        </div>
+                    ) }
                 </div>
-            </>
+            </div>
         );
     }
 }

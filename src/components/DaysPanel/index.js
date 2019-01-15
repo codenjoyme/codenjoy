@@ -12,8 +12,8 @@ class DaysPanelHandler extends Component {
     _getDaysRangeConfig(dates) {
         const currentDate = moment().startOf('day');
 
-        return dates.map(date => {
-            const label = date.format(DATE_FORMAT);
+        return dates.map((date, index) => {
+            const label = String(index + 1);
             const day = date.format(DATE_FORMAT);
 
             const startOfDayDate = moment(date).startOf('day');
@@ -23,9 +23,10 @@ class DaysPanelHandler extends Component {
         });
     }
 
-    _dayButtonStyles = disabled =>
+    _dayButtonStyles = (selected, disabled) =>
         cx({
             dayButtonDisabled: disabled,
+            dayButtonSelected: selected,
             dayButton:         true,
         });
 
@@ -51,24 +52,21 @@ class DaysPanelHandler extends Component {
         const daysRangeConfig = this._getDaysRangeConfig(dates);
 
         return (
-            <div className={ Styles.wrapper }>
-                <div className={ Styles.aside }>Leader Board</div>
-                <div className={ Styles.main }>
-                    <div className={ Styles.dayPanel }>
-                        { daysRangeConfig.map(({ label, disabled, day }) => (
-                            <button
-                                className={ this._dayButtonStyles(
-                                    selectedDay === day || disabled,
-                                ) }
-                                key={ day }
-                                onClick={ () => onDaySelect(day) }
-                                disabled={ selectedDay === day || disabled }
-                            >
-                                { label }
-                            </button>
-                        )) }
-                    </div>
-                </div>
+            <div className={ Styles.dayPanel }>
+                <div className={ Styles.dayName }>День №</div>
+                { daysRangeConfig.map(({ label, disabled, day }) => (
+                    <button
+                        className={ this._dayButtonStyles(
+                            selectedDay === day,
+                            disabled,
+                        ) }
+                        key={ day }
+                        onClick={ () => onDaySelect(day) }
+                        disabled={ selectedDay === day || disabled }
+                    >
+                        { label }
+                    </button>
+                )) }
             </div>
         );
     }

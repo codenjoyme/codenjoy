@@ -5,9 +5,16 @@ import { connect } from 'react-redux';
 // proj
 import { LoginForm } from '../../forms';
 
+// own
+import Styles from './styles.module.css';
+
 class AuthContainer extends Component {
     render() {
-        return <LoginForm />;
+        return (
+            <div className={ Styles.loginContainer }>
+                <LoginForm />
+            </div>
+        );
     }
 }
 

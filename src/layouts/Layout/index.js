@@ -6,7 +6,7 @@ import DocumentTitle from 'react-document-title';
 // proj
 import { logout } from '../../redux/auth';
 
-import { Header } from '../../layouts';
+import { Header, Footer } from '../../layouts';
 
 // own
 import Styles from './styles.module.css';
@@ -18,8 +18,14 @@ class LayoutComponent extends Component {
         return (
             <DocumentTitle title='Codenjoy event'>
                 <div className={ Styles.layout }>
-                    <Header code={ code } email={ email } server={ server } logout={ logout } />
-                    { children }
+                    <Header
+                        code={ code }
+                        email={ email }
+                        server={ server }
+                        logout={ logout }
+                    />
+                    <div className={ Styles.content }>{ children }</div>
+                    <Footer />
                 </div>
             </DocumentTitle>
         );
