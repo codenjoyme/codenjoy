@@ -15,15 +15,27 @@ import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 // own
 import Styles from './styles.module.css';
 
-// TODO set env variables
 const period = {
     start: process.env.REACT_APP_EVENT_START || '2019-01-01T10:00:00.000Z',
     end:   process.env.REACT_APP_EVENT_END || '2019-01-31T10:00:00.000Z',
 };
 
+const eventStart = moment(period.start);
+const eventEnd = moment(period.end);
+
 class BoardContainer extends Component {
+    _isSelectedDateValid(selectedDay) {
+        const currentDate = moment(selectedDay);
+
+        return (
+            currentDate.isSameOrAfter(eventStart, 'day') &&
+            currentDate.isSameOrBefore(eventEnd, 'day')
+        );
+    }
     componentDidMount() {
-        this.props.fetchRating(this.props.selectedDay);
+        if (this._isSelectedDateValid(this.props.selectedDay)) {
+            this.props.fetchRating(this.props.selectedDay);
+        }
     }
 
     render() {
@@ -32,7 +44,8 @@ class BoardContainer extends Component {
 
         const ratingContainsEmail = email && _.find(rating, { email });
         const participantEmail = ratingContainsEmail && email;
-        const battleParticipant =
+
+        const battleParticipantEmail =
             _.get(selectedParticipant, 'email') ||
             participantEmail ||
             _.get(rating, '[0].email');
@@ -44,16 +57,17 @@ class BoardContainer extends Component {
                     onDaySelect={ setSelectedDay }
                     period={ period }
                 />
+
                 <div className={ Styles.wrapper }>
-                    <div className={ Styles.frame }>
-                        { moment(selectedDay).isSame(new Date(), 'day') && (
-                            <BattleFrame participant={ battleParticipant } />
-                        ) }
-                    </div>
+                    { moment(selectedDay).isSame(moment(), 'day') && (
+                        <div className={ Styles.frame }>
+                            <BattleFrame participant={ battleParticipantEmail } />
+                        </div>
+                    ) }
                     <div className={ Styles.rating }>
                         <RatingTable
                             email={ email }
-                            watchEmail={ battleParticipant }
+                            watchEmail={ battleParticipantEmail }
                             rating={ rating }
                             setSelectedParticipant={ setSelectedParticipant }
                         />

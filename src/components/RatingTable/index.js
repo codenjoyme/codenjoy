@@ -60,18 +60,14 @@ class RatingTableHandler extends Component {
                                 flexGrow={ 1 }
                                 width={ 100 }
                             />
-                            <Column
-                                label='Server'
-                                dataKey='server'
-                                width={ 300 }
-                                flexGrow={ 3 }
-                            />
                         </Table>
                     ) }
                 </AutoSizer>
             </div>
         ) : (
-            <div>Oooops, no rating yet</div>
+            <div>
+                Інформація про рейтинг відсутня. Спробуйте обрати інший день
+            </div>
         );
     }
 }
