@@ -1,12 +1,16 @@
 // core
 import React, { Component } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
 import _ from 'lodash';
+import styles from '../common/styles.module.css';
+import { CustomInputComponent } from '../common/customInput';
 
 // proj
 import { login } from '../../redux/auth';
+
+const { formWrap, title, form, submit } = styles;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -23,8 +27,8 @@ class LoginForm extends Component {
         const { login, loginErrors } = this.props;
 
         return (
-            <div>
-                <h1>Логін</h1>
+            <div className={ formWrap }>
+                <h1 className={ title }>Увійти</h1>
                 { _.get(loginErrors, 'credentials') && (
                     <div>Неправильний емейл або пароль</div>
                 ) }
@@ -37,12 +41,10 @@ class LoginForm extends Component {
                     onSubmit={ login }
                 >
                     { () => (
-                        <Form>
-                            <ErrorMessage name='email' component='div' />
-                            <Field type='email' name='email' />
-                            <ErrorMessage name='password' component='div' />
-                            <Field type='password' name='password' />
-                            <button type='submit'>Submit</button>
+                        <Form className={ form }>
+                            <Field name='email' placeholder='Електронна пошта' type='email' component={ CustomInputComponent } />
+                            <Field placeholder='Пароль' type='password' name='password' component={ CustomInputComponent } />
+                            <button className={ submit } type='submit'>Увійти</button>
                         </Form>
                     ) }
                 </Formik>
