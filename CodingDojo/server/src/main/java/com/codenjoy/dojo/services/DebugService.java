@@ -31,7 +31,7 @@ import static com.codenjoy.dojo.services.DLoggerFactory.DEBUG_KEY;
 @Component
 public class DebugService extends Suspendable {
 
-    @Value("${debugEnable}")
+    @Value("${log.debug}")
     public void setDebugEnable(boolean active) {
         super.setActive(active);
     }

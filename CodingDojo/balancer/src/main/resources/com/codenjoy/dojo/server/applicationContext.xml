@@ -33,12 +33,12 @@
     <!-- https://stackoverflow.com/a/37483225/4728425 -->
     <!--location="classpath:/config/codenjoy-balancer.properties"-->
     <context:property-placeholder
-            location="file:src/main/resources/config/codenjoy-balancer.properties"
+            location="file:src/main/resources/config/${project.artifactId}.properties"
             ignore-unresolvable="true"
             ignore-resource-not-found="true"
             order="1" />
     <context:property-placeholder
-            location="file:config/codenjoy-balancer.properties"
+            location="file:config/${project.artifactId}.properties"
             ignore-resource-not-found="true"
             order="2" />
 

@@ -51,9 +51,7 @@ public class BoardController {
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
     @Autowired private Validator validator;
-
-    @Value("${donate.code}")
-    private String donateCode;
+    @Autowired private ConfigProperties properties;
 
     public BoardController() {
     }
@@ -172,7 +170,7 @@ public class BoardController {
     @RequestMapping(value = "/donate", method = RequestMethod.GET)
     public String donate(ModelMap model) {
         model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        model.addAttribute("donateCode", donateCode);
+        model.addAttribute("donateCode", properties.getDonateCode());
         return "donate-form";
     }
 

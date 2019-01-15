@@ -40,7 +40,7 @@ public class AutoSaver extends Suspendable implements Tickable {
     private boolean justStart = true;
     private int count = 0;
 
-    @Value("${autoSave}")
+    @Value("${game.save.auto}")
     public void setActive(boolean active) {
         super.setActive(active);
     }

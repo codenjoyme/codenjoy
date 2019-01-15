@@ -33,16 +33,24 @@
     <context:component-scan base-package="com.codenjoy.dojo.transport"/>
 
     <!-- https://stackoverflow.com/a/37483225/4728425 -->
-    <!--location="classpath:/config/codenjoy-contest.properties"-->
+    <!-- https://stackoverflow.com/a/21015489/4728425 -->
+    <!--
+        Этот малый будет искать папку config с файлом *.properties в нескольких местах:
+            1. codenjoy-contest.war\WEB-INF\classes\config\codenjoy-contest.properties
+                Так же стоит понимать что этот конфиг берется изначально из сырцов
+                server\src\main\resources\config\codenjoy-contest.properties
+                Он читается первым, а второй по счету конфиг если будет найден вне war не перетрет его
+            2.1. в jetty папке, рядом с webapps
+            2.2. в корне builder проекта, рядом с src - в случае запуска builder c mvn jetty:run-war
+        Тут codenjoy-contest может быть другим, в зависимости что указано в artifactId pom.xml
+           Вместо ${project.artifactId} мейвен подставит в codenjoy-contest
+           или что будет указано в pom.xml, для этого нельзя убирать filtering=true
+           c src/main/resources ресурсов в блоке ресурсов server/pom.xml
+        Не загружай properties из servlet-context.xml юзай ConfigProperties класс вместо этого
+    -->
     <context:property-placeholder
-            location="file:src/main/resources/config/codenjoy-contest.properties"
-            ignore-unresolvable="true"
             ignore-resource-not-found="true"
-            order="1" />
-    <context:property-placeholder
-            location="file:config/codenjoy-contest.properties"
-            ignore-resource-not-found="true"
-            order="2" />
+            location="classpath:/config/${project.artifactId}.properties,file:config/${project.artifactId}.properties"/>
 
     <import resource="applicationContext-database.xml"/>
 
