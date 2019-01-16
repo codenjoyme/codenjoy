@@ -19,7 +19,7 @@ class HeaderComponent extends PureComponent {
             <header>
                 <div className={ Styles.container }>
                     <div className={ Styles.logoContainer }>
-                        <img className={ Styles.logo } src={ logo } />
+                        <img className={ Styles.logo } src={ logo } alt="" />
                         EPAM BOT CHALLENGE
                     </div>
 

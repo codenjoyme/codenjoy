@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from './styles.module.css';
 import { book } from '../../routes';
 
-const { checkBox, checkBoxWrap, checkBoxLabel, checkBoxIcon } = styles;
+const { checkBox, checkBoxWrap, checkBoxLabel, checkBoxItem, checkBoxIcon } = styles;
 
 export const CustomCheckboxComponent = ({
     field, // { name, value, onChange, onBlur }
@@ -15,10 +15,10 @@ export const CustomCheckboxComponent = ({
     const isCurrentFieldValid = touched[ field.name ] && !errors[ field.name ];
     const color = isCurrentFieldNotValid ? '#d35d47' : '#41c7dc';
 
-    return(
+    return (
         <div className={ checkBoxWrap }>
             <input type={ field.type } id={ field.name } className={ checkBox } { ...field } { ...props } />
-            <label htmlFor={ field.name } onClick={ () => setTouched({ ...touched, [ field.name ]: true }) }>
+            <label className={ checkBoxItem } htmlFor={ field.name } onClick={ () => setTouched({ ...touched, [ field.name ]: true }) }>
                 {
                     isCurrentFieldValid ?
                         <FontAwesomeIcon className={ checkBoxIcon } icon={ [ 'far', 'check-square' ] } style={ {color: '#cedb56'} } /> :

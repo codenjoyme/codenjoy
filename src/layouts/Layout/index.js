@@ -1,7 +1,6 @@
 // vendor
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DocumentTitle from 'react-document-title';
 
 // proj
 import { logout } from '../../redux/auth';
@@ -16,7 +15,6 @@ class LayoutComponent extends Component {
         const { children, logout, email, server, code } = this.props;
 
         return (
-            <DocumentTitle title='Codenjoy event'>
                 <div className={ Styles.layout }>
                     <Header
                         code={ code }
@@ -27,7 +25,6 @@ class LayoutComponent extends Component {
                     <div className={ Styles.content }>{ children }</div>
                     <Footer />
                 </div>
-            </DocumentTitle>
         );
     }
 }

@@ -108,6 +108,10 @@
     align-items: center;
 }
 
+.checkBoxItem {
+    cursor: pointer;
+}
+
 .checkBoxLabel {
     color: #a1b0bb;
     font-size: 12px;
