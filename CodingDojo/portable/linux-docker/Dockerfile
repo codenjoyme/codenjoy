@@ -61,6 +61,10 @@ RUN cd /tmp/codenjoy/CodingDojo/builder \
          fi \
  && cp /tmp/codenjoy/CodingDojo/builder/target/${CONTEXT}.war /var/lib/jetty/webapps
 
+RUN cd /tmp/codenjoy/CodingDojo/balancer \
+ && clean install -DskipTests=${SKIP_TESTS} \
+ && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-balancer.war /var/lib/jetty/webapps
+
 VOLUME ["/var/lib/jetty/database"]
 
 EXPOSE 8080
