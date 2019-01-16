@@ -45,6 +45,8 @@ import static org.mockito.Mockito.when;
  */
 public class SnakeHeroTest {
 
+    private static final int reducedValue = 3;
+
     private SnakeBoard game;
     private Hero hero;
 
