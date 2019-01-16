@@ -4,7 +4,6 @@
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
-    background: #192433;
     width: 100%;
 }
 
@@ -14,10 +13,16 @@
     color: #a1b0bb;
     padding: 25px;
     border-bottom: 2px solid #41c7dc;
+    background: #192433;
 }
 
-.form {
+.backgroundSection {
+    background: #192433;
     padding: 25px;
+}
+
+.backgroundSection :last-child {
+    margin-bottom: 0;
 }
 
 .inputWrap {
@@ -73,16 +78,38 @@
 
 .selectWrap {
     margin-bottom: 47px;
+    color: #a1b0bb;
 }
 
 .select {
-    
+    border: 1px solid #41c7dc;
 }
 
 .selectError {
-
+    border: 1px solid #d35d47;
 }
 
 .selectValid {
+    border: 1px solid #cedb56;
+}
 
+.checkBox {
+    display: none;
+}
+
+.checkBoxIcon {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.checkBoxWrap {
+    padding: 24px 25px;
+    display: flex;
+    align-items: center;
+}
+
+.checkBoxLabel {
+    color: #a1b0bb;
+    font-size: 12px;
+    text-decoration: underline;
 }

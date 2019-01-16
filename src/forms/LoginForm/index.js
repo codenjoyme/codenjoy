@@ -10,7 +10,7 @@ import { CustomInputComponent } from '../common/customInput';
 // proj
 import { login } from '../../redux/auth';
 
-const { formWrap, title, form, submit } = styles;
+const { formWrap, title, submit, backgroundSection } = styles;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -41,10 +41,12 @@ class LoginForm extends Component {
                     onSubmit={ login }
                 >
                     { () => (
-                        <Form className={ form }>
-                            <Field name='email' placeholder='Електронна пошта' type='email' component={ CustomInputComponent } />
-                            <Field placeholder='Пароль' type='password' name='password' component={ CustomInputComponent } />
-                            <button className={ submit } type='submit'>Увійти</button>
+                        <Form>
+                            <div className={ backgroundSection }>
+                                <Field name='email' placeholder='Електронна пошта' type='email' component={ CustomInputComponent } />
+                                <Field placeholder='Пароль' type='password' name='password' component={ CustomInputComponent } />
+                                <button className={ submit } type='submit'>Увійти</button>
+                            </div>
                         </Form>
                     ) }
                 </Formik>

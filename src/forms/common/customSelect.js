@@ -6,41 +6,41 @@ import styles from './styles.module.css';
 const { selectWrap, select, selectValid, selectError  } = styles;
 
 const customSelectStyles = {
-    input: (provided) => ({
-        ...provided,
-    }),
-    container: (provided) => ({
-        ...provided,
-    }),
     control: (provided) => ({
         ...provided,
         borderRadius: 0,
+        border: 0,
+        padding: '5px 0px',
+        fontSize: '12px',
         background: '#263852',
+
+        '&:hover': {
+            border: 0,
+            boxShadow: 'none',
+        },
     }),
     menu: (provided) => ({
         ...provided,
         borderRadius: 0,
+        border: '1px solid #41c7dc',
+        fontSize: '12px',
         background: '#263852',
     }),
     option: (provided) => ({
         ...provided,
         borderRadius: 0,
     }),
+    singleValue: (provided) => ({
+        ...provided,
+        color: '#a1b0bb',
+    }),
 }
 
 export class CustomSelectComponent extends Component {
-    handleChange = value => {
-        // this is going to call setFieldValue and manually update values.topcis
-        // this.props.onChange('topics', value);
-    };
-
-    handleBlur = () => {
-        // this is going to call setFieldTouched and manually update touched.topcis
-        // this.props.onBlur('topics', true);
-    };
 
     render() {
-        const { field, form: { touched, errors } } = this.props;
+        const { field, form, placeholder, options } = this.props;
+        const { touched, errors } = form;
         const isCurrentFieldNotValid = touched[ field.name ] && errors[ field.name ];
         const isCurrentFieldValid = touched[ field.name ] && !errors[ field.name ];
 
@@ -49,16 +49,11 @@ export class CustomSelectComponent extends Component {
                 <Select
                     className={ classNames(select, { [ selectError ]: isCurrentFieldNotValid, [ selectValid ]: isCurrentFieldValid  }) }
                     styles={ customSelectStyles }
-                    options={ this.props.children }
+                    options={ options }
                     multi={ false }
-                    onChange={ this.handleChange }
-                    onBlur={ this.handleBlur }
-                    value={ this.props.value }
+                    onChange={ (option) => form.setFieldValue(field.name, option.value) }
+                    placeholder={ placeholder }
                 />
-                { !!this.props.error &&
-                this.props.touched && (
-                    <div style={ { color: 'red', marginTop: '.5rem' } }>{ this.props.error }</div>
-                ) }
             </div>
         );
     }

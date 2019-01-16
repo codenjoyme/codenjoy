@@ -15,7 +15,7 @@ export const CustomInputComponent = ({
 
     return(
         <div className={ inputWrap }>
-            <input type='text' className={ classNames(input, { [ inputError ]: isCurrentFieldNotValid, [ inputValid ]: isCurrentFieldValid  }) } { ...field } { ...props } />
+            <input type={ field.type } className={ classNames(input, { [ inputError ]: isCurrentFieldNotValid, [ inputValid ]: isCurrentFieldValid  }) } { ...field } { ...props } />
             { isCurrentFieldNotValid && <FontAwesomeIcon className={ inputIcon } icon='times-circle' style={ {color: '#d35d47'} } /> }
             { isCurrentFieldValid && <FontAwesomeIcon className={ inputIcon } icon='check-circle' style={ {color: '#cedb56'} } /> }
         </div>

@@ -1,8 +1,8 @@
 // vendor
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, { PureComponent } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import classNames from 'classnames/bind';
+import logo from './game-logo.png'
 
 // proj
 import { book } from '../../routes';
@@ -10,15 +10,8 @@ import { getGameConnectionString } from '../../utils';
 
 // own
 import Styles from './styles.module.css';
-const cx = classNames.bind(Styles);
 
-class HeaderComponent extends Component {
-    _getMenuItemStyles(route) {
-        return cx({
-            active: this.props.location.pathname === route,
-        });
-    }
-
+class HeaderComponent extends PureComponent {
     render() {
         const { server, logout, email, code } = this.props;
 
@@ -26,6 +19,7 @@ class HeaderComponent extends Component {
             <header>
                 <div className={ Styles.container }>
                     <div className={ Styles.logoContainer }>
+                        <img className={ Styles.logo } src={ logo } />
                         EPAM BOT CHALLENGE
                     </div>
 
@@ -52,13 +46,13 @@ class HeaderComponent extends Component {
                         { /* <li className={ Styles.navItem }>
                             <NavLink to={ book.board }>Головна</NavLink>
                         </li> */ }
-                        <li className={ this._getMenuItemStyles(book.board) }>
-                            <Link to={ book.board }>Трансляція</Link>
+                        <li>
+                            <NavLink activeClassName={ Styles.activeMenu } to={ book.board }>Трансляція</NavLink>
                         </li>
 
                         { !server && (
-                            <li className={ this._getMenuItemStyles(book.login) }>
-                                <Link to={ book.login }>Увійти</Link>
+                            <li>
+                                <NavLink activeClassName={ Styles.activeMenu } to={ book.login }>Увійти</NavLink>
                             </li>
                         ) }
 
@@ -68,12 +62,8 @@ class HeaderComponent extends Component {
                             </li>
                         ) }
                         { !server && (
-                            <li
-                                className={ this._getMenuItemStyles(
-                                    book.register,
-                                ) }
-                            >
-                                <Link to={ book.register }>Реєстрація</Link>
+                            <li>
+                                <NavLink activeClassName={ Styles.activeMenu } to={ book.register }>Реєстрація</NavLink>
                             </li>
                         ) }
                     </ul>
