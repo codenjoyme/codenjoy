@@ -6,6 +6,18 @@
     outline: none;
 }
 
+.ratingGrid::-webkit-scrollbar-track {
+    background-color: rgb(34, 34, 34);
+}
+
+.ratingGrid::-webkit-scrollbar {
+    width: 10px;
+}
+
+.ratingGrid::-webkit-scrollbar-thumb {
+    background-color: rgb(48, 113, 137);
+}
+
 .ratingTable:focus,
 .row:focus,
 .selectedRow:focus {
@@ -34,18 +46,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    border-top: 30px solid rgb(65, 199, 220);
-    border-left: 30px solid rgb(25, 36, 51);
-    width: 0;
-}
-
-.ratingTable .row:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-top: 30px solid rgb(25, 36, 51);
-    border-left: 30px solid rgb(25, 36, 51);
+    border-top: 20px solid rgb(65, 199, 220);
+    border-left: 20px solid rgb(25, 36, 51);
     width: 0;
 }
 
