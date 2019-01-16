@@ -2,17 +2,24 @@
 import React, { Component } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
-import 'reset-css'
+import 'reset-css';
 import { PersistGate } from 'redux-persist/integration/react';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
-import { faSquare as farSquare, faCheckSquare as farCheckSquare } from '@fortawesome/free-regular-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+    faTimesCircle,
+    faCheckCircle,
+    faStar,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+    faSquare as farSquare,
+    faCheckSquare as farCheckSquare,
+} from '@fortawesome/free-regular-svg-icons';
 
 // proj
 import store, { history, persistor } from './store';
 import Routes from './routes/Routes';
 
-library.add(faTimesCircle, faCheckCircle, farCheckSquare, farSquare);
+library.add(faTimesCircle, faCheckCircle, farCheckSquare, farSquare, faStar);
 
 class App extends Component {
     render() {

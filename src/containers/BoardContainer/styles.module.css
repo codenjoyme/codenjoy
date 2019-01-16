@@ -11,18 +11,24 @@
 
 .frame {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 50px;
-    flex: 1;
+    padding: 0px 30px 10px 30px;
 }
 
 .rating {
-    padding: 50px;
+    padding: 0px 30px 10px 30px;
     flex: 1;
 }
 
 @media all and (max-width: 900px) {
+    .frame {
+        padding: 30px 5px 30px 5px;
+        align-items: center;
+        justify-content: center;
+        order: 1;
+    }
+    .rating {
+        order: 2;
+    }
     .wrapper {
         flex-direction: column;
     }

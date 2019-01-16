@@ -1,16 +1,92 @@
-.rating {
-    height: 100%;
-    min-height: 400px;
-}
-
 .ratingTable {
-    color: white;
+    color: rgb(161, 176, 187);
 }
 
-.selectedRow {
-    border: 1px solid black;
+.ratingGrid {
+    outline: none;
 }
 
-.ownRow {
-    border: 1px solid white;
+.ratingTable:focus,
+.row:focus,
+.selectedRow:focus {
+    outline: 0;
+}
+
+.ratingTable .row,
+.ratingTable .selectedRow,
+.ratingTable .ownRow {
+    background-color: rgb(25, 36, 51);
+    box-sizing: border-box;
+}
+
+.ratingTable .selectedRow {
+    border-top: 1.5px solid rgb(65, 199, 220);
+    border-bottom: 1.5px solid rgb(65, 199, 220);
+}
+
+.ratingTable .ownRow {
+    border-top: 1.5px solid rgb(65, 199, 220);
+    border-bottom: 1.5px solid rgb(65, 199, 220);
+}
+
+.ratingTable .selectedRow:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top: 30px solid rgb(65, 199, 220);
+    border-left: 30px solid rgb(25, 36, 51);
+    width: 0;
+}
+
+.ratingTable .row:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top: 30px solid rgb(25, 36, 51);
+    border-left: 30px solid rgb(25, 36, 51);
+    width: 0;
+}
+
+.ratingTable .header {
+    background-color: rgb(34, 34, 34);
+    box-sizing: border-box;
+    padding: 2px;
+    text-transform: none;
+}
+
+.ratingStar,
+.ratingIndex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.ratingStar {
+    font-size: 8px;
+}
+
+.ratingColumn {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.starLabel {
+    font-size: 12px;
+    color: black;
+}
+
+.firstPlace {
+    color: rgb(235, 106, 90);
+}
+
+.topThree {
+    color: rgb(236, 193, 52);
+}
+
+.topTen {
+    color: rgb(163, 198, 68);
 }
