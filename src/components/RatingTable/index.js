@@ -11,6 +11,16 @@ import Styles from './styles.module.css';
 const cx = classNames.bind(Styles);
 
 class RatingTableHandler extends Component {
+    _starStyle(position) {
+        if (position === 0) {
+            return Styles.firstPlace;
+        } else if (position < 3) {
+            return Styles.topThree;
+        } else if (position < 10) {
+            return Styles.topTen;
+        }
+    }
+
     _rowStyles(rowIndex, selectedIndex, ownIndex) {
         const isHeader = rowIndex === -1;
         const selectedRow = selectedIndex !== -1 && selectedIndex === rowIndex;
@@ -34,8 +44,8 @@ class RatingTableHandler extends Component {
 
         return rating ? (
             <div className={ Styles.rating }>
-                <AutoSizer>
-                    { ({ width, height }) => (
+                <AutoSizer disableHeight>
+                    { ({ width }) => (
                         <Table
                             gridClassName={ Styles.ratingGrid }
                             className={ Styles.ratingTable }
@@ -44,7 +54,11 @@ class RatingTableHandler extends Component {
                                 this._rowStyles(index, selectedIndex, ownIndex)
                             }
                             scrollToIndex={ selectedIndex }
-                            height={ height }
+                            height={
+                                rating.length < 10
+                                    ? Math.max(110, rating.length * 50 + 60)
+                                    : 500
+                            }
                             width={ width }
                             headerHeight={ 60 }
                             rowHeight={ 50 }
@@ -66,6 +80,9 @@ class RatingTableHandler extends Component {
                                         <div className={ Styles.ratingStar }>
                                             <span className='fa-layers fa-fw fa-3x'>
                                                 <FontAwesomeIcon
+                                                    className={ this._starStyle(
+                                                        rowIndex,
+                                                    ) }
                                                     icon={ faStar }
                                                 />
                                                 <span

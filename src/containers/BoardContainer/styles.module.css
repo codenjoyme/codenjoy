@@ -24,6 +24,10 @@
         padding: 30px 5px 30px 5px;
         align-items: center;
         justify-content: center;
+        order: 1;
+    }
+    .rating {
+        order: 2;
     }
     .wrapper {
         flex-direction: column;
