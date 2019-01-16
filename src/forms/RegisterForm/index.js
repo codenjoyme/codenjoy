@@ -18,20 +18,20 @@ const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required');
-
-const requiredString = Yup.string()
-    .min(2, 'Too Short!')
-    .max(255, 'Too Long!')
-    .required('Required');
+const optionalString = Yup.string().nullable(true);
 
 const RegisterSchema = Yup.object().shape({
     password:  requiredShortString,
     firstName: requiredShortString,
     lastName:  requiredShortString,
     city:      requiredShortString,
-    skills:    Yup.string().required(),
-    others:    requiredString,
-    terms:     Yup.boolean().oneOf([ true ]),
+    skills:    requiredShortString,
+    others:    Yup.string().when('skills', {
+        is:        'other',
+        then:      requiredShortString,
+        otherwise: optionalString,
+    }),
+    terms: Yup.boolean().oneOf([ true ]),
 
     email: Yup.string()
         .email('Invalid email')
@@ -41,6 +41,7 @@ const RegisterSchema = Yup.object().shape({
         .required('Password confirm is required'),
 });
 
+const OTHER_VALUE = 'other';
 const options = [
     {
         label: 'Java',
@@ -74,7 +75,11 @@ const options = [
         label: 'Android',
         value: 'android',
     },
-]
+    {
+        label: 'Other',
+        value: OTHER_VALUE,
+    },
+];
 
 class LoginForm extends Component {
     render() {
@@ -102,27 +107,79 @@ class LoginForm extends Component {
                         terms:           false,
                     } }
                     validationSchema={ RegisterSchema }
-                    onSubmit={ payload =>
-                        register(_.omit(payload, [ 'passwordConfirm' ]))
-                    }
+                    onSubmit={ payload => {
+                        const { skills, others, ...otherFields } = payload;
+                        const user = {
+                            ..._.omit(otherFields, 'passwordConfirm'),
+                            skills: skills === OTHER_VALUE ? others : skills,
+                        };
+
+                        register(user);
+                    } }
                 >
-                    { () => (
+                    { props => (
                         <Form>
                             <div className={ backgroundSection }>
-                                <Field name='firstName' placeholder='Ім`я*' component={ CustomInputComponent }/>
-                                <Field name='lastName' placeholder='Прізвище*' component={ CustomInputComponent }/>
-                                <Field type='email' name='email' placeholder='Електронна пошта*' component={ CustomInputComponent }/>
-                                <Field type='password' name='password' placeholder='Пароль*' component={ CustomInputComponent }/>
-                                <Field type='password' name='passwordConfirm' placeholder='Повторіть Пароль*' component={ CustomInputComponent }/>
-                                <Field name='city' placeholder='Місто*' component={ CustomInputComponent }/>
-                                <Field component={ CustomSelectComponent } placeholder='Спеціалізація*' name='skills' options={ options } />
-                                <Field name='others' placeholder='Інше*' component={ CustomInputComponent }/>
+                                <Field
+                                    name='firstName'
+                                    placeholder='Ім`я*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    name='lastName'
+                                    placeholder='Прізвище*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    type='email'
+                                    name='email'
+                                    placeholder='Електронна пошта*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    type='password'
+                                    name='password'
+                                    placeholder='Пароль*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    type='password'
+                                    name='passwordConfirm'
+                                    placeholder='Повторіть Пароль*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    name='city'
+                                    placeholder='Місто*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    component={ CustomSelectComponent }
+                                    placeholder='Спеціалізація*'
+                                    name='skills'
+                                    options={ options }
+                                />
+                                { _.get(props, 'values.skills') ===
+                                    OTHER_VALUE && (
+                                    <Field
+                                        name='others'
+                                        placeholder='Інше*'
+                                        component={ CustomInputComponent }
+                                    />
+                                ) }
                             </div>
 
-                            <Field name='terms' component={ CustomCheckboxComponent } label='Погоджуюсь с політикою конфіденційності*' type='checkbox' />
+                            <Field
+                                name='terms'
+                                component={ CustomCheckboxComponent }
+                                label='Погоджуюсь с політикою конфіденційності*'
+                                type='checkbox'
+                            />
 
                             <div className={ backgroundSection }>
-                                <button className={ submit } type='submit'>Зареєструватися</button>
+                                <button className={ submit } type='submit'>
+                                    Зареєструватися
+                                </button>
                             </div>
                         </Form>
                     ) }
