@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 // own
 import Styles from './styles.module.css';
@@ -10,10 +12,17 @@ const cx = classNames.bind(Styles);
 
 class RatingTableHandler extends Component {
     _rowStyles(rowIndex, selectedIndex, ownIndex) {
-        return cx({
-            ownRow:      ownIndex !== -1 && ownIndex === rowIndex,
-            selectedRow: selectedIndex !== -1 && selectedIndex === rowIndex,
-        });
+        const isHeader = rowIndex === -1;
+        const selectedRow = selectedIndex !== -1 && selectedIndex === rowIndex;
+        const ownRow = ownIndex !== -1 && ownIndex === rowIndex;
+
+        return isHeader
+            ? cx({ header: true })
+            : cx({
+                selectedRow,
+                ownRow,
+                row: !selectedRow && !ownRow,
+            });
     }
 
     render() {
@@ -28,15 +37,17 @@ class RatingTableHandler extends Component {
                 <AutoSizer>
                     { ({ width, height }) => (
                         <Table
+                            gridClassName={ Styles.ratingGrid }
                             className={ Styles.ratingTable }
+                            headerClassName={ Styles.header }
                             rowClassName={ ({ index }) =>
                                 this._rowStyles(index, selectedIndex, ownIndex)
                             }
                             scrollToIndex={ selectedIndex }
                             height={ height }
                             width={ width }
-                            headerHeight={ 20 }
-                            rowHeight={ 30 }
+                            headerHeight={ 60 }
+                            rowHeight={ 50 }
                             rowCount={ rating.length }
                             rowGetter={ ({ index }) => rating[ index ] }
                             onRowClick={ ({ rowData }) =>
@@ -45,21 +56,48 @@ class RatingTableHandler extends Component {
                         >
                             <Column
                                 label='#'
+                                className={ Styles.ratingColumn }
                                 dataKey='index'
-                                flexGrow={ 1 }
-                                width={ 100 }
+                                flexGrow={ 0 }
+                                flexShrink={ 0 }
+                                width={ 40 }
+                                cellRenderer={ ({ rowIndex }) =>
+                                    rowIndex < 10 ? (
+                                        <div className={ Styles.ratingStar }>
+                                            <span className='fa-layers fa-fw fa-3x'>
+                                                <FontAwesomeIcon
+                                                    icon={ faStar }
+                                                />
+                                                <span
+                                                    className={ `fa-layers-text fa-inverse ${
+                                                        Styles.starLabel
+                                                    }` }
+                                                >
+                                                    { rowIndex + 1 }
+                                                </span>
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className={ Styles.ratingIndex }>
+                                            { rowIndex + 1 }
+                                        </div>
+                                    )
+                                }
                             />
                             <Column
-                                label='Name'
+                                label='Учасник'
+                                className={ Styles.ratingColumn }
                                 dataKey='email'
                                 flexGrow={ 2 }
-                                width={ 200 }
+                                width={ 400 }
                             />
                             <Column
-                                label='Score'
+                                label='Бали'
+                                className={ Styles.ratingColumn }
                                 dataKey='score'
-                                flexGrow={ 1 }
-                                width={ 100 }
+                                flexGrow={ 0 }
+                                flexShrink={ 0 }
+                                width={ 80 }
                             />
                         </Table>
                     ) }

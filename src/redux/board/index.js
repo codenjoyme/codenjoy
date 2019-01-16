@@ -113,7 +113,7 @@ export function* fetchRatingSaga() {
         //     .fill(null)
         //     .map((_, index) => ({
         //         email:  'user_' + index + '_' + selectedDay,
-        //         score:  Math.ceil(Math.random() * 10000),
+        //         score:  Math.ceil(Math.random() * 100000000),
         //         server: 'Таразед',
         //     }));
 
