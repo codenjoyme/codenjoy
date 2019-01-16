@@ -6,12 +6,13 @@ import 'reset-css'
 import { PersistGate } from 'redux-persist/integration/react';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faTimesCircle, faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { faSquare as farSquare, faCheckSquare as farCheckSquare } from '@fortawesome/free-regular-svg-icons'
 
 // proj
 import store, { history, persistor } from './store';
 import Routes from './routes/Routes';
 
-library.add(faTimesCircle, faCheckCircle);
+library.add(faTimesCircle, faCheckCircle, farCheckSquare, farSquare);
 
 class App extends Component {
     render() {

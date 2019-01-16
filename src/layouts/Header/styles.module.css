@@ -4,7 +4,12 @@
     justify-content: center;
     color: white;
     font-size: 16px;
-    width: 250px;
+    width: 320px;
+}
+
+.logo {
+    height: 50px;
+    margin-right: 30px;
 }
 
 .active {
@@ -26,12 +31,25 @@
     display: flex;
     justify-content: space-between;
     background: rgb(21, 30, 42);
-    min-height: 60px;
 }
 
 .container a {
+    position: relative;
     color: white;
     text-decoration: none;
+    padding: 39px 10px;
+}
+
+.container a.activeMenu:after {
+    content: '';
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    height: 5px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background: #41c7dc;
 }
 
 .container ul {
@@ -39,7 +57,6 @@
 }
 
 .container li {
-    width: 100px;
     color: white;
     display: flex;
     align-items: center;

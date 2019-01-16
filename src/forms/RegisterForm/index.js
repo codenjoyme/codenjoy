@@ -6,12 +6,13 @@ import * as Yup from 'yup';
 import _ from 'lodash';
 import styles from '../common/styles.module.css';
 import { CustomInputComponent } from '../common/customInput';
+import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
 
 // proj
 import { register } from '../../redux/register';
 
-const { formWrap, title, form, submit } = styles;
+const { formWrap, title, submit, backgroundSection } = styles;
 
 const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
@@ -28,7 +29,9 @@ const RegisterSchema = Yup.object().shape({
     firstName: requiredShortString,
     lastName:  requiredShortString,
     city:      requiredShortString,
-    skills:    requiredString,
+    skills:    Yup.string().required(),
+    others:    requiredString,
+    terms:     Yup.boolean().oneOf([ true ]),
 
     email: Yup.string()
         .email('Invalid email')
@@ -37,6 +40,41 @@ const RegisterSchema = Yup.object().shape({
         .oneOf([ Yup.ref('password'), null ], 'Passwords should be equal')
         .required('Password confirm is required'),
 });
+
+const options = [
+    {
+        label: 'Java',
+        value: 'java',
+    },
+    {
+        label: 'JavaScript',
+        value: 'javaScript',
+    },
+    {
+        label: 'BigData',
+        value: 'bigData',
+    },
+    {
+        label: 'Automated Testing',
+        value: 'dutomatedTesting',
+    },
+    {
+        label: 'Functional Testing',
+        value: 'dunctionaTesting',
+    },
+    {
+        label: 'DevOps.CI/CD',
+        value: 'devOps.CI/CD',
+    },
+    {
+        label: 'Project Management',
+        value: 'projectManagement',
+    },
+    {
+        label: 'Android',
+        value: 'android',
+    },
+]
 
 class LoginForm extends Component {
     render() {
@@ -60,7 +98,8 @@ class LoginForm extends Component {
                         city:            '',
                         email:           '',
                         skills:          '',
-                        color:           '',
+                        others:          '',
+                        terms:           false,
                     } }
                     validationSchema={ RegisterSchema }
                     onSubmit={ payload =>
@@ -68,22 +107,23 @@ class LoginForm extends Component {
                     }
                 >
                     { () => (
-                        <Form className={ form }>
-                            <Field name='firstName' placeholder='Ім`я*' component={ CustomInputComponent }/>
-                            <Field name='lastName' placeholder='Призвіще*' component={ CustomInputComponent }/>
-                            <Field type='email' name='email' placeholder='Електронна пошта*' component={ CustomInputComponent }/>
-                            <Field type='password' name='password' placeholder='Пароль*' component={ CustomInputComponent }/>
-                            <Field type='password' name='passwordConfirm' placeholder='Повтроріть Пароль*' component={ CustomInputComponent }/>
-                            <Field name='city' placeholder='Місто*' component={ CustomInputComponent }/>
-                            <Field name='skills' placeholder='Спеціалізація*' component={ CustomInputComponent }/>
-                            <Field component={ CustomSelectComponent } name='color'>
-                                <option value='red'>Red</option>
-                                <option value='green'>Green</option>
-                                <option value='blue'>Blue</option>
-                            </Field>
-                            <Field component='input' type='checkbox' />
+                        <Form>
+                            <div className={ backgroundSection }>
+                                <Field name='firstName' placeholder='Ім`я*' component={ CustomInputComponent }/>
+                                <Field name='lastName' placeholder='Прізвище*' component={ CustomInputComponent }/>
+                                <Field type='email' name='email' placeholder='Електронна пошта*' component={ CustomInputComponent }/>
+                                <Field type='password' name='password' placeholder='Пароль*' component={ CustomInputComponent }/>
+                                <Field type='password' name='passwordConfirm' placeholder='Повторіть Пароль*' component={ CustomInputComponent }/>
+                                <Field name='city' placeholder='Місто*' component={ CustomInputComponent }/>
+                                <Field component={ CustomSelectComponent } placeholder='Спеціалізація*' name='skills' options={ options } />
+                                <Field name='others' placeholder='Інше*' component={ CustomInputComponent }/>
+                            </div>
 
-                            <button className={ submit } type='submit'>Зареєструватися</button>
+                            <Field name='terms' component={ CustomCheckboxComponent } label='Погоджуюсь с політикою конфіденційності*' type='checkbox' />
+
+                            <div className={ backgroundSection }>
+                                <button className={ submit } type='submit'>Зареєструватися</button>
+                            </div>
                         </Form>
                     ) }
                 </Formik>

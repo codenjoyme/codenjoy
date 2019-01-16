@@ -1,12 +1,12 @@
 // vendor
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
 
 // proj
 import { book } from '../../routes';
 import Styles from './styles.module.css';
 
-export class Footer extends Component {
+export class Footer extends PureComponent {
     render() {
         return (
             <div className={ Styles.footer }>
