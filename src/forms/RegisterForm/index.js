@@ -110,7 +110,7 @@ class LoginForm extends Component {
                     onSubmit={ payload => {
                         const { skills, others, ...otherFields } = payload;
                         const user = {
-                            ..._.omit(otherFields, 'passwordConfirm'),
+                            ..._.omit(otherFields, [ 'passwordConfirm', 'terms' ]),
                             skills: skills === OTHER_VALUE ? others : skills,
                         };
 

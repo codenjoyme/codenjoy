@@ -31,12 +31,12 @@
     box-sizing: border-box;
 }
 
-.ratingTable .selectedRow {
-    border-top: 1.5px solid rgb(65, 199, 220);
-    border-bottom: 1.5px solid rgb(65, 199, 220);
+.ratingTable .ownRow {
+    border-top: 1.5px solid rgb(48, 113, 137);
+    border-bottom: 1.5px solid rgb(48, 113, 137);
 }
 
-.ratingTable .ownRow {
+.ratingTable .selectedRow {
     border-top: 1.5px solid rgb(65, 199, 220);
     border-bottom: 1.5px solid rgb(65, 199, 220);
 }
