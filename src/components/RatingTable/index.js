@@ -4,7 +4,11 @@ import { Column, Table, AutoSizer } from 'react-virtualized';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+    faStar,
+    faArrowUp,
+    faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
 
 // own
 import Styles from './styles.module.css';
@@ -104,6 +108,33 @@ class RatingTableHandler extends Component {
                             <Column
                                 label='Учасник'
                                 className={ Styles.ratingColumn }
+                                headerRenderer={ () => (
+                                    <div className={ Styles.participantHeader }>
+                                        Учасник
+                                        { ownIndex !== -1 && (
+                                            <FontAwesomeIcon
+                                                onClick={ () =>
+                                                    setSelectedParticipant(
+                                                        rating[ ownIndex ],
+                                                    )
+                                                }
+                                                className={ Styles.toMyPosition }
+                                                icon={ faArrowRight }
+                                            />
+                                        ) }
+                                        { !!rating.length && (
+                                            <FontAwesomeIcon
+                                                onClick={ () =>
+                                                    setSelectedParticipant(
+                                                        _.first(rating),
+                                                    )
+                                                }
+                                                className={ Styles.toTop }
+                                                icon={ faArrowUp }
+                                            />
+                                        ) }
+                                    </div>
+                                ) }
                                 dataKey='email'
                                 flexGrow={ 2 }
                                 width={ 400 }

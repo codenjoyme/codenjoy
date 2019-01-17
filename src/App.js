@@ -9,6 +9,8 @@ import {
     faTimesCircle,
     faCheckCircle,
     faStar,
+    faArrowUp,
+    faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faSquare as farSquare,
@@ -19,7 +21,15 @@ import {
 import store, { history, persistor } from './store';
 import Routes from './routes/Routes';
 
-library.add(faTimesCircle, faCheckCircle, farCheckSquare, farSquare, faStar);
+library.add(
+    faTimesCircle,
+    faCheckCircle,
+    farCheckSquare,
+    farSquare,
+    faStar,
+    faArrowUp,
+    faArrowRight,
+);
 
 class App extends Component {
     render() {

@@ -92,3 +92,23 @@
 .topTen {
     color: rgb(163, 198, 68);
 }
+
+.toTop {
+    margin-left: 10px;
+    color: rgb(163, 198, 68);
+}
+
+.toMyPosition {
+    margin-left: 10px;
+    color: rgb(65, 199, 220);
+}
+
+.toMyPosition:hover,
+.toTop {
+    cursor: pointer;
+}
+
+.participantHeader {
+    display: flex;
+    align-items: center;
+}
