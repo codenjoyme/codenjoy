@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.web.controller.AdminController.PASS;
 
@@ -109,6 +110,20 @@ public class AdminController {
     public String reloadAI(@RequestParam("reloadAI") String name, Model model, HttpServletRequest request) {
         playerService.reloadAI(name);
         return getAdmin(request);
+    }
+
+    @RequestMapping(params = "reloadAllAI", method = RequestMethod.GET)
+    public String reloadAllAI(Model model, HttpServletRequest request) {
+        playerService.getAll()
+                .stream().filter(not(Player::hasAI))
+                .map(Player::getName)
+                .forEach(playerService::reloadAI);
+
+        return getAdmin(request);
+    }
+
+    private <T> Predicate<T> not(Predicate<T> predicate) {
+        return t -> !predicate.test(t);
     }
 
     @RequestMapping(params = "loadAll", method = RequestMethod.GET)

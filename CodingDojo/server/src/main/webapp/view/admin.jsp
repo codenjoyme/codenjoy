@@ -247,9 +247,13 @@
                     <td>
                         <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
-                    <td class="header"><a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;</td>
-                    <td class="header">LoadAI&nbsp;&nbsp;</td>
-                    <td class="header">Save&nbsp;&nbsp;</td>
+                    <td>
+                        <a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;
+                    </td>
+                    <td>
+                        <a href="${ctx}/admin31415?reloadAllAI&gameName=${gameName}">LoadAllAI</a>&nbsp;&nbsp;
+                    </td>
+                    <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>

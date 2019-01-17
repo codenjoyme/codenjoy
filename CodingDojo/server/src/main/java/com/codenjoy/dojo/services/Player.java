@@ -180,6 +180,10 @@ public class Player implements ScreenRecipient, Closeable {
         }
     }
 
+    public boolean hasAI() {
+        return ai != null;
+    }
+
     public Closeable getAI() {
         return ai;
     }
