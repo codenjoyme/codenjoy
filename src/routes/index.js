@@ -9,4 +9,5 @@ export const book = Object.freeze({
     exception:           '/exception',
     exceptionStatusCode: '/exception/:statusCode',
     terms:               '/terms',
+    rules:               '/rules',
 });

@@ -1,0 +1,45 @@
+.gameElements {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.elementContainer {
+    display: flex;
+    flex-direction: row;
+    width: 270px;
+    margin: 15px 10px;
+}
+
+.elementDescriptionContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.elementImage {
+    align-self: flex-start;
+}
+
+.elementTitle {
+    height: 30px;
+    padding: 0 10px;
+    background-color: #192433;
+    width: 100%;
+    font-family: 'Museo Sans Cyrl';
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.63;
+    color: #41c7dc;
+}
+
+.elementDescription {
+    font-family: 'Museo Sans Cyrl';
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.43;
+    letter-spacing: normal;
+    color: #a1b0bb;
+}
