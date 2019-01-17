@@ -40,8 +40,8 @@ public class PlayerController implements Controller<String, Joystick> {
     }
 
     @Override
-    public void requestControl(Player player, String board) throws IOException {
-        transport.sendState(player.getName(), new BoardGameState(board));
+    public boolean requestControl(Player player, String board) throws IOException {
+        return transport.sendState(player.getName(), new BoardGameState(board));
     }
 
     @Override

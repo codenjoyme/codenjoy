@@ -56,8 +56,8 @@ public class ScreenResponseHandler implements ResponseHandler {
     @Override
     public void onResponse(PlayerSocket socket, String message) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received response: {} from player: {}",
-                    message, player.getName());
+            //logger.debug("Received response: {} from player: {}",
+            //        message, player.getName());
         }
 
         GetScreenJSONRequest request = new GetScreenJSONRequest(message);
