@@ -7,6 +7,7 @@ import { book } from '../../routes';
 import PS4 from '../../styles/images/prizes/PS4.png';
 import PSClassic from '../../styles/images/prizes/PSclassic.png';
 import PSDualshock from '../../styles/images/prizes/PSdualshock.png';
+import Rules from '../../styles/images/icons/rules.svg';
 
 // own
 import Styles from './styles.module.css';
@@ -75,7 +76,9 @@ const HomeContainer = () => (
             </p>
             <p>
                 Детальні правила і проект гри для створення Бота знайдеш{ ' ' }
-                <Link to={ book.rules }>тут</Link>
+                <Link to={ book.rules }>
+                    тут <img src={ Rules } alt='rules' />
+                </Link>
             </p>
         </div>
     </div>
