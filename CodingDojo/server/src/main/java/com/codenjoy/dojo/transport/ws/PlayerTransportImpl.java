@@ -23,12 +23,17 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
+import org.slf4j.Logger;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 
 public class PlayerTransportImpl implements PlayerTransport {
+
+    private static Logger logger = DLoggerFactory.getLogger(PlayerTransportImpl.class);
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private Map<String, SocketsHandlerPair> endpoints = new LinkedHashMap<>();
@@ -53,6 +58,10 @@ public class PlayerTransportImpl implements PlayerTransport {
             if (!messages.isEmpty()) {
                 throw new IOException("Error during send state to all players: " +
                         messages.toString());
+                // TODO Может не надо тут прокидывать это исключение а просто логгировать факт каждой проблемы отдельно
+            }
+            if (logger.isDebugEnabled()) {
+                logger.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", endpoints.size());
             }
         } finally {
             lock.readLock().unlock();
@@ -60,15 +69,16 @@ public class PlayerTransportImpl implements PlayerTransport {
     }
 
     @Override
-    public void sendState(String id, Object state) throws IOException {
+    public boolean sendState(String id, Object state) throws IOException {
         lock.readLock().lock();
         SocketsHandlerPair pair;
         try {
             pair = endpoints.get(id);
             if (pair == null || pair.noSockets()) {
-                return;
+                return false;
             }
             pair.sendMessage(state);
+            return true;
         } finally {
             lock.readLock().unlock();
         }

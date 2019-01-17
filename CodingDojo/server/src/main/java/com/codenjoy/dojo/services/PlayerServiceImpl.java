@@ -277,15 +277,23 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void requestControls() {
+        int requested = 0;
+
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             try {
                 String board = cacheBoards.get(player);
-                playerController.requestControl(player, board);
+                // TODO в конце концов если if (pair == null || pair.noSockets()) то ничего не отправляется, и зря гоняли но вроде как из кеша берем, так что проблем быть не должно
+                if (playerController.requestControl(player, board)) {
+                    requested++;
+                }
             } catch (IOException e) {
                 logger.error("Unable to send control request to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
             }
+        }
+        if (logger.isDebugEnabled()) {
+            logger.debug("tick().requestControls() {} players", requested);
         }
     }
 
