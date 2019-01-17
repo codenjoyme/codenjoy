@@ -19,11 +19,13 @@ class HeaderComponent extends PureComponent {
         return (
             <header>
                 <div className={ Styles.container }>
-                    <div className={ Styles.logoContainer }>
+                    <NavLink
+                        className={Styles.logoContainer}
+                        to={ book.home }
+                    >
                         <img className={ Styles.logo } src={ logo } alt='' />
                         <span>EPAM BOT CHALLENGE</span>
-                    </div>
-
+                    </NavLink>
                     { server && (
                         <div className={ Styles.serverInfo }>
                             <div className={ Styles.serverName }>
@@ -46,6 +48,7 @@ class HeaderComponent extends PureComponent {
                     <ul>
                         <li className={ Styles.navItem }>
                             <NavLink
+                                className={Styles.navMenu}
                                 activeClassName={ Styles.activeMenu }
                                 to={ book.home }
                             >
@@ -54,6 +57,7 @@ class HeaderComponent extends PureComponent {
                         </li>
                         <li>
                             <NavLink
+                                className={Styles.navMenu}
                                 activeClassName={ Styles.activeMenu }
                                 to={ book.board }
                             >
@@ -73,6 +77,7 @@ class HeaderComponent extends PureComponent {
                         { !server && (
                             <li>
                                 <NavLink
+                                    className={Styles.navMenu}
                                     activeClassName={ Styles.activeMenu }
                                     to={ book.register }
                                 >
@@ -84,6 +89,7 @@ class HeaderComponent extends PureComponent {
                         { !server && (
                             <li>
                                 <NavLink
+                                    className={Styles.navMenu}
                                     activeClassName={ Styles.activeMenu }
                                     to={ book.login }
                                 >
