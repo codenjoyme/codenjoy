@@ -1,24 +1,37 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    background: #192433;
+    padding: 0 24px;
+}
+
 .navigation {
-  list-style: none;
-  margin: 0;
+    list-style: none;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
 
-  background: #192433;
+.navigationModify {
+    justify-content: flex-end;
+}
 
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-
-  -webkit-flex-flow: row wrap;
-  justify-content: flex-end;
+.navigationIcon {
+    margin-left: 18px;
+    font-size: 28px;
 }
 
 .navigation a {
   text-decoration: none;
   display: block;
-  padding: 1em;
+  padding: 40px 8px;
   color: white;
+  font-family: 'Museo Sans Cyrl';
+  font-size: 16px;
+  color: #a1b0bb;
+  display: flex;
+  align-items: center;
 }
 
 .navigation .action {
@@ -33,18 +46,22 @@
   background: darken(deepskyblue, 2%);
 }
 
-.link {
-  display: flex;
-  align-items: center;
-}
-
-.activeNavLink {
-  color: darken(deepskyblue, 2%);
-}
-
 .copyButton {
   background: rgb(68, 101, 148);
   color: white;
   border-radius: 4px;
   border-color: rgb(57, 84, 120);
+}
+
+@media all and (max-width: 600px) {
+    .footer ul {
+        flex-direction: column;
+    }
+    .footer {
+        flex-direction: column;
+    }
+    .navigation a {
+        padding: 10px 8px;
+    }
+
 }

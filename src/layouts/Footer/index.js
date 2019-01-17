@@ -1,7 +1,8 @@
 // vendor
 import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
-
+import classnames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // proj
 import { book } from '../../routes';
 import Styles from './styles.module.css';
@@ -11,21 +12,35 @@ export class Footer extends PureComponent {
         return (
             <div className={ Styles.footer }>
                 <ul className={ Styles.navigation }>
-                    <li className={ Styles.link }>
-                        <NavLink
-                            to={ book.board }
-                            activeClassName={ Styles.activeNavLink }
-                        >
-                            Home
+                    <li>
+                        <NavLink to={ book.board }>
+                            Правила і положення
                         </NavLink>
                     </li>
-                    <li className={ Styles.link }>
-                        <NavLink
-                            to={ book.board }
-                            activeClassName={ Styles.activeNavLink }
-                        >
-                            About
+                    <li>
+                        <NavLink to={ book.board }>
+                            Політика конфіденцій
                         </NavLink>
+                    </li>
+                </ul>
+                <ul className={ classnames(Styles.navigation, Styles.navigation) }>
+                    <li>
+                        <a href='mailto:example@tutorialspark.com'>
+                            Зв'язатися з нами
+                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'far', 'envelope' ] } style={ {color: '#a1b0bb'} } />
+                        </a>
+                    </li>
+                    <li>
+                        <a href='/'>
+                            Поділитися
+                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'fas', 'share-alt' ] } style={ {color: '#a1b0bb'} } />
+                        </a>
+                    </li>
+                    <li>
+                        <a href='/'>
+                            Долучайся до чату
+                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'far', 'comments' ] } style={ {color: '#a1b0bb'} } />
+                        </a>
                     </li>
                 </ul>
             </div>

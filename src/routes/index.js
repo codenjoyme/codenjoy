@@ -1,6 +1,7 @@
 // declare routes
 
 export const book = Object.freeze({
+    home:                '/home',
     board:               '/board',
     registration:        '/registration',
     login:               '/login',

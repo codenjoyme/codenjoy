@@ -2,7 +2,8 @@
 import React, { PureComponent } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import logo from './game-logo.png'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import logo from './game-logo.png';
 
 // proj
 import { book } from '../../routes';
@@ -19,8 +20,8 @@ class HeaderComponent extends PureComponent {
             <header>
                 <div className={ Styles.container }>
                     <div className={ Styles.logoContainer }>
-                        <img className={ Styles.logo } src={ logo } alt="" />
-                        EPAM BOT CHALLENGE
+                        <img className={ Styles.logo } src={ logo } alt='' />
+                        <span>EPAM BOT CHALLENGE</span>
                     </div>
 
                     { server && (
@@ -43,27 +44,55 @@ class HeaderComponent extends PureComponent {
                     ) }
 
                     <ul>
-                        { /* <li className={ Styles.navItem }>
-                            <NavLink to={ book.board }>Головна</NavLink>
-                        </li> */ }
-                        <li>
-                            <NavLink activeClassName={ Styles.activeMenu } to={ book.board }>Трансляція</NavLink>
+                        <li className={ Styles.navItem }>
+                            <NavLink
+                                activeClassName={ Styles.activeMenu }
+                                to={ book.home }
+                            >
+                                Головна
+                            </NavLink>
                         </li>
-
-                        { !server && (
-                            <li>
-                                <NavLink activeClassName={ Styles.activeMenu } to={ book.login }>Увійти</NavLink>
-                            </li>
-                        ) }
+                        <li>
+                            <NavLink
+                                activeClassName={ Styles.activeMenu }
+                                to={ book.board }
+                            >
+                                Трансляція
+                            </NavLink>
+                        </li>
 
                         { server && (
                             <li>
+                                <FontAwesomeIcon
+                                    className={ Styles.avatar }
+                                    icon={ [ 'far', 'user-circle' ] }
+                                />
                                 <div onClick={ () => logout() }>Вийти</div>
                             </li>
                         ) }
                         { !server && (
                             <li>
-                                <NavLink activeClassName={ Styles.activeMenu } to={ book.register }>Реєстрація</NavLink>
+                                <NavLink
+                                    activeClassName={ Styles.activeMenu }
+                                    to={ book.register }
+                                >
+                                    Реєстрація
+                                </NavLink>
+                            </li>
+                        ) }
+
+                        { !server && (
+                            <li>
+                                <NavLink
+                                    activeClassName={ Styles.activeMenu }
+                                    to={ book.login }
+                                >
+                                    <FontAwesomeIcon
+                                        className={ Styles.avatar }
+                                        icon={ [ 'far', 'user-circle' ] }
+                                    />
+                                    Авторизація
+                                </NavLink>
                             </li>
                         ) }
                     </ul>

@@ -11,10 +11,15 @@ import {
     faStar,
     faArrowUp,
     faArrowRight,
+    faShareAlt,
+    faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faSquare as farSquare,
     faCheckSquare as farCheckSquare,
+    faEnvelope as farEnvelope,
+    faComments as farComments,
+    faUserCircle as farUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
 
 // proj
@@ -29,6 +34,11 @@ library.add(
     faStar,
     faArrowUp,
     faArrowRight,
+    farEnvelope,
+    faShareAlt,
+    farComments,
+    faUser,
+    farUserCircle,
 );
 
 class App extends Component {

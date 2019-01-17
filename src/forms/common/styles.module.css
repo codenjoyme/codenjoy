@@ -1,24 +1,26 @@
 .formWrap {
-    max-width: 490px;
+    max-width: 486px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     justify-content: center;
     width: 100%;
+    font-family: 'Museo Sans Cyrl';
 }
 
 .title {
-    font-size: 18px;
+    font-size: 20px;
     text-align: left;
     color: #a1b0bb;
-    padding: 25px;
+    padding: 21px;
     border-bottom: 2px solid #41c7dc;
     background: #192433;
+    font-weight: 500;
 }
 
 .backgroundSection {
     background: #192433;
-    padding: 25px;
+    padding: 24px;
 }
 
 .backgroundSection :last-child {
@@ -103,7 +105,7 @@
 }
 
 .checkBoxWrap {
-    padding: 24px 25px;
+    padding: 21px 25px;
     display: flex;
     align-items: center;
 }
