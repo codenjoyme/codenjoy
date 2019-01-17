@@ -72,7 +72,7 @@ public class Dispatcher {
             "http://%s/codenjoy-contest/rest/player/%s/remove/%s",
             "http://%s/codenjoy-contest/rest/game/%s/players",
             "snakebattle",
-            Arrays.asList("codenjoy.juja.com.ua")
+            Arrays.asList("epam-bot-challenge.com.ua")
         );
         servers.addAll(settings.getServers());
         currentServer = 0;
