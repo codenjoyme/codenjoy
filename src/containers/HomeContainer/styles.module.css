@@ -35,14 +35,16 @@
     font-size: 20px;
     line-height: 1.5;
     margin-bottom: 30px;
+    font-weight: 200;
 }
 
 .title {
     margin-bottom: 33px;
     font-size: 30px;
-    font-weight: 900;
+    font-weight: 600;
     line-height: 2.13;
     color: #ffffff;
+    text-transform: uppercase;
 }
 
 .subTitle {

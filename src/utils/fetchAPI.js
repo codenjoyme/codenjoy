@@ -65,7 +65,7 @@ export async function fetchAPI(
 
         case noRedirect:
             const err = new Error("httpError");
-            err.status = 500;
+            err.status = status;
             err.response = await response;
 
             return err;
