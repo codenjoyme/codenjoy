@@ -4,14 +4,14 @@ import DocumentTitle from 'react-document-title';
 
 // proj
 import { Layout } from '../../layouts';
-import { HomeContainer } from '../../containers';
+import { RulesContainer } from '../../containers';
 
-export default class HomePage extends Component {
+export default class RulesPage extends Component {
     render() {
         return (
             <DocumentTitle title='EPAM Bot Challenge'>
                 <Layout>
-                    <HomeContainer />
+                    <RulesContainer />
                 </Layout>
             </DocumentTitle>
         );

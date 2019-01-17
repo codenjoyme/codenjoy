@@ -1,27 +1,57 @@
-.contentainer {
-    width: 100%;
+.container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    flex: 1;
     font-family: 'Museo Sans Cyrl';
 }
 
-.mask {
-    width: 100%;
+.homeTitle {
+    padding: 45px 0;
+    min-width: 100%;
+    background-color: #a1b0bb;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 260px;
-    background-color: #a1b0bb;
-    font-size: 58px;
-    line-height: 1.07;
-    color: #ffffff;
+    flex: 1;
+    color: white;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.homeTitle .mainText {
+    font-size: 52px;
+    margin: 10px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.homeTitle .subText {
+    font-size: 28px;
+    margin: 10px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.acceptButton {
+    font-family: 'Museo Sans Cyrl';
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+    background-color: #41c7dc;
+    border: none;
+    color: white;
+    padding: 10px 30px;
 }
 
 .content {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
     max-width: 1030px;
-    padding: 45px 0;
+    padding: 45px 100px;
+    box-sizing: border-box;
+    min-width: 100%;
 }
 
 .content a {
@@ -54,33 +84,52 @@
     margin-bottom: 24px;
 }
 
-.highligteUnderNotes,
-.highligte {
-    font-size: 16px;
-    line-height: 1.88;
-    color: #41c7dc;
+.guideContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.guideStep {
+    flex: 1;
+    margin: 15px;
+    min-width: 250px;
+    max-width: 330px;
     background-color: #192433;
-    padding: 17px 32px;
-    margin-bottom: 40px;
+    height: 447px;
+    padding: 16px;
 }
 
-.highligteNotes {
-    font-size: 16px;
-    line-height: 1.63;
-    color: #41c7dc;
-    margin-bottom: 40px;
-    padding: 0 30px;
+.stepHeader {
+    height: 133px;
 }
 
-.highligteUnderNotes {
-    margin-bottom: 16px;
+.stepTitle {
+    text-align: center;
+    font-family: 'Museo Sans Cyrl';
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 0.71;
+    color: #ffffff;
+    margin: 24px 0;
 }
 
-.mb15{
-    margin-bottom: 15px;
+.stepDescription {
+    text-align: center;
+    font-family: 'Museo Sans Cyrl';
+    font-size: 20px;
+    line-height: 1.3;
+    letter-spacing: normal;
+    color: #a1b0bb;
 }
 
-.mb30{
-    margin-bottom: 30px;
+.prizeImage {
+    margin: 10px;
 }
 
+.prizeList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
