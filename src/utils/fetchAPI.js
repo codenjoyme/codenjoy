@@ -10,11 +10,20 @@ import { book } from '../routes';
 const apiC = '/codenjoy-balancer';
 
 /* eslint-disable */
-export async function fetchAPI(method, endpoint, query, body, { rawResponse, url, headers, noRedirect } = {}) {
+export async function fetchAPI(
+    method,
+    endpoint,
+    query,
+    body,
+    { rawResponse, url, headers, noRedirect } = {},
+) {
     const endpointC = trim(endpoint, "/"); // trim all spaces and '/'
     const handler = endpointC ? `/${endpointC}` : ""; // be sure that after api will be only one /
     const methodU = toUpper(method);
-    const omittedQuery = _.omitBy(query, value => _.isString(value) && _.isEmpty(value));
+    const omittedQuery = _.omitBy(
+        query,
+        value => _.isString(value) && _.isEmpty(value),
+    );
     const queryString = qs.stringify(omittedQuery, {
         skipNulls: true,
         arrayFormat: "repeat",

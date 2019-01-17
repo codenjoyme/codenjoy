@@ -29,11 +29,12 @@ class LoginForm extends Component {
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Увійти</h1>
-                { _.get(loginErrors, 'credentials') && (
-                    <div>Неправильний емейл або пароль</div>
-                ) }
                 { _.get(loginErrors, 'system') && (
-                    <div>Сервіс тимчасово недоступний</div>
+                    <div>
+                        Через непередбачуваний політ діда Мороза антети було
+                        пошкоджено. Як тільки пошкодження будуть усунені, сервіс
+                        буде доступним
+                    </div>
                 ) }
                 <Formik
                     initialValues={ { email: '', password: '' } }
@@ -43,9 +44,23 @@ class LoginForm extends Component {
                     { () => (
                         <Form>
                             <div className={ backgroundSection }>
-                                <Field name='email' placeholder='Електронна пошта' type='email' component={ CustomInputComponent } />
-                                <Field placeholder='Пароль' type='password' name='password' component={ CustomInputComponent } />
-                                <button className={ submit } type='submit'>Увійти</button>
+                                <Field
+                                    name='email'
+                                    placeholder='Електронна пошта'
+                                    type='email'
+                                    errors={ _.get(loginErrors, 'credentials') }
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    name='password'
+                                    placeholder='Пароль'
+                                    type='password'
+                                    errors={ _.get(loginErrors, 'credentials') }
+                                    component={ CustomInputComponent }
+                                />
+                                <button className={ submit } type='submit'>
+                                    Увійти
+                                </button>
                             </div>
                         </Form>
                     ) }

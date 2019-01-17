@@ -1,6 +1,6 @@
 // vendor
 import { all, call, put, take } from 'redux-saga/effects';
-import { replace } from 'connected-react-router';
+import { replace, LOCATION_CHANGE } from 'connected-react-router';
 import md5 from 'md5';
 
 // proj
@@ -55,6 +55,9 @@ export default function reducer(state = ReducerState, action) {
 
         case LOGOUT_SUCCESS:
             return ReducerState;
+
+        case LOCATION_CHANGE:
+            return { ...state, loginErrors: void 0 };
 
         default:
             return state;

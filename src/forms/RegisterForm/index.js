@@ -88,11 +88,12 @@ class LoginForm extends Component {
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Новий гравець</h1>
-                { _.get(registerErrors, 'credentials') && (
-                    <div>Такий користувач уже існує</div>
-                ) }
                 { _.get(registerErrors, 'system') && (
-                    <div>Сервіс тимчасово недоступний</div>
+                    <div>
+                        Через непередбачуваний політ діда Мороза антети було
+                        пошкоджено. Як тільки пошкодження будуть усунені, сервіс
+                        буде доступним
+                    </div>
                 ) }
                 <Formik
                     initialValues={ {
@@ -133,6 +134,10 @@ class LoginForm extends Component {
                                 <Field
                                     type='email'
                                     name='email'
+                                    errors={ _.get(
+                                        registerErrors,
+                                        'credentials',
+                                    ) }
                                     placeholder='Електронна пошта*'
                                     component={ CustomInputComponent }
                                 />

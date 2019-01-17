@@ -7,11 +7,12 @@ const { input, inputError, inputValid, inputWrap, inputIcon } = styles;
 
 export const CustomInputComponent = ({
     field, // { name, value, onChange, onBlur }
-    form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+    form: { touched, errors: validationErrors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+    errors,
     ...props
 }) => {
-    const isCurrentFieldNotValid = touched[ field.name ] && errors[ field.name ];
-    const isCurrentFieldValid = touched[ field.name ] && !errors[ field.name ];
+    const isCurrentFieldNotValid = touched[ field.name ] && (validationErrors[ field.name ] || errors);
+    const isCurrentFieldValid = touched[ field.name ] && !validationErrors[ field.name ] && !errors;
 
     return(
         <div className={ inputWrap }>
