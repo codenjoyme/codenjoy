@@ -32,7 +32,9 @@ const HomeContainer = () => (
                     alt='PSClassic'
                 />
             </div>
-            <button className={ Styles.acceptButton }>Виклик прийнято</button>
+            <Link to={ book.rules } className={ Styles.acceptButton }>
+                Виклик прийнято
+            </Link>
         </div>
         <div className={ Styles.content }>
             <div className={ Styles.title }>Як взяти участь</div>

@@ -146,7 +146,7 @@ export class GameElements extends Component {
         return (
             <div className={ Styles.gameElements }>
                 { ELEMENTS.map(({ image, title, description }) => (
-                    <div className={ Styles.elementContainer }>
+                    <div key={ title } className={ Styles.elementContainer }>
                         <img
                             className={ Styles.elementImage }
                             src={ image }
