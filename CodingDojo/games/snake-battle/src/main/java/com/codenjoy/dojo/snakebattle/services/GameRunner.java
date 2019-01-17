@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
+import com.codenjoy.dojo.snakebattle.client.ai.DummyAISolver;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -108,7 +109,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Class<? extends Solver> getAI() {
-        return AISolver.class;
+        return DummyAISolver.class;
     }
 
     @Override
