@@ -3,6 +3,9 @@ import React from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 
+// proj
+import { GameElements } from '../../components';
+
 // own
 import Styles from './styles.module.css';
 
@@ -111,6 +114,7 @@ const RulesContainer = () => (
                 <pre className={ boardExample }>{ BOARD_EXAMPLE }</pre>
             </div>
             <div className={ subTitle }>UI зі спрайтів:</div>
+            <GameElements />
             <div className={ highligteNotes }>
                 Тут your@email.com - имейл, который ты указал при регистрации на
                 сервере, a code - твой security token, его ты можешь получить из
