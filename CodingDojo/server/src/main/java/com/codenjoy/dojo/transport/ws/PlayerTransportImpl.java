@@ -44,12 +44,15 @@ public class PlayerTransportImpl implements PlayerTransport {
     public void sendStateToAll(Object state) throws IOException {
         lock.readLock().lock();
         try {
+            int requested = 0;
+
             List<String> messages = new LinkedList<>();
             for (SocketsHandlerPair pair : endpoints.values()) {
                 if (pair == null || pair.noSockets()) {
                     continue;
                 }
                 try {
+                    requested++;
                     pair.sendMessage(state);
                 } catch (IOException e) {
                     messages.add(e.getMessage());
@@ -61,7 +64,7 @@ public class PlayerTransportImpl implements PlayerTransport {
                 // TODO Может не надо тут прокидывать это исключение а просто логгировать факт каждой проблемы отдельно
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", endpoints.size());
+                logger.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
             }
         } finally {
             lock.readLock().unlock();
