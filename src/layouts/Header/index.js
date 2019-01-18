@@ -1,21 +1,19 @@
 // vendor
 import React, { PureComponent } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import logo from './game-logo.png';
 import avaDefault from './icon_ava_default.svg';
 import classnames from 'classnames';
 
 // proj
 import { book } from '../../routes';
-import { getGameConnectionString } from '../../utils';
 
 // own
 import Styles from './styles.module.css';
 
 class HeaderComponent extends PureComponent {
     render() {
-        const { server, logout, email, code } = this.props;
+        const { email, logout } = this.props;
 
         return (
             <header>
@@ -45,7 +43,7 @@ class HeaderComponent extends PureComponent {
                             </NavLink>
                         </li>
 
-                        { server && (
+                        { email && (
                             <li>
                                 <div
                                     className={ classnames(
@@ -63,7 +61,7 @@ class HeaderComponent extends PureComponent {
                                 </div>
                             </li>
                         ) }
-                        { !server && (
+                        { !email && (
                             <li>
                                 <NavLink
                                     className={ Styles.navMenu }
@@ -75,7 +73,7 @@ class HeaderComponent extends PureComponent {
                             </li>
                         ) }
 
-                        { !server && (
+                        { !email && (
                             <li>
                                 <NavLink
                                     className={ Styles.navMenu }
