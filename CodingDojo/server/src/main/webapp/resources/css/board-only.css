@@ -42,7 +42,6 @@
 
 .player-canvas table {
     width:100%;
-    border-spacing: 0px;
 }
 
 body {
@@ -53,4 +52,5 @@ body {
 
 canvas {
     width: 100%;
+    cursor: pointer;
 }
