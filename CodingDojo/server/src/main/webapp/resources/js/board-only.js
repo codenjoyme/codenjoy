@@ -20,10 +20,6 @@
  * #L%
  */
 
-function initJoystick() {
-    // do nothing
-}
-
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enableAlways = false;
@@ -36,3 +32,9 @@ game.enableAdvertisement = false;
 game.showBody = true;
 game.sprites = null;
 game.heroInfo = null;
+
+$(document).ready(function() {
+    $('body').click(function() {
+        window.open(window.location.href.replace('only=true', 'only=false'));
+    });
+});
