@@ -1,5 +1,5 @@
 // vendor
-import { all, put, call, take } from 'redux-saga/effects';
+import { all, put, call, take, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -13,7 +13,6 @@ export const moduleName = 'board';
 const prefix = `codenjoy/${moduleName}`;
 
 export const SET_SELECTED_DAY = `${prefix}/SET_SELECTED_DAY`;
-export const SET_SELECTED_DAY_SUCCESS = `${prefix}/SET_SELECTED_DAY_SUCCESS`;
 
 export const SET_SELECTED_PARTICIPANT = `${prefix}/SET_SELECTED_PARTICIPANT`;
 
@@ -32,7 +31,7 @@ export default function reducer(state = ReducerState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case SET_SELECTED_DAY_SUCCESS:
+        case SET_SELECTED_DAY:
             return {
                 ...state,
                 selectedDay:         payload,
@@ -71,11 +70,6 @@ export const setSelectedDay = selectedDay => ({
     payload: selectedDay,
 });
 
-export const setSelectedDaySuccess = selectedDay => ({
-    type:    SET_SELECTED_DAY_SUCCESS,
-    payload: selectedDay,
-});
-
 export const setSelectedParticipant = selectedParticipant => ({
     type:    SET_SELECTED_PARTICIPANT,
     payload: selectedParticipant,
@@ -107,23 +101,14 @@ function* fetch(selectedDay) {
     yield put(fetchRatingSuccess(processedData));
 }
 
-export function* setSelectedDaySaga() {
-    while (true) {
-        const { payload: selectedDay } = yield take(SET_SELECTED_DAY);
-        yield call(fetch, selectedDay);
-        yield put(setSelectedDaySuccess(selectedDay));
-    }
+export function* setSelectedDaySaga({ payload: selectedDay }) {
+    yield call(fetch, selectedDay);
 }
 
-export function* fetchRatingSaga() {
-    while (true) {
-        const {
-            payload: { selectedDay },
-        } = yield take(FETCH_RATING);
-        yield call(fetch, selectedDay);
-    }
+export function* fetchRatingSaga({ payload: { selectedDay } }) {
+    yield call(fetch, selectedDay);
 }
 
 export function* saga() {
-    yield all([ call(setSelectedDaySaga), call(fetchRatingSaga) ]);
+    yield all([ takeLatest(SET_SELECTED_DAY, setSelectedDaySaga), takeLatest(FETCH_RATING, fetchRatingSaga) ]);
 }
