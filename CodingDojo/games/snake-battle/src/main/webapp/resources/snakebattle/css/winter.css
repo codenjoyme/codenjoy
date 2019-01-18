@@ -235,3 +235,17 @@ body {
     left: 0;
     right: 0;
 }
+
+/* hide unused elements */
+
+.header-container {
+    display: none;
+}
+
+footer {
+    display: none;
+}
+
+.leaderboard-table th a {
+    display: none;
+}
