@@ -1,5 +1,5 @@
 // vendor
-import { all, put, call, take, takeLatest } from 'redux-saga/effects';
+import { all, put, call, takeLatest } from 'redux-saga/effects';
 import moment from 'moment';
 import _ from 'lodash';
 
