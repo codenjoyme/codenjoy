@@ -35,7 +35,9 @@ body {
     color: #41c7dc;
 }
 
-.content p {
+.content p,
+.content ol,
+.content ul {
     color: #a1b0bb;
     font-size: 20px;
     line-height: 1.5;

@@ -10,5 +10,6 @@ export const book = Object.freeze({
     exceptionStatusCode: '/exception/:statusCode',
     terms:               '/terms',
     privacyPolicy:       '/privacyPolicy',
+    privacyRules:        '/privacyRules',
     rules:               '/rules',
 });
