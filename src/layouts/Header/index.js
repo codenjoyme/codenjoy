@@ -4,6 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import logo from './game-logo.png';
 import avaDefault from './icon_ava_default.svg';
+import classnames from 'classnames';
 
 // proj
 import { book } from '../../routes';
@@ -64,12 +65,20 @@ class HeaderComponent extends PureComponent {
 
                         { server && (
                             <li>
-                                <img
-                                    className={ Styles.avatar }
-                                    src={ avaDefault }
-                                    alt=''
-                                />
-                                <div onClick={ () => logout() }>Вийти</div>
+                                <div
+                                    className={ classnames(
+                                        Styles.navMenu,
+                                        Styles.logout,
+                                    ) }
+                                    onClick={ () => logout() }
+                                >
+                                    <img
+                                        className={ Styles.avatar }
+                                        src={ avaDefault }
+                                        alt='Вийти'
+                                    />
+                                    Вийти
+                                </div>
                             </li>
                         ) }
                         { !server && (

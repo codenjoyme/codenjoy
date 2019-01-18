@@ -7,7 +7,11 @@
     width: 300px;
     color: white;
 }
-.logoContainer, .logoContainer:active, .logoContainer:focus, .logoContainer:hover {
+
+.logoContainer,
+.logoContainer:active,
+.logoContainer:focus,
+.logoContainer:hover {
     text-decoration: none;
 }
 
@@ -85,6 +89,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.logout {
+    cursor: pointer;
 }
 
 @media all and (max-width: 820px) {
