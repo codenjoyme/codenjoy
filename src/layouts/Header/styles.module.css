@@ -34,17 +34,6 @@
     border-bottom: 1px solid lightblue;
 }
 
-.serverInfo {
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.serverName {
-    margin: 5px;
-}
-
 .container {
     display: flex;
     justify-content: space-between;

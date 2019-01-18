@@ -1,2 +1,2 @@
 export const getGameConnectionString = (server, code, email) =>
-    `${server}/codenjoy-contest/board/player/${email}?code=${code}`;
+    `ws://${server}/codenjoy-contest/ws?user=${email}&code=${code}`;

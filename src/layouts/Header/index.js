@@ -24,24 +24,6 @@ class HeaderComponent extends PureComponent {
                         <img className={ Styles.logo } src={ logo } alt='' />
                         <span>EPAM BOT CHALLENGE</span>
                     </NavLink>
-                    { server && (
-                        <div className={ Styles.serverInfo }>
-                            <div className={ Styles.serverName }>
-                                Сервер: { server }
-                            </div>
-                            <CopyToClipboard
-                                text={ getGameConnectionString(
-                                    server,
-                                    code,
-                                    email,
-                                ) }
-                            >
-                                <button className={ Styles.copyButton }>
-                                    Copy
-                                </button>
-                            </CopyToClipboard>
-                        </div>
-                    ) }
 
                     <ul>
                         <li>
