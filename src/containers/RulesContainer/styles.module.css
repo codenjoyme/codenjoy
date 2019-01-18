@@ -88,3 +88,10 @@
     font-family: monospace;
     letter-spacing: 5px;
 }
+
+@media all and (max-width: 1030px) {
+    .content {
+        width: calc(100% - 40px);
+        padding: 45px 20px;
+    }
+}

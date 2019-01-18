@@ -12,7 +12,7 @@ import { CustomSelectComponent } from '../common/customSelect';
 // proj
 import { register } from '../../redux/register';
 
-const { formWrap, title, submit, backgroundSection } = styles;
+const { formWrap, title, submit, backgroundSection, systemError, errorSnake } = styles;
 
 const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
@@ -89,10 +89,11 @@ class LoginForm extends Component {
             <div className={ formWrap }>
                 <h1 className={ title }>Новий гравець</h1>
                 { _.get(registerErrors, 'system') && (
-                    <div>
+                    <div className={ systemError } >
+                        <img src={ errorSnake } alt='' />
                         Через непередбачуваний політ діда Мороза антети було
-                        пошкоджено. Як тільки пошкодження будуть усунені, сервіс
-                        буде доступним
+                        пошкоджено. <br />Як тільки пошкодження будуть усунені, сервіс
+                        буде доступним.
                     </div>
                 ) }
                 <Formik

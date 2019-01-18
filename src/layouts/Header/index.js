@@ -4,6 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from './game-logo.png';
+import avaDefault from './icon_ava_default.svg';
 
 // proj
 import { book } from '../../routes';
@@ -19,10 +20,7 @@ class HeaderComponent extends PureComponent {
         return (
             <header>
                 <div className={ Styles.container }>
-                    <NavLink
-                        className={Styles.logoContainer}
-                        to={ book.home }
-                    >
+                    <NavLink className={ Styles.logoContainer } to={ book.home }>
                         <img className={ Styles.logo } src={ logo } alt='' />
                         <span>EPAM BOT CHALLENGE</span>
                     </NavLink>
@@ -46,9 +44,9 @@ class HeaderComponent extends PureComponent {
                     ) }
 
                     <ul>
-                        <li className={ Styles.navItem }>
+                        <li>
                             <NavLink
-                                className={Styles.navMenu}
+                                className={ Styles.navMenu }
                                 activeClassName={ Styles.activeMenu }
                                 to={ book.home }
                             >
@@ -57,7 +55,7 @@ class HeaderComponent extends PureComponent {
                         </li>
                         <li>
                             <NavLink
-                                className={Styles.navMenu}
+                                className={ Styles.navMenu }
                                 activeClassName={ Styles.activeMenu }
                                 to={ book.board }
                             >
@@ -67,17 +65,14 @@ class HeaderComponent extends PureComponent {
 
                         { server && (
                             <li>
-                                <FontAwesomeIcon
-                                    className={ Styles.avatar }
-                                    icon={ [ 'far', 'user-circle' ] }
-                                />
+                                <img className={ Styles.avatar } src={ avaDefault } alt='' />
                                 <div onClick={ () => logout() }>Вийти</div>
                             </li>
                         ) }
                         { !server && (
                             <li>
                                 <NavLink
-                                    className={Styles.navMenu}
+                                    className={ Styles.navMenu }
                                     activeClassName={ Styles.activeMenu }
                                     to={ book.register }
                                 >
@@ -89,14 +84,11 @@ class HeaderComponent extends PureComponent {
                         { !server && (
                             <li>
                                 <NavLink
-                                    className={Styles.navMenu}
+                                    className={ Styles.navMenu }
                                     activeClassName={ Styles.activeMenu }
                                     to={ book.login }
                                 >
-                                    <FontAwesomeIcon
-                                        className={ Styles.avatar }
-                                        icon={ [ 'far', 'user-circle' ] }
-                                    />
+                                    <img className={ Styles.avatar } src={ avaDefault } alt='' />
                                     Авторизація
                                 </NavLink>
                             </li>

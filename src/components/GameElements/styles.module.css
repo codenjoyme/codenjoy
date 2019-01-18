@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 .elementImage {
@@ -24,22 +24,28 @@
 }
 
 .elementTitle {
-    height: 30px;
-    padding: 0 10px;
+    padding: 7px 10px;
     background-color: #192433;
-    width: 100%;
     font-family: 'Museo Sans Cyrl';
     font-size: 16px;
     font-weight: 300;
-    line-height: 1.63;
     color: #41c7dc;
 }
 
 .elementDescription {
     font-family: 'Museo Sans Cyrl';
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 200;
     line-height: 1.43;
     letter-spacing: normal;
     color: #a1b0bb;
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+
+@media all and (max-width: 930px) {
+    .gameElements {
+        justify-content: space-around;
+    }
 }

@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'Museo Sans Cyrl';
+    src: url('subset-MuseoSansCyrl-700.eot');
+    src: url('subset-MuseoSansCyrl-700.eot?#iefix') format('embedded-opentype'),
+        url('subset-MuseoSansCyrl-700.woff2') format('woff2'),
+        url('subset-MuseoSansCyrl-700.woff') format('woff'),
+        url('subset-MuseoSansCyrl-700.ttf') format('truetype'),
+        url('subset-MuseoSansCyrl-700.svg#MuseoSansCyrl-700') format('svg');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Museo Sans Cyrl';
+    src: url('subset-MuseoSansCyrl-100.eot');
+    src: url('subset-MuseoSansCyrl-100.eot?#iefix') format('embedded-opentype'),
+        url('subset-MuseoSansCyrl-100.woff2') format('woff2'),
+        url('subset-MuseoSansCyrl-100.woff') format('woff'),
+        url('subset-MuseoSansCyrl-100.ttf') format('truetype'),
+        url('subset-MuseoSansCyrl-100.svg#MuseoSansCyrl-100') format('svg');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Museo Sans Cyrl';
+    src: url('subset-MuseoSansCyrl-500.eot');
+    src: url('subset-MuseoSansCyrl-500.eot?#iefix') format('embedded-opentype'),
+        url('subset-MuseoSansCyrl-500.woff2') format('woff2'),
+        url('subset-MuseoSansCyrl-500.woff') format('woff'),
+        url('subset-MuseoSansCyrl-500.ttf') format('truetype'),
+        url('subset-MuseoSansCyrl-500.svg#MuseoSansCyrl-500') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Museo Sans Cyrl';
+    src: url('subset-MuseoSansCyrl-900.eot');
+    src: url('subset-MuseoSansCyrl-900.eot?#iefix') format('embedded-opentype'),
+        url('subset-MuseoSansCyrl-900.woff2') format('woff2'),
+        url('subset-MuseoSansCyrl-900.woff') format('woff'),
+        url('subset-MuseoSansCyrl-900.ttf') format('truetype'),
+        url('subset-MuseoSansCyrl-900.svg#MuseoSansCyrl-900') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Museo Sans Cyrl';
+    src: url('subset-MuseoSansCyrl-300.eot');
+    src: url('subset-MuseoSansCyrl-300.eot?#iefix') format('embedded-opentype'),
+        url('subset-MuseoSansCyrl-300.woff2') format('woff2'),
+        url('subset-MuseoSansCyrl-300.woff') format('woff'),
+        url('subset-MuseoSansCyrl-300.ttf') format('truetype'),
+        url('subset-MuseoSansCyrl-300.svg#MuseoSansCyrl-300') format('svg');
+    font-weight: 300;
+    font-style: normal;
+}
+

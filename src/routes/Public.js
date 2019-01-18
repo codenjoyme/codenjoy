@@ -10,6 +10,7 @@ import {
     RegisterPage,
     RulesPage,
     HomePage,
+    PrivacyPolicyPage,
 } from '../pages';
 import { book } from './index.js';
 
@@ -22,6 +23,7 @@ export default class Public extends Component {
                 <Route exact component={ BoardPage } path={ book.board } />
                 <Route exact component={ LoginPage } path={ book.login } />
                 <Route exact component={ RegisterPage } path={ book.register } />
+                <Route exact component={ PrivacyPolicyPage } path={ book.privacyPolicy } />
                 <Route
                     component={ ExceptionPage }
                     path={ book.exceptionStatusCode }

@@ -25,7 +25,7 @@ export const CustomCheckboxComponent = ({
                         <FontAwesomeIcon className={ checkBoxIcon } icon={ [ 'far', 'square' ] } style={ {color: color} } />
                 }
             </label>
-            <Link to={ book.terms } className={ checkBoxLabel }>{ props.label }</Link>
+            <Link to={ book.privacyPolicy } className={ checkBoxLabel }>{ props.label }</Link>
         </div>
     )
 };

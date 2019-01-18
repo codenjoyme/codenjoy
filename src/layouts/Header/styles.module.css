@@ -50,11 +50,14 @@
 
 .navMenu {
     position: relative;
+    height: 20px;
     color: white;
     text-decoration: none;
-    padding: 40px 20px;
+    padding: 38px 20px;
     font-size: 20px;
     font-weight: 300;
+    display: flex;
+    align-items: center;
 }
 
 .container a.activeMenu:after {
@@ -73,6 +76,10 @@
     display: flex;
 }
 
+.container ul li:last-child {
+    margin-left: 40px;
+}
+
 .container li {
     color: white;
     display: flex;
@@ -80,7 +87,7 @@
     justify-content: center;
 }
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 820px) {
     .container li {
         width: 100%;
     }
@@ -93,7 +100,7 @@
         border: none;
     }
     .logoContainer {
-        width: 100%;
+        width: auto;
         height: 60px;
     }
     .container ul {
@@ -101,5 +108,11 @@
     }
     .container {
         flex-direction: column;
+    }
+    .container ul li:last-child {
+        margin-left: 0;
+    }
+    .avatar {
+        width: 24px;
     }
 }

@@ -13,7 +13,7 @@ export class Footer extends PureComponent {
             <div className={ Styles.footer }>
                 <ul className={ Styles.navigation }>
                     <li>
-                        <NavLink to={ book.board }>
+                        <NavLink to={ book.rules }>
                             Правила і положення
                         </NavLink>
                     </li>
@@ -27,19 +27,19 @@ export class Footer extends PureComponent {
                     <li>
                         <a href='mailto:example@tutorialspark.com'>
                             Зв'язатися з нами
-                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'far', 'envelope' ] } style={ {color: '#a1b0bb'} } />
+                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'far', 'envelope' ] } style={ {color: '#fff'} } />
                         </a>
                     </li>
                     <li>
                         <a href='/'>
                             Поділитися
-                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'fas', 'share-alt' ] } style={ {color: '#a1b0bb'} } />
+                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'fas', 'share-alt' ] } style={ {color: '#fff'} } />
                         </a>
                     </li>
                     <li>
                         <a href='/'>
                             Долучайся до чату
-                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'far', 'comments' ] } style={ {color: '#a1b0bb'} } />
+                            <FontAwesomeIcon className={ Styles.navigationIcon } icon={ [ 'far', 'comments' ] } style={ {color: '#fff'} } />
                         </a>
                     </li>
                 </ul>

@@ -6,11 +6,12 @@ import * as Yup from 'yup';
 import _ from 'lodash';
 import styles from '../common/styles.module.css';
 import { CustomInputComponent } from '../common/customInput';
+import errorSnake from '../common/DuneSnake-icon.svg';
 
 // proj
 import { login } from '../../redux/auth';
 
-const { formWrap, title, submit, backgroundSection } = styles;
+const { formWrap, title, submit, backgroundSection, systemError } = styles;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -30,10 +31,11 @@ class LoginForm extends Component {
             <div className={ formWrap }>
                 <h1 className={ title }>Увійти</h1>
                 { _.get(loginErrors, 'system') && (
-                    <div>
+                    <div className={ systemError } >
+                        <img src={ errorSnake } alt='' />
                         Через непередбачуваний політ діда Мороза антети було
-                        пошкоджено. Як тільки пошкодження будуть усунені, сервіс
-                        буде доступним
+                        пошкоджено. <br />Як тільки пошкодження будуть усунені, сервіс
+                        буде доступним.
                     </div>
                 ) }
                 <Formik

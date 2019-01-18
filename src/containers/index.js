@@ -3,6 +3,7 @@ import LoginContainer from './LoginContainer';
 import RegisterContainer from './RegisterContainer';
 import RulesContainer from './RulesContainer';
 import HomeContainer from './HomeContainer';
+import PrivacyPolicyContainer from './PrivacyPolicyContainer';
 
 export {
     BoardContainer,
@@ -10,4 +11,5 @@ export {
     RegisterContainer,
     RulesContainer,
     HomeContainer,
+    PrivacyPolicyContainer,
 };

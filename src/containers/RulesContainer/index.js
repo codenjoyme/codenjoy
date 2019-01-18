@@ -2,6 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
+import Rules from '../../styles/images/icons/rules.svg';
 
 // proj
 import { GameElements } from '../../components';
@@ -292,18 +293,18 @@ const RulesContainer = () => (
             </p>
             <p>
                 { ' ' }
-                Із детальним описом Правил і Положень гри можна ознайомитися за{ ' ' }
-                <Link to={ '' }>посиланням</Link>.
+                Із детальним описом Правил і Положень гри можна ознайомитися за &nbsp;
+                <Link to={ '' }>посиланням <img src={ Rules } alt='rules' /></Link>.
             </p>
             <p>
-                У разі будь-яких питань звертайтеся за електронною адресою{ ' ' }
+                У разі будь-яких питань звертайтеся за електронною адресою &nbsp;
                 <a href='mailto:OrgBotChallengeUA@epam.com'>
                     OrgBotChallengeUA@epam.com
                 </a>
             </p>
             <p>
                 Для спілкування між Участниками та Організатором також створено
-                Канал у додатку Telegram, приєднатися до якого можна за{ ' ' }
+                Канал у додатку Telegram, приєднатися до якого можна за &nbsp;
                 <Link to={ '' }>посиланням</Link>
             </p>
         </div>

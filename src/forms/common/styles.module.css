@@ -121,3 +121,15 @@
     text-decoration: underline;
     font-weight: 300;
 }
+
+.systemError {
+    padding: 24px 24px 0;
+    background: #192433;
+    font-size: 16px;
+    font-weight: 200;
+    color: #41c7dc;
+}
+
+.systemError img {
+    margin-bottom: 22px;
+}
