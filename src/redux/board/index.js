@@ -13,6 +13,7 @@ export const moduleName = 'board';
 const prefix = `codenjoy/${moduleName}`;
 
 export const SET_SELECTED_DAY = `${prefix}/SET_SELECTED_DAY`;
+export const SET_SELECTED_DAY_SUCCESS = `${prefix}/SET_SELECTED_DAY_SUCCESS`;
 
 export const SET_SELECTED_PARTICIPANT = `${prefix}/SET_SELECTED_PARTICIPANT`;
 
@@ -31,7 +32,7 @@ export default function reducer(state = ReducerState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case SET_SELECTED_DAY:
+        case SET_SELECTED_DAY_SUCCESS:
             return {
                 ...state,
                 selectedDay:         payload,
@@ -70,6 +71,11 @@ export const setSelectedDay = selectedDay => ({
     payload: selectedDay,
 });
 
+export const setSelectedDaySuccess = selectedDay => ({
+    type:    SET_SELECTED_DAY_SUCCESS,
+    payload: selectedDay,
+});
+
 export const setSelectedParticipant = selectedParticipant => ({
     type:    SET_SELECTED_PARTICIPANT,
     payload: selectedParticipant,
@@ -89,10 +95,23 @@ export const fetchRatingSuccess = data => ({
  * Saga
  **/
 
+function* fetch(selectedDay) {
+    const data = yield call(fetchAPI, 'GET', `rest/score/day/${selectedDay}`);
+
+    const processedData = _.chain(data)
+        .filter('server')
+        .orderBy('score', 'desc')
+        .map((value, index) => ({ ...value, index: index + 1 }))
+        .value();
+
+    yield put(fetchRatingSuccess(processedData));
+}
+
 export function* setSelectedDaySaga() {
     while (true) {
         const { payload: selectedDay } = yield take(SET_SELECTED_DAY);
-        yield put(fetchRating(selectedDay));
+        yield call(fetch, selectedDay);
+        yield put(setSelectedDaySuccess(selectedDay));
     }
 }
 
@@ -101,29 +120,7 @@ export function* fetchRatingSaga() {
         const {
             payload: { selectedDay },
         } = yield take(FETCH_RATING);
-
-        const data = yield call(
-            fetchAPI,
-            'GET',
-            `rest/score/day/${selectedDay}`,
-        );
-
-        // Stub data
-        // const data = Array(1000)
-        //     .fill(null)
-        //     .map((_, index) => ({
-        //         email:  'user_' + index + '_' + selectedDay,
-        //         score:  Math.ceil(Math.random() * 100000000),
-        //         server: 'Таразед',
-        //     }));
-
-        const processedData = _.chain(data)
-            .filter('server')
-            .orderBy('score', 'desc')
-            .map((value, index) => ({ ...value, index: index + 1 }))
-            .value();
-
-        yield put(fetchRatingSuccess(processedData));
+        yield call(fetch, selectedDay);
     }
 }
 

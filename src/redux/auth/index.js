@@ -136,8 +136,8 @@ export function* loginFormSaga() {
 
             yield put(loginFail(failParams));
         } else {
-            if (!response.code || !response.email) {
-                yield put(loginFail({ credentials: true }));
+            if (!response.code || !response.email || !response.server) {
+                yield put(loginFail({ system: true }));
             } else {
                 yield put(authenticate(response));
                 yield put(loginSuccess());

@@ -40,15 +40,15 @@ class BoardContainer extends Component {
 
     render() {
         const { setSelectedDay, setSelectedParticipant } = this.props;
-        const { selectedDay, rating, email, selectedParticipant } = this.props;
+        const { selectedDay, rating, selectedParticipant } = this.props;
+        const { email, server } = this.props;
 
         const ratingContainsEmail = email && _.find(rating, { email });
-        const participantEmail = ratingContainsEmail && email;
+        const currentParticipant =
+            ratingContainsEmail && email && server ? { email, server } : void 0;
 
-        const battleParticipantEmail =
-            _.get(selectedParticipant, 'email') ||
-            participantEmail ||
-            _.get(rating, '[0].email');
+        const battleParticipant =
+            selectedParticipant || currentParticipant || _.get(rating, 0);
 
         return (
             <div className={ Styles.boardContainer }>
@@ -62,14 +62,14 @@ class BoardContainer extends Component {
                     <div className={ Styles.rating }>
                         <RatingTable
                             email={ email }
-                            watchEmail={ battleParticipantEmail }
+                            watchEmail={ _.get(battleParticipant, 'email') }
                             rating={ rating }
                             setSelectedParticipant={ setSelectedParticipant }
                         />
                     </div>
                     { moment(selectedDay).isSame(moment(), 'day') && (
                         <div className={ Styles.frame }>
-                            <BattleFrame participant={ battleParticipantEmail } />
+                            <BattleFrame participant={ battleParticipant } />
                         </div>
                     ) }
                 </div>
@@ -83,6 +83,7 @@ const mapStateToProps = state => ({
     selectedParticipant: state.board.selectedParticipant,
     rating:              state.board.rating,
     email:               state.auth.email,
+    server:              state.auth.server,
 });
 
 const mapDispatchToProps = {

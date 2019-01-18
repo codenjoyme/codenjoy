@@ -4,12 +4,11 @@ import Iframe from 'react-iframe';
 
 class BattleFrameHandler extends Component {
     render() {
-        const { participant } = this.props;
+        const { participant: { email, server } = {} } = this.props;
 
-        // TODO fix when iframe becomes available
-        return participant ? (
+        return email && server ? (
             <Iframe
-                url='http://codenjoy.juja.com.ua/codenjoy-contest/board/player/dsdst@gmail.com?only=true'
+                url={ `http://${server}/codenjoy-contest/board/player/${email}?only=true` }
                 width='400px'
                 height='400px'
                 //className={ }
