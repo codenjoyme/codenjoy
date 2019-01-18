@@ -42,13 +42,13 @@
 
 .player-canvas table {
     width:100%;
-    height: 100%;
     border-spacing: 0px;
 }
 
 body {
     margin: 0px;
     padding: 0px;
+    background-color: #263852 !important;
 }
 
 canvas {
