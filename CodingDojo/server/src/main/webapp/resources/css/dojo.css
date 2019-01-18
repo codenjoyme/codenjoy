@@ -121,7 +121,7 @@ label.error {
 }
 
 .glasses {
-    width: calc(100% - 500px);
+    width: calc(100% - 530px);
     float: left;
     padding-left: 20px;
     position: absolute;
@@ -173,5 +173,5 @@ label.error {
 
 canvas {
     border: 1px solid;
+    width:100%!important;
 }
-
