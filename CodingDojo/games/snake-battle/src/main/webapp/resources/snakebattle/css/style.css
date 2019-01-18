@@ -30,10 +30,6 @@ input:-webkit-autofill {
   color: #999 !important;
 }
 
-canvas {
-  width:550px;
-}
-
 body {
   background-color: #464547!important;
 }
