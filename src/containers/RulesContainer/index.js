@@ -8,6 +8,7 @@ import Rules from '../../styles/images/icons/rules.svg';
 // proj
 import { GameElements } from '../../components';
 import { getGameConnectionString } from '../../utils';
+import { book } from '../../routes';
 
 // own
 import Styles from './styles.module.css';
@@ -310,7 +311,7 @@ class RulesContainer extends Component {
                         { ' ' }
                         Із детальним описом Правил і Положень гри можна
                         ознайомитися за &nbsp;
-                        <Link to={ '' }>
+                        <Link to={ book.privacyRules }>
                             посиланням <img src={ Rules } alt='rules' />
                         </Link>
                         .
