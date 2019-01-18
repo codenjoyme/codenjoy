@@ -30,11 +30,7 @@ const BOARD_EXAMPLE = `
 
 const {
     boardExample,
-    contentainer,
     mask,
-    content,
-    title,
-    subTitle,
     highligte,
     highligteNotes,
     highligteUnderNotes,
@@ -43,10 +39,10 @@ const {
 } = Styles;
 
 const RulesContainer = () => (
-    <div className={ contentainer }>
+    <div className='container'>
         <div className={ mask }>Snake Battle - як грати?</div>
-        <div className={ content }>
-            <h2 className={ title }>У чому суть гри?</h2>
+        <div className='content'>
+            <h2 className='title'>У чому суть гри?</h2>
             <p>
                 Треба написати Бота для змійки, який обіграє інших ботів за
                 очками. Всі грають на одному полі. Змійка може пересуватися по
@@ -61,8 +57,8 @@ const RulesContainer = () => (
                 смерті інших Змійок, Ваша Змійка отримає бонусні бали. За свою
                 смерть і за камені - штрафні бали. Бали підсумовуються.
             </p>
-            <h2 className={ title }>Як почати?</h2>
-            <div className={ subTitle }>
+            <h2 className='title'>Як почати?</h2>
+            <div className='subTitle'>
                 Завантажте Проект гри для створення Бота Java JavaScript
             </div>
             <p>
@@ -79,13 +75,13 @@ const RulesContainer = () => (
                 Далі необхідно подключиться з коду до сервера через вебсокети.
                 Це Maven проект і підійде він для гри на JVM і JavaScript мовах.
             </p>
-            <div className={ subTitle }>
+            <div className='subTitle'>
                 Адрес для подключения к игре на сервере http://codenjoy.com:
             </div>
             <div className={ highligte }>
                 ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890
             </div>
-            <div className={ subTitle }>
+            <div className='subTitle'>
                 Адрес для подключения к игре на сервере, развернутом в локальной
                 сети:
             </div>
@@ -108,13 +104,13 @@ const RulesContainer = () => (
                 <br />
                 Розбір поля у читабельний вигляд теж уже виконано.
             </p>
-            <div className={ subTitle }>
+            <div className='subTitle'>
                 Приклад поля: <br />У текстовому вигляді
             </div>
             <div className={ highligte }>
                 <pre className={ boardExample }>{ BOARD_EXAMPLE }</pre>
             </div>
-            <div className={ subTitle }>UI зі спрайтів:</div>
+            <div className='subTitle'>UI зі спрайтів:</div>
             <GameElements />
             <div className={ highligteNotes }>
                 Тут your@email.com - имейл, который ты указал при регистрации на
@@ -145,10 +141,10 @@ const RulesContainer = () => (
                 Основне завдання - вести осмислену гру і перемогти, набравши
                 найбільшу кілкість балів.
             </p>
-            <h2 className={ classnames(title, mb15) }>
+            <h2 className={ classnames('title', mb15) }>
                 Правила, бали, особливі випадки і підказки
             </h2>
-            <div className={ classnames(subTitle, mb30) }>Штрафні бали:</div>
+            <div className={ classnames('subTitle', mb30) }>Штрафні бали:</div>
             <p>
                 Змійка, яка врізалась у стіну, гине.
                 <br />
@@ -160,7 +156,7 @@ const RulesContainer = () => (
                 Змійка, яка з'їла камінь, коротшає на 3 клітини і гине, якщо
                 стає менше 2 клітин довжиною.
             </p>
-            <div className={ classnames(subTitle, mb30) }>Додаткові бали:</div>
+            <div className={ classnames('subTitle', mb30) }>Додаткові бали:</div>
             <p>
                 Змійка, яка з'їла яблуко, збільшується на 1 клітину.
                 <br />
@@ -174,7 +170,9 @@ const RulesContainer = () => (
                 Змійка, яка з'їла золото, отримує додаткові очки.
                 <br />
             </p>
-            <div className={ classnames(subTitle, mb30) }>Особливі випадки:</div>
+            <div className={ classnames('subTitle', mb30) }>
+                Особливі випадки:
+            </div>
             <p>
                 Змійкам дозволено відкушувати свій власний хвіст. При цьому
                 довжина змії зменшується, більше ніяких наслідків.
@@ -193,7 +191,7 @@ const RulesContainer = () => (
                 люті, діють звичайні правила зіткнень.
                 <br />
             </p>
-            <div className={ classnames(subTitle, mb30) }>Підказки:</div>
+            <div className={ classnames('subTitle', mb30) }>Підказки:</div>
             <p>
                 Для реалізації свого алгоритму можна використовувати вже готовий
                 клас DeikstraFindWay і (зокрема) метод getShortestWay ().
@@ -220,7 +218,7 @@ const RulesContainer = () => (
                     </li>
                 </ul>
             </p>
-            <div className={ classnames(subTitle, mb30) }>
+            <div className={ classnames('subTitle', mb30) }>
                 Як визначатимуться переможці?
             </div>
             <p>
@@ -293,11 +291,16 @@ const RulesContainer = () => (
             </p>
             <p>
                 { ' ' }
-                Із детальним описом Правил і Положень гри можна ознайомитися за &nbsp;
-                <Link to={ '' }>посиланням <img src={ Rules } alt='rules' /></Link>.
+                Із детальним описом Правил і Положень гри можна ознайомитися за
+                &nbsp;
+                <Link to={ '' }>
+                    посиланням <img src={ Rules } alt='rules' />
+                </Link>
+                .
             </p>
             <p>
-                У разі будь-яких питань звертайтеся за електронною адресою &nbsp;
+                У разі будь-яких питань звертайтеся за електронною адресою
+                &nbsp;
                 <a href='mailto:OrgBotChallengeUA@epam.com'>
                     OrgBotChallengeUA@epam.com
                 </a>

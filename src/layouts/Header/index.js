@@ -2,7 +2,6 @@
 import React, { PureComponent } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import logo from './game-logo.png';
 import avaDefault from './icon_ava_default.svg';
 
@@ -65,7 +64,11 @@ class HeaderComponent extends PureComponent {
 
                         { server && (
                             <li>
-                                <img className={ Styles.avatar } src={ avaDefault } alt='' />
+                                <img
+                                    className={ Styles.avatar }
+                                    src={ avaDefault }
+                                    alt=''
+                                />
                                 <div onClick={ () => logout() }>Вийти</div>
                             </li>
                         ) }
@@ -88,7 +91,11 @@ class HeaderComponent extends PureComponent {
                                     activeClassName={ Styles.activeMenu }
                                     to={ book.login }
                                 >
-                                    <img className={ Styles.avatar } src={ avaDefault } alt='' />
+                                    <img
+                                        className={ Styles.avatar }
+                                        src={ avaDefault }
+                                        alt=''
+                                    />
                                     Авторизація
                                 </NavLink>
                             </li>

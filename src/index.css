@@ -10,3 +10,57 @@ body {
     padding: 0;
     background: #263852;
 }
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    max-width: 1030px;
+    padding: 45px 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.content a {
+    font-size: 20px;
+    line-height: 1.3;
+    color: #41c7dc;
+}
+
+.content p {
+    color: #a1b0bb;
+    font-size: 20px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+    font-weight: 200;
+}
+
+.title {
+    margin-bottom: 33px;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 2.13;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.subTitle {
+    font-size: 20px;
+    line-height: 1.5;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+@media all and (max-width: 820px) {
+    .content {
+        padding: 45px 20px;
+    }
+}

@@ -13,7 +13,7 @@ import Rules from '../../styles/images/icons/rules.svg';
 import Styles from './styles.module.css';
 
 const HomeContainer = () => (
-    <div className={ Styles.container }>
+    <div className='container'>
         <div className={ Styles.homeTitle }>
             <div className={ Styles.mainText }>Створи розумного бота</div>
             <div className={ Styles.subText }>на Java або JavaScript</div>
@@ -36,8 +36,8 @@ const HomeContainer = () => (
                 Виклик прийнято
             </Link>
         </div>
-        <div className={ Styles.content }>
-            <div className={ Styles.title }>Як взяти участь</div>
+        <div className='content'>
+            <div className='title'>Як взяти участь</div>
             <div className={ Styles.guideContainer }>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.stepHeader } />
@@ -68,7 +68,7 @@ const HomeContainer = () => (
                     </div>
                 </div>
             </div>
-            <div className={ Styles.title }>Правила гри</div>
+            <div className='title'>Правила гри</div>
             <p>
                 Завантаж проект гри, створи логіку для переміщення свого Бота,
                 отримуй найбільшу кілкість балів, щоб увійти до числа Фіналістів
