@@ -91,7 +91,7 @@ const ELEMENTS = [
     },
     {
         image:       HeadSleep,
-        title:       'HEAD_SLEEP(\'⬢\')',
+        title:       'HEAD_SLEEP(\'&\')',
         description: 'Голова неактивної Змійки Учасника',
     },
     {
@@ -131,7 +131,7 @@ const ELEMENTS = [
     },
     {
         image:       EnemyHeadSleep,
-        title:       'ENEMY_HEAD_SLEEP(\'⬡\')',
+        title:       'ENEMY_HEAD_SLEEP(\'ø\')',
         description: 'Голова неактивної Змійки суперника',
     },
     {
