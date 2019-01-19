@@ -89,7 +89,15 @@
         width: 100%;
     }
     .container a {
-        padding: 10px 20px;
+        padding: 10px 0;
+        width: 100%;
+        justify-content: center;
+    }
+    .container a.activeMenu {
+        background: #41c7dc;
+    }
+    .container a.activeMenu:after {
+        display: none;
     }
     .active {
         background-color: rgb(65, 199, 220);
