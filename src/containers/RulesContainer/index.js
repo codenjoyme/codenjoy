@@ -78,7 +78,7 @@ class RulesContainer extends Component {
                         і JavaScript мовах.
                     </p>
                     <div className='subTitle'>
-                        Адрес для подключения к игре на сервері:
+                        Адрес для підключення до гри на сервері:
                     </div>
                     <div className={ highligte }>
                         { [ server, code, email ].every(Boolean)
@@ -86,10 +86,9 @@ class RulesContainer extends Component {
                             : 'Потрібно увійти в систему для отримання адресу' }
                     </div>
                     <div className={ highligteNotes }>
-                        Тут your@email.com - имейл, который ты указал при
-                        регистрации на сервере, a code - твой security token,
-                        его ты можешь получить из адресной строки браузера после
-                        регистрации/логина
+                        Тут your@email.com - емейл, який ти вказав при
+                        реєстрації на сервері, a code - твій security token,
+                        його ти можеш скопіювати з цього поля
                     </div>
                     <p>
                         Після підключення клієнт буде регулярно (кожну секунду)
@@ -103,19 +102,13 @@ class RulesContainer extends Component {
                         Розбір поля у читабельний вигляд теж уже виконано.
                     </p>
                     <div className='subTitle'>
-                        Приклад поля: <br />У текстовому вигляді
+                        Приклад поля у текстовому вигляді:
                     </div>
                     <div className={ highligte }>
                         <pre className={ boardExample }>{ BOARD_EXAMPLE }</pre>
                     </div>
                     <div className='subTitle'>UI зі спрайтів:</div>
                     <GameElements />
-                    <div className={ highligteNotes }>
-                        Тут your@email.com - имейл, который ты указал при
-                        регистрации на сервере, a code - твой security token,
-                        его ты можешь получить из адресной строки браузера после
-                        регистрации/логина
-                    </div>
                     <p>
                         Гра покрокова, кожну секунду сервер посилає Вашому
                         клієнту (Боту) стан оновленого поля на поточний момент і
