@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classnames from 'classnames';
 import { Link } from 'react-router-dom';
-import Rules from '../../styles/images/icons/rules.svg';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // proj
 import { GameElements } from '../../components';
 import { getGameConnectionString } from '../../utils';
 import { book } from '../../routes';
+import Rules from '../../styles/images/icons/rules.svg';
 
 // own
 import Styles from './styles.module.css';
@@ -36,6 +37,8 @@ const { boardExample, mask, highligte, highligteNotes, mb15, mb30 } = Styles;
 class RulesContainer extends Component {
     render() {
         const { server, code, email } = this.props;
+        const loggedIn = [ server, code, email ].every(Boolean);
+        const connectionUrl = loggedIn ? getGameConnectionString(server, code, email) : void 0;
 
         return (
             <div className='container'>
@@ -68,10 +71,18 @@ class RulesContainer extends Component {
                         гри на JVM і JavaScript мовах.
                     </p>
                     <div className='subTitle'>Адрес для підключення до гри на сервері:</div>
+
                     <div className={ highligte }>
-                        { [ server, code, email ].every(Boolean)
-                            ? getGameConnectionString(server, code, email)
-                            : 'Потрібно увійти в систему для отримання адресу' }
+                        { loggedIn ? (
+                            <>
+                                {connectionUrl}
+                                <CopyToClipboard text={ connectionUrl }>
+                                    <img className={ Styles.copyConnection } src={ Rules } alt='Скопіювати адрес' />
+                                </CopyToClipboard>
+                            </>
+                        ) : (
+                            <Link to={ book.login }>Потрібно увійти в систему для отримання адресу</Link>
+                        ) }
                     </div>
                     <div className={ highligteNotes }>
                         Тут your@email.com - емейл, який ти вказав при реєстрації на сервері, a code - твій security

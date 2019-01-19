@@ -45,3 +45,7 @@
     font-family: monospace;
     letter-spacing: 5px;
 }
+
+.copyConnection {
+    cursor: pointer;
+}
