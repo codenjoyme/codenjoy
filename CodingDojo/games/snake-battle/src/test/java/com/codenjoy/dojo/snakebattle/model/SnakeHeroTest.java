@@ -33,7 +33,6 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.snakebattle.model.hero.Hero.reducedValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -44,6 +43,8 @@ import static org.mockito.Mockito.when;
  * @author Kors
  */
 public class SnakeHeroTest {
+
+    private static final int reducedValue = 3;
 
     private SnakeBoard game;
     private Hero hero;
@@ -62,14 +63,14 @@ public class SnakeHeroTest {
         assertTrue("Змейка не активна!", hero.isActive());
     }
 
-    private void snakeEncreasing(int additionLength) {
+    private void snakeIncreasing(int additionLength) {
         for (int i = 0; i < additionLength; i++)
-            snakeEncreasing();
+            snakeIncreasing();
     }
 
     // Проверка что змейка увеличивается
     @Test
-    public void snakeEncreasing() {
+    public void snakeIncreasing() {
         int before = hero.size();
         applesAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
         hero.tick();
@@ -113,13 +114,13 @@ public class SnakeHeroTest {
         wallsAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
         hero.tick();
         wallsAtAllPoints(false);
-        assertTrue("Змейка не погибла от препядствия!", !hero.isAlive());
+        assertTrue("Змейка не погибла от препятствия!", !hero.isAlive());
     }
 
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
-        snakeEncreasing(reducedValue - 1);
+        snakeIncreasing(reducedValue - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         stonesAtAllPoints(false);
@@ -129,7 +130,7 @@ public class SnakeHeroTest {
     // тест что большая змейка уменьшается от камня, но не погибает
     @Test
     public void reduceByStone() {
-        snakeEncreasing(reducedValue);
+        snakeIncreasing(reducedValue);
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
@@ -145,7 +146,7 @@ public class SnakeHeroTest {
     @Test
     public void reduceItself() {
         int additionLength = 5;
-        snakeEncreasing(additionLength);
+        snakeIncreasing(additionLength);
         assertEquals("Змейка не удлиннилась!", additionLength + 2, hero.size());
         hero.down();
         hero.tick();
@@ -164,7 +165,7 @@ public class SnakeHeroTest {
         int additionLength = 4;
         int stonesCount = 0;
         for (int i = 0; i < 4; i++) {
-            snakeEncreasing(additionLength);
+            snakeIncreasing(additionLength);
             stonesAtAllPoints(true);
             hero.tick();
             stonesAtAllPoints(false);

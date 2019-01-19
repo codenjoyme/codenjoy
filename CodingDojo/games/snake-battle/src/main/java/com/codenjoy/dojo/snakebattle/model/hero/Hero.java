@@ -36,7 +36,7 @@ import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
 import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
-    public static final int reducedValue = 4;
+    private static final int reducedValue = 3;
 
     private LinkedList<Tail> elements;
     private boolean alive;
