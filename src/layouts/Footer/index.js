@@ -13,19 +13,13 @@ export class Footer extends PureComponent {
             <div className={ Styles.footer }>
                 <ul className={ Styles.navigation }>
                     <li>
-                        <NavLink to={ book.privacyRules }>
-                            Правила і положення
-                        </NavLink>
+                        <NavLink to={ book.privacyRules }>Правила і положення</NavLink>
                     </li>
                     <li>
-                        <NavLink to={ book.privacyPolicy }>
-                            Політика конфіденцій
-                        </NavLink>
+                        <NavLink to={ book.privacyPolicy }>Політика конфіденцій</NavLink>
                     </li>
                 </ul>
-                <ul
-                    className={ classnames(Styles.navigation, Styles.navigation) }
-                >
+                <ul className={ classnames(Styles.navigation, Styles.navigation) }>
                     <li>
                         <a href='mailto:example@tutorialspark.com'>
                             Зв'язатися з нами
@@ -47,7 +41,7 @@ export class Footer extends PureComponent {
                         </a>
                     </li>
                     <li>
-                        <a href='/'>
+                        <a href={ process.env.REACT_APP_JOIN_CHAT_LINK }>
                             Долучайся до чату
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }
