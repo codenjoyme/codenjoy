@@ -5,6 +5,7 @@
 
 .wrapper {
     display: flex;
+    justify-content: center;
     flex: 1;
     font-weight: bold;
 }
@@ -12,18 +13,23 @@
 .frame {
     display: flex;
     padding: 0px 30px 10px 30px;
+    max-width: 550px;
+    flex: 1 1;
 }
 
 .rating {
     padding: 0px 30px 10px 30px;
-    flex: 1;
+    flex: 2 1;
+    max-width: 1030px;
+    min-width: 400px;
 }
 
 @media all and (max-width: 900px) {
     .frame {
-        padding: 30px 5px 30px 5px;
+        padding: 30px 30px 30px 30px;
         align-items: center;
         justify-content: center;
+        max-width: none;
         order: 1;
     }
     .rating {
