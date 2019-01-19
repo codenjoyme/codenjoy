@@ -34,6 +34,11 @@ class HeaderComponent extends PureComponent {
                                 Трансляція
                             </NavLink>
                         </li>
+                        <li>
+                            <NavLink className={ Styles.navMenu } activeClassName={ Styles.activeMenu } to={ book.rules }>
+                                Правила гри
+                            </NavLink>
+                        </li>
 
                         { email && (
                             <li>
