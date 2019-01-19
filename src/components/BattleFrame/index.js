@@ -11,6 +11,7 @@ class BattleFrameHandler extends Component {
             <div className={ Styles.ratioWrapper }>
                 <div className={ Styles.ratioSquare }>
                     <iframe
+                        scrolling='no'
                         className={ Styles.ratioInner }
                         src={ `http://${server}/codenjoy-contest/board/player/${email}?only=true` }
                     />
