@@ -25,6 +25,7 @@ import {
 // proj
 import store, { history, persistor } from './store';
 import Routes from './routes/Routes';
+import ScrollToTop from './ScrollToTop';
 
 library.add(
     faTimesCircle,
@@ -47,7 +48,9 @@ class App extends Component {
             <Provider store={ store }>
                 <PersistGate loading={ null } persistor={ persistor }>
                     <ConnectedRouter history={ history }>
-                        <Routes />
+                        <ScrollToTop>
+                            <Routes />
+                        </ScrollToTop>
                     </ConnectedRouter>
                 </PersistGate>
             </Provider>

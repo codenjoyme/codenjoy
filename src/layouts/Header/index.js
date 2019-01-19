@@ -1,6 +1,6 @@
 // vendor
 import React, { PureComponent } from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import logo from './game-logo.png';
 import avaDefault from './icon_ava_default.svg';
 import classnames from 'classnames';
@@ -25,38 +25,20 @@ class HeaderComponent extends PureComponent {
 
                     <ul>
                         <li>
-                            <NavLink
-                                className={ Styles.navMenu }
-                                activeClassName={ Styles.activeMenu }
-                                to={ book.home }
-                            >
+                            <NavLink className={ Styles.navMenu } activeClassName={ Styles.activeMenu } to={ book.home }>
                                 Головна
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink
-                                className={ Styles.navMenu }
-                                activeClassName={ Styles.activeMenu }
-                                to={ book.board }
-                            >
+                            <NavLink className={ Styles.navMenu } activeClassName={ Styles.activeMenu } to={ book.board }>
                                 Трансляція
                             </NavLink>
                         </li>
 
                         { email && (
                             <li>
-                                <div
-                                    className={ classnames(
-                                        Styles.navMenu,
-                                        Styles.logout,
-                                    ) }
-                                    onClick={ () => logout() }
-                                >
-                                    <img
-                                        className={ Styles.avatar }
-                                        src={ avaDefault }
-                                        alt='Вийти'
-                                    />
+                                <div className={ classnames(Styles.navMenu, Styles.logout) } onClick={ () => logout() }>
+                                    <img className={ Styles.avatar } src={ avaDefault } alt='Вийти' />
                                     Вийти
                                 </div>
                             </li>
@@ -75,16 +57,8 @@ class HeaderComponent extends PureComponent {
 
                         { !email && (
                             <li>
-                                <NavLink
-                                    className={ Styles.navMenu }
-                                    activeClassName={ Styles.activeMenu }
-                                    to={ book.login }
-                                >
-                                    <img
-                                        className={ Styles.avatar }
-                                        src={ avaDefault }
-                                        alt=''
-                                    />
+                                <NavLink className={ Styles.navMenu } activeClassName={ Styles.activeMenu } to={ book.login }>
+                                    <img className={ Styles.avatar } src={ avaDefault } alt='' />
                                     Авторизація
                                 </NavLink>
                             </li>
@@ -96,4 +70,4 @@ class HeaderComponent extends PureComponent {
     }
 }
 
-export const Header = withRouter(HeaderComponent);
+export const Header = HeaderComponent;

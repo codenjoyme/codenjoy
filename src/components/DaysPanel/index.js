@@ -56,10 +56,8 @@ class DaysPanelHandler extends Component {
                 <div className={ Styles.dayName }>День №</div>
                 { daysRangeConfig.map(({ label, disabled, day }) => (
                     <button
-                        className={ this._dayButtonStyles(
-                            selectedDay === day,
-                            disabled,
-                        ) }
+                        title={ day }
+                        className={ this._dayButtonStyles(selectedDay === day, disabled) }
                         key={ day }
                         onClick={ () => onDaySelect(day) }
                         disabled={ selectedDay === day || disabled }
