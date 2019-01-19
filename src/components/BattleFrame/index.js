@@ -12,10 +12,7 @@ class BattleFrameHandler extends Component {
                 <div className={ Styles.ratioSquare }>
                     <iframe
                         className={ Styles.ratioInner }
-                        src={
-                            'http://www.youtube.com/embed/xDMP3i36naA' ||
-                            `http://${server}/codenjoy-contest/board/player/${email}?only=true`
-                        }
+                        src={ `http://${server}/codenjoy-contest/board/player/${email}?only=true` }
                     />
                 </div>
             </div>
