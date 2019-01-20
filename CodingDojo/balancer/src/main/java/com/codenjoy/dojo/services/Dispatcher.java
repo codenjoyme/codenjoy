@@ -189,11 +189,6 @@ public class Dispatcher {
         Map<String, Player> playerMap = players.getPlayers(emails).stream()
                 .collect(toMap(Player::getEmail, player -> player));
 
-        logger.debug("---------------------------------");
-        logger.debug(result.toString());
-        logger.debug(emails.toString());
-        logger.debug(playerMap.toString());
-
         result.forEach(score -> {
             String email = score.getId();
             Player player = playerMap.get(email);
@@ -202,13 +197,15 @@ public class Dispatcher {
             if (player != null) {
                 score.setServer(player.getServer());
                 score.setName(String.format("%s %s", player.getFirstName(), player.getLastName()));
+            } else {
+                score.setServer(null); // TODO убрать загрузку AI с турнира а так же фильтровать всех кто не попал в табличку
+                score.setName(null);
             }
         });
 
-        logger.debug(result.toString());
-        logger.debug("---------------------------------");
-
-        return result;
+        return result.stream()
+                .filter(score -> score.getServer() != null)
+                .collect(toList());
     }
 
     public Boolean remove(String server, String email, String code) {
