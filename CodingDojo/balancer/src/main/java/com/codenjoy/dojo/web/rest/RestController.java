@@ -87,9 +87,11 @@ public class RestController {
 
             @Override
             public void onGame() {
-                player.setCode(location[0].getCode());
-                player.setServer(location[0].getServer());
-                players.create(player);
+                if (location[0] != null) {
+                    player.setCode(location[0].getCode());
+                    player.setServer(location[0].getServer());
+                    players.create(player);
+                }
             }
         });
 
@@ -159,13 +161,15 @@ public class RestController {
         try {
             action.onBalancer();
         } catch (Exception e) {
+            e.printStackTrace();
             errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
         }
 
         try {
             action.onGame();
         } catch (Exception e) {
-            errors.add("At game server: " +GlobalExceptionHandler.getPrintableMessage(e));
+            e.printStackTrace();
+            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
         }
 
         if (!errors.isEmpty()) {
