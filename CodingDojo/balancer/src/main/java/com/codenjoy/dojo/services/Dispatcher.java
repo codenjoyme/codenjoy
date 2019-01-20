@@ -42,11 +42,11 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Component
 public class Dispatcher {
@@ -182,11 +182,20 @@ public class Dispatcher {
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> result = scores.getScores(day, lastTime);
 
-        result.forEach(score -> {
-            score.setId(Hash.getId(score.getId(), properties.getEmailHash()));
+        List<String> emails = result.stream()
+                .map(score -> score.getId())
+                .collect(toList());
 
-            // TODO вот тут надо оптимизнуть хорошенько и не делать N+1 запрос
-            score.setServer(players.getServer(score.getId()));
+        Map<String, Player> playerMap = players.getPlayers(emails).stream()
+                .collect(toMap(Player::getEmail, player -> player));
+
+        result.forEach(score -> {
+            String email = score.getId();
+            Player player = playerMap.get(email);
+
+            score.setId(Hash.getId(email, properties.getEmailHash()));
+            score.setServer(player.getServer());
+            score.setName(String.format("%s %s", player.getFirstName(), player.getLastName()));
         });
 
         return result;
