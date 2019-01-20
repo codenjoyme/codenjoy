@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.entity;
 public class ServerLocation {
 
     private String email;
+    private String id;
     private String code;
     private String server;
 
@@ -32,8 +33,9 @@ public class ServerLocation {
         // do nothing
     }
 
-    public ServerLocation(String email, String code, String server) {
+    public ServerLocation(String email, String id, String code, String server) {
         this.email = email;
+        this.id = id;
         this.code = code;
         this.server = server;
     }
@@ -50,10 +52,15 @@ public class ServerLocation {
         return email;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "ServerLocation{" +
                 "email='" + email + '\'' +
+                ", id'" + id + '\'' +
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
                 '}';

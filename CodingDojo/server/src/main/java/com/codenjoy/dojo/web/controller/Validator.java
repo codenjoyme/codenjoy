@@ -59,6 +59,12 @@ public class Validator {
         md5 = Pattern.compile(MD5);
     }
 
+    public void checkPlayerId(String input) {
+        if (StringUtils.isEmpty(input)) {
+            throw new IllegalArgumentException("Player id is invalid: " + input);
+        }
+    }
+
     public void checkPlayerName(String input, boolean canBeNull) {
         boolean empty = StringUtils.isEmpty(input);
         if (!(empty && canBeNull ||

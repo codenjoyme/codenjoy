@@ -38,8 +38,15 @@ public class ConfigProperties {
     @Value("${admin.password}")
     private String adminPassword;
 
+    @Value("${email.hash}")
+    private String emailHash;
+
     public String getAdminPassword() {
         return adminPassword;
+    }
+
+    public String getEmailHash() {
+        return emailHash;
     }
 
 }
