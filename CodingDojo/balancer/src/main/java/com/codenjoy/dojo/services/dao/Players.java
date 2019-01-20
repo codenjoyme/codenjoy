@@ -58,7 +58,11 @@ public class Players {
     }
 
     public List<Player> getPlayersDetails() {
-        return pool.select("SELECT * FROM players;",
+        return selectPlayers("SELECT * FROM players;");
+    }
+
+    private List<Player> selectPlayers(String query) {
+        return pool.select(query,
                 rs -> {
                     List<Player> result = new LinkedList<>();
                     while (rs.next()) {
@@ -80,6 +84,13 @@ public class Players {
                 rs.getString("comment"),
                 rs.getString("code"),
                 rs.getString("server"));
+    }
+
+    public List<Player> getPlayers(List<String> emails) {
+        return selectPlayers(String.format(
+                "SELECT * FROM players WHERE email IN ('%s');",
+                String.join("','", emails)
+        ));
     }
 
     public List<ServerLocation> getPlayersLocations() {
@@ -153,5 +164,6 @@ public class Players {
         pool.update("DELETE FROM players WHERE email = ?;",
                 new Object[]{email});
     }
+
 
 }
