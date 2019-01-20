@@ -52,7 +52,7 @@ public class DispatcherSettings {
         urlRemovePlayer = properties.get("dispatcher.url.remove");
         urlGetPlayers = properties.get("dispatcher.url.get");
         gameType = properties.get("game.type");
-        servers = Arrays.asList(properties.get("game.servers").split("|"));
+        servers = Arrays.asList(properties.get("game.servers").split("\\|"));
     }
 
     public String getUrlCreatePlayer() {
