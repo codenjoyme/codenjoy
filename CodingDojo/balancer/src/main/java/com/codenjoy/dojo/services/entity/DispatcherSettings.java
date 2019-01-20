@@ -22,6 +22,9 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
+import com.codenjoy.dojo.services.ConfigProperties;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class DispatcherSettings {
@@ -42,6 +45,14 @@ public class DispatcherSettings {
         this.urlGetPlayers = urlGetPlayers;
         this.gameType = gameType;
         this.servers = servers;
+    }
+
+    public DispatcherSettings(ConfigProperties properties) {
+        urlCreatePlayer = properties.get("dispatcher.url.create");
+        urlRemovePlayer = properties.get("dispatcher.url.remove");
+        urlGetPlayers = properties.get("dispatcher.url.get");
+        gameType = properties.get("game.type");
+        servers = Arrays.asList(properties.get("game.servers").split("|"));
     }
 
     public String getUrlCreatePlayer() {

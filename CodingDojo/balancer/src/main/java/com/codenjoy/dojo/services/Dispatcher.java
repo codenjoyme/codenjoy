@@ -64,20 +64,12 @@ public class Dispatcher {
 
     @PostConstruct
     public void postConstruct() {
-        // в случае если сегодня сервер потушен был
-        lastTime = scores.getLastTime(now());
-    }
-
-    public Dispatcher() {
-        settings = new DispatcherSettings(
-            "http://%s/codenjoy-contest/rest/player/create",
-            "http://%s/codenjoy-contest/rest/player/%s/remove/%s",
-            "http://%s/codenjoy-contest/rest/game/%s/players",
-            "snakebattle",
-            Arrays.asList("epam-bot-challenge.com.ua")
-        );
+        settings = new DispatcherSettings(properties);
         servers.addAll(settings.getServers());
         currentServer = 0;
+
+        // в случае если сегодня сервер потушен был
+        lastTime = scores.getLastTime(now());
     }
 
     public ServerLocation register(Player player, String callbackUrl) {

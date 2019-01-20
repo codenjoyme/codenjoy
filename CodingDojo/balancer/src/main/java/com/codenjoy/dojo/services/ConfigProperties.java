@@ -22,7 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,12 +43,20 @@ public class ConfigProperties {
     @Value("${email.hash}")
     private String emailHash;
 
+    @Autowired
+    private Environment environment;
+
+
     public String getAdminPassword() {
         return adminPassword;
     }
 
     public String getEmailHash() {
         return emailHash;
+    }
+
+    public String get(String key) {
+        return environment.getProperty(key);
     }
 
 }
