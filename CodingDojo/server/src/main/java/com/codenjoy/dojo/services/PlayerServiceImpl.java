@@ -82,6 +82,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     protected ActionLogger actionLogger;
 
+    @Value("${game.ai}")
+    private boolean isAINeeded;
+
     @PostConstruct
     public void init() {
         playerGames.init(lock);
@@ -133,6 +136,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAIIfNeeded(String forPlayer, String gameName) {
         if (forPlayer.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) return;
+        if (!isAINeeded) return;
 
         GameType gameType = gameService.getGame(gameName);
 
