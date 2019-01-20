@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.Hash;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import org.springframework.stereotype.Component;

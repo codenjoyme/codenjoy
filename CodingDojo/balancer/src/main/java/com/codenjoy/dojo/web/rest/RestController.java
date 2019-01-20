@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.Dispatcher;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
@@ -35,7 +36,6 @@ import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -142,11 +142,16 @@ public class RestController {
 
         Player exist = players.get(email);
         if (exist == null || !password.equals(exist.getPassword())) {
-            return onLogin.onFailed(new ServerLocation(email, null, null));
+            return onLogin.onFailed(new ServerLocation(email, null, null, null));
         }
         String server = players.getServer(email);
 
-        return onLogin.onSuccess(new ServerLocation(email, exist.getCode(), server));
+        return onLogin.onSuccess(
+                new ServerLocation(email,
+                        Hash.getId(email, properties.getEmailHash()),
+                        exist.getCode(),
+                        server
+                ));
     }
 
     private void doIt(DoItOnServers action) {

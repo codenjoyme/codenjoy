@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.entity;
 
 public class PlayerScore {
 
-    private String email;
+    private String id;
     private int score;
     private String server;
 
@@ -32,13 +32,13 @@ public class PlayerScore {
         // do nothing
     }
 
-    public PlayerScore(String email, int score) {
-        this.email = email;
+    public PlayerScore(String id, int score) {
+        this.id = id;
         this.score = score;
     }
 
-    public String getEmail() {
-        return email;
+    public String getId() {
+        return id;
     }
 
     public int getScore() {
@@ -52,7 +52,7 @@ public class PlayerScore {
     @Override
     public String toString() {
         return "PlayerScore{" +
-                ", email='" + email + '\'' +
+                ", id='" + id + '\'' +
                 ", score='" + score + '\'' +
                 ", server='" + score + '\'' +
                 '}';
@@ -60,5 +60,9 @@ public class PlayerScore {
 
     public void setServer(String server) {
         this.server = server;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

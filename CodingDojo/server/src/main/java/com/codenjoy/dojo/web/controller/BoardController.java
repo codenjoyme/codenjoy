@@ -25,11 +25,11 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,6 +72,18 @@ public class BoardController {
         return boardPlayer(model, playerName, null, justBoard);
     }
 
+    @RequestMapping(value = "/board/player/id/{playerId}",
+            method = RequestMethod.GET)
+    public String boardPlayerById(ModelMap model,
+                              @PathVariable("playerId") String playerId,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
+        validator.checkPlayerId(playerId);
+
+        String playerName = Hash.getEmail(playerId, properties.getEmailHash());
+        return boardPlayer(model, playerName, null, justBoard);
+    }
+
     // TODO а тут точно надо 'remove' в params = {"code", "remove"} ?
     @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = {"code", "remove"}, method = RequestMethod.GET)
     public String removePlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
@@ -86,10 +98,25 @@ public class BoardController {
         return "redirect:/";
     }
 
+    @RequestMapping(value = "/board/player/id/{playerId}",
+            params = "code",
+            method = RequestMethod.GET)
+    public String boardPlayerById(ModelMap model, @PathVariable("playerId") String playerId,
+                              @RequestParam("code") String code,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
+        validator.checkPlayerId(playerId);
+        validator.checkCode(code, CAN_BE_NULL);
+
+        String playerName = Hash.getEmail(playerId, properties.getEmailHash());
+        return boardPlayer(model, playerName, code, justBoard);
+    }
+
     @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}",
                     params = "code",
                     method = RequestMethod.GET)
-    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName,
+    public String boardPlayer(ModelMap model,
+                              @PathVariable("playerName") String playerName,
                               @RequestParam("code") String code,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
     {

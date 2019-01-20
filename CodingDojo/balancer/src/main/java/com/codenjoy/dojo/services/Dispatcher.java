@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
+import com.codenjoy.dojo.services.hash.Hash;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -54,6 +55,7 @@ public class Dispatcher {
 
     @Autowired Players players;
     @Autowired Scores scores;
+    @Autowired ConfigProperties properties;
 
     private List<String> servers = new CopyOnWriteArrayList<>();
     private volatile DispatcherSettings settings;
@@ -62,20 +64,12 @@ public class Dispatcher {
 
     @PostConstruct
     public void postConstruct() {
-        // в случае если сегодня сервер потушен был
-        lastTime = scores.getLastTime(now());
-    }
-
-    public Dispatcher() {
-        settings = new DispatcherSettings(
-            "http://%s/codenjoy-contest/rest/player/create",
-            "http://%s/codenjoy-contest/rest/player/%s/remove/%s",
-            "http://%s/codenjoy-contest/rest/game/%s/players",
-            "snakebattle",
-            Arrays.asList("epam-bot-challenge.com.ua")
-        );
+        settings = new DispatcherSettings(properties);
         servers.addAll(settings.getServers());
         currentServer = 0;
+
+        // в случае если сегодня сервер потушен был
+        lastTime = scores.getLastTime(now());
     }
 
     public ServerLocation register(Player player, String callbackUrl) {
@@ -91,7 +85,12 @@ public class Dispatcher {
                 player.getPassword(),
                 callbackUrl);
 
-        return new ServerLocation(player.getEmail(), code, server);
+        return new ServerLocation(
+                player.getEmail(),
+                Hash.getId(player.getEmail(), properties.getEmailHash()),
+                code,
+                server
+        );
     }
 
     private String createNewPlayer(String server, String email,
@@ -183,8 +182,12 @@ public class Dispatcher {
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> result = scores.getScores(day, lastTime);
 
-        // TODO вот тут надо оптимизнуть хорошенько и не делать N+1 запрос
-        result.forEach(score -> score.setServer(players.getServer(score.getEmail())));
+        result.forEach(score -> {
+            score.setId(Hash.getId(score.getId(), properties.getEmailHash()));
+
+            // TODO вот тут надо оптимизнуть хорошенько и не делать N+1 запрос
+            score.setServer(players.getServer(score.getId()));
+        });
 
         return result;
     }

@@ -106,6 +106,12 @@ public class Main {
             }
         });
         dispatcher.players = new Players(pool2);
+        dispatcher.properties = new ConfigProperties() {
+            @Override
+            public String getEmailHash() {
+                return "hash";
+            }
+        };
         return dispatcher;
     }
 }

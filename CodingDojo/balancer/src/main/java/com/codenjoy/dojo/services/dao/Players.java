@@ -90,6 +90,7 @@ public class Players {
                         result.add(
                             new ServerLocation(
                                 rs.getString("email"),
+                                null, // TODO установить это поле в сервисе
                                 rs.getString("code"),
                                 rs.getString("server")));
                     }

@@ -50,6 +50,9 @@ public class ConfigProperties {
     @Value("${donate.code}")
     private String donateCode;
 
+    @Value("${email.hash}")
+    private String emailHash;
+
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
     }
@@ -68,5 +71,9 @@ public class ConfigProperties {
 
     public String getDonateCode() {
         return donateCode;
+    }
+
+    public String getEmailHash() {
+        return emailHash;
     }
 }
