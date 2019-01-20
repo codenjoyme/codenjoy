@@ -22,10 +22,10 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Тут собраны только те проперти, которые важны в контроллерах.
@@ -43,9 +43,20 @@ public class ConfigProperties {
     @Value("${email.hash}")
     private String emailHash;
 
-    @Autowired
-    private Environment environment;
+    @Value("${dispatcher.url.create}")
+    private String urlCreatePlayer;
 
+    @Value("${dispatcher.url.remove}")
+    private String urlRemovePlayer;
+
+    @Value("${dispatcher.url.get}")
+    private String urlGetPlayers;
+
+    @Value("${game.type}")
+    private String gameType;
+
+    @Value("#{'${game.servers}'.split(',')}")
+    private List<String> servers;
 
     public String getAdminPassword() {
         return adminPassword;
@@ -55,8 +66,23 @@ public class ConfigProperties {
         return emailHash;
     }
 
-    public String get(String key) {
-        return environment.getProperty(key);
+    public String getUrlCreatePlayer() {
+        return urlCreatePlayer;
     }
 
+    public String getUrlRemovePlayer() {
+        return urlRemovePlayer;
+    }
+
+    public String getUrlGetPlayers() {
+        return urlGetPlayers;
+    }
+
+    public String getGameType() {
+        return gameType;
+    }
+
+    public List<String> getServers() {
+        return servers;
+    }
 }

@@ -48,11 +48,11 @@ public class DispatcherSettings {
     }
 
     public DispatcherSettings(ConfigProperties properties) {
-        urlCreatePlayer = properties.get("dispatcher.url.create");
-        urlRemovePlayer = properties.get("dispatcher.url.remove");
-        urlGetPlayers = properties.get("dispatcher.url.get");
-        gameType = properties.get("game.type");
-        servers = Arrays.asList(properties.get("game.servers").split("\\|"));
+        urlCreatePlayer = properties.getUrlCreatePlayer();
+        urlRemovePlayer = properties.getUrlRemovePlayer();
+        urlGetPlayers = properties.getUrlGetPlayers();
+        gameType = properties.getGameType();
+        servers =  properties.getServers();
     }
 
     public String getUrlCreatePlayer() {
