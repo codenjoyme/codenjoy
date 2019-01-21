@@ -6,6 +6,7 @@ import md5 from 'md5';
 // proj
 import { book } from '../../routes';
 import { fetchAPI } from '../../utils';
+import { authenticate } from '../auth';
 
 /**
  * Constants
@@ -94,8 +95,9 @@ export function* registerFormSaga() {
             if (!response.code) {
                 yield put(registerFail({ credentials: true }));
             } else {
+                yield put(authenticate(response));
                 yield put(registerSuccess());
-                yield put(replace(book.login));
+                yield put(replace(book.board));
             }
         }
     }
