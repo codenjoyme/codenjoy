@@ -13,6 +13,8 @@ import {
     removeEmail,
     setServer,
     removeServer,
+    setId,
+    removeId,
 } from '../../utils';
 
 /**
@@ -154,6 +156,7 @@ export function* authenticateSaga() {
         yield setCode(user.code);
         yield setEmail(user.email);
         yield setServer(user.server);
+        yield setId(user.id);
 
         yield put(authenticateSuccess());
     }
@@ -166,6 +169,7 @@ export function* logoutSaga() {
         yield removeCode();
         yield removeEmail();
         yield removeServer();
+        yield removeId();
 
         yield put(replace(`${book.login}`));
         yield put(logoutSuccess());
