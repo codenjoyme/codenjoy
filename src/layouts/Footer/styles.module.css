@@ -22,34 +22,42 @@
     font-size: 28px;
 }
 
-.navigation a {
-  text-decoration: none;
-  padding: 40px 8px;
-  font-family: 'Museo Sans Cyrl';
-  font-weight: 300;
-  font-size: 16px;
-  color: #a1b0bb;
-  display: flex;
-  align-items: center;
+.navigation a,
+.navigation .share {
+    text-decoration: none;
+    padding: 40px 8px;
+    font-family: 'Museo Sans Cyrl';
+    font-weight: 300;
+    font-size: 16px;
+    color: #a1b0bb;
+    display: flex;
+    align-items: center;
+}
+
+.facebookShare {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 .navigation .action {
-  text-decoration: none;
-  display: block;
-  padding: 1em;
-  color: white;
-  cursor: pointer;
+    text-decoration: none;
+    display: block;
+    padding: 1em;
+    color: white;
+    cursor: pointer;
 }
 
 .navigation a:hover {
-  background: darken(deepskyblue, 2%);
+    background: darken(deepskyblue, 2%);
 }
 
 .copyButton {
-  background: rgb(68, 101, 148);
-  color: white;
-  border-radius: 4px;
-  border-color: rgb(57, 84, 120);
+    background: rgb(68, 101, 148);
+    color: white;
+    border-radius: 4px;
+    border-color: rgb(57, 84, 120);
 }
 
 @media all and (max-width: 600px) {
@@ -59,8 +67,8 @@
     .footer {
         flex-direction: column;
     }
-    .navigation a {
+    .navigation a,
+    .navigation .share {
         padding: 10px 8px;
     }
-
 }

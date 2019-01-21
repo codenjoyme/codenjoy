@@ -3,6 +3,8 @@ import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
 import classnames from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FacebookShareButton } from 'react-share';
+
 // proj
 import { book } from '../../routes';
 import Styles from './styles.module.css';
@@ -23,9 +25,7 @@ export class Footer extends PureComponent {
                         </NavLink>
                     </li>
                 </ul>
-                <ul
-                    className={ classnames(Styles.navigation, Styles.navigation) }
-                >
+                <ul className={ classnames(Styles.navigation) }>
                     <li>
                         <a href='mailto:OrgBotChallengeUA@epam.com'>
                             Зв'язатися з нами
@@ -37,14 +37,19 @@ export class Footer extends PureComponent {
                         </a>
                     </li>
                     <li>
-                        <a href='/'>
-                            Поділитися
-                            <FontAwesomeIcon
-                                className={ Styles.navigationIcon }
-                                icon={ [ 'fas', 'share-alt' ] }
-                                style={ { color: '#fff' } }
-                            />
-                        </a>
+                        <div className={ Styles.share }>
+                            <FacebookShareButton
+                                className={ Styles.facebookShare }
+                                url={ process.env.REACT_APP_EVENT_LINK }
+                            >
+                                Поділитися
+                                <FontAwesomeIcon
+                                    className={ Styles.navigationIcon }
+                                    icon={ [ 'fas', 'share-alt' ] }
+                                    style={ { color: '#fff' } }
+                                />
+                            </FacebookShareButton>
+                        </div>
                     </li>
                     <li>
                         <a
