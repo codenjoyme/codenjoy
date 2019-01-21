@@ -12,7 +12,14 @@ import { CustomSelectComponent } from '../common/customSelect';
 // proj
 import { register } from '../../redux/register';
 
-const { formWrap, title, submit, backgroundSection, systemError, errorSnake } = styles;
+const {
+    formWrap,
+    title,
+    submit,
+    backgroundSection,
+    systemError,
+    errorSnake,
+} = styles;
 
 const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
@@ -83,17 +90,18 @@ const options = [
 
 class LoginForm extends Component {
     render() {
-        const { register, registerErrors } = this.props;
+        const { register, registerErrors, isLoading } = this.props;
 
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Новий гравець</h1>
                 { _.get(registerErrors, 'system') && (
-                    <div className={ systemError } >
+                    <div className={ systemError }>
                         <img src={ errorSnake } alt='' />
-                        Через непередбачуваний політ діда Мороза антети було
-                        пошкоджено. <br />Як тільки пошкодження будуть усунені, сервіс
-                        буде доступним.
+                        Через непередбачуваний політ діда Мороза антени було
+                        пошкоджено. <br />
+                        Як тільки пошкодження будуть усунені, сервіс буде
+                        доступним.
                     </div>
                 ) }
                 <Formik
@@ -183,7 +191,11 @@ class LoginForm extends Component {
                             />
 
                             <div className={ backgroundSection }>
-                                <button className={ submit } type='submit'>
+                                <button
+                                    disabled={ isLoading }
+                                    className={ submit }
+                                    type='submit'
+                                >
                                     Зареєструватися
                                 </button>
                             </div>
@@ -197,6 +209,7 @@ class LoginForm extends Component {
 
 const mapStateToProps = state => ({
     registerErrors: state.register.registerErrors,
+    isLoading:      state.register.isLoading,
 });
 
 const mapDispatchToProps = { register };

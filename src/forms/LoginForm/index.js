@@ -25,17 +25,18 @@ const LoginSchema = Yup.object().shape({
 
 class LoginForm extends Component {
     render() {
-        const { login, loginErrors } = this.props;
+        const { login, loginErrors, isLoading } = this.props;
 
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Увійти</h1>
                 { _.get(loginErrors, 'system') && (
-                    <div className={ systemError } >
+                    <div className={ systemError }>
                         <img src={ errorSnake } alt='' />
-                        Через непередбачуваний політ діда Мороза антети було
-                        пошкоджено. <br />Як тільки пошкодження будуть усунені, сервіс
-                        буде доступним.
+                        Через непередбачуваний політ діда Мороза антени було
+                        пошкоджено. <br />
+                        Як тільки пошкодження будуть усунені, сервіс буде
+                        доступним.
                     </div>
                 ) }
                 <Formik
@@ -60,7 +61,11 @@ class LoginForm extends Component {
                                     errors={ _.get(loginErrors, 'credentials') }
                                     component={ CustomInputComponent }
                                 />
-                                <button className={ submit } type='submit'>
+                                <button
+                                    disabled={ isLoading }
+                                    className={ submit }
+                                    type='submit'
+                                >
                                     Увійти
                                 </button>
                             </div>
@@ -74,6 +79,7 @@ class LoginForm extends Component {
 
 const mapStateToProps = state => ({
     loginErrors: state.auth.loginErrors,
+    isLoading:   state.auth.isLoading,
 });
 
 const mapDispatchToProps = { login };

@@ -40,6 +40,7 @@ export const LOGOUT_FAIL = `${prefix}/LOGOUT_FAIL`;
  **/
 const ReducerState = {
     loginErrors: void 0,
+    isLoading:   false,
 };
 
 export default function reducer(state = ReducerState, action) {
@@ -49,11 +50,14 @@ export default function reducer(state = ReducerState, action) {
         case AUTHENTICATE:
             return { ...state, ...payload };
 
+        case LOGIN:
+            return { ...state, isLoading: true };
+
         case LOGIN_SUCCESS:
-            return { ...state, loginErrors: void 0 };
+            return { ...state, isLoading: false, loginErrors: void 0 };
 
         case LOGIN_FAIL:
-            return { ...state, loginErrors: payload };
+            return { ...state, isLoading: false, loginErrors: payload };
 
         case LOGOUT_SUCCESS:
             return ReducerState;
