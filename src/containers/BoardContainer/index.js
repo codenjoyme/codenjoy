@@ -67,11 +67,11 @@ class BoardContainer extends Component {
                             setSelectedParticipant={ setSelectedParticipant }
                         />
                     </div>
-                    { moment(selectedDay).isSame(moment(), 'day') && (
-                        <div className={ Styles.frame }>
+                    <div className={ Styles.frame }>
+                        { moment(selectedDay).isSame(moment(), 'day') && (
                             <BattleFrame participant={ battleParticipant } />
-                        </div>
-                    ) }
+                        ) }
+                    </div>
                 </div>
             </div>
         );
