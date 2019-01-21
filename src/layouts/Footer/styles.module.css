@@ -60,6 +60,12 @@
     border-color: rgb(57, 84, 120);
 }
 
+@media all and (max-width: 1025px) {
+    .navigation a {
+        font-size: 14px;
+    }
+}
+
 @media all and (max-width: 600px) {
     .footer ul {
         flex-direction: column;

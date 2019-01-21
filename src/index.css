@@ -61,6 +61,12 @@ body {
     margin-bottom: 24px;
 }
 
+@media all and (max-width: 1030px) {
+    .content {
+        padding: 45px 20px;
+    }
+}
+
 @media all and (max-width: 820px) {
     .content {
         padding: 45px 20px;

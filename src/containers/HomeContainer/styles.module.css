@@ -89,7 +89,7 @@
     flex-wrap: wrap;
 }
 
-@media all and (max-width: 990px) {
+@media all and (max-width: 1030px) {
     .guideContainer {
         justify-content: space-around;
     }

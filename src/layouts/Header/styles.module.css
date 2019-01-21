@@ -84,7 +84,18 @@
     cursor: pointer;
 }
 
-@media all and (max-width: 820px) {
+@media all and (max-width: 1090px) {
+    .navMenu {
+        font-size: 18px;
+    }
+
+    .logoContainer {
+        font-size: 15px;
+        width: 280px;
+    }
+}
+
+@media all and (max-width: 1020px) {
     .container li {
         width: 100%;
     }
