@@ -41,7 +41,7 @@ export class Footer extends PureComponent {
                         </a>
                     </li>
                     <li>
-                        <a href={ process.env.REACT_APP_JOIN_CHAT_LINK }>
+                        <a href={ process.env.REACT_APP_JOIN_CHAT_LINK } rel='noopener noreferrer' target='_blank'>
                             Долучайся до чату
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }

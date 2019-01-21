@@ -234,7 +234,7 @@ class RulesContainer extends Component {
                     <p>
                         Для спілкування між Участниками та Організатором також створено Канал у додатку Slack,
                         приєднатися до якого можна за &nbsp;
-                        <a href={ process.env.REACT_APP_JOIN_CHAT_LINK }>
+                        <a href={ process.env.REACT_APP_JOIN_CHAT_LINK } rel='noopener noreferrer' target='_blank'>
                             посиланням <img src={ Rules } alt='rules' />
                         </a>
                     </p>
