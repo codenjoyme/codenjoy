@@ -41,11 +41,11 @@ class BoardContainer extends Component {
     render() {
         const { setSelectedDay, setSelectedParticipant } = this.props;
         const { selectedDay, rating, selectedParticipant } = this.props;
-        const { email, server } = this.props;
+        const { id, server } = this.props;
 
-        const ratingContainsEmail = email && _.find(rating, { email });
+        const ratingContainsId = id && _.find(rating, { id });
         const currentParticipant =
-            ratingContainsEmail && email && server ? { email, server } : void 0;
+            ratingContainsId && id && server ? { id, server } : void 0;
 
         const battleParticipant =
             selectedParticipant || currentParticipant || _.get(rating, 0);
@@ -61,8 +61,8 @@ class BoardContainer extends Component {
                 <div className={ Styles.wrapper }>
                     <div className={ Styles.rating }>
                         <RatingTable
-                            email={ email }
-                            watchEmail={ _.get(battleParticipant, 'email') }
+                            id={ id }
+                            watchId={ _.get(battleParticipant, 'id') }
                             rating={ rating }
                             setSelectedParticipant={ setSelectedParticipant }
                         />
@@ -82,7 +82,7 @@ const mapStateToProps = state => ({
     selectedDay:         state.board.selectedDay,
     selectedParticipant: state.board.selectedParticipant,
     rating:              state.board.rating,
-    email:               state.auth.email,
+    id:                  state.auth.id,
     server:              state.auth.server,
 });
 

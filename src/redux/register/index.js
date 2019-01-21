@@ -22,6 +22,7 @@ export const REGISTER_FAIL = `${prefix}/REGISTER_FAIL`;
  **/
 const ReducerState = {
     registerErrors: void 0,
+    isLoading:      false,
 };
 
 export default function reducer(state = ReducerState, action) {
@@ -29,13 +30,13 @@ export default function reducer(state = ReducerState, action) {
 
     switch (type) {
         case REGISTER:
-            return { ...state, registerErrors: void 0 };
+            return { ...state, isLoading: true, registerErrors: void 0 };
 
         case REGISTER_SUCCESS:
-            return { ...state, registerErrors: void 0 };
+            return { ...state, isLoading: false, registerErrors: void 0 };
 
         case REGISTER_FAIL:
-            return { ...state, registerErrors: payload };
+            return { ...state, isLoading: false, registerErrors: payload };
 
         case LOCATION_CHANGE:
             return { ...state, registerErrors: void 0 };

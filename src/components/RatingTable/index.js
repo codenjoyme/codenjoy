@@ -4,7 +4,11 @@ import { Column, Table, AutoSizer } from 'react-virtualized';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faArrowUp, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import {
+    faStar,
+    faArrowUp,
+    faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
 
 // own
 import Styles from './styles.module.css';
@@ -37,10 +41,10 @@ class RatingTableHandler extends Component {
 
     render() {
         const { setSelectedParticipant } = this.props;
-        const { rating, email, watchEmail } = this.props;
+        const { rating, id, watchId } = this.props;
 
-        const ownIndex = _.findIndex(rating, { email }); // Index of logged in user
-        const selectedIndex = _.findIndex(rating, { email: watchEmail }); // Index of selected participant
+        const ownIndex = _.findIndex(rating, { id }); // Index of logged in user
+        const selectedIndex = _.findIndex(rating, { id: watchId }); // Index of selected participant
 
         return rating ? (
             <div className={ Styles.rating }>
@@ -50,15 +54,23 @@ class RatingTableHandler extends Component {
                             gridClassName={ Styles.ratingGrid }
                             className={ Styles.ratingTable }
                             headerClassName={ Styles.header }
-                            rowClassName={ ({ index }) => this._rowStyles(index, selectedIndex, ownIndex) }
+                            rowClassName={ ({ index }) =>
+                                this._rowStyles(index, selectedIndex, ownIndex)
+                            }
                             scrollToIndex={ selectedIndex }
-                            height={ rating.length < 10 ? Math.max(110, rating.length * 50 + 60) : 500 }
+                            height={
+                                rating.length < 10
+                                    ? Math.max(110, rating.length * 50 + 60)
+                                    : 500
+                            }
                             width={ width }
                             headerHeight={ 60 }
                             rowHeight={ 50 }
                             rowCount={ rating.length }
                             rowGetter={ ({ index }) => rating[ index ] }
-                            onRowClick={ ({ rowData }) => setSelectedParticipant(rowData) }
+                            onRowClick={ ({ rowData }) =>
+                                setSelectedParticipant(rowData)
+                            }
                         >
                             <Column
                                 label='#'
@@ -71,14 +83,25 @@ class RatingTableHandler extends Component {
                                     rowIndex < 10 ? (
                                         <div className={ Styles.ratingStar }>
                                             <span className='fa-layers fa-fw fa-3x'>
-                                                <FontAwesomeIcon className={ this._starStyle(rowIndex) } icon={ faStar } />
-                                                <span className={ `fa-layers-text fa-inverse ${Styles.starLabel}` }>
+                                                <FontAwesomeIcon
+                                                    className={ this._starStyle(
+                                                        rowIndex,
+                                                    ) }
+                                                    icon={ faStar }
+                                                />
+                                                <span
+                                                    className={ `fa-layers-text fa-inverse ${
+                                                        Styles.starLabel
+                                                    }` }
+                                                >
                                                     { rowIndex + 1 }
                                                 </span>
                                             </span>
                                         </div>
                                     ) : (
-                                        <div className={ Styles.ratingIndex }>{ rowIndex + 1 }</div>
+                                        <div className={ Styles.ratingIndex }>
+                                            { rowIndex + 1 }
+                                        </div>
                                     )
                                 }
                             />
@@ -91,7 +114,11 @@ class RatingTableHandler extends Component {
                                         { ownIndex !== -1 && (
                                             <FontAwesomeIcon
                                                 title='До моєї позиції'
-                                                onClick={ () => setSelectedParticipant(rating[ ownIndex ]) }
+                                                onClick={ () =>
+                                                    setSelectedParticipant(
+                                                        rating[ ownIndex ],
+                                                    )
+                                                }
                                                 className={ Styles.toMyPosition }
                                                 icon={ faArrowRight }
                                             />
@@ -99,14 +126,18 @@ class RatingTableHandler extends Component {
                                         { !!rating.length && (
                                             <FontAwesomeIcon
                                                 title='Показати лідерів'
-                                                onClick={ () => setSelectedParticipant(_.first(rating)) }
+                                                onClick={ () =>
+                                                    setSelectedParticipant(
+                                                        _.first(rating),
+                                                    )
+                                                }
                                                 className={ Styles.toTop }
                                                 icon={ faArrowUp }
                                             />
                                         ) }
                                     </div>
                                 ) }
-                                dataKey='email'
+                                dataKey='name'
                                 flexGrow={ 2 }
                                 width={ 400 }
                             />
@@ -123,7 +154,9 @@ class RatingTableHandler extends Component {
                 </AutoSizer>
             </div>
         ) : (
-            <div>Інформація про рейтинг відсутня. Спробуйте обрати інший день</div>
+            <div>
+                Інформація про рейтинг відсутня. Спробуйте обрати інший день
+            </div>
         );
     }
 }
