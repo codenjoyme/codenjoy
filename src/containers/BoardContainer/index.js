@@ -28,8 +28,9 @@ class BoardContainer extends Component {
         const currentDate = moment(selectedDay);
 
         return (
-            currentDate.isSameOrAfter(eventStart, 'day') &&
-            currentDate.isSameOrBefore(eventEnd, 'day')
+            selectedDay &&
+            (currentDate.isSameOrAfter(eventStart, 'day') &&
+                currentDate.isSameOrBefore(eventEnd, 'day'))
         );
     }
     componentDidMount() {

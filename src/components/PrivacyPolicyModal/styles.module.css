@@ -1,0 +1,70 @@
+.privacyFooter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.emptyBlock {
+    width: 18px;
+}
+
+.buttonsPanel {
+    width: 100%;
+    max-width: 1030px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonsPanel button {
+    height: 50px;
+    width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.disagree {
+    background-color: #192433;
+}
+
+.agree {
+    background-color: #41c7dc;
+}
+
+.modalContent {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    background: #263852;
+    overflow: auto;
+    outline: none;
+    padding: 20px;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgb(34, 34, 34, 0.8);
+}
+
+.modalContent::-webkit-scrollbar-track {
+    background-color: rgb(34, 34, 34);
+}
+
+.modalContent::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+    background-color: rgb(48, 113, 137);
+}

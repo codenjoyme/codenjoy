@@ -17,13 +17,15 @@ const prefix = `codenjoy/${moduleName}`;
 export const REGISTER = `${prefix}/REGISTER`;
 export const REGISTER_SUCCESS = `${prefix}/REGISTER_SUCCESS`;
 export const REGISTER_FAIL = `${prefix}/REGISTER_FAIL`;
+export const SET_VISIBLE_PRIVACY_MODAL = `${prefix}/SET_VISIBLE_PRIVACY_MODAL`;
 
 /**
  * Reducer
  **/
 const ReducerState = {
-    registerErrors: void 0,
-    isLoading:      false,
+    registerErrors:      void 0,
+    isLoading:           false,
+    visiblePrivacyModal: false,
 };
 
 export default function reducer(state = ReducerState, action) {
@@ -42,6 +44,9 @@ export default function reducer(state = ReducerState, action) {
         case LOCATION_CHANGE:
             return { ...state, registerErrors: void 0 };
 
+        case SET_VISIBLE_PRIVACY_MODAL:
+            return { ...state, visiblePrivacyModal: payload };
+
         default:
             return state;
     }
@@ -50,6 +55,11 @@ export default function reducer(state = ReducerState, action) {
 /**
  * Action Creators
  **/
+
+export const setVisiblePrivacyModal = visible => ({
+    type:    SET_VISIBLE_PRIVACY_MODAL,
+    payload: visible,
+});
 
 export const register = payload => ({
     type: REGISTER,

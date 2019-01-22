@@ -1,10 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './styles.module.css';
-import { book } from '../../routes';
 
-const { checkBox, checkBoxWrap, checkBoxLabel, checkBoxItem, checkBoxIcon } = styles;
+const {
+    checkBox,
+    checkBoxWrap,
+    checkBoxLabel,
+    checkBoxItem,
+    checkBoxIcon,
+} = styles;
 
 export const CustomCheckboxComponent = ({
     field, // { name, value, onChange, onBlur }
@@ -17,15 +21,33 @@ export const CustomCheckboxComponent = ({
 
     return (
         <div className={ checkBoxWrap }>
-            <input type={ field.type } id={ field.name } className={ checkBox } { ...field } { ...props } />
-            <label className={ checkBoxItem } htmlFor={ field.name } onClick={ () => setTouched({ ...touched, [ field.name ]: true }) }>
-                {
-                    isCurrentFieldValid ?
-                        <FontAwesomeIcon className={ checkBoxIcon } icon={ [ 'far', 'check-square' ] } style={ {color: '#cedb56'} } /> :
-                        <FontAwesomeIcon className={ checkBoxIcon } icon={ [ 'far', 'square' ] } style={ {color: color} } />
-                }
+            <input
+                type={ field.type }
+                id={ field.name }
+                className={ checkBox }
+                { ...field }
+                { ...props }
+            />
+            <label
+                className={ checkBoxItem }
+                htmlFor={ field.name }
+                onClick={ () => setTouched({ ...touched, [ field.name ]: true }) }
+            >
+                { isCurrentFieldValid ? (
+                    <FontAwesomeIcon
+                        className={ checkBoxIcon }
+                        icon={ [ 'far', 'check-square' ] }
+                        style={ { color: '#cedb56' } }
+                    />
+                ) : (
+                    <FontAwesomeIcon
+                        className={ checkBoxIcon }
+                        icon={ [ 'far', 'square' ] }
+                        style={ { color: color } }
+                    />
+                ) }
             </label>
-            <Link to={ book.privacyPolicy } className={ checkBoxLabel }>{ props.label }</Link>
+            <div className={ checkBoxLabel }>{ props.label }</div>
         </div>
-    )
+    );
 };

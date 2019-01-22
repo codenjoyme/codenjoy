@@ -4,12 +4,14 @@ import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
 import _ from 'lodash';
-import styles from '../common/styles.module.css';
-import { CustomInputComponent } from '../common/customInput';
-import errorSnake from '../common/DuneSnake-icon.svg';
 
 // proj
 import { login } from '../../redux/auth';
+import { CustomInputComponent } from '../common/customInput';
+import errorSnake from '../common/DuneSnake-icon.svg';
+
+// own
+import styles from '../common/styles.module.css';
 
 const { formWrap, title, submit, backgroundSection, systemError } = styles;
 

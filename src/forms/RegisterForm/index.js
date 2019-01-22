@@ -4,13 +4,16 @@ import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
 import _ from 'lodash';
-import styles from '../common/styles.module.css';
+
+// proj
+import { register, setVisiblePrivacyModal } from '../../redux/register';
+import { PrivacyPolicyModal } from '../../components';
 import { CustomInputComponent } from '../common/customInput';
 import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
 
-// proj
-import { register } from '../../redux/register';
+// own
+import styles from '../common/styles.module.css';
 
 const {
     formWrap,
@@ -90,7 +93,8 @@ const options = [
 
 class LoginForm extends Component {
     render() {
-        const { register, registerErrors, isLoading } = this.props;
+        const { register, setVisiblePrivacyModal } = this.props;
+        const { visiblePrivacyModal, registerErrors, isLoading } = this.props;
 
         return (
             <div className={ formWrap }>
@@ -186,8 +190,24 @@ class LoginForm extends Component {
                             <Field
                                 name='terms'
                                 component={ CustomCheckboxComponent }
-                                label='Погоджуюсь с політикою конфіденційності*'
+                                label={
+                                    <div
+                                        onClick={ () =>
+                                            setVisiblePrivacyModal(true)
+                                        }
+                                    >
+                                        Погоджуюсь с політикою конфіденційності*
+                                    </div>
+                                }
                                 type='checkbox'
+                            />
+                            <PrivacyPolicyModal
+                                action={ accept => {
+                                    props.setFieldTouched('terms');
+                                    props.setFieldValue('terms', accept);
+                                } }
+                                isOpen={ visiblePrivacyModal }
+                                setVisible={ setVisiblePrivacyModal }
                             />
 
                             <div className={ backgroundSection }>
@@ -208,11 +228,12 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    registerErrors: state.register.registerErrors,
-    isLoading:      state.register.isLoading,
+    registerErrors:      state.register.registerErrors,
+    isLoading:           state.register.isLoading,
+    visiblePrivacyModal: state.register.visiblePrivacyModal,
 });
 
-const mapDispatchToProps = { register };
+const mapDispatchToProps = { register, setVisiblePrivacyModal };
 
 export default connect(
     mapStateToProps,
