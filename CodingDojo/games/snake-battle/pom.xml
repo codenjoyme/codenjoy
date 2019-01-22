@@ -75,6 +75,54 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <configuration>
+                            <target>
+                                <zip destfile="${user.resources}/${module.name}-servers-java.zip"
+                                     basedir="."
+                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
+                                               src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               README.*,
+                                               src/license/**,
+                                               **/pom.xml"
+                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                               src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                               **/target/**"
+                                     update="true"/>
+
+                                <zip destfile="${user.resources}/${module.name}-servers-js.zip"
+                                     basedir="src/main/javascript"
+                                     includes="**"
+                                     update="true"/>
+
+                                <zip destfile="${user.resources}/${module.name}-servers-js.zip"
+                                     basedir="."
+                                     includes="src/license/**"
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/${module.name}-servers-js.zip,
+                                               resources/user/${module.name}-servers-java.zip"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/${module.name}-servers-js.zip,
+                                               resources/user/${module.name}-servers-java.zip"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
