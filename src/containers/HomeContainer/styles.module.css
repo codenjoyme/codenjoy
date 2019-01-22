@@ -55,8 +55,26 @@
     width: 33%;
 }
 
-.stepHeader {
-    height: 133px;
+.stepWinHeader,
+.stepBattleHeader,
+.stepCreateHeader {
+    min-height: 102px;
+    max-height: 124px;
+}
+
+.stepWinHeader {
+    background-image: url(./../../styles/images/layout/presents.png);
+    background-size: cover;
+}
+
+.stepBattleHeader {
+    background-image: url(./../../styles/images/layout/battle.png);
+    background-size: cover;
+}
+
+.stepCreateHeader {
+    background-image: url(./../../styles/images/layout/create.png);
+    background-size: cover;
 }
 
 .stepTitle {
@@ -106,5 +124,11 @@
     .guideStep {
         max-width: 330px;
         width: 50%;
+    }
+    .stepWinHeader,
+    .stepBattleHeader,
+    .stepCreateHeader {
+        min-height: 102px;
+        max-height: 135px;
     }
 }

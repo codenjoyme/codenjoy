@@ -40,21 +40,21 @@ const HomeContainer = () => (
             <div className='title'>Як взяти участь</div>
             <div className={ Styles.guideContainer }>
                 <div className={ Styles.guideStep }>
-                    <div className={ Styles.stepHeader } />
+                    <div className={ Styles.stepCreateHeader } />
                     <div className={ Styles.stepTitle }>СТВОРИ</div>
                     <div className={ Styles.stepDescription }>
                         Створи свого Бота на Java або JavaScript
                     </div>
                 </div>
                 <div className={ Styles.guideStep }>
-                    <div className={ Styles.stepHeader } />
+                    <div className={ Styles.stepBattleHeader } />
                     <div className={ Styles.stepTitle }>ЗМАГАЙСЯ</div>
                     <div className={ Styles.stepDescription }>
                         Змагайся з іншими учасниками
                     </div>
                 </div>
                 <div className={ Styles.guideStep }>
-                    <div className={ Styles.stepHeader } />
+                    <div className={ Styles.stepWinHeader } />
                     <div className={ Styles.stepTitle }>ВИГРАВАЙ</div>
                     <div className={ Styles.stepDescription }>
                         <div>Вигравай!</div>
