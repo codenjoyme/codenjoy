@@ -1,7 +1,10 @@
 .homeTitle {
     padding: 45px 0 55px;
     width: 100%;
-    background-color: var(--title-bg-color);
+    background-image: url(./../../styles/images/layout/dark.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
     display: flex;
     flex-direction: column;
     align-items: center;
