@@ -19,7 +19,7 @@
 }
 
 .buttonsPanel button {
-    height: 50px;
+    padding: 20px 0;
     width: 100%;
     cursor: pointer;
     text-decoration: none;
@@ -38,14 +38,17 @@
 
 .modalContent {
     position: absolute;
-    top: 40px;
-    left: 40px;
-    right: 40px;
-    bottom: 40px;
+    top: 50px;
+    width: calc(90% - 100px);
+    max-width: calc(700px - 100px);
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 50px;
     background: var(--main-bg-color);
     overflow: auto;
     outline: none;
-    padding: 20px;
+    padding: 20px 50px;
 }
 
 .modalOverlay {
@@ -67,4 +70,11 @@
 
 .modalContent::-webkit-scrollbar-thumb {
     background-color: rgb(48, 113, 137);
+}
+
+@media all and (max-width: 820px) {
+    .modalContent {
+        width: calc(90% - 40px);
+        padding: 20px;
+    }
 }

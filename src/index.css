@@ -68,9 +68,42 @@ body {
     margin-bottom: 24px;
 }
 
+.ReactModalPortal .content .title {
+    font-size: 23px;
+    line-height: 2;
+}
+
 @media all and (max-width: 1030px) {
     .content {
         padding: 45px 0px;
         width: calc(100% - 40px);
+    }
+}
+
+@media all and (max-width: 820px) {
+    .title {
+        line-height: 1.13;
+    }
+}
+
+@media all and (max-width: 420px) {
+    .title {
+        font-size: 25px;
+    }
+    .ReactModalPortal .content {
+        padding: 45px 0px;
+        width: 100%;
+    }
+    .ReactModalPortal .content li {
+        font-size: 17px;
+    }
+    .ReactModalPortal .content .title {
+        font-size: 23px;
+    }
+}
+
+@media all and (max-width: 320px) {
+    .content a {
+        font-size: 19px;
     }
 }
