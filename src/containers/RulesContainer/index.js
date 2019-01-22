@@ -7,7 +7,11 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 // proj
 import { GameElements } from '../../components';
-import { getGameConnectionString } from '../../utils';
+import {
+    getGameConnectionString,
+    getJavaClient,
+    getJsClient,
+} from '../../utils';
 import { book } from '../../routes';
 import Rules from '../../styles/images/icons/rules.svg';
 
@@ -42,6 +46,17 @@ class RulesContainer extends Component {
             ? getGameConnectionString(server, code, email)
             : void 0;
 
+        const javaClientLink = loggedIn ? (
+            <a href={ getJavaClient(server) }>Java</a>
+        ) :
+            'Java'
+        ;
+        const jsClientLink = loggedIn ? (
+            <a href={ getJsClient(server) }>JavaScript</a>
+        ) :
+            'JavaScript'
+        ;
+
         return (
             <div className='container'>
                 <div className={ mask }>Snake Battle - як грати?</div>
@@ -64,8 +79,10 @@ class RulesContainer extends Component {
                     </p>
                     <h2 className='title'>Як почати?</h2>
                     <div className='subTitle'>
-                        Завантажте Проект гри для створення Бота: Java або
-                        JavaScript
+                        Завантажте Проект гри для створення Бота:{ ' ' }
+                        { javaClientLink } або { jsClientLink }{ ' ' }
+                        { !loggedIn &&
+                            '(посилання стануть доступні після входу на сайт)' }
                     </div>
                     <p>
                         Пам'ятайте: у процесі написання Бота Вам необхідно

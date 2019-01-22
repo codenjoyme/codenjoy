@@ -3,3 +3,9 @@ export const getGameConnectionString = (server, code, email) =>
 
 export const getIFrameLink = (server, id) =>
     `http://${server}/codenjoy-contest/board/player/id/${id}?only=true`;
+
+export const getJsClient = server =>
+    `http://${server}/codenjoy-contest/resources/user/snakebattle-servers-js.zip`;
+
+export const getJavaClient = server =>
+    `http://${server}/codenjoy-contest/resources/user/snakebattle-servers-java.zip`;
