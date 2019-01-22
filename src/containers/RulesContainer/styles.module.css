@@ -4,11 +4,14 @@
     align-items: center;
     justify-content: center;
     height: 260px;
-    background-color: var(--title-bg-color);
     font-size: 58px;
     line-height: 1.07;
     color: #ffffff;
     text-align: center;
+    background-image: url(./../../styles/images/layout/dark.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .highligteUnderNotes,
