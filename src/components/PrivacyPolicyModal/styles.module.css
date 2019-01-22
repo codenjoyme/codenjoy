@@ -48,7 +48,7 @@
     background: var(--main-bg-color);
     overflow: auto;
     outline: none;
-    padding: 20px 50px;
+    padding: 0px 50px 20px;
 }
 
 .modalOverlay {
@@ -75,6 +75,6 @@
 @media all and (max-width: 820px) {
     .modalContent {
         width: calc(90% - 40px);
-        padding: 20px;
+        padding: 0 20px 20px;
     }
 }
