@@ -20,6 +20,7 @@ export class PrivacyPolicyModal extends Component {
                 contentLabel='Політика конфіденційності'
                 className={ Styles.modalContent }
                 overlayClassName={ Styles.modalOverlay }
+                onRequestClose={ () => setVisible(false) }
             >
                 <PrivacyPolicyContainer />
 
