@@ -8,7 +8,8 @@ import moment from 'moment';
 import {
     setSelectedDay,
     setSelectedParticipant,
-    fetchRating,
+    startBackgroundSync,
+    stopBackgroundSync,
 } from '../../redux/board';
 import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 
@@ -33,10 +34,15 @@ class BoardContainer extends Component {
                 currentDate.isSameOrBefore(eventEnd, 'day'))
         );
     }
+
+    componentWillUnmount() {
+        // eslint-disable-next-line no-sync
+        this.props.stopBackgroundSync();
+    }
+
     componentDidMount() {
-        if (this._isSelectedDateValid(this.props.selectedDay)) {
-            this.props.fetchRating(this.props.selectedDay);
-        }
+        // eslint-disable-next-line no-sync
+        this.props.startBackgroundSync();
     }
 
     render() {
@@ -90,7 +96,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     setSelectedDay,
     setSelectedParticipant,
-    fetchRating,
+    startBackgroundSync,
+    stopBackgroundSync,
 };
 
 export default connect(

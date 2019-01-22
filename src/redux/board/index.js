@@ -1,5 +1,15 @@
 // vendor
-import { all, put, call, takeLatest } from 'redux-saga/effects';
+import {
+    all,
+    put,
+    call,
+    takeLatest,
+    take,
+    fork,
+    cancel,
+    select,
+} from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import moment from 'moment';
 import _ from 'lodash';
 
@@ -18,6 +28,9 @@ export const SET_SELECTED_PARTICIPANT = `${prefix}/SET_SELECTED_PARTICIPANT`;
 
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
+
+export const START_BACKGROUND_SYNC = `${prefix}/START_BACKGROUND_SYNC`;
+export const STOP_BACKGROUND_SYNC = `${prefix}/STOP_BACKGROUND_SYNC`;
 
 /**
  * Reducer
@@ -75,9 +88,8 @@ export const setSelectedParticipant = selectedParticipant => ({
     payload: selectedParticipant,
 });
 
-export const fetchRating = selectedDay => ({
-    type:    FETCH_RATING,
-    payload: { selectedDay },
+export const fetchRating = () => ({
+    type: FETCH_RATING,
 });
 
 export const fetchRatingSuccess = data => ({
@@ -85,11 +97,20 @@ export const fetchRatingSuccess = data => ({
     payload: data,
 });
 
+export const startBackgroundSync = () => ({
+    type: START_BACKGROUND_SYNC,
+});
+
+export const stopBackgroundSync = () => ({
+    type: STOP_BACKGROUND_SYNC,
+});
+
 /**
  * Saga
  **/
 
-function* fetch(selectedDay) {
+function* fetchRatingSaga() {
+    const selectedDay = yield select(state => state.board.selectedDay);
     const data = yield call(fetchAPI, 'GET', `rest/score/day/${selectedDay}`);
 
     const processedData = _.chain(data)
@@ -101,14 +122,26 @@ function* fetch(selectedDay) {
     yield put(fetchRatingSuccess(processedData));
 }
 
-export function* setSelectedDaySaga({ payload: selectedDay }) {
-    yield call(fetch, selectedDay);
+function* ratingSync() {
+    while (true) {
+        yield put(fetchRating());
+        yield delay(10000);
+    }
 }
 
-export function* fetchRatingSaga({ payload: { selectedDay } }) {
-    yield call(fetch, selectedDay);
+function* ratingSyncSaga() {
+    while (yield take(START_BACKGROUND_SYNC)) {
+        const ratingSyncTask = yield fork(ratingSync);
+
+        yield take(STOP_BACKGROUND_SYNC);
+        yield cancel(ratingSyncTask);
+    }
+}
+
+export function* setSelectedDaySaga() {
+    yield put(fetchRating());
 }
 
 export function* saga() {
-    yield all([ takeLatest(SET_SELECTED_DAY, setSelectedDaySaga), takeLatest(FETCH_RATING, fetchRatingSaga) ]);
+    yield all([ call(ratingSyncSaga), takeLatest(SET_SELECTED_DAY, setSelectedDaySaga), takeLatest(FETCH_RATING, fetchRatingSaga) ]);
 }
