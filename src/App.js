@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import 'reset-css';
-import { Scrollbars } from 'react-custom-scrollbars';
 import { PersistGate } from 'redux-persist/integration/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
@@ -26,7 +25,7 @@ import {
 // proj
 import store, { history, persistor } from './store';
 import Routes from './routes/Routes';
-import ScrollToTop from './ScrollToTop';
+import CustomScrollbars from './CustomScrollbars';
 
 library.add(
     faTimesCircle,
@@ -46,17 +45,15 @@ library.add(
 class App extends Component {
     render() {
         return (
-            <Scrollbars autoHide style={ { width: '100%', height: '100vh' } }>
-                <Provider store={ store }>
-                    <PersistGate loading={ null } persistor={ persistor }>
-                        <ConnectedRouter history={ history }>
-                            <ScrollToTop>
-                                <Routes />
-                            </ScrollToTop>
-                        </ConnectedRouter>
-                    </PersistGate>
-                </Provider>
-            </Scrollbars>
+            <Provider store={ store }>
+                <PersistGate loading={ null } persistor={ persistor }>
+                    <ConnectedRouter history={ history }>
+                        <CustomScrollbars>
+                            <Routes />
+                        </CustomScrollbars>
+                    </ConnectedRouter>
+                </PersistGate>
+            </Provider>
         );
     }
 }
