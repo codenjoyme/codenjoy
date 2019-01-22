@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
+import ReactGA from 'react-ga';
 import 'reset-css';
 import { PersistGate } from 'redux-persist/integration/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -41,6 +42,10 @@ library.add(
     faUser,
     farUserCircle,
 );
+
+const reactGAOptions =
+    process.env.NODE_ENV === 'development' ? { testMode: true } : {};
+ReactGA.initialize(process.env.REACT_APP_GA_ID, reactGAOptions);
 
 class App extends Component {
     render() {
