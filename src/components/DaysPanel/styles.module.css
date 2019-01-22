@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     align-items: center;
     padding: 20px;
+    font-family: 'Museo Sans Cyrl';
 }
 
 .dayName {
