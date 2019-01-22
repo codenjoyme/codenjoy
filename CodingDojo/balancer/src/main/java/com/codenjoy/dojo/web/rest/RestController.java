@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.Dispatcher;
+import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.DispatcherSettings;
@@ -192,6 +193,7 @@ public class RestController {
         doIt(new DoItOnServers() {
             @Override
             public void onBalancer() {
+//                scores.delete(email);
                 players.remove(email);
             }
 

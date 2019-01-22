@@ -135,6 +135,7 @@ public class Dispatcher {
                 .collect(LinkedList::new, List::addAll, List::addAll);
 
         long time = now();
+        // TODO тут тоже хорошо бы сделать батч апдейт а не по одному запросу гнать
         playersInfos.forEach(it -> scores.saveScore(time, it.getName(), Integer.valueOf(it.getScore())));
 
         // теперь любой может пользоваться этим данными для считывания
