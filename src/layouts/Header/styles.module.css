@@ -37,7 +37,7 @@
 .container {
     display: flex;
     justify-content: space-between;
-    background: #192433;
+    background: var(--block-bg-color);
     font-family: 'Museo Sans Cyrl';
 }
 
@@ -62,7 +62,7 @@
     width: 100%;
     bottom: 0;
     left: 0;
-    background: #41c7dc;
+    background: var(--primary-color);
 }
 
 .container ul {
@@ -88,7 +88,6 @@
     .navMenu {
         font-size: 18px;
     }
-
     .logoContainer {
         font-size: 15px;
         width: 280px;
@@ -105,13 +104,13 @@
         justify-content: center;
     }
     .container a.activeMenu {
-        background: #41c7dc;
+        background: var(--primary-color);
     }
     .container a.activeMenu:after {
         display: none;
     }
     .active {
-        background-color: rgb(65, 199, 220);
+        background-color: var(--primary-color);
         color: white;
         border: none;
     }

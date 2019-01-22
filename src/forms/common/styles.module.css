@@ -11,15 +11,15 @@
 .title {
     font-size: 20px;
     text-align: left;
-    color: #a1b0bb;
+    color: var(--title-bg-color);
     padding: 21px;
-    border-bottom: 2px solid #41c7dc;
-    background: #192433;
+    border-bottom: 2px solid var(--primary-color);
+    background: var(--block-bg-color);
     font-weight: 500;
 }
 
 .backgroundSection {
-    background: #192433;
+    background: var(--block-bg-color);
     padding: 24px;
 }
 
@@ -36,11 +36,11 @@
     display: inline-block;
     width: calc(100% - 30px);
     line-height: 16px;
-    border: 1px solid #41c7dc;
+    border: 1px solid var(--primary-color);
     font-size: 12px;
     padding: 15px;
-    background: #263852;
-    color: #a1b0bb;
+    background: var(--main-bg-color);
+    color: var(--title-bg-color);
 }
 
 .inputError {
@@ -81,11 +81,11 @@
 
 .selectWrap {
     margin-bottom: 47px;
-    color: #a1b0bb;
+    color: var(--title-bg-color);
 }
 
 .select {
-    border: 1px solid #41c7dc;
+    border: 1px solid var(--primary-color);
 }
 
 .selectError {
@@ -116,7 +116,7 @@
 }
 
 .checkBoxLabel {
-    color: #a1b0bb;
+    color: var(--title-bg-color);
     font-size: 12px;
     text-decoration: underline;
     font-weight: 300;
@@ -125,10 +125,10 @@
 
 .systemError {
     padding: 24px 24px 0;
-    background: #192433;
+    background: var(--block-bg-color);
     font-size: 16px;
     font-weight: 200;
-    color: #41c7dc;
+    color: var(--primary-color);
 }
 
 .systemError img {

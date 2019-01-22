@@ -21,15 +21,15 @@
     text-align: center;
     text-decoration: none;
     background-color: transparent;
-    border: 1.5px solid rgb(65, 199, 220);
-    color: rgb(65, 199, 220);
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
     font-weight: bold;
     font-size: 12px;
     cursor: pointer;
 }
 
 .dayButton:not(.dayButtonDisabled):hover {
-    background-color: rgb(65, 199, 220);
+    background-color: var(--primary-color);
     color: white;
 }
 
@@ -38,7 +38,7 @@
 }
 
 .dayButtonSelected {
-    background-color: rgb(65, 199, 220);
+    background-color: var(--primary-color);
     color: white;
 }
 

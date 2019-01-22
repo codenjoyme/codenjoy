@@ -29,11 +29,11 @@
 }
 
 .disagree {
-    background-color: #192433;
+    background-color: var(--block-bg-color);
 }
 
 .agree {
-    background-color: #41c7dc;
+    background-color: var(--primary-color);
 }
 
 .modalContent {
@@ -42,7 +42,7 @@
     left: 40px;
     right: 40px;
     bottom: 40px;
-    background: #263852;
+    background: var(--main-bg-color);
     overflow: auto;
     outline: none;
     padding: 20px;
