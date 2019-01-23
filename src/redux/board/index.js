@@ -9,12 +9,15 @@ import {
     cancel,
     select,
 } from 'redux-saga/effects';
+import { replace } from 'connected-react-router';
 import { delay } from 'redux-saga';
-import moment from 'moment';
 import _ from 'lodash';
+import moment from 'moment';
+import qs from 'qs';
 
 // proj
 import { fetchAPI } from '../../utils';
+import { book } from '../../routes';
 
 /**
  * Constants
@@ -22,9 +25,9 @@ import { fetchAPI } from '../../utils';
 export const moduleName = 'board';
 const prefix = `codenjoy/${moduleName}`;
 
-export const SET_SELECTED_DAY = `${prefix}/SET_SELECTED_DAY`;
+export const SET_DAY = `${prefix}/SET_DAY`;
 
-export const SET_SELECTED_PARTICIPANT_ID = `${prefix}/SET_SELECTED_PARTICIPANT_ID`;
+export const SET_PARTICIPANT_ID = `${prefix}/SET_PARTICIPANT_ID`;
 
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
@@ -32,29 +35,33 @@ export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
 export const START_BACKGROUND_SYNC = `${prefix}/START_BACKGROUND_SYNC`;
 export const STOP_BACKGROUND_SYNC = `${prefix}/STOP_BACKGROUND_SYNC`;
 
+const eventStart = moment(process.env.REACT_APP_EVENT_START);
+const eventEnd = moment(process.env.REACT_APP_EVENT_END);
+const DATE_FORMAT = 'YYYY-MM-DD';
 /**
  * Reducer
  * */
 
 const ReducerState = {
-    selectedDay: _.max([ _.min([ moment(), moment(process.env.REACT_APP_EVENT_END) ]), moment(process.env.REACT_APP_EVENT_START) ]).format('YYYY-MM-DD'),
+    day:           moment().format(DATE_FORMAT),
+    participantId: void 0,
 };
 
 export default function reducer(state = ReducerState, action) {
     const { type, payload } = action;
 
     switch (type) {
-        case SET_SELECTED_DAY:
+        case SET_DAY:
             return {
                 ...state,
-                selectedDay:           payload,
-                selectedParticipantId: void 0,
+                day:           payload,
+                participantId: void 0,
             };
 
-        case SET_SELECTED_PARTICIPANT_ID:
+        case SET_PARTICIPANT_ID:
             return {
                 ...state,
-                selectedParticipantId: payload,
+                participantId: payload,
             };
 
         case FETCH_RATING:
@@ -78,14 +85,14 @@ export default function reducer(state = ReducerState, action) {
  * Actions
  * */
 
-export const setSelectedDay = selectedDay => ({
-    type:    SET_SELECTED_DAY,
-    payload: selectedDay,
+export const setDay = day => ({
+    type:    SET_DAY,
+    payload: day,
 });
 
-export const setSelectedParticipantId = selectedParticipantId => ({
-    type:    SET_SELECTED_PARTICIPANT_ID,
-    payload: selectedParticipantId,
+export const setParticipantId = participantId => ({
+    type:    SET_PARTICIPANT_ID,
+    payload: participantId,
 });
 
 export const fetchRating = () => ({
@@ -97,8 +104,9 @@ export const fetchRatingSuccess = data => ({
     payload: data,
 });
 
-export const startBackgroundSync = () => ({
+export const startBackgroundSync = payload => ({
     type: START_BACKGROUND_SYNC,
+    payload,
 });
 
 export const stopBackgroundSync = () => ({
@@ -110,8 +118,8 @@ export const stopBackgroundSync = () => ({
  **/
 
 function* fetchRatingSaga() {
-    const selectedDay = yield select(state => state.board.selectedDay);
-    const data = yield call(fetchAPI, 'GET', `rest/score/day/${selectedDay}`);
+    const day = yield select(state => state.board.day);
+    const data = yield call(fetchAPI, 'GET', `rest/score/day/${day}`);
 
     const processedData = _.chain(data)
         .filter('server')
@@ -124,13 +132,29 @@ function* fetchRatingSaga() {
 
 function* ratingSync() {
     while (true) {
-        yield put(fetchRating());
         yield delay(10000);
+        yield put(fetchRating());
     }
 }
 
 function* ratingSyncSaga() {
-    while (yield take(START_BACKGROUND_SYNC)) {
+    while (true) {
+        const {
+            payload: { day, participantId },
+        } = yield take(START_BACKGROUND_SYNC);
+
+        const passedMomentDay = moment(day);
+        const defaultMomentDay = passedMomentDay.isValid()
+            ? passedMomentDay
+            : moment();
+
+        const defaultDay = _.max([ _.min([ defaultMomentDay, eventEnd ]), eventStart ]);
+        yield put(setDay(defaultDay.format(DATE_FORMAT)));
+
+        if (participantId) {
+            yield put(setParticipantId(participantId));
+        }
+
         const ratingSyncTask = yield fork(ratingSync);
 
         yield take(STOP_BACKGROUND_SYNC);
@@ -138,10 +162,24 @@ function* ratingSyncSaga() {
     }
 }
 
-export function* setSelectedDaySaga() {
+export function* setDaySaga() {
     yield put(fetchRating());
 }
 
+export function* updateQueryParamsSaga() {
+    const queryParams = yield select(state => ({
+        participantId: state.board.participantId,
+        day:           state.board.day,
+    }));
+
+    yield put(replace(book.board + '?' + qs.stringify(queryParams)));
+}
+
 export function* saga() {
-    yield all([ call(ratingSyncSaga), takeLatest(SET_SELECTED_DAY, setSelectedDaySaga), takeLatest(FETCH_RATING, fetchRatingSaga) ]);
+    yield all([
+        call(ratingSyncSaga),
+        takeLatest(SET_DAY, setDaySaga),
+        takeLatest(FETCH_RATING, fetchRatingSaga),
+        takeLatest([ SET_PARTICIPANT_ID, SET_DAY ], updateQueryParamsSaga),
+    ]);
 }

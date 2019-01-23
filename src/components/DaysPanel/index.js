@@ -32,7 +32,7 @@ class DaysPanelHandler extends Component {
 
     render() {
         const {
-            selectedDay,
+            day,
             period: { start, end },
             onDaySelect,
         } = this.props;
@@ -54,16 +54,16 @@ class DaysPanelHandler extends Component {
         return (
             <div className={ Styles.dayPanel }>
                 <div className={ Styles.dayName }>День №</div>
-                { daysRangeConfig.map(({ label, disabled, day }) => (
+                { daysRangeConfig.map(({ label, disabled, day: configDay }) => (
                     <button
-                        title={ day }
+                        title={ configDay }
                         className={ this._dayButtonStyles(
-                            selectedDay === day,
+                            day === configDay,
                             disabled,
                         ) }
-                        key={ day }
-                        onClick={ () => onDaySelect(day) }
-                        disabled={ selectedDay === day || disabled }
+                        key={ configDay }
+                        onClick={ () => onDaySelect(configDay) }
+                        disabled={ day === configDay || disabled }
                     >
                         { label }
                     </button>

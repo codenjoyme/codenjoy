@@ -3,11 +3,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
+import qs from 'qs';
 
 // proj
 import {
-    setSelectedDay,
-    setSelectedParticipantId,
+    setDay,
+    setParticipantId,
     startBackgroundSync,
     stopBackgroundSync,
 } from '../../redux/board';
@@ -16,57 +18,45 @@ import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 // own
 import Styles from './styles.module.css';
 
+const QS_PARSE_OPTIONS = { ignoreQueryPrefix: true };
 const period = {
     start: process.env.REACT_APP_EVENT_START || '2019-01-01T10:00:00.000Z',
     end:   process.env.REACT_APP_EVENT_END || '2019-01-31T10:00:00.000Z',
 };
 
-const eventStart = moment(period.start);
-const eventEnd = moment(period.end);
-
 class BoardContainer extends Component {
-    _isSelectedDateValid(selectedDay) {
-        const currentDate = moment(selectedDay);
-
-        return (
-            selectedDay &&
-            (currentDate.isSameOrAfter(eventStart, 'day') &&
-                currentDate.isSameOrBefore(eventEnd, 'day'))
-        );
-    }
-
     componentWillUnmount() {
         // eslint-disable-next-line no-sync
         this.props.stopBackgroundSync();
     }
 
     componentDidMount() {
+        const queryParams = qs.parse(
+            this.props.location.search,
+            QS_PARSE_OPTIONS,
+        );
         // eslint-disable-next-line no-sync
-        this.props.startBackgroundSync();
+        this.props.startBackgroundSync(queryParams);
     }
 
     render() {
-        const { setSelectedDay, setSelectedParticipantId } = this.props; // actions
-        const { selectedDay, rating } = this.props;
-        const { id, selectedParticipantId } = this.props;
+        const { setDay, setParticipantId } = this.props; // actions
+        const { day, rating } = this.props;
+        const { id, participantId } = this.props;
 
         const currentParticipant = _.isNil(id)
             ? void 0
             : _.find(rating, { id });
-        const selectedParticipant = _.isNil(selectedParticipantId)
+        const participant = _.isNil(participantId)
             ? void 0
-            : _.find(rating, { id: selectedParticipantId });
+            : _.find(rating, { id: participantId });
 
         const battleParticipant =
-            selectedParticipant || currentParticipant || _.get(rating, 0);
+            participant || currentParticipant || _.get(rating, 0);
 
         return (
             <div className={ Styles.boardContainer }>
-                <DaysPanel
-                    selectedDay={ selectedDay }
-                    onDaySelect={ setSelectedDay }
-                    period={ period }
-                />
+                <DaysPanel day={ day } onDaySelect={ setDay } period={ period } />
 
                 <div className={ Styles.wrapper }>
                     <div className={ Styles.rating }>
@@ -74,13 +64,11 @@ class BoardContainer extends Component {
                             id={ id }
                             watchId={ _.get(battleParticipant, 'id') }
                             rating={ rating }
-                            setSelectedParticipant={ ({ id }) =>
-                                setSelectedParticipantId(id)
-                            }
+                            setParticipant={ ({ id }) => setParticipantId(id) }
                         />
                     </div>
                     <div className={ Styles.frame }>
-                        { moment(selectedDay).isSame(moment(), 'day') && (
+                        { moment(day).isSame(moment(), 'day') && (
                             <BattleFrame participant={ battleParticipant } />
                         ) }
                     </div>
@@ -91,21 +79,23 @@ class BoardContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    selectedDay:           state.board.selectedDay,
-    selectedParticipantId: state.board.selectedParticipantId,
-    rating:                state.board.rating,
-    id:                    state.auth.id,
-    server:                state.auth.server,
+    day:           state.board.day,
+    participantId: state.board.participantId,
+    rating:        state.board.rating,
+    id:            state.auth.id,
+    server:        state.auth.server,
 });
 
 const mapDispatchToProps = {
-    setSelectedDay,
-    setSelectedParticipantId,
+    setDay,
+    setParticipantId,
     startBackgroundSync,
     stopBackgroundSync,
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-)(BoardContainer);
+export default withRouter(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    )(BoardContainer),
+);

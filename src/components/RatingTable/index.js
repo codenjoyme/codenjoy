@@ -40,7 +40,7 @@ class RatingTableHandler extends Component {
     }
 
     render() {
-        const { setSelectedParticipant } = this.props;
+        const { setParticipant } = this.props;
         const { rating, id, watchId } = this.props;
 
         const ownIndex = _.isNil(id) ? -1 : _.findIndex(rating, { id }); // Index of logged in user
@@ -71,7 +71,7 @@ class RatingTableHandler extends Component {
                             rowCount={ rating.length }
                             rowGetter={ ({ index }) => rating[ index ] }
                             onRowClick={ ({ rowData }) =>
-                                setSelectedParticipant(rowData)
+                                setParticipant(rowData)
                             }
                         >
                             <Column
@@ -117,7 +117,7 @@ class RatingTableHandler extends Component {
                                             <FontAwesomeIcon
                                                 title='До моєї позиції'
                                                 onClick={ () =>
-                                                    setSelectedParticipant(
+                                                    setParticipant(
                                                         rating[ ownIndex ],
                                                     )
                                                 }
@@ -129,7 +129,7 @@ class RatingTableHandler extends Component {
                                             <FontAwesomeIcon
                                                 title='Показати лідерів'
                                                 onClick={ () =>
-                                                    setSelectedParticipant(
+                                                    setParticipant(
                                                         _.first(rating),
                                                     )
                                                 }

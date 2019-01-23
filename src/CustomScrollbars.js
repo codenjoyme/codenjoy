@@ -9,7 +9,7 @@ class CustomScrollbars extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
+        if (this.props.location.pathname !== prevProps.location.pathname) {
             this.scrollbars.scrollToTop();
         }
     }
