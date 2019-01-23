@@ -1,5 +1,4 @@
 .boardContainer {
-    flex-direction: column;
     padding-bottom: 15px;
     width: 100%;
     font-family: 'Museo Sans Cyrl';
@@ -12,23 +11,18 @@
 }
 
 .frame {
-    display: flex;
     padding: 0px 30px 10px 30px;
-    width: 30%;
     flex: 1 1 auto;
 }
 
 .rating {
     padding: 0px 30px 10px 30px;
     flex: 2 1 auto;
-    width: 70%;
 }
 
 @media all and (max-width: 900px) {
     .frame {
         padding: 30px 30px 30px 30px;
-        align-items: center;
-        justify-content: center;
         max-width: 900px;
         order: 1;
         width: auto;

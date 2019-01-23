@@ -3,6 +3,7 @@
     justify-content: space-between;
     background: var(--block-bg-color);
     padding: 0 24px;
+    flex-wrap: wrap;
 }
 
 .navigation {
