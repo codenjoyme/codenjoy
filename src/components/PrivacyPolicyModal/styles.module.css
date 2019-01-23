@@ -57,7 +57,7 @@
     left: 0px;
     right: 0px;
     bottom: 0px;
-    background-color: rgb(34, 34, 34, 0.8);
+    background-color: rgba(34, 34, 34, 0.8);
 }
 
 .modalContent::-webkit-scrollbar-track {
