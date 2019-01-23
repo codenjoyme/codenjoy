@@ -14,14 +14,14 @@
 .frame {
     display: flex;
     padding: 0px 30px 10px 30px;
-    max-width: 550px;
+    width: 30%;
     flex: 1 1 auto;
 }
 
 .rating {
     padding: 0px 30px 10px 30px;
     flex: 2 1 auto;
-    max-width: 1030px;
+    width: 70%;
 }
 
 @media all and (max-width: 900px) {
@@ -31,9 +31,11 @@
         justify-content: center;
         max-width: none;
         order: 1;
+        width: auto;
     }
     .rating {
         order: 2;
+        width: auto;
     }
     .wrapper {
         flex-direction: column;
