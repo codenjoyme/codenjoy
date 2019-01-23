@@ -44,9 +44,8 @@ class DaysPanelHandler extends Component {
         const days = Math.ceil(duration.asDays()) + 1;
         const dates =
             days > 0
-                ? Array(days)
-                    .fill(0)
-                    .map((value, index) => moment(startDate).add(index, 'd'))
+                ? [ ...Array(days) ].map((value, index) =>
+                    moment(startDate).add(index, 'd'))
                 : [];
 
         const daysRangeConfig = this._getDaysRangeConfig(dates);

@@ -8,19 +8,19 @@
 .wrapper {
     display: flex;
     justify-content: center;
-    flex: 1;
+    flex: 1 1 auto;
 }
 
 .frame {
     display: flex;
     padding: 0px 30px 10px 30px;
     max-width: 550px;
-    flex: 1 1;
+    flex: 1 1 auto;
 }
 
 .rating {
     padding: 0px 30px 10px 30px;
-    flex: 2 1;
+    flex: 2 1 auto;
     max-width: 1030px;
 }
 
