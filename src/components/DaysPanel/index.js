@@ -37,11 +37,11 @@ class DaysPanelHandler extends Component {
             onDaySelect,
         } = this.props;
 
-        const startDate = moment(start);
-        const endDate = moment(end);
+        const startDate = moment(start).startOf('day');
+        const endDate = moment(end).startOf('day');
 
         const duration = moment.duration(endDate.diff(startDate));
-        const days = Math.ceil(duration.asDays());
+        const days = Math.ceil(duration.asDays()) + 1;
         const dates =
             days > 0
                 ? Array(days)
@@ -57,7 +57,10 @@ class DaysPanelHandler extends Component {
                 { daysRangeConfig.map(({ label, disabled, day }) => (
                     <button
                         title={ day }
-                        className={ this._dayButtonStyles(selectedDay === day, disabled) }
+                        className={ this._dayButtonStyles(
+                            selectedDay === day,
+                            disabled,
+                        ) }
                         key={ day }
                         onClick={ () => onDaySelect(day) }
                         disabled={ selectedDay === day || disabled }

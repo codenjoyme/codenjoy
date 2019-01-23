@@ -43,8 +43,10 @@ class RatingTableHandler extends Component {
         const { setSelectedParticipant } = this.props;
         const { rating, id, watchId } = this.props;
 
-        const ownIndex = _.findIndex(rating, { id }); // Index of logged in user
-        const selectedIndex = _.findIndex(rating, { id: watchId }); // Index of selected participant
+        const ownIndex = _.isNil(id) ? -1 : _.findIndex(rating, { id }); // Index of logged in user
+        const selectedIndex = _.isNil(watchId)
+            ? -1
+            : _.findIndex(rating, { id: watchId }); // Index of selected participant
 
         return rating ? (
             <div className={ Styles.rating }>

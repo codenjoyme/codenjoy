@@ -7,7 +7,7 @@ import moment from 'moment';
 // proj
 import {
     setSelectedDay,
-    setSelectedParticipant,
+    setSelectedParticipantId,
     startBackgroundSync,
     stopBackgroundSync,
 } from '../../redux/board';
@@ -46,13 +46,16 @@ class BoardContainer extends Component {
     }
 
     render() {
-        const { setSelectedDay, setSelectedParticipant } = this.props;
-        const { selectedDay, rating, selectedParticipant } = this.props;
-        const { id, server } = this.props;
+        const { setSelectedDay, setSelectedParticipantId } = this.props; // actions
+        const { selectedDay, rating } = this.props;
+        const { id, selectedParticipantId } = this.props;
 
-        const ratingContainsId = id && _.find(rating, { id });
-        const currentParticipant =
-            ratingContainsId && id && server ? { id, server } : void 0;
+        const currentParticipant = _.isNil(id)
+            ? void 0
+            : _.find(rating, { id });
+        const selectedParticipant = _.isNil(selectedParticipantId)
+            ? void 0
+            : _.find(rating, { id: selectedParticipantId });
 
         const battleParticipant =
             selectedParticipant || currentParticipant || _.get(rating, 0);
@@ -71,7 +74,9 @@ class BoardContainer extends Component {
                             id={ id }
                             watchId={ _.get(battleParticipant, 'id') }
                             rating={ rating }
-                            setSelectedParticipant={ setSelectedParticipant }
+                            setSelectedParticipant={ ({ id }) =>
+                                setSelectedParticipantId(id)
+                            }
                         />
                     </div>
                     <div className={ Styles.frame }>
@@ -86,16 +91,16 @@ class BoardContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    selectedDay:         state.board.selectedDay,
-    selectedParticipant: state.board.selectedParticipant,
-    rating:              state.board.rating,
-    id:                  state.auth.id,
-    server:              state.auth.server,
+    selectedDay:           state.board.selectedDay,
+    selectedParticipantId: state.board.selectedParticipantId,
+    rating:                state.board.rating,
+    id:                    state.auth.id,
+    server:                state.auth.server,
 });
 
 const mapDispatchToProps = {
     setSelectedDay,
-    setSelectedParticipant,
+    setSelectedParticipantId,
     startBackgroundSync,
     stopBackgroundSync,
 };

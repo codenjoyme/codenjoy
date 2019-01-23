@@ -24,7 +24,7 @@ const prefix = `codenjoy/${moduleName}`;
 
 export const SET_SELECTED_DAY = `${prefix}/SET_SELECTED_DAY`;
 
-export const SET_SELECTED_PARTICIPANT = `${prefix}/SET_SELECTED_PARTICIPANT`;
+export const SET_SELECTED_PARTICIPANT_ID = `${prefix}/SET_SELECTED_PARTICIPANT_ID`;
 
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
@@ -37,7 +37,7 @@ export const STOP_BACKGROUND_SYNC = `${prefix}/STOP_BACKGROUND_SYNC`;
  * */
 
 const ReducerState = {
-    selectedDay: moment().format('YYYY-MM-DD'),
+    selectedDay: _.max([ _.min([ moment(), moment(process.env.REACT_APP_EVENT_END) ]), moment(process.env.REACT_APP_EVENT_START) ]).format('YYYY-MM-DD'),
 };
 
 export default function reducer(state = ReducerState, action) {
@@ -47,14 +47,14 @@ export default function reducer(state = ReducerState, action) {
         case SET_SELECTED_DAY:
             return {
                 ...state,
-                selectedDay:         payload,
-                selectedParticipant: void 0,
+                selectedDay:           payload,
+                selectedParticipantId: void 0,
             };
 
-        case SET_SELECTED_PARTICIPANT:
+        case SET_SELECTED_PARTICIPANT_ID:
             return {
                 ...state,
-                selectedParticipant: payload,
+                selectedParticipantId: payload,
             };
 
         case FETCH_RATING:
@@ -83,9 +83,9 @@ export const setSelectedDay = selectedDay => ({
     payload: selectedDay,
 });
 
-export const setSelectedParticipant = selectedParticipant => ({
-    type:    SET_SELECTED_PARTICIPANT,
-    payload: selectedParticipant,
+export const setSelectedParticipantId = selectedParticipantId => ({
+    type:    SET_SELECTED_PARTICIPANT_ID,
+    payload: selectedParticipantId,
 });
 
 export const fetchRating = () => ({

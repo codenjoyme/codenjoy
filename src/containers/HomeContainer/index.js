@@ -8,9 +8,9 @@ import PS4 from '../../styles/images/prizes/PS4.png';
 import PSClassic from '../../styles/images/prizes/PSclassic.png';
 import PSDualshock from '../../styles/images/prizes/PSdualshock.png';
 import Rules from '../../styles/images/icons/rules.svg';
-import StepWinHeader from '../../styles/images/layout/presents.png'
-import stepBattleHeader from '../../styles/images/layout/battle.png'
-import stepCreateHeader from '../../styles/images/layout/create.png'
+import StepWinHeader from '../../styles/images/layout/presents.png';
+import stepBattleHeader from '../../styles/images/layout/battle.png';
+import stepCreateHeader from '../../styles/images/layout/create.png';
 
 // own
 import Styles from './styles.module.css';
@@ -44,7 +44,7 @@ const HomeContainer = () => (
             <div className={ Styles.guideContainer }>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepCreateHeader } />
+                        <img src={ stepCreateHeader } alt='Створи' />
                     </div>
                     <div className={ Styles.stepTitle }>СТВОРИ</div>
                     <div className={ Styles.stepDescription }>
@@ -53,7 +53,7 @@ const HomeContainer = () => (
                 </div>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepBattleHeader } />
+                        <img src={ stepBattleHeader } alt='Змагайся' />
                     </div>
                     <div className={ Styles.stepTitle }>ЗМАГАЙСЯ</div>
                     <div className={ Styles.stepDescription }>
@@ -62,7 +62,7 @@ const HomeContainer = () => (
                 </div>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ StepWinHeader } />
+                        <img src={ StepWinHeader } alt='Вигравай' />
                     </div>
                     <div className={ Styles.stepTitle }>ВИГРАВАЙ</div>
                     <div className={ Styles.stepDescription }>
