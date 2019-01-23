@@ -86,22 +86,15 @@ export function* registerFormSaga() {
         } = yield take(REGISTER);
         const payload = { ...restPayload, password: md5(password) };
 
-        const response = yield call(
-            fetchAPI,
-            'POST',
-            'rest/register',
-            null,
-            payload,
-            { noRedirect: true },
-        );
-        if (response instanceof Error) {
-            const failParams =
-                response.status === 400
-                    ? { credentials: true }
-                    : { system: true };
-
-            yield put(registerFail(failParams));
-        } else {
+        try {
+            const response = yield call(
+                fetchAPI,
+                'POST',
+                'rest/register',
+                null,
+                payload,
+                { noRedirect: true },
+            );
             if (!response.code) {
                 yield put(registerFail({ credentials: true }));
             } else {
@@ -109,6 +102,11 @@ export function* registerFormSaga() {
                 yield put(registerSuccess());
                 yield put(replace(book.board));
             }
+        } catch (err) {
+            const failParams =
+                err.status === 400 ? { credentials: true } : { system: true };
+
+            yield put(registerFail(failParams));
         }
     }
 }

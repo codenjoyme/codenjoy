@@ -1,11 +1,7 @@
 // vendor
 import { trim, toUpper } from 'lodash/string';
-import { replace } from 'connected-react-router';
 import _ from 'lodash';
 import qs from 'qs';
-
-import store from '../store';
-import { book } from '../routes';
 
 const apiC = '/codenjoy-balancer';
 
@@ -49,49 +45,16 @@ export async function fetchAPI(
     ]);
 
     const { status } = response;
-    const { dispatch } = store;
 
     switch (true) {
         case status >= 200 && status < 300:
-            try {
-                return rawResponse ? await response : await response.json();
-            } catch (err) {
-                if (noRedirect) {
-                    return err;
-                }
-                dispatch(replace(`${book.exception}/500`));
-                return;
-            }
+            return rawResponse ? await response : await response.json();
 
-        case noRedirect:
+        default:
             const err = new Error("httpError");
             err.status = status;
             err.response = await response;
 
-            return err;
-
-        case status === 400:
-            dispatch(replace(`${book.exception}/400`));
-            return;
-
-        case status === 401:
-            dispatch(logout());
-            return;
-
-        case status === 403:
-            dispatch(replace(`${book.exception}/403`));
-            return;
-
-        case status >= 404 && status < 422:
-            dispatch(replace(`${book.exception}/404`));
-            return;
-
-        case status >= 500 && status <= 504:
-            dispatch(replace(`${book.exception}/500`));
-            return;
-
-        default:
-            dispatch(replace(`${book.exception}/500`));
-            return;
+            throw err;
     }
 }

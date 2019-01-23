@@ -126,22 +126,17 @@ export function* loginFormSaga() {
             payload: { email, password },
         } = yield take(LOGIN);
         const credentials = { email, password: md5(password) };
-        const response = yield call(
-            fetchAPI,
-            'POST',
-            'rest/login',
-            null,
-            credentials,
-            { noRedirect: true },
-        );
-        if (response instanceof Error) {
-            const failParams =
-                response.status === 401
-                    ? { credentials: true }
-                    : { system: true };
 
-            yield put(loginFail(failParams));
-        } else {
+        try {
+            const response = yield call(
+                fetchAPI,
+                'POST',
+                'rest/login',
+                null,
+                credentials,
+                { noRedirect: true },
+            );
+
             if (!response.code || !response.email || !response.server) {
                 yield put(loginFail({ system: true }));
             } else {
@@ -149,6 +144,11 @@ export function* loginFormSaga() {
                 yield put(loginSuccess());
                 yield put(replace(book.board));
             }
+        } catch (err) {
+            const failParams =
+                err.status === 401 ? { credentials: true } : { system: true };
+
+            yield put(loginFail(failParams));
         }
     }
 }

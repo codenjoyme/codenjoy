@@ -31,6 +31,7 @@ export const SET_PARTICIPANT_ID = `${prefix}/SET_PARTICIPANT_ID`;
 
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
+export const FETCH_RATING_FAILED = `${prefix}/FETCH_RATING_FAILED`;
 
 export const START_BACKGROUND_SYNC = `${prefix}/START_BACKGROUND_SYNC`;
 export const STOP_BACKGROUND_SYNC = `${prefix}/STOP_BACKGROUND_SYNC`;
@@ -104,6 +105,10 @@ export const fetchRatingSuccess = data => ({
     payload: data,
 });
 
+export const fetchRatingFailed = () => ({
+    type: FETCH_RATING_FAILED,
+});
+
 export const startBackgroundSync = payload => ({
     type: START_BACKGROUND_SYNC,
     payload,
@@ -119,15 +124,26 @@ export const stopBackgroundSync = () => ({
 
 function* fetchRatingSaga() {
     const day = yield select(state => state.board.day);
-    const data = yield call(fetchAPI, 'GET', `rest/score/day/${day}`);
+    try {
+        const data = yield call(
+            fetchAPI,
+            'GET',
+            `rest/score/day/${day}`,
+            void 0,
+            void 0,
+            { noRedirect: true },
+        );
 
-    const processedData = _.chain(data)
-        .filter('server')
-        .orderBy('score', 'desc')
-        .map((value, index) => ({ ...value, index: index + 1 }))
-        .value();
+        const processedData = _.chain(data)
+            .filter('server')
+            .orderBy('score', 'desc')
+            .map((value, index) => ({ ...value, index: index + 1 }))
+            .value();
 
-    yield put(fetchRatingSuccess(processedData));
+        yield put(fetchRatingSuccess(processedData));
+    } catch (err) {
+        yield put(fetchRatingFailed());
+    }
 }
 
 function* ratingSync() {
