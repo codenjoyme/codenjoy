@@ -29,7 +29,9 @@
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/**" access="permitAll"/>
         <headers>
-            <frame-options policy="ALLOW-FROM" value="http://epam-bot-challenge.com.ua"/>
+            <frame-options policy="ALLOW-FROM"
+                           strategy="static"
+                           value="http://epam-bot-challenge.com.ua"/>
             <hsts max-age-seconds="31536000"/>
             <content-type-options/>
             <header name="Content-Security-Policy"
