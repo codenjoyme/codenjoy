@@ -15,15 +15,17 @@ class LayoutComponent extends Component {
         const { children, logout, email, server, code } = this.props;
 
         return (
-            <div className={ Styles.layout }>
-                <Header
-                    code={ code }
-                    email={ email }
-                    server={ server }
-                    logout={ logout }
-                />
-                <div className={ Styles.content }>{ children }</div>
-                <Footer />
+            <div className={ Styles.layoutWrapper }>
+                <div className={ Styles.layout }>
+                    <Header
+                        code={ code }
+                        email={ email }
+                        server={ server }
+                        logout={ logout }
+                    />
+                    <div className={ Styles.content }>{ children }</div>
+                    <Footer />
+                </div>
             </div>
         );
     }
