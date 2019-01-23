@@ -22,29 +22,31 @@ export class PrivacyPolicyModal extends Component {
                 overlayClassName={ Styles.modalOverlay }
                 onRequestClose={ () => setVisible(false) }
             >
-                <PrivacyPolicyContainer />
+                <div className={ Styles.privacyModalContainer }>
+                    <PrivacyPolicyContainer />
 
-                <div className={ Styles.privacyFooter }>
-                    <div className={ Styles.buttonsPanel }>
-                        <button
-                            className={ Styles.agree }
-                            onClick={ () => {
-                                action(true);
-                                setVisible(false);
-                            } }
-                        >
-                            Погоджуюсь
-                        </button>
-                        <div className={ Styles.emptyBlock } />
-                        <button
-                            className={ Styles.disagree }
-                            onClick={ () => {
-                                action(false);
-                                setVisible(false);
-                            } }
-                        >
-                            Не згоден
-                        </button>
+                    <div className={ Styles.privacyFooter }>
+                        <div className={ Styles.buttonsPanel }>
+                            <button
+                                className={ Styles.agree }
+                                onClick={ () => {
+                                    action(true);
+                                    setVisible(false);
+                                } }
+                            >
+                                Погоджуюсь
+                            </button>
+                            <div className={ Styles.emptyBlock } />
+                            <button
+                                className={ Styles.disagree }
+                                onClick={ () => {
+                                    action(false);
+                                    setVisible(false);
+                                } }
+                            >
+                                Не згоден
+                            </button>
+                        </div>
                     </div>
                 </div>
             </Modal>

@@ -1,3 +1,9 @@
+.privacyModalContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 50px 20px;
+}
+
 .privacyFooter {
     display: flex;
     flex-direction: row;
@@ -39,8 +45,8 @@
 .modalContent {
     position: absolute;
     top: 50px;
-    width: calc(90% - 100px);
-    max-width: calc(700px - 100px);
+    width: 90%;
+    max-width: 700px;
     left: 0;
     right: 0;
     margin: auto;
@@ -48,7 +54,6 @@
     background: var(--main-bg-color);
     overflow: auto;
     outline: none;
-    padding: 0px 50px 20px;
 }
 
 .modalOverlay {
