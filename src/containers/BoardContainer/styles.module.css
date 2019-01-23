@@ -29,7 +29,7 @@
         padding: 30px 30px 30px 30px;
         align-items: center;
         justify-content: center;
-        max-width: none;
+        max-width: 900px;
         order: 1;
     }
     .rating {
