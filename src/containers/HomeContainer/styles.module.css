@@ -58,15 +58,10 @@
     width: 33%;
 }
 
-.stepWinHeader,
-.stepBattleHeader,
-.stepCreateHeader {
-    min-height: 102px;
-    max-height: 124px;
-}
-
 .steps img {
     width: 100%;
+    min-height: 102px;
+    max-height: 124px;
 }
 
 .stepTitle {
