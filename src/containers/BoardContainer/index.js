@@ -39,17 +39,43 @@ class BoardContainer extends Component {
         this.props.startBackgroundSync(queryParams);
     }
 
-    render() {
-        const { setDay, setParticipantId } = this.props; // actions
-        const { day, rating } = this.props;
-        const { id, participantId } = this.props;
+    componentDidUpdate(prevProps) {
+        const { rating, participantId } = this.props;
+        if (!participantId && rating && rating !== prevProps.rating) {
+            const { setParticipantId } = this.props;
 
-        const currentParticipant = _.isNil(id)
+            const currentParticipant = this._getCurrentRatingParticipant();
+            const participantToSet = currentParticipant || _.get(rating, 0);
+            const participantId = _.get(participantToSet, 'id'); 
+
+            if (participantId) {
+                setParticipantId(participantId);
+            }
+        }
+    }
+
+    _getCurrentRatingParticipant() {
+        const { id, rating } = this.props;
+        
+        return _.isNil(id)
             ? void 0
             : _.find(rating, { id });
-        const participant = _.isNil(participantId)
+    }
+
+    _getSelectedRatingParticipant() {
+        const { rating, participantId } = this.props;
+
+        return _.isNil(participantId)
             ? void 0
             : _.find(rating, { id: participantId });
+    }
+
+    render() {
+        const { setDay, setParticipantId } = this.props; // actions
+        const { day, rating, id } = this.props;
+
+        const currentParticipant = this._getCurrentRatingParticipant();
+        const participant = this._getSelectedRatingParticipant();
 
         const battleParticipant =
             participant || currentParticipant || _.get(rating, 0);
