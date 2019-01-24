@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { ConnectedRouter } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import ReactGA from 'react-ga';
+import ReactPixel from 'react-facebook-pixel';
 import 'reset-css';
 import { PersistGate } from 'redux-persist/integration/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -43,9 +44,11 @@ library.add(
     farUserCircle,
 );
 
+const reactPixelOptions = { autoConfig: false };
 const reactGAOptions =
     process.env.NODE_ENV === 'development' ? { testMode: true } : {};
 ReactGA.initialize(process.env.REACT_APP_GA_ID, reactGAOptions);
+ReactPixel.init(process.env.REACT_APP_FB_PIXEL_ID, void 0, reactPixelOptions);
 
 class App extends Component {
     render() {
