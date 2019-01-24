@@ -26,8 +26,8 @@ export const moduleName = 'board';
 const prefix = `codenjoy/${moduleName}`;
 
 export const SET_DAY = `${prefix}/SET_DAY`;
-
 export const SET_PARTICIPANT_ID = `${prefix}/SET_PARTICIPANT_ID`;
+export const SET_DEFAULTS = `${prefix}/SET_DEFAULTS`;
 
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
@@ -63,6 +63,13 @@ export default function reducer(state = ReducerState, action) {
             return {
                 ...state,
                 participantId: payload,
+            };
+
+        case SET_DEFAULTS:
+            return {
+                ...state,
+                participantId: payload.participantId,
+                day:           payload.day,
             };
 
         case FETCH_RATING:
@@ -118,6 +125,11 @@ export const stopBackgroundSync = () => ({
     type: STOP_BACKGROUND_SYNC,
 });
 
+export const setDefaults = payload => ({
+    type: SET_DEFAULTS,
+    payload,
+});
+
 /**
  * Saga
  **/
@@ -148,8 +160,8 @@ function* fetchRatingSaga() {
 
 function* ratingSync() {
     while (true) {
-        yield delay(10000);
         yield put(fetchRating());
+        yield delay(10000);
     }
 }
 
@@ -165,21 +177,17 @@ function* ratingSyncSaga() {
             : moment();
 
         const defaultDay = _.max([ _.min([ defaultMomentDay, eventEnd ]), eventStart ]);
-        yield put(setDay(defaultDay.format(DATE_FORMAT)));
-
-        if (participantId) {
-            yield put(setParticipantId(participantId));
-        }
+        const defaultsPayload = {
+            day: defaultDay.format(DATE_FORMAT),
+            participantId,
+        };
+        yield put(setDefaults(defaultsPayload));
 
         const ratingSyncTask = yield fork(ratingSync);
 
         yield take(STOP_BACKGROUND_SYNC);
         yield cancel(ratingSyncTask);
     }
-}
-
-export function* setDaySaga() {
-    yield put(fetchRating());
 }
 
 export function* updateQueryParamsSaga() {
@@ -192,10 +200,5 @@ export function* updateQueryParamsSaga() {
 }
 
 export function* saga() {
-    yield all([
-        call(ratingSyncSaga),
-        takeLatest(SET_DAY, setDaySaga),
-        takeLatest(FETCH_RATING, fetchRatingSaga),
-        takeLatest([ SET_PARTICIPANT_ID, SET_DAY ], updateQueryParamsSaga),
-    ]);
+    yield all([ call(ratingSyncSaga), takeLatest([ SET_DAY, FETCH_RATING ], fetchRatingSaga), takeLatest([ SET_PARTICIPANT_ID, SET_DAY ], updateQueryParamsSaga) ]);
 }
