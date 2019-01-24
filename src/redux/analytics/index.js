@@ -1,48 +1,31 @@
 // vendor
-import { all } from 'redux-saga/effects';
+import { all, takeEvery } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'connected-react-router';
 import ReactGA from 'react-ga';
 
 // proj
-
-/**
- * Constants
- **/
-
-export const moduleName = 'analytics';
-
-/**
- * Reducer
- **/
-const ReducerState = {};
+import { REGISTER_SUCCESS } from './../register';
 
 const trackPage = page => {
     ReactGA.set({ page });
     ReactGA.pageview(page);
 };
 
-export default function reducer(state = ReducerState, action) {
-    const { type, payload } = action;
-
-    switch (type) {
-        case LOCATION_CHANGE:
-            trackPage(payload.location.pathname);
-
-            return state;
-
-        default:
-            return state;
-    }
-}
-
-/**
- * Action Creators
- **/
-
 /**
  * Saga
  **/
 
+function locationChangeSaga({ payload: { action, location } }) {
+    trackPage(location.pathname);
+}
+
+function registerSuccessSaga() {
+    ReactGA.event({
+        category: 'User',
+        action:   'Created an Account',
+    });
+}
+
 export function* saga() {
-    yield all([]);
+    yield all([ takeEvery(LOCATION_CHANGE, locationChangeSaga), takeEvery(REGISTER_SUCCESS, registerSuccessSaga) ]);
 }

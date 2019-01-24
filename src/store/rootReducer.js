@@ -8,9 +8,6 @@ import storage from 'redux-persist/lib/storage';
 // proj
 import authReducer, { moduleName as authModule } from '../redux/auth';
 import boardReducer, { moduleName as boardModule } from '../redux/board';
-import analyticsReducer, {
-    moduleName as analyticsModule,
-} from '../redux/analytics';
 import registerReducer, {
     moduleName as registerModule,
 } from '../redux/register';
@@ -29,10 +26,9 @@ const persistedState = {
 };
 
 const appState = {
-    [ boardModule ]:     boardReducer,
-    [ registerModule ]:  registerReducer,
-    [ analyticsModule ]: analyticsReducer,
-    router:              connectRouter(history),
+    [ boardModule ]:    boardReducer,
+    [ registerModule ]: registerReducer,
+    router:             connectRouter(history),
 };
 
 const rootReducer = persistReducer(

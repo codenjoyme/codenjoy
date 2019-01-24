@@ -5,7 +5,13 @@ import { all } from 'redux-saga/effects';
 import { saga as authSaga } from '../redux/auth';
 import { saga as boardSaga } from '../redux/board';
 import { saga as registerSaga } from '../redux/register';
+import { saga as analyticsSaga } from '../redux/analytics';
 
 export default function* rootSaga() {
-    yield all([ boardSaga(), authSaga(), registerSaga() ]);
+    yield all([
+        analyticsSaga(),
+        boardSaga(),
+        authSaga(),
+        registerSaga(),
+    ]);
 }
