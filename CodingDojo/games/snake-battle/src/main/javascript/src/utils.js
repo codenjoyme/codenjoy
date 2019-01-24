@@ -22,8 +22,38 @@ export function getBoardSize(board) {
     return Math.sqrt(board.length);
 }
 
-export function isDead(board) {
+export function isGameOver(board) {
     return board.indexOf(ELEMENT.HEAD_DEAD) !== -1;
+}
+
+export function isAt(board, x, y, element) {
+    if (isOutOf(board, x, y)) {
+        return false;
+    }
+    return getAt(board, x, y) === element;
+}
+
+export function getAt(board, x, y) {
+    if (isOutOf(board, x, y)) {
+        return ELEMENT.WALL;
+    }
+    return getElementByXY(board, { x, y });
+}
+
+export function isNear(board, x, y, element) {
+    if (isOutOf(board, x, y)) {
+        return ELEMENT.WALL;
+    }
+
+    return isAt(board, x + 1, y, element) ||
+			  isAt(board, x - 1, y, element) ||
+			  isAt(board, x, y + 1, element) ||
+			  isAt(board, x, y - 1, element);
+}
+
+export function isOutOf(board, x, y) {
+    const boardSize = getBoardSize(board);
+    return x >= boardSize || y >= boardSize || x < 0 || y < 0;
 }
 
 export function getHeadPosition(board) {
