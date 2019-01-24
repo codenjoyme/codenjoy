@@ -2,6 +2,11 @@
     color: rgb(161, 176, 187);
 }
 
+.rating {
+    display: flex;
+    flex: 1 1 auto;
+}
+
 .ratingGrid {
     outline: none;
 }

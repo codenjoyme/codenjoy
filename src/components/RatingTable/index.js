@@ -48,10 +48,15 @@ class RatingTableHandler extends Component {
             ? -1
             : _.findIndex(rating, { id: watchId }); // Index of selected participant
 
+        const minHeight =
+            rating && rating.length < 10
+                ? Math.max(110, rating.length * 50 + 60)
+                : Math.max(500);
+
         return rating ? (
-            <div className={ Styles.rating }>
-                <AutoSizer disableHeight>
-                    { ({ width }) => (
+            <div className={ Styles.rating } style={ { minHeight } }>
+                <AutoSizer>
+                    { ({ width, height }) => (
                         <Table
                             gridClassName={ Styles.ratingGrid }
                             className={ Styles.ratingTable }
@@ -63,7 +68,7 @@ class RatingTableHandler extends Component {
                             height={
                                 rating.length < 10
                                     ? Math.max(110, rating.length * 50 + 60)
-                                    : 500
+                                    : Math.max(height, 500)
                             }
                             width={ width }
                             headerHeight={ 60 }

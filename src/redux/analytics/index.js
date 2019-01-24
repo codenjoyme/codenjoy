@@ -15,7 +15,7 @@ const trackPage = page => {
  * Saga
  **/
 
-function locationChangeSaga({ payload: { action, location } }) {
+function locationChangeSaga({ payload: { location } }) {
     trackPage(location.pathname);
 }
 

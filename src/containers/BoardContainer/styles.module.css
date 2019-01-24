@@ -1,6 +1,9 @@
 .boardContainer {
     padding-bottom: 15px;
+    display: flex;
+    flex: 1 1 auto;
     width: 100%;
+    flex-direction: column;
     font-family: 'Museo Sans Cyrl';
 }
 
@@ -18,6 +21,8 @@
 .rating {
     padding: 0px 30px 10px 30px;
     flex: 2 1 auto;
+    display: flex;
+    justify-content: center;
 }
 
 @media all and (max-width: 900px) {
