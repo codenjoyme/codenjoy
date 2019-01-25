@@ -321,7 +321,7 @@ public class SnakeMultiplayerTest {
 
         assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ╘═► ☼" +
+                "☼ ╘☻► ☼" +
                 "☼  ¤  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -329,7 +329,7 @@ public class SnakeMultiplayerTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ ×─> ☼" +
+                "☼ ×☺> ☼" +
                 "☼  ╙  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -461,7 +461,7 @@ public class SnakeMultiplayerTest {
 
         assertH("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ╘► ☼" +
+                "☼  ☻► ☼" +
                 "☼ ×┘  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -469,7 +469,7 @@ public class SnakeMultiplayerTest {
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ×> ☼" +
+                "☼  ☺> ☼" +
                 "☼ ╘╝  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
