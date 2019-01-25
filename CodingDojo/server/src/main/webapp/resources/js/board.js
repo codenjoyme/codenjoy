@@ -20,8 +20,18 @@
  * #L%
  */
 
-function loadPlayers(onLoad) {
-    loadData('/rest/game/' + game.gameName + '/players', function(players) {
+function initBoardPage(game) {
+    loadData('/rest/player/' + game.playerName + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
+        game.contextPath = gameData.context;
+        game.multiplayerType = gameData.gameType.multiplayerType;
+        game.boardSize = gameData.gameType.boardSize;
+        game.registered = gameData.registered;
+
+        game.isGraphicOrTextGame = gameData.sprites.length > 0;
+        game.spriteElements = gameData.sprites;
+        game.alphabet = gameData.alphabet;
+
+        var players = gameData.players;
         if (game.allPlayersScreen) {
             game.players = players;
         } else {
@@ -32,28 +42,7 @@ function loadPlayers(onLoad) {
             }
         }
 
-        onLoad(game.players);
-    });
-}
-
-function initBoardPage(game) {
-    loadContext(function(ctx) {
-        loadData('/rest/game/' + game.gameName + '/type', function(playerGameInfo) {
-            game.multiplayerType = playerGameInfo.multiplayerType;
-            game.boardSize = playerGameInfo.boardSize;
-
-            loadData('/rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
-                game.registered = registered;
-
-                loadData('/rest/sprites/' + game.gameName + '/exists', function(isGraphicOrTextGame) {
-                    game.isGraphicOrTextGame = isGraphicOrTextGame;
-
-                    loadPlayers(function(players) {
-                        initBoardComponents(game);
-                    });
-                });
-            });
-        });
+        initBoardComponents(game);
     });
 }
 
@@ -66,13 +55,15 @@ function initBoardComponents(game) {
                     game.multiplayerType, game.boardSize,
                     game.gameName, game.enablePlayerInfo,
                     game.enablePlayerInfoLevel,
-                    game.sprites, game.drawBoard);
+                    game.sprites, game.alphabet, game.spriteElements,
+                    game.drawBoard);
     } else if (game.isGraphicOrTextGame) {
         initCanvases(game.contextPath, game.players, game.allPlayersScreen,
                     game.multiplayerType, game.boardSize,
                     game.gameName, game.enablePlayerInfo,
                     game.enablePlayerInfoLevel,
-                    game.sprites, game.drawBoard);
+                    game.sprites, game.alphabet, game.spriteElements,
+                    game.drawBoard);
     } else {
         initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
                         game.multiplayerType, game.boardSize,

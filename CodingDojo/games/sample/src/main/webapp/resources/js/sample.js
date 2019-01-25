@@ -24,6 +24,8 @@
 // встроится она в layout указанный в ресурсах
 // если заремарить это все, тогда UI будет базовый
 
+var doNothing = true;
+
 /*
 game.enableDonate = false;
 game.enableJoystick = true;

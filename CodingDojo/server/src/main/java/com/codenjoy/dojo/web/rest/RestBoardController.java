@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
+import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
+import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,6 +47,7 @@ import java.util.*;
 public class RestBoardController {
 
     @Autowired private GameService gameService;
+    @Autowired private RestRegistrationController registrationController;
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private ServletContext servletContext;
@@ -140,4 +143,22 @@ public class RestBoardController {
         return playerGamesView.getScores();
     }
 
+    // TODO test me
+    @RequestMapping(value = "/player/{playerName}/{code}/wantsToPlay/{gameName}", method = RequestMethod.GET)
+    @ResponseBody
+    public PPlayerWantsToPlay playerWantsToPlay(
+            @PathVariable("playerName") String playerName,
+            @PathVariable("code") String code,
+            @PathVariable("gameName") String gameName)
+    {
+        String context = getContext();
+        GameTypeInfo gameType = getGameType(gameName);
+        boolean registered = registrationController.checkUserLogin(playerName, code);
+        List<String> sprites = getSpritesForGame(gameName);
+        String alphabet = getSpritesAlphabet();
+        List<PlayerInfo> players = registrationController.getGamePlayers(gameName);
+
+        return new PPlayerWantsToPlay(context, gameType,
+                registered, sprites, alphabet, players);
+    }
 }

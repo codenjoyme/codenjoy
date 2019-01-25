@@ -24,7 +24,8 @@ var currentBoardSize = null;
 function initCanvases(contextPath, players, allPlayersScreen,
                 multiplayerType, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
-                sprites, drawBoard)
+                sprites, alphabet, spriteElements,
+                drawBoard)
 {
     var canvases = {};
     var infoPools = {};
@@ -34,7 +35,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
     var plotSize = 0;
     var canvasSize = 0;
     var images = {};
-    loadCanvasesData();
+    loadCanvasesData(alphabet, spriteElements);
     var reloading = false;
 
     function toId(email) {
@@ -102,19 +103,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
     }
 
-    function loadCanvasesData() {
-        loadData('/rest/sprites/alphabet', function(alphabet) {
-            loadData('/rest/sprites/' + gameName, function(elements) {
-                loadSpriteImages(elements, alphabet, function() {
-                    buildHtml(players);
-                    buildCanvases(players);
+    function loadCanvasesData(alphabet, elements) {
+        loadSpriteImages(elements, alphabet, function() {
+            buildHtml(players);
+            buildCanvases(players);
 
-                    $('body').on('board-updated', function(events, data) {
-                        if (!reloading) {
-                            drawUsersCanvas(data);
-                        }
-                    });
-                });
+            $('body').on('board-updated', function(events, data) {
+                if (!reloading) {
+                    drawUsersCanvas(data);
+                }
             });
         });
     }
@@ -262,6 +259,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                     var currentPoint = null;
                     var currentHeroData = null;
                     var heroesData = getHeroesData();
+                    var currentIsDrawName = true;
                     for (var name in heroesData) {
                         var heroData = heroesData[name];
                         var point = heroData.coordinate;
@@ -270,10 +268,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         if (!!board.offset) {
                             point.x -= board.offset.x;
                             point.y -= board.offset.y;
-                        }
-                        if (playerName == name) {
-                            currentPoint = point;
-                            currentHeroData = heroData;
                         }
 
                         // TODO это тоже относится к TRAINING типу игры
@@ -284,11 +278,20 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             }
                             return   progress.current < progress.total;
                         }
-                        if (!!heroData.multiplayer && !isPlayerOnSingleBoard(board)) {
+                        var isDrawName = !!heroData.multiplayer && !isPlayerOnSingleBoard(board);
+                        if (playerName == name) {
+                            currentPoint = point;
+                            currentHeroData = heroData;
+                            currentIsDrawName = isDrawName;
+                            continue;
+                        }
+                        if (isDrawName) {
                             drawName(name, point, font, heroData);
                         }
                     }
-                    drawName(playerName, currentPoint, font, currentHeroData);
+                    if (currentIsDrawName) {
+                        drawName(playerName, currentPoint, font, currentHeroData);
+                    }
                 }
             } catch (err) {
                 console.log(err);
