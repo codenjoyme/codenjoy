@@ -11,18 +11,12 @@ import { PrivacyPolicyModal } from '../../components';
 import { CustomInputComponent } from '../common/customInput';
 import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
+import errorSnake from '../common/DuneSnake-icon.svg';
 
 // own
 import styles from '../common/styles.module.css';
 
-const {
-    formWrap,
-    title,
-    submit,
-    backgroundSection,
-    systemError,
-    errorSnake,
-} = styles;
+const { formWrap, title, submit, backgroundSection, systemError } = styles;
 
 const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
