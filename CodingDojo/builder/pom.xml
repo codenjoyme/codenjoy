@@ -56,6 +56,7 @@
         <exclude.quadro>true</exclude.quadro>
         <exclude.lunolet>true</exclude.lunolet>
         <exclude.tetris>true</exclude.tetris>
+        <exclude.icancode>true</exclude.icancode>
     </properties>
 
     <repositories>
@@ -572,6 +573,24 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>icancode</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.icancode>false</exclude.icancode>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>icancode-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <build>
@@ -602,7 +621,7 @@
                     </images>
                     <authConfig>
                         <username>apofig</username>
-                        <password>3wGI3DU2dDF3!dF2sI245d</password>
+                        <password>F#I&amp;DFI@#df32ui327t</password>
                     </authConfig>
                 </configuration>
             </plugin>
@@ -1282,6 +1301,27 @@
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>tetris-engine</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>resources/**/*,WEB-INF/classes/config/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-icancode</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${exclude.icancode}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>icancode-engine</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
