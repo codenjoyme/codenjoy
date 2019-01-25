@@ -67,12 +67,13 @@
     }
 }
 
-@media all and (max-width: 600px) {
+@media all and (max-width: 820px) {
     .footer ul {
         flex-direction: column;
     }
     .footer {
         flex-direction: column;
+        padding: 20px 24px;
     }
     .navigation a,
     .navigation .share {

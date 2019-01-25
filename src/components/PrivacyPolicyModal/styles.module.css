@@ -82,4 +82,7 @@
         width: calc(90% - 40px);
         padding: 0 20px 20px;
     }
+    .privacyModalContainer {
+        padding: 0px 0px 20px;
+    }
 }
