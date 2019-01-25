@@ -181,7 +181,8 @@ public class Tail extends PointImpl implements State<Elements, Object> {
     private Elements snakePart(boolean itIsMyHero, List<Object> alsoAtPoint) {
         Tail higher = getHigher(alsoAtPoint);
 
-        if (snake.itsMyHead(higher)) {
+        Hero snake = higher.snake;
+        if (higher.isHead()) {
             if (snake.isAlive()) {
                 if (!snake.isActive()) {
                     return itIsMyHero ? HEAD_SLEEP : ENEMY_HEAD_SLEEP;
@@ -196,7 +197,7 @@ public class Tail extends PointImpl implements State<Elements, Object> {
                 return itIsMyHero ? HEAD_DEAD : ENEMY_HEAD_DEAD;
             }
         }
-        if (snake.itsMyTail(higher)) {
+        if (higher.isTail()) {
             if (snake.isActive()) {
                 return getTail(snake.getTailDirection(), itIsMyHero);
             } else {
@@ -235,6 +236,10 @@ public class Tail extends PointImpl implements State<Elements, Object> {
 
     private boolean isHead() {
         return snake.itsMyHead(this);
+    }
+
+    private boolean isTail() {
+        return snake.itsMyTail(this);
     }
 
 }
