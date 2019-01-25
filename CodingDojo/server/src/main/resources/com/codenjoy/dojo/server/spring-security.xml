@@ -30,8 +30,8 @@
         <intercept-url pattern="/**" access="permitAll"/>
         <headers>
             <frame-options policy="ALLOW-FROM"
-                           strategy="static"
-                           value="http://epam-bot-challenge.com.ua"/>
+                           strategy="whitelist"
+                           value="http://epam-bot-challenge.com.ua/"/>
             <hsts max-age-seconds="31536000"/>
             <content-type-options/>
             <header name="Content-Security-Policy"
