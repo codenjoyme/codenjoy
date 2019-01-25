@@ -191,7 +191,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             furyCount += 10;
         if (field.isBarrier(next))
             die();
-        if (elements.contains(next) && !isFlying())
+        if (isMe(next) && !isFlying())
             selfReduce(next);
 
         if (growBy > 0)
@@ -258,7 +258,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     BodyDirection getBodyDirection(Tail curr) {
-        int currIndex = elements.indexOf(curr);
+        int currIndex = getBodyIndex(curr);
         Point prev = elements.get(currIndex - 1);
         Point next = elements.get(currIndex + 1);
 
@@ -306,11 +306,15 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     boolean itsMyHead(Point point) {
-        return (getHead().itsMe(point));
+        return getHead() == point;
+    }
+
+    boolean isMe(Point next) {
+        return elements.contains(next);
     }
 
     boolean itsMyTail(Point point) {
-        return getTailPoint().itsMe(point);
+        return getTailPoint() == point;
     }
 
     private void growBy(int val) {
@@ -358,5 +362,15 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         elements.addAll(tail.stream()
                 .map(pt -> new Tail(pt, this))
                 .collect(toList()));
+    }
+
+    public int getBodyIndex(Point pt) {
+        // возможны наложения элементов по pt, а потому надо вначале искать по ==
+        for (int index = 0; index < elements.size(); index++) {
+            if (elements.get(index) == pt) {
+                return index;
+            }
+        }
+        return elements.indexOf(pt);
     }
 }

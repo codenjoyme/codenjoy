@@ -30,6 +30,9 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.snakebattle.model.Elements;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.snakebattle.model.Elements.*;
 
 public class Tail extends PointImpl implements State<Elements, Object> {
@@ -171,28 +174,67 @@ public class Tail extends PointImpl implements State<Elements, Object> {
                 ((Player) player).getHero() == null ||
                 snake == null)
             return OTHER;
-        return snakePart(((Player) player).getHero().equals(snake));
+        return snakePart(((Player) player).getHero().equals(snake),
+                Arrays.asList(alsoAtPoint));
     }
 
-    private Elements snakePart(boolean itIsMyHero) {
-        if (snake.itsMyHead(this)) {
+    private Elements snakePart(boolean itIsMyHero, List<Object> alsoAtPoint) {
+        Tail higher = getHigher(alsoAtPoint);
+
+        if (snake.itsMyHead(higher)) {
             if (snake.isAlive()) {
-                if (!snake.isActive())
+                if (!snake.isActive()) {
                     return itIsMyHero ? HEAD_SLEEP : ENEMY_HEAD_SLEEP;
-                else if (snake.isFlying())
+                } else if (snake.isFlying()) {
                     return itIsMyHero ? HEAD_FLY : ENEMY_HEAD_FLY;
-                else if (snake.isFury())
+                } else if (snake.isFury()) {
                     return itIsMyHero ? HEAD_EVIL : ENEMY_HEAD_EVIL;
-                else
+                } else {
                     return getHead(snake.getDirection(), itIsMyHero);
-            } else
+                }
+            } else {
                 return itIsMyHero ? HEAD_DEAD : ENEMY_HEAD_DEAD;
+            }
         }
-        if (snake.itsMyTail(this))
-            if (snake.isActive())
+        if (snake.itsMyTail(higher)) {
+            if (snake.isActive()) {
                 return getTail(snake.getTailDirection(), itIsMyHero);
-            else
+            } else {
                 return itIsMyHero ? TAIL_INACTIVE : ENEMY_TAIL_INACTIVE;
-        return getBody(snake.getBodyDirection(this), itIsMyHero);
+            }
+        }
+        return getBody(snake.getBodyDirection(higher), itIsMyHero);
     }
+
+    private Tail getHigher(List<Object> alsoAtPoint) {
+        return alsoAtPoint.stream()
+                .filter(p -> p instanceof Tail)
+                .map(p -> (Tail)p)
+                .sorted((t1, t2) -> {
+                    boolean isHead1 = t1.isHead();
+                    boolean isHead2 = t2.isHead();
+                    if (isHead1 && isHead2) {
+                        return 0;
+                    }
+
+                    if (isHead1 && !isHead2) {
+                        return -1;
+                    }
+                    if (!isHead1 && isHead2) {
+                        return 1;
+                    }
+                    return Integer.compare(t2.getBodyIndex(), t1.getBodyIndex());
+                })
+                .findFirst()
+                .orElse(this);
+    }
+
+    private int getBodyIndex() {
+        return snake.getBodyIndex(this);
+    }
+
+    private boolean isHead() {
+        return snake.itsMyHead(this);
+    }
+
 }
