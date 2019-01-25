@@ -21,12 +21,12 @@
  */
 import { ELEMENT, COMMANDS } from './constants';
 import {
-  isDead, getHeadPosition, getElementByXY
+  isGameOver, getHeadPosition, getElementByXY
 } from './utils';
 
 // Bot Example
 export function getNextSnakeMove(board, logger) {
-    if (isDead(board)) {
+    if (isGameOver(board)) {
         return '';
     }
     const headPosition = getHeadPosition(board);
