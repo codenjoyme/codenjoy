@@ -28,12 +28,16 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by indigo on 13.08.2016.
  */
 public class JDBCTimeUtils {
-    public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
+    public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"){{
+        setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+    }};
 
     public static long getTimeLong(ResultSet resultSet) throws SQLException {
         try {

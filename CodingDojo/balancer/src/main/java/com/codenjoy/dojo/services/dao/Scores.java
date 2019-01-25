@@ -34,13 +34,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 @Component
 public class Scores {
 
     private CrudConnectionThreadPool pool;
 
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"){{
+        setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+    }};
 
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(

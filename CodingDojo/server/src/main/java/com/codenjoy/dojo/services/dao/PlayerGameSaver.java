@@ -29,9 +29,7 @@ import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
