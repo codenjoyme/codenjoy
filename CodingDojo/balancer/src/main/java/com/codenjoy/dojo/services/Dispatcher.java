@@ -43,6 +43,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.stream.Collectors.toList;
@@ -61,6 +62,7 @@ public class Dispatcher {
     private volatile DispatcherSettings settings;
     private volatile long lastTime;
     private volatile int currentServer;
+    private Map<String, List<PlayerInfo>> scoresCache = new ConcurrentHashMap();
 
     @PostConstruct
     public void postConstruct() {
@@ -119,7 +121,7 @@ public class Dispatcher {
     }
 
     // несколько потоков могут параллельно регаться, и этот инкремент по кругу
-    // должн быть многопоточнобезопасным
+    // должeн быть многопоточнобезопасным
     private synchronized String getNextServer() {
         String result = servers.get(currentServer);
         currentServer++;
@@ -155,10 +157,19 @@ public class Dispatcher {
                     HttpMethod.GET,
                     null,
                     new ParameterizedTypeReference<List<PlayerInfo>>(){});
-            return entity.getBody();
+
+            List<PlayerInfo> result = entity.getBody();
+            scoresCache.put(server, result);
+            return result;
+
         } catch (RestClientException e) {
             logger.error("Error processing scores from server: " + server, e);
-            return Arrays.asList();
+
+            if (scoresCache.containsKey(server)) {
+                return scoresCache.get(server);
+            } else {
+                return Arrays.asList();
+            }
         }
     }
 
