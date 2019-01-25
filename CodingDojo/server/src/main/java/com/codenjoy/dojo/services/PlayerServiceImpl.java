@@ -159,6 +159,15 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player register(PlayerSave playerSave) {
+        lock.writeLock().lock();
+        try {
+            return justRegister(playerSave);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private Player justRegister(PlayerSave playerSave) {
         String name = playerSave.getName();
         String gameName = playerSave.getGameName();
 
