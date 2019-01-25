@@ -74,11 +74,7 @@ class BoardContainer extends Component {
         const { setDay, setParticipantId } = this.props; // actions
         const { day, rating, id } = this.props;
 
-        const currentParticipant = this._getCurrentRatingParticipant();
-        const participant = this._getSelectedRatingParticipant();
-
-        const battleParticipant =
-            participant || currentParticipant || _.get(rating, 0);
+        const battleParticipant = this._getSelectedRatingParticipant();
 
         return (
             <div className={ Styles.boardContainer }>
