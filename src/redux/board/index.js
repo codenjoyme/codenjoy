@@ -148,7 +148,7 @@ function* fetchRatingSaga() {
 
         const processedData = _.chain(data)
             .filter('server')
-            .orderBy('score', 'desc')
+            .orderBy([ 'score', 'name' ], 'desc')
             .map((value, index) => ({ ...value, index: index + 1 }))
             .value();
 

@@ -21,7 +21,7 @@
     border-radius: 50%;
     text-align: center;
     text-decoration: none;
-    background-color: transparent;
+    background-color: var(--main-bg-color);
     border: 1.5px solid var(--primary-color);
     color: var(--primary-color);
     font-weight: bold;
