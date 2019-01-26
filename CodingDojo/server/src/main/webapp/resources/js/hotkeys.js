@@ -24,8 +24,8 @@ pages = pages || {};
 var adminKey = false;
 
 function initHotkeys() {
-    var gameName = game.gameName || getSettings('gameName');
-    var contextPath = game.contextPath || getSettings('contextPath');
+    var gameName = getSettings('gameName') || game.gameName;
+    var contextPath = getSettings('contextPath') || game.contextPath;
 
     var gameNameParam = ((gameName == '')?'':'gameName=' + gameName);
     $('body').keydown(function(ev) {

@@ -23,9 +23,7 @@ pages = pages || {};
 
 pages.rules = function() {
     var parts = window.location.pathname.split('/');
-    game.gameName = parts[parts.length - 1].split('.')[0];
-    game.contextPath = parts[1];
-    var contextPath = game.contextPath;
+    var contextPath = parts[1];
     var base = window.location.origin + '/' + contextPath + '/';
     document.head.innerHTML = document.head.innerHTML + "<base target='_blank' href='" + base + "' />";
 
@@ -35,6 +33,9 @@ pages.rules = function() {
         $(this).html(content);
     });
 
+
+    game.gameName = parts[parts.length - 1].split('.')[0].split('-')[0];
+    game.contextPath = '/' + contextPath;
 
     initHotkeys();
 }
