@@ -22,7 +22,7 @@
 
 pages = pages || {};
 
-pages.registration = function() {
+pages.register = function() {
     game.contextPath = getSettings('contextPath');
     game.waitApprove = getSettings('waitApprove');
 
