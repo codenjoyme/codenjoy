@@ -9,7 +9,6 @@ import {
     faArrowUp,
     faArrowRight,
     faAnchor,
-    faArrowsAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 // own
@@ -74,9 +73,7 @@ class RatingTableHandler extends Component {
 
     _scrollToPosition(selectedIndex) {
         if (this.table && selectedIndex !== -1) {
-            this.table.scrollToPosition(
-                Math.max(ROW_HEIGHT * (selectedIndex - MIN_ITEMS / 2), 0),
-            );
+            this.table.scrollToRow(selectedIndex);
         }
     }
 
@@ -191,28 +188,29 @@ class RatingTableHandler extends Component {
                                                 icon={ faArrowUp }
                                             />
                                         ) }
-                                        { !watchPosition ? (
-                                            <FontAwesomeIcon
-                                                title='Вільно переглядати рейтинг'
-                                                onClick={ () => {
-                                                    setWatchPosition(true);
+                                        <FontAwesomeIcon
+                                            title={
+                                                watchPosition
+                                                    ? 'Слідкувати за позицією'
+                                                    : 'Вільно переглядати рейтинг'
+                                            }
+                                            onClick={ () => {
+                                                setWatchPosition(
+                                                    !watchPosition,
+                                                );
+                                                if (!watchPosition) {
                                                     this._scrollToPosition(
                                                         selectedIndex,
                                                     );
-                                                } }
-                                                className={ Styles.freeMove }
-                                                icon={ faArrowsAlt }
-                                            />
-                                        ) : (
-                                            <FontAwesomeIcon
-                                                title='Слідкувати за обраною позицією'
-                                                onClick={ () =>
-                                                    setWatchPosition(false)
                                                 }
-                                                className={ Styles.watchPosition }
-                                                icon={ faAnchor }
-                                            />
-                                        ) }
+                                            } }
+                                            className={
+                                                watchPosition
+                                                    ? Styles.watchPosition
+                                                    : Styles.freeMove
+                                            }
+                                            icon={ faAnchor }
+                                        />
                                     </div>
                                 ) }
                                 dataKey='name'

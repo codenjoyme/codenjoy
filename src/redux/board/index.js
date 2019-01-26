@@ -47,6 +47,7 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 const ReducerState = {
     day:           moment().format(DATE_FORMAT),
     participantId: void 0,
+    watchPosition: true,
 };
 
 export default function reducer(state = ReducerState, action) {
