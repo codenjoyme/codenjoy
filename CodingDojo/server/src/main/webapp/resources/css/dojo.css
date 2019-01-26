@@ -175,3 +175,21 @@ canvas {
     border: 1px solid;
     width:100%!important;
 }
+
+/* rule page */
+.hfeed {
+    max-width: 800px;
+    margin: 4em auto;
+}
+
+.hfeed p {
+    margin-bottom: 1.625em;
+}
+
+.hfeed pre {
+    background: none repeat scroll 0% 0% rgb(244, 244, 244);
+    font: 13px/1.5 "Courier 10 Pitch",Courier,monospace;
+    margin-bottom: 1.625em;
+    overflow: auto;
+    padding: 0.75em 1.625em;
+}
