@@ -40,7 +40,6 @@
 
     <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
     <logger name="com.epam.dojo" level="DEBUG" additivity="true"/>
-    <logger name="com.codenjoy.dojo.transport" level="DEBUG" additivity="false"/>
     <logger name="org.eclipse.jetty" level="DEBUG" additivity="false"/>
 
     <root level="debug">

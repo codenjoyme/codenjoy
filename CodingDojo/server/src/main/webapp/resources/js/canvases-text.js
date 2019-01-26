@@ -119,10 +119,6 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         });
     }
 
-    function decode(char) {
-        return plots[char];
-    }
-
     var getBoardDrawer = function(canvas, playerName, playerData) {
         var data = playerData.board;
 

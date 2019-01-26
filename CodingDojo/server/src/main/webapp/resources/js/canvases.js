@@ -82,9 +82,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function loadSpriteImages(elements, alphabet, onImageLoad) {
         for (var index in elements) {
-            var char = alphabet[index];
+            var ch = alphabet[index];
             var color = elements[index];
-            plots[char] = color;
+            plots[ch] = color;
             var subFolder = (!!sprites) ? sprites + '/' : '';
             plotsUrls[color] = contextPath + '/resources/sprite/' + gameName + '/' + subFolder + color + '.png';
 
@@ -151,13 +151,13 @@ function initCanvases(contextPath, players, allPlayersScreen,
         });
     }
 
-    function decode(char) {
-        return plots[char];
+    function decode(ch){
+        return plots[ch];
     }
 
     function plotsContains(color) {
-        for (var char in plots) {
-            if (plots[char] == color) {
+        for (var ch in plots) {
+            if (plots[ch] == color) {
                 return true;
             }
         }
@@ -202,9 +202,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
 
             if (isDrawByOrder) {
-                for (var char in plots) {
-                    var plot = plots[char];
-                    drawChar(char);
+                for (var ch in plots) {
+                    var plot = plots[ch];
+                    drawChar(ch);
                 }
             } else {
                 drawChar();

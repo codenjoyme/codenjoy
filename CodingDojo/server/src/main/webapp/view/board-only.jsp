@@ -28,20 +28,10 @@
 <head>
     <meta charset="utf-8">
     <title>Game board</title>
-    <link href="${ctx}/resources/css/board-only.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/boardonly.min.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
-    <script src="${ctx}/resources/js/jcanvas/jcanvas.min.js"></script>
-
-    <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/board-only.js"></script>
-    <script src="${ctx}/resources/js/ajax-loader.js"></script>
-    <script src="${ctx}/resources/js/board-data-ws.js"></script>
-    <script src="${ctx}/resources/js/canvases.js"></script>
-    <script src="${ctx}/resources/js/canvases-text.js"></script>
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
-    <script src="${ctx}/resources/js/board.js"></script>
+    <script src="${ctx}/resources/js/boardonly.min.js"></script>
 </head>
 <body style="display:none;">
     <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>

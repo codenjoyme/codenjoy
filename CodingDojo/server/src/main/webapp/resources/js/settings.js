@@ -34,7 +34,7 @@ game.sprites = null;
 game.heroInfo = null;
 
 game.debug = false;
-game.debugger = function() {
+game['debugger'] = function() {
     debugger;
 }
 

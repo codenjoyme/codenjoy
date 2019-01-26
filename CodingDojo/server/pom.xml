@@ -256,6 +256,78 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>com.samaxes.maven</groupId>
+                <artifactId>minify-maven-plugin</artifactId>
+                <version>1.7.6</version>
+                <executions>
+                    <execution>
+                        <id>board-only-minify</id>
+                        <configuration>
+                            <cssSourceDir>resources/css</cssSourceDir>
+                            <cssSourceFiles>
+                                <cssInclude>board-only.css</cssInclude>
+                            </cssSourceFiles>
+                            <cssFinalFile>boardonly.css</cssFinalFile>
+
+                            <jsSourceDir>resources/js</jsSourceDir>
+                            <jsSourceFiles>
+                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
+                                <jsInclude>jquery/jquery.tmpl.js</jsInclude>
+                                <jsInclude>jcanvas/jcanvas.js</jsInclude>
+                                <jsInclude>settings.js</jsInclude>
+                                <jsInclude>board-only.js</jsInclude>
+                                <jsInclude>ajax-loader.js</jsInclude>
+                                <jsInclude>board-data-ws.js</jsInclude>
+                                <jsInclude>canvases.js</jsInclude>
+                                <jsInclude>canvases-text.js</jsInclude>
+                                <jsInclude>board.js</jsInclude>
+                            </jsSourceFiles>
+                            <jsFinalFile>boardonly.js</jsFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>board-all-minify</id>
+                        <configuration>
+                            <cssSourceDir>resources/css</cssSourceDir>
+                            <cssSourceFiles>
+                                <cssInclude>bootstrap/bootstrap.css</cssInclude>
+                                <cssInclude>dojo.css</cssInclude>
+                            </cssSourceFiles>
+                            <cssFinalFile>boardall.css</cssFinalFile>
+
+                            <jsSourceDir>resources/js</jsSourceDir>
+                            <jsSourceFiles>
+                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
+                                <jsInclude>jquery/jquery.tmpl.js</jsInclude>
+                                <jsInclude>jquery/jquery.mousewheel-3.1.13.js</jsInclude>
+                                <jsInclude>jcanvas/jcanvas.js</jsInclude>
+                                <jsInclude>jquery/jquery.simplemodal-1.4.4.js</jsInclude>
+                                <jsInclude>settings.js</jsInclude>
+                                <jsInclude>ajax-loader.js</jsInclude>
+                                <jsInclude>board-data-ws.js</jsInclude>
+                                <jsInclude>zoomer.js</jsInclude>
+                                <jsInclude>canvases.js</jsInclude>
+                                <jsInclude>canvases-text.js</jsInclude>
+                                <jsInclude>layout.js</jsInclude>
+                                <jsInclude>donate.js</jsInclude>
+                                <jsInclude>joystick.js</jsInclude>
+                                <jsInclude>leaderstable.js</jsInclude>
+                                <jsInclude>hotkeys.js</jsInclude>
+                                <jsInclude>advertisement.js</jsInclude>
+                                <jsInclude>board.js</jsInclude>
+                            </jsSourceFiles>
+                            <jsFinalFile>boardall.js</jsFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler.version}</version>
