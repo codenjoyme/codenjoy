@@ -28,14 +28,10 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy</title>
 
-    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
-
-    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
 
-    <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/hotkeys.js"></script>
+    <script src="${ctx}/resources/js/all-main.min.js"></script>
 </head>
 <body>
     <div id="settings" contextPath="${ctx}" gameName="${gameName}"></div>

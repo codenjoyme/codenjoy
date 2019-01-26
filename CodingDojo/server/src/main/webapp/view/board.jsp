@@ -29,13 +29,11 @@
     <meta charset="utf-8">
     <title>Game boards</title>
 
-    <link href="${ctx}/resources/css/boardall.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
-
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
-    <script src="${ctx}/resources/js/boardall.min.js"></script>
+    <script src="${ctx}/resources/js/all-board.min.js"></script>
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 </head>
 <body style="display:none;">

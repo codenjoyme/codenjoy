@@ -29,20 +29,10 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Coding dojo</title>
 
-    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
-
-    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.md5.js"></script>
 
-    <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/ajax-loader.js"></script>
-    <script src="${ctx}/resources/js/validation.js"></script>
-    <script src="${ctx}/resources/js/hotkeys.js"></script>
-    <script src="${ctx}/resources/js/registration.js"></script>
+    <script src="${ctx}/resources/js/all-registration.min.js"></script>
 </head>
 <body>
     <div id="settings" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>

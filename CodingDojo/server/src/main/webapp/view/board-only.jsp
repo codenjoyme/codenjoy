@@ -28,10 +28,10 @@
 <head>
     <meta charset="utf-8">
     <title>Game board</title>
-    <link href="${ctx}/resources/css/boardonly.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
 
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
-    <script src="${ctx}/resources/js/boardonly.min.js"></script>
+    <script src="${ctx}/resources/js/all-board-only.min.js"></script>
 </head>
 <body style="display:none;">
     <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>

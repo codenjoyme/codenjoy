@@ -261,13 +261,27 @@
                 <version>1.7.6</version>
                 <executions>
                     <execution>
+                        <id>css-minify</id>
+                        <configuration>
+                            <cssSourceDir>resources/css</cssSourceDir>
+                            <cssSourceFiles>
+                                <cssInclude>bootstrap/bootstrap.css</cssInclude>
+                                <cssInclude>dojo.css</cssInclude>
+                            </cssSourceFiles>
+                            <cssFinalFile>all.css</cssFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>board-only-minify</id>
                         <configuration>
                             <cssSourceDir>resources/css</cssSourceDir>
                             <cssSourceFiles>
                                 <cssInclude>board-only.css</cssInclude>
                             </cssSourceFiles>
-                            <cssFinalFile>boardonly.css</cssFinalFile>
+                            <cssFinalFile>all-board-only.css</cssFinalFile>
 
                             <jsSourceDir>resources/js</jsSourceDir>
                             <jsSourceFiles>
@@ -282,7 +296,7 @@
                                 <jsInclude>canvases-text.js</jsInclude>
                                 <jsInclude>board.js</jsInclude>
                             </jsSourceFiles>
-                            <jsFinalFile>boardonly.js</jsFinalFile>
+                            <jsFinalFile>all-board-only.js</jsFinalFile>
                         </configuration>
                         <goals>
                             <goal>minify</goal>
@@ -291,13 +305,6 @@
                     <execution>
                         <id>board-all-minify</id>
                         <configuration>
-                            <cssSourceDir>resources/css</cssSourceDir>
-                            <cssSourceFiles>
-                                <cssInclude>bootstrap/bootstrap.css</cssInclude>
-                                <cssInclude>dojo.css</cssInclude>
-                            </cssSourceFiles>
-                            <cssFinalFile>boardall.css</cssFinalFile>
-
                             <jsSourceDir>resources/js</jsSourceDir>
                             <jsSourceFiles>
                                 <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
@@ -319,7 +326,61 @@
                                 <jsInclude>advertisement.js</jsInclude>
                                 <jsInclude>board.js</jsInclude>
                             </jsSourceFiles>
-                            <jsFinalFile>boardall.js</jsFinalFile>
+                            <jsFinalFile>all-board.js</jsFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>admin-minify</id>
+                        <configuration>
+                            <jsSourceDir>resources/js</jsSourceDir>
+                            <jsSourceFiles>
+                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
+                                <jsInclude>jquery/jquery.validate.js</jsInclude>
+                                <jsInclude>settings.js</jsInclude>
+                                <jsInclude>ajax-loader.js</jsInclude>
+                                <jsInclude>validation.js</jsInclude>
+                                <jsInclude>admin.js</jsInclude>
+                                <jsInclude>hotkeys.js</jsInclude>
+                            </jsSourceFiles>
+                            <jsFinalFile>all-admin.js</jsFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>registration-minify</id>
+                        <configuration>
+                            <jsSourceDir>resources/js</jsSourceDir>
+                            <jsSourceFiles>
+                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
+                                <jsInclude>jquery/jquery.validate.js</jsInclude>
+                                <jsInclude>jquery/jquery.md5.js</jsInclude>
+                                <jsInclude>settings.js</jsInclude>
+                                <jsInclude>ajax-loader.js</jsInclude>
+                                <jsInclude>validation.js</jsInclude>
+                                <jsInclude>hotkeys.js</jsInclude>
+                                <jsInclude>registration.js</jsInclude>
+                            </jsSourceFiles>
+                            <jsFinalFile>all-registration.js</jsFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>main-minify</id>
+                        <configuration>
+                            <jsSourceDir>resources/js</jsSourceDir>
+                            <jsSourceFiles>
+                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
+                                <jsInclude>settings.js</jsInclude>
+                                <jsInclude>hotkeys.js</jsInclude>
+                            </jsSourceFiles>
+                            <jsFinalFile>all-main.js</jsFinalFile>
                         </configuration>
                         <goals>
                             <goal>minify</goal>
