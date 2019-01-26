@@ -24,8 +24,8 @@ pages = pages || {};
 var adminKey = false;
 
 function initHotkeys() {
-    var gameName = getSettings('gameName');
-    var contextPath = getSettings('contextPath');
+    var gameName = game.gameName || getSettings('gameName');
+    var contextPath = game.contextPath || getSettings('contextPath');
 
     var gameNameParam = ((gameName == '')?'':'gameName=' + gameName);
     $('body').keydown(function(ev) {
@@ -45,6 +45,14 @@ function initHotkeys() {
             game.enableJoystick = !game.enableJoystick;
         } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
             window.open(contextPath + '/board/game/' + gameName);
+        } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)
+            window.open(contextPath + '/help');
+        } else if (adminKey && ev.keyCode == 85) { // ... + U (rUles)
+            if (gameName == '') {
+                window.open(contextPath + '/help');
+            } else {
+                window.open(contextPath + '/resources/help/' + gameName + '.html');
+            }
         } else {
             adminKey = false;
         }

@@ -22,7 +22,10 @@
 pages = pages || {};
 
 pages.rules = function() {
-    var contextPath = window.location.pathname.split('/')[1];
+    var parts = window.location.pathname.split('/');
+    game.gameName = parts[parts.length - 1].split('.')[0];
+    game.contextPath = parts[1];
+    var contextPath = game.contextPath;
     var base = window.location.origin + '/' + contextPath + '/';
     document.head.innerHTML = document.head.innerHTML + "<base target='_blank' href='" + base + "' />";
 
@@ -31,4 +34,7 @@ pages.rules = function() {
         content = content.replace('codenjoy-contest', contextPath);
         $(this).html(content);
     });
+
+
+    initHotkeys();
 }
