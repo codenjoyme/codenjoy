@@ -1,6 +1,6 @@
 // vendor
 import React, { Component } from 'react';
-import { ConnectedRouter } from 'connected-react-router';
+import { Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import ReactGA from 'react-ga';
 import ReactPixel from 'react-facebook-pixel';
@@ -9,12 +9,14 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faTimesCircle,
+    faArrowsAlt,
     faCheckCircle,
     faStar,
     faArrowUp,
     faArrowRight,
     faShareAlt,
     faUser,
+    faAnchor,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faSquare as farSquare,
@@ -30,6 +32,8 @@ import Routes from './routes/Routes';
 import CustomScrollbars from './CustomScrollbars';
 
 library.add(
+    faAnchor,
+    faArrowsAlt,
     faTimesCircle,
     faCheckCircle,
     farCheckSquare,
@@ -55,11 +59,11 @@ class App extends Component {
         return (
             <Provider store={ store }>
                 <PersistGate loading={ null } persistor={ persistor }>
-                    <ConnectedRouter history={ history }>
+                    <Router history={ history }>
                         <CustomScrollbars>
                             <Routes />
                         </CustomScrollbars>
-                    </ConnectedRouter>
+                    </Router>
                 </PersistGate>
             </Provider>
         );

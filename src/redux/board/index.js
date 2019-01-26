@@ -9,7 +9,6 @@ import {
     cancel,
     select,
 } from 'redux-saga/effects';
-import { replace } from 'connected-react-router';
 import { delay } from 'redux-saga';
 import _ from 'lodash';
 import moment from 'moment';
@@ -18,6 +17,7 @@ import qs from 'qs';
 // proj
 import { fetchAPI } from '../../utils';
 import { book } from '../../routes';
+import { history } from '../../store';
 
 /**
  * Constants
@@ -28,6 +28,7 @@ const prefix = `codenjoy/${moduleName}`;
 export const SET_DAY = `${prefix}/SET_DAY`;
 export const SET_PARTICIPANT_ID = `${prefix}/SET_PARTICIPANT_ID`;
 export const SET_DEFAULTS = `${prefix}/SET_DEFAULTS`;
+export const SET_WATCH_POSITION = `${prefix}/SET_WATCH_POSITION`;
 
 export const FETCH_RATING = `${prefix}/FETCH_RATING`;
 export const FETCH_RATING_SUCCESS = `${prefix}/FETCH_RATING_SUCCESS`;
@@ -63,6 +64,12 @@ export default function reducer(state = ReducerState, action) {
             return {
                 ...state,
                 participantId: payload,
+            };
+
+        case SET_WATCH_POSITION:
+            return {
+                ...state,
+                watchPosition: payload,
             };
 
         case SET_DEFAULTS:
@@ -130,6 +137,11 @@ export const setDefaults = payload => ({
     payload,
 });
 
+export const setWatchPosition = watch => ({
+    type:    SET_WATCH_POSITION,
+    payload: watch,
+});
+
 /**
  * Saga
  **/
@@ -191,12 +203,15 @@ function* ratingSyncSaga() {
 }
 
 export function* updateQueryParamsSaga() {
-    const queryParams = yield select(state => ({
+    const query = yield select(state => ({
         participantId: state.board.participantId,
         day:           state.board.day,
     }));
+    const stringifiedQuery = qs.stringify(query);
 
-    yield put(replace(book.board + '?' + qs.stringify(queryParams)));
+    if (stringifiedQuery) {
+        history.replace(book.board + '?' + stringifiedQuery);
+    }
 }
 
 export function* saga() {

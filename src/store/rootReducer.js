@@ -1,6 +1,5 @@
 // vendor
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
 
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -11,9 +10,6 @@ import boardReducer, { moduleName as boardModule } from '../redux/board';
 import registerReducer, {
     moduleName as registerModule,
 } from '../redux/register';
-
-// own
-import { history } from './middleware';
 
 export const persistConfig = {
     key:       'root',
@@ -28,7 +24,6 @@ const persistedState = {
 const appState = {
     [ boardModule ]:    boardReducer,
     [ registerModule ]: registerReducer,
-    router:             connectRouter(history),
 };
 
 const rootReducer = persistReducer(

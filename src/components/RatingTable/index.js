@@ -8,11 +8,17 @@ import {
     faStar,
     faArrowUp,
     faArrowRight,
+    faAnchor,
+    faArrowsAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 // own
 import Styles from './styles.module.css';
 const cx = classNames.bind(Styles);
+
+const ROW_HEIGHT = 50;
+const HEADER_HEIGHT = 60;
+const MIN_ITEMS = 10;
 
 class RatingTableHandler extends Component {
     _starStyle(position) {
@@ -39,40 +45,79 @@ class RatingTableHandler extends Component {
             });
     }
 
+    _getTableRef(table) {
+        this.table = table;
+    }
+
+    _getSelectedIndex() {
+        const { rating, watchId } = this.props;
+
+        return _.isNil(watchId) ? -1 : _.findIndex(rating, { id: watchId });
+    }
+
+    _getOwnIndex() {
+        const { rating, id } = this.props;
+
+        return _.isNil(id) ? -1 : _.findIndex(rating, { id });
+    }
+
+    _getMinTableHeight() {
+        const { rating } = this.props;
+
+        return rating && rating.length < MIN_ITEMS
+            ? Math.max(
+                ROW_HEIGHT + HEADER_HEIGHT,
+                rating.length * ROW_HEIGHT + HEADER_HEIGHT,
+            )
+            : Math.max(ROW_HEIGHT * MIN_ITEMS);
+    }
+
+    _scrollToPosition(selectedIndex) {
+        if (this.table && selectedIndex !== -1) {
+            this.table.scrollToPosition(
+                Math.max(ROW_HEIGHT * (selectedIndex - MIN_ITEMS / 2), 0),
+            );
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const { rating, watchPosition, watchId } = this.props;
+        const selectedIndex = this._getSelectedIndex();
+
+        if (prevProps.rating !== rating && watchPosition) {
+            this._scrollToPosition(selectedIndex);
+        }
+
+        if (prevProps.watchId !== watchId) {
+            this._scrollToPosition(selectedIndex);
+        }
+    }
+
     render() {
-        const { setParticipant } = this.props;
-        const { rating, id, watchId } = this.props;
+        const { setParticipant, setWatchPosition } = this.props;
+        const { rating, watchPosition } = this.props;
 
-        const ownIndex = _.isNil(id) ? -1 : _.findIndex(rating, { id }); // Index of logged in user
-        const selectedIndex = _.isNil(watchId)
-            ? -1
-            : _.findIndex(rating, { id: watchId }); // Index of selected participant
+        const ownIndex = this._getOwnIndex();
+        const selectedIndex = this._getSelectedIndex();
 
-        const minHeight =
-            rating && rating.length < 10
-                ? Math.max(110, rating.length * 50 + 60)
-                : Math.max(500);
+        const minHeight = this._getMinTableHeight();
 
         return rating ? (
             <div className={ Styles.rating } style={ { minHeight } }>
                 <AutoSizer>
                     { ({ width, height }) => (
                         <Table
+                            ref={ this._getTableRef.bind(this) }
                             gridClassName={ Styles.ratingGrid }
                             className={ Styles.ratingTable }
                             headerClassName={ Styles.header }
                             rowClassName={ ({ index }) =>
                                 this._rowStyles(index, selectedIndex, ownIndex)
                             }
-                            scrollToIndex={ selectedIndex }
-                            height={
-                                rating.length < 10
-                                    ? Math.max(110, rating.length * 50 + 60)
-                                    : Math.max(height, 500)
-                            }
+                            height={ Math.max(height, minHeight) }
                             width={ width }
                             headerHeight={ 60 }
-                            rowHeight={ 50 }
+                            rowHeight={ ROW_HEIGHT }
                             rowCount={ rating.length }
                             rowGetter={ ({ index }) => rating[ index ] }
                             onRowClick={ ({ rowData }) =>
@@ -121,11 +166,14 @@ class RatingTableHandler extends Component {
                                         { ownIndex !== -1 && (
                                             <FontAwesomeIcon
                                                 title='До моєї позиції'
-                                                onClick={ () =>
+                                                onClick={ () => {
                                                     setParticipant(
                                                         rating[ ownIndex ],
-                                                    )
-                                                }
+                                                    );
+                                                    this._scrollToPosition(
+                                                        ownIndex,
+                                                    );
+                                                } }
                                                 className={ Styles.toMyPosition }
                                                 icon={ faArrowRight }
                                             />
@@ -133,13 +181,36 @@ class RatingTableHandler extends Component {
                                         { !!rating.length && (
                                             <FontAwesomeIcon
                                                 title='Показати лідерів'
-                                                onClick={ () =>
+                                                onClick={ () => {
                                                     setParticipant(
                                                         _.first(rating),
-                                                    )
-                                                }
+                                                    );
+                                                    this._scrollToPosition(0);
+                                                } }
                                                 className={ Styles.toTop }
                                                 icon={ faArrowUp }
+                                            />
+                                        ) }
+                                        { !watchPosition ? (
+                                            <FontAwesomeIcon
+                                                title='Вільно переглядати рейтинг'
+                                                onClick={ () => {
+                                                    setWatchPosition(true);
+                                                    this._scrollToPosition(
+                                                        selectedIndex,
+                                                    );
+                                                } }
+                                                className={ Styles.freeMove }
+                                                icon={ faArrowsAlt }
+                                            />
+                                        ) : (
+                                            <FontAwesomeIcon
+                                                title='Слідкувати за обраною позицією'
+                                                onClick={ () =>
+                                                    setWatchPosition(false)
+                                                }
+                                                className={ Styles.watchPosition }
+                                                icon={ faAnchor }
                                             />
                                         ) }
                                     </div>

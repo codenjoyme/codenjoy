@@ -1,9 +1,9 @@
 // vendor
 import { all, call, put, take } from 'redux-saga/effects';
-import { replace, LOCATION_CHANGE } from 'connected-react-router';
 import md5 from 'md5';
 
 // proj
+import { history } from '../../store';
 import { book } from '../../routes';
 import { fetchAPI } from '../../utils';
 import { authenticate } from '../auth';
@@ -40,9 +40,6 @@ export default function reducer(state = ReducerState, action) {
 
         case REGISTER_FAIL:
             return { ...state, isLoading: false, registerErrors: payload };
-
-        case LOCATION_CHANGE:
-            return { ...state, registerErrors: void 0 };
 
         case SET_VISIBLE_PRIVACY_MODAL:
             return { ...state, visiblePrivacyModal: payload };
@@ -100,7 +97,7 @@ export function* registerFormSaga() {
             } else {
                 yield put(authenticate(response));
                 yield put(registerSuccess());
-                yield put(replace(book.board));
+                yield call(history.replace, book.board);
             }
         } catch (err) {
             const failParams =

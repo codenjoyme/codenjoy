@@ -1,14 +1,13 @@
 // vendor
-import { routerMiddleware as createRouterMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
-import nprogress from 'nprogress';
+import ReactGA from 'react-ga';
+import ReactPixel from 'react-facebook-pixel';
 
 // proj
 import history from './history';
 
-const routerMiddleware = createRouterMiddleware(history);
 const sagaMiddleware = createSagaMiddleware();
-const middleware = [ sagaMiddleware, routerMiddleware ];
+const middleware = [ sagaMiddleware ];
 
 if (process.env.NODE_ENV === 'development') {
     /**
@@ -33,9 +32,15 @@ if (process.env.NODE_ENV === 'development') {
     middleware.push(logger);
 }
 
-history.listen(() => {
-    nprogress.start();
-    nprogress.done();
-});
+if (process.env.NODE_ENV !== 'development') {
+    history.listen(({ pathname: page }) => {
+        ReactGA.set({ page });
+        ReactGA.pageview(page);
+    });
+
+    history.listen(() => {
+        ReactPixel.pageView();
+    });
+}
 
 export { history, sagaMiddleware, middleware };

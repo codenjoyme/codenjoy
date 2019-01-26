@@ -10,6 +10,7 @@ import qs from 'qs';
 import {
     setDay,
     setParticipantId,
+    setWatchPosition,
     startBackgroundSync,
     stopBackgroundSync,
 } from '../../redux/board';
@@ -46,7 +47,7 @@ class BoardContainer extends Component {
 
             const currentParticipant = this._getCurrentRatingParticipant();
             const participantToSet = currentParticipant || _.get(rating, 0);
-            const participantId = _.get(participantToSet, 'id'); 
+            const participantId = _.get(participantToSet, 'id');
 
             if (participantId) {
                 setParticipantId(participantId);
@@ -56,10 +57,8 @@ class BoardContainer extends Component {
 
     _getCurrentRatingParticipant() {
         const { id, rating } = this.props;
-        
-        return _.isNil(id)
-            ? void 0
-            : _.find(rating, { id });
+
+        return _.isNil(id) ? void 0 : _.find(rating, { id });
     }
 
     _getSelectedRatingParticipant() {
@@ -71,8 +70,8 @@ class BoardContainer extends Component {
     }
 
     render() {
-        const { setDay, setParticipantId } = this.props; // actions
-        const { day, rating, id } = this.props;
+        const { setDay, setParticipantId, setWatchPosition } = this.props; // actions
+        const { day, rating, id, watchPosition } = this.props;
 
         const battleParticipant = this._getSelectedRatingParticipant();
 
@@ -85,8 +84,10 @@ class BoardContainer extends Component {
                         <RatingTable
                             id={ id }
                             watchId={ _.get(battleParticipant, 'id') }
+                            watchPosition={ watchPosition }
                             rating={ rating }
                             setParticipant={ ({ id }) => setParticipantId(id) }
+                            setWatchPosition={ setWatchPosition }
                         />
                     </div>
                     <div className={ Styles.frame }>
@@ -107,6 +108,7 @@ class BoardContainer extends Component {
 const mapStateToProps = state => ({
     day:           state.board.day,
     participantId: state.board.participantId,
+    watchPosition: state.board.watchPosition,
     rating:        state.board.rating,
     id:            state.auth.id,
     server:        state.auth.server,
@@ -115,6 +117,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     setDay,
     setParticipantId,
+    setWatchPosition,
     startBackgroundSync,
     stopBackgroundSync,
 };

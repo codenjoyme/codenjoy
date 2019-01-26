@@ -37,8 +37,7 @@
 }
 
 .ratingTable .ownRow {
-    border-top: 1.5px solid rgb(48, 113, 137);
-    border-bottom: 1.5px solid rgb(48, 113, 137);
+    background-color: rgb(48, 113, 137);
 }
 
 .ratingTable .selectedRow {
@@ -52,7 +51,17 @@
     top: 0;
     right: 0;
     border-top: 20px solid rgb(65, 199, 220);
-    border-left: 20px solid rgb(25, 36, 51);
+    border-left: 20px solid rgb(25, 36,51);
+    width: 0;
+}
+
+.ratingTable .ownRow:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top: 20px solid rgb(65, 199, 220);
+    border-left: 20px solid rgb(48, 113, 137);
     width: 0;
 }
 
@@ -98,7 +107,21 @@
     color: rgb(163, 198, 68);
 }
 
+.toTop, .toMyPosition, .freeMove, .watchPosition {
+    cursor: pointer;
+}
+
 .toTop {
+    margin-left: 10px;
+    color: rgb(163, 198, 68);
+}
+
+.watchPosition {
+    margin-left: 10px;
+    color: rgb(235, 106, 90);
+}
+
+.freeMove {
     margin-left: 10px;
     color: rgb(163, 198, 68);
 }

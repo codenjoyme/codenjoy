@@ -1,10 +1,10 @@
 // vendor
 import { all, call, put, take } from 'redux-saga/effects';
-import { replace, LOCATION_CHANGE } from 'connected-react-router';
 import md5 from 'md5';
 
 // proj
 import { book } from '../../routes';
+import { history } from '../../store';
 import {
     fetchAPI,
     setCode,
@@ -61,9 +61,6 @@ export default function reducer(state = ReducerState, action) {
 
         case LOGOUT_SUCCESS:
             return ReducerState;
-
-        case LOCATION_CHANGE:
-            return { ...state, loginErrors: void 0 };
 
         default:
             return state;
@@ -142,7 +139,7 @@ export function* loginFormSaga() {
             } else {
                 yield put(authenticate(response));
                 yield put(loginSuccess());
-                yield put(replace(book.board));
+                yield call(history.replace, book.board);
             }
         } catch (err) {
             const failParams =
@@ -175,8 +172,8 @@ export function* logoutSaga() {
         yield removeServer();
         yield removeId();
 
-        yield put(replace(`${book.login}`));
         yield put(logoutSuccess());
+        yield call(history.replace, book.login);
     }
 }
 
