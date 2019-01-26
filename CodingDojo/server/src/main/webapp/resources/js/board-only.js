@@ -40,5 +40,5 @@ pages.boardOnly = function() {
         window.open(window.location.href.replace('only=true', 'only=false'));
     });
 
-    initHotkeys();
+    pages.board();
 }
