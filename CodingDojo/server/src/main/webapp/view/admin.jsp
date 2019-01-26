@@ -27,15 +27,15 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
-    <title>Admin page</title>
+    <title>Codenjoy admin page</title>
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/all-admin.min.js"></script>
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body>
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="admin" contextPath="${ctx}" gameName="${gameName}"></div>
 
     <%@include file="forkMe.jsp"%>
     <div class="page-header">

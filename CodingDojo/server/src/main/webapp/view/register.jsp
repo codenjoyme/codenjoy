@@ -27,15 +27,15 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
-    <title>Coding dojo</title>
+    <title>Codenjoy registration</title>
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/all-registration.min.js"></script>
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body>
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
+    <div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
 
     <%@include file="forkMe.jsp"%>
 

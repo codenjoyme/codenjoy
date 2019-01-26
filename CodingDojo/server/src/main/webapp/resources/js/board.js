@@ -20,6 +20,19 @@
  * #L%
  */
 
+pages = pages || {};
+
+pages.board = function() {
+    game.gameName = getSettings('gameName');
+    game.playerName = getSettings('playerName');
+    game.code = getSettings('code');
+    game.allPlayersScreen = getSettings('allPlayersScreen');
+    game.contextPath = getSettings('contextPath');
+
+    initBoardPage(game);
+    initHotkeys();
+}
+
 function initBoardPage(game) {
     loadData('/rest/player/' + game.playerName + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
         game.contextPath = gameData.context;
@@ -89,10 +102,6 @@ function initBoardComponents(game) {
         $("#how-to-play").hide();
     }
 
-    if (game.enableHotkeys) {
-        // do nothing because hotkeys init itself
-    }
-
     if (game.enableAdvertisement) {
         initAdvertisement(game.contextPath);
     }
@@ -115,13 +124,3 @@ function initBoardComponents(game) {
         setupMouseWheelZoom();
     }
 }
-
-$(document).ready(function() {
-    game.gameName = getSettings('gameName');
-    game.playerName = getSettings('playerName');
-    game.code = getSettings('code');
-    game.allPlayersScreen = getSettings('allPlayersScreen');
-    game.contextPath = getSettings('contextPath');
-
-    initBoardPage(game);
-});

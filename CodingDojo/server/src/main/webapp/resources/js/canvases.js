@@ -547,7 +547,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     function drawUserCanvas(playerName, data, allPlayersScreen) {
-        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
+        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер борды а не всем сразу?
             reloadCanvasesData();
         }
 

@@ -31,10 +31,10 @@
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/all-main.min.js"></script>
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body>
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
     <%@include file="forkMe.jsp"%>
 
     <div class="page-header">

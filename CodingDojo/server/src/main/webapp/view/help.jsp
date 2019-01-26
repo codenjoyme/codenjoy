@@ -27,16 +27,15 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
-    <title>Help</title>
-    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
+    <title>Codenjoy help</title>
 
-    <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/help.js"></script>
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body>
-    <div id="settings" contextPath="${ctx}"></div>
+    <div id="settings" page="help" contextPath="${ctx}"></div>
     <%@include file="forkMe.jsp"%>
     <div class="page-header">
         <h1>Help</h1>

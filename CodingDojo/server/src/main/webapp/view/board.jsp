@@ -33,11 +33,11 @@
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
-    <script src="${ctx}/resources/js/all-board.min.js"></script>
+    <script src="${ctx}/resources/js/all.min.js"></script>
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 

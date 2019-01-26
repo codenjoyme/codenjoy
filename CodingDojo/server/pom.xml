@@ -275,44 +275,36 @@
                         </goals>
                     </execution>
                     <execution>
-                        <id>board-only-minify</id>
+                        <id>board-only-css-minify</id>
                         <configuration>
                             <cssSourceDir>resources/css</cssSourceDir>
                             <cssSourceFiles>
                                 <cssInclude>board-only.css</cssInclude>
                             </cssSourceFiles>
                             <cssFinalFile>all-board-only.css</cssFinalFile>
-
-                            <jsSourceDir>resources/js</jsSourceDir>
-                            <jsSourceFiles>
-                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
-                                <jsInclude>jquery/jquery.tmpl.js</jsInclude>
-                                <jsInclude>jcanvas/jcanvas.js</jsInclude>
-                                <jsInclude>settings.js</jsInclude>
-                                <jsInclude>board-only.js</jsInclude>
-                                <jsInclude>ajax-loader.js</jsInclude>
-                                <jsInclude>board-data-ws.js</jsInclude>
-                                <jsInclude>canvases.js</jsInclude>
-                                <jsInclude>canvases-text.js</jsInclude>
-                                <jsInclude>board.js</jsInclude>
-                            </jsSourceFiles>
-                            <jsFinalFile>all-board-only.js</jsFinalFile>
                         </configuration>
                         <goals>
                             <goal>minify</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>board-all-minify</id>
+                        <id>script-minify</id>
                         <configuration>
                             <jsSourceDir>resources/js</jsSourceDir>
                             <jsSourceFiles>
+                                <!-- libraries -->
                                 <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
                                 <jsInclude>jquery/jquery.tmpl.js</jsInclude>
                                 <jsInclude>jquery/jquery.mousewheel-3.1.13.js</jsInclude>
-                                <jsInclude>jcanvas/jcanvas.js</jsInclude>
+                                <jsInclude>jquery/jquery.validate.js</jsInclude>
+                                <jsInclude>jquery/jquery.md5.js</jsInclude>
                                 <jsInclude>jquery/jquery.simplemodal-1.4.4.js</jsInclude>
-                                <jsInclude>settings.js</jsInclude>
+                                <jsInclude>jcanvas/jcanvas.js</jsInclude>
+
+                                <!-- initialization -->
+                                <jsInclude>init.js</jsInclude>
+
+                                <!-- components -->
                                 <jsInclude>ajax-loader.js</jsInclude>
                                 <jsInclude>board-data-ws.js</jsInclude>
                                 <jsInclude>zoomer.js</jsInclude>
@@ -324,63 +316,18 @@
                                 <jsInclude>leaderstable.js</jsInclude>
                                 <jsInclude>hotkeys.js</jsInclude>
                                 <jsInclude>advertisement.js</jsInclude>
-                                <jsInclude>board.js</jsInclude>
-                            </jsSourceFiles>
-                            <jsFinalFile>all-board.js</jsFinalFile>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>admin-minify</id>
-                        <configuration>
-                            <jsSourceDir>resources/js</jsSourceDir>
-                            <jsSourceFiles>
-                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
-                                <jsInclude>jquery/jquery.validate.js</jsInclude>
-                                <jsInclude>settings.js</jsInclude>
-                                <jsInclude>ajax-loader.js</jsInclude>
                                 <jsInclude>validation.js</jsInclude>
+
+                                <!-- jsp pages -->
+                                <jsInclude>main.js</jsInclude>
+                                <jsInclude>register.js</jsInclude>
                                 <jsInclude>admin.js</jsInclude>
-                                <jsInclude>hotkeys.js</jsInclude>
+                                <jsInclude>help.js</jsInclude>
+                                <jsInclude>rules.js</jsInclude>
+                                <jsInclude>board.js</jsInclude>
+                                <jsInclude>board-only.js</jsInclude>
                             </jsSourceFiles>
-                            <jsFinalFile>all-admin.js</jsFinalFile>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>registration-minify</id>
-                        <configuration>
-                            <jsSourceDir>resources/js</jsSourceDir>
-                            <jsSourceFiles>
-                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
-                                <jsInclude>jquery/jquery.validate.js</jsInclude>
-                                <jsInclude>jquery/jquery.md5.js</jsInclude>
-                                <jsInclude>settings.js</jsInclude>
-                                <jsInclude>ajax-loader.js</jsInclude>
-                                <jsInclude>validation.js</jsInclude>
-                                <jsInclude>hotkeys.js</jsInclude>
-                                <jsInclude>registration.js</jsInclude>
-                            </jsSourceFiles>
-                            <jsFinalFile>all-registration.js</jsFinalFile>
-                        </configuration>
-                        <goals>
-                            <goal>minify</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>main-minify</id>
-                        <configuration>
-                            <jsSourceDir>resources/js</jsSourceDir>
-                            <jsSourceFiles>
-                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
-                                <jsInclude>settings.js</jsInclude>
-                                <jsInclude>hotkeys.js</jsInclude>
-                            </jsSourceFiles>
-                            <jsFinalFile>all-main.js</jsFinalFile>
+                            <jsFinalFile>all.js</jsFinalFile>
                         </configuration>
                         <goals>
                             <goal>minify</goal>

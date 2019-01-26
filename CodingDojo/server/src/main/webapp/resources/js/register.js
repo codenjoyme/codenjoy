@@ -19,6 +19,18 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+pages = pages || {};
+
+pages.registration = function() {
+    game.contextPath = getSettings('contextPath');
+    game.waitApprove = getSettings('waitApprove');
+
+    initRegistration(game.waitApprove, game.contextPath);
+
+    initHotkeys();
+}
+
 function initRegistration(waitApprove, contextPath) {
     var disable = function(status) {
         $("#submit").prop("disabled", status);
@@ -54,10 +66,3 @@ function initRegistration(waitApprove, contextPath) {
         });
     });
 }
-
-$(document).ready(function () {
-    game.contextPath = getSettings('contextPath');
-    game.waitApprove = getSettings('waitApprove');
-
-    initRegistration(game.waitApprove, game.contextPath);
-});

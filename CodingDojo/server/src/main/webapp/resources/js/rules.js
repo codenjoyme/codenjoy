@@ -19,10 +19,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+pages = pages || {};
 
-ga('create', 'UA-62528882-1', 'auto');
-ga('send', 'pageview');
+pages.rules = function() {
+    var contextPath = window.location.pathname.split('/')[1];
+    var base = window.location.origin + '/' + contextPath + '/';
+    document.head.innerHTML = document.head.innerHTML + "<base target='_blank' href='" + base + "' />";
+
+    $('pre').each(function(i, e) {
+        var content = $(this).html();
+        content = content.replace('codenjoy-contest', contextPath);
+        $(this).html(content);
+    });
+}

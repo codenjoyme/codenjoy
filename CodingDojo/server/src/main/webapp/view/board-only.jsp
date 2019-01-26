@@ -31,10 +31,10 @@
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
 
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
-    <script src="${ctx}/resources/js/all-board-only.min.js"></script>
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="boardOnly" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

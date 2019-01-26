@@ -20,21 +20,25 @@
  * #L%
  */
 
-game.enableDonate = false;
-game.enableJoystick = false;
-game.enableAlways = false;
-game.enablePlayerInfo = false;
-game.enablePlayerInfoLevel = false;
-game.enableLeadersTable = false;
-game.enableInfo = false;
-game.enableHotkeys = false;
-game.enableAdvertisement = false;
-game.showBody = true;
-game.sprites = null;
-game.heroInfo = null;
+pages = pages || {};
 
-$(document).ready(function() {
+pages.boardOnly = function() {
+    game.enableDonate = false;
+    game.enableJoystick = false;
+    game.enableAlways = false;
+    game.enablePlayerInfo = false;
+    game.enablePlayerInfoLevel = false;
+    game.enableLeadersTable = false;
+    game.enableInfo = false;
+    game.enableHotkeys = false;
+    game.enableAdvertisement = false;
+    game.showBody = true;
+    game.sprites = null;
+    game.heroInfo = null;
+
     $('body').click(function() {
         window.open(window.location.href.replace('only=true', 'only=false'));
     });
-});
+
+    initHotkeys();
+}

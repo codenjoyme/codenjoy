@@ -19,32 +19,34 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+pages = pages || {};
+
 var adminKey = false;
 
-function initHotkeys(gameName, contextPath) {
+function initHotkeys() {
+    var gameName = getSettings('gameName');
+    var contextPath = getSettings('contextPath');
+
     var gameNameParam = ((gameName == '')?'':'gameName=' + gameName);
     $('body').keydown(function(ev) {
+        if (!game.enableHotkeys) {
+            return;
+        }
+
         if (ev.ctrlKey && ev.altKey && ev.keyCode == 65) { // Ctrl-Alt-A + ...
             adminKey = true;
-        } else if (adminKey && ev.keyCode == 68) { // ... + D
+        } else if (adminKey && ev.keyCode == 68) { // ... + D (aDmin)
             window.open(contextPath + '/admin31415' + (gameNameParam == ''?'':'?select&') + gameNameParam);
-        } else if (adminKey && ev.keyCode == 82) { // ... + R
+        } else if (adminKey && ev.keyCode == 82) { // ... + R (Register)
             window.open(contextPath + '/register' + (gameNameParam == ''?'':'?') + gameNameParam);
-        } else if (adminKey && ev.keyCode == 77) { // ... + M
+        } else if (adminKey && ev.keyCode == 77) { // ... + M (Main)
             window.open(contextPath);
-        } else if (adminKey && ev.keyCode == 74) { // ... + J
+        } else if (adminKey && ev.keyCode == 74) { // ... + J (Joystick)
             game.enableJoystick = !game.enableJoystick;
-        } else if (adminKey && ev.keyCode == 66) { // ... + B
+        } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
             window.open(contextPath + '/board/game/' + gameName);
         } else {
             adminKey = false;
         }
     });
 }
-
-$(document).ready(function () {
-    game.contextPath = getSettings('contextPath');
-    game.gameName = getSettings('gameName');
-
-    initHotkeys(game.gameName, game.contextPath);
-});
