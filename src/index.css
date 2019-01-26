@@ -59,6 +59,11 @@ body {
     line-height: 2.13;
     color: #ffffff;
     text-transform: uppercase;
+    text-align: center;
+}
+
+.notation {
+    font-size: 15px;
 }
 
 .subTitle {
