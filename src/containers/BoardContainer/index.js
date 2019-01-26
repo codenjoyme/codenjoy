@@ -92,6 +92,10 @@ class BoardContainer extends Component {
                     </div>
                     <div className={ Styles.frame }>
                         <BattleFrame
+                            battleCompleted={ !moment(day).isSame(
+                                moment(),
+                                'day',
+                            ) }
                             participant={
                                 moment(day).isSame(moment(), 'day')
                                     ? battleParticipant

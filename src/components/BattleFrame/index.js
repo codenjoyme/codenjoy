@@ -11,7 +11,7 @@ import Styles from './styles.module.css';
 
 class BattleFrameHandler extends Component {
     render() {
-        const { participant } = this.props;
+        const { participant, battleCompleted } = this.props;
         const id = _.get(participant, 'id');
         const server = _.get(participant, 'server');
 
@@ -25,13 +25,15 @@ class BattleFrameHandler extends Component {
                             className={ Styles.ratioInner }
                             src={ getIFrameLink(server, id) }
                         />
-                    ) : (
-                        <img
-                            className={ Styles.ratioInner }
-                            src={ battleComplete }
-                            alt=' Битва закінчена'
-                        />
-                    ) }
+                    ) : 
+                        battleCompleted && (
+                            <img
+                                className={ Styles.ratioInner }
+                                src={ battleComplete }
+                                alt=' Битва закінчена'
+                            />
+                        )
+                    }
                 </div>
             </div>
         );
