@@ -113,7 +113,7 @@ class RatingTableHandler extends Component {
                             }
                             height={ Math.max(height, minHeight) }
                             width={ width }
-                            headerHeight={ 60 }
+                            headerHeight={ HEADER_HEIGHT }
                             rowHeight={ ROW_HEIGHT }
                             rowCount={ rating.length }
                             rowGetter={ ({ index }) => rating[ index ] }
