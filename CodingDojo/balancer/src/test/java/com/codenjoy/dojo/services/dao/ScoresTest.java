@@ -3,9 +3,7 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +16,7 @@ public class ScoresTest {
 
     private static Scores service;
 
-    @BeforeTest
+    @BeforeMethod
     public void setup() {
         String dbFile = "target/scores.db" + new Random().nextInt();
         service = new Scores(
@@ -31,7 +29,7 @@ public class ScoresTest {
                         }));
     }
 
-    @AfterTest
+    @AfterMethod
     public void tearDown() {
         service.removeDatabase();
     }
@@ -73,7 +71,6 @@ public class ScoresTest {
         long time1 = day(day).plus(Calendar.SECOND, 10).getTimeInMillis();
         service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
         service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
-        service.saveScore(time1, "bob.marley@gmail.com", 3000);
 
         long time2 = day(day).plus(Calendar.SECOND, 11).getTimeInMillis();
         service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
@@ -95,6 +92,11 @@ public class ScoresTest {
                 "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1002', server='null'}, " +
                         "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2002', server='null'}, " +
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}]");
+
+        // а для прошлого
+        assertEquals(service.getScores(day, time1).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1000', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2000', server='null'}]");
     }
 
     @Test
@@ -128,6 +130,12 @@ public class ScoresTest {
                         "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2001', server='null'}, " +
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}, " +
                         "PlayerScore{id='apofig@gmail.com', name='null', score='4001', server='null'}]");
+
+        // а для прошлого
+        assertEquals(service.getScores(day, time1).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1000', server='null'}, " +
+                "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2000', server='null'}, " +
+                "PlayerScore{id='bob.marley@gmail.com', name='null', score='3000', server='null'}]");
     }
 
     @Test
