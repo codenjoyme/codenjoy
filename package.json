@@ -16,6 +16,7 @@
     "lodash": "4.17.11",
     "md5": "2.2.1",
     "moment": "2.23.0",
+    "moment-timezone": "0.5.23",
     "nprogress": "0.2.0",
     "qs": "6.6.0",
     "react": "16.7.0",

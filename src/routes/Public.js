@@ -38,7 +38,7 @@ export default class Public extends Component {
                     component={ ExceptionPage }
                     path={ book.exceptionStatusCode }
                 />
-                <Redirect to={ book.login } />
+                <Redirect to={ book.home } />
             </Switch>
         );
     }

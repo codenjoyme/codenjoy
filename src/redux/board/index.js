@@ -11,7 +11,7 @@ import {
 } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
 import _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import qs from 'qs';
 
 // proj
@@ -59,6 +59,7 @@ export default function reducer(state = ReducerState, action) {
                 ...state,
                 day:           payload,
                 participantId: void 0,
+                rating:        void 0,
             };
 
         case SET_PARTICIPANT_ID:
@@ -89,7 +90,8 @@ export default function reducer(state = ReducerState, action) {
         case FETCH_RATING_SUCCESS:
             return {
                 ...state,
-                rating: payload,
+                rating:
+                    state.day === payload.day ? payload.rating : state.rating,
             };
 
         default:
@@ -115,9 +117,9 @@ export const fetchRating = () => ({
     type: FETCH_RATING,
 });
 
-export const fetchRatingSuccess = data => ({
+export const fetchRatingSuccess = (rating, day) => ({
     type:    FETCH_RATING_SUCCESS,
-    payload: data,
+    payload: { rating, day },
 });
 
 export const fetchRatingFailed = () => ({
@@ -165,7 +167,7 @@ function* fetchRatingSaga() {
             .map((value, index) => ({ ...value, index: index + 1 }))
             .value();
 
-        yield put(fetchRatingSuccess(processedData));
+        yield put(fetchRatingSuccess(processedData, day));
     } catch (err) {
         yield put(fetchRatingFailed());
     }
