@@ -64,7 +64,9 @@ public class Dispatcher {
     private volatile DispatcherSettings settings;
     private volatile long lastTime;
     private volatile int currentServer;
-    private Map<String, List<PlayerInfo>> scoresCache = new ConcurrentHashMap();
+
+    private Map<String, List<PlayerInfo>> lastScoresFromGameServers = new ConcurrentHashMap();
+    private Map<String, List<PlayerScore>> currentScoresCollected = new ConcurrentHashMap();
 
     @PostConstruct
     public void postConstruct() {
@@ -193,6 +195,7 @@ public class Dispatcher {
         // теперь любой может пользоваться этим данными для считывания
         // внимание! тут нельзя ничего другого делать с переменной кроме как читать/писать
         lastTime = time;
+        currentScoresCollected.remove(String.valueOf(lastTime));
     }
 
     private long now() {
@@ -209,14 +212,14 @@ public class Dispatcher {
                     new ParameterizedTypeReference<List<PlayerInfo>>(){});
 
             List<PlayerInfo> result = entity.getBody();
-            scoresCache.put(server, result);
+            lastScoresFromGameServers.put(server, result);
             return result;
 
         } catch (RestClientException e) {
             logger.error("Error processing scores from server: " + server, e);
 
-            if (scoresCache.containsKey(server)) {
-                return scoresCache.get(server);
+            if (lastScoresFromGameServers.containsKey(server)) {
+                return lastScoresFromGameServers.get(server);
             } else {
                 return Arrays.asList();
             }
@@ -254,6 +257,11 @@ public class Dispatcher {
     }
 
     public List<PlayerScore> getScores(String day) {
+        String key = getKey(day, lastTime);
+        if (currentScoresCollected.containsKey(key)) {
+            return currentScoresCollected.get(key);
+        }
+
         List<PlayerScore> result = scores.getScores(day, lastTime);
 
         List<String> emails = result.stream()
@@ -277,9 +285,21 @@ public class Dispatcher {
             }
         });
 
-        return result.stream()
+        List<PlayerScore> data = result.stream()
                 .filter(score -> score.getServer() != null)
                 .collect(toList());
+
+        currentScoresCollected.put(key, data);
+
+        return data;
+    }
+
+    private String getKey(String day, long lastTime) {
+        if (scores.isPast(day, lastTime)) {
+            return day;
+        } else {
+            return String.valueOf(lastTime);
+        }
     }
 
     public Boolean remove(String server, String email, String code) {

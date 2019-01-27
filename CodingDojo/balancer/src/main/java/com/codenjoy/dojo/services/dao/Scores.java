@@ -48,8 +48,8 @@ public class Scores {
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS scores (" +
-                        "day varchar(255), " +
-                        "time varchar(255), " +
+                        "day varchar(30), " +
+                        "time varchar(50), " +
                         "email varchar(255), " +
                         "score int);");
     }
@@ -142,7 +142,7 @@ public class Scores {
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
-    private boolean isPast(String day, long lastTime) {
+    public boolean isPast(String day, long lastTime) {
         Date date = getDate(getDay(lastTime));
         Date last = getDate(day);
         return last.before(date);
