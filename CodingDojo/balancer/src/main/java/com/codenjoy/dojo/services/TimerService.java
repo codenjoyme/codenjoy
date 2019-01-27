@@ -69,7 +69,7 @@ public class TimerService implements Runnable {
             dispatcher.updateScores();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error while processing next step", e);
+            logger.error("Error while updating scores", e);
         }
     }
 

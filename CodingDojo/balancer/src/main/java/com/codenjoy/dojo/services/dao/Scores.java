@@ -24,11 +24,13 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.entity.PlayerScore;
+import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import org.springframework.stereotype.Component;
 
+import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -65,6 +67,22 @@ public class Scores {
                         JDBCTimeUtils.toString(date),
                         email,
                         score
+                });
+    }
+
+    public void saveScores(long time, List<PlayerInfo> playersInfos) {
+        Date date = new Date(time);
+        pool.batchUpdate("INSERT INTO scores " +
+                        "(day, time, email, score) " +
+                        "VALUES (?,?,?,?);",
+                playersInfos,
+                (PreparedStatement stmt, PlayerInfo info) -> {
+                    pool.fillStatement(stmt,
+                            formatter.format(date),
+                            JDBCTimeUtils.toString(date),
+                            info.getName(),
+                            Integer.valueOf(info.getScore()));
+                    return true;
                 });
     }
 
