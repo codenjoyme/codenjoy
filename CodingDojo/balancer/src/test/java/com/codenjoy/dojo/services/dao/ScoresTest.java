@@ -54,6 +54,7 @@ public class ScoresTest {
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27]");
 
+        // последнее инфо дня
         long last = service.getLastTimeOf(day);
         assertEquals(last, time);
 
@@ -85,6 +86,7 @@ public class ScoresTest {
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27]");
 
+        // последнее инфо дня
         long last = service.getLastTimeOf(day);
         assertEquals(last, time3);
 
@@ -93,7 +95,7 @@ public class ScoresTest {
                         "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2002', server='null'}, " +
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}]");
 
-        // а для прошлого
+        // кокретное инфо дня
         assertEquals(service.getScores(day, time1).toString(),
                 "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1000', server='null'}, " +
                         "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2000', server='null'}]");
@@ -122,6 +124,7 @@ public class ScoresTest {
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27]");
 
+        // последнее инфо дня
         long last = service.getLastTimeOf(day);
         assertEquals(last, time2);
 
@@ -131,7 +134,7 @@ public class ScoresTest {
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}, " +
                         "PlayerScore{id='apofig@gmail.com', name='null', score='4001', server='null'}]");
 
-        // а для прошлого
+        // конкретное инфо дня
         assertEquals(service.getScores(day, time1).toString(),
                 "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1000', server='null'}, " +
                 "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2000', server='null'}, " +
@@ -168,23 +171,45 @@ public class ScoresTest {
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
 
+        // последнее инфо прошлого дня
         long last1 = service.getLastTimeOf(day1);
         assertEquals(last1, time2);
 
-        assertEquals(service.getScores(day1, last1).toString(),
-                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1001', server='null'}, " +
-                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2001', server='null'}, " +
-                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}]");
+        String lastInfoOfDay1 = "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1001', server='null'}, " +
+                "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2001', server='null'}, " +
+                "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}]";
 
+        assertEquals(service.getScores(day1, last1).toString(),
+                lastInfoOfDay1);
+
+        // конкретное инфо прошлого дня
+        assertEquals(service.getScores(day1, time1).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1000', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2000', server='null'}, " +
+                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3000', server='null'}]");
+
+        // последнее инфо сегодняшнего дня
         long last2 = service.getLastTimeOf(day2);
         assertEquals(last2, time4);
 
-        assertEquals(service.getScores(day2, last2).toString(),
-                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1003', server='null'}, " +
-                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2003', server='null'}, " +
-                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3003', server='null'}]");
-    }
+        String lastInfoOfDay2 = "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1003', server='null'}, " +
+                "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2003', server='null'}, " +
+                "PlayerScore{id='bob.marley@gmail.com', name='null', score='3003', server='null'}]";
 
+        assertEquals(service.getScores(day2, last2).toString(),
+                lastInfoOfDay2);
+
+        // конкретное инфо сегодняшнего дня
+        assertEquals(service.getScores(day2, time3).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1002', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2002', server='null'}, " +
+                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}]");
+
+        // а что если для текущего момента, но запрос сделали прошлого дня
+        // возьмет последние данные за прошлый день
+        assertEquals(service.getScores(day1, last2).toString(),
+                lastInfoOfDay1);
+    }
 
     @Test
     public void shouldDeleteByDay() {
@@ -257,6 +282,7 @@ public class ScoresTest {
         // then
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
 
+        // последнее инфо прошлого дня
         long last1 = service.getLastTimeOf(day1);
         assertEquals(last1, time2);
 
@@ -264,6 +290,7 @@ public class ScoresTest {
                 "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1001', server='null'}, " +
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}]");
 
+        // последнее инфо последнего дня
         long last2 = service.getLastTimeOf(day2);
         assertEquals(last2, time4);
 
@@ -291,6 +318,22 @@ public class ScoresTest {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return new ChangeCalendar(calendar);
+    }
+
+    @Test(expectedExceptions = { RuntimeException.class },
+          expectedExceptionsMessageRegExp = "Unexpected day format, should be: yyyy-MM-dd")
+    public void shouldGetScores_forBrokenDay() {
+        // given
+        String day = "2019-01-27";
+
+        long time = day(day).plus(Calendar.SECOND, 10).getTimeInMillis();
+
+        service.saveScore(time, "stiven.pupkin@gmail.com", 1000);
+        service.saveScore(time, "eva.pupkina@gmail.com", 2000);
+        service.saveScore(time, "bob.marley@gmail.com", 3000);
+
+        // when then
+        service.getScores("bla-bla", time);
     }
 
 }
