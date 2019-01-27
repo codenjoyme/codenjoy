@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.ContextPathGetter;
+import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -8,6 +9,7 @@ import org.testng.annotations.Test;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Random;
 
 import static org.testng.Assert.*;
@@ -93,6 +95,39 @@ public class ScoresTest {
                 "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1002', server='null'}, " +
                         "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2002', server='null'}, " +
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}]");
+    }
+
+    @Test
+    public void shouldSaveScores_forOneDay_andSeveralPlayers_severalTimes_batchUpdate() {
+        // given
+        String day = "2019-01-27";
+
+        long time1 = day(day).plus(Calendar.SECOND, 10).getTimeInMillis();
+        service.saveScores(time1, new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo("stiven.pupkin@gmail.com", "1000"));
+            add(new PlayerInfo("eva.pupkina@gmail.com", "2000"));
+            add(new PlayerInfo("bob.marley@gmail.com", "3000"));
+        }});
+
+        long time2 = day(day).plus(Calendar.SECOND, 11).getTimeInMillis();
+        service.saveScores(time2, new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo("stiven.pupkin@gmail.com", "1001"));
+            add(new PlayerInfo("eva.pupkina@gmail.com", "2001"));
+            add(new PlayerInfo("bob.marley@gmail.com", "3001"));
+            add(new PlayerInfo("apofig@gmail.com", "4001"));
+        }});
+
+        // when then
+        assertEquals(service.getDays().toString(), "[2019-01-27]");
+
+        long last = service.getLastTimeOf(day);
+        assertEquals(last, time2);
+
+        assertEquals(service.getScores(day, last).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1001', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2001', server='null'}, " +
+                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}, " +
+                        "PlayerScore{id='apofig@gmail.com', name='null', score='4001', server='null'}]");
     }
 
     @Test

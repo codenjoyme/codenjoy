@@ -37,10 +37,14 @@ public class PlayerInfo {
     public PlayerInfo(String gameType, String callbackUrl, String name, String score, String code) {
         this.gameType = gameType;
         this.callbackUrl = callbackUrl;
-        // do nothing
         this.name = name;
         this.score = score;
         this.code = code;
+    }
+
+    public PlayerInfo(String name, String score) {
+        this.name = name;
+        this.score = score;
     }
 
     public String getGameType() {
