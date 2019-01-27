@@ -74,10 +74,18 @@ public class TimerService implements Runnable {
     }
 
     public void pause() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Update score timer paused");
+        }
+
         this.paused = true;
     }
 
     public void resume() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Update score timer started");
+        }
+
         this.paused = false;
     }
 

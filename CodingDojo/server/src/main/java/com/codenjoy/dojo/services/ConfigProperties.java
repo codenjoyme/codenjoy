@@ -53,6 +53,9 @@ public class ConfigProperties {
     @Value("${email.hash}")
     private String emailHash;
 
+    @Value("${admin.password}")
+    private String adminPassword;
+
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
     }
@@ -75,5 +78,9 @@ public class ConfigProperties {
 
     public String getEmailHash() {
         return emailHash;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
     }
 }

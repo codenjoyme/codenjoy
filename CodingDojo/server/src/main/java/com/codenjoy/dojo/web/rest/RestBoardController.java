@@ -54,6 +54,7 @@ public class RestBoardController {
     @Autowired private Validator validator;
     @Autowired private PlayerGames playerGames;
     @Autowired private PlayerGamesView playerGamesView;
+    @Autowired private ConfigProperties properties;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -141,6 +142,20 @@ public class RestBoardController {
     @ResponseBody
     public Map<String, Object> getPlayersScores() {
         return playerGamesView.getScores();
+    }
+
+    private void verifyIsAdmin(String adminPassword) {
+        validator.validateAdmin(properties.getAdminPassword(), adminPassword);
+    }
+
+    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword) {
+        verifyIsAdmin(adminPassword);
+
+        playerService.cleanAllScores();
+
+        return true;
     }
 
     // TODO test me

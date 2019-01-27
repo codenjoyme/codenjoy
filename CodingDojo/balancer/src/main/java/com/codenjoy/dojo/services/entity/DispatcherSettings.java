@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.entity;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class DispatcherSettings {
@@ -32,6 +31,7 @@ public class DispatcherSettings {
     private String urlCreatePlayer;
     private String urlRemovePlayer;
     private String urlGetPlayers;
+    private String urlClearScores;
     private String gameType;
     private List<String> servers;
 
@@ -39,10 +39,11 @@ public class DispatcherSettings {
         // do nothing
     }
 
-    public DispatcherSettings(String urlCreatePlayer, String urlRemovePlayer, String urlGetPlayers, String gameType, List<String> servers) {
+    public DispatcherSettings(String urlCreatePlayer, String urlRemovePlayer, String urlGetPlayers, String urlClearScores, String gameType, List<String> servers) {
         this.urlCreatePlayer = urlCreatePlayer;
         this.urlRemovePlayer = urlRemovePlayer;
         this.urlGetPlayers = urlGetPlayers;
+        this.urlClearScores = urlClearScores;
         this.gameType = gameType;
         this.servers = servers;
     }
@@ -51,6 +52,7 @@ public class DispatcherSettings {
         urlCreatePlayer = properties.getUrlCreatePlayer();
         urlRemovePlayer = properties.getUrlRemovePlayer();
         urlGetPlayers = properties.getUrlGetPlayers();
+        urlClearScores = properties.getUrlClearScores();
         gameType = properties.getGameType();
         servers =  properties.getServers();
     }
@@ -71,6 +73,10 @@ public class DispatcherSettings {
         return gameType;
     }
 
+    public String getUrlClearScores() {
+        return urlClearScores;
+    }
+
     public List<String> getServers() {
         return servers;
     }
@@ -81,6 +87,7 @@ public class DispatcherSettings {
                 "urlCreatePlayer='" + urlCreatePlayer + '\'' +
                 ", urlRemovePlayer='" + urlRemovePlayer + '\'' +
                 ", urlGetPlayers='" + urlGetPlayers + '\'' +
+                ", urlClearScores='" + urlClearScores + '\'' +
                 ", gameType='" + gameType + '\'' +
                 ", servers=" + servers +
                 '}';

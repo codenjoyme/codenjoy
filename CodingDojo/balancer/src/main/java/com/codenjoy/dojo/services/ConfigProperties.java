@@ -52,6 +52,9 @@ public class ConfigProperties {
     @Value("${dispatcher.url.get}")
     private String urlGetPlayers;
 
+    @Value("${dispatcher.url.clear}")
+    private String urlClearScores;
+
     @Value("${game.type}")
     private String gameType;
 
@@ -76,6 +79,10 @@ public class ConfigProperties {
 
     public String getUrlGetPlayers() {
         return urlGetPlayers;
+    }
+
+    public String getUrlClearScores() {
+        return urlClearScores;
     }
 
     public String getGameType() {

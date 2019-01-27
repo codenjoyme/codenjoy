@@ -23,10 +23,7 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.DebugService;
-import com.codenjoy.dojo.services.Dispatcher;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.DispatcherSettings;
@@ -54,6 +51,7 @@ public class RestController {
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
     @Autowired private Players players;
+    @Autowired private TimerService timer;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
     @Autowired private DebugService debug;
@@ -271,8 +269,38 @@ public class RestController {
         return debug.isWorking();
     }
 
-    private void verifyIsAdmin(@PathVariable("adminPassword") String adminPassword) {
+    private void verifyIsAdmin(String adminPassword) {
         validator.validateAdmin(properties.getAdminPassword(), adminPassword);
+    }
+
+    @RequestMapping(value = "/contest/start/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> startContest(@PathVariable("adminPassword") String adminPassword) {
+        verifyIsAdmin(adminPassword);
+
+        List<String> status = dispatcher.clearScores();
+        timer.resume();
+
+        return status;
+    }
+
+
+    @RequestMapping(value = "/contest/stop/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean stopContest(@PathVariable("adminPassword") String adminPassword) {
+        verifyIsAdmin(adminPassword);
+
+        timer.pause();
+
+        return timer.isPaused();
+    }
+
+    @RequestMapping(value = "/contest/status/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean getContestStatus(@PathVariable("adminPassword") String adminPassword) {
+        verifyIsAdmin(adminPassword);
+
+        return timer.isPaused();
     }
 
 }

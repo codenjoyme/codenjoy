@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
@@ -109,6 +110,12 @@ public class Validator {
         checkCode(code, CANT_BE_NULL);
         if (!registration.checkUser(playerName, code)) {
             throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + playerName);
+        }
+    }
+
+    public void validateAdmin(String expected, String actual) {
+        if (!DigestUtils.md5DigestAsHex(expected.getBytes()).equals(actual)){
+            throw new RuntimeException("Unauthorized admin access");
         }
     }
 }

@@ -38,6 +38,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -93,6 +94,23 @@ public class Dispatcher {
                 code,
                 server
         );
+    }
+
+    private boolean clearScores(String server) {
+        try {
+            RestTemplate rest = new RestTemplate();
+            ResponseEntity<Void> entity = rest.exchange(
+                    clearPlayersScoreUrl(server),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<Void>(){});
+
+            return entity.getStatusCode().is2xxSuccessful();
+
+        } catch (RestClientException e) {
+            logger.error("Error clearing scores on server: " + server, e);
+            return false;
+        }
     }
 
     private String createNewPlayer(String server, String email,
@@ -190,6 +208,12 @@ public class Dispatcher {
                 code);
     }
 
+    private String clearPlayersScoreUrl(String server) {
+        return String.format(settings.getUrlClearScores(),
+                server,
+                DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()));
+    }
+
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> result = scores.getScores(day, lastTime);
 
@@ -240,5 +264,12 @@ public class Dispatcher {
 
     public DispatcherSettings getSettings() {
         return settings;
+    }
+
+    public List<String> clearScores() {
+        return servers.stream()
+            .map(s -> String.format("On server '%s' clear status is %s", s,
+                    clearScores(s)))
+            .collect(toList());
     }
 }
