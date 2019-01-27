@@ -24,9 +24,9 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.Dispatcher;
-import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.DispatcherSettings;
@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,8 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/rest")
 public class RestController {
+
+    private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
     @Autowired private Players players;
     @Autowired private Dispatcher dispatcher;
@@ -79,24 +82,19 @@ public class RestController {
             throw new IllegalArgumentException("User already registered");
         }
 
-        final ServerLocation[] location = {null};
-        doIt(new DoItOnServers() {
+        return doIt(new DoItOnServers<ServerLocation>() {
             @Override
-            public void onBalancer() {
-                location[0] = dispatcher.register(player, getIp(request));
+            public ServerLocation onGame() {
+                return dispatcher.register(player, getIp(request));
             }
 
             @Override
-            public void onGame() {
-                if (location[0] != null) {
-                    player.setCode(location[0].getCode());
-                    player.setServer(location[0].getServer());
-                    players.create(player);
-                }
+            public void onBalancer(ServerLocation location) {
+                player.setCode(location.getCode());
+                player.setServer(location.getServer());
+                players.create(player);
             }
         });
-
-        return location[0];
     }
 
     private String getIp(HttpServletRequest request) {
@@ -113,10 +111,10 @@ public class RestController {
         T onFailed(ServerLocation data);
     }
 
-    interface DoItOnServers {
-        void onBalancer();
+    interface DoItOnServers<T> {
+        T onGame();
 
-        void onGame();
+        void onBalancer(T data);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -157,25 +155,29 @@ public class RestController {
                 ));
     }
 
-    private void doIt(DoItOnServers action) {
+    private <T> T doIt(DoItOnServers<T> action) {
         List<String> errors = new LinkedList<>();
+        T result = null;
+
         try {
-            action.onBalancer();
+            result = action.onGame();
         } catch (Exception e) {
-            e.printStackTrace();
-            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+            logger.error("Error at game server", e);
+            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
         }
 
         try {
-            action.onGame();
+            action.onBalancer(result);
         } catch (Exception e) {
-            e.printStackTrace();
-            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
+            logger.error("Error at balancer", e);
+            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
         }
 
         if (!errors.isEmpty()) {
             throw new RuntimeException(errors.toString());
         }
+
+        return result;
     }
 
     @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
@@ -190,20 +192,21 @@ public class RestController {
             throw new IllegalArgumentException("Attempt to delete non-existing user");
         }
 
-        doIt(new DoItOnServers() {
+        return doIt(new DoItOnServers<Boolean>() {
             @Override
-            public void onBalancer() {
-//                scores.delete(email);
-                players.remove(email);
+            public Boolean onGame() {
+                Boolean result = dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+                return result != null && result;
             }
 
             @Override
-            public void onGame() {
-                dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+            public void onBalancer(Boolean removed) {
+                if (removed) {
+//                    scores.delete(email);
+                    players.remove(email);
+                }
             }
         });
-
-        return true;
     }
 
     @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
