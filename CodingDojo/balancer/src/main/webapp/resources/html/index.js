@@ -22,7 +22,7 @@
 
 var error = function(partOfId, data) {
     $('#' + partOfId + '-result').val('');
-    $('#' + partOfId + '-error').val(data.status + ' ' + data.responseText);
+    $('#' + partOfId + '-error').val(data.status + ' ' + (data.responseText || data.statusText));
 }
 
 var result = function(partOfId, data) {
@@ -150,6 +150,27 @@ var setDebug = function(enabled, adminPassword) {
     });
 };
 
+var getContest = function(adminPassword) {
+    _ajax('contest', {
+        type: 'GET',
+        url: server('balancer') + '/contest/enable/get/' + adminPassword,
+        success: function(data) {
+            $('#contest-result').attr("checked", data);
+        }
+    });
+};
+
+var setContest = function(enabled, adminPassword) {
+    _ajax('contest', {
+        type: 'GET',
+        url: server('balancer') + '/contest/enable/set/' + enabled + '/' + adminPassword,
+        success: function(data) {
+            $('#contest-result-data').val(JSON.stringify(data));
+            getContest($.md5($('#admin-password').val()));
+        }
+    });
+};
+
 $(document).ready(function() {
     $('#register').click(function() {
         var preffix = $('#preffix').val();
@@ -216,4 +237,12 @@ $(document).ready(function() {
         );
     });
     getDebug($.md5($('#admin-password').val()));
+
+    $('#contest-result').change(function() {
+        setContest(
+            $('#contest-result').is(':checked'),
+            $.md5($('#admin-password').val())
+        );
+    });
+    getContest($.md5($('#admin-password').val()));
 });
