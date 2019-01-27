@@ -105,9 +105,9 @@ public class Scores {
         );
     }
 
-    public void deleteByName(String name) {
-        pool.update("DELETE FROM scores WHERE name = ?;",
-                new Object[]{name});
+    public void deleteByName(String email) {
+        pool.update("DELETE FROM scores WHERE email = ?;",
+                new Object[]{email});
     }
 
     public List<String> getDays() {
@@ -123,7 +123,7 @@ public class Scores {
     }
 
     public void deleteByDay(String day) {
-        pool.update("DELETE FROM scores WHERE c = ?;",
+        pool.update("DELETE FROM scores WHERE day = ?;",
                 new Object[]{day});
     }
 
