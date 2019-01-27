@@ -131,7 +131,7 @@ public class Scores {
         return getLastTimeOf(day);
     }
 
-    private String getDay(long time) {
+    public String getDay(long time) {
         Date date = new Date(time);
         return formatter.format(date);
     }
