@@ -55,6 +55,7 @@ public class RestBoardController {
     @Autowired private PlayerGames playerGames;
     @Autowired private PlayerGamesView playerGamesView;
     @Autowired private ConfigProperties properties;
+    @Autowired private TimerService timerService;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -156,6 +157,22 @@ public class RestBoardController {
         playerService.cleanAllScores();
 
         return true;
+    }
+
+    @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword,
+                                  @PathVariable("enabled") boolean enabled)
+    {
+        verifyIsAdmin(adminPassword);
+
+        if (enabled) {
+            timerService.resume();
+        } else {
+            timerService.pause();
+        }
+
+        return timerService.isPaused();
     }
 
     // TODO test me
