@@ -336,4 +336,30 @@ public class ScoresTest {
         service.getScores("bla-bla", time);
     }
 
+    @Test
+    public void shouldGetLastTime() {
+        // given
+        String day = "2019-01-27";
+
+        long time1 = day(day).plus(Calendar.SECOND, 10).getTimeInMillis();
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
+
+        long time2 = day(day).plus(Calendar.SECOND, 11).getTimeInMillis();
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
+        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+
+        long time3 = day(day).plus(Calendar.SECOND, 12).getTimeInMillis();
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+
+        // when
+        long last = service.getLastTime(time1);
+
+        // then
+        assertEquals(last, time3);
+    }
+
 }
