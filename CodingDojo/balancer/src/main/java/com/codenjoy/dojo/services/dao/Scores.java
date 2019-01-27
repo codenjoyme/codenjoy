@@ -48,8 +48,8 @@ public class Scores {
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS scores (" +
-                        "day varchar(30), " +
-                        "time varchar(50), " +
+                        "day varchar(10), " +
+                        "time varchar(30), " +
                         "email varchar(255), " +
                         "score int);");
     }
@@ -90,7 +90,8 @@ public class Scores {
             time = getLastTimeOf(day);
         }
 
-        return pool.select("SELECT * FROM scores WHERE day = ? AND time = ?;",
+        // TODO а тут точно надо AND day = ?
+        return pool.select("SELECT * FROM scores WHERE time = ? AND day = ?;",
                 new Object[]{day, JDBCTimeUtils.toString(new Date(time))},
                 rs -> {
                     List<PlayerScore> result = new LinkedList<>();
