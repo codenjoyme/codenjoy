@@ -25,14 +25,12 @@ import {
     faComments as farComments,
     faUserCircle as farUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
-import moment from 'moment-timezone';
 
 // proj
+import './momentConfig';
 import store, { history, persistor } from './store';
 import Routes from './routes/Routes';
 import CustomScrollbars from './CustomScrollbars';
-
-moment.tz.setDefault('Europe/Kiev');
 
 library.add(
     faAnchor,
