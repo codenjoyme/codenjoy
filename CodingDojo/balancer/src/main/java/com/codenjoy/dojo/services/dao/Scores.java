@@ -105,9 +105,26 @@ public class Scores {
         );
     }
 
-    public void delete(String name) {
+    public void deleteByName(String name) {
         pool.update("DELETE FROM scores WHERE name = ?;",
                 new Object[]{name});
+    }
+
+    public List<String> getDays() {
+        return pool.select("SELECT DISTINCT day FROM scores;",
+                new Object[0],
+                rs -> {
+                    List<String> result = new LinkedList<>();
+                    while (rs.next()) {
+                        result.add(rs.getString(1));
+                    }
+                    return result;
+                });
+    }
+
+    public void deleteByDay(String day) {
+        pool.update("DELETE FROM scores WHERE c = ?;",
+                new Object[]{day});
     }
 
     public long getLastTime(long time) {
@@ -136,7 +153,7 @@ public class Scores {
         return last.before(date);
     }
 
-    private Date getDate(String day) {
+    public Date getDate(String day) {
         try {
             return formatter.parse(day);
         } catch (ParseException e) {

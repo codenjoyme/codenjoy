@@ -57,10 +57,10 @@ public class PlayerScore {
     @Override
     public String toString() {
         return "PlayerScore{" +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", score='" + score + '\'' +
-                ", server='" + score + '\'' +
+                ", server='" + server + '\'' +
                 '}';
     }
 

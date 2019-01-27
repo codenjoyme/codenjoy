@@ -33,7 +33,7 @@
         <rest-assured.version>2.9.0</rest-assured.version>
         <selenium.version>2.20.0</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
-        <junit.version>4.12</junit.version>
+        <tetng.version>6.14.3</tetng.version>
         <mockito.version>1.10.19</mockito.version>
 
         <maven-compiler.version>3.5.1</maven-compiler.version>
@@ -209,7 +209,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>6.14.3</version>
+            <version>${tetng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

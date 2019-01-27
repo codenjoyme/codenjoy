@@ -54,7 +54,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
         update(query, new Object[0]);
     }
 
-    public void update(String query, Object[] parameters) {
+    public void update(String query, Object... parameters) {
         run((For<Void>) connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 fillStatement(stmt, parameters);
