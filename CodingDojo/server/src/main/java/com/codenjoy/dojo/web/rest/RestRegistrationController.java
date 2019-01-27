@@ -125,4 +125,14 @@ public class RestRegistrationController {
 
         return code;
     }
+
+    // TODO test me
+    @RequestMapping(value = "/player/{playerName}/exists", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean isPlayerExists(@PathVariable("playerName") String playerName) {
+        boolean registered = registration.registered(playerName);
+        boolean active = playerService.contains(playerName);
+
+        return registered && active;
+    }
 }

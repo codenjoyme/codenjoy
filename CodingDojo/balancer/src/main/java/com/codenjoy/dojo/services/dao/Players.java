@@ -141,9 +141,14 @@ public class Players {
 
     public void update(Player player) {
         pool.update("UPDATE players SET first_name = ?, last_name = ?, " +
-                        "password = ?, coty = ?, skills = ?, comment = ?, " +
+                        "password = ?, city = ?, skills = ?, comment = ?, " +
                         "code = ?, server = ? WHERE email = ?;",
                 getObjects(player));
+    }
+
+    public void updateServer(String email, String server, String code) {
+        pool.update("UPDATE players SET server = ?, code = ? WHERE email = ?;",
+                server, code, email);
     }
 
     private Object[] getObjects(Player player) {

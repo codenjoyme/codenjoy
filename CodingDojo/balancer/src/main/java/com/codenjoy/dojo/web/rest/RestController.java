@@ -83,14 +83,16 @@ public class RestController {
         return doIt(new DoItOnServers<ServerLocation>() {
             @Override
             public ServerLocation onGame() {
-                return dispatcher.register(player, getIp(request));
+                return dispatcher.register(player.getEmail(), player.getPassword(), getIp(request));
             }
 
             @Override
-            public void onBalancer(ServerLocation location) {
+            public ServerLocation onBalancer(ServerLocation location) {
                 player.setCode(location.getCode());
                 player.setServer(location.getServer());
                 players.create(player);
+
+                return location;
             }
         });
     }
@@ -112,22 +114,47 @@ public class RestController {
     interface DoItOnServers<T> {
         T onGame();
 
-        void onBalancer(T data);
+        T onBalancer(T data);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public ServerLocation login(@RequestBody Player player) {
+    public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, new OnLogin<ServerLocation>(){
 
             @Override
             public ServerLocation onSuccess(ServerLocation data) {
-                return data;
+                return recreatePlayerIfNeeded(data, player.getEmail(), getIp(request));
             }
 
             @Override
             public ServerLocation onFailed(ServerLocation data) {
                throw new LoginException("User name or password is incorrect");
+            }
+        });
+    }
+
+    private ServerLocation recreatePlayerIfNeeded(ServerLocation current, String email, String callback) {
+        return doIt(new DoItOnServers<ServerLocation>() {
+            @Override
+            public ServerLocation onGame() {
+                return dispatcher.registerIfNotExists(
+                        current.getServer(),
+                        current.getEmail(),
+                        current.getCode(),
+                        callback
+                );
+            }
+
+            @Override
+            public ServerLocation onBalancer(ServerLocation updated) {
+                if (updated == null) {
+                    return current;
+                }
+
+                players.updateServer(email, updated.getServer(), updated.getCode());
+
+                return updated;
             }
         });
     }
@@ -165,7 +192,7 @@ public class RestController {
         }
 
         try {
-            action.onBalancer(result);
+            result = action.onBalancer(result);
         } catch (Exception e) {
             logger.error("Error at balancer", e);
             errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
@@ -198,11 +225,12 @@ public class RestController {
             }
 
             @Override
-            public void onBalancer(Boolean removed) {
+            public Boolean onBalancer(Boolean removed) {
                 if (removed) {
 //                    scores.delete(email);
                     players.remove(email);
                 }
+                return removed;
             }
         });
     }
@@ -273,31 +301,30 @@ public class RestController {
         validator.validateAdmin(properties.getAdminPassword(), adminPassword);
     }
 
-    @RequestMapping(value = "/contest/start/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/contest/enable/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public List<String> startContest(@PathVariable("adminPassword") String adminPassword) {
+    public List<String> startContestStarted(@PathVariable("adminPassword") String adminPassword,
+                                     @PathVariable("enabled") boolean enabled)
+    {
         verifyIsAdmin(adminPassword);
 
-        List<String> status = dispatcher.clearScores();
-        timer.resume();
+        List<String> status = new LinkedList<>();
+        if (enabled) {
+                status = dispatcher.clearScores();
+            timer.resume();
+        } else {
+            timer.pause();
+        }
+
+        status.add("On balancer contest is " + (timer.isPaused() ? "paused" : "started"));
 
         return status;
     }
 
 
-    @RequestMapping(value = "/contest/stop/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/contest/enable/get/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean stopContest(@PathVariable("adminPassword") String adminPassword) {
-        verifyIsAdmin(adminPassword);
-
-        timer.pause();
-
-        return timer.isPaused();
-    }
-
-    @RequestMapping(value = "/contest/status/{adminPassword}", method = RequestMethod.GET)
-    @ResponseBody
-    public boolean getContestStatus(@PathVariable("adminPassword") String adminPassword) {
+    public boolean getContestStarted(@PathVariable("adminPassword") String adminPassword) {
         verifyIsAdmin(adminPassword);
 
         return timer.isPaused();

@@ -32,6 +32,7 @@ public class DispatcherSettings {
     private String urlRemovePlayer;
     private String urlGetPlayers;
     private String urlClearScores;
+    private String urlExistsPlayer;
     private String gameType;
     private List<String> servers;
 
@@ -39,11 +40,12 @@ public class DispatcherSettings {
         // do nothing
     }
 
-    public DispatcherSettings(String urlCreatePlayer, String urlRemovePlayer, String urlGetPlayers, String urlClearScores, String gameType, List<String> servers) {
+    public DispatcherSettings(String urlCreatePlayer, String urlRemovePlayer, String urlGetPlayers, String urlClearScores, String urlExistsPlayer, String gameType, List<String> servers) {
         this.urlCreatePlayer = urlCreatePlayer;
         this.urlRemovePlayer = urlRemovePlayer;
         this.urlGetPlayers = urlGetPlayers;
         this.urlClearScores = urlClearScores;
+        this.urlExistsPlayer = urlExistsPlayer;
         this.gameType = gameType;
         this.servers = servers;
     }
@@ -53,6 +55,7 @@ public class DispatcherSettings {
         urlRemovePlayer = properties.getUrlRemovePlayer();
         urlGetPlayers = properties.getUrlGetPlayers();
         urlClearScores = properties.getUrlClearScores();
+        urlExistsPlayer = properties.getUrlExistsPlayer();
         gameType = properties.getGameType();
         servers =  properties.getServers();
     }
@@ -69,12 +72,16 @@ public class DispatcherSettings {
         return urlGetPlayers;
     }
 
-    public String getGameType() {
-        return gameType;
-    }
-
     public String getUrlClearScores() {
         return urlClearScores;
+    }
+
+    public String getUrlExistsPlayer() {
+        return urlExistsPlayer;
+    }
+
+    public String getGameType() {
+        return gameType;
     }
 
     public List<String> getServers() {
@@ -88,8 +95,10 @@ public class DispatcherSettings {
                 ", urlRemovePlayer='" + urlRemovePlayer + '\'' +
                 ", urlGetPlayers='" + urlGetPlayers + '\'' +
                 ", urlClearScores='" + urlClearScores + '\'' +
+                ", urlExistsPlayer='" + urlExistsPlayer + '\'' +
                 ", gameType='" + gameType + '\'' +
                 ", servers=" + servers +
                 '}';
     }
+
 }

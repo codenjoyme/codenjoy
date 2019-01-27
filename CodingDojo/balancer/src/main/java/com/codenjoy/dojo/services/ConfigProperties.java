@@ -55,6 +55,9 @@ public class ConfigProperties {
     @Value("${dispatcher.url.clear}")
     private String urlClearScores;
 
+    @Value("${dispatcher.url.exists}")
+    private String urlExistsPlayer;
+
     @Value("${game.type}")
     private String gameType;
 
@@ -83,6 +86,10 @@ public class ConfigProperties {
 
     public String getUrlClearScores() {
         return urlClearScores;
+    }
+
+    public String getUrlExistsPlayer() {
+        return urlExistsPlayer;
     }
 
     public String getGameType() {

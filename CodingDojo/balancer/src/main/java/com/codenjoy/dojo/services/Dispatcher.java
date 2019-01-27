@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -75,28 +76,59 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
-    public ServerLocation register(Player player, String callbackUrl) {
+    public ServerLocation register(String email, String password, String callbackUrl) {
         String server = getNextServer();
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("User {} go to {}", player.getEmail(), server);
+        return registerOnServer(server, email, password, callbackUrl);
+    }
+
+    public ServerLocation registerIfNotExists(String server, String email, String code, String callbackUrl) {
+        if (existsOnServer(server, email)) {
+            return null;
         }
 
-        String code = createNewPlayer(
-                server,
-                player.getEmail(),
-                player.getPassword(),
-                callbackUrl);
+        // удалить с других серверов если там есть что
+        servers.stream()
+                .filter(s -> !s.equals(server))
+                .filter(s -> existsOnServer(s, email))
+                .forEach(s -> remove(s, email, code));
+
+        Player player = players.get(email);
+        return registerOnServer(server, email, player.getPassword(), callbackUrl);
+    }
+
+    public boolean existsOnServer(String server, String email) {
+        try {
+            RestTemplate rest = new RestTemplate();
+            ResponseEntity<Boolean> entity = rest.exchange(
+                    playerExistsUrl(server, email),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<Boolean>(){});
+
+            return entity.getBody();
+        } catch (RestClientException e) {
+            logger.error("Error get player exists on server: " + server, e);
+            return false;
+        }
+    }
+
+    public ServerLocation registerOnServer(String server, String email, String password, String callbackUrl) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("User {} go to {}", email, server);
+        }
+
+        String code = createNewPlayer(server, email, password, callbackUrl);
 
         return new ServerLocation(
-                player.getEmail(),
-                Hash.getId(player.getEmail(), properties.getEmailHash()),
+                email,
+                Hash.getId(email, properties.getEmailHash()),
                 code,
                 server
         );
     }
 
-    private boolean clearScores(String server) {
+    private String clearScores(String server) {
         try {
             RestTemplate rest = new RestTemplate();
             ResponseEntity<Void> entity = rest.exchange(
@@ -105,11 +137,12 @@ public class Dispatcher {
                     null,
                     new ParameterizedTypeReference<Void>(){});
 
-            return entity.getStatusCode().is2xxSuccessful();
+            return "Successful with code: " + entity.getStatusCode();
 
         } catch (RestClientException e) {
             logger.error("Error clearing scores on server: " + server, e);
-            return false;
+
+            return GlobalExceptionHandler.getPrintableMessage(e);
         }
     }
 
@@ -214,6 +247,12 @@ public class Dispatcher {
                 DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()));
     }
 
+    private String playerExistsUrl(String server, String email) {
+        return String.format(settings.getUrlExistsPlayer(),
+                server,
+                email);
+    }
+
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> result = scores.getScores(day, lastTime);
 
@@ -268,7 +307,7 @@ public class Dispatcher {
 
     public List<String> clearScores() {
         return servers.stream()
-            .map(s -> String.format("On server '%s' clear status is %s", s,
+            .map(s -> String.format("On server '%s' clear status is '%s'", s,
                     clearScores(s)))
             .collect(toList());
     }
