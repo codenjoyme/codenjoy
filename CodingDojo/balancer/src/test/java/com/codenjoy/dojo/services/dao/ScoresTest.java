@@ -95,6 +95,53 @@ public class ScoresTest {
                         "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}]");
     }
 
+    @Test
+    public void shouldSaveScores_forSeveralDays_andSeveralPlayers_severalTimes() {
+        // given
+        String day1 = "2019-01-27";
+
+        long time1 = day(day1).plus(Calendar.SECOND, 10).getTimeInMillis();
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
+        service.saveScore(time1, "bob.marley@gmail.com", 3000);
+
+        long time2 = day(day1).plus(Calendar.SECOND, 11).getTimeInMillis();
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
+        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+
+        String day2 = "2019-01-28";
+
+        long time3 = day(day2).plus(Calendar.SECOND, 10).getTimeInMillis();
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+
+        long time4 = day(day2).plus(Calendar.SECOND, 11).getTimeInMillis();
+        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003);
+        service.saveScore(time4, "eva.pupkina@gmail.com", 2003);
+        service.saveScore(time4, "bob.marley@gmail.com", 3003);
+
+        // when then
+        assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
+
+        long last1 = service.getLastTimeOf(day1);
+        assertEquals(last1, time2);
+
+        assertEquals(service.getScores(day1, last1).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1001', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2001', server='null'}, " +
+                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}]");
+
+        long last2 = service.getLastTimeOf(day2);
+        assertEquals(last2, time4);
+
+        assertEquals(service.getScores(day2, last2).toString(),
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1003', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2003', server='null'}, " +
+                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3003', server='null'}]");
+    }
+
     private static class ChangeCalendar {
 
         private Calendar calendar;
