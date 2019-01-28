@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * Это интерфейс указывает на тип игры. Как только ты его реулизуешь -
- * на админке (http://localhost:8080/codenjoy-contest/admin31415)
+ * на админке (http://localhost:8080/codenjoy-contest/admin)
  * будет возможность переключиться на твою игру.
  */
 public interface GameType extends Tickable {

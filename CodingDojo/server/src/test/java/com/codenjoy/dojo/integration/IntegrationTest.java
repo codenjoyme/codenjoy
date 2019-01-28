@@ -128,12 +128,12 @@ public class IntegrationTest {
     }
 
     private void removeSaveAll(String saves) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         driver.findElement(By.linkText("RemoveSaveAll")).click();
     }
 
     private void gameOverAll(String names) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         driver.findElement(By.linkText("GameOverAll")).click();
         assertPlayers(names);
     }
@@ -148,7 +148,7 @@ public class IntegrationTest {
     }
 
     private void saveAll(String saves) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         save.removeAllSaves();
         assertSaves("[]");
         driver.findElement(By.linkText("SaveAll")).click();
@@ -160,7 +160,7 @@ public class IntegrationTest {
     }
 
     private void save(String saves) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         driver.findElement(By.linkText("Save")).click();
         assertSaves(saves);
     }

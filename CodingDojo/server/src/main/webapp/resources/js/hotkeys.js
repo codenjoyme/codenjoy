@@ -36,7 +36,7 @@ function initHotkeys() {
         if (ev.ctrlKey && ev.altKey && ev.keyCode == 65) { // Ctrl-Alt-A + ...
             adminKey = true;
         } else if (adminKey && ev.keyCode == 68) { // ... + D (aDmin)
-            window.open(contextPath + '/admin31415' + (gameNameParam == ''?'':'?select&') + gameNameParam);
+            window.open(contextPath + '/admin' + (gameNameParam == ''?'':'?select&') + gameNameParam);
         } else if (adminKey && ev.keyCode == 82) { // ... + R (Register)
             window.open(contextPath + '/register' + (gameNameParam == ''?'':'?') + gameNameParam);
         } else if (adminKey && ev.keyCode == 77) { // ... + M (Main)
