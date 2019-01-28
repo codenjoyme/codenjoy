@@ -61,6 +61,9 @@ public class ConfigProperties {
     @Value("${game.type}")
     private String gameType;
 
+    @Value("${game.room}")
+    private int gameRoom;
+
     @Value("#{'${game.servers}'.split(',')}")
     private List<String> servers;
 
@@ -96,7 +99,12 @@ public class ConfigProperties {
         return gameType;
     }
 
+    public int getGameRoom() {
+        return gameRoom;
+    }
+
     public List<String> getServers() {
         return servers;
     }
+
 }

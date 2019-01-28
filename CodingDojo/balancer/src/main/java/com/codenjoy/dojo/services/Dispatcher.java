@@ -64,6 +64,7 @@ public class Dispatcher {
     private volatile DispatcherSettings settings;
     private volatile long lastTime;
     private volatile int currentServer;
+    private volatile int countRegistered;
 
     private Map<String, List<PlayerInfo>> scoresFromGameServers = new ConcurrentHashMap();
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
@@ -73,6 +74,7 @@ public class Dispatcher {
         settings = new DispatcherSettings(properties);
         servers.addAll(settings.getServers());
         currentServer = 0;
+        countRegistered = 0;
 
         // в случае если сегодня сервер потушен был
         lastTime = scores.getLastTime(now());
@@ -176,12 +178,14 @@ public class Dispatcher {
     // несколько потоков могут параллельно регаться, и этот инкремент по кругу
     // должeн быть многопоточнобезопасным
     private synchronized String getNextServer() {
-        String result = servers.get(currentServer);
-        currentServer++;
-        if (currentServer >= servers.size()) {
-            currentServer = 0;
+        if (countRegistered++ % properties.getGameRoom() == 0) {
+            currentServer++;
+            if (currentServer >= servers.size()) {
+                currentServer = 0;
+            }
         }
-        return result;
+        System.out.println(countRegistered + " > " + currentServer);
+        return servers.get(currentServer);
     }
 
     public void updateScores() {
