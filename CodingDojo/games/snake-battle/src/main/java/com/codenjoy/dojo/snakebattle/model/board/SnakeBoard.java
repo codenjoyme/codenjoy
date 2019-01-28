@@ -93,7 +93,7 @@ public class SnakeBoard implements Field {
 
         // победа последнего игрока и рестарт игры
         if (players.size() > 1 && aliveBefore < 2 && pause < 0) {
-            fireWinEventAndRestartGame();
+            fireWinEventAndRestartGame(true);
             return;
         }
         // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
@@ -113,6 +113,12 @@ public class SnakeBoard implements Field {
         fireDieEvents();
         fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
         setNewObjects();
+    }
+
+    @Override
+    public void clearScore() {
+        round = 0;
+        fireWinEventAndRestartGame(false);
     }
 
     private void setNewObjects() {
@@ -214,10 +220,12 @@ public class SnakeBoard implements Field {
                     player.event(Events.ALIVE);
     }
 
-    private void fireWinEventAndRestartGame() {
+    private void fireWinEventAndRestartGame(boolean fire) {
         for (Player player : players)
             if (player.isAlive()) {
-                player.event(Events.WIN);
+                if (fire) {
+                    player.event(Events.WIN);
+                }
                 newGame(player);
             }
         setPause(PAUSE_BEFORE_START);
