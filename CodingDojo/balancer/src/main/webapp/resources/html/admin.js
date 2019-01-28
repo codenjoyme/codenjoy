@@ -35,16 +35,36 @@ var server = function(name) {
 }
 
 var _ajax = function(name, ajaxObject) {
+    var tryAfter = function(data) {
+        if (!!ajaxObject.after) {
+            ajaxObject.after(data);
+        }
+    }
+
     if (!ajaxObject.success) {
         ajaxObject.success = function(data) {
             result(name, data);
+            tryAfter(data);
         };
+    } else {
+        var old = ajaxObject.success;
+        ajaxObject.success = function(data) {
+            old(data);
+            tryAfter(data);
+        }
     }
 
     if (!ajaxObject.error) {
         ajaxObject.error = function(data) {
             error(name, data);
+            tryAfter(data);
         };
+    } else {
+        var old = ajaxObject.error;
+        ajaxObject.error = function(data) {
+            old(data);
+            tryAfter(data);
+        }
     }
 
     ajaxObject.dataType = 'json';
@@ -72,7 +92,13 @@ var registerUser = function(email, firstName,
             '"password" : "' + password + '", ' +
             '"city" : "' + city + '", ' +
             '"skills" : "' + skills + '", ' +
-            '"comment" : "' + comment + '"}'
+            '"comment" : "' + comment + '"}',
+        after: function(){
+            var old = $('#preffix').val();
+            var index = parseInt(old.match(/\d+/g)[0]);
+            var aNew = old.replace('' + index, '' + (index + 1));
+            $('#preffix').val(aNew);
+        }
     });
 };
 
