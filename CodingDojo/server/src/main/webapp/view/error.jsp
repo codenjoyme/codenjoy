@@ -27,17 +27,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy</title>
-    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            initHotkeys('${gameName}', '${ctx}/');
-        });
-    </script>
+
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body>
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}"></div>
+    <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
+    <%@include file="forkMe.jsp"%>
+
     <div class="page-header">
         <h1>WTF! Something wrong...</h1>
     </div>
@@ -45,5 +44,5 @@
         <div>${stacktrace}</div></br>
         <a href="${ctx}">Go to main page</a>
     </div>
-<body>
+</body>
 </html>
