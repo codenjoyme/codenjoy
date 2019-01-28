@@ -35,7 +35,7 @@
                     value="default-src 'self';
                     script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;
                     img-src 'self' data: http://www.google-analytics.com;
-                    connect-src 'self' ws: http: https:;
+                    connect-src 'self' ws: wss: http: https:;
                     font-src 'self';
                     style-src 'self' 'unsafe-inline';"/>
             <xss-protection enabled="true" block="false"/>
