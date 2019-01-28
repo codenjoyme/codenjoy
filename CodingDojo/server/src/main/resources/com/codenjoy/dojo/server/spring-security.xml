@@ -26,8 +26,16 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
+    <global-method-security secured-annotations="enabled" />
+
     <http auto-config="true" use-expressions="true">
+
+        <intercept-url pattern="/admin*" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="permitAll"/>
+
+        <form-login default-target-url="/admin"
+                    authentication-failure-url="/denied"/>
+
         <headers>
             <frame-options policy="SAMEORIGIN"/>
             <hsts max-age-seconds="31536000"/>
@@ -42,9 +50,18 @@
             <xss-protection enabled="true" block="false"/>
             <cache-control/>
         </headers>
+
         <csrf disabled="true"/>
     </http>
 
-    <authentication-manager/>
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="admin"
+                      password="${admin.password}"
+                      authorities="ROLE_ADMIN"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
 
 </bean:beans>

@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -97,6 +98,14 @@ public class MainPageController {
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
         return "main";
+    }
+
+    @RequestMapping(value = "/denied")
+    public ModelAndView displayAccessDeniedPage(){
+        return new ModelAndView(){{
+            addObject("message", "Invalid Username or Password");
+            setViewName("error");
+        }};
     }
 
 }

@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,14 +44,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.codenjoy.dojo.web.controller.AdminController.PASS;
-
 @Controller
-@RequestMapping("/admin" + PASS)
+@RequestMapping("/admin")
+@Secured("ROLE_ADMIN")
 public class AdminController {
 
     public static final String GAME_NAME = "gameName";
-    public static final int PASS = 31415;
 
     @Autowired private TimerService timerService;
     @Autowired private PlayerService playerService;
@@ -326,7 +325,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin" + PASS + "?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin?" + GAME_NAME + "=" + gameName;
     }
 
     private String getAdmin() {
