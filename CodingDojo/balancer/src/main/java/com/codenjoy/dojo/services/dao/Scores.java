@@ -92,7 +92,7 @@ public class Scores {
 
         // TODO а тут точно надо AND day = ?
         return pool.select("SELECT * FROM scores WHERE time = ? AND day = ?;",
-                new Object[]{day, JDBCTimeUtils.toString(new Date(time))},
+                new Object[]{JDBCTimeUtils.toString(new Date(time)), day},
                 rs -> {
                     List<PlayerScore> result = new LinkedList<>();
                     while (rs.next()) {
