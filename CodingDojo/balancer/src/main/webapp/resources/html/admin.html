@@ -25,143 +25,287 @@
     <script src="jquery.md5.js"></script>
     <script src="admin.js"></script>
     <style>
+        .table {
+            display: table;
+        }
+        div {
+            display: table-row;
+        }
+        span {
+            display: table-cell;
+            text-align: end;
+            vertical-align: middle;
+        }
+        button {
+            float: right;
+            width: 20%;
+            height: 30px;
+        }
         input, textarea {
-            width: 600px;
-            position: absolute;
-            left: 120px;
+            width: 700px;
+        }
+        input[type='checkbox'] {
+            width: 40px;
+            float: right;
+            height: 40px;
+        }
+        .basic {
+            position: fixed;
+            left: calc(100% - 500px);
+            top: 10px;
+            background-color: white;
+
+        }
+        body div {
+            padding: 10px;
+            border: 1px solid gray;
+        }
+        .basic input, .basic textarea {
+            width: 300px;
         }
     </style>
 </head>
 <body>
-    BalancerServer:<input id="balancer-server" value="/codenjoy-balancer/rest"/></br>
-    GameServer:    <input id="game-server" value="/codenjoy-contest/rest"/></br>
-    </br>
-    Preffix:       <input id="preffix" value="a1_"/></br>
-    </br>
-    Admin Password:<input id="admin-password" value="securePassword"/></br>
+    <div class="table basic border">
+        <h2>Basic settings</h2>
+        <div>
+            <span>BalancerServer:</span>
+            <input id="balancer-server" value="/codenjoy-balancer/rest"/>
+        </div>
+        <div>
+            <span>GameServer:</span>
+            <input id="game-server" value="/codenjoy-contest/rest"/>
+        </div>
+
+        <div>
+            <span>Preffix:</span>
+            <input id="preffix" value="a1_"/>
+        </div>
+        <div>
+            <span>Admin Password:</span>
+            <input id="admin-password" value="securePassword"/>
+        </div>
+    </div>
 
     <h2>Register user</h2>
-    <div>
-        Email:     <input id="email" value="test@gmail.com"/></br>
-        FirstName: <input id="first-name" value="Stiven"/></br>
-        LastName:  <input id="last-name" value="Pupkin"/></br>
-        Password:  <input id="password" value="password"/></br>
-        City:      <input id="city" value="city"/></br>
-        Skills:    <input id="skills" value="Si Senior"/></br>
-        Comment:   <input id="comment" value="no comment"/></br>
-        <button id="register">Register</button>
-            <input type="text" id="register-request"/></br>
-        Result:    <input id="register-result"/></br>
-        Error:     <input id="register-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span>FirstName:</span>
+            <input id="first-name" value="Stiven"/>
+        </div>
+        <div>
+            <span>LastName:</span>
+            <input id="last-name" value="Pupkin"/>
+        </div>
+        <div>
+            <span>Password:</span>
+            <input id="password" value="password"/>
+        </div>
+        <div>
+            <span>City:</span>
+            <input id="city" value="city"/>
+        </div>
+        <div>
+            <span>Skills:</span>
+            <input id="skills" value="Si Senior"/>
+        </div>
+        <div>
+            <span>Comment:</span>
+            <input id="comment" value="no comment"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="register">Register</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="4" id="register-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="register-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="register-error"></textarea>
+        </div>
+        <div>
+            <span>Email:</span>
+            <input id="email" value="test@gmail.com"/>
+        </div>
     </div>
 
     <h2>Login user</h2>
-    <div>
-        Email:     <input id="login-email" value="test@gmail.com"/></br>
-        Password:  <input id="login-password" value="password"/></br>
-        <button id="login">Login</button>
-            <input type="text" id="login-request"/></br>
-        Result:    <input id="login-result"/></br>
-        Error:     <input id="login-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="login-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span>Password:</span>
+            <input id="login-password" value="password"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="login">Login</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="login-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="login-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="login-error"></textarea>
+        </div>
     </div>
 
     <h2>Remove user</h2>
-    <div>
-        Email:     <input id="remove-email" value="test@gmail.com"/></br>
-        Admin password (already set)</br>
-        <button id="remove">Remove</button>
-            <input type="text" id="remove-request"/></br>
-        Result:    <input id="remove-result"/></br>
-        Error:     <input id="remove-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="remove-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="remove">Remove</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="remove-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="remove-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="remove-error"></textarea>
+        </div>
     </div>
 
     <h2>Scores</h2>
-    <div>
-        Day:       <input id="scores-day" value="2019-01-12"/></br>
-        <button id="scores">Score</button>
-            <input type="text" id="scores-request"/></br>
-        Result:    <textarea rows="8" id="scores-result"></textarea></br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        Error:     <input id="scores-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span>Day:</span>
+            <input id="scores-day"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="scores">Score</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="scores-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="scores-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="scores-error"></textarea>
+        </div>
     </div>
 
-    <h2>All users on balancer</h2>
-    <div>
-        Admin password (already set)</br>
-        <button id="users-balancer">Users</button>
-            <input type="text" id="users-balancer-request"/></br>
-        Result:    <textarea rows="15" id="users-balancer-result"></textarea></br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        Error:     <input id="users-balancer-error" value=""/></br></br>
+    <h2>Users on balancer</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="users-balancer">Users</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="users-balancer-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="15" id="users-balancer-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="users-balancer-error"></textarea>
+        </div>
     </div>
 
-    <h2>All users on game server</h2>
-    <div>
-        <button id="users-game">Users</button>
-            <input type="text" id="users-game-request"/></br>
-        Result:    <textarea rows="15" id="users-game-result"></textarea></br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        Error:     <input id="users-game-error" value=""/></br></br>
+    <h2>Users on game</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="users-game">Users</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="users-game-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="15" id="users-game-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="3" id="users-game-error"></textarea>
+        </div>
     </div>
 
     <h2>Settings</h2>
-    <div>
-        Admin password (already set)</br>
-        <button id="get-settings">Get</button></br>
-        <button id="set-settings">Set</button>
-            <input type="text" id="settings-request"/></br>
-        Result:    <textarea rows="8" id="settings-result"></textarea></br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        </br>
-        Error:     <input id="settings-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="get-settings">Get</button>
+            <button id="set-settings">Set</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="settings-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="settings-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="settings-error"></textarea>
+        </div>
     </div>
 
     <h2>Debug</h2>
-    <div>
-        Admin password (already set)</br>
-        Result:    <input type="checkbox" id="debug-result"/></br>
-                        <input type="text" id="debug-request"/></br>
-        Error:     <input id="debug-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span></span>
+            <input type="checkbox" id="debug-result"/>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="5" id="debug-request"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="debug-error"></textarea>
+        </div>
     </div>
 
     <h2>Contest started</h2>
-    <div>
-        Admin password (already set)</br>
-        Result:    <input type="checkbox" id="contest-result"/></br>
-        <input type="text" id="contest-request"/></br>
-        Result:    <input type="text" id="contest-result-data"/></br>
-        Error:     <input id="contest-error" value=""/></br></br>
+    <div class="table">
+        <div>
+            <span></span>
+            <input type="checkbox" id="contest-result"/>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="5" id="contest-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="5" id="contest-result-data"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="contest-error"></textarea>
+        </div>
     </div>
 
 </body>

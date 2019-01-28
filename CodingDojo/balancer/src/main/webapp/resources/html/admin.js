@@ -52,7 +52,7 @@ var _ajax = function(name, ajaxObject) {
 
     $('#' + name + '-request').val(
         '[' + ajaxObject.type + '] ' + ajaxObject.url +
-        ((!!ajaxObject.data) ? (' > ' + ajaxObject.data) : '')
+        ((!!ajaxObject.data) ? (' > \n' + ajaxObject.data) : '')
     );
 
     $.ajax(ajaxObject);
@@ -186,6 +186,8 @@ $(document).ready(function() {
     }
     $('#balancer-server').val(window.location.protocol + '//' + balancerHost + $('#balancer-server').val());
     $('#game-server').val(window.location.protocol + '//' + gameHost + $('#game-server').val());
+
+    $('#scores-day').val(new Date().toISOString().split('T')[0]);
 
     $('#register').click(function() {
         var preffix = $('#preffix').val();

@@ -88,10 +88,11 @@ public class RestController {
 
             @Override
             public ServerLocation onBalancer(ServerLocation location) {
-                player.setCode(location.getCode());
-                player.setServer(location.getServer());
-                players.create(player);
-
+                if (location != null) {
+                    player.setCode(location.getCode());
+                    player.setServer(location.getServer());
+                    players.create(player);
+                }
                 return location;
             }
         });
