@@ -58,6 +58,9 @@ public class ConfigProperties {
     @Value("${dispatcher.url.exists}")
     private String urlExistsPlayer;
 
+    @Value("${dispatcher.url.enabled}")
+    private String urlGameEnabled;
+
     @Value("${game.type}")
     private String gameType;
 
@@ -93,6 +96,10 @@ public class ConfigProperties {
 
     public String getUrlExistsPlayer() {
         return urlExistsPlayer;
+    }
+
+    public String getUrlGameEnabled() {
+        return urlGameEnabled;
     }
 
     public String getGameType() {

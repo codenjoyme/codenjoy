@@ -311,12 +311,13 @@ public class RestController {
 
         List<String> status = new LinkedList<>();
         if (enabled) {
-                status = dispatcher.clearScores();
+            status.addAll(dispatcher.clearScores());
             timer.resume();
         } else {
             timer.pause();
         }
 
+        status.addAll(dispatcher.gameEnable(enabled));
         status.add("On balancer contest is " + (timer.isPaused() ? "paused" : "started"));
 
         return status;

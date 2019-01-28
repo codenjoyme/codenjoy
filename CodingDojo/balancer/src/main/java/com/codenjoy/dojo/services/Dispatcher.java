@@ -150,6 +150,25 @@ public class Dispatcher {
         }
     }
 
+    private String gameEnable(String server, boolean enable) {
+        String status = enable ? "start" : "stop";
+        try {
+            RestTemplate rest = new RestTemplate();
+            ResponseEntity<Boolean> entity = rest.exchange(
+                    gameEnabledUrl(server, enable),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<Boolean>(){});
+
+            return "Successful " + status + " game: " + entity.getBody();
+
+        } catch (RestClientException e) {
+            logger.error("Error " + status + " game on server: " + server, e);
+
+            return GlobalExceptionHandler.getPrintableMessage(e);
+        }
+    }
+
     private String createNewPlayer(String server, String email,
                                    String password, String callbackUrl)
     {
@@ -260,6 +279,13 @@ public class Dispatcher {
                 email);
     }
 
+    private String gameEnabledUrl(String server, boolean enabled) {
+        return String.format(settings.getUrlGameEnabled(),
+                server,
+                enabled,
+                DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()));
+    }
+
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> cached = currentScores.get(day);
         if (cached != null) {
@@ -326,5 +352,12 @@ public class Dispatcher {
             .map(s -> String.format("On server '%s' clear status is '%s'", s,
                     clearScores(s)))
             .collect(toList());
+    }
+
+    public List<String> gameEnable(boolean enable) {
+        return servers.stream()
+                .map(s -> String.format("On server '%s' enable status is '%s'", s,
+                        gameEnable(s, enable)))
+                .collect(toList());
     }
 }

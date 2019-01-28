@@ -161,7 +161,7 @@ public class RestBoardController {
 
     @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword,
+    public boolean startStopGame(@PathVariable("adminPassword") String adminPassword,
                                   @PathVariable("enabled") boolean enabled)
     {
         verifyIsAdmin(adminPassword);

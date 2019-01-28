@@ -33,6 +33,7 @@ public class DispatcherSettings {
     private String urlGetPlayers;
     private String urlClearScores;
     private String urlExistsPlayer;
+    private String urlGameEnabled;
     private String gameType;
     private List<String> servers;
 
@@ -40,12 +41,17 @@ public class DispatcherSettings {
         // do nothing
     }
 
-    public DispatcherSettings(String urlCreatePlayer, String urlRemovePlayer, String urlGetPlayers, String urlClearScores, String urlExistsPlayer, String gameType, List<String> servers) {
+    public DispatcherSettings(String urlCreatePlayer, String urlRemovePlayer,
+                              String urlGetPlayers, String urlClearScores,
+                              String urlExistsPlayer, String urlGameEnabled,
+                              String gameType, List<String> servers)
+    {
         this.urlCreatePlayer = urlCreatePlayer;
         this.urlRemovePlayer = urlRemovePlayer;
         this.urlGetPlayers = urlGetPlayers;
         this.urlClearScores = urlClearScores;
         this.urlExistsPlayer = urlExistsPlayer;
+        this.urlGameEnabled = urlGameEnabled;
         this.gameType = gameType;
         this.servers = servers;
     }
@@ -56,6 +62,7 @@ public class DispatcherSettings {
         urlGetPlayers = properties.getUrlGetPlayers();
         urlClearScores = properties.getUrlClearScores();
         urlExistsPlayer = properties.getUrlExistsPlayer();
+        urlGameEnabled = properties.getUrlGameEnabled();
         gameType = properties.getGameType();
         servers =  properties.getServers();
     }
@@ -80,6 +87,10 @@ public class DispatcherSettings {
         return urlExistsPlayer;
     }
 
+    public String getUrlGameEnabled() {
+        return urlGameEnabled;
+    }
+
     public String getGameType() {
         return gameType;
     }
@@ -96,9 +107,9 @@ public class DispatcherSettings {
                 ", urlGetPlayers='" + urlGetPlayers + '\'' +
                 ", urlClearScores='" + urlClearScores + '\'' +
                 ", urlExistsPlayer='" + urlExistsPlayer + '\'' +
+                ", urlGameEnabled='" + urlGameEnabled + '\'' +
                 ", gameType='" + gameType + '\'' +
                 ", servers=" + servers +
                 '}';
     }
-
 }
