@@ -31,7 +31,7 @@ var result = function(partOfId, data) {
 }
 
 var server = function(name) {
-    return $('#' + name + '-server').val().replace('THIS_SERVER', window.location.host)
+    return $('#' + name + '-server').val();
 }
 
 var _ajax = function(name, ajaxObject) {
@@ -51,8 +51,8 @@ var _ajax = function(name, ajaxObject) {
     ajaxObject.async = false;
 
     $('#' + name + '-request').val(
-        "[" + ajaxObject.type + "] " + ajaxObject.url +
-        ((!!ajaxObject.data) ? (" > " + ajaxObject.data) : "")
+        '[' + ajaxObject.type + '] ' + ajaxObject.url +
+        ((!!ajaxObject.data) ? (' > ' + ajaxObject.data) : '')
     );
 
     $.ajax(ajaxObject);
@@ -135,7 +135,7 @@ var getDebug = function(adminPassword) {
         type: 'GET',
         url: server('balancer') + '/debug/get/' + adminPassword,
         success: function(data) {
-            $('#debug-result').attr("checked", data);
+            $('#debug-result').attr('checked', data);
         }
     });
 };
@@ -145,7 +145,8 @@ var setDebug = function(enabled, adminPassword) {
         type: 'GET',
         url: server('balancer') + '/debug/set/' + enabled + '/' + adminPassword,
         success: function(data) {
-            $('#debug-result').attr("checked", data);
+            $('#debug-result').attr('checked', data);
+            $('#debug-error').val('');
         }
     });
 };
@@ -155,7 +156,7 @@ var getContest = function(adminPassword) {
         type: 'GET',
         url: server('balancer') + '/contest/enable/get/' + adminPassword,
         success: function(data) {
-            $('#contest-result').attr("checked", data);
+            $('#contest-result').attr('checked', data);
         }
     });
 };
@@ -166,12 +167,26 @@ var setContest = function(enabled, adminPassword) {
         url: server('balancer') + '/contest/enable/set/' + enabled + '/' + adminPassword,
         success: function(data) {
             $('#contest-result-data').val(JSON.stringify(data));
+            $('#contest-error').val('');
+
             getContest($.md5($('#admin-password').val()));
+        },
+        error: function(data) {
+            $('#contest-result-data').val('');
+            $('#contest-error').val(JSON.stringify(data));
         }
     });
 };
 
 $(document).ready(function() {
+    var balancerHost = window.location.host;
+    var gameHost = 'game1.' + window.location.host;
+    if (window.location.hostname == '127.0.0.1') {
+        gameHost = '127.0.0.1:8080';
+    }
+    $('#balancer-server').val(window.location.protocol + '//' + balancerHost + $('#balancer-server').val());
+    $('#game-server').val(window.location.protocol + '//' + gameHost + $('#game-server').val());
+
     $('#register').click(function() {
         var preffix = $('#preffix').val();
         registerUser(
