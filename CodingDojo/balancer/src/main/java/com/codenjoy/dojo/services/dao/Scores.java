@@ -23,11 +23,13 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
@@ -41,6 +43,7 @@ import java.util.List;
 public class Scores {
 
     private CrudConnectionThreadPool pool;
+    @Autowired private ConfigProperties properties;
 
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
     private SimpleDateFormat formatter = new SimpleDateFormat(YYYY_MM_DD);
@@ -87,7 +90,7 @@ public class Scores {
 
     public List<PlayerScore> getScores(String day, long time) {
         if (isPast(day, time)) {
-            time = getLastTimeOf(day);
+            time = getLastTimeOfPast(day);
         }
 
         // TODO а тут точно надо AND day = ?
@@ -135,6 +138,12 @@ public class Scores {
     public String getDay(long time) {
         Date date = new Date(time);
         return formatter.format(date);
+    }
+
+    public long getLastTimeOfPast(String day) {
+        return pool.select("SELECT time FROM scores WHERE day = ? AND time LIKE ? ORDER BY time ASC LIMIT 1;",
+                new Object[]{day, day + "T" + properties.getGameFinalTime() + "%"},
+                rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
     public long getLastTimeOf(String day) {
