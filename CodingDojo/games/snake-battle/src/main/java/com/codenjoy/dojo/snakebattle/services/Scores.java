@@ -41,12 +41,12 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(10);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(0);
+        stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(0);
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
-        diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(10);
-        stonePenalty = settings.addEditBox("Stone penalty").type(Integer.class).def(1);
+        diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
+        stonePenalty = settings.addEditBox("Stone penalty").type(Integer.class).def(-10);
     }
 
     @Override
