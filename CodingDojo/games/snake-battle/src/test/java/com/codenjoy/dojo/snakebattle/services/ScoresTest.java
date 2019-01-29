@@ -44,7 +44,14 @@ public class ScoresTest {
     int changeValue;
 
     public ScoresTest(int startScore, Events event, int changeValue) {
-        scores = new Scores(startScore, new SettingsImpl());
+        SettingsImpl settings = new SettingsImpl();
+        scores = new Scores(startScore, settings);
+        settings.getParameter("Win score").type(Integer.class).update(30);
+        settings.getParameter("Alive score").type(Integer.class).update(10);
+        settings.getParameter("Apple score").type(Integer.class).update(1);
+        settings.getParameter("Gold score").type(Integer.class).update(5);
+        settings.getParameter("Die penalty").type(Integer.class).update(10);
+        settings.getParameter("Stone penalty").type(Integer.class).update(1);
         this.event = event;
         this.changeValue = changeValue;
     }
