@@ -56,6 +56,7 @@ public class RestBoardController {
     @Autowired private PlayerGamesView playerGamesView;
     @Autowired private ConfigProperties properties;
     @Autowired private TimerService timerService;
+    @Autowired private SaveService saveService;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -173,6 +174,19 @@ public class RestBoardController {
         }
 
         return timerService.isPaused();
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/player/{playerName}/{code}/reset", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean reset(@PathVariable("playerName") String playerName, @PathVariable("code") String code){
+        validator.checkPlayerCode(playerName, code);
+
+        saveService.save(playerName);
+        playerService.remove(playerName);
+        saveService.load(playerName);
+
+        return true;
     }
 
     // TODO test me
