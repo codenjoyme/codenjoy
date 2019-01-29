@@ -46,7 +46,7 @@ public class Scores implements PlayerScores {
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
         diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
-        stonePenalty = settings.addEditBox("Stone penalty").type(Integer.class).def(-10);
+        stonePenalty = settings.addEditBox("Stone score").type(Integer.class).def(-10);
     }
 
     @Override

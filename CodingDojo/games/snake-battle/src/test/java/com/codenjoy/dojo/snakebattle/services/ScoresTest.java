@@ -51,7 +51,7 @@ public class ScoresTest {
         settings.getParameter("Apple score").type(Integer.class).update(1);
         settings.getParameter("Gold score").type(Integer.class).update(5);
         settings.getParameter("Die penalty").type(Integer.class).update(10);
-        settings.getParameter("Stone penalty").type(Integer.class).update(1);
+        settings.getParameter("Stone score").type(Integer.class).update(1);
         this.event = event;
         this.changeValue = changeValue;
     }

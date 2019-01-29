@@ -168,7 +168,9 @@ public class SnakeBoard implements Field {
             }
             if (stones.contains(head) && !hero.isFlying()) {
                 stones.remove(head);
-                player.event(Events.STONE);
+                if (player.isAlive()) {
+                    player.event(Events.STONE);
+                }
             }
             if (gold.contains(head)) {
                 gold.remove(head);
