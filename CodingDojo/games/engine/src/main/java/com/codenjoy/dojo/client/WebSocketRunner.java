@@ -30,6 +30,7 @@ import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
@@ -48,8 +49,8 @@ public class WebSocketRunner implements Closeable {
 
 
     public static boolean PRINT_TO_CONSOLE = true;
-    public static int TIMEOUT = 5000;
-    public static Integer ATTEMPTS = 3;
+    public static int TIMEOUT = 10000;
+    public static Integer ATTEMPTS = 5;
 
     private Session session;
     private WebSocketClient client;
@@ -209,7 +210,13 @@ public class WebSocketRunner implements Closeable {
     }
 
     private boolean isUnauthorizedAccess(Throwable exception) {
-        return exception instanceof UpgradeException && ((UpgradeException) exception).getResponseStatusCode() == 401;
+        return exception instanceof UpgradeException
+                && ((UpgradeException) exception).getResponseStatusCode() == 401;
+    }
+
+    private boolean isConnectionRefused(Throwable exception) {
+        return exception instanceof ConnectException
+                && "Connection refused: no further information".equals(exception.getMessage());
     }
 
     private void connectLoop(int countAttempts) {
@@ -218,7 +225,8 @@ public class WebSocketRunner implements Closeable {
                 tryToConnect();
                 break;
             } catch (ExecutionException e) {
-                if (!isUnauthorizedAccess(e.getCause())) {
+                print(e.toString());
+                if (!isUnauthorizedAccess(e.getCause()) && !isConnectionRefused(e.getCause())) {
                     print(e);
                 }
                 printReconnect();
