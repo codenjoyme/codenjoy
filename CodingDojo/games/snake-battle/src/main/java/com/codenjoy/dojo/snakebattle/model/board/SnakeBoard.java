@@ -93,11 +93,31 @@ public class SnakeBoard implements Field {
             return;
         }
 
-        restartIfLast();
+        if (restartIfLast() || restartIfNoGame()) {
+            timer.reset();
+            return;
+        }
+
         snakesMove();
         snakesFight();
         fireWinEvents();
         setNewObjects();
+    }
+
+    private boolean restartIfNoGame() {
+        // если есть активные ребята - выходим
+        if (!aliveActive().isEmpty()) {
+            return false;
+        }
+
+        // если зависшие на старте змейки 20 тиков
+        // не выполняли команлды - мы перегружаемся
+        boolean result = ticksWithoutGame() >= 20;
+        if (result) {
+            players.forEach(p -> p.getHero().die());
+            return true;
+        }
+        return false;
     }
 
     private void sendTimerStatus() {
@@ -152,8 +172,28 @@ public class SnakeBoard implements Field {
                 .collect(toList());
     }
 
+    private List<Player> aliveActiveOrReady() {
+        return players.stream()
+                .filter(p -> p.isAlive() && (p.isActive() || p.isReady()))
+                .collect(toList());
+    }
+
+    private int ticksWithoutGame() {
+        List<Player> ready = players.stream()
+                .filter(p -> p.isAlive() && p.isReady())
+                .collect(toList());
+        if (ready.isEmpty()) {
+            return 0;
+        }
+
+        return ready.stream()
+                .map(p -> p.getHero().getTicksWithoutCommand())
+                .min(Integer::compareTo)
+                .get();
+    }
+
     private void snakesMove() {
-        for (Player player : aliveActive()) {
+        for (Player player : aliveActiveOrReady()) {
             Hero hero = player.getHero();
             Point head = hero.getNextPoint();
             hero.tick();
@@ -211,22 +251,23 @@ public class SnakeBoard implements Field {
         }
     }
 
-    private void restartIfLast() {
+    private boolean restartIfLast() {
         if (timer.unlimited()) {
-            return;
+            return false;
         }
 
-        List<Player> players = aliveActive();
+        List<Player> players = aliveActiveOrReady();
         if (players.size() == 1) {
-            newGame(players.get(0));
+            if (round == roundsPerMatch.getValue()) {
+                players.get(0).leaveBoard();
+            } else {
+                newGame(players.get(0));
+            }
         }
 
         // если остался один игрок или вообще никого -
-        // перезапускаем таймер. Когда время выйдет -
-        // змейки пустятся в пляс
-        if (players.size() <= 1) {
-            timer.reset();
-        }
+        // мы перегружаемся
+        return players.size() <= 1;
     }
 
     public int size() {

@@ -933,7 +933,7 @@ public class SnakeMultiplayerTest {
         assertEquals(true, enemyPlayer.isAlive());
         assertEquals(true, enemyPlayer.isActive());
 
-        // ждем
+        // ждем перехода на первый уровнь
         game.tick();
 
         assertEquals(true, heroPlayer.isAlive());
@@ -1006,14 +1006,14 @@ public class SnakeMultiplayerTest {
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        // ждем
+        // ждем перехода на второй уровень
         game.tick();
 
         assertEquals(true, heroPlayer.isAlive());
-        assertEquals(true, heroPlayer.isActive());
+        assertEquals(false, heroPlayer.isActive());
 
         assertEquals(true, enemyPlayer.isAlive());
-        assertEquals(true, enemyPlayer.isActive());
+        assertEquals(false, enemyPlayer.isActive());
 
         verify(heroEvents).event(Events.START);
         verify(enemyEvents).event(Events.START);
@@ -1022,6 +1022,8 @@ public class SnakeMultiplayerTest {
         verify(enemyEvents).event(new CustomMessage("Round 2"));
         verifyNoMoreInteractions(heroEvents, enemyEvents);
         reset(heroEvents, enemyEvents);
+
+        readyGo();
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
@@ -1079,14 +1081,14 @@ public class SnakeMultiplayerTest {
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
 
-        // ждем
+        // ждем перехода на третий уровень
         game.tick();
 
         assertEquals(true, heroPlayer.isAlive());
-        assertEquals(true, heroPlayer.isActive());
+        assertEquals(false, heroPlayer.isActive());
 
         assertEquals(true, enemyPlayer.isAlive());
-        assertEquals(true, enemyPlayer.isActive());
+        assertEquals(false, enemyPlayer.isActive());
 
         verify(heroEvents).event(Events.START);
         verify(enemyEvents).event(Events.START);
@@ -1095,6 +1097,23 @@ public class SnakeMultiplayerTest {
         verify(enemyEvents).event(new CustomMessage("Round 3"));
         verifyNoMoreInteractions(heroEvents, enemyEvents);
         reset(heroEvents, enemyEvents);
+
+        // пока змейку не мувнут, они не двигаются
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "~&     ☼" +
+                "*ø     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        readyGo();
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
@@ -1110,6 +1129,21 @@ public class SnakeMultiplayerTest {
         game.tick();
         game.tick();
         game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼#   ╘►☼" +
+                "☼#   ×>☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
 
         assertEquals(false, heroPlayer.shouldLeave());
         assertEquals(false, enemyPlayer.shouldLeave());
@@ -1142,6 +1176,17 @@ public class SnakeMultiplayerTest {
         game.remove(heroPlayer);  // это делает автоматом фреймворк потому что heroPlayer.shouldLeave()
         game.remove(enemyPlayer); // это делает автоматом фреймворк потому что enemyPlayer.shouldLeave()
 
+    }
+
+    private void readyGo() {
+        assertEquals(false, heroPlayer.isActive());
+        assertEquals(false, enemyPlayer.isActive());
+        heroPlayer.getHero().act(); // первое движение змейки заставляет ее начинать движение
+        assertEquals(true, heroPlayer.isActive());
+        assertEquals(false, enemyPlayer.isActive());
+        enemyPlayer.getHero().act(); // первое движение змейки заставляет ее начинать движение
+        assertEquals(true, heroPlayer.isActive());
+        assertEquals(true, enemyPlayer.isActive());
     }
 }
 
