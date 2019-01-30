@@ -278,6 +278,12 @@ public class SnakeBoard implements Field {
         return isFreeOfObjects(pt) && freeOfHero(pt);
     }
 
+    public boolean isFreeForStone(Point pt) {
+        Point leftSide = pt.copy();
+        leftSide.change(Direction.LEFT);
+        return isFree(pt) && !starts.contains(leftSide);
+    }
+
     public boolean isFreeOfObjects(Point pt) {
         return !(apples.contains(pt) ||
                 stones.contains(pt) ||
@@ -383,7 +389,7 @@ public class SnakeBoard implements Field {
 
     @Override
     public boolean setStone(Point p) {
-        if (isFree(p)) {
+        if (isFreeForStone(p)) {
             stones.add(new Stone(p));
             return true;
         }

@@ -86,7 +86,8 @@ public class BoardAddObjectsTest {
                 {new Apple(3, 2), false},
                 {new Apple(3, 1), false},
                 {new Apple(3, 0), false},
-                // нельзя ставить камни на яблоки,камни,таблетки,золото,стены
+                // нельзя ставить камни на яблоки,камни,таблетки,золото,стены и справа от выходов
+                {new Stone(2, 3), false},
                 {new Stone(2, 2), false},
                 {new Stone(2, 1), false},
                 {new Stone(3, 3), false},
@@ -129,7 +130,7 @@ public class BoardAddObjectsTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼  ©  ☼" +
+                "☼# ©  ☼" +
                 "☼ ®○  ☼" +
                 "☼ $●  ☼" +
                 "☼☼☼☼☼☼☼");
