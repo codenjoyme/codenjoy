@@ -37,13 +37,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
 public class SnakeBoard implements Field {
 
-    public static int PAUSE_BEFORE_START = 5;
     public static int MAX_ROUNDS_PER_MATCH = 5;
-
-    public boolean debugMode = false;
 
     private List<Wall> walls;
     private List<StartFloor> starts;
@@ -54,13 +52,14 @@ public class SnakeBoard implements Field {
     private List<Gold> gold;
 
     private List<Player> players;
-    private int pause;
+    private List<Player> theWalkingDead;
+    private Timer timer;
     private int round;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice) {
+    public SnakeBoard(Level level, Dice dice, Timer timer) {
         this.dice = dice;
         round = 0;
         walls = level.getWalls();
@@ -72,53 +71,50 @@ public class SnakeBoard implements Field {
         gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<>();
-        pause = PAUSE_BEFORE_START;
+        theWalkingDead = new LinkedList<>();
+
+        this.timer = timer.reset();
     }
 
     @Override
     public void tick() {
-        // отсчёт "секунд" до старта
-        if (pause >= 0) {
-            pause--;
-        }
+        snakesClear();
 
-        // TODO test me
-        if (pause > 0) {
-            String pad = StringUtils.leftPad("", pause, '.');
-            String message = pad + pause + pad;
-            players.forEach(player -> player.printMessage(message));
-        }
+        timer.tick(this::sendTimerStatus);
 
-        int aliveBefore = countActiveHeroes(); // количество живых с прошлого хода
-
-        // победа последнего игрока и рестарт игры
-        if (players.size() > 1 && aliveBefore < 2 && pause < 0) {
-            fireWinEventAndRestartGame(true);
-            return;
-        }
-        // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
-        if (aliveBefore < 1 && pause < 0) {
-            setPause(PAUSE_BEFORE_START);
-            return;
-        }
-
-        if (pause == 0) {
+        if (timer.justFinished()) {
             round++;
-            players.forEach(player -> player.start(round));
+            players.forEach(p -> p.start(round));
         }
 
-        snakesMove(); // продвижение живых змеек
-        snakesCollisionDetection(); // реакция на столкновения змей друг с другом
-        int aliveAfter = countActiveHeroes(); // сколько осталось живо после хода
-        fireDieEvents();
-        fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
+        if (!timer.done()) {
+            return;
+        }
+
+        restartIfLast();
+        snakesMove();
+        snakesFight();
+        fireWinEvents();
         setNewObjects();
+    }
+
+    private void sendTimerStatus() {
+        String pad = StringUtils.leftPad("", timer.time(), '.');
+        String message = pad + timer.time() + pad;
+        players.forEach(player -> player.printMessage(message));
+    }
+
+    private void snakesClear() {
+        players.stream()
+                .filter(p -> p.isActive() && !p.isAlive())
+                .forEach(p -> p.getHero().clear());
     }
 
     @Override
     public void clearScore() {
         round = 0;
-        fireWinEventAndRestartGame(false);
+
+        players.forEach(p -> newGame(p));
     }
 
     private void setNewObjects() {
@@ -136,28 +132,26 @@ public class SnakeBoard implements Field {
             setApple(getFreeRandom());
     }
 
-    private void fireDieEvents() {
-        for (Player player : players) {
-            if (player.isActive() && !player.isAlive()) {
-                player.die(round == MAX_ROUNDS_PER_MATCH);
-            }
+    private void fireWinEvents() {
+        if (theWalkingDead.isEmpty()) {
+            return;
+        }
+        theWalkingDead.clear();
+
+        List<Player> alive = aliveActive();
+        if (alive.size() == 1) {
+            alive.forEach(p -> p.event(Events.WIN));
         }
     }
 
-    private int countActiveHeroes() {
-        int counter = 0;
-        for (Player player : players) {
-            if (player.isAlive() && player.isActive())
-                counter++;
-        }
-        return counter;
+    private List<Player> aliveActive() {
+        return players.stream()
+                .filter(p -> p.isAlive() && p.isActive())
+                .collect(toList());
     }
 
     private void snakesMove() {
-        for (Player player : players) {
-            if (!player.isActive()) {
-                continue;
-            }
+        for (Player player : aliveActive()) {
             Hero hero = player.getHero();
             Point head = hero.getNextPoint();
             hero.tick();
@@ -185,7 +179,7 @@ public class SnakeBoard implements Field {
         }
     }
 
-    private void snakesCollisionDetection() {
+    private void snakesFight() {
         for (Player player : players) {
             if (!player.isActive())
                 continue;
@@ -215,22 +209,22 @@ public class SnakeBoard implements Field {
         }
     }
 
-    private void fireAliveEvents(int died) {
-        for (Player player : players)
-            if (player.isAlive())
-                for (int i = 0; i < died; i++)
-                    player.event(Events.ALIVE);
-    }
+    private void restartIfLast() {
+        if (timer.unlimited()) {
+            return;
+        }
 
-    private void fireWinEventAndRestartGame(boolean fire) {
-        for (Player player : players)
-            if (player.isAlive()) {
-                if (fire) {
-                    player.event(Events.WIN);
-                }
-                newGame(player);
-            }
-        setPause(PAUSE_BEFORE_START);
+        List<Player> players = aliveActive();
+        if (players.size() == 1) {
+            newGame(players.get(0));
+        }
+
+        // если остался один игрок или вообще никого -
+        // перезапускаем таймер. Когда время выйдет -
+        // змейки пустятся в пляс
+        if (players.size() <= 1) {
+            timer.reset();
+        }
     }
 
     public int size() {
@@ -343,6 +337,12 @@ public class SnakeBoard implements Field {
                 return enemy;
         }
         return null;
+    }
+
+    @Override
+    public void oneMoreDead(Player player) {
+        player.die(round == MAX_ROUNDS_PER_MATCH);
+        theWalkingDead.add(player);
     }
 
     private Hero checkHeadByHeadCollision(Hero h) {
@@ -482,11 +482,6 @@ public class SnakeBoard implements Field {
                 }};
             }
         };
-    }
-
-    public void setPause(int newValue) {
-        if (!debugMode)
-            this.pause = newValue;
     }
 
     private void fail(String message) {

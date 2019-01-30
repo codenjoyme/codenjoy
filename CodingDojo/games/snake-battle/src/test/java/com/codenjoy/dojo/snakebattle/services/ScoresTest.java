@@ -47,11 +47,10 @@ public class ScoresTest {
         SettingsImpl settings = new SettingsImpl();
         scores = new Scores(startScore, settings);
         settings.getParameter("Win score").type(Integer.class).update(30);
-        settings.getParameter("Alive score").type(Integer.class).update(10);
         settings.getParameter("Apple score").type(Integer.class).update(1);
         settings.getParameter("Gold score").type(Integer.class).update(5);
         settings.getParameter("Die penalty").type(Integer.class).update(10);
-        settings.getParameter("Stone score").type(Integer.class).update(1);
+        settings.getParameter("Stone score").type(Integer.class).update(-1);
         this.event = event;
         this.changeValue = changeValue;
     }
@@ -63,14 +62,12 @@ public class ScoresTest {
                 {0, Events.APPLE, +1},
                 {0, Events.GOLD, +5},
                 {0, Events.STONE, 0}, // счёт всегда >=0
-                {0, Events.ALIVE, +10},
                 {0, Events.WIN, +30},
                 {0, Events.DIE, 0}, // счёт всегда >=0
                 {100, Events.START, 0},
                 {100, Events.APPLE, +1},
                 {100, Events.GOLD, +5},
                 {100, Events.STONE, -1},
-                {100, Events.ALIVE, +10},
                 {100, Events.WIN, +30},
                 {100, Events.DIE, -10},
         };

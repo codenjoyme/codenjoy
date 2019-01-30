@@ -46,6 +46,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private int stonesCount;
     private int flyingCount;
     private int furyCount;
+    private Player player;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -167,12 +168,8 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public void tick() {
-        if (!isActive())
+        if (!isActive() || !isAlive())
             return;
-        if (!alive) {
-            clear();
-            return;
-        }
         reduceIfShould();
         count();
 
@@ -321,13 +318,14 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         growBy += val;
     }
 
-    private void clear() {
+    public void clear() {
         elements = new LinkedList<>();
         growBy = 0;
     }
 
     public void die() {
         alive = false;
+        field.oneMoreDead(player);
     }
 
     public boolean isActive() {
@@ -372,5 +370,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             }
         }
         return elements.indexOf(pt);
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

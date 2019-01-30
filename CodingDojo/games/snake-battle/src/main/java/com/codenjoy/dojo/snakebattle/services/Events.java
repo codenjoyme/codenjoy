@@ -25,7 +25,9 @@ package com.codenjoy.dojo.snakebattle.services;
 
 public enum Events {
     START,
-    WIN, ALIVE, DIE,
-    APPLE, STONE,
+    WIN,
+    DIE,
+    APPLE,
+    STONE,
     GOLD
 }

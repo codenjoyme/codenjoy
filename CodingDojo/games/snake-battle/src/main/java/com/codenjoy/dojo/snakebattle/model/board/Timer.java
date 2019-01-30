@@ -4,7 +4,7 @@ package com.codenjoy.dojo.snakebattle.model.board;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,43 +22,45 @@ package com.codenjoy.dojo.snakebattle.model.board;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.Parameter;
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.snakebattle.model.Player;
-import com.codenjoy.dojo.snakebattle.model.hero.Hero;
+public class Timer {
 
-public interface Field extends GameField<Player> {
+    private final Parameter<Integer> from;
+    private int time;
 
-    boolean isBarrier(Point p);
+    public Timer(Parameter<Integer> from) {
+        this.from = from;
+    }
 
-    Point getFreeRandom();
+    public Timer reset() {
+        time = from.getValue();
+        return this;
+    }
 
-    Point getFreeStart();
+    public boolean justFinished() {
+        return time == 0;
+    }
 
-    boolean isFree(int x, int y);
+    public boolean done() {
+        return time < 0;
+    }
 
-    boolean isApple(Point p);
+    public int time() {
+        return time;
+    }
 
-    boolean isStone(Point p);
+    public void tick(Runnable onProgress) {
+        if (!done()) {
+            time--;
+        }
 
-    boolean isFlyingPill(Point p);
+        if (onProgress != null && time > 0) {
+            onProgress.run();
+        }
+    }
 
-    boolean isFuryPill(Point p);
-
-    boolean isGold(Point p);
-
-    boolean setStone(Point p);
-
-    void setFlyingPill(Point p);
-
-    void setFuryPill(Point p);
-
-    void setGold(Point p);
-
-    boolean isAnotherHero(Hero h);
-
-    Hero getAnotherHero(Hero h);
-
-    void oneMoreDead(Player player);
+    public boolean unlimited() {
+        return from.getValue() == 0;
+    }
 }

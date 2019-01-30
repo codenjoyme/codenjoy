@@ -26,8 +26,10 @@ package com.codenjoy.dojo.snakebattle.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
@@ -54,10 +56,12 @@ public class SnakeBoardTest {
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private SimpleParameter<Integer> timer;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        timer = new SimpleParameter<>(0);
     }
 
     private void givenFl(String board) {
@@ -69,8 +73,9 @@ public class SnakeBoardTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero();
 
-        game = new SnakeBoard(level, dice);
-        game.debugMode = true;
+        game = new SnakeBoard(level, dice,
+                new Timer(timer));
+
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -1378,4 +1383,5 @@ public class SnakeBoardTest {
                 "☼       ☼" +
                 "☼☼☼☼☼☼☼☼☼");
     }
+
 }

@@ -22,6 +22,8 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import java.util.Objects;
+
 public class CustomMessage {
 
     private String message;
@@ -37,5 +39,18 @@ public class CustomMessage {
     @Override
     public String toString() {
         return "[" + message + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomMessage that = (CustomMessage) o;
+        return Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message);
     }
 }

@@ -52,10 +52,12 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public void setHero(Hero hero) {
         this.hero = hero;
+        this.hero.setPlayer(this);
     }
 
     public void newHero(Field field) {
         hero = new Hero(field.getFreeStart());
+        hero.setPlayer(this);
         hero.init(field);
     }
 

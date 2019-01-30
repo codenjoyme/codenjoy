@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
-    private final Parameter<Integer> stillAliveScore;
     private final Parameter<Integer> appleScore;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> diePenalty;
@@ -41,8 +40,7 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(0);
-        stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(0);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
         diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
@@ -66,9 +64,6 @@ public class Scores implements PlayerScores {
         switch ((Events) event) {
             case WIN:
                 score += winScore.getValue();
-                break;
-            case ALIVE:
-                score += stillAliveScore.getValue();
                 break;
             case APPLE:
                 score += appleScore.getValue();

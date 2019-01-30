@@ -34,6 +34,7 @@ import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
 import com.codenjoy.dojo.snakebattle.client.ai.DummyAISolver;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.Elements;
@@ -44,9 +45,11 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
+    private final Parameter<Integer> timeBeforeStart;
 
     public GameRunner() {
         new Scores(0, settings);
+        timeBeforeStart = settings.addEditBox("Time before start round").type(Integer.class).def(5);
         level = new LevelImpl(getMap());
     }
 
@@ -84,7 +87,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     public GameField createGame(int levelNumber) {
-        return new SnakeBoard(level, getDice());
+        return new SnakeBoard(level, getDice(), new Timer(timeBeforeStart));
     }
 
     @Override

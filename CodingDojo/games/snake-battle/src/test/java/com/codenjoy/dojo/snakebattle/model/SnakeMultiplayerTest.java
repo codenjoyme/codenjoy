@@ -23,11 +23,14 @@ package com.codenjoy.dojo.snakebattle.model;
  */
 
 
+import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
@@ -36,8 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -56,15 +58,18 @@ public class SnakeMultiplayerTest {
     private Player enemyPlayer;
 
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private SimpleParameter<Integer> timer;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        timer = new SimpleParameter<>(0);
     }
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        game = new SnakeBoard(level, dice);
+        game = new SnakeBoard(level, dice,
+                new Timer(timer));
 
         Hero hero = level.getHero();
         hero.setActive(true);
@@ -199,7 +204,7 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        assertH("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -258,7 +263,7 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
 
         verify(heroEvents).event(Events.DIE);
-        verify(enemyEvents).event(Events.ALIVE);
+        verify(enemyEvents).event(Events.WIN);
         game.tick();
 
         assertH("☼☼☼☼☼☼☼" +
@@ -335,7 +340,7 @@ public class SnakeMultiplayerTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(heroEvents).event(Events.ALIVE);
+        verify(heroEvents).event(Events.WIN);
         verify(enemyEvents).event(Events.DIE);
         game.tick();
 
@@ -404,7 +409,7 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
 
         verify(heroEvents).event(Events.DIE);
-        verify(enemyEvents).event(Events.ALIVE);
+        verify(enemyEvents).event(Events.WIN);
 
         game.tick();
 
@@ -456,7 +461,7 @@ public class SnakeMultiplayerTest {
         enemy.up();
         game.tick();
 
-        verify(heroEvents).event(Events.ALIVE);
+        verify(heroEvents).event(Events.WIN);
         verify(enemyEvents).event(Events.DIE);
 
         assertH("☼☼☼☼☼☼☼" +
@@ -542,7 +547,7 @@ public class SnakeMultiplayerTest {
                 "☼☼☼☼☼☼☼");
 
         verify(heroEvents).event(Events.DIE);
-        verify(enemyEvents).event(Events.ALIVE);
+        verify(enemyEvents).event(Events.WIN);
 
         game.tick();
 
@@ -754,4 +759,386 @@ public class SnakeMultiplayerTest {
     private void assertE(String expected) {
         assertBoard(expected, enemyPlayer);
     }
+
+    // если твоя змейка осталась на поле сама, а все противники погибли - тебе WIN
+    @Test
+    public void shouldWin_whenOneOnBoardAfterEnemyDie() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╘►   ☼" +
+                "☼     ☼" +
+                "☼  ×> ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verify(enemyEvents).event(Events.DIE);
+        verify(heroEvents).event(Events.WIN);
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ╘► ☼" +
+                "☼     ☼" +
+                "☼    ×☺" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ×> ☼" +
+                "☼     ☼" +
+                "☼    ╘☻" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyNoMoreInteractions(enemyEvents);
+        verifyNoMoreInteractions(heroEvents);
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+    }
+
+    // змейка не стартует сразу если стоит таймер
+    @Test
+    public void shouldWaitTillTimer_thenStart() {
+        timer.update(4);
+
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╘►   ☼" +
+                "☼     ☼" +
+                "☼×>   ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        // ждем 4 тика
+        game.tick();
+
+        verify(heroEvents).event(new CustomMessage("...3..."));
+        verify(enemyEvents).event(new CustomMessage("...3..."));
+
+        game.tick();
+
+        verify(heroEvents).event(new CustomMessage("..2.."));
+        verify(enemyEvents).event(new CustomMessage("..2.."));
+
+        game.tick();
+
+        verify(heroEvents).event(new CustomMessage(".1."));
+        verify(enemyEvents).event(new CustomMessage(".1."));
+
+        game.tick();
+
+        verify(heroEvents).event(Events.START);
+        verify(enemyEvents).event(Events.START);
+
+        verify(heroEvents).event(new CustomMessage("Round 1"));
+        verify(enemyEvents).event(new CustomMessage("Round 1"));
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╘►   ☼" +
+                "☼     ☼" +
+                "☼×>   ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ╘► ☼" +
+                "☼     ☼" +
+                "☼  ×> ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // если одна змейка погибает, стартует новый раунд
+    @Test
+    public void shouldStartNewGame_whenGameOver() {
+        timer.update(1);
+        SnakeBoard.MAX_ROUNDS_PER_MATCH = 3;
+
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼#   ╘►☼" +
+                "☼#×>   ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        // ждем
+        game.tick();
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        verify(heroEvents).event(Events.START);
+        verify(enemyEvents).event(Events.START);
+
+        verify(heroEvents).event(new CustomMessage("Round 1"));
+        verify(enemyEvents).event(new CustomMessage("Round 1"));
+        verifyNoMoreInteractions(heroEvents, enemyEvents);
+        reset(heroEvents, enemyEvents);
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼#   ╘►☼" +
+                "☼#×>   ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼#    ╘☻" +
+                "☼# ×>  ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        verify(heroEvents).event(Events.DIE);
+        verify(enemyEvents).event(Events.WIN);
+        verifyNoMoreInteractions(heroEvents, enemyEvents);
+        reset(heroEvents, enemyEvents);
+
+        assertEquals(false, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        game.newGame(heroPlayer); // это делает автоматом фреймворк потому что heroPlayer.!isAlive()
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(false, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        game.tick();
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(false, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(false, enemyPlayer.isActive());
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "~&     ☼" +
+                "*ø     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // ждем
+        game.tick();
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        verify(heroEvents).event(Events.START);
+        verify(enemyEvents).event(Events.START);
+
+        verify(heroEvents).event(new CustomMessage("Round 2"));
+        verify(enemyEvents).event(new CustomMessage("Round 2"));
+        verifyNoMoreInteractions(heroEvents, enemyEvents);
+        reset(heroEvents, enemyEvents);
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "╘►     ☼" +
+                "×>     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼#    ╘☻" +
+                "☼#    ×☺" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        verify(heroEvents).event(Events.DIE);
+        verify(enemyEvents).event(Events.DIE);
+        verifyNoMoreInteractions(heroEvents, enemyEvents);
+        reset(heroEvents, enemyEvents);
+
+        assertEquals(false, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(false, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        game.newGame(heroPlayer);  // это делает автоматом фреймворк потому что heroPlayer.!isAlive()
+        game.newGame(enemyPlayer); // это делает автоматом фреймворк потому что enemyPlayer.!isAlive()
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(false, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(false, enemyPlayer.isActive());
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "~&     ☼" +
+                "*ø     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // ждем
+        game.tick();
+
+        assertEquals(true, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(true, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        verify(heroEvents).event(Events.START);
+        verify(enemyEvents).event(Events.START);
+
+        verify(heroEvents).event(new CustomMessage("Round 3"));
+        verify(enemyEvents).event(new CustomMessage("Round 3"));
+        verifyNoMoreInteractions(heroEvents, enemyEvents);
+        reset(heroEvents, enemyEvents);
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "╘►     ☼" +
+                "×>     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertEquals(false, heroPlayer.shouldLeave());
+        assertEquals(false, enemyPlayer.shouldLeave());
+
+        game.tick();
+
+        assertEquals(true, heroPlayer.shouldLeave());
+        assertEquals(true, enemyPlayer.shouldLeave());
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼#    ╘☻" +
+                "☼#    ×☺" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        verify(heroEvents).event(Events.DIE);
+        verify(enemyEvents).event(Events.DIE);
+        verifyNoMoreInteractions(heroEvents, enemyEvents);
+        reset(heroEvents, enemyEvents);
+
+        assertEquals(false, heroPlayer.isAlive());
+        assertEquals(true, heroPlayer.isActive());
+
+        assertEquals(false, enemyPlayer.isAlive());
+        assertEquals(true, enemyPlayer.isActive());
+
+        game.remove(heroPlayer);  // это делает автоматом фреймворк потому что heroPlayer.shouldLeave()
+        game.remove(enemyPlayer); // это делает автоматом фреймворк потому что enemyPlayer.shouldLeave()
+
+    }
 }
+
