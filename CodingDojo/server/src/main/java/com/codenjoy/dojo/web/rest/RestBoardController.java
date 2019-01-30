@@ -108,7 +108,7 @@ public class RestBoardController {
 
     @RequestMapping(value = "/player/{playerName}/{code}/level/{level}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean changeLevel(@PathVariable("playerName") String playerName,
+    public synchronized boolean changeLevel(@PathVariable("playerName") String playerName,
                                 @PathVariable("code") String code,
                                 @PathVariable("level") int level)
     {
@@ -179,7 +179,7 @@ public class RestBoardController {
     // TODO test me
     @RequestMapping(value = "/player/{playerName}/{code}/reset", method = RequestMethod.GET)
     @ResponseBody
-    public boolean reset(@PathVariable("playerName") String playerName, @PathVariable("code") String code){
+    public synchronized boolean reset(@PathVariable("playerName") String playerName, @PathVariable("code") String code){
         validator.checkPlayerCode(playerName, code);
 
         saveService.save(playerName);
@@ -192,7 +192,7 @@ public class RestBoardController {
     // TODO test me
     @RequestMapping(value = "/player/{playerName}/{code}/wantsToPlay/{gameName}", method = RequestMethod.GET)
     @ResponseBody
-    public PPlayerWantsToPlay playerWantsToPlay(
+    public synchronized PPlayerWantsToPlay playerWantsToPlay(
             @PathVariable("playerName") String playerName,
             @PathVariable("code") String code,
             @PathVariable("gameName") String gameName)
