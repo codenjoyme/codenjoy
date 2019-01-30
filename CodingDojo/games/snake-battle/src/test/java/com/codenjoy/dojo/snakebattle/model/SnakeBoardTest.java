@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
-import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
@@ -36,8 +35,6 @@ import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -74,7 +71,8 @@ public class SnakeBoardTest {
         Hero hero = level.getHero();
 
         game = new SnakeBoard(level, dice,
-                new Timer(timer));
+                new Timer(timer),
+                new SimpleParameter<>(5));
 
         listener = mock(EventListener.class);
         player = new Player(listener);

@@ -37,8 +37,6 @@ import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.assertEquals;
@@ -72,7 +70,8 @@ public class AISolverTest {
         Hero hero = level.getHero();
 
         SnakeBoard game = new SnakeBoard(level, dice,
-                new Timer(new SimpleParameter<>(0)));
+                new Timer(new SimpleParameter<>(0)),
+                new SimpleParameter<>(5));
 
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);

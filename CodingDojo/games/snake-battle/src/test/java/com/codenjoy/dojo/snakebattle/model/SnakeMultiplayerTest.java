@@ -59,17 +59,20 @@ public class SnakeMultiplayerTest {
 
     private PrinterFactory printer = new PrinterFactoryImpl();
     private SimpleParameter<Integer> timer;
+    private SimpleParameter<Integer> roundsPerMatch;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
         timer = new SimpleParameter<>(0);
+        roundsPerMatch = new SimpleParameter<>(5);
     }
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
         game = new SnakeBoard(level, dice,
-                new Timer(timer));
+                new Timer(timer),
+                roundsPerMatch);
 
         Hero hero = level.getHero();
         hero.setActive(true);
@@ -913,7 +916,7 @@ public class SnakeMultiplayerTest {
     @Test
     public void shouldStartNewGame_whenGameOver() {
         timer.update(1);
-        SnakeBoard.MAX_ROUNDS_PER_MATCH = 3;
+        roundsPerMatch.update(3);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +

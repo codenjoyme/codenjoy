@@ -25,7 +25,6 @@ package com.codenjoy.dojo.snakebattle.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
-import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
@@ -37,7 +36,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -64,7 +62,8 @@ public class BoardAddObjectsTest {
         Hero hero = level.getHero();
 
         game = new SnakeBoard(level, mock(Dice.class),
-                new Timer(new SimpleParameter<>(0)));
+                new Timer(new SimpleParameter<>(0)),
+                new SimpleParameter<>(5));
 
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);

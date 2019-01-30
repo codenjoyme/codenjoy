@@ -46,10 +46,12 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
     private final Parameter<Integer> timeBeforeStart;
+    private final Parameter<Integer> roundsPerMatch;
 
     public GameRunner() {
         new Scores(0, settings);
         timeBeforeStart = settings.addEditBox("Time before start round").type(Integer.class).def(5);
+        roundsPerMatch = settings.addEditBox("Rounds per match").type(Integer.class).def(5);
         level = new LevelImpl(getMap());
     }
 
@@ -87,7 +89,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     public GameField createGame(int levelNumber) {
-        return new SnakeBoard(level, getDice(), new Timer(timeBeforeStart));
+        return new SnakeBoard(level, getDice(), new Timer(timeBeforeStart), roundsPerMatch);
     }
 
     @Override

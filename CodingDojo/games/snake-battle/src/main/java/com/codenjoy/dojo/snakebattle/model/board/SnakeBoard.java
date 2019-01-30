@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snakebattle.model.board;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
@@ -41,8 +42,6 @@ import static java.util.stream.Collectors.toList;
 
 public class SnakeBoard implements Field {
 
-    public static int MAX_ROUNDS_PER_MATCH = 5;
-
     private List<Wall> walls;
     private List<StartFloor> starts;
     private List<Apple> apples;
@@ -53,14 +52,17 @@ public class SnakeBoard implements Field {
 
     private List<Player> players;
     private List<Player> theWalkingDead;
+
     private Timer timer;
+    private Parameter<Integer> roundsPerMatch;
     private int round;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer timer) {
+    public SnakeBoard(Level level, Dice dice, Timer timer, Parameter<Integer> roundsPerMatch) {
         this.dice = dice;
+        this.roundsPerMatch = roundsPerMatch;
         round = 0;
         walls = level.getWalls();
         starts = level.getStartPoints();
@@ -341,7 +343,7 @@ public class SnakeBoard implements Field {
 
     @Override
     public void oneMoreDead(Player player) {
-        player.die(round == MAX_ROUNDS_PER_MATCH);
+        player.die(round == roundsPerMatch.getValue());
         theWalkingDead.add(player);
     }
 
