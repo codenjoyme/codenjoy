@@ -47,11 +47,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     private final Level level;
     private final Parameter<Integer> timeBeforeStart;
     private final Parameter<Integer> roundsPerMatch;
+    private final Parameter<Integer> playersPerRoom;
 
     public GameRunner() {
         new Scores(0, settings);
-        timeBeforeStart = settings.addEditBox("Time before start round").type(Integer.class).def(5);
-        roundsPerMatch = settings.addEditBox("Rounds per match").type(Integer.class).def(5);
+        timeBeforeStart = settings.addEditBox("Time before start Round").type(Integer.class).def(5);
+        roundsPerMatch = settings.addEditBox("Rounds per Match").type(Integer.class).def(5);
+        playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(10);
         level = new LevelImpl(getMap());
     }
 
@@ -124,7 +126,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE);
+        return MultiplayerType.TEAM.apply(playersPerRoom.getValue(), MultiplayerType.DISPOSABLE);
     }
 
     @Override
