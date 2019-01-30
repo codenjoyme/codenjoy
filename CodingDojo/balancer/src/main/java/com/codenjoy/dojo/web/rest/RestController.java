@@ -118,6 +118,14 @@ public class RestController {
         T onBalancer(T data);
     }
 
+    @RequestMapping(value = "/player/{player}/active", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean login(@PathVariable("player") String email) {
+        validator.checkEmail(email, Validator.CANT_BE_NULL);
+
+        return dispatcher.exists(email);
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {

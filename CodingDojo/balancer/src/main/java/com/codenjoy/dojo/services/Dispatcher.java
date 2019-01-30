@@ -360,4 +360,12 @@ public class Dispatcher {
                         gameEnable(s, enable)))
                 .collect(toList());
     }
+
+    public boolean exists(String email) {
+        Player player = players.get(email);
+        if (player == null) {
+            return false;
+        }
+        return existsOnServer(player.getServer(), player.getEmail());
+    }
 }
