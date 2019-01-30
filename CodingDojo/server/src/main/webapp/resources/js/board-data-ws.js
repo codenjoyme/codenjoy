@@ -36,19 +36,29 @@ function initBoards(players, allPlayersScreen, gameName, playerName, contextPath
     }
 
     var socket = null;
+    var reconnectOnError = function() {
+        $('body').css('background-color', 'bisque');
+
+        setTimeout(function(){
+            connectToServer();
+        }, 5000);
+    }
     var connectToServer = function() {
         currentCommand = null; // for joystick.js
 
-        socket = new WebSocket(constructUrl());
+        try {
+            socket = new WebSocket(constructUrl());
+        } catch (err) {
+            console.log(err);
+        }
         socket.onopen = function() {
             updatePlayersInfo();
         };
         socket.onclose = function() {
-            // do nothing
+            reconnectOnError();
         };
         socket.onerror = function() {
-            $('body').css('background-color', 'bisque');
-            // TODO после этого сразу же отправляется второй запрос, и если серчер отключен то мы имеем купу ошибок js в консоли. Надо сделать так, чтобы при ошибке повторный запро отправлялся через секунду
+//            reconnectOnError();
         };
         socket.onmessage = function(message) {
             var data = JSON.parse(message.data);
