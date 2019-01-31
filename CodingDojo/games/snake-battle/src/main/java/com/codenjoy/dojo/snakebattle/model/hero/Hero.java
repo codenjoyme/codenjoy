@@ -47,8 +47,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private int flyingCount;
     private int furyCount;
     private Player player;
-    private boolean ready;
-    private int ticksWithoutCommand;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -62,11 +60,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         this.direction = direction;
         alive = true;
         active = false;
-        ready = false;
         stonesCount = 0;
         flyingCount = 0;
         furyCount = 0;
-        ticksWithoutCommand = 0;
     }
 
     public List<Tail> getBody() {
@@ -146,8 +142,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     private void setDirection(Direction d) {
-        readyGo();
-
         if (!isActiveAndAlive()) {
             return;
         }
@@ -155,14 +149,10 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             return;
         }
         direction = d;
-
-        ticksWithoutCommand = 0;
     }
 
     @Override
     public void act(int... p) {
-        readyGo();
-
         if (!isActiveAndAlive()) {
             return;
         }
@@ -172,19 +162,10 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
                 stonesCount--;
             }
         }
-
-        ticksWithoutCommand = 0;
     }
 
     private boolean isActiveAndAlive() {
         return active && alive;
-    }
-
-    private void readyGo() {
-        if (ready) {
-            ready = false;
-            active = true;
-        }
     }
 
     Direction getDirection() {
@@ -193,8 +174,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public void tick() {
-        ticksWithoutCommand++;
-
         if (!isActiveAndAlive()) {
             return;
         }
@@ -361,14 +340,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return active;
     }
 
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
-
-    public boolean isReady() {
-        return ready;
-    }
-
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -411,9 +382,5 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-    public int getTicksWithoutCommand() {
-        return ticksWithoutCommand;
     }
 }

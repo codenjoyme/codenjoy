@@ -96,7 +96,7 @@ public class SnakeBoard implements Field {
             return;
         }
 
-        if (restartIfLast() || restartIfNoGame()) {
+        if (restartIfLast()) {
             timer.reset();
             return;
         }
@@ -105,22 +105,6 @@ public class SnakeBoard implements Field {
         snakesFight();
         fireWinEvents();
         setNewObjects();
-    }
-
-    private boolean restartIfNoGame() {
-        // если есть активные ребята - выходим
-        if (!aliveActive().isEmpty()) {
-            return false;
-        }
-
-        // если зависшие на старте змейки 20 тиков
-        // не выполняли команлды - мы перегружаемся
-        boolean result = ticksWithoutGame() >= 20;
-        if (result) {
-            players.forEach(p -> p.getHero().die());
-            return true;
-        }
-        return false;
     }
 
     private void sendTimerStatus() {
@@ -180,28 +164,8 @@ public class SnakeBoard implements Field {
                 .collect(toList());
     }
 
-    private List<Player> aliveActiveOrReady() {
-        return players.stream()
-                .filter(p -> p.isAlive() && (p.isActive() || p.isReady()))
-                .collect(toList());
-    }
-
-    private int ticksWithoutGame() {
-        List<Player> ready = players.stream()
-                .filter(p -> p.isAlive() && p.isReady())
-                .collect(toList());
-        if (ready.isEmpty()) {
-            return 0;
-        }
-
-        return ready.stream()
-                .map(p -> p.getHero().getTicksWithoutCommand())
-                .min(Integer::compareTo)
-                .get();
-    }
-
     private void snakesMove() {
-        for (Player player : aliveActiveOrReady()) {
+        for (Player player : aliveActive()) {
             Hero hero = player.getHero();
             Point head = hero.getNextPoint();
             hero.tick();
@@ -264,7 +228,7 @@ public class SnakeBoard implements Field {
             return false;
         }
 
-        List<Player> players = aliveActiveOrReady();
+        List<Player> players = aliveActive();
         if (players.size() == 1) {
             if (isMatchOver()) {
                 players.get(0).leaveBoard();
