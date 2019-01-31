@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
@@ -1732,7 +1733,7 @@ public class LoderunnerTest {
 
         for (int x = 0; x < game.size(); x ++) {
             for (int y = 0; y < game.size(); y ++) {
-                assertFalse(game.isFree(x, y));
+                assertFalse(game.isFree(pt(x, y)));
             }
 
         }

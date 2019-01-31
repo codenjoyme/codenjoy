@@ -24,6 +24,7 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.moebius.services.Events;
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -33,7 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
 
 public class Moebius implements Field {
 
@@ -66,7 +67,7 @@ public class Moebius implements Field {
         removePipes();
 
         Point pt = getFreeRandom();
-        if (pt == null) {
+        if (pt.equals(NO_SPACE)) {
             player.event(new Events(Events.Event.GAME_OVER));
             player.getHero().die();
         } else {
@@ -135,21 +136,8 @@ public class Moebius implements Field {
 
     @Override
     public Point getFreeRandom() {
-        Point pt;
-        int c = 0;
-        do {
-            int x = dice.next(size);
-            int y = dice.next(size);
-            pt = pt(x, y);
-        } while ((pt.isOutOf(1, 1, size) || !isFree(pt)) && c++ < 100);
-
-        if (c >= 100) {
-            System.out.println("null");
-            return null;
-        }
-        System.out.println(pt);
-
-        return pt;
+        return BoardUtils.getFreeRandom(size, dice,
+                pt -> pt.isOutOf(1, 1, size) || !isFree(pt));
     }
 
     @Override

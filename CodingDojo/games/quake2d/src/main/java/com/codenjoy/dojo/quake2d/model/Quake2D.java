@@ -22,7 +22,6 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.quake2d.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -160,25 +159,11 @@ public class Quake2D implements Field {
 
     @Override
     public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(rndX, rndY);
+        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
+    public boolean isFree(Point pt) {
         return  !abilities.contains(pt) &&
                 !bullets.contains(pt) &&
                 !walls.contains(pt) &&

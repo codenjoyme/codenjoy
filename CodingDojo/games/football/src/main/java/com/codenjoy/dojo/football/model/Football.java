@@ -27,15 +27,17 @@ import com.codenjoy.dojo.football.model.elements.Goal;
 import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.model.elements.Wall;
 import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import static com.codenjoy.dojo.services.PointImpl.*;
+
+import static com.codenjoy.dojo.services.BoardUtils.NO_SPACE;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Football implements Field {
 
@@ -126,62 +128,34 @@ public class Football implements Field {
     }
 
     @Override
-    public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(rndX, rndY);
-    }
-
-    @Override
     public Point getFreeRandomOnMyHalf(Player player) {
-        int rndX;
-        int rndY;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFreeAndOnMyHalf(rndX, rndY, player) && c++ < 100);
+        Point result = BoardUtils.getFreeRandom(size, dice,
+                pt -> isFreeAndOnMyHalf(pt, player));
 
-        if (c >= 100) {
-            return pt(0, 0);
+        if (!result.equals(NO_SPACE)) {
+            return result;
         }
 
-        if (rndX == 0 && rndY == 0) {
-            return getFreeRandom();
-        }
-
-        return pt(rndX, rndY);
+        return BoardUtils.getFreeRandom(size, dice,
+                pt -> isFree(pt));
     }
 
-    private boolean isFreeAndOnMyHalf(int x, int y, Player player) {
-        Point pt = pt(x, y);
-
-        boolean yOnMyHalf;
-        if (player.getMyGoal() == Elements.TOP_GOAL) {
-            yOnMyHalf = y > (size / 2);
-        } else {
-            yOnMyHalf = y < (size / 2);
-        }
-
-        return yOnMyHalf &&
+    private boolean isFreeAndOnMyHalf(Point pt, Player player) {
+        return isOnMyHalf(pt, player) &&
                 !walls.contains(pt) &&
                 !getHeroes().contains(pt);
     }
 
-    @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
+    private boolean isOnMyHalf(Point pt, Player player) {
+        if (player.getMyGoal() == Elements.TOP_GOAL) {
+            return pt.getY() > (size / 2);
+        } else {
+            return pt.getY() < (size / 2);
+        }
+    }
 
+    @Override
+    public boolean isFree(Point pt) {
         return !walls.contains(pt) &&
                 !getHeroes().contains(pt);
     }

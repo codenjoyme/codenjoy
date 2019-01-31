@@ -23,13 +23,15 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 import com.codenjoy.dojo.fifteen.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import static com.codenjoy.dojo.services.PointImpl.*;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Fifteen implements Field {
     private final Level level;
@@ -84,23 +86,6 @@ public class Fifteen implements Field {
             }
         }
         return null;
-    }
-
-    @Override
-    public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(rndX, rndY);
     }
 
     @Override

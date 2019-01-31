@@ -23,7 +23,10 @@ package com.codenjoy.dojo.snakebattle.model.board;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
@@ -154,6 +157,11 @@ public class SnakeBoard implements Field {
             setApple(getFreeRandom());
     }
 
+    @Override
+    public Point getFreeRandom() {
+        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
+    }
+
     private void fireWinEvents() {
         if (theWalkingDead.isEmpty()) {
             return;
@@ -258,7 +266,7 @@ public class SnakeBoard implements Field {
 
         List<Player> players = aliveActiveOrReady();
         if (players.size() == 1) {
-            if (round == roundsPerMatch.getValue()) {
+            if (isMatchOver()) {
                 players.get(0).leaveBoard();
             } else {
                 newGame(players.get(0));
@@ -270,6 +278,12 @@ public class SnakeBoard implements Field {
         return players.size() <= 1;
     }
 
+    private boolean isMatchOver() {
+        // тут >= а не == потому что на админке можно поменять roundsPerMatch
+        // в меньшую сторону и тут можно зациклится в противном случае
+        return round >= roundsPerMatch.getValue();
+    }
+
     public int size() {
         return size;
     }
@@ -277,23 +291,6 @@ public class SnakeBoard implements Field {
     @Override
     public boolean isBarrier(Point p) {
         return p.isOutOf(size) || walls.contains(p) || starts.contains(p);
-    }
-
-    @Override
-    public Point getFreeRandom() {
-        int x;
-        int y;
-        int c = 0;
-        do {
-            x = dice.next(size);
-            y = dice.next(size);
-        } while (!isFree(x, y) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(x, y);
     }
 
     @Override
@@ -307,12 +304,6 @@ public class SnakeBoard implements Field {
             if (freeOfHero(start))
                 return start;
         return pt(0, 0);
-    }
-
-    @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-        return isFree(pt);
     }
 
     public boolean isFree(Point pt) {
@@ -390,7 +381,7 @@ public class SnakeBoard implements Field {
 
     @Override
     public void oneMoreDead(Player player) {
-        player.die(round == roundsPerMatch.getValue());
+        player.die(isMatchOver());
         theWalkingDead.add(player);
     }
 

@@ -24,15 +24,15 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.services.Events;
-import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -294,20 +294,7 @@ public class Loderunner implements Field {
 
     @Override
     public Point getFreeRandom() {
-        int x;
-        int y;
-        int c = 0;
-        do {
-            x = dice.next(size);
-            y = dice.next(size);
-            // TODO подумать над тем, чтобы золото не накапливалось под кирпичами
-        } while (!isFree(x, y) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);  // этого никогда не должно случиться, но никогда не говори никогда. чтобы заметить поставил координаты 0, 0
-        }
-
-        return pt(x, y);
+        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
     private boolean isGround(int x, int y) {
@@ -329,9 +316,7 @@ public class Loderunner implements Field {
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
+    public boolean isFree(Point pt) {
         return !(gold.contains(pt)
                 || is(pt, Border.class)
                 || is(pt, Brick.class)

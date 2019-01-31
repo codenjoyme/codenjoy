@@ -27,15 +27,15 @@ import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.sample.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -96,8 +96,10 @@ public class Sample implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        Point pt = pt(x, y);
+    public boolean isBarrier(Point pt) {
+        int x = pt.getX();
+        int y = pt.getY();
+
         return x > size - 1
                 || x < 0
                 || y < 0
@@ -108,25 +110,11 @@ public class Sample implements Field {
 
     @Override
     public Point getFreeRandom() {
-        int x;
-        int y;
-        int c = 0;
-        do {
-            x = dice.next(size);
-            y = dice.next(size);
-        } while (!isFree(x, y) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(x, y);
+        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
+    public boolean isFree(Point pt) {
         return !(gold.contains(pt)
                 || bombs.contains(pt)
                 || walls.contains(pt)
@@ -134,21 +122,20 @@ public class Sample implements Field {
     }
 
     @Override
-    public boolean isBomb(int x, int y) {
-        return bombs.contains(pt(x, y));
+    public boolean isBomb(Point pt) {
+        return bombs.contains(pt);
     }
 
     @Override
-    public void setBomb(int x, int y) {
-        Point pt = pt(x, y);
+    public void setBomb(Point pt) {
         if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(x, y));
+            bombs.add(new Bomb(pt));
         }
     }
 
     @Override
-    public void removeBomb(int x, int y) {
-        bombs.remove(pt(x, y));
+    public void removeBomb(Point pt) {
+        bombs.remove(pt);
     }
 
     public List<Gold> getGold() {

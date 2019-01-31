@@ -23,15 +23,15 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
-import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -184,26 +184,12 @@ public class Hex implements Field {
     }
 
     @Override
-    public Point getFreeRandom() { // TODO найти место чтобы вокруг было свободно
-        int x;
-        int y;
-        int c = 0;
-        do {
-            x = dice.next(size);
-            y = dice.next(size);
-        } while (!isFree(x, y) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(x, y);
+    public Point getFreeRandom() {
+        return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
+    public boolean isFree(Point pt) {
         return !walls.contains(pt) &&
                 !getHeroes().contains(pt);
     }
