@@ -43,6 +43,7 @@ public class Player extends GamePlayer<Hero, Field> {
     public void start(int round) {
         event(Events.START);
         printMessage("Round " + round);
+        hero.setActive(true);
     }
 
     public Hero getHero() {

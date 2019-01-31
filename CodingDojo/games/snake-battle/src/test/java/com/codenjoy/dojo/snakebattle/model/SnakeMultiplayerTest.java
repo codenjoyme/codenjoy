@@ -1010,10 +1010,10 @@ public class SnakeMultiplayerTest {
         game.tick();
 
         assertEquals(true, heroPlayer.isAlive());
-        assertEquals(false, heroPlayer.isActive());
+        assertEquals(true, heroPlayer.isActive());
 
         assertEquals(true, enemyPlayer.isAlive());
-        assertEquals(false, enemyPlayer.isActive());
+        assertEquals(true, enemyPlayer.isActive());
 
         verify(heroEvents).event(Events.START);
         verify(enemyEvents).event(Events.START);
@@ -1023,7 +1023,8 @@ public class SnakeMultiplayerTest {
         verifyNoMoreInteractions(heroEvents, enemyEvents);
         reset(heroEvents, enemyEvents);
 
-        readyGo();
+        assertEquals(true, heroPlayer.isActive());
+        assertEquals(true, enemyPlayer.isActive());
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
@@ -1085,10 +1086,10 @@ public class SnakeMultiplayerTest {
         game.tick();
 
         assertEquals(true, heroPlayer.isAlive());
-        assertEquals(false, heroPlayer.isActive());
+        assertEquals(true, heroPlayer.isActive());
 
         assertEquals(true, enemyPlayer.isAlive());
-        assertEquals(false, enemyPlayer.isActive());
+        assertEquals(true, enemyPlayer.isActive());
 
         verify(heroEvents).event(Events.START);
         verify(enemyEvents).event(Events.START);
@@ -1098,22 +1099,8 @@ public class SnakeMultiplayerTest {
         verifyNoMoreInteractions(heroEvents, enemyEvents);
         reset(heroEvents, enemyEvents);
 
-        // пока змейку не мувнут, они не двигаются
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-
-        assertH("☼☼☼☼☼☼☼☼" +
-                "☼☼     ☼" +
-                "☼☼     ☼" +
-                "~&     ☼" +
-                "*ø     ☼" +
-                "☼☼     ☼" +
-                "☼☼     ☼" +
-                "☼☼☼☼☼☼☼☼");
-
-        readyGo();
+        assertEquals(true, heroPlayer.isActive());
+        assertEquals(true, enemyPlayer.isActive());
 
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
@@ -1176,17 +1163,6 @@ public class SnakeMultiplayerTest {
         game.remove(heroPlayer);  // это делает автоматом фреймворк потому что heroPlayer.shouldLeave()
         game.remove(enemyPlayer); // это делает автоматом фреймворк потому что enemyPlayer.shouldLeave()
 
-    }
-
-    private void readyGo() {
-        assertEquals(false, heroPlayer.isActive());
-        assertEquals(false, enemyPlayer.isActive());
-        heroPlayer.getHero().act(); // первое движение змейки заставляет ее начинать движение
-        assertEquals(true, heroPlayer.isActive());
-        assertEquals(false, enemyPlayer.isActive());
-        enemyPlayer.getHero().act(); // первое движение змейки заставляет ее начинать движение
-        assertEquals(true, heroPlayer.isActive());
-        assertEquals(true, enemyPlayer.isActive());
     }
 
     // Змейка с одной только головой не живет
