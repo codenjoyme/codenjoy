@@ -79,6 +79,8 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.actionLogger
                         = this.actionLogger = mock(ActionLogger.class);
+
+                this.isAINeeded = true;
             }
 
             protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {

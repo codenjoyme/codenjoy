@@ -83,7 +83,7 @@ public class PlayerServiceImpl implements PlayerService {
     protected ActionLogger actionLogger;
 
     @Value("${game.ai}")
-    private boolean isAINeeded;
+    protected boolean isAINeeded;
 
     @PostConstruct
     public void init() {
