@@ -42,7 +42,7 @@ public class BoardUtils {
                                       Supplier<Integer> getY,
                                       Predicate<Point> isFree)
     {
-        Point result = NO_SPACE;
+        Point result = new PointImpl();
         int count = 0;
         int max = 100;
         do {
@@ -51,7 +51,7 @@ public class BoardUtils {
         } while (!isFree.test(result) && count++ < max);
 
         if (count >= max) {
-            return NO_SPACE;
+            return NO_SPACE.copy();
         }
 
         return result;

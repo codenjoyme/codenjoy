@@ -137,7 +137,7 @@ public class Moebius implements Field {
     @Override
     public Point getFreeRandom() {
         return BoardUtils.getFreeRandom(size, dice,
-                pt -> pt.isOutOf(1, 1, size) || !isFree(pt));
+                pt -> !pt.isOutOf(1, 1, size) && isFree(pt));
     }
 
     @Override
