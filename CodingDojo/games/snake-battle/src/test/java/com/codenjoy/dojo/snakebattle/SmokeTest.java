@@ -26,12 +26,15 @@ package com.codenjoy.dojo.snakebattle;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.snakebattle.client.Board;
+import com.codenjoy.dojo.snakebattle.client.YourSolver;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
 import com.codenjoy.dojo.snakebattle.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -1852,5 +1855,22 @@ public class SmokeTest {
                         "------------------------------------------",
                 String.join("\n", messages));
 
+    }
+
+    public static void main(String[] args) {
+        LocalGameRunner.timeout = 10;
+        LocalGameRunner.run(
+                new GameRunner(){{
+                    settings.getParameter("Rounds per Match").update(1);
+                    settings.getParameter("Players per Room").update(2);
+                }},
+                new ArrayList<Solver>() {{
+                    add(new AISolver(new RandomDice()));
+                    add(new YourSolver(new RandomDice()));
+                }},
+                new ArrayList<ClientBoard>() {{
+                    add(new Board());
+                    add(new Board());
+                }});
     }
 }
