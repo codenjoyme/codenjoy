@@ -53,7 +53,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         new Scores(0, settings);
         timeBeforeStart = settings.addEditBox("Time before start Round").type(Integer.class).def(5);
         roundsPerMatch = settings.addEditBox("Rounds per Match").type(Integer.class).def(1);
-        playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(10);
+        playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
         level = new LevelImpl(getMap());
     }
 
