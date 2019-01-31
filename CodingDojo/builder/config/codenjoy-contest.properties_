@@ -21,6 +21,7 @@
 ###
 #
 game.save.auto=true
+board.save.ticks=1
 game.ai=true
 log.debug=false
 page.main=

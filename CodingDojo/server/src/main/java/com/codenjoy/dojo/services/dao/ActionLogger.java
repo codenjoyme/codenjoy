@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -38,7 +39,8 @@ import java.util.concurrent.Executors;
 @Component
 public class ActionLogger extends Suspendable {
 
-    private final int ticksPerSave;
+    @Value("${board.save.ticks}")
+    private int ticks;
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
@@ -46,8 +48,7 @@ public class ActionLogger extends Suspendable {
 
     private CrudConnectionThreadPool pool;
 
-    public ActionLogger(ConnectionThreadPoolFactory factory, int ticksPerSave) {
-        this.ticksPerSave = ticksPerSave;
+    public ActionLogger(ConnectionThreadPoolFactory factory) {
         pool = factory.create("CREATE TABLE IF NOT EXISTS player_boards (" +
                     "time varchar(255), " +
                     "player_name varchar(255), " +
@@ -56,6 +57,10 @@ public class ActionLogger extends Suspendable {
                     "board varchar(10000));");
         active = false;
         count = 0;
+    }
+
+    public void setTicks(int ticks) {
+        this.ticks = ticks;
     }
 
     void removeDatabase() {
@@ -105,7 +110,7 @@ public class ActionLogger extends Suspendable {
                     playerGame.getGame().getBoardAsString().toString()));
         }
 
-        if (count++ % ticksPerSave == 0) {
+        if (count++ % ticks == 0) {
             // executor.submit потому что sqlite тормозит при сохранении
             executor.submit(() -> saveToDB());
         }

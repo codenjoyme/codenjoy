@@ -52,7 +52,8 @@ public class ActionLoggerTest {
                                 public String getContext() {
                                     return "context";
                                 }
-                            }), 1);
+                            }));
+        logger.setTicks(1);
     }
 
     @After

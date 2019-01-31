@@ -35,7 +35,6 @@
 
     <bean id="actionLogger" class="com.codenjoy.dojo.services.dao.ActionLogger">
         <constructor-arg ref="connectionThreadPollFactory"/>
-        <constructor-arg value="20"/>
     </bean>
 
     <bean id="playerGameSaver" class="com.codenjoy.dojo.services.dao.PlayerGameSaver">
