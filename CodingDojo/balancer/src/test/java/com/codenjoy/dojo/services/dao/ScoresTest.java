@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.dao;
  * #L%
  */
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
@@ -48,7 +49,15 @@ public class ScoresTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }));
+                        }))
+        {{
+            this.properties = new ConfigProperties(){
+                @Override
+                public String getGameFinalTime() {
+                    return "19:00";
+                }
+            };
+        }};
     }
 
     @AfterMethod
@@ -173,10 +182,16 @@ public class ScoresTest {
         service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
         service.saveScore(time1, "bob.marley@gmail.com", 3000);
 
-        long time2 = day(day1).plus(Calendar.SECOND, 11).getTimeInMillis();
-        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
-        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
-        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+        // это время финального свистка, показывается из будущего в этот день
+        long time19 = day(day1).plus(Calendar.HOUR, 19).getTimeInMillis();
+        service.saveScore(time19, "stiven.pupkin@gmail.com", 1111);
+        service.saveScore(time19, "eva.pupkina@gmail.com", 2222);
+
+        // а это время уже после 19:00
+        long time2 = day(day1).plus(Calendar.HOUR, 20).getTimeInMillis();
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1222);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2333);
+        service.saveScore(time2, "bob.marley@gmail.com", 3444);
 
         String day2 = "2019-01-28";
 
@@ -197,12 +212,10 @@ public class ScoresTest {
         long last1 = service.getLastTimeOf(day1);
         assertEquals(last1, time2);
 
-        String lastInfoOfDay1 = "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1001', server='null'}, " +
-                "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2001', server='null'}, " +
-                "PlayerScore{id='bob.marley@gmail.com', name='null', score='3001', server='null'}]";
-
         assertEquals(service.getScores(day1, last1).toString(),
-                lastInfoOfDay1);
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1222', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2333', server='null'}, " +
+                        "PlayerScore{id='bob.marley@gmail.com', name='null', score='3444', server='null'}]");
 
         // конкретное инфо прошлого дня
         assertEquals(service.getScores(day1, time1).toString(),
@@ -230,7 +243,8 @@ public class ScoresTest {
         // а что если для текущего момента, но запрос сделали прошлого дня
         // возьмет последние данные за прошлый день
         assertEquals(service.getScores(day1, last2).toString(),
-                lastInfoOfDay1);
+                "[PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1111', server='null'}, " +
+                        "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2222', server='null'}]");
     }
 
     @Test
