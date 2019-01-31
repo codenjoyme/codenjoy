@@ -1188,5 +1188,83 @@ public class SnakeMultiplayerTest {
         assertEquals(true, heroPlayer.isActive());
         assertEquals(true, enemyPlayer.isActive());
     }
+
+    // Змейка с одной только головой не живет
+    // идея в том, чтоб под таблеткой ярости откусить конец хвоста, оставив только голову
+    @Test
+    public void shouldDie_whenEatAllTailOtherSnake_with1Length() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╘═►   ☼" +
+                "☼   ®  ☼" +
+                "☼   ˄  ☼" +
+                "☼   ¤  ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╘═►   ☼" +
+                "☼   ®  ☼" +
+                "☼   ˄  ☼" +
+                "☼   ¤  ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼×─>   ☼" +
+                "☼   ®  ☼" +
+                "☼   ▲  ☼" +
+                "☼   ╙  ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼   ♣► ☼" +
+                "☼   ¤  ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼   ♥> ☼" +
+                "☼   ╙  ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼   ♣  ☼" +
+                "☼   ¤ ►☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼   ♥  ☼" +
+                "☼   ╙ >☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+//        verify(heroEvents).event(Events.WIN);
+//        verify(enemyEvents).event(Events.DIE);
+
+
+    }
 }
 
