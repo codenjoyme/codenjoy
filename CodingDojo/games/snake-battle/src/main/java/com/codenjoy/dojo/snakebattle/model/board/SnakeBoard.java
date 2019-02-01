@@ -36,6 +36,7 @@ import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -57,23 +58,25 @@ public class SnakeBoard implements Field {
     private List<Player> players;
     private List<Player> theWalkingDead;
 
-    private Timer timer;
+    private Timer fightTimer;
+    private Timer roundTimer;
+    private int round;
+
     private Parameter<Integer> roundsPerMatch;
     private Parameter<Integer> flyingCount;
     private Parameter<Integer> furyCount;
     private Parameter<Integer> stoneReduced;
-    private int round;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer timer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced) {
-        this.roundsPerMatch = roundsPerMatch;
+    public SnakeBoard(Level level, Dice dice, Timer fightTimer, Timer roundTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced) {
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
+        this.stoneReduced = stoneReduced;
+        this.roundsPerMatch = roundsPerMatch;
 
         this.dice = dice;
-        this.stoneReduced = stoneReduced;
         round = 0;
         walls = level.getWalls();
         starts = level.getStartPoints();
@@ -86,26 +89,48 @@ public class SnakeBoard implements Field {
         players = new LinkedList<>();
         theWalkingDead = new LinkedList<>();
 
-        this.timer = timer.reset();
+        this.fightTimer = fightTimer.reset();
+        this.roundTimer = roundTimer.reset();
     }
 
     @Override
     public void tick() {
         snakesClear();
 
-        timer.tick(this::sendTimerStatus);
+        fightTimer.tick(this::sendTimerStatus);
+        roundTimer.time();
 
-        if (timer.justFinished()) {
-            round++;
-            players.forEach(p -> p.start(round));
+        if (roundTimer.justFinished()) {
+            List<Hero> heroes = aliveActive().stream()
+                    .map(p -> p.getHero())
+                    .sorted(Comparator.comparingInt(Hero::size))
+                    .collect(toList());
+            if (heroes.size() > 1) {
+                heroes.get(0).event(Events.WIN);
+                for (int i = 1; i < heroes.size(); i++) {
+                    if (heroes.get(i - 1).size() == heroes.get(i).size()) {
+                        heroes.get(i).event(Events.WIN);
+                    } else {
+                        break;
+                    }
+                }
+            }
+            aliveActive().forEach(player -> reset(player));
+            return;
         }
 
-        if (!timer.done()) {
+        if (fightTimer.justFinished()) {
+            round++;
+            players.forEach(p -> p.start(round));
+            roundTimer.reset();
+        }
+
+        if (!fightTimer.done()) {
             return;
         }
 
         if (restartIfLast()) {
-            timer.reset();
+            fightTimer.reset();
             return;
         }
 
@@ -116,8 +141,8 @@ public class SnakeBoard implements Field {
     }
 
     private void sendTimerStatus() {
-        String pad = StringUtils.leftPad("", timer.time(), '.');
-        String message = pad + timer.time() + pad;
+        String pad = StringUtils.leftPad("", fightTimer.time(), '.');
+        String message = pad + fightTimer.time() + pad;
         players.forEach(player -> player.printMessage(message));
     }
 
@@ -276,22 +301,26 @@ public class SnakeBoard implements Field {
     }
 
     private boolean restartIfLast() {
-        if (timer.unlimited()) {
+        if (fightTimer.unlimited()) {
             return false;
         }
 
         List<Player> players = aliveActive();
         if (players.size() == 1) {
-            if (isMatchOver()) {
-                players.get(0).leaveBoard();
-            } else {
-                newGame(players.get(0));
-            }
+            reset(players.get(0));
         }
 
         // если остался один игрок или вообще никого -
         // мы перегружаемся
         return players.size() <= 1;
+    }
+
+    private void reset(Player player) {
+        if (isMatchOver()) {
+            player.leaveBoard();
+        } else {
+            newGame(player);
+        }
     }
 
     private boolean isMatchOver() {

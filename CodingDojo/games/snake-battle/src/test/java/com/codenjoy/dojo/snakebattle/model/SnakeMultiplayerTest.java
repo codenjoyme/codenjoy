@@ -72,6 +72,7 @@ public class SnakeMultiplayerTest {
         LevelImpl level = new LevelImpl(board);
         game = new SnakeBoard(level, dice,
                 new Timer(timer),
+                new Timer(new SimpleParameter<>(300)),
                 roundsPerMatch,
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),

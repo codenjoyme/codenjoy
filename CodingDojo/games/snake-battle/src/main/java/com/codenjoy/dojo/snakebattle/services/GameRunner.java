@@ -51,9 +51,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     private final Parameter<Integer> flyingCount;
     private final Parameter<Integer> furyCount;
     private final Parameter<Integer> stoneReducedValue;
+    private final Parameter<Integer> timePerRound;
 
     public GameRunner() {
         new Scores(0, settings);
+        timePerRound = settings.addEditBox("Time per Round").type(Integer.class).def(300);
         timeBeforeStart = settings.addEditBox("Time before start Round").type(Integer.class).def(5);
         roundsPerMatch = settings.addEditBox("Rounds per Match").type(Integer.class).def(1);
         playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
@@ -99,6 +101,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameField createGame(int levelNumber) {
         return new SnakeBoard(level, getDice(),
                 new Timer(timeBeforeStart),
+                new Timer(timePerRound),
                 roundsPerMatch,
                 flyingCount,
                 furyCount,
@@ -127,7 +130,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Class<? extends Solver> getAI() {
-        return DummyAISolver.class;
+        return AISolver.class;
     }
 
     @Override
