@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.hero.Tail;
@@ -53,6 +54,8 @@ public class SnakeHeroTest {
     public void setup() {
         hero = new Hero(pt(0, 0));
         game = mock(SnakeBoard.class);
+        when(game.flyingCount()).thenReturn(new SimpleParameter<>(10));
+        when(game.furyCount()).thenReturn(new SimpleParameter<>(10));
         hero.init(game);
         hero.setActive(true);
         hero.setPlayer(mock(Player.class));
@@ -137,10 +140,8 @@ public class SnakeHeroTest {
         hero.tick();
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
-        assertEquals("Змейка укоротилась раньше чем должна!", before, hero.size());
-        hero.tick();
-        assertTrue("Большая змейка погибла от камня!", hero.isAlive());
         assertEquals("Змейка не укоротилась на предполагаемую длину!", before - reducedValue, hero.size());
+        hero.tick();
     }
 
     // змейка может откусить себе хвост

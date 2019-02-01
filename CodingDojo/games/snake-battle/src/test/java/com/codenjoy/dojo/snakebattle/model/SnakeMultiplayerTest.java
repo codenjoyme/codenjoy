@@ -1614,7 +1614,7 @@ public class SnakeMultiplayerTest {
         verifyNoMoreInteractions(enemyEvents);
     }
 
-    private void verifyEvents(EventListener events, String expected) {
+    public static void verifyEvents(EventListener events, String expected) {
         if (expected.equals("[]")) {
             verify(events, never()).event(any(Events.class));
         } else {

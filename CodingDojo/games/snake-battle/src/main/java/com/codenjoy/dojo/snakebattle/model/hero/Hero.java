@@ -40,6 +40,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private static final int STONE_REDUCED_VALUE = 3;
     private static final int MINIMUM_LENGTH = 2;
 
+    public static final boolean NOW = true;
+    public static final boolean NEXT_TICK = !NOW;
+
     private LinkedList<Tail> elements;
     private boolean alive;
     private Direction direction;
@@ -201,7 +204,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         if (field.isStone(next) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
-                reduce(STONE_REDUCED_VALUE);
+                reduce(STONE_REDUCED_VALUE, NOW);
                 clearReduced();
             }
         }
@@ -255,14 +258,18 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         }
     }
 
-    public int reduce(int len) {
+    public int reduce(int len, boolean now) {
         reduced = true;
         int was = size();
         if (was < len + MINIMUM_LENGTH) {
             die();
             return was;
         } else {
-            growBy = -len;
+            if (now) {
+                elements = new LinkedList<>(elements.subList(len, elements.size()));
+            } else {
+                growBy = -len;
+            }
             return len;
         }
     }

@@ -41,6 +41,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NEXT_TICK;
+import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NOW;
 import static java.util.stream.Collectors.toList;
 
 public class SnakeBoard implements Field {
@@ -231,12 +233,12 @@ public class SnakeBoard implements Field {
                     int enemyCut = enemy.size();
 
                     if (!hero.reduced()) {
-                        int len = hero.reduce(enemyCut);
+                        int len = hero.reduce(enemyCut, NEXT_TICK);
                         info.add(new ReduceInfo(enemy, len));
                     }
 
                     if (!enemy.reduced()) {
-                        int len = enemy.reduce(heroCut);
+                        int len = enemy.reduce(heroCut, NEXT_TICK);
                         info.add(new ReduceInfo(hero, len));
                     }
                 }
