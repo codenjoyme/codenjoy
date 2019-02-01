@@ -170,45 +170,42 @@ public class Tail extends PointImpl implements State<Elements, Object> {
 
     @Override
     public Elements state(Object player, Object... alsoAtPoint) {
-        if (!(player instanceof Player) ||
-                ((Player) player).getHero() == null ||
-                snake == null)
-            return OTHER;
-        return snakePart(((Player) player).getHero().equals(snake),
-                Arrays.asList(alsoAtPoint));
+        Hero hero = ((Player) player).getHero();
+
+        return snakePart(hero, Arrays.asList(alsoAtPoint));
     }
 
-    private Elements snakePart(boolean itIsMyHero, List<Object> alsoAtPoint) {
+    private Elements snakePart(Hero hero, List<Object> alsoAtPoint) {
         Tail higher = getHigher(alsoAtPoint);
-
         Hero snake = higher.snake;
+        boolean itsMe = hero.equals(snake);
         if (higher.isHead()) {
             if (snake.isAlive()) {
                 if (!snake.isActive()) {
-                    return itIsMyHero ? HEAD_SLEEP : ENEMY_HEAD_SLEEP;
+                    return itsMe ? HEAD_SLEEP : ENEMY_HEAD_SLEEP;
                 } else if (snake.isFlying()) {
-                    return itIsMyHero ? HEAD_FLY : ENEMY_HEAD_FLY;
+                    return itsMe ? HEAD_FLY : ENEMY_HEAD_FLY;
                 } else if (snake.isFury()) {
-                    return itIsMyHero ? HEAD_EVIL : ENEMY_HEAD_EVIL;
+                    return itsMe ? HEAD_EVIL : ENEMY_HEAD_EVIL;
                 } else {
-                    return getHead(snake.getDirection(), itIsMyHero);
+                    return getHead(snake.getDirection(), itsMe);
                 }
             } else {
-                return itIsMyHero ? HEAD_DEAD : ENEMY_HEAD_DEAD;
+                return itsMe ? HEAD_DEAD : ENEMY_HEAD_DEAD;
             }
         }
         if (higher.isTail()) {
             if (snake.isActive()) {
-                return getTail(snake.getTailDirection(), itIsMyHero);
+                return getTail(snake.getTailDirection(), itsMe);
             } else {
-                return itIsMyHero ? TAIL_INACTIVE : ENEMY_TAIL_INACTIVE;
+                return itsMe ? TAIL_INACTIVE : ENEMY_TAIL_INACTIVE;
             }
         }
-        return getBody(snake.getBodyDirection(higher), itIsMyHero);
+        return getBody(snake.getBodyDirection(higher), itsMe);
     }
 
-    private Tail getHigher(List<Object> alsoAtPoint) {
-        return alsoAtPoint.stream()
+    private Tail getHigher(List<Object> elements) {
+        return elements.stream()
                 .filter(p -> p instanceof Tail)
                 .map(p -> (Tail)p)
                 .sorted((t1, t2) -> {

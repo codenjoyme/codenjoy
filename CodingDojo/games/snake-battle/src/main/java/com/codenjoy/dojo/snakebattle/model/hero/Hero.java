@@ -276,7 +276,8 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public boolean isHeadIntersect(Hero enemy) {
         return enemy.head().equals(head()) ||
-                enemy.neck().equals(head()) && neck().equals(enemy.head());
+                enemy.neck().equals(head()) ||
+                neck().equals(enemy.head());
     }
 
     @Override
@@ -413,5 +414,10 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s,%s]", head().getX(), head().getY());
     }
 }

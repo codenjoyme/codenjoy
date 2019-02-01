@@ -48,9 +48,9 @@ public enum Elements implements CharElements {
     HEAD_RIGHT('►'),
     HEAD_UP('▲'),
     HEAD_DEAD('☻'),    // этот раунд ты проиграл
-    HEAD_EVIL('♥'),    // скушали таблетку ярости
-    HEAD_FLY('♠'),     // скушали таблетку полета
-    HEAD_SLEEP('&'),   // змейка ожидает начала раунда
+    HEAD_EVIL('♥'),    // ты скушал таблетку ярости
+    HEAD_FLY('♠'),     // ты скушал таблетку полета
+    HEAD_SLEEP('&'),   // твоя змейка ожидает начала раунда
 
     // хвост твоей змейки
     TAIL_END_DOWN('╙'),
@@ -75,14 +75,14 @@ public enum Elements implements CharElements {
     ENEMY_HEAD_DEAD('☺'),   // этот раунд противник проиграл
     ENEMY_HEAD_EVIL('♣'),   // противник скушал таблетку ярости
     ENEMY_HEAD_FLY('♦'),    // противник скушал таблетку полета
-    ENEMY_HEAD_SLEEP('ø'),  // змейка ожидает начала раунда
+    ENEMY_HEAD_SLEEP('ø'),  // змейка противника ожидает начала раунда
 
     // хвосты змеек противников
     ENEMY_TAIL_END_DOWN('¤'),
     ENEMY_TAIL_END_LEFT('×'),
     ENEMY_TAIL_END_UP('æ'),
     ENEMY_TAIL_END_RIGHT('ö'),
-    ENEMY_TAIL_INACTIVE('*' ),
+    ENEMY_TAIL_INACTIVE('*'),
 
     // туловище змеек противников
     ENEMY_BODY_HORIZONTAL('─'),
