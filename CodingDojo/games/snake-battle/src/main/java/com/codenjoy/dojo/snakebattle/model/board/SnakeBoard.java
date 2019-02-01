@@ -39,6 +39,7 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -326,13 +327,17 @@ public class SnakeBoard implements Field {
 
     @Override
     public Hero getAnotherHero(Hero me) {
-        return aliveActive().stream()
-                .map(Player::getHero)
-                .filter(h -> !h.equals(me))
+        return aliveEnemies(me)
                 .filter(h -> !h.isFlying())
                 .filter(h -> h.getBody().contains(me.getHead()))
                 .findFirst()
                 .orElse(null);
+    }
+
+    private Stream<Hero> aliveEnemies(Hero me) {
+        return aliveActive().stream()
+                .map(Player::getHero)
+                .filter(h -> !h.equals(me));
     }
 
     @Override
@@ -342,9 +347,7 @@ public class SnakeBoard implements Field {
     }
 
     private Hero enemyCrossedWith(Hero me) {
-        return aliveActive().stream()
-                .map(Player::getHero)
-                .filter(h -> !h.equals(me))
+        return aliveEnemies(me)
                 .filter(h -> me.isHeadIntersect(h))
                 .findFirst()
                 .orElse(null);
