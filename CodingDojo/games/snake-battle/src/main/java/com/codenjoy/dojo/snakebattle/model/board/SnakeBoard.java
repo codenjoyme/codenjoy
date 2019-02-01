@@ -101,20 +101,16 @@ public class SnakeBoard implements Field {
         roundTimer.time();
 
         if (roundTimer.justFinished()) {
-            List<Hero> heroes = aliveActive().stream()
+            Integer maxScore = aliveActive().stream()
+                    .map(p -> p.getHero().size())
+                    .max(Comparator.comparingInt(i1 -> i1))
+                    .orElse(Integer.MAX_VALUE);
+
+            aliveActive().stream()
                     .map(p -> p.getHero())
-                    .sorted(Comparator.comparingInt(Hero::size))
-                    .collect(toList());
-            if (heroes.size() > 1) {
-                heroes.get(0).event(Events.WIN);
-                for (int i = 1; i < heroes.size(); i++) {
-                    if (heroes.get(i - 1).size() == heroes.get(i).size()) {
-                        heroes.get(i).event(Events.WIN);
-                    } else {
-                        break;
-                    }
-                }
-            }
+                    .filter(h -> h.size() == maxScore)
+                    .forEach(h -> h.event(Events.WIN));
+
             aliveActive().forEach(player -> reset(player));
             return;
         }
