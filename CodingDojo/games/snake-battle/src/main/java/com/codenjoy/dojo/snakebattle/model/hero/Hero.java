@@ -36,7 +36,9 @@ import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
 import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
-    private static final int reducedValue = 3;
+
+    private static final int STONE_REDUCED_VALUE = 3;
+    private static final int MINIMUM_LENGTH = 2;
 
     private LinkedList<Tail> elements;
     private boolean alive;
@@ -113,9 +115,11 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public Point getNeck() {
-        if (elements.size() < 2)
+        // TODO я не уверен что тут стоило 2ку заменять на константу
+        if (elements.size() < MINIMUM_LENGTH) {
             return pt(-1, -1);
-        return elements.get(elements.size() - 2);
+        }
+        return elements.get(elements.size() - MINIMUM_LENGTH);
     }
 
     @Override
@@ -195,8 +199,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             growBy(1);
         if (field.isStone(next) && !isFlying()) {
             stonesCount++;
-            if (!isFury())
-                reduce(reducedValue);
+            if (!isFury()) {
+                reduce(STONE_REDUCED_VALUE);
+            }
         }
         if (field.isFlyingPill(next))
             flyingCount += 10;
@@ -238,13 +243,17 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public void reduceFromPoint(Point from) {
         elements = new LinkedList<>(elements.subList(elements.indexOf(from) + 1, elements.size()));
+        if (size() < MINIMUM_LENGTH) {
+            die();
+        }
     }
 
     public void reduce(int reducedValue) {
-        if (size() < reducedValue + 2)
+        if (size() < reducedValue + MINIMUM_LENGTH) {
             die();
-        else
+        } else {
             growBy = -reducedValue;
+        }
     }
 
     public Point getNextPoint() {

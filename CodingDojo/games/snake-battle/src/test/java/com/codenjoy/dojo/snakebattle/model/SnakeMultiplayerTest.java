@@ -1199,10 +1199,13 @@ public class SnakeMultiplayerTest {
         game.tick();
         game.tick();
 
+        verify(heroEvents).event(Events.DIE);
+        verify(enemyEvents).event(Events.WIN);
+
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼   ♣► ☼" +
+                "☼   ♣☻ ☼" +
                 "☼   ¤  ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -1211,7 +1214,7 @@ public class SnakeMultiplayerTest {
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼   ♥> ☼" +
+                "☼   ♥☺ ☼" +
                 "☼   ╙  ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -1222,7 +1225,7 @@ public class SnakeMultiplayerTest {
         assertH("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼   ♣  ☼" +
-                "☼   ¤ ►☼" +
+                "☼   ¤  ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -1231,16 +1234,14 @@ public class SnakeMultiplayerTest {
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼   ♥  ☼" +
-                "☼   ╙ >☼" +
+                "☼   ╙  ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼☼☼☼☼☼☼☼");
 
-//        verify(heroEvents).event(Events.WIN);
-//        verify(enemyEvents).event(Events.DIE);
-
-
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
     }
 
     // с помощью этой команды можно самоуничтожиться
