@@ -350,12 +350,9 @@ public class SnakeBoard implements Field {
     }
 
     private Hero checkHeadByHeadCollision(Hero hero) {
-        List<Hero> other = aliveActive().stream()
+        return aliveActive().stream()
                 .map(Player::getHero)
                 .filter(h -> !h.equals(hero))
-                .collect(toList());
-
-        return other.stream()
                 .filter(enemy -> hero.isHeadIntersect(enemy))
                 .findFirst()
                 .orElse(null);
