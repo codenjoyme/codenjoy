@@ -213,7 +213,7 @@ public class SnakeBoard implements Field {
             } else if (getAnotherHero(hero) != null) {
                 if (hero.isFury()) {
                     Hero reducedEnemy = getAnotherHero(hero);
-                    reducedEnemy.reduceFromPoint(hero.getHead());
+                    reducedEnemy.reduceFromPoint(hero.head());
                 } else {
                     hero.die();
                 }
@@ -333,7 +333,7 @@ public class SnakeBoard implements Field {
     public Hero getAnotherHero(Hero me) {
         return aliveEnemies(me)
                 .filter(h -> !h.isFlying())
-                .filter(h -> h.getBody().contains(me.getHead()))
+                .filter(h -> h.getBody().contains(me.head()))
                 .findFirst()
                 .orElse(null);
     }
@@ -504,7 +504,7 @@ public class SnakeBoard implements Field {
             return new Wall(additionObject);
         for (Player player : players)
             if (player.getHero().getBody().contains(additionObject))
-                return player.getHero().getNeck(); // это просто любой объект типа Tail
+                return player.getHero().neck(); // это просто любой объект типа Tail
         return null;
     }
 }

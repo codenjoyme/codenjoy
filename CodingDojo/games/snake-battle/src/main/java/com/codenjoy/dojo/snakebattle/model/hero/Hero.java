@@ -79,12 +79,12 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public int getX() {
-        return getHead().getX();
+        return head().getX();
     }
 
     @Override
     public int getY() {
-        return getHead().getY();
+        return head().getY();
     }
 
     @Override
@@ -108,13 +108,13 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return elements == null ? 0 : elements.size();
     }
 
-    public Point getHead() {
+    public Point head() {
         if (elements.isEmpty())
             return pt(-1, -1);
         return elements.getLast();
     }
 
-    public Point getNeck() {
+    public Point neck() {
         if (elements.size() <= 1) {
             return pt(-1, -1);
         }
@@ -257,7 +257,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public Point getNextPoint() {
-        return getPointAt(getHead(), direction);
+        return getPointAt(head(), direction);
     }
 
     private void grow(Point newLocation) {
@@ -275,12 +275,8 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public boolean isHeadIntersect(Hero enemy) {
-        Point eHead = enemy.getHead();
-        Point eNeck = enemy.getNeck();
-
-        Point head = getHead();
-        Point neck = getNeck();
-        return eHead.equals(head) || eNeck.equals(head) && neck.equals(eHead);
+        return enemy.head().equals(head()) ||
+                enemy.neck().equals(head()) && neck().equals(enemy.head());
     }
 
     @Override
@@ -337,7 +333,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     boolean itsMyHead(Point point) {
-        return getHead() == point;
+        return head() == point;
     }
 
     boolean isMe(Point next) {
