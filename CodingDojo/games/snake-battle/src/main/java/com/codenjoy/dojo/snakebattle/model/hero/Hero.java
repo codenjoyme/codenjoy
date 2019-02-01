@@ -214,7 +214,8 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         Point head = head();
         if (field.isApple(head)) {
             growBy(1);
-            // it should be done here
+            // если не сделать этого здесь, при съедании яблока и одновременной потере части корпуса
+            // яблоко будет зачтено лишь на следующий тик, что неправильно
             grow();
         }
         if (field.isStone(head) && !isFlying()) {
