@@ -50,6 +50,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private int furyCount;
     private Player player;
     private boolean leaveApples;
+    private boolean reduced;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -201,6 +202,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             stonesCount++;
             if (!isFury()) {
                 reduce(STONE_REDUCED_VALUE);
+                clearReduced();
             }
         }
         if (field.isFlyingPill(next))
@@ -241,18 +243,27 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         elements = new LinkedList<>(elements.subList(elements.indexOf(from), elements.size()));
     }
 
-    public void reduceFromPoint(Point from) {
+    public int reduceFrom(Point from) {
+        reduced = true;
+        int was = size();
         elements = new LinkedList<>(elements.subList(elements.indexOf(from) + 1, elements.size()));
         if (size() < MINIMUM_LENGTH) {
             die();
+            return was; // TODO я не нашел случая когда это может случиться
+        } else {
+            return  was - size();
         }
     }
 
-    public void reduce(int reducedValue) {
-        if (size() < reducedValue + MINIMUM_LENGTH) {
+    public int reduce(int len) {
+        reduced = true;
+        int was = size();
+        if (was < len + MINIMUM_LENGTH) {
             die();
+            return was;
         } else {
-            growBy = -reducedValue;
+            growBy = -len;
+            return len;
         }
     }
 
@@ -416,8 +427,21 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         this.player = player;
     }
 
+    public void event(Object event) {
+        player.event(event);
+    }
+
     @Override
     public String toString() {
         return String.format("[%s,%s]", head().getX(), head().getY());
     }
+
+    public void clearReduced() {
+        reduced = false;
+    }
+
+    public boolean reduced() {
+        return reduced;
+    }
+
 }

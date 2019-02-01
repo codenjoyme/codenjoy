@@ -55,6 +55,7 @@ public class SnakeHeroTest {
         game = mock(SnakeBoard.class);
         hero.init(game);
         hero.setActive(true);
+        hero.setPlayer(mock(Player.class));
         checkStartValues();
     }
 

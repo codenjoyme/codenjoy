@@ -34,6 +34,7 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> diePenalty;
     private final Parameter<Integer> stoneScore;
+    private final Parameter<Integer> eatScore;
 
     private volatile int score;
 
@@ -45,6 +46,7 @@ public class Scores implements PlayerScores {
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
         diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
         stoneScore = settings.addEditBox("Stone score").type(Integer.class).def(10);
+        eatScore = settings.addEditBox("Eat enemy score").type(Integer.class).def(10);
     }
 
     @Override
@@ -58,25 +60,22 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public void event(Object event) {
-        if (!(event instanceof Events))
+    public void event(Object object) {
+        if (!(object instanceof Events))
             return;
-        switch ((Events) event) {
-            case WIN:
-                score += winScore.getValue();
-                break;
-            case APPLE:
-                score += appleScore.getValue();
-                break;
-            case GOLD:
-                score += goldScore.getValue();
-                break;
-            case DIE:
-                score -= diePenalty.getValue();
-                break;
-            case STONE:
-                score += stoneScore.getValue();
-                break;
+        Events event = (Events)object;
+        if (event.isWin()) {
+            score += winScore.getValue();
+        } else if (event.isApple()) {
+            score += appleScore.getValue();
+        } else if (event.isGold()) {
+            score += goldScore.getValue();
+        } else if (event.isDie()) {
+            score -= diePenalty.getValue();
+        } else if (event.isStone()) {
+            score += stoneScore.getValue();
+        } else if (event.isEat()) {
+            score += eatScore.getValue() * event.getAmount();
         }
         score = Math.max(0, score);
     }

@@ -36,7 +36,6 @@ import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -194,8 +193,18 @@ public class SnakeBoard implements Field {
         }
     }
 
+    static class ReduceInfo {
+        Hero hero;
+        int reduce;
+
+        public ReduceInfo(Hero hero, int reduce) {
+            this.hero = hero;
+            this.reduce = reduce;
+        }
+    }
+
     private void snakesFight() {
-        List<Hero> reduced = new LinkedList<>();
+        List<ReduceInfo> info = new LinkedList<>();
         notFlyingHeroes().forEach(hero -> {
             Hero enemy = enemyCrossedWith(hero);
             if (enemy != null) {
@@ -203,39 +212,53 @@ public class SnakeBoard implements Field {
                     return;
                 }
                 if (hero.isFury() && !enemy.isFury()) {
-                    enemy.die();
+                    if (enemy.isAlive()) {
+                        enemy.die();
+                        info.add(new ReduceInfo(hero, enemy.size()));
+                    }
                 } else if (!hero.isFury() && enemy.isFury()) {
-                    hero.die();
+                    if (hero.isAlive()) {
+                        hero.die();
+                        info.add(new ReduceInfo(enemy, hero.size()));
+                    }
                 } else {
                     int heroCut = hero.size();
                     int enemyCut = enemy.size();
 
-                    if (!reduced.contains(hero)) {
-                        hero.reduce(enemyCut);
-                        reduced.add(hero);
+                    if (!hero.reduced()) {
+                        int len = hero.reduce(enemyCut);
+                        info.add(new ReduceInfo(enemy, len));
                     }
 
-                    if (!reduced.contains(enemy)) {
-                        enemy.reduce(heroCut);
-                        reduced.add(enemy);
+                    if (!enemy.reduced()) {
+                        int len = enemy.reduce(heroCut);
+                        info.add(new ReduceInfo(hero, len));
                     }
                 }
                 return;
             }
 
-            Hero enemy2 = enemyEatenWith(hero);
-            if (enemy2 != null) {
+            enemy = enemyEatenWith(hero);
+            if (enemy != null) {
                 if (hero.isFury()) {
-                    if (!reduced.contains(enemy2)) {
-                        enemy2.reduceFromPoint(hero.head());
-                        reduced.add(enemy2);
+                    if (!enemy.reduced()) {
+                        int len = enemy.reduceFrom(hero.head());
+                        info.add(new ReduceInfo(hero, len));
                     }
                 } else {
                     hero.die();
+                    info.add(new ReduceInfo(enemy, hero.size()));
                 }
             }
         });
 
+        info.stream()
+                .filter(i -> i.hero.isAlive())
+                .forEach(i -> {
+                    Hero hero = i.hero;
+                    hero.clearReduced();
+                    hero.event(Events.EAT.apply(i.reduce));
+                });
     }
 
     private Stream<Hero> notFlyingHeroes() {
@@ -426,11 +449,9 @@ public class SnakeBoard implements Field {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<>(players.size());
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
     public void newGame(Player player) {

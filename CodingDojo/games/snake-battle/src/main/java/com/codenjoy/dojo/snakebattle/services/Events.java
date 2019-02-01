@@ -23,11 +23,84 @@ package com.codenjoy.dojo.snakebattle.services;
  */
 
 
-public enum Events {
-    START,
-    WIN,
-    DIE,
-    APPLE,
-    STONE,
-    GOLD
+import java.util.Objects;
+import java.util.function.Function;
+
+public class Events {
+
+    public static final Events START = new Events("START");
+    public static final Events WIN = new Events("WIN");
+    public static final Events DIE = new Events("DIE");
+    public static final Events APPLE = new Events("APPLE");
+    public static final Events STONE = new Events("STONE");
+    public static final Function<Integer, Events> EAT = amount -> new Events("EAT", amount);
+    public static final Events GOLD = new Events("GOLD");
+
+    private String type;
+    private int amount;
+
+    public Events(String type) {
+        this.type = type;
+        this.amount = 1;
+    }
+
+    public Events(String type, int amount) {
+        this.type = type;
+        this.amount = amount;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Events events = (Events) o;
+        if (isEat()) {
+            return Objects.equals(type, events.type) &&
+                    amount == events.amount;
+        }
+        return Objects.equals(type, events.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type);
+    }
+
+    public boolean isWin() {
+        return this.equals(WIN);
+    }
+
+    public boolean isApple() {
+        return this.equals(APPLE);
+    }
+
+    public boolean isGold() {
+        return this.equals(GOLD);
+    }
+
+    public boolean isDie() {
+        return this.equals(DIE);
+    }
+
+    public boolean isStone() {
+        return this.equals(STONE);
+    }
+
+    public boolean isEat() {
+        return type.equals("EAT");
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    @Override
+    public String toString() {
+        if (isEat()) {
+            return String.format("%s[%s]", type, amount);
+        } else {
+            return type;
+        }
+    }
 }
