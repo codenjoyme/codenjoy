@@ -195,16 +195,12 @@ public class SnakeBoard implements Field {
     }
 
     private void snakesFight() {
-        for (Player player : players) {
-            if (!player.isActive())
-                continue;
-            Hero hero = player.getHero();
-            if (hero.isFlying())
-                continue;
+        notFlyingHeroes().forEach(hero -> {
             Hero enemy = enemyCrossedWith(hero);
             if (enemy != null) {
-                if (enemy.isFlying())
-                    continue;
+                if (enemy.isFlying()) {
+                    return;
+                }
                 if (hero.isFury() && !enemy.isFury()) {
                     enemy.die();
                 } else if (!hero.isFury() && enemy.isFury()) {
@@ -218,10 +214,18 @@ public class SnakeBoard implements Field {
                 if (hero.isFury()) {
                     Hero reducedEnemy = getAnotherHero(hero);
                     reducedEnemy.reduceFromPoint(hero.getHead());
-                } else
+                } else {
                     hero.die();
+                }
             }
-        }
+        });
+
+    }
+
+    private Stream<Hero> notFlyingHeroes() {
+        return aliveActive().stream()
+                .map(Player::getHero)
+                .filter(h -> !h.isFlying());
     }
 
     private boolean restartIfLast() {
