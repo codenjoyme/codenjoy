@@ -1568,6 +1568,63 @@ public class SnakeMultiplayerTest {
     }
 
     @Test
+    public void shouldCase6_3() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼˅     ☼" +
+                "☼◄════╕☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        enemy.right();
+        hero.up();
+        game.tick();
+
+        verify(heroEvents).event(Events.WIN);
+        verify(enemyEvents).event(Events.DIE);
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼│     ☼" +
+                "☼▲☺    ☼" +
+                "☼╚═══╕ ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼║     ☼" +
+                "☼˄☻    ☼" +
+                "☼└───ö ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼▲     ☼" +
+                "☼╙     ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼˄     ☼" +
+                "☼¤     ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
     public void shouldCase7() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼┌─┐   ☼" +

@@ -195,6 +195,7 @@ public class SnakeBoard implements Field {
     }
 
     private void snakesFight() {
+        List<Hero> reduced = new LinkedList<>();
         notFlyingHeroes().forEach(hero -> {
             Hero enemy = enemyCrossedWith(hero);
             if (enemy != null) {
@@ -206,14 +207,29 @@ public class SnakeBoard implements Field {
                 } else if (!hero.isFury() && enemy.isFury()) {
                     hero.die();
                 } else {
-                    int len = hero.size();
-                    hero.reduce(enemy.size());
-                    enemy.reduce(len);
+                    int heroCut = hero.size();
+                    int enemyCut = enemy.size();
+
+                    if (!reduced.contains(hero)) {
+                        hero.reduce(enemyCut);
+                        reduced.add(hero);
+                    }
+
+                    if (!reduced.contains(enemy)) {
+                        enemy.reduce(heroCut);
+                        reduced.add(enemy);
+                    }
                 }
-            } else if (getAnotherHero(hero) != null) {
+                return;
+            }
+
+            Hero enemy2 = enemyEatenWith(hero);
+            if (enemy2 != null) {
                 if (hero.isFury()) {
-                    Hero reducedEnemy = getAnotherHero(hero);
-                    reducedEnemy.reduceFromPoint(hero.head());
+                    if (!reduced.contains(enemy2)) {
+                        enemy2.reduceFromPoint(hero.head());
+                        reduced.add(enemy2);
+                    }
                 } else {
                     hero.die();
                 }
@@ -330,7 +346,7 @@ public class SnakeBoard implements Field {
     }
 
     @Override
-    public Hero getAnotherHero(Hero me) {
+    public Hero enemyEatenWith(Hero me) {
         return aliveEnemies(me)
                 .filter(h -> !h.isFlying())
                 .filter(h -> h.getBody().contains(me.head()))
