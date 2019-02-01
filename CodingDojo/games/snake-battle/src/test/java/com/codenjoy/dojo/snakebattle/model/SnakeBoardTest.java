@@ -1267,6 +1267,7 @@ public class SnakeBoardTest {
         game.tick();
 
         assertEquals(9, hero.getFuryCount());
+        assertEquals(0, hero.getStonesCount());
         assertEquals(true, hero.isFury());
 
         assertE("☼☼☼☼☼☼☼☼☼" +
@@ -1311,6 +1312,64 @@ public class SnakeBoardTest {
                 "☼       ☼" +
                 "☼       ☼" +
                 "☼     ╘♥☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldDropStone_afterFury() {
+        shouldEatStones_whenEatFuryPill();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼     ╘♥☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        assertEquals(1, hero.getStonesCount());
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+
+        hero.act();
+        game.tick();
+
+        assertEquals(0, hero.getStonesCount());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼      ●☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼       ☼" +
+                "☼      ●☼" +
                 "☼       ☼" +
                 "☼       ☼" +
                 "☼       ☼" +
