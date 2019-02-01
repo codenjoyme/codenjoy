@@ -115,11 +115,11 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public Point getNeck() {
-        // TODO я не уверен что тут стоило 2ку заменять на константу
-        if (elements.size() < MINIMUM_LENGTH) {
+        if (elements.size() <= 1) {
             return pt(-1, -1);
         }
-        return elements.get(elements.size() - MINIMUM_LENGTH);
+        int last = elements.size() - 1;
+        return elements.get(last - 1);
     }
 
     @Override
