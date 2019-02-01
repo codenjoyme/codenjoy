@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snakebattle.model.board;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 
@@ -59,4 +60,8 @@ public interface Field extends GameField<Player> {
     Hero enemyEatenWith(Hero h);
 
     void oneMoreDead(Player player);
+
+    Parameter<Integer> flyingCount();
+
+    Parameter<Integer> furyCount();
 }

@@ -48,12 +48,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     private final Parameter<Integer> timeBeforeStart;
     private final Parameter<Integer> roundsPerMatch;
     private final Parameter<Integer> playersPerRoom;
+    private final Parameter<Integer> flyingCount;
+    private final Parameter<Integer> furyCount;
 
     public GameRunner() {
         new Scores(0, settings);
         timeBeforeStart = settings.addEditBox("Time before start Round").type(Integer.class).def(5);
         roundsPerMatch = settings.addEditBox("Rounds per Match").type(Integer.class).def(1);
         playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
+        flyingCount = settings.addEditBox("Flying count").type(Integer.class).def(10);
+        furyCount = settings.addEditBox("Fury count").type(Integer.class).def(10);
         level = new LevelImpl(getMap());
     }
 
@@ -91,7 +95,11 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     public GameField createGame(int levelNumber) {
-        return new SnakeBoard(level, getDice(), new Timer(timeBeforeStart), roundsPerMatch);
+        return new SnakeBoard(level, getDice(),
+                new Timer(timeBeforeStart),
+                roundsPerMatch,
+                flyingCount,
+                furyCount);
     }
 
     @Override

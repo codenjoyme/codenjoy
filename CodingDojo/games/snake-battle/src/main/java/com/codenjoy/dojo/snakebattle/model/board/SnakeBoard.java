@@ -58,14 +58,19 @@ public class SnakeBoard implements Field {
 
     private Timer timer;
     private Parameter<Integer> roundsPerMatch;
+    private Parameter<Integer> flyingCount;
+    private Parameter<Integer> furyCount;
     private int round;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer timer, Parameter<Integer> roundsPerMatch) {
-        this.dice = dice;
+    public SnakeBoard(Level level, Dice dice, Timer timer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount) {
         this.roundsPerMatch = roundsPerMatch;
+        this.flyingCount = flyingCount;
+        this.furyCount = furyCount;
+
+        this.dice = dice;
         round = 0;
         walls = level.getWalls();
         starts = level.getStartPoints();
@@ -387,6 +392,16 @@ public class SnakeBoard implements Field {
     public void oneMoreDead(Player player) {
         player.die(isMatchOver());
         theWalkingDead.add(player);
+    }
+
+    @Override
+    public Parameter<Integer> flyingCount() {
+        return flyingCount;
+    }
+
+    @Override
+    public Parameter<Integer> furyCount() {
+        return furyCount;
     }
 
     private Hero enemyCrossedWith(Hero me) {

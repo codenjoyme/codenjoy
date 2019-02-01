@@ -206,9 +206,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             }
         }
         if (field.isFlyingPill(next))
-            flyingCount += 10;
+            flyingCount += field.flyingCount().getValue();
         if (field.isFuryPill(next))
-            furyCount += 10;
+            furyCount += field.furyCount().getValue();
         if (field.isBarrier(next))
             die();
         if (isMe(next) && !isFlying())

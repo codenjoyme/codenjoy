@@ -23,7 +23,6 @@ package com.codenjoy.dojo.snakebattle.model;
  */
 
 
-import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -73,7 +72,9 @@ public class SnakeMultiplayerTest {
         LevelImpl level = new LevelImpl(board);
         game = new SnakeBoard(level, dice,
                 new Timer(timer),
-                roundsPerMatch);
+                roundsPerMatch,
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(10));
 
         Hero hero = level.getHero();
         hero.setActive(true);

@@ -71,7 +71,9 @@ public class AISolverTest {
 
         SnakeBoard game = new SnakeBoard(level, dice,
                 new Timer(new SimpleParameter<>(0)),
-                new SimpleParameter<>(5));
+                new SimpleParameter<>(5),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(10));
 
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);

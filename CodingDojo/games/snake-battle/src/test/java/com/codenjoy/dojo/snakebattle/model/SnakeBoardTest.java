@@ -72,7 +72,9 @@ public class SnakeBoardTest {
 
         game = new SnakeBoard(level, dice,
                 new Timer(timer),
-                new SimpleParameter<>(5));
+                new SimpleParameter<>(5),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(10));
 
         listener = mock(EventListener.class);
         player = new Player(listener);
