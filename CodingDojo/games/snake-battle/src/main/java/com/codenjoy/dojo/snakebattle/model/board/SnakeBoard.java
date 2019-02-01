@@ -349,18 +349,16 @@ public class SnakeBoard implements Field {
         theWalkingDead.add(player);
     }
 
-    private Hero checkHeadByHeadCollision(Hero h) {
-        for (Player anotherPlayer : players) {
-            Hero enemy = anotherPlayer.getHero();
-            if (enemy.equals(h))
-                continue;
-            if (!enemy.isAlive())
-                continue;
-            if (enemy.getHead().equals(h.getHead()) ||
-                    enemy.getNeck().equals(h.getHead()) && h.getNeck().equals(enemy.getHead()))
-                return anotherPlayer.getHero();
-        }
-        return null;
+    private Hero checkHeadByHeadCollision(Hero hero) {
+        List<Hero> other = aliveActive().stream()
+                .map(Player::getHero)
+                .filter(h -> !h.equals(hero))
+                .collect(toList());
+
+        return other.stream()
+                .filter(enemy -> hero.isHeadIntersect(enemy))
+                .findFirst()
+                .orElse(null);
     }
 
     public void addToPoint(Point p) {

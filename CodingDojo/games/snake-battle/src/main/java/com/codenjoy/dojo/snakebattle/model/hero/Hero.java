@@ -274,6 +274,15 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return alive;
     }
 
+    public boolean isHeadIntersect(Hero enemy) {
+        Point eHead = enemy.getHead();
+        Point eNeck = enemy.getNeck();
+
+        Point head = getHead();
+        Point neck = getNeck();
+        return eHead.equals(head) || eNeck.equals(head) && neck.equals(eHead);
+    }
+
     @Override
     public LinkedList<Tail> state(Player player, Object... alsoAtPoint) {
         return elements;
@@ -339,7 +348,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return getTailPoint() == point;
     }
 
-    private void growBy(int val) {
+    public void growBy(int val) {
         growBy += val;
     }
 
