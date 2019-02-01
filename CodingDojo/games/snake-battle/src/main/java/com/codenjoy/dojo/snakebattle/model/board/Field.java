@@ -56,8 +56,6 @@ public interface Field extends GameField<Player> {
 
     void setGold(Point p);
 
-    boolean isAnotherHero(Hero h);
-
     Hero getAnotherHero(Hero h);
 
     void oneMoreDead(Player player);

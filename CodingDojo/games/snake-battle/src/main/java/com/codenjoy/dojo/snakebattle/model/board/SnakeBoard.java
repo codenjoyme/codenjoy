@@ -209,11 +209,11 @@ public class SnakeBoard implements Field {
                 } else if (!hero.isFury() && enemy.isFury()) {
                     hero.die();
                 } else {
-                    int hSize = hero.size();
+                    int len = hero.size();
                     hero.reduce(enemy.size());
-                    enemy.reduce(hSize);
+                    enemy.reduce(len);
                 }
-            } else if (isAnotherHero(hero)) {
+            } else if (getAnotherHero(hero) != null) {
                 if (hero.isFury()) {
                     Hero reducedEnemy = getAnotherHero(hero);
                     reducedEnemy.reduceFromPoint(hero.getHead());
@@ -325,22 +325,14 @@ public class SnakeBoard implements Field {
     }
 
     @Override
-    public boolean isAnotherHero(Hero h) {
-        return getAnotherHero(h) != null;
-    }
-
-    @Override
-    public Hero getAnotherHero(Hero h) {
-        for (Player anotherPlayer : players) {
-            Hero enemy = anotherPlayer.getHero();
-            if (enemy.equals(h) ||
-                    !enemy.isAlive() ||
-                    enemy.isFlying())
-                continue;
-            if (enemy.getBody().contains(h.getHead()))
-                return enemy;
-        }
-        return null;
+    public Hero getAnotherHero(Hero me) {
+        return aliveActive().stream()
+                .map(Player::getHero)
+                .filter(h -> !h.equals(me))
+                .filter(h -> !h.isFlying())
+                .filter(h -> h.getBody().contains(me.getHead()))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
