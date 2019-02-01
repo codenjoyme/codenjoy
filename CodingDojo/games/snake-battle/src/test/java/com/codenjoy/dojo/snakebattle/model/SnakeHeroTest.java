@@ -80,6 +80,7 @@ public class SnakeHeroTest {
         int before = hero.size();
         applesAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
         hero.tick();
+        hero.eat();
         applesAtAllPoints(false);
         assertEquals("Змейка не увеличилась!", before + 1, hero.size());
     }
@@ -91,23 +92,27 @@ public class SnakeHeroTest {
         LinkedList<Tail> startBody = new LinkedList<>(hero.getBody());
         // просто тик
         hero.tick();
+        hero.eat();
         assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
         assertTrue("Змейка мертва!", hero.isAlive());
         // если яблоко
         applesAtAllPoints(true);
         hero.tick();
+        hero.eat();
         applesAtAllPoints(false);
         assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
         assertTrue("Змейка мертва!", hero.isAlive());
         // если камень
         stonesAtAllPoints(true);
         hero.tick();
+        hero.eat();
         stonesAtAllPoints(false);
         assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
         assertTrue("Змейка мертва!", hero.isAlive());
         // если стена
         wallsAtAllPoints(true);
         hero.tick();
+        hero.eat();
         wallsAtAllPoints(false);
         assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
         assertTrue("Змейка мертва!", hero.isAlive());
@@ -119,6 +124,7 @@ public class SnakeHeroTest {
         int before = hero.size();
         wallsAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
         hero.tick();
+        hero.eat();
         wallsAtAllPoints(false);
         assertTrue("Змейка не погибла от препятствия!", !hero.isAlive());
     }
@@ -129,6 +135,7 @@ public class SnakeHeroTest {
         snakeIncreasing(stoneReduced.getValue() - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
+        hero.eat();
         stonesAtAllPoints(false);
         assertTrue("Маленькая змейка не погибла от камня!", !hero.isAlive());
     }
@@ -140,10 +147,12 @@ public class SnakeHeroTest {
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
+        hero.eat();
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
         assertEquals("Змейка не укоротилась на предполагаемую длину!", before - stoneReduced.getValue(), hero.size());
         hero.tick();
+        hero.eat();
     }
 
     // змейка может откусить себе хвост
@@ -154,10 +163,13 @@ public class SnakeHeroTest {
         assertEquals("Змейка не удлиннилась!", additionLength + 2, hero.size());
         hero.down();
         hero.tick();
+        hero.eat();
         hero.left();
         hero.tick();
+        hero.eat();
         hero.up();
         hero.tick();
+        hero.eat();
         assertTrue("Змейка погибла укусив свой хвост!", hero.isAlive());
         assertEquals("Укусив свой хвост, змейка не укоротилась!", 4, hero.size());
     }
@@ -172,8 +184,10 @@ public class SnakeHeroTest {
             snakeIncreasing(additionLength);
             stonesAtAllPoints(true);
             hero.tick();
+            hero.eat();
             stonesAtAllPoints(false);
             hero.tick();
+            hero.eat();
             assertTrue("Змейка погибла!", hero.isAlive());
             assertEquals("Съев камень, он не появился внутри змейки!", ++stonesCount, hero.getStonesCount());
         }
@@ -199,9 +213,11 @@ public class SnakeHeroTest {
     public void eatFlyingPill() {
         flyingPillsAtAllPoints(true);
         hero.tick();
+        hero.eat();
         flyingPillsAtAllPoints(false);
         for (int i = 1; i <= 10; i++) {
             hero.tick();
+            hero.eat();
             assertEquals("Оставшееся количество ходов полёта не соответствует ожидаемому.",
                     10 - i, hero.getFlyingCount());
         }
@@ -213,11 +229,13 @@ public class SnakeHeroTest {
     public void eatFuryPill() {
         furyPillsAtAllPoints(true);
         hero.tick();
+        hero.eat();
         furyPillsAtAllPoints(false);
         for (int i = 0; i <= 10; i++) {
             assertEquals("Оставшееся количество ходов ярости не соответствует ожидаемому.",
                     10 - i, hero.getFuryCount());
             hero.tick();
+            hero.eat();
         }
         assertEquals("Количество ходов ярости не может быть меньше 0.", 0, hero.getFuryCount());
     }
