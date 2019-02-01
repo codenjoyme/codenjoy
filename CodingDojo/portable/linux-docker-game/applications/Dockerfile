@@ -55,45 +55,15 @@ ARG CONTEXT=codenjoy-contest
 RUN cd /tmp/codenjoy/CodingDojo/builder \
  && if [ "x$GAMES" = "x" ] ; \
          then \
-             mvn clean install -Dcontext=${CONTEXT} -DallGames ; \
+             mvn clean install -Dcontext=${CONTEXT} -DallGames -DskipTests=${SKIP_TESTS} ; \
          else \
-             mvn clean install -Dcontext=${CONTEXT} -P${GAMES} ; \
+             mvn clean install -Dcontext=${CONTEXT} -P${GAMES} -DskipTests=${SKIP_TESTS} ; \
          fi \
  && cp /tmp/codenjoy/CodingDojo/builder/target/${CONTEXT}.war /var/lib/jetty/webapps
 
 RUN cd /tmp/codenjoy/CodingDojo/balancer \
  && clean install -DskipTests=${SKIP_TESTS} \
  && cp /tmp/codenjoy/CodingDojo/builder/target/codenjoy-balancer.war /var/lib/jetty/webapps
-
-VOLUME ["/var/lib/jetty/database"]
-
-EXPOSE 8080
-
-# -----------------------------------------------------------------------
-
-FROM jetty:9.3 as codenjoyserver
-MAINTAINER Alexander Baglay <apofig@gmail.com>
-
-USER jetty
-ENV DEBIAN_FRONTEND noninteractive
-
-ARG CONTEXT=codenjoy-contest
-
-ADD ${CONTEXT}.war /var/lib/jetty/webapps/
-
-VOLUME ["/var/lib/jetty/database"]
-
-EXPOSE 8080
-
-# -----------------------------------------------------------------------
-
-FROM jetty:9.3 as balancerserver
-MAINTAINER Alexander Baglay <apofig@gmail.com>
-
-USER jetty
-ENV DEBIAN_FRONTEND noninteractive
-
-ADD codenjoy-balancer.war /var/lib/jetty/webapps/
 
 VOLUME ["/var/lib/jetty/database"]
 

@@ -1,0 +1,60 @@
+version: '3.3'
+
+services:
+   codenjoy_db:
+     image: postgres:11.1
+     container_name: codenjoy-database
+     volumes:
+       - ./content/database:/var/lib/postgresql/data
+#     ports: 
+#       - "5432:5432"
+     restart: always
+     environment:
+         POSTGRES_DB: codenjoy
+         POSTGRES_USER: codenjoy
+         POSTGRES_PASSWORD: dbPassword
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.4
+   
+   codenjoy_server:
+     depends_on:
+       - codenjoy_db
+     image: apofig/codenjoy-contest:1.0.28
+     container_name: codenjoy-contest
+     build:
+        context: .
+        dockerfile: Dockerfile-contest
+     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #S# sqlite
+     volumes: 
+#S#       - ./content/codenjoy/database:/var/lib/jetty/database
+       - ./config/codenjoy:/var/lib/jetty/config
+       - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
+#     ports: 
+#       - "127.0.0.1:8080:8080"
+     restart: always
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.2
+
+   nginx:
+     depends_on:
+       - codenjoy_server
+     image: nginx
+     container_name: nginx
+     volumes: 
+       - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf
+       - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
+     ports: 
+       - "80:80"
+     restart: always   
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.1
+     
+networks:
+    codenjoy:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.28.0.0/16
