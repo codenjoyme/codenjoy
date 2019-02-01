@@ -46,6 +46,8 @@ public interface Field extends GameField<Player> {
 
     boolean isGold(Point p);
 
+    void setApple(Point p);
+
     boolean setStone(Point p);
 
     void setFlyingPill(Point p);

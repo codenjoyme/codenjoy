@@ -47,6 +47,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private int flyingCount;
     private int furyCount;
     private Player player;
+    private boolean leaveApples;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -57,6 +58,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     public Hero(Direction direction) {
         elements = new LinkedList<>();
         growBy = 0;
+        leaveApples = false;
         this.direction = direction;
         alive = true;
         active = false;
@@ -153,6 +155,12 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public void act(int... p) {
+        if (p.length == 1 && p[0] == 0) {
+            die();
+            leaveApples = true;
+            return;
+        }
+
         if (!isActiveAndAlive()) {
             return;
         }
@@ -327,7 +335,12 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public void clear() {
+        List<Point> points = new LinkedList<>(elements);
         elements = new LinkedList<>();
+        if (leaveApples) {
+            points.forEach(e -> field.setApple(e));
+            leaveApples = false;
+        }
         growBy = 0;
     }
 
@@ -362,6 +375,10 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public boolean isFury() {
         return furyCount > 0;
+    }
+
+    public void addTail(Point part) {
+        elements.addFirst(new Tail(part, this));
     }
 
     public void addTail(List<Point> tail) {

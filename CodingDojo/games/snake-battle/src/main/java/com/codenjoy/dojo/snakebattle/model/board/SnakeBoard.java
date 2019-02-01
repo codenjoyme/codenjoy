@@ -378,7 +378,8 @@ public class SnakeBoard implements Field {
             fail("Невозможно добавить на поле объект типа " + p.getClass());
     }
 
-    private void setApple(Point p) {
+    @Override
+    public void setApple(Point p) {
         if (isFree(p))
             apples.add(new Apple(p));
     }
