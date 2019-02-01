@@ -37,7 +37,6 @@ import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
 
-    private static final int STONE_REDUCED_VALUE = 3;
     private static final int MINIMUM_LENGTH = 2;
 
     public static final boolean NOW = true;
@@ -204,7 +203,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         if (field.isStone(next) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
-                reduce(STONE_REDUCED_VALUE, NOW);
+                reduce(field.stoneReduced().getValue(), NOW);
                 clearReduced();
             }
         }

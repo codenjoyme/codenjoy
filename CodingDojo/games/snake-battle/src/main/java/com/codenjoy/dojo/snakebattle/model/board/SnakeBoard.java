@@ -42,7 +42,6 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NEXT_TICK;
-import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NOW;
 import static java.util.stream.Collectors.toList;
 
 public class SnakeBoard implements Field {
@@ -62,17 +61,19 @@ public class SnakeBoard implements Field {
     private Parameter<Integer> roundsPerMatch;
     private Parameter<Integer> flyingCount;
     private Parameter<Integer> furyCount;
+    private Parameter<Integer> stoneReduced;
     private int round;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer timer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount) {
+    public SnakeBoard(Level level, Dice dice, Timer timer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced) {
         this.roundsPerMatch = roundsPerMatch;
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
 
         this.dice = dice;
+        this.stoneReduced = stoneReduced;
         round = 0;
         walls = level.getWalls();
         starts = level.getStartPoints();
@@ -404,6 +405,11 @@ public class SnakeBoard implements Field {
     @Override
     public Parameter<Integer> furyCount() {
         return furyCount;
+    }
+
+    @Override
+    public Parameter<Integer> stoneReduced() {
+        return stoneReduced;
     }
 
     private Hero enemyCrossedWith(Hero me) {

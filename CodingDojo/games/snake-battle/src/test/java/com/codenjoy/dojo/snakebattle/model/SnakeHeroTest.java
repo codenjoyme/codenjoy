@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
@@ -45,10 +46,9 @@ import static org.mockito.Mockito.when;
  */
 public class SnakeHeroTest {
 
-    private static final int reducedValue = 3;
-
     private SnakeBoard game;
     private Hero hero;
+    private Parameter<Integer> stoneReduced;
 
     @Before
     public void setup() {
@@ -56,6 +56,8 @@ public class SnakeHeroTest {
         game = mock(SnakeBoard.class);
         when(game.flyingCount()).thenReturn(new SimpleParameter<>(10));
         when(game.furyCount()).thenReturn(new SimpleParameter<>(10));
+        stoneReduced = new SimpleParameter<>(3);
+        when(game.stoneReduced()).thenReturn(stoneReduced);
         hero.init(game);
         hero.setActive(true);
         hero.setPlayer(mock(Player.class));
@@ -124,7 +126,7 @@ public class SnakeHeroTest {
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
-        snakeIncreasing(reducedValue - 1);
+        snakeIncreasing(stoneReduced.getValue() - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         stonesAtAllPoints(false);
@@ -134,13 +136,13 @@ public class SnakeHeroTest {
     // тест что большая змейка уменьшается от камня, но не погибает
     @Test
     public void reduceByStone() {
-        snakeIncreasing(reducedValue);
+        snakeIncreasing(stoneReduced.getValue());
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
-        assertEquals("Змейка не укоротилась на предполагаемую длину!", before - reducedValue, hero.size());
+        assertEquals("Змейка не укоротилась на предполагаемую длину!", before - stoneReduced.getValue(), hero.size());
         hero.tick();
     }
 

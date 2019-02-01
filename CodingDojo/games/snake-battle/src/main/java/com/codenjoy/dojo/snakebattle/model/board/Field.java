@@ -64,4 +64,6 @@ public interface Field extends GameField<Player> {
     Parameter<Integer> flyingCount();
 
     Parameter<Integer> furyCount();
+
+    Parameter<Integer> stoneReduced();
 }
