@@ -33,7 +33,7 @@ public class Timer {
         this.from = from;
     }
 
-    public Timer reset() {
+    public Timer start() {
         time = from.getValue();
         return this;
     }
@@ -62,5 +62,10 @@ public class Timer {
 
     public boolean unlimited() {
         return from.getValue() == 0;
+    }
+
+    public Timer stop() {
+        time = -1;
+        return this;
     }
 }

@@ -23,10 +23,7 @@ package com.codenjoy.dojo.snakebattle.model.board;
  */
 
 
-import com.codenjoy.dojo.services.BoardUtils;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
@@ -89,36 +86,43 @@ public class SnakeBoard implements Field {
         players = new LinkedList<>();
         theWalkingDead = new LinkedList<>();
 
-        this.fightTimer = fightTimer.reset();
-        this.roundTimer = roundTimer.reset();
+        this.fightTimer = fightTimer.start();
+//        this.roundTimer = roundTimer.stop();
     }
 
     @Override
     public void tick() {
         snakesClear();
 
+
         fightTimer.tick(this::sendTimerStatus);
-        roundTimer.time();
+//        roundTimer.tick(() -> {});
 
-        if (roundTimer.justFinished()) {
-            Integer maxScore = aliveActive().stream()
-                    .map(p -> p.getHero().size())
-                    .max(Comparator.comparingInt(i1 -> i1))
-                    .orElse(Integer.MAX_VALUE);
-
-            aliveActive().stream()
-                    .map(p -> p.getHero())
-                    .filter(h -> h.size() == maxScore)
-                    .forEach(h -> h.event(Events.WIN));
-
-            aliveActive().forEach(player -> reset(player));
-            return;
-        }
+// TODO родить это чудо :)
+//        if (roundTimer.justFinished()) {
+//            Integer maxScore = aliveActive().stream()
+//                    .map(p -> p.getHero().size())
+//                    .max(Comparator.comparingInt(i1 -> i1))
+//                    .orElse(Integer.MAX_VALUE);
+//
+//            aliveActive().stream()
+//                    .filter(p -> p.getHero().size() == maxScore)
+//                    .forEach(p -> p.event(Events.WIN));
+//
+//            aliveActive().stream()
+//                    .filter(p -> p.getHero().size() != maxScore)
+//                    .forEach(p -> p.printMessage("Time is out"));
+//
+//            aliveActive().forEach(player -> reset(player));
+//
+//            fightTimer.start();
+//            return;
+//        }
 
         if (fightTimer.justFinished()) {
             round++;
             players.forEach(p -> p.start(round));
-            roundTimer.reset();
+//            roundTimer.start();
         }
 
         if (!fightTimer.done()) {
@@ -126,7 +130,7 @@ public class SnakeBoard implements Field {
         }
 
         if (restartIfLast()) {
-            fightTimer.reset();
+            fightTimer.start();
             return;
         }
 
