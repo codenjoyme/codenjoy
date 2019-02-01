@@ -1441,6 +1441,51 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼☼☼");
     }
 
+    @Test
+    public void shouldDropStone_afterFuryDisabled() {
+        shouldDisableFuryPillEffect_when10Ticks();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼   ◄╕  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        assertEquals(1, hero.getStonesCount());
+
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼  ◄╕●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+
+        assertEquals(0, hero.getStonesCount());
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼ ◄╕ ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+    }
+
     // разворот на 180 без откусывания хвоста
     @Test
     public void shouldTurn180_whenLengthIs2() {
