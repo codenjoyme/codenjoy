@@ -203,7 +203,7 @@ public class Dispatcher {
                 currentServer = 0;
             }
         }
-        System.out.println(countRegistered + " > " + currentServer);
+
         return servers.get(currentServer);
     }
 
