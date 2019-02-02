@@ -18,6 +18,7 @@ import qs from 'qs';
 import { fetchAPI } from '../../utils';
 import { book } from '../../routes';
 import { history } from '../../store';
+import { selectUser } from '../auth';
 
 /**
  * Constants
@@ -37,6 +38,16 @@ export const FETCH_RATING_FAILED = `${prefix}/FETCH_RATING_FAILED`;
 export const START_BACKGROUND_SYNC = `${prefix}/START_BACKGROUND_SYNC`;
 export const STOP_BACKGROUND_SYNC = `${prefix}/STOP_BACKGROUND_SYNC`;
 
+export const EXIT_ROOM = `${prefix}/EXIT_ROOM`;
+export const EXIT_ROOM_SUCCESS = `${prefix}/EXIT_ROOM_SUCCESS`;
+export const EXIT_ROOM_FAILED = `${prefix}/EXIT_ROOM_FAILED`;
+
+export const JOIN_ROOM = `${prefix}/JOIN_ROOM`;
+export const JOIN_ROOM_SUCCESS = `${prefix}/JOIN_ROOM_SUCCESS`;
+export const JOIN_ROOM_FAILED = `${prefix}/JOIN_ROOM_FAILED`;
+
+export const CLEAR_ROOM_CHANGE_HISTORY = `${prefix}/CLEAR_ROOM_CHANGE_HISTORY`;
+
 const eventStart = moment(process.env.REACT_APP_EVENT_START);
 const eventEnd = moment(process.env.REACT_APP_EVENT_END);
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -48,8 +59,13 @@ const ReducerState = {
     day:           moment().format(DATE_FORMAT),
     participantId: void 0,
     watchPosition: true,
+    isRoomExited:  false,
+    isExiting:     false,
+    isRoomJoined:  false,
+    isJoining:     false,
 };
 
+// eslint-disable-next-line complexity
 export default function reducer(state = ReducerState, action) {
     const { type, payload } = action;
 
@@ -63,16 +79,10 @@ export default function reducer(state = ReducerState, action) {
             };
 
         case SET_PARTICIPANT_ID:
-            return {
-                ...state,
-                participantId: payload,
-            };
+            return { ...state, participantId: payload };
 
         case SET_WATCH_POSITION:
-            return {
-                ...state,
-                watchPosition: payload,
-            };
+            return { ...state, watchPosition: payload };
 
         case SET_DEFAULTS:
             return {
@@ -81,10 +91,31 @@ export default function reducer(state = ReducerState, action) {
                 day:           payload.day,
             };
 
-        case FETCH_RATING:
+        case EXIT_ROOM:
+            return { ...state, isExiting: true };
+
+        case EXIT_ROOM_FAILED:
+            return { ...state, isExiting: false };
+
+        case EXIT_ROOM_SUCCESS:
+            return { ...state, isExiting: false, isRoomExited: true };
+
+        case JOIN_ROOM:
+            return { ...state, isJoining: true };
+
+        case JOIN_ROOM_FAILED:
+            return { ...state, isJoining: false };
+
+        case JOIN_ROOM_SUCCESS:
+            return { ...state, isJoining: false, isRoomJoined: true };
+
+        case CLEAR_ROOM_CHANGE_HISTORY:
             return {
                 ...state,
-                // rating: void 0,
+                isJoining:    false,
+                isRoomJoined: false,
+                isRoomExited: false,
+                isExiting:    false,
             };
 
         case FETCH_RATING_SUCCESS:
@@ -145,6 +176,17 @@ export const setWatchPosition = watch => ({
     payload: watch,
 });
 
+export const joinRoom = () => ({ type: JOIN_ROOM });
+export const joinRoomSuccess = () => ({ type: JOIN_ROOM_SUCCESS });
+export const joinRoomFailed = () => ({ type: JOIN_ROOM_FAILED });
+
+export const exitRoom = () => ({ type: EXIT_ROOM });
+export const exitRoomSuccess = () => ({ type: EXIT_ROOM_SUCCESS });
+export const exitRoomFailed = () => ({ type: EXIT_ROOM_FAILED });
+
+export const clearRoomChangeHistory = () => ({
+    type: CLEAR_ROOM_CHANGE_HISTORY,
+});
 /**
  * Saga
  **/
@@ -152,14 +194,7 @@ export const setWatchPosition = watch => ({
 function* fetchRatingSaga() {
     const day = yield select(state => state.board.day);
     try {
-        const data = yield call(
-            fetchAPI,
-            'GET',
-            `rest/score/day/${day}`,
-            void 0,
-            void 0,
-            { noRedirect: true },
-        );
+        const data = yield call(fetchAPI, 'GET', `rest/score/day/${day}`);
 
         const processedData = _.chain(data)
             .filter('server')
@@ -217,6 +252,42 @@ export function* updateQueryParamsSaga() {
     }
 }
 
+export function* exitRoomSaga() {
+    try {
+        const { email, code } = yield select(selectUser);
+
+        if (!email || !code) {
+            throw new Error('EMPTY_EMAIL');
+        }
+
+        yield call(fetchAPI, 'GET', `/rest/player/${email}/exit/${code}`);
+        yield put(exitRoomSuccess());
+    } catch (err) {
+        yield put(exitRoomFailed());
+    }
+}
+
+export function* joinRoomSaga() {
+    try {
+        const { email, code } = yield select(selectUser);
+
+        if (!email || !code) {
+            throw new Error('EMPTY_EMAIL');
+        }
+
+        yield call(fetchAPI, 'GET', `/rest/player/${email}/join/${code}`);
+        yield put(joinRoomSuccess());
+    } catch (err) {
+        yield put(joinRoomFailed());
+    }
+}
+
 export function* saga() {
-    yield all([ call(ratingSyncSaga), takeLatest([ SET_DAY, FETCH_RATING ], fetchRatingSaga), takeLatest([ SET_PARTICIPANT_ID, SET_DAY ], updateQueryParamsSaga) ]);
+    yield all([
+        call(ratingSyncSaga),
+        takeLatest([ SET_DAY, FETCH_RATING ], fetchRatingSaga),
+        takeLatest([ SET_PARTICIPANT_ID, SET_DAY ], updateQueryParamsSaga),
+        takeLatest(EXIT_ROOM, exitRoomSaga),
+        takeLatest(JOIN_ROOM, joinRoomSaga),
+    ]);
 }

@@ -1,0 +1,58 @@
+.participantHeader {
+    display: flex;
+    align-items: center;
+}
+
+.toTop,
+.toMyPosition,
+.freeMove,
+.watchPosition {
+    cursor: pointer;
+}
+
+.toTop {
+    margin-left: 10px;
+    color: rgb(163, 198, 68);
+}
+
+.watchPosition {
+    margin-left: 10px;
+    color: rgb(235, 106, 90);
+}
+
+.freeMove {
+    margin-left: 10px;
+    color: gray;
+}
+
+.toMyPosition {
+    margin-left: 10px;
+    color: rgb(65, 199, 220);
+}
+
+.exitedRoom {
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.joinedRoom {
+    cursor: pointer;
+    margin-left: 10px;
+    color: rgb(255, 255, 255);
+}
+
+.actionInProgress {
+    margin-left: 10px;
+    color: rgb(239, 255, 21);
+}
+
+.exitedRoomRequest {
+    margin-left: 10px;
+    color: rgb(196, 197, 183);
+}
+
+.joinedRoomRequest {
+    margin-left: 10px;
+    color: rgb(249, 253, 186);
+    ;
+}

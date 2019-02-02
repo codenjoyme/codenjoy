@@ -3,16 +3,14 @@ import React, { Component } from 'react';
 import { Column, Table, AutoSizer } from 'react-virtualized';
 import classNames from 'classnames/bind';
 import _ from 'lodash';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faStar,
-    faArrowUp,
-    faArrowRight,
-    faAnchor,
-} from '@fortawesome/free-solid-svg-icons';
+
+// proj
+import { Spinner, StarIndex } from './../../components';
 
 // own
+import ActionsPanel from './helpers/ActionsPanel';
 import Styles from './styles.module.css';
+
 const cx = classNames.bind(Styles);
 
 const ROW_HEIGHT = 50;
@@ -20,16 +18,6 @@ const HEADER_HEIGHT = 60;
 const MIN_ITEMS = 10;
 
 class RatingTableHandler extends Component {
-    _starStyle(position) {
-        if (position === 0) {
-            return Styles.firstPlace;
-        } else if (position < 3) {
-            return Styles.topThree;
-        } else if (position < 10) {
-            return Styles.topTen;
-        }
-    }
-
     _rowStyles(rowIndex, selectedIndex, ownIndex) {
         const isHeader = rowIndex === -1;
         const selectedRow = selectedIndex !== -1 && selectedIndex === rowIndex;
@@ -92,7 +80,9 @@ class RatingTableHandler extends Component {
 
     render() {
         const { setParticipant, setWatchPosition } = this.props;
-        const { rating, watchPosition } = this.props;
+        const { rating, watchPosition, id, active } = this.props;
+        const { joinRoom, exitRoom } = this.props;
+        const { isExiting, isJoining, isRoomExited, isRoomJoined } = this.props;
 
         const ownIndex = this._getOwnIndex();
         const selectedIndex = this._getSelectedIndex();
@@ -128,90 +118,33 @@ class RatingTableHandler extends Component {
                                 flexGrow={ 0 }
                                 flexShrink={ 0 }
                                 width={ 40 }
-                                cellRenderer={ ({ rowIndex }) =>
-                                    rowIndex < 10 ? (
-                                        <div className={ Styles.ratingStar }>
-                                            <span className='fa-layers fa-fw fa-3x'>
-                                                <FontAwesomeIcon
-                                                    className={ this._starStyle(
-                                                        rowIndex,
-                                                    ) }
-                                                    icon={ faStar }
-                                                />
-                                                <span
-                                                    className={ `fa-layers-text fa-inverse ${
-                                                        Styles.starLabel
-                                                    }` }
-                                                >
-                                                    { rowIndex + 1 }
-                                                </span>
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <div className={ Styles.ratingIndex }>
-                                            { rowIndex + 1 }
-                                        </div>
-                                    )
-                                }
+                                cellRenderer={ ({ rowIndex }) => (
+                                    <StarIndex rowIndex={ rowIndex } />
+                                ) }
                             />
                             <Column
                                 label='Учасник'
                                 className={ Styles.ratingColumn }
                                 headerRenderer={ () => (
-                                    <div className={ Styles.participantHeader }>
-                                        Учасник
-                                        { ownIndex !== -1 && (
-                                            <FontAwesomeIcon
-                                                title='До моєї позиції'
-                                                onClick={ () => {
-                                                    setParticipant(
-                                                        rating[ ownIndex ],
-                                                    );
-                                                    this._scrollToPosition(
-                                                        ownIndex,
-                                                    );
-                                                } }
-                                                className={ Styles.toMyPosition }
-                                                icon={ faArrowRight }
-                                            />
+                                    <ActionsPanel
+                                        setParticipant={ setParticipant }
+                                        setWatchPosition={ setWatchPosition }
+                                        scrollToPosition={ this._scrollToPosition.bind(
+                                            this,
                                         ) }
-                                        { !!rating.length && (
-                                            <FontAwesomeIcon
-                                                title='Показати лідерів'
-                                                onClick={ () => {
-                                                    setParticipant(
-                                                        _.first(rating),
-                                                    );
-                                                    this._scrollToPosition(0);
-                                                } }
-                                                className={ Styles.toTop }
-                                                icon={ faArrowUp }
-                                            />
-                                        ) }
-                                        <FontAwesomeIcon
-                                            title={
-                                                watchPosition
-                                                    ? 'Слідкувати за позицією'
-                                                    : 'Вільно переглядати рейтинг'
-                                            }
-                                            onClick={ () => {
-                                                setWatchPosition(
-                                                    !watchPosition,
-                                                );
-                                                if (!watchPosition) {
-                                                    this._scrollToPosition(
-                                                        selectedIndex,
-                                                    );
-                                                }
-                                            } }
-                                            className={
-                                                watchPosition
-                                                    ? Styles.watchPosition
-                                                    : Styles.freeMove
-                                            }
-                                            icon={ faAnchor }
-                                        />
-                                    </div>
+                                        id={ id }
+                                        active={ active }
+                                        joinRoom={ joinRoom }
+                                        exitRoom={ exitRoom }
+                                        ownIndex={ ownIndex }
+                                        selectedIndex={ selectedIndex }
+                                        rating={ rating }
+                                        watchPosition={ watchPosition }
+                                        isRoomExited={ isRoomExited }
+                                        isRoomJoined={ isRoomJoined }
+                                        isExiting={ isExiting }
+                                        isJoining={ isJoining }
+                                    />
                                 ) }
                                 dataKey='name'
                                 flexGrow={ 2 }
@@ -230,15 +163,7 @@ class RatingTableHandler extends Component {
                 </AutoSizer>
             </div>
         ) : (
-            <div>
-                <div className={ Styles.spinner }>
-                    <div className={ Styles.rect1 } />
-                    <div className={ Styles.rect2 } />
-                    <div className={ Styles.rect3 } />
-                    <div className={ Styles.rect4 } />
-                    <div className={ Styles.rect5 } />
-                </div>
-            </div>
+            <Spinner />
         );
     }
 }

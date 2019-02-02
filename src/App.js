@@ -17,6 +17,7 @@ import {
     faShareAlt,
     faUser,
     faAnchor,
+    faLightbulb,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faSquare as farSquare,
@@ -47,6 +48,7 @@ library.add(
     farComments,
     faUser,
     farUserCircle,
+    faLightbulb,
 );
 
 const reactPixelOptions = { autoConfig: false };

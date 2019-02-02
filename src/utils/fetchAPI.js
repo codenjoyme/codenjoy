@@ -11,7 +11,7 @@ export async function fetchAPI(
     endpoint,
     query,
     body,
-    { rawResponse, url, headers, noRedirect } = {},
+    { rawResponse, url, headers } = {},
 ) {
     const endpointC = trim(endpoint, "/"); // trim all spaces and '/'
     const handler = endpointC ? `/${endpointC}` : ""; // be sure that after api will be only one /

@@ -70,7 +70,11 @@ export default function reducer(state = ReducerState, action) {
  * Selectors
  **/
 
-export const selectToken = state => state.auth.token;
+export const selectUser = state => ({
+    email:  state.auth.email,
+    server: state.auth.server,
+    code:   state.auth.code,
+});
 
 /**
  * Action Creators
@@ -131,7 +135,6 @@ export function* loginFormSaga() {
                 'rest/login',
                 null,
                 credentials,
-                { noRedirect: true },
             );
 
             if (!response.code || !response.email || !response.server) {

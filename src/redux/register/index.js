@@ -90,7 +90,6 @@ export function* registerFormSaga() {
                 'rest/register',
                 null,
                 payload,
-                { noRedirect: true },
             );
             if (!response.code) {
                 yield put(registerFail({ credentials: true }));

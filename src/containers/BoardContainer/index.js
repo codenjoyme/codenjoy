@@ -13,6 +13,9 @@ import {
     setWatchPosition,
     startBackgroundSync,
     stopBackgroundSync,
+    exitRoom,
+    joinRoom,
+    clearRoomChangeHistory,
 } from '../../redux/board';
 import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 
@@ -40,19 +43,43 @@ class BoardContainer extends Component {
         this.props.startBackgroundSync(queryParams);
     }
 
+    // eslint-disable-next-line complexity
     componentDidUpdate(prevProps) {
-        const { rating, participantId } = this.props;
+        const {
+            rating,
+            participantId,
+            isRoomJoined,
+            isRoomExited,
+        } = this.props;
+        const { clearRoomChangeHistory, setParticipantId } = this.props;
+
+        const currentParticipant = this._getCurrentRatingParticipant();
+        const isActive = this._isActiveDay();
+
+        // Set participant if not set yet
         if (!participantId && rating && rating !== prevProps.rating) {
-            const { setParticipantId } = this.props;
-
-            const currentParticipant = this._getCurrentRatingParticipant();
             const participantToSet = currentParticipant || _.get(rating, 0);
-            const participantId = _.get(participantToSet, 'id');
+            const newParticipantId = _.get(participantToSet, 'id');
 
-            if (participantId) {
-                setParticipantId(participantId);
+            if (newParticipantId) {
+                setParticipantId(newParticipantId);
             }
         }
+
+        // Clear room change history
+        if (isActive && currentParticipant && isRoomJoined) {
+            clearRoomChangeHistory();
+        }
+
+        if (isActive && !currentParticipant && isRoomExited) {
+            clearRoomChangeHistory();
+        }
+    }
+
+    _isActiveDay() {
+        const { day } = this.props;
+
+        return moment(day).isSame(moment(), 'day');
     }
 
     _getCurrentRatingParticipant() {
@@ -73,6 +100,18 @@ class BoardContainer extends Component {
         const { setDay, setParticipantId, setWatchPosition } = this.props; // actions
         const { day, rating, id, watchPosition } = this.props;
 
+        const { exitRoom, joinRoom } = this.props;
+        const { isExiting, isJoining, isRoomExited, isRoomJoined } = this.props;
+
+        const changeRoomOptions = {
+            exitRoom,
+            joinRoom,
+            isExiting,
+            isJoining,
+            isRoomExited,
+            isRoomJoined,
+        };
+
         const battleParticipant = this._getSelectedRatingParticipant();
 
         return (
@@ -82,7 +121,9 @@ class BoardContainer extends Component {
                 <div className={ Styles.wrapper }>
                     <div className={ Styles.rating }>
                         <RatingTable
+                            { ...changeRoomOptions }
                             id={ id }
+                            active={ this._isActiveDay() }
                             watchId={ _.get(battleParticipant, 'id') }
                             watchPosition={ watchPosition }
                             rating={ rating }
@@ -92,14 +133,9 @@ class BoardContainer extends Component {
                     </div>
                     <div className={ Styles.frame }>
                         <BattleFrame
-                            battleCompleted={ !moment(day).isSame(
-                                moment(),
-                                'day',
-                            ) }
+                            battleCompleted={ !this._isActiveDay() }
                             participant={
-                                moment(day).isSame(moment(), 'day')
-                                    ? battleParticipant
-                                    : void 0
+                                this._isActiveDay() ? battleParticipant : void 0
                             }
                         />
                     </div>
@@ -110,18 +146,35 @@ class BoardContainer extends Component {
 }
 
 const mapStateToProps = state => ({
+    // rating related actions
     day:           state.board.day,
     participantId: state.board.participantId,
     watchPosition: state.board.watchPosition,
     rating:        state.board.rating,
-    id:            state.auth.id,
-    server:        state.auth.server,
+
+    // auth
+    id:     state.auth.id,
+    server: state.auth.server,
+
+    // room actions
+    isExiting:    state.board.isExiting,
+    isJoining:    state.board.isJoining,
+    isRoomExited: state.board.isRoomExited,
+    isRoomJoined: state.board.isRoomJoined,
 });
 
 const mapDispatchToProps = {
+    // change room actions
+    clearRoomChangeHistory,
+    exitRoom,
+    joinRoom,
+
+    // rating related actions
     setDay,
     setParticipantId,
     setWatchPosition,
+
+    // sync actions
     startBackgroundSync,
     stopBackgroundSync,
 };

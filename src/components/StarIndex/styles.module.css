@@ -1,0 +1,28 @@
+.firstPlace {
+    color: rgb(235, 106, 90);
+}
+
+.topThree {
+    color: rgb(236, 193, 52);
+}
+
+.topTen {
+    color: rgb(163, 198, 68);
+}
+
+.starLabel {
+    font-size: 12px;
+    color: black;
+}
+
+.ratingStar,
+.ratingIndex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+}
+
+.ratingStar {
+    font-size: 8px;
+}
