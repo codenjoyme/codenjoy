@@ -297,8 +297,8 @@ public class AdminController {
                 }
 
                 created++;
-                playerService.register(playerName, "127.0.0.1", settings.getGameName());
                 String code = getCode(playerName);
+                playerService.register(playerName, "127.0.0.1", settings.getGameName());
             }
         }
 

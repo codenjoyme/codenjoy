@@ -23,12 +23,16 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.web.rest.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.regex.Pattern;
 
@@ -47,7 +51,8 @@ public class Validator {
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
     public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
 
-    @Autowired private Players registration;
+    @Autowired private Players players;
+    @Autowired private ConfigProperties properties;
 
     private final Pattern email;
     private final Pattern gameName;
@@ -117,8 +122,19 @@ public class Validator {
         }
     }
 
-    public void validateAdmin(String expected, String actual) {
-        if (!DigestUtils.md5DigestAsHex(expected.getBytes()).equals(actual)){
+    public Player checkPlayerCode(@PathVariable("player") String email, @PathVariable("code") String code) {
+        checkEmail(email, Validator.CANT_BE_NULL);
+        checkCode(code, Validator.CANT_BE_NULL);
+
+        Player player = players.get(email);
+        if (player == null || code.equals(player.getCode())) {
+            throw new IllegalArgumentException("Player code is invalid: " + code);
+        }
+        return player;
+    }
+
+    public void checkIsAdmin(String adminPassword) {
+        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(adminPassword)){
             throw new LoginException("Unauthorized admin access");
         }
     }

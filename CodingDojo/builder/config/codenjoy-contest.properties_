@@ -35,5 +35,5 @@ database.url=
 database.name=
 database.user=
 database.password=
-admin.password=securePassword
+admin.password=admin
 email.hash=secureSoul

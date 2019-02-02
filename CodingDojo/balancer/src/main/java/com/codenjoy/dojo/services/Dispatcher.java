@@ -257,7 +257,8 @@ public class Dispatcher {
 
     private String createPlayerUrl(String server) {
         return String.format(settings.getUrlCreatePlayer(),
-                server);
+                server,
+                getAdminToken());
     }
 
     private String removePlayerUrl(String server, String email, String code) {
@@ -270,7 +271,11 @@ public class Dispatcher {
     private String clearPlayersScoreUrl(String server) {
         return String.format(settings.getUrlClearScores(),
                 server,
-                DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()));
+                getAdminToken());
+    }
+
+    private String getAdminToken() {
+        return DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes());
     }
 
     private String playerExistsUrl(String server, String email) {
@@ -283,7 +288,7 @@ public class Dispatcher {
         return String.format(settings.getUrlGameEnabled(),
                 server,
                 enabled,
-                DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()));
+                getAdminToken());
     }
 
     public List<PlayerScore> getScores(String day) {

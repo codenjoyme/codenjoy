@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class Validator {
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
 
     @Autowired private Registration registration;
+    @Autowired private ConfigProperties properties;
 
     private final Pattern email;
     private final Pattern gameName;
@@ -113,8 +115,8 @@ public class Validator {
         }
     }
 
-    public void validateAdmin(String expected, String actual) {
-        if (!DigestUtils.md5DigestAsHex(expected.getBytes()).equals(actual)){
+    public void checkIsAdmin(String adminPassword) {
+        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(adminPassword)){
             throw new RuntimeException("Unauthorized admin access");
         }
     }
