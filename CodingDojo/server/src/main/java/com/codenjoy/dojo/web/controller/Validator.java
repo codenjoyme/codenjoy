@@ -63,13 +63,13 @@ public class Validator {
     }
 
     public void checkPlayerId(String input) {
-        if (StringUtils.isEmpty(input)) {
+        if (isEmpty(input)) {
             throw new IllegalArgumentException("Player id is invalid: " + input);
         }
     }
 
     public void checkPlayerName(String input, boolean canBeNull) {
-        boolean empty = StringUtils.isEmpty(input);
+        boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
                 !empty && email.matcher(input).matches()))
         {
@@ -78,7 +78,7 @@ public class Validator {
     }
 
     public void checkCode(String input, boolean canBeNull) {
-        boolean empty = StringUtils.isEmpty(input);
+        boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
                 !empty && code.matcher(input).matches()))
         {
@@ -86,8 +86,12 @@ public class Validator {
         }
     }
 
+    private boolean isEmpty(String input) {
+        return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
+    }
+
     public void checkGameName(String input, boolean canBeNull) {
-        boolean empty = StringUtils.isEmpty(input);
+        boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
                 !empty && gameName.matcher(input).matches()))
         {
