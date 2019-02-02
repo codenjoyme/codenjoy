@@ -5,9 +5,9 @@ const PrivacyPolicyContainer = () => (
     <div className='container'>
         <div className='content'>
             <div className='title'>
-                ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ
+                ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ ТА ЗГОДА НА ОБРОБКУ ДАНИХ
                 <br />
-                під час проведення конкурсу “EPAM BOT CHALLENGE”,
+                в зв'язку з проведенням конкурсу “EPAM BOT CHALLENGE”,
                 <br />
                 який організовано ТОВ «ЕПАМ СИСТЕМЗ»
             </div>
