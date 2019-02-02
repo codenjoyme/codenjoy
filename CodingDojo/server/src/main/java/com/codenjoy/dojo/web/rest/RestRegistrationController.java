@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import org.json.JSONObject;
@@ -47,6 +48,8 @@ public class RestRegistrationController {
     @Autowired private PlayerGames playerGames;
     @Autowired private PlayerGamesView playerGamesView;
     @Autowired private SaveService saveService;
+    @Autowired private Validator validator;
+    @Autowired private ConfigProperties properties;
 
     @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
@@ -82,10 +85,16 @@ public class RestRegistrationController {
                 .collect(toList());
     }
 
+    private void verifyIsAdmin(String adminPassword) {
+        validator.validateAdmin(properties.getAdminPassword(), adminPassword);
+    }
+
     // TODO test me
-    @RequestMapping(value = "/player/all/info", method = RequestMethod.GET)
+    @RequestMapping(value = "/player/all/info/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlayerDetailInfo> getPlayersForMigrate() {
+    public List<PlayerDetailInfo> getPlayersForMigrate(@PathVariable("adminPassword") String adminPassword) {
+        verifyIsAdmin(adminPassword);
+
         List<Player> players = playerService.getAll();
         List<Registration.User> users = registration.getUsers();
         Map<String, List<String>> groups = playerGamesView.getGroupsMap();
