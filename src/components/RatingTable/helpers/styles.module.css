@@ -33,26 +33,29 @@
 .exitedRoom {
     cursor: pointer;
     margin-left: 10px;
+    color: rgb(96, 94, 184);
 }
 
 .joinedRoom {
     cursor: pointer;
     margin-left: 10px;
-    color: rgb(255, 255, 255);
+    color: rgb(251, 255, 0);
 }
 
 .actionInProgress {
     margin-left: 10px;
-    color: rgb(239, 255, 21);
+    cursor: not-allowed;
+    color: rgb(196, 197, 183);
 }
 
 .exitedRoomRequest {
     margin-left: 10px;
+    cursor: not-allowed;
     color: rgb(196, 197, 183);
 }
 
 .joinedRoomRequest {
     margin-left: 10px;
-    color: rgb(249, 253, 186);
-    ;
+    cursor: not-allowed;
+    color: rgb(196, 197, 183);
 }

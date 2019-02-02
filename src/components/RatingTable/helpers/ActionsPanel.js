@@ -84,16 +84,18 @@ export default class ActionsPanel extends Component {
         );
     }
 
+    _isDisabled() {
+        const { isJoining, isExiting, isRoomExited, isRoomJoined } = this.props;
+
+        return isJoining || isExiting || isRoomExited || isRoomJoined;
+    }
+
     render() {
         const {
             ownIndex,
             selectedIndex,
             watchPosition,
             id,
-            isJoining,
-            isExiting,
-            isRoomExited,
-            isRoomJoined,
             active,
 
             setWatchPosition,
@@ -129,13 +131,13 @@ export default class ActionsPanel extends Component {
                         icon={ faLightbulb }
                         title={ this._getTitle() }
                         className={ this._getLampStyle() }
-                        disabled={
-                            isJoining ||
-                            isExiting ||
-                            isRoomExited ||
-                            isRoomJoined
+                        onClick={
+                            this._isDisabled()
+                                ? void 0
+                                : ownIndex === -1
+                                    ? joinRoom
+                                    : exitRoom
                         }
-                        onClick={ ownIndex === -1 ? joinRoom : exitRoom }
                     />
                 ) }
             </div>
