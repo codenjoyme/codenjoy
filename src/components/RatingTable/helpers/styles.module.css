@@ -44,18 +44,37 @@
 
 .actionInProgress {
     margin-left: 10px;
-    cursor: not-allowed;
     color: rgb(196, 197, 183);
 }
 
 .exitedRoomRequest {
+    animation: exitPulse 1s infinite;
     margin-left: 10px;
-    cursor: not-allowed;
     color: rgb(196, 197, 183);
 }
 
+@keyframes exitPulse {
+    0% {
+        color: rgb(196, 197, 183);
+    }
+
+    100% {
+        color: rgb(96, 94, 184);
+    }
+}
+
 .joinedRoomRequest {
+    animation: joinPulse 1s infinite;
     margin-left: 10px;
-    cursor: not-allowed;
     color: rgb(196, 197, 183);
+}
+
+@keyframes joinPulse {
+    0% {
+        color: rgb(196, 197, 183);
+    }
+
+    100% {
+        color: rgb(251, 255, 0);
+    }
 }
