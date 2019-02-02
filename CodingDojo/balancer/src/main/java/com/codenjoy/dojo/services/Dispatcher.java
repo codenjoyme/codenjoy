@@ -80,10 +80,10 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
-    public ServerLocation register(String email, String password, String callbackUrl) {
+    public ServerLocation registerNew(String email, String password, String callbackUrl) {
         String server = getNextServer();
 
-        return registerOnServer(server, email, password, callbackUrl);
+        return registerOnServer(server, email, password, callbackUrl, "0", "{}");
     }
 
     public ServerLocation registerIfNotExists(String server, String email, String code, String callbackUrl) {
@@ -98,7 +98,9 @@ public class Dispatcher {
                 .forEach(s -> remove(s, email, code));
 
         Player player = players.get(email);
-        return registerOnServer(server, email, player.getPassword(), callbackUrl);
+        String score = null; // будет попытка загрузиться с сейва
+        String save = null;
+        return registerOnServer(server, email, player.getPassword(), callbackUrl, score, save);
     }
 
     public boolean existsOnServer(String server, String email) {
@@ -117,12 +119,12 @@ public class Dispatcher {
         }
     }
 
-    public ServerLocation registerOnServer(String server, String email, String password, String callbackUrl) {
+    public ServerLocation registerOnServer(String server, String email, String password, String callbackUrl, String score, String save) {
         if (logger.isDebugEnabled()) {
             logger.debug("User {} go to {}", email, server);
         }
 
-        String code = createNewPlayer(server, email, password, callbackUrl);
+        String code = createNewPlayer(server, email, password, callbackUrl, score, save);
 
         return new ServerLocation(
                 email,
@@ -170,7 +172,8 @@ public class Dispatcher {
     }
 
     private String createNewPlayer(String server, String email,
-                                   String password, String callbackUrl)
+                                   String password, String callbackUrl,
+                                   String score, String save)
     {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> entity = rest.postForEntity(
@@ -179,8 +182,8 @@ public class Dispatcher {
                         email,
                         callbackUrl,
                         settings.getGameType(),
-                        "0",
-                        "{}",
+                        score,
+                        save,
                         new User(
                                 email,
                                 1,

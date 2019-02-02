@@ -27,7 +27,7 @@ import java.util.List;
 
 public interface SaveService {
 
-    void load(String name);
+    boolean load(String name);
     void load(String name, String gameName, String save);
     void save(String name);
     List<PlayerInfo> getSaves();

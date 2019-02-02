@@ -78,6 +78,15 @@ var _ajax = function(name, ajaxObject) {
     $.ajax(ajaxObject);
 }
 
+var autoIncrement = function() {
+    if ($('#auto-increment').is(':checked')) {
+        var old = $('#preffix').val();
+        var index = parseInt(old.match(/\d+/g)[0]);
+        var aNew = old.replace('' + index, '' + (index + 1));
+        $('#preffix').val(aNew);
+    }
+}
+
 var registerUser = function(email, firstName,
                             lastName, password,
                             city, skills, comment)
@@ -93,11 +102,10 @@ var registerUser = function(email, firstName,
             '"city" : "' + city + '", ' +
             '"skills" : "' + skills + '", ' +
             '"comment" : "' + comment + '"}',
-        after: function(){
-            var old = $('#preffix').val();
-            var index = parseInt(old.match(/\d+/g)[0]);
-            var aNew = old.replace('' + index, '' + (index + 1));
-            $('#preffix').val(aNew);
+        after: function(data){
+            $('#join-code').val(data.code);
+
+            autoIncrement();
         }
     });
 };
@@ -108,7 +116,19 @@ var loginUser = function(email, password) {
         url: server('balancer') + '/login',
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
-            '"password" : "' + password + '"}'
+            '"password" : "' + password + '"}',
+        after: function(data){
+            $('#join-code').val(data.code);
+
+            autoIncrement();
+        }
+    });
+};
+
+var joinExitStatusUser = function(email, code, whatToDo) {
+    _ajax('join', {
+        type: 'GET',
+        url: server('balancer') + '/player/' + email + '/' + whatToDo + '/' + code,
     });
 };
 
@@ -225,6 +245,41 @@ $(document).ready(function() {
             preffix + $('#city').val(),
             preffix + $('#skills').val(),
             preffix + $('#comment').val()
+        );
+    });
+
+    $('#login').click(function() {
+        var preffix = $('#preffix').val();
+        loginUser(
+            preffix + $('#login-email').val(),
+            $.md5(preffix + $('#login-password').val())
+        );
+    });
+
+    $('#join').click(function() {
+        var preffix = $('#preffix').val();
+        joinExitStatusUser(
+            preffix + $('#join-email').val(),
+            $('#join-code').val(),
+            'join'
+        );
+    });
+
+    $('#exit').click(function() {
+        var preffix = $('#preffix').val();
+        joinExitStatusUser(
+            preffix + $('#join-email').val(),
+            $('#join-code').val(),
+            'exit'
+        );
+    });
+
+    $('#join-status').click(function() {
+        var preffix = $('#preffix').val();
+        joinExitStatusUser(
+            preffix + $('#join-email').val(),
+            $('#join-code').val(),
+            'active'
         );
     });
 

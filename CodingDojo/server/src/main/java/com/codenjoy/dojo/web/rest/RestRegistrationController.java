@@ -64,13 +64,23 @@ public class RestRegistrationController {
     // TODO test me
     @RequestMapping(value = "/player/{playerName}/remove/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean removeUser(@PathVariable("playerName") String playerName,
+    public synchronized boolean removeUser(@PathVariable("playerName") String playerName,
                               @PathVariable("code") String code)
     {
+        validator.checkPlayerName(playerName, Validator.CANT_BE_NULL);
+        if (!registration.registered(playerName)) {
+            return false;
+        }
+
         validator.checkPlayerCode(playerName, code);
 
-        playerService.remove(playerName);
+        // оставляем только актуальные на сейчас очки, мало ли захочет залогиниться назад
+        // TODO как-то тут не очень оставлять последние очки, иначе пользователь потеряет их, что тоже не ок
         saveService.removeSave(playerName);
+        saveService.save(playerName);
+
+        // и удаляем игрока с игрового сервера
+        playerService.remove(playerName);
         registration.remove(playerName);
 
         return true;
@@ -115,23 +125,37 @@ public class RestRegistrationController {
     // TODO test me
     @RequestMapping(value = "/player/create/{adminPassword}", method = RequestMethod.POST)
     @ResponseBody
-    public String createPlayer(@RequestBody PlayerDetailInfo playerInfo,
+    public synchronized String createPlayer(@RequestBody PlayerDetailInfo player,
                                @PathVariable("adminPassword") String adminPassword)
     {
         validator.checkIsAdmin(adminPassword);
 
-        Registration.User user = playerInfo.getRegistration();
+        Registration.User user = player.getRegistration();
 
         String code = Registration.makeCode(user.getEmail(), user.getPassword());
         user.setCode(code);
 
         registration.replace(user);
 
-        PlayerSave playerSave = playerInfo.buildPlayerSave();
-        playerService.register(playerSave);
+        boolean fromSave = player.getScore() == null;
+        if (fromSave) {
+            // делаем попытку грузить по сейву
+            boolean loaded = saveService.load(player.getName());
+            if (loaded) {
+                return code;
+            } else {
+                // неудача - обнуляем все
+                player.setSave("{}");
+                player.setScore("0");
+            }
+        }
 
-        playerGames.setLevel(playerInfo.getName(),
-                new JSONObject(playerInfo.getSave()));
+        // грузим как положено
+        PlayerSave save = player.buildPlayerSave();
+        playerService.register(save);
+
+        playerGames.setLevel(player.getName(),
+                new JSONObject(player.getSave()));
 
         return code;
     }

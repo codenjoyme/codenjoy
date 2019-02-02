@@ -66,12 +66,18 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public void load(String name) {
+    public boolean load(String name) {
         PlayerSave save = saver.loadGame(name);
+        if (save == PlayerSave.NULL) { // TODO test me
+            return false;
+        }
+
         if (playerService.contains(name)) { // TODO test me
             playerService.remove(name);
         }
         playerService.register(save);
+
+        return true;
     }
 
     @Override

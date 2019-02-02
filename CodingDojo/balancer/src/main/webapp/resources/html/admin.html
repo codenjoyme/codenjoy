@@ -82,6 +82,10 @@
             <input id="preffix" value="a1_"/>
         </div>
         <div>
+            <span>Auto increment:</span>
+            <input type="checkbox" id="auto-increment"/>
+        </div>
+        <div>
             <span>Admin Password:</span>
             <input id="admin-password" value="admin"/>
         </div>
@@ -184,6 +188,36 @@
         <div>
             <span>Error:</span>
             <textarea rows="5" id="remove-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Join/Exit game server</h2>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="join-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span>Code:</span>
+            <input id="join-code" value="code"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="join">Join</button>
+            <button id="exit">Exit</button>
+            <button id="join-status">Status</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="join-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="join-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="join-error"></textarea>
         </div>
     </div>
 

@@ -178,8 +178,15 @@ public class RestBoardController {
         validator.checkPlayerCode(playerName, code);
 
         saveService.save(playerName);
-        playerService.remove(playerName);
-        saveService.load(playerName);
+        Player player = playerService.get(playerName);
+
+        boolean loaded = saveService.load(playerName);
+        if (!loaded) {
+            if (playerService.contains(playerName)) {
+                playerService.remove(playerName);
+            }
+            playerService.register(new PlayerSave(player));
+        }
 
         return true;
     }

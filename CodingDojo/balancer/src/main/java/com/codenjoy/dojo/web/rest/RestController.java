@@ -83,7 +83,7 @@ public class RestController {
         return doIt(new DoItOnServers<ServerLocation>() {
             @Override
             public ServerLocation onGame() {
-                return dispatcher.register(player.getEmail(), player.getPassword(), getIp(request));
+                return dispatcher.registerNew(player.getEmail(), player.getPassword(), getIp(request));
             }
 
             @Override
@@ -118,12 +118,14 @@ public class RestController {
         T onBalancer(T data);
     }
 
-    @RequestMapping(value = "/player/{player}/active", method = RequestMethod.POST)
+    @RequestMapping(value = "/player/{player}/active/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean login(@PathVariable("player") String email) {
-        validator.checkEmail(email, Validator.CANT_BE_NULL);
+    public boolean login(@PathVariable("player") String email,
+                         @PathVariable("code") String code)
+    {
+        Player player = validator.checkPlayerCode(email, code);
 
-        return dispatcher.exists(email);
+        return dispatcher.exists(player.getEmail());
     }
 
     @RequestMapping(value = "/player/{player}/join/{code}", method = RequestMethod.GET)
@@ -138,8 +140,7 @@ public class RestController {
                 player.getServer(),
                 player.getEmail(),
                 player.getPassword(),
-                getIp(request)
-        );
+                getIp(request));
         return location != null;
     }
 
@@ -181,8 +182,7 @@ public class RestController {
                         current.getServer(),
                         current.getEmail(),
                         current.getCode(),
-                        callback
-                );
+                        callback);
             }
 
             @Override

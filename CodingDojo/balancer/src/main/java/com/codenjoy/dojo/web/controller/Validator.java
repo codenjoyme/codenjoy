@@ -127,7 +127,7 @@ public class Validator {
         checkCode(code, Validator.CANT_BE_NULL);
 
         Player player = players.get(email);
-        if (player == null || code.equals(player.getCode())) {
+        if (player == null || !code.equals(player.getCode())) {
             throw new IllegalArgumentException("Player code is invalid: " + code);
         }
         return player;
