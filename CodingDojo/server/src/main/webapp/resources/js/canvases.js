@@ -527,7 +527,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var names = getPlayers(data);
             for (var index in names) {
                 var name = names[index];
-                playersOnTop.push({ 'name':name });
+                playersOnTop.push({
+                    'name':name,
+                    'readableName':data[name].heroesData.readableNames[name]
+                });
             }
 
             reloading = true;
