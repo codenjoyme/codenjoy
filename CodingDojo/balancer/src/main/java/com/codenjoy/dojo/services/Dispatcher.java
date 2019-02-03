@@ -274,7 +274,7 @@ public class Dispatcher {
     private String removePlayerUrl(String server, String email, String code) {
         return String.format(settings.getUrlRemovePlayer(),
                 server,
-                email,
+                getId(email),
                 code);
     }
 
@@ -291,7 +291,7 @@ public class Dispatcher {
     private String playerExistsUrl(String server, String email) {
         return String.format(settings.getUrlExistsPlayer(),
                 server,
-                email);
+                getId(email));
     }
 
     private String gameEnabledUrl(String server, boolean enabled) {
