@@ -176,6 +176,13 @@ var setSettings = function(settings, adminPassword) {
     });
 };
 
+var clearCache = function(adminPassword) {
+    _ajax('cache', {
+        type: 'GET',
+        url: server('balancer') + '/cache/clear/' + adminPassword
+    });
+};
+
 var getDebug = function(adminPassword) {
     _ajax('debug', {
         type: 'GET',
@@ -334,7 +341,14 @@ $(document).ready(function() {
             $.md5($('#admin-password').val())
         );
     });
-    getDebug($.md5($('#admin-password').val()));
+
+    var loadCheckboxes = function() {
+        getDebug($.md5($('#admin-password').val()));
+        getContest($.md5($('#admin-password').val()));
+    };
+
+    $('#admin-password').focusout(loadCheckboxes);
+    loadCheckboxes();
 
     $('#contest-result').change(function() {
         setContest(
@@ -342,5 +356,11 @@ $(document).ready(function() {
             $.md5($('#admin-password').val())
         );
     });
-    getContest($.md5($('#admin-password').val()));
+
+    $('#cache').click(function() {
+        clearCache(
+            $.md5($('#admin-password').val())
+        );
+    });
+
 });

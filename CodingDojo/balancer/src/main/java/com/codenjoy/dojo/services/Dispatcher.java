@@ -391,4 +391,9 @@ public class Dispatcher {
         }
         return existsOnServer(player.getServer(), player.getEmail());
     }
+
+    public void clearCache() {
+        scoresFromGameServers.clear();
+        currentScores.clear();
+    }
 }

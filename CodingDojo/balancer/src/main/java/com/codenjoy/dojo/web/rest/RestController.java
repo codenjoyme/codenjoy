@@ -377,4 +377,14 @@ public class RestController {
         return timer.isPaused();
     }
 
+    @RequestMapping(value = "/cache/clear/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean invalidateCache(@PathVariable("adminPassword") String adminPassword) {
+        validator.checkIsAdmin(adminPassword);
+
+        dispatcher.clearCache();
+
+        return true;
+    }
+
 }
