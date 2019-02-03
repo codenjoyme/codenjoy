@@ -215,12 +215,15 @@ public class Dispatcher {
     }
 
     public void updateScores() {
-        List<PlayerInfo> playersInfos = servers.stream()
+        List<PlayerInfo> players = servers.stream()
                 .map(s -> getPlayersInfos(s))
                 .collect(LinkedList::new, List::addAll, List::addAll);
 
+        players.stream()
+                .forEach(p -> p.setName(getEmail(p.getName())));
+
         long time = now();
-        scores.saveScores(time, playersInfos);
+        scores.saveScores(time, players);
 
         // теперь любой может пользоваться этим данными для считывания
         // внимание! тут нельзя ничего другого делать с переменной кроме как читать/писать
@@ -334,6 +337,10 @@ public class Dispatcher {
         currentScores.put(day, data);
 
         return data;
+    }
+
+    private String getEmail(String id) {
+        return Hash.getEmail(id, properties.getEmailHash());
     }
 
     private String getId(String email) {
