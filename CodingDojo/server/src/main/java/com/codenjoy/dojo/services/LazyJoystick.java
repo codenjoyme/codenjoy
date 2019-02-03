@@ -25,8 +25,8 @@ package com.codenjoy.dojo.services;
 
 import org.springframework.util.StringUtils;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -40,7 +40,7 @@ public class LazyJoystick implements Joystick, Tickable {
 
     private final Game game;
 
-    private List<Consumer<Joystick>> commands = new LinkedList<>();
+    private List<Consumer<Joystick>> commands = new CopyOnWriteArrayList<>();
 
     public LazyJoystick(Game game) {
         this.game = game;
@@ -83,7 +83,7 @@ public class LazyJoystick implements Joystick, Tickable {
     }
 
     @Override
-    public void tick() {
+    public synchronized void tick() {
         Joystick joystick = game.getJoystick();
 
         commands.forEach(command -> command.accept(joystick));
