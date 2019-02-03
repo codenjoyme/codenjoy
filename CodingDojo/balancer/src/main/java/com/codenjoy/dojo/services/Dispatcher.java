@@ -80,13 +80,13 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
-    public ServerLocation registerNew(String email, String password, String callbackUrl) {
+    public ServerLocation registerNew(String email, String name, String password, String callbackUrl) {
         String server = getNextServer();
 
-        return registerOnServer(server, email, password, callbackUrl, "0", "{}");
+        return registerOnServer(server, email, name, password, callbackUrl, "0", "{}");
     }
 
-    public ServerLocation registerIfNotExists(String server, String email, String code, String callbackUrl) {
+    public ServerLocation registerIfNotExists(String server, String email, String name, String code, String callbackUrl) {
         if (existsOnServer(server, email)) {
             return null;
         }
@@ -100,7 +100,7 @@ public class Dispatcher {
         Player player = players.get(email);
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
-        return registerOnServer(server, email, player.getPassword(), callbackUrl, score, save);
+        return registerOnServer(server, email, name, player.getPassword(), callbackUrl, score, save);
     }
 
     public boolean existsOnServer(String server, String email) {
@@ -119,16 +119,16 @@ public class Dispatcher {
         }
     }
 
-    public ServerLocation registerOnServer(String server, String email, String password, String callbackUrl, String score, String save) {
+    public ServerLocation registerOnServer(String server, String email, String name, String password, String callbackUrl, String score, String save) {
         if (logger.isDebugEnabled()) {
             logger.debug("User {} go to {}", email, server);
         }
 
-        String code = createNewPlayer(server, email, password, callbackUrl, score, save);
+        String code = createNewPlayer(server, email, name, password, callbackUrl, score, save);
 
         return new ServerLocation(
                 email,
-                Hash.getId(email, properties.getEmailHash()),
+                getId(email),
                 code,
                 server
         );
@@ -171,21 +171,25 @@ public class Dispatcher {
         }
     }
 
-    private String createNewPlayer(String server, String email,
+    private String createNewPlayer(String server, String email, String name,
                                    String password, String callbackUrl,
                                    String score, String save)
     {
+        String id = getId(email);
+
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> entity = rest.postForEntity(
                 createPlayerUrl(server),
                 new PlayerDetailInfo(
-                        email,
+                        id,
+                        name,
                         callbackUrl,
                         settings.getGameType(),
                         score,
                         save,
                         new User(
-                                email,
+                                id,
+                                name,
                                 1,
                                 password,
                                 null,
@@ -313,7 +317,7 @@ public class Dispatcher {
             String email = score.getId();
             Player player = playerMap.get(email);
 
-            score.setId(Hash.getId(email, properties.getEmailHash()));
+            score.setId(getId(email));
             if (player != null) {
                 score.setServer(player.getServer());
                 score.setName(String.format("%s %s", player.getFirstName(), player.getLastName()));
@@ -330,6 +334,10 @@ public class Dispatcher {
         currentScores.put(day, data);
 
         return data;
+    }
+
+    private String getId(String email) {
+        return Hash.getId(email, properties.getEmailHash());
     }
 
     public Boolean remove(String server, String email, String code) {

@@ -61,7 +61,7 @@ public class BoardController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}",
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     method = RequestMethod.GET)
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
@@ -72,7 +72,8 @@ public class BoardController {
         return boardPlayer(model, playerName, null, justBoard);
     }
 
-    @RequestMapping(value = "/board/player/id/{playerId}",
+    // TODO удалить это после того как попрошу Олега обновить фронт
+    @RequestMapping(value = "/board/player/id/{playerId:" + Validator.ID + "}",
             method = RequestMethod.GET)
     public String boardPlayerById(ModelMap model,
                               @PathVariable("playerId") String playerId,
@@ -80,13 +81,12 @@ public class BoardController {
     {
         validator.checkPlayerId(playerId);
 
-        String playerName = Hash.getEmail(playerId, properties.getEmailHash());
-        return boardPlayer(model, playerName, null, justBoard);
+        return boardPlayer(model, playerId, null, justBoard);
     }
 
     // TODO а тут точно надо 'remove' в params = {"code", "remove"} ?
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = {"code", "remove"}, method = RequestMethod.GET)
-    public String removePlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
+    public String removePlayer(@PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
         validator.checkCode(code, CANT_BE_NULL);
 
@@ -98,21 +98,7 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/board/player/id/{playerId}",
-            params = "code",
-            method = RequestMethod.GET)
-    public String boardPlayerById(ModelMap model, @PathVariable("playerId") String playerId,
-                              @RequestParam("code") String code,
-                              @RequestParam(name = "only", required = false) Boolean justBoard)
-    {
-        validator.checkPlayerId(playerId);
-        validator.checkCode(code, CAN_BE_NULL);
-
-        String playerName = Hash.getEmail(playerId, properties.getEmailHash());
-        return boardPlayer(model, playerName, code, justBoard);
-    }
-
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}",
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     params = "code",
                     method = RequestMethod.GET)
     public String boardPlayer(ModelMap model,
@@ -145,7 +131,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = "/board/game/{gameName:" + Validator.GAME + "}", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/game/{gameName}", method = RequestMethod.GET)
     public String boardAllGames(ModelMap model, @PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 

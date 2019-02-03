@@ -83,7 +83,12 @@ public class RestController {
         return doIt(new DoItOnServers<ServerLocation>() {
             @Override
             public ServerLocation onGame() {
-                return dispatcher.registerNew(player.getEmail(), player.getPassword(), getIp(request));
+                return dispatcher.registerNew(
+                        player.getEmail(),
+                        getFullName(player),
+                        player.getPassword(),
+                        getIp(request)
+                );
             }
 
             @Override
@@ -96,6 +101,10 @@ public class RestController {
                 return location;
             }
         });
+    }
+
+    private String getFullName(Player player) {
+        return player.getFirstName() + " " + player.getLastName();
     }
 
     private String getIp(HttpServletRequest request) {
@@ -139,6 +148,7 @@ public class RestController {
         ServerLocation location = dispatcher.registerIfNotExists(
                 player.getServer(),
                 player.getEmail(),
+                getFullName(player),
                 player.getPassword(),
                 getIp(request));
         return location != null;
@@ -181,6 +191,7 @@ public class RestController {
                 return dispatcher.registerIfNotExists(
                         current.getServer(),
                         current.getEmail(),
+                        getFullName(players.get(current.getEmail())),
                         current.getCode(),
                         callback);
             }

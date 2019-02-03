@@ -40,6 +40,7 @@ public class Registration {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS users (" +
                         "email varchar(255), " +
+                        "readable_name varchar(255), " +
                         "email_approved int, " +
                         "password varchar(255)," +
                         "code varchar(255)," +
@@ -73,10 +74,10 @@ public class Registration {
         );
     }
 
-    public String register(final String email, final String password, String data) {
+    public String register(String email, String readableName, String password, String data) {
         String code = makeCode(email, password);
-        pool.update("INSERT INTO users (email, email_approved, password, code, data) VALUES (?,?,?,?,?);",
-                new Object[]{email, 0, password, code, data});
+        pool.update("INSERT INTO users (email, readable_name, email_approved, password, code, data) VALUES (?,?,?,?,?,?);",
+                new Object[]{email, readableName, 0, password, code, data});
         return code;
     }
 
@@ -96,27 +97,40 @@ public class Registration {
         return actualName != null && actualName.equals(email);
     }
 
-    public String getEmail(final String code) {
+    public String getEmail(String code) {
         return pool.select("SELECT email FROM users WHERE code = ?;",
                 new Object[]{code},
                 rs -> rs.next() ? rs.getString("email") : null
         );
     }
 
-    public String getCode(final String email) {
+    public String getReadableName(String email) {
+        return pool.select("SELECT readable_name FROM users WHERE email = ?;",
+                new Object[]{email},
+                rs -> rs.next() ? rs.getString("readable_name") : null
+        );
+    }
+
+    public String getCode(String email) {
         return pool.select("SELECT code FROM users WHERE email = ?;",
                 new Object[]{email},
                 rs -> rs.next() ? rs.getString("code") : null
         );
     }
 
-    public void approve(final String code) {
+    public void approve(String code) {
         pool.update("UPDATE users SET email_approved = ? WHERE code = ?;",
                 new Object[]{1, code});
     }
 
+    public void updateReadableName(String email, String readableName) {
+        pool.update("UPDATE users SET readable_name = ? WHERE email = ?;",
+                new Object[]{readableName, email});
+    }
+
     public static class User {
         private String email;
+        private String readableName;
         private int approved;
         private String password;
         private String code;
@@ -126,8 +140,9 @@ public class Registration {
             // do nothing
         }
 
-        public User(String email, int approved, String password, String code, String data) {
+        public User(String email, String readableName, int approved, String password, String code, String data) {
             this.email = email;
+            this.readableName = readableName;
             this.approved = approved;
             this.password = password;
             this.code = code;
@@ -136,6 +151,10 @@ public class Registration {
 
         public String getEmail() {
             return email;
+        }
+
+        public String getReadableName() {
+            return readableName;
         }
 
         public int getApproved() {
@@ -158,6 +177,7 @@ public class Registration {
         public String toString() {
             return "User{" +
                     "email='" + email + '\'' +
+                    ", readable_name=" + readableName +
                     ", email_approved=" + approved +
                     ", password='" + password + '\'' +
                     ", code='" + code + '\'' +
@@ -184,7 +204,9 @@ public class Registration {
                 rs -> {
                     List<User> result = new LinkedList<>();
                     while (rs.next()) {
-                        result.add(new User(rs.getString("email"),
+                        result.add(new User(
+                                rs.getString("email"),
+                                rs.getString("readable_name"),
                                 rs.getInt("email_approved"),
                                 rs.getString("password"),
                                 rs.getString("code"),
@@ -196,12 +218,12 @@ public class Registration {
     }
 
     public void replace(User user) {
-        Object[] parameters = {1, user.getPassword(), user.getCode(), user.getData(), user.getEmail()};
+        Object[] parameters = {user.getReadableName(), 1, user.getPassword(), user.getCode(), user.getData(), user.getEmail()};
         if (getCode(user.getEmail()) == null) {
-            pool.update("INSERT INTO users (email_approved, password, code, data, email) VALUES (?,?,?,?,?);",
+            pool.update("INSERT INTO users (readable_name, email_approved, password, code, data, email) VALUES (?,?,?,?,?,?);",
                     parameters);
         } else {
-            pool.update("UPDATE users SET email_approved = ?, password = ?, code = ?, data = ? WHERE email = ?;",
+            pool.update("UPDATE users SET readable_name = ?, email_approved = ?, password = ?, code = ?, data = ? WHERE email = ?;",
                     parameters);
         }
     }

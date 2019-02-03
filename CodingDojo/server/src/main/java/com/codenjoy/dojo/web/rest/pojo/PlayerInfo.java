@@ -28,6 +28,7 @@ public class PlayerInfo {
     private String gameType;
     private String callbackUrl;
     private String name;
+    private String readableName;
     private String score;
     private String code;
 
@@ -35,6 +36,7 @@ public class PlayerInfo {
         gameType = player.getGameType().name();
         callbackUrl = player.getCallbackUrl();
         name = player.getName();
+        readableName = player.getNotNullReadableName();
         score = String.valueOf(player.getScore());
         code = player.getCode();
     }
@@ -57,5 +59,9 @@ public class PlayerInfo {
 
     public String getCode() {
         return code;
+    }
+
+    public String getReadableName() {
+        return readableName;
     }
 }

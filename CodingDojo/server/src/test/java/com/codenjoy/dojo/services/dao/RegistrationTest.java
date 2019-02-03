@@ -66,7 +66,7 @@ public class RegistrationTest {
     @Test
     public void shouldRegister() {
         // given
-        String code = service.register("user", "pass", "data");
+        String code = service.register("user", "name", "pass", "data");
 
         // then
         assertTrue(service.registered("user"));
@@ -83,7 +83,7 @@ public class RegistrationTest {
     @Test
     public void shouldRegisterWithData() {
         // when
-        String code = service.register("user", "pass", "someData");
+        String code = service.register("user", "name", "pass", "someData");
 
         // then
         assertEquals("35993073433489", code);
@@ -91,6 +91,7 @@ public class RegistrationTest {
         List<Registration.User> users = service.getUsers();
 
         assertEquals("[User{email='user', " +
+                "readable_name=name, " +
                 "email_approved=0, " +
                 "password='pass', " +
                 "code='35993073433489', " +
@@ -107,7 +108,7 @@ public class RegistrationTest {
     @Test
     public void shouldSuccessLogin() {
         // given
-        service.approve(service.register("user", "pass", "data"));
+        service.approve(service.register("user", "name", "pass", "data"));
 
         // when
         String code = service.login("user", "pass");
@@ -119,7 +120,7 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenNoApproveEmail() {
         // given
-        service.register("user", "pass", "data");
+        service.register("user", "name", "pass", "data");
 
         // when
         String code = service.login("user", "pass");
@@ -131,7 +132,7 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin() {
         // given
-        service.register("user", "pass", "data");
+        service.register("user", "name", "pass", "data");
 
         // when
         String code = service.login("user", "bad_pass");
@@ -143,7 +144,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeByName() {
         // given
-        service.register("user", "pass", "data");
+        service.register("user", "name", "pass", "data");
 
         // when
         String code = service.getCode("user");
@@ -155,7 +156,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeByName_ifNotFound() {
         // given
-        service.register("user", "pass", "data");
+        service.register("user", "name", "pass", "data");
 
         // when
         String code = service.getCode("other_user");
@@ -167,7 +168,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetEmailByCode() {
         // given
-        service.register("user", "pass", "data");
+        service.register("user", "name", "pass", "data");
 
         // when
         String email = service.getEmail("35993073433489");
@@ -177,9 +178,21 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldGetReadableNameByEmail() {
+        // given
+        service.register("user", "name", "pass", "data");
+
+        // when
+        String name = service.getReadableName("user");
+
+        // then
+        assertEquals("name", name);
+    }
+
+    @Test
     public void shouldGetEmailByCode_ifNotFound() {
         // given
-        service.register("user", "pass", "data");
+        service.register("user", "name", "pass", "data");
 
         // when
         String email = service.getEmail("bad_code");
@@ -191,8 +204,8 @@ public class RegistrationTest {
     @Test
     public void shouldChangePasswordsToMD5() {
         // given
-        service.approve(service.register("user", "pass", "data"));
-        service.approve(service.register("user2", "pass2", "data2"));
+        service.approve(service.register("user", "name", "pass", "data"));
+        service.approve(service.register("user2", "name2", "pass2", "data2"));
 
         assertEquals("35993073433489", service.login("user", "pass"));
         assertEquals("111578567106438209", service.login("user2", "pass2"));
@@ -206,17 +219,19 @@ public class RegistrationTest {
     }
 
     @Test
-    public void shouldReplaceExistingUser() {
+    public void shouldUpdateReadableName() {
         // given
-        String code1 = service.register("user1", "pass1", "someData1");
-        String code2 = service.register("user2", "pass2", "someData2");
+        String code1 = service.register("user1", "name1", "pass1", "someData1");
+        String code2 = service.register("user2", "name2", "pass2", "someData2");
 
         assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
                         "code='111578566106438208', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
+                        "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
                         "code='111578567106438209', " +
@@ -224,15 +239,56 @@ public class RegistrationTest {
                 service.getUsers().toString());
 
         // when
-        service.replace(new Registration.User("user1", 1, "newPassword1", "newCode1", "newData1"));
+        service.updateReadableName("user1", "updatedName1");
 
         // then
         assertEquals("[User{email='user1', " +
+                        "readable_name=updatedName1, " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                      "User{email='user2', " +
+                        "readable_name=name2, " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+    }
+
+    @Test
+    public void shouldReplaceExistingUser() {
+        // given
+        String code1 = service.register("user1", "name1", "pass1", "someData1");
+        String code2 = service.register("user2", "name2", "pass2", "someData2");
+
+        assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                      "User{email='user2', " +
+                        "readable_name=name2, " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+
+        // when
+        service.replace(new Registration.User("user1", "name1", 1, "newPassword1", "newCode1", "newData1"));
+
+        // then
+        assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
                         "email_approved=1, " +
                         "password='newPassword1', " +
                         "code='newCode1', " +
                         "data='newData1'}, " +
                       "User{email='user2', " +
+                        "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
                         "code='111578567106438209', " +
@@ -243,15 +299,17 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceNonExistingUser() {
         // given
-        String code1 = service.register("user1", "pass1", "someData1");
-        String code2 = service.register("user2", "pass2", "someData2");
+        String code1 = service.register("user1", "name1", "pass1", "someData1");
+        String code2 = service.register("user2", "name2", "pass2", "someData2");
 
         assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
                         "code='111578566106438208', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
+                        "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
                         "code='111578567106438209', " +
@@ -259,20 +317,23 @@ public class RegistrationTest {
                 service.getUsers().toString());
 
         // when
-        service.replace(new Registration.User("user3", 1, "newPassword3", "newCode3", "newData3"));
+        service.replace(new Registration.User("user3", "name3", 1, "newPassword3", "newCode3", "newData3"));
 
         // then
         assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
                         "code='111578566106438208', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
+                        "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
                         "code='111578567106438209', " +
                         "data='someData2'}, " +
                       "User{email='user3', " +
+                        "readable_name=name3, " +
                         "email_approved=1, " +
                         "password='newPassword3', " +
                         "code='newCode3', " +
@@ -283,15 +344,17 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveUser() {
         // given
-        String code1 = service.register("user1", "pass1", "someData1");
-        String code2 = service.register("user2", "pass2", "someData2");
+        String code1 = service.register("user1", "name1", "pass1", "someData1");
+        String code2 = service.register("user2", "name2", "pass2", "someData2");
 
         assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
                         "code='111578566106438208', " +
                         "data='someData1'}, " +
-                        "User{email='user2', " +
+                      "User{email='user2', " +
+                        "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
                         "code='111578567106438209', " +
@@ -303,6 +366,7 @@ public class RegistrationTest {
 
         // then
         assertEquals("[User{email='user2', " +
+                        "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
                         "code='111578567106438209', " +

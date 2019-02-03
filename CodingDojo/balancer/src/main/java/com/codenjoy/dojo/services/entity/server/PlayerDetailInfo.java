@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.entity.server;
 public class PlayerDetailInfo {
 
     private String name;
+    private String readableName;
     private String callbackUrl;
     private String gameType;
     private String score;
@@ -35,10 +36,11 @@ public class PlayerDetailInfo {
         // do nothing
     }
 
-    public PlayerDetailInfo(String name, String callbackUrl, String gameType,
+    public PlayerDetailInfo(String name, String readableName, String callbackUrl, String gameType,
                             String score, String save, User registration)
     {
         this.name = name;
+        this.readableName = readableName;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;
         this.score = score;
@@ -71,6 +73,14 @@ public class PlayerDetailInfo {
         return save;
     }
 
+    public String getReadableName() {
+        return readableName;
+    }
+
+    public void setReadableName(String readableName) {
+        this.readableName = readableName;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -99,6 +109,7 @@ public class PlayerDetailInfo {
     public String toString() {
         return "PlayerDetailInfo{" +
                 "name='" + name + '\'' +
+                ", id='" + readableName + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", gameType='" + gameType + '\'' +
                 ", score='" + score + '\'' +

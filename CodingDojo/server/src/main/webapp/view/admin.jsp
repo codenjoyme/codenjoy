@@ -224,6 +224,7 @@
                 </tr>
                 <tr>
                     <td class="header">Player name</td>
+                    <td class="header">Player id/email</td>
                     <td class="header">IP</td>
                     <td class="header">Game name</td>
                     <td>
@@ -260,6 +261,7 @@
                     </c:choose>
                         <c:choose>
                             <c:when test="${player.active}">
+                                <td><form:input path="players[${status.index}].readableName"/></td>
                                 <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
@@ -280,7 +282,14 @@
                                         <td>RemoveSave</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/admin?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td><a href="${ctx}/admin?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>RemoveReg</td>
+                                    </c:otherwise>
+                                </c:choose>
                                 <td><a href="${ctx}/admin?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.name}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
@@ -301,6 +310,7 @@
                                 </c:choose>
                             </c:when>
                             <c:otherwise>
+                                <td><input class="uneditable-input" value="${player.readableName}"/></td>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>
                                 <td><input class="uneditable-input" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
@@ -319,6 +329,14 @@
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td><a href="${ctx}/admin?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>RemoveReg</td>
                                     </c:otherwise>
                                 </c:choose>
                                 <td>GameOver</td>

@@ -47,7 +47,7 @@
         <form:hidden path="data"/>
         <table>
             <tr>
-                <td>User name (email)<form:errors path="name"/></td>
+                <td>Email<form:errors path="name"/></td>
             </tr>
             <tr>
                 <td>
@@ -57,6 +57,13 @@
                         <c:if test="${wait_approve}">Please check your email</c:if>
                     </span>
                 </td>
+            </tr>
+            <tr>
+                <td>Name</td>
+            </tr>
+
+            <tr>
+                <td><form:input path="readableName"/></td>
             </tr>
             <tr>
                 <td>Password<form:errors path="password"/></td>

@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
 import com.codenjoy.dojo.services.mocks.*;
@@ -44,6 +45,8 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -65,6 +68,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
         MockScreenController.class,
         MockAutoSaver.class,
         MockSaveService.class,
+        MockRegistration.class,
         MockGameService.class,
         MockActionLogger.class,
         SpyPlayerGames.class,
@@ -94,6 +98,7 @@ public class PlayerServiceImplTest {
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
     @Autowired private PlayerGames playerGames;
+    @Autowired private Registration registration;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -161,6 +166,11 @@ public class PlayerServiceImplTest {
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+
+        doAnswer(inv -> {
+            String email = inv.getArgumentAt(0, String.class);
+            return "readable_" + email.split("@")[0];
+        }).when(registration).getReadableName(anyString());
 
         playerGames.clear();
         Mockito.reset(playerController, screenController, actionLogger);
@@ -337,14 +347,18 @@ public class PlayerServiceImplTest {
                     "Scores:'{'vasya@mail.com':123}', " +
                     "HeroesData:'{" +
                         "'coordinates':{'vasya@mail.com':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
-                        "'group':['vasya@mail.com']}'], " +
+                        "'group':['vasya@mail.com']," +
+                        "'readableNames':{'vasya@mail.com':'readable_vasya'}" +
+                        "}'], " +
                 "petya@mail.com=PlayerData[" +
                     "BoardSize:15, Board:'DCBA', GameName:'game', " +
                     "Score:234, Info:'', " +
                     "Scores:'{'petya@mail.com':234}', " +
                     "HeroesData:'{" +
                         "'coordinates':{'petya@mail.com':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
-                        "'group':['petya@mail.com']}']}",
+                        "'group':['petya@mail.com']," +
+                        "'readableNames':{'petya@mail.com':'readable_petya'}" +
+                        "}']}",
                 data.toString().replaceAll("\"", "'"));
     }
 

@@ -199,7 +199,7 @@ public class RestBoardController {
             @PathVariable("code") String code,
             @PathVariable("gameName") String gameName)
     {
-        validator.checkPlayerName(playerName, Validator.CANT_BE_NULL);
+        validator.checkPlayerName(playerName, Validator.CAN_BE_NULL);
         validator.checkCode(code, Validator.CAN_BE_NULL);
         validator.checkGameName(gameName, Validator.CANT_BE_NULL);
 

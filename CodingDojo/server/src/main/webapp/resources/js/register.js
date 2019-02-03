@@ -35,6 +35,7 @@ function initRegistration(waitApprove, contextPath) {
     var disable = function(status) {
         $("#submit").prop("disabled", status);
         $("#name").prop("disabled", status);
+        $("#readable-name").prop("disabled", status);
         $("#password").prop("disabled", status);
         $("#gameName").prop("disabled", status)
     }

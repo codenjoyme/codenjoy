@@ -174,7 +174,7 @@ public class RegistrationController {
             }
         } else {
             if (!registered) {
-                code = registration.register(playerName, player.getPassword(), player.getData());
+                code = registration.register(playerName, player.getReadableName(), player.getPassword(), player.getData());
             } else {
                 code = registration.getCode(playerName);
             }

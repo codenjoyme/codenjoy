@@ -44,6 +44,7 @@ public class PlayerGamesView {
         Map<String, List<String>> groupsMap = getGroupsMap();
         Map<String, Object> scores = getScores();
         Map<String, HeroData> coordinates = getCoordinates();
+        Map<String, String> readableNames = getReadableNames();
 
         return service.all().stream()
                 .collect(toMap(
@@ -58,7 +59,8 @@ public class PlayerGamesView {
                                     decoders.get(gameType),
                                     filterByGroup(scores, group),
                                     group,
-                                    filterByGroup(coordinates, group));
+                                    filterByGroup(coordinates, group),
+                                    filterByGroup(readableNames, group));
                         }));
     }
 
@@ -108,5 +110,11 @@ public class PlayerGamesView {
         return service.all().stream()
                 .collect(toMap(pg -> pg.getPlayer().getName(),
                         pg -> pg.getPlayer().getScore()));
+    }
+
+    public Map<String, String> getReadableNames() {
+        return service.all().stream()
+                .collect(toMap(pg -> pg.getPlayer().getName(),
+                        pg -> pg.getPlayer().getNotNullReadableName()));
     }
 }

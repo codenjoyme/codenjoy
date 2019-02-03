@@ -97,6 +97,7 @@ public class SaveServiceImpl implements SaveService {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCode(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
+            info.setReadableName(registration.getReadableName(player.getName()));
             info.setAIPlayer(player.hasAI());
 
             copySave(player, info);

@@ -94,7 +94,8 @@ public class PlayerGamesViewTest {
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'group':['user1','user2','user3','user4']" +
+                    "'group':['user1','user2','user3','user4']," +
+                    "'readableNames':{'user1':'user1','user2':'user2','user3':'user3','user4':'user4'}" +
                 "},'scores':{'user1':123,'user2':234,'user3':345,'user4':456}}";
 
         assertEquals(expectedGroup, toString(dataMap.get("user1")));
@@ -123,7 +124,8 @@ public class PlayerGamesViewTest {
                         "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}," +
                         "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
                     "}," +
-                    "'group':['user1','user2']" +
+                    "'group':['user1','user2']," +
+                    "'readableNames':{'user1':'user1','user2':'user2'}" +
                 "},'scores':{'user1':123,'user2':234}}";
 
         assertEquals(expectedGroup1, toString(dataMap.get("user1")));
@@ -135,7 +137,8 @@ public class PlayerGamesViewTest {
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}," +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'group':['user3','user4']" +
+                    "'group':['user3','user4']," +
+                    "'readableNames':{'user3':'user3','user4':'user4'}" +
                 "},'scores':{'user3':345,'user4':456}}";
 
         assertEquals(expectedGroup2, toString(dataMap.get("user3")));
@@ -162,7 +165,8 @@ public class PlayerGamesViewTest {
                     "'coordinates':{" +
                         "'user1':{'additionalData':'data1','coordinate':{'x':1,'y':2},'level':10,'multiplayer':false}" +
                     "}," +
-                    "'group':['user1']" +
+                    "'group':['user1']," +
+                    "'readableNames':{'user1':'user1'}" +
                 "},'scores':{'user1':123}}";
 
         assertEquals(expectedGroup1, toString(dataMap.get("user1")));
@@ -172,7 +176,8 @@ public class PlayerGamesViewTest {
                     "'coordinates':{" +
                         "'user2':{'additionalData':'data2','coordinate':{'x':3,'y':4},'level':11,'multiplayer':false}" +
                     "}," +
-                    "'group':['user2']" +
+                    "'group':['user2']," +
+                    "'readableNames':{'user2':'user2'}" +
                 "},'scores':{'user2':234}}";
 
         assertEquals(expectedGroup2, toString(dataMap.get("user2")));
@@ -182,7 +187,8 @@ public class PlayerGamesViewTest {
                     "'coordinates':{" +
                         "'user3':{'additionalData':{'key':'value'},'coordinate':{'x':5,'y':6},'level':12,'multiplayer':false}" +
                     "}," +
-                    "'group':['user3']" +
+                    "'group':['user3']," +
+                    "'readableNames':{'user3':'user3'}" +
                 "},'scores':{'user3':345}}";
 
         assertEquals(expectedGroup3, toString(dataMap.get("user3")));
@@ -192,7 +198,8 @@ public class PlayerGamesViewTest {
                     "'coordinates':{" +
                         "'user4':{'additionalData':['data3, data4'],'coordinate':{'x':7,'y':8},'level':13,'multiplayer':false}" +
                     "}," +
-                    "'group':['user4']" +
+                    "'group':['user4']," +
+                    "'readableNames':{'user4':'user4'}" +
                 "},'scores':{'user4':456}}";
 
         assertEquals(expectedGroup4, toString(dataMap.get("user4")));

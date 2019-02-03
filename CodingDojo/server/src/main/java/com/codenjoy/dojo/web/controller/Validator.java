@@ -42,7 +42,9 @@ public class Validator {
     public static final boolean CAN_BE_NULL = true;
     public static final boolean CANT_BE_NULL = !CAN_BE_NULL;
 
+    public static final String EMAIL_OR_ID = "^(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})|(?:[A-Za-z0-9]+)$";
     public static final String EMAIL = "^[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
+    public static final String ID = "^[A-Za-z0-9]+$";
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
     public static final String CODE = "^[0-9]{1,50}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
@@ -51,12 +53,14 @@ public class Validator {
     @Autowired private ConfigProperties properties;
 
     private final Pattern email;
+    private final Pattern id;
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
+        id = Pattern.compile(ID);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
@@ -71,9 +75,9 @@ public class Validator {
     public void checkPlayerName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
-                !empty && email.matcher(input).matches()))
+                !empty && (email.matcher(input).matches() || id.matcher(input).matches())))
         {
-            throw new IllegalArgumentException("Player name is invalid: " + input);
+            throw new IllegalArgumentException("Player name/id is invalid: " + input);
         }
     }
 

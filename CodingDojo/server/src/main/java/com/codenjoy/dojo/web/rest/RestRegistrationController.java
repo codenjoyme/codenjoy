@@ -126,8 +126,7 @@ public class RestRegistrationController {
     @RequestMapping(value = "/player/create/{adminPassword}", method = RequestMethod.POST)
     @ResponseBody
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player,
-                               @PathVariable("adminPassword") String adminPassword)
-    {
+                               @PathVariable("adminPassword") String adminPassword) {
         validator.checkIsAdmin(adminPassword);
 
         Registration.User user = player.getRegistration();
@@ -140,22 +139,22 @@ public class RestRegistrationController {
         boolean fromSave = player.getScore() == null;
         if (fromSave) {
             // делаем попытку грузить по сейву
-            boolean loaded = saveService.load(player.getName());
-            if (loaded) {
-                return code;
-            } else {
+            if (!saveService.load(player.getName())) {
                 // неудача - обнуляем все
                 player.setSave("{}");
                 player.setScore("0");
+                fromSave = false;
             }
         }
 
-        // грузим как положено
-        PlayerSave save = player.buildPlayerSave();
-        playerService.register(save);
+        if (!fromSave) {
+            // грузим как положено
+            PlayerSave save = player.buildPlayerSave();
+            playerService.register(save);
 
-        playerGames.setLevel(player.getName(),
-                new JSONObject(player.getSave()));
+            playerGames.setLevel(player.getName(),
+                    new JSONObject(player.getSave()));
+        }
 
         return code;
     }

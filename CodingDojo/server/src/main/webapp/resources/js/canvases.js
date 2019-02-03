@@ -37,6 +37,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
     var images = {};
     loadCanvasesData(alphabet, spriteElements);
     var reloading = false;
+    var readableNames = {};
+
+    function fromEmail(email) {
+        return email.split('@')[0];
+    }
+
+    function toName(email) {
+        return fromEmail(readableNames[email]);
+    }
 
     function toId(email) {
         return email.replace(/[@.]/gi, "_");
@@ -127,7 +136,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         playersList.forEach(function (player) {
             var playerName = player.name;
             var id = toId(playerName);
-            var name = playerName.split('@')[0];
+            var name = fromEmail(player.readableName);
             var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
             templateData.push({name : name, id : id, visible : visible })
         });
@@ -162,10 +171,6 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
         }
         return false;
-    }
-
-    var getNameFromEmail = function(email) {
-        return email.substring(0, email.indexOf('@'));
     }
 
     var getBoardDrawer = function(canvas, playerName, playerData, allPlayersScreen) {
@@ -243,7 +248,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var drawPlayerNames = function(font, beforeDraw) {
             try {
                 var drawName = function(name, point, font, heroData) {
-                    var name = getNameFromEmail(name);
+                    var name = toName(name);
                     var data = {
                         'name':name,
                         'point':point,
@@ -553,6 +558,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var canvas = canvases[playerName];
         canvas.boardSize = boardSize;
+        readableNames = data.heroesData.readableNames;
+
         drawBoard(getBoardDrawer(canvas, playerName, data, allPlayersScreen));
 
         $("#score_" + toId(playerName)).text(data.score);

@@ -30,6 +30,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
@@ -57,13 +58,10 @@ public class PlayerServiceImpl implements PlayerService {
     
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
-    private boolean registration = true;
+    private boolean isRegOpened = true;
 
-    @Autowired
-    protected PlayerGames playerGames;
-
-    @Autowired
-    private PlayerGamesView playerGamesView;
+    @Autowired protected PlayerGames playerGames;
+    @Autowired private PlayerGamesView playerGamesView;
 
     @Autowired
     @Qualifier("playerController")
@@ -73,14 +71,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Qualifier("screenController")
     protected Controller screenController;
 
-    @Autowired
-    protected GameService gameService;
-
-    @Autowired
-    protected AutoSaver autoSaver;
-
-    @Autowired
-    protected ActionLogger actionLogger;
+    @Autowired protected GameService gameService;
+    @Autowired protected AutoSaver autoSaver;
+    @Autowired protected ActionLogger actionLogger;
+    @Autowired protected Registration registration;
 
     @Value("${game.ai}")
     protected boolean isAINeeded;
@@ -109,7 +103,7 @@ public class PlayerServiceImpl implements PlayerService {
                 logger.debug("Registered user {} in game {}", name, gameName);
             }
 
-            if (!registration) {
+            if (!isRegOpened) {
                 return NullPlayer.INSTANCE;
             }
 
@@ -243,6 +237,8 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerGame playerGame = playerGames.add(player, playerSave);
 
             player = playerGame.getPlayer();
+
+            player.setReadableName(registration.getReadableName(player.getName()));
 
             if (logger.isDebugEnabled()) {
                 logger.debug("Player {} starting new game {}", name, playerGame.getGame());
@@ -423,6 +419,8 @@ public class PlayerServiceImpl implements PlayerService {
 
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
+                playerToUpdate.setReadableName(newPlayer.getReadableName());
+                registration.updateReadableName(newPlayer.getName(), newPlayer.getReadableName());
 
                 Game game = playerGame.getGame();
                 if (game != null && game.getSave() != null) {
@@ -486,17 +484,17 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void closeRegistration() {
-        registration = false;
+        isRegOpened = false;
     }
 
     @Override
     public boolean isRegistrationOpened() {
-        return registration;
+        return isRegOpened;
     }
 
     @Override
     public void openRegistration() {
-        registration = true;
+        isRegOpened = true;
     }
 
     @Override
