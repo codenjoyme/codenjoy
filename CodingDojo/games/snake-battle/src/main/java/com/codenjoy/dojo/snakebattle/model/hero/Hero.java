@@ -53,6 +53,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private Player player;
     private boolean leaveApples;
     private boolean reduced;
+    private Point lastTailPosition;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -197,29 +198,39 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         count();
 
         Point next = getNextPoint();
+        if (isMe(next) && !isFlying())
+            selfReduce(next);
 
-        if (field.isApple(next))
+        go(next);
+    }
+
+    // Этот метод должен вызываться отдельно от tick,
+    // уже после обработки столкновений с другими змейками
+    public void eat() {
+        if (!isActiveAndAlive()) {
+            return;
+        }
+
+        Point head = head();
+        if (field.isApple(head)) {
             growBy(1);
-        if (field.isStone(next) && !isFlying()) {
+            // если не сделать этого здесь, при съедании яблока и одновременной потере части корпуса
+            // яблоко будет зачтено лишь на следующий тик, что неправильно
+            grow();
+        }
+        if (field.isStone(head) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
                 reduce(field.stoneReduced().getValue(), NOW);
                 clearReduced();
             }
         }
-        if (field.isFlyingPill(next))
+        if (field.isFlyingPill(head))
             flyingCount += field.flyingCount().getValue();
-        if (field.isFuryPill(next))
+        if (field.isFuryPill(head))
             furyCount += field.furyCount().getValue();
-        if (field.isBarrier(next))
+        if (field.isBarrier(head))
             die();
-        if (isMe(next) && !isFlying())
-            selfReduce(next);
-
-        if (growBy > 0)
-            grow(next);
-        else
-            go(next);
     }
 
     private void count() {
@@ -277,12 +288,13 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return getPointAt(head(), direction);
     }
 
-    private void grow(Point newLocation) {
+    private void grow() {
         growBy--;
-        elements.add(new Tail(newLocation, this));
+        elements.addFirst(new Tail(lastTailPosition, this));
     }
 
     private void go(Point newLocation) {
+        lastTailPosition = getTailPoint();
         elements.add(new Tail(newLocation, this));
         elements.removeFirst();
     }

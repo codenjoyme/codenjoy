@@ -136,6 +136,10 @@ public class SnakeBoard implements Field {
 
         snakesMove();
         snakesFight();
+        snakesEat();
+        // после еды у змеек отрастают хвосты, поэтому столкновения нужно повторить
+        // чтобы обработать ситуацию "кусь за растущий хвост", иначе eatTailThatGrows тесты не пройдут
+        snakesFight();
         fireWinEvents();
         setNewObjects();
     }
@@ -200,29 +204,7 @@ public class SnakeBoard implements Field {
     private void snakesMove() {
         for (Player player : aliveActive()) {
             Hero hero = player.getHero();
-            Point head = hero.getNextPoint();
             hero.tick();
-
-            if (apples.contains(head)) {
-                apples.remove(head);
-                player.event(Events.APPLE);
-            }
-            if (stones.contains(head) && !hero.isFlying()) {
-                stones.remove(head);
-                if (player.isAlive()) {
-                    player.event(Events.STONE);
-                }
-            }
-            if (gold.contains(head)) {
-                gold.remove(head);
-                player.event(Events.GOLD);
-            }
-            if (flyingPills.contains(head)) {
-                flyingPills.remove(head);
-            }
-            if (furyPills.contains(head)) {
-                furyPills.remove(head);
-            }
         }
     }
 
@@ -292,6 +274,35 @@ public class SnakeBoard implements Field {
                     hero.clearReduced();
                     hero.event(Events.EAT.apply(i.reduce));
                 });
+    }
+
+    private void snakesEat() {
+        for (Player player : aliveActive()) {
+            Hero hero = player.getHero();
+            Point head = hero.head();
+            hero.eat();
+
+            if (apples.contains(head)) {
+                apples.remove(head);
+                player.event(Events.APPLE);
+            }
+            if (stones.contains(head) && !hero.isFlying()) {
+                stones.remove(head);
+                if (player.isAlive()) {
+                    player.event(Events.STONE);
+                }
+            }
+            if (gold.contains(head)) {
+                gold.remove(head);
+                player.event(Events.GOLD);
+            }
+            if (flyingPills.contains(head)) {
+                flyingPills.remove(head);
+            }
+            if (furyPills.contains(head)) {
+                furyPills.remove(head);
+            }
+        }
     }
 
     private Stream<Hero> notFlyingHeroes() {

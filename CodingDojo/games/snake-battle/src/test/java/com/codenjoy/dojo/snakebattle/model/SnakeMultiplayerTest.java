@@ -39,6 +39,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
@@ -1802,6 +1803,516 @@ public class SnakeMultiplayerTest {
                 "☼▼     ☼" +
                 "☼☼☼☼☼☼☼☼");
 
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Когда две змейки сталкиваются на объекте, сначала должно быть обработано столкновение, а уж
+    // затем съедение объекта выжившей змейкой (если такая есть).
+    @Test
+    public void firstFightThenEatFury() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼┌─┐   ☼" +
+                "☼│ ¤   ☼" +
+                "☼│     ☼" +
+                "☼˅     ☼" +
+                "☼®◄═══╕☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[DIE]");
+        verifyEvents(enemyEvents, "[EAT[5], WIN]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼┌─ö   ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼☻═══╕ ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼╔═╕   ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼☺───ö ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼♣     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼♥     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getFuryPills().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    @Test
+    // Предыдущий тест в инвертированных ролях. Эти два теста вместе показывают что порядок игроков
+    // в списке List<Player> больше не влияет на результат таких столкновений.
+    public void firstFightThenEatFuryInverted() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼╔═╗   ☼" +
+                "☼║ ╙   ☼" +
+                "☼║     ☼" +
+                "☼▼     ☼" +
+                "☼®<───ö☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[EAT[5], WIN]");
+        verifyEvents(enemyEvents, "[DIE]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼╔═╕   ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼♥───ö ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼┌─ö   ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼♣═══╕ ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼♥     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼♣     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getFuryPills().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Тестируем что обработка столкновений происходите до съедения яблока.
+    // Если бы яблоко "съелось" короткой змейкой до обработки столкновения, обе змейки умерли бы.
+    @Test
+    public void firstFightThenEatApple() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼┌─┐   ☼" +
+                "☼│ ¤   ☼" +
+                "☼│     ☼" +
+                "☼˅     ☼" +
+                "☼○◄═══╕☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[DIE]");
+        verifyEvents(enemyEvents, "[EAT[5], APPLE, WIN]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼┌─┐   ☼" +
+                "☼│ ¤   ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼☻═══╕ ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼╔═╗   ☼" +
+                "☼║ ╙   ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼☺───ö ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼│     ☼" +
+                "☼˅     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼║     ☼" +
+                "☼▼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getApples().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Тест зеркальный предыдущему чтобы показать что порядок игроков на сервере не влияет на исход столкновения.
+    @Test
+    public void firstFightThenEatAppleInverted() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼╔═╗   ☼" +
+                "☼║ ╙   ☼" +
+                "☼║     ☼" +
+                "☼▼     ☼" +
+                "☼○<───ö☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[EAT[5], APPLE, WIN]");
+        verifyEvents(enemyEvents, "[DIE]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼╔═╗   ☼" +
+                "☼║ ╙   ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼▼───ö ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼┌─┐   ☼" +
+                "☼│ ¤   ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼˅═══╕ ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼║     ☼" +
+                "☼▼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼│     ☼" +
+                "☼˅     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getApples().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Тестируем что обработка столкновений происходите до съедения камня.
+    // Если бы камень "съелся" короткой змейкой до обработки столкновения, она умерла бы не повредив длинную.
+    @Test
+    public void firstFightThenEatStone() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼┌─┐   ☼" +
+                "☼│ ¤   ☼" +
+                "☼│     ☼" +
+                "☼˅     ☼" +
+                "☼●◄╕   ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[DIE]");
+        verifyEvents(enemyEvents, "[EAT[2], STONE, WIN]");
+
+        // несмотря на то что на сервере столкновение обрабатывается до съедения камня,
+        // съедение камня приводит к мгновенной утрате длинны (на 3),
+        // тогда как убийство соперника приводит к утрате длинны только на следующий тик.
+        // лично я бы апдейтил длинну выжившей змейки тоже сразу и не показывал бы части умерших змеек.
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼☻╕    ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼☺ö    ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼˅     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼▼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getStones().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Тест зеркальный предыдущему, показывает что порядок игроков на сервере не влият на исход столкновения.
+    @Test
+    public void firstFightThenEatStoneInverted() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼╔═╗   ☼" +
+                "☼║ ╙   ☼" +
+                "☼║     ☼" +
+                "☼▼     ☼" +
+                "☼●<ö   ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[EAT[2], STONE, WIN]");
+        verifyEvents(enemyEvents, "[DIE]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼║     ☼" +
+                "☼║     ☼" +
+                "☼▼ö    ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼│     ☼" +
+                "☼│     ☼" +
+                "☼˅╕    ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╓     ☼" +
+                "☼▼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼æ     ☼" +
+                "☼˅     ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getStones().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Тестируем случай когда одна змейка с Fury идет на клетку где был хвост второй в момент когда вторая кушает яблоко.
+    @Test
+    public void eatTailThatGrows_Fury() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼  ╓   ☼" +
+                "☼˄®║   ☼" +
+                "☼¤ ▼ ○ ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        enemy.right();
+        hero.right();
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼×♣╓   ☼" +
+                "☼  ╚►○ ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼╘♥æ   ☼" +
+                "☼  └>○ ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[APPLE]");
+        verifyEvents(enemyEvents, "[EAT[1]]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ×♣   ☼" +
+                "☼  ╘═► ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ╘♥   ☼" +
+                "☼  ×─> ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ×♣  ☼" +
+                "☼   ╘═►☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ╘♥  ☼" +
+                "☼   ×─>☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getApples().isEmpty());
+        verifyNoMoreInteractions(heroEvents);
+        verifyNoMoreInteractions(enemyEvents);
+    }
+
+    // Тестируем врезание в отросший хвост.
+    @Test
+    public void eatTailThatGrows() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼×>╓   ☼" +
+                "☼  ╚►○ ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(heroEvents, "[APPLE, EAT[2], WIN]");
+        verifyEvents(enemyEvents, "[DIE]");
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ×☺   ☼" +
+                "☼  ╚═► ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ╘☻   ☼" +
+                "☼  └─> ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ╘══►☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ×──>☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        assertTrue(game.getApples().isEmpty());
         verifyNoMoreInteractions(heroEvents);
         verifyNoMoreInteractions(enemyEvents);
     }
