@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.entity;
+package com.codenjoy.dojo.services;
 
 /*-
  * #%L
@@ -22,11 +22,17 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
-import com.codenjoy.dojo.services.ConfigProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
+@Component
 public class DispatcherSettings {
+
+    @Autowired ConfigProperties config;
+    @Autowired GameServers gameServers;
 
     private String urlCreatePlayer;
     private String urlRemovePlayer;
@@ -56,15 +62,37 @@ public class DispatcherSettings {
         this.servers = servers;
     }
 
-    public DispatcherSettings(ConfigProperties properties) {
-        urlCreatePlayer = properties.getUrlCreatePlayer();
-        urlRemovePlayer = properties.getUrlRemovePlayer();
-        urlGetPlayers = properties.getUrlGetPlayers();
-        urlClearScores = properties.getUrlClearScores();
-        urlExistsPlayer = properties.getUrlExistsPlayer();
-        urlGameEnabled = properties.getUrlGameEnabled();
-        gameType = properties.getGameType();
-        servers =  properties.getServers();
+    @PostConstruct
+    public void postConstruct() {
+        urlCreatePlayer = config.getUrlCreatePlayer();
+        urlRemovePlayer = config.getUrlRemovePlayer();
+        urlGetPlayers = config.getUrlGetPlayers();
+        urlClearScores = config.getUrlClearScores();
+        urlExistsPlayer = config.getUrlExistsPlayer();
+        urlGameEnabled = config.getUrlGameEnabled();
+        gameType = config.getGameType();
+        servers = config.getServers();
+
+        updateGameServers();
+    }
+
+    private void updateGameServers() {
+        if (servers != null) {
+            gameServers.update(servers);
+        }
+    }
+
+    public void updateFrom(DispatcherSettings settings) {
+        urlRemovePlayer = settings.urlRemovePlayer;
+        urlCreatePlayer = settings.urlCreatePlayer;
+        urlGetPlayers = settings.urlGetPlayers;
+        urlClearScores = settings.urlClearScores;
+        urlExistsPlayer = settings.urlExistsPlayer;
+        urlGameEnabled = settings.urlGameEnabled;
+        gameType = settings.gameType;
+        servers = settings.servers;
+
+        updateGameServers();
     }
 
     public String getUrlCreatePlayer() {

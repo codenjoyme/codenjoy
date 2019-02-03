@@ -22,8 +22,10 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.hash.Hash;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 
@@ -119,6 +121,18 @@ public class ConfigProperties {
 
     public List<String> getServers() {
         return servers;
+    }
+
+    public String getEmail(String id) {
+        return Hash.getEmail(id, emailHash);
+    }
+
+    public String getId(String email) {
+        return Hash.getId(email, emailHash);
+    }
+
+    public String getAdminToken() {
+        return DigestUtils.md5DigestAsHex(adminPassword.getBytes());
     }
 
 }

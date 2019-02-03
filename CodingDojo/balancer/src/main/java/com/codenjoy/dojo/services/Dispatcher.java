@@ -22,31 +22,21 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
-import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
-import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
-import com.codenjoy.dojo.services.entity.server.User;
-import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -58,44 +48,37 @@ public class Dispatcher {
 
     @Autowired Players players;
     @Autowired Scores scores;
-    @Autowired ConfigProperties properties;
+    @Autowired ConfigProperties config;
+    @Autowired GameServers gameServers;
+    @Autowired GameServer game;
 
-    private List<String> servers = new CopyOnWriteArrayList<>();
-    private volatile DispatcherSettings settings;
     private volatile long lastTime;
-    private volatile int currentServer;
-    private volatile int countRegistered;
 
     private Map<String, List<PlayerInfo>> scoresFromGameServers = new ConcurrentHashMap();
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
 
     @PostConstruct
     public void postConstruct() {
-        settings = new DispatcherSettings(properties);
-        servers.addAll(settings.getServers());
-        currentServer = 0;
-        countRegistered = 0;
-
         // в случае если сегодня сервер потушен был
         lastTime = scores.getLastTime(now());
     }
 
     public ServerLocation registerNew(String email, String name, String password, String callbackUrl) {
-        String server = getNextServer();
+        String server = gameServers.getNextServer();
 
         return registerOnServer(server, email, name, password, callbackUrl, "0", "{}");
     }
 
     public ServerLocation registerIfNotExists(String server, String email, String name, String code, String callbackUrl) {
-        if (existsOnServer(server, email)) {
+        if (game.existsOnServer(server, email)) {
             return null;
         }
 
         // удалить с других серверов если там есть что
-        servers.stream()
+        gameServers.stream()
                 .filter(s -> !s.equals(server))
-                .filter(s -> existsOnServer(s, email))
-                .forEach(s -> remove(s, email, code));
+                .filter(s -> game.existsOnServer(s, email))
+                .forEach(s -> game.remove(s, email, code));
 
         Player player = players.get(email);
         String score = null; // будет попытка загрузиться с сейва
@@ -103,124 +86,28 @@ public class Dispatcher {
         return registerOnServer(server, email, name, player.getPassword(), callbackUrl, score, save);
     }
 
-    public boolean existsOnServer(String server, String email) {
-        try {
-            RestTemplate rest = new RestTemplate();
-            ResponseEntity<Boolean> entity = rest.exchange(
-                    playerExistsUrl(server, email),
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<Boolean>(){});
-
-            return entity.getBody();
-        } catch (RestClientException e) {
-            logger.error("Error get player exists on server: " + server, e);
-            return false;
-        }
-    }
-
     public ServerLocation registerOnServer(String server, String email, String name, String password, String callbackUrl, String score, String save) {
         if (logger.isDebugEnabled()) {
             logger.debug("User {} go to {}", email, server);
         }
 
-        String code = createNewPlayer(server, email, name, password, callbackUrl, score, save);
+        String code = game.createNewPlayer(server, email, name, password, callbackUrl, score, save);
 
         return new ServerLocation(
                 email,
-                getId(email),
+                config.getId(email),
                 code,
                 server
         );
     }
 
-    private String clearScores(String server) {
-        try {
-            RestTemplate rest = new RestTemplate();
-            ResponseEntity<Void> entity = rest.exchange(
-                    clearPlayersScoreUrl(server),
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<Void>(){});
-
-            return "Successful with code: " + entity.getStatusCode();
-
-        } catch (RestClientException e) {
-            logger.error("Error clearing scores on server: " + server, e);
-
-            return GlobalExceptionHandler.getPrintableMessage(e);
-        }
-    }
-
-    private String gameEnable(String server, boolean enable) {
-        String status = enable ? "start" : "stop";
-        try {
-            RestTemplate rest = new RestTemplate();
-            ResponseEntity<Boolean> entity = rest.exchange(
-                    gameEnabledUrl(server, enable),
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<Boolean>(){});
-
-            return "Successful " + status + " game: " + entity.getBody();
-
-        } catch (RestClientException e) {
-            logger.error("Error " + status + " game on server: " + server, e);
-
-            return GlobalExceptionHandler.getPrintableMessage(e);
-        }
-    }
-
-    private String createNewPlayer(String server, String email, String name,
-                                   String password, String callbackUrl,
-                                   String score, String save)
-    {
-        String id = getId(email);
-
-        RestTemplate rest = new RestTemplate();
-        ResponseEntity<String> entity = rest.postForEntity(
-                createPlayerUrl(server),
-                new PlayerDetailInfo(
-                        id,
-                        name,
-                        callbackUrl,
-                        settings.getGameType(),
-                        score,
-                        save,
-                        new User(
-                                id,
-                                name,
-                                1,
-                                password,
-                                null,
-                                null)
-
-                ),
-                String.class);
-
-        return entity.getBody();
-    }
-
-    // несколько потоков могут параллельно регаться, и этот инкремент по кругу
-    // должeн быть многопоточнобезопасным
-    private synchronized String getNextServer() {
-        if (countRegistered++ % properties.getGameRoom() == 0) {
-            currentServer++;
-            if (currentServer >= servers.size()) {
-                currentServer = 0;
-            }
-        }
-
-        return servers.get(currentServer);
-    }
-
     public void updateScores() {
-        List<PlayerInfo> players = servers.stream()
-                .map(s -> getPlayersInfos(s))
+        List<PlayerInfo> players = gameServers.stream()
+                .map(s -> getPlayersInfosCached(s))
                 .collect(LinkedList::new, List::addAll, List::addAll);
 
         players.stream()
-                .forEach(p -> p.setName(getEmail(p.getName())));
+                .forEach(p -> p.setName(config.getEmail(p.getName())));
 
         long time = now();
         scores.saveScores(time, players);
@@ -231,23 +118,13 @@ public class Dispatcher {
         lastTime = time;
     }
 
-    private long now() {
-        return Calendar.getInstance().getTimeInMillis();
-    }
-
-    private List<PlayerInfo> getPlayersInfos(String server) {
+    private List<PlayerInfo> getPlayersInfosCached(String server) {
         try {
-            RestTemplate rest = new RestTemplate();
-            ResponseEntity<List<PlayerInfo>> entity = rest.exchange(
-                    getPlayersUrl(server),
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<PlayerInfo>>(){});
+            List<PlayerInfo> result = game.getPlayersInfos(server);
 
-            List<PlayerInfo> result = entity.getBody();
             scoresFromGameServers.put(server, result);
-            return result;
 
+            return result;
         } catch (RestClientException e) {
             logger.error("Error processing scores from server: " + server, e);
 
@@ -259,46 +136,8 @@ public class Dispatcher {
         }
     }
 
-    private String getPlayersUrl(String server) {
-        return String.format(settings.getUrlGetPlayers(),
-                server,
-                settings.getGameType());
-    }
-
-    private String createPlayerUrl(String server) {
-        return String.format(settings.getUrlCreatePlayer(),
-                server,
-                getAdminToken());
-    }
-
-    private String removePlayerUrl(String server, String email, String code) {
-        return String.format(settings.getUrlRemovePlayer(),
-                server,
-                getId(email),
-                code);
-    }
-
-    private String clearPlayersScoreUrl(String server) {
-        return String.format(settings.getUrlClearScores(),
-                server,
-                getAdminToken());
-    }
-
-    private String getAdminToken() {
-        return DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes());
-    }
-
-    private String playerExistsUrl(String server, String email) {
-        return String.format(settings.getUrlExistsPlayer(),
-                server,
-                getId(email));
-    }
-
-    private String gameEnabledUrl(String server, boolean enabled) {
-        return String.format(settings.getUrlGameEnabled(),
-                server,
-                enabled,
-                getAdminToken());
+    private long now() {
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     public List<PlayerScore> getScores(String day) {
@@ -320,7 +159,7 @@ public class Dispatcher {
             String email = score.getId();
             Player player = playerMap.get(email);
 
-            score.setId(getId(email));
+            score.setId(config.getId(email));
             if (player != null) {
                 score.setServer(player.getServer());
                 score.setName(String.format("%s %s", player.getFirstName(), player.getLastName()));
@@ -339,57 +178,27 @@ public class Dispatcher {
         return data;
     }
 
-    private String getEmail(String id) {
-        return Hash.getEmail(id, properties.getEmailHash());
-    }
-
-    private String getId(String email) {
-        return Hash.getId(email, properties.getEmailHash());
-    }
-
-    public Boolean remove(String server, String email, String code) {
-        RestTemplate rest = new RestTemplate();
-        ResponseEntity<Boolean> entity = rest.exchange(
-                removePlayerUrl(server, email, code),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Boolean>(){});
-        return entity.getBody();
-    }
-
-    public void saveSettings(DispatcherSettings settings) {
-        this.settings = settings;
-
-        if (settings.getServers() != null) {
-            servers.clear();
-            servers.addAll(settings.getServers());
-        }
-    }
-
-    public DispatcherSettings getSettings() {
-        return settings;
-    }
-
     public List<String> clearScores() {
-        return servers.stream()
+        return gameServers.stream()
             .map(s -> String.format("On server '%s' clear status is '%s'", s,
-                    clearScores(s)))
+                    game.clearScores(s)))
             .collect(toList());
     }
 
     public List<String> gameEnable(boolean enable) {
-        return servers.stream()
+        return gameServers.stream()
                 .map(s -> String.format("On server '%s' enable status is '%s'", s,
-                        gameEnable(s, enable)))
+                        game.gameEnable(s, enable)))
                 .collect(toList());
     }
+
 
     public boolean exists(String email) {
         Player player = players.get(email);
         if (player == null) {
             return false;
         }
-        return existsOnServer(player.getServer(), player.getEmail());
+        return game.existsOnServer(player.getServer(), player.getEmail());
     }
 
     public void clearCache() {

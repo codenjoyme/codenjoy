@@ -24,9 +24,10 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
-import com.codenjoy.dojo.services.entity.DispatcherSettings;
+import com.codenjoy.dojo.services.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
@@ -55,7 +56,9 @@ public class RestController {
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
     @Autowired private DebugService debug;
+    @Autowired private GameServer game;
     @Autowired private ConfigProperties properties;
+    @Autowired private DispatcherSettings settings;
 
     @RequestMapping(value = "/score/day/{day}", method = RequestMethod.GET)
     @ResponseBody
@@ -161,7 +164,7 @@ public class RestController {
     {
         Player player = validator.checkPlayerCode(email, code);
 
-        return dispatcher.remove(
+        return game.remove(
                 player.getServer(),
                 player.getEmail(),
                 player.getCode());
@@ -270,7 +273,7 @@ public class RestController {
         return doIt(new DoItOnServers<Boolean>() {
             @Override
             public Boolean onGame() {
-                Boolean result = dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+                Boolean result = game.remove(player.getServer(), player.getEmail(), player.getCode());
                 return result != null && result;
             }
 
@@ -314,7 +317,7 @@ public class RestController {
     {
         validator.checkIsAdmin(adminPassword);
 
-        dispatcher.saveSettings(settings);
+        this.settings.updateFrom(settings);
 
         return true;
     }
@@ -324,7 +327,7 @@ public class RestController {
     public DispatcherSettings getSettings(@PathVariable("adminPassword") String adminPassword) {
         validator.checkIsAdmin(adminPassword);
 
-        return dispatcher.getSettings();
+        return settings;
     }
 
     @RequestMapping(value = "/debug/get/{adminPassword}", method = RequestMethod.GET)
