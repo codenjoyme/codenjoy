@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -237,7 +239,12 @@ public class Registration {
     }
 
     public void replace(User user) {
-        Object[] parameters = {user.getReadableName(), 1, user.getPassword(), user.getCode(), user.getData(), user.getEmail()};
+        String code = user.getCode();
+        if (StringUtils.isEmpty(code)) {
+            code = Hash.getCode(user.getEmail(), user.getPassword());
+        }
+
+        Object[] parameters = {user.getReadableName(), 1, user.getPassword(), code, user.getData(), user.getEmail()};
         if (getCode(user.getEmail()) == null) {
             pool.update("INSERT INTO users (readable_name, email_approved, password, code, data, email) VALUES (?,?,?,?,?,?);",
                     parameters);

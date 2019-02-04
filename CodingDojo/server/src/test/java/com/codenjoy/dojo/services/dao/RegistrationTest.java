@@ -307,6 +307,46 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldReplaceExistingUser_withoutCode() {
+        // given
+        String code1 = service.register("user1", "name1", "pass1", "someData1");
+        String code2 = service.register("user2", "name2", "pass2", "someData2");
+
+        assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
+                        "email_approved=0, " +
+                        "password='pass1', " +
+                        "code='111578566106438208', " +
+                        "data='someData1'}, " +
+                        "User{email='user2', " +
+                        "readable_name=name2, " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+
+        // when
+        String noCode = null;
+        service.replace(new Registration.User("user1", "name1", 1, "newPassword1", noCode, "newData1"));
+
+        // then
+        assertEquals("[User{email='user1', " +
+                        "readable_name=name1, " +
+                        "email_approved=1, " +
+                        "password='newPassword1', " +
+                        "code='111578566623713482', " +
+                        "data='newData1'}, " +
+                        "User{email='user2', " +
+                        "readable_name=name2, " +
+                        "email_approved=0, " +
+                        "password='pass2', " +
+                        "code='111578567106438209', " +
+                        "data='someData2'}]",
+                service.getUsers().toString());
+    }
+
+    @Test
     public void shouldReplaceNonExistingUser() {
         // given
         String code1 = service.register("user1", "name1", "pass1", "someData1");

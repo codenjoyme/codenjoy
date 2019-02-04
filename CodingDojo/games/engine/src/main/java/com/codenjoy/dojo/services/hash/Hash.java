@@ -70,6 +70,7 @@ public class Hash {
                 .toString();
     }
 
+    // TODO сделать метод получения хеша с испольованием соли
     public static String getCode(String email, String password) {
         return "" + Math.abs(email.hashCode()) + Math.abs(password.hashCode());
     }

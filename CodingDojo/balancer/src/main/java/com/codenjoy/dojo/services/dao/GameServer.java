@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,7 @@ public class GameServer {
                                   String score, String save)
     {
         String id = config.getId(email);
+        String code = Hash.getCode(email, password);
 
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> entity = rest.postForEntity(
@@ -118,7 +120,7 @@ public class GameServer {
                                 name,
                                 1,
                                 password,
-                                null,
+                                code,
                                 null)
 
                 ),
