@@ -142,7 +142,7 @@ public class Dispatcher {
 
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> cached = currentScores.get(day);
-        if (cached != null) {
+        if (cached != null && !cached.isEmpty()) {
             return cached;
         }
 
