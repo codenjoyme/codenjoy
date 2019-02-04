@@ -23,8 +23,9 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
-import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -38,6 +39,7 @@ import static org.junit.Assert.*;
 
 public class RegistrationTest {
 
+    public static final String HASH = "someHash";
     private static Registration service;
 
     @Before
@@ -50,7 +52,15 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }));
+                        }))
+        {{
+            this.config = new ConfigProperties(){
+                @Override
+                public String getEmailHash() {
+                    return HASH;
+                }
+            };
+        }};
     }
 
     @After
@@ -374,4 +384,42 @@ public class RegistrationTest {
                 service.getUsers().toString());
     }
 
+    @Test
+    public void shouldCheckUser_whenOnlyEmails() {
+        String email = "user@email.com";
+
+        String code = service.register(email, "name", "pass", "someData");
+
+        assertEquals(true, service.checkUser(email, code));
+    }
+
+    @Test
+    public void shouldCheckUser_whenIdStoredOnDb_askWithEmail() {
+        String email = "user@email.com";
+        String id = Hash.getId(email, HASH);
+
+        String code = service.register(id, "name", "pass", "someData");
+
+        assertEquals(true, service.checkUser(email, code));
+    }
+
+    @Test
+    public void shouldCheckUser_whenEmailStoredOnDb_askWithId() {
+        String email = "user@email.com";
+        String id = Hash.getId(email, HASH);
+
+        String code = service.register(email, "name", "pass", "someData");
+
+        assertEquals(true, service.checkUser(id, code));
+    }
+
+    @Test
+    public void shouldCheckUser_whenOnlyIds() {
+        String email = "user@email.com";
+        String id = Hash.getId(email, HASH);
+
+        String code = service.register(id, "name", "pass", "someData");
+
+        assertEquals(true, service.checkUser(id, code));
+    }
 }

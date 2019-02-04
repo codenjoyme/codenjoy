@@ -23,9 +23,11 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -35,6 +37,9 @@ import java.util.List;
 public class Registration {
 
     private CrudConnectionThreadPool pool;
+
+    @Autowired
+    protected ConfigProperties config;
 
     public Registration(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
@@ -89,8 +94,26 @@ public class Registration {
     }
 
     public boolean checkUser(String email, String code) {
-        String actualName = getEmail(code);
-        return actualName != null && actualName.equals(email);
+        String stored = getEmail(code);
+        String soul = config.getEmailHash();
+
+        if (stored == null) {
+            return false;
+        }
+
+        if (stored.equals(email)) {
+            return true;
+        }
+
+        if (!stored.contains("@")) {
+            return Hash.getEmail(stored, soul).equals(email);
+        }
+
+        if (!email.contains("@")) {
+            return stored.equals(Hash.getEmail(email, soul));
+        }
+
+        return false;
     }
 
     public String getEmail(String code) {
