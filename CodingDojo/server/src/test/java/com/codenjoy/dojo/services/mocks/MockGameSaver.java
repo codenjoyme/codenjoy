@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockGameSaver {
     @Bean(name = "playerGameSaver")
-    public GameSaver bean() throws Exception {
+    public GameSaver bean() {
         return mock(GameSaver.class);
     }
 }

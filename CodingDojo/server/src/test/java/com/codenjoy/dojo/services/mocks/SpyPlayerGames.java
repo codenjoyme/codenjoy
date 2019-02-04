@@ -33,13 +33,13 @@ public class SpyPlayerGames {
     public static PlayerGames playerGames;
 
     @Bean(name = "playerGames")
-    public PlayerGames bean() throws Exception {
+    public PlayerGames bean() {
         playerGames = new PlayerGames();
         return spy(playerGames);
     }
 
     @Bean(name = "playerGamesView")
-    public PlayerGamesView bean2() throws Exception {
+    public PlayerGamesView bean2() {
         return spy(new PlayerGamesView());
     }
 }

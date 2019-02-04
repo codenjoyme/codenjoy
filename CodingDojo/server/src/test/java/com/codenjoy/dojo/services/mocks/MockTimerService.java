@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockTimerService {
     @Bean(name = "timerService")
-    public TimerService bean() throws Exception {
+    public TimerService bean() {
         return mock(TimerService.class);
     }
 }

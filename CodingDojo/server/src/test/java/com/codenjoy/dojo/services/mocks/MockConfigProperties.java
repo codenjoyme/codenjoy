@@ -23,14 +23,15 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 
-import com.codenjoy.dojo.services.AutoSaver;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
 
-public class MockAutoSaver {
-    @Bean(name = "autoSaver")
-    public AutoSaver bean() {
-        return mock(AutoSaver.class);
+public class MockConfigProperties {
+    @Bean(name = "configProperties")
+    public ConfigProperties bean() {
+        return mock(ConfigProperties.class);
     }
 }

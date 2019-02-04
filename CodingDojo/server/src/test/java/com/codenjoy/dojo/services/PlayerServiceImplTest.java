@@ -70,6 +70,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
         MockSaveService.class,
         MockRegistration.class,
         MockGameService.class,
+        MockConfigProperties.class,
         MockActionLogger.class,
         SpyPlayerGames.class,
         MockPropertyPlaceholderConfigurer.class})

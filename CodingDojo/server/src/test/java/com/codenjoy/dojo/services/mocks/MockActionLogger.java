@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockActionLogger {
     @Bean(name = "actionLogger")
-    public ActionLogger bean() throws Exception {
+    public ActionLogger bean() {
         return mock(ActionLogger.class);
     }
 }
