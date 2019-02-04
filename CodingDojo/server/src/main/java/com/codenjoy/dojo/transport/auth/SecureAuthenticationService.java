@@ -34,22 +34,26 @@ import javax.servlet.http.HttpServletRequest;
 public class SecureAuthenticationService implements AuthenticationService {
 
     @Autowired
-    private Registration registration;
+    protected Registration registration;
 
     @Override
     public String authenticate(HttpServletRequest request) {
         String user = request.getParameter("user");
-        if (user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
-            return user;
-        }
         String code = request.getParameter("code");
-        if (WebSocketRunner.BOT_CODE.equals(code)) { // TODO test me
+
+        if (isAI(user, code)){
             return user;
         }
+
         if (registration.checkUser(user, code)) {
             return user;
         } else {
             return null;
         }
+    }
+
+    private boolean isAI(String user, String code) {
+        return user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)
+            && WebSocketRunner.BOT_CODE.equals(code);
     }
 }
