@@ -75,7 +75,7 @@ public class Registration {
     }
 
     public String register(String email, String readableName, String password, String data) {
-        String code = makeCode(email, password);
+        String code = Hash.getCode(email, password);
         pool.update("INSERT INTO users (email, readable_name, email_approved, password, code, data) VALUES (?,?,?,?,?,?);",
                 new Object[]{email, readableName, 0, password, code, data});
         return code;
@@ -86,10 +86,6 @@ public class Registration {
                 new Object[]{email, password},
                 rs -> rs.next() ? rs.getString("code") : null
         );
-    }
-
-    public static String makeCode(String email, String password) {
-        return "" + Math.abs(email.hashCode()) + Math.abs(password.hashCode());
     }
 
     public boolean checkUser(String email, String code) {

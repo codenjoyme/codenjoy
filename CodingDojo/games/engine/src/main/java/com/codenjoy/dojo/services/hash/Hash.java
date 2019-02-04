@@ -69,4 +69,25 @@ public class Hash {
                         StringBuilder::append)
                 .toString();
     }
+
+    public static String getCode(String email, String password) {
+        return "" + Math.abs(email.hashCode()) + Math.abs(password.hashCode());
+    }
+
+    public static void main(String[] args) {
+        String email = "apofig@gmail.com";
+        String password = "password";
+        String passwordHash = md5(password);
+        String code = getCode(email, passwordHash);
+
+        System.out.println("email: " + email);
+        System.out.println("password: " + password);
+        System.out.println("password md5: " + passwordHash);
+        System.out.println("code: " + code);
+        System.out.println("---");
+        System.out.printf("UPDATE players " +
+                "SET password = '%s', code = '%s' " +
+                "WHERE email = '%s';\n", passwordHash, code, email);
+    }
+
 }
