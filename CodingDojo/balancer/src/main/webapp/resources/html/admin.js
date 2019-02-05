@@ -247,11 +247,16 @@ $(document).ready(function() {
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
             var preffix = $('#preffix').val();
+
+            var password = $('#password').val();
+            if (!password) {
+                password + $.md5(preffix + password);
+            }
             registerUser(
                 preffix + $('#email').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
-                $.md5(preffix + $('#password').val()),
+                password,
                 $('#code').val(),
                 preffix + $('#city').val(),
                 preffix + $('#skills').val(),

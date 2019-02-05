@@ -22,6 +22,8 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
+import org.apache.commons.lang.StringUtils;
+
 public class Player {
 
     private String email;
@@ -121,5 +123,17 @@ public class Player {
 
     public void setServer(String server) {
         this.server = server;
+    }
+
+    public void resetNullFileds(Player player) {
+        email = StringUtils.isEmpty(email) ? player.email : email;
+        firstName = StringUtils.isEmpty(firstName) ? player.firstName : firstName;
+        lastName = StringUtils.isEmpty(lastName) ? player.lastName : lastName;
+        password = StringUtils.isEmpty(password) ? player.password : password;
+        city = StringUtils.isEmpty(city) ? player.city : city;
+        skills = StringUtils.isEmpty(skills) ? player.skills : skills;
+        comment = StringUtils.isEmpty(comment) ? player.comment : comment;
+        code = StringUtils.isEmpty(code) ? player.code : code;
+        server = StringUtils.isEmpty(server) ? player.server : server;
     }
 }

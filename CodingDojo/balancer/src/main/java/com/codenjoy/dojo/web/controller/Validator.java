@@ -95,9 +95,12 @@ public class Validator {
         }
     }
 
-    public void checkMD5(String input) {
-        if (input == null || !md5.matcher(input).matches()) {
-            throw new IllegalArgumentException("Link hash is invalid: " + input);
+    public void checkMD5(String input, boolean canBeNull) {
+        boolean empty = StringUtils.isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && !md5.matcher(input).matches()))
+        {
+            throw new IllegalArgumentException("Password is invalid: " + input);
         }
     }
 
