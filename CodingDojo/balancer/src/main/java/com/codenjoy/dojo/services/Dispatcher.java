@@ -140,6 +140,11 @@ public class Dispatcher {
         return Calendar.getInstance().getTimeInMillis();
     }
 
+    public List<PlayerScore> getFinalists(int finalistsCount, String from, String to) {
+        List<String> exclude = Arrays.asList("apofig@gmail.com");
+        return scores.getFinalists(from, to, lastTime, finalistsCount, exclude);
+    }
+
     public List<PlayerScore> getScores(String day) {
         List<PlayerScore> cached = currentScores.get(day);
         if (cached != null && !cached.isEmpty()) {

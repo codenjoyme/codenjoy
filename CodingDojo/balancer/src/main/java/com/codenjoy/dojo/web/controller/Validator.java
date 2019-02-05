@@ -141,4 +141,10 @@ public class Validator {
             throw new LoginException("Unauthorized admin access");
         }
     }
+
+    public void checkPositiveInteger(int count) {
+        if (count <= 0){
+            throw new IllegalArgumentException("Should be positive integer: " + count);
+        }
+    }
 }

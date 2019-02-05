@@ -48,7 +48,7 @@ public class ScoresTest {
                             }
                         }))
         {{
-            this.properties = new ConfigProperties(){
+            this.config = new ConfigProperties(){
                 @Override
                 public String getGameFinalTime() {
                     return "19:00";

@@ -48,7 +48,7 @@ import java.util.stream.Stream;
 public class Scores {
 
     private CrudConnectionThreadPool pool;
-    @Autowired protected ConfigProperties properties;
+     @Autowired protected ConfigProperties config;
 
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
     public static final DateTimeFormatter YYYY_MM_DD2 = DateTimeFormatter.ofPattern(YYYY_MM_DD);
@@ -140,17 +140,11 @@ public class Scores {
 //                rs -> buildScores(rs));
 //    }
 
-    public List<PlayerScore> getFinalists(String from, int days, long time,
+    public List<PlayerScore> getFinalists(String from, String to, long time,
                                           int finalistsCount, List<String> exclude)
     {
-        LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
-        LocalDate end = start.plusDays(days);
-        List<LocalDate> dates = Stream.iterate(start, date -> date.plusDays(1))
-                .limit(ChronoUnit.DAYS.between(start, end))
-                .collect(Collectors.toList());
-
         List<String> finalists = new LinkedList<>();
-        return dates.stream()
+        return getDaysBetween(from, to).stream()
                 .map(day -> day.format(YYYY_MM_DD2))
                 .filter(day -> isPast(day, time))
                 .map(day -> getScores(day, time))
@@ -165,6 +159,14 @@ public class Scores {
                     })
             )
             .collect(Collectors.toList());
+    }
+
+    private List<LocalDate> getDaysBetween(String from, String to) {
+        LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
+        LocalDate end = LocalDate.parse(to, YYYY_MM_DD2);
+        return Stream.iterate(start, date -> date.plusDays(1))
+                .limit(ChronoUnit.DAYS.between(start, end))
+                .collect(Collectors.toList());
     }
 
     public List<PlayerScore> getScores(String day, long time) {
@@ -221,7 +223,7 @@ public class Scores {
 
     public long getLastTimeOfPast(String day) {
         return pool.select("SELECT time FROM scores WHERE day = ? AND time LIKE ? ORDER BY time ASC LIMIT 1;",
-                new Object[]{day, day + "T" + properties.getGameFinalTime() + "%"},
+                new Object[]{day, day + "T" + config.getGameFinalTime() + "%"},
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
