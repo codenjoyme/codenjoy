@@ -430,7 +430,7 @@ public class RegistrationTest {
 
         String code = service.register(email, "name", "pass", "someData");
 
-        assertEquals(true, service.checkUser(email, code));
+        assertEquals(email, service.checkUser(email, code));
     }
 
     @Test
@@ -440,7 +440,7 @@ public class RegistrationTest {
 
         String code = service.register(id, "name", "pass", "someData");
 
-        assertEquals(true, service.checkUser(email, code));
+        assertEquals(id, service.checkUser(email, code));
     }
 
     @Test
@@ -450,7 +450,7 @@ public class RegistrationTest {
 
         String code = service.register(email, "name", "pass", "someData");
 
-        assertEquals(true, service.checkUser(id, code));
+        assertEquals(email, service.checkUser(id, code));
     }
 
     @Test
@@ -460,6 +460,6 @@ public class RegistrationTest {
 
         String code = service.register(id, "name", "pass", "someData");
 
-        assertEquals(true, service.checkUser(id, code));
+        assertEquals(id, service.checkUser(id, code));
     }
 }

@@ -95,27 +95,35 @@ public class Registration {
         );
     }
 
-    public boolean checkUser(String email, String code) {
+    public String checkUser(String emailOrId, String code) {
         String stored = getEmail(code);
         String soul = config.getEmailHash();
 
         if (stored == null) {
-            return false;
+            return null;
         }
 
-        if (stored.equals(email)) {
-            return true;
+        if (stored.equals(emailOrId)) {
+            return emailOrId;
         }
 
         if (!stored.contains("@")) {
-            return Hash.getEmail(stored, soul).equals(email);
+            if (Hash.getEmail(stored, soul).equals(emailOrId)) {
+                return stored;
+            } else {
+                return null;
+            }
         }
 
-        if (!email.contains("@")) {
-            return stored.equals(Hash.getEmail(email, soul));
+        if (!emailOrId.contains("@")) {
+            if (stored.equals(Hash.getEmail(emailOrId, soul))) {
+                return stored;
+            } else {
+                return null;
+            }
         }
 
-        return false;
+        return null;
     }
 
     public String getEmail(String code) {

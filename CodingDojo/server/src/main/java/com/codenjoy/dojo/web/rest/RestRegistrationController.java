@@ -59,7 +59,7 @@ public class RestRegistrationController {
         validator.checkPlayerName(playerName, Validator.CANT_BE_NULL);
         validator.checkCode(code, Validator.CANT_BE_NULL);
 
-        return registration.checkUser(playerName, code);
+        return registration.checkUser(playerName, code) != null;
     }
 
     // TODO test me

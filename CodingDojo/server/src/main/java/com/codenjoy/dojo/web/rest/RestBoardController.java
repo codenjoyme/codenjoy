@@ -205,7 +205,7 @@ public class RestBoardController {
 
         String context = getContext();
         GameTypeInfo gameType = getGameType(gameName);
-        boolean registered = registration.checkUser(playerName, code);
+        boolean registered = registration.checkUser(playerName, code) == null;
         List<String> sprites = getSpritesForGame(gameName);
         String alphabet = getSpritesAlphabet();
         List<PlayerInfo> players = registrationController.getGamePlayers(gameName);

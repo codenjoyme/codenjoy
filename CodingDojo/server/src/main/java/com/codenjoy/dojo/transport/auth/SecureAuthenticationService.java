@@ -45,11 +45,7 @@ public class SecureAuthenticationService implements AuthenticationService {
             return user;
         }
 
-        if (registration.checkUser(user, code)) {
-            return user;
-        } else {
-            return null;
-        }
+        return registration.checkUser(user, code);
     }
 
     private boolean isAI(String user, String code) {

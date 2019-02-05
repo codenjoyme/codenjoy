@@ -118,7 +118,7 @@ public class Validator {
     public void checkPlayerCode(String playerName, String code) {
         checkPlayerName(playerName, CANT_BE_NULL);
         checkCode(code, CANT_BE_NULL);
-        if (!registration.checkUser(playerName, code)) {
+        if (registration.checkUser(playerName, code) == null) {
             throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + playerName);
         }
     }
