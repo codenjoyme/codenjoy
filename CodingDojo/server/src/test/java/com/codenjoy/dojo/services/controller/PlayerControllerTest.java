@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.controller;
 
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.nullobj.NullInformation;
 import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
@@ -35,11 +37,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 // TODO разобратсья почему не рабоатет весь тест
 public class PlayerControllerTest {
 
-    public static final int PORT = 8081;
+    public static final int PORT = 8082;
     public static final String CONTEXT_PATH = "/appcontext";
     private static WebSocketRunnerMock client;
 
@@ -47,19 +50,25 @@ public class PlayerControllerTest {
 
     private static PlayerController controller;
     private static TimerService timer;
+    private static Registration registration;
+
     private static SpringMockerJettyRunner runner;
 
     private static Joystick joystick;
     private static Player player;
 
     private static final String SERVER = "ws://127.0.0.1:" + PORT + CONTEXT_PATH + "/ws";
-    private static String USER_NAME = "apofig";
+    private static String USER_NAME = "apofig@gmail.com";
+    private static String CODE = Hash.getCode("apofig@gmail.com", "secureSoul");
 
     private static List<String> serverMessages = new LinkedList<>();
 
     @BeforeClass
     public static void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", CONTEXT_PATH);
+        runner = new SpringMockerJettyRunner("src/main/webapp", CONTEXT_PATH){{
+            mockBean("registration");
+        }};
+
         int port = runner.start(PORT);
 
         url = runner.getUrl();
@@ -67,6 +76,7 @@ public class PlayerControllerTest {
 
         timer = runner.getBean(TimerService.class, "timerService");
         controller = runner.getBean(PlayerController.class, "playerController");
+        registration = runner.getBean(Registration.class, "registration");
 
         timer.pause();
 
@@ -102,7 +112,10 @@ public class PlayerControllerTest {
 
         controller.registerPlayerTransport(player, joystick);
 
-        client = WebSocketRunnerMock.run(SERVER, USER_NAME);
+        // SecureAuthenticationService спросит Registration а можно ли этому юзеру что-то делать?
+        when(registration.checkUser(USER_NAME, CODE)).thenReturn(USER_NAME);
+
+        client = WebSocketRunnerMock.run(SERVER, USER_NAME, CODE);
     }
 
     @Before
@@ -112,11 +125,11 @@ public class PlayerControllerTest {
     }
 
     @AfterClass
-    public static void tearDown() throws Exception {
+    public static void tearDown() {
         client.stop();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldLeft() {
         client.willAnswer("LEFT");
         waitForPlayerResponse();
@@ -124,7 +137,7 @@ public class PlayerControllerTest {
         assertEquals("[left]", serverMessages.toString());
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldRight() {
         client.willAnswer("right");
         waitForPlayerResponse();
@@ -133,7 +146,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldUp() {
         client.willAnswer("Up");
         waitForPlayerResponse();
@@ -142,7 +155,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldAct() {
         client.willAnswer("aCt");
         waitForPlayerResponse();
@@ -151,7 +164,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldActWithParameters() {
         client.willAnswer("ACt(1,2 ,3, 5)");
         waitForPlayerResponse();
@@ -160,7 +173,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldDown() {
         client.willAnswer("DowN");
         waitForPlayerResponse();
@@ -169,7 +182,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldRightAct() {
         client.willAnswer("right,Act");
         waitForPlayerResponse();
@@ -178,7 +191,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldMixed() {
         client.willAnswer("Act,right, left ,act");
         waitForPlayerResponse();
@@ -187,7 +200,7 @@ public class PlayerControllerTest {
         clean();
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldCheckRequest() {
         client.willAnswer("act");
         waitForPlayerResponse();
@@ -199,7 +212,7 @@ public class PlayerControllerTest {
         waitForPlayerResponse(1);
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
         // given, when
         client.willAnswer("LEFT").times(2);

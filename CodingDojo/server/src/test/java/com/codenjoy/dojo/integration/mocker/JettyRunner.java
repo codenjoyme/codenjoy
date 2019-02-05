@@ -25,7 +25,9 @@ package com.codenjoy.dojo.integration.mocker;
 
 import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -39,8 +41,6 @@ import java.util.List;
 
 public class JettyRunner {
 
-    private ServletContext servletContext;
-    protected WebApplicationContext applicationContext;
     private List<SpringContextInitEvent> springContextInitListeners = new LinkedList<>();
     private List<ServletContextInitEvent> servletContextInitListeners = new LinkedList<>();
     private String webApp;
@@ -74,41 +74,42 @@ public class JettyRunner {
         void contextInit(WebAppContext context, ServletContext servletContext);
     }
 
+    void setupApplicationContext(ContextHandler.Context servletContext) {
+        WebApplicationContext appContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+
+        for (SpringContextInitEvent listener : springContextInitListeners) {
+            listener.contextInit(appContext);
+        }
+    }
+
     public int start(int givenPort) throws Exception {
         stop();
 
         server = new Server(givenPort);
-        final WebAppContext context = loadWebContext();
-        context.addEventListener(new ServletContextListener() {
+
+        server.setAttribute(Configuration.ATTR, new Configuration.ClassList(){{
+            add(MockerConfiguration.class.getName());
+        }});
+        MockerConfiguration.add(this);
+
+        WebAppContext webContext = loadWebContext();
+        webContext.addEventListener(new ServletContextListener() {
             @Override
             public void contextInitialized(ServletContextEvent sce) {
-                servletContext = sce.getServletContext();
+                ServletContext servletContext = sce.getServletContext();
 
                 for (ServletContextInitEvent listener : servletContextInitListeners) {
-                    listener.contextInit(context, servletContext);
+                    listener.contextInit(webContext, servletContext);
                 }
-
-                context.addEventListener(new ServletContextListener() {
-                    @Override
-                    public void contextInitialized(ServletContextEvent sce) {
-                        applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-
-                        for (SpringContextInitEvent listener : springContextInitListeners) {
-                            listener.contextInit(applicationContext);
-                        }
-                    }
-
-                    @Override
-                    public void contextDestroyed(ServletContextEvent sce) {
-                    }
-                });
             }
 
             @Override
             public void contextDestroyed(ServletContextEvent sce) {
             }
         });
-        server.setHandler(context);
+
+
+        server.setHandler(webContext);
         server.start();
         NetworkConnector networkConnector = (NetworkConnector) server.getConnectors()[0];
         port = networkConnector.getLocalPort();
