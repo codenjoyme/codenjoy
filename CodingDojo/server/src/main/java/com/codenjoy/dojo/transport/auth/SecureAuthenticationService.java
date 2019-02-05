@@ -24,7 +24,9 @@ package com.codenjoy.dojo.transport.auth;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.dao.Registration;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +34,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class SecureAuthenticationService implements AuthenticationService {
+
+    private static Logger logger = DLoggerFactory.getLogger(SecureAuthenticationService.class);
 
     @Autowired
     protected Registration registration;
@@ -42,10 +46,20 @@ public class SecureAuthenticationService implements AuthenticationService {
         String code = request.getParameter("code");
 
         if (isAI(user, code)){
+            if (logger.isDebugEnabled()) {
+                logger.debug("User {} with code {} logged in as AI", user, code);
+            }
+
             return user;
         }
 
-        return registration.checkUser(user, code);
+        String result = registration.checkUser(user, code);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("User {} with code {} logged as {}", user, code, result);
+        }
+
+        return result;
     }
 
     private boolean isAI(String user, String code) {
