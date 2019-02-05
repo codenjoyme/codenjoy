@@ -89,8 +89,10 @@ function initBoardComponents(game) {
     }
 
     if (typeof initJoystick == 'function') {
-        initJoystick(game.playerName, game.registered,
-            game.code, game.contextPath);
+        if (!!game.playerName) {
+            initJoystick(game.playerName, game.registered,
+                game.code, game.contextPath);
+        }
     }
 
     if (game.enableLeadersTable) {
