@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,7 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected PlayerService playerService;
     @Autowired protected Registration registration;
     @Autowired protected PlayerGames playerGames;
+    @Autowired protected ConfigProperties config;
 
     @Override
     public void saveAll() {
@@ -69,7 +71,10 @@ public class SaveServiceImpl implements SaveService {
     public boolean load(String name) {
         PlayerSave save = saver.loadGame(name);
         if (save == PlayerSave.NULL) { // TODO test me
-            return false;
+            save = saver.loadGame(Hash.getEmail(name, config.getEmailHash()));
+            if (save == PlayerSave.NULL) {
+                return false;
+            }
         }
 
         if (playerService.contains(name)) { // TODO test me
