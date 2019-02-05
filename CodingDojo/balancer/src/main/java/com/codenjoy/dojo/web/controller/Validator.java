@@ -98,7 +98,7 @@ public class Validator {
     public void checkMD5(String input, boolean canBeNull) {
         boolean empty = StringUtils.isEmpty(input);
         if (!(empty && canBeNull ||
-                !empty && !md5.matcher(input).matches()))
+                !empty && md5.matcher(input).matches()))
         {
             throw new IllegalArgumentException("Password is invalid: " + input);
         }
