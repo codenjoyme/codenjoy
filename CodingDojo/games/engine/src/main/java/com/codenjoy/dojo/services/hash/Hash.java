@@ -26,7 +26,10 @@ package com.codenjoy.dojo.services.hash;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.stream.Collectors.toList;
 
 public class Hash {
 
@@ -40,6 +43,16 @@ public class Hash {
         }
 
         String encoded = xor(email, soul);
+        encoded = shuffle(encoded, shuffleSoul(soul, true));
+        return encode(encoded);
+    }
+
+    private static String shuffleSoul(String soul, boolean inverted) {
+        soul = encode(md5(soul) + md5(soul + "qwe"));
+        return inverted ? StringUtils.reverse(soul) : soul;
+    }
+
+    private static String encode(String encoded) {
         return ZBase32Encoder.encode(encoded.getBytes());
     }
 
@@ -48,28 +61,47 @@ public class Hash {
             return id;
         }
 
-        String data = new String(ZBase32Encoder.decode(id));
+        String data = decode(id);
+        data = shuffle(data, shuffleSoul(soul, false));
         return xor(data, soul);
     }
 
-    private static String xor(String email, String soul) {
-        String hash = md5(soul);
-        String hash2 = md5(hash);
+    private static String decode(String id) {
+        return new String(ZBase32Encoder.decode(id));
+    }
 
-        AtomicInteger index = new AtomicInteger();
+    private static String xor(String email, String soul) {
+        String h1 = md5(soul);
+        String h2 = h1 + md5(h1);
+
+        AtomicInteger i = new AtomicInteger();
         return email.chars()
-                .map(ch -> {
-                    int i = index.get();
-                    i = index.addAndGet(hash2.codePointAt(i % hash.length()));
-                    if (i >= hash.length()) {
-                        i = i % hash.length();
-                    }
-                    return ch ^ hash.codePointAt(i);
-                })
+                .map(ch -> ch ^ h1.codePointAt(i.addAndGet(h2.codePointAt(i.get() % h1.length())) % h1.length()))
                 .collect(StringBuilder::new,
                         StringBuilder::appendCodePoint,
                         StringBuilder::append)
                 .toString();
+    }
+
+    private static String shuffle(String input, String soul) {
+        List<Character> l = input.chars()
+                .mapToObj(c -> new Character((char) c))
+                .collect(toList());
+
+        soul.chars().forEach(c -> {
+            swap((c >>> 12) ^ c >> input.length(), c ^ (c >>> 3), l);
+        });
+
+        return l.stream().collect(StringBuilder::new,
+                StringBuilder::appendCodePoint,
+                StringBuilder::append)
+                .toString();
+    }
+
+    private static void swap(int n, int m, List<Character> l) {
+        m = m % l.size();
+        n = n % l.size();
+        l.set(m, l.set(n, l.get(m)));
     }
 
     // TODO сделать метод получения хеша с испольованием соли
