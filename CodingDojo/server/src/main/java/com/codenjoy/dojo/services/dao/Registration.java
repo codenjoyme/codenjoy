@@ -267,4 +267,8 @@ public class Registration {
                 new Object[]{email});
     }
 
+    public void removeAll() {
+        pool.update("DELETE FROM users;");
+    }
+
 }

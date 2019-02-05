@@ -237,7 +237,7 @@
                         <a href="${ctx}/admin?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        Registration&nbsp;&nbsp;
+                        <a href="${ctx}/admin?removeRegistrationAll&gameName=${gameName}">RemoveRegAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
                         <a href="${ctx}/admin?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;

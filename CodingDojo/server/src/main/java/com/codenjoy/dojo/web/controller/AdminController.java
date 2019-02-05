@@ -132,13 +132,13 @@ public class AdminController {
     }
 
     @RequestMapping(params = "gameOver", method = RequestMethod.GET)
-    public String removePlayer(@RequestParam("gameOver") String name, Model model, HttpServletRequest request) {
+    public String removePlayer(@RequestParam("gameOver") String name, HttpServletRequest request) {
         playerService.remove(name);
         return getAdmin(request);
     }
 
     @RequestMapping(params = "removeSave", method = RequestMethod.GET)
-    public String removePlayerSave(@RequestParam("removeSave") String name, Model model, HttpServletRequest request) {
+    public String removePlayerSave(@RequestParam("removeSave") String name, HttpServletRequest request) {
         saveService.removeSave(name);
         return getAdmin(request);
     }
@@ -149,8 +149,14 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @RequestMapping(params = "removeRegistrationAll", method = RequestMethod.GET)
+    public String removePlayerRegistration(HttpServletRequest request) {
+        registration.removeAll();
+        return getAdmin(request);
+    }
+
     @RequestMapping(params = "removeSaveAll", method = RequestMethod.GET)
-    public String removePlayerSave(Model model, HttpServletRequest request) {
+    public String removePlayerSave(HttpServletRequest request) {
         saveService.removeAllSaves();
         return getAdmin(request);
     }
