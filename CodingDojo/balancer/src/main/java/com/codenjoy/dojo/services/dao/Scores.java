@@ -37,8 +37,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class Scores {
@@ -47,6 +51,7 @@ public class Scores {
     @Autowired protected ConfigProperties properties;
 
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
+    public static final DateTimeFormatter YYYY_MM_DD2 = DateTimeFormatter.ofPattern(YYYY_MM_DD);
     private SimpleDateFormat formatter = new SimpleDateFormat(YYYY_MM_DD);
 
     public Scores(ConnectionThreadPoolFactory factory) {
@@ -135,23 +140,25 @@ public class Scores {
 //                rs -> buildScores(rs));
 //    }
 
-    public List<PlayerScore> getFinalists(long time, int count) {
-        List<String> days = Arrays.asList("2019-01-28", "2019-01-29", "2019-01-30", "2019-01-31",
-                "2019-02-01", "2019-02-02", "2019-02-03", "2019-02-04", "2019-02-05", "2019-02-06",
-                "2019-02-07", "2019-02-08", "2019-02-09", "2019-02-10", "2019-02-11", "2019-02-10",
-                "2019-02-13");
+    public List<PlayerScore> getFinalists(String from, int days, long time,
+                                          int finalistsCount, List<String> exclude)
+    {
+        LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
+        LocalDate end = start.plusDays(days);
+        List<LocalDate> dates = Stream.iterate(start, date -> date.plusDays(1))
+                .limit(ChronoUnit.DAYS.between(start, end))
+                .collect(Collectors.toList());
 
-        List<String> exclude = Arrays.asList("apofig@gmail.com");
         List<String> finalists = new LinkedList<>();
-
-        return days.stream()
-            .filter(day -> isPast(day, time))
+        return dates.stream()
+                .map(day -> day.format(YYYY_MM_DD2))
+                .filter(day -> isPast(day, time))
                 .map(day -> getScores(day, time))
                 .flatMap(list -> list.stream()
                     .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
                     .filter(score -> !exclude.contains(score.getId()))
                     .filter(score -> !finalists.contains(score.getId()))
-                    .limit(count)
+                    .limit(finalistsCount)
                     .map(score -> {
                         finalists.add(score.getId());
                         return score;
