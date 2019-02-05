@@ -250,7 +250,7 @@ $(document).ready(function() {
 
             var password = $('#password').val();
             if (!!password) {
-                password + $.md5(preffix + password);
+                password = $.md5(preffix + password);
             }
             registerUser(
                 preffix + $('#email').val(),
