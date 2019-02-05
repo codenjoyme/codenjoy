@@ -76,15 +76,20 @@ public class Hash {
     }
 
     public static void main(String[] args) {
+        String soul = "soul";
+
         String email = "apofig@gmail.com";
-        String password = "password";
+        String password = "apofig@gmail.com";
         String passwordHash = md5(password);
+        String id = getId(email, soul);
         String code = getCode(email, passwordHash);
 
         System.out.println("email: " + email);
+        System.out.println("id: " + id);
         System.out.println("password: " + password);
         System.out.println("password md5: " + passwordHash);
         System.out.println("code: " + code);
+
         System.out.println("---");
         System.out.printf("UPDATE players " +
                 "SET password = '%s', code = '%s' " +
