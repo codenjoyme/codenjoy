@@ -249,7 +249,7 @@ $(document).ready(function() {
             var preffix = $('#preffix').val();
 
             var password = $('#password').val();
-            if (!password) {
+            if (!!password) {
                 password + $.md5(preffix + password);
             }
             registerUser(
