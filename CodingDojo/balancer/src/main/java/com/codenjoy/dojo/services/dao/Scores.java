@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services.dao;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -33,11 +33,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class Scores {
@@ -88,24 +89,95 @@ public class Scores {
                 });
     }
 
+//    public List<PlayerScore> getLeaders() {
+//        String time = "19:00";
+//        String firstDay = "2019-01-28";
+//        int countWinners = 10;
+//        String lastDay = "2019-02-10";
+//
+//        return pool.select("WITH RECURSIVE day_scores AS (\n" +
+//                        "  SELECT * \n" +
+//                        "    FROM scores \n" +
+//                        "    INNER JOIN \n" +
+//                        "        (SELECT MAX(time) AS max_time \n" +
+//                        "            FROM (SELECT * FROM scores WHERE time LIKE '2019-%T?%') as test \n" +
+//                        "            GROUP BY day) test \n" +
+//                        "    ON time = max_time\n" +
+//                        "), \n" +
+//                        "\n" +
+//                        "top_scores(emails, day) AS (\n" +
+//                        "        (SELECT array_agg(row(email, day)) AS emails, '?' :: date AS day \n" +
+//                        "            FROM (SELECT email, day FROM day_scores WHERE day = '?' ORDER BY score DESC LIMIT ?) initial_query) \n" +
+//                        "    UNION ALL \n" +
+//                        "        (SELECT * \n" +
+//                        "            FROM \n" +
+//                        "                (SELECT array_agg(row(email, s_day)) AS emails, MAX(ts_day):: date AS day \n" +
+//                        "                    FROM \n" +
+//                        "                        (SELECT ROW_NUMBER () OVER (PARTITION BY s.day ORDER BY score DESC) AS index, \n" +
+//                        "                                time, score, ts.day AS ts_day, s.day AS s_day, email \n" +
+//                        "                            FROM day_scores s, \n" +
+//                        "                                (SELECT emails, top_scores.day + interval '1' day AS \"day\" \n" +
+//                        "                                    FROM top_scores ORDER BY day DESC LIMIT 1) ts \n" +
+//                        "                            WHERE ((NOT s.email IN (SELECT email FROM unnest(emails) AS (email text, day varchar))) \n" +
+//                        "                                    AND s.day :: date = ts.day :: date) \n" +
+//                        "                                OR (ts.day :: date != s.day :: date \n" +
+//                        "                                    AND (s.email, s.day) = ANY(ts.emails))\n" +
+//                        "                        ) indexed_top \n" +
+//                        "                    WHERE index <= ?\n" +
+//                        "                ) rec_exit \n" +
+//                        "            WHERE day < '?')\n" +
+//                        ") \n" +
+//                        "     \n" +
+//                        "SELECT DISTINCT nest_email AS name, nest_day AS day \n" +
+//                        "    FROM top_scores, unnest(emails) AS (nest_email text, nest_day varchar)\n" +
+//                        "    ORDER BY nest_day;\n",
+//                new Object[]{time, firstDay, firstDay, countWinners, countWinners, lastDay},
+//                rs -> buildScores(rs));
+//    }
+
+    public List<PlayerScore> getFinalists(long time, int count) {
+        List<String> days = Arrays.asList("2019-01-28", "2019-01-29", "2019-01-30", "2019-01-31",
+                "2019-02-01", "2019-02-02", "2019-02-03", "2019-02-04", "2019-02-05", "2019-02-06",
+                "2019-02-07", "2019-02-08", "2019-02-09", "2019-02-10", "2019-02-11", "2019-02-10",
+                "2019-02-13");
+
+        List<String> exclude = Arrays.asList("apofig@gmail.com");
+        List<String> finalists = new LinkedList<>();
+
+        return days.stream()
+            .filter(day -> isPast(day, time))
+                .map(day -> getScores(day, time))
+                .flatMap(list -> list.stream()
+                    .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
+                    .filter(score -> !exclude.contains(score.getId()))
+                    .filter(score -> !finalists.contains(score.getId()))
+                    .limit(count)
+                    .map(score -> {
+                        finalists.add(score.getId());
+                        return score;
+                    })
+            )
+            .collect(Collectors.toList());
+    }
+
     public List<PlayerScore> getScores(String day, long time) {
         if (isPast(day, time)) {
             time = getLastTimeOfPast(day);
         }
 
-        // TODO а тут точно надо AND day = ?
-        return pool.select("SELECT * FROM scores WHERE time = ? AND day = ?;",
-                new Object[]{JDBCTimeUtils.toString(new Date(time)), day},
-                rs -> {
-                    List<PlayerScore> result = new LinkedList<>();
-                    while (rs.next()) {
-                        result.add(new PlayerScore(
-                                rs.getString("email"),
-                                rs.getInt("score")));
-                    }
-                    return result;
-                }
-        );
+        return pool.select("SELECT * FROM scores WHERE time = ?;",
+                new Object[]{JDBCTimeUtils.toString(new Date(time))},
+                rs -> buildScores(rs));
+    }
+
+    private List<PlayerScore> buildScores(ResultSet rs) throws SQLException {
+        return new LinkedList<PlayerScore>(){{
+            while (rs.next()) {
+                add(new PlayerScore(
+                        rs.getString("email"),
+                        rs.getInt("score")));
+            }
+        }};
     }
 
     public void deleteByName(String email) {
