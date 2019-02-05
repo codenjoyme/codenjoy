@@ -88,22 +88,24 @@ var autoIncrement = function() {
 }
 
 var registerUser = function(email, firstName,
-                            lastName, password,
-                            city, skills, comment)
+                            lastName, password, code,
+                            city, skills, comment, whatToDo)
 {
     _ajax('register', {
         type: 'POST',
-        url: server('balancer') + '/register',
+        url: server('balancer') + '/' + whatToDo,
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
             '"firstName" : "' + firstName + '", ' +
             '"lastName" : "' + lastName + '", ' +
             '"password" : "' + password + '", ' +
+            '"code" : "' + code + '", ' +
             '"city" : "' + city + '", ' +
             '"skills" : "' + skills + '", ' +
             '"comment" : "' + comment + '"}',
         after: function(data){
             $('#join-code').val(data.code);
+            $('#code').val(data.code);
 
             autoIncrement();
         }
@@ -242,18 +244,25 @@ $(document).ready(function() {
 
     $('#scores-day').val(new Date().toISOString().split('T')[0]);
 
-    $('#register').click(function() {
-        var preffix = $('#preffix').val();
-        registerUser(
-            preffix + $('#email').val(),
-            preffix + $('#first-name').val(),
-            preffix + $('#last-name').val(),
-            $.md5(preffix + $('#password').val()),
-            preffix + $('#city').val(),
-            preffix + $('#skills').val(),
-            preffix + $('#comment').val()
-        );
-    });
+    var registerOrUpdate = function(action) {
+        $('#' + action).click(function() {
+            var preffix = $('#preffix').val();
+            registerUser(
+                preffix + $('#email').val(),
+                preffix + $('#first-name').val(),
+                preffix + $('#last-name').val(),
+                $.md5(preffix + $('#password').val()),
+                $('#code').val(),
+                preffix + $('#city').val(),
+                preffix + $('#skills').val(),
+                preffix + $('#comment').val(),
+                action
+            );
+        });
+    }
+
+    registerOrUpdate('register');
+    registerOrUpdate('update');
 
     $('#login').click(function() {
         var preffix = $('#preffix').val();

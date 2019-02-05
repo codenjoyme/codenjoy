@@ -182,7 +182,35 @@ public class RestController {
 
             @Override
             public ServerLocation onFailed(ServerLocation data) {
-               throw new LoginException("User name or password is incorrect");
+               throw new LoginException("User name or password/code is incorrect");
+            }
+        });
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
+        return tryLogin(player, new OnLogin<ServerLocation>(){
+
+            @Override
+            public ServerLocation onSuccess(ServerLocation location) {
+                String server = location.getServer();
+                String email = location.getEmail();
+
+                if (game.existsOnServer(server, email)) {
+                    game.remove(server, email, location.getCode());
+                }
+
+                String newPassword = player.getPassword();
+                player.setCode(Hash.getCode(email, newPassword));
+                players.update(player);
+
+                return recreatePlayerIfNeeded(location, email, getIp(request));
+            }
+
+            @Override
+            public ServerLocation onFailed(ServerLocation data) {
+                throw new LoginException("User name or password/code is incorrect");
             }
         });
     }
@@ -215,14 +243,17 @@ public class RestController {
     private <T> T tryLogin(Player player, OnLogin<T> onLogin) {
         String email = player.getEmail();
         String password = player.getPassword();
+        String code = player.getCode();
 
         validator.checkEmail(email, false);
         validator.checkMD5(password);
+        validator.checkCode(code, Validator.CAN_BE_NULL);
 
         Player exist = players.get(email);
-        if (exist == null || !password.equals(exist.getPassword())) {
+        if (!isValid(exist, password, code)) {
             return onLogin.onFailed(new ServerLocation(email, null, null, null));
         }
+
         String server = players.getServer(email);
 
         return onLogin.onSuccess(
@@ -231,6 +262,15 @@ public class RestController {
                         exist.getCode(),
                         server
                 ));
+    }
+
+    private boolean isValid(Player exist, String password, String code) {
+        if (exist == null) {
+            return false;
+        }
+
+        return exist.getPassword().equals(password)
+                || exist.getCode().equals(code);
     }
 
     private <T> T doIt(DoItOnServers<T> action) {
