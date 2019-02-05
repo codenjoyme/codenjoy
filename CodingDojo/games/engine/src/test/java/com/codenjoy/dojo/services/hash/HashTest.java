@@ -31,26 +31,26 @@ public class HashTest {
 
     @Test
     public void testEncodeEmailToIdAndBack() {
-        assertHash("apofig@gmail.com", "soul", "k3dfwbacm74feznamcgthbk6bh");
-        assertHash("apofig@gmail.comd", "soul", "k3dfwbacm74feznamcgthbk6b7ky");
-        assertHash("apofig@gmail.com", "G(^D@F(@&If2d", "yemy1byxyf4ygzkzmy8b1y16ba");
+        assertHash("apofig@gmail.com", "soul", "khko1yacyauyrnyybhrwsyojby");
+        assertHash("apofig@gmail.comd", "soul", "khko1yacyauyrnyybhrwsyojbyyo");
+        assertHash("apofig@gmail.com", "G(^D@F(@&If2d", "kwko4waxke1frsy8morbsiojmy");
 
         assertHash("qwertyuiop[]asdfghjkl;'zxvbnm,./!@#$%^&*()_+~`1234567890-=QWERTYUIOP{}ASDFGHJKL:\"||ZXCVBNM<>?\\/",
                 "soul",
-                "e3yiyratefyiwz1jpr6fnfkiytmi6sapmy8tguy7npmy4snkjhqbc7oseiygcro3dreg411qyayfyyadyteygdypy3rfo3jwqy4dk4unx77dn81fqio8k95iff7n49kanjfw4xdcq7t8ek3ebbqowq1q");
+                "ehjygfatdyjoanot8whyeronycby1dyqbfprn8a7nhnysnnpjbfreekfefyd6onxjird1uo5yfmiqi1ikpjirsk9kirfap31ry3urxbofywuk8ohrh5nnj3bfwz1wk19ehqtwx37reanqk3cmjpiwxkj");
 
-        assertHash("1", "soul", "ya");
-        assertHash("12", "soul", "yany");
-        assertHash("123", "soul", "yanyc");
-        assertHash("1234", "soul", "yanycie");
-        assertHash("12345", "soul", "yanyciko");
-        assertHash("123456", "soul", "yanycikoba");
-        assertHash("1234567", "soul", "yanycikobabo");
-        assertHash("12345678", "soul", "yanycikobabos");
-        assertHash("123456789", "soul", "yanycikobabosny");
-        assertHash("1234567890", "soul", "yanycikobabosnyj");
+        assertHash("1", "soul", "yh");
+        assertHash("12", "soul", "y7mo");
+        assertHash("123", "soul", "y7mik");
+        assertHash("1234", "soul", "y7mikwe");
+        assertHash("12345", "soul", "y7mikwko");
+        assertHash("123456", "soul", "y7mikwkokh");
+        assertHash("1234567", "soul", "y7mikwkok7eo");
+        assertHash("12345678", "soul", "y7mikwkok7ei4");
+        assertHash("123456789", "soul", "y7mikwkok7ei4zy");
+        assertHash("1234567890", "soul", "y7mikwkok7ei4znt");
 
-        assertHash("1", "F@#*O2gt", "kh");
+        assertHash("1", "F@#*O2gt", "by");
 
         assertHash("", "soul", "");
         assertHash("", "H*OCv2ck", "");

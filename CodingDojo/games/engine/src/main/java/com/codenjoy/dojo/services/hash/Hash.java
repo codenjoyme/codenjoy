@@ -54,11 +54,13 @@ public class Hash {
 
     private static String xor(String email, String soul) {
         String hash = md5(soul);
+        String hash2 = md5(hash);
 
         AtomicInteger index = new AtomicInteger();
         return email.chars()
                 .map(ch -> {
-                    int i = index.getAndIncrement();
+                    int i = index.get();
+                    i = index.addAndGet(hash2.codePointAt(i % hash.length()));
                     if (i >= hash.length()) {
                         i = i % hash.length();
                     }
