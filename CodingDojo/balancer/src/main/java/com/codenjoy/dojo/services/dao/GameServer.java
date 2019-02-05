@@ -36,6 +36,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -105,28 +106,42 @@ public class GameServer {
         String id = config.getId(email);
         String code = Hash.getCode(email, password);
 
+
         RestTemplate rest = new RestTemplate();
-        ResponseEntity<String> entity = rest.postForEntity(
-                createPlayerUrl(server),
-                new PlayerDetailInfo(
-                        id,
-                        name,
-                        callbackUrl,
-                        settings.getGameType(),
-                        score,
-                        save,
-                        new User(
-                                id,
-                                name,
-                                1,
-                                password,
-                                code,
-                                null)
+        ResponseEntity<String> entity = null;
+        try {
+            entity = rest.postForEntity(
+                    createPlayerUrl(server),
+                    new PlayerDetailInfo(
+                            id,
+                            name,
+                            callbackUrl,
+                            settings.getGameType(),
+                            score,
+                            save,
+                            new User(
+                                    id,
+                                    name,
+                                    1,
+                                    password,
+                                    code,
+                                    null)
 
-                ),
-                String.class);
+                    ),
+                    String.class);
+        } catch (HttpServerErrorException e) {
+            String message = "Cant create new player. Status is: " + e.getResponseBodyAsString();
+            logger.error(message);
+            throw new RuntimeException(message, e);
+        }
 
-        return entity.getBody();
+        if (entity.getStatusCode().is2xxSuccessful()) {
+            return entity.getBody();
+        } else {
+            String message = "Cant create new player. Status is: " + entity.getStatusCode();
+            logger.error(message);
+            throw new RuntimeException(message);
+        }
     }
 
     public boolean existsOnServer(String server, String email) {
@@ -184,12 +199,26 @@ public class GameServer {
 
     public Boolean remove(String server, String email, String code) {
         RestTemplate rest = new RestTemplate();
-        ResponseEntity<Boolean> entity = rest.exchange(
-                removePlayerUrl(server, email, code),
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Boolean>(){});
-        return entity.getBody();
+        ResponseEntity<Boolean> entity = null;
+        try {
+            rest.exchange(
+                    removePlayerUrl(server, email, code),
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<Boolean>(){});
+        } catch (HttpServerErrorException e) {
+            String message = "Cant remove player. Status is: " + e.getResponseBodyAsString();
+            logger.error(message);
+            return false;
+        }
+
+        if (entity.getStatusCode().is2xxSuccessful()) {
+            return entity.getBody();
+        } else {
+            String message = "Cant remove player. Status is: " + entity.getStatusCode();
+            logger.error(message);
+            return false;
+        }
     }
 
 

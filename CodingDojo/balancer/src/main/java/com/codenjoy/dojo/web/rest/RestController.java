@@ -327,7 +327,7 @@ public class RestController {
 
             @Override
             public Boolean onBalancer(Boolean removed) {
-                if (removed) {
+                if (removed != null && removed) {
 //                    scores.delete(email);
                     players.remove(email);
                 }

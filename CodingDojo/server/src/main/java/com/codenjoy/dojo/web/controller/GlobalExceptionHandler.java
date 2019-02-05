@@ -24,10 +24,13 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.DLoggerFactory;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
@@ -45,10 +48,22 @@ public class GlobalExceptionHandler {
     public ModelAndView defaultErrorHandler(HttpServletRequest req,
                                             Exception e) throws Exception
     {
-        logger.error("[URL] : {} {}", req.getRequestURL(), e);
+        String url = req.getRequestURL().toString();
+        logger.error("[URL] : {} {}", url, e);
         e.printStackTrace();
 
         ModelAndView result = new ModelAndView();
+        result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if (url.contains("/rest/")) {
+            result.addObject("message", e.getMessage());
+            result.addObject("stackTrace", ExceptionUtils.getStackTrace(e));
+            result.addObject("url", url);
+            result.setView(new MappingJackson2JsonView(){{
+                setPrettyPrint(true);
+            }});
+            return result;
+        }
 
         result.addObject("exception", e);
 
@@ -62,7 +77,7 @@ public class GlobalExceptionHandler {
 
         result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
 
-        result.addObject("url", req.getRequestURL());
+        result.addObject("url", url);
 
         result.setViewName("error");
         return result;
