@@ -179,22 +179,25 @@ public class Dispatcher {
         }
 
         List<PlayerScore> scores = this.scores.getScores(day, lastTime);
-        scores = updateFinalistsInfo(scores);
-
-        List<PlayerScore> result = prepareScoresForClient(scores);
+        List<PlayerScore> updated = prepareScoresForClient(scores);
+        List<PlayerScore> result = prepareFinalistsInfo(updated);
 
         currentScores.put(day, result);
         return result;
     }
 
-    private List<PlayerScore> updateFinalistsInfo(List<PlayerScore> scores) {
+    private List<PlayerScore> prepareFinalistsInfo(List<PlayerScore> scores) {
         Map<String, PlayerScore> finalists = loadFinalists().stream()
                 .collect(toMap(s -> s.getId(), s -> s));
 
-        scores.stream()
-                .forEach(score -> score.setDay(finalists.get(score.getId()).getDay()));
-
-        return null;
+        return scores.stream()
+                .map(score -> {
+                    PlayerScore finalistScore = finalists.get(score.getId());
+                    String day = finalistScore.getDay();
+                    score.setDay(day);
+                    return score;
+                })
+                .collect(toList());
     }
 
     private List<PlayerScore> prepareScoresForClient(List<PlayerScore> result) {
