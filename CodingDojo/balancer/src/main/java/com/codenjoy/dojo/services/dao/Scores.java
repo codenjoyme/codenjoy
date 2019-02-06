@@ -147,14 +147,14 @@ public class Scores {
         return getDaysBetween(from, to).stream()
                 .map(day -> day.format(YYYY_MM_DD2))
                 .filter(day -> isPast(day, time))
-                .map(day -> getScores(day, time))
-                .flatMap(list -> list.stream()
+                .flatMap(day -> getScores(day, time).stream()
                     .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
                     .filter(score -> !exclude.contains(score.getId()))
                     .filter(score -> !finalists.contains(score.getId()))
                     .limit(finalistsCount)
                     .map(score -> {
                         finalists.add(score.getId());
+                        score.setDay(day);
                         return score;
                     })
             )

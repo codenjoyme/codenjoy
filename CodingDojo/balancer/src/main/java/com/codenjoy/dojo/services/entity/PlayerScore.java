@@ -27,6 +27,7 @@ public class PlayerScore {
     private String id;
     private String name;
     private int score;
+    private String day;
     private String server;
 
     public PlayerScore() {
@@ -59,6 +60,7 @@ public class PlayerScore {
         return "PlayerScore{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
+                ((day != null) ? (", day='" + day + '\'') : "") +
                 ", score='" + score + '\'' +
                 ", server='" + server + '\'' +
                 '}';
@@ -74,5 +76,13 @@ public class PlayerScore {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
 }

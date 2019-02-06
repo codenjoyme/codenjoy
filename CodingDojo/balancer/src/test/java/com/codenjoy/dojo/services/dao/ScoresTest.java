@@ -448,11 +448,11 @@ public class ScoresTest {
         List<String> exclude = Arrays.asList("apofig@gmail.com");
         int finalistsCount = 2;
         assertEquals(service.getFinalists("2019-01-28", "2019-01-31", now, finalistsCount, exclude).toString(),
-            "[PlayerScore{id='zanefig@gmail.com', name='null', score='5002', server='null'}, " +
-            "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}, " +
-            "PlayerScore{id='nunafig@gmail.com', name='null', score='6003', server='null'}, " +
-            "PlayerScore{id='eva.pupkina@gmail.com', name='null', score='2003', server='null'}, " +
-            "PlayerScore{id='stiven.pupkin@gmail.com', name='null', score='1004', server='null'}]");
+            "[PlayerScore{id='zanefig@gmail.com', name='null', day='2019-01-28', score='5002', server='null'}, " +
+            "PlayerScore{id='bob.marley@gmail.com', name='null', day='2019-01-28', score='3002', server='null'}, " +
+            "PlayerScore{id='nunafig@gmail.com', name='null', day='2019-01-29', score='6003', server='null'}, " +
+            "PlayerScore{id='eva.pupkina@gmail.com', name='null', day='2019-01-29', score='2003', server='null'}, " +
+            "PlayerScore{id='stiven.pupkin@gmail.com', name='null', day='2019-01-30', score='1004', server='null'}]");
     }
 
 }
