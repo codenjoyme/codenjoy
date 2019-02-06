@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hash.Hash;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
@@ -83,6 +84,10 @@ public class ConfigProperties {
 
     @Value("${game.finalists.count}")
     private int dayFinalistsCount;
+
+    public void updateFrom(ConfigProperties config) {
+        BeanUtils.copyProperties(config, this);
+    }
 
     public String getAdminPassword() {
         return adminPassword;
@@ -155,4 +160,5 @@ public class ConfigProperties {
     public int getDayFinalistCount() {
         return dayFinalistsCount;
     }
+
 }

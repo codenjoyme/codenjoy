@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
@@ -48,42 +47,41 @@ public class GameServer {
     private static Logger logger = DLoggerFactory.getLogger(GameServer.class);
 
     @Autowired ConfigProperties config;
-    @Autowired DispatcherSettings settings;
 
     private String playerExistsUrl(String server, String email) {
-        return String.format(settings.getUrlExistsPlayer(),
+        return String.format(config.getUrlExistsPlayer(),
                 server,
                 config.getId(email));
     }
 
     private String gameEnabledUrl(String server, boolean enabled) {
-        return String.format(settings.getUrlGameEnabled(),
+        return String.format(config.getUrlGameEnabled(),
                 server,
                 enabled,
                 config.getAdminToken());
     }
 
     private String getPlayersUrl(String server) {
-        return String.format(settings.getUrlGetPlayers(),
+        return String.format(config.getUrlGetPlayers(),
                 server,
-                settings.getGameType());
+                config.getGameType());
     }
 
     private String createPlayerUrl(String server) {
-        return String.format(settings.getUrlCreatePlayer(),
+        return String.format(config.getUrlCreatePlayer(),
                 server,
                 config.getAdminToken());
     }
 
     private String removePlayerUrl(String server, String email, String code) {
-        return String.format(settings.getUrlRemovePlayer(),
+        return String.format(config.getUrlRemovePlayer(),
                 server,
                 config.getId(email),
                 code);
     }
 
     private String clearPlayersScoreUrl(String server) {
-        return String.format(settings.getUrlClearScores(),
+        return String.format(config.getUrlClearScores(),
                 server,
                 config.getAdminToken());
     }
@@ -106,7 +104,6 @@ public class GameServer {
         String id = config.getId(email);
         String code = Hash.getCode(email, password);
 
-
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> entity = null;
         try {
@@ -116,7 +113,7 @@ public class GameServer {
                             id,
                             name,
                             callbackUrl,
-                            settings.getGameType(),
+                            config.getGameType(),
                             score,
                             save,
                             new User(
