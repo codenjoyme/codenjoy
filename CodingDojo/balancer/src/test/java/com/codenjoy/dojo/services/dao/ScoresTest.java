@@ -446,9 +446,8 @@ public class ScoresTest {
         // when then
         long now = day("2019-01-31").plus(Calendar.HOUR, 19).get();
         List<String> exclude = Arrays.asList("apofig@gmail.com");
-        int days = 17;
         int finalistsCount = 2;
-        assertEquals(service.getFinalists("2019-01-28", days, now, finalistsCount, exclude).toString(),
+        assertEquals(service.getFinalists("2019-01-28", "2019-01-31", now, finalistsCount, exclude).toString(),
             "[PlayerScore{id='zanefig@gmail.com', name='null', score='5002', server='null'}, " +
             "PlayerScore{id='bob.marley@gmail.com', name='null', score='3002', server='null'}, " +
             "PlayerScore{id='nunafig@gmail.com', name='null', score='6003', server='null'}, " +
