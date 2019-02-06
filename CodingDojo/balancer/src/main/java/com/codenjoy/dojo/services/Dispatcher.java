@@ -192,9 +192,11 @@ public class Dispatcher {
 
         return scores.stream()
                 .map(score -> {
-                    PlayerScore finalistScore = finalists.get(score.getId());
-                    String day = finalistScore.getDay();
-                    score.setDay(day);
+                    if (finalists.containsKey(score.getId())) {
+                        PlayerScore finalistScore = finalists.get(score.getId());
+                        String day = finalistScore.getDay();
+                        score.setDay(day);
+                    }
                     return score;
                 })
                 .collect(toList());
