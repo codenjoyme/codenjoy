@@ -115,16 +115,18 @@ public class Validator {
         }
     }
 
-    public void checkPlayerCode(String playerName, String code) {
-        checkPlayerName(playerName, CANT_BE_NULL);
+    public String checkPlayerCode(String emailOrId, String code) {
+        checkPlayerName(emailOrId, CANT_BE_NULL);
         checkCode(code, CANT_BE_NULL);
-        if (registration.checkUser(playerName, code) == null) {
-            throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + playerName);
+        String id = registration.checkUser(emailOrId, code);
+        if (id == null) {
+            throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + emailOrId);
         }
+        return id;
     }
 
-    public void checkIsAdmin(String adminPassword) {
-        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(adminPassword)){
+    public void checkIsAdmin(String password) {
+        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(password)){
             throw new RuntimeException("Unauthorized admin access");
         }
     }

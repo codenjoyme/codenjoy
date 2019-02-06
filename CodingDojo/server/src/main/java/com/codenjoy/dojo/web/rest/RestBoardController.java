@@ -172,18 +172,18 @@ public class RestBoardController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{playerName}/{code}/reset", method = RequestMethod.GET)
+    @RequestMapping(value = "/player/{player}/{code}/reset", method = RequestMethod.GET)
     @ResponseBody
-    public synchronized boolean reset(@PathVariable("playerName") String playerName, @PathVariable("code") String code){
-        validator.checkPlayerCode(playerName, code);
+    public synchronized boolean reset(@PathVariable("player") String emailOrId, @PathVariable("code") String code){
+        String id = validator.checkPlayerCode(emailOrId, code);
 
-        saveService.save(playerName);
-        Player player = playerService.get(playerName);
+        saveService.save(id);
+        Player player = playerService.get(id);
 
-        boolean loaded = saveService.load(playerName);
+        boolean loaded = saveService.load(id);
         if (!loaded) {
-            if (playerService.contains(playerName)) {
-                playerService.remove(playerName);
+            if (playerService.contains(id)) {
+                playerService.remove(id);
             }
             playerService.register(new PlayerSave(player));
         }
