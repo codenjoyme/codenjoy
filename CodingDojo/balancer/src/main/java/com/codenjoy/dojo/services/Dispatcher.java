@@ -57,7 +57,7 @@ public class Dispatcher {
 
     private Map<String, List<PlayerInfo>> scoresFromGameServers = new ConcurrentHashMap();
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
-    private volatile List<PlayerScore> finalists;
+    private volatile List<PlayerScore> finalists = new LinkedList<>();
 
     private List<String> disqualified = new CopyOnWriteArrayList<>();
 
