@@ -27,12 +27,10 @@ import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
-import com.codenjoy.dojo.web.rest.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.regex.Pattern;
 
@@ -125,7 +123,7 @@ public class Validator {
         }
     }
 
-    public Player checkPlayerCode(@PathVariable("player") String email, @PathVariable("code") String code) {
+    public Player checkPlayerCode(String email, String code) {
         checkEmail(email, Validator.CANT_BE_NULL);
         checkCode(code, Validator.CANT_BE_NULL);
 

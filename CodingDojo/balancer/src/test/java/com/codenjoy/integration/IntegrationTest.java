@@ -29,22 +29,25 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.integration.mocker.SpringMockerJettyRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Random;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
 public class IntegrationTest {
@@ -61,9 +64,11 @@ public class IntegrationTest {
     private int port;
     private RestTemplate rest;
 
+    private String adminPassword;
+
     @BeforeTest
     public void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", "/appcontext"){{
+        runner = new SpringMockerJettyRunner("src/main/webapp", "/codenjoy-balancer"){{
             mockBean("gameServer");
             spyBean("gameServers");
             spyBean("configProperties");
@@ -85,18 +90,35 @@ public class IntegrationTest {
         gameServers = runner.getBean(GameServers.class, "gameServers");
         game = runner.getBean(GameServer.class, "gameServer");
         timer.resume();
+
+        adminPassword = Hash.md5(config.getAdminPassword());
     }
+
+    @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+    @Target(java.lang.annotation.ElementType.METHOD)
+    public @interface Clean {}
 
     @BeforeMethod
-    public void clean() {
-        players.removeAll();
-        scores.removeAll();
+    public void before(Method method) {
+        if (Arrays.stream(method.getDeclaredAnnotations())
+                .filter(a -> a.annotationType().equals(Clean.class))
+                .findAny()
+                .isPresent())
+        {
+            players.removeAll();
+            scores.removeAll();
+        }
     }
 
+    @AfterMethod
+    public void after() {
+        resetMocks();
+    }
 
+    @Clean
     @Test
-    public void test(){
-        doReturn("code").when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(), anyString(), anyString());
+    public void shouldRegister_whenNotPresent() {
+        shouldCreateNewPlayerOnGame("12345678901234567890");
 
         assertPost("/rest/register",
 
@@ -112,11 +134,110 @@ public class IntegrationTest {
                 "}",
 
                 "{\n" +
-                "  'code':'code',\n" +
+                "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
                 "  'id':'btcfedopmomo66einibynbe',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
+
+        verify(game).createNewPlayer(
+                "localhost:8080",
+                "test@gmail.com",
+                "Stiven Pupkin",
+                "13cf481db24b78c69ed39ab8663408c0",
+                "127.0.0.1",
+                "0", // create new
+                "{}"
+        );
+    }
+
+    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    public void shouldSuccessfulLogin_whenRegistered() {
+        shouldCheckIfExistsOnGame(true);
+
+        assertPost("/rest/login",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'password':'13cf481db24b78c69ed39ab8663408c0'" +
+                "}",
+
+                "{\n" +
+                "  'code':'12345678901234567890',\n" +
+                "  'email':'test@gmail.com',\n" +
+                "  'id':'btcfedopmomo66einibynbe',\n" +
+                "  'server':'localhost:8080'\n" +
+                "}");
+
+        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+    }
+
+    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    public void shouldExistOnGameServer_whenRegistered() {
+        shouldCheckIfExistsOnGame(true);
+
+        assertGet("/rest/player/test@gmail.com/active/12345678901234567890",
+                "true");
+
+        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+    }
+
+    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    public void shouldExitFromGameServer_whenRegistered() {
+        shouldExitFromGame(true);
+
+        assertGet("/rest/player/test@gmail.com/exit/12345678901234567890",
+                "true");
+
+        verify(game).remove("localhost:8080", "test@gmail.com", "12345678901234567890");
+    }
+
+    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    public void shouldJoinToGameServer_whenRegistered() {
+        shouldCheckIfExistsOnGame(false);
+
+        assertGet("/rest/player/test@gmail.com/join/12345678901234567890",
+                "true");
+
+        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+        verify(game).createNewPlayer(
+                "localhost:8080",
+                "test@gmail.com",
+                "Stiven Pupkin",
+                "13cf481db24b78c69ed39ab8663408c0",
+                "127.0.0.1",
+                null, // try load from save
+                null
+        );
+    }
+
+    @Test(dependsOnMethods = "shouldJoinToGameServer_whenRegistered")
+    public void shouldRemoveFromServer_whenRegistered() {
+        shouldExitFromGame(true);
+
+        assertGet("/rest/remove/test@gmail.com/" + adminPassword,
+                "true");
+
+        verify(game).remove("localhost:8080", "test@gmail.com", "12345678901234567890");
+        verify(players).remove("test@gmail.com");
+    }
+
+    private void resetMocks() {
+        verifyNoMoreInteractions(game);
+        reset(game);
+    }
+
+    private void shouldCreateNewPlayerOnGame(String code) {
+        doReturn(code).when(game).createNewPlayer(anyString(), anyString(),
+                anyString(), anyString(), anyString(), anyString(), anyString());
+    }
+
+    private void shouldCheckIfExistsOnGame(boolean exists) {
+        doReturn(exists).when(game).existsOnServer(anyString(), anyString());
+    }
+
+    private void shouldExitFromGame(boolean exited) {
+        doReturn(exited).when(game).remove(anyString(), anyString(), anyString());
     }
 
     private void assertPost(String url, String json, String answer) {
@@ -128,8 +249,18 @@ public class IntegrationTest {
         assertJson(result, answer);
     }
 
+    private void assertGet(String url, String answer) {
+        String result = rest.getForObject(
+                context + url,
+                String.class);
+
+        assertJson(result, answer);
+    }
+
     private void assertJson(String actual, String expected) {
-        assertEquals(fix2(JsonUtils.prettyPrint(actual)), expected);
+        boolean isJson = actual.startsWith("{");
+        assertEquals(isJson ? fix2(JsonUtils.prettyPrint(actual)) : actual,
+                expected);
     }
 
     private HttpEntity jsonRequest(String json) {

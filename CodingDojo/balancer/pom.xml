@@ -28,6 +28,7 @@
         <commons-lang.version>2.6</commons-lang.version>
         <org.reflections.version>0.9.9-RC2</org.reflections.version>
         <joda-time.version>2.9.4</joda-time.version>
+        <cglib.version>2.1_3</cglib.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <rest-assured.version>2.9.0</rest-assured.version>
@@ -192,6 +193,11 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+            <version>${cglib.version}</version>
         </dependency>
 
         <!-- TESTING -->
