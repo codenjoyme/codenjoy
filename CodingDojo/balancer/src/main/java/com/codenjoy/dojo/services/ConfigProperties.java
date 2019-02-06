@@ -75,6 +75,15 @@ public class ConfigProperties {
     @Value("#{'${game.servers}'.split(',')}")
     private List<String> servers;
 
+    @Value("${game.start.day}")
+    private String dayStart;
+
+    @Value("${game.end.day}")
+    private String dayEnd;
+
+    @Value("${game.finalists.count}")
+    private int dayFinalistsCount;
+
     public String getAdminPassword() {
         return adminPassword;
     }
@@ -135,4 +144,15 @@ public class ConfigProperties {
         return DigestUtils.md5DigestAsHex(adminPassword.getBytes());
     }
 
+    public String getDayStart() {
+        return dayStart;
+    }
+
+    public String getDayEnd() {
+        return dayEnd;
+    }
+
+    public int getDayFinalistCount() {
+        return dayFinalistsCount;
+    }
 }

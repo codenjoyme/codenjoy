@@ -69,17 +69,10 @@ public class RestController {
         return dispatcher.getScores(day);
     }
 
-    @RequestMapping(value = "/score/finalists/{from}/{to}/{count}", method = RequestMethod.GET)
+    @RequestMapping(value = "/score/finalists", method = RequestMethod.GET)
     @ResponseBody
-    public List<PlayerScore> finalistsScores(@PathVariable("from") String from,
-                                             @PathVariable("to") String to,
-                                             @PathVariable("count") int count)
-    {
-        validator.checkDay(from);
-        validator.checkDay(to);
-        validator.checkPositiveInteger(count);
-
-        return dispatcher.getFinalists(count, from, to);
+    public List<PlayerScore> finalistsScores() {
+        return dispatcher.getFinalists();
     }
 
     @RequestMapping(value = "/score/disqualify/{player}/{adminPassword}", method = RequestMethod.POST)
