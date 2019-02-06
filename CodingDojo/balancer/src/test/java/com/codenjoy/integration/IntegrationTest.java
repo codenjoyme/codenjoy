@@ -238,6 +238,30 @@ public class IntegrationTest {
                 null);
     }
 
+    @Clean
+    @Test
+    public void shouldRegisterValidationError_whenBadEmail() {
+        assertPost("/rest/register",
+
+                "{" +
+                "  'email':'NOT_EMAIL'," +    // there is an error
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                "  'code':'12345678901234567890'," +
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}",
+
+                "IllegalArgumentException: Player name is invalid: NOT_EMAIL");
+
+        verifyNoMoreInteractions(game);
+        verify(players, never()).create(any(Player.class));
+        assertEquals(players.get("test@gmail.com"),
+                null);
+    }
+
     @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
     public void shouldSuccessfulLogin_whenRegistered() {
         shouldCheckIfExistsOnGame(true);

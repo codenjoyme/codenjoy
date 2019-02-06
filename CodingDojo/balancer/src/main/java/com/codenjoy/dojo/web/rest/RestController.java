@@ -45,6 +45,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+
 @Controller
 @RequestMapping(value = "/rest")
 public class RestController {
@@ -82,7 +84,7 @@ public class RestController {
                                        @PathVariable("adminPassword") String adminPassword)
     {
         validator.checkIsAdmin(adminPassword);
-        players.stream().forEach(email -> validator.checkEmail(email, Validator.CANT_BE_NULL));
+        players.stream().forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
 
@@ -102,10 +104,10 @@ public class RestController {
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
-        validator.checkEmail(email, false);
+        validator.checkEmail(email, CANT_BE_NULL);
         validator.checkString(player.getFirstName());
         validator.checkString(player.getLastName());
-        validator.checkMD5(player.getPassword(), Validator.CANT_BE_NULL);
+        validator.checkMD5(player.getPassword(), CANT_BE_NULL);
         validator.checkString(player.getCity());
         validator.checkString(player.getSkills());
 
