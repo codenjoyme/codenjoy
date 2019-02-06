@@ -78,6 +78,7 @@ public class Dispatcher {
             return null;
         }
 
+        // TODO test me
         // удалить с других серверов если там есть что
         gameServers.stream()
                 .filter(s -> !s.equals(server))
