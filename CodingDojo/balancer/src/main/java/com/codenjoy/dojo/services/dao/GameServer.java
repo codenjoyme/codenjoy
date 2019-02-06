@@ -223,7 +223,7 @@ public class GameServer {
                         email, code, server);
             }
 
-            rest.exchange(
+            entity = rest.exchange(
                     removePlayerUrl(server, email, code),
                     HttpMethod.GET,
                     null,

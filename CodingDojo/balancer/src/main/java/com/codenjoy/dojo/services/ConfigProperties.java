@@ -161,4 +161,63 @@ public class ConfigProperties {
         return dayFinalistsCount;
     }
 
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
+    }
+
+    public void setEmailHash(String emailHash) {
+        this.emailHash = emailHash;
+    }
+
+    public void setUrlCreatePlayer(String urlCreatePlayer) {
+        this.urlCreatePlayer = urlCreatePlayer;
+    }
+
+    public void setUrlRemovePlayer(String urlRemovePlayer) {
+        this.urlRemovePlayer = urlRemovePlayer;
+    }
+
+    public void setUrlGetPlayers(String urlGetPlayers) {
+        this.urlGetPlayers = urlGetPlayers;
+    }
+
+    public void setUrlClearScores(String urlClearScores) {
+        this.urlClearScores = urlClearScores;
+    }
+
+    public void setUrlExistsPlayer(String urlExistsPlayer) {
+        this.urlExistsPlayer = urlExistsPlayer;
+    }
+
+    public void setUrlGameEnabled(String urlGameEnabled) {
+        this.urlGameEnabled = urlGameEnabled;
+    }
+
+    public void setGameType(String gameType) {
+        this.gameType = gameType;
+    }
+
+    public void setGameRoom(int gameRoom) {
+        this.gameRoom = gameRoom;
+    }
+
+    public void setGameFinalTime(String gameFinalTime) {
+        this.gameFinalTime = gameFinalTime;
+    }
+
+    public void setServers(List<String> servers) {
+        this.servers = servers;
+    }
+
+    public void setDayStart(String dayStart) {
+        this.dayStart = dayStart;
+    }
+
+    public void setDayEnd(String dayEnd) {
+        this.dayEnd = dayEnd;
+    }
+
+    public void setDayFinalistsCount(int dayFinalistsCount) {
+        this.dayFinalistsCount = dayFinalistsCount;
+    }
 }
