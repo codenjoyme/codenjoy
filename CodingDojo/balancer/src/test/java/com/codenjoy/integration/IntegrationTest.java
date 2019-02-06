@@ -36,12 +36,13 @@ import com.codenjoy.integration.mocker.SpringMockerJettyRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
-import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
@@ -110,6 +111,7 @@ public class IntegrationTest {
         {
             players.removeAll();
             scores.removeAll();
+            resetMocks();
         }
     }
 
@@ -152,6 +154,8 @@ public class IntegrationTest {
                 "0", // create new
                 "{}"
         );
+
+        verify(players, times(1)).create(any(Player.class));
 
         assertEquals(players.get("test@gmail.com").toString(),
                 "Player{email='test@gmail.com', " +
@@ -196,6 +200,42 @@ public class IntegrationTest {
                         "comment='no comment', " +
                         "code='12345678901234567890', " +
                         "server='localhost:8080'}");
+    }
+
+    @Clean
+    @Test
+    public void shouldRegisterError_whenGameServerIsNotResponding() {
+        shouldThrowWhenCreateNewPlayerOnGame(new RuntimeException("Shit happens"));
+
+        assertPost("/rest/register",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                "  'code':'12345678901234567890'," +
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}",
+
+                "RuntimeException: [At game server: RuntimeException: Shit happens]");
+
+        verify(game).createNewPlayer(
+                "localhost:8080",
+                "test@gmail.com",
+                "Stiven Pupkin",
+                "13cf481db24b78c69ed39ab8663408c0",
+                "127.0.0.1",
+                "0", // create new
+                "{}"
+        );
+
+        verify(players, never()).create(any(Player.class));
+
+        assertEquals(players.get("test@gmail.com"),
+                null);
     }
 
     @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
@@ -279,6 +319,11 @@ public class IntegrationTest {
                 anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
+    private void shouldThrowWhenCreateNewPlayerOnGame(Exception exception) {
+        doThrow(exception).when(game).createNewPlayer(anyString(), anyString(),
+                anyString(), anyString(), anyString(), anyString(), anyString());
+    }
+
     private void shouldCheckIfExistsOnGame(boolean exists) {
         doReturn(exists).when(game).existsOnServer(anyString(), anyString());
     }
@@ -294,7 +339,7 @@ public class IntegrationTest {
                     jsonRequest(json),
                     String.class);
             assertJson(result, answer);
-        } catch (HttpClientErrorException e) {
+        } catch (HttpStatusCodeException e) {
             assertEquals(answer, e.getResponseBodyAsString());
         }
     }
@@ -306,7 +351,7 @@ public class IntegrationTest {
                     String.class);
 
             assertJson(result, answer);
-        } catch (HttpClientErrorException e) {
+        } catch (HttpStatusCodeException e) {
             assertEquals(answer, e.getResponseBodyAsString());
         }
     }
