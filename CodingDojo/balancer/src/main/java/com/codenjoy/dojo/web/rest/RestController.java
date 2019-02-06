@@ -68,12 +68,14 @@ public class RestController {
         return dispatcher.getScores(day);
     }
 
+    // TODO add to admin page
     @RequestMapping(value = "/score/finalists", method = RequestMethod.GET)
     @ResponseBody
     public List<PlayerScore> finalistsScores() {
         return dispatcher.getFinalists();
     }
 
+    // TODO add to admin page
     @RequestMapping(value = "/score/disqualify/{player}/{adminPassword}", method = RequestMethod.POST)
     @ResponseBody
     public boolean disqualify(@RequestBody List<String> players,
@@ -87,6 +89,7 @@ public class RestController {
         return true;
     }
 
+    // TODO add to admin page
     @RequestMapping(value = "/score/disqualified/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public List<String> disqualified(@PathVariable("adminPassword") String adminPassword) {
