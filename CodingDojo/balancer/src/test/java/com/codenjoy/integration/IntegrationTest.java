@@ -132,7 +132,6 @@ public class IntegrationTest {
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
                 "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                "  'code':'12345678901234567890'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -180,7 +179,6 @@ public class IntegrationTest {
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
                 "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                "  'code':'12345678901234567890'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -214,7 +212,6 @@ public class IntegrationTest {
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
                 "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                "  'code':'12345678901234567890'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -248,7 +245,6 @@ public class IntegrationTest {
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
                 "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                "  'code':'12345678901234567890'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -256,6 +252,94 @@ public class IntegrationTest {
 
                 "IllegalArgumentException: Player name is invalid: NOT_EMAIL");
 
+        doNothingOnRegistration();
+    }
+
+    @Clean
+    @Test
+    public void shouldRegisterValidationError_whenEmailIsNull() {
+        assertPost("/rest/register",
+
+                "{" +
+                        "  'email':null," +    // there is an error
+                        "  'firstName':'Stiven'," +
+                        "  'lastName':'Pupkin'," +
+                        "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                        "  'city':'city'," +
+                        "  'skills':'Si Senior'," +
+                        "  'comment':'no comment'" +
+                        "}",
+
+                "IllegalArgumentException: Player name is invalid: null");
+
+        doNothingOnRegistration();
+    }
+
+    @Clean
+    @Test
+    public void shouldRegisterValidationError_whenPasswordIsNotMd5() {
+        assertPost("/rest/register",
+
+                "{" +
+                        "  'email':'test@gmail.com'," +
+                        "  'firstName':'Stiven'," +
+                        "  'lastName':'Pupkin'," +
+                        "  'password':'NOT_MD5'," +     // there is an error
+                        "  'city':'city'," +
+                        "  'skills':'Si Senior'," +
+                        "  'comment':'no comment'" +
+                        "}",
+
+                "IllegalArgumentException: Password is invalid: NOT_MD5");
+
+        doNothingOnRegistration();
+    }
+
+    @Clean
+    @Test
+    public void shouldRegisterValidationError_whenPasswordIsNull() {
+        assertPost("/rest/register",
+
+                "{" +
+                        "  'email':'test@gmail.com'," +
+                        "  'firstName':'Stiven'," +
+                        "  'lastName':'Pupkin'," +
+                        "  'password':null," +     // there is an error
+                        "  'city':'city'," +
+                        "  'skills':'Si Senior'," +
+                        "  'comment':'no comment'" +
+                        "}",
+
+                "IllegalArgumentException: Password is invalid: null");
+
+        doNothingOnRegistration();
+    }
+
+    @Clean
+    @Test
+    public void shouldRegisterValidationError_whenOtherStringsIsNull() {
+        assertPost("/rest/register",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'firstName':null," +        // there is an error
+                "  'lastName':null," +         // there is an error
+                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                "  'city':null," +             // there is an error
+                "  'skills':null," +           // there is an error
+                "  'comment':null" +           // it's ok
+                "}",
+
+                "IllegalArgumentException: Something wrong with parameters on this request: " +
+                        "[FirstName string is empty: null, " +
+                        "LastName string is empty: null, " +
+                        "City string is empty: null, " +
+                        "Skills string is empty: null]");
+
+        doNothingOnRegistration();
+    }
+
+    private void doNothingOnRegistration() {
         verifyNoMoreInteractions(game);
         verify(players, never()).create(any(Player.class));
         assertEquals(players.get("test@gmail.com"),

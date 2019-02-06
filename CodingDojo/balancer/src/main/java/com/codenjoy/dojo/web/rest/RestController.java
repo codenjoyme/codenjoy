@@ -104,12 +104,14 @@ public class RestController {
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
-        validator.checkEmail(email, CANT_BE_NULL);
-        validator.checkString(player.getFirstName());
-        validator.checkString(player.getLastName());
-        validator.checkMD5(player.getPassword(), CANT_BE_NULL);
-        validator.checkString(player.getCity());
-        validator.checkString(player.getSkills());
+        validator.all(
+                () -> validator.checkEmail(email, CANT_BE_NULL),
+                () -> validator.checkString("FirstName", player.getFirstName()),
+                () -> validator.checkString("LastName", player.getLastName()),
+                () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
+                () -> validator.checkString("City", player.getCity()),
+                () -> validator.checkString("Skills", player.getSkills())
+        );
 
         if (players.getCode(email) != null) {
             throw new IllegalArgumentException("User already registered");
