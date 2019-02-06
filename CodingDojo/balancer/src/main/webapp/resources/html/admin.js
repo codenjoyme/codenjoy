@@ -121,6 +121,7 @@ var loginUser = function(email, password) {
             '"password" : "' + password + '"}',
         after: function(data){
             $('#join-code').val(data.code);
+            $('#code').val(data.code);
 
             autoIncrement();
         }
@@ -301,14 +302,6 @@ $(document).ready(function() {
             preffix + $('#join-email').val(),
             $('#join-code').val(),
             'active'
-        );
-    });
-
-    $('#login').click(function() {
-        var preffix = $('#preffix').val();
-        loginUser(
-            preffix + $('#login-email').val(),
-            $.md5(preffix + $('#login-password').val())
         );
     });
 
