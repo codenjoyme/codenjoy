@@ -41,10 +41,7 @@ public class GameServers {
 
     @PostConstruct
     public void postConstruct() {
-        if (servers == null || servers.isEmpty()) {
-            throw new IllegalArgumentException("Game servers list is empty. Please check balancer.properties");
-        }
-        update(servers);
+        update(config.getServers());
     }
 
     // несколько потоков могут параллельно регаться, и этот инкремент по кругу
@@ -65,6 +62,10 @@ public class GameServers {
     }
 
     public void update(List<String> list) {
+        if (list == null || list.isEmpty()) {
+            throw new IllegalArgumentException("Game servers list is empty. Nothing to add");
+        }
+
         servers.clear();
         servers.addAll(list);
     }
