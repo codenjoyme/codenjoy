@@ -107,6 +107,11 @@ public class GameServer {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<String> entity = null;
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
+                        id, code, name, server, save, score);
+            }
+
             entity = rest.postForEntity(
                     createPlayerUrl(server),
                     new PlayerDetailInfo(
@@ -143,6 +148,11 @@ public class GameServer {
 
     public boolean existsOnServer(String server, String email) {
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Check is player {} exists on server {}",
+                        email, server);
+            }
+
             RestTemplate rest = new RestTemplate();
             ResponseEntity<Boolean> entity = rest.exchange(
                     playerExistsUrl(server, email),
@@ -159,6 +169,11 @@ public class GameServer {
 
     public String clearScores(String server) {
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Clear all scores on server {}",
+                        server);
+            }
+
             RestTemplate rest = new RestTemplate();
             ResponseEntity<Void> entity = rest.exchange(
                     clearPlayersScoreUrl(server),
@@ -178,6 +193,11 @@ public class GameServer {
     public String gameEnable(String server, boolean enable) {
         String status = enable ? "start" : "stop";
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Set status {} of game on server {}",
+                        status, server);
+            }
+
             RestTemplate rest = new RestTemplate();
             ResponseEntity<Boolean> entity = rest.exchange(
                     gameEnabledUrl(server, enable),
@@ -198,6 +218,11 @@ public class GameServer {
         RestTemplate rest = new RestTemplate();
         ResponseEntity<Boolean> entity = null;
         try {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Remove player {} ({}) on server {}",
+                        email, code, server);
+            }
+
             rest.exchange(
                     removePlayerUrl(server, email, code),
                     HttpMethod.GET,
