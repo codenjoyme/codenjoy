@@ -51,38 +51,33 @@ public class RestRegistrationController {
     @Autowired private SaveService saveService;
     @Autowired private Validator validator;
 
-    @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
+    @RequestMapping(value = "/player/{player}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean checkUserLogin(@PathVariable("playerName") String playerName,
+    public boolean checkUserLogin(@PathVariable("player") String emailOrId,
                                   @PathVariable("code") String code)
     {
-        validator.checkPlayerName(playerName, Validator.CANT_BE_NULL);
+        validator.checkPlayerName(emailOrId, Validator.CANT_BE_NULL);
         validator.checkCode(code, Validator.CANT_BE_NULL);
 
-        return registration.checkUser(playerName, code) != null;
+        return registration.checkUser(emailOrId, code) != null;
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{playerName}/remove/{code}", method = RequestMethod.GET)
+    @RequestMapping(value = "/player/{player}/remove/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public synchronized boolean removeUser(@PathVariable("playerName") String playerName,
+    public synchronized boolean removeUser(@PathVariable("player") String emailOrId,
                               @PathVariable("code") String code)
     {
-        validator.checkPlayerName(playerName, Validator.CANT_BE_NULL);
-        if (!registration.registered(playerName)) {
-            return false;
-        }
-
-        validator.checkPlayerCode(playerName, code);
+        String id = validator.checkPlayerCode(emailOrId, code);
 
         // оставляем только актуальные на сейчас очки, мало ли захочет залогиниться назад
         // TODO как-то тут не очень оставлять последние очки, иначе пользователь потеряет их, что тоже не ок
-        saveService.removeSave(playerName);
-        saveService.save(playerName);
+        saveService.removeSave(id);
+        saveService.save(id);
 
         // и удаляем игрока с игрового сервера
-        playerService.remove(playerName);
-        registration.remove(playerName);
+        playerService.remove(id);
+        registration.remove(id);
 
         return true;
     }
@@ -158,12 +153,12 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{playerName}/exists", method = RequestMethod.GET)
+    @RequestMapping(value = "/player/{player}/exists", method = RequestMethod.GET)
     @ResponseBody
-    public boolean isPlayerExists(@PathVariable("playerName") String playerName) {
-        boolean registered = registration.registered(playerName);
-        boolean active = playerService.contains(playerName);
+    public boolean isPlayerExists(@PathVariable("player") String emailOrId) {
+        validator.checkPlayerName(emailOrId, Validator.CANT_BE_NULL);
 
-        return registered && active;
+        String id = registration.checkUser(emailOrId);
+        return (id != null) && playerService.contains(id);
     }
 }

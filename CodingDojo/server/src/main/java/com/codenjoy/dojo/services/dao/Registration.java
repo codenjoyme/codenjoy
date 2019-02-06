@@ -95,6 +95,31 @@ public class Registration {
         );
     }
 
+    // TODO test me
+    public String checkUser(String emailOrId) {
+        String soul = config.getEmailHash();
+
+        if (getCode(emailOrId) != null) {
+            return emailOrId;
+        }
+
+        if (emailOrId.contains("@")) {
+            String id = Hash.getId(emailOrId, soul);
+            if (getCode(id) != null) {
+                return id;
+            } else {
+                return null;
+            }
+        } else {
+            String email = Hash.getEmail(emailOrId, soul);
+            if (getCode(email) != null) {
+                return email;
+            } else {
+                return null;
+            }
+        }
+    }
+
     public String checkUser(String emailOrId, String code) {
         String stored = getEmail(code);
         String soul = config.getEmailHash();
