@@ -29,12 +29,15 @@ import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
+import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.integration.mocker.SpringMockerJettyRunner;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.*;
 
@@ -149,6 +152,50 @@ public class IntegrationTest {
                 "0", // create new
                 "{}"
         );
+
+        assertEquals(players.get("test@gmail.com").toString(),
+                "Player{email='test@gmail.com', " +
+                        "firstName='Stiven', " +
+                        "lastName='Pupkin', " +
+                        "password='13cf481db24b78c69ed39ab8663408c0', " +
+                        "city='city', " +
+                        "skills='Si Senior', " +
+                        "comment='no comment', " +
+                        "code='12345678901234567890', " +
+                        "server='localhost:8080'}");
+    }
+
+    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    public void shouldSameRegisterFailed_whenPresent() {
+        shouldCreateNewPlayerOnGame("12345678901234567890");
+
+        assertPost("/rest/register",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                "  'code':'12345678901234567890'," +
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}",
+
+                "IllegalArgumentException: User already registered");
+
+        verify(players, never()).create(any(Player.class));
+
+        assertEquals(players.get("test@gmail.com").toString(),
+                "Player{email='test@gmail.com', " +
+                        "firstName='Stiven', " +
+                        "lastName='Pupkin', " +
+                        "password='13cf481db24b78c69ed39ab8663408c0', " +
+                        "city='city', " +
+                        "skills='Si Senior', " +
+                        "comment='no comment', " +
+                        "code='12345678901234567890', " +
+                        "server='localhost:8080'}");
     }
 
     @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
@@ -224,7 +271,7 @@ public class IntegrationTest {
 
     private void resetMocks() {
         verifyNoMoreInteractions(game);
-        reset(game);
+        reset(game, players, scores, config, gameServers);
     }
 
     private void shouldCreateNewPlayerOnGame(String code) {
@@ -241,20 +288,27 @@ public class IntegrationTest {
     }
 
     private void assertPost(String url, String json, String answer) {
-        String result = rest.postForObject(
-                context + url,
-                jsonRequest(json),
-                String.class);
-
-        assertJson(result, answer);
+        try {
+            String result = rest.postForObject(
+                    context + url,
+                    jsonRequest(json),
+                    String.class);
+            assertJson(result, answer);
+        } catch (HttpClientErrorException e) {
+            assertEquals(answer, e.getResponseBodyAsString());
+        }
     }
 
     private void assertGet(String url, String answer) {
-        String result = rest.getForObject(
-                context + url,
-                String.class);
+        try {
+            String result = rest.getForObject(
+                    context + url,
+                    String.class);
 
-        assertJson(result, answer);
+            assertJson(result, answer);
+        } catch (HttpClientErrorException e) {
+            assertEquals(answer, e.getResponseBodyAsString());
+        }
     }
 
     private void assertJson(String actual, String expected) {
