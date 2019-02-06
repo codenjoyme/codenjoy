@@ -57,7 +57,7 @@ public class Dispatcher {
 
     private Map<String, List<PlayerInfo>> scoresFromGameServers = new ConcurrentHashMap();
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
-    private volatile List<PlayerScore> finalists = new LinkedList<>();
+    private volatile List<PlayerScore> currentFinalists = new LinkedList<>();
 
     private List<String> disqualified = new CopyOnWriteArrayList<>();
 
@@ -149,9 +149,16 @@ public class Dispatcher {
     }
 
     public synchronized List<PlayerScore> getFinalists(int finalistsCount, String from, String to) {
-        return finalists.isEmpty()
-                ? finalists = scores.getFinalists(from, to, lastTime, finalistsCount, disqualified)
-                : finalists;
+        List<PlayerScore> cached = currentFinalists;
+        if (cached != null && !cached.isEmpty()) {
+            return cached;
+        }
+
+        List<PlayerScore> scores = this.scores.getFinalists(from, to, lastTime, finalistsCount, disqualified);
+        List<PlayerScore> result = prepareScoresForClient(scores);
+
+        currentFinalists = result;
+        return result;
     }
 
     public synchronized List<PlayerScore> getScores(String day) {
@@ -160,8 +167,14 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> result = scores.getScores(day, lastTime);
+        List<PlayerScore> scores = this.scores.getScores(day, lastTime);
+        List<PlayerScore> result = prepareScoresForClient(scores);
 
+        currentScores.put(day, result);
+        return result;
+    }
+
+    private List<PlayerScore> prepareScoresForClient(List<PlayerScore> result) {
         List<String> emails = result.stream()
                 .map(score -> score.getId())
                 .collect(toList());
@@ -183,13 +196,9 @@ public class Dispatcher {
             }
         });
 
-        List<PlayerScore> data = result.stream()
+        return result.stream()
                 .filter(score -> score.getServer() != null)
                 .collect(toList());
-
-        currentScores.put(day, data);
-
-        return data;
     }
 
     public List<String> clearScores() {
@@ -219,7 +228,7 @@ public class Dispatcher {
         scoresFromGameServers.clear();
         currentScores.clear();
         disqualified.clear();
-        finalists.clear();
+        currentFinalists.clear();
     }
 
 
