@@ -37,6 +37,7 @@ import org.springframework.web.client.RestClientException;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -56,6 +57,9 @@ public class Dispatcher {
 
     private Map<String, List<PlayerInfo>> scoresFromGameServers = new ConcurrentHashMap();
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
+    private volatile List<PlayerScore> finalists;
+
+    private List<String> disqualified = new CopyOnWriteArrayList<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -140,12 +144,17 @@ public class Dispatcher {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    public List<PlayerScore> getFinalists(int finalistsCount, String from, String to) {
-        List<String> exclude = Arrays.asList("apofig@gmail.com");
-        return scores.getFinalists(from, to, lastTime, finalistsCount, exclude);
+    public void disqualify(List<String> players) {
+        disqualified.addAll(players);
     }
 
-    public List<PlayerScore> getScores(String day) {
+    public synchronized List<PlayerScore> getFinalists(int finalistsCount, String from, String to) {
+        return finalists.isEmpty()
+                ? finalists = scores.getFinalists(from, to, lastTime, finalistsCount, disqualified)
+                : finalists;
+    }
+
+    public synchronized List<PlayerScore> getScores(String day) {
         List<PlayerScore> cached = currentScores.get(day);
         if (cached != null && !cached.isEmpty()) {
             return cached;
@@ -210,4 +219,6 @@ public class Dispatcher {
         scoresFromGameServers.clear();
         currentScores.clear();
     }
+
+
 }

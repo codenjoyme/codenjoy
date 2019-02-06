@@ -82,6 +82,19 @@ public class RestController {
         return dispatcher.getFinalists(count, from, to);
     }
 
+    @RequestMapping(value = "/score/disqualify/{player}/{adminPassword}", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean disqualify(@RequestBody List<String> players,
+                                       @PathVariable("adminPassword") String adminPassword)
+    {
+        validator.checkIsAdmin(adminPassword);
+        players.stream().forEach(email -> validator.checkEmail(email, Validator.CANT_BE_NULL));
+
+        dispatcher.disqualify(players);
+
+        return true;
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
