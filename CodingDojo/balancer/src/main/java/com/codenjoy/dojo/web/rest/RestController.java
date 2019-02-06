@@ -95,6 +95,14 @@ public class RestController {
         return true;
     }
 
+    @RequestMapping(value = "/score/disqualified/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> disqualified(@PathVariable("adminPassword") String adminPassword) {
+        validator.checkIsAdmin(adminPassword);
+
+        return dispatcher.disqualified();
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {

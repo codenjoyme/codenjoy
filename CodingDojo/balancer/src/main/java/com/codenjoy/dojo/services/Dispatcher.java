@@ -218,7 +218,12 @@ public class Dispatcher {
     public void clearCache() {
         scoresFromGameServers.clear();
         currentScores.clear();
+        disqualified.clear();
+        finalists.clear();
     }
 
 
+    public List<String> disqualified() {
+        return disqualified;
+    }
 }
