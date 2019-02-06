@@ -194,6 +194,7 @@
             <version>${commons-lang.version}</version>
         </dependency>
 
+        <!-- TESTING -->
         <dependency>
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>

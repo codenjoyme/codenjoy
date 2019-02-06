@@ -189,7 +189,7 @@ public class Scores {
         }};
     }
 
-    public void deleteByName(String email) {
+    public void removeByName(String email) {
         pool.update("DELETE FROM scores WHERE email = ?;",
                 email);
     }
@@ -206,7 +206,7 @@ public class Scores {
                 });
     }
 
-    public void deleteByDay(String day) {
+    public void removeByDay(String day) {
         pool.update("DELETE FROM scores WHERE day = ?;",
                 day);
     }
@@ -245,5 +245,9 @@ public class Scores {
         } catch (ParseException e) {
             throw new RuntimeException("Unexpected day format, should be: " + YYYY_MM_DD, e);
         }
+    }
+
+    public void removeAll() {
+        pool.update("DELETE FROM scores;");
     }
 }

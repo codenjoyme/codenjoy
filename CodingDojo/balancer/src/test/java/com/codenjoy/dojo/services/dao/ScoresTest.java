@@ -274,7 +274,7 @@ public class ScoresTest {
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
 
         // when
-        service.deleteByDay(day2);
+        service.removeByDay(day2);
 
         // then
         assertEquals(service.getDays().toString(), "[2019-01-27]");
@@ -310,7 +310,7 @@ public class ScoresTest {
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
 
         // when
-        service.deleteByName("eva.pupkina@gmail.com");
+        service.removeByName("eva.pupkina@gmail.com");
 
         // then
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");

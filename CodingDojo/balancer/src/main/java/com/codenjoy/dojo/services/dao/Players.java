@@ -170,5 +170,7 @@ public class Players {
                 new Object[]{email});
     }
 
-
+    public void removeAll() {
+        pool.update("DELETE FROM players;");
+    }
 }
