@@ -45,6 +45,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private LinkedList<Tail> elements;
     private boolean alive;
     private Direction direction;
+    private Direction newDirection;
     private int growBy;
     private boolean active;
     private int stonesCount;
@@ -66,6 +67,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         growBy = 0;
         leaveApples = false;
         this.direction = direction;
+        newDirection = null;
         alive = true;
         active = false;
         stonesCount = 0;
@@ -133,36 +135,34 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public void down() {
-        setDirection(DOWN);
+        setNewDirection(DOWN);
     }
 
     @Override
     public void up() {
-        setDirection(UP);
+        setNewDirection(UP);
     }
 
     @Override
     public void left() {
-        setDirection(LEFT);
+        setNewDirection(LEFT);
     }
 
     @Override
     public void right() {
-        setDirection(RIGHT);
+        setNewDirection(RIGHT);
     }
 
-    private void setDirection(Direction d) {
+    private void setNewDirection(Direction d) {
         if (!isActiveAndAlive()) {
             return;
         }
-        if (d.equals(direction.inverted())) {
-            return;
-        }
-        direction = d;
+        newDirection = d;
     }
 
     @Override
     public void act(int... p) {
+        // TODO только если змейка жива, если она в загоне нельзя давать эту команду выполнять
         if (p.length == 1 && p[0] == 0) {
             die();
             leaveApples = true;
@@ -194,6 +194,8 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             return;
         }
 
+        applyNewDirection();
+
         reduceIfShould();
         count();
 
@@ -202,6 +204,13 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             selfReduce(next);
 
         go(next);
+    }
+
+    private void applyNewDirection() {
+        if (newDirection != null && !newDirection.equals(direction.inverted())) {
+            direction = newDirection;
+            newDirection = null;
+        }
     }
 
     // Этот метод должен вызываться отдельно от tick,

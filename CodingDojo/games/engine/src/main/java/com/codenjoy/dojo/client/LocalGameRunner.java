@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -49,24 +50,40 @@ public class LocalGameRunner { // TODO test me
     }
 
     public static void run(GameType gameType,
-                           List<Solver> solver,
-                           List<ClientBoard> board)
+                           List<Solver> solvers,
+                           List<ClientBoard> boards)
     {
-        GameField game = gameType.createGame(0);
+        GameField field = gameType.createGame(0);
 
-        List<Game> games = solver.stream()
-                .map(slv -> createGame(gameType, game))
+        List<Game> games = solvers.stream()
+                .map(slv -> createGame(gameType, field))
                 .collect(toList());
 
         Integer count = countIterations;
         while (count == null || (count != null && count-- > 0)) {
+
+            List<String> answers = new LinkedList<>();
+
             for (int index = 0; index < games.size(); index++) {
-                processNextTick(index, solver.get(index),
-                        board.get(index),
-                        games.get(index));
+                answers.add(askAnswer(index, boards, games, solvers));
             }
 
-            game.tick();
+            for (Game game : games) {
+                int index = games.indexOf(game);
+                String answer = answers.get(index);
+
+                new PlayerCommand(game.getJoystick(), answer).execute();
+
+                if (timeout > 0) {
+                    try {
+                        Thread.sleep(timeout);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            field.tick();
             for (int index = 0; index < games.size(); index++) {
                 Game single = games.get(index);
                 if (single.isGameOver()) {
@@ -79,7 +96,11 @@ public class LocalGameRunner { // TODO test me
         }
     }
 
-    private static void processNextTick(int index, Solver solver, ClientBoard board, Game game) {
+    private static String askAnswer(int index, List<ClientBoard> boards, List<Game> games, List<Solver> solvers) {
+        Game game = games.get(index);
+        ClientBoard board = boards.get(index);
+        Solver solver = solvers.get(index);
+
         Object data = game.getBoardAsString();
         board.forString(data.toString());
 
@@ -88,16 +109,7 @@ public class LocalGameRunner { // TODO test me
         String answer = solver.get(board);
 
         out.accept(player(index, "Answer: " + answer));
-
-        new PlayerCommand(game.getJoystick(), answer).execute();
-
-        if (timeout > 0) {
-            try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        return answer;
     }
 
     public static Dice getDice(int... numbers) {

@@ -1536,7 +1536,7 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼☼☼");
     }
 
-    // разворот на 180 без откусывания хвоста
+    // разворот на 180 короткой змейки невозможен
     @Test
     public void shouldTurn180_whenLengthIs2() {
         givenFl("☼☼☼☼☼☼☼" +
@@ -1547,20 +1547,20 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.up(); // без этого не сработает
+        hero.up(); // раньше так срабатывало
         hero.left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼◄╕   ☼" +
+                "☼ ╘►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
-    // разворот на 180 с откусыванием хвоста
+    // разворот на 180 с откусыванием хвоста невозможен
     @Test
     public void shouldTurn180_whenLengthIs5() {
         givenFl("☼☼☼☼☼☼☼" +
@@ -1571,14 +1571,14 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        hero.down(); // без этого не срабоатет
+        hero.down(); // раньше так срабатывало
         hero.left();
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ◄╕☼" +
+                "☼ ╘═══☻" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
