@@ -164,17 +164,17 @@ public class SnakeBoard implements Field {
     }
 
     private void setNewObjects() {
-        int playersVar = (players.size() / 2) + 1;
-        int randVal = dice.next(50);
-        if (randVal == 42 && furyPills.size() < playersVar)
+        int max = (players.size() / 2) + 1;
+        int i = dice.next(50);
+        if (i == 42 && furyPills.size() < max)
             setFuryPill(getFreeRandom());
-        if (randVal == 32 && flyingPills.size() < playersVar)
+        if (i == 32 && flyingPills.size() < max)
             setFlyingPill(getFreeRandom());
-        if (randVal == 21 && gold.size() < playersVar)
+        if (i == 21 && gold.size() < max*2)
             setGold(getFreeRandom());
-        if ((randVal == 11 && stones.size() < size / 2) || stones.size() < 1)
+        if ((i == 11 && stones.size() < size / 2) || stones.isEmpty())
             setStone(getFreeRandom());
-        if (randVal < 5 || apples.size() < playersVar)
+        if ((i < 10 && apples.size() < max*10) || apples.size() < max*2)
             setApple(getFreeRandom());
     }
 
