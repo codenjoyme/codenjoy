@@ -88,7 +88,8 @@ public class PlayerServiceImplIntegrationTest {
                 this.isAINeeded = true;
             }
 
-            protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
+            @Override
+            protected WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
                 WebSocketRunner runner = mock(WebSocketRunner.class);
                 doAnswer(inv -> {
                     return null; // for debug
