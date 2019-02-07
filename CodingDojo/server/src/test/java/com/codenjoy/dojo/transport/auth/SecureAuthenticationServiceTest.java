@@ -76,16 +76,16 @@ public class SecureAuthenticationServiceTest {
     }
 
     @Test
-    public void ai_withValidName_andInvalidCode() {
+    public void ai_withValidName_andInvalidCode_ignoreCode() {
         shouldCheckuserIs(null);
         assertAuth(null,
                 "11111111111111111110", "some-text-super-ai@codenjoy.com");
     }
 
     @Test
-    public void ai_withInvalidName_andInvalidCode() {
+    public void ai_withInvalidName_andInvalidCode_ignoreCode() {
         shouldCheckuserIs(null);
-        assertAuth(null,
+        assertAuth("some-text-super-ai@codenjoy.com",
                 "11111111111111111110", "user@email.com");
     }
 
