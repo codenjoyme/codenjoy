@@ -525,7 +525,12 @@ public class SnakeBoard implements Field {
     }
 
     public void remove(Player player) {
-        players.remove(player);
+        if (players.contains(player)) {
+            // кто уходит из игры не лишает коллег очков за победу
+            player.getHero().die();
+            players.remove(player);
+            fireWinEvents();
+        }
     }
 
     public List<Wall> getWalls() {

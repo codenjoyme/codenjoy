@@ -1005,6 +1005,81 @@ public class SnakeMultiplayerTest {
 
     }
 
+    // если твоя змейка осталась на поле сама после того
+    // как противник удалился (не через die) - тебе WIN
+    @Test
+    public void shouldWin_whenOneOnBoardAfterEnemyLeaveRoom() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼╘►   ☼" +
+                "☼     ☼" +
+                "☼×>   ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ×>  ☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.remove(heroPlayer);
+        game.tick();
+
+        verifyEvents(enemyEvents, "[WIN]");
+        verifyEvents(heroEvents, "[DIE]");
+
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ×> ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ╘► ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyNoMoreInteractions(enemyEvents);
+        verifyNoMoreInteractions(heroEvents);
+
+        assertH("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ×>☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ╘►☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
     // змейка не стартует сразу если стоит таймер
     @Test
     public void shouldWaitTillTimer_thenStart() {
