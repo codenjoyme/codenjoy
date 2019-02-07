@@ -76,7 +76,7 @@ public class AISolverTest {
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(3),
-                new SimpleParameter<>(10));
+                new SimpleParameter<>(2));
 
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);

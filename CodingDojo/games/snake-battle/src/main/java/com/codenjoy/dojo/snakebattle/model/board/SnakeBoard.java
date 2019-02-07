@@ -196,7 +196,10 @@ public class SnakeBoard implements Field {
 
         List<Player> alive = aliveActive();
         if (alive.size() == 1) {
-            alive.forEach(p -> p.event(Events.WIN));
+            Player player = alive.get(0);
+            if (player.getHero().size() >= minLengthForWin.getValue()) {
+                alive.forEach(p -> p.event(Events.WIN));
+            }
         }
     }
 
