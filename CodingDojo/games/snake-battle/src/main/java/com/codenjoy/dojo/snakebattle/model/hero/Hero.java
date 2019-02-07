@@ -471,4 +471,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return reduced;
     }
 
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
 }

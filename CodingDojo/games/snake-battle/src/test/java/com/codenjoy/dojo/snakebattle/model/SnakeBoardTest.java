@@ -74,7 +74,8 @@ public class SnakeBoardTest {
                 new SimpleParameter<>(5),
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),
-                new SimpleParameter<>(3));
+                new SimpleParameter<>(3),
+                new SimpleParameter<>(10));
 
         listener = mock(EventListener.class);
         player = new Player(listener);

@@ -55,7 +55,7 @@ public class SnakeBoard implements Field {
     private List<Player> players;
     private List<Player> theWalkingDead;
 
-    private Timer fightTimer;
+    private Timer startTimer;
     private Timer roundTimer;
     private int round;
 
@@ -63,15 +63,17 @@ public class SnakeBoard implements Field {
     private Parameter<Integer> flyingCount;
     private Parameter<Integer> furyCount;
     private Parameter<Integer> stoneReduced;
+    private Parameter<Integer> minLengthForWin;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer fightTimer, Timer roundTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced) {
+    public SnakeBoard(Level level, Dice dice, Timer startTimer, Timer roundTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced, Parameter<Integer> minLengthForWin) {
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
         this.stoneReduced = stoneReduced;
         this.roundsPerMatch = roundsPerMatch;
+        this.minLengthForWin = minLengthForWin;
 
         this.dice = dice;
         round = 0;
@@ -86,8 +88,8 @@ public class SnakeBoard implements Field {
         players = new LinkedList<>();
         theWalkingDead = new LinkedList<>();
 
-        this.fightTimer = fightTimer.start();
-//        this.roundTimer = roundTimer.stop();
+        this.startTimer = startTimer.start();
+        this.roundTimer = roundTimer.stop();
     }
 
     @Override
@@ -95,42 +97,28 @@ public class SnakeBoard implements Field {
         snakesClear();
 
 
-        fightTimer.tick(this::sendTimerStatus);
-//        roundTimer.tick(() -> {});
+        startTimer.tick(this::sendTimerStatus);
+        roundTimer.tick(() -> {});
 
-// TODO родить это чудо :)
-//        if (roundTimer.justFinished()) {
-//            Integer maxScore = aliveActive().stream()
-//                    .map(p -> p.getHero().size())
-//                    .max(Comparator.comparingInt(i1 -> i1))
-//                    .orElse(Integer.MAX_VALUE);
-//
-//            aliveActive().stream()
-//                    .filter(p -> p.getHero().size() == maxScore)
-//                    .forEach(p -> p.event(Events.WIN));
-//
-//            aliveActive().stream()
-//                    .filter(p -> p.getHero().size() != maxScore)
-//                    .forEach(p -> p.printMessage("Time is out"));
-//
-//            aliveActive().forEach(player -> reset(player));
-//
-//            fightTimer.start();
-//            return;
-//        }
+        if (roundTimer.justFinished()) {
+            rewardWinnersByTimeout();
 
-        if (fightTimer.justFinished()) {
-            round++;
-            players.forEach(p -> p.start(round));
-//            roundTimer.start();
+            startTimer.start();
+            return;
         }
 
-        if (!fightTimer.done()) {
+        if (startTimer.justFinished()) {
+            round++;
+            players.forEach(p -> p.start(round));
+            roundTimer.start();
+        }
+
+        if (!startTimer.done()) {
             return;
         }
 
         if (restartIfLast()) {
-            fightTimer.start();
+            startTimer.start();
             return;
         }
 
@@ -140,13 +128,30 @@ public class SnakeBoard implements Field {
         // после еды у змеек отрастают хвосты, поэтому столкновения нужно повторить
         // чтобы обработать ситуацию "кусь за растущий хвост", иначе eatTailThatGrows тесты не пройдут
         snakesFight();
-        fireWinEvents();
+        rewardTheWinner();
         setNewObjects();
     }
 
+    private void rewardWinnersByTimeout() {
+        Integer max = Math.max(aliveActive().stream()
+                .map(p -> p.getHero().size())
+                .max(Comparator.comparingInt(i1 -> i1))
+                .orElse(Integer.MAX_VALUE), minLengthForWin.getValue());
+
+        aliveActive().forEach(p -> {
+                    if (p.getHero().size() == max) {
+                        p.event(Events.WIN);
+                    } else {
+                        p.printMessage("Time is over");
+                    }
+                });
+
+        aliveActive().forEach(player -> reset(player));
+    }
+
     private void sendTimerStatus() {
-        String pad = StringUtils.leftPad("", fightTimer.time(), '.');
-        String message = pad + fightTimer.time() + pad;
+        String pad = StringUtils.leftPad("", startTimer.time(), '.');
+        String message = pad + startTimer.time() + pad;
         players.forEach(player -> player.printMessage(message));
     }
 
@@ -183,7 +188,7 @@ public class SnakeBoard implements Field {
         return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
-    private void fireWinEvents() {
+    private void rewardTheWinner() {
         if (theWalkingDead.isEmpty()) {
             return;
         }
@@ -312,12 +317,14 @@ public class SnakeBoard implements Field {
     }
 
     private boolean restartIfLast() {
-        if (fightTimer.unlimited()) {
+        if (startTimer.unlimited()) {
             return false;
         }
 
         List<Player> players = aliveActive();
         if (players.size() == 1) {
+            // TODO этого никогда не случится. потому что фреймворк решает что последнего игрока надо кикнуть
+            // TODO надо бы и тесты пофиксить так как они рассчитывают на этот кусок кода
             reset(players.get(0));
         }
 
@@ -328,6 +335,7 @@ public class SnakeBoard implements Field {
 
     private void reset(Player player) {
         if (isMatchOver()) {
+            player.getHero().setAlive(false);
             player.leaveBoard();
         } else {
             newGame(player);
@@ -529,7 +537,7 @@ public class SnakeBoard implements Field {
             // кто уходит из игры не лишает коллег очков за победу
             player.getHero().die();
             players.remove(player);
-            fireWinEvents();
+            rewardTheWinner();
         }
     }
 

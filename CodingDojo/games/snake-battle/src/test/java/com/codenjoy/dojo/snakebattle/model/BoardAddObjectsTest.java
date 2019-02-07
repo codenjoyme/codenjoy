@@ -67,7 +67,8 @@ public class BoardAddObjectsTest {
                 new SimpleParameter<>(5),
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),
-                new SimpleParameter<>(3));
+                new SimpleParameter<>(3),
+                new SimpleParameter<>(10));
 
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);

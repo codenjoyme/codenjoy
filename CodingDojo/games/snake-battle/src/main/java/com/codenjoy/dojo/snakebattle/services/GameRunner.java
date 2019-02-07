@@ -51,6 +51,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     private final Parameter<Integer> flyingCount;
     private final Parameter<Integer> furyCount;
     private final Parameter<Integer> stoneReducedValue;
+    private final Parameter<Integer> minLengthForWin;
     private final Parameter<Integer> timePerRound;
 
     public GameRunner() {
@@ -62,6 +63,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         flyingCount = settings.addEditBox("Flying count").type(Integer.class).def(10);
         furyCount = settings.addEditBox("Fury count").type(Integer.class).def(10);
         stoneReducedValue = settings.addEditBox("Stone reduced value").type(Integer.class).def(3);
+        minLengthForWin = settings.addEditBox("Min length for win").type(Integer.class).def(10);
         level = new LevelImpl(getMap());
     }
 
@@ -105,7 +107,8 @@ public class GameRunner extends AbstractGameType implements GameType {
                 roundsPerMatch,
                 flyingCount,
                 furyCount,
-                stoneReducedValue);
+                stoneReducedValue,
+                minLengthForWin);
     }
 
     @Override
