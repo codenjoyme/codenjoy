@@ -28,6 +28,7 @@ public class Timer {
 
     private final Parameter<Integer> from;
     private int time;
+    private int currentFrom;
 
     public Timer(Parameter<Integer> from) {
         this.from = from;
@@ -35,6 +36,7 @@ public class Timer {
 
     public Timer start() {
         time = from.getValue();
+        currentFrom = from.getValue();
         return this;
     }
 
@@ -46,8 +48,12 @@ public class Timer {
         return time < 0;
     }
 
-    public int time() {
+    public int countdown() {
         return time;
+    }
+
+    public int time() {
+        return currentFrom - time;
     }
 
     public void tick(Runnable onProgress) {

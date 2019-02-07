@@ -63,17 +63,17 @@ public class SnakeBoard implements Field {
     private Parameter<Integer> flyingCount;
     private Parameter<Integer> furyCount;
     private Parameter<Integer> stoneReduced;
-    private Parameter<Integer> minLengthForWin;
+    private Parameter<Integer> minTicksForWin;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer startTimer, Timer roundTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced, Parameter<Integer> minLengthForWin) {
+    public SnakeBoard(Level level, Dice dice, Timer startTimer, Timer roundTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced, Parameter<Integer> minTicksForWin) {
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
         this.stoneReduced = stoneReduced;
         this.roundsPerMatch = roundsPerMatch;
-        this.minLengthForWin = minLengthForWin;
+        this.minTicksForWin = minTicksForWin;
 
         this.dice = dice;
         round = 0;
@@ -133,13 +133,15 @@ public class SnakeBoard implements Field {
     }
 
     private void rewardWinnersByTimeout() {
-        Integer max = Math.max(aliveActive().stream()
+        Integer max = aliveActive().stream()
                 .map(p -> p.getHero().size())
                 .max(Comparator.comparingInt(i1 -> i1))
-                .orElse(Integer.MAX_VALUE), minLengthForWin.getValue());
+                .orElse(Integer.MAX_VALUE);
 
         aliveActive().forEach(p -> {
-                    if (p.getHero().size() == max) {
+                    if (p.getHero().size() == max
+                        && roundTimer.time() > minTicksForWin.getValue())
+                    {
                         p.event(Events.WIN);
                     } else {
                         p.printMessage("Time is over");
@@ -150,8 +152,8 @@ public class SnakeBoard implements Field {
     }
 
     private void sendTimerStatus() {
-        String pad = StringUtils.leftPad("", startTimer.time(), '.');
-        String message = pad + startTimer.time() + pad;
+        String pad = StringUtils.leftPad("", startTimer.countdown(), '.');
+        String message = pad + startTimer.countdown() + pad;
         players.forEach(player -> player.printMessage(message));
     }
 
@@ -196,8 +198,7 @@ public class SnakeBoard implements Field {
 
         List<Player> alive = aliveActive();
         if (alive.size() == 1) {
-            Player player = alive.get(0);
-            if (player.getHero().size() >= minLengthForWin.getValue()) {
+            if (roundTimer.time() > minTicksForWin.getValue()) {
                 alive.forEach(p -> p.event(Events.WIN));
             }
         }
