@@ -39,11 +39,17 @@ import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 
-public class LocalGameRunner { // TODO test me
+public class LocalGameRunner {
 
     public static int timeout = 1000;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
+
+    private GameField field;
+    private List<Game> games;
+    private GameType gameType;
+    private List<Solver> solvers;
+    private List<ClientBoard> boards;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
         run(gameType, Arrays.asList(solver), Arrays.asList(board));
@@ -53,19 +59,32 @@ public class LocalGameRunner { // TODO test me
                            List<Solver> solvers,
                            List<ClientBoard> boards)
     {
-        GameField field = gameType.createGame(0);
+        new LocalGameRunner(gameType, solvers, boards).run();
+    }
 
-        List<Game> games = solvers.stream()
-                .map(slv -> createGame(gameType, field))
+    private LocalGameRunner(GameType gameType,
+                           List<Solver> solvers,
+                           List<ClientBoard> boards)
+    {
+        this.solvers = solvers;
+        this.boards = boards;
+        this.gameType = gameType;
+
+        field = gameType.createGame(0);
+
+        games = solvers.stream()
+                .map(slv -> createGame())
                 .collect(toList());
+    }
 
+    public void run() {
         Integer count = countIterations;
         while (count == null || (count != null && count-- > 0)) {
 
             List<String> answers = new LinkedList<>();
 
-            for (int index = 0; index < games.size(); index++) {
-                answers.add(askAnswer(index, boards, games, solvers));
+            for (Game game : games) {
+                answers.add(askAnswer(games.indexOf(game)));
             }
 
             for (Game game : games) {
@@ -96,20 +115,30 @@ public class LocalGameRunner { // TODO test me
         }
     }
 
-    private static String askAnswer(int index, List<ClientBoard> boards, List<Game> games, List<Solver> solvers) {
-        Game game = games.get(index);
-        ClientBoard board = boards.get(index);
-        Solver solver = solvers.get(index);
+    private String askAnswer(int index) {
+        ClientBoard board = board(index);
 
-        Object data = game.getBoardAsString();
+        Object data = game(index).getBoardAsString();
         board.forString(data.toString());
 
         out.accept(player(index, board.toString()));
 
-        String answer = solver.get(board);
+        String answer = solver(index).get(board);
 
         out.accept(player(index, "Answer: " + answer));
         return answer;
+    }
+
+    private Solver solver(int index) {
+        return solvers.get(index);
+    }
+
+    private ClientBoard board(int index) {
+        return boards.get(index);
+    }
+
+    private Game game(int index) {
+        return games.get(index);
     }
 
     public static Dice getDice(int... numbers) {
@@ -128,15 +157,16 @@ public class LocalGameRunner { // TODO test me
         };
     }
 
-    private static String player(int index, String message) {
+    private String player(int index, String message) {
         String preffix = (index + 1) + ":";
         return preffix + message.replaceAll("\\n", "\n" + preffix);
     }
 
-    private static Game createGame(GameType gameType, GameField field) {
+    private Game createGame() {
         GamePlayer gamePlayer = gameType.createPlayer(
                 event -> out.accept("Fire Event: " + event.toString()),
                 null);
+
         PrinterFactory factory = gameType.getPrinterFactory();
 
         Game game = new Single(gamePlayer, factory);
