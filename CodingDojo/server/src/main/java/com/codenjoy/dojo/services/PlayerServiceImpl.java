@@ -31,12 +31,14 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import org.apache.commons.lang.StringUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -129,7 +131,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAIIfNeeded(String forPlayer, String gameName) {
-        if (forPlayer.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) return;
+        if (isAI(forPlayer)) return;
         if (!isAINeeded) return;
 
         GameType gameType = gameService.getGame(gameName);
@@ -143,10 +145,19 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void registerAI(String aiName, GameType gameType) {
-        Closeable ai = createAI(aiName, gameType);
+    private String gerCodeForAI(String aiName) {
+        return Hash.getCode(aiName, StringUtils.EMPTY);
+    }
+
+    private void registerAI(String playerName, GameType gameType) {
+        String code = isAI(playerName) ?
+                gerCodeForAI(playerName) :
+                registration.getCode(playerName);
+
+        Closeable ai = createAI(playerName, code, gameType);
         if (ai != null) {
-            Player player = getPlayer(PlayerSave.get(aiName, "127.0.0.1", gameType.name(), 0, null), gameType);
+            Player player = getPlayer(PlayerSave.get(playerName,
+                    "127.0.0.1", gameType.name(), 0, null), gameType);
             player.setAI(ai);
         }
     }
@@ -171,15 +182,19 @@ public class PlayerServiceImpl implements PlayerService {
         }
         Player player = getPlayer(playerSave, gameType);
 
-        if (name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
-            Closeable runner = createAI(name, gameType);
+        if (isAI(name)) {
+            Closeable runner = createAI(name, gerCodeForAI(name), gameType);
             player.setAI(runner);
         }
 
         return player;
     }
 
-    private Closeable createAI(String aiName, GameType gameType) {
+    private boolean isAI(String name) {
+        return name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX);
+    }
+
+    private Closeable createAI(String aiName, String code, GameType gameType) {
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
@@ -204,15 +219,15 @@ public class PlayerServiceImpl implements PlayerService {
                     .in(gameType.getBoard())
                     .newInstance();
 
-            WebSocketRunner runner = runAI(aiName, solver, board);
+            WebSocketRunner runner = runAI(aiName, code, solver, board);
             return runner;
         } catch (Exception e) {
             return null;
         }
     }
 
-    protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
-        return WebSocketRunner.runAI(aiName, solver, board);
+    protected WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
+        return WebSocketRunner.runAI(aiName, code, solver, board);
     }
 
     private Player getPlayer(PlayerSave playerSave, GameType gameType) {

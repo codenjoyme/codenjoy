@@ -45,8 +45,6 @@ public class WebSocketRunner implements Closeable {
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
-    public static String BOT_CODE = "12345678901234567890";
-
 
     public static boolean PRINT_TO_CONSOLE = true;
     public static int TIMEOUT = 10000;
@@ -73,9 +71,9 @@ public class WebSocketRunner implements Closeable {
                 solver, board, ATTEMPTS);
     }
 
-    public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
+    public static WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
-        return run(UrlParser.WS_PROTOCOL, LOCAL, CodenjoyContext.get(), aiName, BOT_CODE, solver, board, 1);
+        return run(UrlParser.WS_PROTOCOL, LOCAL, CodenjoyContext.get(), aiName, code, solver, board, 1);
     }
 
     private static WebSocketRunner run(String protocol,

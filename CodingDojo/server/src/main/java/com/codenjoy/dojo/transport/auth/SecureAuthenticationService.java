@@ -45,7 +45,7 @@ public class SecureAuthenticationService implements AuthenticationService {
         String user = request.getParameter("user");
         String code = request.getParameter("code");
 
-        if (isAI(user, code)){
+        if (isAI(user)){
             if (logger.isDebugEnabled()) {
                 logger.debug("User {} with code {} logged in as AI", user, code);
             }
@@ -62,8 +62,7 @@ public class SecureAuthenticationService implements AuthenticationService {
         return result;
     }
 
-    private boolean isAI(String user, String code) {
-        return user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)
-            && WebSocketRunner.BOT_CODE.equals(code);
+    private boolean isAI(String user) {
+        return user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX);
     }
 }

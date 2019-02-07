@@ -23,12 +23,9 @@ package com.codenjoy.dojo.moebius.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.moebius.client.Board;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 public class AISolver implements Solver<Board> {
 
@@ -44,16 +41,6 @@ public class AISolver implements Solver<Board> {
         return String.format("ACT(%s,%s)",
                 dice.next(board.size()),
                 dice.next(board.size()));
-    }
-
-    public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, new RandomDice());
-    }
-
-    public static Closeable start(String name, Dice dice) {
-        return WebSocketRunner.runAI(name,
-                new AISolver(dice),
-                new Board());
     }
 
 }
