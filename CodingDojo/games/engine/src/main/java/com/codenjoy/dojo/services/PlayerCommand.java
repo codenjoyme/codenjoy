@@ -75,9 +75,12 @@ public class PlayerCommand {
                         joystick.act();
                     } else {
                         String[] split = p.split("[\\(,\\)]");
-                        int[] parameters = new int[split.length - 1];
-                        for (int index = 1; index < split.length; index++) {
-                            parameters[index - 1] = Integer.valueOf(split[index]);
+                        int[] parameters = new int[0];
+                        if (split.length != 0) {
+                            parameters = new int[split.length - 1];
+                            for (int index = 1; index < split.length; index++) {
+                                parameters[index - 1] = Integer.valueOf(split[index]);
+                            }
                         }
                         joystick.act(parameters);
                     }
