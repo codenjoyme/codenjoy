@@ -26,12 +26,7 @@ package com.codenjoy.dojo.services.hash;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang.StringUtils.reverse;
 
 public class Hash {
 
@@ -40,58 +35,44 @@ public class Hash {
     }
 
     public static String getId(String email, String soul) {
-        return (StringUtils.isEmpty(email)) ? email : encode(shuffle(xor(email, soul), shuffleSoul(soul), true));
+        if (StringUtils.isEmpty(email)) {
+            return email;
+        }
+
+        String encoded = xor(email, soul);
+        return ZBase32Encoder.encode(encoded.getBytes());
     }
 
     public static String getEmail(String id, String soul) {
-        return (StringUtils.isEmpty(id)) ? id : xor(shuffle(decode(id), shuffleSoul(soul), false), soul);
+        if (StringUtils.isEmpty(id)) {
+            return id;
+        }
+
+        String data = new String(ZBase32Encoder.decode(id));
+        return xor(data, soul);
+    }
+
+    private static String xor(String email, String soul) {
+        String hash = md5(soul);
+
+        AtomicInteger index = new AtomicInteger();
+        return email.chars()
+                .map(ch -> {
+                    int i = index.getAndIncrement();
+                    if (i >= hash.length()) {
+                        i = i % hash.length();
+                    }
+                    return ch ^ hash.codePointAt(i);
+                })
+                .collect(StringBuilder::new,
+                        StringBuilder::appendCodePoint,
+                        StringBuilder::append)
+                .toString();
     }
 
     // TODO сделать метод получения хеша с испольованием соли
     public static String getCode(String email, String password) {
         return "" + Math.abs(email.hashCode()) + Math.abs(password.hashCode());
-    }
-
-    private static String shuffleSoul(String soul) {
-        return encode(md5(soul) + md5(soul + "qwe"));
-    }
-
-    private static String encode(String encoded) {
-        return ZBase32Encoder.encode(encoded.getBytes());
-    }
-
-    private static String decode(String id) {
-        return new String(ZBase32Encoder.decode(id));
-    }
-
-    private static String xor(String email, String soul) {
-        String h1 = md5(soul);
-        String h2 = h1 + md5(h1);
-        AtomicInteger i = new AtomicInteger();
-        return toString(getChars(email).map(ch -> (char)(ch ^ h1.codePointAt(i.addAndGet(h2.codePointAt(i.get() % h1.length())) % h1.length()))));
-    }
-
-    private static String shuffle(String input, String soul, boolean inverted) {
-        List<Character> l = getChars(input).collect(toList());
-        (inverted ? reverse(soul) : soul).chars().forEach(c -> swap((c >>> 12) ^ c >> input.length(), c ^ (c >>> 3), l));
-        return toString(l.stream());
-    }
-
-    private static Stream<Character> getChars(String input) {
-        return input.chars().mapToObj(c -> (char) c);
-    }
-
-    private static String toString(Stream<Character> stream) {
-        return stream.collect(StringBuilder::new,
-                StringBuilder::appendCodePoint,
-                StringBuilder::append)
-                .toString();
-    }
-
-    private static void swap(int n, int m, List<Character> l) {
-        m = m % l.size();
-        n = n % l.size();
-        l.set(m, l.set(n, l.get(m)));
     }
 
     public static void main(String[] args) {
