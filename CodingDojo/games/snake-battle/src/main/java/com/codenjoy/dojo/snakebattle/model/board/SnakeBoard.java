@@ -96,7 +96,6 @@ public class SnakeBoard implements Field {
     public void tick() {
         snakesClear();
 
-
         startTimer.tick(this::sendTimerStatus);
         roundTimer.tick(() -> {});
 
@@ -198,7 +197,7 @@ public class SnakeBoard implements Field {
 
         List<Player> alive = aliveActive();
         if (alive.size() == 1) {
-            if (roundTimer.time() > minTicksForWin.getValue()) {
+            if (roundTimer.time() >= minTicksForWin.getValue()) {
                 alive.forEach(p -> p.event(Events.WIN));
             }
         }
