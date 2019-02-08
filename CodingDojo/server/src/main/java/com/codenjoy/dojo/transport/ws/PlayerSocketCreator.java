@@ -60,7 +60,7 @@ public class PlayerSocketCreator implements WebSocketCreator {
         String authId = authenticationService.authenticate(request);
         PlayerSocket socket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
-            logger.warn("Unauthorized access [{}]", getParameters(request));
+            logger.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
             try {
                 response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
             } catch (IOException e) {
