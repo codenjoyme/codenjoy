@@ -179,6 +179,10 @@ public class RestBoardController {
     public synchronized boolean reset(@PathVariable("player") String emailOrId, @PathVariable("code") String code){
         String id = validator.checkPlayerCode(emailOrId, code);
 
+        if (!playerService.contains(id)) {
+            return false;
+        }
+
         saveService.save(id);
         Player player = playerService.get(id);
 
