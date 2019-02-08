@@ -180,8 +180,8 @@ public class Dispatcher {
         }
 
         List<PlayerScore> scores = this.scores.getScores(day, lastTime);
-        List<PlayerScore> updated = prepareScoresForClient(scores);
-        List<PlayerScore> result = prepareFinalistsInfo(updated);
+        List<PlayerScore> result = prepareScoresForClient(scores);
+        // List<PlayerScore> result = prepareFinalistsInfo(updated);
 
         currentScores.put(day, result);
         return result;
