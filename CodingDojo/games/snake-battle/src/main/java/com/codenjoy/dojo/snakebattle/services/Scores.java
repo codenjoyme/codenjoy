@@ -43,9 +43,9 @@ public class Scores implements PlayerScores {
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
-        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
+        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
-        stoneScore = settings.addEditBox("Stone score").type(Integer.class).def(10);
+        stoneScore = settings.addEditBox("Stone score").type(Integer.class).def(5);
         eatScore = settings.addEditBox("Eat enemy score").type(Integer.class).def(10);
     }
 
