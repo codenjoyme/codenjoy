@@ -43,7 +43,8 @@ public class WebSocketRunner implements Closeable {
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
-    public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
+    public static final String BOARD_FORMAT = "^board=(.*)$";
+    public static final Pattern BOARD_PATTERN = Pattern.compile(BOARD_FORMAT);
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     public static boolean PRINT_TO_CONSOLE = true;
@@ -181,11 +182,10 @@ public class WebSocketRunner implements Closeable {
 
         @OnWebSocketMessage
         public void onMessage(String data) {
-            print("Data from server: " + data);
             try {
                 Matcher matcher = BOARD_PATTERN.matcher(data);
                 if (!matcher.matches()) {
-                    throw new RuntimeException("Error parsing data: " + data);
+                    throw new IllegalArgumentException("Unexpected board format, should be: " + BOARD_FORMAT);
                 }
 
                 board.forString(matcher.group(1));
@@ -201,6 +201,7 @@ public class WebSocketRunner implements Closeable {
                 }
                 remote.sendString(answer);
             } catch (Exception e) {
+                print("Error processing data: " + data);
                 print(e);
             }
             printBreak();

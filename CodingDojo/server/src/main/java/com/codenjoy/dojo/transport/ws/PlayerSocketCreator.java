@@ -32,6 +32,10 @@ import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerSocketCreator implements WebSocketCreator {
 
@@ -56,7 +60,7 @@ public class PlayerSocketCreator implements WebSocketCreator {
         String authId = authenticationService.authenticate(request);
         PlayerSocket socket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
-            logger.warn("Unauthorized access {}", request.getParameterMap().toString());
+            logger.warn("Unauthorized access [{}]", getParameters(request));
             try {
                 response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
             } catch (IOException e) {
@@ -67,5 +71,17 @@ public class PlayerSocketCreator implements WebSocketCreator {
         socket.onClose(() -> transport.unregisterPlayerSocket(socket));
         transport.registerPlayerSocket(authId, socket);
         return socket;
+    }
+
+    private String getParameters(HttpServletRequest request) {
+        try {
+            Map<String, String[]> parameters = request.getParameterMap();
+            return parameters.keySet().stream()
+                    .map(key -> String.format("%s=%s", key, Arrays.toString(parameters.get(key))))
+                    .collect(toList())
+                    .toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 }
