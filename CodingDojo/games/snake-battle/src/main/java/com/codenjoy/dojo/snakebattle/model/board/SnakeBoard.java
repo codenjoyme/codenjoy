@@ -609,24 +609,33 @@ public class SnakeBoard implements Field {
         throw new RuntimeException(message);
     }
 
-    public Point getObjOn(Point additionObject) {
-        if (apples.contains(additionObject))
-            return new Apple(additionObject);
-        if (stones.contains(additionObject))
-            return new Stone(additionObject);
-        if (flyingPills.contains(additionObject))
-            return new FlyingPill(additionObject);
-        if (furyPills.contains(additionObject))
-            return new FuryPill(additionObject);
-        if (gold.contains(additionObject))
-            return new Gold(additionObject);
-        if (starts.contains(additionObject))
-            return new StartFloor(additionObject);
-        if (walls.contains(additionObject))
-            return new Wall(additionObject);
-        for (Player player : players)
-            if (player.getHero().getBody().contains(additionObject))
+    public Point getOn(Point pt) {
+        if (apples.contains(pt)) {
+            return new Apple(pt);
+        }
+        if (stones.contains(pt)) {
+            return new Stone(pt);
+        }
+        if (flyingPills.contains(pt)) {
+            return new FlyingPill(pt);
+        }
+        if (furyPills.contains(pt)) {
+            return new FuryPill(pt);
+        }
+        if (gold.contains(pt)) {
+            return new Gold(pt);
+        }
+        if (starts.contains(pt)) {
+            return new StartFloor(pt);
+        }
+        if (walls.contains(pt)) {
+            return new Wall(pt);
+        }
+        for (Player player : players) {
+            if (player.getHero().getBody().contains(pt)) {
                 return player.getHero().neck(); // это просто любой объект типа Tail
+            }
+        }
         return null;
     }
 }

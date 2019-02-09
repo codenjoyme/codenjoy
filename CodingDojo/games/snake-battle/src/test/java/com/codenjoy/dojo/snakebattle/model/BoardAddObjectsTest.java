@@ -49,12 +49,12 @@ public class BoardAddObjectsTest {
 
     private SnakeBoard game;
 
-    private Point additionObject;
-    boolean shouldAdd;
+    private Point addition;
+    boolean add;
 
-    public BoardAddObjectsTest(Point additionObject, boolean shouldAdd) {
-        this.additionObject = additionObject;
-        this.shouldAdd = shouldAdd;
+    public BoardAddObjectsTest(Point addition, boolean add) {
+        this.addition = addition;
+        this.add = add;
     }
 
     private void givenFl(String board) {
@@ -141,12 +141,12 @@ public class BoardAddObjectsTest {
                 "☼ ®○  ☼" +
                 "☼ $●  ☼" +
                 "☼☼☼☼☼☼☼");
-        int objectsBefore = 1;
-        Point objOnPoint = game.getObjOn(additionObject);
-        game.addToPoint(additionObject);
+        int before = 1;
+        Point object = game.getOn(addition);
+        game.addToPoint(addition);
         game.tick();
         int objectsAfter = 0;
-        String objType = additionObject.getClass().toString().replaceAll(".*\\.", "");
+        String objType = addition.getClass().toString().replaceAll(".*\\.", "");
         switch (objType) {
             case "Apple":
                 objectsAfter = game.getApples().size();
@@ -166,13 +166,13 @@ public class BoardAddObjectsTest {
             default:
                 fail("Отсутствуют действия на объект типа " + objType);
         }
-        if (shouldAdd)
+        if (add)
             assertEquals("Новый объект '" + objType + "' не был добавлен на поле!",
-                    objectsBefore + 1, objectsAfter);
+                    before + 1, objectsAfter);
         else
             assertEquals("Добавился новый объект '" + objType + "'" + " поверх существующего объекта!" +
-                            (objOnPoint == null ? null : objOnPoint.getClass()),
-                    objectsBefore, objectsAfter);
+                            (object == null ? null : object.getClass()),
+                    before, objectsAfter);
     }
 
 }
