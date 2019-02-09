@@ -23,6 +23,7 @@ package com.codenjoy.dojo.snakebattle.model.level;
  */
 
 
+import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 
@@ -40,9 +41,9 @@ public interface Level {
 
     List<StartFloor> getStartPoints();
 
-    Hero getHero();
+    Hero getHero(Field field);
 
-    Hero getEnemy();
+    Hero getEnemy(Field field);
 
     List<Apple> getApples();
 

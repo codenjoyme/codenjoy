@@ -67,7 +67,6 @@ public class AISolverTest {
         // этот весь код ниже используется сейчас только для распечатки изображения доски (для наглядности)
         // можно смело убирать, если мешает
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero();
 
         SnakeBoard game = new SnakeBoard(level, dice,
                 new Timer(new SimpleParameter<>(0)),
@@ -79,6 +78,7 @@ public class AISolverTest {
                 new SimpleParameter<>(3),
                 new SimpleParameter<>(2));
 
+        Hero hero = level.getHero(game);
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);
 

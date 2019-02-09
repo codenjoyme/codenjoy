@@ -66,7 +66,6 @@ public class SnakeBoardTest {
 
     private void given(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero();
 
         game = new SnakeBoard(level, dice,
                 new Timer(timer),
@@ -78,6 +77,7 @@ public class SnakeBoardTest {
                 new SimpleParameter<>(3),
                 new SimpleParameter<>(2));
 
+        Hero hero = level.getHero(game);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);

@@ -59,7 +59,6 @@ public class BoardAddObjectsTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero();
 
         game = new SnakeBoard(level, mock(Dice.class),
                 new Timer(new SimpleParameter<>(0)),
@@ -70,6 +69,8 @@ public class BoardAddObjectsTest {
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(3),
                 new SimpleParameter<>(2));
+
+        Hero hero = level.getHero(game);
 
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);

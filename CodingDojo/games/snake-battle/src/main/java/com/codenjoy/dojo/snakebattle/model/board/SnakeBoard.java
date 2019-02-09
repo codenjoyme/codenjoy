@@ -279,10 +279,10 @@ public class SnakeBoard implements Field {
             enemy = enemyEatenWith(hero);
             if (enemy != null) {
                 if (hero.isFury()) {
-                    if (!enemy.reduced()) {
+//                    if (!enemy.reduced()) { // TODO подумать когда такой кейз возможен
                         int len = enemy.reduceFrom(hero.head());
                         info.add(new ReduceInfo(hero, len));
-                    }
+//                    }
                 } else {
                     hero.die();
                     info.add(new ReduceInfo(enemy, hero.size()));

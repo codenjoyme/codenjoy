@@ -234,15 +234,25 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
                 clearReduced();
             }
         }
-        if (field.isFlyingPill(head))
-            flyingCount += field.flyingCount().getValue();
-        if (field.isFuryPill(head))
-            furyCount += field.furyCount().getValue();
+        if (field.isFlyingPill(head)) {
+            eatFlying();
+        }
+        if (field.isFuryPill(head)) {
+            eatFury();
+        }
         if (field.isBarrier(head))
             die();
     }
 
-    private void count() {
+    public void eatFlying() {
+        flyingCount += field.flyingCount().getValue();
+    }
+
+    public void eatFury() {
+        furyCount += field.furyCount().getValue();
+    }
+
+    public void count() {
         if (isFlying())
             flyingCount--;
         if (isFury())
@@ -473,5 +483,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }
