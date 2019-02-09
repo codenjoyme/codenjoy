@@ -231,18 +231,45 @@ public class SnakeBoard implements Field {
         }
     }
 
-    static class ReduceInfo {
-        Hero hero;
+    private static class ReduceInfo {
+        Hero attacker;
+        Hero pray;
         int reduce;
 
-        public ReduceInfo(Hero hero, int reduce) {
-            this.hero = hero;
+        public ReduceInfo(Hero attacker, Hero pray, int reduce) {
+            this.attacker = attacker;
+            this.pray = pray;
             this.reduce = reduce;
         }
     }
 
+    @FunctionalInterface
+    private interface Reduce {
+        void doit(Hero attacker, Hero pray, int size);
+    }
+
+    private static class FightDetails  {
+        private List<ReduceInfo> info = new LinkedList<>();
+
+        public void cutOff(Hero attacker, Hero pray, int size) {
+            info.add(new ReduceInfo(attacker, pray, size));
+        }
+
+        public boolean alreadyCut(Hero pray) {
+            return info.stream()
+                    .filter(info -> info.pray == pray)
+                    .findAny()
+                    .isPresent();
+        }
+
+        public void forEach(Reduce action) {
+            info.forEach(info -> action.doit(info.attacker, info.pray, info.reduce));
+        }
+    }
+
     private void snakesFight() {
-        List<ReduceInfo> info = new LinkedList<>();
+        FightDetails info = new FightDetails();
+
         notFlyingHeroes().forEach(hero -> {
             Hero enemy = enemyCrossedWith(hero);
             if (enemy != null) {
@@ -252,25 +279,22 @@ public class SnakeBoard implements Field {
                 if (hero.isFury() && !enemy.isFury()) {
                     if (enemy.isAlive()) {
                         enemy.die();
-                        info.add(new ReduceInfo(hero, enemy.size()));
+                        info.cutOff(hero, enemy, enemy.size());
                     }
                 } else if (!hero.isFury() && enemy.isFury()) {
                     if (hero.isAlive()) {
                         hero.die();
-                        info.add(new ReduceInfo(enemy, hero.size()));
+                        info.cutOff(enemy, hero, hero.size());
                     }
                 } else {
-                    int heroCut = hero.size();
-                    int enemyCut = enemy.size();
-
-                    if (!hero.reduced()) {
-                        int len = hero.reduce(enemyCut, NEXT_TICK);
-                        info.add(new ReduceInfo(enemy, len));
+                    if (!info.alreadyCut(hero)) {
+                        int len1 = hero.reduce(enemy.size(), NEXT_TICK);
+                        info.cutOff(enemy, hero, len1);
                     }
 
-                    if (!enemy.reduced()) {
-                        int len = enemy.reduce(heroCut, NEXT_TICK);
-                        info.add(new ReduceInfo(hero, len));
+                    if (!info.alreadyCut(enemy)) {
+                        int len2 = enemy.reduce(hero.size(), NEXT_TICK);
+                        info.cutOff(hero, enemy, len2);
                     }
                 }
                 return;
@@ -279,24 +303,20 @@ public class SnakeBoard implements Field {
             enemy = enemyEatenWith(hero);
             if (enemy != null) {
                 if (hero.isFury()) {
-//                    if (!enemy.reduced()) { // TODO подумать когда такой кейз возможен
-                        int len = enemy.reduceFrom(hero.head());
-                        info.add(new ReduceInfo(hero, len));
-//                    }
+                    int len = enemy.reduceFrom(hero.head());
+                    info.cutOff(hero, enemy, len);
                 } else {
                     hero.die();
-                    info.add(new ReduceInfo(enemy, hero.size()));
+                    info.cutOff(enemy, hero, hero.size());
                 }
             }
         });
 
-        info.stream()
-                .filter(i -> i.hero.isAlive())
-                .forEach(i -> {
-                    Hero hero = i.hero;
-                    hero.clearReduced();
-                    hero.event(Events.EAT.apply(i.reduce));
-                });
+        info.forEach((attacker, pray, reduce) -> {
+            if (attacker.isAlive()) {
+                attacker.event(Events.EAT.apply(reduce));
+            }
+        });
     }
 
     private void snakesEat() {

@@ -54,7 +54,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     private int furyCount;
     private Player player;
     private boolean leaveApples;
-    private boolean reduced;
     private Point lastTailPosition;
 
     public Hero(Point xy) {
@@ -238,7 +237,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
             stonesCount++;
             if (!isFury()) {
                 reduce(field.stoneReduced().getValue(), NOW);
-                clearReduced();
             }
         }
         if (field.isFlyingPill(head)) {
@@ -289,7 +287,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public int reduceFrom(Point from) {
-        reduced = true;
         int was = size();
         lastTailPosition = from;
         elements = new LinkedList<>(elements.subList(elements.indexOf(from) + 1, elements.size()));
@@ -302,7 +299,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public int reduce(int len, boolean now) {
-        reduced = true;
         int was = size();
         if (was < len + MINIMUM_LENGTH) {
             die();
@@ -494,14 +490,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     @Override
     public String toString() {
         return String.format("[%s,%s]", head().getX(), head().getY());
-    }
-
-    public void clearReduced() {
-        reduced = false;
-    }
-
-    public boolean reduced() {
-        return reduced;
     }
 
     public void setAlive(boolean alive) {
