@@ -3943,7 +3943,7 @@ public class SnakeMultiplayerTest {
     }
 
     @Test
-    public void headTwoFlyingSnakes_wrawSmallerOnTop() {
+    public void headTwoFlyingSnakes_drawSmallerOnTop_start() {
         givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼           ☼" +
                 "☼           ☼" +
@@ -4110,6 +4110,11 @@ public class SnakeMultiplayerTest {
                 "☼           ☼\n" +
                 "☼           ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void headTwoFlyingSnakes_drawSmallerOnTop_finishWithFlying() {
+        headTwoFlyingSnakes_drawSmallerOnTop_start();
 
         enemy.up();
         game.tick();
@@ -4199,6 +4204,107 @@ public class SnakeMultiplayerTest {
                 "☼   │       ☼\n" +
                 "☼   │       ☼\n" +
                 "☼   ♦       ☼\n" +
+                "☼           ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+    @Test
+    public void headTwoFlyingSnakes_drawSmallerOnTop_finishWithoutFlying() {
+        headTwoFlyingSnakes_drawSmallerOnTop_start();
+
+        hero.removeFlying();
+        enemy.removeFlying();
+
+        assertEquals(0, hero.getFlyingCount());
+        assertEquals(0, enemy.getFlyingCount());
+
+        enemy.up();
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼          ˄☼\n" +
+                "☼   ╔╕─────┘☼\n" +
+                "☼   ║       ☼\n" +
+                "☼   ▼       ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼          ▲☼\n" +
+                "☼   ┌ö═════╝☼\n" +
+                "☼   │       ☼\n" +
+                "☼   ˅       ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼          ˄☼\n" +
+                "☼          │☼\n" +
+                "☼   ╓──────┘☼\n" +
+                "☼   ║       ☼\n" +
+                "☼   ║       ☼\n" +
+                "☼   ▼       ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼          ▲☼\n" +
+                "☼          ║☼\n" +
+                "☼   æ══════╝☼\n" +
+                "☼   │       ☼\n" +
+                "☼   │       ☼\n" +
+                "☼   ˅       ☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼          ▲☼\n" +
+                "☼          │☼\n" +
+                "☼          │☼\n" +
+                "☼    ×─────┘☼\n" +
+                "☼   ╓       ☼\n" +
+                "☼   ║       ☼\n" +
+                "☼   ║       ☼\n" +
+                "☼   ˅       ☼\n" +
+                "☼           ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼           ☼\n" +
+                "☼           ☼\n" +
+                "☼          ▲☼\n" +
+                "☼          ║☼\n" +
+                "☼          ║☼\n" +
+                "☼    ╘═════╝☼\n" +
+                "☼   æ       ☼\n" +
+                "☼   │       ☼\n" +
+                "☼   │       ☼\n" +
+                "☼   ˅       ☼\n" +
                 "☼           ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
