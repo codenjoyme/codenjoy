@@ -54,6 +54,7 @@ public class ActionLogger extends Suspendable {
                     "player_name varchar(255), " +
                     "game_type varchar(255), " +
                     "score varchar(255), " +
+                    "command varchar(255), " +
                     "board varchar(10000));");
         active = false;
         count = 0;
@@ -70,8 +71,8 @@ public class ActionLogger extends Suspendable {
     public void saveToDB() {
         pool.run(connection -> {
             String sql = "INSERT INTO player_boards " +
-                    "(time, player_name, game_type, score, board) " +
-                    "VALUES (?,?,?,?,?);";
+                    "(time, player_name, game_type, score, command, board) " +
+                    "VALUES (?,?,?,?,?,?);";
 
             BoardLog data;
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -86,7 +87,8 @@ public class ActionLogger extends Suspendable {
                     stmt.setString(2, data.getPlayerName());
                     stmt.setString(3, data.getGameType());
                     stmt.setString(4, data.getScore().toString());
-                    stmt.setString(5, data.getBoard());
+                    stmt.setString(5, data.getCommand());
+                    stmt.setString(6, data.getBoard());
                     stmt.addBatch();
                 }
                 stmt.executeBatch();
@@ -107,7 +109,8 @@ public class ActionLogger extends Suspendable {
                     player.getName(),
                     player.getGameName(),
                     player.getScore(),
-                    playerGame.getGame().getBoardAsString().toString()));
+                    playerGame.getGame().getBoardAsString().toString(),
+                    playerGame.popLastCommand()));
         }
 
         if (count++ % ticks == 0) {

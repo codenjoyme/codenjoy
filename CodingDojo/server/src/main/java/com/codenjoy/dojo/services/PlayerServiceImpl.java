@@ -275,13 +275,12 @@ public class PlayerServiceImpl implements PlayerService {
                 time = System.currentTimeMillis();
             }
 
+            actionLogger.log(playerGames);
             autoSaver.tick();
 
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
-
-            actionLogger.log(playerGames);
 
             if (logger.isDebugEnabled()) {
                 time = System.currentTimeMillis() - time;

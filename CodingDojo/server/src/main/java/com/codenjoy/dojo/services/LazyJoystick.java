@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -41,6 +42,7 @@ public class LazyJoystick implements Joystick, Tickable {
     private final Game game;
 
     private List<Consumer<Joystick>> commands = new CopyOnWriteArrayList<>();
+    private List<String> list = new CopyOnWriteArrayList<>();
 
     public LazyJoystick(Game game) {
         this.game = game;
@@ -49,21 +51,25 @@ public class LazyJoystick implements Joystick, Tickable {
     @Override
     public void down() {
         commands.add(Joystick::down);
+        list.add("DOWN");
     }
 
     @Override
     public void up() {
         commands.add(Joystick::up);
+        list.add("UP");
     }
 
     @Override
     public void left() {
         commands.add(Joystick::left);
+        list.add("LEFT");
     }
 
     @Override
     public void right() {
         commands.add(Joystick::right);
+        list.add("RIGHT");
     }
 
     @Override
@@ -72,6 +78,7 @@ public class LazyJoystick implements Joystick, Tickable {
             return;
         }
         commands.add(joystick -> joystick.act(parameters));
+        list.add(String.format("ACT%s", Arrays.toString(parameters)));
     }
 
     @Override
@@ -80,6 +87,7 @@ public class LazyJoystick implements Joystick, Tickable {
             return;
         }
         commands.add(joystick -> joystick.message(message));
+        list.add(String.format("MESSAGE('%s')", message));
     }
 
     @Override
@@ -89,5 +97,11 @@ public class LazyJoystick implements Joystick, Tickable {
         commands.forEach(command -> command.accept(joystick));
 
         commands.clear();
+    }
+
+    public synchronized String popLastCommands() {
+        String result = list.toString();
+        list.clear();
+        return result;
     }
 }
