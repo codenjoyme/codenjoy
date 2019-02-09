@@ -612,6 +612,7 @@ public class SnakeBoard implements Field {
                                             Function<Hero, List<? extends Point>> getElements)
                     {
                         SnakeBoard.this.getHeroes().stream()
+//                                .sorted(Comparator.comparingInt(Hero::size))
                                 .filter(filter)
                                 .forEach(hero -> addAll(getElements.apply(hero)));
                     }
