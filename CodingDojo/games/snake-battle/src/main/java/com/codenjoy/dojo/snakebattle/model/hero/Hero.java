@@ -247,8 +247,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         if (field.isFuryPill(head)) {
             eatFury();
         }
-        if (field.isBarrier(head))
+        if (field.isBarrier(head)) {
             die();
+        }
     }
 
     public void eatFlying() {
@@ -260,18 +261,22 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     public void count() {
-        if (isFlying())
+        if (isFlying()) {
             flyingCount--;
-        if (isFury())
+        }
+        if (isFury()) {
             furyCount--;
+        }
     }
 
     private void reduceIfShould() {
         if (growBy < 0) {
-            if (growBy < -elements.size())
+            if (growBy < -elements.size()) {
                 die();
-            else
+            } else {
                 elements = new LinkedList<>(elements.subList(-growBy, elements.size()));
+                // TODO тут тоже надо по идее lastTailPosition = getTailPoint();
+            }
             growBy = 0;
         }
     }
@@ -280,11 +285,13 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         if (from.equals(getTailPoint()))
             return;
         elements = new LinkedList<>(elements.subList(elements.indexOf(from), elements.size()));
+        // TODO тут тоже надо по идее lastTailPosition = getTailPoint();
     }
 
     public int reduceFrom(Point from) {
         reduced = true;
         int was = size();
+        lastTailPosition = from;
         elements = new LinkedList<>(elements.subList(elements.indexOf(from) + 1, elements.size()));
         if (size() < MINIMUM_LENGTH) {
             die();
@@ -303,6 +310,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         } else {
             if (now) {
                 elements = new LinkedList<>(elements.subList(len, elements.size()));
+                // TODO тут тоже надо по идее lastTailPosition = getTailPoint();
             } else {
                 growBy = -len;
             }
