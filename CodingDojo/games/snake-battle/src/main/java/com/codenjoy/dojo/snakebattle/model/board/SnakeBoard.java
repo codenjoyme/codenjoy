@@ -58,6 +58,7 @@ public class SnakeBoard implements Field {
     private Timer startTimer;
     private Timer roundTimer;
     private int round;
+    private Timer winnerTimer;
 
     private Parameter<Integer> roundsPerMatch;
     private Parameter<Integer> flyingCount;
@@ -68,7 +69,7 @@ public class SnakeBoard implements Field {
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer startTimer, Timer roundTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced, Parameter<Integer> minTicksForWin) {
+    public SnakeBoard(Level level, Dice dice, Timer startTimer, Timer roundTimer, Timer winnerTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced, Parameter<Integer> minTicksForWin) {
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
         this.stoneReduced = stoneReduced;
@@ -90,6 +91,7 @@ public class SnakeBoard implements Field {
 
         this.startTimer = startTimer.start();
         this.roundTimer = roundTimer.stop();
+        this.winnerTimer = winnerTimer.stop();
     }
 
     @Override
@@ -98,13 +100,7 @@ public class SnakeBoard implements Field {
 
         startTimer.tick(this::sendTimerStatus);
         roundTimer.tick(() -> {});
-
-        if (roundTimer.justFinished()) {
-            rewardWinnersByTimeout();
-
-            startTimer.start();
-            return;
-        }
+        winnerTimer.tick(() -> {});
 
         if (startTimer.justFinished()) {
             round++;
@@ -116,9 +112,25 @@ public class SnakeBoard implements Field {
             return;
         }
 
-        if (restartIfLast()) {
+        if (roundTimer.justFinished()) {
+            rewardWinnersByTimeout();
+
             startTimer.start();
             return;
+        }
+
+
+        if (isNoOneOnBoard() || winnerTimer.justFinished()) {
+            if (isLastOnBoard()) {
+                reset(getLast());
+            }
+
+            startTimer.start();
+            return;
+        }
+
+        if (!startTimer.unlimited() && winnerTimer.done() && isLastOnBoard()) {
+            winnerTimer.start();
         }
 
         snakesMove();
@@ -195,12 +207,15 @@ public class SnakeBoard implements Field {
         }
         theWalkingDead.clear();
 
-        List<Player> alive = aliveActive();
-        if (alive.size() == 1) {
+        if (isLastOnBoard()) {
             if (roundTimer.time() >= minTicksForWin.getValue()) {
-                alive.forEach(p -> p.event(Events.WIN));
+                getLast().event(Events.WIN);
             }
         }
+    }
+
+    private Player getLast() {
+        return aliveActive().iterator().next();
     }
 
     private List<Player> aliveActive() {
@@ -319,21 +334,12 @@ public class SnakeBoard implements Field {
                 .filter(h -> !h.isFlying());
     }
 
-    private boolean restartIfLast() {
-        if (startTimer.unlimited()) {
-            return false;
-        }
+    private boolean isNoOneOnBoard() {
+        return aliveActive().size() == 0;
+    }
 
-        List<Player> players = aliveActive();
-        if (players.size() == 1) {
-            // TODO этого никогда не случится. потому что фреймворк решает что последнего игрока надо кикнуть
-            // TODO надо бы и тесты пофиксить так как они рассчитывают на этот кусок кода
-            reset(players.get(0));
-        }
-
-        // если остался один игрок или вообще никого -
-        // мы перегружаемся
-        return players.size() <= 1;
+    private boolean isLastOnBoard() {
+        return aliveActive().size() == 1;
     }
 
     private void reset(Player player) {

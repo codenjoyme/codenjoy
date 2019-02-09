@@ -64,6 +64,7 @@ public class BoardAddObjectsTest {
         game = new SnakeBoard(level, mock(Dice.class),
                 new Timer(new SimpleParameter<>(0)),
                 new Timer(new SimpleParameter<>(300)),
+                new Timer(new SimpleParameter<>(1)),
                 new SimpleParameter<>(5),
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),

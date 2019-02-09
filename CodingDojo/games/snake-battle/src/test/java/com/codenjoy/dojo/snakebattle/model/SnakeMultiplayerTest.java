@@ -77,6 +77,7 @@ public class SnakeMultiplayerTest {
         game = new SnakeBoard(level, dice,
                 new Timer(timer),
                 new Timer(new SimpleParameter<>(300)),
+                new Timer(new SimpleParameter<>(1)),
                 roundsPerMatch,
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),
@@ -1235,16 +1236,28 @@ public class SnakeMultiplayerTest {
         assertEquals(false, heroPlayer.isActive());
 
         assertEquals(true, enemyPlayer.isAlive());
-        assertEquals(false, enemyPlayer.isActive());
+        assertEquals(true, enemyPlayer.isActive());
 
-        assertH("☼☼☼☼☼☼☼☼" +
-                "☼☼     ☼" +
-                "☼☼     ☼" +
-                "~&     ☼" +
-                "*ø     ☼" +
-                "☼☼     ☼" +
-                "☼☼     ☼" +
-                "☼☼☼☼☼☼☼☼");
+        assertH("☼☼☼☼☼☼☼☼\n" +
+                "☼☼     ☼\n" +
+                "☼☼     ☼\n" +
+                "~&     ☼\n" +
+                "☼#  ×> ☼\n" +
+                "☼☼     ☼\n" +
+                "☼☼     ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        // последний победный тик героя!
+        game.tick();
+
+        assertH("☼☼☼☼☼☼☼☼\n" +
+                "☼☼     ☼\n" +
+                "☼☼     ☼\n" +
+                "~&     ☼\n" +
+                "*ø     ☼\n" +
+                "☼☼     ☼\n" +
+                "☼☼     ☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         // ждем перехода на второй уровень
         game.tick();
@@ -1316,6 +1329,9 @@ public class SnakeMultiplayerTest {
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼☼☼☼☼☼☼");
+
+        // последний тик победителя тут неуместен, все погибли
+        // game.tick();
 
         // ждем перехода на третий уровень
         game.tick();

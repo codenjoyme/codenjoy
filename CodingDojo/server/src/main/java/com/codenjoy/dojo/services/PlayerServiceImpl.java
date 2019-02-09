@@ -146,7 +146,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private String gerCodeForAI(String aiName) {
-        return Hash.getCode(aiName, StringUtils.EMPTY);
+        return Hash.getCode(aiName, aiName);
     }
 
     private void registerAI(String playerName, GameType gameType) {

@@ -97,8 +97,10 @@ public class Spreader {
 
             if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
                 GamePlayer lastPlayer = players.iterator().next();
-                removed.add(lastPlayer);
-                players.remove(lastPlayer);
+                if (!lastPlayer.wantToStay()) {
+                    removed.add(lastPlayer);
+                    players.remove(lastPlayer);
+                }
             }
             if (players.isEmpty()) {
                 rooms.values().forEach(it -> it.remove(room));

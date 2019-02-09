@@ -52,10 +52,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     private final Parameter<Integer> stoneReducedValue;
     private final Parameter<Integer> minTicksForWin;
     private final Parameter<Integer> timePerRound;
+    private final Parameter<Integer> timeForWinner;
 
     public GameRunner() {
         new Scores(0, settings);
         timePerRound = settings.addEditBox("Time per Round").type(Integer.class).def(300);
+        timeForWinner = settings.addEditBox("Time for Winner").type(Integer.class).def(1);
         timeBeforeStart = settings.addEditBox("Time before start Round").type(Integer.class).def(5);
         roundsPerMatch = settings.addEditBox("Rounds per Match").type(Integer.class).def(1);
         playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
@@ -103,6 +105,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         return new SnakeBoard(level, getDice(),
                 new Timer(timeBeforeStart),
                 new Timer(timePerRound),
+                new Timer(timeForWinner),
                 roundsPerMatch,
                 flyingCount,
                 furyCount,

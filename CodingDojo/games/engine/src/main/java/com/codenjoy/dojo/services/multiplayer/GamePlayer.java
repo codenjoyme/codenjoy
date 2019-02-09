@@ -117,6 +117,15 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     }
 
     /**
+     * @return В случае если герой остался один на карте и должен покинуть ее
+     *          этим флагом он может сообщить о своем нежелании.
+     *          // TODO подумать хорошенько, а то тут флагов уже как тараканов
+     */
+    public boolean wantToStay() {
+        return false;
+    }
+
+    /**
      * Никогда не переопределяй этот метод
      */
     @Override

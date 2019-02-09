@@ -23,7 +23,6 @@ package com.codenjoy.dojo.snakebattle.model;
  */
 
 
-import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
@@ -76,6 +75,11 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public void leaveBoard() {
         shouldLeave = true;
+    }
+
+    @Override
+    public boolean wantToStay() {
+        return true;
     }
 
     public void die(boolean lastRound) {
