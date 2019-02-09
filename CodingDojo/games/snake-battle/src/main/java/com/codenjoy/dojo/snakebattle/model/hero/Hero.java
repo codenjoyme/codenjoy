@@ -432,8 +432,16 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return furyCount;
     }
 
+    public void removeFury() {
+        furyCount = 0;
+    }
+
     public boolean isFlying() {
         return flyingCount > 0;
+    }
+
+    public void removeFlying() {
+        flyingCount = 0;
     }
 
     public boolean isFury() {
@@ -488,4 +496,5 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
 }
