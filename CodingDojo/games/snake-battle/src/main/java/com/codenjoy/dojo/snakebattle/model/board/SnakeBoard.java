@@ -33,10 +33,7 @@ import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -588,10 +585,10 @@ public class SnakeBoard implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>(){{
+                return new LinkedHashSet<Point>(){{
                     drawHeroes(hero -> !hero.isAlive(), hero -> Arrays.asList(hero.head()));
-                    drawHeroes(hero -> hero.isFlying(), hero -> hero.body());
-                    drawHeroes(hero -> !hero.isFlying(), hero -> hero.body());
+                    drawHeroes(hero -> hero.isFlying(), hero -> hero.reversedBody());
+                    drawHeroes(hero -> !hero.isFlying(), hero -> hero.reversedBody());
 
                     addAll(SnakeBoard.this.getWalls());
                     addAll(SnakeBoard.this.getApples());
@@ -600,9 +597,9 @@ public class SnakeBoard implements Field {
                     addAll(SnakeBoard.this.getFuryPills());
                     addAll(SnakeBoard.this.getGold());
                     addAll(SnakeBoard.this.getStarts());
-                    for (int i = 0; i < size(); i++) {
-                        Point p = get(i);
-                        if (p.isOutOf(SnakeBoard.this.size())) { // TODO могут ли существовать объекты за границей поля? (выползать из-за края змея)
+
+                    for (Point p : this.toArray(new Point[0])) {
+                        if (p.isOutOf(SnakeBoard.this.size())) {
                             remove(p);
                         }
                     }
@@ -612,8 +609,8 @@ public class SnakeBoard implements Field {
                                             Function<Hero, List<? extends Point>> getElements)
                     {
                         SnakeBoard.this.getHeroes().stream()
-//                                .sorted(Comparator.comparingInt(Hero::size))
                                 .filter(filter)
+                                .sorted(Comparator.comparingInt(Hero::size))
                                 .forEach(hero -> addAll(getElements.apply(hero)));
                     }
                 };

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -77,6 +78,12 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     public List<Tail> body() {
         return elements;
+    }
+
+    public List<Tail> reversedBody() {
+        return new LinkedList<Tail>(elements){{
+            Collections.reverse(this);
+        }};
     }
 
     public Point getTailPoint() {
