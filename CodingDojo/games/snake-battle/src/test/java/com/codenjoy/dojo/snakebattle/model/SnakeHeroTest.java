@@ -89,32 +89,32 @@ public class SnakeHeroTest {
     @Test
     public void snakeInactive() {
         hero.setActive(false);
-        LinkedList<Tail> startBody = new LinkedList<>(hero.getBody());
+        LinkedList<Tail> startBody = new LinkedList<>(hero.body());
         // просто тик
         hero.tick();
         hero.eat();
-        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.body());
         assertTrue("Змейка мертва!", hero.isAlive());
         // если яблоко
         applesAtAllPoints(true);
         hero.tick();
         hero.eat();
         applesAtAllPoints(false);
-        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.body());
         assertTrue("Змейка мертва!", hero.isAlive());
         // если камень
         stonesAtAllPoints(true);
         hero.tick();
         hero.eat();
         stonesAtAllPoints(false);
-        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.body());
         assertTrue("Змейка мертва!", hero.isAlive());
         // если стена
         wallsAtAllPoints(true);
         hero.tick();
         hero.eat();
         wallsAtAllPoints(false);
-        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.body());
         assertTrue("Змейка мертва!", hero.isAlive());
     }
 

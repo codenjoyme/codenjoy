@@ -33,9 +33,12 @@ import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -401,7 +404,7 @@ public class SnakeBoard implements Field {
 
     private boolean freeOfHero(Point pt) {
         for (Hero h : getHeroes()) {
-            if (h != null && h.getBody().contains(pt) &&
+            if (h != null && h.body().contains(pt) &&
                     !pt.equals(h.getTailPoint()))
                 return false;
         }
@@ -437,7 +440,7 @@ public class SnakeBoard implements Field {
     public Hero enemyEatenWith(Hero me) {
         return aliveEnemies(me)
                 .filter(h -> !h.isFlying())
-                .filter(h -> h.getBody().contains(me.head()))
+                .filter(h -> h.body().contains(me.head()))
                 .findFirst()
                 .orElse(null);
     }
@@ -586,7 +589,10 @@ public class SnakeBoard implements Field {
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>(){{
-                    SnakeBoard.this.getHeroes().forEach(hero -> addAll(hero.getBody()));
+                    drawHeroes(hero -> !hero.isAlive(), hero -> Arrays.asList(hero.head()));
+                    drawHeroes(hero -> hero.isFlying(), hero -> hero.body());
+                    drawHeroes(hero -> !hero.isFlying(), hero -> hero.body());
+
                     addAll(SnakeBoard.this.getWalls());
                     addAll(SnakeBoard.this.getApples());
                     addAll(SnakeBoard.this.getStones());
@@ -600,7 +606,16 @@ public class SnakeBoard implements Field {
                             remove(p);
                         }
                     }
-                }};
+                }
+
+                    private void drawHeroes(Predicate<Hero> filter,
+                                            Function<Hero, List<? extends Point>> getElements)
+                    {
+                        SnakeBoard.this.getHeroes().stream()
+                                .filter(filter)
+                                .forEach(hero -> addAll(getElements.apply(hero)));
+                    }
+                };
             }
         };
     }
@@ -632,7 +647,7 @@ public class SnakeBoard implements Field {
             return new Wall(pt);
         }
         for (Player player : players) {
-            if (player.getHero().getBody().contains(pt)) {
+            if (player.getHero().body().contains(pt)) {
                 return player.getHero().neck(); // это просто любой объект типа Tail
             }
         }

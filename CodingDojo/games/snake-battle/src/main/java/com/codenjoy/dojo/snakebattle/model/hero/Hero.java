@@ -75,7 +75,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         furyCount = 0;
     }
 
-    public List<Tail> getBody() {
+    public List<Tail> body() {
         return elements;
     }
 
