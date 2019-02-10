@@ -239,7 +239,7 @@ public class RestBoardController {
             time = actionLogger.getLastTime(id);
         }
 
-        List<BoardLog> result = actionLogger.getBoardLogsFor(id, time);
+        List<BoardLog> result = actionLogger.getBoardLogsFor(id, time, 100);
 
         if (result.isEmpty()) {
             return Arrays.asList();

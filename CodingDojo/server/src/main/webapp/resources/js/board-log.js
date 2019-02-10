@@ -30,7 +30,7 @@ pages.boardLog = function() {
     game.enablePlayerInfoLevel = false;
     game.enableLeadersTable = false;
     game.enableInfo = false;
-    game.enableHotkeys = false;
+    game.enableHotkeys = true;
     game.enableAdvertisement = false;
     game.showBody = true;
     game.sprites = null;
@@ -71,11 +71,16 @@ function loadLogs(playerName, time, onLoad) {
     });
 }
 
-function initLogs(gameName, boardSize, alphabet, playerName) {
-    var time = 0;
+var logTicks = [];
+var currentTick = 0;
+var firstTick = null;
+var lastTick = null;
 
-    loadLogs(playerName, time, function(ticks) {
-        var tick = ticks[0];
+function initLogs(gameName, boardSize, alphabet, playerName) {
+
+    function loadTick(time) {
+        currentTick = time;
+        var tick = logTicks[time];
 
         var data = {};
         var info = data[playerName] = {};
@@ -98,8 +103,103 @@ function initLogs(gameName, boardSize, alphabet, playerName) {
         info.heroesData.group[0] = playerName;
 
         $('body').trigger('board-updated', data);
+    }
+
+    function loadNewLogs(time, onLoad) {
+        if (firstTick == time || lastTick == time) {
+            if (!!onLoad) {
+                onLoad(time);
+            }
+            return;
+        }
+
+        loadLogs(playerName, time, function(ticks) {
+            var max = 0;
+            for (var index in ticks) {
+                var tick = ticks[index];
+                logTicks[tick.time] = tick;
+                if (max < tick.time) {
+                    max = tick.time;
+                }
+            }
+            if (time == 0) {
+                time = max;
+            } else {
+                if (!firstTick && !findSmaller(time)) {
+                    firstTick = time;
+                }
+                if (!lastTick && !findLarger(time)) {
+                    lastTick = time;
+                }
+            }
+            if (!!onLoad) {
+                onLoad(time);
+            }
+        });
+    }
+
+    function findNext(from, filter) {
+        var minDelta = Number.MAX_SAFE_INTEGER;
+        var result = -1;
+        for (var time in logTicks) {
+
+            if (!filter(time)) {
+                continue;
+            }
+
+            var delta = Math.abs(from - time);
+            if (delta < minDelta) {
+                minDelta = delta;
+                result = time;
+            }
+        }
+
+        if (result == -1) {
+            return null;
+        }
+
+        return result;
+    }
+
+    function findSmaller(time) {
+        return findNext(time, function(it) { return it < time; })
+    }
+
+    function findLarger(time) {
+        return findNext(time, function(it) { return it > time; })
+    }
+
+    function goPast() {
+        var time = findSmaller(currentTick);
+        if (!!time) {
+            loadTick(time);
+        } else {
+            loadNewLogs(currentTick, function(time) {
+                loadTick(time);
+            });
+        }
+    }
+
+    function goFuture() {
+        var time = findLarger(currentTick);
+        if (!!time) {
+            loadTick(time);
+        } else {
+            loadNewLogs(currentTick, function(time) {
+                loadTick(time);
+            });
+        }
+    }
+
+    $('body').keydown(function(ev) {
+        if (ev.keyCode == 37) { // left
+            goPast();
+        } else if (ev.keyCode == 39) { // right
+            goFuture();
+        }
     });
 
-
-
+    loadNewLogs(0, function(time) {
+        loadTick(time);
+    });
 }

@@ -144,9 +144,15 @@ public class ActionLogger extends Suspendable {
     }
 
     // TODO test me
-    public List<BoardLog> getBoardLogsFor(String player, long time) {
-        return pool.select("SELECT * FROM player_boards WHERE player_name = ? AND time <= ? ORDER BY time ASC LIMIT 200;",
-                new Object[]{ player, JDBCTimeUtils.toString(new java.util.Date(time))},
+    public List<BoardLog> getBoardLogsFor(String player, long time, int count) {
+        return pool.select(
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_name = ? AND time <= ? ORDER BY time ASC LIMIT ?) AS before" +
+                    " UNION " +
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_name = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
+                new Object[]{
+                    player, JDBCTimeUtils.toString(new java.util.Date(time)), count + 1,
+                    player, JDBCTimeUtils.toString(new java.util.Date(time)), count
+                },
                 rs -> getBoardLogs(rs));
     }
 }
