@@ -139,7 +139,9 @@ public class SnakeBoard implements Field {
         // после еды у змеек отрастают хвосты, поэтому столкновения нужно повторить
         // чтобы обработать ситуацию "кусь за растущий хвост", иначе eatTailThatGrows тесты не пройдут
         snakesFight();
-        rewardTheWinner();
+        if (winnerTimer.done()) {
+            rewardTheWinner();
+        }
         setNewObjects();
     }
 
