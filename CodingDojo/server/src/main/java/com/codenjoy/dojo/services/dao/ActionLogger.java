@@ -102,7 +102,7 @@ public class ActionLogger extends Suspendable {
     public void log(PlayerGames playerGames) {
         if (!active || playerGames.size() == 0) return;
 
-        long tick = System.currentTimeMillis();
+        long tick = now();
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             cache.add(new BoardLog(tick,
@@ -119,15 +119,34 @@ public class ActionLogger extends Suspendable {
         }
     }
 
+    protected long now() {
+        return System.currentTimeMillis();
+    }
+
     public List<BoardLog> getAll() {
         return pool.select("SELECT * FROM player_boards;",
-                rs -> {
-                    List<BoardLog> result = new LinkedList<>();
-                    while (rs.next()) {
-                        result.add(new BoardLog(rs));
-                    }
-                    return result;
+                rs -> getBoardLogs(rs));
+    }
+
+    private LinkedList<BoardLog> getBoardLogs(ResultSet rs) throws SQLException {
+        return new LinkedList<BoardLog>(){{
+                while (rs.next()) {
+                    add(new BoardLog(rs));
                 }
-        );
+            }};
+    }
+
+    // TODO test me
+    public long getLastTime(String player) {
+        return pool.select("SELECT MAX(time) AS time FROM player_boards WHERE player_name = ?;",
+                new Object[]{ player },
+                rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
+    }
+
+    // TODO test me
+    public List<BoardLog> getBoardLogsFor(String player, long time) {
+        return pool.select("SELECT * FROM player_boards WHERE player_name = ? AND time <= ? ORDER BY time ASC LIMIT 200;",
+                new Object[]{ player, JDBCTimeUtils.toString(new java.util.Date(time))},
+                rs -> getBoardLogs(rs));
     }
 }

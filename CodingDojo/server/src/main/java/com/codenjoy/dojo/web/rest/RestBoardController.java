@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
@@ -42,6 +43,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.ServletContext;
 import java.util.*;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+
 @Controller
 @RequestMapping(value = "/rest")
 public class RestBoardController {
@@ -56,6 +60,7 @@ public class RestBoardController {
     @Autowired private PlayerGamesView playerGamesView;
     @Autowired private TimerService timerService;
     @Autowired private SaveService saveService;
+    @Autowired private ActionLogger actionLogger;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -205,9 +210,9 @@ public class RestBoardController {
             @PathVariable("code") String code,
             @PathVariable("gameName") String gameName)
     {
-        validator.checkPlayerName(emailOrId, Validator.CAN_BE_NULL);
-        validator.checkCode(code, Validator.CAN_BE_NULL);
-        validator.checkGameName(gameName, Validator.CANT_BE_NULL);
+        validator.checkPlayerName(emailOrId, CAN_BE_NULL);
+        validator.checkCode(code, CAN_BE_NULL);
+        validator.checkGameName(gameName, CANT_BE_NULL);
 
         String context = getContext();
         GameTypeInfo gameType = getGameType(gameName);
@@ -218,5 +223,22 @@ public class RestBoardController {
 
         return new PPlayerWantsToPlay(context, gameType,
                 registered, sprites, alphabet, players);
+    }
+
+    // TOOD test me
+    @RequestMapping(value = "/player/{player}/log/{time}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<BoardLog> changeLevel(@PathVariable("player") String emailOrId,
+                                            @PathVariable("time") Long time)
+    {
+        validator.checkPlayerName(emailOrId, CANT_BE_NULL);
+
+        String id = registration.checkUser(emailOrId);
+
+        if (time == null || time == 0) {
+            time = actionLogger.getLastTime(id);
+        }
+
+        return actionLogger.getBoardLogsFor(id, time);
     }
 }

@@ -197,13 +197,11 @@ public class Scores {
     public List<String> getDays() {
         return pool.select("SELECT DISTINCT day FROM scores;",
                 new Object[0],
-                rs -> {
-                    List<String> result = new LinkedList<>();
+                rs -> new LinkedList<String>() {{
                     while (rs.next()) {
-                        result.add(rs.getString(1));
+                        add(rs.getString(1));
                     }
-                    return result;
-                });
+                }});
     }
 
     public void removeByDay(String day) {
