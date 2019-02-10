@@ -29,11 +29,11 @@ pages.board = function() {
     game.allPlayersScreen = getSettings('allPlayersScreen');
     game.contextPath = getSettings('contextPath');
 
-    initBoardPage(game);
+    initBoardPage(game, initBoardComponents);
     initHotkeys();
 }
 
-function initBoardPage(game) {
+function initBoardPage(game, onLoad) {
     loadData('/rest/player/' + game.playerName + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
         game.contextPath = gameData.context;
         game.multiplayerType = gameData.gameType.multiplayerType;
@@ -55,7 +55,9 @@ function initBoardPage(game) {
             }
         }
 
-        initBoardComponents(game);
+        if (!!onLoad) {
+            onLoad(game);
+        }
     });
 }
 

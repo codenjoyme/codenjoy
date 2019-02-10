@@ -122,6 +122,22 @@ public class BoardController {
         return (justBoard == null || !justBoard) ? "board" : "board-only";
     }
 
+    @RequestMapping(value = "/board/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+            method = RequestMethod.GET)
+    public String boardPlayerLog(ModelMap model, @PathVariable("playerName") String playerName) {
+        validator.checkPlayerName(playerName, CANT_BE_NULL);
+
+        Player player = playerService.get(playerName);
+        if (player == NullPlayer.INSTANCE) {
+            return "redirect:/register?name=" + playerName;
+        }
+
+        model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute("playerName", player.getName());
+
+        return "board-log";
+    }
+
     @RequestMapping(value = "/board", method = RequestMethod.GET)
     public String boardAll() {
         GameType gameType = playerService.getAnyGameWithPlayers();

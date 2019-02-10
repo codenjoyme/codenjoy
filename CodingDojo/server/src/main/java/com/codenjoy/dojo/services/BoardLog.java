@@ -94,4 +94,8 @@ public class BoardLog {
     public long getTime() {
         return time;
     }
+
+    public void setBoard(String board) {
+        this.board = board;
+    }
 }

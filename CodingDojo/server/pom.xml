@@ -326,6 +326,7 @@
                                 <jsInclude>rules.js</jsInclude>
                                 <jsInclude>board.js</jsInclude>
                                 <jsInclude>board-only.js</jsInclude>
+                                <jsInclude>board-log.js</jsInclude>
                             </jsSourceFiles>
                             <jsFinalFile>all.js</jsFinalFile>
                         </configuration>

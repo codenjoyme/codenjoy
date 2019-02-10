@@ -239,6 +239,20 @@ public class RestBoardController {
             time = actionLogger.getLastTime(id);
         }
 
-        return actionLogger.getBoardLogsFor(id, time);
+        List<BoardLog> result = actionLogger.getBoardLogsFor(id, time);
+
+        if (result.isEmpty()) {
+            return Arrays.asList();
+        }
+
+        // TODO Как-то тут сложно
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameService.getGame(result.get(0).getGameType()).getPlots());
+
+        result.forEach(log -> {
+            String board = log.getBoard().replaceAll("\n", "");
+            log.setBoard((String) decoder.encodeForBrowser(board));
+        });
+
+        return result;
     }
 }
