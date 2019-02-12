@@ -116,7 +116,6 @@ public class Validator {
         }
     }
 
-    // TODO test me
     public void checkCommand(String input) {
         if (!PlayerCommand.isValid(input)) {
             throw new IllegalArgumentException(String.format("Command is invalid: '%s'", input));

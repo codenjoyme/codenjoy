@@ -224,6 +224,95 @@ public class ValidatorTest {
                 () -> validator.checkMD5("some@email.com"));
     }
 
+    @Test
+    public void validateCommand() {
+        shouldError("Command is invalid: 'null'",
+                () -> validator.checkCommand(null));
+
+        shouldError("Command is invalid: ''",
+                () -> validator.checkCommand(""));
+
+        shouldError("Command is invalid: 'NuLL'",
+                () -> validator.checkCommand("NuLL"));
+
+        shouldError("Command is invalid: 'null'",
+                () -> validator.checkCommand("null"));
+
+        shouldError("Command is invalid: 'NULL'",
+                () -> validator.checkCommand("NULL"));
+
+        shouldError("Command is invalid: '*F(@DF^@(&@DF(@^'",
+                () -> validator.checkCommand("*F(@DF^@(&@DF(@^"));
+
+        shouldError("Command is invalid: '3-13dc7cb57f02b9c7c066b9e34b6fe72'",
+                () -> validator.checkCommand("3-13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Command is invalid: '3_13dc7cb57f02b9c7c066b9e34b6fe72'",
+                () -> validator.checkCommand("3_13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Command is invalid: '3.13dc7cb57f02b9c7c066b9e34b6fe72'",
+                () -> validator.checkCommand("3.13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Command is invalid: '1'",
+                () -> validator.checkCommand("1"));
+
+        shouldError("Command is invalid: '0'",
+                () -> validator.checkCommand("0"));
+
+        shouldError("Command is invalid: '434589345613405760956134056340596345903465'",
+                () -> validator.checkCommand("434589345613405760956134056340596345903465"));
+
+        shouldOk(() -> validator.checkCommand("act(1,2,3),Left,messAGE('SOME TEXT'),RIGHT,ACT(),down,uP,act(1, 2 , 3)  ,DOWN"));
+
+        shouldOk(() -> validator.checkCommand("act()"));
+
+        shouldOk(() -> validator.checkCommand("DOWN"));
+
+        shouldOk(() -> validator.checkCommand("leFT"));
+
+        shouldOk(() -> validator.checkCommand("right,up"));
+
+        shouldOk(() -> validator.checkCommand("left()"));
+
+        shouldOk(() -> validator.checkCommand("act()()"));
+
+        shouldOk(() -> validator.checkCommand("act(1,       2)"));
+
+        shouldOk(() -> validator.checkCommand("act"));
+
+        shouldOk(() -> validator.checkCommand("act(1, 34"));
+
+        // TODO вот тут как-то не совсем верно
+        shouldOk(() -> validator.checkCommand("right?up"));
+        shouldOk(() -> validator.checkCommand("-right,up"));
+        shouldOk(() -> validator.checkCommand("&^@#%&^right@#$&*up@$"));
+
+        shouldError("Command is invalid: 'qwe'",
+                () -> validator.checkCommand("qwe"));
+
+        shouldError("Command is invalid: 'qwe,asd'",
+                () -> validator.checkCommand("qwe,asd"));
+
+        shouldError("Command is invalid: 'qwe(1,3)'",
+                () -> validator.checkCommand("qwe(1,3)"));
+
+        shouldOk(() -> validator.checkCommand("message('кириллица')"));
+
+        shouldOk(() -> validator.checkCommand("message('latin')"));
+
+        shouldOk(() -> validator.checkCommand("message(''')"));
+
+        shouldOk(() -> validator.checkCommand("message(''''''''')"));
+
+        shouldError("Command is invalid: 'messAGE('TOO LARGE'),message('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')'",
+                () -> validator.checkCommand("messAGE('TOO LARGE'),message('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')"));
+
+        shouldError("Command is invalid: 'some@email.com'",
+                () -> validator.checkCommand("some@email.com"));
+
+        shouldOk(() -> validator.checkCommand("message('some@email.com')"));
+    }
+
     private void shouldOk(Runnable toRun) {
         shouldError("", toRun);
     }

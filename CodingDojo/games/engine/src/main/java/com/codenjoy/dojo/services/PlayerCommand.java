@@ -32,6 +32,7 @@ public class PlayerCommand {
 
     private static Logger logger = DLoggerFactory.getLogger(PlayerCommand.class);
 
+    public static final int MAX_COMMAND_LENGTH = 100;
     private static final String COMMAND = "(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))";
     private static Pattern PATTERN = Pattern.compile(COMMAND, Pattern.CASE_INSENSITIVE);
 
@@ -48,7 +49,9 @@ public class PlayerCommand {
     }
 
     public static boolean isValid(String command) {
-        return command != null && PATTERN.matcher(command).find();
+        return command != null
+                && command.length() < MAX_COMMAND_LENGTH
+                && PATTERN.matcher(command).find();
     }
 
     public void execute(){
