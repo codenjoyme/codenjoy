@@ -101,6 +101,82 @@ public class ValidatorTest {
                 () -> validator.checkCode("some@email.com", CANT_BE_NULL));
     }
 
+    @Test
+    public void validateGameName() {
+        shouldError("Game name is invalid: 'null'",
+                () -> validator.checkGameName(null, CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName(null, CAN_BE_NULL));
+
+        shouldError("Game name is invalid: ''",
+                () -> validator.checkGameName("", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("", CAN_BE_NULL));
+
+        shouldError("Game name is invalid: 'NuLL'",
+                () -> validator.checkGameName("NuLL", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("NuLL", CAN_BE_NULL));
+
+        shouldError("Game name is invalid: 'null'",
+                () -> validator.checkGameName("null", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("null", CAN_BE_NULL));
+
+        shouldError("Game name is invalid: 'NULL'",
+                () -> validator.checkGameName("NULL", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("NULL", CAN_BE_NULL));
+
+        shouldError("Game name is invalid: '*F(@DF^@(&@DF(@^'",
+                () -> validator.checkGameName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                () -> validator.checkGameName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: '-game'",
+                () -> validator.checkGameName("-game", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: 'game-'",
+                () -> validator.checkGameName("game-", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("a-game", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: '_game'",
+                () -> validator.checkGameName("_game", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: 'game_'",
+                () -> validator.checkGameName("game_", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("a_game", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: '.game'",
+                () -> validator.checkGameName(".game", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: 'game.'",
+                () -> validator.checkGameName("game.", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("a.game", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: '1'",
+                () -> validator.checkGameName("1", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("a1", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("a1", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: '0'",
+                () -> validator.checkGameName("0", CAN_BE_NULL));
+
+        shouldError("Game name is invalid: '434589345613405760956134056340596345903465'",
+                () -> validator.checkGameName("434589345613405760956134056340596345903465", CANT_BE_NULL));
+
+        shouldOk(() -> validator.checkGameName("someGame", CANT_BE_NULL));
+
+        shouldError("Game name is invalid: 'some@email.com'",
+                () -> validator.checkGameName("some@email.com", CANT_BE_NULL));
+    }
+
     private void shouldOk(Runnable toRun) {
         shouldError("", toRun);
     }

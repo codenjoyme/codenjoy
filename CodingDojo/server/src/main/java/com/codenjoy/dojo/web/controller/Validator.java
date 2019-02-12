@@ -50,7 +50,7 @@ public class Validator {
     public static final String ID_PART = "[A-Za-z0-9]{1," + MAX_PLAYER_ID_LENGTH + "}";
     public static final String ID = "^" + ID_PART + "$";
     public static final String EMAIL_OR_ID = "^(?:" + EMAIL_PART + ")|(?:" + ID_PART + ")$";
-    public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
+    public static final String GAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
     public static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
 
@@ -101,7 +101,6 @@ public class Validator {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
-    // TODO test me
     public void checkGameName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
