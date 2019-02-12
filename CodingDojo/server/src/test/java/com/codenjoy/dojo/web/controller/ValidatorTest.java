@@ -1,5 +1,27 @@
 package com.codenjoy.dojo.web.controller;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2019 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.apache.commons.lang.StringUtils;
@@ -406,11 +428,27 @@ public class ValidatorTest {
     public void validateCheckReadablePlayerName() {
         shouldOk(() -> validator.checkReadableName("Стивен Пупкин"));
 
+        shouldOk(() -> validator.checkReadableName("Oleksandr Baglay"));
+
         shouldOk(() -> validator.checkReadableName("Stiven Pupkin"));
 
         shouldOk(() -> validator.checkReadableName("стивен пупкин"));
 
         shouldOk(() -> validator.checkReadableName("stiven pupkin"));
+
+        shouldOk(() -> validator.checkReadableName("ABCDEFGHIJKLMNOPQRSTUVQXYZ abcdefghijklmnopqrstuvqxyz"));
+
+        shouldOk(() -> validator.checkReadableName("abcdefghijklmnopqrstuvqxyz ABCDEFGHIJKLMNOPQRSTUVQXYZ"));
+
+        shouldOk(() -> validator.checkReadableName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
+
+        shouldOk(() -> validator.checkReadableName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
+
+        shouldOk(() -> validator.checkReadableName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
+
+        shouldOk(() -> validator.checkReadableName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
+
+        shouldOk(() -> validator.checkReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
 
         shouldError("Readable player name is invalid: 'Стивен'",
                 () -> validator.checkReadableName("Стивен"));
@@ -421,8 +459,8 @@ public class ValidatorTest {
         shouldError("Readable player name is invalid: 'Дефис-нельзя'",
                 () -> validator.checkReadableName("Дефис-нельзя"));
 
-        shouldError("Readable player name is invalid: 'Двапробела нельзя'",
-                () -> validator.checkReadableName("Двапробела нельзя"));
+        shouldError("Readable player name is invalid: 'Двапробела  нельзя'",
+                () -> validator.checkReadableName("Двапробела  нельзя"));
 
         shouldError("Readable player name is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
                 () -> validator.checkReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
