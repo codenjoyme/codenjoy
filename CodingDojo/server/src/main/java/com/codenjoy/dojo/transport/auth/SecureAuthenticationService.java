@@ -53,7 +53,13 @@ public class SecureAuthenticationService implements AuthenticationService {
             return user;
         }
 
-        String result = registration.checkUser(user, code);
+        String result = null;
+        try {
+            result = registration.checkUser(user, code);
+        } catch (Exception e) {
+            logger.error(String.format("Error during check user on authenticate " +
+                    "for user %s with code %s", user, code), e);
+        }
 
         if (logger.isDebugEnabled()) {
             logger.debug("User {} with code {} logged as {}", user, code, result);
