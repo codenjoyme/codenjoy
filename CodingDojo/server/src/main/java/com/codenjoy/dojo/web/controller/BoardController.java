@@ -25,7 +25,6 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
@@ -84,16 +83,16 @@ public class BoardController {
         return boardPlayer(model, playerId, null, justBoard);
     }
 
-    // TODO а тут точно надо 'remove' в params = {"code", "remove"} ?
+
     @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
     public String removePlayer(@PathVariable("playerName") String playerName, @RequestParam("code") String code) {
-        validator.checkPlayerName(playerName, CANT_BE_NULL);
-        validator.checkCode(code, CANT_BE_NULL);
+        String playerId = validator.checkPlayerCode(playerName, code);
 
-        Player player = playerService.get(registration.getEmail(code));
+        Player player = playerService.get(playerId);
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?name=" + playerName;
         }
+
         playerService.remove(player.getName());
         return "redirect:/";
     }
