@@ -64,7 +64,7 @@ public class MainPageController {
     }
 
     @RequestMapping(value = "/help", params = "gameName", method = RequestMethod.GET)
-    public String helpForGame(Model model, @RequestParam("gameName") String gameName) {
+    public String helpForGame(@RequestParam("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
         String language = properties.getHelpLanguage();
