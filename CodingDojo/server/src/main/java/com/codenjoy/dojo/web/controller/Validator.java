@@ -33,6 +33,9 @@ import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
 
+import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_CODE_LENGTH;
+import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_ID_LENGTH;
+
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
  */
@@ -42,15 +45,17 @@ public class Validator {
     public static final boolean CAN_BE_NULL = true;
     public static final boolean CANT_BE_NULL = !CAN_BE_NULL;
 
-    public static final String EMAIL_OR_ID = "^(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})|(?:[A-Za-z0-9]+)$";
-    public static final String EMAIL = "^[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
-    public static final String ID = "^[A-Za-z0-9]+$";
+    public static final String EMAIL_PART = "(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}){6," + MAX_PLAYER_ID_LENGTH + "}";
+    public static final String EMAIL = "^" + EMAIL_PART + "$";
+    public static final String ID_PART = "[A-Za-z0-9]{1," + MAX_PLAYER_ID_LENGTH + "}";
+    public static final String ID = "^" + ID_PART + "$";
+    public static final String EMAIL_OR_ID = "^(?:" + EMAIL_PART + ")|(?:" + ID_PART + ")$";
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
-    public static final String CODE = "^[0-9]{1,50}$";
+    public static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
 
-    @Autowired private Registration registration;
-    @Autowired private ConfigProperties properties;
+    @Autowired protected Registration registration;
+    @Autowired protected ConfigProperties properties;
 
     private final Pattern email;
     private final Pattern id;
@@ -67,8 +72,9 @@ public class Validator {
     }
 
     public void checkPlayerId(String input) {
-        if (isEmpty(input)) {
-            throw new IllegalArgumentException("Player id is invalid: " + input);
+        boolean empty = isEmpty(input);
+        if (empty || !id.matcher(input).matches()) {
+            throw new IllegalArgumentException(String.format("Player id is invalid: '%s'", input));
         }
     }
 
