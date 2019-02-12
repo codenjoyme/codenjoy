@@ -11,6 +11,8 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ValidatorTest {
 
@@ -311,6 +313,25 @@ public class ValidatorTest {
                 () -> validator.checkCommand("some@email.com"));
 
         shouldOk(() -> validator.checkCommand("message('some@email.com')"));
+    }
+
+    @Test
+    public void validateCheckIsAdmin() {
+        when(properties.getAdminPassword()).thenReturn("admin");
+
+        shouldError("Unauthorized admin access",
+                () -> validator.checkIsAdmin(null));
+
+        shouldError("Unauthorized admin access",
+                () -> validator.checkIsAdmin(""));
+
+        shouldError("Unauthorized admin access",
+                () -> validator.checkIsAdmin("admin"));
+
+        shouldError("Unauthorized admin access",
+                () -> validator.checkIsAdmin("BAD_21232f297a57a5a743894a0e4a801fc3"));
+
+        shouldOk(() -> validator.checkIsAdmin("21232f297a57a5a743894a0e4a801fc3"));
     }
 
     private void shouldOk(Runnable toRun) {

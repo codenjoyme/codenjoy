@@ -133,7 +133,6 @@ public class Validator {
         return id;
     }
 
-    // TODO test me
     public void checkIsAdmin(String password) {
         if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(password)){
             throw new RuntimeException("Unauthorized admin access");
