@@ -78,7 +78,6 @@ public class Validator {
         }
     }
 
-    // TODO test me
     public void checkPlayerName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
