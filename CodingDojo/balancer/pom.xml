@@ -21,22 +21,22 @@
         <jackson.version>2.9.8</jackson.version>
         <mail-api.version>1.6.2</mail-api.version>
         <json.version>20180813</json.version>
+        <logback.version>1.2.3</logback.version>
+        <commons-collections.version>4.3</commons-collections.version>
+        <commons-lang.version>3.8.1</commons-lang.version>
+        <reflections.version>0.9.11</reflections.version>
+        <joda-time.version>2.10.1</joda-time.version>
         <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
-        <!--TODO продолжить обновлять версии зависимостей ниже-->
+        <!--TODO обновить postgre и потестить-->
         <postgresql-jdbc.version>9.1-901-1.jdbc4</postgresql-jdbc.version>
-        <logback.version>1.1.7</logback.version>
-        <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <reflections.version>0.9.9-RC2</reflections.version>
-        <joda-time.version>2.9.4</joda-time.version>
-        <cglib.version>2.1_3</cglib.version>
+        <cglib.version>3.2.10</cglib.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
-        <rest-assured.version>2.9.0</rest-assured.version>
-        <selenium.version>2.20.0</selenium.version>
+        <rest-assured.version>3.3.0</rest-assured.version>
+        <selenium.version>3.141.59</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
-        <tetng.version>6.14.3</tetng.version>
-        <mockito.version>1.10.19</mockito.version>
+        <testng.version>6.14.3</testng.version>
+        <mockito.version>2.24.0</mockito.version>
 
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
@@ -186,13 +186,13 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
             <version>${commons-collections.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
         <dependency>
@@ -203,7 +203,7 @@
 
         <!-- TESTING -->
         <dependency>
-            <groupId>com.jayway.restassured</groupId>
+            <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured.version}</version>
             <scope>test</scope>
@@ -217,12 +217,12 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>${tetng.version}</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>

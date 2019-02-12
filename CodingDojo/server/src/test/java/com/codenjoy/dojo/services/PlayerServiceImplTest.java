@@ -169,7 +169,7 @@ public class PlayerServiceImplTest {
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         doAnswer(inv -> {
-            String email = inv.getArgumentAt(0, String.class);
+            String email = inv.getArgument(0);
             return "readable_" + email.split("@")[0];
         }).when(registration).getReadableName(anyString());
 

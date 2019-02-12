@@ -107,7 +107,7 @@ public class PlayerServiceImplIntegrationTest {
         int ai2 = 0;
         int ai3 = 0;
         when(gameService.getGame(anyString())).thenAnswer(
-                inv -> getOrCreateGameType(inv.getArgumentAt(0, String.class))
+                inv -> getOrCreateGameType(inv.getArgument(0))
         );
 
         // первый плеер зарегался
