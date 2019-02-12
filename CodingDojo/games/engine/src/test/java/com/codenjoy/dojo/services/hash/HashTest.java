@@ -68,4 +68,37 @@ public class HashTest {
 
         assertEquals(decodedEmail, email);
     }
+
+    @Test
+    public void getCode() {
+        assertEquals("332508025959427091", Hash.getCode("some@email.com", "password"));
+        assertEquals("1692647133079004397", Hash.getCode("some@email.com", "password1"));
+        assertEquals("4328714851439546419", Hash.getCode("some1@email.com", "password"));
+        assertEquals("9202308006379358423", Hash.getCode("some2@email.com", "password"));
+        assertEquals("9190844035320923121", Hash.getCode("some@email.com", "password2"));
+        assertEquals("5604620294581909543", Hash.getCode("some2@email.com", "password2"));
+        assertEquals("8875365410164739627", Hash.getCode("other@qweasd.com", "&DF^(3f#"));
+        assertEquals("2629080835288317399", Hash.getCode("", ""));
+        assertEquals("3967685628367253962", Hash.getCode("a", ""));
+        assertEquals("2534205565314907788", Hash.getCode("aa", ""));
+        assertEquals("2185515729311252789", Hash.getCode("aaa", ""));
+        assertEquals("1823907032787024471", Hash.getCode("aaaa", ""));
+        assertEquals("6422843662087450229", Hash.getCode("aaaaa", ""));
+        assertEquals("8031143483660354678", Hash.getCode("aaaaaa", ""));
+        assertEquals("7327808622569386488", Hash.getCode("aaaaaaa", ""));
+        assertEquals("4868999876524578793", Hash.getCode("aaaaaaaa", ""));
+        assertEquals("7435395250271427528", Hash.getCode("aaaaaaaaa", ""));
+        assertEquals("7329568606724989118", Hash.getCode("aaaaaaaaaa", ""));
+        assertEquals("2629080835288317399", Hash.getCode("", ""));
+        assertEquals("1822563622007870532", Hash.getCode("", "a"));
+        assertEquals("9081627849986635866", Hash.getCode("", "aa"));
+        assertEquals("9188476625050457977", Hash.getCode("", "aaa"));
+        assertEquals("7910242258643120595", Hash.getCode("", "aaaa"));
+        assertEquals("5891487770313027016", Hash.getCode("", "aaaaa"));
+        assertEquals("6517161914849431196", Hash.getCode("", "aaaaaa"));
+        assertEquals("6550003572887281106", Hash.getCode("", "aaaaaaa"));
+        assertEquals("6438391547563772104", Hash.getCode("", "aaaaaaaa"));
+        assertEquals("2573975121814597326", Hash.getCode("", "aaaaaaaaa"));
+        assertEquals("6234584207232655936", Hash.getCode("", "aaaaaaaaaa"));
+    }
 }
