@@ -47,11 +47,10 @@ public class JoystickController {
                            @RequestParam("code") String code,
                            @RequestParam("command") String command)
     {
-        validator.checkPlayerName(playerName, CANT_BE_NULL);
-        validator.checkCode(code, CANT_BE_NULL);
         validator.checkCommand(command);
+        String playerId = validator.checkPlayerCode(playerName, code);
 
-        Player registeredPlayer = playerService.get(registration.getEmail(code));
+        Player registeredPlayer = playerService.get(playerId);
         if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getName().equals(playerName)) {
             return "fail";
         }
