@@ -5,6 +5,7 @@ import RulesContainer from './RulesContainer';
 import HomeContainer from './HomeContainer';
 import PrivacyPolicyContainer from './PrivacyPolicyContainer';
 import PrivacyRulesContainer from './PrivacyRulesContainer';
+import UnavailableContainer from './UnavailableContainer';
 
 export {
     BoardContainer,
@@ -14,4 +15,5 @@ export {
     HomeContainer,
     PrivacyPolicyContainer,
     PrivacyRulesContainer,
+    UnavailableContainer,
 };

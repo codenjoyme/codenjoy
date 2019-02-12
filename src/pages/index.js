@@ -6,6 +6,7 @@ import RulesPage from './RulesPage';
 import HomePage from './HomePage';
 import PrivacyPolicyPage from './PrivacyPolicyPage';
 import PrivacyRulesPage from './PrivacyRulesPage';
+import UnavailablePage from './UnavailablePage';
 
 export {
     LoginPage,
@@ -16,4 +17,5 @@ export {
     HomePage,
     PrivacyPolicyPage,
     PrivacyRulesPage,
+    UnavailablePage,
 };

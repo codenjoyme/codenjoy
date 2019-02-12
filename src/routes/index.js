@@ -12,4 +12,5 @@ export const book = Object.freeze({
     privacyPolicy:       '/privacyPolicy',
     privacyRules:        '/privacyRules',
     rules:               '/rules',
+    unavailable:         '/unavailable',
 });
