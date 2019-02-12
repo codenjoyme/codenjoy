@@ -48,12 +48,12 @@ public class GameDataController {
         this.gameData = gameData;
     }
 
-    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.GET)
+//    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.GET)
     public @ResponseBody String get(@PathVariable("gameType") String gameType, @PathVariable("key") String key) {
         return gameData.get(gameType, key);
     }
 
-    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.POST)
+//    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.POST)
     public @ResponseBody String set(@PathVariable("gameType") String gameType, @PathVariable("key") String key, @RequestBody String value) {
         try {
             gameData.set(gameType, key, URLDecoder.decode(value, "UTF-8"));

@@ -117,7 +117,7 @@ public class RegistrationController {
         return request.getLocalAddr();
     }
 
-    @RequestMapping(params = "approve", method = RequestMethod.GET)
+//    @RequestMapping(params = "approve", method = RequestMethod.GET)
     public String approveEmail(Model model, @RequestParam("approve") String link) {
         validator.checkMD5(link);
 
@@ -133,7 +133,7 @@ public class RegistrationController {
         return "redirect:/" + register(name, code, gameName, ip);
     }
 
-    @RequestMapping(params = "approved", method = RequestMethod.GET)
+//    @RequestMapping(params = "approved", method = RequestMethod.GET)
     public @ResponseBody String isEmailApproved(@RequestParam("approved") String email) throws InterruptedException {
         validator.checkPlayerName(email, CANT_BE_NULL);
 
@@ -148,7 +148,7 @@ public class RegistrationController {
         return getBoardUrl(code, player);
     }
 
-    @RequestMapping(params = "remove_me", method = RequestMethod.GET)
+//    @RequestMapping(params = "remove_me", method = RequestMethod.GET)
     public String removeUserFromGame(@RequestParam("code") String code) {
         validator.checkCode(code, CANT_BE_NULL);
 
