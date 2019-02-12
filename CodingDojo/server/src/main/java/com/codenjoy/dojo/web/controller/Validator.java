@@ -78,12 +78,13 @@ public class Validator {
         }
     }
 
+    // TODO test me
     public void checkPlayerName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
                 !empty && (email.matcher(input).matches() || id.matcher(input).matches())))
         {
-            throw new IllegalArgumentException("Player name/id is invalid: " + input);
+            throw new IllegalArgumentException(String.format("Player name/id is invalid: '%s'", input));
         }
     }
 
@@ -92,7 +93,7 @@ public class Validator {
         if (!(empty && canBeNull ||
                 !empty && code.matcher(input).matches()))
         {
-            throw new IllegalArgumentException("Player code is invalid: " + input);
+            throw new IllegalArgumentException(String.format("Player code is invalid: '%s'", input));
         }
     }
 
@@ -100,37 +101,42 @@ public class Validator {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
+    // TODO test me
     public void checkGameName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
                 !empty && gameName.matcher(input).matches()))
         {
-            throw new IllegalArgumentException("Game name is invalid: " + input);
+            throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
         }
     }
 
+    // TODO test me
     public void checkMD5(String input) {
         if (input == null || !md5.matcher(input).matches()) {
-            throw new IllegalArgumentException("Link hash is invalid: " + input);
+            throw new IllegalArgumentException(String.format("Link hash is invalid: '%s'", input));
         }
     }
 
+    // TODO test me
     public void checkCommand(String input) {
         if (!PlayerCommand.isValid(input)) {
-            throw new IllegalArgumentException("Command is invalid: " + input);
+            throw new IllegalArgumentException(String.format("Command is invalid: '%s'", input));
         }
     }
 
+    // TODO test me
     public String checkPlayerCode(String emailOrId, String code) {
         checkPlayerName(emailOrId, CANT_BE_NULL);
         checkCode(code, CANT_BE_NULL);
         String id = registration.checkUser(emailOrId, code);
         if (id == null) {
-            throw new IllegalArgumentException("Player code is invalid: " + code + " for player: " + emailOrId);
+            throw new IllegalArgumentException(String.format("Player code is invalid: '%s' for player: '%s'", code, emailOrId));
         }
         return id;
     }
 
+    // TODO test me
     public void checkIsAdmin(String password) {
         if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(password)){
             throw new RuntimeException("Unauthorized admin access");
