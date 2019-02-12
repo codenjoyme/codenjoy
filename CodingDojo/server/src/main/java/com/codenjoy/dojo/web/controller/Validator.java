@@ -110,10 +110,9 @@ public class Validator {
         }
     }
 
-    // TODO test me
     public void checkMD5(String input) {
         if (input == null || !md5.matcher(input).matches()) {
-            throw new IllegalArgumentException(String.format("Link hash is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format("Hash is invalid: '%s'", input));
         }
     }
 

@@ -177,6 +177,53 @@ public class ValidatorTest {
                 () -> validator.checkGameName("some@email.com", CANT_BE_NULL));
     }
 
+    @Test
+    public void validateMd5() {
+        shouldError("Hash is invalid: 'null'",
+                () -> validator.checkMD5(null));
+
+        shouldError("Hash is invalid: ''",
+                () -> validator.checkMD5(""));
+
+        shouldError("Hash is invalid: 'NuLL'",
+                () -> validator.checkMD5("NuLL"));
+
+        shouldError("Hash is invalid: 'null'",
+                () -> validator.checkMD5("null"));
+
+        shouldError("Hash is invalid: 'NULL'",
+                () -> validator.checkMD5("NULL"));
+
+        shouldError("Hash is invalid: '*F(@DF^@(&@DF(@^'",
+                () -> validator.checkMD5("*F(@DF^@(&@DF(@^"));
+
+        shouldError("Hash is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                () -> validator.checkMD5("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+
+        shouldError("Hash is invalid: '3-13dc7cb57f02b9c7c066b9e34b6fe72'",
+                () -> validator.checkMD5("3-13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Hash is invalid: '3_13dc7cb57f02b9c7c066b9e34b6fe72'",
+                () -> validator.checkMD5("3_13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Hash is invalid: '3.13dc7cb57f02b9c7c066b9e34b6fe72'",
+                () -> validator.checkMD5("3.13dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Hash is invalid: '1'",
+                () -> validator.checkMD5("1"));
+
+        shouldError("Hash is invalid: '0'",
+                () -> validator.checkMD5("0"));
+
+        shouldError("Hash is invalid: '434589345613405760956134056340596345903465'",
+                () -> validator.checkMD5("434589345613405760956134056340596345903465"));
+
+        shouldOk(() -> validator.checkMD5("313dc7cb57f02b9c7c066b9e34b6fe72"));
+
+        shouldError("Hash is invalid: 'some@email.com'",
+                () -> validator.checkMD5("some@email.com"));
+    }
+
     private void shouldOk(Runnable toRun) {
         shouldError("", toRun);
     }
