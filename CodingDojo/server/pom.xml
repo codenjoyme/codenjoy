@@ -17,7 +17,7 @@
         <jetty.version>9.3.25.v20180904</jetty.version>
         <jetty-jsp.version>9.2.26.v20180806</jetty-jsp.version>
         <jetty-io.version>9.3.25.v20180904</jetty-io.version>
-        <javax-servlet.version>3.1.0</javax-servlet.version>
+        <javax-servlet-api.version>4.0.1</javax-servlet-api.version>
         <jackson.version>2.7.5</jackson.version>
         <javax-mail.version>1.4.7</javax-mail.version>
         <json.version>20160810</json.version>
@@ -174,7 +174,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${javax-servlet.version}</version>
+            <version>${javax-servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
