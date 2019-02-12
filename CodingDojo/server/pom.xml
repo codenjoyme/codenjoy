@@ -18,9 +18,9 @@
         <jetty-jsp.version>9.2.26.v20180806</jetty-jsp.version>
         <jetty-io.version>9.3.25.v20180904</jetty-io.version>
         <javax-servlet-api.version>4.0.1</javax-servlet-api.version>
-        <jackson.version>2.7.5</jackson.version>
-        <javax-mail.version>1.4.7</javax-mail.version>
-        <json.version>20160810</json.version>
+        <jackson.version>2.9.8</jackson.version>
+        <mail-api.version>1.6.2</mail-api.version>
+        <json.version>20180813</json.version>
         <sqlite-jdbc.version>3.8.11.2</sqlite-jdbc.version>
         <postgresql-jdbc.version>9.1-901-1.jdbc4</postgresql-jdbc.version>
         <logback.version>1.1.7</logback.version>
@@ -119,13 +119,13 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
             <version>${jetty.version}</version>
-        </dependency>
+        </dependency>        <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>${mail-api.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>${javax-mail.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
