@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -151,9 +150,22 @@ public class Registration {
         return null;
     }
 
+    // TODO test me
+    public String checkUserByPassword(String emailOrId, String password) {
+        return checkUser(emailOrId, Hash.getCode(emailOrId, password));
+    }
+
     public String getEmail(String code) {
         return pool.select("SELECT email FROM users WHERE code = ?;",
                 new Object[]{code},
+                rs -> rs.next() ? rs.getString("email") : null
+        );
+    }
+
+    // TODO test me
+    public String getEmailByReadableName(String name) {
+        return pool.select("SELECT email FROM users WHERE readable_name = ?;",
+                new Object[]{name},
                 rs -> rs.next() ? rs.getString("email") : null
         );
     }

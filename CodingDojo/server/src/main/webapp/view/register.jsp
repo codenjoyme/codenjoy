@@ -46,30 +46,41 @@
     <form:form commandName="player" action="register" method="POST">
         <form:hidden path="data"/>
         <table>
-            <tr>
-                <td>Email<form:errors path="name"/></td>
-            </tr>
-            <tr>
-                <td>
-                    <form:input path="name"/>
-                    <span class="error">
-                        <c:if test="${bad_pass}">Already registered</c:if>
-                        <c:if test="${wait_approve}">Please check your email</c:if>
-                    </span>
-                </td>
-            </tr>
+            <c:if test="${by_email}">
+                <tr>
+                    <td>Email<form:errors path="name"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <form:input path="name"/>
+                        <span class="error">
+                            <c:if test="${bad_pass}">Already registered</c:if>
+                            <c:if test="${wait_approve}">Please check your email</c:if>
+                        </span>
+                    </td>
+                </tr>
+            </c:if>
             <tr>
                 <td>Name</td>
             </tr>
-
             <tr>
-                <td><form:input path="readableName"/></td>
+                <td>
+                    <form:input path="readableName"/>
+                    <span class="error">
+                        <c:if test="${bad_name}">${message}</c:if>
+                    </span>
+                </td>
             </tr>
             <tr>
                 <td>Password<form:errors path="password"/></td>
             </tr>
             <tr>
-                <td><form:password path="password"/><c:if test="${bad_pass}">Bad password</c:if></td>
+                <td>
+                    <form:password path="password"/>
+                    <span class="error">
+                        <c:if test="${bad_pass}">Bad password</c:if>
+                    </span>
+                </td>
             </tr>
             <tr>
                 <td>Your game</td>
