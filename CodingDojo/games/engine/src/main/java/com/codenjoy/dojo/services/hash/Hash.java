@@ -70,11 +70,11 @@ public class Hash {
                 .toString();
     }
 
-    public static String getCode(String email, String password) {
+    public static String getCode(String emailOrId, String password) {
         return String.valueOf(Math.abs(
-                md5(md5(email) + md5(password)).hashCode()
-                + 10000000000000L * md5(md5(password) + md5(email) + email).hashCode()
-                ^ md5(email + password).hashCode() << 13 ^ 345378L * md5(password + md5(email)).hashCode()
+                md5(md5(emailOrId) + md5(password)).hashCode()
+                + 10000000000000L * md5(md5(password) + md5(emailOrId) + emailOrId).hashCode()
+                ^ md5(emailOrId + password).hashCode() << 13 ^ 345378L * md5(password + md5(emailOrId)).hashCode()
         ));
     }
 
