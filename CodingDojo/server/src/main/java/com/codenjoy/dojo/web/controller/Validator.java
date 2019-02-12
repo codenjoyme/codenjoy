@@ -45,7 +45,7 @@ public class Validator {
     public static final boolean CAN_BE_NULL = true;
     public static final boolean CANT_BE_NULL = !CAN_BE_NULL;
 
-    public static final String EMAIL_PART = "(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\\\.)+[a-zA-Z]{2,6}){6," + MAX_PLAYER_ID_LENGTH + "}";
+    public static final String EMAIL_PART = "(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})";
     public static final String EMAIL = "^" + EMAIL_PART + "$";
     public static final String ID_PART = "[A-Za-z0-9]{1," + MAX_PLAYER_ID_LENGTH + "}";
     public static final String ID = "^" + ID_PART + "$";
@@ -82,10 +82,16 @@ public class Validator {
     public void checkPlayerName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
-                !empty && (email.matcher(input).matches() || id.matcher(input).matches())))
+                !empty && (isEmail(input) || id.matcher(input).matches())))
         {
             throw new IllegalArgumentException(String.format("Player name/id is invalid: '%s'", input));
         }
+    }
+
+    private boolean isEmail(String input) {
+        return input != null
+                && input.length() <= MAX_PLAYER_ID_LENGTH
+                && email.matcher(input).matches();
     }
 
     public void checkCode(String input, boolean canBeNull) {
@@ -122,7 +128,6 @@ public class Validator {
         }
     }
 
-    // TODO test me
     public String checkPlayerCode(String emailOrId, String code) {
         checkPlayerName(emailOrId, CANT_BE_NULL);
         checkCode(code, CANT_BE_NULL);

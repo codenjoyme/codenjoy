@@ -6,13 +6,14 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.Callable;
+
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class ValidatorTest {
 
@@ -93,8 +94,7 @@ public class ValidatorTest {
 
         shouldOk(() -> validator.checkCode("0", CAN_BE_NULL));
 
-        shouldError("",
-                () -> validator.checkCode("434589345613405760956134056340596345903465", CANT_BE_NULL));
+        shouldOk(() -> validator.checkCode("434589345613405760956134056340596345903465", CANT_BE_NULL));
 
         shouldError("Player code is invalid: 'someId'",
                 () -> validator.checkCode("someId", CANT_BE_NULL));
@@ -334,20 +334,64 @@ public class ValidatorTest {
         shouldOk(() -> validator.checkIsAdmin("21232f297a57a5a743894a0e4a801fc3"));
     }
 
+    @Test
+    public void validateCheckPlayerCode() {
+        when(registration.checkUser(anyString(), anyString())).thenAnswer(inv -> inv.getArgument(0));
+
+        shouldReturn("email@gmail.com",
+                () -> validator.checkPlayerCode("email@gmail.com", "12345678901234567890"));
+
+        shouldReturn("codePlayerId",
+                () -> validator.checkPlayerCode("codePlayerId", "12345678901234567890"));
+
+        shouldReturn("Player name/id is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aaa.aaa'",
+                () -> validator.checkPlayerCode("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aaa.aaa", "12345678901234567890"));
+
+        shouldReturn("Player name/id is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                () -> validator.checkPlayerCode("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "12345678901234567890"));
+
+        shouldReturn("Player code is invalid: '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'",
+                () -> validator.checkPlayerCode("codePlayerId", "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"));
+
+        shouldReturn("Player name/id is invalid: 'email#&*^#gmail%#&^*com'",
+                () -> validator.checkPlayerCode("email#&*^#gmail%#&^*com", "12345678901234567890"));
+
+        shouldReturn("Player code is invalid: '12dehgfsgfsdlfidfj90'",
+                () -> validator.checkPlayerCode("email@gmail.com", "12dehgfsgfsdlfidfj90"));
+
+        shouldReturn("Player name/id is invalid: 'null'",
+                () -> validator.checkPlayerCode(null, "12345678901234567890"));
+
+        shouldReturn("Player code is invalid: 'null'",
+                () -> validator.checkPlayerCode("email@gmail.com", null));
+    }
+
     private void shouldOk(Runnable toRun) {
         shouldError("", toRun);
     }
 
-    private void shouldError(String expectedException, Runnable toRun) {
+    private void shouldError(String expected, Runnable toRun) {
         try {
             if (toRun != null) {
                 toRun.run();
             }
-            if (StringUtils.isNotEmpty(expectedException)) {
+            if (StringUtils.isNotEmpty(expected)) {
                 fail();
             }
         } catch (Exception e) {
-            assertEquals(expectedException, e.getMessage());
+            assertEquals(expected, e.getMessage());
+        }
+    }
+
+    private void shouldReturn(String expected, Callable toRun) {
+        try {
+            Object result = null;
+            if (toRun != null) {
+                result = toRun.call();
+            }
+            assertEquals(expected, result);
+        } catch (Exception e) {
+            assertEquals(expected, e.getMessage());
         }
     }
 
