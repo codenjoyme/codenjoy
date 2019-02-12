@@ -53,12 +53,16 @@ public class Validator {
     public static final String GAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
     public static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
+    public static final String READABLE_NAME_EN = "^[A-Za-f]{1,50}$";
+    public static final String READABLE_NAME_RU = "^[А-Яа-я]{1,50}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
 
     private final Pattern email;
     private final Pattern id;
+    private final Pattern readableNameEn;
+    private final Pattern readableNameRu;
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
@@ -66,6 +70,8 @@ public class Validator {
     public Validator() {
         email = Pattern.compile(EMAIL);
         id = Pattern.compile(ID);
+        readableNameEn = Pattern.compile(READABLE_NAME_EN);
+        readableNameRu = Pattern.compile(READABLE_NAME_RU);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
@@ -76,6 +82,35 @@ public class Validator {
         if (empty || !id.matcher(input).matches()) {
             throw new IllegalArgumentException(String.format("Player id is invalid: '%s'", input));
         }
+    }
+
+    public void checkReadableName(String input) {
+        boolean empty = isEmpty(input);
+        if (empty || !isFullName(input)) {
+            throw new IllegalArgumentException(String.format("Readable player name id is invalid: '%s'", input));
+        }
+    }
+
+    private boolean isFullName(String input) {
+        String[] parts = input.split(" ");
+        if (parts == null || parts.length != 2) {
+            return false;
+        }
+        String firstName = parts[0];
+        String lastName = parts[1];
+        if (readableNameEn.matcher(firstName).matches()
+                && readableNameEn.matcher(lastName).matches())
+        {
+            return true;
+        }
+
+        if (readableNameRu.matcher(firstName).matches()
+                && readableNameRu.matcher(lastName).matches())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     public void checkPlayerName(String input, boolean canBeNull) {

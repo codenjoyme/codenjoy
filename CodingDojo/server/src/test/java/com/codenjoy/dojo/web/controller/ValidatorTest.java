@@ -402,6 +402,47 @@ public class ValidatorTest {
         shouldOk(() -> validator.checkPlayerName("nULL", CAN_BE_NULL));
     }
 
+    @Test
+    public void validateCheckReadablePlayerName() {
+        shouldOk(() -> validator.checkReadableName("Стивен Пупкин"));
+
+        shouldOk(() -> validator.checkReadableName("Stiven Pupkin"));
+
+        shouldOk(() -> validator.checkReadableName("стивен пупкин"));
+
+        shouldOk(() -> validator.checkReadableName("stiven pupkin"));
+
+        shouldError("Readable player name is invalid: 'Стивен'",
+                () -> validator.checkReadableName("Стивен"));
+
+        shouldError("Readable player name is invalid: 'Я Д'Артаньян'",
+                () -> validator.checkReadableName("Я Д'Артаньян"));
+
+        shouldError("Readable player name is invalid: 'Дефис-нельзя'",
+                () -> validator.checkReadableName("Дефис-нельзя"));
+
+        shouldError("Readable player name is invalid: 'Двапробела нельзя'",
+                () -> validator.checkReadableName("Двапробела нельзя"));
+
+        shouldError("Readable player name is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
+                () -> validator.checkReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
+
+        shouldError("Readable player name is invalid: 'email#&*^#gmail%#&^*com'",
+                () -> validator.checkReadableName("email#&*^#gmail%#&^*com"));
+
+        shouldError("Readable player name is invalid: 'null'",
+                () -> validator.checkReadableName(null));
+
+        shouldError("Readable player name is invalid: 'NuLL'",
+                () -> validator.checkReadableName("NuLL"));
+
+        shouldError("Readable player name is invalid: ''",
+                () -> validator.checkReadableName(""));
+
+        shouldError("Readable player name is invalid: 'null'",
+                () -> validator.checkReadableName(null));
+    }
+
     private void shouldOk(Runnable toRun) {
         shouldError("", toRun);
     }
