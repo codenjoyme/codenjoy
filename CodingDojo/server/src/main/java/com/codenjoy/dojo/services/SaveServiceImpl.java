@@ -42,8 +42,9 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void saveAll() {
+        long now = System.currentTimeMillis();
         for (PlayerGame playerGame : playerGames) {
-            saveGame(playerGame);
+            saveGame(playerGame, now);
         }
     }
 
@@ -58,13 +59,15 @@ public class SaveServiceImpl implements SaveService {
     public void save(String name) {
         PlayerGame playerGame = playerGames.get(name);
         if (playerGame != NullPlayerGame.INSTANCE) {
-            saveGame(playerGame);
+            long now = System.currentTimeMillis();
+            saveGame(playerGame, now);
         }
     }
 
-    private void saveGame(PlayerGame playerGame) {
+    private void saveGame(PlayerGame playerGame, long time) {
         saver.saveGame(playerGame.getPlayer(),
-                playerGame.getGame().getSave().toString());
+                playerGame.getGame().getSave().toString(),
+                time);
     }
 
     @Override

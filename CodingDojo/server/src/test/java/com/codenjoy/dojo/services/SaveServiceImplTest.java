@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -78,7 +77,7 @@ public class SaveServiceImplTest {
 
         saveService.save("vasia");
 
-        verify(saver).saveGame(player, "{\"key\":\"value\"}");
+        verify(saver).saveGame(player, "{\"key\":\"value\"}", anyLong());
     }
 
     private Player createPlayer(String name) {
@@ -113,7 +112,7 @@ public class SaveServiceImplTest {
     public void shouldNotSavePlayerWhenNotExists() {
         saveService.save("cocacola");
 
-        verify(saver, never()).saveGame(any(Player.class), any(String.class));
+        verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
     }
 
     @Test
@@ -255,8 +254,8 @@ public class SaveServiceImplTest {
 
         saveService.saveAll();
 
-        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}");
-        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}");
+        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", System.currentTimeMillis());
+        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", System.currentTimeMillis());
     }
 
     @Test

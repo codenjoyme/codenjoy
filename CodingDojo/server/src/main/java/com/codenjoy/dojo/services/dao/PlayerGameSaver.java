@@ -29,9 +29,7 @@ import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
@@ -55,11 +53,11 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void saveGame(final Player player, final String save) {
+    public void saveGame(final Player player, final String save, long time) {
         pool.update("INSERT INTO saves " +
                         "(time, name, callbackUrl, gameName, score, save) " +
                         "VALUES (?,?,?,?,?,?);",
-                new Object[]{JDBCTimeUtils.toString(new Date(System.currentTimeMillis())),
+                new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getName(),
                         player.getCallbackUrl(),
                         player.getGameName(),
