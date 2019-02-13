@@ -57,7 +57,8 @@ public class GlobalExceptionHandler {
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        if (!logger.isDebugEnabled()) {
+        // TODO сдеалть тут какуй-то пропертю
+        if (true) {
             result.addObject("message", "Something wrong with your request. " +
                     "Please ask site administrator. Your ticket number is: " + ticket);
             if (url.contains("/rest/")) {
