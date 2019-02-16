@@ -3,33 +3,52 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+echo "[92m========================================================================================================================"
+echo "==================================================== Init structure ===================================================="
+echo "========================================================================================================================[0m"
+
+eval_echo() {
+    to_run=$1
+    echo "[94m"
+    echo $to_run
+    echo "[0m"
+
+    eval $to_run
+}
+
 JETTY_UID=999
 
 # for nginx
-rm ./config/nginx/.htpasswd
-touch ./config/nginx/.htpasswd
-sudo sh -c "echo -n 'codenjoy:' >> ./config/nginx/.htpasswd"
-sudo sh -c "openssl passwd -apr1 3141592 >> ./config/nginx/.htpasswd"
-cat ./config/nginx/.htpasswd
+generate_htpasswd() {
+    rm ./config/nginx/.htpasswd
+    touch ./config/nginx/.htpasswd
+    sudo sh -c "echo -n 'codenjoy:' >> ./config/nginx/.htpasswd"
+    sudo sh -c "openssl passwd -apr1 3141592 >> ./config/nginx/.htpasswd"
+    cat ./config/nginx/.htpasswd
+}
+eval_echo "generate_htpasswd"
 
-chown root:root ./cert/*
-chown root:root ./config/nginx/*
+eval_echo "chown root:root ./cert/*"
+ls -la ./cert
+
+eval_echo "chown root:root ./config/nginx/*"
+ls -la ./config/nginx
 
 # for postgres codenjoy_db
-mkdir -p ./materials/database
-chown root:root ./materials/database
-
+eval_echo "mkdir -p ./materials/database"
+eval_echo "chown root:root ./materials/database"
 # for sqlite
-#L# mkdir -p ./materials/codenjoy/database
-#L# chown $JETTY_UID:$JETTY_UID ./materials/codenjoy/database
+#L# eval_echo "chown $JETTY_UID:$JETTY_UID ./materials/database"
+ls -la ./materials/database
 
 # for codenjoy_balancer / codenjoy_contest
-mkdir -p ./config/codenjoy
-chown $JETTY_UID:$JETTY_UID ./config/codenjoy
+eval_echo "mkdir -p ./config/codenjoy"
+eval_echo "chown $JETTY_UID:$JETTY_UID ./config/codenjoy"
+ls -la ./config/codenjoy
 
-mkdir -p ./logs/codenjoy
-touch ./logs/codenjoy/codenjoy-balancer.log
-touch ./logs/codenjoy/codenjoy-contest.log
-chown $JETTY_UID:$JETTY_UID ./logs/codenjoy/codenjoy-balancer.log
-chown $JETTY_UID:$JETTY_UID ./logs/codenjoy/codenjoy-contest.log
-
+eval_echo "mkdir -p ./logs/codenjoy"
+eval_echo "touch ./logs/codenjoy/codenjoy-balancer.log"
+eval_echo "touch ./logs/codenjoy/codenjoy-contest.log"
+eval_echo "chown $JETTY_UID:$JETTY_UID ./logs/codenjoy/codenjoy-balancer.log"
+eval_echo "chown $JETTY_UID:$JETTY_UID ./logs/codenjoy/codenjoy-contest.log"
+ls -la ./logs/codenjoy

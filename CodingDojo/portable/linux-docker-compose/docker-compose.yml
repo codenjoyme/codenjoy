@@ -68,7 +68,7 @@ services:
         dockerfile: Dockerfile-contest
      command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #L# sqlite
      volumes: 
-#L#       - ./materials/codenjoy/database:/var/lib/jetty/database
+#L#       - ./materials/database:/var/lib/jetty/database
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
 #P#     ports: 
