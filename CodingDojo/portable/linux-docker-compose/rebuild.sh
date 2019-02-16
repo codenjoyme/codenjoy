@@ -3,39 +3,49 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-echo $DIR
+echo "[92m========================================================================================================================"
+echo "========================================================= START ========================================================"
+echo "========================================================================================================================[0m"
 
-bash init-structure.sh
+eval_echo() {
+    to_run=$1
+    echo "[94m"
+    echo $to_run
+    echo "[0m"
+
+    eval $to_run
+}
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+echo "[93m"
+echo "Work in: $DIR"
+echo "[0m"
+
+eval_echo "bash init-structure.sh"
 
 # TODO continue with db backup
-# cd $DIR/materials
-# bash backup.sh
+# eval_echo "cd $DIR/materials && bash backup.sh"
 
-cd $DIR/logs
-bash get-docker-compose-logs.sh
+eval_echo "cd $DIR/logs && bash get-docker-compose-logs.sh"
 
-cd $DIR/applications
-bash build.sh
+eval_echo "cd $DIR/applications && bash build.sh"
 
-docker container rm $(docker ps -a | grep -v "mycgi" | cut -d ' ' -f1) --force
+eval_echo "docker container rm $(docker ps -a | grep -v 'CONTAINER' | cut -d ' ' -f1) --force"
 # TODO this is balancer frontend, merge it in codenjoy git repo
-# docker rmi vreshch/codenjoy-lb
-docker rmi apofig/codenjoy-contest:1.0.28 --force
-docker rmi apofig/codenjoy-balancer:1.0.28 --force
+# eval_echo "docker rmi vreshch/codenjoy-lb"
+eval_echo "docker rmi apofig/codenjoy-contest:1.0.28 --force"
+eval_echo "docker rmi apofig/codenjoy-balancer:1.0.28 --force"
 
 echo "[92m========================================================================================================================"
 echo "================================================ Docker compose starting ==============================================="
 echo "========================================================================================================================[0m"
 
 cd $DIR
-sudo bash init-structure.sh
-sudo docker-compose build --no-cache
-bash up.sh  
+eval_echo "docker-compose build --no-cache"
+eval_echo "bash up.sh"
 
 echo "[92m========================================================================================================================"
 echo "========================================================= DONE ========================================================="
 echo "========================================================================================================================[0m"
 
-cd $DIR/applications
-bash check-revision.sh
+eval_echo "cd $DIR/applications && bash check-revision.sh"
