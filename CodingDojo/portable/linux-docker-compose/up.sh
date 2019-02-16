@@ -20,7 +20,12 @@ if [ "x$OPEN_PORTS" = "xtrue" ]; then
     open="-f open-ports.yml"
 fi
 
-eval_echo "docker-compose -f docker-compose.yml $open up -d codenjoy_db"
+if [ "x$PGADMIN" = "xtrue" ]; then
+    echo "[93mWARNING: PGAdmin will start on port $PGADMIN_PORT[0m"
+    pgadmin="-f pgadmin.yml"
+fi
+
+eval_echo "docker-compose -f docker-compose.yml $open $pgadmin up -d codenjoy_db"
 sleep 10
-eval_echo "docker-compose -f docker-compose.yml $open up -d"
+eval_echo "docker-compose -f docker-compose.yml $open $pgadmin up -d"
 
