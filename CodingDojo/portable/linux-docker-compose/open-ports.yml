@@ -7,7 +7,7 @@ services:
 
 #B#   codenjoy_balancer_frontend:
 #B#     ports:
-#B#       - "${BALANCER_PORT}:80"
+#B#       - "${BALANCER_FRONTEND_PORT}:80"
 
 #B#   codenjoy_balancer:
 #B#     ports:

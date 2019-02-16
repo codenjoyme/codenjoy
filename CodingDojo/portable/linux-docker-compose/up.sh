@@ -13,7 +13,7 @@ eval_echo() {
     eval $to_run
 }
 
-eval_echo "docker-compose down"
+eval_echo "docker-compose down --remove-orphans"
 
 if [ "x$OPEN_PORTS" = "xtrue" ]; then
     echo "[93mWARNING: All applications ports are exposed out of containers[0m"
@@ -25,7 +25,12 @@ if [ "x$PGADMIN" = "xtrue" ]; then
     pgadmin="-f pgadmin.yml"
 fi
 
-eval_echo "docker-compose -f docker-compose.yml $open $pgadmin up -d codenjoy_db"
+if [ "x$BALANCER" = "xtrue" ]; then
+    echo "[93mBalancer will start on port $BALANCER_PORT[0m"
+    balancer="-f balancer.yml"
+fi
+
+eval_echo "docker-compose -f docker-compose.yml $balancer $open $pgadmin up -d codenjoy_db"
 sleep 10
-eval_echo "docker-compose -f docker-compose.yml $open $pgadmin up -d"
+eval_echo "docker-compose -f docker-compose.yml $balancer $open $pgadmin up -d"
 

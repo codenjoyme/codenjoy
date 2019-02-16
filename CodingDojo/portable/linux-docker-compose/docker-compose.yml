@@ -15,33 +15,6 @@ services:
          codenjoy:
              ipv4_address: 172.28.1.4
 
-#B#   codenjoy_balancer_frontend:
-#B#     depends_on:
-#B#       - codenjoy_balancer
-#B#     image: vreshch/codenjoy-lb
-#B#     container_name: codenjoy-balancer-frontend
-#B#     networks:
-#B#         codenjoy:
-#B#             ipv4_address: 172.28.1.5
-
-#B#   codenjoy_balancer:
-#B#     depends_on:
-#B#       - codenjoy_db
-#B#     image: apofig/codenjoy-balancer:1.0.28
-#B#     container_name: codenjoy-balancer
-#B#     build:
-#B#        context: ./applications
-#B#        dockerfile: Dockerfile-balancer
-#B#     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
-#B#     volumes: 
-#B##L#       - ./materials/database:/var/lib/jetty/database
-#B#       - ./config/codenjoy:/var/lib/jetty/config
-#B#       - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
-#B#     restart: always
-#B#     networks:
-#B#         codenjoy:
-#B#             ipv4_address: 172.28.1.3
-
 #C# comment this block if you need only balancer
    codenjoy_server:
      depends_on:
@@ -63,12 +36,10 @@ services:
 
    nginx:
      depends_on:
-#B#       - codenjoy_balancer
        - codenjoy_server
      image: nginx
      container_name: nginx
      volumes: 
-#B#       - ./config/nginx/codenjoy-balancer.conf:/etc/nginx/conf.d/codenjoy-balancer.conf
        - ./config/nginx/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf      #C# 
        - ./config/nginx/domain.conf:/etc/nginx/domain.conf
        - ./config/nginx/ssl.conf:/etc/nginx/ssl.conf

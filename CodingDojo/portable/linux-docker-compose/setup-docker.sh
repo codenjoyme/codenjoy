@@ -82,5 +82,4 @@ echo "[93mPlease try to connect via ssh as $NEW_USER[0m"
 # setup timezone
 eval_echo "ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime"
 sudo dpkg-reconfigure -f noninteractive tzdata
-	
-	
+

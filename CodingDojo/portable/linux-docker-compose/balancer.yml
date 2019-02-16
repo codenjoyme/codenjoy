@@ -1,0 +1,35 @@
+version: '3.3'
+
+services:
+   codenjoy_balancer_frontend:
+     depends_on:
+       - codenjoy_balancer
+     image: vreshch/codenjoy-lb
+     container_name: codenjoy-balancer-frontend
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.5
+
+   codenjoy_balancer:
+     depends_on:
+       - codenjoy_db
+     image: apofig/codenjoy-balancer:1.0.28
+     container_name: codenjoy-balancer
+     build:
+        context: ./applications
+        dockerfile: Dockerfile-balancer
+     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
+     volumes:
+#L#       - ./materials/database:/var/lib/jetty/database
+       - ./config/codenjoy:/var/lib/jetty/config
+       - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
+     restart: always
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.3
+
+   nginx:
+     depends_on:
+       - codenjoy_balancer
+     volumes: 
+       - ./config/nginx/codenjoy-balancer.conf:/etc/nginx/conf.d/codenjoy-balancer.conf
