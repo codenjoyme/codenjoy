@@ -10,4 +10,3 @@ do
   fi
 done
 echo "[0m"
-

@@ -3,40 +3,20 @@ echo "[92m=====================================================================
 echo "================================================= Building applications ================================================"
 echo "========================================================================================================================[0m"
 
-if [ "x$BUILD_SERVER" = "x" ]; then
-    BUILD_SERVER=true
-fi
-
-if [ "x$BUILD_BALANCER" = "x" ]; then
-    BUILD_BALANCER=true
-fi
-
 if [ "x$GIT_REPO" = "x" ]; then
-    GIT_REPO=https://github.com/codenjoyme/codenjoy.git
+    cd ..
+    . ./config.sh 
+    cd ./applications
+else
+    echo "[93m"
+    echo "BUILD_SERVER=$BUILD_SERVER"
+    echo "BUILD_BALANCER=$BUILD_BALANCER"
+    echo "GIT_REPO=$GIT_REPO"
+    echo "REVISION=$REVISION"
+    echo "GAME=$GAME"
+    echo "GAME_PROJECT=$GAME_PROJECT"
+    echo "[0m"
 fi
-
-if [ "x$REVISION" = "x" ]; then
-    REVISION=master
-fi
-
-if [ "x$CODENJOY_CONTEXT" = "x" ]; then
-    CODENJOY_CONTEXT=codenjoy-contest
-fi
-
-if [ "x$GAME" = "x" ]; then
-    GAME=snakebattle
-    # this difference is only for snake-battle
-    GAME_PROJECT=snake-battle 
-fi
-
-echo "[93m"
-echo "BUILD_SERVER=$BUILD_SERVER"
-echo "BUILD_BALANCER=$BUILD_BALANCER"
-echo "GIT_REPO=$GIT_REPO"
-echo "REVISION=$REVISION"
-echo "GAME=$GAME"
-echo "GAME_PROJECT=$GAME_PROJECT"
-echo "[0m"
 
 eval_echo() {
     to_run=$1
@@ -126,5 +106,8 @@ echo "==========================================================================
 
 eval_echo "docker commit temp codenjoy-source"
 eval_echo "docker container rm temp --force"
+
+eval_echo "docker image ls"
+eval_echo "docker ps -a"
 
 eval_echo "bash check-revision.sh"

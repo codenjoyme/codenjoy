@@ -6,8 +6,6 @@ services:
      container_name: codenjoy-database
      volumes:
        - ./materials/database:/var/lib/postgresql/data
-#P#     ports: 
-#P#       - "2352:5432"
      restart: always
      environment:
          POSTGRES_DB: codenjoy
@@ -20,7 +18,7 @@ services:
 #D#   pgadmin:
 #D#     image: dpage/pgadmin4
 #D#     container_name: pgadmin
-#D#     ports: 
+#D#     ports:
 #D#       - "${PGADMIN_PORT}:80"
 #D#     environment:
 #D#         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -31,8 +29,6 @@ services:
 #B#       - codenjoy_balancer
 #B#     image: vreshch/codenjoy-lb
 #B#     container_name: codenjoy-balancer-frontend
-#B##P#     ports: 
-#B##P#       - "8001:80"
 #B#     networks:
 #B#         codenjoy:
 #B#             ipv4_address: 172.28.1.5
@@ -50,8 +46,6 @@ services:
 #B##L#       - ./materials/database:/var/lib/jetty/database
 #B#       - ./config/codenjoy:/var/lib/jetty/config
 #B#       - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
-#B##P#     ports: 
-#B##P#       - "127.0.0.1:8001:8080"
 #B#     restart: always
 #B#     networks:
 #B#         codenjoy:
@@ -71,8 +65,6 @@ services:
 #L#       - ./materials/database:/var/lib/jetty/database
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
-#P#     ports: 
-#P#       - "127.0.0.1:8002:8080"
      restart: always
      networks:
          codenjoy:

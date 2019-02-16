@@ -22,7 +22,7 @@ echo "[93m"
 echo "Work in: $DIR"
 echo "[0m"
 
-eval_echo "bash config.sh"
+eval_echo ". config.sh"
 
 eval_echo "bash init-structure.sh"
 
