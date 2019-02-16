@@ -6,6 +6,9 @@ services:
        - codenjoy_balancer
      image: vreshch/codenjoy-lb
      container_name: codenjoy-balancer-frontend
+#     ports:                              #P#
+#       - "${BALANCER_FRONTEND_PORT}:80"  #P#
+     restart: always
      networks:
          codenjoy:
              ipv4_address: 172.28.1.5
@@ -23,6 +26,8 @@ services:
 #L#       - ./materials/database:/var/lib/jetty/database
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
+#     ports:                              #P#
+#       - "${BALANCER_PORT}:8080"         #P#
      restart: always
      networks:
          codenjoy:

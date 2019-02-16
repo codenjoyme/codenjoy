@@ -37,3 +37,17 @@ cat ./config/nginx/codenjoy-balancer.conf | grep 'server_name '
 
 eval_echo "sed -i 's/\(server_name \).*\$/\1$CODENJOY_DOMAIN;/' ./config/nginx/codenjoy-contest.conf"
 cat ./config/nginx/codenjoy-contest.conf | grep 'server_name '
+
+comment() {
+    file=$1
+    if [ "x$OPEN_PORTS" = "xtrue" ]; then
+        eval_echo "sed -i '/#P#/s/^#//' $file"
+    else
+        eval_echo "sed -i '/#P#/s/^#?/#/' $file"
+    fi
+    cat $file | grep '#P#'
+}
+
+eval_echo "comment ./docker-compose.yml"
+eval_echo "comment ./codenjoy.yml"
+eval_echo "comment ./balancer.yml"

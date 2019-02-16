@@ -14,6 +14,8 @@ services:
 #L#       - ./materials/database:/var/lib/jetty/database
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
+#     ports:                       #P#
+#       - "${CODENJOY_PORT}:8080"  #P#
      restart: always
      networks:
          codenjoy:

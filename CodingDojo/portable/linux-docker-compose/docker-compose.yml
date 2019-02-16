@@ -6,6 +6,8 @@ services:
      container_name: codenjoy-database
      volumes:
        - ./materials/database:/var/lib/postgresql/data
+#     ports:                       #P#
+#       - "${POSTGRES_PORT}:5432"  #P#
      restart: always
      environment:
          POSTGRES_DB: codenjoy
