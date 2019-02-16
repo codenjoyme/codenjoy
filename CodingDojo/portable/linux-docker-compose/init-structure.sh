@@ -16,12 +16,12 @@ chown root:root ./cert/*
 chown root:root ./config/nginx/*
 
 # for postgres codenjoy_db
-mkdir -p ./content/database
-chown root:root ./content/database
+mkdir -p ./materials/database
+chown root:root ./materials/database
 
 # for sqlite
-#L# mkdir -p ./content/codenjoy/database
-#L# chown $JETTY_UID:$JETTY_UID ./content/codenjoy/database
+#L# mkdir -p ./materials/codenjoy/database
+#L# chown $JETTY_UID:$JETTY_UID ./materials/codenjoy/database
 
 # for codenjoy_balancer / codenjoy_contest
 mkdir -p ./config/codenjoy

@@ -5,7 +5,7 @@ services:
      image: postgres:11.1
      container_name: codenjoy-database
      volumes:
-       - ./content/database:/var/lib/postgresql/data
+       - ./materials/database:/var/lib/postgresql/data
 #P#     ports: 
 #P#       - "2352:5432"
      restart: always
@@ -47,7 +47,7 @@ services:
 #B#        dockerfile: Dockerfile-balancer
 #B#     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #L# sqlite
 #B#     volumes: 
-#B##L#       - ./content/codenjoy/database:/var/lib/jetty/database
+#B##L#       - ./materials/codenjoy/database:/var/lib/jetty/database
 #B#       - ./config/codenjoy:/var/lib/jetty/config
 #B#       - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
 #B##P#     ports: 
@@ -68,7 +68,7 @@ services:
         dockerfile: Dockerfile-contest
      command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #L# sqlite
      volumes: 
-#L#       - ./content/codenjoy/database:/var/lib/jetty/database
+#L#       - ./materials/codenjoy/database:/var/lib/jetty/database
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
 #P#     ports: 
@@ -93,7 +93,7 @@ services:
        - ./config/nginx/.htpasswd:/etc/nginx/.htpasswd
        - ./cert:/usr/share/ca-certificates/extra
      ports: 
-#A#       - "443:443" 
+#S#       - "443:443" 
        - "80:80"   
      restart: always   
      networks:

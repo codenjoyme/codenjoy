@@ -9,7 +9,7 @@ echo $DIR
 bash init-structure.sh
 
 # TODO continue with db backup
-# cd $DIR/content
+# cd $DIR/materials
 # bash backup.sh
 
 cd $DIR/logs
