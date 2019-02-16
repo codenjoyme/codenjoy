@@ -15,32 +15,10 @@ services:
          codenjoy:
              ipv4_address: 172.28.1.4
 
-#C# comment this block if you need only balancer
-   codenjoy_server:
-     depends_on:
-       - codenjoy_db
-     image: apofig/codenjoy-contest:1.0.28
-     container_name: codenjoy-contest
-     build:
-        context: ./applications
-        dockerfile: Dockerfile-contest
-     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
-     volumes: 
-#L#       - ./materials/database:/var/lib/jetty/database
-       - ./config/codenjoy:/var/lib/jetty/config
-       - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
-     restart: always
-     networks:
-         codenjoy:
-             ipv4_address: 172.28.1.2
-
    nginx:
-     depends_on:
-       - codenjoy_server
      image: nginx
      container_name: nginx
-     volumes: 
-       - ./config/nginx/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf      #C# 
+     volumes:
        - ./config/nginx/domain.conf:/etc/nginx/domain.conf
        - ./config/nginx/ssl.conf:/etc/nginx/ssl.conf
        - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf

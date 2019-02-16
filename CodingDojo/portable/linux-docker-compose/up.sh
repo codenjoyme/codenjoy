@@ -26,11 +26,16 @@ if [ "x$PGADMIN" = "xtrue" ]; then
 fi
 
 if [ "x$BALANCER" = "xtrue" ]; then
-    echo "[93mBalancer will start on port $BALANCER_PORT[0m"
+    echo "[93mBalancer will start[0m"
     balancer="-f balancer.yml"
 fi
 
-eval_echo "docker-compose -f docker-compose.yml $balancer $open $pgadmin up -d codenjoy_db"
+if [ "x$CODENJOY" = "xtrue" ]; then
+    echo "[93mCodenjoy will start[0m"
+    codenjoy="-f codenjoy.yml"
+fi
+
+eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $open $pgadmin up -d codenjoy_db"
 sleep 10
-eval_echo "docker-compose -f docker-compose.yml $balancer $open $pgadmin up -d"
+eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $open $pgadmin up -d"
 
