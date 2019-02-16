@@ -23,7 +23,13 @@ echo "[0m"
 eval_echo "sed -i 's/\(server_name \).*\$/\1$SERVER_IP;/' ./config/nginx/domain.conf"
 cat ./config/nginx/domain.conf | grep 'server_name '
 
-eval_echo "sed -i 's,\(return 301 https\?://\).*\\$,\1$BALANCER_DOMAIN\$,' ./config/nginx/domain.conf"
+if [ "x$BALANCER" = "xtrue" ]; then
+    domain=$BALANCER_DOMAIN
+else
+    domain=$CODENJOY_DOMAIN
+fi
+
+eval_echo "sed -i 's,\(return 301 https\?://\).*\\$,\1$domain\$,' ./config/nginx/domain.conf"
 cat ./config/nginx/domain.conf | grep 'return 301 '
 
 eval_echo "sed -i 's/\(server_name \).*\$/\1$BALANCER_DOMAIN;/' ./config/nginx/codenjoy-balancer.conf"
