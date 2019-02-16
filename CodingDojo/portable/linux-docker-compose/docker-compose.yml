@@ -91,7 +91,7 @@ services:
        - ./config/nginx/ssl.conf:/etc/nginx/ssl.conf
        - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
        - ./config/nginx/.htpasswd:/etc/nginx/.htpasswd
-       - ./cert:/usr/share/ca-certificates/extra
+       - ./ssl-cert:/usr/share/ca-certificates/extra
      ports: 
 #S#       - "443:443" 
        - "80:80"   
