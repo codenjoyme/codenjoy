@@ -40,14 +40,21 @@ cat ./config/nginx/codenjoy-contest.conf | grep 'server_name '
 
 comment() {
     file=$1
-    if [ "x$OPEN_PORTS" = "xtrue" ]; then
-        eval_echo "sed -i '/#P#/s/^#//' $file"
+    marker=$2
+    flag=$3
+    if [ "x$flag" = "xtrue" ]; then
+        eval_echo "sed -i '/$marker/s/^#\+//' $file"
     else
-        eval_echo "sed -i '/#P#/s/^#?/#/' $file"
+        eval_echo "sed -i '/$marker/s/^#\?/#/' $file"
     fi
-    cat $file | grep '#P#'
+    cat $file | grep $marker
 }
 
-eval_echo "comment ./docker-compose.yml"
-eval_echo "comment ./codenjoy.yml"
-eval_echo "comment ./balancer.yml"
+ports() {
+    file=$1
+    comment $file "#P#" $OPEN_PORTS
+}
+
+ports ./docker-compose.yml
+ports ./codenjoy.yml
+ports ./balancer.yml
