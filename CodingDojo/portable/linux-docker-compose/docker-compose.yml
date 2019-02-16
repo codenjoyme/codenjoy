@@ -47,7 +47,7 @@ services:
 #B#        dockerfile: Dockerfile-balancer
 #B#     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #L# sqlite
 #B#     volumes: 
-#B##L#       - ./materials/codenjoy/database:/var/lib/jetty/database
+#B##L#       - ./materials/database:/var/lib/jetty/database
 #B#       - ./config/codenjoy:/var/lib/jetty/config
 #B#       - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
 #B##P#     ports: 
