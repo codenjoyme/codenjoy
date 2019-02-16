@@ -7,20 +7,47 @@ echo "[92m=====================================================================
 echo "======================================================= Save logs ======================================================"
 echo "========================================================================================================================[0m"
 
-mkdir ./docker/
+eval_echo() {
+    to_run=$1
+    echo "[94m"
+    echo $to_run
+    echo "[0m"
 
+    eval $to_run
+}
+
+save_log() {
+    container=$1
+    time=$2
+
+    count=$(docker ps -a | grep "$container" | wc -l)
+    if (( $count > 0 )) ; then
+        mkdir -p ./docker/$time/
+        cp $(eval 'docker inspect --format='{{.LogPath}}' $container') ./docker/$time/$container-$time.log ;
+        ls -la ./docker/$time/$container-$time.log ;
+    else
+        echo "Container '$container' not exists" ;
+    fi
+}
+
+echo "[93m"
 now=`date +%Y-%m-%d_%H-%M-%S`
 echo $now
+echo "[0m"
 
-cp $(eval 'docker inspect --format='{{.LogPath}}' codenjoy-balancer') ./docker/codenjoy-balancer-$now.log
-cp $(eval 'docker inspect --format='{{.LogPath}}' codenjoy-database') ./docker/codenjoy-database-$now.log
-cp $(eval 'docker inspect --format='{{.LogPath}}' codenjoy-contest') ./docker/codenjoy-contest-$now.log
-cp $(eval 'docker inspect --format='{{.LogPath}}' nginx') ./docker/nginx-$now.log
-cp $(eval 'docker inspect --format='{{.LogPath}}' codenjoy-balancer-frontend') ./docker/codenjoy-balancer-frontend-$now.log
-cp $(eval 'docker inspect --format='{{.LogPath}}' mycgi') ./docker/mycgi-$now.log
-cp $(eval 'docker inspect --format='{{.LogPath}}' pgadmin') ./docker/pgadmin-$now.log
+eval_echo "mkdir ./docker/"
 
-chown alex:alex ./docker/*
+eval_echo "save_log 'codenjoy-balancer' $now"
+eval_echo "save_log 'codenjoy-database' $now"
+eval_echo "save_log 'codenjoy-contest' $now"
+eval_echo "save_log 'nginx' $now"
+eval_echo "save_log 'codenjoy-balancer-frontend' $now"
+eval_echo "save_log 'mycgi' $now"
+eval_echo "save_log 'pgadmin' $now"
 
-sudo gzip ./docker/*.log
+eval_echo "chown alex:alex ./docker/$now"
+
+eval_echo "tar -zcvf ./docker/$now.tar.gz ./docker/$now && rm -R ./docker/$now"
+
+eval_echo "ls -la ./docker/$now.tar.gz"
 
