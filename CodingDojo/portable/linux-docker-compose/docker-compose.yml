@@ -12,7 +12,7 @@ services:
      environment:
          POSTGRES_DB: codenjoy
          POSTGRES_USER: codenjoy
-         POSTGRES_PASSWORD: secureDBPassword
+         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
      networks:
          codenjoy:
              ipv4_address: 172.28.1.4
@@ -21,10 +21,10 @@ services:
 #D#     image: dpage/pgadmin4
 #D#     container_name: pgadmin
 #D#     ports: 
-#D#       - "3251:80"
+#D#       - "${PGADMIN_PORT}:80"
 #D#     environment:
-#D#         PGADMIN_DEFAULT_PASSWORD: securePGAdminPassword
-#D#         PGADMIN_DEFAULT_EMAIL: your@email.com
+#D#         PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+#D#         PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
    
 #B#   codenjoy_balancer_frontend:
 #B#     depends_on:
@@ -45,7 +45,7 @@ services:
 #B#     build:
 #B#        context: ./applications
 #B#        dockerfile: Dockerfile-balancer
-#B#     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #L# sqlite
+#B#     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
 #B#     volumes: 
 #B##L#       - ./materials/database:/var/lib/jetty/database
 #B#       - ./config/codenjoy:/var/lib/jetty/config
@@ -66,7 +66,7 @@ services:
      build:
         context: ./applications
         dockerfile: Dockerfile-contest
-     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=postgre #L# sqlite
+     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
      volumes: 
 #L#       - ./materials/database:/var/lib/jetty/database
        - ./config/codenjoy:/var/lib/jetty/config
