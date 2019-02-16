@@ -15,11 +15,6 @@ eval_echo() {
 
 eval_echo "docker-compose down --remove-orphans"
 
-if [ "x$OPEN_PORTS" = "xtrue" ]; then
-    echo "[93mWARNING: All applications ports are exposed out of containers[0m"
-    open="-f open-ports.yml"
-fi
-
 if [ "x$PGADMIN" = "xtrue" ]; then
     echo "[93mWARNING: PGAdmin will start on port $PGADMIN_PORT[0m"
     pgadmin="-f pgadmin.yml"
@@ -35,7 +30,7 @@ if [ "x$CODENJOY" = "xtrue" ]; then
     codenjoy="-f codenjoy.yml"
 fi
 
-eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $open $pgadmin up -d codenjoy_db"
+eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d codenjoy_db"
 sleep 10
-eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $open $pgadmin up -d"
+eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d"
 
