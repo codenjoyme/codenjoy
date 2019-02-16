@@ -3,50 +3,83 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+eval_echo() {
+    to_run=$1
+    echo "[94m"
+    echo $to_run
+    echo "[0m"
+
+    eval $to_run
+}
+
 # setup docker
-sudo apt-get update -y
-sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-sudo apt-get install software-properties-common -y
-sudo apt-get install apt-transport-https -y
-sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'
-sudo apt-get update -y
-apt-cache policy docker-engine
-sudo apt-get install -y docker-engine
-sudo systemctl status docker --no-pager
+eval_echo "sudo apt-get update -y"
+eval_echo "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D"
+eval_echo "sudo apt-get install software-properties-common -y"
+eval_echo "sudo apt-get install apt-transport-https -y"
+eval_echo "sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'"
+eval_echo "sudo apt-get update -y"
+eval_echo "apt-cache policy docker-engine"
+eval_echo "sudo apt-get install -y docker-engine"
+eval_echo "sudo systemctl status docker --no-pager"
 	
 # setup compose
-curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-docker-compose --version
+eval_echo "curl -L 'https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose"
+eval_echo "chmod +x /usr/local/bin/docker-compose"
+eval_echo "docker-compose --version"
 	
 NEW_USER=alex
-adduser --disabled-password --gecos "" $NEW_USER
-usermod -aG sudo $NEW_USER
-usermod -aG docker $NEW_USER
+eval_echo "adduser --disabled-password --gecos '' $NEW_USER"
+
+eval_echo "usermod -aG sudo $NEW_USER"
+groups $NEW_USER
+
+eval_echo "usermod -aG docker $NEW_USER"
+groups $NEW_USER
 	
-mkdir /home/$NEW_USER/.ssh
-chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh
-chmod 700 /home/$NEW_USER/.ssh
-echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTH7actwVII/hwh/C/EuAR7shdfdOovjeak86k9V3vXHSTBIoarvZVEhsAd1i/2mlujmFhecbQvT78h7aKdmwF2r+2U/QgeWwPFmpGuNQXNGskidumW3FE1eI7v8wiGy1dxtdmxfEPHpZSr7C3+d6GQsR2WbhvNay5hU7ADDRHU6KPknBn1kZL/ZEaqxlBR1hMlHANeoUTLqQbdQL8DcNAlOicatjSfXMml93vy2y2Nz91GD646TIRPhjh+b2/JzxaREr3tHzFWzBLfqFXo/6k9beUVCi4GDrTSVLA/YKxqkcVItPlr+M9TvPZsr+84eQchpuCbUb0QoHmTBt//EMv indigo@indigo-pc" >> /home/$NEW_USER/.ssh/authorized_keys
-chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh/authorized_keys
-chmod 600 /home/$NEW_USER/.ssh/authorized_keys
+eval_echo "mkdir /home/$NEW_USER/.ssh"
+ls -la /home/$NEW_USER/.ssh
 
-sed -i "s/\(Port \).*\$/\14632/" /etc/ssh/sshd_config
+eval_echo "chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh"
+ls -la /home/$NEW_USER/.ssh
+
+eval_echo "chmod 700 /home/$NEW_USER/.ssh"
+ls -la /home/$NEW_USER/.ssh
+
+eval_echo "echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTH7actwVII/hwh/C/EuAR7shdfdOovjeak86k9V3vXHSTBIoarvZVEhsAd1i/2mlujmFhecbQvT78h7aKdmwF2r+2U/QgeWwPFmpGuNQXNGskidumW3FE1eI7v8wiGy1dxtdmxfEPHpZSr7C3+d6GQsR2WbhvNay5hU7ADDRHU6KPknBn1kZL/ZEaqxlBR1hMlHANeoUTLqQbdQL8DcNAlOicatjSfXMml93vy2y2Nz91GD646TIRPhjh+b2/JzxaREr3tHzFWzBLfqFXo/6k9beUVCi4GDrTSVLA/YKxqkcVItPlr+M9TvPZsr+84eQchpuCbUb0QoHmTBt//EMv indigo@indigo-pc' >> /home/$NEW_USER/.ssh/authorized_keys"
+ls -la /home/$NEW_USER/.ssh/authorized_keys
+
+eval_echo "chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh/authorized_keys"
+ls -la /home/$NEW_USER/.ssh/authorized_keys
+
+eval_echo "chmod 600 /home/$NEW_USER/.ssh/authorized_keys"
+ls -la /home/$NEW_USER/.ssh/authorized_keys
+
+eval_echo "sed -i 's/\(Port \).*\$/\14632/' /etc/ssh/sshd_config"
+cat /etc/ssh/sshd_config | grep '^Port '
+
 # comment PasswordAuthentication
-# sed -i '/PasswordAuthentication /s/^/#/' /etc/ssh/sshd_config  
-sed -i '/PasswordAuthentication /s/^#//' /etc/ssh/sshd_config
-sed -i "s/\(PasswordAuthentication \).*\$/\1yes/" /etc/ssh/sshd_config	
-sed -i "s/\(RSAAuthentication \).*\$/\1yes/" /etc/ssh/sshd_config
-sed -i "s/\(PubkeyAuthentication \).*\$/\1yes/" /etc/ssh/sshd_config
-sudo systemctl reload sshd
-# connect via putty ssh to $NEW_USER with peagent 
+# eval_echo "sed -i '/PasswordAuthentication /s/^/#/' /etc/ssh/sshd_config"
+eval_echo "sed -i '/PasswordAuthentication /s/^#//' /etc/ssh/sshd_config"
+eval_echo "sed -i 's/\(PasswordAuthentication \).*\$/\1no/' /etc/ssh/sshd_config"
+cat /etc/ssh/sshd_config | grep '^PasswordAuthentication '
 
-# setup dockerhun account	
+eval_echo "sed -i 's/\(RSAAuthentication \).*\$/\1yes/' /etc/ssh/sshd_config"
+cat /etc/ssh/sshd_config | grep '^RSAAuthentication '
+
+eval_echo "sed -i 's/\(PubkeyAuthentication \).*\$/\1yes/' /etc/ssh/sshd_config"
+cat /etc/ssh/sshd_config | grep '^PubkeyAuthentication '
+
+eval_echo "sudo systemctl reload sshd"
+
+echo "[93mPlease try to connect via ssh as $NEW_USER[0m"
+
+# setup dockerhub account
 # https://docs.docker.com/engine/reference/commandline/login/
 # copy ~/.docker/config.json <from other server>	
 	
 # setup timezone
-echo "Europe/Kiev" > /etc/timezone   
+eval_echo "ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime"
 sudo dpkg-reconfigure -f noninteractive tzdata
 	
 	
