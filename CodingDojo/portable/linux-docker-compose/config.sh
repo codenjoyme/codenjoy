@@ -22,3 +22,9 @@ echo "[0m"
 
 eval_echo "sed -i 's/\(server_name \).*\$/\1$SERVER_IP;/' ./config/nginx/domain.conf"
 cat ./config/nginx/domain.conf | grep 'server_name '
+
+eval_echo "sed -i 's/\(server_name \).*\$/\1$BALANCER_DOMAIN;/' ./config/nginx/codenjoy-balancer.conf"
+cat ./config/nginx/codenjoy-balancer.conf | grep 'server_name '
+
+eval_echo "sed -i 's/\(server_name \).*\$/\1$CODENJOY_DOMAIN;/' ./config/nginx/codenjoy-contest.conf"
+cat ./config/nginx/codenjoy-contest.conf | grep 'server_name '
