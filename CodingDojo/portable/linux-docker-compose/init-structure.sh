@@ -7,6 +7,14 @@ echo "[92m=====================================================================
 echo "==================================================== Init structure ===================================================="
 echo "========================================================================================================================[0m"
 
+if [ "x$BASIC_AUTH_LOGIN" = "x" ]; then
+    BASIC_AUTH_LOGIN=codenjoy
+fi
+
+if [ "x$BASIC_AUTH_PASSWORD" = "x" ]; then
+    BASIC_AUTH_PASSWORD=codenjoy
+fi
+
 eval_echo() {
     to_run=$1
     echo "[94m"
@@ -22,8 +30,8 @@ JETTY_UID=999
 generate_htpasswd() {
     rm ./config/nginx/.htpasswd
     touch ./config/nginx/.htpasswd
-    sudo sh -c "echo -n 'codenjoy:' >> ./config/nginx/.htpasswd"
-    sudo sh -c "openssl passwd -apr1 3141592 >> ./config/nginx/.htpasswd"
+    sudo sh -c "echo -n '$BASIC_AUTH_LOGIN:' >> ./config/nginx/.htpasswd"
+    sudo sh -c "openssl passwd -apr1 $BASIC_AUTH_PASSWORD >> ./config/nginx/.htpasswd"
     cat ./config/nginx/.htpasswd
 }
 eval_echo "generate_htpasswd"
