@@ -5,6 +5,7 @@ REVISION=master
 CODENJOY_CONTEXT=codenjoy-contest
 GAME=snakebattle
 GAME_PROJECT=snake-battle
+
 BASIC_AUTH_LOGIN=codenjoy
 BASIC_AUTH_PASSWORD=secureBasicAuthPassword
 
@@ -15,4 +16,6 @@ echo "GIT_REPO=$GIT_REPO"
 echo "REVISION=$REVISION"
 echo "GAME=$GAME"
 echo "GAME_PROJECT=$GAME_PROJECT"
+echo "BASIC_AUTH_LOGIN=$BASIC_AUTH_LOGIN"
+echo "BASIC_AUTH_PASSWORD=$BASIC_AUTH_PASSWORD"
 echo "[0m"
