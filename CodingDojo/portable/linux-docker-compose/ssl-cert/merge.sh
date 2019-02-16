@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 rm STAR_domain_com_CHAIN.crt
 
 cat STAR_domain_com.crt >> STAR_domain_com_CHAIN.crt

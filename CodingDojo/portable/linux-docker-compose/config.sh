@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 BUILD_SERVER=true
 BUILD_BALANCER=true
 GIT_REPO=https://github.com/codenjoyme/codenjoy.git
