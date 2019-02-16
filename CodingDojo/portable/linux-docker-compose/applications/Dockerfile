@@ -1,4 +1,16 @@
-FROM jetty:9.3 as javaworkspace
+FROM jetty:9.3 as jetty_updated
+MAINTAINER Alexander Baglay <apofig@gmail.com>
+
+USER root
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update \
+ && ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime \
+ && dpkg-reconfigure -f noninteractive tzdata
+
+# -----------------------------------------------------------------------
+
+FROM jetty-updated as java_workspace
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
 USER root
@@ -18,11 +30,13 @@ RUN apt-get update \
  && echo "${MAVEN_SHA} /tmp/apache-maven.tar.gz" | sha256sum -c - \
  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
  && rm -f /tmp/apache-maven.tar.gz \
- && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+ && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn \
+ && echo "Europe/Kiev" > /etc/timezone \
+ && dpkg-reconfigure -f noninteractive tzdata
 
 # -----------------------------------------------------------------------
 
-FROM javaworkspace as codenjoysource
+FROM java-workspace as codenjoy_source
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -44,7 +58,7 @@ RUN cd /tmp \
 
 # -----------------------------------------------------------------------
 
-FROM codenjoysource as codenjoydeploy
+FROM codenjoy-source as codenjoy_deploy
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive

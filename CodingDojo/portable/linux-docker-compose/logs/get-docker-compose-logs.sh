@@ -1,8 +1,12 @@
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 mkdir ./docker/
 
 now=`date +%Y-%m-%d_%H-%M-%S`
 echo $now
-
 
 cp $(eval 'docker inspect --format='{{.LogPath}}' codenjoy-balancer') ./docker/codenjoy-balancer-$now.log
 cp $(eval 'docker inspect --format='{{.LogPath}}' codenjoy-database') ./docker/codenjoy-database-$now.log

@@ -1,3 +1,8 @@
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
 # setup docker
 sudo apt-get update -y
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
@@ -15,20 +20,25 @@ chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 	
 NEW_USER=alex
-adduser $NEW_USER
+adduser --disabled-password --gecos "" $NEW_USER
 usermod -aG sudo $NEW_USER
 usermod -aG docker $NEW_USER
 	
 mkdir /home/$NEW_USER/.ssh
+chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh
 chmod 700 /home/$NEW_USER/.ssh
 echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCTH7actwVII/hwh/C/EuAR7shdfdOovjeak86k9V3vXHSTBIoarvZVEhsAd1i/2mlujmFhecbQvT78h7aKdmwF2r+2U/QgeWwPFmpGuNQXNGskidumW3FE1eI7v8wiGy1dxtdmxfEPHpZSr7C3+d6GQsR2WbhvNay5hU7ADDRHU6KPknBn1kZL/ZEaqxlBR1hMlHANeoUTLqQbdQL8DcNAlOicatjSfXMml93vy2y2Nz91GD646TIRPhjh+b2/JzxaREr3tHzFWzBLfqFXo/6k9beUVCi4GDrTSVLA/YKxqkcVItPlr+M9TvPZsr+84eQchpuCbUb0QoHmTBt//EMv indigo@indigo-pc" >> /home/$NEW_USER/.ssh/authorized_keys
+chown $NEW_USER:$NEW_USER /home/$NEW_USER/.ssh/authorized_keys
 chmod 600 /home/$NEW_USER/.ssh/authorized_keys
 
-sed -i "s/\(Port \).*\$/\18473/" /etc/ssh/sshd_config
-sed -i "s/\(PasswordAuthentication \).*\$/\1no/" /etc/ssh/sshd_config
+sed -i "s/\(Port \).*\$/\14632/" /etc/ssh/sshd_config
+# comment PasswordAuthentication
+# sed -i '/PasswordAuthentication /s/^/#/' /etc/ssh/sshd_config  
+sed -i '/PasswordAuthentication /s/^#//' /etc/ssh/sshd_config
+sed -i "s/\(PasswordAuthentication \).*\$/\1yes/" /etc/ssh/sshd_config	
 sed -i "s/\(RSAAuthentication \).*\$/\1yes/" /etc/ssh/sshd_config
 sed -i "s/\(PubkeyAuthentication \).*\$/\1yes/" /etc/ssh/sshd_config
-systemctl reload sshd
+sudo systemctl reload sshd
 # connect via putty ssh to $NEW_USER with peagent 
 
 # setup dockerhun account	
