@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockPlayerService {
     @Bean(name = "playerService")
-    public PlayerService bean() throws Exception {
+    public PlayerService bean() {
         return mock(PlayerService.class);
     }
 }

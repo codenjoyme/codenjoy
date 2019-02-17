@@ -33,15 +33,17 @@ public class BoardLog {
     private long time;
     private String playerName;
     private String board;
+    private String command;
     private String gameType;
     private Object score;
 
-    public BoardLog(long time, String playerName, String gameType, Object score, String board) {
+    public BoardLog(long time, String playerName, String gameType, Object score, String board, String command) {
         this.time = time;
         this.playerName = playerName;
         this.gameType = gameType;
         this.score = score;
         this.board = board;
+        this.command = command;
     }
 
     public BoardLog(ResultSet resultSet) {
@@ -51,6 +53,7 @@ public class BoardLog {
             gameType = resultSet.getString("game_type");
             score = resultSet.getInt("score");
             board = resultSet.getString("board");
+            command = resultSet.getString("command");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,11 +67,17 @@ public class BoardLog {
         return board;
     }
 
+    public String getCommand() {
+        return command;
+    }
+
     @Override
     public String toString() {
         return "BoardLog{" +
                 "playerName='" + playerName + '\'' +
+                ", time='" + time + '\'' +
                 ", board='" + board + '\'' +
+                ", command='" + command + '\'' +
                 ", gameType='" + gameType + '\'' +
                 ", score=" + score +
                 '}';
@@ -84,5 +93,9 @@ public class BoardLog {
 
     public long getTime() {
         return time;
+    }
+
+    public void setBoard(String board) {
+        this.board = board;
     }
 }

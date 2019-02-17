@@ -53,11 +53,11 @@ public class WebSocketRunnerMock {
         reset();
     }
 
-    public static WebSocketRunnerMock run(final String server, final String userName) throws Exception {
+    public static WebSocketRunnerMock run(String server, String userName, String code) throws Exception {
         final WebSocketRunnerMock client = new WebSocketRunnerMock();
         new Thread(() -> {
             try {
-                client.start(server, userName);
+                client.start(server, userName, code);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -82,15 +82,17 @@ public class WebSocketRunnerMock {
         return client;
     }
 
-    public void stop() throws Exception {
+    public void stop() {
         session.close();
     }
 
-    private void start(String server, final String userName) throws Exception {
+    private void start(String server, String userName, String code) throws Exception {
         wsClient = new WebSocketClient();
         wsClient.start();
 
-        session = wsClient.connect(new ClientSocket(), new URI(server + "?user=" + userName)).get(5000, TimeUnit.MILLISECONDS);
+        URI uri = new URI(server + "?user=" + userName + "&code=" + code);
+        System.out.println("Connecting to: " + uri);
+        session = wsClient.connect(new ClientSocket(), uri).get(5000, TimeUnit.MILLISECONDS);
     }
 
     public WebSocketRunnerMock willAnswer(String answer) {
@@ -124,22 +126,22 @@ public class WebSocketRunnerMock {
     }
 
     @WebSocket
-    private class ClientSocket {
+    public class ClientSocket {
 
         @OnWebSocketConnect
-        private void onConnect(Session session) {
+        public void onConnect(Session session) {
             System.out.println("client started!");
             started = true;
         }
 
         @OnWebSocketClose
-        private void onClose(int closeCode, String message) {
+        public void onClose(int closeCode, String message) {
             System.out.println("client closed!");
             closed = true;
         }
 
         @OnWebSocketMessage
-        private void onMessage(String data) {
+        public void onMessage(String data) {
             System.out.println("client got message: " + data);
             messages.add(data);
 

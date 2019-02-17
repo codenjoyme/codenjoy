@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,14 +44,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static com.codenjoy.dojo.web.controller.AdminController.PASS;
-
 @Controller
-@RequestMapping("/admin" + PASS)
+@RequestMapping("/admin")
+@Secured("ROLE_ADMIN")
 public class AdminController {
 
     public static final String GAME_NAME = "gameName";
-    public static final int PASS = 31415;
 
     @Autowired private TimerService timerService;
     @Autowired private PlayerService playerService;
@@ -133,13 +132,13 @@ public class AdminController {
     }
 
     @RequestMapping(params = "gameOver", method = RequestMethod.GET)
-    public String removePlayer(@RequestParam("gameOver") String name, Model model, HttpServletRequest request) {
+    public String removePlayer(@RequestParam("gameOver") String name, HttpServletRequest request) {
         playerService.remove(name);
         return getAdmin(request);
     }
 
     @RequestMapping(params = "removeSave", method = RequestMethod.GET)
-    public String removePlayerSave(@RequestParam("removeSave") String name, Model model, HttpServletRequest request) {
+    public String removePlayerSave(@RequestParam("removeSave") String name, HttpServletRequest request) {
         saveService.removeSave(name);
         return getAdmin(request);
     }
@@ -150,8 +149,14 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @RequestMapping(params = "removeRegistrationAll", method = RequestMethod.GET)
+    public String removePlayerRegistration(HttpServletRequest request) {
+        registration.removeAll();
+        return getAdmin(request);
+    }
+
     @RequestMapping(params = "removeSaveAll", method = RequestMethod.GET)
-    public String removePlayerSave(Model model, HttpServletRequest request) {
+    public String removePlayerSave(HttpServletRequest request) {
         saveService.removeAllSaves();
         return getAdmin(request);
     }
@@ -298,8 +303,8 @@ public class AdminController {
                 }
 
                 created++;
-                playerService.register(playerName, "127.0.0.1", settings.getGameName());
                 String code = getCode(playerName);
+                playerService.register(playerName, "127.0.0.1", settings.getGameName());
             }
         }
 
@@ -311,7 +316,7 @@ public class AdminController {
         if (registration.registered(playerName)) {
             return registration.login(playerName, playerName);
         } else {
-            return registration.register(playerName, playerName, "");
+            return registration.register(playerName, playerName, playerName, "");
         }
     }
 
@@ -326,7 +331,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin" + PASS + "?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin?" + GAME_NAME + "=" + gameName;
     }
 
     private String getAdmin() {

@@ -19,6 +19,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-$(document).ready(function() {
+
+pages = pages || {};
+
+pages.admin = function() {
     validatePlayerRegistration("#adminSettings");
-});
+
+    initHotkeys();
+}

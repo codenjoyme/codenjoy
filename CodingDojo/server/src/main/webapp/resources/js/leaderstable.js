@@ -40,6 +40,22 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
         return result;
     }
 
+    function getReadableNames(data) {
+        var result = {};
+        var players = Object.keys(data);
+        for (var index in players) {
+            var player = players[index];
+            var names = data[player].heroesData.readableNames;
+            var namesPlayers = Object.keys(names);
+            for (var index2 in namesPlayers) {
+                var player2 = namesPlayers[index2];
+                var name = names[player2];
+                result[player2] = name;
+            }
+        }
+        return result;
+    }
+
     function sortByScore(data) {
         var vals = new Array();
 
@@ -63,12 +79,21 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
         return result;
     }
 
+    function fromEmail(email) {
+        return email.split('@')[0];
+    }
+
+    function toName(email) {
+        return fromEmail(email.replace(' ', '&nbsp;'));
+    }
+
     function drawLeaderTable(data) {
         if (data == null) {
             $("#table-logs-body").empty();
             return;
         }
         var scores = getAllValues(data);
+        var readableNames = getReadableNames(data);
         if (scores == null) {
             $("#table-logs-body").empty();
             return;
@@ -80,7 +105,7 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
             onDrawItem = function(count, you, link, name, score) {
                 return '<tr>' +
                         '<td>' + count + '</td>' +
-                        '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
+                        '<td>' + '<a href="' + link + '">' + name + '</a>' + you + '</td>' +
                         '<td class="center">' + score + '</td>' +
                     '</tr>';
             }
@@ -89,9 +114,12 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
         var tbody = '';
         var count = 0;
         $.each(scores, function (email, score) {
-            var name = email.substring(0, email.indexOf('@'));
+            var name = toName(readableNames[email]);
 
-            var you = (name == playerName)?"=> ":"";
+            var you = '';
+            if (!!playerName) {
+                you = (name == toName(readableNames[playerName]))?"*":"";
+            }
 
             count++;
             var link = contextPath + '/board/player/' + email + ((!!code)?('?code=' + code):"");

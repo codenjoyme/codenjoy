@@ -27,21 +27,15 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
-    <title>Admin page</title>
-    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
-    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
+    <title>Codenjoy admin page</title>
 
-    <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/ajax-loader.js"></script>
-    <script src="${ctx}/resources/js/validation.js"></script>
-    <script src="${ctx}/resources/js/admin.js"></script>
-    <script src="${ctx}/resources/js/hotkeys.js"></script>
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+
+    <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body>
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="admin" contextPath="${ctx}" gameName="${gameName}"></div>
 
     <%@include file="forkMe.jsp"%>
     <div class="page-header">
@@ -60,7 +54,7 @@
                     <c:if test="${game == gameName}">
                         <b>
                     </c:if>
-                        <a href="${ctx}/admin31415?gameName=${game}&select">${game}${gamesCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
+                        <a href="${ctx}/admin?gameName=${game}&select">${game}${gamesCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
                     <c:if test="${game == gameName}">
                         </b>
                     </c:if>
@@ -79,14 +73,14 @@
             <td>
                 <c:choose>
                     <c:when test="${paused}">
-                        <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin31415?resume&gameName=${gameName}">Resume game</a>.
+                        <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin?resume&gameName=${gameName}">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The codenjoy is active</b></br> <a href="${ctx}/admin31415?pause&gameName=${gameName}">Pause game</a>.
+                        <b>The codenjoy is active</b></br> <a href="${ctx}/admin?pause&gameName=${gameName}">Pause game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
-            <form:form commandName="adminSettings" action="admin31415" method="POST">
+            <form:form commandName="adminSettings" action="admin" method="POST">
                 <tr>
                     <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
                 </tr>
@@ -105,10 +99,10 @@
             <td>
                 <c:choose>
                     <c:when test="${recording}">
-                        <b>The recording is active</b></br> <a href="${ctx}/admin31415?stopRecording&gameName=${gameName}">Stop recording</a>.
+                        <b>The recording is active</b></br> <a href="${ctx}/admin?stopRecording&gameName=${gameName}">Stop recording</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The recording was suspended</b></br> <a href="${ctx}/admin31415?recording&gameName=${gameName}">Start recording</a>.
+                        <b>The recording was suspended</b></br> <a href="${ctx}/admin?recording&gameName=${gameName}">Start recording</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -120,10 +114,10 @@
             <td>
                 <c:choose>
                     <c:when test="${debug}">
-                        <b>The debug in progress</b></br> <a href="${ctx}/admin31415?stopDebug&gameName=${gameName}">Stop debug</a>.
+                        <b>The debug in progress</b></br> <a href="${ctx}/admin?stopDebug&gameName=${gameName}">Stop debug</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The debug was suspended</b></br> <a href="${ctx}/admin31415?startDebug&gameName=${gameName}">Start debug</a>.
+                        <b>The debug was suspended</b></br> <a href="${ctx}/admin?startDebug&gameName=${gameName}">Start debug</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -135,10 +129,10 @@
             <td>
                 <c:choose>
                     <c:when test="${autoSave}">
-                        <b>The auto save in progress</b></br> <a href="${ctx}/admin31415?stopAutoSave&gameName=${gameName}">Stop auto save</a>.
+                        <b>The auto save in progress</b></br> <a href="${ctx}/admin?stopAutoSave&gameName=${gameName}">Stop auto save</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin31415?startAutoSave&gameName=${gameName}">Start auto save</a>.
+                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin?startAutoSave&gameName=${gameName}">Start auto save</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -150,10 +144,10 @@
             <td>
                 <c:choose>
                     <c:when test="${opened}">
-                        <b>The registration is active</b></br> <a href="${ctx}/admin31415?close&gameName=${gameName}">Close registration</a>.
+                        <b>The registration is active</b></br> <a href="${ctx}/admin?close&gameName=${gameName}">Close registration</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The registration was closed</b></br> <a href="${ctx}/admin31415?open&gameName=${gameName}">Open registration</a>.
+                        <b>The registration was closed</b></br> <a href="${ctx}/admin?open&gameName=${gameName}">Open registration</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -163,12 +157,12 @@
     <table class="admin-table" id="cleanGame">
         <tr>
             <td>
-                <a href="${ctx}/admin31415?cleanAll&gameName=${gameName}">Clean all scores</a>.
+                <a href="${ctx}/admin?cleanAll&gameName=${gameName}">Clean all scores</a>.
             </td>
         </tr>
     </table>
 
-    <form:form commandName="adminSettings" action="admin31415" method="POST">
+    <form:form commandName="adminSettings" action="admin" method="POST">
         <table class="admin-table" id="createNewUsers">
             <tr>
                 <td>NameMask</td>
@@ -187,7 +181,7 @@
     </form:form>
 
     <c:if test="${parameters.size() != 0}">
-        <form:form commandName="adminSettings" action="admin31415" method="POST">
+        <form:form commandName="adminSettings" action="admin" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -223,35 +217,36 @@
     </c:if>
 
     <c:if test="${players != null || savedGames != null}">
-        <form:form commandName="adminSettings" action="admin31415" method="POST">
+        <form:form commandName="adminSettings" action="admin" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
                 </tr>
                 <tr>
                     <td class="header">Player name</td>
+                    <td class="header">Player id/email</td>
                     <td class="header">IP</td>
                     <td class="header">Game name</td>
                     <td>
-                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin?loadAll&gameName=${gameName}">LoadAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        Registration&nbsp;&nbsp;
+                        <a href="${ctx}/admin?removeRegistrationAll&gameName=${gameName}">RemoveRegAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
                         <a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin31415?reloadAllAI&gameName=${gameName}">LoadAllAI</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin?reloadAllAI&gameName=${gameName}">LoadAllAI</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
@@ -266,13 +261,14 @@
                     </c:choose>
                         <c:choose>
                             <c:when test="${player.active}">
+                                <td><form:input path="players[${status.index}].readableName"/></td>
                                 <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
-                                <td><a href="${ctx}/admin31415?save=${player.name}&gameName=${gameName}">Save</a></td>
+                                <td><a href="${ctx}/admin?save=${player.name}&gameName=${gameName}">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin31415?load=${player.name}&gameName=${gameName}">Load</a></td>
+                                        <td><a href="${ctx}/admin?load=${player.name}&gameName=${gameName}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -280,21 +276,28 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin31415?removeSave=${player.name}&gameName=${gameName}">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin?removeSave=${player.name}&gameName=${gameName}">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/admin31415?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
-                                <td><a href="${ctx}/admin31415?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td><a href="${ctx}/admin?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>RemoveReg</td>
+                                    </c:otherwise>
+                                </c:choose>
+                                <td><a href="${ctx}/admin?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.name}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.aiPlayer}">
                                         <td>Loaded</td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
+                                        <td><a href="${ctx}/admin?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
@@ -307,13 +310,14 @@
                                 </c:choose>
                             </c:when>
                             <c:otherwise>
+                                <td><input class="uneditable-input" value="${player.readableName}"/></td>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>
                                 <td><input class="uneditable-input" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin31415?load=${player.name}&gameName=${gameName}">Load</a></td>
+                                        <td><a href="${ctx}/admin?load=${player.name}&gameName=${gameName}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -321,10 +325,18 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin31415?removeSave=${player.name}&gameName=${gameName}">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin?removeSave=${player.name}&gameName=${gameName}">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
+                                    </c:otherwise>
+                                </c:choose>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td><a href="${ctx}/admin?removeRegistration=${player.name}&gameName=${gameName}">RemoveReg</a></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>RemoveReg</td>
                                     </c:otherwise>
                                 </c:choose>
                                 <td>GameOver</td>

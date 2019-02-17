@@ -37,9 +37,7 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
     public <T> T select(String query, Object[] parameters, ObjectMapper<T> mapper) {
         return run(connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int index = 0; index < parameters.length; index++) {
-                    stmt.setObject(index + 1, parameters[index]);
-                }
+                fillStatement(stmt, parameters);
                 ResultSet resultSet = stmt.executeQuery();
                 return mapper.mapFor(resultSet);
             } catch (SQLException e) {
@@ -56,18 +54,22 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
         update(query, new Object[0]);
     }
 
-    public void update(String query, Object[] parameters) {
+    public void update(String query, Object... parameters) {
         run((For<Void>) connection -> {
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
-                for (int index = 0; index < parameters.length; index++) {
-                    stmt.setObject(index + 1, parameters[index]);
-                }
+                fillStatement(stmt, parameters);
                 stmt.execute();
             } catch (SQLException e) {
                 throw new RuntimeException(String.format("Error when update '%s': %s", query, e));
             }
             return null;
         });
+    }
+
+    public void fillStatement(PreparedStatement stmt, Object... parameters) throws SQLException {
+        for (int index = 0; index < parameters.length; index++) {
+            stmt.setObject(index + 1, parameters[index]);
+        }
     }
 
     public <T> void batchUpdate(String query, List<T> parameters, ForStmt<T> forStmt) {

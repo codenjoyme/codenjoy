@@ -37,6 +37,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
     var images = {};
     loadCanvasesData(alphabet, spriteElements);
     var reloading = false;
+    var readableNames = {};
+
+    function fromEmail(email) {
+        return email.split('@')[0];
+    }
+
+    function toName(email) {
+        return fromEmail(readableNames[email]);
+    }
 
     function toId(email) {
         return email.replace(/[@.]/gi, "_");
@@ -82,9 +91,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
     function loadSpriteImages(elements, alphabet, onImageLoad) {
         for (var index in elements) {
-            var char = alphabet[index];
+            var ch = alphabet[index];
             var color = elements[index];
-            plots[char] = color;
+            plots[ch] = color;
             var subFolder = (!!sprites) ? sprites + '/' : '';
             plotsUrls[color] = contextPath + '/resources/sprite/' + gameName + '/' + subFolder + color + '.png';
 
@@ -127,7 +136,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         playersList.forEach(function (player) {
             var playerName = player.name;
             var id = toId(playerName);
-            var name = playerName.split('@')[0];
+            var name = fromEmail(player.readableName);
             var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
             templateData.push({name : name, id : id, visible : visible })
         });
@@ -151,21 +160,17 @@ function initCanvases(contextPath, players, allPlayersScreen,
         });
     }
 
-    function decode(char) {
-        return plots[char];
+    function decode(ch){
+        return plots[ch];
     }
 
     function plotsContains(color) {
-        for (var char in plots) {
-            if (plots[char] == color) {
+        for (var ch in plots) {
+            if (plots[ch] == color) {
                 return true;
             }
         }
         return false;
-    }
-
-    var getNameFromEmail = function(email) {
-        return email.substring(0, email.indexOf('@'));
     }
 
     var getBoardDrawer = function(canvas, playerName, playerData, allPlayersScreen) {
@@ -202,9 +207,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
 
             if (isDrawByOrder) {
-                for (var char in plots) {
-                    var plot = plots[char];
-                    drawChar(char);
+                for (var ch in plots) {
+                    var plot = plots[ch];
+                    drawChar(ch);
                 }
             } else {
                 drawChar();
@@ -243,7 +248,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         var drawPlayerNames = function(font, beforeDraw) {
             try {
                 var drawName = function(name, point, font, heroData) {
-                    var name = getNameFromEmail(name);
+                    var name = toName(name);
                     var data = {
                         'name':name,
                         'point':point,
@@ -522,7 +527,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var names = getPlayers(data);
             for (var index in names) {
                 var name = names[index];
-                playersOnTop.push({ 'name':name });
+                playersOnTop.push({
+                    'name':name,
+                    'readableName':data[name].heroesData.readableNames[name]
+                });
             }
 
             reloading = true;
@@ -547,12 +555,14 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     function drawUserCanvas(playerName, data, allPlayersScreen) {
-        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
+        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер борды а не всем сразу?
             reloadCanvasesData();
         }
 
         var canvas = canvases[playerName];
         canvas.boardSize = boardSize;
+        readableNames = data.heroesData.readableNames;
+
         drawBoard(getBoardDrawer(canvas, playerName, data, allPlayersScreen));
 
         $("#score_" + toId(playerName)).text(data.score);

@@ -24,8 +24,9 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.snakebattle.model.Player;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
@@ -35,7 +36,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -49,20 +49,29 @@ public class BoardAddObjectsTest {
 
     private SnakeBoard game;
 
-    private Point additionObject;
-    boolean shouldAdd;
+    private Point addition;
+    boolean add;
 
-    public BoardAddObjectsTest(Point additionObject, boolean shouldAdd) {
-        this.additionObject = additionObject;
-        this.shouldAdd = shouldAdd;
+    public BoardAddObjectsTest(Point addition, boolean add) {
+        this.addition = addition;
+        this.add = add;
     }
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero();
 
-        game = new SnakeBoard(level, mock(Dice.class));
-        game.debugMode = true;
+        game = new SnakeBoard(level, mock(Dice.class),
+                new Timer(new SimpleParameter<>(0)),
+                new Timer(new SimpleParameter<>(300)),
+                new Timer(new SimpleParameter<>(1)),
+                new SimpleParameter<>(5),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(3),
+                new SimpleParameter<>(2));
+
+        Hero hero = level.getHero(game);
+
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);
         game.newGame(player);
@@ -84,7 +93,8 @@ public class BoardAddObjectsTest {
                 {new Apple(3, 2), false},
                 {new Apple(3, 1), false},
                 {new Apple(3, 0), false},
-                // нельзя ставить камни на яблоки,камни,таблетки,золото,стены
+                // нельзя ставить камни на яблоки,камни,таблетки,золото,стены и справа от выходов
+                {new Stone(2, 3), false},
                 {new Stone(2, 2), false},
                 {new Stone(2, 1), false},
                 {new Stone(3, 3), false},
@@ -127,16 +137,16 @@ public class BoardAddObjectsTest {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼ ╘►  ☼" +
                 "☼     ☼" +
-                "☼  ©  ☼" +
+                "☼# ©  ☼" +
                 "☼ ®○  ☼" +
                 "☼ $●  ☼" +
                 "☼☼☼☼☼☼☼");
-        int objectsBefore = 1;
-        Point objOnPoint = game.getObjOn(additionObject);
-        game.addToPoint(additionObject);
+        int before = 1;
+        Point object = game.getOn(addition);
+        game.addToPoint(addition);
         game.tick();
         int objectsAfter = 0;
-        String objType = additionObject.getClass().toString().replaceAll(".*\\.", "");
+        String objType = addition.getClass().toString().replaceAll(".*\\.", "");
         switch (objType) {
             case "Apple":
                 objectsAfter = game.getApples().size();
@@ -156,13 +166,13 @@ public class BoardAddObjectsTest {
             default:
                 fail("Отсутствуют действия на объект типа " + objType);
         }
-        if (shouldAdd)
+        if (add)
             assertEquals("Новый объект '" + objType + "' не был добавлен на поле!",
-                    objectsBefore + 1, objectsAfter);
+                    before + 1, objectsAfter);
         else
             assertEquals("Добавился новый объект '" + objType + "'" + " поверх существующего объекта!" +
-                            (objOnPoint == null ? null : objOnPoint.getClass()),
-                    objectsBefore, objectsAfter);
+                            (object == null ? null : object.getClass()),
+                    before, objectsAfter);
     }
 
 }

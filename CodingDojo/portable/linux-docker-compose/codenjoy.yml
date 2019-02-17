@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+   codenjoy_server:
+     depends_on:                                            #!L#
+       - codenjoy_db                                        #!L#
+     image: apofig/codenjoy-contest:1.0.28
+     container_name: codenjoy-contest
+     build:
+        context: ./applications
+        dockerfile: Dockerfile-contest
+     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
+     volumes:
+#       - ./materials/database:/var/lib/jetty/database      #L#
+       - ./config/codenjoy:/var/lib/jetty/config
+       - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
+       - /etc/localtime:/etc/localtime:ro
+#     ports:                                                #P#
+#       - "${CODENJOY_PORT}:8080"                           #P#
+     restart: always
+     networks:
+         codenjoy:
+             ipv4_address: 172.28.1.2
+
+   nginx:
+     depends_on:
+       - codenjoy_server
+     volumes:
+       - ./config/nginx/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf

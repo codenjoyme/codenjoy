@@ -30,12 +30,15 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import org.apache.commons.lang.StringUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -57,13 +60,10 @@ public class PlayerServiceImpl implements PlayerService {
     
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
-    private boolean registration = true;
+    private boolean isRegOpened = true;
 
-    @Autowired
-    protected PlayerGames playerGames;
-
-    @Autowired
-    private PlayerGamesView playerGamesView;
+    @Autowired protected PlayerGames playerGames;
+    @Autowired private PlayerGamesView playerGamesView;
 
     @Autowired
     @Qualifier("playerController")
@@ -73,17 +73,13 @@ public class PlayerServiceImpl implements PlayerService {
     @Qualifier("screenController")
     protected Controller screenController;
 
-    @Autowired
-    protected GameService gameService;
-
-    @Autowired
-    protected AutoSaver autoSaver;
-
-    @Autowired
-    protected ActionLogger actionLogger;
+    @Autowired protected GameService gameService;
+    @Autowired protected AutoSaver autoSaver;
+    @Autowired protected ActionLogger actionLogger;
+    @Autowired protected Registration registration;
 
     @Value("${game.ai}")
-    private boolean isAINeeded;
+    protected boolean isAINeeded;
 
     @PostConstruct
     public void init() {
@@ -109,7 +105,7 @@ public class PlayerServiceImpl implements PlayerService {
                 logger.debug("Registered user {} in game {}", name, gameName);
             }
 
-            if (!registration) {
+            if (!isRegOpened) {
                 return NullPlayer.INSTANCE;
             }
 
@@ -135,7 +131,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAIIfNeeded(String forPlayer, String gameName) {
-        if (forPlayer.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) return;
+        if (isAI(forPlayer)) return;
         if (!isAINeeded) return;
 
         GameType gameType = gameService.getGame(gameName);
@@ -149,16 +145,34 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void registerAI(String aiName, GameType gameType) {
-        Closeable ai = createAI(aiName, gameType);
+    private String gerCodeForAI(String aiName) {
+        return Hash.getCode(aiName, aiName);
+    }
+
+    private void registerAI(String playerName, GameType gameType) {
+        String code = isAI(playerName) ?
+                gerCodeForAI(playerName) :
+                registration.getCode(playerName);
+
+        Closeable ai = createAI(playerName, code, gameType);
         if (ai != null) {
-            Player player = getPlayer(PlayerSave.get(aiName, "127.0.0.1", gameType.name(), 0, null), gameType);
+            Player player = getPlayer(PlayerSave.get(playerName,
+                    "127.0.0.1", gameType.name(), 0, null), gameType);
             player.setAI(ai);
         }
     }
 
     @Override
     public Player register(PlayerSave playerSave) {
+        lock.writeLock().lock();
+        try {
+            return justRegister(playerSave);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private Player justRegister(PlayerSave playerSave) {
         String name = playerSave.getName();
         String gameName = playerSave.getGameName();
 
@@ -168,15 +182,19 @@ public class PlayerServiceImpl implements PlayerService {
         }
         Player player = getPlayer(playerSave, gameType);
 
-        if (name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
-            Closeable runner = createAI(name, gameType);
+        if (isAI(name)) {
+            Closeable runner = createAI(name, gerCodeForAI(name), gameType);
             player.setAI(runner);
         }
 
         return player;
     }
 
-    private Closeable createAI(String aiName, GameType gameType) {
+    private boolean isAI(String name) {
+        return name.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX);
+    }
+
+    private Closeable createAI(String aiName, String code, GameType gameType) {
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
@@ -201,15 +219,15 @@ public class PlayerServiceImpl implements PlayerService {
                     .in(gameType.getBoard())
                     .newInstance();
 
-            WebSocketRunner runner = runAI(aiName, solver, board);
+            WebSocketRunner runner = runAI(aiName, code, solver, board);
             return runner;
         } catch (Exception e) {
             return null;
         }
     }
 
-    protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
-        return WebSocketRunner.runAI(aiName, solver, board);
+    protected WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
+        return WebSocketRunner.runAI(aiName, code, solver, board);
     }
 
     private Player getPlayer(PlayerSave playerSave, GameType gameType) {
@@ -235,6 +253,8 @@ public class PlayerServiceImpl implements PlayerService {
 
             player = playerGame.getPlayer();
 
+            player.setReadableName(registration.getReadableName(player.getName()));
+
             if (logger.isDebugEnabled()) {
                 logger.debug("Player {} starting new game {}", name, playerGame.getGame());
             }
@@ -255,13 +275,12 @@ public class PlayerServiceImpl implements PlayerService {
                 time = System.currentTimeMillis();
             }
 
+            actionLogger.log(playerGames);
             autoSaver.tick();
 
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
-
-            actionLogger.log(playerGames);
 
             if (logger.isDebugEnabled()) {
                 time = System.currentTimeMillis() - time;
@@ -291,7 +310,7 @@ public class PlayerServiceImpl implements PlayerService {
                 if (playerController.requestControl(player, board)) {
                     requested++;
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.error("Unable to send control request to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
             }
@@ -414,6 +433,8 @@ public class PlayerServiceImpl implements PlayerService {
 
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
+                playerToUpdate.setReadableName(newPlayer.getReadableName());
+                registration.updateReadableName(newPlayer.getName(), newPlayer.getReadableName());
 
                 Game game = playerGame.getGame();
                 if (game != null && game.getSave() != null) {
@@ -477,17 +498,17 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void closeRegistration() {
-        registration = false;
+        isRegOpened = false;
     }
 
     @Override
     public boolean isRegistrationOpened() {
-        return registration;
+        return isRegOpened;
     }
 
     @Override
     public void openRegistration() {
-        registration = true;
+        isRegOpened = true;
     }
 
     @Override

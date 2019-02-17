@@ -27,12 +27,14 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import org.apache.commons.lang.StringUtils;
 
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
 
     private String name;
+    private String readableName;
     private String code;
     private String data;
     private String callbackUrl;
@@ -186,5 +188,17 @@ public class Player implements ScreenRecipient, Closeable {
 
     public Closeable getAI() {
         return ai;
+    }
+
+    public String getReadableName() {
+        return readableName;
+    }
+
+    public String getNotNullReadableName() {
+        return StringUtils.isEmpty(readableName) ? name : readableName;
+    }
+
+    public void setReadableName(String readableName) {
+        this.readableName = readableName;
     }
 }

@@ -30,7 +30,9 @@ import com.codenjoy.dojo.services.dao.Registration;
 import java.util.List;
 
 public class PlayerDetailInfo {
+
     private String name;
+    private String readableName;
     private String callbackUrl;
     private String gameType;
     private PMuptiplayerType multiplayer;
@@ -65,6 +67,10 @@ public class PlayerDetailInfo {
 
     public PlayerSave buildPlayerSave() {
         return PlayerSave.get(name, callbackUrl, gameType, Integer.valueOf(score), save);
+    }
+
+    public String getReadableName() {
+        return readableName;
     }
 
     public String getGameType() {
@@ -145,5 +151,9 @@ public class PlayerDetailInfo {
 
     public void setRegistration(Registration.User registration) {
         this.registration = registration;
+    }
+
+    public void setReadableName(String readableName) {
+        this.readableName = readableName;
     }
 }

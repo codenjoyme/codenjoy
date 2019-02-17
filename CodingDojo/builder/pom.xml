@@ -15,7 +15,7 @@
              mvn jetty:run-war -Dcontext=another-context -->
         <context>codenjoy-contest</context>
 
-        <jetty.version>9.3.14.v20161028</jetty.version>
+        <jetty.version>9.3.25.v20180904</jetty.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 

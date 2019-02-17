@@ -69,15 +69,23 @@ public class TimerService implements Runnable {
             dispatcher.updateScores();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error while processing next step", e);
+            logger.error("Error while updating scores", e);
         }
     }
 
     public void pause() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Update score timer paused");
+        }
+
         this.paused = true;
     }
 
     public void resume() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Update score timer started");
+        }
+
         this.paused = false;
     }
 

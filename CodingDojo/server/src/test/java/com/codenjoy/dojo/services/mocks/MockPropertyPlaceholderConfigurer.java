@@ -30,7 +30,7 @@ import org.springframework.core.io.ClassPathResource;
 public class MockPropertyPlaceholderConfigurer {
 
     @Bean(name = "propertyPlaceholderConfigurer")
-    public PropertyPlaceholderConfigurer bean() throws Exception {
+    public PropertyPlaceholderConfigurer bean() {
         PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
         configurer.setLocation(new ClassPathResource("/config/codenjoy-contest.properties"));
         return configurer;

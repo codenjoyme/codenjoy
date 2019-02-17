@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
         AutoSaver.class,
         MockSaveService.class})
 @TestPropertySource(properties = {
-        "autoSave=true"
+        "game.save.auto=true"
 })
 @RunWith(SpringJUnit4ClassRunner.class)
 public class AutoSaverTest {

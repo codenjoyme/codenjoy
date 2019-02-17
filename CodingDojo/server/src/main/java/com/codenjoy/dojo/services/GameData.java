@@ -36,17 +36,20 @@ public class GameData {
     private final Map<String, Object> scores;
     private final List<String> group;
     private final Map<String, HeroData> coordinates;
+    private Map<String, String> readableNames;
 
 
     public GameData(int boardSize, GuiPlotColorDecoder decoder,
                     Map<String, Object> scores, List<String> group,
-                    Map<String, HeroData> coordinates)
+                    Map<String, HeroData> coordinates,
+                    Map<String, String> readableNames)
     {
         this.boardSize = boardSize;
         this.decoder = decoder;
         this.scores = scores;
         this.group = group;
         this.coordinates = coordinates;
+        this.readableNames = readableNames;
     }
 
     public GuiPlotColorDecoder getDecoder() {
@@ -65,6 +68,7 @@ public class GameData {
         JSONObject result = new JSONObject();
         result.put("coordinates", coordinates);
         result.put("group", group);
+        result.put("readableNames", readableNames);
         return result;
     }
 }

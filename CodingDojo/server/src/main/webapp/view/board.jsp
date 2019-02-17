@@ -28,36 +28,16 @@
 <head>
     <meta charset="utf-8">
     <title>Game boards</title>
-    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
+
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <!--script src="${ctx}/resources/js/google-analytics.js"></script-->
-
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.mousewheel-3.1.13.min.js"></script>
-    <script src="${ctx}/resources/js/jcanvas/jcanvas.min.js"></script>
-    <script src="${ctx}/resources/js/jquery/jquery.simplemodal-1.4.4.js"></script>
-
-    <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/ajax-loader.js"></script>
-    <script src="${ctx}/resources/js/board-data-ws.js"></script>
-    <script src="${ctx}/resources/js/zoomer.js"></script>
-    <script src="${ctx}/resources/js/canvases.js"></script>
-    <script src="${ctx}/resources/js/canvases-text.js"></script>
     <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
-    <script src="${ctx}/resources/js/layout.js"></script>
-    <script src="${ctx}/resources/js/donate.js"></script>
-    <script src="${ctx}/resources/js/joystick.js"></script>
-    <script src="${ctx}/resources/js/leaderstable.js"></script>
-    <script src="${ctx}/resources/js/hotkeys.js"></script>
-    <script src="${ctx}/resources/js/advertisement.js"></script>
-    <script src="${ctx}/resources/js/board.js"></script>
+    <script src="${ctx}/resources/js/all.min.js"></script>
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 

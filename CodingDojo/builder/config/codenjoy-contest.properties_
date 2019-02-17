@@ -19,8 +19,10 @@
 # <http://www.gnu.org/licenses/gpl-3.0.html>.
 # #L%
 ###
-# расскомментируй этот конфиг, если хочешь делать кастомный конфиг
+#
 game.save.auto=true
+board.save.ticks=1
+game.ai=true
 log.debug=false
 page.main=
 page.registration=
@@ -33,3 +35,5 @@ database.url=
 database.name=
 database.user=
 database.password=
+admin.password=admin
+email.hash=secureSoul

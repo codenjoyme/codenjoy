@@ -32,6 +32,7 @@ public class PlayerCommand {
 
     private static Logger logger = DLoggerFactory.getLogger(PlayerCommand.class);
 
+    public static final int MAX_COMMAND_LENGTH = 100;
     private static final String COMMAND = "(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))";
     private static Pattern PATTERN = Pattern.compile(COMMAND, Pattern.CASE_INSENSITIVE);
 
@@ -48,7 +49,9 @@ public class PlayerCommand {
     }
 
     public static boolean isValid(String command) {
-        return command != null && PATTERN.matcher(command).find();
+        return command != null
+                && command.length() < MAX_COMMAND_LENGTH
+                && PATTERN.matcher(command).find();
     }
 
     public void execute(){
@@ -75,9 +78,12 @@ public class PlayerCommand {
                         joystick.act();
                     } else {
                         String[] split = p.split("[\\(,\\)]");
-                        int[] parameters = new int[split.length - 1];
-                        for (int index = 1; index < split.length; index++) {
-                            parameters[index - 1] = Integer.valueOf(split[index]);
+                        int[] parameters = new int[0];
+                        if (split.length != 0) {
+                            parameters = new int[split.length - 1];
+                            for (int index = 1; index < split.length; index++) {
+                                parameters[index - 1] = Integer.valueOf(split[index]);
+                            }
                         }
                         joystick.act(parameters);
                     }

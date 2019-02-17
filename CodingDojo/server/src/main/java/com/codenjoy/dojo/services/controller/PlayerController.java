@@ -35,7 +35,7 @@ public class PlayerController implements Controller<String, Joystick> {
     private PlayerTransport transport;
 
     @Override
-    public void requestControlToAll(String board) throws IOException {
+    public void requestControlToAll(String board) {
         throw new UnsupportedOperationException();
     }
 

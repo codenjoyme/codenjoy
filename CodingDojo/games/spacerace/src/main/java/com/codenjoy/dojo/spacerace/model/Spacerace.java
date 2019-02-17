@@ -22,9 +22,9 @@ package com.codenjoy.dojo.spacerace.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.spacerace.services.Events;
 
@@ -329,25 +329,14 @@ public class Spacerace implements Field {
 
     @Override
     public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(4);  //todo почему 4? вроде первая четверть экрана
-        } while (!isFree(rndX, rndY) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-        return pt(rndX, rndY);
+        return BoardUtils.getFreeRandom(
+                () -> dice.next(size),
+                () -> dice.next(4),
+                pt -> isFree(pt));
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
+    public boolean isFree(Point pt) {
         // TODO test me
         return  !walls.contains(pt) &&
                 !bullets.contains(pt) &&

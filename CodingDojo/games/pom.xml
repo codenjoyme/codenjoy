@@ -270,6 +270,9 @@
                         <canUpdateCopyright>false</canUpdateCopyright>
                         <canUpdateDescription>false</canUpdateDescription>
                         <canUpdateLicense>false</canUpdateLicense>
+                        <excludes>
+                            <exclude>**/*.json</exclude>
+                        </excludes>
                     </configuration>
                     <executions>
                         <execution>

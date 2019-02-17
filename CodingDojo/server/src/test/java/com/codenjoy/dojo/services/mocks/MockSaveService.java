@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockSaveService {
     @Bean(name = "saveService")
-    public SaveService bean() throws Exception {
+    public SaveService bean() {
         return mock(SaveService.class);
     }
 }

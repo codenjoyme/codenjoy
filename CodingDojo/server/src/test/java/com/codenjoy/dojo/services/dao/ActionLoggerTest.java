@@ -52,7 +52,14 @@ public class ActionLoggerTest {
                                 public String getContext() {
                                     return "context";
                                 }
-                            }), 1);
+                            }))
+        {
+            @Override
+            protected long now() {
+                return 123456789L;
+            }
+        };
+        logger.setTicks(1);
     }
 
     @After
@@ -66,8 +73,8 @@ public class ActionLoggerTest {
 
         act();
 
-        assertEquals("[BoardLog{playerName='player1', board='board1', gameType='game1', score=123}, " +
-                "BoardLog{playerName='player2', board='board2', gameType='game2', score=234}]", logger.getAll().toString());
+        assertEquals("[BoardLog{playerName='player1', time='123456789', board='board1', command='[]', gameType='game1', score=123}, " +
+                "BoardLog{playerName='player2', time='123456789', board='board2', command='[]', gameType='game2', score=234}]", logger.getAll().toString());
     }
 
     @Test

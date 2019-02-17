@@ -23,13 +23,18 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -47,7 +52,8 @@ public class Validator {
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
     public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
 
-    @Autowired private Players registration;
+    @Autowired private Players players;
+    @Autowired private ConfigProperties properties;
 
     private final Pattern email;
     private final Pattern gameName;
@@ -90,9 +96,12 @@ public class Validator {
         }
     }
 
-    public void checkMD5(String input) {
-        if (input == null || !md5.matcher(input).matches()) {
-            throw new IllegalArgumentException("Link hash is invalid: " + input);
+    public void checkMD5(String input, boolean canBeNull) {
+        boolean empty = StringUtils.isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && md5.matcher(input).matches()))
+        {
+            throw new IllegalArgumentException("Password is invalid: " + input);
         }
     }
 
@@ -111,15 +120,54 @@ public class Validator {
         }
     }
 
-    public void checkString(String input) {
+    public void checkString(String name, String input) {
         if (StringUtils.isEmpty(input)) {
-            throw new IllegalArgumentException("String can be empty: " + input);
+            throw new IllegalArgumentException(name + " string is empty: " + input);
         }
     }
 
-    public void validateAdmin(String expected, String actual) {
-        if (!DigestUtils.md5DigestAsHex(expected.getBytes()).equals(actual)){
+    public Player checkPlayerCode(String email, String code) {
+        checkEmail(email, Validator.CANT_BE_NULL);
+        checkCode(code, Validator.CANT_BE_NULL);
+
+        Player player = players.get(email);
+        if (player == null || !code.equals(player.getCode())) {
+            throw new IllegalArgumentException("Player code is invalid: " + code);
+        }
+        return player;
+    }
+
+    public void checkIsAdmin(String adminPassword) {
+        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(adminPassword)){
             throw new LoginException("Unauthorized admin access");
+        }
+    }
+
+    public void checkPositiveInteger(int count) {
+        if (count <= 0){
+            throw new IllegalArgumentException("Should be positive integer: " + count);
+        }
+    }
+
+    public void all(Runnable... validators) {
+        List<String> messages = new LinkedList<>();
+        Arrays.stream(validators)
+                .forEach(v -> {
+                    try {
+                        v.run();
+                    } catch (IllegalArgumentException e) {
+                        messages.add(e.getMessage());
+                    }
+                });
+        if (messages.isEmpty()) {
+            return;
+        }
+
+        if (messages.size() == 1) {
+            throw new IllegalArgumentException(messages.iterator().next());
+        } else {
+            throw new IllegalArgumentException("Something wrong with parameters on this request: " +
+                    messages.toString());
         }
     }
 }

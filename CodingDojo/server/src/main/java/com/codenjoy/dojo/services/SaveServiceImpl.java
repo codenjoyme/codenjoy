@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,11 +38,13 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected PlayerService playerService;
     @Autowired protected Registration registration;
     @Autowired protected PlayerGames playerGames;
+    @Autowired protected ConfigProperties config;
 
     @Override
     public void saveAll() {
+        long now = System.currentTimeMillis();
         for (PlayerGame playerGame : playerGames) {
-            saveGame(playerGame);
+            saveGame(playerGame, now);
         }
     }
 
@@ -56,22 +59,33 @@ public class SaveServiceImpl implements SaveService {
     public void save(String name) {
         PlayerGame playerGame = playerGames.get(name);
         if (playerGame != NullPlayerGame.INSTANCE) {
-            saveGame(playerGame);
+            long now = System.currentTimeMillis();
+            saveGame(playerGame, now);
         }
     }
 
-    private void saveGame(PlayerGame playerGame) {
+    private void saveGame(PlayerGame playerGame, long time) {
         saver.saveGame(playerGame.getPlayer(),
-                playerGame.getGame().getSave().toString());
+                playerGame.getGame().getSave().toString(),
+                time);
     }
 
     @Override
-    public void load(String name) {
+    public boolean load(String name) {
         PlayerSave save = saver.loadGame(name);
+        if (save == PlayerSave.NULL) { // TODO test me
+            save = saver.loadGame(Hash.getEmail(name, config.getEmailHash()));
+            if (save == PlayerSave.NULL) {
+                return false;
+            }
+        }
+
         if (playerService.contains(name)) { // TODO test me
             playerService.remove(name);
         }
         playerService.register(save);
+
+        return true;
     }
 
     @Override
@@ -91,6 +105,7 @@ public class SaveServiceImpl implements SaveService {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCode(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
+            info.setReadableName(registration.getReadableName(player.getName()));
             info.setAIPlayer(player.hasAI());
 
             copySave(player, info);

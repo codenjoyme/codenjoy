@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,16 +37,24 @@ import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
 import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
-    private static final int reducedValue = 3;
+
+    private static final int MINIMUM_LENGTH = 2;
+
+    public static final boolean NOW = true;
+    public static final boolean NEXT_TICK = !NOW;
 
     private LinkedList<Tail> elements;
     private boolean alive;
     private Direction direction;
+    private Direction newDirection;
     private int growBy;
     private boolean active;
     private int stonesCount;
     private int flyingCount;
     private int furyCount;
+    private Player player;
+    private boolean leaveApples;
+    private Point lastTailPosition;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -56,7 +65,9 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     public Hero(Direction direction) {
         elements = new LinkedList<>();
         growBy = 0;
+        leaveApples = false;
         this.direction = direction;
+        newDirection = null;
         alive = true;
         active = false;
         stonesCount = 0;
@@ -64,8 +75,14 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         furyCount = 0;
     }
 
-    public List<Tail> getBody() {
+    public List<Tail> body() {
         return elements;
+    }
+
+    public List<Tail> reversedBody() {
+        return new LinkedList<Tail>(elements){{
+            Collections.reverse(this);
+        }};
     }
 
     public Point getTailPoint() {
@@ -74,12 +91,12 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public int getX() {
-        return getHead().getX();
+        return head().getX();
     }
 
     @Override
     public int getY() {
-        return getHead().getY();
+        return head().getY();
     }
 
     @Override
@@ -103,16 +120,18 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return elements == null ? 0 : elements.size();
     }
 
-    public Point getHead() {
+    public Point head() {
         if (elements.isEmpty())
             return pt(-1, -1);
         return elements.getLast();
     }
 
-    public Point getNeck() {
-        if (elements.size() < 2)
+    public Point neck() {
+        if (elements.size() <= 1) {
             return pt(-1, -1);
-        return elements.get(elements.size() - 2);
+        }
+        int last = elements.size() - 1;
+        return elements.get(last - 1);
     }
 
     @Override
@@ -122,43 +141,53 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public void down() {
-        setDirection(DOWN);
+        setNewDirection(DOWN);
     }
 
     @Override
     public void up() {
-        setDirection(UP);
+        setNewDirection(UP);
     }
 
     @Override
     public void left() {
-        setDirection(LEFT);
+        setNewDirection(LEFT);
     }
 
     @Override
     public void right() {
-        setDirection(RIGHT);
+        setNewDirection(RIGHT);
     }
 
-    private void setDirection(Direction d) {
-        if (!isAlive() || !isActive())
+    private void setNewDirection(Direction d) {
+        if (!isActiveAndAlive()) {
             return;
-        if (d.equals(direction.inverted()))
-            return;
-        direction = d;
+        }
+        newDirection = d;
     }
 
     @Override
     public void act(int... p) {
-        if (!isActive())
+        // TODO только если змейка жива, если она в загоне нельзя давать эту команду выполнять
+        if (p.length == 1 && p[0] == 0) {
+            die();
+            leaveApples = true;
             return;
-        if (!alive)
+        }
+
+        if (!isActiveAndAlive()) {
             return;
+        }
         if (stonesCount > 0) {
             Point to = getTailPoint();
-            if (field.setStone(to))
+            if (field.setStone(to)) {
                 stonesCount--;
+            }
         }
+    }
+
+    private boolean isActiveAndAlive() {
+        return active && alive;
     }
 
     Direction getDirection() {
@@ -167,52 +196,85 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
 
     @Override
     public void tick() {
-        if (!isActive())
-            return;
-        if (!alive) {
-            clear();
+        if (!isActiveAndAlive()) {
             return;
         }
+
+        applyNewDirection();
+
         reduceIfShould();
         count();
 
         Point next = getNextPoint();
-
-        if (field.isApple(next))
-            growBy(1);
-        if (field.isStone(next) && !isFlying()) {
-            stonesCount++;
-            if (!isFury())
-                reduce(reducedValue);
-        }
-        if (field.isFlyingPill(next))
-            flyingCount += 10;
-        if (field.isFuryPill(next))
-            furyCount += 10;
-        if (field.isBarrier(next))
-            die();
         if (isMe(next) && !isFlying())
             selfReduce(next);
 
-        if (growBy > 0)
-            grow(next);
-        else
-            go(next);
+        go(next);
     }
 
-    private void count() {
-        if (isFlying())
+    private void applyNewDirection() {
+        if (newDirection != null && !newDirection.equals(direction.inverted())) {
+            direction = newDirection;
+            newDirection = null;
+        }
+    }
+
+    // Этот метод должен вызываться отдельно от tick,
+    // уже после обработки столкновений с другими змейками
+    public void eat() {
+        if (!isActiveAndAlive()) {
+            return;
+        }
+
+        Point head = head();
+        if (field.isApple(head)) {
+            growBy(1);
+            // если не сделать этого здесь, при съедании яблока и одновременной потере части корпуса
+            // яблоко будет зачтено лишь на следующий тик, что неправильно
+            grow();
+        }
+        if (field.isStone(head) && !isFlying()) {
+            stonesCount++;
+            if (!isFury()) {
+                reduce(field.stoneReduced().getValue(), NOW);
+            }
+        }
+        if (field.isFlyingPill(head)) {
+            eatFlying();
+        }
+        if (field.isFuryPill(head)) {
+            eatFury();
+        }
+        if (field.isBarrier(head)) {
+            die();
+        }
+    }
+
+    public void eatFlying() {
+        flyingCount += field.flyingCount().getValue();
+    }
+
+    public void eatFury() {
+        furyCount += field.furyCount().getValue();
+    }
+
+    public void count() {
+        if (isFlying()) {
             flyingCount--;
-        if (isFury())
+        }
+        if (isFury()) {
             furyCount--;
+        }
     }
 
     private void reduceIfShould() {
         if (growBy < 0) {
-            if (growBy < -elements.size())
+            if (growBy < -elements.size()) {
                 die();
-            else
+            } else {
                 elements = new LinkedList<>(elements.subList(-growBy, elements.size()));
+                // TODO тут тоже надо по идее lastTailPosition = getTailPoint();
+            }
             growBy = 0;
         }
     }
@@ -221,35 +283,60 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         if (from.equals(getTailPoint()))
             return;
         elements = new LinkedList<>(elements.subList(elements.indexOf(from), elements.size()));
+        // TODO тут тоже надо по идее lastTailPosition = getTailPoint();
     }
 
-    public void reduceFromPoint(Point from) {
+    public int reduceFrom(Point from) {
+        int was = size();
+        lastTailPosition = from;
         elements = new LinkedList<>(elements.subList(elements.indexOf(from) + 1, elements.size()));
+        if (size() < MINIMUM_LENGTH) {
+            die();
+            return was; // TODO я не нашел случая когда это может случиться
+        } else {
+            return  was - size();
+        }
     }
 
-    public void reduce(int reducedValue) {
-        if (size() < reducedValue + 2)
+    public int reduce(int len, boolean now) {
+        int was = size();
+        if (was < len + MINIMUM_LENGTH) {
             die();
-        else
-            growBy = -reducedValue;
+            return was;
+        } else {
+            if (now) {
+                elements = new LinkedList<>(elements.subList(len, elements.size()));
+                // TODO тут тоже надо по идее lastTailPosition = getTailPoint();
+            } else {
+                growBy = -len;
+            }
+            return len;
+        }
     }
 
     public Point getNextPoint() {
-        return getPointAt(getHead(), direction);
+        return getPointAt(head(), direction);
     }
 
-    private void grow(Point newLocation) {
+    private void grow() {
         growBy--;
-        elements.add(new Tail(newLocation, this));
+        elements.addFirst(new Tail(lastTailPosition, this));
     }
 
     private void go(Point newLocation) {
+        lastTailPosition = getTailPoint();
         elements.add(new Tail(newLocation, this));
         elements.removeFirst();
     }
 
     public boolean isAlive() {
         return alive;
+    }
+
+    public boolean isHeadIntersect(Hero enemy) {
+        return enemy.head().equals(head()) ||
+                enemy.neck().equals(head()) ||
+                neck().equals(enemy.head());
     }
 
     @Override
@@ -306,7 +393,7 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     }
 
     boolean itsMyHead(Point point) {
-        return getHead() == point;
+        return head() == point;
     }
 
     boolean isMe(Point next) {
@@ -317,17 +404,23 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return getTailPoint() == point;
     }
 
-    private void growBy(int val) {
+    public void growBy(int val) {
         growBy += val;
     }
 
-    private void clear() {
+    public void clear() {
+        List<Point> points = new LinkedList<>(elements);
         elements = new LinkedList<>();
+        if (leaveApples) {
+            points.forEach(e -> field.setApple(e));
+            leaveApples = false;
+        }
         growBy = 0;
     }
 
     public void die() {
         alive = false;
+        field.oneMoreDead(player);
     }
 
     public boolean isActive() {
@@ -350,12 +443,24 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return furyCount;
     }
 
+    public void removeFury() {
+        furyCount = 0;
+    }
+
     public boolean isFlying() {
         return flyingCount > 0;
     }
 
+    public void removeFlying() {
+        flyingCount = 0;
+    }
+
     public boolean isFury() {
         return furyCount > 0;
+    }
+
+    public void addTail(Point part) {
+        elements.addFirst(new Tail(part, this));
     }
 
     public void addTail(List<Point> tail) {
@@ -373,4 +478,26 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         }
         return elements.indexOf(pt);
     }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void event(Object event) {
+        player.event(event);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s,%s]", head().getX(), head().getY());
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
 }

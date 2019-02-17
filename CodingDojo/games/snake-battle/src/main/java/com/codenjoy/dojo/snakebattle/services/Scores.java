@@ -30,23 +30,23 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
-    private final Parameter<Integer> stillAliveScore;
     private final Parameter<Integer> appleScore;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> diePenalty;
-    private final Parameter<Integer> stonePenalty;
+    private final Parameter<Integer> stoneScore;
+    private final Parameter<Integer> eatScore;
 
     private volatile int score;
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(10);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
-        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
-        diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(10);
-        stonePenalty = settings.addEditBox("Stone penalty").type(Integer.class).def(1);
+        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
+        diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(0);
+        stoneScore = settings.addEditBox("Stone score").type(Integer.class).def(5);
+        eatScore = settings.addEditBox("Eat enemy score").type(Integer.class).def(10);
     }
 
     @Override
@@ -60,28 +60,22 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public void event(Object event) {
-        if (!(event instanceof Events))
+    public void event(Object object) {
+        if (!(object instanceof Events))
             return;
-        switch ((Events) event) {
-            case WIN:
-                score += winScore.getValue();
-                break;
-            case ALIVE:
-                score += stillAliveScore.getValue();
-                break;
-            case APPLE:
-                score += appleScore.getValue();
-                break;
-            case GOLD:
-                score += goldScore.getValue();
-                break;
-            case DIE:
-                score -= diePenalty.getValue();
-                break;
-            case STONE:
-                score -= stonePenalty.getValue();
-                break;
+        Events event = (Events)object;
+        if (event.isWin()) {
+            score += winScore.getValue();
+        } else if (event.isApple()) {
+            score += appleScore.getValue();
+        } else if (event.isGold()) {
+            score += goldScore.getValue();
+        } else if (event.isDie()) {
+            score -= diePenalty.getValue();
+        } else if (event.isStone()) {
+            score += stoneScore.getValue();
+        } else if (event.isEat()) {
+            score += eatScore.getValue() * event.getAmount();
         }
         score = Math.max(0, score);
     }

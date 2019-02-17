@@ -27,15 +27,15 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
@@ -67,11 +67,18 @@ public class AISolverTest {
         // этот весь код ниже используется сейчас только для распечатки изображения доски (для наглядности)
         // можно смело убирать, если мешает
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero();
 
-        SnakeBoard game = new SnakeBoard(level, dice);
-        game.debugMode = true;
+        SnakeBoard game = new SnakeBoard(level, dice,
+                new Timer(new SimpleParameter<>(0)),
+                new Timer(new SimpleParameter<>(300)),
+                new Timer(new SimpleParameter<>(1)),
+                new SimpleParameter<>(5),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(3),
+                new SimpleParameter<>(2));
 
+        Hero hero = level.getHero(game);
         EventListener listener = mock(EventListener.class);
         Player player = new Player(listener);
 

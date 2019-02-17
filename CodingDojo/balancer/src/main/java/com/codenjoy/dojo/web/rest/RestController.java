@@ -23,19 +23,18 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.DebugService;
-import com.codenjoy.dojo.services.Dispatcher;
-import com.codenjoy.dojo.services.dao.Scores;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
-import com.codenjoy.dojo.services.entity.DispatcherSettings;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,16 +45,25 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+
 @Controller
 @RequestMapping(value = "/rest")
 public class RestController {
 
+    private static Logger logger = DLoggerFactory.getLogger(RestController.class);
+
     @Autowired private Players players;
+    @Autowired private TimerService timer;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
     @Autowired private DebugService debug;
-    @Autowired private ConfigProperties properties;
+    @Autowired private GameServer game;
+    @Autowired private GameServers gameSerers;
+    @Autowired private ConfigProperties config;
 
+    // TODO test me
     @RequestMapping(value = "/score/day/{day}", method = RequestMethod.GET)
     @ResponseBody
     public List<PlayerScore> dayScores(@PathVariable("day") String day) {
@@ -64,39 +72,81 @@ public class RestController {
         return dispatcher.getScores(day);
     }
 
+    // TODO test me
+    // TODO add to admin page
+    @RequestMapping(value = "/score/finalists", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PlayerScore> finalistsScores() {
+        return dispatcher.getFinalists();
+    }
+
+    // TODO test me
+    // TODO add to admin page
+    @RequestMapping(value = "/score/disqualify/{player}/{adminPassword}", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean disqualify(@RequestBody List<String> players,
+                                       @PathVariable("adminPassword") String adminPassword)
+    {
+        validator.checkIsAdmin(adminPassword);
+        players.stream().forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
+
+        dispatcher.disqualify(players);
+
+        return true;
+    }
+
+    // TODO test me
+    // TODO add to admin page
+    @RequestMapping(value = "/score/disqualified/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> disqualified(@PathVariable("adminPassword") String adminPassword) {
+        validator.checkIsAdmin(adminPassword);
+
+        return dispatcher.disqualified();
+    }
+
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
-        validator.checkEmail(email, false);
-        validator.checkString(player.getFirstName());
-        validator.checkString(player.getLastName());
-        validator.checkMD5(player.getPassword());
-        validator.checkString(player.getCity());
-        validator.checkString(player.getSkills());
+        validator.all(
+                () -> validator.checkEmail(email, CANT_BE_NULL),
+                () -> validator.checkString("FirstName", player.getFirstName()),
+                () -> validator.checkString("LastName", player.getLastName()),
+                () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
+                () -> validator.checkString("City", player.getCity()),
+                () -> validator.checkString("Skills", player.getSkills())
+        );
 
         if (players.getCode(email) != null) {
             throw new IllegalArgumentException("User already registered");
         }
 
-        final ServerLocation[] location = {null};
-        doIt(new DoItOnServers() {
+        return doIt(new DoItOnServers<ServerLocation>() {
             @Override
-            public void onBalancer() {
-                location[0] = dispatcher.register(player, getIp(request));
+            public ServerLocation onGame() {
+                return dispatcher.registerNew(
+                        player.getEmail(),
+                        getFullName(player),
+                        player.getPassword(),
+                        getIp(request)
+                );
             }
 
             @Override
-            public void onGame() {
-                if (location[0] != null) {
-                    player.setCode(location[0].getCode());
-                    player.setServer(location[0].getServer());
+            public ServerLocation onBalancer(ServerLocation location) {
+                if (location != null) {
+                    player.setCode(location.getCode());
+                    player.setServer(location.getServer());
                     players.create(player);
                 }
+                return location;
             }
         });
+    }
 
-        return location[0];
+    private String getFullName(Player player) {
+        return player.getFirstName() + " " + player.getLastName();
     }
 
     private String getIp(HttpServletRequest request) {
@@ -113,25 +163,133 @@ public class RestController {
         T onFailed(ServerLocation data);
     }
 
-    interface DoItOnServers {
-        void onBalancer();
+    interface DoItOnServers<T> {
+        T onGame();
 
-        void onGame();
+        T onBalancer(T data);
+    }
+
+    @RequestMapping(value = "/player/{player}/active/{code}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean login(@PathVariable("player") String email,
+                         @PathVariable("code") String code)
+    {
+        Player player = validator.checkPlayerCode(email, code); // TODO test me
+
+        // TODO test me when not found on balancer
+        return dispatcher.exists(player.getEmail());
+    }
+
+    @RequestMapping(value = "/player/{player}/join/{code}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean joinToGameServer(@PathVariable("player") String email,
+                                      @PathVariable("code") String code,
+                                      HttpServletRequest request)
+    {
+        Player player = validator.checkPlayerCode(email, code); // TODO test me
+
+        // TODO test me when not exists - should remove from other servers and join
+        ServerLocation location = dispatcher.registerIfNotExists(
+                player.getServer(),
+                player.getEmail(),
+                getFullName(player),
+                player.getPassword(),
+                getIp(request));
+        return location != null;
+    }
+
+    @RequestMapping(value = "/player/{player}/exit/{code}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean exitFromGameServer(@PathVariable("player") String email,
+                                    @PathVariable("code") String code)
+    {
+        Player player = validator.checkPlayerCode(email, code); // TODO test me
+
+        return game.remove(
+                player.getServer(),
+                player.getEmail(),
+                player.getCode());
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public ServerLocation login(@RequestBody Player player) {
+    public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, new OnLogin<ServerLocation>(){
 
             @Override
             public ServerLocation onSuccess(ServerLocation data) {
-                return data;
+                return recreatePlayerIfNeeded(data, player.getEmail(), getIp(request));
             }
 
             @Override
             public ServerLocation onFailed(ServerLocation data) {
-               throw new LoginException("User name or password is incorrect");
+                // TODO test me
+                throw new LoginException("User name or password/code is incorrect");
+            }
+        });
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
+        return tryLogin(player, new OnLogin<ServerLocation>(){
+
+            @Override
+            public ServerLocation onSuccess(ServerLocation location) {
+                String server = location.getServer();
+                String email = location.getEmail();
+                Player old = players.get(email);
+
+                if (StringUtils.isNotEmpty(player.getPassword())
+                        && !player.getPassword().equals(old.getPassword()))
+                {
+                    if (game.existsOnServer(server, email)) {
+                        game.remove(server, email, location.getCode());
+                    }
+
+                    String newPassword = player.getPassword();
+                    player.setCode(Hash.getCode(email, newPassword));
+                }
+
+                player.resetNullFileds(old);
+                players.update(player);
+
+                return recreatePlayerIfNeeded(location, email, getIp(request));
+            }
+
+            @Override
+            public ServerLocation onFailed(ServerLocation data) {
+                throw new LoginException("User name or password/code is incorrect");
+            }
+        });
+    }
+
+    private ServerLocation recreatePlayerIfNeeded(ServerLocation current, String email, String callback) {
+        return doIt(new DoItOnServers<ServerLocation>() {
+            @Override
+            public ServerLocation onGame() {
+                // TODO test not exists - remove from other and create
+                return dispatcher.registerIfNotExists(
+                        current.getServer(),
+                        current.getEmail(),
+                        getFullName(players.get(current.getEmail())),
+                        current.getCode(),
+                        callback);
+            }
+
+            @Override
+            public ServerLocation onBalancer(ServerLocation updated) {
+                if (updated == null) {
+                    // TODO test me
+                    return current;
+                } else {
+                    // TODO test me
+                }
+
+                players.updateServer(email, updated.getServer(), updated.getCode());
+
+                return updated;
             }
         });
     }
@@ -139,43 +297,59 @@ public class RestController {
     private <T> T tryLogin(Player player, OnLogin<T> onLogin) {
         String email = player.getEmail();
         String password = player.getPassword();
+        String code = player.getCode();
 
-        validator.checkEmail(email, false);
-        validator.checkMD5(password);
+        validator.checkEmail(email, CANT_BE_NULL); // TODO test me
+        validator.checkMD5(password, CAN_BE_NULL); // TODO test me
+        validator.checkCode(code, CAN_BE_NULL); // TODO test me
 
         Player exist = players.get(email);
-        if (exist == null || !password.equals(exist.getPassword())) {
+        if (!isValid(exist, password, code)) {
             return onLogin.onFailed(new ServerLocation(email, null, null, null));
         }
+
         String server = players.getServer(email);
 
         return onLogin.onSuccess(
                 new ServerLocation(email,
-                        Hash.getId(email, properties.getEmailHash()),
+                        Hash.getId(email, config.getEmailHash()),
                         exist.getCode(),
                         server
                 ));
     }
 
-    private void doIt(DoItOnServers action) {
+    private boolean isValid(Player exist, String password, String code) {
+        if (exist == null) {
+            return false;
+        }
+
+        return exist.getPassword().equals(password)
+                || exist.getCode().equals(code);
+    }
+
+    private <T> T doIt(DoItOnServers<T> action) {
         List<String> errors = new LinkedList<>();
+        T result = null;
+
         try {
-            action.onBalancer();
+            result = action.onGame();
         } catch (Exception e) {
-            e.printStackTrace();
-            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+            logger.error("Error at game server", e);
+            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
         }
 
         try {
-            action.onGame();
+            result = action.onBalancer(result);
         } catch (Exception e) {
-            e.printStackTrace();
-            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
+            logger.error("Error at balancer", e);
+            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
         }
 
         if (!errors.isEmpty()) {
             throw new RuntimeException(errors.toString());
         }
+
+        return result;
     }
 
     @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
@@ -183,33 +357,39 @@ public class RestController {
     public boolean remove(@PathVariable("player") String email,
                           @PathVariable("adminPassword") String adminPassword)
     {
-        verifyIsAdmin(adminPassword);
+        validator.checkIsAdmin(adminPassword); // TODO test me
 
         Player player = players.get(email);
         if (player == null) {
+            // TODO test me
             throw new IllegalArgumentException("Attempt to delete non-existing user");
         }
 
-        doIt(new DoItOnServers() {
+        return doIt(new DoItOnServers<Boolean>() {
             @Override
-            public void onBalancer() {
-//                scores.delete(email);
-                players.remove(email);
+            public Boolean onGame() {
+                Boolean result = game.remove(player.getServer(), player.getEmail(), player.getCode());
+                return result != null && result;
             }
 
             @Override
-            public void onGame() {
-                dispatcher.remove(player.getServer(), player.getEmail(), player.getCode());
+            public Boolean onBalancer(Boolean removed) {
+                if (removed != null && removed) {
+//                    scores.delete(email);
+                    players.remove(email);
+                } else {
+                    // TODO test me
+                }
+                return removed;
             }
         });
-
-        return true;
     }
 
+    // TODO test me
     @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public List<Player> getPlayers(@PathVariable("adminPassword") String adminPassword) {
-        verifyIsAdmin(adminPassword);
+        validator.checkIsAdmin(adminPassword);
 
         return players.getPlayersDetails();
     }
@@ -228,48 +408,92 @@ public class RestController {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    // TODO test me
     @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.POST)
     @ResponseBody
     public boolean saveSettings(@PathVariable("adminPassword") String adminPassword,
-                                   @RequestBody DispatcherSettings settings)
+                                   @RequestBody ConfigProperties config)
     {
-        verifyIsAdmin(adminPassword);
+        validator.checkIsAdmin(adminPassword);
 
-        dispatcher.saveSettings(settings);
+        this.config.updateFrom(config);
+        gameSerers.update(config.getServers());
 
         return true;
     }
 
+    // TODO test me
     @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
-    public DispatcherSettings getSettings(@PathVariable("adminPassword") String adminPassword) {
-        verifyIsAdmin(adminPassword);
+    public ConfigProperties getSettings(@PathVariable("adminPassword") String adminPassword) {
+        validator.checkIsAdmin(adminPassword);
 
-        return dispatcher.getSettings();
+        return config;
     }
 
+    // TODO test me
     @RequestMapping(value = "/debug/get/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public boolean getDebug(@PathVariable("adminPassword") String adminPassword) {
-        verifyIsAdmin(adminPassword);
+        validator.checkIsAdmin(adminPassword);
 
         return debug.isWorking();
     }
 
+    // TODO test me
     @RequestMapping(value = "/debug/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
     @ResponseBody
     public boolean setDebug(@PathVariable("adminPassword") String adminPassword,
                                           @PathVariable("enabled") boolean enabled)
     {
-        verifyIsAdmin(adminPassword);
+        validator.checkIsAdmin(adminPassword);
 
         debug.setDebugEnable(enabled);
 
         return debug.isWorking();
     }
 
-    private void verifyIsAdmin(@PathVariable("adminPassword") String adminPassword) {
-        validator.validateAdmin(properties.getAdminPassword(), adminPassword);
+    // TODO test me
+    @RequestMapping(value = "/contest/enable/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> startContestStarted(@PathVariable("adminPassword") String adminPassword,
+                                     @PathVariable("enabled") boolean enabled)
+    {
+        validator.checkIsAdmin(adminPassword);
+
+        List<String> status = new LinkedList<>();
+        if (enabled) {
+            status.addAll(dispatcher.clearScores());
+            timer.resume();
+        } else {
+            timer.pause();
+        }
+
+        status.addAll(dispatcher.gameEnable(enabled));
+        status.add("On balancer contest is " + (timer.isPaused() ? "paused" : "started"));
+
+        return status;
+    }
+
+
+    // TODO test me
+    @RequestMapping(value = "/contest/enable/get/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean getContestStarted(@PathVariable("adminPassword") String adminPassword) {
+        validator.checkIsAdmin(adminPassword);
+
+        return timer.isPaused();
+    }
+
+    // TODO test me
+    @RequestMapping(value = "/cache/clear/{adminPassword}", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean invalidateCache(@PathVariable("adminPassword") String adminPassword) {
+        validator.checkIsAdmin(adminPassword);
+
+        dispatcher.clearCache();
+
+        return true;
     }
 
 }

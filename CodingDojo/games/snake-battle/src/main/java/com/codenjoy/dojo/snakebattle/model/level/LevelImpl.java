@@ -27,9 +27,11 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snakebattle.model.Elements;
+import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Hero getHero() {
+    public Hero getHero(Field field) {
         Point point = getPointsOf(
                 HEAD_DOWN,
                 HEAD_UP,
@@ -71,31 +73,122 @@ public class LevelImpl implements Level {
             return null;
         }
 
-        Direction direction = getDirection(point);
+        return parseSnake(point, field);
+    }
 
+    private Hero parseSnake(Point head, Field field) {
+        Direction direction = getDirection(head);
         Hero hero = new Hero(direction);
+        hero.init(field);
 
-        List<Point> tail = getPointsOf(
-                TAIL_END_DOWN,
-                TAIL_END_LEFT,
-                TAIL_END_UP,
-                TAIL_END_RIGHT,
-                TAIL_INACTIVE,
-                BODY_HORIZONTAL,
-                BODY_VERTICAL,
-                BODY_LEFT_DOWN,
-                BODY_LEFT_UP,
-                BODY_RIGHT_DOWN,
-                BODY_RIGHT_UP);
+        Elements headElement = getAt(head);
+        if (Arrays.asList(HEAD_FLY, ENEMY_HEAD_FLY).contains(headElement)) {
+            direction = getHeadDirectionWithMod(head);
+            hero.setDirection(direction);
+            hero.eatFlying();
+        }
 
-        tail.add(point);
-        hero.addTail(tail);
+        if (Arrays.asList(HEAD_EVIL, ENEMY_HEAD_EVIL).contains(headElement)) {
+            direction = getHeadDirectionWithMod(head);
+            hero.setDirection(direction);
+            hero.eatFury();
+        }
+
+        hero.addTail(head);
+        direction = direction.inverted();
+
+        Point point = head;
+        while (direction != null) {
+            point = direction.change(point);
+            hero.addTail(point);
+            direction = next(point, direction);
+        }
 
         return hero;
     }
 
+    private Direction getHeadDirectionWithMod(Point head) {
+        Elements atLeft = getAt(Direction.LEFT.change(head));
+        if (Arrays.asList(Elements.BODY_HORIZONTAL,
+                Elements.BODY_RIGHT_DOWN,
+                Elements.BODY_RIGHT_UP,
+                Elements.TAIL_END_LEFT,
+                Elements.ENEMY_BODY_HORIZONTAL,
+                Elements.ENEMY_BODY_RIGHT_DOWN,
+                Elements.ENEMY_BODY_RIGHT_UP,
+                Elements.ENEMY_TAIL_END_LEFT).contains(atLeft))
+        {
+            return Direction.RIGHT;
+        }
+
+        Elements atRight = getAt(Direction.RIGHT.change(head));
+        if (Arrays.asList(Elements.BODY_HORIZONTAL,
+                Elements.BODY_LEFT_DOWN,
+                Elements.BODY_LEFT_UP,
+                Elements.TAIL_END_RIGHT,
+                Elements.ENEMY_BODY_HORIZONTAL,
+                Elements.ENEMY_BODY_LEFT_DOWN,
+                Elements.ENEMY_BODY_LEFT_UP,
+                Elements.ENEMY_TAIL_END_RIGHT).contains(atRight))
+        {
+            return Direction.LEFT;
+        }
+
+        Elements atDown = getAt(Direction.DOWN.change(head));
+        if (Arrays.asList(Elements.BODY_VERTICAL,
+                Elements.BODY_LEFT_UP,
+                Elements.BODY_RIGHT_UP,
+                Elements.TAIL_END_DOWN,
+                Elements.ENEMY_BODY_VERTICAL,
+                Elements.ENEMY_BODY_LEFT_UP,
+                Elements.ENEMY_BODY_RIGHT_UP,
+                Elements.ENEMY_TAIL_END_DOWN).contains(atDown))
+        {
+            return Direction.UP;
+        }
+
+        Elements atUp = getAt(Direction.UP.change(head));
+        if (Arrays.asList(Elements.BODY_VERTICAL,
+                Elements.BODY_LEFT_DOWN,
+                Elements.BODY_RIGHT_DOWN,
+                Elements.TAIL_END_UP,
+                Elements.ENEMY_BODY_VERTICAL,
+                Elements.ENEMY_BODY_LEFT_DOWN,
+                Elements.ENEMY_BODY_RIGHT_DOWN,
+                Elements.ENEMY_TAIL_END_UP).contains(atUp))
+        {
+            return Direction.DOWN;
+        }
+
+        throw new RuntimeException("Smth wrong with head");
+    }
+
+    private Direction next(Point point, Direction direction) {
+        switch (getAt(point)) {
+            case BODY_HORIZONTAL:
+            case ENEMY_BODY_HORIZONTAL:
+                return direction;
+            case BODY_VERTICAL:
+            case ENEMY_BODY_VERTICAL:
+                return direction;
+            case BODY_LEFT_DOWN:
+            case ENEMY_BODY_LEFT_DOWN:
+                return ((direction == Direction.RIGHT) ? Direction.DOWN : Direction.LEFT);
+            case BODY_RIGHT_DOWN:
+            case ENEMY_BODY_RIGHT_DOWN:
+                return ((direction == Direction.LEFT) ? Direction.DOWN : Direction.RIGHT);
+            case BODY_LEFT_UP:
+            case ENEMY_BODY_LEFT_UP:
+                return ((direction == Direction.RIGHT) ? Direction.UP : Direction.LEFT);
+            case BODY_RIGHT_UP:
+            case ENEMY_BODY_RIGHT_UP:
+                return ((direction == Direction.LEFT) ? Direction.UP : Direction.RIGHT);
+        }
+        return null;
+    }
+
     @Override
-    public Hero getEnemy() {
+    public Hero getEnemy(Field field) {
         Point point = getPointsOf(
                 ENEMY_HEAD_DOWN,
                 ENEMY_HEAD_UP,
@@ -113,27 +206,7 @@ public class LevelImpl implements Level {
             return null;
         }
 
-        Direction direction = getDirection(point);
-
-        Hero hero = new Hero(direction);
-
-        List<Point> tail = getPointsOf(
-                ENEMY_TAIL_END_DOWN,
-                ENEMY_TAIL_END_LEFT,
-                ENEMY_TAIL_END_UP,
-                ENEMY_TAIL_END_RIGHT,
-                ENEMY_TAIL_INACTIVE,
-                ENEMY_BODY_HORIZONTAL,
-                ENEMY_BODY_VERTICAL,
-                ENEMY_BODY_LEFT_DOWN,
-                ENEMY_BODY_LEFT_UP,
-                ENEMY_BODY_RIGHT_DOWN,
-                ENEMY_BODY_RIGHT_UP);
-
-        tail.add(point);
-        hero.addTail(tail);
-
-        return hero;
+        return parseSnake(point, field);
     }
 
     private Direction getDirection(Point point) {

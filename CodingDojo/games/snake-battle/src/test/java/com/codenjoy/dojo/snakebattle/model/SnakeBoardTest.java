@@ -23,24 +23,22 @@ package com.codenjoy.dojo.snakebattle.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.snakebattle.model.Player;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
-import com.codenjoy.dojo.snakebattle.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
+import static com.codenjoy.dojo.snakebattle.model.SnakeMultiplayerTest.verifyEvents;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 /**
  * @author Kors
@@ -53,10 +51,12 @@ public class SnakeBoardTest {
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private SimpleParameter<Integer> timer;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        timer = new SimpleParameter<>(0);
     }
 
     private void givenFl(String board) {
@@ -66,10 +66,18 @@ public class SnakeBoardTest {
 
     private void given(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero();
 
-        game = new SnakeBoard(level, dice);
-        game.debugMode = true;
+        game = new SnakeBoard(level, dice,
+                new Timer(timer),
+                new Timer(new SimpleParameter<>(300)),
+                new Timer(new SimpleParameter<>(1)),
+                new SimpleParameter<>(5),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(10),
+                new SimpleParameter<>(3),
+                new SimpleParameter<>(2));
+
+        Hero hero = level.getHero(game);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -191,7 +199,7 @@ public class SnakeBoardTest {
 
         game.tick();
 
-        verify(listener).event(Events.GOLD);
+        verifyEvents(listener, "[GOLD]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -223,7 +231,7 @@ public class SnakeBoardTest {
 
         game.tick();
 
-        verify(listener).event(Events.APPLE);
+        verifyEvents(listener, "[APPLE]");
 
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -254,8 +262,8 @@ public class SnakeBoardTest {
 
         game.tick();
 
-        verify(listener).event(Events.STONE);
-        verify(listener).event(Events.DIE);
+        verifyEvents(listener, "[DIE]");
+
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
 
@@ -278,6 +286,53 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼");
 
         assertEquals(false, hero.isAlive());
+        assertEquals(true, hero.isActive());
+    }
+
+    @Test
+    public void shouldStoneAndAlive_whenEatStone_lengthIsOk() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼╔═══╗☼" +
+                "☼╚═╗╘╝☼" +
+                "☼  ▼  ☼" +
+                "☼  ●  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼╔═══╗☼" +
+                "☼╚═╗╘╝☼" +
+                "☼  ▼  ☼" +
+                "☼  ●  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        verifyEvents(listener, "[STONE]");
+
+        assertEquals(true, hero.isAlive());
+        assertEquals(true, hero.isActive());
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼╔═╕  ☼" +
+                "☼╚═╗  ☼" +
+                "☼  ║  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼╔╕   ☼" +
+                "☼╚═╗  ☼" +
+                "☼  ║  ☼" +
+                "☼  ║  ☼" +
+                "☼  ▼  ☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertEquals(true, hero.isAlive());
         assertEquals(true, hero.isActive());
     }
 
@@ -658,7 +713,8 @@ public class SnakeBoardTest {
 
         game.tick();
 
-        verify(listener).event(Events.DIE);
+        verifyEvents(listener, "[DIE]");
+
         assertEquals(false, hero.isAlive());
         assertEquals(true, hero.isActive());
 
@@ -1263,6 +1319,7 @@ public class SnakeBoardTest {
         game.tick();
 
         assertEquals(9, hero.getFuryCount());
+        assertEquals(0, hero.getStonesCount());
         assertEquals(true, hero.isFury());
 
         assertE("☼☼☼☼☼☼☼☼☼" +
@@ -1307,6 +1364,64 @@ public class SnakeBoardTest {
                 "☼       ☼" +
                 "☼       ☼" +
                 "☼     ╘♥☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldDropStone_afterFury() {
+        shouldEatStones_whenEatFuryPill();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼     ╘♥☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        assertEquals(1, hero.getStonesCount());
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+
+        hero.act();
+        game.tick();
+
+        assertEquals(0, hero.getStonesCount());
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼       ☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼      ●☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼      ♥☼" +
+                "☼      ╙☼" +
+                "☼       ☼" +
+                "☼      ●☼" +
                 "☼       ☼" +
                 "☼       ☼" +
                 "☼       ☼" +
@@ -1377,4 +1492,98 @@ public class SnakeBoardTest {
                 "☼       ☼" +
                 "☼☼☼☼☼☼☼☼☼");
     }
+
+    @Test
+    public void shouldDropStone_afterFuryDisabled() {
+        shouldDisableFuryPillEffect_when10Ticks();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼   ◄╕  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+        assertEquals(1, hero.getStonesCount());
+
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼  ◄╕●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+
+
+        assertEquals(0, hero.getStonesCount());
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼" +
+                "☼ ◄╕ ●  ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼       ☼" +
+                "☼☼☼☼☼☼☼☼☼");
+    }
+
+    // разворот на 180 короткой змейки невозможен
+    @Test
+    public void shouldTurn180_whenLengthIs2() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼╘►   ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.up(); // раньше так срабатывало
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ ╘►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // разворот на 180 с откусыванием хвоста невозможен
+    @Test
+    public void shouldTurn180_whenLengthIs5() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼╘═══►☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.down(); // раньше так срабатывало
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ ╘═══☻" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
 }

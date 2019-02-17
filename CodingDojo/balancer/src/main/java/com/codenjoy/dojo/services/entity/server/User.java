@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.entity.server;
 public class User {
 
     private String email;
+    private String readableName;
     private int approved;
     private String password;
     private String code;
@@ -34,8 +35,9 @@ public class User {
         // do nothing
     }
 
-    public User(String email, int approved, String password, String code, String data) {
+    public User(String email, String readableName, int approved, String password, String code, String data) {
         this.email = email;
+        this.readableName = readableName;
         this.approved = approved;
         this.password = password;
         this.code = code;
@@ -44,6 +46,10 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getReadableName() {
+        return readableName;
     }
 
     public int getApproved() {
@@ -66,6 +72,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
+                ", readable_name=" + readableName +
                 ", email_approved=" + approved +
                 ", password='" + password + '\'' +
                 ", code='" + code + '\'' +

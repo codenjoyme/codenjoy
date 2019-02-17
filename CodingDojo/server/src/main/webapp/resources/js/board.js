@@ -20,7 +20,20 @@
  * #L%
  */
 
-function initBoardPage(game) {
+pages = pages || {};
+
+pages.board = function() {
+    game.gameName = getSettings('gameName');
+    game.playerName = getSettings('playerName');
+    game.code = getSettings('code');
+    game.allPlayersScreen = getSettings('allPlayersScreen');
+    game.contextPath = getSettings('contextPath');
+
+    initBoardPage(game, initBoardComponents);
+    initHotkeys();
+}
+
+function initBoardPage(game, onLoad) {
     loadData('/rest/player/' + game.playerName + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
         game.contextPath = gameData.context;
         game.multiplayerType = gameData.gameType.multiplayerType;
@@ -42,7 +55,9 @@ function initBoardPage(game) {
             }
         }
 
-        initBoardComponents(game);
+        if (!!onLoad) {
+            onLoad(game);
+        }
     });
 }
 
@@ -76,8 +91,10 @@ function initBoardComponents(game) {
     }
 
     if (typeof initJoystick == 'function') {
-        initJoystick(game.playerName, game.registered,
-            game.code, game.contextPath);
+        if (!!game.playerName) {
+            initJoystick(game.playerName, game.registered,
+                game.code, game.contextPath);
+        }
     }
 
     if (game.enableLeadersTable) {
@@ -87,10 +104,6 @@ function initBoardComponents(game) {
     if (!game.enableInfo) {
         $("#fork-me").hide();
         $("#how-to-play").hide();
-    }
-
-    if (game.enableHotkeys) {
-        // do nothing because hotkeys init itself
     }
 
     if (game.enableAdvertisement) {
@@ -115,13 +128,3 @@ function initBoardComponents(game) {
         setupMouseWheelZoom();
     }
 }
-
-$(document).ready(function() {
-    game.gameName = getSettings('gameName');
-    game.playerName = getSettings('playerName');
-    game.code = getSettings('code');
-    game.allPlayersScreen = getSettings('allPlayersScreen');
-    game.contextPath = getSettings('contextPath');
-
-    initBoardPage(game);
-});

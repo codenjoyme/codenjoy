@@ -32,8 +32,8 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
-import com.codenjoy.dojo.snakebattle.client.ai.DummyAISolver;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.Elements;
@@ -44,9 +44,27 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private final Level level;
+    private final Parameter<Integer> timeBeforeStart;
+    private final Parameter<Integer> roundsPerMatch;
+    private final Parameter<Integer> playersPerRoom;
+    private final Parameter<Integer> flyingCount;
+    private final Parameter<Integer> furyCount;
+    private final Parameter<Integer> stoneReducedValue;
+    private final Parameter<Integer> minTicksForWin;
+    private final Parameter<Integer> timePerRound;
+    private final Parameter<Integer> timeForWinner;
 
     public GameRunner() {
         new Scores(0, settings);
+        timePerRound = settings.addEditBox("Time per Round").type(Integer.class).def(300);
+        timeForWinner = settings.addEditBox("Time for Winner").type(Integer.class).def(1);
+        timeBeforeStart = settings.addEditBox("Time before start Round").type(Integer.class).def(5);
+        roundsPerMatch = settings.addEditBox("Rounds per Match").type(Integer.class).def(1);
+        playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
+        flyingCount = settings.addEditBox("Flying count").type(Integer.class).def(10);
+        furyCount = settings.addEditBox("Fury count").type(Integer.class).def(10);
+        stoneReducedValue = settings.addEditBox("Stone reduced value").type(Integer.class).def(3);
+        minTicksForWin = settings.addEditBox("Min length for win").type(Integer.class).def(40);
         level = new LevelImpl(getMap());
     }
 
@@ -84,7 +102,15 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     public GameField createGame(int levelNumber) {
-        return new SnakeBoard(level, getDice());
+        return new SnakeBoard(level, getDice(),
+                new Timer(timeBeforeStart),
+                new Timer(timePerRound),
+                new Timer(timeForWinner),
+                roundsPerMatch,
+                flyingCount,
+                furyCount,
+                stoneReducedValue,
+                minTicksForWin);
     }
 
     @Override
@@ -109,7 +135,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Class<? extends Solver> getAI() {
-        return DummyAISolver.class;
+        return AISolver.class;
     }
 
     @Override
@@ -119,7 +145,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE);
+        return MultiplayerType.TEAM.apply(playersPerRoom.getValue(), MultiplayerType.DISPOSABLE);
     }
 
     @Override

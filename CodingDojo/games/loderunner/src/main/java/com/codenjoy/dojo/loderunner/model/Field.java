@@ -25,7 +25,6 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public interface Field extends GameField<Player> {
 
     boolean isPipe(int x, int y);
 
-    boolean isFree(int x, int y);
+    boolean isFree(Point pt);
 
     boolean isFullBrick(int x, int y);
 
@@ -58,5 +57,5 @@ public interface Field extends GameField<Player> {
 
     boolean isBorder(int x, int y);
 
-    List<Hero> getHeroes(); // TODO не слишком ли я рассекретил?
+    List<Hero> getHeroes();
 }

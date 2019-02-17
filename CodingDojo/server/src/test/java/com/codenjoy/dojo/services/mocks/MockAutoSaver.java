@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockAutoSaver {
     @Bean(name = "autoSaver")
-    public AutoSaver bean() throws Exception {
+    public AutoSaver bean() {
         return mock(AutoSaver.class);
     }
 }

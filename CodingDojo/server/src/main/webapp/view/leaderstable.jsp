@@ -28,7 +28,7 @@
             <th width="5%">
                 <c:choose>
                     <c:when test="${code != null}">
-                        <a href="${ctx}/board?code=${code}">#</a>
+                        <a href="${ctx}/board/game/${gameName}?code=${code}">#</a>
                     </c:when>
                     <c:otherwise>
                         <a href="${ctx}/board/game/${gameName}">#</a>

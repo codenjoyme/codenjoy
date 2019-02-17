@@ -54,6 +54,7 @@ public class AutoSaver extends Suspendable implements Tickable {
         if (justStart) {
             justStart = false;
             save.loadAll();
+            java.awt.Toolkit.getDefaultToolkit().beep();
         } else {
             count++;
             if (count % TICKS == (TICKS - 1)) {

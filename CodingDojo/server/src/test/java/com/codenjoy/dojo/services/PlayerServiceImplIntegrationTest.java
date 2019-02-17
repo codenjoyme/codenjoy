@@ -26,6 +26,7 @@ import com.codenjoy.dojo.client.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.controller.Controller;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mocks.AISolverStub;
 import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -55,6 +56,7 @@ public class PlayerServiceImplIntegrationTest {
     private Controller screenController;
     private Controller playerController;
     private PlayerGames playerGames;
+    private Registration registration;
     private Map<String, GameType> gameTypes = new HashMap<>();
     private Map<String, WebSocketRunner> runners = new HashMap<>();
 
@@ -79,9 +81,15 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.actionLogger
                         = this.actionLogger = mock(ActionLogger.class);
+
+                PlayerServiceImplIntegrationTest.this.registration
+                        = this.registration = mock(Registration.class);
+
+                this.isAINeeded = true;
             }
 
-            protected WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
+            @Override
+            protected WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
                 WebSocketRunner runner = mock(WebSocketRunner.class);
                 doAnswer(inv -> {
                     return null; // for debug
@@ -99,7 +107,7 @@ public class PlayerServiceImplIntegrationTest {
         int ai2 = 0;
         int ai3 = 0;
         when(gameService.getGame(anyString())).thenAnswer(
-                inv -> getOrCreateGameType(inv.getArgumentAt(0, String.class))
+                inv -> getOrCreateGameType(inv.getArgument(0))
         );
 
         // первый плеер зарегался
