@@ -6,6 +6,7 @@ services:
      container_name: codenjoy-database                      #!L#
      volumes:                                               #!L#
        - ./materials/database:/var/lib/postgresql/data      #!L#
+       - /etc/localtime:/etc/localtime:ro                   #!L#
 #     ports:                                                #!LP#
 #       - "${POSTGRES_PORT}:5432"                           #!LP#
      restart: always                                        #!L#
@@ -26,6 +27,7 @@ services:
        - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf
        - ./config/nginx/.htpasswd:/etc/nginx/.htpasswd
        - ./ssl-cert:/usr/share/ca-certificates/extra
+       - /etc/localtime:/etc/localtime:ro
      ports: 
 #       - "443:443"                                         #S#
        - "80:80"   
