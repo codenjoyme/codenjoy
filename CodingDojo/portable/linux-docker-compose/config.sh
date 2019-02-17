@@ -24,11 +24,12 @@ parameter() {
     file=$1
     key=$2
     value=$3
-    eval_echo "sed -i 's/\($key\).*\$/\1$value;/' $file"
+    sep=$4
+    eval_echo "sed -i 's/\($key\).*\$/\1$value$sep/' $file"
     cat $file | grep $key
 }
 
-parameter ./config/nginx/domain.conf "server_name " $SERVER_IP
+parameter ./config/nginx/domain.conf "server_name " $SERVER_IP ";"
 
 if [ "x$BALANCER" = "xtrue" ]; then
     domain=$BALANCER_DOMAIN
@@ -39,8 +40,8 @@ fi
 eval_echo "sed -i 's,\(return 301 https\?://\).*\\$,\1$domain\$,' ./config/nginx/domain.conf"
 cat ./config/nginx/domain.conf | grep 'return 301 '
 
-parameter ./config/nginx/codenjoy-balancer.conf "server_name " $BALANCER_DOMAIN
-parameter ./config/nginx/codenjoy-contest.conf "server_name " $CODENJOY_DOMAIN
+parameter ./config/nginx/codenjoy-balancer.conf "server_name " $BALANCER_DOMAIN ";"
+parameter ./config/nginx/codenjoy-contest.conf "server_name " $CODENJOY_DOMAIN ";"
 
 comment() {
     file=$1
@@ -85,3 +86,12 @@ ssl() {
 ssl ./config/nginx/domain.conf
 ssl ./config/nginx/codenjoy-balancer.conf
 ssl ./config/nginx/codenjoy-contest.conf
+
+parameter ./config/codenjoy/codenjoy-balancer.properties "database.password=" $POSTGRES_PASSWORD
+parameter ./config/codenjoy/codenjoy-balancer.properties "admin.password=" $ADMIN_PASSWORD
+parameter ./config/codenjoy/codenjoy-balancer.properties "email.hash=" $EMAIL_HASH
+parameter ./config/codenjoy/codenjoy-balancer.properties "game.type=" $GAME
+
+parameter ./config/codenjoy/codenjoy-contest.properties "database.password=" $POSTGRES_PASSWORD
+parameter ./config/codenjoy/codenjoy-contest.properties "admin.password=" $ADMIN_PASSWORD
+parameter ./config/codenjoy/codenjoy-contest.properties "email.hash=" $EMAIL_HASH
