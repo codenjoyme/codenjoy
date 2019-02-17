@@ -20,8 +20,15 @@ do
 done
 echo "[0m"
 
-eval_echo "sed -i 's/\(server_name \).*\$/\1$SERVER_IP;/' ./config/nginx/domain.conf"
-cat ./config/nginx/domain.conf | grep 'server_name '
+parameter() {
+    file=$1
+    key=$2
+    value=$3
+    eval_echo "sed -i 's/\($key\).*\$/\1$value;/' $file"
+    cat $file | grep $key
+}
+
+parameter ./config/nginx/domain.conf "server_name " $SERVER_IP
 
 if [ "x$BALANCER" = "xtrue" ]; then
     domain=$BALANCER_DOMAIN
@@ -32,11 +39,8 @@ fi
 eval_echo "sed -i 's,\(return 301 https\?://\).*\\$,\1$domain\$,' ./config/nginx/domain.conf"
 cat ./config/nginx/domain.conf | grep 'return 301 '
 
-eval_echo "sed -i 's/\(server_name \).*\$/\1$BALANCER_DOMAIN;/' ./config/nginx/codenjoy-balancer.conf"
-cat ./config/nginx/codenjoy-balancer.conf | grep 'server_name '
-
-eval_echo "sed -i 's/\(server_name \).*\$/\1$CODENJOY_DOMAIN;/' ./config/nginx/codenjoy-contest.conf"
-cat ./config/nginx/codenjoy-contest.conf | grep 'server_name '
+parameter ./config/nginx/codenjoy-balancer.conf "server_name " $BALANCER_DOMAIN
+parameter ./config/nginx/codenjoy-contest.conf "server_name " $CODENJOY_DOMAIN
 
 comment() {
     file=$1
