@@ -26,8 +26,8 @@
 
 <div id="advertisement" style="display:none;">
     <h3>
-        <a href="https://www.appodeal.com/" target="blank">
-            <img src="${ctx}/resources/advertisement/advertisement.png"/>
+        <a href="http://codenjoy.com" target="blank">
+            <img src=""/>
         </a>
     </h3>
 </div>

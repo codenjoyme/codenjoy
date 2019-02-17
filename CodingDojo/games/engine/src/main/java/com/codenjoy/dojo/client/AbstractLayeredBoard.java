@@ -238,11 +238,18 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
                 if (dx == 0 && dy == 0) {
                     continue;
                 }
+                if (withoutCorners() && (dx != 0 && dy != 0)) {
+                    continue;
+                }
                 result.add(getAt(numLayer, x + dx, y + dy));
             }
         }
 
         return result;
+    }
+
+    protected boolean withoutCorners() {
+        return false;
     }
 
     public boolean isOutOfField(int x, int y) {

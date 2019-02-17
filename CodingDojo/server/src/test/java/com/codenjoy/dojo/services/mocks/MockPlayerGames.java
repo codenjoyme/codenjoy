@@ -34,7 +34,7 @@ import static org.mockito.Mockito.mock;
  */
 public class MockPlayerGames {
     @Bean(name = "playerGames")
-    public PlayerGames bean() throws Exception {
+    public PlayerGames bean() {
         return new PlayerGames();
     }
 }

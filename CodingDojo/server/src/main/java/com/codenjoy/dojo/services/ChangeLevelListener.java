@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+
 public interface ChangeLevelListener {
-    void levelChanged(int levelNumber, GameLevel level);
+    void levelChanged(LevelProgress levelProgress);
 }

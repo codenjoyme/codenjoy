@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.hash.Hash;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

@@ -20,13 +20,25 @@
  * #L%
  */
 
+body, input, textarea {
+    color: black !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #dededead !important;
+}
+
+.table>tbody>tr>td {
+    border-top: 0px !important;
+}
+
 #settings {
     display: none;
 }
 
 .score-info {
-    color:#e11916;
-    text-shadow: 6px 6px 10px #3a4354, 4px 4px 4px #e11916;
+    color:yellow;
+    text-shadow: 6px 6px 10px black, 4px 4px 4px red;
     font-size:90px;
     display:none;
     line-height:0.8;
@@ -100,17 +112,19 @@ label.error {
     height: 20px;
 }
 
-#leaderboard {
-    width: 500px;
-    float: right;
+.board {
+    width: 400px;
     padding-right: 75px;
     padding-top: 25px;
+    position: absolute;
+    right: 0px;
 }
 
-#glasses {
-    width: calc(100% - 500px);
+.glasses {
+    width: calc(100% - 530px);
     float: left;
     padding-left: 20px;
+    position: absolute;
 }
 
 #want-donate {
@@ -157,3 +171,25 @@ label.error {
     float: left;
 }
 
+canvas {
+    border: 1px solid;
+    width:100%!important;
+}
+
+/* rule page */
+.hfeed {
+    max-width: 800px;
+    margin: 4em auto;
+}
+
+.hfeed p {
+    margin-bottom: 1.625em;
+}
+
+.hfeed pre {
+    background: none repeat scroll 0% 0% rgb(244, 244, 244);
+    font: 13px/1.5 "Courier 10 Pitch",Courier,monospace;
+    margin-bottom: 1.625em;
+    overflow: auto;
+    padding: 0.75em 1.625em;
+}

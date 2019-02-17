@@ -35,11 +35,6 @@ public class Stone extends EateablePoint implements Element, State<Elements, Obj
     }
 
     @Override
-    public String toString() {
-        return String.format("Позиция камня x:%s, y:%s", getX(), getY());
-    }
-
-    @Override
     public void affect(Hero snake) {
         snake.eatStone();
         super.affect(snake);

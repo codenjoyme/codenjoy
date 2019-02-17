@@ -30,7 +30,7 @@ import static org.mockito.Mockito.mock;
 
 public class MockPlayerController {
     @Bean(name = "playerController")
-    public Controller bean() throws Exception {
+    public Controller bean() {
         return mock(Controller.class);
     }
 }

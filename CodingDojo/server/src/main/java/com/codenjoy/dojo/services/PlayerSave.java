@@ -59,6 +59,10 @@ public class PlayerSave {
         this.save = save.getData();
     }
 
+    public static boolean isSaveNull(String str) {
+        return StringUtils.isEmpty(str) || str.equalsIgnoreCase("null");
+    }
+
     public Object getScore() {
         return score;
     }

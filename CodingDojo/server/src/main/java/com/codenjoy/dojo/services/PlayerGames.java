@@ -27,23 +27,21 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
-
-    private static Logger logger = LoggerFactory.getLogger(PlayerGames.class);
 
     private List<PlayerGame> playerGames = new LinkedList<>();
 
@@ -121,8 +119,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     JSONObject parseSave(PlayerSave save) {
-        String saveString = (save == null || save.getSave() == null) ? "{}" : save.getSave();
-        return new JSONObject(saveString);
+        if (save == null || PlayerSave.isSaveNull(save.getSave())) {
+            return new JSONObject();
+        }
+        return new JSONObject(save.getSave());
     }
 
     private List<PlayerGame> removeAndLeaveAlone(Game game) {
@@ -187,23 +187,32 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // по всем джойстикам отправили сообщения играм
         playerGames.forEach(PlayerGame::quietTick);
 
-        // создаем новые игры для тех, кто уже game over
-        // если при этом в TRAINING кто-то isWin то мы его относим на следующий уровень
+        // если в TRAINING кто-то isWin то мы его относим на следующий уровень
+        // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
+        // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
+            MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
-                    GameType gameType = getPlayer(game).getGameType();
-                    if (gameType.getMultiplayerType().isTraining()) {
-                        if (game.isWin()) {
-                            JSONObject from = game.getSave();
-                            JSONObject to = LevelProgress.winLevel(from);
-                            if (to != null) {
-                                reload(game, to);
-                                return;
-                            }
+                    JSONObject level = game.getSave();
+
+                    // TODO ##2 попробовать какой-то другой тип с несколькими уровнями, а не только isTraining
+                    if (game.isWin() && multiplayerType.isTraining()) {
+                        level = LevelProgress.winLevel(level);
+                        if (level != null) {
+                            reload(game, level);
+                            // TODO test me
+                            playerGame.getPlayer().getEventListener().levelChanged(game.getProgress());
+                            return;
                         }
                     }
+
+                    if (game.shouldLeave() && multiplayerType.isDisposable()) {
+                        reload(game, level);
+                        return;
+                    }
+
                     game.newGame();
                 });
             }
@@ -211,13 +220,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // собираем все уникальные борды
         // независимо от типа игры нам нужно тикнуть все
+        //      но только те, которые не DISPOSABLE и одновременно
+        //      недокомплектованные пользователями
         playerGames.stream()
                 .map(PlayerGame::getField)
-                .collect(toSet())
+                .distinct()
+                .filter(this::isMatchCanBeStarted)
                 .forEach(GameField::quietTick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private boolean isMatchCanBeStarted(GameField field) {
+        return spreader.isRoomStaffed(field);
     }
 
     public void reload(Game game, JSONObject save) {
@@ -263,13 +279,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public void setLevel(String playerName, JSONObject save) { // TODO test me
+    public void setLevel(String playerName, JSONObject save) {
+        if (save == null) {
+            return;
+        }
         PlayerGame playerGame = get(playerName);
         Game game = playerGame.getGame();
         reload(game, save);
     }
 
-    public PlayerGame get(int index) { // TODO test me
+    public PlayerGame get(int index) {
         return playerGames.get(index);
+    }
+
+    public List<PlayerGame> all() {
+        return playerGames;
     }
 }

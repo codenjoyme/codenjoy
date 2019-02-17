@@ -44,21 +44,21 @@ public class GameData {
                         "value varchar(10000));");
     }
 
-    public String get(final String gameType, final String key) {
+    public String get(String gameType, String key) {
         return pool.select("SELECT value FROM game_settings WHERE game_type = ? AND key = ?;",
                 new Object[]{gameType, key},
                 rs -> rs.next() ? rs.getString("value") : null
         );
     }
 
-    public boolean exists(final String gameType, final String key) {
+    public boolean exists(String gameType, String key) {
         return pool.select("SELECT count(*) AS count FROM game_settings WHERE game_type = ? AND key = ?;",
                 new Object[]{gameType, key},
                 rs -> rs.next() && rs.getInt("count") > 0
         );
     }
 
-    public void set(final String gameType, final String key, final String value) {
+    public void set(String gameType, String key, String value) {
         if (exists(gameType, key)) {
             pool.update("UPDATE game_settings SET value = ? WHERE game_type = ? AND key = ?;",
                     new Object[]{value, gameType, key});

@@ -25,9 +25,13 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,22 +42,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-
-import static com.codenjoy.dojo.web.controller.AdminController.PASS;
+import java.util.function.Predicate;
 
 @Controller
-@RequestMapping("/admin" + PASS)
+@RequestMapping("/admin")
+@Secured("ROLE_ADMIN")
 public class AdminController {
 
     public static final String GAME_NAME = "gameName";
-    public static final int PASS = 31415;
 
     @Autowired private TimerService timerService;
     @Autowired private PlayerService playerService;
     @Autowired private SaveService saveService;
     @Autowired private GameService gameService;
     @Autowired private ActionLogger actionLogger;
+    @Autowired private AutoSaver autoSaver;
     @Autowired private DebugService debugService;
+    @Autowired private Registration registration;
 
     public AdminController() {
     }
@@ -106,6 +111,20 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    @RequestMapping(params = "reloadAllAI", method = RequestMethod.GET)
+    public String reloadAllAI(Model model, HttpServletRequest request) {
+        playerService.getAll()
+                .stream().filter(not(Player::hasAI))
+                .map(Player::getName)
+                .forEach(playerService::reloadAI);
+
+        return getAdmin(request);
+    }
+
+    private <T> Predicate<T> not(Predicate<T> predicate) {
+        return t -> !predicate.test(t);
+    }
+
     @RequestMapping(params = "loadAll", method = RequestMethod.GET)
     public String loadAllGames(Model model, HttpServletRequest request) {
         saveService.loadAll();
@@ -113,19 +132,31 @@ public class AdminController {
     }
 
     @RequestMapping(params = "gameOver", method = RequestMethod.GET)
-    public String removePlayer(@RequestParam("gameOver") String name, Model model, HttpServletRequest request) {
+    public String removePlayer(@RequestParam("gameOver") String name, HttpServletRequest request) {
         playerService.remove(name);
         return getAdmin(request);
     }
 
     @RequestMapping(params = "removeSave", method = RequestMethod.GET)
-    public String removePlayerSave(@RequestParam("removeSave") String name, Model model, HttpServletRequest request) {
+    public String removePlayerSave(@RequestParam("removeSave") String name, HttpServletRequest request) {
         saveService.removeSave(name);
         return getAdmin(request);
     }
 
+    @RequestMapping(params = "removeRegistration", method = RequestMethod.GET)
+    public String removePlayerRegistration(@RequestParam("removeRegistration") String name, Model model, HttpServletRequest request) {
+        registration.remove(name);
+        return getAdmin(request);
+    }
+
+    @RequestMapping(params = "removeRegistrationAll", method = RequestMethod.GET)
+    public String removePlayerRegistration(HttpServletRequest request) {
+        registration.removeAll();
+        return getAdmin(request);
+    }
+
     @RequestMapping(params = "removeSaveAll", method = RequestMethod.GET)
-    public String removePlayerSave(Model model, HttpServletRequest request) {
+    public String removePlayerSave(HttpServletRequest request) {
         saveService.removeAllSaves();
         return getAdmin(request);
     }
@@ -168,18 +199,36 @@ public class AdminController {
 
     @RequestMapping(params = "stopDebug", method = RequestMethod.GET)
     public String stopDebug(Model model, HttpServletRequest request) {
-        debugService.stop();
+        debugService.pause();
         return getAdmin(request);
     }
 
     @RequestMapping(params = "startDebug", method = RequestMethod.GET)
     public String startDebug(Model model, HttpServletRequest request) {
-        debugService.start();
+        debugService.resume();
         return getAdmin(request);
     }
 
     private void checkDebugStatus(Model model) {
-        model.addAttribute("debug", debugService.isStarted());
+        model.addAttribute("debug", debugService.isWorking());
+    }
+
+    // ----------------
+
+    @RequestMapping(params = "stopAutoSave", method = RequestMethod.GET)
+    public String stopAutoSave(Model model, HttpServletRequest request) {
+        autoSaver.pause();
+        return getAdmin(request);
+    }
+
+    @RequestMapping(params = "startAutoSave", method = RequestMethod.GET)
+    public String startAutoSave(Model model, HttpServletRequest request) {
+        autoSaver.resume();
+        return getAdmin(request);
+    }
+
+    private void checkAutoSaveStatus(Model model) {
+        model.addAttribute("autoSave", autoSaver.isWorking());
     }
 
     // ----------------
@@ -197,7 +246,7 @@ public class AdminController {
     }
 
     private void checkRecordingStatus(Model model) {
-        model.addAttribute("recording", actionLogger.isRecording());
+        model.addAttribute("recording", actionLogger.isWorking());
     }
 
     // ----------------
@@ -241,23 +290,34 @@ public class AdminController {
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
             int count = Integer.valueOf(settings.getGenerateCount());
+            int numLength = String.valueOf(count).length();
 
             int created = 0;
             int index = 0;
             while (created != count) {
-                String name = mask.replaceAll("%", String.valueOf(++index));
+                String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
+                String playerName = mask.replaceAll("%", number);
 
-                if (playerService.contains(name) && index < playerService.getAll().size()) {
+                if (playerService.contains(playerName) && index < playerService.getAll().size()) {
                     continue;
                 }
 
                 created++;
-                playerService.register(name, "127.0.0.1", settings.getGameName());
+                String code = getCode(playerName);
+                playerService.register(playerName, "127.0.0.1", settings.getGameName());
             }
         }
 
         request.setAttribute(GAME_NAME, settings.getGameName());
         return getAdmin(settings.getGameName());
+    }
+
+    private String getCode(String playerName) {
+        if (registration.registered(playerName)) {
+            return registration.login(playerName, playerName);
+        } else {
+            return registration.register(playerName, playerName, playerName, "");
+        }
     }
 
     private Object fixForCheckbox(Parameter parameter, Object value) {
@@ -271,7 +331,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin" + PASS + "?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin?" + GAME_NAME + "=" + gameName;
     }
 
     private String getAdmin() {
@@ -291,6 +351,11 @@ public class AdminController {
         }
 
         GameType game = gameService.getGame(gameName);
+
+        if (game instanceof NullGameType) {
+            return getAdmin();
+        }
+
         Settings gameSettings = game.getSettings();
         List<Parameter<?>> parameters = gameSettings.getParameters();
 
@@ -311,6 +376,7 @@ public class AdminController {
 
         checkGameStatus(model);
         checkRecordingStatus(model);
+        checkAutoSaveStatus(model);
         checkDebugStatus(model);
         checkRegistrationClosed(model);
         prepareList(model, settings, gameName);

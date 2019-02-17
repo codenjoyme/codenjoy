@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +66,7 @@ public class InformationCollectorTest {
     }
 
     private void levelChanged(int levelNumber) {
-        collector.levelChanged(levelNumber, null);
+        collector.levelChanged(new LevelProgress(levelNumber + 1, levelNumber, levelNumber - 1));
     }
 
     @Test
@@ -178,6 +179,17 @@ public class InformationCollectorTest {
         snakeIsDead();
 
         assertEquals("-10, -3", collector.getMessage());
+        assertNull(collector.getMessage());
+    }
+
+    @Test
+    public void shouldPrintCustomMessage() {
+        collector.event(new CustomMessage("3"));
+        collector.event(new CustomMessage("2"));
+        collector.event(new CustomMessage("1"));
+        collector.event(new CustomMessage("Fight!!!"));
+
+        assertEquals("3, 2, 1, Fight!!!", collector.getMessage());
         assertNull(collector.getMessage());
     }
 

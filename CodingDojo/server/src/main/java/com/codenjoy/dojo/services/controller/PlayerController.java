@@ -35,13 +35,13 @@ public class PlayerController implements Controller<String, Joystick> {
     private PlayerTransport transport;
 
     @Override
-    public void requestControlToAll(String board) throws IOException {
+    public void requestControlToAll(String board) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void requestControl(Player player, String board) throws IOException {
-        transport.sendState(player.getName(), new BoardGameState(board));
+    public boolean requestControl(Player player, String board) throws IOException {
+        return transport.sendState(player.getName(), new BoardGameState(board));
     }
 
     @Override

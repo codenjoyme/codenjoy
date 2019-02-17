@@ -51,11 +51,11 @@ function initLayout(gameName, pageName, contextPath, transformations, scriptSour
         if (!!transformations) {
             transformations();
         } else {
-            $("#main_board").empty();
-            $("#glasses").prependTo($("#main_board"));
+            $("#glasses").insertBefore($("#main_board"));
+            $("#main_board").remove();
 
-            $("#main_leaderboard").empty();
-            $("#leaderboard").prependTo($("#main_leaderboard"));
+            $("#leaderboard").insertBefore($("#main_leaderboard"));
+            $("#main_leaderboard").remove();
         }
 
         // because http://stackoverflow.com/questions/5085228/does-jquery-append-behave-asynchronously

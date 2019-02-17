@@ -1,0 +1,462 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Snake Battle — как играть? | Игры на работе</title>
+    <link href="../css/all.min.css" media="all" type="text/css" rel="stylesheet">
+    <link href="../css/custom.css" rel="stylesheet">
+    <style>
+        .entry-content div img {
+            vertical-align: middle;
+        }
+    </style>
+    <script src="../js/all.min.js"></script>
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<div id="settings" page="rules"></div>
+<a target="_blank" href="https://github.com/Kors/codenjoy"><img
+        style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;"
+        src="../../resources/img/fork-me.png"
+        alt="Fork me on GitHub"
+       ></a>
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+                <header class="entry-header">
+                    <h1 class="entry-title">Snake Battle — как играть?</h1>
+                </header>
+                <div class="entry-content">
+                    <div class="page-restrict-output">
+                        <p>Игровой demo-сервер доступен так же в интернете 24/7
+                            в целях ознакомления <a href="http://codenjoy.com/codenjoy-contest">
+                                http://codenjoy.com/codenjoy-contest</a></p>
+
+                        <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
+                            ошибок в текущей и внесения других правок необходимо для начала
+                            <a href="https://github.com/codenjoyme/codenjoy">форкнуть проект</a>.
+                            В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
+
+                        <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+
+                        <p><b>Проект игры (для написания своего бота) брать <a href="resources/user/snakebattle-servers.zip">ЗДЕСЬ</a></b></p>
+                        <p>Читая инструкцию, помните: процессе написания бота Вам необходимо заботится только о логике перемещений вашего бота.
+                            Все необходимые вспомогательные вещи уже сделаны за Вас.</p>
+
+                        <h2>В чем суть игры?</h2>
+
+                        <p>Надо написать своего бота для змейки, который обыграет других ботов
+                            по очкам. Все играют на одном поле. Змейка может передвигаться по
+                            свободным ячейкам во все четыре стороны, но не может возвращаться в предыдущую клетку.</p>
+                        <p>На своем пути змейка может повстречать камень, золото, таблеку ярости, таблетку полёта,
+                            яблоко или другую змейку.
+                            Если змейка нарвется на камень - уменьшается на 4 единицы. Если змейка меньше двух клеток -
+                            погибнет. За золото, яблоки, в случае смерти других змеек,
+                            змейка получит бонусные очки. За свою смерть и за камни - штрафные. Очки суммируются.</p>
+                        <p><b>Побеждает игрок с большим числом очков</b> (до условленного времени).
+                            Мертвая змейка тут же появляется на одном из свободных стартовых полей и ждёт начала
+                            следующего раунда (события старта).</p>
+
+                        <p>Итак, игрок <a href="register?gameName=snakebattle">
+                            регистрируется на сервере</a>, указывая свой email</p>
+                        <p>Далее необходимо подключиться <a href="resources/user/snakebattle-servers.zip">из кода</a>
+                            к серверу через вебсокеты. Это Maven проект и подойдет он для игры на JVM языках.
+                            Как его запустить смотри в корне проекта в файле README.txt</p>
+                        <p>Для других языков придется написать свой клиент (а после пошарить с нами на почту: apofig@gmail.com)</p>
+                        <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
+                        <p>Адрес для подключения к игре на сервере, развернутом в локальной сети:</p>
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
+                        <p>Тут your@email.com - имейл, который ты указал при регистрации на сервере,
+                            a code - твой security token, его ты можешь получить из адресной
+                            строки браузера после регистрации/логина</p>
+                        <p>После подключения клиент будет регулярно (каждую секунду) получать строку
+                            символов — с закодированным состоянием поля. Формат таков</p>
+
+                        <p>Длинна строки равна площади поля. Если вставить символ переноса
+                            строки каждые sqrt(length(string)) символов, то получится читабельное
+                            изображение поля.</p>
+                        <p>Разбор поля в читабельный вид тоже уже выполнен.</p>
+                        <p>Пример поля:</p>
+                        <p>В текстовом виде</p>
+                        <pre>
+                             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
+                             ☼☼            ☼
+                             ☼☼     $      ☼
+                             ☼☼           @☼
+                             ☼#           ▲☼
+                             ☼☼           ║☼
+                             ☼☼   ○       ║☼
+                             ☼#           ║☼
+                             ☼☼         ╘═╝☼
+                             ☼☼      %     ☼
+                             ☼☼   ×—>      ☼
+                             ☼☼            ☼
+                             ☼☼       ●    ☼
+                             ☼☼            ☼
+                             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+                        <p>UI из спрайтов:</p>
+                        <img src="./board.JPG"/>
+
+                        <p>Расшифровка символов в файле Elements:</p>
+
+                        <div>
+                            <img src="../sprite/snakebattle/none.png"/>
+                            <span>Пустое место – по которому может двигаться герой</span>
+                            <pre>NONE(' ')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/wall.png"/>
+                            <span>Cтена, через которую нельзя пройти</span>
+                            <pre>WALL('☼')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/start_floor.png"/>
+                            <span>Стартовая точка. Отсюда начинает движение змейка</span>
+                            <pre>START_FLOOR('#')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/apple.png"/>
+                            <span>Яблоко</span>
+                            <pre>APPLE('○')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/stone.png"/>
+                            <span>Гиря (Камень)</span>
+                            <pre>STONE('●')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/flying_pill.png"/>
+                            <span>Ангельские крылья (Таблетка полёта)</span>
+                            <pre>FLYING_PILL('©')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/fury_pill.png"/>
+                            <span>Маска дьявола (Таблетка ярости)</span>
+                            <pre>FURY_PILL('®')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/gold.png"/>
+                            <span>Золото</span>
+                            <pre>GOLD('$')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_down.png"/>
+                            <span>Голова змейки игрока в направлении вниз</span>
+                            <pre>HEAD_DOWN('▼')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_left.png"/>
+                            <span>Голова змейки игрока в направлении влево</span>
+                            <pre>HEAD_LEFT('◄')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_right.png"/>
+                            <span>Голова змейки игрока в направлении вправо</span>
+                            <pre>HEAD_RIGHT('►')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_up.png"/>
+                            <span>Голова змейки игрока в направлении вверх</span>
+                            <pre>HEAD_UP('▲')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_dead.png"/>
+                            <span>Голова мёртвой змейки игрока</span>
+                            <pre>HEAD_DEAD('☻')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_evil.png"/>
+                            <span>Голова змейки игрока со сверхспособностью "ярость"</span>
+                            <pre>HEAD_EVIL('♥')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_fly.png"/>
+                            <span>Голова змейки игрока со сверхспособностью "полет"</span>
+                            <pre>HEAD_FLY('♠')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/head_sleep.png"/>
+                            <span>Голова неактивной змейки игрока</span>
+                            <pre>HEAD_SLEEP('&')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/tail_end_down.png"/>
+                            <span>Хвост змейки игрока повернутый вниз</span>
+                            <pre>TAIL_END_DOWN('╙')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/tail_end_left.png"/>
+                            <span>Хвост змейки игрока повернутый влево</span>
+                            <pre>TAIL_END_LEFT('╘')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/tail_end_up.png"/>
+                            <span>Хвост змейки игрока повернутый вверх</span>
+                            <pre>TAIL_END_UP('╓')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/tail_end_right.png"/>
+                            <span>Хвост змейки игрока повернутый вправо</span>
+                            <pre>TAIL_END_RIGHT('╕')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/tail_inactive.png"/>
+                            <span>Тело неактивной змейки игрока</span>
+                            <pre>TAIL_INACTIVE('~')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/body_horizontal.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>BODY_HORIZONTAL('═')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/body_vertical.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>BODY_VERTICAL('║')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/body_left_down.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>BODY_LEFT_DOWN('╗')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/body_left_up.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>BODY_LEFT_UP('╝')</pre>
+                        </div>
+
+
+                        <div>
+                            <img src="../sprite/snakebattle/body_right_down.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>BODY_RIGHT_DOWN('╔')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/body_right_up.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>BODY_RIGHT_UP('╚')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_down.png"/>
+                            <span>Голова змейки соперника в направлении вниз</span>
+                            <pre>ENEMY_HEAD_DOWN('˅')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_left.png"/>
+                            <span>Голова змейки соперника в направлении влево</span>
+                            <pre>ENEMY_HEAD_LEFT('<')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_right.png"/>
+                            <span>Голова змейки соперника в направлении вправо</span>
+                            <pre>ENEMY_HEAD_RIGHT('>')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_up.png"/>
+                            <span>Голова змейки соперника в направлении вверх</span>
+                            <pre>ENEMY_HEAD_UP('˄')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_dead.png"/>
+                            <span>Голова мёртвой змейки соперника</span>
+                            <pre>ENEMY_HEAD_DEAD('☺')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_evil.png"/>
+                            <span>Голова змейки соперника со сверхспособностью "ярость"</span>
+                            <pre>ENEMY_HEAD_EVIL('♣')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_fly.png"/>
+                            <span>Голова змейки соперника со сверхспособностью "полет"</span>
+                            <pre>ENEMY_HEAD_FLY('♦')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_head_sleep.png"/>
+                            <span>Голова неактивной змейки соперника</span>
+                            <pre>ENEMY_HEAD_SLEEP('ø')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_tail_end_down.png"/>
+                            <span>Хвост змейки соперника повернутый вниз</span>
+                            <pre>ENEMY_TAIL_END_DOWN('¤')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_tail_end_left.png"/>
+                            <span>Хвост змейки соперника повернутый влево</span>
+                            <pre>ENEMY_TAIL_END_LEFT('×')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_tail_end_up.png"/>
+                            <span>Хвост змейки соперника повернутый вверх</span>
+                            <pre>ENEMY_TAIL_END_UP('æ')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_tail_end_right.png"/>
+                            <span>Хвост змейки соперника повернутый вправо</span>
+                            <pre>ENEMY_TAIL_END_RIGHT('ö')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_tail_inactive.png"/>
+                            <span>Тело неактивной змейки соперника</span>
+                            <pre>ENEMY_TAIL_INACTIVE('*')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_body_horizontal.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>ENEMY_BODY_HORIZONTAL('—')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_body_vertical.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>ENEMY_BODY_VERTICAL('|')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_body_left_down.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>ENEMY_BODY_LEFT_DOWN('┐')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_body_left_up.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>ENEMY_BODY_LEFT_UP('┘')</pre>
+                        </div>
+
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_body_right_down.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>ENEMY_BODY_RIGHT_DOWN('┌')</pre>
+                        </div>
+
+                        <div>
+                            <img src="../sprite/snakebattle/enemy_body_right_up.png"/>
+                            <span>Вариант расположения тела активной змейки игрока</span>
+                            <pre>ENEMY_BODY_RIGHT_UP('└')</pre>
+                        </div>
+
+                        <p>Элементы туловища и хвоста змеек можно посмотреть в файле Elements.</p>
+                        <p>Игра пошаговая, каждую секунду сервер посылает твоему клиенту (боту)
+                            состояние обновленного поля на текущий момент и ожидает ответа команды герою.
+                            За следующую секунду игрок должен успеть дать команду герою.
+                            Если не успел — змейка продолжает движение в прежнем направлении(изначальное направление -
+                            направо).</p>
+                        <p>Команд несколько: UP, DOWN, LEFT, RIGHT – приводят к движению героя
+                            в заданном направлении на 1 клетку; ACT - оставить камень (если есть съеденые камни).
+                            Камень остаётся на месте хвоста змейки. При помощи камней можно строить препядствия и
+                            блокировать соперников.
+                            Команды движения можно комбинировать с командой ACT, разделяя их
+                            через запятую – это значит что за один такт игры будет оставлен камень,
+                            а потом движение (LEFT, ACT) или наоборот (ACT, LEFT)</p>
+                        <p>Ваша задача – заставить вашу змейку следовать придуманному алгоритму.
+                            Алгоритм змейки должен блокировать (и тем самым уничтожать) змей соперников, используя бонусы.
+                            Основная задача – вести осмысленную игру и победить.</p>
+                        <p><b>Правила борьбы:</b></p>
+                        <p><b>Негативные воздействия:</b><br>
+                            Змейка, врезавшаяся в стену, погибает.<br>
+                            Змейка, врезавшаяся в другую змейку, погибает.<br>
+                            Змейка должна быть не менее 2х клеток длиной, иначе она погибает.<br>
+                            Змейка, съевшая камень, укорачивается на 3 единицы (если становится меньше 2 - погибает).</p>
+                        <p><b>Позитивные воздействия:</b><br>
+                            Змейка, съевшая яблоко, увеличивается на 1.<br>
+                            Змейка, съевшая таблетку полёта, в течении 10 ходов летает над камнями и другими змеями.<br>
+                            Змейка, съевшая таблетку ярости, в течении 10 ходов может откусывать куски от других змей, а так же поедать камни без уменьшения длины.<br>
+                            Змейка, съевшая золото, просто получает дополнительные очки.</p>
+                        <p><b>Особые случаи:</b><br>
+                            Змеям разрешено откусывать свой собственный хвост. При этом длина змеи уменьшается, больше никаких последствий.<br>
+                            При столкновении змей лоб в лоб, меньшая змея погибает. Большая змея при этом укорачивается на длину меньшей.
+                            (если становится меньше 2, тоже погибает)<br>
+                            При столкновении двух змей, одна из которых под воздействием таблетки полёта, не происходит ничего.<br>
+                            При столкновении двух змей, всегда побеждает змея, находящаяся под воздействием таблетки ярости.<br>
+                            При столкновении двух змей, когда обе под воздействием таблетки ярости, действуют обычные правила столкновений.</p>
+                        <p>Удачи! И пусть победит хитрейший! =)</p>
+                        <p><b>Подсказки:</b><br>
+                            Для реализации своего алгоритма можно использовать уже готовый класс DeikstraFindWay и (в частности) метод getShortestWay().<br>
+                            Если не знаете что написать, попробуйте реализовать следующие варианты алгоритмов:<br>
+                            - Перемещение в случайную сторону, если соответствующая клетка свободна.<br>
+                            - Движение на свободную клетку в сторону ближайшего яблока.<br>
+                            - Движение к тому яблоку, добраться до которого можно быстрее других.<br>
+                            - Уклонение от более длинных соперников и от соперников в состоянии ярости.<br>
+                            - Блокировка собой предполагаемых маршрутов соперника.</p>
+                        <p>Максимальное количество игроков определяется количеством стартовых точек на карте.(15 для текущей карты)</p>
+                    </div>
+                    <div class="entry-author">
+                        <p>По возникающим вопросам, обращайся:<br>
+                            Author: <b>Корсиков Илья</b><br>
+                            mail: <b>kors.ilya@gmail.com</b><br>
+                            skype: <b>kk.ilya</b></p>
+                        <p>Так же можно написать <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

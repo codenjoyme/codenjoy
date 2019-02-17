@@ -27,13 +27,13 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,12 +47,7 @@ public class MainPageController {
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
     @Autowired private Validator validator;
-
-    @Value("${page.main}")
-    private String mainPage;
-
-    @Value("${language}")
-    private String language;
+    @Autowired private ConfigProperties properties;
 
     public MainPageController() {
     }
@@ -69,15 +64,17 @@ public class MainPageController {
     }
 
     @RequestMapping(value = "/help", params = "gameName", method = RequestMethod.GET)
-    public String helpForGame(Model model, @RequestParam("gameName") String gameName) {
+    public String helpForGame(@RequestParam("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
+        String language = properties.getHelpLanguage();
         String suffix = (StringUtils.isEmpty(language)) ? "" : ("-" + language);
         return "redirect:resources/help/" + gameName + suffix + ".html";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getMainPage(HttpServletRequest request, Model model) {
+        String mainPage = properties.getMainPage();
         if (StringUtils.isEmpty(mainPage)) {
             return getMainPage(request, null, model);
         } else {
@@ -101,6 +98,14 @@ public class MainPageController {
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
         return "main";
+    }
+
+    @RequestMapping(value = "/denied")
+    public ModelAndView displayAccessDeniedPage(){
+        return new ModelAndView(){{
+            addObject("message", "Invalid Username or Password");
+            setViewName("error");
+        }};
     }
 
 }

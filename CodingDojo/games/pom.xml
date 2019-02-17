@@ -6,11 +6,13 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.26</version>
+    <version>1.0.27</version>
 
     <packaging>pom</packaging>
 
     <properties>
+        <build.time>${maven.build.timestamp}</build.time>
+
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <commons-collections.version>3.2.2</commons-collections.version>
@@ -267,6 +269,9 @@
                         <canUpdateCopyright>false</canUpdateCopyright>
                         <canUpdateDescription>false</canUpdateDescription>
                         <canUpdateLicense>false</canUpdateLicense>
+                        <excludes>
+                            <exclude>**/*.json</exclude>
+                        </excludes>
                     </configuration>
                     <executions>
                         <execution>

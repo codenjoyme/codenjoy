@@ -100,8 +100,21 @@ public class Single implements Game {
     }
 
     @Override
+    public boolean shouldLeave() {
+        return player.shouldLeave();
+    }
+
+    @Override
     public void newGame() {
         field.newGame(player);
+    }
+
+    @Override
+    public void loadSave(JSONObject save) {
+        if (save.has("levelProgress")) {
+            save.remove("levelProgress");
+        }
+        field.loadSave(save);
     }
 
     @Override
@@ -163,6 +176,9 @@ public class Single implements Game {
             progress.saveTo(result);
             return result;
         } else {
+            if (save == null) {
+                return new JSONObject();
+            }
             return save;
         }
     }

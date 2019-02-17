@@ -120,4 +120,8 @@ public class PlayerGame implements Tickable {
     public GameType getGameType() {
         return player.getGameType();
     }
+
+    public String popLastCommand() {
+        return joystick.popLastCommands();
+    }
 }

@@ -3805,13 +3805,10 @@ var readyList = jQuery.Deferred();
 
 jQuery.fn.ready = function( fn ) {
 
-	readyList
-		.then( fn )
-
-		// Wrap jQuery.readyException in a function so that the lookup
-		// happens at the time of error handling instead of callback
-		// registration.
-		.catch( function( error ) {
+	// Wrap jQuery.readyException in a function so that the lookup
+	// happens at the time of error handling instead of callback
+	// registration.
+	readyList.then( fn )['catch']( function( error ) {
 			jQuery.readyException( error );
 		} );
 
@@ -8576,7 +8573,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 				if ( conv !== true ) {
 
 					// Unless errors are allowed to bubble, catch and return them
-					if ( conv && s.throws ) {
+					if ( conv && s['throws'] ) {
 						response = conv( response );
 					} else {
 						try {

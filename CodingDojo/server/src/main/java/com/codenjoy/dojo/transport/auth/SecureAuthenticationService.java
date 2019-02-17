@@ -24,7 +24,9 @@ package com.codenjoy.dojo.transport.auth;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.dao.Registration;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,23 +35,51 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 public class SecureAuthenticationService implements AuthenticationService {
 
+    public static final int MAX_PLAYER_ID_LENGTH = 100;
+    public static final int MAX_PLAYER_CODE_LENGTH = 50;
+
+    private static Logger logger = DLoggerFactory.getLogger(SecureAuthenticationService.class);
+
     @Autowired
-    private Registration registration;
+    protected Registration registration;
 
     @Override
     public String authenticate(HttpServletRequest request) {
         String user = request.getParameter("user");
-        if (user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX)) {
-            return user;
-        }
         String code = request.getParameter("code");
-        if (WebSocketRunner.BOT_CODE.equals(code)) { // TODO test me
-            return user;
-        }
-        if (registration.checkUser(user, code)) {
-            return user;
-        } else {
+
+        if ((user != null && user.length() > MAX_PLAYER_ID_LENGTH)
+                || (code != null && code.length() > MAX_PLAYER_CODE_LENGTH))
+        {
+            logger.warn("Thee are unexpected pair of user {} and code {}. " +
+                    "We will drop this user.", user, code);
             return null;
         }
+
+        if (isAI(user)){
+            if (logger.isDebugEnabled()) {
+                logger.debug("User {} with code {} logged in as AI", user, code);
+            }
+
+            return user;
+        }
+
+        String result = null;
+        try {
+            result = registration.checkUser(user, code);
+        } catch (Exception e) {
+            logger.error(String.format("Error during check user on authenticate " +
+                    "for user %s with code %s", user, code), e);
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("User {} with code {} logged as {}", user, code, result);
+        }
+
+        return result;
+    }
+
+    private boolean isAI(String user) {
+        return user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX);
     }
 }

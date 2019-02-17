@@ -23,19 +23,23 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
+import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toList;
 
 public class PlayerSocketCreator implements WebSocketCreator {
 
-    private Logger LOGGER = LoggerFactory.getLogger(PlayerSocketCreator.class);
+    private static Logger logger = DLoggerFactory.getLogger(PlayerSocketCreator.class);
 
     private PlayerTransport transport;
     private AuthenticationService authenticationService;
@@ -56,16 +60,28 @@ public class PlayerSocketCreator implements WebSocketCreator {
         String authId = authenticationService.authenticate(request);
         PlayerSocket socket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
-            LOGGER.warn("Unauthorized access {}", request.getParameterMap().toString());
+            logger.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
             try {
                 response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
             } catch (IOException e) {
-                LOGGER.warn("Error sending status {}", e.getMessage());
+                logger.warn("Error sending status {}", e.getMessage());
             }
             return null;
         }
         socket.onClose(() -> transport.unregisterPlayerSocket(socket));
         transport.registerPlayerSocket(authId, socket);
         return socket;
+    }
+
+    private String getParameters(HttpServletRequest request) {
+        try {
+            Map<String, String[]> parameters = request.getParameterMap();
+            return parameters.keySet().stream()
+                    .map(key -> String.format("%s=%s", key, Arrays.toString(parameters.get(key))))
+                    .collect(toList())
+                    .toString();
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 }

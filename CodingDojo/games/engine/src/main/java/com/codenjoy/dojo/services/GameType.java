@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * Это интерфейс указывает на тип игры. Как только ты его реулизуешь -
- * на админке (http://localhost:8080/codenjoy-contest/admin31415)
+ * на админке (http://localhost:8080/codenjoy-contest/admin)
  * будет возможность переключиться на твою игру.
  */
 public interface GameType extends Tickable {
@@ -85,7 +85,7 @@ public interface GameType extends Tickable {
     Class<? extends ClientBoard> getBoard();
 
     /**
-     * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку 'version=${project.version}'
+     * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку '${project.version}_${build.time}'
      * то ее потом мождно будет прочитать с помощью VersionReader.getCurrentVersion();
      * @return версия игры
      */

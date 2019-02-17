@@ -24,14 +24,19 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.DLoggerFactory;
+import com.codenjoy.dojo.services.hash.Hash;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Calendar;
 
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
@@ -42,13 +47,37 @@ public class GlobalExceptionHandler {
     private static Logger logger = DLoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Exception.class)
-    public ModelAndView defaultErrorHandler(HttpServletRequest req,
-                                            Exception e) throws Exception
-    {
-        logger.error("[URL] : {} {}", req.getRequestURL(), e);
+    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
+        String url = req.getRequestURL().toString();
+        String ticket = ticket();
+        logger.error("[TICKET:URL] {}:{} {}", ticket, url, e);
+        System.err.printf("[TICKET:URL] %s:%s\n", ticket, url);
         e.printStackTrace();
 
         ModelAndView result = new ModelAndView();
+        result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // TODO сдеалть тут какуй-то пропертю
+        if (true) {
+            result.addObject("message", "Something wrong with your request. " +
+                    "Please ask site administrator. Your ticket number is: " + ticket);
+            if (url.contains("/rest/")) {
+                shouldJsonResult(result);
+            } else {
+                shouldErrorPage(result);
+            }
+            return result;
+        }
+
+        if (url.contains("/rest/")) {
+            result.addObject("message", e.getMessage());
+            result.addObject("stackTrace", ExceptionUtils.getStackTrace(e));
+            result.addObject("url", url);
+            result.setView(new MappingJackson2JsonView(){{
+                setPrettyPrint(true);
+            }});
+            return result;
+        }
 
         result.addObject("exception", e);
 
@@ -62,10 +91,26 @@ public class GlobalExceptionHandler {
 
         result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
 
-        result.addObject("url", req.getRequestURL());
+        result.addObject("url", url);
 
-        result.setViewName("error");
+        shouldErrorPage(result);
+
         return result;
+    }
+
+    private void shouldJsonResult(ModelAndView result) {
+        result.setView(new MappingJackson2JsonView(){{
+            setPrettyPrint(true);
+        }});
+    }
+
+    private void shouldErrorPage(ModelAndView result) {
+        result.setViewName("error");
+    }
+
+    private String ticket() {
+        return Hash.md5("anotherSoul" + Hash.md5("someSoul" +
+                Calendar.getInstance().getTimeInMillis()));
     }
 
 }

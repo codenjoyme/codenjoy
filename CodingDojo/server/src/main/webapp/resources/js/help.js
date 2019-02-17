@@ -19,7 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-$(document).ready(function () {
+pages = pages || {};
+
+pages.help = function() {
     game.contextPath = getSettings('contextPath');
 
     $("#games").change(function () {
@@ -27,4 +29,6 @@ $(document).ready(function () {
         if (val == '') return;
         window.location.href = game.contextPath + "/resources/user/" + val + "-servers.zip";
     });
-});
+
+    initHotkeys();
+}

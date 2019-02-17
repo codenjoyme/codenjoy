@@ -57,7 +57,17 @@ public class NullGame implements Game {
     }
 
     @Override
+    public boolean shouldLeave() {
+        return false;
+    }
+
+    @Override
     public void newGame() {
+        // do nothing
+    }
+
+    @Override
+    public void loadSave(JSONObject save) {
         // do nothing
     }
 

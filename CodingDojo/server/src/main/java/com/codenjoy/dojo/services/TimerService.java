@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class TimerService implements Runnable {
 
-    private static Logger logger = LoggerFactory.getLogger(TimerService.class);
+    private static Logger logger = DLoggerFactory.getLogger(TimerService.class);
 
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture<?> future;
@@ -44,7 +44,7 @@ public class TimerService implements Runnable {
     private PlayerService playerService;
 
     private volatile boolean paused;
-    private long period;
+    private volatile long period;
 
     public void start() {
         period = 1000;

@@ -19,20 +19,104 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace SnakeClient
 {
-    internal class Board
+    public class Board
     {
-        public string RawBoard { get; private set; }
+        private string RawBoard;
+        private LengthToXY LengthXY;
 
         public int MapSize { get; private set; }
 
-        public void Parse(string input)
+        /// <summary>
+        /// GameBoard size (actual board size is Size x Size cells)
+        /// </summary>
+        public int Size
+        {
+            get
+            {
+                return (int)Math.Sqrt(RawBoard.Length);
+            }
+        }
+
+        public Board(String boardString)
+        {
+            RawBoard = boardString.Replace("\n", "");
+            LengthXY = new LengthToXY(Size);
+        }
+
+        public Point GetHead()
+        {
+            return Get(Element.HEAD_UP)
+                .Concat(Get(Element.HEAD_DOWN))
+                .Concat(Get(Element.HEAD_LEFT))
+                .Concat(Get(Element.HEAD_RIGHT))
+                .SingleOrDefault();
+        }
+
+        public List<Point> GetApples()
+        {
+            return Get(Element.GOOD_APPLE);
+        }
+
+        public List<Point> GetStones()
+        {
+            return Get(Element.BAD_APPLE);
+        }
+
+        public List<Point> GetWalls()
+        {
+            return Get(Element.BREAK);
+        }
+
+        public List<Point> GetSnake()
+        {
+            List<Point> snake = new List<Point>();
+            Point head = GetHead();
+            if (head == null)
+            {
+                return snake;
+            }
+
+            snake.Add(head);
+            return snake
+                .Concat(Get(Element.TAIL_END_DOWN))
+                .Concat(Get(Element.TAIL_END_LEFT))
+                .Concat(Get(Element.TAIL_END_UP))
+                .Concat(Get(Element.TAIL_END_RIGHT))
+                .Concat(Get(Element.TAIL_HORIZONTAL))
+                .Concat(Get(Element.TAIL_VERTICAL))
+                .Concat(Get(Element.TAIL_LEFT_DOWN))
+                .Concat(Get(Element.TAIL_LEFT_UP))
+                .Concat(Get(Element.TAIL_RIGHT_DOWN))
+                .Concat(Get(Element.TAIL_RIGHT_UP))
+                .ToList();
+        }
+
+        public List<Point> GetBarriers()
+        {
+            return GetSnake()
+                .Concat(GetStones())
+                .Concat(GetWalls())
+                .ToList();
+        }
+
+        public bool IsBarrierAt(Point point)
+        {
+            return GetBarriers().Contains(point);
+        }
+
+        public bool IsSnakeAlive()
+        {
+            return GetHead() != null;
+        }
+
+        private void Parse(string input)
         {
             if (input.StartsWith("board="))
                 input = input.Substring(6);
@@ -46,15 +130,50 @@ namespace SnakeClient
                 .Replace('☻', 'X')  // bad apple
                 .Replace('☺', '$'); // good apple
             int length = RawBoard.Length;
-            MapSize = (int) Math.Sqrt(length);
+            MapSize = (int)Math.Sqrt(length);
         }
 
-        public char GetAt(int x, int y)
+        private Element GetAt(Point point)
+        {
+            if (point.IsOutOf(Size))
+            {
+                return Element.NONE;
+            }
+            return (Element)RawBoard[LengthXY.GetLength(point.X, point.Y)];
+        }
+
+        private bool IsAt(Point point, Element element)
+        {
+            if (point.IsOutOf(Size))
+            {
+                return false;
+            }
+            return GetAt(point) == element;
+        }
+
+        private List<Point> Get(Element element)
+        {
+            List<Point> result = new List<Point>();
+
+            for (int i = 0; i < Size * Size; i++)
+            {
+                Point pt = LengthXY.GetXY(i);
+
+                if (IsAt(pt, element))
+                {
+                    result.Add(pt);
+                }
+            }
+
+            return result;
+        }
+
+        private char GetAt(int x, int y)
         {
             return RawBoard[x + y * MapSize];
         }
 
-        public string GetDisplay()
+        private string GetDisplay()
         {
             StringBuilder sb = new StringBuilder();
 
@@ -68,5 +187,6 @@ namespace SnakeClient
 
             return sb.ToString();
         }
+
     }
 }

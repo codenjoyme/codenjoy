@@ -48,7 +48,7 @@ public class Spreader {
             room = findUnfilled(gameType);
         }
         if (room == null) {
-            room = new Room(supplier.get(), roomSize);
+            room = new Room(supplier.get(), roomSize, type.isDisposable());
             add(gameType, room);
         }
 
@@ -95,10 +95,12 @@ public class Spreader {
             List<GamePlayer> players = room.getPlayers();
             players.remove(player);
 
-            if (players.size() == 1) { // TODO тут может не надо выходить если тип игры MULTIPLAYER
+            if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
                 GamePlayer lastPlayer = players.iterator().next();
-                removed.add(lastPlayer);
-                players.remove(lastPlayer);
+                if (!lastPlayer.wantToStay()) {
+                    removed.add(lastPlayer);
+                    players.remove(lastPlayer);
+                }
             }
             if (players.isEmpty()) {
                 rooms.values().forEach(it -> it.remove(room));
@@ -125,20 +127,37 @@ public class Spreader {
 
         MultiplayerType type = gameType.getMultiplayerType();
         int roomSize = type.loadProgress(game, save);
-        int levelNumber = game.getProgress().getCurrent();
+        LevelProgress progress = game.getProgress();
+        int levelNumber = progress.getCurrent();
         GameField field = getField(game.getPlayer(),
                 gameType.name(),
                 type,
                 roomSize,
                 levelNumber,
-                () -> gameType.createGame(levelNumber));
+                () -> {
+                    game.getPlayer().setProgress(progress);
+                    return gameType.createGame(levelNumber);
+                });
 
         game.on(field);
 
         game.newGame();
+        if (save != null && !save.keySet().isEmpty()) {
+            game.loadSave(save);
+        }
     }
 
     public boolean contains(Game game) {
         return !roomsFor(game.getPlayer()).isEmpty();
+    }
+
+    public boolean isRoomStaffed(GameField field) {
+        List<Room> rooms = allRooms().stream()
+                .filter(r -> r.isFor(field))
+                .collect(toList());
+        if (rooms.size() != 1) {
+            throw new IllegalArgumentException("Почему-то комната для поля не одна: " + rooms.size());
+        }
+        return rooms.get(0).isStuffed();
     }
 }

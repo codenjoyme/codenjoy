@@ -44,7 +44,7 @@ public interface Controller<TData, TControl> {
      * @param data Данные к отправке
      * @throws IOException если что не так
      */
-    void requestControl(Player player, TData data) throws IOException;
+    boolean requestControl(Player player, TData data) throws IOException;
 
     /**
      * В момент регистрации пользователя для него создается канал связи

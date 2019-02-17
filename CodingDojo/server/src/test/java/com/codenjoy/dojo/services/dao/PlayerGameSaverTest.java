@@ -25,13 +25,10 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -70,7 +67,8 @@ public class PlayerGameSaverTest {
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
 
-        saver.saveGame(player, "{'key':'value'}");
+        long now = System.currentTimeMillis();
+        saver.saveGame(player, "{'key':'value'}", now);
 
         PlayerSave loaded = saver.loadGame("vasia");
         assertEqualsProperties(player, loaded);
@@ -117,8 +115,9 @@ public class PlayerGameSaverTest {
         Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
 
-        saver.saveGame(player1, "{'key':'value'}");
-        saver.saveGame(player2, "{'key':'value'}");
+        long now = System.currentTimeMillis();
+        saver.saveGame(player1, "{'key':'value'}", now);
+        saver.saveGame(player2, "{'key':'value'}", now);
 
         assertEquals("[vasia, katia]", saver.getSavedList().toString());
     }

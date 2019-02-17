@@ -45,8 +45,9 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     }
 
     @Override
-    public void requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
-        transport.sendState(player.getName(), data);
+    public boolean requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
+        // TODO этот метод вообще не используется
+        return transport.sendState(player.getName(), data);
     }
 
     @Override

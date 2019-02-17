@@ -43,15 +43,29 @@ public interface Game extends Closeable {
     boolean isGameOver();
 
     /**
-     * @return true - если герой прошел уровень
+     * @return true - если герой прошел уровень. TODO ##2 работает пока только с multiplayerType.isTraining()
      */
     boolean isWin();
+
+    /**
+     * @return true - если герой должен покинуть эту комнату (проиграл матч)
+     *          Работает только с multiplayerType.isDisposable()
+     */
+    boolean shouldLeave();
 
     /**
      * Если герой убит, то в слудеющий такт фреймворк дернет за этот метод, чтобы создать новую игру для игрока.
      * То же происходит же при регистрации нового игрока.
      */
     void newGame();
+
+    /**
+     * Если игра имеет состояние и может быть сохранена,
+     * то она может и загрузиться из этого состояния с помощью этого метода.
+     * Этот метод вызывается сразу после созлания игры методом {@see #newGame()}
+     * @param save Загружаемый save
+     */
+    void loadSave(JSONObject save);
 
     /**
      * Board =
@@ -83,6 +97,7 @@ public interface Game extends Closeable {
 
     /**
      * @return Если игра сохраняется, то у нее должно быть состояние, иначе null
+     *
      */
     JSONObject getSave();
 

@@ -1,0 +1,7 @@
+FROM jetty-updated
+MAINTAINER Alexander Baglay <apofig@gmail.com>
+
+USER jetty
+ENV DEBIAN_FRONTEND noninteractive
+
+ADD ./codenjoy-balancer.war /var/lib/jetty/webapps/

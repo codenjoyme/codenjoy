@@ -1,0 +1,1 @@
+mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true clean jetty:run-war -DallGames # -Dcontext=another-context # -Psnake,bomberman,sample

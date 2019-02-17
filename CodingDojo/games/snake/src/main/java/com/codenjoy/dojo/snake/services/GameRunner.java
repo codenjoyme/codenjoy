@@ -43,11 +43,13 @@ import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
+    private final Parameter<Integer> startSnakeLength;
     private Parameter<Integer> boardSize;
 
     public GameRunner() {
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
         new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
+        startSnakeLength = settings.getParameter("Start snake length").type(Integer.class);
     }
 
     @Override
@@ -59,7 +61,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameField createGame(int levelNumber) {
         return new Snake(new RandomArtifactGenerator(getDice()),
                 new BasicWalls(boardSize.getValue()),
-                boardSize.getValue());
+                boardSize.getValue(),
+                startSnakeLength.getValue());
     }
 
     @Override

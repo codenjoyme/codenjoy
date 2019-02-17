@@ -32,7 +32,7 @@ public interface Field extends GameField<Player> {
 
     Point getFreeRandom();
 
-    boolean isFree(int x, int y);
+    boolean isFree(Point pt);
 
     void addHero(int x, int y, Hero hero);
 

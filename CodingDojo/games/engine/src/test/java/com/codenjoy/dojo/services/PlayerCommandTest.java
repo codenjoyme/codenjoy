@@ -98,6 +98,14 @@ public class PlayerCommandTest {
     }
 
     @Test
+    public void shouldActWithoutParameters() {
+        execute("act()");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).act();
+    }
+
+    @Test
     public void shouldDirectionsPlusActCommand() {
         execute("right,left,up,up, down  ,act,down");
 

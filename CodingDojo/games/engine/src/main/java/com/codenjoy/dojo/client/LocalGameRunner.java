@@ -33,40 +33,76 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 
-public class LocalGameRunner { // TODO test me
+public class LocalGameRunner {
 
     public static int timeout = 1000;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
+
+    private GameField field;
+    private List<Game> games;
+    private GameType gameType;
+    private List<Solver> solvers;
+    private List<ClientBoard> boards;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
         run(gameType, Arrays.asList(solver), Arrays.asList(board));
     }
 
     public static void run(GameType gameType,
-                           List<Solver> solver,
-                           List<ClientBoard> board)
+                           List<Solver> solvers,
+                           List<ClientBoard> boards)
     {
-        GameField game = gameType.createGame(0);
+        new LocalGameRunner(gameType, solvers, boards).run();
+    }
 
-        List<Game> games = solver.stream()
-                .map(slv -> createGame(gameType, game))
+    private LocalGameRunner(GameType gameType,
+                           List<Solver> solvers,
+                           List<ClientBoard> boards)
+    {
+        this.solvers = solvers;
+        this.boards = boards;
+        this.gameType = gameType;
+
+        field = gameType.createGame(0);
+
+        games = solvers.stream()
+                .map(slv -> createGame())
                 .collect(toList());
+    }
 
+    public void run() {
         Integer count = countIterations;
         while (count == null || (count != null && count-- > 0)) {
-            for (int index = 0; index < games.size(); index++) {
-                processNextTick(index, solver.get(index),
-                        board.get(index),
-                        games.get(index));
+
+            List<String> answers = new LinkedList<>();
+
+            for (Game game : games) {
+                answers.add(askAnswer(games.indexOf(game)));
             }
 
-            game.tick();
+            for (Game game : games) {
+                int index = games.indexOf(game);
+                String answer = answers.get(index);
+
+                new PlayerCommand(game.getJoystick(), answer).execute();
+
+                if (timeout > 0) {
+                    try {
+                        Thread.sleep(timeout);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            field.tick();
             for (int index = 0; index < games.size(); index++) {
                 Game single = games.get(index);
                 if (single.isGameOver()) {
@@ -79,25 +115,30 @@ public class LocalGameRunner { // TODO test me
         }
     }
 
-    private static void processNextTick(int index, Solver solver, ClientBoard board, Game game) {
-        Object data = game.getBoardAsString();
+    private String askAnswer(int index) {
+        ClientBoard board = board(index);
+
+        Object data = game(index).getBoardAsString();
         board.forString(data.toString());
 
         out.accept(player(index, board.toString()));
 
-        String answer = solver.get(board);
+        String answer = solver(index).get(board);
 
         out.accept(player(index, "Answer: " + answer));
+        return answer;
+    }
 
-        new PlayerCommand(game.getJoystick(), answer).execute();
+    private Solver solver(int index) {
+        return solvers.get(index);
+    }
 
-        if (timeout > 0) {
-            try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    private ClientBoard board(int index) {
+        return boards.get(index);
+    }
+
+    private Game game(int index) {
+        return games.get(index);
     }
 
     public static Dice getDice(int... numbers) {
@@ -116,15 +157,16 @@ public class LocalGameRunner { // TODO test me
         };
     }
 
-    private static String player(int index, String message) {
+    private String player(int index, String message) {
         String preffix = (index + 1) + ":";
         return preffix + message.replaceAll("\\n", "\n" + preffix);
     }
 
-    private static Game createGame(GameType gameType, GameField field) {
+    private Game createGame() {
         GamePlayer gamePlayer = gameType.createPlayer(
                 event -> out.accept("Fire Event: " + event.toString()),
                 null);
+
         PrinterFactory factory = gameType.getPrinterFactory();
 
         Game game = new Single(gamePlayer, factory);

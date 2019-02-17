@@ -6,42 +6,44 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-contest</artifactId>
-    <version>1.0.26</version>
+    <version>1.0.27</version>
     <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.version>4.3.18.RELEASE</spring.version>
-        <spring.security.version>4.2.7.RELEASE</spring.security.version>
-        <jetty.version>9.3.14.v20161028</jetty.version>
-        <jetty.jsp.version>9.2.19.v20160908</jetty.jsp.version>
-        <jetty.io.version>9.3.14.v20161028</jetty.io.version>
-        <javax-servlet.version>3.1.0</javax-servlet.version>
-        <jackson.version>2.7.5</jackson.version>
-        <javax.mail.version>1.4.7</javax.mail.version>
-        <org.json.version>20160810</org.json.version>
-        <sqlite-jdbc.version>3.8.11.2</sqlite-jdbc.version>
+        <spring.version>4.3.22.RELEASE</spring.version>
+        <spring-security.version>4.2.11.RELEASE</spring-security.version>
+        <jetty.version>9.3.25.v20180904</jetty.version>
+        <jetty-jsp.version>9.2.26.v20180806</jetty-jsp.version>
+        <jetty-io.version>9.3.25.v20180904</jetty-io.version>
+        <javax-servlet-api.version>4.0.1</javax-servlet-api.version>
+        <jackson.version>2.9.8</jackson.version>
+        <mail-api.version>1.6.2</mail-api.version>
+        <json.version>20180813</json.version>
+        <logback.version>1.2.3</logback.version>
+        <commons-collections.version>4.3</commons-collections.version>
+        <commons-lang.version>3.8.1</commons-lang.version>
+        <reflections.version>0.9.11</reflections.version>
+        <joda-time.version>2.10.1</joda-time.version>
+        <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
+        <!--TODO обновить postgre и потестить-->
         <postgresql-jdbc.version>9.1-901-1.jdbc4</postgresql-jdbc.version>
-        <logback.version>1.1.7</logback.version>
-        <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <org.reflections.version>0.9.9-RC2</org.reflections.version>
-        <joda-time.version>2.9.4</joda-time.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
-        <rest-assured.version>2.9.0</rest-assured.version>
-        <selenium.version>2.20.0</selenium.version>
+        <rest-assured.version>3.3.0</rest-assured.version>
+        <selenium.version>2.53.1</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>1.10.19</mockito.version>
+        <mockito.version>2.24.0</mockito.version>
 
-        <maven-compiler.version>3.5.1</maven-compiler.version>
-        <maven-war.version>2.6</maven-war.version>
-        <maven-license.version>1.16</maven-license.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <maven-license-plugin.version>1.16</maven-license-plugin.version>
+        <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
+        <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
@@ -67,13 +69,13 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>${spring.security.version}</version>
+            <version>${spring-security.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>${spring.security.version}</version>
+            <version>${spring-security.version}</version>
         </dependency>
 
         <dependency>
@@ -85,7 +87,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-io</artifactId>
-            <version>${jetty.io.version}</version>
+            <version>${jetty-io.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -101,7 +103,7 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jsp</artifactId>
-            <version>${jetty.jsp.version}</version>
+            <version>${jetty-jsp.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -118,17 +120,17 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
             <version>${jetty.version}</version>
-        </dependency>
+        </dependency>        <dependency>
+        <groupId>javax.mail</groupId>
+        <artifactId>javax.mail-api</artifactId>
+        <version>${mail-api.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>${javax.mail.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>${org.json.version}</version>
+            <version>${json.version}</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
@@ -158,7 +160,7 @@
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>${org.reflections.version}</version>
+            <version>${reflections.version}</version>
         </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
@@ -173,7 +175,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${javax-servlet.version}</version>
+            <version>${javax-servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -184,18 +186,18 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
             <version>${commons-collections.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.jayway.restassured</groupId>
+            <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured.version}</version>
             <scope>test</scope>
@@ -220,7 +222,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
@@ -241,6 +243,8 @@
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
+                <!--это не сработает потому что war союирается из WEB-INF из src-->
+                <!--<filtering>true</filtering>-->
                 <includes>
                     <include>**/*</include>
                 </includes>
@@ -254,9 +258,90 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>com.samaxes.maven</groupId>
+                <artifactId>minify-maven-plugin</artifactId>
+                <version>${minify-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>css-minify</id>
+                        <configuration>
+                            <cssSourceDir>resources/css</cssSourceDir>
+                            <cssSourceFiles>
+                                <cssInclude>bootstrap/bootstrap.css</cssInclude>
+                                <cssInclude>dojo.css</cssInclude>
+                            </cssSourceFiles>
+                            <cssFinalFile>all.css</cssFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>board-only-css-minify</id>
+                        <configuration>
+                            <cssSourceDir>resources/css</cssSourceDir>
+                            <cssSourceFiles>
+                                <cssInclude>board-only.css</cssInclude>
+                            </cssSourceFiles>
+                            <cssFinalFile>all-board-only.css</cssFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>script-minify</id>
+                        <configuration>
+                            <jsSourceDir>resources/js</jsSourceDir>
+                            <jsSourceFiles>
+                                <!-- libraries -->
+                                <jsInclude>jquery/jquery-3.1.0.js</jsInclude>
+                                <jsInclude>jquery/jquery.tmpl.js</jsInclude>
+                                <jsInclude>jquery/jquery.mousewheel-3.1.13.js</jsInclude>
+                                <jsInclude>jquery/jquery.validate.js</jsInclude>
+                                <jsInclude>jquery/jquery.md5.js</jsInclude>
+                                <jsInclude>jquery/jquery.simplemodal-1.4.4.js</jsInclude>
+                                <jsInclude>jcanvas/jcanvas.js</jsInclude>
+
+                                <!-- initialization -->
+                                <jsInclude>init.js</jsInclude>
+
+                                <!-- components -->
+                                <jsInclude>ajax-loader.js</jsInclude>
+                                <jsInclude>board-data-ws.js</jsInclude>
+                                <jsInclude>zoomer.js</jsInclude>
+                                <jsInclude>canvases.js</jsInclude>
+                                <jsInclude>canvases-text.js</jsInclude>
+                                <jsInclude>layout.js</jsInclude>
+                                <jsInclude>donate.js</jsInclude>
+                                <jsInclude>joystick.js</jsInclude>
+                                <jsInclude>leaderstable.js</jsInclude>
+                                <jsInclude>hotkeys.js</jsInclude>
+                                <jsInclude>advertisement.js</jsInclude>
+                                <jsInclude>validation.js</jsInclude>
+
+                                <!-- jsp pages -->
+                                <jsInclude>main.js</jsInclude>
+                                <jsInclude>register.js</jsInclude>
+                                <jsInclude>admin.js</jsInclude>
+                                <jsInclude>help.js</jsInclude>
+                                <jsInclude>rules.js</jsInclude>
+                                <jsInclude>board.js</jsInclude>
+                                <jsInclude>board-only.js</jsInclude>
+                                <jsInclude>board-log.js</jsInclude>
+                            </jsSourceFiles>
+                            <jsFinalFile>all.js</jsFinalFile>
+                        </configuration>
+                        <goals>
+                            <goal>minify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler.version}</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <encoding>utf8</encoding>
                     <source>${java.version}</source>
@@ -294,7 +379,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>${maven-war.version}</version>
+                <version>${maven-war-plugin.version}</version>
                 <configuration>
                     <webXml>${basedir}/target/web.xml</webXml>
                 </configuration>
@@ -315,7 +400,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
-                <version>${maven-license.version}</version>
+                <version>${maven-license-plugin.version}</version>
                 <configuration>
                     <licenseName>gpl_v3</licenseName>
                     <licenseResolver>${project.baseUri}/src/license</licenseResolver>

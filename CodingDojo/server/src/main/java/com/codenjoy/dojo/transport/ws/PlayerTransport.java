@@ -41,7 +41,7 @@ public interface PlayerTransport {
      * @param state state
      * @throws IOException
      */
-    void sendState(String id, Object state) throws IOException;
+    boolean sendState(String id, Object state) throws IOException;
 
     /**
      * Случается, когда игрок зарегистрировался в игре на страничке регистрации

@@ -1,0 +1,371 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 - 2019 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <script src="jquery.min.js"></script>
+    <script src="jquery.md5.js"></script>
+    <script src="admin.js"></script>
+    <style>
+        .table {
+            display: table;
+        }
+        div {
+            display: table-row;
+        }
+        span {
+            display: table-cell;
+            text-align: end;
+            vertical-align: middle;
+        }
+        button {
+            float: right;
+            width: 20%;
+            height: 30px;
+        }
+        input, textarea {
+            width: 700px;
+        }
+        input[type='checkbox'] {
+            width: 40px;
+            float: right;
+            height: 40px;
+        }
+        .basic {
+            position: fixed;
+            left: calc(100% - 500px);
+            top: 10px;
+
+        }
+        body div {
+            padding: 10px;
+            border: 1px solid gray;
+            background-color: bisque;
+        }
+        .basic input, .basic textarea {
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="table basic border">
+        <h2>Basic settings</h2>
+        <div>
+            <span>BalancerServer:</span>
+            <input id="balancer-server" value="/codenjoy-balancer/rest"/>
+        </div>
+        <div>
+            <span>GameServer:</span>
+            <input id="game-server" value="/codenjoy-contest/rest"/>
+        </div>
+
+        <div>
+            <span>Preffix:</span>
+            <input id="preffix" value="a1_"/>
+        </div>
+        <div>
+            <span>Auto increment:</span>
+            <input type="checkbox" id="auto-increment"/>
+        </div>
+        <div>
+            <span>Admin Password:</span>
+            <input id="admin-password" value="admin"/>
+        </div>
+    </div>
+
+    <h2>Register user</h2>
+    <div class="table">
+        <div>
+            <span>FirstName:</span>
+            <input id="first-name" value="Stiven"/>
+        </div>
+        <div>
+            <span>LastName:</span>
+            <input id="last-name" value="Pupkin"/>
+        </div>
+        <div>
+            <span>Password:</span>
+            <input id="password" value="password"/>
+        </div>
+        <div>
+            <span>Code:</span>
+            <input id="code" value="12345678901234567890"/>
+        </div>
+        <div>
+            <span>Email:</span>
+            <input id="email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span>City:</span>
+            <input id="city" value="city"/>
+        </div>
+        <div>
+            <span>Skills:</span>
+            <input id="skills" value="Si Senior"/>
+        </div>
+        <div>
+            <span>Comment:</span>
+            <input id="comment" value="no comment"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="register">Register</button>
+            <button id="update">Update</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="4" id="register-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="register-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="register-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Login user</h2>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="login-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span>Password:</span>
+            <input id="login-password" value="password"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="login">Login</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="login-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="login-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="login-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Remove user</h2>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="remove-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="remove">Remove</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="remove-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="remove-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="remove-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Join/Exit game server</h2>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="join-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span>Code:</span>
+            <input id="join-code" value="code"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="join">Join</button>
+            <button id="exit">Exit</button>
+            <button id="join-status">Status</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="join-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="join-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="join-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Scores</h2>
+    <div class="table">
+        <div>
+            <span>Day:</span>
+            <input id="scores-day"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="scores">Score</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="scores-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="scores-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="scores-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Users on balancer</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="users-balancer">Users</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="users-balancer-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="15" id="users-balancer-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="users-balancer-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Users on game</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="users-game">Users</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="users-game-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="15" id="users-game-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="3" id="users-game-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Settings</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="get-settings">Get</button>
+            <button id="set-settings">Set</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="settings-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="settings-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="settings-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Debug</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <input type="checkbox" id="debug-result"/>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="5" id="debug-request"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="debug-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Contest started</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <input type="checkbox" id="contest-result"/>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="5" id="contest-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="5" id="contest-result-data"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="contest-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Clear cache</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="cache">Clear</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="3" id="cache-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="cache-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="3" id="cache-error"></textarea>
+        </div>
+    </div>
+
+</body>
+</html>

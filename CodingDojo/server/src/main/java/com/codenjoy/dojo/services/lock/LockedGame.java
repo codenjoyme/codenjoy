@@ -76,10 +76,30 @@ public class LockedGame implements Game {
     }
 
     @Override
+    public boolean shouldLeave() {
+        lock.writeLock().lock();
+        try {
+            return game.shouldLeave();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public void newGame() {
         lock.writeLock().lock();
         try {
             game.newGame();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void loadSave(JSONObject save) {
+        lock.writeLock().lock();
+        try {
+            game.loadSave(save);
         } finally {
             lock.writeLock().unlock();
         }

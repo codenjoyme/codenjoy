@@ -30,6 +30,7 @@ import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
@@ -42,16 +43,13 @@ public class WebSocketRunner implements Closeable {
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
-    public static final Pattern BOARD_PATTERN = Pattern.compile("^board=(.*)$");
-    public static final String CODENJOY_COM_SERVER = "tetrisj.jvmhost.net:12270";
-    public static final String CODENJOY_COM_ALIAS = "codenjoy.com:8080";
+    public static final String BOARD_FORMAT = "^board=(.*)$";
+    public static final Pattern BOARD_PATTERN = Pattern.compile(BOARD_FORMAT);
     public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
-    public static String BOT_CODE = "12345678901234567890";
-
 
     public static boolean PRINT_TO_CONSOLE = true;
-    public static int TIMEOUT = 5000;
-    public static Integer ATTEMPTS = 3;
+    public static int TIMEOUT = 10000;
+    public static Integer ATTEMPTS = 5;
 
     private Session session;
     private WebSocketClient client;
@@ -74,9 +72,9 @@ public class WebSocketRunner implements Closeable {
                 solver, board, ATTEMPTS);
     }
 
-    public static WebSocketRunner runAI(String aiName, Solver solver, ClientBoard board) {
+    public static WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
-        return run(UrlParser.WS_PROTOCOL, LOCAL, CodenjoyContext.get(), aiName, BOT_CODE, solver, board, 1);
+        return run(UrlParser.WS_PROTOCOL, LOCAL, CodenjoyContext.get(), aiName, code, solver, board, 1);
     }
 
     private static WebSocketRunner run(String protocol,
@@ -90,9 +88,6 @@ public class WebSocketRunner implements Closeable {
     private static URI getUri(String protocol, String server, String context, String userName, String code) {
         try {
             String url = String.format(WS_URI_PATTERN, protocol, server, context, userName, code);
-            if (url.contains(CODENJOY_COM_ALIAS)) { // TODO это костылек пока сервер не сделаем нормальный
-                url = url.replace(CODENJOY_COM_ALIAS, CODENJOY_COM_SERVER);
-            }
             return new URI(url);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
@@ -187,11 +182,10 @@ public class WebSocketRunner implements Closeable {
 
         @OnWebSocketMessage
         public void onMessage(String data) {
-            print("Data from server: " + data);
             try {
                 Matcher matcher = BOARD_PATTERN.matcher(data);
                 if (!matcher.matches()) {
-                    throw new RuntimeException("Error parsing data: " + data);
+                    throw new IllegalArgumentException("Unexpected board format, should be: " + BOARD_FORMAT);
                 }
 
                 board.forString(matcher.group(1));
@@ -207,6 +201,7 @@ public class WebSocketRunner implements Closeable {
                 }
                 remote.sendString(answer);
             } catch (Exception e) {
+                print("Error processing data: " + data);
                 print(e);
             }
             printBreak();
@@ -214,7 +209,13 @@ public class WebSocketRunner implements Closeable {
     }
 
     private boolean isUnauthorizedAccess(Throwable exception) {
-        return exception instanceof UpgradeException && ((UpgradeException) exception).getResponseStatusCode() == 401;
+        return exception instanceof UpgradeException
+                && ((UpgradeException) exception).getResponseStatusCode() == 401;
+    }
+
+    private boolean isConnectionRefused(Throwable exception) {
+        return exception instanceof ConnectException
+                && "Connection refused: no further information".equals(exception.getMessage());
     }
 
     private void connectLoop(int countAttempts) {
@@ -223,7 +224,8 @@ public class WebSocketRunner implements Closeable {
                 tryToConnect();
                 break;
             } catch (ExecutionException e) {
-                if (!isUnauthorizedAccess(e.getCause())) {
+                print(e.toString());
+                if (!isUnauthorizedAccess(e.getCause()) && !isConnectionRefused(e.getCause())) {
                     print(e);
                 }
                 printReconnect();

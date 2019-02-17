@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 
 import java.util.Deque;
@@ -41,9 +42,13 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void event(Object event) {
-        Object before = playerScores.getScore();
-        playerScores.event(event);
-        add(before);
+        if (event instanceof CustomMessage) {
+            pool.add(((CustomMessage) event).getMessage());
+        } else {
+            Object before = playerScores.getScore();
+            playerScores.event(event);
+            add(before);
+        }
     }
 
     private void add(Object before) {
@@ -97,8 +102,8 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     }
 
     @Override
-    public void levelChanged(int levelNumber, GameLevel level) {
-        pool.add(LEVEL + " " + (levelNumber + 1));
+    public void levelChanged(LevelProgress progress) {
+        pool.add(LEVEL + " " + (progress.getCurrent() + 1));
     }
 
     public void setInfo(String information) {

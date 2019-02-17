@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,9 +50,7 @@ public class BoardController {
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
     @Autowired private Validator validator;
-
-    @Value("${donate.code}")
-    private String donateCode;
+    @Autowired private ConfigProperties properties;
 
     public BoardController() {
     }
@@ -63,28 +60,51 @@ public class BoardController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", method = RequestMethod.GET)
-    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName) {
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+                    method = RequestMethod.GET)
+    public String boardPlayer(ModelMap model,
+                              @PathVariable("playerName") String playerName,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
 
-        return boardPlayer(model, playerName, null);
+        return boardPlayer(model, playerName, null, justBoard);
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = {"code", "remove"}, method = RequestMethod.GET)
-    public String removePlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
-        validator.checkPlayerName(playerName, CANT_BE_NULL);
-        validator.checkCode(code, CANT_BE_NULL);
+    // TODO удалить это после того как попрошу Олега обновить фронт
+    @RequestMapping(value = "/board/player/id/{playerId:" + Validator.ID + "}",
+            method = RequestMethod.GET)
+    public String boardPlayerById(ModelMap model,
+                              @PathVariable("playerId") String playerId,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
+        validator.checkPlayerId(playerId);
 
-        Player player = playerService.get(registration.getEmail(code));
+        return boardPlayer(model, playerId, null, justBoard);
+    }
+
+
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
+    public String removePlayer(@PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+        String playerId = validator.checkPlayerCode(playerName, code);
+
+        Player player = playerService.get(playerId);
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?name=" + playerName;
         }
+
         playerService.remove(player.getName());
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL + "}", params = "code", method = RequestMethod.GET)
-    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+                    params = "code",
+                    method = RequestMethod.GET)
+    public String boardPlayer(ModelMap model,
+                              @PathVariable("playerName") String playerName,
+                              @RequestParam("code") String code,
+                              @RequestParam(name = "only", required = false) Boolean justBoard)
+    {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -97,7 +117,24 @@ public class BoardController {
         model.addAttribute(GAME_NAME, player.getGameName());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", false);
-        return "board";
+
+        return (justBoard == null || !justBoard) ? "board" : "board-only";
+    }
+
+    @RequestMapping(value = "/board/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+            method = RequestMethod.GET)
+    public String boardPlayerLog(ModelMap model, @PathVariable("playerName") String playerName) {
+        validator.checkPlayerName(playerName, CANT_BE_NULL);
+
+        Player player = playerService.get(playerName);
+        if (player == NullPlayer.INSTANCE) {
+            return "redirect:/register?name=" + playerName;
+        }
+
+        model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute("playerName", player.getName());
+
+        return "board-log";
     }
 
     @RequestMapping(value = "/board", method = RequestMethod.GET)
@@ -109,7 +146,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = "/board/game/{gameName:" + Validator.GAME + "}", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/game/{gameName}", method = RequestMethod.GET)
     public String boardAllGames(ModelMap model, @PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
@@ -122,7 +159,7 @@ public class BoardController {
             return "redirect:/register?" + GAME_NAME + "=" + gameName;
         }
         GameType gameType = player.getGameType();
-        if (gameType.getMultiplayerType() != MultiplayerType.SINGLE) {
+        if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
             return "redirect:/board/player/" + player.getName();
         }
 
@@ -161,7 +198,7 @@ public class BoardController {
     @RequestMapping(value = "/donate", method = RequestMethod.GET)
     public String donate(ModelMap model) {
         model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        model.addAttribute("donateCode", donateCode);
+        model.addAttribute("donateCode", properties.getDonateCode());
         return "donate-form";
     }
 

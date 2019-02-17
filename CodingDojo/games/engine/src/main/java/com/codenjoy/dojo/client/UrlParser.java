@@ -30,15 +30,18 @@ public class UrlParser {
     public static final String WS_PROTOCOL = "ws";
     public static final String HTTPS_PROTOCOL = "https";
 
-    String protocol;
-    String server;
-    String code;
-    String userName;
-    String context;
+    public String protocol;
+    public String server;
+    public String code;
+    public String userName;
+    public String context;
 
     public UrlParser(String uri) {
         try {
             URL url = new URL(uri);
+            if (url.getQuery() == null) {
+                throw badUrl();
+            }
             String[] queryParts = url.getQuery().split("=");
             String[] urlParts = url.getPath().split("\\/");
             if (urlParts.length != 5
@@ -48,7 +51,7 @@ public class UrlParser {
                     || queryParts.length != 2
                     || !queryParts[0].equals("code"))
             {
-                throw new IllegalArgumentException("Bad URL");
+                throw badUrl();
             }
 
             protocol = (url.getProtocol().equals(HTTPS_PROTOCOL))? WSS_PROTOCOL : WS_PROTOCOL;
@@ -62,6 +65,10 @@ public class UrlParser {
                     "board/player/your@email.com?code=12345678901234567890'",
                     e);
         }
+    }
+
+    private IllegalArgumentException badUrl() {
+        return new IllegalArgumentException("Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
     }
 
     private String portPart(int port) {

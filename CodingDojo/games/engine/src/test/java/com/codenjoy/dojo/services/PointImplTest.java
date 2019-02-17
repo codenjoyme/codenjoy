@@ -186,6 +186,28 @@ public class PointImplTest {
     }
 
     @Test
+    public void shouldDefaultConstructor() {
+        Point pt = new PointImpl();
+
+        assertEquals("[-1,-1]", pt.toString());
+    }
+
+    @Test
+    public void shouldSet() {
+        Point pt = pt(10, 15);
+
+        pt.setX(20);
+        pt.setY(23);
+
+        assertEquals("[20,23]", pt.toString());
+
+        pt.setX(40);
+        pt.setY(43);
+
+        assertEquals("[40,43]", pt.toString());
+    }
+
+    @Test
     public void shouldCopy() {
         Point pt = pt(10, 15);
 

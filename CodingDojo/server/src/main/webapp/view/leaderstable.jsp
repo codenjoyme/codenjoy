@@ -22,13 +22,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard" style="display:none;">
+<div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
     <table id="table-logs" class="table table-striped leaderboard-table">
         <thead>
             <th width="5%">
                 <c:choose>
                     <c:when test="${code != null}">
-                        <a href="${ctx}/board?code=${code}">#</a>
+                        <a href="${ctx}/board/game/${gameName}?code=${code}">#</a>
                     </c:when>
                     <c:otherwise>
                         <a href="${ctx}/board/game/${gameName}">#</a>
@@ -46,4 +46,5 @@
             -->
         </tbody>
     </table>
+    <%@include file="info.jsp"%>
 </div>

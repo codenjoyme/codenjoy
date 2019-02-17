@@ -23,19 +23,33 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.hero.HeroData;
 import org.json.JSONObject;
 
+import java.util.List;
+import java.util.Map;
+
 public class GameData {
+
     private final int boardSize;
     private final GuiPlotColorDecoder decoder;
-    private final JSONObject scores;
-    private final JSONObject heroesData;
+    private final Map<String, Object> scores;
+    private final List<String> group;
+    private final Map<String, HeroData> coordinates;
+    private Map<String, String> readableNames;
 
-    public GameData(int boardSize, GuiPlotColorDecoder decoder, JSONObject scores, JSONObject heroesData) {
+
+    public GameData(int boardSize, GuiPlotColorDecoder decoder,
+                    Map<String, Object> scores, List<String> group,
+                    Map<String, HeroData> coordinates,
+                    Map<String, String> readableNames)
+    {
         this.boardSize = boardSize;
         this.decoder = decoder;
         this.scores = scores;
-        this.heroesData = heroesData;
+        this.group = group;
+        this.coordinates = coordinates;
+        this.readableNames = readableNames;
     }
 
     public GuiPlotColorDecoder getDecoder() {
@@ -47,10 +61,14 @@ public class GameData {
     }
 
     public JSONObject getScores() {
-        return scores;
+        return new JSONObject(scores);
     }
 
     public JSONObject getHeroesData() {
-        return heroesData;
+        JSONObject result = new JSONObject();
+        result.put("coordinates", coordinates);
+        result.put("group", group);
+        result.put("readableNames", readableNames);
+        return result;
     }
 }

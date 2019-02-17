@@ -26,7 +26,6 @@ package com.codenjoy.dojo.integration;
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
-import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -35,12 +34,8 @@ import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.annotation.Nullable;
 import javax.mail.MessagingException;
-import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -128,12 +123,12 @@ public class IntegrationTest {
     }
 
     private void removeSaveAll(String saves) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         driver.findElement(By.linkText("RemoveSaveAll")).click();
     }
 
     private void gameOverAll(String names) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         driver.findElement(By.linkText("GameOverAll")).click();
         assertPlayers(names);
     }
@@ -148,7 +143,7 @@ public class IntegrationTest {
     }
 
     private void saveAll(String saves) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         save.removeAllSaves();
         assertSaves("[]");
         driver.findElement(By.linkText("SaveAll")).click();
@@ -160,7 +155,7 @@ public class IntegrationTest {
     }
 
     private void save(String saves) {
-        driver.get(url + "admin31415");
+        driver.get(url + "admin");
         driver.findElement(By.linkText("Save")).click();
         assertSaves(saves);
     }

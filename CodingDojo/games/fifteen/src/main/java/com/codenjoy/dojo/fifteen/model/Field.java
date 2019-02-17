@@ -22,7 +22,6 @@ package com.codenjoy.dojo.fifteen.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 public interface Field extends GameField<Player> {
@@ -30,8 +29,6 @@ public interface Field extends GameField<Player> {
     boolean isBarrier(int x, int y);
 
     Digit getDigit(int x, int y);
-
-    Point getFreeRandom();
 
     boolean isFree(int x, int y);
 

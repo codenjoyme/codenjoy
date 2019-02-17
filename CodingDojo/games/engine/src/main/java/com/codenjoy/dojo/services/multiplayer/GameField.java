@@ -46,4 +46,18 @@ public interface GameField<P extends GamePlayer> extends Tickable {
     default JSONObject getSave(){
         return null;
     }
+
+    default void loadSave(JSONObject save) {
+        // do nothing
+    }
+
+    /**
+     * Никогда не переопределяй этот метод
+     */
+    boolean equals(Object o);
+
+    /**
+     * Никогда не переопределяй этот метод
+     */
+    int hashCode();
 }

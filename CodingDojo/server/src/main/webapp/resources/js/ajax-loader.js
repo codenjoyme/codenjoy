@@ -40,15 +40,6 @@ function sendData(url, jsonData, onSend) {
     });
 }
 
-function loadContext(onLoad) {
-    loadData('/rest/context', function(contextPath) {
-        game.contextPath = contextPath;
-        if (!!onLoad) {
-            onLoad(game.contextPath);
-        }
-    });
-}
-
 // TODO continue with this
 //function loadAllData(urls, onAllLoad) {
 //    var url = url.shift();

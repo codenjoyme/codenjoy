@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class LazyJoystickTest {
@@ -278,5 +279,26 @@ public class LazyJoystickTest {
 
         // then
         verifyNoMoreInteractions(original);
+    }
+
+    @Test
+    public void testCollectedAllCommands() {
+        // when
+        lazy.message("Hello");
+        lazy.act(1, 2, 3);
+        lazy.up();
+        lazy.down();
+        lazy.left();
+        lazy.right();
+        lazy.act();
+
+        lazy.tick();
+
+        // then
+        assertEquals("[MESSAGE('Hello'), ACT[1, 2, 3], UP, DOWN, LEFT, RIGHT, ACT[]]",
+                lazy.popLastCommands());
+
+        assertEquals("[]", lazy.popLastCommands());
+
     }
 }

@@ -53,6 +53,10 @@ public interface Point extends Comparable<Point> {
      */
     Point copy();
 
+    void setX(int x);
+
+    void setY(int y);
+
     /**
      * @return true if points has equals X and Y coordinates.
      */

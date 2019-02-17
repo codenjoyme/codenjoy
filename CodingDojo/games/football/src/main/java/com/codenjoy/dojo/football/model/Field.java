@@ -34,11 +34,9 @@ public interface Field extends GameField<Player> {
     
     boolean isWall(int x, int y);
 
-    Point getFreeRandom();
-
     Point getFreeRandomOnMyHalf(Player player);
 
-    boolean isFree(int x, int y);
+    boolean isFree(Point pt);
 
     Ball getBall(int x, int y);
 
