@@ -86,6 +86,7 @@ ssl() {
 ssl ./config/nginx/domain.conf
 ssl ./config/nginx/codenjoy-balancer.conf
 ssl ./config/nginx/codenjoy-contest.conf
+ssl ./docker-compose.yml
 
 parameter ./config/codenjoy/codenjoy-balancer.properties "database.password=" $POSTGRES_PASSWORD
 parameter ./config/codenjoy/codenjoy-balancer.properties "admin.password=" $ADMIN_PASSWORD

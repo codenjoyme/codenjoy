@@ -27,7 +27,7 @@ services:
        - ./config/nginx/.htpasswd:/etc/nginx/.htpasswd
        - ./ssl-cert:/usr/share/ca-certificates/extra
      ports: 
-#S#       - "443:443" 
+#       - "443:443"                                         #S#
        - "80:80"   
      restart: always   
      networks:
