@@ -14,8 +14,8 @@ services:
              ipv4_address: 172.28.1.5
 
    codenjoy_balancer:
-     depends_on:
-       - codenjoy_db
+     depends_on:                                          #!L#
+       - codenjoy_db                                      #!L#
      image: apofig/codenjoy-balancer:1.0.28
      container_name: codenjoy-balancer
      build:

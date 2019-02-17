@@ -30,7 +30,10 @@ if [ "x$CODENJOY" = "xtrue" ]; then
     codenjoy="-f codenjoy.yml"
 fi
 
-eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d codenjoy_db"
-sleep 10
+if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
+    eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d codenjoy_db"
+    sleep 10
+fi
+
 eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d"
 
