@@ -70,6 +70,12 @@ basic_auth ./config/nginx/codenjoy-contest.conf
 ssl() {
     file=$1
     comment $file "#S#" $SSL
+    if [ "x$SSL" = "xtrue" ]; then
+        NOT_SSL="false";
+    else
+        NOT_SSL="true";
+    fi
+    comment $file "#!S#" $NOT_SSL
 }
 
 ssl ./config/nginx/domain.conf
