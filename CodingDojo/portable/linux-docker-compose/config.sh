@@ -66,3 +66,12 @@ basic_auth() {
 
 basic_auth ./config/nginx/codenjoy-balancer.conf
 basic_auth ./config/nginx/codenjoy-contest.conf
+
+ssl() {
+    file=$1
+    comment $file "#S#" $SSL
+}
+
+ssl ./config/nginx/domain.conf
+ssl ./config/nginx/codenjoy-balancer.conf
+ssl ./config/nginx/codenjoy-contest.conf
