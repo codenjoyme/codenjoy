@@ -58,3 +58,11 @@ ports() {
 ports ./docker-compose.yml
 ports ./codenjoy.yml
 ports ./balancer.yml
+
+basic_auth() {
+    file=$1
+    comment $file "#A#" $BASIC_AUTH
+}
+
+basic_auth ./config/nginx/codenjoy-balancer.conf
+basic_auth ./config/nginx/codenjoy-contest.conf
