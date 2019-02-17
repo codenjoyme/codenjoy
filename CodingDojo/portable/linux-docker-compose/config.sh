@@ -91,6 +91,7 @@ parameter ./config/codenjoy/codenjoy-balancer.properties "database.password=" $P
 parameter ./config/codenjoy/codenjoy-balancer.properties "admin.password=" $ADMIN_PASSWORD
 parameter ./config/codenjoy/codenjoy-balancer.properties "email.hash=" $EMAIL_HASH
 parameter ./config/codenjoy/codenjoy-balancer.properties "game.type=" $GAME
+parameter ./config/codenjoy/codenjoy-balancer.properties "game.servers=" $GAME_SERVERS
 
 parameter ./config/codenjoy/codenjoy-contest.properties "database.password=" $POSTGRES_PASSWORD
 parameter ./config/codenjoy/codenjoy-contest.properties "admin.password=" $ADMIN_PASSWORD
