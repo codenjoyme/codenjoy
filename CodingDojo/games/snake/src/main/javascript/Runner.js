@@ -82,53 +82,28 @@ ws.on('message', function(message) {
 log('Web socket client running at ' + url);
 
 var Elements = {
-    /// a void
-    NONE : ' ',
+    BAD_APPLE: '☻',
+    GOOD_APPLE: '☺',
 
-    /// walls
-    BRICK : '#',
-    PIT_FILL_1 : '1',
-    PIT_FILL_2 : '2',
-    PIT_FILL_3 : '3',
-    PIT_FILL_4 : '4',
-    UNDESTROYABLE_WALL : '☼',
+    BREAK: '☼',
 
-    DRILL_PIT : '*',
+    HEAD_DOWN: '▼',
+    HEAD_LEFT: '◄',
+    HEAD_RIGHT: '►',
+    HEAD_UP: '▲',
 
-    // this is enemy
-    ENEMY_LADDER : 'Q',
-    ENEMY_LEFT : '«',
-    ENEMY_RIGHT : '»',
-    ENEMY_PIPE_LEFT : '<',
-    ENEMY_PIPE_RIGHT : '>',
-    ENEMY_PIT : 'X',
+    TAIL_END_DOWN: '╙',
+    TAIL_END_LEFT: '╘',
+    TAIL_END_UP: '╓',
+    TAIL_END_RIGHT: '╕',
+    TAIL_HORIZONTAL: '═',
+    TAIL_VERTICAL: '║',
+    TAIL_LEFT_DOWN: '╗',
+    TAIL_LEFT_UP: '╝',
+    TAIL_RIGHT_DOWN: '╔',
+    TAIL_RIGHT_UP: '╚',
 
-    /// gold ;)
-    GOLD : '$',
-
-    /// This is your loderunner
-    HERO_DIE : 'Ѡ',
-    HERO_DRILL_LEFT : 'Я',
-    HERO_DRILL_RIGHT : 'R',
-    HERO_LADDER : 'Y',
-    HERO_LEFT : '◄',
-    HERO_RIGHT : '►',
-    HERO_FALL_LEFT : ']',
-    HERO_FALL_RIGHT : '[',
-    HERO_PIPE_LEFT : '{',
-    HERO_PIPE_RIGHT : '}',
-
-    /// this is other players
-    OTHER_HERO_DIE : 'Z',
-    OTHER_HERO_LEFT : ')',
-    OTHER_HERO_RIGHT : ' : ',
-    OTHER_HERO_LADDER : 'U',
-    OTHER_HERO_PIPE_LEFT : 'Э',
-    OTHER_HERO_PIPE_RIGHT : 'Є',
-
-    /// ladder and pipe - you can walk
-    LADDER : 'H',
-    PIPE : '~'
+    NONE: ' '
 };
 
 var D = function(index, dx, dy, name){
@@ -279,74 +254,44 @@ var Board = function(board){
     var size = boardSize();
     var xyl = new LengthToXY(size);
 
-    var getMe = function() {
+    var getMyBody = function() {
         var result = [];
-        result = result.concat(findAll(Elements.HERO_DIE));
-        result = result.concat(findAll(Elements.HERO_DRILL_LEFT));
-        result = result.concat(findAll(Elements.HERO_DRILL_RIGHT));
-        result = result.concat(findAll(Elements.HERO_FALL_RIGHT));
-        result = result.concat(findAll(Elements.HERO_FALL_LEFT));
-        result = result.concat(findAll(Elements.HERO_LADDER));
-        result = result.concat(findAll(Elements.HERO_LEFT));
-        result = result.concat(findAll(Elements.HERO_RIGHT));
-        result = result.concat(findAll(Elements.HERO_PIPE_LEFT));
-        result = result.concat(findAll(Elements.HERO_PIPE_RIGHT));
+        result = result.concat(findAll(Elements.HEAD_DOWN));
+        result = result.concat(findAll(Elements.HEAD_LEFT));
+        result = result.concat(findAll(Elements.HEAD_RIGHT));
+        result = result.concat(findAll(Elements.HEAD_UP));
+        result = result.concat(findAll(Elements.TAIL_END_DOWN));
+        result = result.concat(findAll(Elements.TAIL_END_LEFT));
+        result = result.concat(findAll(Elements.TAIL_END_UP));
+        result = result.concat(findAll(Elements.TAIL_END_RIGHT));
+        result = result.concat(findAll(Elements.TAIL_HORIZONTAL));
+        result = result.concat(findAll(Elements.TAIL_VERTICAL));
+        result = result.concat(findAll(Elements.TAIL_LEFT_DOWN));
+        result = result.concat(findAll(Elements.TAIL_LEFT_UP));
+        result = result.concat(findAll(Elements.TAIL_RIGHT_DOWN));
+        result = result.concat(findAll(Elements.TAIL_RIGHT_UP));
         return result[0];
     };
 
-    var getOtherHeroes = function() {
+    var getMyHead = function() {
         var result = [];
-        result = result.concat(findAll(Elements.OTHER_HERO_LEFT));
-        result = result.concat(findAll(Elements.OTHER_HERO_RIGHT));
-        result = result.concat(findAll(Elements.OTHER_HERO_LADDER));
-        result = result.concat(findAll(Elements.OTHER_HERO_PIPE_LEFT));
-        result = result.concat(findAll(Elements.OTHER_HERO_PIPE_RIGHT));
-        return result;
+        result = result.concat(findAll(Elements.HEAD_DOWN));
+        result = result.concat(findAll(Elements.HEAD_LEFT));
+        result = result.concat(findAll(Elements.HEAD_RIGHT));
+        result = result.concat(findAll(Elements.HEAD_UP));
+        return result[0];
     };
 
-    var getEnemies = function() {
-        var result = [];
-        result = result.concat(findAll(Elements.ENEMY_LADDER));
-        result = result.concat(findAll(Elements.ENEMY_LADDER));
-        result = result.concat(findAll(Elements.ENEMY_LEFT));
-        result = result.concat(findAll(Elements.ENEMY_PIPE_LEFT));
-        result = result.concat(findAll(Elements.ENEMY_PIPE_RIGHT));
-        result = result.concat(findAll(Elements.ENEMY_RIGHT));
-        result = result.concat(findAll(Elements.ENEMY_PIT));
-        return result;
+    var getApple = function() {
+        return findAll(Elements.GOOD_APPLE);
     };
 
-    var getGold = function() {
-        return findAll(Elements.GOLD);
+    var getStone = function() {
+        return findAll(Elements.BAD_APPLE);
     };
 
     var getWalls = function() {
-        var result = [];
-        result = result.concat(findAll(Elements.BRICK));
-        result = result.concat(findAll(Elements.UNDESTROYABLE_WALL));
-        return result;
-    };
-
-    var getLadder = function() {
-        var result = [];
-        result = result.concat(findAll(Elements.LADDER));
-        result = result.concat(findAll(Elements.HERO_LADDER));
-        result = result.concat(findAll(Elements.ENEMY_LADDER));
-        return result;
-    };
-
-    var getPipe = function() {
-        var result = [];
-        result = result.concat(findAll(Elements.PIPE));
-        result = result.concat(findAll(Elements.HERO_PIPE_LEFT));
-        result = result.concat(findAll(Elements.HERO_PIPE_RIGHT));
-        result = result.concat(findAll(Elements.OTHER_HERO_PIPE_LEFT));
-        result = result.concat(findAll(Elements.OTHER_HERO_PIPE_RIGHT));
-        return result;
-    };
-
-    var isGameOver = function() {
-        return board.indexOf(Elements.HERO_DIE) != -1;
+        return findAll(Elements.BREAK);
     };
 
     var isAt = function(x, y, element) {
@@ -374,23 +319,22 @@ var Board = function(board){
 
     var getBarriers = function() {
         var all = getWalls();
-        all = all.concat(getEnemies());
-        all = all.concat(getOtherHeroes());
         all = all.concat(getWalls());
+        all = all.concat(getStone());
         return removeDuplicates(all);
     };
 
     var toString = function() {
         return util.format("Board:\n%s\n" +
-            "Me at: %s\n" +
-            "Other heroes at: %s\n" +
-            "Enemies at: %s\n" +
-            "Gold at: %s\n",
+            "My head at: %s\n" +
+            "My body at: %s\n" +
+            "Apple at: %s\n" +
+            "Stone at: %s\n",
                 boardAsString(),
-                getMe(),
-                printArray(getOtherHeroes()),
-                printArray(getEnemies()),
-                printArray(getGold())
+                getMyHead(),
+                getMyBody,
+                printArray(getApple()),
+                printArray(getStone())
             );
     };
 
@@ -443,16 +387,16 @@ var Board = function(board){
 
     return {
         size : boardSize,
-        getMe : getMe,
-        getOtherHeroes : getOtherHeroes,
-        isGameOver : isGameOver,
+        getMyBody : getMyBody,
+        getMyHead : getMyHead,
         isAt : isAt,
         boardAsString : boardAsString,
         getBarriers : getBarriers,
         toString : toString,
         findAll : findAll,
         getWalls : getWalls,
-        getGold : getGold,
+        getApple : getApple,
+        getStone : getStone,
         isAnyOfAt : isAnyOfAt,
         isNear : isNear,
         isBarrierAt : isBarrierAt,
