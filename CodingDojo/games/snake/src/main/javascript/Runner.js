@@ -236,6 +236,13 @@ var Board = function(board){
         return false;
     };
 
+    var sort = function(all) {
+        return all.sort(function(pt1, pt2) {
+            return (pt1.getY()*1000 + pt1.getX()) -
+                (pt2.getY()*1000 + pt2.getX());
+        });
+    }
+
     var removeDuplicates = function(all) {
         var result = [];
         for (var index in all) {
@@ -244,7 +251,7 @@ var Board = function(board){
                 result.push(point);
             }
         }
-        return result;
+        return sort(result);
     };
 
     var boardSize = function() {
@@ -270,7 +277,7 @@ var Board = function(board){
         result = result.concat(findAll(Elements.TAIL_LEFT_UP));
         result = result.concat(findAll(Elements.TAIL_RIGHT_DOWN));
         result = result.concat(findAll(Elements.TAIL_RIGHT_UP));
-        return result;
+        return sort(result);
     };
 
     var getMyHead = function() {
@@ -303,7 +310,7 @@ var Board = function(board){
 
     var getAt = function(x, y) {
         if (pt(x, y).isOutOf(size)) {
-            return Element.WALL;
+            return Elements.BREAK;
         }
         return board.charAt(xyl.getLength(x, y));
     };
@@ -346,13 +353,16 @@ var Board = function(board){
                 result.push(point);
             }
         }
-        return result;
+        return sort(result);
     };
 
     var isAnyOfAt = function(x, y, elements) {
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
         for (var index in elements) {
             var element = elements[index];
-            if (isAt(x, y,element)) {
+            if (isAt(x, y, element)) {
                 return true;
             }
         }
@@ -370,6 +380,10 @@ var Board = function(board){
     };
 
     var isBarrierAt = function(x, y) {
+        if (pt(x, y).isOutOf(size)) {
+            return true;
+        }
+
         return contains(getBarriers(), pt(x, y));
     };
 
@@ -422,7 +436,7 @@ var DirectionSolver = function(board){
 
             // TODO your code here
 
-            return Direction.DOWN;
+            return "";
         }
     };
 };
