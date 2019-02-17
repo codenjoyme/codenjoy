@@ -55,7 +55,7 @@ var processBoard = function(boardString) {
 };
 
 // you can get this code after registration on the server with your email
-var url = "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+var url = "http://127.0.0.1:8080/codenjoy-contest/board/player/tofxije4urfiw1xj2d5x?code=4780229493598912478";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
@@ -270,7 +270,7 @@ var Board = function(board){
         result = result.concat(findAll(Elements.TAIL_LEFT_UP));
         result = result.concat(findAll(Elements.TAIL_RIGHT_DOWN));
         result = result.concat(findAll(Elements.TAIL_RIGHT_UP));
-        return result[0];
+        return result;
     };
 
     var getMyHead = function() {
@@ -279,7 +279,7 @@ var Board = function(board){
         result = result.concat(findAll(Elements.HEAD_LEFT));
         result = result.concat(findAll(Elements.HEAD_RIGHT));
         result = result.concat(findAll(Elements.HEAD_UP));
-        return result[0];
+        return (result.length > 0) ? result[0] : null;
     };
 
     var getApple = function() {
@@ -332,7 +332,7 @@ var Board = function(board){
             "Stone at: %s\n",
                 boardAsString(),
                 getMyHead(),
-                getMyBody,
+                getMyBody(),
                 printArray(getApple()),
                 printArray(getStone())
             );
@@ -418,11 +418,11 @@ var DirectionSolver = function(board){
          * @return next hero action
          */
         get : function() {
-            var me = board.getMe();
+            var me = board.getMyHead();
 
             // TODO your code here
 
-            return Direction.DRILL_LEFT;
+            return Direction.DOWN;
         }
     };
 };
