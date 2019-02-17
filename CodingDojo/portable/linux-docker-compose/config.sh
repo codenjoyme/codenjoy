@@ -97,3 +97,25 @@ parameter ./config/codenjoy/codenjoy-balancer.properties "game.servers=" $GAME_S
 parameter ./config/codenjoy/codenjoy-contest.properties "database.password=" $POSTGRES_PASSWORD
 parameter ./config/codenjoy/codenjoy-contest.properties "admin.password=" $ADMIN_PASSWORD
 parameter ./config/codenjoy/codenjoy-contest.properties "email.hash=" $EMAIL_HASH
+
+database() {
+    file=$1
+    if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
+        POSTGRE="true";
+        SQLITE="false";
+    else
+        POSTGRE="false";
+        SQLITE="true";
+    fi
+    comment $file "#L#" $SQLITE
+    comment $file "#!L#" $POSTGRE
+    if [ "x$POSTGRE" = "xtrue" ] && [ "x$OPEN_PORTS" = "xtrue" ]; then
+        comment $file "#!LP#" "true"
+    else
+        comment $file "#!LP#" "false"
+    fi
+}
+
+database ./docker-compose.yml
+database ./balancer.yml
+database ./codenjoy.yml

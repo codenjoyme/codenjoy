@@ -6,8 +6,8 @@ services:
        - codenjoy_balancer
      image: vreshch/codenjoy-lb
      container_name: codenjoy-balancer-frontend
-#     ports:                              #P#
-#       - "${BALANCER_FRONTEND_PORT}:80"  #P#
+#     ports:                                              #P#
+#       - "${BALANCER_FRONTEND_PORT}:80"                  #P#
      restart: always
      networks:
          codenjoy:
@@ -23,11 +23,11 @@ services:
         dockerfile: Dockerfile-balancer
      command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
      volumes:
-#L#       - ./materials/database:/var/lib/jetty/database
+#       - ./materials/database:/var/lib/jetty/database    #L#
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
-#     ports:                              #P#
-#       - "${BALANCER_PORT}:8080"         #P#
+#     ports:                                              #P#
+#       - "${BALANCER_PORT}:8080"                         #P#
      restart: always
      networks:
          codenjoy:

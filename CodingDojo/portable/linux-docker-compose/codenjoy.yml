@@ -11,11 +11,11 @@ services:
         dockerfile: Dockerfile-contest
      command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
      volumes:
-#L#       - ./materials/database:/var/lib/jetty/database
+#       - ./materials/database:/var/lib/jetty/database      #L#
        - ./config/codenjoy:/var/lib/jetty/config
        - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
-#     ports:                       #P#
-#       - "${CODENJOY_PORT}:8080"  #P#
+#     ports:                                                #P#
+#       - "${CODENJOY_PORT}:8080"                           #P#
      restart: always
      networks:
          codenjoy:

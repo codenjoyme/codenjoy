@@ -1,21 +1,21 @@
 version: '3.3'
 
 services:
-   codenjoy_db:
-     image: postgres:11.1
-     container_name: codenjoy-database
-     volumes:
-       - ./materials/database:/var/lib/postgresql/data
-#     ports:                       #P#
-#       - "${POSTGRES_PORT}:5432"  #P#
-     restart: always
-     environment:
-         POSTGRES_DB: codenjoy
-         POSTGRES_USER: codenjoy
-         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-     networks:
-         codenjoy:
-             ipv4_address: 172.28.1.4
+   codenjoy_db:                                             #!L#
+     image: postgres:11.1                                   #!L#
+     container_name: codenjoy-database                      #!L#
+     volumes:                                               #!L#
+       - ./materials/database:/var/lib/postgresql/data      #!L#
+#     ports:                                                #!LP#
+#       - "${POSTGRES_PORT}:5432"                           #!LP#
+     restart: always                                        #!L#
+     environment:                                           #!L#
+         POSTGRES_DB: codenjoy                              #!L#
+         POSTGRES_USER: codenjoy                            #!L#
+         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}            #!L#
+     networks:                                              #!L#
+         codenjoy:                                          #!L#
+             ipv4_address: 172.28.1.4                       #!L#
 
    nginx:
      image: nginx

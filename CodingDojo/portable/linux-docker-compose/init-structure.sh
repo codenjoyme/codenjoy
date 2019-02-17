@@ -37,17 +37,19 @@ generate_htpasswd() {
 }
 eval_echo "generate_htpasswd"
 
-eval_echo "chown root:root ./cert/*"
-ls -la ./cert
+eval_echo "chown root:root ./ssl-cert/*"
+ls -la ./ssl-cert
 
 eval_echo "chown root:root ./config/nginx/*"
 ls -la ./config/nginx
 
-# for postgres codenjoy_db
+# database
 eval_echo "mkdir -p ./materials/database"
-eval_echo "chown root:root ./materials/database"
-# for sqlite
-#L# eval_echo "chown $JETTY_UID:$JETTY_UID ./materials/database"
+if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
+    eval_echo "chown root:root ./materials/database"
+else
+    eval_echo "chown $JETTY_UID:$JETTY_UID ./materials/database"
+fi
 ls -la ./materials/database
 
 # for codenjoy_balancer / codenjoy_contest
