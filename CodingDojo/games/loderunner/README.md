@@ -1,7 +1,11 @@
 For NonJava languages:
-- please go to .\src\main\<language>
-- chose your language
-- and follow README.md instructions
+- DotNet client
+    + read src\main\dotNet\Readme.txt
+- Python client
+    + read src\main\dotNet\README.MD
+    + read src\main\dotNet\README.MD
+- JS client
+    + read src\main\javascript\README.txt
 
 For Java:
 - setup Java (JDK 8)
