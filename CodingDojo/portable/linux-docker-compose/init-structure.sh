@@ -25,6 +25,9 @@ eval_echo() {
     eval $to_run
 }
 
+eval_echo "ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
+sudo dpkg-reconfigure -f noninteractive tzdata
+
 JETTY_UID=999
 
 # for nginx

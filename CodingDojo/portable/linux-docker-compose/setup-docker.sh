@@ -77,9 +77,5 @@ echo "[93mPlease try to connect via ssh as $NEW_USER[0m"
 
 # setup dockerhub account
 # https://docs.docker.com/engine/reference/commandline/login/
-# copy ~/.docker/config.json <from other server>	
-	
-# setup timezone
-eval_echo "ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime"
-sudo dpkg-reconfigure -f noninteractive tzdata
+# copy ~/.docker/config.json <from other server>
 

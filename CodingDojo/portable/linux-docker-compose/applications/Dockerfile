@@ -4,8 +4,10 @@ MAINTAINER Alexander Baglay <apofig@gmail.com>
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 
+ARG TIMEZONE=Europe/Kiev
+
 RUN apt-get update \
- && ln -sf /usr/share/zoneinfo/Europe/Kiev /etc/localtime \
+ && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
 
 # -----------------------------------------------------------------------

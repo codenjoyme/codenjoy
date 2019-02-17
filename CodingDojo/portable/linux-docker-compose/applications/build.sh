@@ -11,6 +11,7 @@ else
     echo "[93m"
     echo "BUILD_SERVER=$BUILD_SERVER"
     echo "BUILD_BALANCER=$BUILD_BALANCER"
+    echo "TIMEZONE=$TIMEZONE"
     echo "GIT_REPO=$GIT_REPO"
     echo "REVISION=$REVISION"
     echo "GAME=$GAME"
@@ -30,11 +31,20 @@ eval_echo() {
 rm -rf ./logs
 mkdir ./logs
 
+# build jetty-updated
+if [[ "$(docker images -q jetty-updated 2> /dev/null)" == "" ]]; then
+
+    # prepare jetty image update system && set timezone
+    eval_echo "docker build --target jetty_updated -t jetty-updated . --build-arg TIMEZONE=${TIMEZONE} |& tee ./logs/java-workspace.log" ;
+else
+    echo "[94mImage jetty-updated already installed[0m" ;
+fi
+
 # checkout if needed
 if [[ "$(docker images -q codenjoy-source 2> /dev/null)" == "" ]]; then
-    echo "[92m========================================================================================================================"
-    echo "======================================== Codenjoy sources not found. Checking out ======================================="
-    echo "========================================================================================================================[0m"
+    echo "[92m========================================================================================================================" ;
+    echo "======================================== Codenjoy sources not found. Checking out =======================================" ;
+    echo "========================================================================================================================[0m" ;
 
     # remove everything
     eval_echo "docker rmi codenjoy-deploy --force" ;
@@ -42,13 +52,12 @@ if [[ "$(docker images -q codenjoy-source 2> /dev/null)" == "" ]]; then
     eval_echo "docker rmi java-workspace --force" ;
 
     # build workspace
-    eval_echo "docker build --target jetty_updated -t jetty-updated . |& tee ./logs/java-workspace.log" ;
-
-    # build workspace
     eval_echo "docker build --target java_workspace -t java-workspace . |& tee ./logs/java-workspace.log" ;
 
     # checkout and build project
     eval_echo "docker build --target codenjoy_source -t codenjoy-source . --build-arg GIT_REPO=${GIT_REPO} --build-arg REVISION=${REVISION} --build-arg SKIP_TESTS=true |& tee ./logs/codenjoy-source.log" ;
+else
+    echo "[94mImage codenjoy-source already installed[0m" ;
 fi
 
 echo "[92m========================================================================================================================"
