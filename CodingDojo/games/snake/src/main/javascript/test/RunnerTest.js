@@ -192,6 +192,30 @@ function runTest() {
 
     assertEquals(0,
         board.countNear(3, -1, Elements.GOOD_APPLE));
+
+    assertEquals("[5,4]",
+        Direction.DOWN.change(new Point(5, 5)));
+
+    assertEquals("[5,6]",
+        Direction.UP.change(new Point(5, 5)));
+
+    assertEquals("[4,5]",
+        Direction.LEFT.change(new Point(5, 5)));
+
+    assertEquals("[6,5]",
+        Direction.RIGHT.change(new Point(5, 5)));
+
+    assertEquals("[5,4]",
+        new Point(5, 5).moveTo(Direction.DOWN));
+
+    assertEquals("[5,6]",
+        new Point(5, 5).moveTo(Direction.UP));
+
+    assertEquals("[4,5]",
+        new Point(5, 5).moveTo(Direction.LEFT));
+
+    assertEquals("[6,5]",
+        new Point(5, 5).moveTo(Direction.RIGHT));
 }
 
 assertEquals = function(expected, actual) {

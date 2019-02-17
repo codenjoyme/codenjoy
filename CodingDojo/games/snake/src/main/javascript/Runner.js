@@ -116,6 +116,10 @@ var D = function(index, dx, dy, name){
         return y + dy;
     };
 
+    var change = function(point) {
+        return point.moveTo(this);
+    };
+
     var inverted = function() {
         switch (this) {
             case Direction.UP : return Direction.DOWN;
@@ -135,6 +139,8 @@ var D = function(index, dx, dy, name){
 
         changeY : changeY,
 
+        change : change,
+
         inverted : inverted,
 
         toString : toString,
@@ -146,12 +152,10 @@ var D = function(index, dx, dy, name){
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'up'),                 // you can move
-    DOWN : D(3, 0, 1, 'down'),
+    UP : D(2, 0, 1, 'up'),                 // you can move
+    DOWN : D(3, 0, -1, 'down'),
     LEFT : D(0, -1, 0, 'left'),
     RIGHT : D(1, 1, 0, 'right'),
-    DRILL_LEFT : D(4, 0, 0, 'act,left'),    // drill ground
-    DRILL_RIGHT : D(5, 0, 0, 'act,right'),
     STOP : D(6, 0, 0, '')                   // stay
 };
 
@@ -190,6 +194,10 @@ var Point = function (x, y) {
 
         getY : function() {
             return y;
+        },
+
+        moveTo : function(direction) {
+            return pt(direction.changeX(x), direction.changeY(y));
         }
     }
 };
