@@ -4,7 +4,7 @@ package com.epam.dojo.icancode;
  * #%L
  * iCanCode - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 EPAM
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
