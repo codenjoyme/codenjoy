@@ -53,6 +53,7 @@
         <exclude.puzzlebox>true</exclude.puzzlebox>
         <exclude.spacerace>true</exclude.spacerace>
         <exclude.icancode>true</exclude.icancode>
+        <exclude.expansion>true</exclude.expansion>
         <exclude.reversi>true</exclude.reversi>
         <exclude.quadro>true</exclude.quadro>
         <exclude.lunolet>true</exclude.lunolet>
@@ -516,6 +517,24 @@
                 <dependency>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>icancode-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>expansion</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.expansion>false</exclude.expansion>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>expansion-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -1257,6 +1276,27 @@
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>icancode-engine</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>resources/**/*,WEB-INF/classes/config/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-expansion</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${exclude.expansion}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>expansion-engine</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

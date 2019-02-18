@@ -60,7 +60,7 @@ public class GameServiceImpl implements GameService {
         result.remove(AbstractGameType.class);
 
         result.stream()
-                .filter(it -> Arrays.asList("chess","sokoban").stream()
+                .filter(it -> Arrays.asList("chess", "sokoban", "expansion").stream()
                         .filter(name -> it.getPackage().toString().contains(name))
                         .count() != 0)
                 .forEach(result::remove);
