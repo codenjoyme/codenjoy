@@ -1,0 +1,50 @@
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2016 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<configuration>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>codenjoy.log</file>
+        <append>true</append>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>300MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender-->
+
+    <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
+    <logger name="com.codenjoy.dojo" level="DEBUG" additivity="true"/>
+    <logger name="com.codenjoy.dojo.transport" level="DEBUG" additivity="false"/>
+    <logger name="org.eclipse.jetty" level="DEBUG" additivity="false"/>
+
+    <root level="debug">
+        <appender-ref ref="FILE" additivity="false"/>
+        <appender-ref ref="STDOUT" additivity="false"/>
+    </root>
+</configuration>
