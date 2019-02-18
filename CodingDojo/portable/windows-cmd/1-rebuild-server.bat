@@ -33,12 +33,13 @@ echo on
 
 cd %ROOT%\codenjoy\CodingDojo
 
+call %GIT_HOME%\cmd\git config --global core.autocrlf true
 if "%GIT_REVISION%"=="" (
 	set GIT_REVISION=master
 )
 if not "%GIT_REVISION%"=="local" (
-	call %GIT_HOME%\cmd\git stash --all
-	call %GIT_HOME%\cmd\git pull origin master
+	call %GIT_HOME%\cmd\git reset --hard
+	call %GIT_HOME%\cmd\git pull origin
 	call %GIT_HOME%\cmd\git checkout "%GIT_REVISION%"
 )
 
