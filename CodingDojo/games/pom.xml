@@ -67,11 +67,11 @@
         <module>puzzlebox</module>
         <module>spacerace</module>
         <module>kata</module>
+        <module>icancode</module>
         <module>reversi</module>
         <module>quadro</module>
         <module>lunolet</module>
         <module>tetris</module>
-        <module>icancode</module>
     </modules>
 
     <dependencyManagement>

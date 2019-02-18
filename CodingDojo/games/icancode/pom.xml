@@ -126,30 +126,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <configuration>
-                        <licenseName>gpl_v3</licenseName>
-                        <licenseResolver>${project.baseUri}/src/license</licenseResolver>
-                        <organizationName>EPAM</organizationName>
-                        <projectName>iCanCode - it's a dojo-like platform from developers to developers.</projectName>
-                        <failOnMissingHeader>true</failOnMissingHeader>
-                        <inceptionYear>2016</inceptionYear>
-                        <canUpdateCopyright>false</canUpdateCopyright>
-                        <canUpdateDescription>false</canUpdateDescription>
-                        <canUpdateLicense>false</canUpdateLicense>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>first</id>
-                            <goals>
-                                <goal>update-file-header</goal>
-                            </goals>
-                            <phase>process-sources</phase>
-                        </execution>
-                    </executions>
-            </plugin>
         </plugins>
     </build>
 </project>
