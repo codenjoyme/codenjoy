@@ -52,11 +52,12 @@
         <exclude.fifteen>true</exclude.fifteen>
         <exclude.puzzlebox>true</exclude.puzzlebox>
         <exclude.spacerace>true</exclude.spacerace>
+        <exclude.icancode>true</exclude.icancode>
         <exclude.reversi>true</exclude.reversi>
         <exclude.quadro>true</exclude.quadro>
         <exclude.lunolet>true</exclude.lunolet>
         <exclude.tetris>true</exclude.tetris>
-        <exclude.icancode>true</exclude.icancode>
+        <exclude.sokoban>true</exclude.sokoban>
     </properties>
 
     <repositories>
@@ -502,6 +503,24 @@
             </dependencies>
         </profile>
         <profile>
+            <id>icancode</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.icancode>false</exclude.icancode>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>icancode-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>reversi</id>
             <activation>
                 <property>
@@ -574,19 +593,19 @@
             </dependencies>
         </profile>
         <profile>
-            <id>icancode</id>
+            <id>sokoban</id>
             <activation>
                 <property>
                     <name>allGames</name>
                 </property>
             </activation>
             <properties>
-                <exclude.icancode>false</exclude.icancode>
+                <exclude.sokoban>false</exclude.sokoban>
             </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
-                    <artifactId>icancode-engine</artifactId>
+                    <artifactId>sokoban-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -621,7 +640,7 @@
                     </images>
                     <authConfig>
                         <username>apofig</username>
-                        <password>F#I&amp;DFI@#df32ui327t</password>
+                        <password>3wGI3DU2dDF3!dF2sI245d</password>
                     </authConfig>
                 </configuration>
             </plugin>
@@ -1227,6 +1246,27 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>unpack-icancode</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${exclude.icancode}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>icancode-engine</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>resources/**/*,WEB-INF/classes/config/*</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>unpack-reversi</id>
                         <phase>compile</phase>
                         <goals>
@@ -1311,17 +1351,17 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>unpack-icancode</id>
+                        <id>unpack-sokoban</id>
                         <phase>compile</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <skip>${exclude.icancode}</skip>
+                            <skip>${exclude.sokoban}</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>icancode-engine</artifactId>
+                                    <artifactId>sokoban-engine</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
