@@ -71,6 +71,7 @@
         <module>quadro</module>
         <module>lunolet</module>
         <module>tetris</module>
+        <module>sokoban</module>
     </modules>
 
     <dependencyManagement>

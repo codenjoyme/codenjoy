@@ -1,0 +1,257 @@
+Here's another set of levels from Aymeric. After I have a chance to play them, I'll write samething.
+
+Author: Aymeric du Peloux, aymeric.dupeloux@smile.fr
+Original level website: http://www.multimania.com/nabokos/
+
+
+This file downloaded from the Sokoban levels page at http://sneezingtiger.com/sokoban/levels.html.
+ NONE(' ')
+# = wall = ☼
+* = boxONTheMark = *
+@ = hero = ☺
+$ = box = ■
+. = MARK_TO_WIN = X
+
+Level 1
+'PICOKOSMOS 01'
+ #####
+ #   ####
+ #      #
+### **# #
+#  #* *@#
+#   * ###
+#  ##  #
+##     #
+ #.$#  #
+ #  ####
+ ####
+
+Level 2
+'PICOKOSMOS 02'
+       #####
+     ###   #
+    ## . # #
+   ##  $$  #
+  ## *$. ###
+ ## $  ###
+## .$. #
+#  @ ###
+#  . #
+######
+
+Level 3
+'PICOKOSMOS 03'
+   ####
+   #  #
+####  ###
+#  *$*  #
+#  *@*# #
+## .**  #
+## #   ##
+#    ###
+#   ##
+#####
+
+Level 4
+'PICOKOSMOS 04'
+   ####
+ ###  ##
+## * * #
+#  * * ##
+#  * *  #
+#  $ * @#
+###. ####
+  #  #
+  ####
+
+Level 5
+'PICOKOSMOS 05'
+   #####
+ ###   ##
+##   #  ##
+#  * * * #
+#+  $ *  #
+#### * ###
+   #  ##
+   ####
+
+Level 6
+'PICOKOSMOS 06'
+  ####
+ ##  ###
+##  .  #
+# $.$.$##
+# .$.$. #
+##$ #.$ #
+ #  @  ##
+ #######
+
+Level 7
+'PICOKOSMOS 07'
+   #####
+####   ##
+#  * *  #
+#  . *  #
+##$.$*$##
+ # . *@#
+ #   ###
+ #####
+
+Level 8
+'PICOKOSMOS 08'
+    ####
+   ##  #
+ ###   ####
+## * * *  #
+#  * * $  #
+#  * # * ##
+## . ##@ #
+ #  ######
+ ####
+
+Level 9
+'PICOKOSMOS 09'
+ ####
+ #  ###
+##    ####
+#  * *   #
+# $#*#*  #
+## * *   #
+ #  + * ##
+ ###  ###
+   ####
+
+Level 10
+'PICOKOSMOS 10'
+ ####
+##  ####
+#      ##
+# **@** #
+##  #   #
+ # **$ ##
+ #  *  #
+ ## . ##
+  ##  #
+   ####
+
+Level 11
+'PICOKOSMOS 11'
+    ####
+    #  ###
+  ###    #
+### ** * #
+#  . *$@##
+#  ***  #
+##    ###
+ ###  #
+   ####
+
+Level 12
+'PICOKOSMOS 12'
+ #####
+ # + #
+ #$.$#
+ # * #
+ # * #
+ # * ##
+## *  #
+#  *  #
+#    ##
+##  ##
+ ####
+
+Level 13
+'PICOKOSMOS 13'
+        #####
+##### ###   #
+#   ###     #
+# * * # * +##
+##     $* ##
+ #  *## * #
+ ##  ##  ##
+  ########
+
+Level 14
+'PICOKOSMOS 14'
+  #######
+ ##  #  #
+ #      #
+## # #  #
+#  *** ##
+#@#*  $#
+#  *** #
+### .  #
+  ###  #
+    ####
+
+Level 15
+'PICOKOSMOS 15'
+  ####
+ ##  ##
+ #@ $ #
+## .* ###
+# $$*.* #
+# #.. # #
+#   $   #
+###  ####
+  ####
+
+Level 16
+'PICOKOSMOS 16'
+ ######
+ #    #
+## * .##
+# *$*  ##
+#@ * *  #
+##* *   #
+ #   ####
+ #####
+
+Level 17
+'PICOKOSMOS 17'
+ #####
+ # + #
+ #$.$#
+ # * #
+ # * #
+## * #
+#  * ##
+#  *  #
+#  *  #
+###  ##
+  ####
+
+Level 18
+'PICOKOSMOS 18'
+ ########
+ #   #  #
+##.     #
+# ***** #
+#   * * #
+## #$  ##
+ #  @###
+ #####
+
+Level 19
+'PICOKOSMOS 19'
+  ####
+  #  ####
+  #    @##
+ ##** ** #
+##  **.  #
+# $  # ###
+#      #
+########
+
+Level 20
+'PICOKOSMOS 20'
+  ####
+ ##  #
+##   ###
+#  *** #
+#  *@# #
+## **. #
+ #     #
+ # #$###
+ #   #
+ #####
