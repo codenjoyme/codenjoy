@@ -45,7 +45,6 @@ var require = function(string) {
         }
     } else if (string == 'ws') {
         return function(uri) {
-            var socket = new WebSocket(uri);
             return {
                 "on" : function(name, callback) {
                     if (name == "open") {
