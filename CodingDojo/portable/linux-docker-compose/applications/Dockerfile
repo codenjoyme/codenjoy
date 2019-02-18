@@ -27,14 +27,14 @@ ENV M2_HOME /usr/share/maven
 RUN apt-get update \
  && apt-get -y install -y openjdk-8-jdk \
  && apt-get -y install -y git \
+ && git config --global user.name "Alexander Baglay" \
+ && git config --global user.email "apofig@gmail.com" \
  && mkdir -p /usr/share/maven /usr/share/maven/ref \
  && curl -fsSL -o /tmp/apache-maven.tar.gz ${MAVEN_BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
  && echo "${MAVEN_SHA} /tmp/apache-maven.tar.gz" | sha256sum -c - \
  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
  && rm -f /tmp/apache-maven.tar.gz \
- && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn \
- && echo "Europe/Kiev" > /etc/timezone \
- && dpkg-reconfigure -f noninteractive tzdata
+ && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 # -----------------------------------------------------------------------
 
