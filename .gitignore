@@ -23,13 +23,4 @@
 /CodingDojo/builder/.git
 /CodingDojo/builder/.git_
 /CodingDojo/games/**/webapp/resources/user/*.zip
-/CodingDojo/games/expansion
-/_/**
-/CodingDojo/portable/windows-cmd/codenjoy/**
-/CodingDojo/portable/windows-cmd/files/**
-/CodingDojo/portable/windows-cmd/git/**
-/CodingDojo/portable/windows-cmd/jdk*/**
-/CodingDojo/portable/windows-cmd/jetty*/**
-/CodingDojo/portable/windows-cmd/maven/**
-/CodingDojo/portable/windows-cmd/tools/**
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
