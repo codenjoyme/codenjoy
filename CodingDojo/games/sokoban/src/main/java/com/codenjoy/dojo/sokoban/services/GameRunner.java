@@ -23,7 +23,10 @@ package com.codenjoy.dojo.sokoban.services;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.sokoban.client.Board;
 import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -63,7 +66,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame() {
+    public GameField createGame(int levelNumber) {
         return new Sokoban(level, getDice());
     }
 
@@ -88,13 +91,17 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String save, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerName) {
         return new Player(listener, playerName);
     }
 
     @Override
-    public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL, getDice());
-        return true;
+    public Class<? extends Solver> getAI() {
+        return ApofigSolver.class;
+    }
+
+    @Override
+    public Class<? extends ClientBoard> getBoard() {
+        return Board.class;
     }
 }

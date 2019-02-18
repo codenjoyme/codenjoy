@@ -45,7 +45,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public Player(EventListener listener, String name) {
         super(listener);
-        this.name=name;
+        this.name = name;
         if (!Storage.levels.containsKey(name)){
             Storage.levels.put(name,1);}
     }
@@ -53,10 +53,8 @@ public class Player extends GamePlayer<Hero, Field> {
     public void event(Events event) {
         switch (event) {
             case LOOSE:
-                gameOver();
                 break;
             case WIN:
-                increaseScore();
                 increaseLevel(1);
                 break;
         }
