@@ -55,7 +55,7 @@ class YourKotlinSolver : AbstractSolver {
 fun main(args: Array<String>) {
     AbstractSolver.connectClient(
             // paste here board page url from browser after registration
-            "http://192.168.1.102:80/codenjoy-contest/board/player/your@email.com?code=18899199021366816317",
+            "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=18899199021366816317",
             // and solver here
             YourKotlinSolver(RandomDice()))
 }
