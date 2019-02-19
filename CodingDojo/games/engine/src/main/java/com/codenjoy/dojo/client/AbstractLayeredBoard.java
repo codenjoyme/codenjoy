@@ -39,7 +39,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
     protected List<String> layersString = new LinkedList<>();
 
     public ClientBoard forString(String boardString) {
-        if (boardString.indexOf("layer") != -1) {
+        if (boardString.contains("layer")) {
             source = new JSONObject(boardString);
             JSONArray layers = source.getJSONArray("layers");
             return forString(layers.toList().toArray(new String[0]));
@@ -87,11 +87,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
 
     // TODO подумать над этим, а то оно так долго все делается
     public static Set<Point> removeDuplicates(Collection<Point> all) {
-        Set<Point> result = new TreeSet<Point>();
-        for (Point point : all) {
-            result.add(point);
-        }
-        return result;
+        return new TreeSet<>(all);
     }
 
     /**
@@ -100,7 +96,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
      * @return All positions of element specified.
      */
     protected List<Point> get(int numLayer, E... elements) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 for (E element : elements) {
@@ -140,7 +136,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
     }
 
     protected String boardAsString(int numLayer) {
-        StringBuffer result = new StringBuffer();
+        StringBuilder result = new StringBuilder();
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 result.append(field[numLayer][inversionX(x)][inversionY(y)]);
@@ -156,11 +152,11 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
 
     @Override
     public String toString() {
-        String result = "Board:";
+        StringBuilder result = new StringBuilder("Board:");
         for (int i = 0; i < countLayers(); i++) {
-            result += "\n" + boardAsString(i);
+            result.append("\n").append(boardAsString(i));
         }
-        return result;
+        return result.toString();
     }
 
     /**
