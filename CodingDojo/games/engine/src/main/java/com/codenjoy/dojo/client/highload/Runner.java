@@ -110,6 +110,6 @@ public class Runner {
     }
 
     public String makeCode(String email, String password) {
-        return "" + Math.abs(email.hashCode()) + Math.abs(password.hashCode());
+        return "" + ((email.hashCode() + password.hashCode()) & 0x7FFFFFFF);
     }
 }

@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
@@ -366,7 +365,7 @@ public class Minesweeper implements Field {
 
     @Override
     public void tick() {
-        if (currentSize != size.getValue()) {  // TODO потестить это
+        if(!Objects.equals(size.getValue(), currentSize)) {  // TODO потестить это
             currentSize = size.getValue();
             newGame(player);
             return;
