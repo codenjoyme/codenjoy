@@ -61,7 +61,10 @@ public class BallDirection {
 
     @Override
     public boolean equals(Object o) {
-      return Objects.nonNull(o) && Objects.equals(direction, ((BallDirection) o).direction);
+        if (!(o instanceof BallDirection)) {
+            return false;
+        }
+      return Objects.equals(direction, ((BallDirection) o).direction);
     }
 
     @Override

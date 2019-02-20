@@ -24,16 +24,15 @@ package com.codenjoy.dojo.bomberman.client;
 
 
 import com.codenjoy.dojo.bomberman.model.Elements;
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 
@@ -71,13 +70,13 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        return String.format("%s\n" +
-            "Bomberman at: %s\n" +
-            "Other bombermans at: %s\n" +
-            "Meat choppers at: %s\n" +
-            "Destroy walls at: %s\n" +
-            "Bombs at: %s\n" +
-            "Blasts: %s\n" +
+        return String.format("%s%n" +
+            "Bomberman at: %s%n" +
+            "Other bombermans at: %s%n" +
+            "Meat choppers at: %s%n" +
+            "Destroy walls at: %s%n" +
+            "Bombs at: %s%n" +
+            "Blasts: %s%n" +
             "Expected blasts at: %s",
                 boardAsString(),
                 getBomberman(),

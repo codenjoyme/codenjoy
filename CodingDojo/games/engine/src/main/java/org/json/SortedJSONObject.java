@@ -1658,7 +1658,7 @@ public class SortedJSONObject {
                 throw new JSONException(e);
             }
             if (object == null) {
-                throw new JSONException("Bad value from toJSONString: " + object);
+                throw new JSONException("Null value from toJSONString");
             }
             return object;
         }

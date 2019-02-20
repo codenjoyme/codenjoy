@@ -89,7 +89,7 @@ public class ProbabilityRandomizerTest {
 
         Map<Integer, Double> map2 = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            double figureProbability = 10000L * entry.getValue() / countIterations;
+            double figureProbability = 10000L * entry.getValue() / (double) countIterations;
             map2.put(entry.getKey(), 1D * figureProbability / 100);
         }
 

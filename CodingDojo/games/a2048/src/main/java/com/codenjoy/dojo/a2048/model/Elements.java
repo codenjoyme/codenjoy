@@ -88,6 +88,6 @@ public enum Elements implements CharElements {
         if (this == _x) {
             return -1;
         }
-        return Integer.valueOf(super.toString().substring(1));
+        return Integer.parseInt(super.toString().substring(1));
     }
 }

@@ -90,12 +90,12 @@ public class GuiPlotColorDecoderTest {
         Object[] plots = game.getPlots();
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(plots);
 
-        String plotsString = "";
+        StringBuilder plotsString = new StringBuilder();
         for (Object o : plots) {
-            plotsString += o;
+            plotsString.append(o);
         }
 
-        assertEquals(expected, decoder.encodeForBrowser(plotsString));
+        assertEquals(expected, decoder.encodeForBrowser(plotsString.toString()));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class GuiPlotColorDecoderTest {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
         try {
-            decoder.encodeForBrowser(new Boolean(true));
+            decoder.encodeForBrowser(Boolean.TRUE);
             fail("Expected exception");
         } catch (IllegalArgumentException e) {
             Assert.assertEquals("You can use only String or JSONObject as board", e.getMessage());

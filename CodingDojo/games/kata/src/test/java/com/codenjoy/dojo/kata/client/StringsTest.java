@@ -55,13 +55,13 @@ public class StringsTest {
         strings.add("string3");
 
         // when
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (String string : strings) {
-            result += string;
+            result.append(string);
         }
 
         // then
-        assertEquals("string1string2string3", result);
+        assertEquals("string1string2string3", result.toString());
     }
 
     @Test

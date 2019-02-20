@@ -23,17 +23,18 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import org.sqlite.date.FastDateFormat;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by indigo on 13.08.2016.
  */
 public class JDBCTimeUtils {
-    public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final FastDateFormat formatter = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public static long getTimeLong(ResultSet resultSet) throws SQLException {
         try {

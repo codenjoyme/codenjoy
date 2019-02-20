@@ -97,7 +97,7 @@ public class FigureImpl implements Figure, Cloneable {
     }
 
     private void performRotate() {
-        char newRows[][] = new char[width()][rows.length];
+        char[][] newRows = new char[width()][rows.length];
         int newX = rows.length - y - 1;
         int newY = left();
         for (int y = 0; y < rows.length; y++) {

@@ -115,14 +115,14 @@ public class BoardTest {
     }
 
     private String checkXY() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int y = 0; y < board.size(); y++) {
             for (int x = 0; x < board.size(); x++) {
-                result += format(board.getAt(x, y).toString());
+                result.append(format(board.getAt(x, y).toString()));
             }
-            result += '\n';
+            result.append('\n');
         }
-        return result;
+        return result.toString();
     }
 
     @Test
@@ -146,11 +146,11 @@ public class BoardTest {
     }
 
     private String checkY() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int y = 1; y <= 9; y++) {
-            result += format(board.getY(y).toString()) + "\n";
+            result.append(format(board.getY(y).toString())).append("\n");
         }
-        return result;
+        return result.toString();
     }
 
     private String format(String s) {
@@ -158,11 +158,11 @@ public class BoardTest {
     }
 
     private String checkX() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int x = 1; x <= 9; x++) {
-            result += format(board.getX(x).toString()) + "\n";
+            result.append(format(board.getX(x).toString())).append("\n");
         }
-        return result;
+        return result.toString();
     }
 
     @Test
@@ -194,13 +194,13 @@ public class BoardTest {
     }
 
     private String checkC() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int x = 1; x <= 3; x++) {
             for (int y = 1; y <= 3; y++) {
-                result += format(board.getC(x, y).toString()) + "\n";
+                result.append(format(board.getC(x, y).toString())).append("\n");
             }
         }
-        return result;
+        return result.toString();
     }
 
     @Test

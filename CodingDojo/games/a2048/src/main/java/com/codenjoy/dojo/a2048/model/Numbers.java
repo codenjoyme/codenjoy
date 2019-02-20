@@ -26,7 +26,6 @@ package com.codenjoy.dojo.a2048.model;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
-import java.lang.*;
 import java.util.List;
 
 public class Numbers {

@@ -109,11 +109,11 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        return String.format("Board:\n%s\n" +
-            "Apple at: %s\n" +
-            "Stones at: %s\n" +
-            "Head at: %s\n" +
-            "Snake at: %s\n" +
+        return String.format("Board:%n%s%n" +
+            "Apple at: %s%n" +
+            "Stones at: %s%n" +
+            "Head at: %s%n" +
+            "Snake at: %s%n" +
             "Current direction: %s",
                 boardAsString(),
                 getApples(),
