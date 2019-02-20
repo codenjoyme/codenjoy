@@ -37,9 +37,9 @@ echo [0m
 echo on
 
 rd /S /Q %JETTY_HOME%
-powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; (new-object System.Net.WebClient).DownloadFile('https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.3.14.v20161028/jetty-distribution-9.3.14.v20161028.zip','%ROOT%\tools\jetty.zip') }"
+powershell -command "& { set-executionpolicy remotesigned -s currentuser; [System.Net.ServicePointManager]::SecurityProtocol = 3072 -bor 768 -bor 192 -bor 48; (new-object System.Net.WebClient).DownloadFile('https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-distribution/9.3.25.v20180904/jetty-distribution-9.3.25.v20180904.zip','%ROOT%\tools\jetty.zip') }"
 %ROOT%\tools\7z x -y -o%ROOT% %ROOT%\tools\jetty.zip
-rename %ROOT%\jetty-distribution-9.3.14.v20161028 jetty9
+rename %ROOT%\jetty-distribution-9.3.25.v20180904 jetty9
 
 echo off
 echo [44;93m
