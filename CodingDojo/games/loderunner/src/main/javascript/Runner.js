@@ -44,7 +44,7 @@ var processBoard = function(boardString) {
         printBoardOnTextArea(board.boardAsString());
     }
 
-    var logMessage = board + "\n\n";
+    var logMessage = /*board +*/ "\n";
     var answer = new DirectionSolver(board).get().toString();
     logMessage += "Answer: " + answer + "\n";
     logMessage += "-----------------------------------\n";
@@ -106,7 +106,7 @@ var Elements = {
     /// gold ;)
     GOLD : '$',
 
-    /// This is your loderunner
+    /// this is you
     HERO_DIE : 'Ѡ',
     HERO_DRILL_LEFT : 'Я',
     HERO_DRILL_RIGHT : 'R',
@@ -131,7 +131,7 @@ var Elements = {
     PIPE : '~'
 };
 
-var D = function(index, dx, dy, name){
+var D = function(index, dx, dy, name) {
 
     var changeX = function(x) {
         return x + dx;
@@ -147,6 +147,8 @@ var D = function(index, dx, dy, name){
             case Direction.DOWN : return Direction.UP;
             case Direction.LEFT : return Direction.RIGHT;
             case Direction.RIGHT : return Direction.LEFT;
+            case Direction.DRILL_LEFT : return Direction.DRILL_RIGHT;
+            case Direction.DRILL_RIGHT : return Direction.DRILL_LEFT;
             default : return Direction.STOP;
         }
     };
@@ -157,11 +159,8 @@ var D = function(index, dx, dy, name){
 
     return {
         changeX : changeX,
-
         changeY : changeY,
-
         inverted : inverted,
-
         toString : toString,
 
         getIndex : function() {
@@ -171,17 +170,18 @@ var D = function(index, dx, dy, name){
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'up'),                 // you can move
-    DOWN : D(3, 0, 1, 'down'),
-    LEFT : D(0, -1, 0, 'left'),
-    RIGHT : D(1, 1, 0, 'right'),
-    DRILL_LEFT : D(4, 0, 0, 'act,left'),    // drill ground
-    DRILL_RIGHT : D(5, 0, 0, 'act,right'),
-    STOP : D(6, 0, 0, '')                   // stay
+    UP          : D(2,  0, -1, 'UP'),         // move up
+    DOWN        : D(3,  0,  1, 'DOWN'),       // move down
+    LEFT        : D(0, -1,  0, 'LEFT'),
+    RIGHT       : D(1,  1,  0, 'RIGHT'),
+    DRILL_LEFT  : D(4,  0,  0, 'ACT,LEFT'),   // drill ground and move left
+    DRILL_RIGHT : D(5,  0,  0, 'ACT,RIGHT'),  // drill ground and move right
+    STOP        : D(6,  0,  0, ''),           // stay
+    DIE         : D(8,  0,  0, "ACT(0)")      // suicide
 };
 
 Direction.values = function() {
-   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.DRILL_LEFT, Direction.DRILL_RIGHT, Direction.STOP];
+   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.DRILL_LEFT, Direction.DRILL_RIGHT, Direction.STOP, Direction.DIE];
 };
 
 Direction.valueOf = function(index) {
@@ -250,8 +250,8 @@ var LengthToXY = function(boardSize) {
     };
 };
 
-var Board = function(board){
-    var contains  = function(a, obj) {
+var Board = function(board) {
+    var contains = function(a, obj) {
         var i = a.length;
         while (i--) {
             if (a[i].equals(obj)) {
@@ -261,6 +261,12 @@ var Board = function(board){
         return false;
     };
 
+    var sort = function(all) {
+        return all.sort(function(pt1, pt2) {
+            return pt1.getY()*1000 + pt1.getX() - pt2.getY()*1000 + pt2.getX();
+        });
+    }
+
     var removeDuplicates = function(all) {
         var result = [];
         for (var index in all) {
@@ -269,7 +275,7 @@ var Board = function(board){
                 result.push(point);
             }
         }
-        return result;
+        return sort(result);
     };
 
     var boardSize = function() {
@@ -327,7 +333,7 @@ var Board = function(board){
         return result;
     };
 
-    var getLadder = function() {
+    var getLadders = function() {
         var result = [];
         result = result.concat(findAll(Elements.LADDER));
         result = result.concat(findAll(Elements.HERO_LADDER));
@@ -335,7 +341,7 @@ var Board = function(board){
         return result;
     };
 
-    var getPipe = function() {
+    var getPipes = function() {
         var result = [];
         result = result.concat(findAll(Elements.PIPE));
         result = result.concat(findAll(Elements.HERO_PIPE_LEFT));
@@ -358,7 +364,7 @@ var Board = function(board){
 
     var getAt = function(x, y) {
         if (pt(x, y).isOutOf(size)) {
-            return Element.WALL;
+            return Elements.UNDESTROYABLE_WALL;
         }
         return board.charAt(xyl.getLength(x, y));
     };
@@ -402,13 +408,16 @@ var Board = function(board){
                 result.push(point);
             }
         }
-        return result;
+        return sort(result);
     };
 
     var isAnyOfAt = function(x, y, elements) {
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
         for (var index in elements) {
             var element = elements[index];
-            if (isAt(x, y,element)) {
+            if (isAt(x, y, element)) {
                 return true;
             }
         }
@@ -426,7 +435,40 @@ var Board = function(board){
     };
 
     var isBarrierAt = function(x, y) {
+        if (pt(x, y).isOutOf(size)) {
+            return true;
+        }
         return contains(getBarriers(), pt(x, y));
+    };
+
+    var hasEnemyAt = function(x, y) {
+        return isAnyOfAt(x, y,
+            [Elements.ENEMY_LADDER, Elements.ENEMY_LEFT, Elements.ENEMY_PIPE_LEFT, Elements.ENEMY_PIPE_RIGHT, Elements.ENEMY_PIT, Elements.ENEMY_RIGHT]);
+    };
+
+    var hasOtherHeroAt = function(x, y) {
+        return isAnyOfAt(x, y,
+            [Elements.OTHER_HERO_LEFT, Elements.OTHER_HERO_RIGHT, Elements.OTHER_HERO_LADDER, Elements.OTHER_HERO_PIPE_LEFT, Elements.OTHER_HERO_PIPE_RIGHT]);
+    };
+
+    var hasWallAt = function(x, y) {
+        if (pt(x, y).isOutOf(size)) {
+            return true;
+        }
+        return isAnyOfAt(x, y, [Elements.BRICK, Elements.UNDESTROYABLE_WALL]);
+    };
+
+    var hasLadderAt = function(x, y) {
+        return isAnyOfAt(x, y, [Elements.LADDER, Elements.HERO_LADDER, Elements.ENEMY_LADDER]);
+    };
+
+    var hasGoldAt = function(x, y) {
+        return isAt(x, y, Elements.GOLD);
+    };
+
+    var hasPipeAt = function(x, y) {
+        return isAnyOfAt(x, y,
+            [Elements.PIPE, Elements.HERO_PIPE_LEFT, Elements.HERO_PIPE_RIGHT, Elements.OTHER_HERO_PIPE_LEFT, Elements.OTHER_HERO_PIPE_RIGHT]);
     };
 
     var countNear = function(x, y, element) {
@@ -447,39 +489,48 @@ var Board = function(board){
         getOtherHeroes : getOtherHeroes,
         isGameOver : isGameOver,
         isAt : isAt,
+        getAt : getAt,
         boardAsString : boardAsString,
         getBarriers : getBarriers,
         toString : toString,
         findAll : findAll,
         getWalls : getWalls,
+        getLadders : getLadders,
+        getPipes : getPipes,
         getGold : getGold,
         isAnyOfAt : isAnyOfAt,
         isNear : isNear,
         isBarrierAt : isBarrierAt,
-        countNear : countNear,
-        getAt : getAt
+        hasEnemyAt : hasEnemyAt,
+        hasOtherHeroAt : hasOtherHeroAt,
+        hasWallAt : hasWallAt,
+        hasLadderAt : hasLadderAt,
+        hasGoldAt : hasGoldAt,
+        hasPipeAt : hasPipeAt,
+        countNear : countNear
     };
 };
 
-var random = function(n){
+var random = function(n) {
     return Math.floor(Math.random()*n);
 };
 
 var direction;
 
-var DirectionSolver = function(board){
-
+var DirectionSolver = function(board) {
     return {
         /**
          * @return next hero action
          */
         get : function() {
             var me = board.getMe();
+            //console.log(me.getX(), me.getY());
 
             // TODO your code here
+            var dir = Direction.values()[random(6)];  // STUB get any random direction except Direction.DIE
 
-            return Direction.DRILL_LEFT;
+            //return Direction.DIE;  // for suicide
+            return dir;
         }
     };
 };
-
