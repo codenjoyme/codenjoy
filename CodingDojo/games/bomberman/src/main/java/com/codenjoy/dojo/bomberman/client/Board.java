@@ -70,13 +70,13 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        return String.format("%s%n" +
-            "Bomberman at: %s%n" +
-            "Other bombermans at: %s%n" +
-            "Meat choppers at: %s%n" +
-            "Destroy walls at: %s%n" +
-            "Bombs at: %s%n" +
-            "Blasts: %s%n" +
+        return String.format("%s\n" +
+            "Bomberman at: %s\n" +
+            "Other bombermans at: %s\n" +
+            "Meat choppers at: %s\n" +
+            "Destroy walls at: %s\n" +
+            "Bombs at: %s\n" +
+            "Blasts: %s\n" +
             "Expected blasts at: %s",
                 boardAsString(),
                 getBomberman(),

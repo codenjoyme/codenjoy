@@ -96,7 +96,7 @@ public class RegistrationTest {
         String code = service.register("user", "name", "pass", "someData");
 
         // then
-        assertEquals("35993073433489", code);
+        assertEquals("3514017434644657823", code);
 
         List<Registration.User> users = service.getUsers();
 
@@ -104,7 +104,7 @@ public class RegistrationTest {
                 "readable_name=name, " +
                 "email_approved=0, " +
                 "password='pass', " +
-                "code='35993073433489', " +
+                "code='3514017434644657823', " +
                 "data='someData'}]",
                 users.toString());
     }
@@ -124,7 +124,7 @@ public class RegistrationTest {
         String code = service.login("user", "pass");
 
         // then
-        assertEquals("35993073433489", code);
+        assertEquals("3514017434644657823", code);
     }
 
     @Test
@@ -160,7 +160,7 @@ public class RegistrationTest {
         String code = service.getCode("user");
 
         // then
-        assertEquals("35993073433489", code);
+        assertEquals("3514017434644657823", code);
     }
 
     @Test
@@ -181,7 +181,7 @@ public class RegistrationTest {
         service.register("user", "name", "pass", "data");
 
         // when
-        String email = service.getEmail("35993073433489");
+        String email = service.getEmail("3514017434644657823");
 
         // then
         assertEquals("user", email);
@@ -217,15 +217,15 @@ public class RegistrationTest {
         service.approve(service.register("user", "name", "pass", "data"));
         service.approve(service.register("user2", "name2", "pass2", "data2"));
 
-        assertEquals("35993073433489", service.login("user", "pass"));
-        assertEquals("111578567106438209", service.login("user2", "pass2"));
+        assertEquals("3514017434644657823", service.login("user", "pass"));
+        assertEquals("5959534295416704333", service.login("user2", "pass2"));
 
         // when
         service.changePasswordsToMD5();
 
         // then
-        assertEquals("35993073433489", service.login("user", "1a1dc91c907325c69271ddf0c944bc72"));
-        assertEquals("111578567106438209", service.login("user2", "c1572d05424d0ecb2a65ec6a82aeacbf"));
+        assertEquals("3514017434644657823", service.login("user", "1a1dc91c907325c69271ddf0c944bc72"));
+        assertEquals("5959534295416704333", service.login("user2", "c1572d05424d0ecb2a65ec6a82aeacbf"));
     }
 
     @Test
@@ -238,13 +238,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
 
@@ -256,13 +256,13 @@ public class RegistrationTest {
                         "readable_name=updatedName1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
     }
@@ -277,13 +277,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
 
@@ -301,7 +301,7 @@ public class RegistrationTest {
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
     }
@@ -316,13 +316,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                         "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
 
@@ -335,13 +335,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=1, " +
                         "password='newPassword1', " +
-                        "code='111578566623713482', " +
+                        "code='5386468289660031252', " +
                         "data='newData1'}, " +
                         "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
     }
@@ -356,13 +356,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
 
@@ -374,13 +374,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}, " +
                       "User{email='user3', " +
                         "readable_name=name3, " +
@@ -401,13 +401,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                       "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
 
@@ -419,7 +419,7 @@ public class RegistrationTest {
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
     }
@@ -434,13 +434,13 @@ public class RegistrationTest {
                         "readable_name=name1, " +
                         "email_approved=0, " +
                         "password='pass1', " +
-                        "code='111578566106438208', " +
+                        "code='1997914414654684689', " +
                         "data='someData1'}, " +
                         "User{email='user2', " +
                         "readable_name=name2, " +
                         "email_approved=0, " +
                         "password='pass2', " +
-                        "code='111578567106438209', " +
+                        "code='5959534295416704333', " +
                         "data='someData2'}]",
                 service.getUsers().toString());
 

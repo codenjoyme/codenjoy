@@ -41,7 +41,7 @@ public class TestUtils {
     }
 
     public static String injectNN(String expected) {
-        int size = (int) Math.sqrt(expected.length()/(double)COUNT_NUMBERS)*COUNT_NUMBERS;
+        int size = (int) Math.sqrt(expected.length()/COUNT_NUMBERS)*COUNT_NUMBERS;
         return inject(expected, size, "\n");
     }
 

@@ -33,11 +33,11 @@ public class RandomDice implements Dice {
    * Simulates a dice throwing.
    *
    * @param n number of dice faces
-   * @return positive integer inclusively between 1 and n
+   * @return integer between 0 (inclusively) and n (exclusively)
    */
   @Override
   public int next(int n) {
     if (n <= 0) throw new IllegalArgumentException("Dice should have a positive number of faces");
-    return random.nextInt(n) + 1;
+    return random.nextInt(n);
   }
 }
