@@ -29,8 +29,8 @@ namespace Demo
     /// </summary>
     internal class MyCustomLoderunnerAI : LoderunnerBase
     {
-        public MyCustomLoderunnerAI(string name)
-            : base(name)
+        public MyCustomLoderunnerAI(string serverAndPort, string name, string code)
+            : base(serverAndPort, name, code)
         {
         }
 
@@ -40,10 +40,17 @@ namespace Demo
         protected override string DoMove(GameBoard gameBoard)
         {
             //Just print current state (gameBoard) to console
-            Console.SetCursorPosition(0, 0);
+            Console.Clear();
+            //Console.SetCursorPosition(0, 0);
             gameBoard.PrintBoard();
 
-			return LoderunnerActionToString(LoderunnerAction.GoDown);
+            Random random = new Random(Environment.TickCount);
+
+            //TODO: Implement your logic here
+            LoderunnerAction action = (LoderunnerAction)random.Next(3);
+
+            Console.WriteLine(action.ToString());
+            return LoderunnerActionToString(action);
         }
 
         /// <summary>

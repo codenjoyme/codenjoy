@@ -27,12 +27,12 @@ namespace Loderunner.Api
 {
     public class GameBoard
     {
-        public GameBoard(String boardString)
+        public GameBoard(string boardString)
         {
             BoardString = boardString.Replace("\n", "");
         }
 
-        public String BoardString { get; private set; }
+        public string BoardString { get; private set; }
 
         public int Size
         {
