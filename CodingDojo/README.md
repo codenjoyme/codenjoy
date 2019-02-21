@@ -1,5 +1,6 @@
 Codenjoy
 ==============
+[![Build Status](https://travis-ci.org/codenjoyme/codenjoy.svg?branch=master)](https://travis-ci.org/codenjoyme/codenjoy)
 
 Introduction
 --------------
@@ -9,7 +10,7 @@ And you can write one that will be your own.
 
 Set up a development environment
 --------------
-All you need to develop a game is jdk7, maven3, git client and IDE Idea.
+All you need to develop a game is jdk8, maven3, git client and IDE Idea.
 
 - install a git client locally, for example, [tortoise git](https://code.google.com/p/tortoisegit/)
 - create an account on [github](http://github.com) or [bitbucket](http://bitbucket.org)
