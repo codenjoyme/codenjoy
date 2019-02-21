@@ -28,16 +28,20 @@ namespace Demo
     {
         static void Main(string[] args)
         {
-            // creating custom loderunner's Ai client
-            var bot = new MyCustomLoderunnerAI("ApiDotNet");
+            const string serverAndPort = "yourservername:1234";
+            const string playerName = "playeraddress@email.com";
+            const string playerCode = "123456789012345678";
+
+            // creating custom loderunner's AI client
+            var bot = new MyCustomLoderunnerAI(serverAndPort, playerName, playerCode);
             
             // starting thread with playing loderunner
             (new Thread(bot.Play)).Start();
             
-            // waiting for "anykey"
+            // waiting for any key
             Console.ReadKey();
 
-            // on "anykey" - asking loderunner's Ai client to stop. 
+            // on any key - asking loderunner's AI client to stop. 
             bot.InitiateExit();
         }
     }
