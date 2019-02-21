@@ -68,7 +68,7 @@ public class UrlParser {
     }
 
     private IllegalArgumentException badUrl() {
-        return new IllegalArgumentException("Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        return new IllegalArgumentException("Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/playerid?code=12345678901234567890");
     }
 
     private String portPart(int port) {
