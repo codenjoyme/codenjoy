@@ -51,7 +51,7 @@ class BoardScala extends AbstractBoard[Elements] {
 
   def getPoints(elements: Elements*): List[Point] = super.get(elements: _*).asScala.toList
 
-  override def valueOf(ch: Char): Elements = valueOf(ch)
+  override def valueOf(ch: Char): Elements = Elements.valueOf(ch)
 
   override protected def inversionY(y: Int): Int = size - 1 - y
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.client
+package com.codenjoy.dojo.bomberman.client
 
 import com.codenjoy.dojo.client.{Solver, WebSocketRunner}
 import com.codenjoy.dojo.services.{Dice, Direction, RandomDice}
@@ -21,10 +21,10 @@ class YourSolverScala(var dice: Dice) extends Solver[BoardScala] {
     * Каждую секунду сервер будет вызывать этот метод, передавая на вход актуальное состояние доски.
     *
     * @param board объект, описывающий состояние доски
-    * @return направление, куда следует двигаться змейке
+    * @return следующее действие твоего персонажа
     */
   override def get(board: BoardScala): String = {
     if (board.isGameOver) return ""
-    Direction.UP.toString
+    Direction.ACT.toString
   }
 }

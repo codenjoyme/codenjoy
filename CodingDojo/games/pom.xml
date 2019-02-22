@@ -14,6 +14,7 @@
         <build.time>${maven.build.timestamp}</build.time>
 
         <java.version>1.8</java.version>
+        <scala.version>2.12.7</scala.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -30,6 +31,7 @@
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.16</maven-license.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-scala-plugin.version>2.15.2</maven-scala-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
@@ -80,6 +82,12 @@
                 <groupId>${project.groupId}</groupId>
                 <artifactId>engine</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
             </dependency>
 
             <dependency>
@@ -283,6 +291,24 @@
                             <phase>process-sources</phase>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.scala-tools</groupId>
+                    <artifactId>maven-scala-plugin</artifactId>
+                    <version>${maven-scala-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile</goal>
+                                <goal>testCompile</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <args>
+                            <arg>-g:line</arg>
+                        </args>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
