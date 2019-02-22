@@ -316,7 +316,7 @@ public class AdminController {
         if (registration.registered(playerName)) {
             return registration.login(playerName, playerName);
         } else {
-            return registration.register(playerName, playerName, playerName, "");
+            return registration.register(playerName, playerName, playerName, playerName, "");
         }
     }
 

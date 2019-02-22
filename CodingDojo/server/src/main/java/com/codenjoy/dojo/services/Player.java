@@ -34,6 +34,7 @@ public class Player implements ScreenRecipient, Closeable {
     public static final Player ANONYMOUS = new Player("anonymous");
 
     private String name;
+    private String email;
     private String readableName;
     private String code;
     private String data;
@@ -200,5 +201,13 @@ public class Player implements ScreenRecipient, Closeable {
 
     public void setReadableName(String readableName) {
         this.readableName = readableName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
