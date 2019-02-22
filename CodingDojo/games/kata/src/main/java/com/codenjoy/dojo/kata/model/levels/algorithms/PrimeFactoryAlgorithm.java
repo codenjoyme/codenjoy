@@ -29,20 +29,20 @@ public class PrimeFactoryAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public String get(int number) {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         if (number == 1) {
             return "[1]";
         }
         for (int i = 2; i < number / (i - 1); i++) {
             while (number % i == 0) {
                 number /= i;
-                result.append(i).append(",");
+                result += String.valueOf(i) + ",";
             }
         }
         if (number > 1) {
-            result.append(number).append(",");
+            result += String.valueOf(number) + ",";
         }
-        result = new StringBuilder(result.substring(0, result.length() - 1));
+        result = result.substring(0, result.length() - 1);
         return "[" + result + "]";
     }
 

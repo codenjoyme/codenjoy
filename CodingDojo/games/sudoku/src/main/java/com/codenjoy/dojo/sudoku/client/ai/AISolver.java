@@ -59,7 +59,7 @@ public class AISolver implements Solver<Board> {
                 for (int xx = 1; xx <= SIZE; xx++) {
                     Set<Integer> list = deprecated.get(pt(xx, y));
                     if (xx == x && current != 0) {
-                        list.addAll(invert(Collections.singletonList(current)));
+                        list.addAll(invert(Arrays.asList(current)));
                     } else {
                         list.add(current);
                     }
@@ -118,9 +118,8 @@ public class AISolver implements Solver<Board> {
             return "ACT(0)";
         }
 
-        Map.Entry<Point, Set<Integer>> next = toSet.entrySet().iterator().next();
-        Point key = next.getKey();
-        Set<Integer> numbers = next.getValue();
+        Point key = toSet.keySet().iterator().next();
+        Set<Integer> numbers = toSet.get(key);
 
         return String.format("ACT(%s,%s,%s)",
                 key.getX(),

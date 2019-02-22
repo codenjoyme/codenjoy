@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -52,14 +52,20 @@ public class LocalGameRunner {
     private List<ClientBoard> boards;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
-        run(gameType, Collections.singletonList(solver), Collections.singletonList(board));
+        run(gameType, Arrays.asList(solver), Arrays.asList(board));
     }
 
-    public static void run(GameType gameType, List<Solver> solvers, List<ClientBoard> boards) {
+    public static void run(GameType gameType,
+                           List<Solver> solvers,
+                           List<ClientBoard> boards)
+    {
         new LocalGameRunner(gameType, solvers, boards).run();
     }
 
-    private LocalGameRunner(GameType gameType, List<Solver> solvers, List<ClientBoard> boards) {
+    private LocalGameRunner(GameType gameType,
+                           List<Solver> solvers,
+                           List<ClientBoard> boards)
+    {
         this.solvers = solvers;
         this.boards = boards;
         this.gameType = gameType;

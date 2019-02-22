@@ -85,7 +85,6 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         return size;
     }
 
-    // TODO подумать над этим, а то оно так долго все делается
     public static Set<Point> removeDuplicates(Collection<Point> all) {
         return new TreeSet<>(all);
     }

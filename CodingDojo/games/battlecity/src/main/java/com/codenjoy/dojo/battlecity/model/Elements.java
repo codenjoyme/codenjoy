@@ -28,7 +28,8 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public enum Elements implements CharElements {
 
@@ -78,13 +79,12 @@ public enum Elements implements CharElements {
     public final char ch;
     int power;
 
-    // TODO test me
     private static List<Elements> result = null;
     public static Collection<Elements> getConstructions() {
         if (result == null) {
             result = Arrays.stream(values())
                     .filter(e -> e.name().startsWith(CONSTRUCTION.name()))
-                    .collect(Collectors.toList());
+                    .collect(toList());
         }
         return result;
     }

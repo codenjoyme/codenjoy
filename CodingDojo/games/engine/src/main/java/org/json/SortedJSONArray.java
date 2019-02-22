@@ -746,7 +746,7 @@ public class SortedJSONArray implements Iterable<Object> {
      * @return this.
      */
     public SortedJSONArray put(int value) {
-        this.put(Integer.valueOf(value));
+        this.put(new Integer(value));
         return this;
     }
 
@@ -758,7 +758,7 @@ public class SortedJSONArray implements Iterable<Object> {
      * @return this.
      */
     public SortedJSONArray put(long value) {
-        this.put(Long.valueOf(value));
+        this.put(new Long(value));
         return this;
     }
 
@@ -856,7 +856,7 @@ public class SortedJSONArray implements Iterable<Object> {
      *             If the index is negative.
      */
     public SortedJSONArray put(int index, int value) throws JSONException {
-        this.put(index, Integer.valueOf(value));
+        this.put(index, new Integer(value));
         return this;
     }
 
@@ -874,7 +874,7 @@ public class SortedJSONArray implements Iterable<Object> {
      *             If the index is negative.
      */
     public SortedJSONArray put(int index, long value) throws JSONException {
-        this.put(index, Long.valueOf(value));
+        this.put(index, new Long(value));
         return this;
     }
 

@@ -69,10 +69,10 @@ public class LoggerFactory {
 
                     @Override
                     public String toString() {
-                        StringBuilder s = new StringBuilder();
+                        String s = "";
                         for (Object arg : args) {
-                            if (!s.toString().equals("")) s.append(", ");
-                            s.append(getValue(arg));
+                            if (!s.equals("")) s += ", ";
+                            s += getValue(arg);
                         }
 
                         return object.getClass().getSimpleName() + "." + method.getName() + "(" + s + ") => " + getValue(result);

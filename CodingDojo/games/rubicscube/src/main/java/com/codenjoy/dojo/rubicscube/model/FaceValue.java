@@ -43,27 +43,27 @@ public class FaceValue {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         for (int line = 0; line < 3; line ++) {
-            result.append(getLine(line));
+            result += getLine(line);
         }
-        return result.toString();
+        return result;
     }
 
     public Line getLine(int line) {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         for (int index = 0; index < 3; index ++) {
-            result.append(colors[line][index].toString());
+            result += colors[line][index].toString();
         }
-        return new Line(result.toString());
+        return new Line(result);
     }
 
     public Line getRow(int row) {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         for (int index = 0; index < 3; index ++) {
-            result.append(colors[index][row].toString());
+            result += colors[index][row].toString();
         }
-        return new Line(result.toString());
+        return new Line(result);
     }
 
     public void updateLine(int line, Line data) {

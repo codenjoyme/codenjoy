@@ -73,7 +73,7 @@ public class SettingsTest {
     }
 
     @Test
-     public void shouldChangedValueWhenChangeIt() {
+    public void shouldChangedValueWhenChangeIt() {
         Settings settings = new SettingsImpl();
 
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);

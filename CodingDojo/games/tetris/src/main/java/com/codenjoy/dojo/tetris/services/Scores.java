@@ -27,8 +27,6 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> oneLineRemovedScore;
@@ -38,10 +36,10 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> figureDroppedScore;
     private final Parameter<Integer> glassOverflownPenalty;
 
-    private AtomicInteger score;
+    private volatile int score;
 
-    public Scores(int initialScore, Settings settings) {
-        score = new AtomicInteger(initialScore);
+    public Scores(int score, Settings settings) {
+        this.score = score;
 
         figureDroppedScore = settings.addEditBox("Figure dropped score score").type(Integer.class).def(1);
         oneLineRemovedScore = settings.addEditBox("One line removed score").type(Integer.class).def(10);
@@ -53,12 +51,12 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
-        return score.getAndSet(0);
+        return score = 0;
     }
 
     @Override
     public Integer getScore() {
-        return score.get();
+        return score;
     }
 
     @Override
@@ -71,30 +69,30 @@ public class Scores implements PlayerScores {
         } else if (event.isGlassOverflown()) {
             glassOverflown(event.getLevel());
         }
-        score.set(Math.max(0, score.get()));
+        score = Math.max(0, score);
     }
 
     private void figureDropped(int figureIndex) {
-        score.addAndGet(figureDroppedScore.getValue() * figureIndex);
+        score += figureDroppedScore.getValue() * figureIndex;
     }
 
     private void glassOverflown(int level) {
-        score.addAndGet(Math.negateExact(glassOverflownPenalty.getValue() * level));
+        score -= glassOverflownPenalty.getValue() * level;
     }
 
     private void linesRemoved(int level, int count) {
         switch (count) {
             case 1:
-                score.addAndGet(oneLineRemovedScore.getValue() * level);
+                score += oneLineRemovedScore.getValue() * level;
                 break;
             case 2:
-                score.addAndGet(twoLinesRemovedScore.getValue() * level);
+                score += twoLinesRemovedScore.getValue() * level;
                 break;
             case 3:
-                score.addAndGet(threeLinesRemovedScore.getValue() * level);
+                score += threeLinesRemovedScore.getValue() * level;
                 break;
             case 4:
-                score.addAndGet(fourLinesRemovedScore.getValue() * level);
+                score += fourLinesRemovedScore.getValue() * level;
                 break;
         }
     }

@@ -24,15 +24,15 @@ package com.codenjoy.dojo.bomberman.client;
 
 
 import com.codenjoy.dojo.bomberman.model.Elements;
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 

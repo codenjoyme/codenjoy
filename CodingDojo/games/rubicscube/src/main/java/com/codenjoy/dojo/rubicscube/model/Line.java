@@ -53,10 +53,10 @@ public class Line {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         for (int index = 0; index < SIZE; index++) {
-            result.append(get(index).value());
+            result += get(index).value();
         }
-        return result.toString();
+        return result;
     }
 }

@@ -90,12 +90,12 @@ public class GuiPlotColorDecoderTest {
         Object[] plots = game.getPlots();
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(plots);
 
-        StringBuilder plotsString = new StringBuilder();
+        String plotsString = "";
         for (Object o : plots) {
-            plotsString.append(o);
+            plotsString += o;
         }
 
-        assertEquals(expected, decoder.encodeForBrowser(plotsString.toString()));
+        assertEquals(expected, decoder.encodeForBrowser(plotsString));
     }
 
     @Test

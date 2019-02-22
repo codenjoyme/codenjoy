@@ -365,7 +365,7 @@ public class Minesweeper implements Field {
 
     @Override
     public void tick() {
-        if(!Objects.equals(size.getValue(), currentSize)) {  // TODO потестить это
+        if (currentSize != size.getValue()) {  // TODO потестить это
             currentSize = size.getValue();
             newGame(player);
             return;

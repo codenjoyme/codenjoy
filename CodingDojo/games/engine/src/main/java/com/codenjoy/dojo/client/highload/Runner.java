@@ -22,6 +22,7 @@ package com.codenjoy.dojo.client.highload;
  * #L%
  */
 
+import com.codenjoy.dojo.services.hash.Hash;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
@@ -44,7 +45,7 @@ public class Runner {
         for (int index = 1; index <= count; index++) {
             String number = StringUtils.leftPad(String.valueOf(index), numLength, "0");
             String name = "demo" + number + "@codenjoy.com";
-            String code = makeCode(name, name);
+            String code = Hash.getCode(name, name);
             String url = String.format("http://" + host + "/codenjoy-contest/board/player/" +
                     "%s?code=%s", name, code);
 
@@ -107,9 +108,5 @@ public class Runner {
         status.put(name, statusLine);
 
         new WebSocketClient(url, new MySocket(name, statusLine));
-    }
-
-    public String makeCode(String email, String password) {
-        return "" + ((email.hashCode() + password.hashCode()) & 0x7FFFFFFF);
     }
 }

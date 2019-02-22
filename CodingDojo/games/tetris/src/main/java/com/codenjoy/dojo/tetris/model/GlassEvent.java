@@ -57,7 +57,9 @@ public class GlassEvent<T> {
         if (value == null || that.value == null) {
             return value == that.value;
         }
-        if (type.equals(Type.TOTAL_LINES_REMOVED) || type.equals(Type.WITHOUT_OVERFLOWN_LINES_REMOVED)) {
+        if (type.equals(Type.TOTAL_LINES_REMOVED)
+            || type.equals(Type.WITHOUT_OVERFLOWN_LINES_REMOVED))
+        {
             return (Integer) value <= (Integer) that.value;
         } else {
             return value.equals(that.value);
