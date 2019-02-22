@@ -39,7 +39,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-// TODO разобратсья почему не рабоатет весь тест
 public class PlayerControllerTest {
 
     public static final int PORT = 8082;
@@ -106,6 +105,21 @@ public class PlayerControllerTest {
                 serverMessages.add("act" + Arrays.toString(p));
             }
         };
+    }
+
+    public void clean() {
+        if (player != null) {
+            controller.unregisterPlayerTransport(player);
+        }
+        if (client != null) {
+            client.reset();
+        }
+        serverMessages.clear();
+    }
+
+    @Before
+    public void createPlayer() throws Exception {
+        clean();
 
         player = new Player(USER_NAME, "127.0.0.1", PlayerTest.mockGameType("game"),
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
@@ -115,13 +129,7 @@ public class PlayerControllerTest {
         // SecureAuthenticationService спросит Registration а можно ли этому юзеру что-то делать?
         when(registration.checkUser(USER_NAME, CODE)).thenReturn(USER_NAME);
 
-        client = WebSocketRunnerMock.run(SERVER, USER_NAME, CODE);
-    }
-
-    @Before
-    public void clean() {
-        client.reset();
-        serverMessages.clear();
+        client = new WebSocketRunnerMock(SERVER, USER_NAME, CODE);
     }
 
     @AfterClass
@@ -131,7 +139,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldLeft() {
-        client.willAnswer("LEFT");
+        client.willAnswer("LEFT").start();
         waitForPlayerResponse();
 
         assertEquals("[left]", serverMessages.toString());
@@ -139,7 +147,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldRight() {
-        client.willAnswer("right");
+        client.willAnswer("right").start();
         waitForPlayerResponse();
 
         assertEquals("[right]", serverMessages.toString());
@@ -148,7 +156,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldUp() {
-        client.willAnswer("Up");
+        client.willAnswer("Up").start();
         waitForPlayerResponse();
 
         assertEquals("[up]", serverMessages.toString());
@@ -157,7 +165,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldAct() {
-        client.willAnswer("aCt");
+        client.willAnswer("aCt").start();
         waitForPlayerResponse();
 
         assertEquals("[act[]]", serverMessages.toString());
@@ -166,7 +174,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldActWithParameters() {
-        client.willAnswer("ACt(1,2 ,3, 5)");
+        client.willAnswer("ACt(1,2 ,3, 5)").start();
         waitForPlayerResponse();
 
         assertEquals("[act[1, 2, 3, 5]]", serverMessages.toString());
@@ -175,7 +183,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldDown() {
-        client.willAnswer("DowN");
+        client.willAnswer("DowN").start();
         waitForPlayerResponse();
 
         assertEquals("[down]", serverMessages.toString());
@@ -184,7 +192,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldRightAct() {
-        client.willAnswer("right,Act");
+        client.willAnswer("right,Act").start();
         waitForPlayerResponse();
 
         assertEquals("[right, act[]]", serverMessages.toString());
@@ -193,7 +201,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldMixed() {
-        client.willAnswer("Act,right, left ,act");
+        client.willAnswer("Act,right, left ,act").start();
         waitForPlayerResponse();
 
         assertEquals("[act[], right, left, act[]]", serverMessages.toString());
@@ -202,7 +210,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldCheckRequest() {
-        client.willAnswer("act");
+        client.willAnswer("act").start();
         waitForPlayerResponse();
 
         assertEquals("board=some-request-0", client.getRequest());
@@ -215,7 +223,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
         // given, when
-        client.willAnswer("LEFT").times(2);
+        client.willAnswer("LEFT").times(2).start();
         waitForPlayerResponse();
 
         // then
@@ -225,6 +233,7 @@ public class PlayerControllerTest {
 
     private void waitForPlayerResponse(int times) {
         try {
+            Thread.sleep(300);
             for (int index = 0; index < times; index++) {
                 controller.requestControl(player, "some-request-" + index);
             }
@@ -240,7 +249,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldClientGotOnlyOneWhenServerRequestTwice() {
         // given, when
-        client.willAnswer("LEFT").times(1).onlyOnce();
+        client.willAnswer("LEFT").times(1).onlyOnce().start();
         waitForPlayerResponse(2);
 
         // then
