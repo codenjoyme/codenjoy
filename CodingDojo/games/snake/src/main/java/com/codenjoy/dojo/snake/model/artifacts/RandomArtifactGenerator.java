@@ -34,6 +34,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class RandomArtifactGenerator implements ArtifactGenerator {
 
+    public static final int MAX = 100;
     private Dice dice;
 
     public RandomArtifactGenerator(Dice dice) {
@@ -50,24 +51,31 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
             return new Stone(-1, -1);
         }
 
+        int c = 0;
         do {
-            y = dice.next(boardSize);
             x = dice.next(boardSize);
+            y = dice.next(boardSize);
 
             boolean onSnake = snake.itsMe(x, y);
             boolean onApple = (apple != null) && apple.itsMe(x, y);
             boolean onWall = walls.itsMe(x, y);
 
             boolean onSnakeWayWhenGoRight = (snake.getX() + 1) <= x && x <= boardSize && y == snake.getY() && snake.getDirection().equals(Direction.RIGHT);
-            boolean onSnakeWayWhenGoLeft =0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT);
+            boolean onSnakeWayWhenGoLeft = 0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT);
             boolean onSnakeWayWhenGoDown = (snake.getY() + 1) <= y && y <= boardSize && x == snake.getX() && snake.getDirection().equals(Direction.DOWN);
             boolean onSnakeWayWhenGoUp = 0 <= y && y <= (snake.getY() - 1) && x == snake.getX() && snake.getDirection().equals(Direction.UP);
             boolean onSnakeWay = onSnakeWayWhenGoRight || onSnakeWayWhenGoLeft || onSnakeWayWhenGoDown || onSnakeWayWhenGoUp;
 
             boolean whenStandstill = isStandstill(apple, pt(x, y), boardSize);
 
-            noSoGoodPlace = onSnake || onSnakeWay || onApple || whenStandstill || onWall;
-        } while (noSoGoodPlace);
+            boolean outOfBoard = pt(x, y).isOutOf(boardSize);
+
+            noSoGoodPlace = outOfBoard || onSnake || onSnakeWay || onApple || whenStandstill || onWall;
+        } while (noSoGoodPlace && c++ < 100);
+
+        if (c >= MAX) {
+            return new Stone(-1, -1);
+        }
 
         return new Stone(x, y);
     }
@@ -96,7 +104,6 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
         return snake.getLength() == maxSnakeSize;
     }
 
-    // TODO надо сделать так, что если яблока больше негде поставить, то игра не заканчивалась бы
     @Override
     public Apple generateApple(Hero snake, Apple apple, Stone stone, Walls walls, int boardSize) {
         int x;
@@ -107,6 +114,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
             return new Apple(-1, -1);
         }
 
+        int c = 0;
         do {
             x = dice.next(boardSize);
             y = dice.next(boardSize);
@@ -118,8 +126,14 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
             boolean whenStandstill = isStandstill(pt(x, y), stone, boardSize);
 
-            noSoGoodPlace = onSnake || onStone || whenStandstill || onWall || onApple;
-        } while (noSoGoodPlace);
+            boolean outOfBoard = pt(x, y).isOutOf(boardSize);
+
+            noSoGoodPlace = outOfBoard || onSnake || onStone || whenStandstill || onWall || onApple;
+        } while (noSoGoodPlace && c++ < 100);
+
+        if (c >= MAX) {
+            return new Apple(-1, -1);
+        }
 
         return new Apple(x, y);
     }
