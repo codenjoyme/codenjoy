@@ -10,12 +10,12 @@ package com.codenjoy.dojo.battlecity.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,14 +25,10 @@ package com.codenjoy.dojo.battlecity.client;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 
@@ -72,6 +68,22 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.TANK_RIGHT).get(0);
     }
 
+    public Direction getMyDirection() {
+        if (isGameOver()) {
+            return null;
+        }
+        Point me = getMe();
+        if (isAt(me, Elements.TANK_UP)) {
+            return Direction.UP;
+        } else if (isAt(me, Elements.TANK_RIGHT)) {
+            return Direction.RIGHT;
+        } else if (isAt(me, Elements.TANK_DOWN)) {
+            return Direction.DOWN;
+        } else {
+            return Direction.LEFT;
+        }
+    }
+
     public boolean isGameOver() {
         return get(Elements.TANK_UP,
                 Elements.TANK_DOWN,
@@ -81,5 +93,16 @@ public class Board extends AbstractBoard<Elements> {
 
     public boolean isBulletAt(int x, int y) {
         return getAt(x, y).equals(Elements.BULLET);
+    }
+
+    public List<Point> getEnemies() {
+        return get(Elements.OTHER_TANK_UP,
+                Elements.OTHER_TANK_RIGHT,
+                Elements.OTHER_TANK_DOWN,
+                Elements.OTHER_TANK_LEFT,
+                Elements.AI_TANK_UP,
+                Elements.AI_TANK_RIGHT,
+                Elements.AI_TANK_DOWN,
+                Elements.AI_TANK_LEFT);
     }
 }
