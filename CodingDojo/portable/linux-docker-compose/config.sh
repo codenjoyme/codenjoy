@@ -119,3 +119,10 @@ database() {
 database ./docker-compose.yml
 database ./balancer.yml
 database ./codenjoy.yml
+
+domain() {
+    file=$1
+    comment $file "#D#" $DOMAIN
+}
+
+domain ./config/nginx/nginx.conf
