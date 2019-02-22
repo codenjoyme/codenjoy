@@ -41,11 +41,12 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected ConfigProperties config;
 
     @Override
-    public void saveAll() {
+    public long saveAll() {
         long now = System.currentTimeMillis();
         for (PlayerGame playerGame : playerGames) {
             saveGame(playerGame, now);
         }
+        return now;
     }
 
     @Override
@@ -56,12 +57,14 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public void save(String name) {
+    public long save(String name) {
         PlayerGame playerGame = playerGames.get(name);
         if (playerGame != NullPlayerGame.INSTANCE) {
             long now = System.currentTimeMillis();
             saveGame(playerGame, now);
+            return now;
         }
+        return -1;
     }
 
     private void saveGame(PlayerGame playerGame, long time) {

@@ -243,6 +243,7 @@ public class PlayerGamesViewTest {
         heroesData.add(heroData);
 
         Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null);
+        player.setEventListener(mock(InformationCollector.class));
         players.add(player);
 
         Controller controller = mock(Controller.class);

@@ -75,9 +75,9 @@ public class SaveServiceImplTest {
         Player player = createPlayer("vasia");
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'key':'value'}"));
 
-        saveService.save("vasia");
+        long time = saveService.save("vasia");
 
-        verify(saver).saveGame(player, "{\"key\":\"value\"}", anyLong());
+        verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
     }
 
     private Player createPlayer(String name) {
@@ -86,6 +86,7 @@ public class SaveServiceImplTest {
         when(player.getData()).thenReturn("data for " + name);
         when(player.getGameName()).thenReturn(name + " game");
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
+        when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
         when(playerService.get(name)).thenReturn(player);
         players.add(player);
 
@@ -252,10 +253,10 @@ public class SaveServiceImplTest {
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'key':'value1'}"));
         when(fields.get(1).getSave()).thenReturn(new JSONObject("{'key':'value2'}"));
 
-        saveService.saveAll();
+        long time = saveService.saveAll();
 
-        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", System.currentTimeMillis());
-        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", System.currentTimeMillis());
+        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
+        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
     }
 
     @Test

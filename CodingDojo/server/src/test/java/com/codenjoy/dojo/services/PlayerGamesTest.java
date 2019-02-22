@@ -167,6 +167,7 @@ public class PlayerGamesTest {
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
         Player player = new Player(name, "url", gameType, scores, mock(Information.class));
+        player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
         player.setAI(ai);
@@ -179,6 +180,7 @@ public class PlayerGamesTest {
                         player,
                         inv -> {
                             GameField field = mock(GameField.class);
+                            when(field.reader()).thenReturn(mock(BoardReader.class));
                             fields.add(field);
                             return field;
                         },

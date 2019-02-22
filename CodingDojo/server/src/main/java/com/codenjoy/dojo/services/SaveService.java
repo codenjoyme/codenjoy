@@ -29,9 +29,9 @@ public interface SaveService {
 
     boolean load(String name);
     void load(String name, String gameName, String save);
-    void save(String name);
+    long save(String name);
     List<PlayerInfo> getSaves();
-    void saveAll();
+    long saveAll();
     void loadAll();
     void removeSave(String name);
     void removeAllSaves();
