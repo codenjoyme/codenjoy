@@ -138,7 +138,7 @@ public class AI2Solver implements Solver<Board> {
             Collections.sort(goodPoint, new Comparator<HistoryPoint>() {
                 @Override
                 public int compare(HistoryPoint o1, HistoryPoint o2) {
-                    return Integer.valueOf(o1.dieTime()).compareTo(o2.dieTime());
+                    return Integer.compare(o1.dieTime(), o2.dieTime());
                 }
             });
         }
@@ -182,20 +182,20 @@ public class AI2Solver implements Solver<Board> {
 
         @Override
         public String toString() {
-            String result = "";
+            StringBuilder result = new StringBuilder();
 
             int count = 0;
             for (Elements el : near) {
-                result += el.ch();
+                result.append(el.ch());
                 count ++;
                 if (count % 3 == 0) {
-                    result += "\n";
+                    result.append("\n");
                 }
             }
 
-            result += command;
+            result.append(command);
 
-            return result;
+            return result.toString();
         }
 
         public boolean itsMe(List<Elements> elements) {
@@ -222,8 +222,6 @@ public class AI2Solver implements Solver<Board> {
         String byMemory = memory.getFor(oldDirection, board);
 
         memory.add(board, byAI);
-
-        HistoryPoint point = memory.getLast().prev;
 
         if (!byMemory.equals("")) {
             byAI = byMemory;

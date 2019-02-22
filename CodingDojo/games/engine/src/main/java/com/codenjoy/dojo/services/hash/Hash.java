@@ -96,7 +96,7 @@ public class Hash {
         System.out.println("---");
         System.out.printf("UPDATE players " +
                 "SET password = '%s', code = '%s' " +
-                "WHERE email = '%s';\n", passwordHash, code, email);
+                "WHERE email = '%s';%n", passwordHash, code, email);
     }
 
 }

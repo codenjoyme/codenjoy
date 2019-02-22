@@ -82,7 +82,7 @@ public class PlayerCommand {
                         if (split.length != 0) {
                             parameters = new int[split.length - 1];
                             for (int index = 1; index < split.length; index++) {
-                                parameters[index - 1] = Integer.valueOf(split[index]);
+                                parameters[index - 1] = Integer.parseInt(split[index]);
                             }
                         }
                         joystick.act(parameters);

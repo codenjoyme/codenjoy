@@ -52,7 +52,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
 
     @Override
     public void tick() {
-        if (huntHim == null || (huntHim != null && !huntHim.isAlive())) {
+        if (huntHim == null || !huntHim.isAlive()) {
             List<Hero> heroes = new LinkedList<Hero>(field.getHeroes());
             if (oldHurt != null) { // если я бегал за героем, который спрятался
                 heroes.remove(oldHurt); // исключаю его из поиска // TODO подумать, тут может быть кейс, когда герой один и он появился уже а я за ним бегать не могу

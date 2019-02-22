@@ -29,7 +29,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.Collection;
 import java.util.LinkedList;

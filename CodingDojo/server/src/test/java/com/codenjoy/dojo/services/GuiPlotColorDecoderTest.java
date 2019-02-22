@@ -142,7 +142,7 @@ public class GuiPlotColorDecoderTest {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
         try {
-            decoder.encodeForBrowser(new Boolean(true));
+            decoder.encodeForBrowser(Boolean.TRUE);
             fail("Expected exception");
         } catch (IllegalArgumentException e) {
             Assert.assertEquals("You can use only String or JSONObject as board", e.getMessage());
