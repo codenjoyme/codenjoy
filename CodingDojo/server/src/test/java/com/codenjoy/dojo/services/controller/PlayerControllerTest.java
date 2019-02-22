@@ -237,7 +237,7 @@ public class PlayerControllerTest {
         }
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldClientGotOnlyOneWhenServerRequestTwice() {
         // given, when
         client.willAnswer("LEFT").times(1).onlyOnce();
