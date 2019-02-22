@@ -119,7 +119,7 @@ public class IntegrationTest {
     }
 
     private String getEmail(String name) {
-        return name + Math.abs(new Random().nextInt()) + "@gmail.com";
+        return name + new Random().nextInt(Integer.MAX_VALUE) + "@gmail.com";
     }
 
     private void removeSaveAll(String saves) {

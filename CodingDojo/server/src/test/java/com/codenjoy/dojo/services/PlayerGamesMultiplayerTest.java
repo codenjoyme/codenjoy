@@ -120,6 +120,7 @@ public class PlayerGamesMultiplayerTest {
     private void playerWantsToPlay(GameType gameType) {
         int index = gamePlayers.size();
         Player player = new Player("player" + index);
+        player.setEventListener(mock(InformationCollector.class));
         players.add(player);
         PlayerGame playerGame = playerWantsToPlay(gameType, player, null);
         getFileds.add(() -> playerGame.getGame().getField());

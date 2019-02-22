@@ -109,7 +109,7 @@ public class Battlecity implements Field {
             do {
                 x = dice.next(size);
                 c++;
-            } while (isBarrier(x, y) & c < size);
+            } while (isBarrier(x, y) && c < size);
 
             if (!isBarrier(x, y)) {
                 addAI(new AITank(x, y, dice, Direction.DOWN));

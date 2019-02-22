@@ -20,21 +20,27 @@
  * #L%
  */
 using System;
+using System.Threading;
 using WebSocketSharp;
 
 namespace Loderunner.Api
 {
     public abstract class LoderunnerBase
     {
-        protected readonly string Server = @"ws://loderunner.luxoft.com:8080/codenjoy-contest/ws";
         private const string ResponsePrefix = "board=";
 
-        public LoderunnerBase(string userName)
+        protected LoderunnerBase(string serverAndPort, string userName, string code)
         {
+            ServerAndPort = serverAndPort;
             UserName = userName;
+            Code = code;
         }
 
+        public string ServerAndPort { get; private set; }
+
         public string UserName { get; private set; }
+
+        public string Code { get; private set; }
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -43,12 +49,15 @@ namespace Loderunner.Api
 
         public void Play()
         {
-            var socket = new WebSocket(Server + "?user=" + UserName);
+            var socket = new WebSocket(
+                string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}", ServerAndPort, UserName, Code));
+
             socket.OnMessage += Socket_OnMessage;
             socket.Connect();
 
             while (!ShouldExit && socket.ReadyState != WebSocketState.Closed)
             {
+                Thread.Sleep(50);
             }
         }
 

@@ -120,7 +120,7 @@ public class Snake implements Field {
 
     @Override
     public void remove(Player player) {
-        player = null;
+        this.player = null;
     }
 
     @Override

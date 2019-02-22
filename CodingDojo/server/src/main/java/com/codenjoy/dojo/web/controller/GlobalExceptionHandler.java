@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         String url = req.getRequestURL().toString();
         String ticket = ticket();
         logger.error("[TICKET:URL] {}:{} {}", ticket, url, e);
-        System.err.printf("[TICKET:URL] %s:%s\n", ticket, url);
+        System.err.printf("[TICKET:URL] %s:%s%n", ticket, url);
         e.printStackTrace();
 
         ModelAndView result = new ModelAndView();

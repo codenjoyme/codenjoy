@@ -86,8 +86,6 @@ public class RegistrationController {
         player.setGameName(gameName);
         model.addAttribute("player", player);
 
-        model.addAttribute("by_email", properties.isEmailVerificationNeeded());
-
         player.setCallbackUrl("http://" + ip + ":80");
 
         return getRegister(model);
@@ -164,10 +162,6 @@ public class RegistrationController {
             return openRegistrationForm(request, model);
         }
 
-        if (!StringUtils.isEmpty(player.getName())) {
-            return registerByEmail(player, result, request, model);
-        }
-
         String playerReadableName = player.getReadableName();
         String gameName = player.getGameName();
         try {
@@ -222,7 +216,7 @@ public class RegistrationController {
             }
         } else {
             if (!registered) {
-                code = registration.register(playerName, player.getReadableName(), player.getPassword(), player.getData());
+                code = registration.register(playerName, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData());
             } else {
                 code = registration.getCode(playerName);
             }

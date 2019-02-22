@@ -45,19 +45,20 @@ public class WebSocketRunnerTest {
         assertURL("UrlParser{server='otherDomain', context='other-context', code='otherCode', userName='otherEmail'}",
                 "http://otherDomain/other-context/board/player/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        String message = "Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/playerid?code=12345678901234567890";
+        assertURL(message,
                 "http://otherDomain/other-context/BUG/player/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/BUG/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/player/otherEmail?BUG=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/player/BUG/otherEmail?code=otherCode");
     }
 

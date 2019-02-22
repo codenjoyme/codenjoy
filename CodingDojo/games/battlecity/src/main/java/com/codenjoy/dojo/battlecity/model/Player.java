@@ -51,8 +51,8 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void event(Events event) {
-        switch (event) {
-            case KILL_YOUR_TANK:  hero.kill(null); break;
+        if (event == Events.KILL_YOUR_TANK) {
+            hero.kill(null);
         }
 
         super.event(event);

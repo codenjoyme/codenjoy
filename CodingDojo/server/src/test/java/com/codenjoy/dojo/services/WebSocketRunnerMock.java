@@ -38,6 +38,9 @@ import java.util.concurrent.TimeUnit;
 
 public class WebSocketRunnerMock {
 
+    private final String server;
+    private final String userName;
+    private final String code;
     private Session session;
     private WebSocketClient wsClient;
     private String answer;
@@ -49,15 +52,17 @@ public class WebSocketRunnerMock {
     private boolean answered;
     public List<String> messages = new LinkedList<>();
 
-    public WebSocketRunnerMock() {
+    public WebSocketRunnerMock(String server, String userName, String code) {
+        this.server = server;
+        this.userName = userName;
+        this.code = code;
         reset();
     }
 
-    public static WebSocketRunnerMock run(String server, String userName, String code) throws Exception {
-        final WebSocketRunnerMock client = new WebSocketRunnerMock();
+    public void start() {
         new Thread(() -> {
             try {
-                client.start(server, userName, code);
+                this.start(server, userName, code);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -65,7 +70,7 @@ public class WebSocketRunnerMock {
                 @Override
                 public void run() {
                     try {
-                        client.stop();
+                        this.stop();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -76,10 +81,12 @@ public class WebSocketRunnerMock {
 
         System.out.println("client starting...");
         while (!started) {
-            Thread.sleep(10);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-        return client;
     }
 
     public void stop() {

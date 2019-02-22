@@ -125,7 +125,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
         previousDirection = direction;
         direction = null;
-        counterBeetwenShut = Math.max(0,--counterBeetwenShut);
+        if (counterBeetwenShut > 0) {
+            counterBeetwenShut--;
+        }
         if (abilityCounter != 0 && --abilityCounter == 0){
             ability = null;
         }
@@ -184,9 +186,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void setDamage(int pDamage) {
-
         health -= ((ability != null && ability.getAbilityType() == Ability.Type.DEFENCE) ? pDamage/DEFFENCE_MULTIPLICATOR : pDamage);
-
-        Math.max(0, health);
+        health = Math.max(0, health);
     }
 }

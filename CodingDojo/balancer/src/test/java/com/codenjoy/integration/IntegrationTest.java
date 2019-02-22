@@ -140,7 +140,7 @@ public class IntegrationTest {
                 "{\n" +
                 "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'btcfedopmomo66einibynbe',\n" +
+                "  'id':'nrnbnrmikfkiksoejwbf4ze',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 
@@ -360,7 +360,7 @@ public class IntegrationTest {
                 "{\n" +
                 "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'btcfedopmomo66einibynbe',\n" +
+                "  'id':'nrnbnrmikfkiksoejwbf4ze',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 

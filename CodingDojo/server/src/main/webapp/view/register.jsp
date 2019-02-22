@@ -46,20 +46,18 @@
     <form:form commandName="player" action="register" method="POST">
         <form:hidden path="data"/>
         <table>
-            <c:if test="${by_email}">
-                <tr>
-                    <td>Email<form:errors path="name"/></td>
-                </tr>
-                <tr>
-                    <td>
-                        <form:input path="name"/>
-                        <span class="error">
-                            <c:if test="${bad_pass}">Already registered</c:if>
-                            <c:if test="${wait_approve}">Please check your email</c:if>
-                        </span>
-                    </td>
-                </tr>
-            </c:if>
+            <tr>
+                <td>Email<form:errors path="email"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <form:input path="email"/>
+                    <span class="error">
+                        <c:if test="${bad_pass}">Already registered</c:if>
+                        <c:if test="${wait_approve}">Please check your email</c:if>
+                    </span>
+                </td>
+            </tr>
             <tr>
                 <td>Name</td>
             </tr>
