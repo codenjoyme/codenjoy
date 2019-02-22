@@ -1,7 +1,8 @@
-package com.codenjoy.dojo.snake.client
+package com.codenjoy.dojo.battlecity.client
 
 import com.codenjoy.dojo.client.{Solver, WebSocketRunner}
-import com.codenjoy.dojo.services.{Dice, Direction, RandomDice}
+import com.codenjoy.dojo.services.Direction._
+import com.codenjoy.dojo.services.{Dice, RandomDice}
 
 /**
   * User: your name
@@ -10,7 +11,7 @@ import com.codenjoy.dojo.services.{Dice, Direction, RandomDice}
 object YourSolverScala {
   def main(args: Array[String]): Unit = {
     WebSocketRunner.runClient(// paste here board page url from browser after registration
-      "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+      "http://127.0.0.1:8080/codenjoy-contest/board/player/z2d3lyzvc0lyf68ynpz9?code=8026464261134740400",
       new YourSolverScala(new RandomDice),
       new BoardScala)
   }
@@ -21,9 +22,9 @@ class YourSolverScala(var dice: Dice) extends Solver[BoardScala] {
     * Каждую секунду сервер будет вызывать этот метод, передавая на вход актуальное состояние доски.
     *
     * @param board объект, описывающий состояние доски
-    * @return направление, куда следует двигаться змейке
+    * @return следующее действие твоего танка
     */
   override def get(board: BoardScala): String = {
-    Direction.UP.toString
+    UP.toString
   }
 }

@@ -29,9 +29,9 @@ class BoardScala extends AbstractBoard[Elements] {
   def getSnakeDirection: Direction = {
     val head = getHead.orNull
     if (head == null) return null
-    if (isAt(head, HEAD_LEFT)) LEFT
-    if (isAt(head, HEAD_RIGHT)) RIGHT
-    if (isAt(head, HEAD_UP)) UP
+    if (isAt(head, HEAD_LEFT)) return LEFT
+    if (isAt(head, HEAD_RIGHT)) return RIGHT
+    if (isAt(head, HEAD_UP)) return UP
     DOWN
   }
 
