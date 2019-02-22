@@ -48,10 +48,10 @@ public class OneCommandSolver<T extends ClientBoard> implements Solver<T> {
         } else {
             processed = true;
         }
-        System.out.printf("Are you sure you want to run the command '%s' (y/n)?\n", command);
+        System.out.printf("Are you sure you want to run the command '%s' (y/n)?%n", command);
         String answer = new Scanner(System.in).next();
         if (answer.equals("y")) {
-            System.out.printf("Sending '%s' to the server\n", command);
+            System.out.printf("Sending '%s' to the server%n", command);
             return command;
         } else {
             System.exit(0);

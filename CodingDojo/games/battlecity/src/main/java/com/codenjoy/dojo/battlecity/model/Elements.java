@@ -25,9 +25,10 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum Elements implements CharElements {
 
@@ -81,12 +82,9 @@ public enum Elements implements CharElements {
     private static List<Elements> result = null;
     public static Collection<Elements> getConstructions() {
         if (result == null) {
-            result = new LinkedList<Elements>();
-            for (Elements element : values()) {
-                if (element.name().startsWith(CONSTRUCTION.name())) {
-                    result.add(element);
-                }
-            }
+            result = Arrays.stream(values())
+                    .filter(e -> e.name().startsWith(CONSTRUCTION.name()))
+                    .collect(Collectors.toList());
         }
         return result;
     }

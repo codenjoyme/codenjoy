@@ -263,7 +263,7 @@ public class SortedJSONObject {
      *            An array of strings, the names of the fields to be obtained
      *            from the object.
      */
-    public SortedJSONObject(Object object, String names[]) {
+    public SortedJSONObject(Object object, String[] names) {
         this();
         Class<?> c = object.getClass();
         for (int i = 0; i < names.length; i += 1) {
@@ -1205,7 +1205,7 @@ public class SortedJSONObject {
      *             If the key is null.
      */
     public SortedJSONObject put(String key, int value) throws JSONException {
-        this.put(key, new Integer(value));
+        this.put(key, Integer.valueOf(value));
         return this;
     }
 
@@ -1221,7 +1221,7 @@ public class SortedJSONObject {
      *             If the key is null.
      */
     public SortedJSONObject put(String key, long value) throws JSONException {
-        this.put(key, new Long(value));
+        this.put(key, Long.valueOf(value));
         return this;
     }
 
@@ -1521,10 +1521,10 @@ public class SortedJSONObject {
                         return d;
                     }
                 } else {
-                    Long myLong = new Long(string);
+                    Long myLong = Long.valueOf(string);
                     if (string.equals(myLong.toString())) {
-                        if (myLong.longValue() == myLong.intValue()) {
-                            return Integer.valueOf(myLong.intValue());
+                        if (myLong == myLong.intValue()) {
+                            return myLong.intValue();
                         }
                         return myLong;
                     }
@@ -1647,20 +1647,20 @@ public class SortedJSONObject {
      *             If the value is or contains an invalid number.
      */
     public static String valueToString(Object value) throws JSONException {
-        if (value == null || value.equals(null)) {
+        if (value == null) {
             return "null";
         }
         if (value instanceof JSONString) {
-            Object object;
+            String object;
             try {
                 object = ((JSONString) value).toJSONString();
             } catch (Exception e) {
                 throw new JSONException(e);
             }
-            if (object instanceof String) {
-                return (String) object;
+            if (object == null) {
+                throw new JSONException("Null value from toJSONString");
             }
-            throw new JSONException("Bad value from toJSONString: " + object);
+            return object;
         }
         if (value instanceof Number) {
             return numberToString((Number) value);
@@ -1751,7 +1751,7 @@ public class SortedJSONObject {
 
     static final Writer writeValue(Writer writer, Object value,
                                    int indentFactor, int indent) throws JSONException, IOException {
-        if (value == null || value.equals(null)) {
+        if (value == null) {
             writer.write("null");
         } else if (value instanceof SortedJSONObject) {
             ((SortedJSONObject) value).write(writer, indentFactor, indent);

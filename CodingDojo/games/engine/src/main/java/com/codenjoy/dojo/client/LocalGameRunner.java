@@ -10,12 +10,12 @@ package com.codenjoy.dojo.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -52,20 +52,14 @@ public class LocalGameRunner {
     private List<ClientBoard> boards;
 
     public static void run(GameType gameType, Solver solver, ClientBoard board) {
-        run(gameType, Arrays.asList(solver), Arrays.asList(board));
+        run(gameType, Collections.singletonList(solver), Collections.singletonList(board));
     }
 
-    public static void run(GameType gameType,
-                           List<Solver> solvers,
-                           List<ClientBoard> boards)
-    {
+    public static void run(GameType gameType, List<Solver> solvers, List<ClientBoard> boards) {
         new LocalGameRunner(gameType, solvers, boards).run();
     }
 
-    private LocalGameRunner(GameType gameType,
-                           List<Solver> solvers,
-                           List<ClientBoard> boards)
-    {
+    private LocalGameRunner(GameType gameType, List<Solver> solvers, List<ClientBoard> boards) {
         this.solvers = solvers;
         this.boards = boards;
         this.gameType = gameType;
@@ -79,7 +73,7 @@ public class LocalGameRunner {
 
     public void run() {
         Integer count = countIterations;
-        while (count == null || (count != null && count-- > 0)) {
+        while (count == null || count-- > 0) {
 
             List<String> answers = new LinkedList<>();
 

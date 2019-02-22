@@ -86,8 +86,7 @@ public class MakeBricksAlgorithmTest {
 
     private void assertL(boolean expected, int c1, int c5, int l) {
         boolean actual = Boolean.valueOf(method(c1, c5, l));
-        assertEquals(String.format("C1 = %s, C5 = %s, L = %s, Actual = %s, But expected = True", c1, c5, l, actual, expected),
-                expected, actual);
+        assertEquals(String.format("C1 = %s, C5 = %s, L = %s, Actual = %s, But expected = %s", c1, c5, l, actual, expected), expected, actual);
     }
 
     public String method(Integer small, Integer big, Integer goal) {

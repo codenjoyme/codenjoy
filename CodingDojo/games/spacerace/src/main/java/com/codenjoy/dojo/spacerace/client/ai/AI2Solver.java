@@ -52,7 +52,7 @@ public class AI2Solver implements Solver<Board> {
         Direction result = Direction.STOP;
         result = findDirection(board);
         if (result != null) {
-            if(isStoneOrBombAtop() & bullets > 0){
+            if(isStoneOrBombAtop() && bullets > 0){
                 if(isBulletAtop()){
                     return result.toString();
                 }
@@ -92,8 +92,6 @@ public class AI2Solver implements Solver<Board> {
 
         Point me = board.getMe();
         if (me != null) {
-            int x = me.getX();
-            int y = me.getY();
             result = findDirectionToBulletPack(board, me, result);
         }
         return CheckResult(result, board);
@@ -172,13 +170,13 @@ public class AI2Solver implements Solver<Board> {
         int x = me.getX();
         int y = me.getY();
 
-        if ((board.isBombAt(x, y - 4)) & (bestDirection.equals(Direction.UP))){
+        if ((board.isBombAt(x, y - 4)) && (bestDirection.equals(Direction.UP))){
             // TODO implement directions asap
             // посчитать дистанции вправо и влево, где меньше, то туда
             return Direction.RIGHT;
         }
 
-        if ((board.isBombAt(x, y - 3)) &
+        if ((board.isBombAt(x, y - 3)) &&
                 (bestDirection.equals(Direction.UP))){
             // TODO implement directions
             // посчитать дистанции справо и влево, где меньше, то туда
@@ -186,75 +184,75 @@ public class AI2Solver implements Solver<Board> {
         }
 
         // если мина вверху справа в соседней колонке и движимся вправо или вверх, то на одну влево
-        if ((board.isBombAt(x + 1, y - 3)) & // TODO implement directions
+        if ((board.isBombAt(x + 1, y - 3)) && // TODO implement directions
                 (bestDirection.equals(Direction.RIGHT) || bestDirection.equals(Direction.UP))){
             return Direction.LEFT;
         }
 
         // если мина вверху справа в соседней колонке и движимся вправо или вверх, то на одну влево
-        if ((board.isBombAt(x + 1, y - 2)) & // TODO implement directions
+        if ((board.isBombAt(x + 1, y - 2)) && // TODO implement directions
                 (bestDirection.equals(Direction.RIGHT) || bestDirection.equals(Direction.UP))){
             return Direction.LEFT;
         }
 
         // если мина вверху справа в колонке через одну и движимся вправо, то ждем
-        if ((board.isBombAt(x + 2, y - 2)) & // TODO implement directions
+        if ((board.isBombAt(x + 2, y - 2)) && // TODO implement directions
                 (bestDirection.equals(Direction.RIGHT))){
             return Direction.STOP;
         }
 
         // еще ждем
-        if ((board.isBombAt(x + 2, y - 1)) & // TODO implement directions
+        if ((board.isBombAt(x + 2, y - 1)) && // TODO implement directions
                 (bestDirection.equals(Direction.RIGHT))){
             return Direction.STOP;
         }
 
         // еще ждем
-        if ((board.isBombAt(x + 2, y)) & // TODO implement directions
+        if ((board.isBombAt(x + 2, y)) && // TODO implement directions
                 (bestDirection.equals(Direction.RIGHT))){
             return Direction.STOP;
         }
 
         // если мина вверху справа в колонке через одну и движимся вправо,
         // а мина уже прошла мимо,то идем дальше
-        if ((board.isBombAt(x + 2, y + 1)) & // TODO implement directions
+        if ((board.isBombAt(x + 2, y + 1)) && // TODO implement directions
                 (bestDirection.equals(Direction.RIGHT))){
             return Direction.RIGHT;
         }
 
         // если мина вверху слева в соседней колонке и движимся влево, то возврат на одну
-        if ((board.isBombAt(x - 1, y - 3)) & // TODO implement directions
+        if ((board.isBombAt(x - 1, y - 3)) && // TODO implement directions
                 (bestDirection.equals(Direction.LEFT) || bestDirection.equals(Direction.UP))) {
             return Direction.RIGHT;
         }
 
         // если мина вверху слева в соседней колонке и движимся влево, то возврат на одну
-        if ((board.isBombAt(x - 1, y - 2)) & // TODO implement directions
+        if ((board.isBombAt(x - 1, y - 2)) && // TODO implement directions
                 (bestDirection.equals(Direction.LEFT) || bestDirection.equals(Direction.UP))){
             return Direction.RIGHT;
         }
 
         // если мина вверху слева в колонке через одну и движимся влево, то ждем
-        if ((board.isBombAt(x - 2, y - 2)) & // TODO implement directions
+        if ((board.isBombAt(x - 2, y - 2)) && // TODO implement directions
                 (bestDirection.equals(Direction.LEFT))){
             return Direction.STOP;
         }
 
         // еще ждем
-        if ((board.isBombAt(x - 2, y - 1)) & // TODO implement directions
+        if ((board.isBombAt(x - 2, y - 1)) && // TODO implement directions
                 (bestDirection.equals(Direction.LEFT))){
             return Direction.STOP;
         }
 
         // еще ждем
-        if ((board.isBombAt(x - 2, y)) & // TODO implement directions
+        if ((board.isBombAt(x - 2, y)) && // TODO implement directions
                 (bestDirection.equals(Direction.LEFT))){
             return Direction.STOP;
         }
 
         // если мина вверху слева в колонке через одну и движимся влево,
         // а мина уже прошла мимо,то идем дальше
-        if ((board.isBombAt(x - 2, y + 1)) & // TODO implement directions
+        if ((board.isBombAt(x - 2, y + 1)) && // TODO implement directions
                 (bestDirection.equals(Direction.LEFT))){
             return Direction.LEFT;
         }
@@ -263,18 +261,18 @@ public class AI2Solver implements Solver<Board> {
     private Direction findBestDirectionNearStone(Board board, Point me, Direction givenDirection) {
         Direction bestDirection = givenDirection;
 
-        if ((board.isStoneAt(me.getX() - 1, me.getY() - 1)) &
+        if ((board.isStoneAt(me.getX() - 1, me.getY() - 1)) &&
                 (bestDirection.equals(Direction.LEFT))){
             return Direction.STOP;
         }
 
-        if ((board.isStoneAt(me.getX() + 1, me.getY() - 1)) &
+        if ((board.isStoneAt(me.getX() + 1, me.getY() - 1)) &&
                 (bestDirection.equals(Direction.RIGHT))){
             return Direction.STOP;
         }
 
         if (((board.isStoneAt(me.getX(), me.getY() - 1)) ||
-                (board.isStoneAt(me.getX(), me.getY() - 2))) &
+                (board.isStoneAt(me.getX(), me.getY() - 2))) &&
                 (bestDirection.equals(Direction.UP))){
             return Direction.LEFT;
         }

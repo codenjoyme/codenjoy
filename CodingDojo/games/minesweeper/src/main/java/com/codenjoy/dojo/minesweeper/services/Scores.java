@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> gameOverPenalty;
@@ -35,28 +37,28 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> clearBoardScore;
 
-    private volatile int score;
-    private volatile int destroyed;
+    private AtomicInteger score;
+    private AtomicInteger destroyed;
 
     public Scores(int startScore, Settings settings) {
-        this.score = startScore;
-        destroyed = 0;
+        score = new AtomicInteger(startScore);
+        destroyed = new AtomicInteger(0);
 
         gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(15);
         destroyedPenalty = settings.addEditBox("Forgot penalty").type(Integer.class).def(5);
-        destroyedForgotPenalty = settings.addEditBox("Destoyed forgot penalty").type(Integer.class).def(2);
+        destroyedForgotPenalty = settings.addEditBox("Destroyed forgot penalty").type(Integer.class).def(2);
         winScore = settings.addEditBox("Win score").type(Integer.class).def(300);
         clearBoardScore = settings.addEditBox("Clear board score").type(Integer.class).def(1);
     }
 
     @Override
     public Integer getScore() {
-        return score;
+        return score.get();
     }
 
     @Override
     public int clear() {
-        return score = 0;
+        return score.getAndSet(0);
     }
 
     @Override
@@ -74,15 +76,15 @@ public class Scores implements PlayerScores {
         } else if (event.equals(Events.CLEAN_BOARD)) {
             onClearBoard();
         }
-        score = Math.max(0, score);
+        score.set(Math.max(0, score.get()));
     }
 
     private void onClearBoard() {
-        score += clearBoardScore.getValue();
+        score.addAndGet(clearBoardScore.getValue());
     }
 
     private void onWin() {
-        score += winScore.getValue();
+        score.addAndGet(winScore.getValue());
     }
 
     private void onNoMoreCharge() {
@@ -90,18 +92,17 @@ public class Scores implements PlayerScores {
     }
 
     private void onDestroyMine() {
-        destroyed++;
-        score += destroyed;
+        score.addAndGet(destroyed.incrementAndGet());
     }
 
     private void onForgotCharge() {
-        score -= destroyedPenalty.getValue();
-        destroyed -= destroyedForgotPenalty.getValue();
-        destroyed = Math.max(0, destroyed);
+        score.addAndGet(Math.negateExact(destroyedPenalty.getValue()));
+        destroyed.addAndGet(Math.negateExact(destroyedForgotPenalty.getValue()));
+        destroyed.set(Math.max(0, destroyed.get()));
     }
 
     private void onKillOnMine() {
-        score -= gameOverPenalty.getValue();
-        destroyed = 0;
+        score.addAndGet(Math.negateExact(gameOverPenalty.getValue()));
+        destroyed.set(0);
     }
 }

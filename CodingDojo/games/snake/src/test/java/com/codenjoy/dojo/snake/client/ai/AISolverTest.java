@@ -459,9 +459,6 @@ public class AISolverTest {
             Direction actual = Direction.valueOf(new AISolver(null).get(board));
             actualPath.add(actual);
 
-            if (actual.equals("")) {
-                actual = direction;
-            }
             from = actual.change(from);
 
             // в ходе пережвижения тело за собой надо тащить если оно есть

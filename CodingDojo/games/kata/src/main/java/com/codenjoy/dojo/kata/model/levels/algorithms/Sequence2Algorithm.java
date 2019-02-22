@@ -35,7 +35,7 @@ public class Sequence2Algorithm extends AlgorithmLevelImpl {
         for(int i = 1; i < n; i++) {
             String s = res.toString();
             String s2 = StringUtils.leftPad(s, 3, '0');
-            res = res - Integer.valueOf(s2.substring(0, 2));
+            res = res - Integer.parseInt(s2.substring(0, 2));
         }
 
         return res.toString();

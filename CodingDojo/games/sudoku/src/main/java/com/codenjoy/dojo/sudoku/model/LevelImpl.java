@@ -58,7 +58,7 @@ public class LevelImpl implements Level {
             char ch = map.charAt(index);
             char mch = mask.charAt(index);
             if (ch != Elements.BORDER.ch) {
-                result.add(new Cell(xy.getXY(index), Integer.valueOf("" + ch), mch != '?'));
+                result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch), mch != '?'));
             }
         }
 

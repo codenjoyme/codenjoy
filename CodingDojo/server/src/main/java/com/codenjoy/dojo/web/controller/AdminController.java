@@ -262,7 +262,7 @@ public class AdminController {
 
         if (settings.getTimerPeriod() != null) {
             try {
-                timerService.changePeriod(Integer.valueOf(settings.getTimerPeriod()));
+                timerService.changePeriod(Integer.parseInt(settings.getTimerPeriod()));
             } catch (NumberFormatException e) {
                 // do nothing
             }
@@ -289,7 +289,7 @@ public class AdminController {
 
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
-            int count = Integer.valueOf(settings.getGenerateCount());
+            int count = Integer.parseInt(settings.getGenerateCount());
             int numLength = String.valueOf(count).length();
 
             int created = 0;

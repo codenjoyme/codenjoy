@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> gameOverPenalty;
@@ -34,29 +36,29 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> eatStonePenalty;
     private final Parameter<Integer> eatStoneDecrease;
 
-    private volatile int score;
-    private volatile int length;  // TODO remove from here
+    private AtomicInteger score;
+    private AtomicInteger length;  // TODO remove from here
 
     public Scores(int startScore, Settings settings) {
-        this.score = startScore;
+        score = new AtomicInteger(startScore);
 
         gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(0);
         startSnakeLength = settings.addEditBox("Start snake length").type(Integer.class).def(2);
         eatStonePenalty = settings.addEditBox("Eat stone penalty").type(Integer.class).def(0);
         eatStoneDecrease = settings.addEditBox("Eat stone decrease").type(Integer.class).def(10);
 
-        length = startSnakeLength.getValue();
+        length = new AtomicInteger(startSnakeLength.getValue());
     }
 
     @Override
     public int clear() {
-        length = startSnakeLength.getValue();
-        return score = 0;
+        length.set(startSnakeLength.getValue());
+        return score.getAndSet(0);
     }
 
     @Override
     public Integer getScore() {
-        return score;
+        return score.get();
     }
 
     @Override
@@ -68,22 +70,21 @@ public class Scores implements PlayerScores {
         }  else if (event.equals(Events.EAT_STONE)) {
             snakeEatStone();
         }
-        score = Math.max(0, score);
-        length = Math.max(startSnakeLength.getValue(), length);
+        score.set(Math.max(0, score.get()));
+        length.set(Math.max(startSnakeLength.getValue(), length.get()));
     }
 
     private void snakeIsDead() {
-        score -= gameOverPenalty.getValue();
-        length = startSnakeLength.getValue();
+        score.addAndGet(Math.negateExact(gameOverPenalty.getValue()));
+        length.set(startSnakeLength.getValue());
     }
 
     private void snakeEatApple() {
-        length++;
-        score += length;
+        score.addAndGet(length.incrementAndGet());
     }
 
     private void snakeEatStone() {
-        score -= eatStonePenalty.getValue();
-        length -= eatStoneDecrease.getValue();
+        score.addAndGet(Math.negateExact(eatStonePenalty.getValue()));
+        length.addAndGet(Math.negateExact(eatStoneDecrease.getValue()));
     }
 }

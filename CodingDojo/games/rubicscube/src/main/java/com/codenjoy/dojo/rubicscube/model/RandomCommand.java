@@ -42,12 +42,12 @@ public class RandomCommand {
     public String next() {
         int count = dice.next(100);
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < count; i++) {
             int command = dice.next(parts.size());
 
-            result += parts.get(command);
+            result.append(parts.get(command));
         }
-        return result;
+        return result.toString();
     }
 }

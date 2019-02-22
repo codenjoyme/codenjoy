@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,12 +23,21 @@ package com.codenjoy.dojo.services;
  */
 
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class RandomDice implements Dice {
 
-    @Override
-    public int next(int n) {
-        return new Random().nextInt(n);
-    }
+  private static final SecureRandom random = new SecureRandom(String.valueOf(System.nanoTime()).getBytes());
+
+  /**
+   * Simulates a dice throwing.
+   *
+   * @param n number of dice faces
+   * @return integer between 0 (inclusively) and n (exclusively)
+   */
+  @Override
+  public int next(int n) {
+    if (n <= 0) throw new IllegalArgumentException("Dice should have a positive number of faces");
+    return random.nextInt(n);
+  }
 }

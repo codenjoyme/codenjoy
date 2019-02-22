@@ -69,9 +69,9 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         } else if (Boolean.class.equals(type)) {
             return (T) Boolean.valueOf(value);
         } else if (String.class.equals(type)) {
-            return (T) Boolean.valueOf(value).toString();
+            return (T) String.valueOf(value);
         } else {
-            return tryParse(Boolean.valueOf(value));
+            return tryParse(value);
         }
     }
 
