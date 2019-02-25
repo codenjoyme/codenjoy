@@ -1,5 +1,5 @@
-def fromVersion = '1.0.27'
-def toVersion = '1.0.28'
+def fromVersion = '1.0.28'
+def toVersion = '1.0.29'
 
 // select root directories
 def base = '..\\..\\..\\..\\..\\..\\..\\..\\';
@@ -35,6 +35,8 @@ def files = dirs3.collect {
 }
 files << new File("${base}games\\engine\\setup.bat")
 files << new File("${base}portable\\windows-cmd\\00-settings.bat")
+files << new File("${base}portable\\linux-docker-compose\\balancer.yml")
+files << new File("${base}portable\\linux-docker-compose\\codenjoy.yml")
 files << new File("${base}games\\pom.xml")
 files << new File("${base}builder\\README.md")
 files << new File("${base}pom.xml")

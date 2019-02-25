@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-balancer</artifactId>
-    <version>1.0.27</version>
+    <version>1.0.28</version>
     <packaging>war</packaging>
 
     <properties>
