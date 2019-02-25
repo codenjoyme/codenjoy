@@ -9,21 +9,21 @@
     <version>1.0.27</version>
 
     <properties>
-        <jetty.version>9.3.14.v20161028</jetty.version>
+        <jetty.version>9.3.25.v20180904</jetty.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <logback.version>1.2.3</logback.version>
-        <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <commons-codec.version>1.11</commons-codec.version>
-        <org.json.version>20160810</org.json.version>
-        <com.cedarsoftware.jsonio.version>4.9.9</com.cedarsoftware.jsonio.version>
+        <commons-collections.version>4.3</commons-collections.version>
+        <commons-lang.version>3.8.1</commons-lang.version>
+        <commons-codec.version>1.12</commons-codec.version>
+        <json.version>20180813</json.version>
+        <jsonio.version>4.10.1</jsonio.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>1.10.19</mockito.version>
+        <mockito.version>2.24.0</mockito.version>
 
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-resources.version>2.7</maven-resources.version>
@@ -57,13 +57,13 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
             <version>${commons-collections.version}</version>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
         <dependency>
@@ -74,12 +74,12 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>${org.json.version}</version>
+            <version>${json.version}</version>
         </dependency>
         <dependency>
             <groupId>com.cedarsoftware</groupId>
             <artifactId>json-io</artifactId>
-            <version>${com.cedarsoftware.jsonio.version}</version>
+            <version>${jsonio.version}</version>
         </dependency>
 
         <dependency>
@@ -96,7 +96,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
