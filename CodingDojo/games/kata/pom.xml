@@ -14,8 +14,6 @@
 
     <properties>
         <module.name>kata</module.name>
-
-        <org.reflections.version>0.9.9-RC2</org.reflections.version>
     </properties>
 
     <repositories>
@@ -30,39 +28,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>engine</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.cedarsoftware</groupId>
-            <artifactId>json-io</artifactId>
-        </dependency>
-        <!--<dependency>
-            <groupId>org.approvaltests</groupId>
-            <artifactId>approvaltests</artifactId>
-            <version>0.13</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/ApprovalTests-013.jar</systemPath>
-        </dependency>-->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>${org.reflections.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.20</version>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
-           <groupId>org.apache.commons</groupId>
+            <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>

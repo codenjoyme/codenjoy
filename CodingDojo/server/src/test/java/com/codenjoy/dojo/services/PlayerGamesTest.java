@@ -122,6 +122,17 @@ public class PlayerGamesTest {
 
         PlayerGame playerGame = playerGames.get(otherPlayer.getName());
 
+        System.out.println(">>> otherPlayer");
+        System.out.println(">>> " + otherPlayer.getClass().getSimpleName());
+        System.out.println(">>> " + otherPlayer.hashCode());
+
+        System.out.println(">>> playerGame.getPlayer()");
+        System.out.println(">>> " + playerGame.getPlayer().getClass().getSimpleName());
+        System.out.println(">>> " + playerGame.getPlayer().hashCode());
+
+        System.out.println("==> " + (otherPlayer == playerGame.getPlayer()));
+        System.out.println("eq> " + (otherPlayer.equals(playerGame.getPlayer())));
+
         assertSame(otherPlayer, playerGame.getPlayer());
     }
 

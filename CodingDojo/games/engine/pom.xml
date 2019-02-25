@@ -20,6 +20,7 @@
         <json.version>20180813</json.version>
         <jsonio.version>4.10.1</jsonio.version>
 
+        <reflections.version>0.9.11</reflections.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
         <junit.version>4.12</junit.version>
@@ -81,12 +82,18 @@
             <artifactId>json-io</artifactId>
             <version>${jsonio.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>${reflections.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
         </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
