@@ -23,7 +23,8 @@ package com.codenjoy.dojo.services.hash;
  */
 
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -97,6 +98,10 @@ public class Hash {
         System.out.printf("UPDATE players " +
                 "SET password = '%s', code = '%s' " +
                 "WHERE email = '%s';%n", passwordHash, code, email);
+    }
+
+    public static String getRandomId() {
+        return RandomStringUtils.random(20, "abcdefghijklmnopqrstuvwxyz1234567890");
     }
 
 }

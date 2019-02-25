@@ -26,9 +26,9 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -177,7 +177,7 @@ public class RegistrationController {
         String playerId = registration.getEmailByReadableName(playerReadableName);
 
         if (StringUtils.isEmpty(playerId)) {
-            playerId = RandomStringUtils.random(20, "abcdefghijklmnopqrstuvwxyz1234567890");
+            playerId = Hash.getRandomId();
             player.setName(playerId);
 
             return registerByEmail(player, result, request, model);
@@ -190,8 +190,15 @@ public class RegistrationController {
         }
 
         player.setName(playerId);
-        String code = registration.getCode(playerId);
-        return "redirect:/" + getBoardUrl(code, player);
+
+        String last = playerService.get(playerId).getGameName();
+        String current = player.getGameName();
+        if (last != null && last.equals(current)) {
+            String code = registration.getCode(playerId);
+            return "redirect:/" + getBoardUrl(code, player);
+        }
+
+        return registerByEmail(player, result, request, model);
     }
 
     public String registerByEmail(Player player, BindingResult result, HttpServletRequest request, Model model) {
