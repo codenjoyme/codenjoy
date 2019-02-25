@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.levels.level.MockLevels;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 

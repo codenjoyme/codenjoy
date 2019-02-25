@@ -27,7 +27,7 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class Player implements ScreenRecipient, Closeable {
 

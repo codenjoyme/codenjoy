@@ -35,8 +35,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.tetris.model.levels.random.ProbabilityRandomizerTest.COUNT_ITERATIONS;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
 

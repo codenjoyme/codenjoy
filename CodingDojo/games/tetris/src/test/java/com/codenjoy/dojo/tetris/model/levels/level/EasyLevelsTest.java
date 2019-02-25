@@ -31,7 +31,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.tetris.model.Type.*;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
 

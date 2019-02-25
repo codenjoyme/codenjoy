@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class Player {
 

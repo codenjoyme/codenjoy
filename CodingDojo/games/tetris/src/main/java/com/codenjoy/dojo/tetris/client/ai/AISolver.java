@@ -31,8 +31,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.model.*;
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.LinkedList;

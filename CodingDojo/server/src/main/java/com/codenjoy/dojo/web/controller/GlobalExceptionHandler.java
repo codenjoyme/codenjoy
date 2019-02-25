@@ -25,7 +25,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.hash.Hash;
-import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

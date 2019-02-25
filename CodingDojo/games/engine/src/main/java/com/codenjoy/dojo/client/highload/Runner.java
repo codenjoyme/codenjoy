@@ -23,7 +23,7 @@ package com.codenjoy.dojo.client.highload;
  */
 
 import com.codenjoy.dojo.services.hash.Hash;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.*;
 

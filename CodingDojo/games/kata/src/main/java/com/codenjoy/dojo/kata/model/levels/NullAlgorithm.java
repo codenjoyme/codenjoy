@@ -23,7 +23,7 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class NullAlgorithm implements Algorithm {
 

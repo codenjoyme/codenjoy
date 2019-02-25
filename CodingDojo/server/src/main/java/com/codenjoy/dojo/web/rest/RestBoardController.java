@@ -32,7 +32,7 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

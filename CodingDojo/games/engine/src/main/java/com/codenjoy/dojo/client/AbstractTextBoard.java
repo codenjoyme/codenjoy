@@ -25,7 +25,7 @@ package com.codenjoy.dojo.client;
 
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.UnicodeUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class AbstractTextBoard implements ClientBoard {
 

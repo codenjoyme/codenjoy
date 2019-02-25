@@ -24,7 +24,7 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class Sequence2Algorithm extends AlgorithmLevelImpl {
 
