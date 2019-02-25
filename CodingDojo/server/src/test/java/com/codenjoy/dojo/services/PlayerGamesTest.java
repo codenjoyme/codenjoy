@@ -53,14 +53,14 @@ public class PlayerGamesTest {
     private List<GameField> fields = new LinkedList<>();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         playerGames = new PlayerGames();
     }
 
     private PlayerGame removed;
 
     @Test
-    public void testRemove() throws Exception {
+    public void testRemove() {
         // given
         Player player = createPlayer();
 
@@ -82,7 +82,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testGet() throws Exception {
+    public void testGet() {
         // given
         Player player = createPlayer();
 
@@ -97,7 +97,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testGetByIndex() throws Exception {
+    public void testGetByIndex() {
         // given
         Player player = createPlayer();
 
@@ -109,7 +109,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testAdd() throws Exception {
+    public void testAdd() {
         // given
         Player player = createPlayer();
 
@@ -117,7 +117,7 @@ public class PlayerGamesTest {
         Player otherPlayer = createPlayer();
 
         // then
-        assertFalse(playerGames.isEmpty());
+        assertEquals(false, playerGames.isEmpty());
         assertEquals(2, playerGames.size());
 
         PlayerGame playerGame = playerGames.get(otherPlayer.getName());
@@ -126,7 +126,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testIterator() throws Exception {
+    public void testIterator() {
         // given
         Player player = createPlayer();
         Player otherPlayer = createPlayer();
@@ -196,7 +196,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testPlayers() throws Exception {
+    public void testPlayers() {
         // given
         Player player = createPlayer();
         Player otherPlayer = createPlayer();
@@ -211,7 +211,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    public void testGetAll() {
         // given
         Player player = createPlayer();
         Player secondPlayer = createPlayer();
@@ -234,7 +234,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testGetAllPlayersByType() throws Exception {
+    public void testGetAllPlayersByType() {
         // given
         Player player = createPlayer();
         Player secondPlayer = createPlayer();
@@ -261,7 +261,7 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testClear() throws Exception {
+    public void testClear() {
         // given
         Player player = createPlayer();
         Player player2 = createPlayer();
