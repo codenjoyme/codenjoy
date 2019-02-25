@@ -14,8 +14,6 @@
 
     <properties>
         <module.name>snake</module.name>
-        <scala.version>2.12.7</scala.version>
-        <maven-scala-plugin.version>2.15.2</maven-scala-plugin.version>
     </properties>
 
     <repositories>
@@ -31,6 +29,10 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
         </dependency>
@@ -38,6 +40,7 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -57,12 +60,6 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-reflect</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
         </dependency>
     </dependencies>
 
@@ -88,24 +85,9 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
             </plugin>
-
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
-                <version>${maven-scala-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <args>
-                        <arg>-g:line</arg>
-                    </args>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.client
+package com.codenjoy.dojo.snakebattle.client
 
 import com.codenjoy.dojo.client.{Solver, WebSocketRunner}
 import com.codenjoy.dojo.services.{Dice, Direction, RandomDice}
@@ -24,7 +24,6 @@ class YourSolverScala(var dice: Dice) extends Solver[BoardScala] {
     * @return направление, куда следует двигаться змейке
     */
   override def get(board: BoardScala): String = {
-    if (board.isGameOver) return ""
     Direction.UP.toString
   }
 }
