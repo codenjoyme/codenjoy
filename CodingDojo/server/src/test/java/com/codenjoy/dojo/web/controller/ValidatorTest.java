@@ -450,34 +450,34 @@ public class ValidatorTest {
 
         shouldOk(() -> validator.checkReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
 
-        shouldError("Readable player name is invalid: 'Стивен'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Стивен'",
                 () -> validator.checkReadableName("Стивен"));
 
-        shouldError("Readable player name is invalid: 'Я Д'Артаньян'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Я Д'Артаньян'",
                 () -> validator.checkReadableName("Я Д'Артаньян"));
 
-        shouldError("Readable player name is invalid: 'Дефис-нельзя'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Дефис-нельзя'",
                 () -> validator.checkReadableName("Дефис-нельзя"));
 
-        shouldError("Readable player name is invalid: 'Двапробела  нельзя'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Двапробела  нельзя'",
                 () -> validator.checkReadableName("Двапробела  нельзя"));
 
-        shouldError("Readable player name is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
                 () -> validator.checkReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
 
-        shouldError("Readable player name is invalid: 'email#&*^#gmail%#&^*com'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'email#&*^#gmail%#&^*com'",
                 () -> validator.checkReadableName("email#&*^#gmail%#&^*com"));
 
-        shouldError("Readable player name is invalid: 'null'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'null'",
                 () -> validator.checkReadableName(null));
 
-        shouldError("Readable player name is invalid: 'NuLL'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'NuLL'",
                 () -> validator.checkReadableName("NuLL"));
 
-        shouldError("Readable player name is invalid: ''",
+        shouldError("Player name is invalid (should be 'Name Surname'): ''",
                 () -> validator.checkReadableName(""));
 
-        shouldError("Readable player name is invalid: 'null'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'null'",
                 () -> validator.checkReadableName(null));
     }
 

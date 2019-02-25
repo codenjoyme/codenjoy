@@ -87,7 +87,7 @@ public class Validator {
     public void checkReadableName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !isFullName(input)) {
-            throw new IllegalArgumentException(String.format("Readable player name is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format("Player name is invalid (should be 'Name Surname'): '%s'", input));
         }
     }
 
