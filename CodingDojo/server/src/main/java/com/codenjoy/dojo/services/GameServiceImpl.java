@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -59,11 +60,11 @@ public class GameServiceImpl implements GameService {
         result.remove(NullGameType.class);
         result.remove(AbstractGameType.class);
 
-        result.stream()
+        result.removeAll(result.stream()
                 .filter(it -> Arrays.asList("chess", "sokoban", "expansion").stream()
                         .filter(name -> it.getPackage().toString().contains(name))
                         .count() != 0)
-                .forEach(result::remove);
+                .collect(Collectors.toList()));
 
         return result;
     }
