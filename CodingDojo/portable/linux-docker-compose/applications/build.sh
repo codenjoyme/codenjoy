@@ -15,7 +15,6 @@ else
     echo "GIT_REPO=$GIT_REPO"
     echo "REVISION=$REVISION"
     echo "GAME=$GAME"
-    echo "GAME_PROJECT=$GAME_PROJECT"
     echo "[0m"
 fi
 
@@ -85,7 +84,7 @@ if [ "x$BUILD_SERVER" = "xtrue" ]; then
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build game
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/$GAME_PROJECT && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/$GAME && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build server
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
