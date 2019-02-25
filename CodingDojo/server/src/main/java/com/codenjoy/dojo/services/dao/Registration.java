@@ -23,14 +23,14 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,17 +65,19 @@ public class Registration {
     public boolean registered(String id) {
         return pool.select("SELECT count(*) AS total FROM users WHERE id = ?;",
                 new Object[]{id},
-                rs -> {
-                    if (!rs.next()) {
-                        return false;
-                    }
-                    int count = rs.getInt("total");
-                    if (count > 1) {
-                        throw new IllegalStateException("Found more than one user with id " + id);
-                    }
-                    return count > 0;
-                }
+                rs -> exists(rs, " id " + id)
         );
+    }
+
+    private Boolean exists(ResultSet rs, String details) throws SQLException {
+        if (!rs.next()) {
+            return false;
+        }
+        int count = rs.getInt("total");
+        if (count > 1) {
+            throw new IllegalStateException("Found more than one user with " + details);
+        }
+        return count > 0;
     }
 
     public String register(String id, String email, String readableName, String password, String data) {
@@ -94,7 +96,7 @@ public class Registration {
 
     // TODO test me
     public String checkUser(String id) {
-        if (getCode(id) != null) {
+        if (getCodeById(id) != null) {
             return id;
         } else {
             return null;
@@ -102,7 +104,7 @@ public class Registration {
     }
 
     public String checkUser(String id, String code) {
-        String stored = getEmail(code);
+        String stored = getIdByCode(code);
 
         if (stored == null) {
             return null;
@@ -116,11 +118,11 @@ public class Registration {
     }
 
     // TODO test me
-    public String checkUserByPassword(String emailOrId, String password) {
-        return checkUser(emailOrId, Hash.getCode(emailOrId, password));
+    public String checkUserByPassword(String id, String password) {
+        return checkUser(id, Hash.getCode(id, password));
     }
 
-    public String getEmail(String code) {
+    public String getIdByCode(String code) {
         return pool.select("SELECT id FROM users WHERE code = ?;",
                 new Object[]{code},
                 rs -> rs.next() ? rs.getString("id") : null
@@ -128,21 +130,53 @@ public class Registration {
     }
 
     // TODO test me
-    public String getEmailByReadableName(String name) {
+    public boolean emailIsUsed(String email) {
+        return pool.select("SELECT count(*) AS total FROM users WHERE email = ?;",
+                new Object[]{email},
+                rs -> exists(rs, " email " + email)
+        );
+    }
+
+    // TODO test me
+    public boolean nameIsUsed(String name) {
+        return pool.select("SELECT count(*) AS total FROM users WHERE readable_name = ?;",
+                new Object[]{name},
+                rs -> exists(rs, " name " + name)
+        );
+    }
+
+    // TODO test me
+    public String getEmailById(String id) {
+        return pool.select("SELECT email FROM users WHERE id = ?;",
+                new Object[]{id},
+                rs -> rs.next() ? rs.getString("email") : null
+        );
+    }
+
+    // TODO test me
+    public String getIdByName(String name) {
         return pool.select("SELECT id FROM users WHERE readable_name = ?;",
                 new Object[]{name},
                 rs -> rs.next() ? rs.getString("id") : null
         );
     }
 
-    public String getReadableName(String id) {
+    // TODO test me
+    public String getIdByEmail(String email) {
+        return pool.select("SELECT id FROM users WHERE email = ?;",
+                new Object[]{email},
+                rs -> rs.next() ? rs.getString("id") : null
+        );
+    }
+
+    public String getNameById(String id) {
         return pool.select("SELECT readable_name FROM users WHERE id = ?;",
                 new Object[]{id},
                 rs -> rs.next() ? rs.getString("readable_name") : null
         );
     }
 
-    public String getCode(String id) {
+    public String getCodeById(String id) {
         return pool.select("SELECT code FROM users WHERE id = ?;",
                 new Object[]{id},
                 rs -> rs.next() ? rs.getString("code") : null
@@ -154,9 +188,15 @@ public class Registration {
                 new Object[]{1, code});
     }
 
-    public void updateReadableName(String id, String readableName) {
+    public void updateName(String id, String name) {
         pool.update("UPDATE users SET readable_name = ? WHERE id = ?;",
-                new Object[]{readableName, id});
+                new Object[]{name, id});
+    }
+
+    // TODO test me
+    public void updateNameAndEmail(String id, String name, String email) {
+        pool.update("UPDATE users SET readable_name = ?, email = ? WHERE id = ?;",
+                new Object[]{name, email, id});
     }
 
     public static class User {
@@ -263,7 +303,7 @@ public class Registration {
         }
 
         Object[] parameters = {user.getReadableName(), user.getEmail(), 1, user.getPassword(), code, user.getData(), user.getId()};
-        if (getCode(user.getId()) == null) {
+        if (getCodeById(user.getId()) == null) {
             pool.update("INSERT INTO users (readable_name, email, email_approved, password, code, data, id) VALUES (?,?,?,?,?,?,?);",
                     parameters);
         } else {

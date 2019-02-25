@@ -122,6 +122,16 @@ public class Validator {
         }
     }
 
+    // TODO test me
+    public void checkEmail(String input, boolean canBeNull) {
+        boolean empty = isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && isEmail(input)))
+        {
+            throw new IllegalArgumentException(String.format("Player email is invalid: '%s'", input));
+        }
+    }
+
     private boolean isEmail(String input) {
         return input != null
                 && input.length() <= MAX_PLAYER_ID_LENGTH

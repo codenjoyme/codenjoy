@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
@@ -150,7 +149,7 @@ public class RegistrationTest {
         service.register("user", "email", "name", "pass", "data");
 
         // when
-        String code = service.getCode("user");
+        String code = service.getCodeById("user");
 
         // then
         assertEquals("3514017434644657823", code);
@@ -162,7 +161,7 @@ public class RegistrationTest {
         service.register("user", "email", "name", "pass", "data");
 
         // when
-        String code = service.getCode("other_user");
+        String code = service.getCodeById("other_user");
 
         // then
         assertEquals(null, code);
@@ -174,7 +173,7 @@ public class RegistrationTest {
         String code = service.register("user", "email", "name", "pass", "data");
 
         // when
-        String email = service.getEmail(code);
+        String email = service.getIdByCode(code);
 
         // then
         assertEquals("user", email);
@@ -186,7 +185,7 @@ public class RegistrationTest {
         service.register("user", "email", "name", "pass", "data");
 
         // when
-        String name = service.getReadableName("user");
+        String name = service.getNameById("user");
 
         // then
         assertEquals("name", name);
@@ -198,7 +197,7 @@ public class RegistrationTest {
         service.register("user", "email", "name", "pass", "data");
 
         // when
-        String email = service.getEmail("bad_code");
+        String email = service.getIdByCode("bad_code");
 
         // then
         assertNull(email);
@@ -244,7 +243,7 @@ public class RegistrationTest {
                 service.getUsers().toString());
 
         // when
-        service.updateReadableName("user1", "updatedName1");
+        service.updateName("user1", "updatedName1");
 
         // then
         assertEquals("[User{id='user1', " +

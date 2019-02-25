@@ -93,7 +93,7 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        Player player = playerService.get(registration.getEmail(code));
+        Player player = playerService.get(registration.getIdByCode(code));
         request.setAttribute("registered", player != NullPlayer.INSTANCE);
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
