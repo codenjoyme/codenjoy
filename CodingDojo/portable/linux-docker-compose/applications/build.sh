@@ -80,6 +80,9 @@ if [ "x$BUILD_SERVER" = "xtrue" ]; then
         # build war with all games
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/builder && mvn clean install -Dcontext=${CODENJOY_CONTEXT} -DallGames -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
     else
+        # build games parent
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games && mvn clean install -N -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+
         # build engine
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
 
