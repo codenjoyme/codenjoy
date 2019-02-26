@@ -11,11 +11,19 @@ echo "==================================================== Init structure ======
 echo "========================================================================================================================[0m"
 
 if [ "x$BASIC_AUTH_LOGIN" = "x" ]; then
-    BASIC_AUTH_LOGIN=codenjoy
+    . config.sh ;
 fi
 
 if [ "x$BASIC_AUTH_PASSWORD" = "x" ]; then
-    BASIC_AUTH_PASSWORD=codenjoy
+    . config.sh ;
+fi
+
+if [ "x$TIMEZONE" = "x" ]; then
+    . config.sh ;
+fi
+
+if [ "x$DATABASE_TYPE" = "x" ]; then
+    . config.sh ;
 fi
 
 eval_echo() {
@@ -27,7 +35,7 @@ eval_echo() {
     eval $to_run
 }
 
-eval_echo "ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
+eval_echo "unlink /etc/localtime & ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
 sudo dpkg-reconfigure -f noninteractive tzdata
 
 JETTY_UID=999
