@@ -26,14 +26,13 @@ namespace Demo
 {
     class Program
     {
+        // you can get this URL after registration on the server with your email
+        static string ServerUrl = "http://127.0.0.1:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+
         static void Main(string[] args)
         {
-            const string serverAndPort = "yourservername:1234";
-            const string playerName = "playeraddress@email.com";
-            const string playerCode = "123456789012345678";
-
             // creating custom loderunner's AI client
-            var bot = new MyCustomLoderunnerAI(serverAndPort, playerName, playerCode);
+            var bot = new MyCustomLoderunnerAI(ServerUrl);
             
             // starting thread with playing loderunner
             (new Thread(bot.Play)).Start();

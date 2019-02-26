@@ -20,7 +20,9 @@
  * #L%
  */
 using System;
+using System.Linq;
 using System.Threading;
+using System.Web;
 using WebSocketSharp;
 
 namespace Loderunner.Api
@@ -29,18 +31,12 @@ namespace Loderunner.Api
     {
         private const string ResponsePrefix = "board=";
 
-        protected LoderunnerBase(string serverAndPort, string userName, string code)
+        protected LoderunnerBase(string serverUrl)
         {
-            ServerAndPort = serverAndPort;
-            UserName = userName;
-            Code = code;
+            ServerUrl = serverUrl;
         }
 
-        public string ServerAndPort { get; private set; }
-
-        public string UserName { get; private set; }
-
-        public string Code { get; private set; }
+        public string ServerUrl { get; private set; }
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -49,8 +45,9 @@ namespace Loderunner.Api
 
         public void Play()
         {
-            var socket = new WebSocket(
-                string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}", ServerAndPort, UserName, Code));
+            string url = GetWebSocketUrl(this.ServerUrl);
+
+            var socket = new WebSocket(url);
 
             socket.OnMessage += Socket_OnMessage;
             socket.Connect();
@@ -59,6 +56,25 @@ namespace Loderunner.Api
             {
                 Thread.Sleep(50);
             }
+        }
+
+        private static string GetWebSocketUrl(string serverUrl)
+        {
+            Uri uri = new Uri(serverUrl);
+
+            var server = $"{uri.Host}:{uri.Port}";
+            var userName = uri.Segments.Last();
+            var code = HttpUtility.ParseQueryString(uri.Query).Get("code");
+
+            return GetWebSocketUrl(userName, code, server);
+        }
+
+        private static string GetWebSocketUrl(string userName, string code, string server)
+        {
+            return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
+                server,
+                Uri.EscapeDataString(userName),
+                code);
         }
 
         private void Socket_OnMessage(object sender, MessageEventArgs e)
