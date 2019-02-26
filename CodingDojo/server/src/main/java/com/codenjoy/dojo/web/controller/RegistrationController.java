@@ -68,28 +68,22 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String openRegistrationForm(HttpServletRequest request, Model model) {
+    public String openRegistrationForm(HttpServletRequest request, Model model,
+                                       @RequestParam(name = "id", required = false) String id,
+                                       @RequestParam(name = "email", required = false) String email,
+                                       @RequestParam(name = "readableName", required = false) String name)
+    {
         String ip = getIp(request);
 
-        // TODO вэй вэй - исправь это как-то
-        String id = request.getParameter("id");
-        String email;
-        if (StringUtils.isEmpty(id)) {
-            email = (String)model.asMap().get("email");
-        } else {
+        if (!StringUtils.isEmpty(id)) {
             email = registration.getEmailById(id);
-        }
-        String name = request.getParameter("readableName");
-        if (StringUtils.isEmpty(name)) {
-            name = (String)model.asMap().get("readableName");
-            if (StringUtils.isEmpty(name)) {
-                name = registration.getNameById(id);
+            name = registration.getNameById(id);
+            if (!model.containsAttribute("bad_email")) {
+                validator.checkPlayerName(email, CAN_BE_NULL);
             }
         }
+
         String gameName = request.getParameter(AdminController.GAME_NAME);
-        if (!model.containsAttribute("bad_email")) {
-            validator.checkPlayerName(email, CAN_BE_NULL);
-        }
         if (!model.containsAttribute("bad_game")) {
             validator.checkGameName(gameName, CAN_BE_NULL);
         }
@@ -174,14 +168,11 @@ public class RegistrationController {
     @RequestMapping(method = RequestMethod.POST)
     public String registerByNameOrEmail(Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, null, null);
         }
 
         String name = player.getReadableName();
-        model.addAttribute("readableName", name);
-
         String email = player.getEmail();
-        model.addAttribute("email", email);
 
         String gameName = player.getGameName();
         try {
@@ -190,7 +181,7 @@ public class RegistrationController {
             model.addAttribute("bad_name", true);
             model.addAttribute("bad_name_message", e.getMessage());
 
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, email, name);
         }
         try {
             validator.checkEmail(email, CANT_BE_NULL);
@@ -198,7 +189,7 @@ public class RegistrationController {
             model.addAttribute("bad_email", true);
             model.addAttribute("bad_email_message", e.getMessage());
 
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, email, name);
         }
         try {
             validator.checkGameName(gameName, CANT_BE_NULL);
@@ -206,7 +197,7 @@ public class RegistrationController {
             model.addAttribute("bad_game", true);
             model.addAttribute("bad_game_message", e.getMessage());
 
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, email, name);
         }
 
         String idByName = registration.getIdByName(name);
@@ -224,7 +215,7 @@ public class RegistrationController {
                 model.addAttribute("email_busy", emailIsUsed);
                 model.addAttribute("name_busy", emailIsUsed);
 
-                return openRegistrationForm(request, model);
+                return openRegistrationForm(request, model, null, email, name);
             }
 
             return register(player, result, request, model);
@@ -237,7 +228,7 @@ public class RegistrationController {
             model.addAttribute("email_busy", emailIsUsed);
             model.addAttribute("name_busy", nameIsUsed);
 
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, email, name);
         }
 
         if (idByEmail != null && idByName != null && !idByEmail.equals(idByName)) {
@@ -245,7 +236,7 @@ public class RegistrationController {
             model.addAttribute("email_busy", !id.equals(idByEmail));
             model.addAttribute("name_busy", !id.equals(idByName));
 
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, email, name);
         }
 
         player.setName(id);
@@ -268,13 +259,16 @@ public class RegistrationController {
     }
 
     private boolean sameGame(Player player, String id) {
+        if (!playerService.contains(id)) {
+            return false;
+        }
         String last = playerService.get(id).getGameName();
         return last != null && last.equals(player.getGameName());
     }
 
     public String register(Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, null, null, null);
         }
 
         String id = player.getName();
@@ -293,7 +287,7 @@ public class RegistrationController {
             if (code == null) {
                 model.addAttribute("bad_pass", true);
 
-                return openRegistrationForm(request, model);
+                return openRegistrationForm(request, model, id, email, name);
             }
             registration.updateNameAndEmail(id, name, email);
         } else {
@@ -341,7 +335,7 @@ public class RegistrationController {
                     gameName, request.getRemoteAddr());
         } else {
             model.addAttribute("wait_approve", true);
-            return openRegistrationForm(request, model);
+            return openRegistrationForm(request, model, id, email, name);
         }
     }
 
