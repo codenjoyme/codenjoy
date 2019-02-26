@@ -51,9 +51,7 @@ public class GameServiceImpl implements GameService {
 
     private List<Class<? extends GameType>> allGames() {
         List<Class<? extends GameType>> result = new LinkedList<>();
-        result.addAll(findInPackage("com"));
-        result.addAll(findInPackage("org"));
-        result.addAll(findInPackage("net"));
+        result.addAll(findInPackage("com.codenjoy.dojo"));
 
         Collections.sort(result, Comparator.comparing(Class::getName));
 
