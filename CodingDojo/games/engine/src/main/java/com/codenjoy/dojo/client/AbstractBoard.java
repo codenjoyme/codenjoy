@@ -153,7 +153,9 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
      * @param x X coordinate.
      * @param y Y coordinate.
      * @param element Element that we try to detect on near point.
-     * @return Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.
+     * @return Returns count of elements with type specified near
+     * (at left, right, down, up, left-down, left-up,
+     *     right-down, right-up) {x,y} point.
      */
     public int countNear(int x, int y, E element) {
         int count = 0;
@@ -172,7 +174,8 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
     /**
      * @param x X coordinate.
      * @param y Y coordinate.
-     * @return All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.
+     * @return All elements around (at left, right, down, up,
+     *     left-down, left-up, right-down, right-up) position.
      */
     public List<E> getNear(int x, int y) {
         List<E> result = new LinkedList<E>();

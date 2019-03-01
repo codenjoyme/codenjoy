@@ -51,6 +51,10 @@ public class Board extends AbstractBoard<Elements> {
             return true;
         }
 
+        return getBarriers().contains(pt(x, y));
+    }
+
+    public List<Point> getBarriers() {
         return get(Elements.BATTLE_WALL,
                 Elements.CONSTRUCTION,
                 Elements.CONSTRUCTION_DESTROYED_DOWN,
@@ -66,8 +70,7 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.CONSTRUCTION_DESTROYED_UP_LEFT,
                 Elements.CONSTRUCTION_DESTROYED_RIGHT_UP,
                 Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT,
-                Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT)
-            .contains(pt(x, y));
+                Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT);
     }
 
     public Point getMe() {
