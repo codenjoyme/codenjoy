@@ -107,7 +107,7 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, Events.KILL_OTHER_TANK);
+        onlyEvent(events, Events.KILL_OTHER_AI_TANK);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class TanksEventsTest {
                 "☼ ►  Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, Events.KILL_OTHER_TANK);
+        onlyEvent(events, Events.KILL_OTHER_HERO_TANK);
         onlyEvent(events2, Events.KILL_YOUR_TANK);
     }
 
@@ -231,7 +231,7 @@ public class TanksEventsTest {
                 "☼☼☼☼☼☼☼\n");
 
         onlyEvent(events, Events.KILL_YOUR_TANK);
-        onlyEvent(events2, Events.KILL_OTHER_TANK);
+        onlyEvent(events2, Events.KILL_OTHER_HERO_TANK);
     }
 
     private void noEvents(EventListener ev) {

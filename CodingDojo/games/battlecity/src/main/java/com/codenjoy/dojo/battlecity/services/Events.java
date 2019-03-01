@@ -24,5 +24,7 @@ package com.codenjoy.dojo.battlecity.services;
 
 
 public enum Events {
-    KILL_YOUR_TANK, KILL_OTHER_TANK;
+    KILL_YOUR_TANK,
+    KILL_OTHER_HERO_TANK,
+    KILL_OTHER_AI_TANK;
 }

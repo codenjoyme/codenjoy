@@ -30,8 +30,8 @@ import java.util.Map;
 
 public class SettingsImpl implements Settings {
 
-    private List<Parameter<?>> parameters = new LinkedList<Parameter<?>>();
-    private Map<String, Parameter<?>> map = new HashMap<String, Parameter<?>>();
+    private List<Parameter<?>> parameters = new LinkedList<>();
+    private Map<String, Parameter<?>> map = new HashMap<>();
 
     @Override
     public List<Parameter<?>> getParameters() {
