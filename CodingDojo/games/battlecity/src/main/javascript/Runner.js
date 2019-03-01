@@ -55,7 +55,7 @@ var processBoard = function(boardString) {
 };
 
 // you can get this code after registration on the server with your email
-var url = "http://127.0.0.1:8080/codenjoy-contest/board/player/tofxije4urfiw1xj2d5x?code=4780229493598912478";
+var url = "http://algoritmix.dan-it.kiev.ua/codenjoy-contest/board/player/eae1bel6klfsh5kb3veh?code=5257725287416123010";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
