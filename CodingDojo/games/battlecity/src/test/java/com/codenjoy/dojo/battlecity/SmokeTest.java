@@ -449,7 +449,7 @@ public class SmokeTest {
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
                         "2:Answer: UP\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK\n" +
+                        "Fire Event: KILL_OTHER_HERO_TANK[1]\n" +
                         "Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:2\n" +
@@ -574,7 +574,7 @@ public class SmokeTest {
                         "2:\n" +
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
-                        "Fire Event: KILL_OTHER_AI_TANK\n" +
+                        "Fire Event: KILL_OTHER_AI_TANK[1]\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -735,7 +735,7 @@ public class SmokeTest {
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:\n" +
                         "2:Answer: UP\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK\n" +
+                        "Fire Event: KILL_OTHER_HERO_TANK[2]\n" +
                         "Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
@@ -1133,7 +1133,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK\n" +
+                        "Fire Event: KILL_OTHER_HERO_TANK[3]\n" +
                         "Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:1\n" +
@@ -1229,7 +1229,7 @@ public class SmokeTest {
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK\n" +
+                        "Fire Event: KILL_OTHER_HERO_TANK[4]\n" +
                         "Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:2\n" +

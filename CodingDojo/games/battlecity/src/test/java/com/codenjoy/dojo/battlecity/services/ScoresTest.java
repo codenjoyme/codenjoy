@@ -48,12 +48,12 @@ public class ScoresTest {
         scores.event(Events.KILL_YOUR_TANK);
     }
 
-    public void killOtherAITank() {
-        scores.event(Events.KILL_OTHER_AI_TANK);
+    public void killOtherAITank(int amount) {
+        scores.event(Events.KILL_OTHER_AI_TANK.apply(amount));
     }
 
-    public void killOtherHeroTank() {
-        scores.event(Events.KILL_OTHER_HERO_TANK);
+    public void killOtherHeroTank(int amount) {
+        scores.event(Events.KILL_OTHER_HERO_TANK.apply(amount));
     }
 
     @Before
@@ -70,13 +70,16 @@ public class ScoresTest {
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        killOtherHeroTank();
-        killOtherHeroTank();
-        killOtherAITank();
+        killOtherHeroTank(1);
+        killOtherHeroTank(2);
+        killOtherHeroTank(3);
+        killOtherAITank(1);
 
         killYourTank();
 
-        assertEquals(140 + 2*killOtherHeroTankScore + killOtherAITankScore
+        assertEquals(140
+                + (1 + 2 + 3)*killOtherHeroTankScore
+                + killOtherAITankScore
                 - killYourTankPenalty, scores.getScore());
     }
 
@@ -89,7 +92,7 @@ public class ScoresTest {
 
     @Test
     public void shouldClearScore() {
-        killOtherHeroTank();
+        killOtherHeroTank(1);
 
         scores.clear();
 

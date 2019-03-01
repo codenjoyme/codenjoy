@@ -54,13 +54,16 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public void event(Object event) {
-        if (event.equals(Events.KILL_YOUR_TANK)) {
+    public void event(Object object) {
+        if (!(object instanceof Events))
+            return;
+        Events event = (Events)object;
+        if (event.isKillYourTank()) {
             score -= killYourTankPenalty.getValue();
-        } else if (event.equals(Events.KILL_OTHER_HERO_TANK)) {
-            score += killOtherHeroTankScore.getValue();
-        } else if (event.equals(Events.KILL_OTHER_AI_TANK)) {
-            score += killOtherAITankScore.getValue();
+        } else if (event.isKillOtherHeroTank()) {
+            score += killOtherHeroTankScore.getValue() * event.getAmount();
+        } else if (event.isKillOtherAITank()) {
+            score += killOtherAITankScore.getValue() * event.getAmount();
         }
 
         score = Math.max(0, score);

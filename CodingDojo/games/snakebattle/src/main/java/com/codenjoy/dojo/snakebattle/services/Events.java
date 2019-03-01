@@ -68,27 +68,27 @@ public class Events {
     }
 
     public boolean isWin() {
-        return this.equals(WIN);
+        return type.equals(WIN.type);
     }
 
     public boolean isApple() {
-        return this.equals(APPLE);
+        return type.equals(APPLE.type);
     }
 
     public boolean isGold() {
-        return this.equals(GOLD);
+        return type.equals(GOLD.type);
     }
 
     public boolean isDie() {
-        return this.equals(DIE);
+        return type.equals(DIE.type);
     }
 
     public boolean isStone() {
-        return this.equals(STONE);
+        return type.equals(STONE.type);
     }
 
     public boolean isEat() {
-        return type.equals("EAT");
+        return type.equals(EAT.apply(1).type);
     }
 
     public int getAmount() {

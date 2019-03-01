@@ -44,13 +44,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
         super(x, y);
-        speed = 1;
-        moving = false;
         this.direction = direction;
-        gun = new Gun(ticksPerBullets);
-        bullets = new LinkedList<Bullet>();
-        alive = true;
         this.dice = dice;
+        gun = new Gun(ticksPerBullets);
+        reset();
     }
 
     void turn(Direction direction) {
@@ -178,5 +175,13 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
+    }
+
+    public void reset() {
+        speed = 1;
+        moving = false;
+        alive = true;
+        gun.reset();
+        bullets = new LinkedList<>();
     }
 }

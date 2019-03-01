@@ -63,6 +63,13 @@ public class Battlecity implements Field {
     }
 
     @Override
+    public void clearScore() {
+        players.forEach(Player::reset);
+        constructions.forEach(Construction::reset);
+        getTanks().forEach(Tank::reset);
+    }
+
+    @Override
     public void tick() {
         removeDeadTanks();
 
@@ -194,10 +201,11 @@ public class Battlecity implements Field {
         }
 
         if (killer != null) {
+            killer.kill();
             if (aiDied) {
-                killer.event(Events.KILL_OTHER_AI_TANK);
+                killer.event(Events.KILL_OTHER_AI_TANK.apply(killer.killed()));
             } else {
-                killer.event(Events.KILL_OTHER_HERO_TANK);
+                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.killed()));
             }
         }
         if (died != null) {
@@ -242,7 +250,7 @@ public class Battlecity implements Field {
 
     @Override
     public List<Bullet> getBullets() {
-        List<Bullet> result = new LinkedList<Bullet>();
+        List<Bullet> result = new LinkedList<>();
         for (Tank tank : getTanks()) {
             for (Bullet bullet : tank.getBullets()) {
                 result.add(bullet);
