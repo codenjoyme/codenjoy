@@ -41,6 +41,7 @@ if not "%GIT_REVISION%"=="local" (
 	call %GIT_HOME%\cmd\git reset --hard
 	call %GIT_HOME%\cmd\git fetch --all
 	call %GIT_HOME%\cmd\git checkout "%GIT_REVISION%"
+	call %GIT_HOME%\cmd\git pull origin
 	call %GIT_HOME%\cmd\git status"
 )
 
