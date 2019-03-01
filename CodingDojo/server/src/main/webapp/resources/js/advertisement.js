@@ -23,7 +23,7 @@ function initAdvertisement(contextPath){
     var advertisement = $("#advertisement");
     advertisement.prependTo($("#leaderboard"));
     advertisement.show();
-    advertisement.find("a").attr("href", "http://www.jetbrains.com");
+    advertisement.find("a").attr("href", "http://dan-it.com.ua");
     advertisement.find("img").attr("src",
-        contextPath + "/resources/advertisement/advertisement.png");
+        contextPath + "/resources/advertisement/logo.png");
 }

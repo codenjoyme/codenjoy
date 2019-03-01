@@ -20,4 +20,5 @@
  * #L%
  */
 
-var doNothing = true;
+game.enableAdvertisement = true;
+game.enableForkMe = false;
