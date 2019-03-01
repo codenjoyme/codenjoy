@@ -2749,7 +2749,7 @@ public class BattlecityTest {
 
         // then
         // но после рисета это поле чистится
-        assertEquals(0, player.killed());
+        assertEquals(0, player.score());
 
         // и стенки тоже ресетнулись
         // и снаряд полетел

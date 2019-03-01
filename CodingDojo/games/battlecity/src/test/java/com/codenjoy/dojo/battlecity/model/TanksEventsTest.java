@@ -107,7 +107,7 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, Events.KILL_OTHER_AI_TANK.apply(1));
+        onlyEvent(events, Events.KILL_OTHER_AI_TANK);
     }
 
     @Test

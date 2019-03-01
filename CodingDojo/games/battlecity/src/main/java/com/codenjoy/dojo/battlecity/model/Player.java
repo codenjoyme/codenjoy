@@ -64,7 +64,7 @@ public class Player extends GamePlayer<Tank, Field> {
         super.event(event);
     }
 
-    public int kill() {
+    public int killHero() {
         return killed++;
     }
 
@@ -75,7 +75,7 @@ public class Player extends GamePlayer<Tank, Field> {
         reset();
     }
 
-    public int killed() {
+    public int score() {
         return killed;
     }
 

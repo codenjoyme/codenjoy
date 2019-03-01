@@ -201,11 +201,11 @@ public class Battlecity implements Field {
         }
 
         if (killer != null) {
-            killer.kill();
             if (aiDied) {
-                killer.event(Events.KILL_OTHER_AI_TANK.apply(killer.killed()));
+                killer.event(Events.KILL_OTHER_AI_TANK);
             } else {
-                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.killed()));
+                killer.killHero();
+                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
             }
         }
         if (died != null) {

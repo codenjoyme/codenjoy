@@ -48,8 +48,8 @@ public class ScoresTest {
         scores.event(Events.KILL_YOUR_TANK);
     }
 
-    public void killOtherAITank(int amount) {
-        scores.event(Events.KILL_OTHER_AI_TANK.apply(amount));
+    public void killOtherAITank() {
+        scores.event(Events.KILL_OTHER_AI_TANK);
     }
 
     public void killOtherHeroTank(int amount) {
@@ -73,13 +73,14 @@ public class ScoresTest {
         killOtherHeroTank(1);
         killOtherHeroTank(2);
         killOtherHeroTank(3);
-        killOtherAITank(1);
+        killOtherAITank();
+        killOtherAITank();
 
         killYourTank();
 
         assertEquals(140
                 + (1 + 2 + 3)*killOtherHeroTankScore
-                + killOtherAITankScore
+                + 2*killOtherAITankScore
                 - killYourTankPenalty, scores.getScore());
     }
 

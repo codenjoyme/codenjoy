@@ -30,7 +30,7 @@ public class Events {
 
     public static final Events KILL_YOUR_TANK = new Events("KILL_YOUR_TANK");
     public static final Function<Integer, Events> KILL_OTHER_HERO_TANK = amount -> new Events("KILL_OTHER_HERO_TANK", amount);
-    public static final Function<Integer, Events> KILL_OTHER_AI_TANK = amount -> new Events("KILL_OTHER_AI_TANK", amount);
+    public static final Events KILL_OTHER_AI_TANK = new Events("KILL_OTHER_AI_TANK");
 
     private String type;
     private int amount;
@@ -50,7 +50,7 @@ public class Events {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Events events = (Events) o;
-        if (!isKillYourTank()) {
+        if (isKillOtherHeroTank()) {
             return Objects.equals(type, events.type) &&
                     amount == events.amount;
         }
@@ -71,12 +71,12 @@ public class Events {
     }
 
     public boolean isKillOtherAITank() {
-        return type.equals(KILL_OTHER_AI_TANK.apply(1).type);
+        return type.equals(KILL_OTHER_AI_TANK.type);
     }
 
     @Override
     public String toString() {
-        if (!isKillYourTank()) {
+        if (isKillOtherHeroTank()) {
             return String.format("%s[%s]", type, amount);
         } else {
             return type;
