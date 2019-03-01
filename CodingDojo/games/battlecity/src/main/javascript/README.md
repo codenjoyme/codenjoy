@@ -1,10 +1,9 @@
 Registration:
-- on page http://server/codenjoy-contest/help
+- on page http://algoritmix.dan-it.kiev.ua/codenjoy-contest/help
     + you can read game instructions
-        * server = server_host_ip:8080 server ip inside your LAN
-        * server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
-- register your hero on server http://server/codenjoy-contest/register
+- register your hero on server http://algoritmix.dan-it.kiev.ua/codenjoy-contest/register
 - copy board page browser url from address bar and paste into url variable of Runner.js
+    + for example http://algoritmix.dan-it.kiev.ua/codenjoy-contest/board/player/eae1bel6klfsh5kb3veh?code=5257725287416123010
 - write your own bot at 'get' function
 
 For JavaScript with browser:
