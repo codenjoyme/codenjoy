@@ -87,6 +87,7 @@ public class Battlecity implements Field {
 
         for (Tank tank : getTanks()) {
             if (tank.isAlive()) {
+                tank.fire();
                 tank.move();
 
                 List<Bullet> bullets = getBullets();

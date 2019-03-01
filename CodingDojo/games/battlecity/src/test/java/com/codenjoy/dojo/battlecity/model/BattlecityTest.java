@@ -272,6 +272,7 @@ public class BattlecityTest {
     public void shouldBulletHasSameDirectionAsTank() {
         givenGameWithTankAt(1, 1);
         hero.act();
+        game.tick();
 
         Tank realTank = (Tank) hero;
         assertEquals(realTank.getBullets().iterator().next().getDirection(), realTank.getDirection());
@@ -2292,7 +2293,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n";
         assertD(field);
 
-        for (int i = 1; i < ticksPerBullets; i++) {
+        for (int i = 1; i < ticksPerBullets - 1; i++) {
             hero.act();
             game.tick();
 
