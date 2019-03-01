@@ -10,6 +10,16 @@ IF NOT EXIST "%M2_HOME%" (
     )
 )
 :here
+IF NOT EXIST "%M2_HOME%" (
+    echo off
+    echo [44;93m
+    echo        +--------------------------------------------------+
+    echo        !              [102;30mPlease install maven[44;93m               !
+    echo        +--------------------------------------------------+
+    echo [0m
+    echo on
+    GOTO :EOF
+)
 IF "%CODENJOY_VERSION%"=="" SET CODENJOY_VERSION=1.0.28
 
 echo CODENJOY_VERSION=%CODENJOY_VERSION%
