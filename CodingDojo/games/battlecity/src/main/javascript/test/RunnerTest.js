@@ -22,181 +22,188 @@
 function runTest() {
     var board = new Board(
       /*14*/'☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼' +
-      /*13*/'☼        ☻    ☼' +
-      /*12*/'☼            ☺☼' +
-      /*11*/'☼   ╔══►      ☼' +
-      /*10*/'☼   ╚═╗       ☼' +
-      /*9*/ '☼   ╔╗║       ☼' +
-      /*8*/ '☼ ╔═╝╚╝       ☼' +
-      /*7*/ '☼ ╚═╕         ☼' +
-      /*6*/ '☼             ☼' +
-      /*5*/ '☼             ☼' +
-      /*4*/ '☼             ☼' +
-      /*3*/ '☼             ☼' +
-      /*2*/ '☼             ☼' +
-      /*1*/ '☼             ☼' +
+      /*13*/'☼     »   » « ☼' +
+      /*12*/'☼ ╬ ╬?╬ ╬ ╬ ╬?☼' +
+      /*11*/'☼ ╬ ╬ ╬☼╬ ╬ ╬ ☼' +
+      /*10*/'☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼' +
+      /*9*/ '☼▲╬ ╬     ╬ ╬ ☼' +
+      /*8*/ '☼•    ╬ ╬     ☼' +
+      /*7*/ '☼   ╬     ╬   ☼' +
+      /*6*/ '☼     ╬ ╬     ☼' +
+      /*5*/ '☼ ╬ ╬ ╬╬╬ ╬ ╬ ☼' +
+      /*4*/ '☼˅╬ ╬ ╬ ╬ ╬ ╬ ☼' +
+      /*3*/ '☼ ╬         ╬ ☼' +
+      /*2*/ '☼ ╬?  ╬╬╬   ╬ ☼' +
+      /*1*/ '☼     ╬ ╬     ☼' +
       /*0*/ '☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼');
            /*012345678901234*/
 
     assertEquals("15", board.size());
 
-    assertEquals("[9,13]", board.getStone());
+    assertEquals("[1,9]", board.getMe());
 
-    assertEquals("[13,12]", board.getApple());
+    assertEquals(true, board.isBarrierAt(2, 2));
+    assertEquals(true, board.isBarrierAt(-1, 2));
+    assertEquals(false, board.isBarrierAt(3, 2));
 
-    assertEquals("[0,0],[1,0],[2,0],[3,0],[4,0],[5,0]," +
-        "[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]," +
-        "[13,0],[14,0],[0,1],[14,1],[0,2],[14,2],[0,3]," +
-        "[14,3],[0,4],[14,4],[0,5],[14,5],[0,6],[14,6]," +
-        "[0,7],[14,7],[0,8],[14,8],[0,9],[14,9],[0,10]," +
-        "[14,10],[0,11],[14,11],[0,12],[14,12],[0,13]," +
-        "[9,13]," + // stone
-        "[14,13],[0,14]", board.getBarriers());
+    assertEquals(false, board.isGameOver());
 
-    assertEquals("[0,0],[1,0],[2,0],[3,0],[4,0],[5,0]," +
-        "[6,0],[7,0],[8,0],[9,0],[10,0],[11,0],[12,0]," +
-        "[13,0],[14,0],[0,1],[14,1],[0,2],[14,2],[0,3]," +
-        "[14,3],[0,4],[14,4],[0,5],[14,5],[0,6],[14,6]," +
-        "[0,7],[14,7],[0,8],[14,8],[0,9],[14,9],[0,10]," +
-        "[14,10],[0,11],[14,11],[0,12],[14,12],[0,13]," +
-        "[14,13],[0,14]", board.getWalls());
+    assertEquals(true, board.isAt(2, 2, Elements.CONSTRUCTION));
+    assertEquals(false, board.isAt(3, 2, Elements.CONSTRUCTION));
+    assertEquals(true, board.isAt(1, 9, Elements.TANK_UP));
+    assertEquals(false, board.isAt(1, 9, Elements.TANK_DOWN));
 
-    assertEquals("[2,7],[3,7],[4,7],[2,8],[3,8],[4,8]," +
-        "[5,8],[6,8],[4,9],[5,9],[6,9],[4,10],[5,10]," +
-        "[6,10],[4,11],[5,11],[6,11],[7,11]", board.getMyBody());
+    assertEquals(false, board.isAt(3, board.size(), Elements.BATTLE_WALL));
+    assertEquals(true, board.isAt(3, board.size() - 1, Elements.BATTLE_WALL));
 
-    assertEquals("[7,11]", board.getMyHead());
+    assertEquals(Elements.CONSTRUCTION, board.getAt(2, 2));
+    assertEquals(Elements.TANK_UP, board.getAt(1, 9));
+    assertEquals(Elements.BATTLE_WALL, board.getAt(3, -1));
 
-    assertEquals(true, board.isAt(9, 13, Elements.BAD_APPLE));
-    assertEquals(false, board.isAt(9, 13, Elements.GOOD_APPLE));
-    assertEquals(true, board.isAt(6, 8, Elements.TAIL_LEFT_UP));
-    assertEquals(false, board.isAt(3, -1, Elements.TAIL_LEFT_UP));
-
-    assertEquals(false, board.isAt(3, board.size(), Elements.BREAK));
-    assertEquals(true, board.isAt(3, board.size() - 1, Elements.BREAK));
-
-    assertEquals(Elements.BAD_APPLE, board.getAt(9, 13));
-    assertEquals(Elements.TAIL_LEFT_UP, board.getAt(6, 8));
-    assertEquals(Elements.BREAK, board.getAt(3, -1));
-
-    assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-        "☼        ☻    ☼\n" +
-        "☼            ☺☼\n" +
-        "☼   ╔══►      ☼\n" +
-        "☼   ╚═╗       ☼\n" +
-        "☼   ╔╗║       ☼\n" +
-        "☼ ╔═╝╚╝       ☼\n" +
-        "☼ ╚═╕         ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
+    assertEquals(
+        "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+        "☼     »   » « ☼\n" +
+        "☼ ╬ ╬?╬ ╬ ╬ ╬?☼\n" +
+        "☼ ╬ ╬ ╬☼╬ ╬ ╬ ☼\n" +
+        "☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼\n" +
+        "☼▲╬ ╬     ╬ ╬ ☼\n" +
+        "☼•    ╬ ╬     ☼\n" +
+        "☼   ╬     ╬   ☼\n" +
+        "☼     ╬ ╬     ☼\n" +
+        "☼ ╬ ╬ ╬╬╬ ╬ ╬ ☼\n" +
+        "☼˅╬ ╬ ╬ ╬ ╬ ╬ ☼\n" +
+        "☼ ╬         ╬ ☼\n" +
+        "☼ ╬?  ╬╬╬   ╬ ☼\n" +
+        "☼     ╬ ╬     ☼\n" +
         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", board.boardAsString());
 
     assertEquals("Board:\n" +
         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-        "☼        ☻    ☼\n" +
-        "☼            ☺☼\n" +
-        "☼   ╔══►      ☼\n" +
-        "☼   ╚═╗       ☼\n" +
-        "☼   ╔╗║       ☼\n" +
-        "☼ ╔═╝╚╝       ☼\n" +
-        "☼ ╚═╕         ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
-        "☼             ☼\n" +
+        "☼     »   » « ☼\n" +
+        "☼ ╬ ╬?╬ ╬ ╬ ╬?☼\n" +
+        "☼ ╬ ╬ ╬☼╬ ╬ ╬ ☼\n" +
+        "☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼\n" +
+        "☼▲╬ ╬     ╬ ╬ ☼\n" +
+        "☼•    ╬ ╬     ☼\n" +
+        "☼   ╬     ╬   ☼\n" +
+        "☼     ╬ ╬     ☼\n" +
+        "☼ ╬ ╬ ╬╬╬ ╬ ╬ ☼\n" +
+        "☼˅╬ ╬ ╬ ╬ ╬ ╬ ☼\n" +
+        "☼ ╬         ╬ ☼\n" +
+        "☼ ╬?  ╬╬╬   ╬ ☼\n" +
+        "☼     ╬ ╬     ☼\n" +
         "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
         "\n" +
-        "My head at: [7,11]\n" +
-        "My body at: [2,7],[3,7],[4,7],[2,8],[3,8],[4,8]," +
-            "[5,8],[6,8],[4,9],[5,9],[6,9],[4,10],[5,10]," +
-            "[6,10],[4,11],[5,11],[6,11],[7,11]\n" +
-        "Apple at: [[13,12]]\n" +
-        "Stone at: [[9,13]]\n", board.toString());
+        "My tank at: [1,9]\n" +
+        "Enemies at: [3,2],[5,12],[13,12],[12,13],[6,13],[10,13],[1,4]\n" +
+        "Bulets at: [1,8]\n", board.toString());
 
-    assertEquals("[4,8],[6,8]",
-        board.findAll(Elements.TAIL_LEFT_UP));
+    assertEquals("[6,13],[10,13]",
+        board.findAll(Elements.AI_TANK_RIGHT));
 
-    assertEquals("[3,7],[3,8],[5,10],[5,11],[6,11]",
-        board.findAll(Elements.TAIL_HORIZONTAL));
+    assertEquals("[1,8]",
+        board.findAll(Elements.BULLET));
 
-    assertEquals("[9,13]",
-        board.findAll(Elements.BAD_APPLE));
-
-    assertEquals("[13,12]",
-        board.findAll(Elements.GOOD_APPLE));
-
-    assertEquals("[7,11]",
-        board.findAll(Elements.HEAD_RIGHT));
+    assertEquals("[1,4]",
+        board.findAll(Elements.OTHER_TANK_DOWN));
 
     assertEquals("",
-        board.findAll(Elements.HEAD_DOWN));
+        board.findAll(Elements.BANG));
+
+    assertEquals("[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[7,0],[8,0],[9,0]," +
+        "[10,0],[11,0],[12,0],[13,0],[14,0],[0,1],[14,1],[0,2],[14,2],[0,3]," +
+        "[14,3],[0,4],[14,4],[0,5],[14,5],[0,6],[14,6],[0,7],[14,7],[0,8]," +
+        "[14,8],[0,9],[14,9],[0,10],[14,10],[0,11],[7,11],[14,11],[0,12]," +
+        "[14,12],[0,13],[14,13],[0,14]",
+        board.findAll(Elements.BATTLE_WALL));
+
+    assertEquals("[6,1],[8,1],[2,2],[6,2],[7,2],[8,2],[12,2],[2,3],[12,3]," +
+        "[2,4],[4,4],[6,4],[8,4],[10,4],[12,4],[2,5],[4,5],[6,5],[7,5],[8,5]," +
+        "[10,5],[12,5],[6,6],[8,6],[4,7],[10,7],[6,8],[8,8],[2,9],[4,9],[10,9]," +
+        "[12,9],[2,10],[4,10],[6,10],[8,10],[10,10],[12,10],[2,11],[4,11]," +
+        "[6,11],[8,11],[10,11],[12,11],[2,12],[4,12],[6,12],[8,12],[10,12]," +
+        "[12,12]",
+        board.findAll(Elements.CONSTRUCTION));
+
+    assertEquals("",
+        board.findAll(Elements.TANK_DOWN));
 
     assertEquals(true,
-        board.isAnyOfAt(9, 13,
-            [Elements.HEAD_DOWN,
-            Elements.HEAD_UP,
-            Elements.HEAD_RIGHT,
-            Elements.HEAD_LEFT,
-            Elements.BAD_APPLE]));
+        board.isAnyOfAt(1, 9,
+            [Elements.TANK_UP,
+            Elements.CONSTRUCTION,
+            Elements.OTHER_TANK_DOWN]));
 
     assertEquals(true,
-        board.isAnyOfAt(9, 13,
-            [Elements.BAD_APPLE]));
+        board.isAnyOfAt(1, 9,
+            [Elements.TANK_UP]));
 
     assertEquals(true,
-        board.isAnyOfAt(9, 13,
-            Elements.BAD_APPLE));
+        board.isAnyOfAt(1, 9,
+            Elements.TANK_UP));
 
     assertEquals(false,
-        board.isAnyOfAt(9, 13,
-            [Elements.HEAD_DOWN,
-            Elements.HEAD_UP,
-            Elements.HEAD_RIGHT,
-            Elements.HEAD_LEFT]));
+        board.isAnyOfAt(1, 9,
+            [Elements.CONSTRUCTION,
+            Elements.OTHER_TANK_DOWN]));
 
     assertEquals(false,
-        board.isAnyOfAt(9, 13,
-            [Elements.HEAD_DOWN]));
+        board.isAnyOfAt(1, 9,
+            [Elements.CONSTRUCTION]));
 
     assertEquals(false,
-        board.isAnyOfAt(9, 13,
-            Elements.HEAD_DOWN));
+        board.isAnyOfAt(1, 9,
+            Elements.CONSTRUCTION));
 
     assertEquals(false,
         board.isAnyOfAt(3, -1,
-            Elements.HEAD_DOWN));
+            Elements.TANK_UP));
 
     assertEquals(true,
-        board.isNear(9, 12,
-            Elements.BAD_APPLE));
+        board.isNear(0, 8,
+            Elements.TANK_UP));
 
     assertEquals(true,
-        board.isNear(9, 14,
-            Elements.BAD_APPLE));
+        board.isNear(0, 9,
+            Elements.TANK_UP));
 
     assertEquals(true,
-        board.isNear(8, 13,
-            Elements.BAD_APPLE));
+        board.isNear(0, 10,
+            Elements.TANK_UP));
 
     assertEquals(true,
-        board.isNear(10, 13,
-            Elements.BAD_APPLE));
+        board.isNear(1, 8,
+            Elements.TANK_UP));
 
     assertEquals(false,
-        board.isNear(8, 12,
-            Elements.BAD_APPLE));
-
-    assertEquals(false,
-        board.isNear(3, -1,
-            Elements.BAD_APPLE));
+        board.isNear(1, 9,   // сам танк
+            Elements.TANK_UP));
 
     assertEquals(true,
+        board.isNear(1, 10,
+            Elements.TANK_UP));
+
+    assertEquals(true,
+        board.isNear(2, 8,
+            Elements.TANK_UP));
+
+    assertEquals(true,
+        board.isNear(2, 9,
+            Elements.TANK_UP));
+
+    assertEquals(true,
+        board.isNear(2, 10,
+            Elements.TANK_UP));
+
+    assertEquals(false,
+        board.isNear(1, -9,
+            Elements.TANK_UP));
+
+    assertEquals(false,
+        board.isNear(-1, 9,
+            Elements.TANK_UP));
+
+    assertEquals(false,
         board.isBarrierAt(9, 13));
 
     assertEquals(true,
@@ -208,14 +215,10 @@ function runTest() {
     assertEquals(false,
         board.isBarrierAt(3, 3));
 
-    assertEquals(1,
-        board.countNear(9, 12, Elements.BAD_APPLE));
-
-    assertEquals(2,
-        board.countNear(0, 0, Elements.BREAK));
-
-    assertEquals(0,
-        board.countNear(3, -1, Elements.GOOD_APPLE));
+    assertEquals(0, board.countNear(0, 0, Elements.CONSTRUCTION));
+    assertEquals(1, board.countNear(2, 1, Elements.CONSTRUCTION));
+    assertEquals(5, board.countNear(5, 5, Elements.CONSTRUCTION));
+    assertEquals(5, board.countNear(7, 6, Elements.CONSTRUCTION));
 
     assertEquals("[5,4]",
         Direction.DOWN.change(new Point(5, 5)));

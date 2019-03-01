@@ -304,31 +304,27 @@ var Board = function(board){
         return result[0];
     };
 
-    var isGameOver = function() {
-        return getMe() == null;
+    var getEnemies = function() {
+        var result = [];
+        result = result.concat(findAll(Elements.AI_TANK_UP));
+        result = result.concat(findAll(Elements.AI_TANK_DOWN));
+        result = result.concat(findAll(Elements.AI_TANK_LEFT));
+        result = result.concat(findAll(Elements.AI_TANK_RIGHT));
+        result = result.concat(findAll(Elements.OTHER_TANK_UP));
+        result = result.concat(findAll(Elements.OTHER_TANK_DOWN));
+        result = result.concat(findAll(Elements.OTHER_TANK_LEFT));
+        result = result.concat(findAll(Elements.OTHER_TANK_RIGHT));
+        return result;
     };
 
-    var isBarrierAt = function(x, y) {
-        if (pt(x, y).isOutOf(size)) {
-            return true;
-        }
+    var getBullets = function() {
+        var result = [];
+        result = result.concat(findAll(Elements.BULLET));
+        return result;
+    }
 
-        return isAt(x, y, Elements.BATTLE_WALL) ||
-                isAt(x, y, Elements.CONSTRUCTION) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_LEFT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_RIGHT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP_DOWN) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP_LEFT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_RIGHT_UP) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT);
+    var isGameOver = function() {
+        return getMe() == null;
     };
 
     var isBulletAt = function(x, y) {
@@ -348,7 +344,7 @@ var Board = function(board){
 
     var getAt = function(x, y) {
         if (pt(x, y).isOutOf(size)) {
-            return Elements.BREAK;
+            return Elements.BATTLE_WALL;
         }
         return board.charAt(xyl.getLength(x, y));
     };
@@ -363,21 +359,35 @@ var Board = function(board){
     };
 
     var getBarriers = function() {
-        var all = getWalls();
-        all = all.concat(getWalls());
-        all = all.concat(getStone());
-        return removeDuplicates(all);
+        var result = [];
+        result = result.concat(findAll(Elements.BATTLE_WALL));
+        result = result.concat(findAll(Elements.CONSTRUCTION));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_TWICE));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_DOWN));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_LEFT));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_UP));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT));
+        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT));
+        return sort(result);
     };
 
     var toString = function() {
         return util.format("Board:\n%s\n" +
             "My tank at: %s\n" +
-            "Apple at: %s\n" +
-            "Stone at: %s\n",
+            "Enemies at: %s\n" +
+            "Bulets at: %s\n",
                 boardAsString(),
                 getMe(),
-                printArray(getApple()),
-                printArray(getStone())
+                getEnemies(),
+                getBullets()
             );
     };
 
@@ -405,14 +415,20 @@ var Board = function(board){
         return false;
     };
 
-    var isNear = function(x, y, element) {
-        if (pt(x, y).isOutOf(size)) {
-            return false;
+    // TODO применить этот подход в других js клиентах
+    var getNear = function(x, y) {
+        var result = [];
+        for (var dx = -1; dx <= 1; dx++) {
+            for (var dy = -1; dy <= 1; dy++) {
+                if (dx == 0 && dy == 0) continue;
+                result.push(getAt(x + dx, y + dy));
+            }
         }
-        return isAt(x + 1, y, element) || // TODO to remove duplicate
-            isAt(x - 1, y, element) ||
-            isAt(x, y + 1, element) ||
-            isAt(x, y - 1, element);
+        return result;
+    };
+
+    var isNear = function(x, y, element) {
+        return getNear(x, y).includes(element);
     };
 
     var isBarrierAt = function(x, y) {
@@ -424,30 +440,27 @@ var Board = function(board){
     };
 
     var countNear = function(x, y, element) {
-        if (pt(x, y).isOutOf(size)) {
-            return 0;
-        }
-        var count = 0;
-        if (isAt(x - 1, y    , element)) count ++; // TODO to remove duplicate
-        if (isAt(x + 1, y    , element)) count ++;
-        if (isAt(x    , y - 1, element)) count ++;
-        if (isAt(x    , y + 1, element)) count ++;
-        return count;
+        return getNear(x, y)
+                    .filter(function(value) { return value === element })
+                    .length;
     };
 
     return {
         size : boardSize,
         getMe : getMe,
+        getEnemies : getEnemies,
+        getBullets : getBullets,
         isGameOver : isGameOver,
         isAt : isAt,
         boardAsString : boardAsString,
-        isBarrierAt : isBarrierAt,
         toString : toString,
         findAll : findAll,
         isAnyOfAt : isAnyOfAt,
+        getNear : getNear,
         isNear : isNear,
-        isBarrierAt : isBarrierAt,
         countNear : countNear,
+        isBarrierAt : isBarrierAt,
+        getBarriers : getBarriers,
         getAt : getAt
     };
 };
