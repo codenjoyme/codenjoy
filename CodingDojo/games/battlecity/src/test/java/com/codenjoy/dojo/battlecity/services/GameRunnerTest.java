@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 public class GameRunnerTest {
     @Test
     public void testNoNPE() {
-        GameType gameType = new GameRunner();
+        GameType gameType = new GameRunner(){};
         assertEquals(34, gameType.getBoardSize().getValue().intValue());
 
         TestUtils.buildGame(gameType,

@@ -44,7 +44,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     private LevelImpl level;
 
-    public GameRunner() {
+    protected GameRunner() {
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
 
         level = new LevelImpl(getMap(), getDice());

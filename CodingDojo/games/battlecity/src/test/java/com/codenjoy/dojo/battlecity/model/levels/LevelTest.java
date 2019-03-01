@@ -45,7 +45,7 @@ public class LevelTest {
 
     @Test
     public void test() {
-        LevelImpl level = new LevelImpl(new GameRunner().getMap(), mock(Dice.class));
+        LevelImpl level = new LevelImpl(new GameRunner(){}.getMap(), mock(Dice.class));
 
         assertEquals(34, level.size());
 
