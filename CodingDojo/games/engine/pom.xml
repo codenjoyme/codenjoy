@@ -181,6 +181,7 @@
                                 <copy todir="${engine.packs}">
                                     <resources>
                                         <file file="setup.bat"/>
+                                        <file file="setup.sh"/>
                                         <file file="${project.build.directory}/engine-${project.version}.jar"/>
                                         <file file="${project.build.directory}/engine-${project.version}-sources.jar"/>
                                     </resources>
