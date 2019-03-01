@@ -51,7 +51,7 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 public class RegistrationController {
 
     // TODO вынести это в сеттинги
-    private static final boolean NICK_NAME_ALLOWED = false;
+    private static final boolean NICK_NAME_ALLOWED = true;
 
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
