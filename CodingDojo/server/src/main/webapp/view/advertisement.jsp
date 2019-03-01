@@ -26,8 +26,8 @@
 
 <div id="advertisement" style="display:none;">
     <h3>
-        <a href="http://codenjoy.com" target="blank">
-            <img src=""/>
+        <a href="https://dan-it.com.ua" target="blank">
+            <img src="${ctx}/resources/advertisement/logo.png"/>
         </a>
     </h3>
 </div>
