@@ -50,6 +50,9 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 @RequestMapping("/register")
 public class RegistrationController {
 
+    // TODO вынести это в сеттинги
+    private static final boolean NICK_NAME_ALLOWED = false;
+
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
@@ -176,7 +179,11 @@ public class RegistrationController {
 
         String gameName = player.getGameName();
         try {
-            validator.checkReadableName(name);
+            if (NICK_NAME_ALLOWED) {
+                validator.checkNickName(name);
+            } else {
+                validator.checkReadableName(name);
+            }
         } catch (IllegalArgumentException e) {
             model.addAttribute("bad_name", true);
             model.addAttribute("bad_name_message", e.getMessage());
