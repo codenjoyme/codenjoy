@@ -35,6 +35,4 @@ public interface Field extends GameField<Player>, Level {
     boolean outOfField(int x, int y);
 
     void affect(Bullet bullet);
-
-    List<Bullet> getBullets();
 }

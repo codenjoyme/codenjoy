@@ -75,7 +75,9 @@ public class Battlecity implements Field {
 
         newAI();
 
-        for (Tank tank : getTanks()) {
+        List<Tank> tanks = getTanks();
+
+        for (Tank tank : tanks) {
             tank.tick();
         }
 
@@ -85,9 +87,14 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Tank tank : getTanks()) {
+        for (Tank tank : tanks) {
             if (tank.isAlive()) {
                 tank.fire();
+            }
+        }
+
+        for (Tank tank : tanks) {
+            if (tank.isAlive()) {
                 tank.move();
 
                 List<Bullet> bullets = getBullets();
@@ -103,7 +110,7 @@ public class Battlecity implements Field {
         }
 
         for (Construction construction : constructions) {
-            if (!getTanks().contains(construction) && !getBullets().contains(construction)) {
+            if (!tanks.contains(construction) && !getBullets().contains(construction)) {
                 construction.tick();
             }
         }
@@ -249,8 +256,7 @@ public class Battlecity implements Field {
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 
-    @Override
-    public List<Bullet> getBullets() {
+    private List<Bullet> getBullets() {
         List<Bullet> result = new LinkedList<>();
         for (Tank tank : getTanks()) {
             for (Bullet bullet : tank.getBullets()) {
