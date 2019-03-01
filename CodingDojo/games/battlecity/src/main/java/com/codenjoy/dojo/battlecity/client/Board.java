@@ -47,22 +47,27 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.BATTLE_WALL) ||
-                isAt(x, y, Elements.CONSTRUCTION) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_LEFT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_RIGHT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP_DOWN) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_UP_LEFT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_RIGHT_UP) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT) ||
-                isAt(x, y, Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT);
+        if (isOutOfField(x, y)) {
+            return true;
+        }
+
+        return get(Elements.BATTLE_WALL,
+                Elements.CONSTRUCTION,
+                Elements.CONSTRUCTION_DESTROYED_DOWN,
+                Elements.CONSTRUCTION_DESTROYED_UP,
+                Elements.CONSTRUCTION_DESTROYED_LEFT,
+                Elements.CONSTRUCTION_DESTROYED_RIGHT,
+                Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE,
+                Elements.CONSTRUCTION_DESTROYED_UP_TWICE,
+                Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE,
+                Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE,
+                Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT,
+                Elements.CONSTRUCTION_DESTROYED_UP_DOWN,
+                Elements.CONSTRUCTION_DESTROYED_UP_LEFT,
+                Elements.CONSTRUCTION_DESTROYED_RIGHT_UP,
+                Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT,
+                Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT)
+            .contains(pt(x, y));
     }
 
     public Point getMe() {
@@ -72,6 +77,21 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.TANK_RIGHT).get(0);
     }
 
+    public List<Point> getEnemies() {
+        return get(Elements.AI_TANK_UP,
+                Elements.AI_TANK_DOWN,
+                Elements.AI_TANK_LEFT,
+                Elements.AI_TANK_RIGHT,
+                Elements.OTHER_TANK_UP,
+                Elements.OTHER_TANK_DOWN,
+                Elements.OTHER_TANK_LEFT,
+                Elements.OTHER_TANK_RIGHT);
+    }
+
+    public List<Point> getBullets() {
+        return get(Elements.BULLET);
+    }
+
     public boolean isGameOver() {
         return get(Elements.TANK_UP,
                 Elements.TANK_DOWN,
@@ -79,7 +99,26 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.TANK_RIGHT).isEmpty();
     }
 
+    public Elements getAt(int x, int y) {
+        if (isOutOfField(x, y)) {
+            return Elements.BATTLE_WALL;
+        }
+        return super.getAt(x, y);
+    }
+
     public boolean isBulletAt(int x, int y) {
         return getAt(x, y).equals(Elements.BULLET);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s\n" +
+                        "My tank at: %s\n" +
+                        "Enemies at: %s\n" +
+                        "Bullets at: %s\n",
+                boardAsString(),
+                getMe(),
+                getEnemies(),
+                getBullets());
     }
 }
