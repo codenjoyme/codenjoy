@@ -27,6 +27,7 @@ game.enableAlways = false;
 game.enablePlayerInfo = true;
 game.enablePlayerInfoLevel = true;
 game.enableLeadersTable = true;
+game.enableForkMe = true;
 game.enableInfo = true;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;

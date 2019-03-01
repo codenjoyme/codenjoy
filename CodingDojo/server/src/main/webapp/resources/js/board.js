@@ -101,8 +101,11 @@ function initBoardComponents(game) {
         initLeadersTable(game.contextPath, game.playerName, game.code);
     }
 
-    if (!game.enableInfo) {
+    if (!game.enableForkMe) {
         $("#fork-me").hide();
+    }
+
+    if (!game.enableInfo) {
         $("#how-to-play").hide();
     }
 
