@@ -24,11 +24,13 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -58,13 +60,21 @@ public class GameServiceImpl implements GameService {
         result.remove(NullGameType.class);
         result.remove(AbstractGameType.class);
 
-        result.removeAll(result.stream()
-                .filter(it -> Arrays.asList("chess", "sokoban", "expansion").stream()
-                        .filter(name -> it.getPackage().toString().contains(name))
-                        .count() != 0)
-                .collect(Collectors.toList()));
+        remove(result,
+                it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
+
+        remove(result,
+                it -> Arrays.asList("chess", "sokoban", "expansion").stream()
+                    .filter(name -> it.getPackage().toString().contains(name))
+                    .count() != 0);
 
         return result;
+    }
+
+    private void remove(List<Class<? extends GameType>> result, Predicate<Class<? extends GameType>> predicate) {
+        result.removeAll(result.stream()
+                .filter(predicate)
+                .collect(Collectors.toList()));
     }
 
     private Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
