@@ -2293,7 +2293,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n";
         assertD(field);
 
-        for (int i = 1; i < ticksPerBullets - 1; i++) {
+        for (int i = 1; i < ticksPerBullets; i++) {
             hero.act();
             game.tick();
 
@@ -2784,6 +2784,81 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼▲        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+
+    // первый выстрел иногда получается сделать дважды
+    @Test
+    public void shouldCantFireTwice() {
+        size = 11;
+        ticksPerBullets = 4;
+        givenGameWithTankAt(1, 1);
+
+        game.clearScore();
+
+        game.tick(); // внутри там тикает так же gun, но первого выстрела еще небыло
+        game.tick();
+
+        hero.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
 
     }
 
