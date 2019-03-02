@@ -28,15 +28,31 @@ var printBoardOnTextArea = function(data) {
     textarea.value = data;
 }
 
+var cache = [];
+
 var printLogOnTextArea = function(data) {
     var textarea = document.getElementById("log-area");
     var addToEnd = document.getElementById("add-to-end");
     if (!textarea) return;
+    // TODO такой же подход во все клиенты всех игрушек сделать
     if (addToEnd.checked) {
-        textarea.value = textarea.value + "\n" + data;
+        cache.push(data);
+        if (cache.length > 30) {
+            cache.shift()
+        }
     } else {
-        textarea.value = data + "\n" + textarea.value;
+        cache.unshift(data);
+        if (cache.length > 30) {
+            cache.pop()
+        }
     }
+
+    var all = '';
+    for (var i in cache) {
+        var data = cache[i];
+        all = all + "\n" + data;
+    }
+    textarea.value = all;
 }
 
 var require = function(string) {
