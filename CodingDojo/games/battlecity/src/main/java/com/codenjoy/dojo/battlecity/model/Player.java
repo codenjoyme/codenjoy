@@ -75,6 +75,11 @@ public class Player extends GamePlayer<Tank, Field> {
         reset();
     }
 
+    @Override
+    public boolean shouldLeave() {
+        return !isAlive();
+    }
+
     public int score() {
         return killed;
     }
