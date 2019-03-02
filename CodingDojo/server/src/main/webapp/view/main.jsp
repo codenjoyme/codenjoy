@@ -50,7 +50,7 @@
         </c:if>
         <li>Check game board</li>
         <c:forEach items="${gameNames}" var="gameName">
-            - <a href="${ctx}/board/game/${gameName}">${gameNameOnly}</a></br>
+            - <a href="${ctx}/board/game/${gameName.key}">${gameName.value}</a></br>
         </c:forEach>
     </div>
 <body>

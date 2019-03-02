@@ -26,6 +26,7 @@ import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Set;
 
 @Component
@@ -56,5 +57,9 @@ public class RoomsAliaser {
 
     public Set<String> gameNames() {
         return rooms.keySet();
+    }
+
+    public Set<Map.Entry<String, String>> all() {
+        return rooms.entrySet();
     }
 }
