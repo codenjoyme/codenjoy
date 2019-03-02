@@ -56,23 +56,23 @@ public class SolverTest {
                 "☼     ☼" +
                 "☼ ▲   ☼" +
                 "☼     ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+                "☼☼☼☼☼☼☼", Direction.ACT);
+
+        asertAI("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ •   ☼" +
+                "☼     ☼" +
+                "☼ ▲   ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼", Direction.ACT);
 
         asertAI("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
+                "☼     ☼" +
                 "☼ ▲   ☼" +
                 "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
-
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼ ▲   ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼", Direction.UP);
+                "☼☼☼☼☼☼☼", Direction.ACT);
     }
 
     private void asertAI(String board, Direction expected) {

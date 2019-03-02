@@ -31,6 +31,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -95,7 +96,14 @@ public class SmokeTest {
         LocalGameRunner.run(gameType,
                 new ArrayList<Solver>() {{
                     add(new AISolver(dice));
-                    add(new YourSolver(dice));
+                    add(new YourSolver(dice){
+                        @Override
+                        public String get(Board board) {
+                            if (board.isGameOver()) return "";
+
+                            return Direction.UP.toString();
+                        }
+                    });
                 }},
                 new ArrayList<ClientBoard>() {{
                     add(new Board());
