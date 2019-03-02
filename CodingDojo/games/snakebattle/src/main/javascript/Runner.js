@@ -61,25 +61,34 @@ url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
 url = url.replace("?code=", "&code=");
 
-var ws = new WSocket(url);
+var ws;
 
-ws.on('open', function () {
-    log('Opened');
-});
+function connect() {
+    ws = new WSocket(url);
+    log('Opening...');
 
-ws.on('close', function () {
-    log('Closed');
-});
+    ws.on('open', function() {
+        log('Web socket client opened ' + url);
+    });
 
-ws.on('message', function (message) {
-    var pattern = new RegExp(/^board=(.*)$/);
-    var parameters = message.match(pattern);
-    var boardString = parameters[1];
-    var answer = processBoard(boardString);
-    ws.send(answer);
-});
+    ws.on('close', function() {
+        log('Web socket client closed');
 
-log('Web socket client running at ' + url);
+        setTimeout(function() {
+            connect();
+        }, 5000);
+    });
+
+    ws.on('message', function(message) {
+        var pattern = new RegExp(/^board=(.*)$/);
+        var parameters = message.match(pattern);
+        var boardString = parameters[1];
+        var answer = processBoard(boardString);
+        ws.send(answer);
+    });
+}
+
+connect();
 
 var Element = {
       NONE: ' ',        // например это пустое место, куда можно перейти герою

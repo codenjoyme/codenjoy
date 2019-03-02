@@ -34,7 +34,6 @@ var printLogOnTextArea = function(data) {
     var textarea = document.getElementById("log-area");
     var addToEnd = document.getElementById("add-to-end");
     if (!textarea) return;
-    // TODO такой же подход во все клиенты всех игрушек сделать
     if (addToEnd.checked) {
         cache.push(data);
         if (cache.length > 30) {
