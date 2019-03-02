@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.apache.commons.lang3.StringUtils;
 
+import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
+
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
@@ -142,6 +144,11 @@ public class Player implements ScreenRecipient, Closeable {
 
     public String getGameName() {
         return (gameType != null) ? gameType.name() : gameName;
+    }
+
+    // TODO test me
+    public String getGameNameOnly() {
+        return removeNumbers(getGameName());
     }
 
     public String getPassword() {
