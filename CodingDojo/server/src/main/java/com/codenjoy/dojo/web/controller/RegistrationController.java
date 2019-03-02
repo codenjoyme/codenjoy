@@ -105,7 +105,7 @@ public class RegistrationController {
         player.setEmail(email);
         player.setName(id);
         player.setReadableName(name);
-        player.setGameName(gameName);
+        player.setGameName(rooms.get(gameName));
         model.addAttribute("player", player);
 
         player.setCallbackUrl("http://" + ip + ":80");
