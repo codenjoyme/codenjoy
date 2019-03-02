@@ -42,11 +42,12 @@ public class Gun implements Tickable {
 
     @Override
     public void tick() {
-        ticks++;
+        if (!canFire) {
+            ticks++;
+        }
         if (ticksPerBullets <= 0) {
             canFire = true;
-        }
-        if (ticks == ticksPerBullets) {
+        } else if (ticks == ticksPerBullets) {
             reset();
         }
     }
