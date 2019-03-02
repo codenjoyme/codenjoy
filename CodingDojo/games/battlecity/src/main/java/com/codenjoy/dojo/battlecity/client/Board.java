@@ -74,10 +74,14 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getMe() {
-        return get(Elements.TANK_UP,
+        List<Point> points = get(Elements.TANK_UP,
                 Elements.TANK_DOWN,
                 Elements.TANK_LEFT,
-                Elements.TANK_RIGHT).get(0);
+                Elements.TANK_RIGHT);
+        if (points.isEmpty()) {
+            return null;
+        }
+        return points.get(0);
     }
 
     public List<Point> getEnemies() {
