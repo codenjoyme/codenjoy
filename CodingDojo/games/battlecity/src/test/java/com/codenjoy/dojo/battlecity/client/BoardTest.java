@@ -131,14 +131,14 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getBullets() {
-        assertEquals("[[1,8]]",
-                board.getBullets().toString());
+        assertEquals("[[1,8]]", board.getBullets().toString());
     }
 
     @Test
     public void shouldWork_getMe() {
-        assertEquals("[1,9]",
-                board.getMe().toString());
+        assertEquals("[1,9]", board.getMe().toString());
+
+        assertEquals(null, board(" ").getMe());
     }
 
     @Test
