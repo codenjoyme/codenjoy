@@ -86,6 +86,18 @@ public class GameServiceImpl implements GameService {
         return cache.keySet();
     }
 
+    // TODO test me
+    @Override
+    public Set<String> getOnlyGameNames() {
+        return getGameNames().stream()
+                .map(name -> removeNumbers(name))
+                .collect(Collectors.toSet());
+    }
+
+    public static String removeNumbers(String gameName) {
+        return gameName.replaceAll("[\\d.]", "");
+    }
+
     @Override
     public Map<String, List<String>> getSprites() {
         return cache.entrySet().stream()

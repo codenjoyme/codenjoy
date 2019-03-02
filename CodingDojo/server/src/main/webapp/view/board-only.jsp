@@ -30,7 +30,7 @@
     <title>Game board</title>
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
     <script src="${ctx}/resources/js/all.min.js"></script>
 </head>
 <body style="display:none;">
