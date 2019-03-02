@@ -62,16 +62,9 @@ public class RegistrationController {
     @Autowired private LinkService linkService;
     @Autowired private Validator validator;
     @Autowired private ConfigProperties properties;
-
-    private BidiMap<String, String> rooms;
+    @Autowired private RoomsAliaser rooms;
 
     public RegistrationController() {
-        rooms = new DualLinkedHashBidiMap();
-        rooms.put("battlecity1", "Haifa");
-        rooms.put("battlecity2", "Jerusalem");
-        rooms.put("battlecity3", "Co-studying");
-        rooms.put("battlecity4", "Semi Final");
-        rooms.put("battlecity5", "Final");
     }
 
     //for unit test
@@ -105,7 +98,7 @@ public class RegistrationController {
         player.setEmail(email);
         player.setName(id);
         player.setReadableName(name);
-        player.setGameName(rooms.get(gameName));
+        player.setGameName(rooms.getAlias(gameName));
         model.addAttribute("player", player);
 
         player.setCallbackUrl("http://" + ip + ":80");
@@ -115,7 +108,7 @@ public class RegistrationController {
 
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("gameNames", rooms.values());
+        model.addAttribute("gameNames", rooms.alises());
 
         if (StringUtils.isEmpty(properties.getRegistrationPage())) {
             return "register";
@@ -209,7 +202,7 @@ public class RegistrationController {
             return openRegistrationForm(request, model, null, email, name);
         }
 
-        String gameName = rooms.getKey(player.getGameName());
+        String gameName = rooms.getGameName(player.getGameName());
         player.setGameName(gameName);
         try {
             validator.checkGameName(gameName, CANT_BE_NULL);
