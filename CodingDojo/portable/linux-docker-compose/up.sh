@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-if [ "x$CONFIG" = "x" ]; then
-    . config.sh ;
-fi
-
 eval_echo() {
     to_run=$1
     echo "[94m"
@@ -12,6 +8,10 @@ eval_echo() {
 
     eval $to_run
 }
+
+if [ "x$CONFIG" = "x" ]; then
+    eval_echo ". config.sh" ;
+fi
 
 eval_echo "docker-compose down --remove-orphans"
 
