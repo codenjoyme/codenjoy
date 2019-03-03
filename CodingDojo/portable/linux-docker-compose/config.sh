@@ -40,6 +40,8 @@ parameter() {
     cat $file | grep "$before"
 }
 
+# -------------------------- DOMAIN --------------------------
+
 eval_echo "parameter ./config/nginx/domain.conf 'server_name ' $SERVER_IP ';'"
 
 if [ "x$DOMAIN" = "xfalse" ]; then
@@ -62,6 +64,8 @@ eval_echo "domain ./config/nginx/codenjoy-balancer.conf"
 eval_echo "domain ./config/nginx/codenjoy-contest.conf"
 eval_echo "domain ./config/nginx/wordpress.conf"
 
+# -------------------------- OPEN PORTS --------------------------
+
 ports() {
     file=$1
     comment $file "#P#" $OPEN_PORTS
@@ -72,6 +76,8 @@ eval_echo "ports ./codenjoy.yml"
 eval_echo "ports ./balancer.yml"
 eval_echo "ports ./wordpress.yml"
 
+# -------------------------- BASIC AUTH --------------------------
+
 basic_auth() {
     file=$1
     comment $file "#A#" $BASIC_AUTH
@@ -80,6 +86,8 @@ basic_auth() {
 eval_echo "basic_auth ./config/nginx/codenjoy-balancer.conf"
 eval_echo "basic_auth ./config/nginx/codenjoy-contest.conf"
 eval_echo "basic_auth ./config/nginx/wordpress.conf"
+
+# -------------------------- SSL --------------------------
 
 ssl() {
     file=$1
@@ -113,6 +121,8 @@ eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'admin.passwo
 eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'email.hash=' $EMAIL_HASH"
 eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'server.ip=' $SERVER_IP"
 
+# -------------------------- DATABASE --------------------------
+
 database() {
     file=$1
     if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
@@ -134,3 +144,5 @@ database() {
 eval_echo "database ./docker-compose.yml"
 eval_echo "database ./balancer.yml"
 eval_echo "database ./codenjoy.yml"
+
+# --------------------------         --------------------------
