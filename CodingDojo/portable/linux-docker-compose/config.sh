@@ -88,13 +88,17 @@ ssl ./config/nginx/codenjoy-balancer.conf
 ssl ./config/nginx/codenjoy-contest.conf
 ssl ./docker-compose.yml
 
-parameter ./config/codenjoy/codenjoy-balancer.properties "database.password=" $POSTGRES_PASSWORD
+parameter ./config/codenjoy/codenjoy-balancer.properties "database.name=" $CODENJOY_POSTGRES_NAME
+parameter ./config/codenjoy/codenjoy-balancer.properties "database.user=" $CODENJOY_POSTGRES_USER
+parameter ./config/codenjoy/codenjoy-balancer.properties "database.password=" $CODENJOY_POSTGRES_PASSWORD
 parameter ./config/codenjoy/codenjoy-balancer.properties "admin.password=" $ADMIN_PASSWORD
 parameter ./config/codenjoy/codenjoy-balancer.properties "email.hash=" $EMAIL_HASH
 parameter ./config/codenjoy/codenjoy-balancer.properties "game.type=" $GAME
 parameter ./config/codenjoy/codenjoy-balancer.properties "game.servers=" $GAME_SERVERS
 
-parameter ./config/codenjoy/codenjoy-contest.properties "database.password=" $POSTGRES_PASSWORD
+parameter ./config/codenjoy/codenjoy-contest.properties "database.name=" $CODENJOY_POSTGRES_NAME
+parameter ./config/codenjoy/codenjoy-contest.properties "database.user=" $CODENJOY_POSTGRES_USER
+parameter ./config/codenjoy/codenjoy-contest.properties "database.password=" $CODENJOY_POSTGRES_PASSWORD
 parameter ./config/codenjoy/codenjoy-contest.properties "admin.password=" $ADMIN_PASSWORD
 parameter ./config/codenjoy/codenjoy-contest.properties "email.hash=" $EMAIL_HASH
 parameter ./config/codenjoy/codenjoy-contest.properties "server.ip=" $SERVER_IP
