@@ -24,16 +24,57 @@ package com.codenjoy.dojo.battlecity.services.rooms;
 
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 public class GameRunner4 extends GameRunner {
+
+    private final Parameter<Integer> playersPerRoom;
 
     @Override
     public String name() {
         return "battlecity4";
     }
 
+    public GameRunner4() {
+        super();
+
+        playersPerRoom = settings.addEditBox("Players per room").type(Integer.class).def(5);
+    }
+
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE);
+        return MultiplayerType.TEAM.apply(playersPerRoom.getValue(), MultiplayerType.DISPOSABLE);
+    }
+
+    public String getMap() {
+        return  "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼  ¿   ¿   ¿    ¿   ¿   ¿  ☼" +
+                "☼                          ☼" +
+                "☼ ╬ ╬╬╬ ╬╬╬ ╬╬╬╬ ╬╬╬ ╬╬╬ ╬ ☼" +
+                "☼                          ☼" +
+                "☼  ☼☼☼☼     ☼     ☼     ☼  ☼" +
+                "☼  ☼   ☼    ☼ ☼   ☼☼    ☼  ☼" +
+                "☼  ☼    ☼  ☼   ☼  ☼ ☼   ☼  ☼" +
+                "☼  ☼    ☼  ☼    ☼ ☼  ☼  ☼  ☼" +
+                "☼  ☼    ☼  ☼ ☼☼☼☼ ☼   ☼    ☼" +
+                "☼  ☼   ☼  ☼     ☼ ☼    ☼   ☼" +
+                "☼  ☼ ☼☼   ☼     ☼ ☼     ☼  ☼" +
+                "☼                          ☼" +
+                "☼          ╬    ╬          ☼" +
+                "☼☼☼☼☼ ╬╬╬ ╬╬    ╬╬ ╬╬╬ ☼☼☼☼☼" +
+                "☼          ╬╬  ╬╬          ☼" +
+                "☼   ╬                  ╬   ☼" +
+                "☼   ╬   ☼☼☼     ☼☼☼☼☼  ╬   ☼" +
+                "☼   ╬╬   ☼        ☼   ╬╬   ☼" +
+                "☼    ╬   ☼  ╬╬╬╬  ☼   ╬    ☼" +
+                "☼    ╬   ☼   ╬╬   ☼   ╬    ☼" +
+                "☼    ╬  ☼☼☼  ╬╬   ☼   ╬    ☼" +
+                "☼                          ☼" +
+                "☼    ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬    ☼" +
+                "☼                          ☼" +
+                "☼╬╬     ╬╬        ╬╬     ╬╬☼" +
+                "☼╬╬╬    ╬╬        ╬╬    ╬╬╬☼" +
+                "☼╬╬╬╬╬    ╬      ╬    ╬╬╬╬╬☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
     }
 }
