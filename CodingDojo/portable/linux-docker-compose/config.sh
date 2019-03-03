@@ -44,6 +44,15 @@ parameter ./config/nginx/codenjoy-balancer.conf "server_name " $SERVER_DOMAIN ";
 parameter ./config/nginx/codenjoy-contest.conf "server_name " $SERVER_DOMAIN ";"
 parameter ./config/nginx/wordpress.conf "server_name " $SERVER_DOMAIN ";"
 
+domain() {
+    file=$1
+    comment $file "#D#" $DOMAIN
+}
+
+domain ./config/nginx/nginx.conf
+domain ./config/nginx/codenjoy-balancer.conf
+domain ./config/nginx/codenjoy-contest.conf
+
 comment() {
     file=$1
     marker=$2
@@ -125,12 +134,3 @@ database() {
 database ./docker-compose.yml
 database ./balancer.yml
 database ./codenjoy.yml
-
-domain() {
-    file=$1
-    comment $file "#D#" $DOMAIN
-}
-
-domain ./config/nginx/nginx.conf
-domain ./config/nginx/codenjoy-balancer.conf
-domain ./config/nginx/codenjoy-contest.conf
