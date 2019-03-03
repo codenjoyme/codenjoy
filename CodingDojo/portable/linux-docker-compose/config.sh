@@ -60,9 +60,6 @@ domain() {
 }
 
 eval_echo "domain ./config/nginx/nginx.conf"
-eval_echo "domain ./config/nginx/codenjoy-balancer.conf"
-eval_echo "domain ./config/nginx/codenjoy-contest.conf"
-eval_echo "domain ./config/nginx/wordpress.conf"
 
 # -------------------------- OPEN PORTS --------------------------
 
