@@ -8,7 +8,7 @@ services:
        - ./materials/database:/var/lib/postgresql/data      #!L#
        - /etc/localtime:/etc/localtime:ro                   #!L#
 #     ports:                                                #!LP#
-#       - "${POSTGRES_PORT}:5432"                           #!LP#
+#       - "${CODENJOY_POSTGRES_PORT}:5432"                  #!LP#
      restart: always                                        #!L#
      environment:                                           #!L#
        POSTGRES_DB: ${CODENJOY_POSTGRES_DB}                 #!L#
