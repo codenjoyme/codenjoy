@@ -22,26 +22,27 @@ echo "[0m"
 
 parameter() {
     file=$1
-    key=$2
+    before=$2
     value=$3
-    sep=$4
-    eval_echo "sed -i 's/\($key\).*\$/\1$value$sep/' $file"
-    cat $file | grep $key
+    after=$4
+    if [ "x$after" = "x" ]; then
+        eol="\$"
+    fi
+    eval_echo "sed -i 's,\($before\).*$after$eol,\1$value$after,' $file"
+    cat $file | grep "$before"
 }
 
 parameter ./config/nginx/domain.conf "server_name " $SERVER_IP ";"
 
-if [ "x$BALANCER" = "xtrue" ]; then
-    domain=$BALANCER_DOMAIN
-else
-    domain=$CODENJOY_DOMAIN
+if [ "x$DOMAIN" = "xfalse" ]; then
+    SERVER_DOMAIN=$SERVER_IP
 fi
 
-eval_echo "sed -i 's,\(return 301 https\?://\).*\\$,\1$domain\$,' ./config/nginx/domain.conf"
-cat ./config/nginx/domain.conf | grep 'return 301 '
+parameter ./config/nginx/domain.conf "return 301 https\?://" $SERVER_DOMAIN "\\$"
 
-parameter ./config/nginx/codenjoy-balancer.conf "server_name " $BALANCER_DOMAIN ";"
-parameter ./config/nginx/codenjoy-contest.conf "server_name " $CODENJOY_DOMAIN ";"
+parameter ./config/nginx/codenjoy-balancer.conf "server_name " $SERVER_DOMAIN ";"
+parameter ./config/nginx/codenjoy-contest.conf "server_name " $SERVER_DOMAIN ";"
+parameter ./config/nginx/wordpress.conf "server_name " $SERVER_DOMAIN ";"
 
 comment() {
     file=$1
@@ -131,3 +132,5 @@ domain() {
 }
 
 domain ./config/nginx/nginx.conf
+domain ./config/nginx/codenjoy-balancer.conf
+domain ./config/nginx/codenjoy-contest.conf
