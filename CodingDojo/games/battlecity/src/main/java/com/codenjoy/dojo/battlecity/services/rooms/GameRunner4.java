@@ -34,6 +34,6 @@ public class GameRunner4 extends GameRunner {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(10, MultiplayerType.DISPOSABLE);
+        return MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE);
     }
 }
