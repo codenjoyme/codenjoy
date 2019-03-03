@@ -50,6 +50,7 @@ eval_echo "parameter ./config/nginx/domain.conf 'return 301 https\?://' $SERVER_
 
 eval_echo "parameter ./config/nginx/codenjoy-balancer.conf 'server_name ' $SERVER_DOMAIN ';'"
 eval_echo "parameter ./config/nginx/codenjoy-contest.conf 'server_name ' $SERVER_DOMAIN ';'"
+eval_echo "parameter ./config/nginx/wordpress.conf 'server_name ' $SERVER_DOMAIN ';'"
 
 domain() {
     file=$1
@@ -59,6 +60,7 @@ domain() {
 eval_echo "domain ./config/nginx/nginx.conf"
 eval_echo "domain ./config/nginx/codenjoy-balancer.conf"
 eval_echo "domain ./config/nginx/codenjoy-contest.conf"
+eval_echo "domain ./config/nginx/wordpress.conf"
 
 ports() {
     file=$1
@@ -68,6 +70,7 @@ ports() {
 eval_echo "ports ./docker-compose.yml"
 eval_echo "ports ./codenjoy.yml"
 eval_echo "ports ./balancer.yml"
+eval_echo "ports ./wordpress.yml"
 
 basic_auth() {
     file=$1
@@ -76,6 +79,7 @@ basic_auth() {
 
 eval_echo "basic_auth ./config/nginx/codenjoy-balancer.conf"
 eval_echo "basic_auth ./config/nginx/codenjoy-contest.conf"
+eval_echo "basic_auth ./config/nginx/wordpress.conf"
 
 ssl() {
     file=$1
@@ -91,6 +95,7 @@ ssl() {
 eval_echo "ssl ./config/nginx/domain.conf"
 eval_echo "ssl ./config/nginx/codenjoy-balancer.conf"
 eval_echo "ssl ./config/nginx/codenjoy-contest.conf"
+eval_echo "ssl ./config/nginx/wordpress.conf"
 eval_echo "ssl ./docker-compose.yml"
 
 eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'database.name=' $CODENJOY_POSTGRES_NAME"

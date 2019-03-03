@@ -1,0 +1,31 @@
+version: '3.3'
+
+services:
+   wordpress_db:
+     image: mysql:5.7
+     container_name: wordpress-database
+     volumes:
+       - ./materials/wordpress/database:/var/lib/mysql
+       - /etc/localtime:/etc/localtime:ro
+     restart: always
+     ports:
+       - "80:80"
+     environment:
+         MYSQL_ROOT_PASSWORD: secureWordpressRootDBPassword
+         MYSQL_DATABASE: wordpress
+         MYSQL_USER: wordpress
+         MYSQL_PASSWORD: secureWordpressDBPassword
+
+   wordpress:
+     depends_on:
+       - wordpress_db
+     image: wordpress:latest
+     container_name: wordpress
+     volumes:
+       - ./materials/wordpress/wp_content:/var/www/html/wp-content
+       - /etc/localtime:/etc/localtime:ro
+     restart: always
+     environment:
+         WORDPRESS_DB_HOST: wordpress_db:3306
+         WORDPRESS_DB_USER: wordpress
+         WORDPRESS_DB_PASSWORD: secureWordpressDBPassword
