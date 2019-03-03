@@ -11,6 +11,17 @@ eval_echo() {
 
 eval_echo ". env-read.sh"
 
+comment() {
+    file=$1
+    marker=$2
+    flag=$3
+    if [ "x$flag" = "xtrue" ]; then
+        eval_echo "sed -i '/$marker/s/^#\+//' $file"
+    else
+        eval_echo "sed -i '/$marker/s/^#\?/#/' $file"
+    fi
+    cat $file | grep $marker
+}
 
 parameter() {
     file=$1
@@ -44,18 +55,6 @@ domain() {
 domain ./config/nginx/nginx.conf
 domain ./config/nginx/codenjoy-balancer.conf
 domain ./config/nginx/codenjoy-contest.conf
-
-comment() {
-    file=$1
-    marker=$2
-    flag=$3
-    if [ "x$flag" = "xtrue" ]; then
-        eval_echo "sed -i '/$marker/s/^#\+//' $file"
-    else
-        eval_echo "sed -i '/$marker/s/^#\?/#/' $file"
-    fi
-    cat $file | grep $marker
-}
 
 ports() {
     file=$1
