@@ -57,13 +57,13 @@ eval_echo "chown root:root ./config/nginx/*"
 ls -la ./config/nginx
 
 # database
-eval_echo "mkdir -p ./materials/database"
+eval_echo "mkdir -p ./materials/codenjoy/database"
 if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
-    eval_echo "chown root:root ./materials/database"
+    eval_echo "chown root:root ./materials/codenjoy/database"
 else
-    eval_echo "chown $JETTY_UID:$JETTY_UID ./materials/database"
+    eval_echo "chown $JETTY_UID:$JETTY_UID ./materials/codenjoy/database"
 fi
-ls -la ./materials/database
+ls -la ./materials/codenjoy/database
 
 # for codenjoy_balancer / codenjoy_contest
 eval_echo "mkdir -p ./config/codenjoy"
