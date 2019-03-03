@@ -299,6 +299,9 @@ public class RegistrationController {
             registration.updateNameAndEmail(id, name, email);
         } else {
             if (!registered) {
+                if (!playerService.isRegistrationOpened()) {
+                    return openRegistrationForm(request, model, id, email, name);
+                }
                 code = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData());
             } else {
                 code = registration.getCodeById(id);
