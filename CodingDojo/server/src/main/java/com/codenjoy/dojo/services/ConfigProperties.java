@@ -56,6 +56,9 @@ public class ConfigProperties {
     @Value("${admin.password}")
     private String adminPassword;
 
+    @Value("${Server.ip}")
+    private String serverIp;
+
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
     }
@@ -82,5 +85,9 @@ public class ConfigProperties {
 
     public String getAdminPassword() {
         return adminPassword;
+    }
+
+    public String getServerIp() {
+        return serverIp;
     }
 }

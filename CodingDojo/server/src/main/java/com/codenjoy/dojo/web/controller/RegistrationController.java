@@ -98,7 +98,7 @@ public class RegistrationController {
         player.setGameName(gameName);
         model.addAttribute("player", player);
 
-        player.setCallbackUrl("http://" + ip + ":80");
+        player.setCallbackUrl(ip);
 
         return getRegister(model);
     }
@@ -120,11 +120,10 @@ public class RegistrationController {
         if (result.equals("0:0:0:0:0:0:0:1")) {
             result = "127.0.0.1";
         }
+        if (result.equals("172.28.1.1")) {
+            result = request.getHeader("X-Real-IP");
+        }
         return result;
-    }
-
-    private String getLocalIp(HttpServletRequest request) {
-        return request.getLocalAddr();
     }
 
 //    @RequestMapping(params = "approve", method = RequestMethod.GET)
@@ -144,17 +143,17 @@ public class RegistrationController {
     }
 
 //    @RequestMapping(params = "approved", method = RequestMethod.GET)
-    public @ResponseBody String isEmailApproved(@RequestParam("approved") String email) throws InterruptedException {
-        validator.checkPlayerName(email, CANT_BE_NULL);
+    public @ResponseBody String isEmailApproved(@RequestParam("approved") String id) throws InterruptedException {
+        validator.checkPlayerName(id, CANT_BE_NULL);
 
-        while (!registration.approved(email)) {
+        while (!registration.approved(id)) {
             Thread.sleep(2000);
         }
         Player player = null;
-        while ((player = playerService.get(email)) == NullPlayer.INSTANCE) {
+        while ((player = playerService.get(id)) == NullPlayer.INSTANCE) {
             Thread.sleep(2000);
         }
-        String code = registration.getCodeById(email);
+        String code = registration.getCodeById(id);
         return getBoardUrl(code, player);
     }
 
@@ -162,8 +161,8 @@ public class RegistrationController {
     public String removeUserFromGame(@RequestParam("code") String code) {
         validator.checkCode(code, CANT_BE_NULL);
 
-        String name = registration.getIdByCode(code);
-        Player player = playerService.get(name);
+        String id = registration.getIdByCode(code);
+        Player player = playerService.get(id);
         playerService.remove(player.getName());
         return "redirect:/";
     }
@@ -314,12 +313,13 @@ public class RegistrationController {
                     map.put("name", id);
                     map.put("code", code);
                     map.put("gameName", gameName);
-                    map.put("ip", request.getRemoteAddr());
-                    map.put("host", gameName);
+                    map.put("ip", getIp(request));
 
-                    String host = getLocalIp(request); // TODO test me on prod
+                    String hostIp = properties.getServerIp(); // TODO to use server domain here
+                    map.put("host", hostIp);
+
                     String context = CodenjoyContext.get();
-                    String link = "http://" + host + "/" + context + "/register?approve=" + storage.getLink();
+                    String link = "http://" + hostIp + "/" + context + "/register?approve=" + storage.getLink();
                     try {
                         mailService.sendEmail(id, "Codenjoy регистрация",
                                 "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
@@ -349,8 +349,8 @@ public class RegistrationController {
         }
     }
 
-    private String register(String name, String code, String gameName, String ip) {
-        Player player = playerService.register(name, ip, gameName);
+    private String register(String id, String code, String gameName, String ip) {
+        Player player = playerService.register(id, ip, gameName);
         return getBoardUrl(code, player);
     }
 

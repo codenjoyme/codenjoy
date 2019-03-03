@@ -96,7 +96,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String name, String callbackUrl, String gameName) {
+    public Player register(String name, String ip, String gameName) {
         lock.writeLock().lock();
         try {
             if (logger.isDebugEnabled()) {
@@ -109,7 +109,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             registerAIIfNeeded(name, gameName);
 
-            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, null));
+            Player player = register(new PlayerSave(name, ip, gameName, 0, null));
 
             return player;
         } finally {
