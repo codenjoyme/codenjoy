@@ -65,7 +65,7 @@ echo "==========================================================================
 
 eval_echo "docker container rm temp --force"
 eval_echo "docker run --name temp -d codenjoy-source"
-eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy && git reset --hard && git fetch --all && git checkout ${REVISION} && pull origin && git status'"
+eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy && git clean -fx && git reset --hard && git fetch --all && git checkout ${REVISION} && git pull origin && git status'"
 sleep 5
 
 echo "[92m========================================================================================================================"

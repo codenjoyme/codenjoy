@@ -38,6 +38,7 @@ if "%GIT_REVISION%"=="" (
 	set GIT_REVISION=master
 )
 if not "%GIT_REVISION%"=="local" (
+	call %GIT_HOME%\cmd\git clean -fx
 	call %GIT_HOME%\cmd\git reset --hard
 	call %GIT_HOME%\cmd\git fetch --all
 	call %GIT_HOME%\cmd\git checkout "%GIT_REVISION%"
