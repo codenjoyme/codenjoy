@@ -56,7 +56,7 @@ public class ConfigProperties {
     @Value("${admin.password}")
     private String adminPassword;
 
-    @Value("${Server.ip}")
+    @Value("${server.ip}")
     private String serverIp;
 
     public boolean isEmailVerificationNeeded() {
