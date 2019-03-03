@@ -2,6 +2,8 @@ version: '3.3'
 
 services:
    nginx:
+     depends_on:
+       - wordpress
      image: nginx
      container_name: nginx
      volumes:
