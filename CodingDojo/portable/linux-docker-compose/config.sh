@@ -9,16 +9,8 @@ eval_echo() {
     eval $to_run
 }
 
-echo "[93m"
-for entry in $(cat ./.env)
-do
-  if [[ ! $entry == \#* ]]
-  then
-    export $entry
-    echo "$entry"
-  fi
-done
-echo "[0m"
+eval_echo ". env-read.sh"
+
 
 parameter() {
     file=$1
