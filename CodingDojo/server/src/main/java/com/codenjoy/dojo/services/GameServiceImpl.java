@@ -39,6 +39,8 @@ import static java.util.stream.Collectors.toMap;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
+    public static final String ROOMS_SEPARATOR = "-";
+
     @Autowired private TimerService timer;
     @Autowired private PlayerService players;
 
@@ -90,12 +92,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public Set<String> getOnlyGameNames() {
         return getGameNames().stream()
-                .map(name -> removeNumbers(name))
+                .map(GameServiceImpl::removeNumbers)
                 .collect(Collectors.toSet());
     }
 
     public static String removeNumbers(String gameName) {
-        return gameName.replaceAll("[\\d.]", "");
+        return gameName.split(ROOMS_SEPARATOR)[0];
     }
 
     @Override

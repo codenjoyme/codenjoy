@@ -90,7 +90,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
     }
 
     function justGame(gameRoom) {
-        return gameRoom.replace(/[0-9]/g, '');
+        var ROOMS_SEPARATOR = '-';
+        return gameRoom.split(ROOMS_SEPARATOR).shift();
     }
 
     function loadSpriteImages(elements, alphabet, onImageLoad) {
