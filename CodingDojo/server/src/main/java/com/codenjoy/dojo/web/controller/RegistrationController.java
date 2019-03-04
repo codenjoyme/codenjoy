@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import org.apache.commons.collections4.BidiMap;
+import org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +62,7 @@ public class RegistrationController {
     @Autowired private LinkService linkService;
     @Autowired private Validator validator;
     @Autowired private ConfigProperties properties;
+    @Autowired private RoomsAliaser rooms;
 
     public RegistrationController() {
     }
@@ -95,7 +98,7 @@ public class RegistrationController {
         player.setEmail(email);
         player.setName(id);
         player.setReadableName(name);
-        player.setGameName(gameName);
+        player.setGameName(rooms.getAlias(gameName));
         model.addAttribute("player", player);
 
         player.setCallbackUrl(ip);
@@ -105,7 +108,7 @@ public class RegistrationController {
 
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
-        model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("gameNames", rooms.alises());
 
         if (StringUtils.isEmpty(properties.getRegistrationPage())) {
             return "register";
@@ -176,7 +179,6 @@ public class RegistrationController {
         String name = player.getReadableName();
         String email = player.getEmail();
 
-        String gameName = player.getGameName();
         try {
             if (NICK_NAME_ALLOWED) {
                 validator.checkNickName(name);
@@ -189,6 +191,7 @@ public class RegistrationController {
 
             return openRegistrationForm(request, model, null, email, name);
         }
+
         try {
             validator.checkEmail(email, CANT_BE_NULL);
         } catch (IllegalArgumentException e) {
@@ -197,6 +200,9 @@ public class RegistrationController {
 
             return openRegistrationForm(request, model, null, email, name);
         }
+
+        String gameName = rooms.getGameName(player.getGameName());
+        player.setGameName(gameName);
         try {
             validator.checkGameName(gameName, CANT_BE_NULL);
         } catch (IllegalArgumentException e) {

@@ -51,6 +51,7 @@ public class MainPageController {
     @Autowired private GameService gameService;
     @Autowired private Validator validator;
     @Autowired private ConfigProperties properties;
+    @Autowired private RoomsAliaser rooms;
 
     public MainPageController() {
     }
@@ -99,7 +100,7 @@ public class MainPageController {
         Player player = playerService.get(registration.getIdByCode(code));
         request.setAttribute("registered", player != NullPlayer.INSTANCE);
         request.setAttribute("code", code);
-        model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("gameNames", rooms.all());
         return "main";
     }
 
