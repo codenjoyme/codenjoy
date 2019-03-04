@@ -50,9 +50,8 @@ fi
 
 eval_echo "parameter ./config/nginx/domain.conf 'return 301 https\?://' $SERVER_DOMAIN '\\$'"
 
-eval_echo "parameter ./config/nginx/codenjoy-balancer.conf 'server_name ' $SERVER_DOMAIN ';'"
-eval_echo "parameter ./config/nginx/codenjoy-contest.conf 'server_name ' $SERVER_DOMAIN ';'"
-eval_echo "parameter ./config/nginx/wordpress.conf 'server_name ' $SERVER_DOMAIN ';'"
+eval_echo "parameter ./config/nginx/conf.d/codenjoy-balancer.conf 'server_name ' $SERVER_DOMAIN ';'"
+eval_echo "parameter ./config/nginx/conf.d/codenjoy-contest.conf 'server_name ' $SERVER_DOMAIN ';'"
 
 domain() {
     file=$1
@@ -80,9 +79,9 @@ basic_auth() {
     comment $file "#A#" $BASIC_AUTH
 }
 
-eval_echo "basic_auth ./config/nginx/codenjoy-balancer.conf"
-eval_echo "basic_auth ./config/nginx/codenjoy-contest.conf"
-eval_echo "basic_auth ./config/nginx/wordpress.conf"
+eval_echo "basic_auth ./config/nginx/conf.d/codenjoy-balancer.conf"
+eval_echo "basic_auth ./config/nginx/conf.d/codenjoy-contest.conf"
+eval_echo "basic_auth ./config/nginx/conf.d/wordpress/locations.conf"
 
 # -------------------------- SSL --------------------------
 
@@ -98,9 +97,8 @@ ssl() {
 }
 
 eval_echo "ssl ./config/nginx/domain.conf"
-eval_echo "ssl ./config/nginx/codenjoy-balancer.conf"
-eval_echo "ssl ./config/nginx/codenjoy-contest.conf"
-eval_echo "ssl ./config/nginx/wordpress.conf"
+eval_echo "ssl ./config/nginx/conf.d/codenjoy-balancer.conf"
+eval_echo "ssl ./config/nginx/conf.d/codenjoy-contest.conf"
 eval_echo "ssl ./docker-compose.yml"
 
 eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'database.name=' $CODENJOY_POSTGRES_NAME"
@@ -131,6 +129,8 @@ database() {
     fi
     comment $file "#L#" $SQLITE
     comment $file "#!L#" $POSTGRE
+
+    # TODO to solve situation with multiple tags #!LP#
     if [ "x$POSTGRE" = "xtrue" ] && [ "x$OPEN_PORTS" = "xtrue" ]; then
         comment $file "#!LP#" "true"
     else
@@ -141,5 +141,25 @@ database() {
 eval_echo "database ./docker-compose.yml"
 eval_echo "database ./balancer.yml"
 eval_echo "database ./codenjoy.yml"
+
+# -------------------------- WORDPRESS --------------------------
+
+wordpress() {
+    file=$1
+    comment $file "#W#" $WORDPRESS
+    if [ "x$WORDPRESS" = "xtrue" ]; then
+        NOT_WORDPRESS="false";
+    else
+        NOT_WORDPRESS="true";
+    fi
+    comment $file "#!W#" $NOT_WORDPRESS
+
+    # TODO to solve situation with multiple tags #S# #!W#
+    if [ "x$NOT_WORDPRESS" = "xtrue" ]; then
+        eval_echo "ssl ./config/nginx/conf.d/codenjoy-contest.conf"
+    fi
+}
+
+eval_echo "wordpress ./config/nginx/conf.d/codenjoy-contest.conf"
 
 # --------------------------         --------------------------

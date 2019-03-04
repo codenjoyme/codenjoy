@@ -42,4 +42,5 @@ services:
      depends_on:
        - wordpress
      volumes:
-       - ./config/nginx/wordpress.conf:/etc/nginx/conf.d/wordpress.conf
+       - ./config/nginx/conf.d/wordpress/upstreams.conf:/etc/nginx/conf.d/wordpress/upstreams.conf
+       - ./config/nginx/conf.d/wordpress/locations.conf:/etc/nginx/conf.d/wordpress/locations.conf

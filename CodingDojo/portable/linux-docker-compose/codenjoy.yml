@@ -26,4 +26,4 @@ services:
      depends_on:
        - codenjoy_server
      volumes:
-       - ./config/nginx/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf
+       - ./config/nginx/conf.d/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf
