@@ -53,6 +53,8 @@
             location="classpath:/config/${project.artifactId}.properties,file:config/${project.artifactId}.properties"
             system-properties-mode="OVERRIDE"/>
 
+    <context:component-scan base-package="com.codenjoy.dojo.config" />
+
     <!-- Ключик ${database.type:sqlite} нужен для запуска джетти с -Ddatabase.type=postgre|sqlite
           sqlite по умолчанию если ничего не вводить -->
     <import resource="applicationContext-database-${database.type:sqlite}.xml"/>

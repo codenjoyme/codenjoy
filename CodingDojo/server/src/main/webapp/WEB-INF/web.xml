@@ -37,7 +37,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>
             classpath:/com/codenjoy/dojo/server/applicationContext.xml
-            classpath:/com/codenjoy/dojo/server/spring-security.xml
+            <!--classpath:/com/codenjoy/dojo/server/spring-security.xml-->
         </param-value>
     </context-param>
 
