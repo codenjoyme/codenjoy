@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
@@ -41,7 +41,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
  * Created at 3/6/2019
  */
 @Configuration
-public class MVCConf extends WebMvcConfigurerAdapter {
+public class MVCConf implements WebMvcConfigurer {
 
     @Value("${mvc.cache-period}")
     private int cachePeriod;

@@ -28,5 +28,5 @@ server.ip: 127.0.0.1
 
 logging:
     level:
-        root: debug
+        root: info
 
