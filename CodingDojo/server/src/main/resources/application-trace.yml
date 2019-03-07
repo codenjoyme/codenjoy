@@ -1,0 +1,8 @@
+logging:
+  level:
+    org.springframework: debug
+    com: debug
+#    com:
+#      codenjoy: debug
+#      epam.dojo: debug
+#      org.eclipse.jetty: debug

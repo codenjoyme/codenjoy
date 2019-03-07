@@ -28,20 +28,17 @@ import com.codenjoy.dojo.transport.auth.SecureAuthenticationService;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+@RequiredArgsConstructor
 public class ControlWebSocketServlet extends WebSocketServlet {
 
-    @Autowired
-    private TimerService timer;
-
-    @Autowired
-    @Qualifier("controlPlayerTransport")
-    private PlayerTransport transport;
+    private final TimerService timer;
+    private final PlayerTransport controlPlayerTransport;
 
     @Autowired
     private SecureAuthenticationService authentication;
@@ -51,7 +48,7 @@ public class ControlWebSocketServlet extends WebSocketServlet {
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 
         PlayerSocketCreator creator =
-                new PlayerSocketCreator(transport,
+                new PlayerSocketCreator(controlPlayerTransport,
                         authentication,
                         PlayerSocket.SERVER_SEND_FIRST);
 

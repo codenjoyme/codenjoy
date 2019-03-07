@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -115,6 +116,7 @@ public class GuiPlotColorDecoderTest {
                 "{'layers':['1234','4123']}");
     }
 
+    @SneakyThrows
     private void assertEncode(GuiPlotColorDecoder decoder, String expected, String input) {
         assertEquals(fix(JsonUtils.toStringSorted(expected)),
                 JsonUtils.toStringSorted(decoder.encodeForBrowser(new JSONObject(input)).toString()));
@@ -177,6 +179,7 @@ public class GuiPlotColorDecoderTest {
     }
 
     @Test
+    @SneakyThrows
     public void shouldEncodeForClient_removeN() {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 

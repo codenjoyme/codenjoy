@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,6 +71,7 @@ public class SaveServiceImplTest {
         when(playerService.get(anyString())).thenReturn(NullPlayer.INSTANCE);
     }
 
+    @SneakyThrows
     @Test
     public void shouldSavePlayerWhenExists() {
         Player player = createPlayer("vasia");
@@ -196,6 +198,7 @@ public class SaveServiceImplTest {
         verifyNoMoreInteractions(playerService);
     }
 
+    @SneakyThrows
     @Test
     public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
         // given
@@ -246,6 +249,7 @@ public class SaveServiceImplTest {
         assertTrue(saved.isSaved());
     }
 
+    @SneakyThrows
     @Test
     public void testSaveAll() {
         createPlayer("first");

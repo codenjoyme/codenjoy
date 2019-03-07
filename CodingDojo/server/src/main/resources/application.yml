@@ -1,0 +1,32 @@
+rest-sender:
+    pool-size: 100
+
+mvc:
+    cache-period: 259200
+    screen-servlet-path: /screen-ws/*
+    control-servlet-path: /ws/*
+
+
+game.save.auto: true
+board.save.ticks: 1
+game.ai: true
+log.debug: false
+page.main:
+page.registration:
+page.help.language:
+email.verification: false
+email.password:
+email.name: info@codenjoy.com
+donate.code:
+database.url:
+database.name:
+database.user:
+database.password:
+admin.password: admin
+email.hash: secureSoul
+server.ip: 127.0.0.1
+
+logging:
+    level:
+        root: debug
+

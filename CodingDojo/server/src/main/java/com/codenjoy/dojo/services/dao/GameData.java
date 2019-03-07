@@ -25,13 +25,8 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
-import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-@Component
+//@Component
 public class GameData {
 
     private CrudConnectionThreadPool pool;

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,6 +108,7 @@ public class InformationCollectorTest {
         assertNull(collector.getMessage());
     }
 
+    @SneakyThrows
     private JSONObject json(int score) {
         return new JSONObject(String.format("{'score':%s}", score));
     }

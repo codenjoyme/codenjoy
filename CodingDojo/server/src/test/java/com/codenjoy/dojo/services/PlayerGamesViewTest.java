@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -72,6 +73,7 @@ public class PlayerGamesViewTest {
     }
 
     @Test
+    @SneakyThrows
     public void testGetGamesDataMap_usersInSameGroup() {
         // given
         GameField field = mock(GameField.class); // same group
@@ -101,6 +103,7 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup, toString(dataMap.get("user1")));
     }
 
+    @SneakyThrows
     @Test
     public void testGetGamesDataMap_usersInGroup() {
         // given
@@ -145,6 +148,7 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup2, toString(dataMap.get("user4")));
     }
 
+    @SneakyThrows
     @Test
     public void testGetGamesDataMap_singleGames() {
         // given

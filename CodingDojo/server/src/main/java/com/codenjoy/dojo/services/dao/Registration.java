@@ -34,7 +34,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-@Component
+//@Component
 public class Registration {
 
     private CrudConnectionThreadPool pool;

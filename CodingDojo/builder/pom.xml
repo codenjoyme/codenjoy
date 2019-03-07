@@ -33,7 +33,7 @@
         <exclude.sampletext>true</exclude.sampletext>
         <exclude.a2048>true</exclude.a2048>
         <exclude.battlecity>true</exclude.battlecity>
-        <exclude.bomberman>true</exclude.bomberman>
+        <exclude.bomberman>false</exclude.bomberman>
         <exclude.chess>true</exclude.chess>
         <exclude.collapse>true</exclude.collapse>
         <exclude.hex>true</exclude.hex>

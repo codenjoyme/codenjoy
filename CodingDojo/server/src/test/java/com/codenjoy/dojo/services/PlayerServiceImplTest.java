@@ -37,6 +37,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -284,6 +285,7 @@ public class PlayerServiceImplTest {
         assertEquals("ABCD", getBoardFor(vasia));
     }
 
+    @SneakyThrows
     @Test
     public void shouldSendPlayerBoardFromJsonBoard() throws IOException {
         Player vasia = createPlayer(VASYA);

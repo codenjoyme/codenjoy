@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services.jdbc;
+package com.codenjoy.dojo.config.meta;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,19 +22,20 @@ package com.codenjoy.dojo.services.jdbc;
  * #L%
  */
 
-import com.codenjoy.dojo.services.ContextPathGetter;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
 
-public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    private String dbFile;
-
-    public SqliteConnectionThreadPoolFactory(String dbFile, ContextPathGetter context) {
-        this.dbFile = dbFile.replace(".db", "_" + context.getContext() + ".db");
-    }
-
-    @Override
-    public CrudConnectionThreadPool create(String... createTableSqls) {
-        return new SqliteConnectionThreadPool(dbFile, createTableSqls);
-    }
+/**
+ * @author Igor_Petrov@epam.com
+ * Created at 3/6/2019
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+@Profile(SQLiteProfile.NAME)
+public @interface SQLiteProfile {
+    String NAME = "sqlite";
 }
