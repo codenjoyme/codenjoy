@@ -80,7 +80,7 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <form:form commandName="adminSettings" action="admin" method="POST">
+            <form:form modelAttribute="adminSettings" action="admin" method="POST">
                 <tr>
                     <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
                 </tr>
@@ -162,7 +162,7 @@
         </tr>
     </table>
 
-    <form:form commandName="adminSettings" action="admin" method="POST">
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
         <table class="admin-table" id="createNewUsers">
             <tr>
                 <td>NameMask</td>
@@ -181,7 +181,7 @@
     </form:form>
 
     <c:if test="${parameters.size() != 0}">
-        <form:form commandName="adminSettings" action="admin" method="POST">
+        <form:form modelAttribute="adminSettings" action="admin" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -217,7 +217,7 @@
     </c:if>
 
     <c:if test="${players != null || savedGames != null}">
-        <form:form commandName="adminSettings" action="admin" method="POST">
+        <form:form modelAttribute="adminSettings" action="admin" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>

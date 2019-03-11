@@ -43,7 +43,7 @@
         <h1 id="title">Registration</h1>
     </div>
 
-    <form:form commandName="player" action="register" method="POST">
+    <form:form modelAttribute="player" action="register" method="POST">
         <form:hidden path="data"/>
         <table>
             <tr>

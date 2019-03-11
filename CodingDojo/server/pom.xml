@@ -71,6 +71,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>jakarta.servlet</groupId>
+                    <artifactId>jakarta.servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -140,10 +147,28 @@
 
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
+            <artifactId>apache-jsp</artifactId>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.eclipse.jetty</groupId>-->
+            <!--<artifactId>jetty-server</artifactId>-->
+            <!--<version>${jetty.version}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.eclipse.jetty</groupId>-->
             <!--<artifactId>jetty-io</artifactId>-->
@@ -330,6 +355,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.samaxes.maven</groupId>
@@ -345,6 +373,7 @@
                                 <cssInclude>dojo.css</cssInclude>
                             </cssSourceFiles>
                             <cssFinalFile>all.css</cssFinalFile>
+                            <webappTargetDir>${project.build.outputDirectory}</webappTargetDir>
                         </configuration>
                         <goals>
                             <goal>minify</goal>
@@ -358,6 +387,7 @@
                                 <cssInclude>board-only.css</cssInclude>
                             </cssSourceFiles>
                             <cssFinalFile>all-board-only.css</cssFinalFile>
+                            <webappTargetDir>${project.build.outputDirectory}</webappTargetDir>
                         </configuration>
                         <goals>
                             <goal>minify</goal>
@@ -405,6 +435,9 @@
                                 <jsInclude>board-log.js</jsInclude>
                             </jsSourceFiles>
                             <jsFinalFile>all.js</jsFinalFile>
+                            <!--<webappSourceDir>${basedir}/src/main/webapp/resources/js</webappSourceDir>-->
+                            <webappTargetDir>${project.build.outputDirectory}</webappTargetDir>
+                            <verbose>true</verbose>
                         </configuration>
                         <goals>
                             <goal>minify</goal>
