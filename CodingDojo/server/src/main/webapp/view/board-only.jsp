@@ -31,7 +31,14 @@
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
 
     <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
-    <script src="${ctx}/resources/js/all.min.js"></script>
+    <c:choose>
+        <c:when test="${debug}" >
+            <script src="${ctx}/resources/js/all.js"></script>
+        </c:when>
+        <c:otherwise>
+            <script src="${ctx}/resources/js/all.min.js"></script>
+        </c:otherwise>
+    </c:choose>
 </head>
 <body style="display:none;">
     <div id="settings" page="boardOnly" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>

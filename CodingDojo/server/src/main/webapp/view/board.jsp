@@ -33,7 +33,14 @@
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
     <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
-    <script src="${ctx}/resources/js/all.min.js"></script>
+    <c:choose>
+        <c:when test="${debug}" >
+            <script src="${ctx}/resources/js/all.js"></script>
+        </c:when>
+        <c:otherwise>
+            <script src="${ctx}/resources/js/all.min.js"></script>
+        </c:otherwise>
+    </c:choose>
     <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
 </head>
 <body style="display:none;">

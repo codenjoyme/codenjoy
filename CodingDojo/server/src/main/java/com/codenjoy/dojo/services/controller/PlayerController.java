@@ -39,6 +39,7 @@ public class PlayerController implements Controller<String, Joystick> {
 
     public PlayerController(@NamedArg("controlPlayerTransport") PlayerTransport controlPlayerTransport) { // autowiring by name
         this.transport = controlPlayerTransport;
+        this.transport.setDefaultFilter(Object::toString);
     }
 
     @Override

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.config;
  */
 
 import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
 import com.codenjoy.dojo.transport.screen.ws.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
@@ -52,6 +53,15 @@ public class MVCConf implements WebMvcConfigurer {
     @Autowired
     private PlayerTransport controlPlayerTransport;
 
+    @Autowired
+    private PlayerTransport screenPlayerTransport;
+
+    @Autowired
+    private AuthenticationService secureAuthenticationService;
+
+    @Autowired
+    private AuthenticationService defaultAuthenticationService;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
@@ -77,7 +87,7 @@ public class MVCConf implements WebMvcConfigurer {
 
     @Bean
     public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport, secureAuthenticationService), path);
         servletRegistrationBean.setLoadOnStartup(100);
         servletRegistrationBean.setName("wsControlServlet");
         return servletRegistrationBean;
@@ -85,7 +95,7 @@ public class MVCConf implements WebMvcConfigurer {
 
     @Bean
     public ServletRegistrationBean wsScreenServlet(@Value("${mvc.screen-servlet-path}") String path) {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ScreenWebSocketServlet(), path);
+        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ScreenWebSocketServlet(screenPlayerTransport, defaultAuthenticationService), path);
         servletRegistrationBean.setLoadOnStartup(100);
         servletRegistrationBean.setName("wsScreenServlet");
         return servletRegistrationBean;
