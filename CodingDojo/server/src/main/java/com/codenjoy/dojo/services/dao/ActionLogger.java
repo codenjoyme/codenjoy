@@ -41,7 +41,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//@Component
 public class ActionLogger extends Suspendable {
 
     @Value("${board.save.ticks}")

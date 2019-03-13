@@ -1,5 +1,6 @@
 server:
     servlet.context-path: /codenjoy-contest
+    ip: 127.0.0.1
 
 rest-sender:
     pool-size: 100
@@ -10,24 +11,27 @@ mvc:
     control-servlet-path: /ws/*
 
 
-game.save.auto: true
+game:
+    save.auto: true
+    ai: true
 board.save.ticks: 1
-game.ai: true
 log.debug: false
-page.main:
-page.registration:
-page.help.language:
-email.verification: false
-email.password:
-email.name: info@codenjoy.com
+page:
+    main: ''
+    registration: ''
+    help.language: ''
+email:
+    verification: false
+    password: ''
+    name: info@codenjoy.com
+    hash: secureSoul
 donate.code:
-database.url:
-database.name:
-database.user:
-database.password:
+database:
+    url: ''
+    name: ''
+    user: ''
+    password: ''
 admin.password: admin
-email.hash: secureSoul
-server.ip: 127.0.0.1
 
 logging:
     level:

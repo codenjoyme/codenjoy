@@ -26,7 +26,6 @@ package com.codenjoy.dojo.services.dao;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 
-//@Component
 public class GameData {
 
     private CrudConnectionThreadPool pool;

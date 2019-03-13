@@ -26,7 +26,6 @@ package com.codenjoy.dojo.services.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-
 public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
 
     private static final int CONNECTIONS_COUNT = 10;
