@@ -39,7 +39,11 @@ public class ScreenWebSocketServlet extends WebSocketServlet{
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        PlayerSocketCreator creator = new PlayerSocketCreator(transport, authentication, PlayerSocket.CLIENT_SEND_FIRST);
+        PlayerSocketCreator creator =
+                new PlayerSocketCreator(transport,
+                        authentication,
+                        PlayerSocket.CLIENT_SEND_FIRST);
+
         webSocketServletFactory.setCreator(creator);
     }
 }

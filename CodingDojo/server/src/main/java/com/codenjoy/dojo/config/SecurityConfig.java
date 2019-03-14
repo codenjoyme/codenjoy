@@ -48,9 +48,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .hasRole("ADMIN")
                 .antMatchers("/*")
                     .permitAll()
+// TODO закончить с headers
 //                .and()
 //                    .headers()
 //                        .
+//        <http auto-config="true" use-expressions="true">
+//            <intercept-url pattern="/**" access="permitAll"/>
+//            <headers>
+//                <hsts max-age-seconds="31536000"/>
+//                <content-type-options/>
+//                <header name="Content-Security-Policy"
+//                    value="default-src 'self';
+//                    script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;
+//                    img-src 'self' data: http://www.google-analytics.com;
+//                    connect-src 'self' ws: wss: http: https:;
+//                    font-src 'self';
+//                    style-src 'self' 'unsafe-inline';"/>
+//                <xss-protection enabled="true" block="false"/>
+//                <cache-control/>
+//            </headers>
+//            <csrf disabled="true"/>
+//        </http>
 
                 .and()
                     .formLogin()

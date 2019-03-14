@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 import com.codenjoy.dojo.services.ContextPathGetter;
-import org.springframework.stereotype.Component;
 
 public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
 

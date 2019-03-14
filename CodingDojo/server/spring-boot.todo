@@ -1,0 +1,189 @@
+Сделано:
+
+Модуль "server" переведен с war деплоймента Jetty на spring-boot 2 с embedded Jetty контейнером
+Добавлена поддержка spring-security (TODO: регистрация пользователей через него же)
+Переключение БД (sqlite/postgres) переведено на spring profiles
+Интеграционные тесты также переведены на спринт бут
+Добавлен 'debug' spring profile, подключающий не-минифицированный all.js для удобства отладки фронта
+Местами добавлена поддержа project lombok, просто для удобства. Может потребовать установки доп. плагина в IDE разработки. В случае с Intellij IDEA это lombok plugin
+P.S.: spring-boot 2 - чтобы было приятнее/проще/быстрее контрибьютить + более удобная поддержка нескольких OAuth2 IDP (на будущее)
+P.P.S: сохранил возможность сборки и запуска сервера с определенным набором игр через maven профили
+P.P.P.S: готов ответить за всё на любые вопросы
+
+Вопросы/фиксы:
+
++0) Создал ветку spring-boot и туда подтянул PR
+ 1) server\src\main\webapp\WEB-INF\web.xml
+     было закомменчено classpath:/com/codenjoy/dojo/server/spring-security.xml
+     а в нем было очень важная настройка безопасности, чтобы мы проходили тесты нашего секьюрити отдела
+         <http auto-config="true" use-expressions="true">
+             <intercept-url pattern="/**" access="permitAll"/>
+             <headers>
+                 <hsts max-age-seconds="31536000"/>
+                 <content-type-options/>
+                 <header name="Content-Security-Policy"
+                         value="default-src 'self';
+                         script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;
+                         img-src 'self' data: http://www.google-analytics.com;
+                         connect-src 'self' ws: wss: http: https:;
+                         font-src 'self';
+                         style-src 'self' 'unsafe-inline';"/>
+                 <xss-protection enabled="true" block="false"/>
+                 <cache-control/>
+             </headers>
+             <csrf disabled="true"/>
+         </http>
+?    Вопрос где это сейчас находится?
+         Вижу, SecurityConfig но там закомментировано
+             //                .and()
+             //                    .headers()
+             //                 .
+         Пока добавил TODO
+ 2) Очень стараюсь (хотя конечно не всегда) не использовать комментарий для кода, если же есть идея продолжить в этом месте, то обязательно TODO с сообщением что тут планируется делать
+     Давай все закомменченные дипенденси что остались во время фикса, а так же куски кода просто удалим. У нас есть git чтобы видеть хистори. Если цель была другой - поясни плиз
++    Это же касается server/pom.xml
++    Сюда же //@Component
+     MVCConf на тему favicon - добавил TODO
+ 3) Установил плагин ломбока и попробовал mvn clean install на codenjoy-parent проекте и он собрался, что отлично.
+     [INFO] ------------------------------------------------------------------------
+     [INFO] BUILD SUCCESS
+     [INFO] ------------------------------------------------------------------------
+     [INFO] Total time: 07:19 min
+?    Показалось что это происходило дольше чем раньше, но я могу ошибаться
+  4) Видел что логгер заккоментирован !--<logback.version>1.2.3</logback.version>-->
+     Вопрос, как сейчас происходит логгирование? Мне важно было на сервере получать в логе определенную инфу из определенных пакетов.
+     Вижу, дошел до application.yml и там
+         logging:
+             level:
+                 root: debug
+?    Вопрос, как определяетс формат? Для меня важен <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+?    Как включается application-trace.yml
+?    Знал ли ты что у меня логгирование включается в рантайме на админке?
+     Так же вижу, что в другом коммите вернулся logback.xml но там
+         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+             <encoder>
+                 <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+             </encoder>
+         </appender>
+?        Я так понимаю дело в том, что все пусть пишется в консоль, а логгингом пусть занимается докеркомпоуз? Или как? Почему в файл не пишем
+     Так же мне кажется, что комментировать лучше не так
+         <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+             <!--<file>logs/${project.artifactId}.log</file>-->
+             <!--<append>true</append>-->
+
+             <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+                 <!--<maxFileSize>300MB</maxFileSize>-->
+             <!--</triggeringPolicy>-->
+             <!--<encoder>-->
+                 <!--<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+             <!--</encoder>-->
+         <!--</appender>-->
+     а так
+         <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+             <file>logs/${project.artifactId}.log</file>
+             <append>true</append>
+
+             <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                 <maxFileSize>300MB</maxFileSize>
+             </triggeringPolicy>
+             <encoder>
+                 <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+             </encoder>
+         </appender>-->
++    Делается это Ctrl-Shift-. вместо Ctrl-. и читабельность выше
++5) в server/pom.xml встречается две зависимости
+     <joda-time.version>2.10.1</joda-time.version>
+     <joda-time.version>2.10.1</joda-time.version>
+ 6) @SneakyThrows кажется неочевидным, почему только в некоторых тестах есть эта аннотация. Не пытаемся ли мы устранять последствия, вместо того чтобы предложить решение?
+?    Я закомментил одну такую аннотацию - тест запустил и он прошел. Вопрос - зачем тогда она нужна?
+ 7) По какой-то причине на view Maven IDE
+         a2048-engine
+             Dependencies
+             com.codenjoy:engine:1.0.28                  // зависимость красная
+             org.apache.commons:commons-collections4:4.3
+             org.apache.commons:commons-lang3:3.8.1
+             junit:junit:4.12
+             org.mockito:mockito-core:2.24.0            // зависимость красная
+             org.easytesting:fest-assert:1.4
+             org.easytesting:fest-reflect:1.4.1
++8) Видел что в некоторых местах (пакет dao) //@Component что в 5м спринге не надо указывать эту аннотацию?
+     Причем для класса PlayerController эту аннотацию наоборот вернули на место
+     Вопрос снят - дошел до PostgresDBConfig/SqliteDDConfig
+?9) В классе ActionLogger что делает? @NamedArg("databasePoolFactory") из import javafx.beans.NamedArg; ?
++10) В коде MVCConf
+     вместо
+         @Bean
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+             ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
+             servletRegistrationBean.setLoadOnStartup(100);
+             servletRegistrationBean.setName("wsControlServlet");
+             return servletRegistrationBean;
+         }
+     предпочитаю делать так
+         @Bean
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+             return new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path){{
+                 setLoadOnStartup(100);
+                 setLoadOnStartup(100);
+             }};
+         }
+     всегда когда метод возвращает new КакойТоКласс который тут же перед вовзратом чуть конфигурится я делаю анонимного наследника и в его динамическом блоке добавляю что надо
+     если мы говорим про сокращение строк кода всякими методами для удобства читабельности, то такой подход тоже годны
+     если не ок, тогда объект который возвращается из метода называю result, иначе слишком много слов Servlet+Registration+Bean для одного метода
+         вместо
+         @Bean
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+             ServletRegistrationBean result = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
+             result.setLoadOnStartup(100);
+             result.setName("wsControlServlet");
+             return result;
+         }
+?11) Что делают SQLiteProfile/PostgreSQLProfile
+ 12) Вижу в start-server.bat # -Dcontext=another-context # -Psnake,bomberman,sample
+     Контекст менять потребность есть, эту фичу надо оставить рабочей
+ 13) В pom.xml билдера было случайно закоммичено
+     <exclude.bomberman>false</exclude.bomberman>
+     Да и вообще его удалять пора, от слова "вообще"
++14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
+     @Override
+     public void configure(WebSocketServletFactory webSocketServletFactory) {
+         PlayerSocketCreator creator =
+                 new PlayerSocketCreator(
+                         controlPlayerTransport,
+                         authentication,
+                         PlayerSocket.SERVER_SEND_FIRST);
+
+         webSocketServletFactory.setCreator(creator);
+
+         timer.resume();
+     }
++15) что делает SystemControllerAdvice ?
+     Вопрос снят, почитал дальше
+?    Вопрос, как оно передает сигнал в <c:when test="${debug}" >?
+ 16) Во всех jsp дублирование, очень хочется его вынести
+     <c:choose>
+         <c:when test="${debug}" >
+             <script src="${ctx}/resources/js/all.js"></script>
+         </c:when>
+         <c:otherwise>
+             <script src="${ctx}/resources/js/all.min.js"></script>
+         </c:otherwise>
+     </c:choose>
+ 17) Сейчас сервер запускается так
+         call mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug clean spring-boot:run -DallGames
+?    вопрос в том, как поменять codenjoy-contest ? работает ли как раньше
+         # -Dcontext=another-context # -Psnake,bomberman,sample
+?18) Как подменить application.yml - раньше конфиг codenjoy-contest.properties можно было размещать в jetty/config и приложение брало его вначале оттуда, а потом из war (если не нашло), можно ли сейчас так же подменять? Это актуально для скриптов запуска на linux сервере и windows portable
+
+Плюс то, что мы обсудили в чатике:
+
+ 19) так же переживаю за скрипты для сборки сервера на локали (winodws10) и на linux сервере (с докером и компоузом) https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable
+     Они так же должны быть обновлены перед влвианием в мастер
+ 20) Readme.md так же надо будет обновить под новые реалии. Поскольку там сейчас инфа как запуститься с билдером.
+ 21) И если билдер уже не нужен и с war мы не запускаеп, тогда получается его надо выпилить.
+
+Плюс то, что вылезло в ходе тестирования:
+
+ 22)
+
+Что могу сказать, все очень достойно! Ты крут, Игорь
