@@ -24,15 +24,19 @@ package com.codenjoy.dojo.services.mocks;
 
 
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 
 public class MockPropertyPlaceholderConfigurer {
 
-    @Bean(name = "propertyPlaceholderConfigurer")
-    public PropertyPlaceholderConfigurer bean() {
-        PropertyPlaceholderConfigurer configurer = new PropertyPlaceholderConfigurer();
-        configurer.setLocation(new ClassPathResource("/config/codenjoy-contest.properties"));
+    @Bean(name = "propertySourcesPlaceholderConfigurer")
+    public PropertySourcesPlaceholderConfigurer bean() {
+        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+        YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+        yaml.setResources(new ClassPathResource("application.yml"));
+        configurer.setProperties(yaml.getObject());
         return configurer;
     }
 }
