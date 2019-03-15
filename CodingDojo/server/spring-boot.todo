@@ -193,8 +193,32 @@ P.P.P.S: готов ответить за всё на любые вопросы
                null
                There was an unexpected error (type=null, status=null).
                Invalid Username or Password
-    23.1) что само по себе не очень информативно (надо какой-то error.jsp)
+    23.1) что само по себе не очень информативно
+        почему-то не редиректится на error.jsp
+            @RequestMapping(value = "/error", params = "message")
+            public String error(ModelMap model, @RequestParam("message") String message) {
+                model.addAttribute("message", message);
+                return "error";
+            }
+        с
+            @RequestMapping(value = "/denied")
+            public ModelAndView displayAccessDeniedPage(){
+                return new ModelAndView(){{
+                    addObject("message", "Invalid Username or Password");
+                    setViewName("error");
+                }};
+            }
+        подозреваю что из за params = "message"
+
     23.2) Но проблема так же в том, что на админку так и не попал
+            возможно дело в том, что
+                .antMatchers("/admin*")
+                    .hasRole("ADMIN")
+            а на админ контроллере
+                @Component
+                @RequestMapping("/admin")
+                @Secured("ROLE_ADMIN")
+            хотя не уверен
 +24) Файлик codenjoy-contest.properties думаю можно удалить
 +    Но на него завязаны MockPropertyPlaceholderConfigurer и дальше PlayerServiceImplTest а это та еще боль. Быть может тогда конфиг отнести в тесты?
 
