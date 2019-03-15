@@ -59,6 +59,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
 ?    Вопрос, как определяетс формат? Для меня важен <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
 ?    Как включается application-trace.yml
 ?    Знал ли ты что у меня логгирование включается в рантайме на админке?
++        Я проверил как оно работает. Все ок
      Так же вижу, что в другом коммите вернулся logback.xml но там
          <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
              <encoder>
@@ -221,5 +222,83 @@ P.P.P.S: готов ответить за всё на любые вопросы
             хотя не уверен
 +24) Файлик codenjoy-contest.properties думаю можно удалить
 +    Но на него завязаны MockPropertyPlaceholderConfigurer и дальше PlayerServiceImplTest а это та еще боль. Быть может тогда конфиг отнести в тесты?
+
++25) Как собрать codenjoy-contest.jar со всеми депенденсями? видимо надо какой-то maven-assembly
+    Чтобы потом для запуска сервера вызвать на linux в докере вызвать
+        java -jar codenjoy-contest.jar
+    Ведь на linux в одном докер контейнере с сырцами и мейвеном собирался war
+        а в другом контейнере этот war запускался в предустановленный jetty
+    Я попробовал
+        mvn clean package -Dmaven.test.skip=true -Psnake,bomberman,sample
+        cd target
+        java -Dspring-boot.run.profiles=sqlite,trace,debug -jar codenjoy-contest.jar
+    Но получил
+        02:55:03,679 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+        02:55:03,680 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+        02:55:03,680 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/classes!/logback.xml]
+        02:55:03,684 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
+        02:55:03,684 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/lib/engine-1.0.28.jar!/logback.xml]
+        02:55:03,684 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/classes!/logback.xml]
+        02:55:03,747 |-INFO in ch.qos.logback.core.joran.spi.ConfigurationWatchList@5f4da5c3 - URL [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/classes!/logback.xml] is not of type file
+        02:55:03,876 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+        02:55:03,879 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+        02:55:03,903 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+        02:55:03,923 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.codenjoy] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.codenjoy] to true
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.epam.dojo] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.epam.dojo] to true
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.codenjoy.dojo.transport] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.codenjoy.dojo.transport] to true
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.eclipse.jetty] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [org.eclipse.jetty] to false
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to INFO
+        02:55:04,044 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+        02:55:04,045 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+        02:55:04,047 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@443b7951 - Registering current configuration as safe fallback point
+          .   ____          _            __ _ _
+         /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+        ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+         \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+          '  |____| .__|_| |_|_| |_\__, | / / / /
+         =========|_|==============|___/=/_/_/_/
+         :: Spring Boot ::        (v2.1.3.RELEASE)
+        2019-03-15T02:55:05.537 [main] INFO  c.c.dojo.CodenjoyContestApplication - Starting CodenjoyContestApplication v1.0.28 on indigo-pc with PID 360 (D:\JavaForFun\Codenjoy\CodingDojo\server\target\codenjoy-contest.jar started by indigo in D:\JavaForFun\Codenjoy\CodingDojo\server\target)
+        2019-03-15T02:55:05.542 [main] DEBUG c.c.dojo.CodenjoyContestApplication - Running with Spring Boot v2.1.3.RELEASE, Spring v5.1.5.RELEASE
+        2019-03-15T02:55:05.544 [main] INFO  c.c.dojo.CodenjoyContestApplication - No active profile set, falling back to default profiles: default
+        2019-03-15T02:55:09.145 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.configuration.ObjectP ostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$704d76fd] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.158 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'objectPostProcessor' of type [org.springframework.security.config.an notation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.172 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodS ecurityExpressionHandler@236e3f4e' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.176 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.method.configuration. GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$952219af] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.190 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security. access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:10.218 [main] INFO  o.s.b.w.e.j.JettyServletWebServerFactory - Server initialized with port: 8080
+        2019-03-15T02:55:10.322 [main] INFO  o.s.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 4662 ms
+        2019-03-15T02:55:10.750 [main] INFO  org.reflections.Reflections - Reflections took 157 ms to scan 2 urls, producing 92 keys and 204 values
+        2019-03-15T02:55:11.104 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Unable to start embedded Jetty web server
+        2019-03-15T02:55:11.138 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+        2019-03-15T02:55:11.600 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -
+        ***************************
+        APPLICATION FAILED TO START
+        ***************************
+        Description:
+        Field saver in com.codenjoy.dojo.services.SaveServiceImpl required a bean of type 'com.codenjoy.dojo.services.GameSaver' that could not be found.
+        The injection point has the following annotations:
+                - @org.springframework.beans.factory.annotation.Autowired(required=true)
+        Action:
+        Consider defining a bean of type 'com.codenjoy.dojo.services.GameSaver' in your configuration.
+    Решилось через запуск с ключиком "spring.profiles.active" вместо "spring-boot.run.profiles"
+        java -Dspring.profiles.active=sqlite,trace,debug -jar codenjoy-contest.jar
+?   Но не все так просто - пробую загрузить страничку http://127.0.0.1:8080/codenjoy-contest
+        2019-03-15T03:08:01.545 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - GET "/codenjoy-contest/", parameters={}
+        2019-03-15T03:08:01.549 [qtp1912960603-17] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to public java.lang.String com.codenjoy.dojo.web.controller.MainPageController.getMainPage(javax.servlet.http.HttpServletRequest,org.springframework.ui.Model)
+        2019-03-15T03:08:01.566 [qtp1912960603-17] DEBUG o.s.w.s.v.ContentNegotiatingViewResolver - Selected 'text/html' given [text/html, application/xhtml+xml, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8]
+        2019-03-15T03:08:01.576 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - View name 'main', model {debug=true, ip=127.0.0.1, gameNames=[bomberman=bomberman, sample=sample, snake=snake]}
+        2019-03-15T03:08:01.589 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - Forwarding to [/view/main.jsp]
+        2019-03-15T03:08:01.592 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - "ERROR" dispatch for GET "/codenjoy-contest/error", parameters={}
+        2019-03-15T03:08:01.599 [qtp1912960603-17] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+        2019-03-15T03:08:01.605 [qtp1912960603-17] DEBUG o.s.w.s.v.ContentNegotiatingViewResolver - Selected 'text/html' given [text/html, text/html;q=0.8]
+        2019-03-15T03:08:01.613 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - Exiting from "ERROR" dispatch, status 404
+        2019-03-15T03:08:01.623 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - Completed 404 NOT_FOUND
+?   25.2) Кроме всего прочего, полученный jar не открываеся как архив, что очень странно
 
 Что могу сказать, все очень достойно! Ты крут, Игорь
