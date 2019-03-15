@@ -184,6 +184,17 @@ P.P.P.S: готов ответить за всё на любые вопросы
 
 Плюс то, что вылезло в ходе тестирования:
 
- 22)
+ 22) Не удалось мне с ключиком # -Dcontext=another-context запуститься с другим контекстом по
+    mvn clean spring-boot:run -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug -Psnake,bomberman,sample -Dcontext=another-context
+ 23) зашел на админку http://127.0.0.1:8080/codenjoy-contest/admin
+    ввел логин пароль admin/admin
+    и получил  Whitelabel Error Page
+               This application has no explicit mapping for /error, so you are seeing this as a fallback.
+               null
+               There was an unexpected error (type=null, status=null).
+               Invalid Username or Password
+    23.1) что само по себе не очень информативно (надо какой-то error.jsp)
+    23.2) Но проблема так же в том, что на админку так и не попал
+ 
 
 Что могу сказать, все очень достойно! Ты крут, Игорь
