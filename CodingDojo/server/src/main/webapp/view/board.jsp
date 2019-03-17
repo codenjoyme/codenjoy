@@ -31,6 +31,7 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+    <link href="${ctx}/resources/favicon.ico" rel="icon">
 
     <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
     <c:choose>

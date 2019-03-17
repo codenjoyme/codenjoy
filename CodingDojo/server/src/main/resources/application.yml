@@ -32,7 +32,3 @@ database:
     user: ''
     password: ''
 admin.password: admin
-
-logging:
-    level:
-        root: info

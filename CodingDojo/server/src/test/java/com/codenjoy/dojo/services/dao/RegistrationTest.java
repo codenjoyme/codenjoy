@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Random;
@@ -51,7 +52,7 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }));
+                        }), "admin");
     }
 
     @After

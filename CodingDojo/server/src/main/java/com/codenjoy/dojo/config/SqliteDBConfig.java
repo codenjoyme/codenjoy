@@ -28,9 +28,11 @@ import com.codenjoy.dojo.services.dao.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -39,7 +41,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @SQLiteProfile
 @RequiredArgsConstructor
-public class SqliteDDConfig {
+public class SqliteDBConfig {
 
     private final ContextPathGetter contextPathGetter;
 
@@ -57,6 +59,12 @@ public class SqliteDDConfig {
 
     @Value("${database.files.settings}")
     private String settingsFileName;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public ConnectionThreadPoolFactory databasePoolFactory() {
@@ -85,7 +93,7 @@ public class SqliteDDConfig {
 
     @Bean
     public Registration registration() {
-        return new Registration(registrationPoolFactory());
+        return new Registration(registrationPoolFactory(), passwordEncoder.encode(adminPassword));
     }
 
     @Bean

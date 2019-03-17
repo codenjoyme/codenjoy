@@ -2,7 +2,5 @@ logging:
   level:
     com:
       codenjoy: debug
-      org.eclipse.jetty: debug
-    org:
-      springframework:
-        web: debug
+      epam.dojo: debug
+    org.eclipse.jetty: debug

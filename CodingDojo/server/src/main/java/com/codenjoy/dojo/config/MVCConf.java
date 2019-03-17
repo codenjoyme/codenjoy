@@ -48,6 +48,9 @@ public class MVCConf implements WebMvcConfigurer {
     @Value("${mvc.cache-period}")
     private int cachePeriod;
 
+    @Value("${server.servlet.context-path}")
+    private String servletContextRoot;
+
     @Autowired
     private TimerService timer;
 
@@ -69,13 +72,6 @@ public class MVCConf implements WebMvcConfigurer {
                 .addResourceHandler("/resources/**")
                     .addResourceLocations("/resources/", "classpath:/resources/")
                     .setCachePeriod(cachePeriod);
-
-// TODO закончить тут
-//        registry
-//                .addResourceHandler("/favicon.ico")
-//                    .addResourceLocations("/resources/favicon.ico")
-//                    .setCachePeriod(cachePeriod);
-
     }
 
     @Bean

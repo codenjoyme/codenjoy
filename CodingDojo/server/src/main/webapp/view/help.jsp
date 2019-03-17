@@ -31,6 +31,7 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+    <link href="${ctx}/resources/favicon.ico" rel="icon">
 
     <c:choose>
         <c:when test="${debug}" >
