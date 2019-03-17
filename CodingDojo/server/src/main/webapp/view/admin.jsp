@@ -122,7 +122,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${debug}">
+                    <c:when test="${debugLog}">
                         <b>The debug in progress</b></br> <a href="${ctx}/admin?stopDebug&gameName=${gameName}">Stop debug</a>.
                     </c:when>
                     <c:otherwise>

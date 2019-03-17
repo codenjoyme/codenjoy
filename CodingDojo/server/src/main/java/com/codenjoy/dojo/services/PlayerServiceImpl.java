@@ -307,9 +307,7 @@ public class PlayerServiceImpl implements PlayerService {
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
-        if (log.isDebugEnabled()) {
-            log.debug("tick().requestControls() {} players", requested);
-        }
+        log.debug("tick().requestControls() {} players", requested);
     }
 
     private void sendScreenUpdates() {

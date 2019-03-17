@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -41,12 +42,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 
 @Controller
 @RequestMapping("/admin")
 @Secured("ROLE_ADMIN")
+@Slf4j
 public class AdminController {
 
     public static final String GAME_NAME = "gameName";
@@ -210,7 +215,7 @@ public class AdminController {
     }
 
     private void checkDebugStatus(Model model) {
-        model.addAttribute("debug", debugService.isWorking());
+        model.addAttribute("debugLog", debugService.isWorking());
     }
 
     // ----------------

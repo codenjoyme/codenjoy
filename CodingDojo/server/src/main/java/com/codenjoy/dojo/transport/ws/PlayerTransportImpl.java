@@ -23,17 +23,15 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 
+@Slf4j
 public class PlayerTransportImpl implements PlayerTransport {
-
-    private static Logger logger = DLoggerFactory.getLogger(PlayerTransportImpl.class);
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private Map<String, SocketsHandlerPair> endpoints = new LinkedHashMap<>();
@@ -63,8 +61,8 @@ public class PlayerTransportImpl implements PlayerTransport {
                         messages.toString());
                 // TODO Может не надо тут прокидывать это исключение а просто логгировать факт каждой проблемы отдельно
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
+            if (log.isDebugEnabled()) {
+                log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
             }
         } finally {
             lock.readLock().unlock();

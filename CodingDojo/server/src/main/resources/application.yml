@@ -32,3 +32,9 @@ database:
     user: ''
     password: ''
 admin.password: admin
+
+app:
+    logging:
+        - com.epam.dojo
+        - com.codenjoy
+
