@@ -111,16 +111,16 @@ P.P.P.S: готов ответить за всё на любые вопросы
 +    Делается это Ctrl-Shift-. вместо Ctrl-. и читабельность выше
  Igor: не знал, что так можно. У меня этот шорткат не работает, но я поищу, как на это поведение повлиять :)
     Плюс, с переходом на spring-boot версия logback апнулась, теперь пришлось немного конфигурацию под file appender поменять.
-+5) в server/pom.xml встречается две зависимости
+✓5) в server/pom.xml встречается две зависимости
      <joda-time.version>2.10.1</joda-time.version>
      <joda-time.version>2.10.1</joda-time.version>
  Igor: странно, вижу только одну. В идеале, стоит от Йоды избавиться, Datetime API в 8-ке покрывает его фичи целиком.
  6) @SneakyThrows кажется неочевидным, почему только в некоторых тестах есть эта аннотация. Не пытаемся ли мы устранять последствия, вместо того чтобы предложить решение?
-?    Я закомментил одну такую аннотацию - тест запустил и он прошел. Вопрос - зачем тогда она нужна?
+✓    Я закомментил одну такую аннотацию - тест запустил и он прошел. Вопрос - зачем тогда она нужна?
  Igor: В своё время я его добавил в тесты, потому что у конструктора org.json.JSONObject внезапно в сигнатуре появился throws с checked исключением. Позже понял,
     что класс тянулся не из той зависимости. В итоге зависимость в pom'нике поправил, а аннотации убрать забыл - спасибо, что обнаружил.
     P.S.: аннотация вообще спорная, есть смысл использовать только если явно нет смысла обрабатывать checked exceptions.
- 7) По какой-то причине на view Maven IDE
+✓? 7) По какой-то причине на view Maven IDE
          a2048-engine
              Dependencies
              com.codenjoy:engine:1.0.28                  // зависимость красная
@@ -131,12 +131,13 @@ P.P.P.S: готов ответить за всё на любые вопросы
              org.easytesting:fest-assert:1.4
              org.easytesting:fest-reflect:1.4.1
  Igor: странно, у меня не воспроизводится. Реимпорт тоже не помог? Можем вместе посмотреть.
-+8) Видел что в некоторых местах (пакет dao) //@Component что в 5м спринге не надо указывать эту аннотацию?
+✓8) Видел что в некоторых местах (пакет dao) //@Component что в 5м спринге не надо указывать эту аннотацию?
      Причем для класса PlayerController эту аннотацию наоборот вернули на место
      Вопрос снят - дошел до PostgresDBConfig/SqliteDDConfig
-?9) В классе ActionLogger что делает? @NamedArg("databasePoolFactory") из import javafx.beans.NamedArg; ?
+✓9) В классе ActionLogger что делает? @NamedArg("databasePoolFactory") из import javafx.beans.NamedArg; ?
+ Igor: это по недосмотру, там должна была быть другая аннотация. Но т.к. сейчас сервер запускается только в одном из sqlite|postgres профилей, необходимости в квалифаерах нет - убрал.
 
-+10) В коде MVCConf
+✓10) В коде MVCConf
      вместо
          @Bean
          public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
@@ -164,13 +165,20 @@ P.P.P.S: готов ответить за всё на любые вопросы
              result.setName("wsControlServlet");
              return result;
          }
-?11) Что делают SQLiteProfile/PostgreSQLProfile
- 12) Вижу в start-server.bat # -Dcontext=another-context # -Psnake,bomberman,sample
+ Igor: отличное замечание! Раньше только для инициализации коллекций использовал. Твой код выглядит читабельнее и понятнее (y)
+
+✓11) Что делают SQLiteProfile/PostgreSQLProfile
+?? Igor: создают connection пулы либо для sqlite, либо для postgres. У тебя раньше это было реализовано через import одной из xml конфигураций в applicationContext.xml в зависимости от пропертей в рантайме.
+  Просто перевел это логику на спринговые профили, их как раз для таких целей нынче принято использовать.
+  Но, я бы в перспективе вообще от классов PostgresDBConfig и SqliteDBConfig избавился и упростил конфиги. Осталось
+  только вместе обсудить 2 момента: для чего были нужны самописные connection пулы + для чего таблицы в sqlite разнесены по разным физическим файлам базы
+?? 12) Вижу в start-server.bat # -Dcontext=another-context # -Psnake,bomberman,sample
      Контекст менять потребность есть, эту фичу надо оставить рабочей
+ Igor: здесь есть вопросы, давай обсудим вместе.
  13) В pom.xml билдера было случайно закоммичено
      <exclude.bomberman>false</exclude.bomberman>
      Да и вообще его удалять пора, от слова "вообще"
-+14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
+✓+14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
      @Override
      public void configure(WebSocketServletFactory webSocketServletFactory) {
          PlayerSocketCreator creator =
@@ -183,10 +191,13 @@ P.P.P.S: готов ответить за всё на любые вопросы
 
          timer.resume();
      }
-+15) что делает SystemControllerAdvice ?
+
+ Igor: мне кажется, 120 символов в строке нынче уже вполне допустимо, но ок, буду иметь в виду :)
+✓+15) что делает SystemControllerAdvice ?
      Вопрос снят, почитал дальше
 ?    Вопрос, как оно передает сигнал в <c:when test="${debug}" >?
- 16) Во всех jsp дублирование, очень хочется его вынести
+?? Igor: хм, это стандартный атрибут в модели, который устанавливается перед загрузкой страницы. Может быть, я не понял вопрос...
+✓ 16) Во всех jsp дублирование, очень хочется его вынести
      <c:choose>
          <c:when test="${debug}" >
              <script src="${ctx}/resources/js/all.js"></script>
@@ -195,12 +206,20 @@ P.P.P.S: готов ответить за всё на любые вопросы
              <script src="${ctx}/resources/js/all.min.js"></script>
          </c:otherwise>
      </c:choose>
+ Igor: действительно, done.
  17) Сейчас сервер запускается так
          call mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug clean spring-boot:run -DallGames
 ?    вопрос в том, как поменять codenjoy-contest ? работает ли как раньше
          # -Dcontext=another-context # -Psnake,bomberman,sample
+?? Igor: давай вместе обсудим этот момент с контекстом.
 ?18) Как подменить application.yml - раньше конфиг codenjoy-contest.properties можно было размещать в jetty/config и приложение брало его вначале оттуда, а потом из war (если не нашло), можно ли сейчас так же подменять? Это актуально для скриптов запуска на linux сервере и windows portable
-
+ Igor: подменять его не стоит, хотя можно. Для добавления предопределенных наборов настроек есть смысл завести в коде приложения аналогичный файл по маске application-${spring.profile.name}.yml
+ и добавить этот профиль в рантайме.
+ Для перекрытия настроек извне в spring boot (если не используется spring cloud, а он нам не нужен, думаю) используют 3 способа (на примере admin.password):
+    1. JVM аргументы (-Dadmin.password=supersecurepassword)
+    2. CLI аргументы (аргументы jar'ника: --admin.password=supersecurepassword)
+    3. ENV переменные среды (докер контейнера или хоста, в зависимости от способа запуска. Ключи заменяются на uppercase,
+        точки заменяются на underscore: ADMIN_PASSWORD=supersecurepassword)
 Плюс то, что мы обсудили в чатике:
 
  19) так же переживаю за скрипты для сборки сервера на локали (winodws10) и на linux сервере (с докером и компоузом) https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable
@@ -329,7 +348,7 @@ P.P.P.S: готов ответить за всё на любые вопросы
 Что могу сказать, все очень достойно! Ты крут, Игорь
 
  Igor:
-   +26) перевел вход в админку пользователем 'admin' из БД. Начались проблемы из-за того, что пришлось поменять DDL создания таблицы USERS в конструкторе Registration. Поэтому, пере
+??   +26) перевел вход в админку пользователем 'admin' из БД. Начались проблемы из-за того, что пришлось поменять DDL создания таблицы USERS в конструкторе Registration. Поэтому, пере
    запуском сервера на SQLite, нужно удалить старый файл базы.
    В кач-ве решения предлагаю перевести "проливку" БД на liquibase или flyway. Постараюсь сделать чуть позже. Сейчас это проблематично из-за самописного connection пула. Кстати,
    хотел бы его голосом обсудить вместе.
