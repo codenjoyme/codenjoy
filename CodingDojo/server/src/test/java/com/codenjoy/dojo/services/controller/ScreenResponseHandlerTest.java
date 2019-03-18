@@ -28,7 +28,6 @@ import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.utils.JsonUtils;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -114,7 +113,6 @@ public class ScreenResponseHandlerTest {
     }
 
     @Test
-    @SneakyThrows
     public void shouldOnResponse_whenOnResponse_caseAllPlayersScreen_noGroupsAllSelected() {
         // given
 
@@ -267,7 +265,6 @@ public class ScreenResponseHandlerTest {
                 "}", JsonUtils.prettyPrint(result));
     }
 
-    @SneakyThrows
     private Map<Player, PlayerData> getDummyPlayers() {
         Map<Player, PlayerData> map = new HashMap<>();
 

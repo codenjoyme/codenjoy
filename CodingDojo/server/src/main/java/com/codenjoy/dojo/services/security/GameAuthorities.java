@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public enum GameAuthorities {
-    ADMIN,
-    USER;
+    ADMIN("ROLE_ADMIN", "ROLE_USER"),
+    USER("ROLE_USER");
 
     GameAuthorities(String... roles) {
         this.roles = Stream.of(roles).collect(Collectors.toSet());
@@ -46,6 +46,11 @@ public enum GameAuthorities {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
+    public String[] roles() {
+        return roles.toArray(new String[roles.size()]);
+    }
+
 
     public static String buildRolesString(String... roles) {
         return String.join(",", roles);

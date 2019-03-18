@@ -22,12 +22,15 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import org.junit.Assert;
 import org.mockito.stubbing.Answer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -79,5 +82,15 @@ public class TestUtils {
         result.playerGame = playerGame;
         result.printerFactory = printerFactory;
         return result;
+    }
+
+    public static void assertUsersEqual(Registration.User expected, Registration.User actual, String originPassword, PasswordEncoder passwordEncoder) {
+        Assert.assertEquals("User ids mismatch", expected.getId(), actual.getId());
+        Assert.assertEquals("User readable names mismatch", expected.getReadableName(), actual.getReadableName());
+        Assert.assertEquals("User emails approval statuses mismatch", expected.getApproved(), actual.getApproved());
+        Assert.assertEquals("User emails approval statuses mismatch", expected.getApproved(), actual.getApproved());
+        Assert.assertEquals("User codes mismatch", expected.getCode(), actual.getCode());
+        Assert.assertEquals("User data mismatch", expected.getData(), actual.getData());
+        Assert.assertTrue("User passwords mismatch", passwordEncoder.matches(originPassword, actual.getPassword()));
     }
 }

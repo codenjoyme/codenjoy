@@ -93,7 +93,7 @@ public class SqliteDBConfig {
 
     @Bean
     public Registration registration() {
-        return new Registration(registrationPoolFactory(), passwordEncoder.encode(adminPassword));
+        return new Registration(registrationPoolFactory(), adminPassword, passwordEncoder, true);
     }
 
     @Bean

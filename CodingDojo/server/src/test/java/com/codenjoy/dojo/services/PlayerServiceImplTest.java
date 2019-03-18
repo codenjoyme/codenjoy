@@ -285,7 +285,6 @@ public class PlayerServiceImplTest {
         assertEquals("ABCD", getBoardFor(vasia));
     }
 
-    @SneakyThrows
     @Test
     public void shouldSendPlayerBoardFromJsonBoard() throws IOException {
         Player vasia = createPlayer(VASYA);

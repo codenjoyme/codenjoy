@@ -73,7 +73,6 @@ public class PlayerGamesViewTest {
     }
 
     @Test
-    @SneakyThrows
     public void testGetGamesDataMap_usersInSameGroup() {
         // given
         GameField field = mock(GameField.class); // same group
@@ -103,7 +102,6 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup, toString(dataMap.get("user1")));
     }
 
-    @SneakyThrows
     @Test
     public void testGetGamesDataMap_usersInGroup() {
         // given
@@ -148,7 +146,6 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup2, toString(dataMap.get("user4")));
     }
 
-    @SneakyThrows
     @Test
     public void testGetGamesDataMap_singleGames() {
         // given

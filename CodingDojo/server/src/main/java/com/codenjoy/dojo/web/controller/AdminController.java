@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.extern.slf4j.Slf4j;
@@ -321,7 +322,7 @@ public class AdminController {
         if (registration.registered(playerName)) {
             return registration.login(playerName, playerName);
         } else {
-            return registration.register(playerName, playerName, playerName, playerName, "");
+            return registration.register(playerName, playerName, playerName, playerName, "", GameAuthorities.USER.roles());
         }
     }
 

@@ -1,40 +1,40 @@
 server:
-    servlet.context-path: /codenjoy-contest
-    ip: 127.0.0.1
+  servlet.context-path: /codenjoy-contest
+  ip: 127.0.0.1
 
 rest-sender:
-    pool-size: 100
+  pool-size: 100
 
 mvc:
-    cache-period: 259200
-    screen-servlet-path: /screen-ws/*
-    control-servlet-path: /ws/*
+  cache-period: 259200
+  screen-servlet-path: /screen-ws/*
+  control-servlet-path: /ws/*
 
 
 game:
-    save.auto: true
-    ai: true
+  save.auto: true
+  ai: true
 board.save.ticks: 1
 log.debug: false
 page:
-    main: ''
-    registration: ''
-    help.language: ''
+  main: ''
+  registration: ''
+  help.language: ''
 email:
-    verification: false
-    password: ''
-    name: info@codenjoy.com
-    hash: secureSoul
+  verification: false
+  password: ''
+  name: info@codenjoy.com
+  hash: secureSoul
 donate.code:
 database:
-    url: ''
-    name: ''
-    user: ''
-    password: ''
+  url: ''
+  name: ''
+  user: ''
+  password: ''
 admin.password: admin
 
 app:
-    logging:
-        - com.epam.dojo
-        - com.codenjoy
+  logging:
+    - com.epam.dojo
+    - com.codenjoy
 

@@ -66,7 +66,7 @@ public class PostgresDBConfig {
 
     @Bean
     public Registration registration() {
-        return new Registration(connectionThreadPollFactory(), passwordEncoder.encode(adminPassword));
+        return new Registration(connectionThreadPollFactory(), adminPassword, passwordEncoder, true);
     }
 
     @Bean
