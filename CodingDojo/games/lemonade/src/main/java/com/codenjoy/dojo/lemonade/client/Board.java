@@ -24,10 +24,55 @@ package com.codenjoy.dojo.lemonade.client;
 
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
+import com.codenjoy.dojo.client.ClientBoard;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board extends AbstractTextBoard {
 
+    private final ArrayList<DailyReport> history;
+    private final InputData inputData;
+
+    private Board(InputData inputData, ArrayList<DailyReport> history){
+        this.inputData = inputData;
+        this.history = history;
+    }
+
+    public Board(){
+        history = null;
+        inputData = null;
+    }
+
+    @Override
+    public ClientBoard forString(String data) {
+        JSONObject input = new JSONObject(data);
+        JSONArray historyJson = input.getJSONArray("history");
+        ArrayList<DailyReport> history = parseHistory(historyJson);
+        JSONObject inputDataJson = input.getJSONObject("inputData");
+        InputData inputData = InputData.fromJson(inputDataJson);
+        return new Board(inputData, history);
+    }
+
+    private ArrayList<DailyReport> parseHistory(JSONArray historyJson) {
+        ArrayList<DailyReport> history = new ArrayList<>();
+        historyJson.forEach(reportJson -> {
+            history.add(DailyReport.fromJson(reportJson));
+        });
+        return history;
+    }
+
+    public List<DailyReport> getHistory(){
+        return history;
+    }
+
     public String getData() {
         return data;
+    }
+
+    public InputData getInputData() {
+        return inputData;
     }
 }

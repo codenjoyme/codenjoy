@@ -23,10 +23,12 @@ package com.codenjoy.dojo.lemonade.client;
  */
 
 
+import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.client.AbstractTextSolver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+import org.json.JSONObject;
 
 /**
  * User: your name
@@ -34,7 +36,7 @@ import com.codenjoy.dojo.services.RandomDice;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class YourSolver extends AbstractTextSolver {
+public class YourSolver extends AbstractJsonSolver<Board> {
 
     private Dice dice;
     private YourSolver board;
@@ -43,16 +45,25 @@ public class YourSolver extends AbstractTextSolver {
         this.dice = dice;
     }
 
-    @Override
-    public String getAnswer(String question) {
-        return "your answer";
-    }
-
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
-                "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+                "http://localhost:8080/codenjoy-contest/board/player/nobm5352w8ho65xnx968?code=1279539930846793759",
                 new YourSolver(new RandomDice()),
                 new Board());
+    }
+
+    @Override
+    public String getAnswer(Board board) {
+        String a = toAnswerString(0,0,0);
+        return a;
+    }
+
+    private String toAnswerString(int glasses, int signs, int priceCents) {
+        JSONObject answer = new JSONObject();
+        answer.put("glassesToMake", glasses);
+        answer.put("signsToMake", signs);
+        answer.put("priceCents", priceCents);
+        return answer.toString();
     }
 }

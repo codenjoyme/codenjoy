@@ -23,9 +23,12 @@ package com.codenjoy.dojo.lemonade.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.AbstractTextSolver;
+import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.services.Dice;
+import org.json.JSONObject;
 
 /**
  * User: your name
@@ -33,7 +36,7 @@ import com.codenjoy.dojo.services.Dice;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class AISolver extends AbstractTextSolver {
+public class AISolver extends AbstractJsonSolver<Board> {
 
     private Dice dice;
     private AbstractTextBoard board;
@@ -43,7 +46,16 @@ public class AISolver extends AbstractTextSolver {
     }
 
     @Override
-    public String getAnswer(String question) {
-        return "answer" + question.substring("question".length());
+    public String getAnswer(Board board) {
+        String a = toAnswerString(0,0,0);
+        return a;
+    }
+
+    private String toAnswerString(int glasses, int signs, int priceCents) {
+        JSONObject answer = new JSONObject();
+        answer.put("glassesToMake", glasses);
+        answer.put("signsToMake", signs);
+        answer.put("priceCents", priceCents);
+        return answer.toString();
     }
 }
