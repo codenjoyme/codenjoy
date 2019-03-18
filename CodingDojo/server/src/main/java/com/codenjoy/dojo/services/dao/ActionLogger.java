@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
-import javafx.beans.NamedArg;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.Date;
@@ -52,7 +51,7 @@ public class ActionLogger extends Suspendable {
 
     private CrudConnectionThreadPool pool;
 
-    public ActionLogger(@NamedArg("databasePoolFactory") ConnectionThreadPoolFactory factory) {
+    public ActionLogger(ConnectionThreadPoolFactory factory) {
         pool = factory.create("CREATE TABLE IF NOT EXISTS player_boards (" +
                     "time varchar(255), " +
                     "player_name varchar(255), " +
