@@ -222,15 +222,18 @@ P.P.P.S: готов ответить за всё на любые вопросы
         точки заменяются на underscore: ADMIN_PASSWORD=supersecurepassword)
 Плюс то, что мы обсудили в чатике:
 
- 19) так же переживаю за скрипты для сборки сервера на локали (winodws10) и на linux сервере (с докером и компоузом) https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable
+TODO: 19) так же переживаю за скрипты для сборки сервера на локали (winodws10) и на linux сервере (с докером и компоузом) https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable
      Они так же должны быть обновлены перед влвианием в мастер
- 20) Readme.md так же надо будет обновить под новые реалии. Поскольку там сейчас инфа как запуститься с билдером.
- 21) И если билдер уже не нужен и с war мы не запускаеп, тогда получается его надо выпилить.
+
+TODO: 20) Readme.md так же надо будет обновить под новые реалии. Поскольку там сейчас инфа как запуститься с билдером.
+
+✓ 21) И если билдер уже не нужен и с war мы не запускаеп, тогда получается его надо выпилить.
 
 Плюс то, что вылезло в ходе тестирования:
 
- 22) Не удалось мне с ключиком # -Dcontext=another-context запуститься с другим контекстом по
+✓  22) Не удалось мне с ключиком # -Dcontext=another-context запуститься с другим контекстом по
     mvn clean spring-boot:run -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug -Psnake,bomberman,sample -Dcontext=another-context
+ Igor: теперь должно работать
  23) зашел на админку http://127.0.0.1:8080/codenjoy-contest/admin
     ввел логин пароль admin/admin
     и получил  Whitelabel Error Page

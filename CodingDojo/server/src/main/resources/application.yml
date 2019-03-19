@@ -1,5 +1,5 @@
 server:
-  servlet.context-path: /codenjoy-contest
+  servlet.context-path: ${context:/codenjoy-contest}
   ip: 127.0.0.1
 
 rest-sender:
