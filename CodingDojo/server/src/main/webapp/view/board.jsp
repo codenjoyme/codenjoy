@@ -29,12 +29,12 @@
     <meta charset="utf-8">
     <title>Game boards</title>
 
-    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/all.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
-    <script src="${ctx}/resources/js/all.min.js"></script>
-    <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
+    <script src="${ctx}/resources/js/all.js"></script>
+    <script src="${ctx}/resources/js/${gameName}.js"></script>
 </head>
 <body style="display:none;">
     <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
