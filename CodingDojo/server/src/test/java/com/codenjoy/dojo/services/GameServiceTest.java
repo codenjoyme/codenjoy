@@ -23,17 +23,19 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.MockPlayerService;
-import com.codenjoy.dojo.services.mocks.MockTimerService;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -49,16 +51,19 @@ import static org.mockito.Mockito.reset;
  * Date: 17.12.13
  * Time: 18:51
  */
-@ContextConfiguration(classes = {
-        GameServiceImpl.class,
-        MockTimerService.class,
-        MockPlayerService.class})
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@RunWith(SpringRunner.class)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class GameServiceTest {
 
-    @Autowired private GameServiceImpl gameService;
-    @Autowired private TimerService timer;
-    @Autowired private PlayerService players;
+    @MockBean
+    private TimerService timer;
+
+    @MockBean
+    private PlayerService players;
+
+    @Autowired
+    private GameServiceImpl gameService;
 
     @Before
     public void setup() {

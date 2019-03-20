@@ -31,8 +31,7 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-
-    <script src="${ctx}/resources/js/all.min.js"></script>
+    <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
     <div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
@@ -43,7 +42,7 @@
         <h1 id="title">Registration</h1>
     </div>
 
-    <form:form commandName="player" action="register" method="POST">
+    <form:form modelAttribute="player" action="register" method="POST">
         <form:hidden path="data"/>
         <table>
             <tr>
