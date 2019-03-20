@@ -108,7 +108,6 @@ public class InformationCollectorTest {
         assertNull(collector.getMessage());
     }
 
-    @SneakyThrows
     private JSONObject json(int score) {
         return new JSONObject(String.format("{'score':%s}", score));
     }

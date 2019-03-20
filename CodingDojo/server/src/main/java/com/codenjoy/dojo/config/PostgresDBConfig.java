@@ -26,9 +26,11 @@ import com.codenjoy.dojo.config.meta.PostgreSQLProfile;
 import com.codenjoy.dojo.services.dao.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPoolFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -38,8 +40,14 @@ import org.springframework.context.annotation.Configuration;
 @PostgreSQLProfile
 public class PostgresDBConfig {
 
-    @Value("${database.url}/${database.name}?user=${database.user}&amp;password=${database.password}")
+    @Value("${database.host}:${database.port}/${database.name:postgres}?user=${database.user}&password=${database.password}")
     private String jdbcString;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Bean
     public ConnectionThreadPoolFactory connectionThreadPollFactory() {
@@ -58,7 +66,7 @@ public class PostgresDBConfig {
 
     @Bean
     public Registration registration() {
-        return new Registration(connectionThreadPollFactory());
+        return new Registration(connectionThreadPollFactory(), adminPassword, passwordEncoder, true);
     }
 
     @Bean

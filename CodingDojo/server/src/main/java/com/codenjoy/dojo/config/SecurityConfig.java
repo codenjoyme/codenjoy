@@ -27,6 +27,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -48,26 +50,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .hasRole("ADMIN")
                 .antMatchers("/*")
                     .permitAll()
-//                .and()
-//                    .headers()
-//                        .
-
+                .and()
+                    .headers()
+                        .httpStrictTransportSecurity().maxAgeInSeconds(31536000)
+                    .and()
+                        .contentTypeOptions()
+                    .and()
+                        .contentSecurityPolicy(
+                                "default-src 'self';" +
+                                "script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;" +
+                                "img-src 'self' data: http://www.google-analytics.com;" +
+                                "connect-src 'self' ws: wss: http: https:;" +
+                                "font-src 'self';" +
+                                "style-src 'self' 'unsafe-inline';")
+                    .and()
                 .and()
                     .formLogin()
                         .loginProcessingUrl("/admin")
-                        .failureForwardUrl("/denied");
+                .and()
+                    .csrf().disable();
 
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return new CorsFilter(
+            new UrlBasedCorsConfigurationSource(){{
+                registerCorsConfiguration("/**",
+                    new CorsConfiguration(){{
+                        setAllowCredentials(true);
+                        addAllowedOrigin("*");
+                        addAllowedHeader("*");
+                        addAllowedMethod("*");
+                    }});
+            }});
     }
 }

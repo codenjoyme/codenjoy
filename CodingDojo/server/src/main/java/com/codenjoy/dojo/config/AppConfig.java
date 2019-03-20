@@ -22,6 +22,7 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,13 +44,13 @@ public class AppConfig {
     }
 
     @Bean
-    public PlayerTransport controlPlayerTransport() {
-        return new PlayerTransportImpl();
+    public PlayerTransport controlPlayerTransport(DebugService debugService) {
+        return new PlayerTransportImpl(debugService);
     }
 
     @Bean
-    public PlayerTransport screenPlayerTransport() {
-        return new PlayerTransportImpl();
+    public PlayerTransport screenPlayerTransport(DebugService debugService) {
+        return new PlayerTransportImpl(debugService);
     }
 
 }

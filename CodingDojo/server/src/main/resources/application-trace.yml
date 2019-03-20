@@ -1,9 +1,0 @@
-logging:
-  level:
-    com:
-      codenjoy: debug
-      epam.dojo: debug
-      org.eclipse.jetty: debug
-    org:
-      springframework:
-        web: debug

@@ -23,8 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,9 +32,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Slf4j
 public class TimerService implements Runnable {
-
-    private static Logger logger = DLoggerFactory.getLogger(TimerService.class);
 
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture<?> future;
@@ -67,7 +65,7 @@ public class TimerService implements Runnable {
             playerService.tick();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Error while processing next step", e);
+            log.error("Error while processing next step", e);
         }
     }
 

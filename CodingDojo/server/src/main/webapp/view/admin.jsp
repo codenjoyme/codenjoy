@@ -32,14 +32,7 @@
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <c:choose>
-        <c:when test="${debug}" >
-            <script src="${ctx}/resources/js/all.js"></script>
-        </c:when>
-        <c:otherwise>
-            <script src="${ctx}/resources/js/all.min.js"></script>
-        </c:otherwise>
-    </c:choose>
+    <jsp:include page="common-inclusion.jsp" />
 
 </head>
 <body>
@@ -121,7 +114,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${debug}">
+                    <c:when test="${debugLog}">
                         <b>The debug in progress</b></br> <a href="${ctx}/admin?stopDebug&gameName=${gameName}">Stop debug</a>.
                     </c:when>
                     <c:otherwise>

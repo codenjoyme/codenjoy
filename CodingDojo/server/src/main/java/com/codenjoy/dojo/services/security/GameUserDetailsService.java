@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services.jdbc;
+package com.codenjoy.dojo.services.security;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,18 +22,21 @@ package com.codenjoy.dojo.services.jdbc;
  * #L%
  */
 
-import com.codenjoy.dojo.services.ContextPathGetter;
+import com.codenjoy.dojo.services.dao.Registration;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
-public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
+@Component
+@RequiredArgsConstructor
+public class GameUserDetailsService implements UserDetailsService {
 
-    private String dbFile;
-
-    public SqliteConnectionThreadPoolFactory(String dbFile, ContextPathGetter context) {
-        this.dbFile = dbFile.replace(".db", "_" + context.getContext() + ".db");
-    }
+    private final Registration registration;
 
     @Override
-    public CrudConnectionThreadPool create(String... createTableSqls) {
-        return new SqliteConnectionThreadPool(dbFile, createTableSqls);
+    public UserDetails loadUserByUsername(String code) throws UsernameNotFoundException {
+        return registration.getUserByCode(code);
     }
 }

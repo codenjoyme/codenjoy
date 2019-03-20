@@ -71,7 +71,6 @@ public class SaveServiceImplTest {
         when(playerService.get(anyString())).thenReturn(NullPlayer.INSTANCE);
     }
 
-    @SneakyThrows
     @Test
     public void shouldSavePlayerWhenExists() {
         Player player = createPlayer("vasia");
@@ -198,7 +197,6 @@ public class SaveServiceImplTest {
         verifyNoMoreInteractions(playerService);
     }
 
-    @SneakyThrows
     @Test
     public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
         // given
@@ -249,7 +247,6 @@ public class SaveServiceImplTest {
         assertTrue(saved.isSaved());
     }
 
-    @SneakyThrows
     @Test
     public void testSaveAll() {
         createPlayer("first");

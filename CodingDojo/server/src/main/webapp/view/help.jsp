@@ -31,15 +31,7 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-
-    <c:choose>
-        <c:when test="${debug}" >
-            <script src="${ctx}/resources/js/all.js"></script>
-        </c:when>
-        <c:otherwise>
-            <script src="${ctx}/resources/js/all.min.js"></script>
-        </c:otherwise>
-    </c:choose>
+    <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
     <div id="settings" page="help" contextPath="${ctx}"></div>

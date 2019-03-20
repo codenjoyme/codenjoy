@@ -506,7 +506,6 @@ public class PlayerGamesTest {
         verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
     }
 
-    @SneakyThrows
     @Test
     public void testSetLevel_caseNotPassedLevel() {
         // given
@@ -538,7 +537,6 @@ public class PlayerGamesTest {
         verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
     }
 
-    @SneakyThrows
     @Test
     public void testSetLevel_casePassedLevel() {
         shouldNextLevel_whenGameOver_andIsWin_caseTrainingMultiplayerType();
@@ -567,7 +565,6 @@ public class PlayerGamesTest {
         verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
     }
 
-    @SneakyThrows
     @Test
     public void testSetLevel_caseNoLevelData() {
         shouldNextLevel_whenGameOver_andIsWin_caseTrainingMultiplayerType();
@@ -820,7 +817,6 @@ public class PlayerGamesTest {
                 playerGames.get("player").getGame().getSave().toString());
     }
 
-    @SneakyThrows
     @Test
     public void testGetGameSave_forTrainingMultiplayerType_caseNotNullFieldSave() {
         // given
@@ -837,7 +833,6 @@ public class PlayerGamesTest {
                 playerGames.get("player").getGame().getSave().toString());
     }
 
-    @SneakyThrows
     @Test
     public void testGetGameSave_forOtherMultiplayerTypes() {
         // given
@@ -870,7 +865,6 @@ public class PlayerGamesTest {
 
     }
 
-    @SneakyThrows
     @Test
     public void testGetBoardAsString_trainingMultiplayerType_caseJSON() {
         // given

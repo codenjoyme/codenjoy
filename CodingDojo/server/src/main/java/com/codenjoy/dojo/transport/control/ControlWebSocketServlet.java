@@ -36,13 +36,18 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 public class ControlWebSocketServlet extends WebSocketServlet {
 
     private final TimerService timer;
-    private final PlayerTransport controlPlayerTransport;
+    private final PlayerTransport transport;
     private final AuthenticationService authentication;
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        PlayerSocketCreator creator = new PlayerSocketCreator(controlPlayerTransport, authentication, PlayerSocket.SERVER_SEND_FIRST);
+        PlayerSocketCreator creator =
+                new PlayerSocketCreator(transport,
+                        authentication,
+                        PlayerSocket.SERVER_SEND_FIRST);
+
         webSocketServletFactory.setCreator(creator);
+
         timer.resume();
     }
 }

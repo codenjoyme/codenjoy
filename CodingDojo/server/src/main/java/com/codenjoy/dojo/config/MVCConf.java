@@ -27,6 +27,7 @@ import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
 import com.codenjoy.dojo.transport.screen.ws.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -46,6 +47,9 @@ public class MVCConf implements WebMvcConfigurer {
 
     @Value("${mvc.cache-period}")
     private int cachePeriod;
+
+    @Value("${server.servlet.context-path}")
+    private String servletContextRoot;
 
     @Autowired
     private TimerService timer;
@@ -68,36 +72,34 @@ public class MVCConf implements WebMvcConfigurer {
                 .addResourceHandler("/resources/**")
                     .addResourceLocations("/resources/", "classpath:/resources/")
                     .setCachePeriod(cachePeriod);
-
-//        registry
-//                .addResourceHandler("/favicon.ico")
-//                    .addResourceLocations("/resources/favicon.ico")
-//                    .setCachePeriod(cachePeriod);
-
     }
 
     @Bean
     public ViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setPrefix("/view/");
-        viewResolver.setSuffix(".jsp");
-        viewResolver.setRedirectHttp10Compatible(false);
-        return viewResolver;
+        return new InternalResourceViewResolver(){{
+            setPrefix("/view/");
+            setSuffix(".jsp");
+            setRedirectHttp10Compatible(false);
+        }};
     }
 
     @Bean
     public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport, secureAuthenticationService), path);
-        servletRegistrationBean.setLoadOnStartup(100);
-        servletRegistrationBean.setName("wsControlServlet");
-        return servletRegistrationBean;
+        WebSocketServlet servlet = new ControlWebSocketServlet(timer, controlPlayerTransport, secureAuthenticationService);
+
+        return new ServletRegistrationBean<WebSocketServlet>(servlet, path){{
+            setLoadOnStartup(100);
+            setName("wsControlServlet");
+        }};
     }
 
     @Bean
     public ServletRegistrationBean wsScreenServlet(@Value("${mvc.screen-servlet-path}") String path) {
-        ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ScreenWebSocketServlet(screenPlayerTransport, defaultAuthenticationService), path);
-        servletRegistrationBean.setLoadOnStartup(100);
-        servletRegistrationBean.setName("wsScreenServlet");
-        return servletRegistrationBean;
+        ScreenWebSocketServlet servlet = new ScreenWebSocketServlet(screenPlayerTransport, defaultAuthenticationService);
+
+        return new ServletRegistrationBean<WebSocketServlet>(servlet, path){{
+            setLoadOnStartup(100);
+            setName("wsScreenServlet");
+        }};
     }
 }

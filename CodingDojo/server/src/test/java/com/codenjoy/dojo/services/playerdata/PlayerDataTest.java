@@ -24,17 +24,13 @@ package com.codenjoy.dojo.services.playerdata;
 
 
 import com.codenjoy.dojo.utils.JsonUtils;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PlayerDataTest {
 
-    @SneakyThrows
     @Test
     public void shouldSavePlayerData(){
         PlayerData data = new PlayerData(13, "board", "game", 55, "+100",
@@ -50,7 +46,6 @@ public class PlayerDataTest {
         assertEquals("game", data.getGameName());
     }
 
-    @SneakyThrows
     @Test
     public void shouldCollectData() {
         PlayerData data = new PlayerData(15, "board", "game", 10, "info",
@@ -67,7 +62,6 @@ public class PlayerDataTest {
                 "HeroesData:'{\"user@gmail.com\":{\"x\":5,\"y\":10}}']", data.toString());
     }
 
-    @SneakyThrows
     @Test
     public void shouldEmptyInfoIfNull(){
         PlayerData data = new PlayerData(15, "board", "game", 10, null,
