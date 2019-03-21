@@ -41,10 +41,11 @@ var util = require('util');
 var hostIP = '127.0.0.1';
 var port = 8080;
 
-// this is your email
-var userName = 'your@email.com';
-// you can get this code after registration on the server with your email
-// http://servernameorip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+// TODO to use new way of get ws link
+// this is your player id
+var playerId = '3edq63tw0bq4w4iem7nb';
+// you can get this code after registration on the server
+// http://servernameorip:8080/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890
 var code = '1889919902398150091';
 
 var processBoard = function(boardString) {
@@ -67,7 +68,7 @@ var processBoard = function(boardString) {
 
 var server = 'ws://' + hostIP + ':' + port + '/codenjoy-contest/ws';
 var WSocket = require('ws');
-var wsurl = server + '?user=' + userName + '&code=' + code;
+var wsurl = server + '?user=' + playerId + '&code=' + code;
 //log(wsurl);
 var ws = new WSocket(wsurl);
 

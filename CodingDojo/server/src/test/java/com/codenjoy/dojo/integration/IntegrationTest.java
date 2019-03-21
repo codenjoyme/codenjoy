@@ -187,7 +187,7 @@ public class IntegrationTest {
         String str = "href=\"";
         int fromIndex = message.indexOf(str) + str.length();
         String activationUrl = message.substring(fromIndex, message.indexOf('"', fromIndex + 1));
-        activationUrl = activationUrl.replace("tetrisj.jvmhost.net:12270", "localhost:" + port);
+        activationUrl = activationUrl.replace("codenjoy.com:80", "localhost:" + port);
         return activationUrl;
     }
 

@@ -29,8 +29,8 @@ namespace LunoletClient
     {
         // Server name and port number -- ask orgs
         private static string ServerNameAndPort = "127.0.0.1:8080";
-        // Register on the server, write down your registration name
-        private static string UserName = "your@email.com";
+        // Register on the server, write down your player id (you can get it from baord page url after registration)
+        private static string UserId = "3edq63tw0bq4w4iem7nb";
         // Look up for the code in the browser url after the registration
         private static string UserCode = "1889919902398150091";
 
@@ -45,7 +45,7 @@ namespace LunoletClient
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string url = $"ws://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}";
+            string url = $"ws://{ServerNameAndPort}/codenjoy-contest/ws?user={UserId}&code={UserCode}";
             client = new WebSocket(url);
 
             client.OnOpen += Client_OnOpen;

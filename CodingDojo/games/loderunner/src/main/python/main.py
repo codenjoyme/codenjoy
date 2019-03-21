@@ -33,7 +33,7 @@ def main():
     dds = DirectionSolver()
     wcl = WebClient(dds)
 
-    wcl.run("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws", 'au')
+    wcl.run("ws://codenjoy.com:80/codenjoy-contest/ws", 'au')
 
 if __name__ == '__main__':
     main()
