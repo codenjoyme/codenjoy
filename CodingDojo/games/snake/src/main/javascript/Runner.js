@@ -230,7 +230,7 @@ var LengthToXY = function(boardSize) {
                 return null;
             }
             var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize));
+            var y = inversionY(Math.trunc(length / boardSize));
             return new Point(x, y);
         },
 

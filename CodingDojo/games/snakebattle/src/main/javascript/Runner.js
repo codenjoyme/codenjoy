@@ -19,6 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+// TODO test me
+
 var util = require('util');
 var WSocket = require('ws');
 
@@ -260,7 +263,7 @@ var LengthToXY = function (boardSize) {
                 return null;
             }
             var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize));
+            var y = inversionY(Math.trunc(length / boardSize));
             return new Point(x, y);
         },
 
