@@ -38,7 +38,7 @@ public class WebSocketRunnerTest {
                 "https://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
 
         assertURL("UrlParser{server='127.0.0.1:8080', context='codenjoy-contest', code='12345678901234567890', userName='3edq63tw0bq4w4iem7nb'}",
-                "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
+                "http://127.0.0.1:8080/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
 
         assertURL("UrlParser{server='192.168.0.1', context='codenjoy-contest', code='12345678901234567890', userName='3edq63tw0bq4w4iem7nb'}",
                 "http://192.168.0.1/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
