@@ -5,6 +5,8 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 DOCKER_IMAGE=apofig/codenjoy-contest:1.0.28
+SERVER_PORT=8080
+
 JETTY_PID=999
 
 HOME_DIR=$(
@@ -48,9 +50,9 @@ database.url=
 database.name=
 database.user=
 database.password=
-admin.password=admin31415
-email.hash=hash28143168
-server.ip=134.209.82.193
+admin.password=admin
+email.hash=secureHash
+server.ip=127.0.0.1
 EOT
 
 eval_echo "mkdir $HOME_DIR/database"
@@ -58,4 +60,4 @@ eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/database"
 
 eval_echo "docker rm --force codenjoy-contest"
 
-eval_echo "docker run --name codenjoy-contest -p 8080:8080 -v $HOME_DIR/database:/var/lib/jetty/database -v $HOME_DIR/config:/var/lib/jetty/config -v $HOME_DIR/logs/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log -d $DOCKER_IMAGE"
+eval_echo "docker run --name codenjoy-contest -p $SERVER_PORT:8080 -v $HOME_DIR/database:/var/lib/jetty/database -v $HOME_DIR/config:/var/lib/jetty/config -v $HOME_DIR/logs/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log -d $DOCKER_IMAGE"
