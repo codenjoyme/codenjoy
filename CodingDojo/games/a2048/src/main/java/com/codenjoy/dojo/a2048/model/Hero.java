@@ -63,7 +63,7 @@ public class Hero extends PlayerHero<Field> {
 
     @Override
     public void act(int... p) {
-        clear = true;
+        clear();
     }
 
     @Override
@@ -81,5 +81,9 @@ public class Hero extends PlayerHero<Field> {
 
     public boolean isAlive() {
         return !field.isGameOver();
+    }
+
+    public void clear() {
+        clear = true;
     }
 }
