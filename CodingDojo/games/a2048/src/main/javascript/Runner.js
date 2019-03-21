@@ -403,7 +403,6 @@ var DirectionSolver = function(board){
          * @return next hero action
          */
         get : function() {
-            var tank = board.getMe();
 
             // TODO your code here
 
