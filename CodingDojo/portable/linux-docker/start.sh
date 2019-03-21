@@ -4,7 +4,6 @@ if [ "$EUID" -ne 0 ]; then
     exit ;
 fi
 
-SERVER_DIR=/srv/codenjoy
 DOCKER_IMAGE=apofig/codenjoy-contest:1.0.28
 JETTY_PID=999
 
@@ -13,10 +12,6 @@ HOME_DIR=$(
   pwd
 )
 echo $HOME_DIR
-if [ "x$HOME_DIR" = "x$SERVER_DIR" ]; then
-    echo "[91mPlease run as root on the /srv/codenjoy folder[0m" ;
-    exit ;
-fi
 
 eval_echo() {
     to_run=$1
