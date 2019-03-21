@@ -10,11 +10,12 @@
         ]).
 
 -define(Host,player:hostname()).
--define(User,player:username()).
+-define(User,player:userid()).
+-define(Code,player:code()).
 -define(GameUrl,player:gameurl()).
 
 start() ->
-  websocket_client:start_link("ws://"++ ?Host ++ "/"++ ?GameUrl ++ "user=" ++ ?User, ?MODULE, []).
+  websocket_client:start_link("ws://"++ ?Host ++ "/"++ ?GameUrl ++ "user=" ++ ?User ++ "code=" ++ ?Code, ?MODULE, []).
 
 init([], _ConnState) ->
     websocket_client:cast(self(), {text, <<"message 1">>}),

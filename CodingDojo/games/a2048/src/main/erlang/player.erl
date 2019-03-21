@@ -6,10 +6,12 @@
          gameurl/0
         ]).
 
-username() ->
-  "anatoliliotych".
+userid() ->
+  "3edq63tw0bq4w4iem7nb".
+code() ->
+  "1234567890123456789".
 hostname() ->
-  "localhost:8080".
+  "codenjoy.com:80".
 gameurl() ->
   "codenjoy-contest/ws?".
 

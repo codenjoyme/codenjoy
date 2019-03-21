@@ -24,12 +24,13 @@ from codenjoy_connection import CodenjoyConnection
 
 
 try:
-    name = 'anatoliliotych' # name which was used during registration
-    port = '8080' # game port
-    host = 'localhost' # game host
+    name = '3edq63tw0bq4w4iem7nb'     # player id (which you can get from board page url after registration)
+    code = '1234567890123456789'      # player code (-- " --")
+    port = '80'                       # game port
+    host = 'codenjoy.com'             # game host
     game_url = 'codenjoy-contest/ws?' # game url
 
-    url = "ws://{0}:{1}/{2}user={3}".format(host, port, game_url, name)
+    url = "ws://{0}:{1}/{2}user={3}&code={4}".format(host, port, game_url, name, code)
     player = Player()
     ws = CodenjoyConnection(url, player)
     ws.connect()

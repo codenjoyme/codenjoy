@@ -24,11 +24,12 @@
 require 'codenjoy_connection'
 require File.expand_path('../player', __FILE__)
 
-host_ip = 'codenjoy_server' # ip of host with running tetris-server
-port = '8080' # this port is used for communication between your client and tetris-server
-user = 'anatoliliotych' # your username, use the same for registration on tetris-server
+host_ip = 'codenjoy.com'       # ip of host with running server
+port = '80'                    # this port is used for communication between your client and server
+user = '3edq63tw0bq4w4iem7nb'  # player id (which you can get from board page url after registration)
+code = '1234567890123456789'   # your code  (-- " --")
 
-opts = {:username => user, :host=> host_ip, :port => port, :game_url => 'tetris-contest/ws?'}
+opts = {:username => user, :host=> host_ip, :port => port, :game_url => 'codenjoy-contest/ws?'}
 
 player = Player.new
 CodenjoyConnection.play(player,opts)
