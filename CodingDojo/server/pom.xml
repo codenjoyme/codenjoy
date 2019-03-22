@@ -7,7 +7,7 @@
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-contest</artifactId>
     <version>1.0.28</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -18,7 +18,7 @@ MAINTAINER Alexander Baglay <apofig@gmail.com>
 USER root
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV MAVEN_VERSION 3.5.4
+ENV MAVEN_VERSION 3.6.0
 ENV MAVEN_BASE_URL https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
 ENV MAVEN_SHA ce50b1c91364cb77efe3776f756a6d92b76d9038b0a0782f7d53acf1e997a14d
 ENV MAVEN_HOME /usr/share/maven
