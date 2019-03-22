@@ -15,7 +15,7 @@ IF "%DEBUG%"=="true" (
 
 call explorer http://127.0.0.1:8080%CONTEXT%
 
-%JAVA_HOME%\bin\java -jar %APP_HOME%\server.jar --spring.profiles.active=%SPRING_PROFILES% --context=%CONTEXT%
+%JAVA_HOME%\bin\java -jar %APP_HOME%\server.war --spring.profiles.active=%SPRING_PROFILES% --context=%CONTEXT%
 
 echo Press any key to exit
 pause >nul

@@ -83,7 +83,8 @@ IF "%GAMES_TO_RUN%"=="" (
 )
 
 mkdir %APP_HOME%
-copy %ROOT%\codenjoy\CodingDojo\server\target\codenjoy-contest.jar %APP_HOME%\server.jar
+echo %ROOT%\codenjoy\CodingDojo\server\target\codenjoy-contest.war
+copy %ROOT%\codenjoy\CodingDojo\server\target\codenjoy-contest.war %APP_HOME%\server.war
 
 cd %ROOT%
 
