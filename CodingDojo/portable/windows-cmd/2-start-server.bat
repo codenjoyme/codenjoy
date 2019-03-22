@@ -13,10 +13,10 @@ IF "%DEBUG%"=="true" (
     pause >nul
 )
 
-call explorer http://127.0.0.1:8080/%CONTEXT%
+call explorer http://127.0.0.1:8080%CONTEXT%
 
 cd %APP_HOME%
-%JAVA_HOME%\bin\java -jar server.jar
+%JAVA_HOME%\bin\java -Dcontext=%CONTEXT% -jar server.jar --spring.profiles.active=%SPRING_PROFILES%
 
 echo Press any key to exit
 pause >nul
