@@ -210,12 +210,4 @@ public class AISolver extends AbstractJsonSolver<Board> {
         }
         combo.setScore(gaps, height);
     }
-
-    public static void main(String[] args) {
-        WebSocketRunner.runClient(
-                // paste here board page url from browser after registration
-                "http://127.0.0.1:8080/codenjoy-contest/board/player/apofig@gmail.com?code=20010765231070354251",
-                new AISolver(new RandomDice()),
-                new Board());
-    }
 }

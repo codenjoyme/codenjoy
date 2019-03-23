@@ -11,7 +11,7 @@ bundle install
 ```
 4. Run your client:
 ```
-ruby game.rb 127.0.0.1:8080 your@email.com 20010765231070354251
+ruby game.rb 127.0.0.1:8080 3edq63tw0bq4w4iem7nb 20010765231070354251
 ```
 
 Now you can code your bot, change code of `solver.rb` after block

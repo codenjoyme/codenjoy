@@ -55,7 +55,7 @@ var processBoard = function(boardString) {
 };
 
 // you can get this code after registration on the server with your email
-var url = "http://127.0.0.1:8080/codenjoy-contest/board/player/tofxije4urfiw1xj2d5x?code=4780229493598912478";
+var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
@@ -230,7 +230,7 @@ var LengthToXY = function(boardSize) {
                 return null;
             }
             var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize));
+            var y = inversionY(Math.trunc(length / boardSize));
             return new Point(x, y);
         },
 

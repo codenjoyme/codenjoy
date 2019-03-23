@@ -30,7 +30,7 @@ static BombermanAPI *bomberAPI = nil;
 	}
 	_webSocket.delegate = nil;
     [_webSocket close];
-	NSString *server = [NSString stringWithFormat:@"ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=%@",userName];
+	NSString *server = [NSString stringWithFormat:@"ws://codenjoy.com:80/codenjoy-contest/ws?user=%@",userName];
 	_webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:server]]];
 	_webSocket.delegate = self;
 	[_webSocket open];

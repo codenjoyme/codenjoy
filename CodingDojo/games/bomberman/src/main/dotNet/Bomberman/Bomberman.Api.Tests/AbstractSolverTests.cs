@@ -31,11 +31,11 @@ namespace Bomberman.Api.Tests
         [TestMethod]
         public void ShouldProvideWebSocketUrlFromServerAddress()
         {
-            var serverUrl = "http://127.0.0.1:8080/codenjoy-contest/board/player/player@mail.com?code=12345678901234567890";
+            var serverUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
 
             var result = AbstractSolver.GetWebSocketUrl(serverUrl);
 
-            var expectedWebSocketUrl = "ws://127.0.0.1:8080/codenjoy-contest/ws?user=player%40mail.com&code=12345678901234567890";
+            var expectedWebSocketUrl = "ws://codenjoy.com:80/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=1234567890123456789";
 
             Assert.AreEqual(expectedWebSocketUrl, result);
         }
