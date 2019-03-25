@@ -5,39 +5,36 @@ import org.junit.Test;
 
 public class BoardTest {
 
-    String input = "{\n" +
-            "    history : [\n" +
-            "        {\n" +
-            "            day : \"1\",\n" +
-            "            glassesSold : \"2\",\n" +
-            "            glassPrice : \"0.34\",\n" +
-            "            income : \"0.00\",\n" +
-            "            glassesMade : \"3\",\n" +
-            "            signsMade : \"3\",\n" +
-            "            expenses : \"4.3\",\n" +
-            "            profit : \"-0.45\",\n" +
-            "            assets : \"2.55\"\n" +
-            "        },\n" +
-            "        {\n" +
-            "            day : \"2\",\n" +
-            "            glassesSold : \"5\",\n" +
-            "            glassPrice : \"0.34\",\n" +
-            "            income : \"0.60\",\n" +
-            "            glassesMade : \"3\",\n" +
-            "            signsMade : \"3\",\n" +
-            "            expenses : \"4.3\",\n" +
-            "            profit : \"-0.45\",\n" +
-            "            assets : \"2.55\"\n" +
-            "        }\n" +
-            "    ],\n" +
-            "    inputData: {\n" +
-            "        day : \"2\",\n" +
-            "        costOfLemonade : \"0.02\",\n" +
-            "        lemonadeStand : \"1\",\n" +
-            "        assets : \"1.55\",\n" +
-            "        signCost : \"0.15\",\n" +
-            "        forecast : \"SUNNY\"\n" +
-            "    }\n" +
+    String input =
+            "{" +
+            "    history : [" +
+            "        {" +
+            "            day : 1," +
+            "            lemonadeSold : 2," +
+            "            lemonadePrice : 0.34," +
+            "            income : 0.00," +
+            "            lemonadeMade : 3," +
+            "            signsMade : 3," +
+            "            expenses : 4.3," +
+            "            profit : -0.45," +
+            "            assets : 2.55" +
+            "        }," +
+            "        {" +
+            "            day : 2," +
+            "            lemonadeSold : 5," +
+            "            lemonadePrice : 0.34," +
+            "            income : 0.60," +
+            "            lemonadeMade : 3," +
+            "            signsMade : 3," +
+            "            expenses : 4.3," +
+            "            profit : -0.45," +
+            "            assets : 2.55" +
+            "        }" +
+            "    ]," +
+            "    day : 2," +
+            "    lemonadePrice : 0.02," +
+            "    assets : 1.55," +
+            "    weatherForecast : SUNNY" +
             "}";
 
     @Test

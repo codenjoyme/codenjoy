@@ -4,22 +4,22 @@ import org.json.JSONObject;
 
 public class DailyReport {
     private final int day;
-    private final int glassesSold;
-    private final float glassPrice;
+    private final int lemonadeSold;
+    private final float lemonadePrice;
     private final float income;
-    private final int glassesMade;
+    private final int lemonadeMade;
     private final int signsMade;
     private final float expenses;
     private final float profit;
     private final float assets;
 
-    public DailyReport(int day, int glassesSold, float glassPrice, float income,
-                       int glassesMade, int signsMade, float expenses, float profit, float assets) {
+    public DailyReport(int day, int lemonadeSold, float lemonadePrice, float income,
+                       int lemonadeMade, int signsMade, float expenses, float profit, float assets) {
         this.day = day;
-        this.glassesSold = glassesSold;
-        this.glassPrice = glassPrice;
+        this.lemonadeSold = lemonadeSold;
+        this.lemonadePrice = lemonadePrice;
         this.income = income;
-        this.glassesMade = glassesMade;
+        this.lemonadeMade = lemonadeMade;
         this.signsMade = signsMade;
         this.expenses = expenses;
         this.profit = profit;
@@ -29,19 +29,19 @@ public class DailyReport {
     public static DailyReport fromJson(Object report) {
         JSONObject reportJson = (JSONObject)report;
         int day = reportJson.getInt("day");
-        int glassesSold = reportJson.getInt("glassesSold");
-        float glassPrice = reportJson.getFloat("glassPrice");
+        int lemonadeSold = reportJson.getInt("lemonadeSold");
+        float lemonadePrice = reportJson.getFloat("lemonadePrice");
         float income = reportJson.getFloat("income");
-        int glassesMade = reportJson.getInt("glassesMade");
+        int lemonadeMade = reportJson.getInt("lemonadeMade");
         int signsMade = reportJson.getInt("signsMade");
         float expenses = reportJson.getFloat("expenses");
         float profit = reportJson.getFloat("profit");
         float assets = reportJson.getFloat("assets");
         return new DailyReport(day,
-                glassesSold,
-                glassPrice,
+                lemonadeSold,
+                lemonadePrice,
                 income,
-                glassesMade,
+                lemonadeMade,
                 signsMade,
                 expenses,
                 profit,

@@ -4,29 +4,23 @@ import org.json.JSONObject;
 
 public class InputData {
     private final int day;
-    private final float costOfLemonade;
-    private final int lemonadeStand;
+    private final float lemonadePrice;
     private final float assets;
-    private final float signCost;
-    private final Forecast forecast;
+    private final WeatherForecast weatherForecast;
 
-    public InputData(int day, float costOfLemonade, int lemonadeStand, float assets, float signCost, Forecast forecast) {
+    public InputData(int day, float lemonadePrice, float assets, WeatherForecast weatherForecast) {
 
         this.day = day;
-        this.costOfLemonade = costOfLemonade;
-        this.lemonadeStand = lemonadeStand;
+        this.lemonadePrice = lemonadePrice;
         this.assets = assets;
-        this.signCost = signCost;
-        this.forecast = forecast;
+        this.weatherForecast = weatherForecast;
     }
 
     public static InputData fromJson(JSONObject inputJson){
         int day = inputJson.getInt("day");
-        float costOfLemonade = inputJson.getFloat("costOfLemonade");
-        int lemonadeStand = inputJson.getInt("lemonadeStand");
+        float lemonadePrice = inputJson.getFloat("lemonadePrice");
         float assets = inputJson.getFloat("assets");
-        float signCost = inputJson.getFloat("signCost");
-        Forecast forecast = inputJson.getEnum(Forecast.class, "forecast");
-        return new InputData(day, costOfLemonade, lemonadeStand, assets, signCost, forecast);
+        WeatherForecast weatherForecast = inputJson.getEnum(WeatherForecast.class, "weatherForecast");
+        return new InputData(day, lemonadePrice, assets, weatherForecast);
     }
 }

@@ -51,8 +51,7 @@ public class Board extends AbstractTextBoard {
         JSONObject input = new JSONObject(data);
         JSONArray historyJson = input.getJSONArray("history");
         ArrayList<DailyReport> history = parseHistory(historyJson);
-        JSONObject inputDataJson = input.getJSONObject("inputData");
-        InputData inputData = InputData.fromJson(inputDataJson);
+        InputData inputData = InputData.fromJson(input);
         return new Board(inputData, history);
     }
 
