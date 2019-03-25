@@ -34,7 +34,14 @@ public class BoardTest {
             "    day : 2," +
             "    lemonadePrice : 0.02," +
             "    assets : 1.55," +
-            "    weatherForecast : SUNNY" +
+            "    weatherForecast : SUNNY," +
+            "    messages : [" +
+            "        \"line1\"," +
+            "        \"line2\"," +
+            "        \"line3\"," +
+            "        \"line4\"," +
+            "        \"line5\"," +
+            "    ]," +
             "}";
 
     @Test
