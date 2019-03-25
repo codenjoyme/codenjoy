@@ -84,14 +84,16 @@
             <tr>
                 <td>Your game</td>
             </tr>
-            <tr>
-                <td>
-                    <form:select items="${gameNames}" path="gameName"/>
-                    <span class="error">
-                        <c:if test="${bad_game}">${bad_game_message}</c:if>
-                    </span>
-                </td>
-            </tr>
+            <c:if test="${not adminLogin}">
+                <tr>
+                    <td>
+                        <form:select items="${gameNames}" path="gameName"/>
+                        <span class="error">
+                            <c:if test="${bad_game}">${bad_game_message}</c:if>
+                        </span>
+                    </td>
+                </tr>
+            </c:if>
             <tr>
                 <td colspan="3">
                     <c:choose>

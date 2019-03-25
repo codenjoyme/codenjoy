@@ -50,12 +50,14 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping(AdminController.URI)
 @Secured("ROLE_ADMIN")
 @Slf4j
 public class AdminController {
 
-    public static final String GAME_NAME = "gameName";
+    public static final String URI = "/admin";
+
+    static final String GAME_NAME = "gameName";
 
     @Autowired private TimerService timerService;
     @Autowired private PlayerService playerService;
@@ -322,7 +324,7 @@ public class AdminController {
         if (registration.registered(playerName)) {
             return registration.login(playerName, playerName);
         } else {
-            return registration.register(playerName, playerName, playerName, playerName, "", GameAuthorities.USER.roles());
+            return registration.register(playerName, playerName, playerName, playerName, "", GameAuthorities.USER.roles()).getCode();
         }
     }
 

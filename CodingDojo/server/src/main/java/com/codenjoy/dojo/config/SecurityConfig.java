@@ -22,7 +22,14 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.web.controller.AdminController;
+import com.codenjoy.dojo.web.controller.LoginController;
+import com.codenjoy.dojo.web.controller.RegistrationController;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -41,15 +48,17 @@ import org.springframework.web.filter.CorsFilter;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final int BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE = 99;
+    private static final int PRE_BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE = 98;
+    private static final String USERNAME_FORM_PARAMETER = "email";
+    private static final String PASSWORD_FORM_PARAMETER = "password";
+
+    private static final String LOGIN_PROCESSING_URI = "/process_login";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        // @formatter:off
         http.cors()
-                .and()
-                    .authorizeRequests()
-                .antMatchers("/admin*")
-                    .hasRole("ADMIN")
-                .antMatchers("/*")
-                    .permitAll()
                 .and()
                     .headers()
                         .httpStrictTransportSecurity().maxAgeInSeconds(31536000)
@@ -65,16 +74,78 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 "style-src 'self' 'unsafe-inline';")
                     .and()
                 .and()
-                    .formLogin()
-                        .loginProcessingUrl("/admin")
-                .and()
                     .csrf().disable();
+        // @formatter:on
+    }
 
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Configuration
+    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
+
+        @Value("${mvc.screen-servlet-path}")
+        private String screenWsURI;
+
+        @Value("${mvc.control-servlet-path}")
+        private String controlWsURI;
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http
+                    .authorizeRequests()
+                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*")
+                            .permitAll()
+
+                        .anyRequest()
+                            .hasRole("USER")
+
+                        .antMatchers(screenWsURI, controlWsURI, LOGIN_PROCESSING_URI)
+                            .permitAll()
+                    .and()
+                        .formLogin()
+                            .loginPage(LoginController.URI)
+                                .loginProcessingUrl(LOGIN_PROCESSING_URI)
+                                    .permitAll()
+                                .usernameParameter(USERNAME_FORM_PARAMETER)
+                                .passwordParameter(PASSWORD_FORM_PARAMETER)
+                            .permitAll()
+                    .and()
+                    .csrf().disable();
+            // @formatter:on
+        }
+    }
+
+    @Configuration
+    @Order(PRE_BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    public static class AdminSecurityConf extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http
+                    .antMatcher(AdminController.URI + "*")
+                        .authorizeRequests()
+                            .anyRequest()
+                                .hasRole("ADMIN")
+                    .and()
+                        .formLogin()
+                            .loginPage(LoginController.ADMIN_URI)
+                                .usernameParameter(USERNAME_FORM_PARAMETER)
+                                .passwordParameter(PASSWORD_FORM_PARAMETER)
+                            .permitAll();
+            // @formatter:on
+        }
     }
 
     @Bean

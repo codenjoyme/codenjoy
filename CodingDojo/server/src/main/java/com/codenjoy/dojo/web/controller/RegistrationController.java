@@ -28,17 +28,19 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mail.MailService;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.GameAuthorities;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,36 +50,56 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
-@RequestMapping("/register")
+@RequestMapping(RegistrationController.URI)
+@RequiredArgsConstructor
 public class RegistrationController {
+
+    private static final String ADMIN = "/admin";
+    public static final String URI = "/register";
+    public static final String ADMIN_URI =  URI + ADMIN;
 
     // TODO вынести это в сеттинги
     private static final boolean NICK_NAME_ALLOWED = false;
 
-    @Autowired private PlayerService playerService;
-    @Autowired private Registration registration;
-    @Autowired private GameService gameService;
-    @Autowired private MailService mailService;
-    @Autowired private LinkService linkService;
-    @Autowired private Validator validator;
-    @Autowired private ConfigProperties properties;
-    @Autowired private RoomsAliaser rooms;
+    private final PlayerService playerService;
+    private final Registration registration;
+    private final GameService gameService;
+    private final MailService mailService;
+    private final LinkService linkService;
+    private final Validator validator;
+    private final ConfigProperties properties;
+    private final RoomsAliaser rooms;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
-    public RegistrationController() {
+    @GetMapping
+    public String register(HttpServletRequest request, Model model,
+                           @RequestParam(name = "id", required = false) String id,
+                           @RequestParam(name = "email", required = false) String email,
+                           @RequestParam(name = "readableName", required = false) String name) {
+        return openRegistrationForm(request, model, id, email, name, false);
     }
 
-    //for unit test
-    RegistrationController(PlayerService playerService, Validator validator) {
-        this.playerService = playerService;
-        this.validator = validator;
+    @GetMapping(ADMIN)
+    public String registerAdmin(HttpServletRequest request, Model model,
+                                @RequestParam(name = "id", required = false) String id,
+                                @RequestParam(name = "email", required = false) String email,
+                                @RequestParam(name = "readableName", required = false) String name) {
+        return openRegistrationForm(request, model, id, email, name, true);
     }
 
-    @RequestMapping(method = RequestMethod.GET)
     public String openRegistrationForm(HttpServletRequest request, Model model,
-                                       @RequestParam(name = "id", required = false) String id,
-                                       @RequestParam(name = "email", required = false) String email,
-                                       @RequestParam(name = "readableName", required = false) String name)
-    {
+                                       String id,
+                                       String email,
+                                       String name) {
+        return openRegistrationForm(request, model, id, email, name, false);
+    }
+
+    public String openRegistrationForm(HttpServletRequest request, Model model,
+                                       String id,
+                                       String email,
+                                       String name,
+                                       boolean isAdminLogin) {
         String ip = getIp(request);
 
         if (!StringUtils.isEmpty(id)) {
@@ -101,6 +123,8 @@ public class RegistrationController {
         model.addAttribute("player", player);
 
         player.setCallbackUrl(ip);
+
+        model.addAttribute("adminLogin", isAdminLogin);
 
         return getRegister(model);
     }
@@ -126,47 +150,6 @@ public class RegistrationController {
             result = request.getHeader("X-Real-IP");
         }
         return result;
-    }
-
-//    @RequestMapping(params = "approve", method = RequestMethod.GET)
-    public String approveEmail(Model model, @RequestParam("approve") String link) {
-        validator.checkMD5(link);
-
-        Map<String, Object> data = linkService.getData(link);
-        if (data == null) {
-            throw new IllegalStateException("Ошибка регистрации. Повтори еще раз.");
-        }
-        String code = (String) data.get("code");
-        String name = (String) data.get("name");
-        String ip = (String) data.get("ip");
-        String gameName = (String) data.get("gameName");
-        registration.approve(code);
-        return "redirect:/" + register(name, code, gameName, ip);
-    }
-
-//    @RequestMapping(params = "approved", method = RequestMethod.GET)
-    public @ResponseBody String isEmailApproved(@RequestParam("approved") String id) throws InterruptedException {
-        validator.checkPlayerName(id, CANT_BE_NULL);
-
-        while (!registration.approved(id)) {
-            Thread.sleep(2000);
-        }
-        Player player = null;
-        while ((player = playerService.get(id)) == NullPlayer.INSTANCE) {
-            Thread.sleep(2000);
-        }
-        String code = registration.getCodeById(id);
-        return getBoardUrl(code, player);
-    }
-
-//    @RequestMapping(params = "remove_me", method = RequestMethod.GET)
-    public String removeUserFromGame(@RequestParam("code") String code) {
-        validator.checkCode(code, CANT_BE_NULL);
-
-        String id = registration.getIdByCode(code);
-        Player player = playerService.get(id);
-        playerService.remove(player.getName());
-        return "redirect:/";
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -306,7 +289,8 @@ public class RegistrationController {
                 if (!playerService.isRegistrationOpened()) {
                     return openRegistrationForm(request, model, id, email, name);
                 }
-                code = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
+                Registration.User user = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
+                code = user.getCode();
             } else {
                 code = registration.getCodeById(id);
             }
@@ -346,6 +330,15 @@ public class RegistrationController {
         player.setCode(code);
 
         if (approved) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, player.getPassword(), userDetails.getAuthorities());
+            authentication = authenticationManager.authenticate(authentication);
+            if (authentication.isAuthenticated()) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                model.addAttribute("bad_pass", true);
+                return openRegistrationForm(request, model, id, email, name);
+            }
             return "redirect:/" + register(id, player.getCode(),
                     gameName, request.getRemoteAddr());
         } else {

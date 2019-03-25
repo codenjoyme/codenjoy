@@ -62,8 +62,5 @@ function initRegistration(waitApprove, contextPath) {
                 $("#password").focus();
             }
         }
-        $("#player").submit(function() {
-            $("#password").val($.md5($("#password").val()));
-        });
     });
 }

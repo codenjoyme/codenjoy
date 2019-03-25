@@ -103,13 +103,13 @@ public class Registration {
         return count > 0;
     }
 
-    public String register(String id, String email, String readableName, String password, String data, String... roles) {
+    public User register(String id, String email, String readableName, String password, String data, String... roles) {
         roles = roles.length > 0 ? roles : GameAuthorities.USER.roles();
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
         pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
                 new Object[]{id, email, readableName, 0, password, code, data, GameAuthorities.buildRolesString(roles)});
-        return code;
+        return getUserByCode(code);
     }
 
     public String login(String id, String password) {
@@ -268,7 +268,16 @@ public class Registration {
     public User getUserByCode(String code) {
         return pool.select("SELECT * FROM users where code = ?", new Object[] {code}, rs -> {
             if (!rs.next()) {
-                throw new UsernameNotFoundException(String.format("User with id '%s' does not exist", code));
+                throw new UsernameNotFoundException(String.format("User with code '%s' does not exist", code));
+            }
+            return extractUser(rs);
+        });
+    }
+
+    public User getUserByEmail(String code) {
+        return pool.select("SELECT * FROM users where email = ?", new Object[] {code}, rs -> {
+            if (!rs.next()) {
+                throw new UsernameNotFoundException(String.format("User with email '%s' does not exist", code));
             }
             return extractUser(rs);
         });

@@ -37,6 +37,6 @@ public class GameUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String code) throws UsernameNotFoundException {
-        return registration.getUserByCode(code);
+        return registration.getUserByEmail(code);
     }
 }
