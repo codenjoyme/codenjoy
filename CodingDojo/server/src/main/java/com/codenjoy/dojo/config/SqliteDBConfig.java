@@ -60,8 +60,12 @@ public class SqliteDBConfig {
     @Value("${database.files.settings}")
     private String settingsFileName;
 
+    @Value("${admin.login}")
+    private String adminLogin;
+
     @Value("${admin.password}")
     private String adminPassword;
+
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -93,7 +97,7 @@ public class SqliteDBConfig {
 
     @Bean
     public Registration registration() {
-        return new Registration(registrationPoolFactory(), adminPassword, passwordEncoder, true);
+        return new Registration(registrationPoolFactory(), adminLogin, adminPassword, passwordEncoder, true);
     }
 
     @Bean

@@ -55,7 +55,7 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }), "admin", new BCryptPasswordEncoder(), false);
+                        }), "admin", "admin", new BCryptPasswordEncoder(), false);
     }
 
     @After

@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String PASSWORD_FORM_PARAMETER = "password";
 
     private static final String LOGIN_PROCESSING_URI = "/process_login";
+    private static final String ADMIN_LOGIN_PROCESSING_URI = "/process_admin_login";
     private static final String LOGOUT_PROCESSING_URI = "/process_logout";
 
     @Override
@@ -100,14 +101,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // @formatter:off
             http
                     .authorizeRequests()
-                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*")
+                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*", LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI)
                             .permitAll()
 
                         .anyRequest()
                             .hasRole("USER")
 
-                        .antMatchers(LOGIN_PROCESSING_URI)
-                            .permitAll()
                     .and()
                         .formLogin()
                             .loginPage(LoginController.URI)

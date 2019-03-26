@@ -31,7 +31,9 @@ database:
   name: ''
   user: ''
   password: ''
-admin.password: admin
+admin:
+  login: admin@dojarena.io
+  password: admin
 
 app:
   logging:
