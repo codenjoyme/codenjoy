@@ -10,12 +10,12 @@ package com.codenjoy.dojo.config;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE = 99;
     private static final int PRE_BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE = 98;
+    private static final int HIGHEST_SEC_CONFIG_PRECEDENCE = 97;
     private static final String USERNAME_FORM_PARAMETER = "email";
     private static final String PASSWORD_FORM_PARAMETER = "password";
 
@@ -93,12 +94,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
 
-        @Value("${mvc.screen-servlet-path}")
-        private String screenWsURI;
-
-        @Value("${mvc.control-servlet-path}")
-        private String controlWsURI;
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
@@ -110,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .anyRequest()
                             .hasRole("USER")
 
-                        .antMatchers(screenWsURI, controlWsURI, LOGIN_PROCESSING_URI)
+                        .antMatchers(LOGIN_PROCESSING_URI)
                             .permitAll()
                     .and()
                         .formLogin()
@@ -144,6 +139,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .usernameParameter(USERNAME_FORM_PARAMETER)
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
                             .permitAll();
+            // @formatter:on
+        }
+    }
+
+    @Configuration
+    @Order(HIGHEST_SEC_CONFIG_PRECEDENCE)
+    public static class WebSocketSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Value("${mvc.control-servlet-path}")
+        private String controlWsURI;
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http
+                    .antMatcher(controlWsURI + "*")
+                        .authorizeRequests()
+                            .anyRequest().permitAll();
             // @formatter:on
         }
     }

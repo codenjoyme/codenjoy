@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,21 +44,14 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
+@RequiredArgsConstructor
 public class BoardController {
 
-    @Autowired private PlayerService playerService;
-    @Autowired private Registration registration;
-    @Autowired private GameService gameService;
-    @Autowired private Validator validator;
-    @Autowired private ConfigProperties properties;
-
-    public BoardController() {
-    }
-
-    //for unit test
-    BoardController(PlayerService playerService) {
-        this.playerService = playerService;
-    }
+    private final PlayerService playerService;
+    private final Registration registration;
+    private final GameService gameService;
+    private final Validator validator;
+    private final ConfigProperties properties;
 
     @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     method = RequestMethod.GET)
