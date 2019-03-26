@@ -126,6 +126,11 @@ public class A2048 implements Field {
     }
 
     @Override
+    public void clearScore() {
+        hero().clear();
+    }
+
+    @Override
     public void newGame(Player player) {
         if (this.player != null) {
             numbers.clear();

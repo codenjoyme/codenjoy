@@ -43,10 +43,10 @@ import java.util.regex.Pattern;
 public class SwingClient extends JFrame implements ActionListener {
 
     private static final String SERVER_AND_PORT = "127.0.0.1:8080";
-    // this is your email
-    private static final String USER_NAME = "your@email.com";
+    // this is your player id (you can get it from board page url after registration)
+    private static final String USER_ID = "3edq63tw0bq4w4iem7nb";
     // you can get this code after registration on the server with your email
-    // http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
+    // http://server-ip:8080/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890
     private static final String CODE = "1889919902398150091";
 
     private final JButton buttonConnect;
@@ -125,7 +125,7 @@ public class SwingClient extends JFrame implements ActionListener {
         try {
             // TODO to use board url parsing like WebSocketRunner.runClient
             String server = String.format("ws://%s/codenjoy-contest/ws", SERVER_AND_PORT);
-            URI uri = new URI(String.format("%s?user=%s&code=%s", server, USER_NAME, CODE));
+            URI uri = new URI(String.format("%s?user=%s&code=%s", server, USER_ID, CODE));
 
             if (session != null) {
                 session.close();

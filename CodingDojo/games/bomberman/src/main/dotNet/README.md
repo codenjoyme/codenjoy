@@ -11,7 +11,7 @@ For C#:
     + find line and replace 192.168.1.1 to server_host_ip if you play on LAN
         * static string Server = "192.168.1.1:8080";
     + or uncomment this line if you want to play on http://codenjoy.com server
-        * static string Server = "tetrisj.jvmhost.net:12270";
+        * static string Server = "codenjoy.com:80";
 - make "Demo" project as runnable
 - now you can run Demo :)
 - all "game logic" is in the class "YourSolver" in method 

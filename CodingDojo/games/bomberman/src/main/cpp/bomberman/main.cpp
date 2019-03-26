@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
 
 	WebClient wcl(dds);
 	try {
-		wcl.run("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws", yourName);
+		wcl.run("ws://codenjoy.com:80/codenjoy-contest/ws", yourName);
 	} catch (const std::runtime_error& ex) {
 		std::cout << "Runtime error happened: " << ex.what() << std::endl;
 		EXITCODE = 1;
