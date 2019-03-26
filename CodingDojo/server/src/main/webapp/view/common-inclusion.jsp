@@ -37,3 +37,10 @@
         </c:otherwise>
     </c:choose>
 </head>
+<body>
+    <div class="center">
+        <form action="${ctx}/process_logout">
+            <input type="submit" value="Logout" class="btn btn-link">
+        </form>
+    </div>
+</body>

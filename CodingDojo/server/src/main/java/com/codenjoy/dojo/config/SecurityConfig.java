@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String PASSWORD_FORM_PARAMETER = "password";
 
     private static final String LOGIN_PROCESSING_URI = "/process_login";
+    private static final String LOGOUT_PROCESSING_URI = "/process_logout";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -116,6 +117,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
                             .permitAll()
                     .and()
+                        .logout()
+                            .logoutUrl(LOGOUT_PROCESSING_URI)
+                            .invalidateHttpSession(true)
+                    .and()
                     .csrf().disable();
             // @formatter:on
         }
@@ -138,7 +143,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .loginPage(LoginController.ADMIN_URI)
                                 .usernameParameter(USERNAME_FORM_PARAMETER)
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
-                            .permitAll();
+                            .permitAll()
+                    .and()
+                        .logout()
+                            .logoutUrl(LOGOUT_PROCESSING_URI)
+                            .invalidateHttpSession(true);
             // @formatter:on
         }
     }
