@@ -11,8 +11,8 @@ Module Program
     'Server name and port number -- ask orgs
     Private Property ServerNameAndPort As String = "epruryaw0576:8080"
 
-    'Register on the server, write down your registration name
-    Private Property UserName As String = "your@email.com"
+    'Register on the server, write down your player id (you can find it on board page url after registration)
+    Private Property UserId As String = "3edq63tw0bq4w4iem7nb"
 
     'Look up for the code in the browser url after the registration
     Private Property UserCode As String = "12345678901234567890"
@@ -27,7 +27,7 @@ Module Program
     Sub Main(args As String())
         Thread.Sleep(1000)
         Dim url as String = String.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}", _
-            ServerNameAndPort, UserName, UserCode)
+            ServerNameAndPort, UserId, UserCode)
         Connect(url).Wait()
     End Sub
 

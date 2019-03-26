@@ -26,12 +26,12 @@ namespace Demo
 {
     class Program
     {
-        // tetrisj.jvmhost.net:12270  // to use for codenjoy.com server
+        // codenjoy.com:80  // to use for codenjoy.com server
         // 127.0.0.1:8080               // to use for localhost server
-        static string ServerUrl = "http://127.0.0.1:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+        static string ServerUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
         
 		// you can get this code after registration on the server with your email
-		// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890    
+		// http://server-ip:8080/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789
 
         static void Main(string[] args)
         {

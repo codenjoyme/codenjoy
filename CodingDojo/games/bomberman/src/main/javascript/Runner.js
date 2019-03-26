@@ -19,6 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+// TODO test me
+
 var util = require('util');
 var WSocket = require('ws');
 
@@ -55,7 +58,7 @@ var processBoard = function(boardString) {
 };
 
 // you can get this code after registration on the server with your email
-var url = "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890";
+var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
@@ -233,7 +236,7 @@ var LengthToXY = function(boardSize) {
                 return null;
             }
             var x = inversionX(length % boardSize);
-            var y = inversionY(Math.ceil(length / boardSize));
+            var y = inversionY(Math.trunc(length / boardSize));
             return new Point(x, y);
         },
 

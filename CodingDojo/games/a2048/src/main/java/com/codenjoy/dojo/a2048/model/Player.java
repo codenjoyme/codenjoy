@@ -22,7 +22,6 @@ package com.codenjoy.dojo.a2048.model;
  * #L%
  */
 
-import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
