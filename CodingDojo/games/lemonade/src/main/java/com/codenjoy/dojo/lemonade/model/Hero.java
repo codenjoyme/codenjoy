@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.client.WeatherForecast;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -38,9 +39,15 @@ import java.util.regex.Pattern;
  */
 public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
+    private static Pattern patternGo;
     private Simulator simulator;
     private boolean alive;
     private String answer;
+
+    static {
+        patternGo = Pattern.compile(
+                "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
+    }
 
     public Hero() {
         simulator = new Simulator((int) System.currentTimeMillis());
@@ -60,8 +67,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
         String command = s.toLowerCase();
 
-        Pattern patternGo = Pattern.compile(
-                "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
             int lemonadeToMake = Integer.parseInt(matcher.group(1));
@@ -85,6 +90,19 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         String answer = this.answer;
         this.answer = null;
         return answer;
+    }
+
+    public Question getNextQuestion(){
+        int day = simulator.getDay();
+        double lemonadePrice = simulator.getLemonadePrice();
+        double assets = simulator.getAssets();
+        WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
+        String messages = simulator.getMessages();
+        return new Question(day,
+                lemonadePrice,
+                assets,
+                weatherForecast,
+                messages);
     }
 
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {

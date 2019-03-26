@@ -71,15 +71,15 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero != null && hero.isAlive();
     }
 
-    public String getNextQuestion() { // TODO test me
+    public JSONObject getNextQuestion() { // TODO test me
         if (field.isLastQuestion(questionIndex)) {
-            return "You win!";
+            return new JSONObject().put("message", "You win!");
         }
-        return field.getQuestion(questionIndex);
+        return hero.getNextQuestion().toJson();
     }
 
     public List<QuestionAnswer> getHistory() {
-        List<QuestionAnswer> result = new LinkedList<>();
+        List<SalesResult> result = new LinkedList<>();
         result.addAll(history);
         return result;
     }

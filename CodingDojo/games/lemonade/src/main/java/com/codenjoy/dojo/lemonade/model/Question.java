@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.lemonade.client;
+package com.codenjoy.dojo.lemonade.model;
 
 /*-
  * #%L
@@ -22,19 +22,18 @@ package com.codenjoy.dojo.lemonade.client;
  * #L%
  */
 
-import org.json.JSONArray;
+import com.codenjoy.dojo.lemonade.client.WeatherForecast;
 import org.json.JSONObject;
+import org.reflections.serializers.JsonSerializer;
 
-import java.util.ArrayList;
-
-public class InputData {
+public class Question {
     private final int day;
-    private final float lemonadePrice;
-    private final float assets;
+    private final double lemonadePrice;
+    private final double assets;
     private final WeatherForecast weatherForecast;
     private final String messages;
 
-    public InputData(int day, float lemonadePrice, float assets, WeatherForecast weatherForecast, String messages) {
+    public Question(int day, double lemonadePrice, double assets, WeatherForecast weatherForecast, String messages) {
 
         this.day = day;
         this.lemonadePrice = lemonadePrice;
@@ -43,12 +42,13 @@ public class InputData {
         this.messages = messages;
     }
 
-    public static InputData fromJson(JSONObject inputJson){
-        int day = inputJson.getInt("day");
-        float lemonadePrice = inputJson.getFloat("lemonadePrice");
-        float assets = inputJson.getFloat("assets");
-        WeatherForecast weatherForecast = inputJson.getEnum(WeatherForecast.class, "weatherForecast");
-        String messages = inputJson.getString("messages");
-        return new InputData(day, lemonadePrice, assets, weatherForecast, messages);
+    public JSONObject toJson() {
+        JSONObject questionJson = new JSONObject();
+        questionJson.put("day", day);
+        questionJson.put("lemonadePrice", lemonadePrice);
+        questionJson.put("assets", assets);
+        questionJson.put("weatherForecast", weatherForecast);
+        questionJson.put("messages", messages);
+        return questionJson;
     }
 }

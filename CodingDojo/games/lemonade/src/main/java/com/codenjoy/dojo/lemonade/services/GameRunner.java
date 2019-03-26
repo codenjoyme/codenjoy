@@ -120,11 +120,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public PrinterFactory getPrinterFactory() {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
-            JSONObject result = new JSONObject();
-
-            result.put("nextQuestion", player.getNextQuestion());
+            JSONObject result = player.getNextQuestion();
             result.put("history", player.getHistory());
-
             return result;
         });
     }
