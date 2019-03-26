@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,29 +54,21 @@ import java.util.function.Predicate;
 @RequestMapping(AdminController.URI)
 @Secured("ROLE_ADMIN")
 @Slf4j
+@RequiredArgsConstructor
 public class AdminController {
 
     public static final String URI = "/admin";
 
     static final String GAME_NAME = "gameName";
 
-    @Autowired private TimerService timerService;
-    @Autowired private PlayerService playerService;
-    @Autowired private SaveService saveService;
-    @Autowired private GameService gameService;
-    @Autowired private ActionLogger actionLogger;
-    @Autowired private AutoSaver autoSaver;
-    @Autowired private DebugService debugService;
-    @Autowired private Registration registration;
-
-    public AdminController() {
-    }
-
-    //for unit test
-    AdminController(TimerService timerService, PlayerService playerService) {
-        this.timerService = timerService;
-        this.playerService = playerService;
-    }
+    private final TimerService timerService;
+    private final PlayerService playerService;
+    private final SaveService saveService;
+    private final GameService gameService;
+    private final ActionLogger actionLogger;
+    private final AutoSaver autoSaver;
+    private final DebugService debugService;
+    private final Registration registration;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
