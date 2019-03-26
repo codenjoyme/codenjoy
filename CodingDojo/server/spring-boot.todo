@@ -358,4 +358,27 @@ TODO: 19) так же переживаю за скрипты для сборки
    В кач-ве решения предлагаю перевести "проливку" БД на liquibase или flyway. Постараюсь сделать чуть позже. Сейчас это проблематично из-за самописного connection пула. Кстати,
    хотел бы его голосом обсудить вместе.
 
-   +27)
+from Alex: 2019-03-23
+
+https://github.com/codenjoyme/codenjoy/pull/46/commits/3fbc36c0303ed06076d7ee47c9b253360aa07361
+    Пока не очень понятно что тут будет, но думаю дальше станет понятно
+https://github.com/codenjoyme/codenjoy/pull/46/commits/8b7d826bea6cbc6251eafa2118cb2b0d4b38d752
+    DLoggerFactory был реализован так, чтобы я мог на админке включать и выключать дебаг вручную (не при старте приложения) сейчас так понимаю это не работает
+    В некоторых местах было прооптимизировано и убрана проверка log.isDebugEnabled. Я не уверен что это стоит делать, поскольку этот метод выполняется много раз подряд, а requested может приводиться к строке для выполнения этой функции.
+        if (log.isDebugEnabled()) {
+            log.debug("tick().requestControls() {} players", requested);
+        }
+https://github.com/codenjoyme/codenjoy/pull/46/commits/cc373402aebae1eb8744db405a012163cde249c4
+    Не совсем понял что тут делается, в коммите написано что пофиксил тест, а по факту - зачем не совсем понятно. С виду стало сложнее
+        if (initAdminUser) {
+            initialScripts.add("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
+                    " select '" + ADMIN_USER_ID + "', 'admin@codenjoyme.com', 'admin', 1,  '" + adminPassword + "', '" + ADMIN_USER_CODE + "', '{}', 'ROLE_ADMIN, ROLE_USER'" +
+                    " where not exists (select 1 from users where id = '" + ADMIN_USER_ID + "')");
+        }
+    А вижу вот
+        Igor:
+           +26) перевел вход в админку пользователем 'admin' из БД. Начались проблемы из-за того, что пришлось поменять DDL создания таблицы USERS в конструкторе Registration. Поэтому, пере
+           запуском сервера на SQLite, нужно удалить старый файл базы.
+           В кач-ве решения предлагаю перевести "проливку" БД на liquibase или flyway. Постараюсь сделать чуть позже. Сейчас это проблематично из-за самописного connection пула. Кстати,
+    Не, не неадо усложнять. Давай упрощать. Баз никаких долгосрочных нет. Да и по сути, что мешало оставить как есть? Пароль админа в конфиге.
+    Сейчас как-то сложнее все сделалось, не уверен на счет этого изменения
