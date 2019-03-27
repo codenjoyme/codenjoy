@@ -3,21 +3,6 @@ call 00-settings.bat
 echo off
 echo [44;93m
 echo        +-------------------------------------+        
-echo        !          Installing Maven           !        
-echo        +-------------------------------------+        
-echo [0m
-echo on
-
-rd /S /Q %M2_HOME%
-powershell -command "& { iwr http://apache.ip-connect.vn.ua/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip -OutFile %ROOT%\tools\maven.zip }"
-%ROOT%\tools\7z x -y -o%ROOT% %ROOT%\tools\maven.zip
-rename %ROOT%\apache-maven-3.6.0 maven
-mkdir %M2_HOME%\.m2
-mkdir %M2_HOME%\.m2\repository
-
-echo off
-echo [44;93m
-echo        +-------------------------------------+        
 echo        !           Installing Git            !        
 echo        +-------------------------------------+        
 echo [0m
