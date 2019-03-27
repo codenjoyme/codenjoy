@@ -41,6 +41,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
     private static Pattern patternGo;
     private Simulator simulator;
+    private SalesResult salesResult;
     private boolean alive;
     private String answer;
 
@@ -73,8 +74,33 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
             int signsToMake = Integer.parseInt(matcher.group(2));
             int lemonadePriceCents = Integer.parseInt(matcher.group(3));
             simulate(lemonadeToMake, signsToMake, lemonadePriceCents);
+            readSalesResult();
             return;
         }
+    }
+
+    private void readSalesResult() {
+        int day = simulator.getDay();
+        int lemonadeSold = simulator.getLemonadeSold();
+        double lemonadePrice = simulator.getLemonadePrice();
+        double income = simulator.getIncome();
+        int lemonadeMade = simulator.getLemonadeMade();
+        int signsMade = simulator.getSignsMade();
+        double expenses = simulator.getExpenses();
+        double profit = simulator.getProfit();
+        double assets = simulator.getAssets();
+        boolean isBunkrupt = simulator.isBankrupt();
+        this.salesResult = new SalesResult(day,
+                lemonadeSold,
+                lemonadePrice,
+                income,
+                lemonadeMade,
+                signsMade,
+                expenses,
+                profit,
+                assets,
+                isBunkrupt
+                );
     }
 
     @Override
@@ -108,5 +134,9 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
         simulator.step(lemonadeToMake, signsToMake, lemonadePriceCents);
         //TODO
+    }
+
+    public SalesResult getSalesResult() {
+        return this.salesResult;
     }
 }

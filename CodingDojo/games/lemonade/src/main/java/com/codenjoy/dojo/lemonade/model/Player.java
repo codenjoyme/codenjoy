@@ -40,7 +40,7 @@ import java.util.List;
 public class Player extends GamePlayer<Hero, Field> {
 
     private Field field;
-    private List<QuestionAnswer> history;
+    private List<SalesResult> history;
     private int questionIndex;
     Hero hero;
 
@@ -78,27 +78,23 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero.getNextQuestion().toJson();
     }
 
-    public List<QuestionAnswer> getHistory() {
-        List<SalesResult> result = new LinkedList<>();
-        result.addAll(history);
-        return result;
+    public String getHistory() {
+        JSONArray historyJson = new JSONArray();
+        history.forEach(sr -> historyJson.put(sr.toJSONObject()));
+        return historyJson.toString();
     }
 
     public void checkAnswer() {
         hero.tick();
-
         String answer = hero.popAnswer();
         if (answer != null && !field.isLastQuestion(questionIndex)) {
-            String question = field.getQuestion(questionIndex);
-            String validAnswer = field.getAnswer(questionIndex);
-            if (validAnswer.equals(answer)) {
-                logSuccess(question, answer);
-                event(Events.WIN);
-                questionIndex++;
-            } else {
-                logFailure(question, answer);
+            SalesResult salesResult = hero.getSalesResult();
+            history.add(salesResult);
+            if (salesResult.isBunkrupt()) {
                 event(Events.LOOSE);
-                questionIndex = 0;
+            } else {
+                questionIndex++;
+                event(Events.WIN);
             }
         }
     }
@@ -114,6 +110,5 @@ public class Player extends GamePlayer<Hero, Field> {
     private void log(String question, String answer, boolean valid) {
         QuestionAnswer qa = new QuestionAnswer(question, answer);
         qa.setValid(valid);
-        history.add(qa);
     }
 }
