@@ -56,7 +56,7 @@ IF "%DEBUG%"=="true" (
     pause >nul 
 )
 
-call %M2_HOME%\bin\mvn clean install -DskipTests=%SKIP_TESTS%
+call mvnw clean install -DskipTests=%SKIP_TESTS%
 
 echo off
 echo [44;93m
@@ -77,9 +77,9 @@ echo [44;93m
 set /p GAMES_TO_RUN="Please select games from list with comma separated (just click Enter to select all games):"
 echo [0m
 IF "%GAMES_TO_RUN%"=="" (
-    call %M2_HOME%\bin\mvn clean package -DskipTests -DallGames
+    call ..\mvnw clean package -DskipTests -DallGames
 ) else (
-    call %M2_HOME%\bin\mvn clean package -DskipTests -P%GAMES_TO_RUN%
+    call ..\mvnw clean package -DskipTests -P%GAMES_TO_RUN%
 )
 
 mkdir %APP_HOME%
