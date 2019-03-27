@@ -29,19 +29,30 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
+import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_ID_LENGTH;
+import static com.codenjoy.dojo.web.controller.Validator.EMAIL;
 
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
 
     private String name;
+
+    @Email(regexp = EMAIL, message = )
+    @Size(max = MAX_PLAYER_ID_LENGTH)
     private String email;
     private String readableName;
     private String code;
     private String data;
     private String callbackUrl;
     private String gameName;
+    @NotEmpty(message = "Password can not be empty")
+    @Size(min = 8, message = "Password len must be not lesser than 8 symbols")
     private String password;
     private PlayerScores scores;
     private Information info;

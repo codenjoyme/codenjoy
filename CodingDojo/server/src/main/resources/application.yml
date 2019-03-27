@@ -16,6 +16,8 @@ game:
   ai: true
 board.save.ticks: 1
 log.debug: false
+registration:
+    nickname.allowed: false
 page:
   main: ''
   registration: ''

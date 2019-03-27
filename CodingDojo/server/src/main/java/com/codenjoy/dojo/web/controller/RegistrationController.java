@@ -161,38 +161,42 @@ public class RegistrationController {
         String name = player.getReadableName();
         String email = player.getEmail();
 
-        try {
-            if (NICK_NAME_ALLOWED) {
-                validator.checkNickName(name);
-            } else {
-                validator.checkReadableName(name);
-            }
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("bad_name", true);
-            model.addAttribute("bad_name_message", e.getMessage());
+        boolean validRegistrationData = true;
+//        try {
+//            if (NICK_NAME_ALLOWED) {
+//                validator.checkNickName(name);
+//            } else {
+//                validator.checkReadableName(name);
+//            }
+//        } catch (IllegalArgumentException e) {
+//            model.addAttribute("bad_name", true);
+//            model.addAttribute("bad_name_message", e.getMessage());
+//            validRegistrationData = false;
+//        }
 
-            return openRegistrationForm(request, model, null, email, name);
-        }
-
-        try {
-            validator.checkEmail(email, CANT_BE_NULL);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("bad_email", true);
-            model.addAttribute("bad_email_message", e.getMessage());
-
-            return openRegistrationForm(request, model, null, email, name);
-        }
+//        try {
+//            validator.checkEmail(email, CANT_BE_NULL);
+//        } catch (IllegalArgumentException e) {
+//            model.addAttribute("bad_email", true);
+//            model.addAttribute("bad_email_message", e.getMessage());
+//
+//            validRegistrationData = false;
+//        }
 
         String gameName = rooms.getGameName(player.getGameName());
         player.setGameName(gameName);
-        try {
-            validator.checkGameName(gameName, CANT_BE_NULL);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("bad_game", true);
-            model.addAttribute("bad_game_message", e.getMessage());
-
-            return openRegistrationForm(request, model, null, email, name);
-        }
+//        try {
+//            validator.checkGameName(gameName, CANT_BE_NULL);
+//        } catch (IllegalArgumentException e) {
+//            model.addAttribute("bad_game", true);
+//            model.addAttribute("bad_game_message", e.getMessage());
+//
+//            validRegistrationData = false;
+//        }
+//
+//        if (!validRegistrationData) {
+//            return openRegistrationForm(request, model, null, email, name);
+//        }
 
         String idByName = registration.getIdByName(name);
         String idByEmail = registration.getIdByEmail(email);
