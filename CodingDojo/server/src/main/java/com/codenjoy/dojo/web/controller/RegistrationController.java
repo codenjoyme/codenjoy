@@ -26,7 +26,6 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import lombok.RequiredArgsConstructor;
@@ -40,10 +39,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Map;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -58,9 +59,6 @@ public class RegistrationController {
     public static final String URI = "/register";
     public static final String ADMIN_URI =  URI + ADMIN;
 
-    // TODO вынести это в сеттинги
-    private static final boolean NICK_NAME_ALLOWED = false;
-
     private final PlayerService playerService;
     private final Registration registration;
     private final GameService gameService;
@@ -71,6 +69,12 @@ public class RegistrationController {
     private final RoomsAliaser rooms;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final RegistrationValidator registrationValidator;
+
+    @InitBinder
+    private void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.setValidator(registrationValidator);
+    }
 
     @GetMapping
     public String register(HttpServletRequest request, Model model,
@@ -129,6 +133,12 @@ public class RegistrationController {
         return getRegister(model);
     }
 
+    private void populateCommonRegistrationModel(Model model, boolean isAdminLogin) {
+        model.addAttribute("adminLogin", isAdminLogin);
+        model.addAttribute("opened", playerService.isRegistrationOpened());
+        model.addAttribute("gameNames", rooms.alises());
+    }
+
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", rooms.alises());
@@ -153,9 +163,11 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String registerByNameOrEmail(Player player, BindingResult result, HttpServletRequest request, Model model) {
+    public String registerByNameOrEmail(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
-            return openRegistrationForm(request, model, null, null, null);
+            populateCommonRegistrationModel(model, false);
+            return "register";
+//            return openRegistrationForm(request, model, null, null, null);
         }
 
         String name = player.getReadableName();
@@ -200,42 +212,42 @@ public class RegistrationController {
 
         String idByName = registration.getIdByName(name);
         String idByEmail = registration.getIdByEmail(email);
-
-        boolean emailIsUsed = registration.emailIsUsed(email);
-        boolean nameIsUsed = registration.nameIsUsed(name);
-
-        if (StringUtils.isEmpty(idByName) && StringUtils.isEmpty(idByEmail)) {
-            String id = Hash.getRandomId();
-            player.setName(id);
-
-            if (emailIsUsed || nameIsUsed) {
-                model.addAttribute("bad_pass", true);
-                model.addAttribute("email_busy", emailIsUsed);
-                model.addAttribute("name_busy", emailIsUsed);
-
-                return openRegistrationForm(request, model, null, email, name);
-            }
-
-            return register(player, result, request, model);
-        }
+//
+//        boolean emailIsUsed = registration.emailIsUsed(email);
+//        boolean nameIsUsed = registration.nameIsUsed(name);
+//
+//        if (StringUtils.isEmpty(idByName) && StringUtils.isEmpty(idByEmail)) {
+//            String id = Hash.getRandomId();
+//            player.setName(id);
+//
+//            if (emailIsUsed || nameIsUsed) {
+//                model.addAttribute("bad_pass", true);
+//                model.addAttribute("email_busy", emailIsUsed);
+//                model.addAttribute("name_busy", emailIsUsed);
+//
+//                return openRegistrationForm(request, model, null, email, name);
+//            }
+//
+//            return register(player, result, request, model);
+//        }
 
         String id = !StringUtils.isEmpty(idByEmail) ? idByEmail : idByName;
-
-        if (StringUtils.isEmpty(registration.checkUserByPassword(id, player.getPassword()))) {
-            model.addAttribute("bad_pass", true);
-            model.addAttribute("email_busy", emailIsUsed);
-            model.addAttribute("name_busy", nameIsUsed);
-
-            return openRegistrationForm(request, model, null, email, name);
-        }
-
-        if (idByEmail != null && idByName != null && !idByEmail.equals(idByName)) {
-            model.addAttribute("bad_pass", true);
-            model.addAttribute("email_busy", !id.equals(idByEmail));
-            model.addAttribute("name_busy", !id.equals(idByName));
-
-            return openRegistrationForm(request, model, null, email, name);
-        }
+//
+//        if (StringUtils.isEmpty(registration.checkUserByPassword(id, player.getPassword()))) {
+//            model.addAttribute("bad_pass", true);
+//            model.addAttribute("email_busy", emailIsUsed);
+//            model.addAttribute("name_busy", nameIsUsed);
+//
+//            return openRegistrationForm(request, model, null, email, name);
+//        }
+//
+//        if (idByEmail != null && idByName != null && !idByEmail.equals(idByName)) {
+//            model.addAttribute("bad_pass", true);
+//            model.addAttribute("email_busy", !id.equals(idByEmail));
+//            model.addAttribute("name_busy", !id.equals(idByName));
+//
+//            return openRegistrationForm(request, model, null, email, name);
+//        }
 
         player.setName(id);
         if (sameGame(player, id)) {

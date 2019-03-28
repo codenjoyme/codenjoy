@@ -46,9 +46,8 @@
         <form:hidden path="data"/>
         <table>
             <tr>
-                <td>Email<form:errors path="email"/></td>
-            </tr>
-            <tr>
+                <td>Email</td>
+            <%--<tr>--%>
                 <td>
                     <form:input path="email"/>
                     <%--<span class="error">--%>
@@ -57,14 +56,18 @@
                         <%--<c:if test="${wait_approve}">Please check your email</c:if>--%>
                     <%--</span>--%>
                 </td>
+                <td>
+                    <form:errors path="email"/>
+                </td>
             </tr>
+            <%--</tr>--%>
             <tr>
                 <td>Name</td>
-            </tr>
-            <tr>
                 <td>
                     <form:input path="readableName"/>
-                    <form:errors path="readableName" cssClass="error" />
+                </td>
+                <td>
+                    <form:errors path="readableName" cssClass="error"/>
                 </td>
             </tr>
             <tr>
@@ -73,22 +76,21 @@
             <tr>
                 <td>
                     <form:password path="password"/>
-                    <span class="error">
-                        <c:if test="${bad_pass}">Bad password</c:if>
-                    </span>
+                    <%--<span class="error">--%>
+                        <%--<c:if test="${bad_pass}">Bad password</c:if>--%>
+                    <%--</span>--%>
                 </td>
-            </tr>
-            <tr>
-                <td>Your game</td>
-            </tr>
-            <c:if test="${not adminLogin}">
-                <tr>
+
+                <c:if test="${not adminLogin}">
+                    <td>Your game</td>
                     <td>
                         <form:select items="${gameNames}" path="gameName"/>
-                        <form:errors path="gameName" cssClass="error" />
                     </td>
-                </tr>
-            </c:if>
+                    <rd>
+                        <form:errors path="gameName" cssClass="error" />
+                    </rd>
+                </c:if>
+            </tr>
             <tr>
                 <td colspan="3">
                     <c:choose>
@@ -96,7 +98,7 @@
                             <input type="submit" id="submit" value="Register" />
                         </c:when>
                         <c:otherwise>
-                            Registration was closed, please try again tomorrow.
+                            Registration is closed, please try again later.
                         </c:otherwise>
                     </c:choose>
                 </td>

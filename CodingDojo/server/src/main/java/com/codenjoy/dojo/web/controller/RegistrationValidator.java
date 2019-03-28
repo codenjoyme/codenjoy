@@ -1,5 +1,27 @@
 package com.codenjoy.dojo.web.controller;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2019 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Registration;
 import lombok.RequiredArgsConstructor;
@@ -36,43 +58,46 @@ public class RegistrationValidator implements Validator {
         if (target == null) {
             return;
         }
+
         Player player = (Player) target;
+
         String name = player.getReadableName();
 
         if (!validateNicknameStructure(name)) {
-            errors.rejectValue("readableName", "registration.nickname.invalid", new Object[] {name}, null);
+            errors.rejectValue("readableName", "registration.nickname.invalid", new Object[]{name}, null);
         }
 
-        if (!validateUniqueName(name)) {
-            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[] {name}, null);
+        if (!checkNameUniqueness(name)) {
+            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[]{name}, null);
         }
-
 
         String email = player.getEmail();
-        if (!validator.checkEmail(email, CANT_BE_NULL)) {
-            errors.rejectValue("email", "registration.email.invalid", new Object[] {email}, null);
+        if (!validateEmailStructure(email)) {
+            errors.rejectValue("email", "registration.email.invalid", new Object[]{email}, null);
         }
 
-        String idByName = registration.getIdByName(name);
-        String idByEmail = registration.getIdByEmail(email);
-
-        boolean emailIsUsed = registration.emailIsUsed(email);
-
-
-        if (StringUtils.isEmpty(idByName) && StringUtils.isEmpty(idByEmail)) {
-            if (emailIsUsed) {
-                errors.rejectValue("email", "registration.email.alreadyUsed");
-            }
+        if (!checkEmailUniqueness(email)) {
+            errors.rejectValue("email", "registration.email.alreadyUsed");
         }
 
         String gameName = rooms.getGameName(player.getGameName());
         if (!validator.checkGameName(gameName, CANT_BE_NULL)) {
-            errors.rejectValue("gameName", "registration.game.invalid", new Object[] {gameName}, null);
+            errors.rejectValue("gameName", "registration.game.invalid", new Object[]{gameName}, null);
         }
     }
 
-    private boolean validateUniqueName(String name) {
+    private boolean checkEmailUniqueness(String email) {
+        boolean emailIsUsed = registration.emailIsUsed(email);
+        String idByEmail = registration.getIdByEmail(email);
+        return StringUtils.isEmpty(idByEmail) && !emailIsUsed;
+    }
+
+    private boolean checkNameUniqueness(String name) {
         return !registration.nameIsUsed(name);
+    }
+
+    private boolean validateEmailStructure(String email) {
+        return validator.checkEmail(email, CANT_BE_NULL);
     }
 
     private boolean validateNicknameStructure(String name) {

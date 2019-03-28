@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.Email;
@@ -37,13 +38,14 @@ import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
 import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_ID_LENGTH;
 import static com.codenjoy.dojo.web.controller.Validator.EMAIL;
 
+@ToString(of = "name")
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
 
     private String name;
 
-    @Email(regexp = EMAIL, message = )
+    @Email(regexp = EMAIL, message = "Email is not valid")
     @Size(max = MAX_PLAYER_ID_LENGTH)
     private String email;
     private String readableName;
@@ -126,11 +128,6 @@ public class Player implements ScreenRecipient, Closeable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 
     public int clearScore() {
