@@ -22,6 +22,7 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -30,12 +31,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * Created at 3/6/2019
  */
 @Data
-public class SQLConfProperties {
+@ConfigurationProperties("database")
+@SQLiteProfile
+public class SQLiteFilesProperties {
 
     private DBProps files;
 
     @Data
-    public class DBProps {
+    public static class DBProps {
         private String log;
         private String saves;
         private String users;
