@@ -17,7 +17,10 @@ game:
 board.save.ticks: 1
 log.debug: false
 registration:
-    nickname.allowed: false
+    nickname:
+      allowed: false
+    pasword:
+      min-length: 8
 page:
   main: ''
   registration: ''
@@ -33,7 +36,6 @@ database:
   name: ''
   user: ''
   password: ''
-pasword.min-length: 8
 admin:
   login: admin@dojarena.io
   password: admin
