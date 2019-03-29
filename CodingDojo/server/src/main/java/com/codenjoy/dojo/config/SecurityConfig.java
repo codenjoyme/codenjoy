@@ -101,7 +101,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // @formatter:off
             http
                     .authorizeRequests()
-                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*", LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI)
+                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
+                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI)
                             .permitAll()
 
                         .anyRequest()
@@ -114,6 +115,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     .permitAll()
                                 .usernameParameter(USERNAME_FORM_PARAMETER)
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
+                                .defaultSuccessUrl("/")
+                                    .permitAll()
                             .permitAll()
                     .and()
                         .logout()
@@ -143,6 +146,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .usernameParameter(USERNAME_FORM_PARAMETER)
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
                             .permitAll()
+                            .defaultSuccessUrl(AdminController.URI)
+                                .permitAll()
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)

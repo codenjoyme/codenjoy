@@ -47,20 +47,13 @@
         <table>
             <tr>
                 <td>Email</td>
-            <%--<tr>--%>
                 <td>
                     <form:input path="email"/>
-                    <%--<span class="error">--%>
-                        <%--<c:if test="${email_busy}">Already used</c:if>--%>
-                        <%--<c:if test="${bad_email}">${bad_email_message}</c:if>--%>
-                        <%--<c:if test="${wait_approve}">Please check your email</c:if>--%>
-                    <%--</span>--%>
                 </td>
                 <td>
                     <form:errors path="email"/>
                 </td>
             </tr>
-            <%--</tr>--%>
             <tr>
                 <td>Name</td>
                 <td>
@@ -71,26 +64,34 @@
                 </td>
             </tr>
             <tr>
-                <td>Password<form:errors path="password"/></td>
-            </tr>
-            <tr>
+                <td>Password</td>
                 <td>
                     <form:password path="password"/>
-                    <%--<span class="error">--%>
-                        <%--<c:if test="${bad_pass}">Bad password</c:if>--%>
-                    <%--</span>--%>
                 </td>
-
-                <c:if test="${not adminLogin}">
+                <td>
+                    <form:errors path="password"/>
+                </td>
+            </tr>
+            <tr>
+                <td>Confirm password</td>
+                <td>
+                    <form:password path="passwordConfirmation" />
+                </td>
+                <td>
+                    <form:errors path="passwordConfirmation" />
+                </td>
+            </tr>
+            <c:if test="${not adminLogin}">
+                <tr>
                     <td>Your game</td>
                     <td>
                         <form:select items="${gameNames}" path="gameName"/>
                     </td>
-                    <rd>
+                    <td>
                         <form:errors path="gameName" cssClass="error" />
-                    </rd>
-                </c:if>
-            </tr>
+                    </td>
+                </tr>
+            </c:if>
             <tr>
                 <td colspan="3">
                     <c:choose>

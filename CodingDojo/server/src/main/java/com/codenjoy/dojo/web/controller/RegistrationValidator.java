@@ -44,6 +44,9 @@ public class RegistrationValidator implements Validator {
     @Value("${registration.nickname.allowed}")
     private boolean nicknameAllowed;
 
+    @Value("${pasword.min-length}")
+    private int minPasswordLen;
+
     private final com.codenjoy.dojo.web.controller.Validator validator;
     private final RoomsAliaser rooms;
     private final Registration registration;
@@ -64,26 +67,48 @@ public class RegistrationValidator implements Validator {
         String name = player.getReadableName();
 
         if (!validateNicknameStructure(name)) {
-            errors.rejectValue("readableName", "registration.nickname.invalid", new Object[]{name}, null);
+            errors.rejectValue("readableName", "registration.nickname.invalid", new Object[]{ name }, null);
         }
 
         if (!checkNameUniqueness(name)) {
-            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[]{name}, null);
+            errors.rejectValue("readableName", "registration.nickname.alreadyUsed", new Object[]{ name }, null);
         }
 
         String email = player.getEmail();
         if (!validateEmailStructure(email)) {
-            errors.rejectValue("email", "registration.email.invalid", new Object[]{email}, null);
+            errors.rejectValue("email", "registration.email.invalid", new Object[]{ email }, null);
         }
 
         if (!checkEmailUniqueness(email)) {
             errors.rejectValue("email", "registration.email.alreadyUsed");
         }
 
+        String password = player.getPassword();
+
+        if (!checkPasswordNotEmpty(password)) {
+            errors.rejectValue("password", "registration.password.empty");
+        }
+
+        if (!checkPasswordLength(password)) {
+            errors.rejectValue("password", "registration.password.length", new Object[] { minPasswordLen }, null);
+        }
+
+        if (!checkPasswordConfirmation(password, player.getPasswordConfirmation())) {
+            errors.rejectValue("passwordConfirmation", "registration.password.invalidConfirmation");
+        }
+
         String gameName = rooms.getGameName(player.getGameName());
         if (!validator.checkGameName(gameName, CANT_BE_NULL)) {
-            errors.rejectValue("gameName", "registration.game.invalid", new Object[]{gameName}, null);
+            errors.rejectValue("gameName", "registration.game.invalid", new Object[]{ gameName }, null);
         }
+    }
+
+    private boolean checkPasswordConfirmation(String password, String passwordConfirmation) {
+        return password.equals(passwordConfirmation);
+    }
+
+    private boolean checkPasswordLength(String password) {
+        return password.length() >= minPasswordLen;
     }
 
     private boolean checkEmailUniqueness(String email) {
@@ -91,6 +116,11 @@ public class RegistrationValidator implements Validator {
         String idByEmail = registration.getIdByEmail(email);
         return StringUtils.isEmpty(idByEmail) && !emailIsUsed;
     }
+
+    private boolean checkPasswordNotEmpty(String password) {
+        return StringUtils.hasText(password);
+    }
+
 
     private boolean checkNameUniqueness(String name) {
         return !registration.nameIsUsed(name);

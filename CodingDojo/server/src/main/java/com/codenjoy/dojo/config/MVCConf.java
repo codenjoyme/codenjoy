@@ -45,6 +45,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 public class MVCConf implements WebMvcConfigurer {
 
+    public static final String RESOURCES_URI = "/resources/**";
+
     @Value("${mvc.cache-period}")
     private int cachePeriod;
 
@@ -69,7 +71,7 @@ public class MVCConf implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
-                .addResourceHandler("/resources/**")
+                .addResourceHandler(RESOURCES_URI)
                     .addResourceLocations("/resources/", "classpath:/resources/")
                     .setCachePeriod(cachePeriod);
     }

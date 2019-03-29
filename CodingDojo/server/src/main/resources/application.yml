@@ -33,6 +33,7 @@ database:
   name: ''
   user: ''
   password: ''
+pasword.min-length: 8
 admin:
   login: admin@dojarena.io
   password: admin

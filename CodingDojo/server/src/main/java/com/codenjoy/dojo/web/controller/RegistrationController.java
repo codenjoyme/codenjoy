@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import lombok.RequiredArgsConstructor;
@@ -57,11 +58,9 @@ public class RegistrationController {
 
     private static final String ADMIN = "/admin";
     public static final String URI = "/register";
-    public static final String ADMIN_URI =  URI + ADMIN;
 
     private final PlayerService playerService;
     private final Registration registration;
-    private final GameService gameService;
     private final MailService mailService;
     private final LinkService linkService;
     private final Validator validator;
@@ -167,113 +166,15 @@ public class RegistrationController {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
             return "register";
-//            return openRegistrationForm(request, model, null, null, null);
         }
-
-        String name = player.getReadableName();
-        String email = player.getEmail();
-
-        boolean validRegistrationData = true;
-//        try {
-//            if (NICK_NAME_ALLOWED) {
-//                validator.checkNickName(name);
-//            } else {
-//                validator.checkReadableName(name);
-//            }
-//        } catch (IllegalArgumentException e) {
-//            model.addAttribute("bad_name", true);
-//            model.addAttribute("bad_name_message", e.getMessage());
-//            validRegistrationData = false;
-//        }
-
-//        try {
-//            validator.checkEmail(email, CANT_BE_NULL);
-//        } catch (IllegalArgumentException e) {
-//            model.addAttribute("bad_email", true);
-//            model.addAttribute("bad_email_message", e.getMessage());
-//
-//            validRegistrationData = false;
-//        }
 
         String gameName = rooms.getGameName(player.getGameName());
         player.setGameName(gameName);
-//        try {
-//            validator.checkGameName(gameName, CANT_BE_NULL);
-//        } catch (IllegalArgumentException e) {
-//            model.addAttribute("bad_game", true);
-//            model.addAttribute("bad_game_message", e.getMessage());
-//
-//            validRegistrationData = false;
-//        }
-//
-//        if (!validRegistrationData) {
-//            return openRegistrationForm(request, model, null, email, name);
-//        }
 
-        String idByName = registration.getIdByName(name);
-        String idByEmail = registration.getIdByEmail(email);
-//
-//        boolean emailIsUsed = registration.emailIsUsed(email);
-//        boolean nameIsUsed = registration.nameIsUsed(name);
-//
-//        if (StringUtils.isEmpty(idByName) && StringUtils.isEmpty(idByEmail)) {
-//            String id = Hash.getRandomId();
-//            player.setName(id);
-//
-//            if (emailIsUsed || nameIsUsed) {
-//                model.addAttribute("bad_pass", true);
-//                model.addAttribute("email_busy", emailIsUsed);
-//                model.addAttribute("name_busy", emailIsUsed);
-//
-//                return openRegistrationForm(request, model, null, email, name);
-//            }
-//
-//            return register(player, result, request, model);
-//        }
-
-        String id = !StringUtils.isEmpty(idByEmail) ? idByEmail : idByName;
-//
-//        if (StringUtils.isEmpty(registration.checkUserByPassword(id, player.getPassword()))) {
-//            model.addAttribute("bad_pass", true);
-//            model.addAttribute("email_busy", emailIsUsed);
-//            model.addAttribute("name_busy", nameIsUsed);
-//
-//            return openRegistrationForm(request, model, null, email, name);
-//        }
-//
-//        if (idByEmail != null && idByName != null && !idByEmail.equals(idByName)) {
-//            model.addAttribute("bad_pass", true);
-//            model.addAttribute("email_busy", !id.equals(idByEmail));
-//            model.addAttribute("name_busy", !id.equals(idByName));
-//
-//            return openRegistrationForm(request, model, null, email, name);
-//        }
-
-        player.setName(id);
-        if (sameGame(player, id)) {
-            if (!sameNameAndEmail(player, id)) {
-                registration.updateNameAndEmail(id, name, email);
-                playerService.get(id).setReadableName(name);
-            }
-
-            String code = registration.getCodeById(id);
-            return "redirect:/" + getBoardUrl(code, player);
+        if (player.getName() == null) {
+            player.setName(Hash.getRandomId());
         }
-
         return register(player, result, request, model);
-    }
-
-    private boolean sameNameAndEmail(Player player, String id) {
-        return registration.getEmailById(id).equals(player.getEmail())
-                && registration.getNameById(id).equals(player.getName());
-    }
-
-    private boolean sameGame(Player player, String id) {
-        if (!playerService.contains(id)) {
-            return false;
-        }
-        String last = playerService.get(id).getGameName();
-        return last != null && last.equals(player.getGameName());
     }
 
     public String register(Player player, BindingResult result, HttpServletRequest request, Model model) {

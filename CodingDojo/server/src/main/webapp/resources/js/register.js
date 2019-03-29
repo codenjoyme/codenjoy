@@ -42,10 +42,6 @@ function initRegistration(waitApprove, contextPath) {
 
     $(document).ready(function() {
         validatePlayerRegistration("#player");
-        if ($("#name").val() != "") {
-            $("#submit").val("Login");
-            $("#title").text("Login");
-        }
         if (waitApprove) {
             disable(true);
             $.ajax({ url:contextPath + '/register?approved=' + $("#name").val(),

@@ -27,35 +27,27 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
-import static com.codenjoy.dojo.transport.auth.SecureAuthenticationService.MAX_PLAYER_ID_LENGTH;
-import static com.codenjoy.dojo.web.controller.Validator.EMAIL;
 
-@ToString(of = "name")
+@Getter
+@Setter
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
 
     private String name;
-
-    @Email(regexp = EMAIL, message = "Email is not valid")
-    @Size(max = MAX_PLAYER_ID_LENGTH)
     private String email;
     private String readableName;
     private String code;
     private String data;
     private String callbackUrl;
     private String gameName;
-    @NotEmpty(message = "Password can not be empty")
-    @Size(min = 8, message = "Password len must be not lesser than 8 symbols")
     private String password;
+    private String passwordConfirmation;
     private PlayerScores scores;
     private Information info;
     private GameType gameType;
@@ -105,29 +97,13 @@ public class Player implements ScreenRecipient, Closeable {
         return false;
     }
 
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
-
     @Override
     public int hashCode() {
         return (name + code).hashCode();
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    
+    public String getNotNullReadableName() {
+        return StringUtils.isEmpty(readableName) ? name : readableName;
     }
 
     public int clearScore() {
@@ -142,14 +118,6 @@ public class Player implements ScreenRecipient, Closeable {
         return info.getMessage();
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
     public String getGameName() {
         return (gameType != null) ? gameType.name() : gameName;
     }
@@ -157,26 +125,6 @@ public class Player implements ScreenRecipient, Closeable {
     // TODO test me
     public String getGameNameOnly() {
         return removeNumbers(getGameName());
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public void setEventListener(InformationCollector eventListener) {
-        this.eventListener = eventListener;
     }
 
     public InformationCollector getEventListener() {
@@ -202,27 +150,8 @@ public class Player implements ScreenRecipient, Closeable {
         return ai != null;
     }
 
-    public Closeable getAI() {
-        return ai;
-    }
-
-    public String getReadableName() {
-        return readableName;
-    }
-
-    public String getNotNullReadableName() {
-        return StringUtils.isEmpty(readableName) ? name : readableName;
-    }
-
-    public void setReadableName(String readableName) {
-        this.readableName = readableName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    @Override
+    public String toString() {
+        return name;
     }
 }
