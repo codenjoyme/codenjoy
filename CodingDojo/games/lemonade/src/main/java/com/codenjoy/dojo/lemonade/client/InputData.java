@@ -22,17 +22,19 @@ package com.codenjoy.dojo.lemonade.client;
  * #L%
  */
 
-import org.json.JSONArray;
+import com.codenjoy.dojo.lemonade.model.WeatherForecast;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class InputData {
     private final int day;
-    private final float lemonadePrice;
-    private final float assets;
+    private final double lemonadePrice;
+    private final double assets;
     private final WeatherForecast weatherForecast;
     private final String messages;
+
+    public String getMessages(){
+        return messages;
+    }
 
     public InputData(int day, float lemonadePrice, float assets, WeatherForecast weatherForecast, String messages) {
 
@@ -50,5 +52,9 @@ public class InputData {
         WeatherForecast weatherForecast = inputJson.getEnum(WeatherForecast.class, "weatherForecast");
         String messages = inputJson.getString("messages");
         return new InputData(day, lemonadePrice, assets, weatherForecast, messages);
+    }
+
+    public double getAssets() {
+        return assets;
     }
 }

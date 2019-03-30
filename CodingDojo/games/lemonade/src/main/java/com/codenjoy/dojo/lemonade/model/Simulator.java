@@ -135,119 +135,117 @@ public class Simulator {
         B = false;
 
         messages.setLength(0);
+
+        // START OF GAME, TITLE PAGE
+        messages.append("\n");
+        messages.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n");
+        messages.append("\n");
+        messages.append("IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\n");
+        messages.append("HOW MUCH PROFIT YOU MAKE IS UP TO YOU.\n");
+        messages.append("IF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\n");
+        messages.append("\n");
+        messages.append("TO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\n");
+        messages.append("1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\n");
+        messages.append("2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\n");
+        messages.append("3. WHAT PRICE TO CHARGE FOR EACH GLASS\n");
+        messages.append("\n");
+        messages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS).");
+        messages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR, YOUR COST TO MAKE LEMONADE IS\n");
+        messages.append("$0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\n");
+        messages.append("\n");
+        messages.append("YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\n");
+        messages.append("YOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\n");
+        messages.append("THE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\n");
+        messages.append("THE NUMBER OF ADVERTISING SIGNS YOU USE.\n");
+        messages.append("KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\n");
+        messages.append("\n");
     }
 
     public void step(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
         messages.setLength(0);
 
-        if (D == 0) {
-            // START OF GAME, TITLE PAGE
-            messages.append("\n");
-            messages.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n");
-            messages.append("\n");
-            messages.append("IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\n");
-            messages.append("HOW MUCH PROFIT YOU MAKE IS UP TO YOU.\n");
-            messages.append("IF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\n");
-            messages.append("\n");
-            messages.append("TO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\n");
-            messages.append("1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\n");
-            messages.append("2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\n");
-            messages.append("3. WHAT PRICE TO CHARGE FOR EACH GLASS\n");
-            messages.append("\n");
-            messages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS).");
-            messages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR, YOUR COST TO MAKE LEMONADE IS\n");
-            messages.append("$0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\n");
-            messages.append("\n");
-            messages.append("YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\n");
-            messages.append("YOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\n");
-            messages.append("THE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\n");
-            messages.append("THE NUMBER OF ADVERTISING SIGNS YOU USE.\n");
-            messages.append("KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\n");
-            messages.append("\n");
-        } else {
-            boolean inputError = false;
-            double STI = A;
-            if (lemonadeToMake < 0 || lemonadeToMake > 1000) {
-                messages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
-                inputError = true;
-            }
-            if (signsToMake < 0 || signsToMake > 50) {
-                messages.append("signsToMake parameter should be in [0, 50] range.\n");
-                inputError = true;
-            }
-            if (lemonadePriceCents < 0 || lemonadePriceCents > 100) {
-                messages.append("lemonadePriceCents parameter should be in [0, 100] range.\n");
-                inputError = true;
-            }
-            if (inputError)
-                return;
-
-            //TODO: Validate input values against C1
-
-            L = lemonadeToMake;  // How many glasses to make
-            S = signsToMake;  // How many signs to make
-            double G = 1;
-            P = lemonadePriceCents;  // Price for a glass of lemonade
-
-            // 1120 PRINT : IF SC = 10 AND RND (1) < .25 THEN 2300
-            messages.append("\n");
-            if (SC == 10 && rand.nextDouble() < 0.25) {  // THUNDERSTORM!
-                //X3 = 1;
-                SC = 5;
-                messages.append("WEATHER REPORT: A SEVERE THUNDERSTORM HIT LEMONSVILLE EARLIER TODAY, JUST AS\n");
-                messages.append("THE LEMONADE STANDS WERE BEING SET UP. UNFORTUNATELY, EVERYTHING WAS RUINED!!\n");
-                G = 0;
-            }
-
-            messages.append("** LEMONSVILLE DAILY FINANCIAL REPORT, DAY " + D + " **\n");
-            // CALCULATE PROFITS
-            if (R2 == 2) { // IF R2 = 2 THEN 2290
-                messages.append("THE STREET CREWS BOUGHT ALL YOUR LEMONADE AT LUNCHTIME!!\n");
-            }
-            {  // loop in lines 1185..1390
-                if (R2 == 2) {
-                    N2 = L;
-                } else {
-                    if (A < 0) {
-                        A = 0;
-                    }
-                    double N1;
-                    if (P > P9) {
-                        N1 = (P9 - P) / P9 * 0.8 * S2 + S2;
-                    } else {
-                        N1 = ((Math.pow(P9, 2)) * S2 / Math.pow(P, 2));
-                    }
-                    double W = -S * C9;
-                    double V = 1 - (Math.exp(W) * C2);
-                    N2 = (int) Math.floor(R1 * (N1 + (N1 * V)));
-                    N2 = (int) Math.floor(N2 * G);  // N2 = INT (N2 * G(I))
-                    if (N2 > L) {
-                        N2 = L;
-                    }
-                }
-
-                M = N2 * P * 0.01;
-                E = S * S3 + L * (C * 0.01);  // EXPENSES
-                P1 = M - E;  // PROFIT
-                A = A + P1;
-
-                messages.append("GLASSES SOLD: " + N2 + ", PRICE " + formatCurrency(P / 100.0) + " PER GLASS\n");
-                messages.append("INCOME:   " + formatCurrency(M) + "\n");
-                messages.append("GLASSES MADE: " + L + ", SIGNS MADE: " + S + "\n");
-                messages.append("EXPENSES: " + formatCurrency(E) + "\n");
-                messages.append("PROFIT:   " + formatCurrency(P1) + "\n");
-                messages.append("ASSETS:   " + formatCurrency(A) + "\n");
-                messages.append("\n");
-
-                if (A <= C / 100) {
-                    messages.append("YOU DON'T HAVE ENOUGH MONEY LEFT TO STAY IN BUSINESS YOU'RE BANKRUPT!\n");
-                    B = true;
-                    return;
-                }
-            }
-            R1 = 1;
-            R2 = 0;
+        boolean inputError = false;
+        double STI = A;
+        if (lemonadeToMake < 0 || lemonadeToMake > 1000) {
+            messages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
+            inputError = true;
         }
+        if (signsToMake < 0 || signsToMake > 50) {
+            messages.append("signsToMake parameter should be in [0, 50] range.\n");
+            inputError = true;
+        }
+        if (lemonadePriceCents < 0 || lemonadePriceCents > 100) {
+            messages.append("lemonadePriceCents parameter should be in [0, 100] range.\n");
+            inputError = true;
+        }
+        if (inputError)
+            return;
+
+        //TODO: Validate input values against C1
+
+        L = lemonadeToMake;  // How many glasses to make
+        S = signsToMake;  // How many signs to make
+        double G = 1;
+        P = lemonadePriceCents;  // Price for a glass of lemonade
+
+        // 1120 PRINT : IF SC = 10 AND RND (1) < .25 THEN 2300
+        messages.append("\n");
+        if (SC == 10 && rand.nextDouble() < 0.25) {  // THUNDERSTORM!
+            //X3 = 1;
+            SC = 5;
+            messages.append("WEATHER REPORT: A SEVERE THUNDERSTORM HIT LEMONSVILLE EARLIER TODAY, JUST AS\n");
+            messages.append("THE LEMONADE STANDS WERE BEING SET UP. UNFORTUNATELY, EVERYTHING WAS RUINED!!\n");
+            G = 0;
+        }
+
+        messages.append("** LEMONSVILLE DAILY FINANCIAL REPORT, DAY " + D + " **\n");
+        // CALCULATE PROFITS
+        if (R2 == 2) { // IF R2 = 2 THEN 2290
+            messages.append("THE STREET CREWS BOUGHT ALL YOUR LEMONADE AT LUNCHTIME!!\n");
+        }
+        {  // loop in lines 1185..1390
+            if (R2 == 2) {
+                N2 = L;
+            } else {
+                if (A < 0) {
+                    A = 0;
+                }
+                double N1;
+                if (P > P9) {
+                    N1 = (P9 - P) / P9 * 0.8 * S2 + S2;
+                } else {
+                    N1 = ((Math.pow(P9, 2)) * S2 / Math.pow(P, 2));
+                }
+                double W = -S * C9;
+                double V = 1 - (Math.exp(W) * C2);
+                N2 = (int) Math.floor(R1 * (N1 + (N1 * V)));
+                N2 = (int) Math.floor(N2 * G);  // N2 = INT (N2 * G(I))
+                if (N2 > L) {
+                    N2 = L;
+                }
+            }
+
+            M = N2 * P * 0.01;
+            E = S * S3 + L * (C * 0.01);  // EXPENSES
+            P1 = M - E;  // PROFIT
+            A = A + P1;
+
+            messages.append("GLASSES SOLD: " + N2 + ", PRICE " + formatCurrency(P / 100.0) + " PER GLASS\n");
+            messages.append("INCOME:   " + formatCurrency(M) + "\n");
+            messages.append("GLASSES MADE: " + L + ", SIGNS MADE: " + S + "\n");
+            messages.append("EXPENSES: " + formatCurrency(E) + "\n");
+            messages.append("PROFIT:   " + formatCurrency(P1) + "\n");
+            messages.append("ASSETS:   " + formatCurrency(A) + "\n");
+            messages.append("\n");
+
+            if (A <= C / 100) {
+                messages.append("YOU DON'T HAVE ENOUGH MONEY LEFT TO STAY IN BUSINESS YOU'RE BANKRUPT!\n");
+                B = true;
+                return;
+            }
+        }
+        R1 = 1;
+        R2 = 0;
 
         messages.append("YOUR ASSETS: " + formatCurrency(A) + "\n");
 

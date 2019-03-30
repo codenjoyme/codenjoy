@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.lemonade.client;
+package com.codenjoy.dojo.lemonade.model;
 
 /*-
  * #%L

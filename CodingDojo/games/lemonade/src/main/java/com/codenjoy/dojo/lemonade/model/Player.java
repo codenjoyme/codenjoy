@@ -32,6 +32,8 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки.
@@ -40,7 +42,7 @@ import java.util.List;
 public class Player extends GamePlayer<Hero, Field> {
 
     private Field field;
-    private List<SalesResult> history;
+    private Queue<SalesResult> history;
     private int questionIndex;
     Hero hero;
 
@@ -78,22 +80,22 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero.getNextQuestion().toJson();
     }
 
-    public String getHistory() {
+    public JSONArray getHistoryJson() {
         JSONArray historyJson = new JSONArray();
         history.forEach(sr -> historyJson.put(sr.toJSONObject()));
-        return historyJson.toString();
+        return historyJson;
     }
 
     public void checkAnswer() {
         hero.tick();
-        String answer = hero.popAnswer();
-        if (answer != null && !field.isLastQuestion(questionIndex)) {
-            SalesResult salesResult = hero.getSalesResult();
+        SalesResult salesResult = hero.popSalesResult();
+        if (salesResult != null) {
             history.add(salesResult);
+            while (history.size() > 10)
+                history.remove();
             if (salesResult.isBunkrupt()) {
                 event(Events.LOOSE);
             } else {
-                questionIndex++;
                 event(Events.WIN);
             }
         }

@@ -33,8 +33,8 @@ import java.util.List;
 
 public class Board extends AbstractTextBoard {
 
-    private final ArrayList<DailyReport> history;
-    private final InputData inputData;
+    private ArrayList<DailyReport> history;
+    private InputData inputData;
 
     private Board(InputData inputData, ArrayList<DailyReport> history){
         this.inputData = inputData;
@@ -47,12 +47,18 @@ public class Board extends AbstractTextBoard {
     }
 
     @Override
+    public boolean isGameOver() {
+        return inputData == null || inputData.getAssets() <= 0.0;
+    }
+
+    @Override
     public ClientBoard forString(String data) {
+        this.data = data;
         JSONObject input = new JSONObject(data);
         JSONArray historyJson = input.getJSONArray("history");
-        ArrayList<DailyReport> history = parseHistory(historyJson);
-        InputData inputData = InputData.fromJson(input);
-        return new Board(inputData, history);
+        this.history = parseHistory(historyJson);
+        this.inputData = InputData.fromJson(input);
+        return this;
     }
 
     private ArrayList<DailyReport> parseHistory(JSONArray historyJson) {

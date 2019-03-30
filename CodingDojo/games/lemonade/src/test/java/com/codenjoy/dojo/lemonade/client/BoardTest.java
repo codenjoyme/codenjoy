@@ -57,7 +57,7 @@ public class BoardTest {
             "    lemonadePrice : 0.02," +
             "    assets : 1.55," +
             "    weatherForecast : SUNNY," +
-            "    messages : \"my test message\"" +
+            "    message : \"my test message\"" +
             "}";
 
     @Test

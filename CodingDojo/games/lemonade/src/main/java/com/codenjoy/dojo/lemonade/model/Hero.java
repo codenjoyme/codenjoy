@@ -23,12 +23,9 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
-import com.codenjoy.dojo.lemonade.client.WeatherForecast;
-import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,6 +55,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     @Override
     public void init(Field field) {
         simulator.reset();
+        simulator.step(0,0,0);
 
         this.field = field;
     }
@@ -67,6 +65,11 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         this.answer = s;
 
         String command = s.toLowerCase();
+
+        if(command.contains("reset")) {
+            simulator.reset();
+            return;
+        }
 
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
@@ -136,7 +139,9 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         //TODO
     }
 
-    public SalesResult getSalesResult() {
-        return this.salesResult;
+    public SalesResult popSalesResult() {
+        SalesResult result = this.salesResult;
+        this.salesResult = null;
+        return result;
     }
 }

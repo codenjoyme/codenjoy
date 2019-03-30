@@ -22,9 +22,7 @@ package com.codenjoy.dojo.lemonade.model;
  * #L%
  */
 
-import com.codenjoy.dojo.lemonade.client.WeatherForecast;
 import org.json.JSONObject;
-import org.reflections.serializers.JsonSerializer;
 
 public class Question {
     private final int day;
