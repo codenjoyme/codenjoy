@@ -22,12 +22,15 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.config.meta.NonSSOProfile;
+import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.LoginController;
 import com.codenjoy.dojo.web.controller.RegistrationController;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -36,6 +39,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -92,6 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
+    @NonSSOProfile
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
@@ -125,6 +135,65 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                     .csrf().disable();
             // @formatter:on
+        }
+    }
+
+    @SSOProfile
+    @Configuration
+    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    public static class SSOUserSecurityConf extends WebSecurityConfigurerAdapter {
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http
+                    .authorizeRequests()
+                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
+                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI)
+                            .permitAll()
+
+                        .anyRequest()
+                            .hasRole("USER")
+
+                    .and()
+                        .oauth2Login()
+                    .and()
+                        .logout()
+                            .logoutUrl(LOGOUT_PROCESSING_URI)
+                            .invalidateHttpSession(true)
+                    .and()
+                    .csrf().disable();
+            // @formatter:on
+        }
+    }
+
+    @SSOProfile
+    @Configuration
+    public static class ResourceServerSSOConf extends ResourceServerConfigurerAdapter {
+
+        @Override
+        public void configure(ResourceServerSecurityConfigurer config) {
+            config.tokenServices(tokenServices());
+        }
+
+        @Bean
+        public TokenStore tokenStore() {
+            return new JwtTokenStore(accessTokenConverter());
+        }
+
+        @Bean
+        public JwtAccessTokenConverter accessTokenConverter() {
+            JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+            converter.setSigningKey("123");
+            return converter;
+        }
+
+        @Bean
+        @Primary
+        public DefaultTokenServices tokenServices() {
+            DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+            defaultTokenServices.setTokenStore(tokenStore());
+            return defaultTokenServices;
         }
     }
 

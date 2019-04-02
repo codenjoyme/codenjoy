@@ -46,6 +46,10 @@
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+
+        <spring.security.oauth2.version>2.3.3.RELEASE</spring.security.oauth2.version>
+        <spring.security.jwt.version>1.0.9.RELEASE</spring.security.jwt.version>
+        <spring.security.jose.version>5.1.4.RELEASE</spring.security.jose.version>
     </properties>
 
     <repositories>
@@ -53,9 +57,52 @@
             <id>codenjoy-releases</id>
             <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
         </repository>
+        <repository>
+            <id>maven-central</id>
+            <url>http://central.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>springframework-maven</id>
+            <url>http://maven.springframework.org/milestone/</url>
+        </repository>
     </repositories>
 
     <profiles>
+        <profile>
+            <id>sso</id>
+            <activation>
+                <property>
+                    <name>sso</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.security.oauth</groupId>
+                    <artifactId>spring-security-oauth2</artifactId>
+                    <version>${spring.security.oauth2.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-config</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-oauth2-client</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-oauth2-jose</artifactId>
+                    <version>${spring.security.jose.version}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-jwt</artifactId>
+                    <version>${spring.security.jwt.version}</version>
+                </dependency>
+
+            </dependencies>
+        </profile>
+
         <profile>
             <id>sample</id>
             <activation>
