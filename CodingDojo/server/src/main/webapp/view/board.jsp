@@ -27,6 +27,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Game boards</title>
 
     <link href="${ctx}/resources/css/all.css" rel="stylesheet">

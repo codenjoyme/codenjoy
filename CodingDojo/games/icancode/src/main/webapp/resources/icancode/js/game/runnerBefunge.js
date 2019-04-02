@@ -293,7 +293,7 @@ function initRunnerBefunge(logger, storage) {
             type: 1,
             title: 'start',
             process: startCommand,
-            description: 'Выполнение команд начинается тут.',
+            description: 'Выполнение команд начинается тута.',
             minLevel: 0,
             img1: 'img/sprite/start.png'
         },
@@ -904,9 +904,13 @@ function initRunnerBefunge(logger, storage) {
             }
 
             var currentTooltip = null;
-            var showTooltip = function() {
+            var touchMode = false;
+            var showTooltip = function(event) {
+                if(touchMode) return false;
+         
                 var slot = $(this);
                 currentTooltip = slot.data('data-type').id;
+                touchMode = event.type === 'touchstart';
 
                 setTimeout(function() {
                     var tooltip = slot.data('data-type').id;
@@ -920,6 +924,8 @@ function initRunnerBefunge(logger, storage) {
             }
 
             var hideTooltip = function() {
+                if(touchMode) return false;
+
                 var slot = $(this);
                 var tooltip = slot.data('data-type').id;
                 if (tooltip == currentTooltip) {
@@ -928,6 +934,14 @@ function initRunnerBefunge(logger, storage) {
                 slot.empty();
             }
 
+            var handleTouchEnd = function(evt) {
+                touchMode = false;
+                hideTooltip.call(this, evt);
+            }
+
+            $("#cardPile ." + commands[index].title)[0].addEventListener('touchstart', showTooltip);
+            $("#cardPile ." + commands[index].title)[0].addEventListener('touchend', handleTouchEnd);
+            $("#cardPile ." + commands[index].title)[0].addEventListener('touchmove', handleTouchEnd);
             $("#cardPile ." + commands[index].title).mouseenter(showTooltip);
             $("#cardPile ." + commands[index].title).mousedown(hideTooltip);
             $("#cardPile ." + commands[index].title).mouseleave(hideTooltip);
