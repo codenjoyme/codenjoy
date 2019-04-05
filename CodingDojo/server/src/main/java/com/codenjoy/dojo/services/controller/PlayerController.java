@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.BoardGameState;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import javafx.beans.NamedArg;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class PlayerController implements Controller<String, Joystick> {
 
     private final PlayerTransport transport;
 
-    public PlayerController(@NamedArg("controlPlayerTransport") PlayerTransport controlPlayerTransport) { // autowiring by name
+    public PlayerController(PlayerTransport controlPlayerTransport) { // autowiring by name
         this.transport = controlPlayerTransport;
         this.transport.setDefaultFilter(Object::toString);
     }

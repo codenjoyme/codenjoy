@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import javafx.beans.NamedArg;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -39,7 +38,7 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
 
     private final PlayerTransport transport;
 
-    public ScreenController(@NamedArg("screenPlayerTransport") PlayerTransport screenPlayerTransport) {
+    public ScreenController(PlayerTransport screenPlayerTransport) {
         this.transport = screenPlayerTransport;
     }
 
