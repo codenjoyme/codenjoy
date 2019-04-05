@@ -391,3 +391,30 @@ https://github.com/codenjoyme/codenjoy/pull/46/commits/cc373402aebae1eb8744db405
     Сейчас как-то сложнее все сделалось, не уверен на счет этого изменения
 
     Igor: окей, согласен. Я сделал уже 2 подхода к снаряду, и выглядит так, что лучше пока оставить как есть.
+
+from Alex: 2019-04-05
+
+30) Свалился тест во время билда сервера, видимо тест не может найти ресурсы, которые упакованы внутри jar тетриса
+    cd /tmp/codenjoy/CodingDojo/server && mvnw clean package -Ptetris -DskipTests=false
+
+    [ERROR] Tests run: 4, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 3.429 s <<< FAILURE! - in com.codenjoy.dojo.services.GameServiceTest
+    [ERROR] shouldGetGameNames(com.codenjoy.dojo.services.GameServiceTest)  Time elapsed: 0.013 s  <<< FAILURE!
+    org.junit.ComparisonFailure: expected:<[first, second[]]> but was:<[first, second[, tetris]]>
+            at com.codenjoy.dojo.services.GameServiceTest.shouldGetGameNames(GameServiceTest.java:75)
+
+    [ERROR] shouldGetPngForSprites(com.codenjoy.dojo.services.GameServiceTest)  Time elapsed: 0.011 s  <<< FAILURE!
+    java.lang.AssertionError:
+    [Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/blue.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/cyan.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/orange.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/yellow.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/green.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/purple.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/red.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/none.png]
+            at com.codenjoy.dojo.services.GameServiceTest.shouldGetPngForSprites(GameServiceTest.java:116)
+
+    [ERROR] shouldGetSprites(com.codenjoy.dojo.services.GameServiceTest)  Time elapsed: 0.003 s  <<< FAILURE!
+    org.junit.ComparisonFailure: expected:<{[]first=[none, wall, h...> but was:<{[tetris=[blue, cyan, orange, yellow, green, purple, red, none], ]first=[none, wall, h...>
+            at com.codenjoy.dojo.services.GameServiceTest.shouldGetSprites(GameServiceTest.java:82)
+
