@@ -443,6 +443,7 @@ from Alex: 2019-04-05
     хотя в табличке есть запись
         "admin@codenjoyme.com"	"0"	"admin"	"1"	"$2a$10$cmKGT1LRwtr1FGSQrducqefoWKAMVBwXK0/CMPZmv.ltBzhoKv22y"	"000000"	"{}"
     пробовал я и admin@codenjoyme.com в качестве логина, не получилось
+    UPD логин 000000/admin прошел, хотя несколько это необычно
 
 +36) В конфигурации спринга почему-то не стартовало
 +++UPD: дело было в том что раньше я юзал postgre а сейчас postgreS
