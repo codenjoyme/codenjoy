@@ -418,3 +418,4 @@ from Alex: 2019-04-05
     org.junit.ComparisonFailure: expected:<{[]first=[none, wall, h...> but was:<{[tetris=[blue, cyan, orange, yellow, green, purple, red, none], ]first=[none, wall, h...>
             at com.codenjoy.dojo.services.GameServiceTest.shouldGetSprites(GameServiceTest.java:82)
 
+31) balancer приложение так же надо перевести на новые рельсы spring-boot

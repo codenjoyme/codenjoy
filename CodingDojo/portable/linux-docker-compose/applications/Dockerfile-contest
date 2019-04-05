@@ -1,12 +1,12 @@
-FROM java_workspace
+FROM java-workspace
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
-VOLUME /tmp
-
-ARG WAR_FILE
+ARG WAR_FILE=codenjoy-contest.war
 ARG SPRING_PROFILES=sqlite
 ARG CONTEXT=codenjoy-contest
 
-COPY ${WAR_FILE} server.war
+RUN mkdir -p /app
 
-ENTRYPOINT ["java","-jar","/server.war","--spring.profiles.active=${SPRING_PROFILES}","--context=${CONTEXT}"]
+COPY ${WAR_FILE} /app/server.war
+
+# ENTRYPOINT ["java","-jar","/app/server.war","--spring.profiles.active=${SPRING_PROFILES}","--context=${CONTEXT}"]

@@ -101,21 +101,6 @@ eval_echo "ssl ./config/nginx/conf.d/codenjoy-balancer.conf"
 eval_echo "ssl ./config/nginx/conf.d/codenjoy-contest.conf"
 eval_echo "ssl ./docker-compose.yml"
 
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'database.name=' $CODENJOY_POSTGRES_NAME"
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'database.user=' $CODENJOY_POSTGRES_USER"
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'database.password=' $CODENJOY_POSTGRES_PASSWORD"
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'admin.password=' $ADMIN_PASSWORD"
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'email.hash=' $EMAIL_HASH"
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'game.type=' $GAME"
-eval_echo "parameter ./config/codenjoy/codenjoy-balancer.properties 'game.servers=' $BALANCER_GAME_SERVERS"
-
-eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'database.name=' $CODENJOY_POSTGRES_NAME"
-eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'database.user=' $CODENJOY_POSTGRES_USER"
-eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'database.password=' $CODENJOY_POSTGRES_PASSWORD"
-eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'admin.password=' $ADMIN_PASSWORD"
-eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'email.hash=' $EMAIL_HASH"
-eval_echo "parameter ./config/codenjoy/codenjoy-contest.properties 'server.ip=' $SERVER_IP"
-
 # -------------------------- DATABASE --------------------------
 
 database() {
