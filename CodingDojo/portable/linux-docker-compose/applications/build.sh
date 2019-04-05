@@ -15,6 +15,7 @@ else
     echo "GIT_REPO=$GIT_REPO"
     echo "REVISION=$REVISION"
     echo "GAME=$GAME"
+    echo "SKIP_TESTS=$SKIP_TESTS"
     echo "[0m"
 fi
 
@@ -72,27 +73,28 @@ MVNW=/tmp/codenjoy/CodingDojo/mvnw
 if [ "x$BUILD_SERVER" = "xtrue" ]; then
     if [ "x$GAME" = "x" ]; then 
         # build all projects
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo && $MVNW clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo && $MVNW clean install -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build war with all games
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/sever && $MVNW clean package -DallGames -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && $MVNW clean package -DallGames -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
     else
         # build games parent
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games && $MVNW clean install -N -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games && $MVNW clean install -N -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build engine
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && $MVNW clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && $MVNW clean install -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build game
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/$GAME && $MVNW clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/$GAME && $MVNW clean install -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build server
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && $MVNW clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && $MVNW clean install -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build war with selected game
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && $MVNW clean package -P$GAME -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && $MVNW clean package -P$GAME -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
     fi
-    eval_echo "docker cp temp:/tmp/codenjoy/CodingDojo/builder/target/${CODENJOY_CONTEXT}.war ./${CODENJOY_CONTEXT}.war" ;
+    eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server/target && ls -la'"
+    eval_echo "docker cp temp:/tmp/codenjoy/CodingDojo/server/target/${CODENJOY_CONTEXT}.war ./${CODENJOY_CONTEXT}.war" ;
 fi
     
 echo "[92m========================================================================================================================"
@@ -102,10 +104,10 @@ echo "==========================================================================
 if [ "x$BUILD_BALANCER" = "xtrue" ] ;
 then
     # build engine
-    eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && $MVNW clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+    eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && $MVNW clean install -DskipTests=$SKIP_TESTS' |& tee ./logs/codenjoy-deploy.log" ;
 
     # build balancer
-    eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/balancer && $MVNW clean install -DskipTests=true' |& tee ./logs/balancer-deploy.log" ;
+    eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/balancer && $MVNW clean install -DskipTests=$SKIP_TESTS' |& tee ./logs/balancer-deploy.log" ;
     eval_echo "docker cp temp:/tmp/codenjoy/CodingDojo/balancer/target/codenjoy-balancer.war ./codenjoy-balancer.war" ;
 fi
     
