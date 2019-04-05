@@ -25,7 +25,7 @@ services:
         dockerfile: Dockerfile-balancer
         args:
           WAR_FILE: ./codenjoy-balancer.war
-     command: --spring.profiles.active=${DATABASE_TYPE} --context=/${CODENJOY_CONTEXT}
+     command: --spring.profiles.active=${DATABASE_TYPE} --context=/${CODENJOY_CONTEXT} # --debug
      volumes:
 #       - ./materials/database:/database    #L#
        - ./logs/codenjoy:/logs
