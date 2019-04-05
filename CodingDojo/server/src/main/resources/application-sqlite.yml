@@ -1,6 +1,6 @@
 database:
   files:
-    log: database/logs
+    log: database/logs.db
     saves: database/saves.db
     users: database/users.db
     payment: database/payment.db

@@ -427,21 +427,153 @@ from Alex: 2019-04-05
         -rw-r--r--  1 root root 5314 Apr  5 22:51 project.artifactId_IS_UNDEFINED.log
     а должен быть codenjoy-context.log
 
-33) почему-то папки logs и database создаются в корне докера, а не в папке /app где я запускаю варник
+ 33) почему-то папки logs и database создаются в корне докера, а не в папке /app где я запускаю варник
 
-34) один из файлов базы sqlite в контейнере создался без контекста
++34) один из файлов базы sqlite в контейнере создался без контекста
     drwxr-xr-x 2 root root 4096 Apr  5 23:04 .
     drwxr-xr-x 3 root root 4096 Apr  5 19:37 ..
->>> -rw-r--r-- 1 root root 8192 Apr  5 23:03 logs
+ >> -rw-r--r-- 1 root root 8192 Apr  5 23:03 logs <<<<<<<<<<<<<<<<<<<<<<<<<
     -rw-r--r-- 1 root root 8192 Apr  5 23:03 payment_codenjoy-contest.db
     -rw-r--r-- 1 root root 8192 Apr  5 23:04 saves_codenjoy-contest.db
     -rw-r--r-- 1 root root 8192 Apr  5 23:03 settings_codenjoy-contest.db
     -rw-r--r-- 1 root root 8192 Apr  5 23:03 users_codenjoy-contest.db
 
-35) попытался зайти на админку под admin/admin но получил
+ 35) попытался зайти на админку под admin/admin но получил
         java.util.concurrent.ExecutionException: org.springframework.security.core.userdetails.UsernameNotFoundException: User with id 'admin' does not exist
     хотя в табличке есть запись
         "admin@codenjoyme.com"	"0"	"admin"	"1"	"$2a$10$cmKGT1LRwtr1FGSQrducqefoWKAMVBwXK0/CMPZmv.ltBzhoKv22y"	"000000"	"{}"
     пробовал я и admin@codenjoyme.com в качестве логина, не получилось
 
-36)
+ 36) В конфигурации спринга почему-то не стартовало
+        ***************************
+        APPLICATION FAILED TO START
+        ***************************
+        Description:
+        Field saver in com.codenjoy.dojo.services.SaveServiceImpl required a bean of type 'com.codenjoy.dojo.services.GameSaver' that could not be found.
+        The injection point has the following annotations:
+                - @org.springframework.beans.factory.annotation.Autowired(required=true)
+        Action:
+        Consider defining a bean of type 'com.codenjoy.dojo.services.GameSaver' in your configuration.
+
+    вот стектрейс в дебаге
+
+        2019-04-05T23:21:54.440 [main] DEBUG o.s.b.d.LoggingFailureAnalysisReporter - Application failed to start due to an exception
+        org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.codenjoy.dojo.services.GameSaver' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoMatchingBeanFound(DefaultListableBeanFactory.java:1654)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1213)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:392)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1305)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1144)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:235)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:226)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addServletContextInitializerBeans(ServletContextInitializerBeans.java:101)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:88)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:261)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:234)
+                at org.springframework.boot.web.embedded.jetty.ServletContextInitializerConfiguration.callInitializers(ServletContextInitializerConfiguration.java:66)
+                at org.springframework.boot.web.embedded.jetty.ServletContextInitializerConfiguration.configure(ServletContextInitializerConfiguration.java:55)
+                at org.eclipse.jetty.webapp.WebAppContext.configure(WebAppContext.java:517)
+                at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1454)
+                at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:852)
+                at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:278)
+                at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:545)
+                at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+                at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:138)
+                at org.eclipse.jetty.server.Server.start(Server.java:415)
+                at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:108)
+                at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+                at org.eclipse.jetty.server.Server.doStart(Server.java:382)
+                at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+                at org.springframework.boot.web.embedded.jetty.JettyWebServer.initialize(JettyWebServer.java:108)
+                at org.springframework.boot.web.embedded.jetty.JettyWebServer.<init>(JettyWebServer.java:86)
+                at org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory.getJettyWebServer(JettyServletWebServerFactory.java:410)
+                at org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory.getWebServer(JettyServletWebServerFactory.java:153)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:181)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:154)
+                at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142)
+                at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775)
+                at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397)
+                at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+                at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260)
+                at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248)
+                at com.codenjoy.dojo.CodenjoyContestApplication.main(CodenjoyContestApplication.java:49)
+                at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+                at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+                at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+                at java.lang.reflect.Method.invoke(Method.java:498)
+                at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:48)
+                at org.springframework.boot.loader.Launcher.launch(Launcher.java:87)
+                at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+                at org.springframework.boot.loader.WarLauncher.main(WarLauncher.java:58)
+
+37)
