@@ -51,7 +51,7 @@
             location="classpath:/config/${project.artifactId}.properties,file:config/${project.artifactId}.properties"
             system-properties-mode="OVERRIDE"/>
 
-    <!-- Ключик ${database.type:sqlite} нужен для запуска джетти с -Ddatabase.type=postgre|sqlite
+    <!-- Ключик ${database.type:sqlite} нужен для запуска джетти с -Ddatabase.type=postgres|sqlite
           sqlite по умолчанию если ничего не вводить -->
     <import resource="applicationContext-database-${database.type:sqlite}.xml"/>
 

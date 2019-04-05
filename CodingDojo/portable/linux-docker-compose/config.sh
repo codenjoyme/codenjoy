@@ -105,7 +105,7 @@ eval_echo "ssl ./docker-compose.yml"
 
 database() {
     file=$1
-    if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
+    if [ "x$DATABASE_TYPE" = "xpostgres" ]; then
         POSTGRE="true";
         SQLITE="false";
     else
