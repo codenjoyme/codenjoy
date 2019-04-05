@@ -3,10 +3,11 @@ MAINTAINER Alexander Baglay <apofig@gmail.com>
 
 ARG WAR_FILE=codenjoy-contest.war
 ARG SPRING_PROFILES=sqlite
-ARG CONTEXT=codenjoy-contest
+ARG CODENJOY_CONTEXT=codenjoy-contest
 
 RUN mkdir -p /app
 
 COPY ${WAR_FILE} /app/server.war
 
-# ENTRYPOINT ["java","-jar","/app/server.war","--spring.profiles.active=${SPRING_PROFILES}","--context=${CONTEXT}"]
+ENTRYPOINT ["java","-jar","/app/server.war"]
+CMD ["--spring.profiles.active=${SPRING_PROFILES}","--context=/${CODENJOY_CONTEXT}"]
