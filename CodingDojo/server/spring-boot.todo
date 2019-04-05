@@ -419,3 +419,29 @@ from Alex: 2019-04-05
             at com.codenjoy.dojo.services.GameServiceTest.shouldGetSprites(GameServiceTest.java:82)
 
 31) balancer приложение так же надо перевести на новые рельсы spring-boot
+
+32) Почему-то лог файл в контейнере создается с ненормальным именем
+        root@885f2a4989f9:/logs# ls -la /logs
+        drwxr-xr-x  2 root root 4096 Apr  5 22:50 .
+        drwxr-xr-x 64 root root 4096 Apr  5 22:50 ..
+        -rw-r--r--  1 root root 5314 Apr  5 22:51 project.artifactId_IS_UNDEFINED.log
+    а должен быть codenjoy-context.log
+
+33) почему-то папки logs и database создаются в корне докера, а не в папке /app где я запускаю варник
+
+34) один из файлов базы sqlite в контейнере создался без контекста
+    drwxr-xr-x 2 root root 4096 Apr  5 23:04 .
+    drwxr-xr-x 3 root root 4096 Apr  5 19:37 ..
+>>> -rw-r--r-- 1 root root 8192 Apr  5 23:03 logs
+    -rw-r--r-- 1 root root 8192 Apr  5 23:03 payment_codenjoy-contest.db
+    -rw-r--r-- 1 root root 8192 Apr  5 23:04 saves_codenjoy-contest.db
+    -rw-r--r-- 1 root root 8192 Apr  5 23:03 settings_codenjoy-contest.db
+    -rw-r--r-- 1 root root 8192 Apr  5 23:03 users_codenjoy-contest.db
+
+35) попытался зайти на админку под admin/admin но получил
+        java.util.concurrent.ExecutionException: org.springframework.security.core.userdetails.UsernameNotFoundException: User with id 'admin' does not exist
+    хотя в табличке есть запись
+        "admin@codenjoyme.com"	"0"	"admin"	"1"	"$2a$10$cmKGT1LRwtr1FGSQrducqefoWKAMVBwXK0/CMPZmv.ltBzhoKv22y"	"000000"	"{}"
+    пробовал я и admin@codenjoyme.com в качестве логина, не получилось
+
+36)

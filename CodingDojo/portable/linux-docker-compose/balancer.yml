@@ -27,8 +27,8 @@ services:
           WAR_FILE: ./codenjoy-balancer.war
      command: --spring.profiles.active=${DATABASE_TYPE} --context=/${CODENJOY_CONTEXT}
      volumes:
-#       - ./materials/database:/app/database    #L#
-       - ./logs/codenjoy/codenjoy-balancer.log:/app/logs/codenjoy-balancer.log
+#       - ./materials/database:/database    #L#
+       - ./logs/codenjoy:/logs
        - /etc/localtime:/etc/localtime:ro
 #     ports:                                              #P#
 #       - "${BALANCER_PORT}:8080"                         #P#
