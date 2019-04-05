@@ -1,7 +1,12 @@
-FROM jetty-updated
+FROM java_workspace
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
-USER jetty
-ENV DEBIAN_FRONTEND noninteractive
+VOLUME /tmp
 
-ADD ./codenjoy-balancer.war /var/lib/jetty/webapps/
+ARG WAR_FILE
+ARG SPRING_PROFILES=sqlite
+ARG CONTEXT=codenjoy-contest
+
+COPY ${WAR_FILE} server.war
+
+ENTRYPOINT ["java","-jar","/server.war","--spring.profiles.active=${SPRING_PROFILES}","--context=${CONTEXT}"]
