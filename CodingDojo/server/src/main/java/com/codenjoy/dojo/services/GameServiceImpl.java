@@ -79,7 +79,7 @@ public class GameServiceImpl implements GameService {
                 .collect(Collectors.toList()));
     }
 
-    private Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+    Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
         return new Reflections(packageName).getSubTypesOf(GameType.class);
     }
 
@@ -110,12 +110,12 @@ public class GameServiceImpl implements GameService {
                                 .collect(toList())
                 ))
                 .collect(toMap(
-                        entry -> entry.getKey(),
-                        entry -> entry.getValue()
+                        AbstractMap.SimpleEntry::getKey,
+                        AbstractMap.SimpleEntry::getValue
                 ));
     }
 
-    private GameType loadGameType(Class<? extends GameType> gameType) {
+    GameType loadGameType(Class<? extends GameType> gameType) {
         try {
             return gameType.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {

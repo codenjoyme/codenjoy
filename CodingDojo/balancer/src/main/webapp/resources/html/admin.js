@@ -30,6 +30,10 @@ var result = function(partOfId, data) {
     $('#' + partOfId + '-error').val('');
 }
 
+var getGameType = function() {
+    return JSON.parse($('#gametype-result').val()).gameType;
+}
+
 var server = function(name) {
     return $('#' + name + '-server').val();
 }
@@ -142,64 +146,64 @@ var getScores = function(day) {
     });
 };
 
-var removeUser = function(email, adminPassword) {
+var removeUser = function(email) {
     _ajax('remove', {
         type: 'GET',
-        url: server('balancer') + '/remove/' + email + '/' + adminPassword
+        url: server('balancer') + '/remove/' + email
     });
 };
 
 var getUsersOnGameServer = function() {
     _ajax('users-game', {
         type: 'GET',
-        url: server('game') + '/game/snakebattle/players'
+        url: server('game') + '/game/' + getGameType() + '/players'
     });
 };
 
-var getUsersOnBalancerServer = function(adminPassword) {
+var getUsersOnBalancerServer = function() {
     _ajax('users-balancer', {
         type: 'GET',
-        url: server('balancer') + '/players/' + adminPassword
+        url: server('balancer') + '/players'
     });
 };
 
-var getSettings = function(adminPassword) {
-    _ajax('settings', {
+var getSettings = function(gameType) {
+    _ajax(gameType || 'settings', {
         type: 'GET',
-        url: server('balancer') + '/settings/' + adminPassword
+        url: server('balancer') + '/settings'
     });
 };
 
-var setSettings = function(settings, adminPassword) {
+var setSettings = function(settings) {
     _ajax('settings', {
         type: 'POST',
-        url: server('balancer') + '/settings/' + adminPassword,
+        url: server('balancer') + '/settings',
         contentType: 'application/json; charset=utf-8',
         data: settings
     });
 };
 
-var clearCache = function(adminPassword) {
+var clearCache = function() {
     _ajax('cache', {
         type: 'GET',
-        url: server('balancer') + '/cache/clear/' + adminPassword
+        url: server('balancer') + '/cache/clear'
     });
 };
 
-var getDebug = function(adminPassword) {
+var getDebug = function() {
     _ajax('debug', {
         type: 'GET',
-        url: server('balancer') + '/debug/get/' + adminPassword,
+        url: server('balancer') + '/debug/get',
         success: function(data) {
             $('#debug-result').attr('checked', data);
         }
     });
 };
 
-var setDebug = function(enabled, adminPassword) {
+var setDebug = function(enabled) {
     _ajax('debug', {
         type: 'GET',
-        url: server('balancer') + '/debug/set/' + enabled + '/' + adminPassword,
+        url: server('balancer') + '/debug/set/' + enabled,
         success: function(data) {
             $('#debug-result').attr('checked', data);
             $('#debug-error').val('');
@@ -207,25 +211,25 @@ var setDebug = function(enabled, adminPassword) {
     });
 };
 
-var getContest = function(adminPassword) {
+var getContest = function() {
     _ajax('contest', {
         type: 'GET',
-        url: server('balancer') + '/contest/enable/get/' + adminPassword,
+        url: server('balancer') + '/contest/enable/get',
         success: function(data) {
             $('#contest-result').attr('checked', data);
         }
     });
 };
 
-var setContest = function(enabled, adminPassword) {
+var setContest = function(enabled) {
     _ajax('contest', {
         type: 'GET',
-        url: server('balancer') + '/contest/enable/set/' + enabled + '/' + adminPassword,
+        url: server('balancer') + '/contest/enable/set/' + enabled,
         success: function(data) {
             $('#contest-result-data').val(JSON.stringify(data));
             $('#contest-error').val('');
 
-            getContest($.md5($('#admin-password').val()));
+            getContest();
         },
         error: function(data) {
             $('#contest-result-data').val('');
@@ -244,6 +248,8 @@ $(document).ready(function() {
     $('#game-server').val(window.location.protocol + '//' + gameHost + $('#game-server').val());
 
     $('#scores-day').val(new Date().toISOString().split('T')[0]);
+
+    getSettings('gametype');
 
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
@@ -314,8 +320,7 @@ $(document).ready(function() {
     $('#remove').click(function() {
         var preffix = $('#preffix').val();
         removeUser(
-            preffix + $('#remove-email').val(),
-            $.md5($('#admin-password').val())
+            preffix + $('#remove-email').val()
         );
     });
 
@@ -324,50 +329,40 @@ $(document).ready(function() {
     });
 
     $('#users-balancer').click(function() {
-        getUsersOnBalancerServer(
-            $.md5($('#admin-password').val())
-        );
+        getUsersOnBalancerServer();
     });
 
     $('#get-settings').click(function() {
-        getSettings(
-            $.md5($('#admin-password').val())
-        );
+        getSettings();
     });
 
     $('#set-settings').click(function() {
         setSettings(
-            $('#settings-result').val(),
-            $.md5($('#admin-password').val())
+            $('#settings-result').val()
         );
     });
 
     $('#debug-result').change(function() {
         setDebug(
-            $('#debug-result').is(':checked'),
-            $.md5($('#admin-password').val())
+            $('#debug-result').is(':checked')
         );
     });
 
     var loadCheckboxes = function() {
-        getDebug($.md5($('#admin-password').val()));
-        getContest($.md5($('#admin-password').val()));
+        getDebug();
+        getContest();
     };
 
-    $('#admin-password').focusout(loadCheckboxes);
     loadCheckboxes();
 
     $('#contest-result').change(function() {
         setContest(
-            $('#contest-result').is(':checked'),
-            $.md5($('#admin-password').val())
+            $('#contest-result').is(':checked')
         );
     });
 
     $('#cache').click(function() {
-        clearCache(
-            $.md5($('#admin-password').val())
-        );
+        clearCache();
     });
 
 });

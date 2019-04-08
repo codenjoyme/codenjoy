@@ -1,0 +1,3 @@
+database:
+  scores: database/scores.db
+  players: database/players.db
