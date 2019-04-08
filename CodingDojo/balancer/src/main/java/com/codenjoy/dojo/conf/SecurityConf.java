@@ -42,10 +42,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
                 .and()
-                .antMatcher("/**")
                     .authorizeRequests()
-                        .anyRequest()
+                        .antMatchers("/html/admin.html", "/rest/**")
+                            .hasRole("ADMIN")
+                        .antMatchers("/**")
                             .permitAll()
+                        .anyRequest().permitAll()
                 .and()
                     .headers()
                         .httpStrictTransportSecurity().maxAgeInSeconds(31536000)
@@ -64,7 +66,6 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                     .httpBasic()
                 .and()
                     .formLogin()
-                        .permitAll()
                 .and()
                 .csrf().disable();
 

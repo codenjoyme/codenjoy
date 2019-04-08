@@ -1,3 +1,7 @@
+server:
+  servlet:
+    context-path: ${context:/codenjoy-balancer}
+
 mvc:
   cache-period: 259200
 
@@ -22,7 +26,7 @@ dispatcher:
     exists: "http://%s/codenjoy-contest/rest/player/%s/exists"
     enabled: "http://%s/codenjoy-contest/rest/game/enabled/%s/%s"
 game:
-  type: snakebattle
+  type: bomberman
   servers: localhost:8080
   room: 10
   start.day: "2019-01-28"
