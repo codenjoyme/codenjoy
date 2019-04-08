@@ -418,6 +418,9 @@ from Alex: 2019-04-05
     org.junit.ComparisonFailure: expected:<{[]first=[none, wall, h...> but was:<{[tetris=[blue, cyan, orange, yellow, green, purple, red, none], ]first=[none, wall, h...>
             at com.codenjoy.dojo.services.GameServiceTest.shouldGetSprites(GameServiceTest.java:82)
 
+ Igor: странно, что раньше тест определения игр в рантайме работал корректно. Хотя, глубоко не вникал. Со спрайтами - действительно косяк.
+ Поправил тесты с поправкой на активные *maven* профили.
+
 31) balancer приложение так же надо перевести на новые рельсы spring-boot
 
 32) Почему-то лог файл в контейнере создается с ненормальным именем
@@ -444,6 +447,8 @@ from Alex: 2019-04-05
         "admin@codenjoyme.com"	"0"	"admin"	"1"	"$2a$10$cmKGT1LRwtr1FGSQrducqefoWKAMVBwXK0/CMPZmv.ltBzhoKv22y"	"000000"	"{}"
     пробовал я и admin@codenjoyme.com в качестве логина, не получилось
     UPD логин 000000/admin прошел, хотя несколько это необычно
+    Igor: это действительно странное решение, но оно в принципе рабочее. Рядом уже готова ветка с доработками по spring-security - в ней
+    реализован логин по email.
 
 +36) В конфигурации спринга почему-то не стартовало
 +++UPD: дело было в том что раньше я юзал postgre а сейчас postgreS
