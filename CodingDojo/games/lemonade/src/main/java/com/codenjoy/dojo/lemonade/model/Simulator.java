@@ -150,7 +150,7 @@ public class Simulator {
         messages.append("3. WHAT PRICE TO CHARGE FOR EACH GLASS\n");
         messages.append("\n");
         messages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS).");
-        messages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR, YOUR COST TO MAKE LEMONADE IS\n");
+        messages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\nYOUR COST TO MAKE LEMONADE IS ");
         messages.append("$0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\n");
         messages.append("\n");
         messages.append("YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\n");
