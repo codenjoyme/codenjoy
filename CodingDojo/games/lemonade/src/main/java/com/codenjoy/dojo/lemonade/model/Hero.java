@@ -55,7 +55,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     @Override
     public void init(Field field) {
         simulator.reset();
-        simulator.step(0,0,0);
+        //simulator.step(0,0,0);
 
         this.field = field;
     }

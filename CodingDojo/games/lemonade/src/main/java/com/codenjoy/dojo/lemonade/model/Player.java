@@ -75,7 +75,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     public JSONObject getNextQuestion() { // TODO test me
         if (field.isLastQuestion(questionIndex)) {
-            return new JSONObject().put("message", "You win!");
+            return new JSONObject().put("messages", "You win!");
         }
         return hero.getNextQuestion().toJson();
     }

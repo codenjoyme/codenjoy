@@ -21,12 +21,15 @@
  */
 
 // TOTO проверить может что еще осталось от старой реализации неиспользуемое
+var sprites = [];
+
 function initCanvasesGame(contextPath, players, allPlayersScreen,
                 singleBoardGame, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, alphabet, spriteElements,
                 drawBoard)
 {
+    loadSprites(contextPath, spriteElements);
     var plotSize = {width: 30, height: 20};
     var canvases = {};
     var infoPools = {};
@@ -142,14 +145,14 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 shadowOffsetY: 0,
                 shadowBlur: 7
             }
-            canvas.drawText("TIME  " + board.time, {"x": 0, "y": 17.2}, monofont);
-            canvas.drawText("FUEL  " + board.fuelmass, {"x": 0, "y": 16.4}, monofont);
-            canvas.drawText("STATE " + board.state, {"x": 0, "y": 15.6}, monofont);
-            canvas.drawText("XPOS " + board.x, {"x": 6, "y": 17.2}, monofont);
-            canvas.drawText("YPOS " + board.y, {"x": 6, "y": 16.4}, monofont);
-            canvas.drawText("HSPEED " + board.hspeed, {"x": 12, "y": 17.2}, monofont);
-            canvas.drawText("VSPEED " + board.vspeed, {"x": 12, "y": 16.4}, monofont);
-            if (board.hspeed >= 0.001) {
+
+            var weatherImg = sprites[board.weatherForecast.toLowerCase()];
+            if(!!weatherImg) {
+                var ctx = canvas.getCanvasContext();
+                ctx.drawImage(weatherImg,50,50,weatherImg.width,weatherImg.height);
+            }
+            canvas.drawText(board.messages, {"x": 0, "y": 16.4}, monofont);
+            /*if (board.hspeed >= 0.001) {
                 canvas.drawText("→", {"x": 18, "y": 17.2}, monofont);
             }
             else if (board.hspeed <= -0.001) {
@@ -266,7 +269,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 }
             }
 
-            ctx.resetTransform();
+            ctx.resetTransform();*/
 
         }
 
@@ -494,4 +497,12 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         }
     }
 
+    function loadSprites(contextPath, spriteElements){
+        if(!sprites)
+            sprites = [];
+        for(var i=0;i<spriteElements.length;i++){
+            var name = spriteElements[i];
+            (sprites[name] = new Image()).src = contextPath + '/resources/sprite/lemonade/' + name + '.png';
+        }
+    }
 }
