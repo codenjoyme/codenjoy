@@ -149,9 +149,13 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             var weatherImg = sprites[board.weatherForecast.toLowerCase()];
             if(!!weatherImg) {
                 var ctx = canvas.getCanvasContext();
-                ctx.drawImage(weatherImg,50,50,weatherImg.width,weatherImg.height);
+                ctx.drawImage(weatherImg, 0, plotSize.height * boardSize - 200, 240, 200);
             }
-            canvas.drawText(board.messages, {"x": 0, "y": 16.4}, monofont);
+            var messages = board.messages.split('\n');
+            var interval = board.weatherForecast.toLowerCase() == "unknown" ? 0.7 : 0.8;
+            for(var i=0; i< messages.length; i++){
+                canvas.drawText(messages[i], {"x": 0, "y": 23 - i * interval}, monofont);
+            }
             /*if (board.hspeed >= 0.001) {
                 canvas.drawText("→", {"x": 18, "y": 17.2}, monofont);
             }
