@@ -61,11 +61,11 @@
         <h2 class="form-title">Sign up/Sign in</h2>
         <div class="inputs">
           <div id="readableName" class="field not-valid" not-empty>
-            <input type="text" placeholder="First name, last name" name="readableName"/>
+            <input type="text" placeholder="FirstName LastName" name="readableName"/>
             <span class="icon fa"></span>
           </div>
           <div id="email" class="field not-valid">
-            <input type="email" placeholder="Email address (valid)" name="name"/>
+            <input type="email" placeholder="Email address (valid)" name="email"/>
             <span class="icon fa"></span>
           </div>
           <div id="password" class="field not-valid">
@@ -100,6 +100,7 @@
           </div>
           <input type="hidden" name="gameName" value="icancode"/>
           <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
+          <div id="error-message" class="error-message" hidden></div>
         </div>
       </form>
     </div>

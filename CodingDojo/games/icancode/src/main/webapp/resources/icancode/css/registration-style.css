@@ -177,7 +177,11 @@ a:visited {
 }
 
 .inputs {
-    padding: 35px 25px 50px;
+    padding: 35px 25px 25px;
+}
+
+.error-message {
+    color: #eb6a5a;
 }
 
 .btn-submit {

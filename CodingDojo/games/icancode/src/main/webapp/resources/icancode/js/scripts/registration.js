@@ -82,10 +82,24 @@
         });
     }
 
+    function showErrorMessage() {
+        var error = $('#error-message');
+        var params = new URLSearchParams(window.location.search);
+        if (params.has('message')) {
+            error.html(params.get('message'));
+            error.show();
+        } else {
+            error.html('');
+            error.hide();
+        }
+    }
+
     function loadRegistrationPage() {
         configureFormFromAdminSettings();
 
         fillFormFromLocalStorage();
+
+        showErrorMessage();
 
         var checkEls = {};
 
