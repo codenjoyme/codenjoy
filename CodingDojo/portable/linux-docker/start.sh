@@ -41,6 +41,7 @@ game.ai=false
 log.debug=false
 page.main=
 page.registration=
+page.registration.nickname=false
 page.help.language=
 email.verification=false
 email.password=
