@@ -144,7 +144,7 @@ public class RegistrationController {
             message += "Name already used. ";
         }
 
-        return properties.getRegistrationPage() + "&message=" + message;
+        return properties.getRegistrationPage() + "?message=" + message;
     }
 
     private String getIp(HttpServletRequest request) {
