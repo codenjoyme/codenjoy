@@ -129,7 +129,7 @@
 
                 var element = $('#' + index);
                 var value = element.find('input').val();
-                if (!element.attr('hidden') && checkEls[index](value)) {
+                if (!element.is(':hidden') && checkEls[index](value)) {
                     element.addClass('not-valid');
                     element.removeClass('valid');
                 } else {
