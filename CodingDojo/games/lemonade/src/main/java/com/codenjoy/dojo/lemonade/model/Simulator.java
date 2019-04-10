@@ -302,8 +302,9 @@ public class Simulator {
         }
     }
 
+    private static DecimalFormat formatter = new DecimalFormat("0.00");
+
     private static String formatCurrency(double value) {
-        DecimalFormat formatter = new DecimalFormat("0.00");
         return "$" + formatter.format(value);
     }
 }
