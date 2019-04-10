@@ -58,7 +58,7 @@ public class YourSolver implements Solver<Board> {
     public String get(Board board) {
         if(board.isGameOver())
             return resetCommand();
-        System.out.println(board.getInputData().getMessages());
+        System.out.println(board.getMessages());
         String a = toAnswerString(1,1,1);
         return a;
     }

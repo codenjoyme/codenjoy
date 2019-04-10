@@ -71,6 +71,12 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
             return;
         }
 
+        if(simulator.isBankrupt())
+        {
+            this.salesResult = null;
+            return;
+        }
+
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
             int lemonadeToMake = Integer.parseInt(matcher.group(1));
@@ -115,23 +121,19 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         return alive;
     }
 
-    public String popAnswer() {
-        String answer = this.answer;
-        this.answer = null;
-        return answer;
-    }
-
     public Question getNextQuestion(){
         int day = simulator.getDay();
         double lemonadePrice = simulator.getLemonadePrice();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
         String messages = simulator.getMessages();
+        Boolean isBankrupt = simulator.isBankrupt();
         return new Question(day,
                 lemonadePrice,
                 assets,
                 weatherForecast,
-                messages);
+                messages,
+                isBankrupt);
     }
 
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {

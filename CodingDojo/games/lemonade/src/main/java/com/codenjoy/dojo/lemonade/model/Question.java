@@ -30,14 +30,17 @@ public class Question {
     private final double assets;
     private final WeatherForecast weatherForecast;
     private final String messages;
+    private final boolean isBankrupt;
 
-    public Question(int day, double lemonadePrice, double assets, WeatherForecast weatherForecast, String messages) {
+    public Question(int day, double lemonadePrice, double assets, WeatherForecast weatherForecast, String messages,
+                    boolean isBankrupt) {
 
         this.day = day;
         this.lemonadePrice = lemonadePrice;
         this.assets = assets;
         this.weatherForecast = weatherForecast;
         this.messages = messages;
+        this.isBankrupt = isBankrupt;
     }
 
     public JSONObject toJson() {
@@ -47,6 +50,7 @@ public class Question {
         questionJson.put("assets", assets);
         questionJson.put("weatherForecast", weatherForecast);
         questionJson.put("messages", messages);
+        questionJson.put("isBankrupt", isBankrupt);
         return questionJson;
     }
 }

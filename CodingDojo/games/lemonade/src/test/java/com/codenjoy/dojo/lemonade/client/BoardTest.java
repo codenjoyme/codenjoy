@@ -57,13 +57,15 @@ public class BoardTest {
             "    lemonadePrice : 0.02," +
             "    assets : 1.55," +
             "    weatherForecast : SUNNY," +
-            "    message : \"my test message\"" +
+            "    messages : \"my test message\"," +
+            "    isBankrupt : true" +
             "}";
 
     @Test
     public void parseBoard(){
         Board parsedBoard = (Board)new Board().forString(input);
         Assert.assertEquals(2, parsedBoard.getHistory().size());
-        Assert.assertNotNull(parsedBoard.getInputData());
+        Assert.assertNotNull(parsedBoard.getMessages());
+        Assert.assertTrue(parsedBoard.isGameOver());
     }
 }

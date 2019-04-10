@@ -25,6 +25,7 @@ package com.codenjoy.dojo.lemonade.client;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.lemonade.model.WeatherForecast;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,21 +35,17 @@ import java.util.List;
 public class Board extends AbstractTextBoard {
 
     private ArrayList<DailyReport> history;
-    private InputData inputData;
 
-    private Board(InputData inputData, ArrayList<DailyReport> history){
-        this.inputData = inputData;
-        this.history = history;
-    }
-
-    public Board(){
-        history = null;
-        inputData = null;
-    }
+    private int day;
+    private double lemonadePrice;
+    private double assets;
+    private WeatherForecast weatherForecast;
+    private String messages;
+    private boolean isBankrupt;
 
     @Override
     public boolean isGameOver() {
-        return inputData == null || inputData.getAssets() <= 0.0;
+        return isBankrupt;
     }
 
     @Override
@@ -56,28 +53,44 @@ public class Board extends AbstractTextBoard {
         this.data = data;
         JSONObject input = new JSONObject(data);
         JSONArray historyJson = input.getJSONArray("history");
-        this.history = parseHistory(historyJson);
-        this.inputData = InputData.fromJson(input);
+        parseHistory(historyJson);
+        parseData(input);
         return this;
     }
 
-    private ArrayList<DailyReport> parseHistory(JSONArray historyJson) {
-        ArrayList<DailyReport> history = new ArrayList<>();
+    private void parseData(JSONObject dataJson) {
+        this.day = dataJson.getInt("day");
+        this.lemonadePrice = dataJson.getFloat("lemonadePrice");
+        this.assets = dataJson.getFloat("assets");
+        this.weatherForecast = dataJson.getEnum(WeatherForecast.class, "weatherForecast");
+        this.messages = dataJson.getString("messages");
+        this.isBankrupt = dataJson.getBoolean("isBankrupt");
+    }
+
+    private void parseHistory(JSONArray historyJson) {
+        this.history = new ArrayList<>();
         historyJson.forEach(reportJson -> {
             history.add(DailyReport.fromJson(reportJson));
         });
-        return history;
     }
 
     public List<DailyReport> getHistory(){
-        return history;
+        return this.history;
     }
 
     public String getData() {
-        return data;
+        return this.data;
     }
 
-    public InputData getInputData() {
-        return inputData;
+    public double getAssets() {
+        return this.assets;
+    }
+
+    public String getMessages(){
+        return this.messages;
+    }
+
+    public WeatherForecast getWeatherForecast(){
+        return this.weatherForecast;
     }
 }
