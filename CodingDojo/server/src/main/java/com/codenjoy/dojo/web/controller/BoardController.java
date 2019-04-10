@@ -117,6 +117,7 @@ public class BoardController {
         model.addAttribute(GAME_NAME, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
+        model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
 
         return (justBoard == null || !justBoard) ? "board" : "board-only";
@@ -135,6 +136,7 @@ public class BoardController {
         model.addAttribute(GAME_NAME, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
+        model.addAttribute("readableName", player.getReadableName());
 
         return "board-log";
     }
@@ -169,6 +171,7 @@ public class BoardController {
         model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", null);
+        model.addAttribute("readableName", null);
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         return "board";
     }
@@ -195,6 +198,7 @@ public class BoardController {
         model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
+        model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", true);
         return "board";
     }
