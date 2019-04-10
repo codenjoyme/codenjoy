@@ -110,8 +110,8 @@ public class RestBoardController {
         return new GameTypeInfo(game);
     }
 
-//    @RequestMapping(value = "/player/{player}/{code}/level/{level}", method = RequestMethod.GET)
-//    @ResponseBody
+    @RequestMapping(value = "/player/{player}/{code}/level/{level}", method = RequestMethod.GET)
+    @ResponseBody
     public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
                                 @PathVariable("code") String code,
                                 @PathVariable("level") int level)
