@@ -100,7 +100,7 @@
                             <input type="submit" id="submit" value="Register" />
                         </c:when>
                         <c:otherwise>
-                            Registration was closed, please try again tomorrow.
+                            Registration was closed, please try again later.
                         </c:otherwise>
                     </c:choose>
                 </td>
