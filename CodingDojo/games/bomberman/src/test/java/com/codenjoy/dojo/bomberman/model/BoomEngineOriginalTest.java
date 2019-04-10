@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -274,7 +274,7 @@ public class BoomEngineOriginalTest {
 
     @Test
     public void testBigBoomAtClassicWalls5() {
-        List<Wall> barriers = new LinkedList<Wall>();
+        List<Wall> barriers = new LinkedList<>();
         CollectionUtils.addAll(barriers, new OriginalWalls(v(SIZE)).iterator());
         Point source = pt(11, 11);
         int radius = 15;

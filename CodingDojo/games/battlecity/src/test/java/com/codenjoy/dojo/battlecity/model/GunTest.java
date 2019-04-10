@@ -86,4 +86,30 @@ public class GunTest {
 
         assertTrue(gun.tryToFire());
     }
+
+    @Test
+    public void testReset() {
+        // given
+        Gun gun = new Gun(5);
+
+        assertTrue(gun.tryToFire());
+        assertFalse(gun.tryToFire());
+
+        gun.tick();
+
+        assertFalse(gun.tryToFire());
+        assertFalse(gun.tryToFire());
+
+        gun.tick();
+
+        assertFalse(gun.tryToFire());
+        assertFalse(gun.tryToFire());
+
+        // when
+        gun.reset();
+
+        // then
+        assertTrue(gun.tryToFire());
+        assertFalse(gun.tryToFire());
+    }
 }

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class FigureImpl implements Figure, Cloneable {
 

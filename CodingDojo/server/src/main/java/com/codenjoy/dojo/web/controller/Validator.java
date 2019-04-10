@@ -55,6 +55,7 @@ public class Validator {
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
     public static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
     public static final String READABLE_NAME_CYR = "^[А-Яа-яЁёҐґІіІіЄє]{1,50}$";
+    public static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
@@ -63,6 +64,7 @@ public class Validator {
     private final Pattern id;
     private final Pattern readableNameLat;
     private final Pattern readableNameCyr;
+    private final Pattern nickName;
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
@@ -72,6 +74,7 @@ public class Validator {
         id = Pattern.compile(ID);
         readableNameLat = Pattern.compile(READABLE_NAME_LAT);
         readableNameCyr = Pattern.compile(READABLE_NAME_CYR);
+        nickName = Pattern.compile(NICK_NAME);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
@@ -87,7 +90,14 @@ public class Validator {
     public void checkReadableName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !isFullName(input)) {
-            throw new IllegalArgumentException(String.format("Readable player name is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format("Player name is invalid (should be 'Name Surname'): '%s'", input));
+        }
+    }
+
+    public void checkNickName(String input) {
+        boolean empty = isEmpty(input);
+        if (empty || !nickName.matcher(input).matches()) {
+            throw new IllegalArgumentException(String.format("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): '%s'", input));
         }
     }
 
@@ -119,6 +129,16 @@ public class Validator {
                 !empty && (isEmail(input) || id.matcher(input).matches())))
         {
             throw new IllegalArgumentException(String.format("Player name/id is invalid: '%s'", input));
+        }
+    }
+
+    // TODO test me
+    public void checkEmail(String input, boolean canBeNull) {
+        boolean empty = isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && isEmail(input)))
+        {
+            throw new IllegalArgumentException(String.format("Player email is invalid: '%s'", input));
         }
     }
 

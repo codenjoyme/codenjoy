@@ -53,7 +53,8 @@
                 <td>
                     <form:input path="email"/>
                     <span class="error">
-                        <c:if test="${bad_pass}">Already registered</c:if>
+                        <c:if test="${email_busy}">Already used</c:if>
+                        <c:if test="${bad_email}">${bad_email_message}</c:if>
                         <c:if test="${wait_approve}">Please check your email</c:if>
                     </span>
                 </td>
@@ -65,7 +66,8 @@
                 <td>
                     <form:input path="readableName"/>
                     <span class="error">
-                        <c:if test="${bad_name}">${message}</c:if>
+                        <c:if test="${name_busy}">Already used</c:if>
+                        <c:if test="${bad_name}">${bad_name_message}</c:if>
                     </span>
                 </td>
             </tr>
@@ -84,7 +86,12 @@
                 <td>Your game</td>
             </tr>
             <tr>
-                <td><form:select items="${gameNames}" path="gameName"/></td>
+                <td>
+                    <form:select items="${gameNames}" path="gameName"/>
+                    <span class="error">
+                        <c:if test="${bad_game}">${bad_game_message}</c:if>
+                    </span>
+                </td>
             </tr>
             <tr>
                 <td colspan="3">

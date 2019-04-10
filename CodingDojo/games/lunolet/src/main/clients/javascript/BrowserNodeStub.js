@@ -27,13 +27,26 @@ var printBoardOnTextArea = function(data) {
 
 var printLogOnTextArea = function(data) {
     var textarea = document.getElementById("log-area");
-	var addToEnd = document.getElementById("add-to-end");
+    var addToEnd = document.getElementById("add-to-end");
     if (!textarea) return;
     if (addToEnd.checked) {
-		textarea.value = textarea.value + "\n" + data;
-	} else {
-		textarea.value = data + "\n" + textarea.value;
-	}
+        cache.push(data);
+        if (cache.length > 30) {
+            cache.shift()
+        }
+    } else {
+        cache.unshift(data);
+        if (cache.length > 30) {
+            cache.pop()
+        }
+    }
+
+    var all = '';
+    for (var i in cache) {
+        var data = cache[i];
+        all = all + "\n" + data;
+    }
+    textarea.value = all;
 }
 
 var require = function(string) {

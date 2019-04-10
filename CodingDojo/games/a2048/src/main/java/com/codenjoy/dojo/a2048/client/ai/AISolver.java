@@ -120,7 +120,7 @@ public class AISolver implements Solver<Board> {
                 step.directions = addComma(directions) + direction.name();
 
                 CharNumbers numbers = new CharNumbers(field);
-                numbers.move(invertY(direction));
+                numbers.move(direction);
                 numbers.addNew();
 
                 step.field = numbers.get();
@@ -135,18 +135,6 @@ public class AISolver implements Solver<Board> {
             }
         }
         deepIndex--;
-    }
-
-    private Direction invertY(Direction direction) {
-        if (direction == Direction.UP) {
-            return direction.DOWN;
-        }
-
-        if (direction == Direction.DOWN) {
-            return direction.UP;
-        }
-
-        return  direction;
     }
 
     private boolean changed(char[][] from, char[][] to) {

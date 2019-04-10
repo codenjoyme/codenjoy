@@ -15,7 +15,6 @@ else
     echo "GIT_REPO=$GIT_REPO"
     echo "REVISION=$REVISION"
     echo "GAME=$GAME"
-    echo "GAME_PROJECT=$GAME_PROJECT"
     echo "[0m"
 fi
 
@@ -66,7 +65,7 @@ echo "==========================================================================
 
 eval_echo "docker container rm temp --force"
 eval_echo "docker run --name temp -d codenjoy-source"
-eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy && git stash --all && git checkout ${REVISION} && git pull origin'"
+eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy && git clean -fx && git reset --hard && git fetch --all && git checkout ${REVISION} && git pull origin && git status'"
 sleep 5
 
 echo "[92m========================================================================================================================"
@@ -81,11 +80,14 @@ if [ "x$BUILD_SERVER" = "xtrue" ]; then
         # build war with all games
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/builder && mvn clean install -Dcontext=${CODENJOY_CONTEXT} -DallGames -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
     else
+        # build games parent
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games && mvn clean install -N -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+
         # build engine
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/engine && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build game
-        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/$GAME_PROJECT && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
+        eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/games/$GAME && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;
 
         # build server
         eval_echo "docker exec temp bash -c 'cd /tmp/codenjoy/CodingDojo/server && mvn clean install -DskipTests=true' |& tee ./logs/codenjoy-deploy.log" ;

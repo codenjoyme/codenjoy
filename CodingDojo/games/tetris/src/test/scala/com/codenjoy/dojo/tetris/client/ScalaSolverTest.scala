@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.{Dice, Direction, Point}
 import com.codenjoy.dojo.services.PointImpl.pt
 import org.junit.Assert.assertEquals
 import org.junit.{Before, Test}
-import org.mockito.Matchers.anyInt
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.{mock, when}
 
 class SolverScalaTest {

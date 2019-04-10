@@ -32,10 +32,10 @@
 //import org.junit.Test;
 //import org.mockito.stubbing.OngoingStubbing;
 //
-//import static junit.framework.Assert.assertEquals;
-//import static junit.framework.Assert.assertFalse;
-//import static junit.framework.Assert.assertTrue;
-//import static org.mockito.Matchers.anyInt;
+//import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertFalse;
+//import static org.junit.Assert.assertTrue;
+//import static org.mockito.ArgumentMatchers.anyInt;
 //import static org.mockito.Mockito.*;
 //
 ///**

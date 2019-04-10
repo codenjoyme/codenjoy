@@ -67,7 +67,7 @@ public class LevelManagerTest {
         Player player = new Player(listener);
         Field field = mock(Field.class);
         when(field.getLevel(anyInt()))
-                .thenAnswer(inv -> manager.getLevel(inv.getArgumentAt(0, Integer.class)));
+                .thenAnswer(inv -> manager.getLevel(inv.getArgument(0)));
         int levelNum = 0;
         while (true) {
             player.newHero(field);

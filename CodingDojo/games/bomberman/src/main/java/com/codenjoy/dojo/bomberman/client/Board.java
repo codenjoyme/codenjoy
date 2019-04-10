@@ -52,7 +52,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Elements getAt(int x, int y) {
-        if (x < 0 || y < 0 || x >= size || y >= size) {
+        if (isOutOfField(x, y)) {
             return WALL;
         }
         return super.getAt(x, y);

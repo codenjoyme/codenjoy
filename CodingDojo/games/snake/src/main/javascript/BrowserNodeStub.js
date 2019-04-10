@@ -33,10 +33,23 @@ var printLogOnTextArea = function(data) {
     var addToEnd = document.getElementById("add-to-end");
     if (!textarea) return;
     if (addToEnd.checked) {
-        textarea.value = textarea.value + "\n" + data;
+        cache.push(data);
+        if (cache.length > 30) {
+            cache.shift()
+        }
     } else {
-        textarea.value = data + "\n" + textarea.value;
+        cache.unshift(data);
+        if (cache.length > 30) {
+            cache.pop()
+        }
     }
+
+    var all = '';
+    for (var i in cache) {
+        var data = cache[i];
+        all = all + "\n" + data;
+    }
+    textarea.value = all;
 }
 
 var require = function(string) {

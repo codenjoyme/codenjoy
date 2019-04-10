@@ -106,9 +106,9 @@ public class SaveServiceImpl implements SaveService {
         List<Player> active = playerService.getAll();
         for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player);
-            info.setCode(registration.getCode(player.getName()));
+            info.setCode(registration.getCodeById(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
-            info.setReadableName(registration.getReadableName(player.getName()));
+            info.setReadableName(registration.getNameById(player.getName()));
             info.setAIPlayer(player.hasAI());
 
             copySave(player, info);
@@ -125,7 +125,7 @@ public class SaveServiceImpl implements SaveService {
                 info.setSaved(true);
             } else {
                 PlayerSave save = saver.loadGame(name);
-                String code = registration.getCode(name);
+                String code = registration.getCodeById(name);
                 map.put(name, new PlayerInfo(name, code, save.getCallbackUrl(), save.getGameName(), true));
             }
         }

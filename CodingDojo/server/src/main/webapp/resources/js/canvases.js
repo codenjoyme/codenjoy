@@ -89,13 +89,18 @@ function initCanvases(contextPath, players, allPlayersScreen,
         reloading = false;
     }
 
+    function justGame(gameRoom) {
+        var ROOMS_SEPARATOR = '-';
+        return gameRoom.split(ROOMS_SEPARATOR).shift();
+    }
+
     function loadSpriteImages(elements, alphabet, onImageLoad) {
         for (var index in elements) {
             var ch = alphabet[index];
             var color = elements[index];
             plots[ch] = color;
             var subFolder = (!!sprites) ? sprites + '/' : '';
-            plotsUrls[color] = contextPath + '/resources/sprite/' + gameName + '/' + subFolder + color + '.png';
+            plotsUrls[color] = contextPath + '/resources/sprite/' + justGame(gameName) + '/' + subFolder + color + '.png';
 
             var image = new Image();
             image.onload = function() {

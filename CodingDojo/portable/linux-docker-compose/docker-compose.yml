@@ -1,22 +1,22 @@
 version: '3.3'
 
 services:
-   codenjoy_db:                                             #!L#
-     image: postgres:11.1                                   #!L#
-     container_name: codenjoy-database                      #!L#
-     volumes:                                               #!L#
-       - ./materials/database:/var/lib/postgresql/data      #!L#
-       - /etc/localtime:/etc/localtime:ro                   #!L#
-#     ports:                                                #!LP#
-#       - "${POSTGRES_PORT}:5432"                           #!LP#
-     restart: always                                        #!L#
-     environment:                                           #!L#
-         POSTGRES_DB: codenjoy                              #!L#
-         POSTGRES_USER: codenjoy                            #!L#
-         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}            #!L#
-     networks:                                              #!L#
-         codenjoy:                                          #!L#
-             ipv4_address: 172.28.1.4                       #!L#
+   codenjoy_db:                                                      #!L#
+     image: postgres:11.1                                            #!L#
+     container_name: codenjoy-database                               #!L#
+     volumes:                                                        #!L#
+       - ./materials/codenjoy/database:/var/lib/postgresql/data      #!L#
+       - /etc/localtime:/etc/localtime:ro                            #!L#
+#     ports:                                                         #!LP#
+#       - "${CODENJOY_POSTGRES_PORT}:5432"                           #!LP#
+     restart: always                                                 #!L#
+     environment:                                                    #!L#
+         POSTGRES_DB: ${CODENJOY_POSTGRES_DB}                        #!L#
+         POSTGRES_USER: ${CODENJOY_POSTGRES_USER}                    #!L#
+         POSTGRES_PASSWORD: ${CODENJOY_POSTGRES_PASSWORD}            #!L#
+     networks:                                                       #!L#
+         codenjoy:                                                   #!L#
+             ipv4_address: 172.28.1.4                                #!L#
 
    nginx:
      image: nginx
@@ -29,7 +29,7 @@ services:
        - ./ssl-cert:/usr/share/ca-certificates/extra
        - /etc/localtime:/etc/localtime:ro
      ports: 
-#       - "443:443"                                         #S#
+#       - "443:443"                                                  #S#
        - "80:80"   
      restart: always   
      networks:

@@ -45,8 +45,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -58,7 +56,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -171,7 +169,7 @@ public class PlayerServiceImplTest {
         doAnswer(inv -> {
             String email = inv.getArgument(0);
             return "readable_" + email.split("@")[0];
-        }).when(registration).getReadableName(anyString());
+        }).when(registration).getNameById(anyString());
 
         playerGames.clear();
         Mockito.reset(playerController, screenController, actionLogger);

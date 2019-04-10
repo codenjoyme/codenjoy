@@ -41,16 +41,14 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected Direction direction;
     protected int speed;
     protected boolean moving;
+    private boolean fire;
 
     public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
         super(x, y);
-        speed = 1;
-        moving = false;
         this.direction = direction;
-        gun = new Gun(ticksPerBullets);
-        bullets = new LinkedList<Bullet>();
-        alive = true;
         this.dice = dice;
+        gun = new Gun(ticksPerBullets);
+        reset();
     }
 
     void turn(Direction direction) {
@@ -59,32 +57,41 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void up() {
-        direction = Direction.UP;
-        moving = true;
+        if (alive) {
+            direction = Direction.UP;
+            moving = true;
+        }
     }
 
     @Override
     public void down() {
-        direction = Direction.DOWN;
-        moving = true;
+        if (alive) {
+            direction = Direction.DOWN;
+            moving = true;
+        }
     }
 
     @Override
     public void right() {
-        direction = Direction.RIGHT;
-        moving = true;
+        if (alive) {
+            direction = Direction.RIGHT;
+            moving = true;
+        }
     }
 
     @Override
     public void left() {
-        direction = Direction.LEFT;
-        moving = true;
+        if (alive) {
+            direction = Direction.LEFT;
+            moving = true;
+        }
     }
 
     public Direction getDirection() {
         return direction;
     }
 
+    // TODO подумать как устранить дублирование с MovingObject
     public void move() {
         for (int i = 0; i < speed; i++) {
             if (!moving) {
@@ -108,16 +115,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (gun.tryToFire()) {
-            Bullet bullet = new Bullet(field, direction, copy(), this, new OnDestroy() {
-                @Override
-                public void destroy(Object bullet) {
-                    Tank.this.bullets.remove(bullet);
-                }
-            });
-            if (!bullets.contains(bullet)) {
-                bullets.add(bullet);
-            }
+        if (alive) {
+            fire = true;
         }
     }
 
@@ -177,6 +176,29 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             }
         } else {
             return Elements.BANG;
+        }
+    }
+
+    public void reset() {
+        speed = 1;
+        moving = false;
+        fire = false;
+        alive = true;
+        gun.reset();
+        bullets = new LinkedList<>();
+    }
+
+    public void fire() {
+        if (!fire) return;
+        fire = false;
+
+        if (!gun.tryToFire()) return;
+
+        Bullet bullet = new Bullet(field, direction, copy(), this,
+                b -> Tank.this.bullets.remove(b));
+
+        if (!bullets.contains(bullet)) {
+            bullets.add(bullet);
         }
     }
 }

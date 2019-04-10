@@ -25,21 +25,21 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.tetris.services.Events;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.tetris.model.TestUtils.HEIGHT;
 import static com.codenjoy.dojo.tetris.model.TestUtils.WIDTH;
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

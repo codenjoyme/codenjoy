@@ -38,7 +38,7 @@ import java.util.Arrays;
 import static com.codenjoy.dojo.battlecity.model.BattlecityTest.tank;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -107,7 +107,7 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, Events.KILL_OTHER_TANK);
+        onlyEvent(events, Events.KILL_OTHER_AI_TANK);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class TanksEventsTest {
                 "☼ ►  Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, Events.KILL_OTHER_TANK);
+        onlyEvent(events, Events.KILL_OTHER_HERO_TANK.apply(1));
         onlyEvent(events2, Events.KILL_YOUR_TANK);
     }
 
@@ -231,7 +231,7 @@ public class TanksEventsTest {
                 "☼☼☼☼☼☼☼\n");
 
         onlyEvent(events, Events.KILL_YOUR_TANK);
-        onlyEvent(events2, Events.KILL_OTHER_TANK);
+        onlyEvent(events2, Events.KILL_OTHER_HERO_TANK.apply(1));
     }
 
     private void noEvents(EventListener ev) {

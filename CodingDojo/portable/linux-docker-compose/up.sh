@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-if [ "x$CONFIG" = "x" ]; then
-    . config.sh ;
-fi
-
 eval_echo() {
     to_run=$1
     echo "[94m"
@@ -12,6 +8,10 @@ eval_echo() {
 
     eval $to_run
 }
+
+if [ "x$CONFIG" = "x" ]; then
+    eval_echo ". config.sh" ;
+fi
 
 eval_echo "docker-compose down --remove-orphans"
 
@@ -30,12 +30,17 @@ if [ "x$CODENJOY" = "xtrue" ]; then
     codenjoy="-f codenjoy.yml"
 fi
 
+if [ "x$WORDPRESS" = "xtrue" ]; then
+    echo "[93mWordpress will start[0m"
+    wordpress="-f wordpress.yml"
+fi
+
 if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
-    eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d codenjoy_db"
+    eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $wordpress $pgadmin up -d codenjoy_db"
     sleep 10
 fi
 
-eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $pgadmin up -d"
+eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $wordpress $pgadmin up -d"
 
 eval_echo "date"
 eval_echo "docker exec -it codenjoy-database date"
@@ -43,4 +48,6 @@ eval_echo "docker exec -it codenjoy-contest date"
 eval_echo "docker exec -it codenjoy-balancer date"
 eval_echo "docker exec -it nginx date"
 eval_echo "docker exec -it codenjoy-balancer-frontend date"
+eval_echo "docker exec -it wordpress date"
+eval_echo "docker exec -it wordpress-database date"
 

@@ -40,4 +40,4 @@ services:
      depends_on:
        - codenjoy_balancer
      volumes: 
-       - ./config/nginx/codenjoy-balancer.conf:/etc/nginx/conf.d/codenjoy-balancer.conf
+       - ./config/nginx/conf.d/codenjoy-balancer.conf:/etc/nginx/conf.d/codenjoy-balancer.conf

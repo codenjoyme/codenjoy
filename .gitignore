@@ -4,7 +4,9 @@
 **/bin
 **/obj
 **/Gemfile.lock
+/_temp
 /CodingDojo/repo
+/CodingDojo/balancer-frontend
 /CodingDojo/repo/**
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game

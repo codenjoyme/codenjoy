@@ -23,13 +23,13 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Predicate;
 import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertNotNull;
 
 public class TestUtils {
     public static final int HEIGHT = 20;
@@ -41,23 +41,17 @@ public class TestUtils {
     }
 
     public static void assertContainsPlot(final int x, final int y, final Elements color, List<Plot> plots) {
-        Object foundPlot = CollectionUtils.find(plots, new Predicate() {
-            @Override
-            public boolean evaluate(Object object) {
-                Plot plot = (Plot) object;
-                return plot.getColor() == color && plot.getX() == x && plot.getY() == y;
-            }
+        Object foundPlot = CollectionUtils.find(plots, (Predicate) object -> {
+            Plot plot = (Plot) object;
+            return plot.getColor() == color && plot.getX() == x && plot.getY() == y;
         });
         assertNotNull("Plot with coordinates (" + x + "," + y + ") color: " + color + " not found", foundPlot);
     }
 
     public static void assertContainsPlot(final int x, final int y,  List<Plot> plots) {
-        Object foundPlot = CollectionUtils.find(plots, new Predicate() {
-            @Override
-            public boolean evaluate(Object object) {
-                Plot plot = (Plot) object;
-                return plot.getX() == x && plot.getY() == y;
-            }
+        Object foundPlot = CollectionUtils.find(plots, (Predicate) object -> {
+            Plot plot = (Plot) object;
+            return plot.getX() == x && plot.getY() == y;
         });
         assertNotNull("Plot with coordinates (" + x + "," + y + ") not found", foundPlot);
     }

@@ -23,6 +23,67 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
-public enum Events {
-    KILL_YOUR_TANK, KILL_OTHER_TANK;
+import java.util.Objects;
+import java.util.function.Function;
+
+public class Events {
+
+    public static final Events KILL_YOUR_TANK = new Events("KILL_YOUR_TANK");
+    public static final Function<Integer, Events> KILL_OTHER_HERO_TANK = amount -> new Events("KILL_OTHER_HERO_TANK", amount);
+    public static final Events KILL_OTHER_AI_TANK = new Events("KILL_OTHER_AI_TANK");
+
+    private String type;
+    private int amount;
+
+    public Events(String type) {
+        this.type = type;
+        this.amount = 1;
+    }
+
+    public Events(String type, int amount) {
+        this.type = type;
+        this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Events events = (Events) o;
+        if (isKillOtherHeroTank()) {
+            return Objects.equals(type, events.type) &&
+                    amount == events.amount;
+        }
+        return Objects.equals(type, events.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type);
+    }
+
+    public boolean isKillYourTank() {
+        return type.equals(KILL_YOUR_TANK.type);
+    }
+
+    public boolean isKillOtherHeroTank() {
+        return type.equals(KILL_OTHER_HERO_TANK.apply(1).type);
+    }
+
+    public boolean isKillOtherAITank() {
+        return type.equals(KILL_OTHER_AI_TANK.type);
+    }
+
+    @Override
+    public String toString() {
+        if (isKillOtherHeroTank()) {
+            return String.format("%s[%s]", type, amount);
+        } else {
+            return type;
+        }
+    }
+
+    public int getAmount() {
+        return amount;
+    }
 }

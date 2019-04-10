@@ -37,6 +37,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -48,6 +51,7 @@ public class MainPageController {
     @Autowired private GameService gameService;
     @Autowired private Validator validator;
     @Autowired private ConfigProperties properties;
+    @Autowired private RoomsAliaser rooms;
 
     public MainPageController() {
     }
@@ -59,7 +63,7 @@ public class MainPageController {
 
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public String help(Model model) {
-        model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("gameNames", gameService.getOnlyGameNames());
         return "help";
     }
 
@@ -93,10 +97,10 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        Player player = playerService.get(registration.getEmail(code));
+        Player player = playerService.get(registration.getIdByCode(code));
         request.setAttribute("registered", player != NullPlayer.INSTANCE);
         request.setAttribute("code", code);
-        model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("gameNames", rooms.all());
         return "main";
     }
 

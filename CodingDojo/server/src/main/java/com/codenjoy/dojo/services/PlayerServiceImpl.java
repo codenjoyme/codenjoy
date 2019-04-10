@@ -38,7 +38,6 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import org.apache.commons.lang.StringUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -48,7 +47,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -98,7 +96,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String name, String callbackUrl, String gameName) {
+    public Player register(String name, String ip, String gameName) {
         lock.writeLock().lock();
         try {
             if (logger.isDebugEnabled()) {
@@ -111,7 +109,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             registerAIIfNeeded(name, gameName);
 
-            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, null));
+            Player player = register(new PlayerSave(name, ip, gameName, 0, null));
 
             return player;
         } finally {
@@ -152,7 +150,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void registerAI(String playerName, GameType gameType) {
         String code = isAI(playerName) ?
                 gerCodeForAI(playerName) :
-                registration.getCode(playerName);
+                registration.getCodeById(playerName);
 
         Closeable ai = createAI(playerName, code, gameType);
         if (ai != null) {
@@ -253,7 +251,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             player = playerGame.getPlayer();
 
-            player.setReadableName(registration.getReadableName(player.getName()));
+            player.setReadableName(registration.getNameById(player.getName()));
 
             if (logger.isDebugEnabled()) {
                 logger.debug("Player {} starting new game {}", name, playerGame.getGame());
@@ -434,7 +432,7 @@ public class PlayerServiceImpl implements PlayerService {
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
                 playerToUpdate.setReadableName(newPlayer.getReadableName());
-                registration.updateReadableName(newPlayer.getName(), newPlayer.getReadableName());
+                registration.updateName(newPlayer.getName(), newPlayer.getReadableName());
 
                 Game game = playerGame.getGame();
                 if (game != null && game.getSave() != null) {

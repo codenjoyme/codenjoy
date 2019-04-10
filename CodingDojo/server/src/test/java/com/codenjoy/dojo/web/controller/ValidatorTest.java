@@ -24,7 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -450,35 +450,100 @@ public class ValidatorTest {
 
         shouldOk(() -> validator.checkReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
 
-        shouldError("Readable player name is invalid: 'Стивен'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Стивен'",
                 () -> validator.checkReadableName("Стивен"));
 
-        shouldError("Readable player name is invalid: 'Я Д'Артаньян'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Я Д'Артаньян'",
                 () -> validator.checkReadableName("Я Д'Артаньян"));
 
-        shouldError("Readable player name is invalid: 'Дефис-нельзя'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Дефис-нельзя'",
                 () -> validator.checkReadableName("Дефис-нельзя"));
 
-        shouldError("Readable player name is invalid: 'Двапробела  нельзя'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'Двапробела  нельзя'",
                 () -> validator.checkReadableName("Двапробела  нельзя"));
 
-        shouldError("Readable player name is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
                 () -> validator.checkReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
 
-        shouldError("Readable player name is invalid: 'email#&*^#gmail%#&^*com'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'email#&*^#gmail%#&^*com'",
                 () -> validator.checkReadableName("email#&*^#gmail%#&^*com"));
 
-        shouldError("Readable player name is invalid: 'null'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'null'",
                 () -> validator.checkReadableName(null));
 
-        shouldError("Readable player name is invalid: 'NuLL'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'NuLL'",
                 () -> validator.checkReadableName("NuLL"));
 
-        shouldError("Readable player name is invalid: ''",
+        shouldError("Player name is invalid (should be 'Name Surname'): ''",
                 () -> validator.checkReadableName(""));
 
-        shouldError("Readable player name is invalid: 'null'",
+        shouldError("Player name is invalid (should be 'Name Surname'): 'null'",
                 () -> validator.checkReadableName(null));
+    }
+
+    @Test
+    public void validateCheckNickName() {
+        shouldOk(() -> validator.checkNickName("Стивен Пупкин"));
+
+        shouldOk(() -> validator.checkNickName("Oleksandr Baglay"));
+
+        shouldOk(() -> validator.checkNickName("Stiven Pupkin"));
+
+        shouldOk(() -> validator.checkNickName("FuTuRamA"));
+
+        shouldOk(() -> validator.checkNickName("BLIvl evLVe cyuw7 82fx"));
+
+        shouldOk(() -> validator.checkNickName("123 444 56 7890 2231"));
+
+        shouldOk(() -> validator.checkNickName("стивен пупкин"));
+
+        shouldOk(() -> validator.checkNickName("stiven pupkin"));
+
+        shouldOk(() -> validator.checkNickName("ABCDEFGHIJKLMNOP abcdefghijklmnop"));
+
+        shouldOk(() -> validator.checkNickName("QRSTUVQXYZ qrstuvqxyz"));
+
+        shouldOk(() -> validator.checkNickName("qrstuvqxyz QRSTUVQXYZ"));
+
+        shouldOk(() -> validator.checkNickName("abcdefghijklmnop ABCDEFGHIJKLMNOP"));
+
+        shouldOk(() -> validator.checkNickName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
+
+        shouldOk(() -> validator.checkNickName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
+
+        shouldOk(() -> validator.checkNickName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
+
+        shouldOk(() -> validator.checkNickName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
+
+        shouldOk(() -> validator.checkNickName("ҐґІіІіЄє ҐґІіІіЄє"));
+
+        shouldOk(() -> validator.checkNickName("Стивен"));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'Я Д'Артаньян'",
+                () -> validator.checkNickName("Я Д'Артаньян"));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'Дефис-нельзя'",
+                () -> validator.checkNickName("Дефис-нельзя"));
+
+        shouldOk(() -> validator.checkNickName("Двапробела  нельзя"));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
+                () -> validator.checkNickName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'email#&*^#gmail%#&^*com'",
+                () -> validator.checkNickName("email#&*^#gmail%#&^*com"));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'null'",
+                () -> validator.checkNickName(null));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'NuLL'",
+                () -> validator.checkNickName("NuLL"));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): ''",
+                () -> validator.checkNickName(""));
+
+        shouldError("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'null'",
+                () -> validator.checkNickName(null));
     }
 
     private void shouldOk(Runnable toRun) {

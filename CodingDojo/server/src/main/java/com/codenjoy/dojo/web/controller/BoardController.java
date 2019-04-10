@@ -90,7 +90,7 @@ public class BoardController {
 
         Player player = playerService.get(playerId);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?name=" + playerName;
+            return "redirect:/register?id=" + playerName;
         }
 
         playerService.remove(player.getName());
@@ -110,11 +110,12 @@ public class BoardController {
 
         Player player = playerService.get(playerName);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?name=" + playerName;
+            return "redirect:/register?id=" + playerName;
         }
 
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", false);
 
@@ -128,10 +129,11 @@ public class BoardController {
 
         Player player = playerService.get(playerName);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?name=" + playerName;
+            return "redirect:/register?id=" + playerName;
         }
 
         model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
 
         return "board-log";
@@ -165,6 +167,7 @@ public class BoardController {
 
         model.addAttribute("code", null);
         model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", null);
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         return "board";
@@ -174,7 +177,7 @@ public class BoardController {
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         validator.checkCode(code, CAN_BE_NULL);
 
-        String name = registration.getEmail(code);
+        String name = registration.getIdByCode(code);
         Player player = playerService.get(name);
         if (player == NullPlayer.INSTANCE) {
             player = playerService.getRandom(null);
@@ -190,6 +193,7 @@ public class BoardController {
 
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", true);
         return "board";

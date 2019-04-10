@@ -23,7 +23,6 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import com.codenjoy.dojo.kata.model.levels.algorithms.*;
 import org.reflections.Reflections;
 
 import java.util.*;
@@ -32,21 +31,7 @@ public class LevelsLoader {
 
     // TODO На админке можно менять порядок задач местами для играющих, а это убрать
     public static List<Level> getAlgorithms() {
-        return new LinkedList<Level>(){{
-            add(new HelloWorldAlgorithm());
-            add(new FizzBuzzAlgorithm());
-            add(new SumSquareDifferenceAlgorithm());
-            add(new Sequence1Algorithm());
-            add(new FibonacciNumbersAlgorithm());
-            add(new PrimeFactoryAlgorithm());
-            add(new PowerDigitSumAlgorithm());
-            add(new MakeBricksAlgorithm());
-            add(new FactorialAlgorithm());
-            add(new ReverseAddPalindromeAlgorithm());
-            add(new Sequence2Algorithm());
-            add(new XthPrimeAlgorithm());
-            add(new LongDivisionAlgorithm());
-        }};
+        return getAlgorithmsOrderedByComplexity();
     }
 
     public static List<Level> getAlgorithmsOrderedByComplexity() {

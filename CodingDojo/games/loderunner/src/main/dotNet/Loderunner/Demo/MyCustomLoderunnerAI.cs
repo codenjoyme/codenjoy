@@ -29,8 +29,8 @@ namespace Demo
     /// </summary>
     internal class MyCustomLoderunnerAI : LoderunnerBase
     {
-        public MyCustomLoderunnerAI(string serverAndPort, string name, string code)
-            : base(serverAndPort, name, code)
+        public MyCustomLoderunnerAI(string serverUrl)
+            : base(serverUrl)
         {
         }
 

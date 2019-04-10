@@ -28,9 +28,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Matchers;
+import static org.mockito.ArgumentMatchers.*;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -157,7 +157,7 @@ public class LevelsTest {
 
         levels.glassOverflown();
 
-        verify(level1, times(1)).accept(Matchers.<GlassEvent>anyObject());
+        verify(level1, times(1)).accept(any());
         verify(level1, times(1)).apply();
         verify(level2, times(1)).apply();
     }
@@ -175,7 +175,7 @@ public class LevelsTest {
 
         levels.glassOverflown();
 
-        verify(level2, times(1)).accept(Matchers.<GlassEvent>anyObject());
+        verify(level2, times(1)).accept(any());
         verify(level2, times(1)).apply();
     }
 
@@ -191,7 +191,7 @@ public class LevelsTest {
     }
 
     private void acceptLevel(GameLevel level, boolean accept) {
-        when(level.accept(Matchers.<GlassEvent>anyObject())).thenReturn(accept);
+        when(level.accept(anyObject())).thenReturn(accept);
     }
 
     private void gotoNextLevel() {

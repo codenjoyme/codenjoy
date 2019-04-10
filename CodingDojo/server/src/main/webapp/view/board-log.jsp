@@ -37,7 +37,7 @@
         }
     </style>
 
-    <script src="${ctx}/resources/js/canvases-${gameName}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
     <script src="${ctx}/resources/js/all.js"></script>
 </head>
 <body style="display:none;">
