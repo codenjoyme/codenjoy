@@ -26,7 +26,7 @@ package com.codenjoy.dojo.icancode.client;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.icancode.model.Elements;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 

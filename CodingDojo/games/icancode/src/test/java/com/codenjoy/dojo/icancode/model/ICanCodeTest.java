@@ -27,7 +27,7 @@ import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class ICanCodeTest extends AbstractGameTest {

@@ -151,7 +151,7 @@
                 <li><span class="list-values">Change console font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply</span></li>
                 <li><span class="list-values">Change ide font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply</span></li>
                 <li><span class="list-values">Go to YourSoljer.java (or YourSolver.kt for Kotlin)</span></li>
-                <li><span class="list-values">Set your email in the <span class="func" id="connection-line">start("your@email.com", "server:8080", new YourSolver());</span></span></li>
+                <li><span class="list-values">Set your board page url in the <span class="func" id="connection-line">public static void main(String[] args)</span></span></li>
                 <li><span class="list-values">Run YourSolver as main application</span></li>
                 <li><span class="list-values">Check in the console that client connected</span></li>
                 <li><span class="list-values">Do your changes in the YourSolver method <span class="func">Command whatToDo(Board board)</span></span></li>
@@ -170,7 +170,11 @@ Send program to Robot by running the YourSolver class as Main Application.
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("your@email.com", "server_ip:8080", new YourSolver());
+        connectClient(
+                // paste here board page url from browser after registration
+                "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
+                // and solver here
+                new YourSolver(new RandomDice()));
     }</pre>
 
           <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
