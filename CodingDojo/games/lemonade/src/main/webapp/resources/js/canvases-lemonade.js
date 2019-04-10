@@ -138,17 +138,22 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
 
             var monofont = {
                 font: "13px monospace",
-                fillStyle: "#444",
+                fillStyle: "#CCC",
                 textAlign: "left",
-                shadowColor: "#EEE",
+                shadowColor: "#222",
                 shadowOffsetX: 0,
                 shadowOffsetY: 0,
                 shadowBlur: 7
             }
 
+            var ctx = canvas.getCanvasContext();
+            ctx.beginPath();
+            ctx.rect(0, 0, plotSize.width * boardSize, plotSize.height * boardSize);
+            ctx.fillStyle = "black";
+            ctx.fill();
+
             var weatherImg = sprites[board.weatherForecast.toLowerCase()];
             if(!!weatherImg) {
-                var ctx = canvas.getCanvasContext();
                 ctx.drawImage(weatherImg, 0, plotSize.height * boardSize - 200, 240, 200);
             }
             var messages = board.messages.split('\n');
