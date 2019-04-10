@@ -50,11 +50,11 @@ var boardPageLoad = function() {
     // ----------------------- init logger -------------------
     var logger = initLogger();
     logger.printCongrats = function() {
-        logger.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
+        logger.print('Congrats ' + game.readableName + '! You have passed the puzzle!!!');
     }
 
     logger.printHello = function() {
-        logger.print('Hello ' + game.playerName + ', I am Hero! Waiting for your command...');
+        logger.print('Hello ' + game.readableName + ', I am Hero! Waiting for your command...');
     }
 
     // ----------------------- init slider -------------------
