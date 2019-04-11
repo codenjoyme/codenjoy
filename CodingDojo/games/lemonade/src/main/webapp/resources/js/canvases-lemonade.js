@@ -161,6 +161,44 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             for(var i=0; i< messages.length; i++){
                 canvas.drawText(messages[i], {"x": 0, "y": 23 - i * interval}, monofont);
             }
+
+            // --- draw assets graph ---
+            var graphX = 245;
+            var graphY = plotSize.height * boardSize - 200;
+            var graphWidth = plotSize.width * boardSize - 250;
+            var graphHeight = 195;
+
+            // background
+            ctx.beginPath();
+            ctx.rect(graphX, graphY, graphWidth, graphHeight);
+            ctx.fillStyle = "darkgray";
+            ctx.fill();
+
+            // draw graph
+            ctx.lineWidth = 3;
+            var history = board.history;
+            var scaledAssetsList = history.map(function(salesResult) {
+                return salesResult.assets * 100;
+            });
+            var assetsListLength = scaledAssetsList.length;
+            if (assetsListLength > 1) {
+                var pInterval = (graphWidth - 40) / (assetsListLength - 1);
+                var maxY = Math.max.apply(null, scaledAssetsList);
+                var minY = Math.min.apply(null, scaledAssetsList);
+                var scaleFactor = (graphHeight - 40) / (maxY - minY);
+                var yShift = graphY + graphHeight - 20;
+                var startX = graphX + 20;
+                var startY = (minY - scaledAssetsList[0]) * scaleFactor + yShift;
+                ctx.strokeStyle = "#FF0";
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                for (i = 1; i < assetsListLength; i++) {
+                    var y = (minY - scaledAssetsList[i]) * scaleFactor + yShift;
+                    ctx.lineTo(startX + i * pInterval, y);
+                }
+                ctx.stroke();
+            }
+
             /*if (board.hspeed >= 0.001) {
                 canvas.drawText("→", {"x": 18, "y": 17.2}, monofont);
             }
