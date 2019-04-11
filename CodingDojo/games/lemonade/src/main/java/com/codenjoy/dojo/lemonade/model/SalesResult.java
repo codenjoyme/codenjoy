@@ -68,4 +68,8 @@ public class SalesResult {
         jsonObj.put("assets", assets);
         return jsonObj;
     }
+
+    public double getProfit() {
+        return this.profit;
+    }
 }

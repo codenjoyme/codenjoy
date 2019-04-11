@@ -23,7 +23,8 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
-import com.codenjoy.dojo.lemonade.services.Events;
+import com.codenjoy.dojo.lemonade.services.EventArgs;
+import com.codenjoy.dojo.lemonade.services.EventType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -94,9 +95,9 @@ public class Player extends GamePlayer<Hero, Field> {
             while (history.size() > 10)
                 history.remove();
             if (salesResult.isBunkrupt()) {
-                event(Events.LOOSE);
+                event(new EventArgs(EventType.LOOSE, (int)salesResult.getProfit()));
             } else {
-                event(Events.WIN);
+                event(new EventArgs(EventType.WIN, (int)(100 * salesResult.getProfit())));
             }
         }
     }

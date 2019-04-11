@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
+    private final Parameter<Integer> bankruptPenalty;
 
     private volatile int score;
 
@@ -43,7 +43,7 @@ public class Scores implements PlayerScores {
 
         // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+        bankruptPenalty = settings.addEditBox("Bankrupt penalty").type(Integer.class).def(100);
     }
 
     @Override
@@ -58,10 +58,14 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
-        } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+        EventArgs eventArgs = (EventArgs) event;
+        switch(eventArgs.type){
+            case WIN:
+                score += eventArgs.score;
+                break;
+            case LOOSE:
+                score -= bankruptPenalty.getValue();
+                break;
         }
         score = Math.max(0, score);
     }

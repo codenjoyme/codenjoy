@@ -40,11 +40,11 @@ public class ScoresTest {
     private Integer winScore;
 
     public void loose() {
-        scores.event(Events.LOOSE);
+        scores.event(new EventArgs(EventType.LOOSE, 100));
     }
 
     public void win() {
-        scores.event(Events.WIN);
+        scores.event(new EventArgs(EventType.WIN, 30));
     }
 
     @Before
@@ -52,7 +52,7 @@ public class ScoresTest {
         settings = new SettingsImpl();
         scores = new Scores(0, settings);
 
-        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
+        loosePenalty = settings.getParameter("Bankrupt penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
     }
 
