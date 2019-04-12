@@ -19,16 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-// TODO test me
-
-var util = require('util');
-var WSocket = require('ws');
+var browserNodeStub = require('./BrowserNodeStub');
+var environment = typeof window === 'undefined' ? 'node' : 'browser';
 
 var log = function(string) {
     console.log(string);
-    if (!!printBoardOnTextArea) {
-        printLogOnTextArea(string);
+    if (environment === 'browser') {
+        browserNodeStub.printLogOnTextArea(string);
     }
 };
 
@@ -43,8 +40,9 @@ var printArray = function (array) {
 
 var processBoard = function(boardString) {
     var board = new Board(boardString);
-        if (!!printBoardOnTextArea) {
-        printBoardOnTextArea(board.boardAsString());
+
+    if (environment === 'browser') {
+        browserNodeStub.printBoardOnTextArea(board.boardAsString());
     }
 
     var logMessage = board + "\n\n";
@@ -57,17 +55,24 @@ var processBoard = function(boardString) {
     return answer;
 };
 
-// you can get this code after registration on the server with your email
-var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
-
+// TODO: Modify this url after with the one provided after registration on the server.
+var url = "http://3.88.60.183/codenjoy-contest/board/player/7hgcv8qsrkmylf9avov6?code=3360300179738809996";
+// http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
 url = url.replace("?code=", "&code=");
 
-var ws;
-
 function connect() {
-    ws = new WSocket(url);
+    var ws;
+    
+    if (environment === 'browser') {
+        ws = browserNodeStub.webSoket();
+        ws = ws(url);
+    } else {
+        var WebSocket = require('ws');
+        ws = new WebSocket(url);
+    }
+    
     log('Opening...');
 
     ws.on('open', function() {
@@ -331,6 +336,7 @@ var Board = function(board){
     };
 
     var toString = function() {
+        var util = require('util');
         return util.format("%s\n" +
             "Bomberman at: %s\n" +
             "Other bombermans at: %s\n" +
