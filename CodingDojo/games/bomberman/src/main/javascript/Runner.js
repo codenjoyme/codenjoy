@@ -56,8 +56,7 @@ var processBoard = function(boardString) {
 };
 
 // TODO: Modify this url after with the one provided after registration on the server.
-var url = "http://3.88.60.183/codenjoy-contest/board/player/7hgcv8qsrkmylf9avov6?code=3360300179738809996";
-// http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890
+var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
 url = url.replace("?code=", "&code=");
