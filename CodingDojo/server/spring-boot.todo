@@ -421,14 +421,16 @@ from Alex: 2019-04-05
  Igor: странно, что раньше тест определения игр в рантайме работал корректно. Хотя, глубоко не вникал. Со спрайтами - действительно косяк.
  Поправил тесты с поправкой на активные *maven* профили.
 
-31) balancer приложение так же надо перевести на новые рельсы spring-boot
++ 31) balancer приложение так же надо перевести на новые рельсы spring-boot
+ Igor: переведен
 
-32) Почему-то лог файл в контейнере создается с ненормальным именем
++ 32) Почему-то лог файл в контейнере создается с ненормальным именем
         root@885f2a4989f9:/logs# ls -la /logs
         drwxr-xr-x  2 root root 4096 Apr  5 22:50 .
         drwxr-xr-x 64 root root 4096 Apr  5 22:50 ..
         -rw-r--r--  1 root root 5314 Apr  5 22:51 project.artifactId_IS_UNDEFINED.log
     а должен быть codenjoy-context.log
+ Igor: какой-то глич из-за спринг-бутового плагина, пришлось поменять нотацию для плейсхолдера в logback.xml - теперь норм
 
  33) почему-то папки logs и database создаются в корне докера, а не в папке /app где я запускаю варник
 
@@ -441,14 +443,14 @@ from Alex: 2019-04-05
     -rw-r--r-- 1 root root 8192 Apr  5 23:03 settings_codenjoy-contest.db
     -rw-r--r-- 1 root root 8192 Apr  5 23:03 users_codenjoy-contest.db
 
- 35) попытался зайти на админку под admin/admin но получил
++? 35) попытался зайти на админку под admin/admin но получил
         java.util.concurrent.ExecutionException: org.springframework.security.core.userdetails.UsernameNotFoundException: User with id 'admin' does not exist
     хотя в табличке есть запись
         "admin@codenjoyme.com"	"0"	"admin"	"1"	"$2a$10$cmKGT1LRwtr1FGSQrducqefoWKAMVBwXK0/CMPZmv.ltBzhoKv22y"	"000000"	"{}"
     пробовал я и admin@codenjoyme.com в качестве логина, не получилось
     UPD логин 000000/admin прошел, хотя несколько это необычно
-    Igor: это действительно странное решение, но оно в принципе рабочее. Рядом уже готова ветка с доработками по spring-security - в ней
-    реализован логин по email.
+ Igor: это действительно странное решение, но оно в принципе рабочее. Рядом уже готова ветка с доработками по spring-security - в ней
+ реализован логин по email.
 
 +36) В конфигурации спринга почему-то не стартовало
 +++UPD: дело было в том что раньше я юзал postgre а сейчас postgreS
