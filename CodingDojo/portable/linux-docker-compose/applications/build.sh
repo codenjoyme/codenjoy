@@ -38,7 +38,7 @@ if [[ "$(docker images -q java-workspace 2> /dev/null)" == "" ]]; then
     echo "========================================================================================================================[0m" ;
 
     # prepare java-workspace image update system && set timezone
-    eval_echo "docker build --target java_workspace -t java-workspace . --build-arg TIMEZONE=${TIMEZONE} |& tee ./logs/java-workspace.log" ;
+    eval_echo "docker build --target java-workspace -t java-workspace . --build-arg TIMEZONE=${TIMEZONE} --build-arg GIT_REPO=${GIT_REPO} --build-arg REF=${REVISION} |& tee ./logs/java-workspace.log" ;
 else
     echo "[94mImage java-workspace already installed[0m" ;
 fi
@@ -50,7 +50,7 @@ if [[ "$(docker images -q codenjoy-source 2> /dev/null)" == "" ]]; then
     echo "========================================================================================================================[0m" ;
 
     # checkout and build project
-    eval_echo "docker build --target codenjoy_source -t codenjoy-source . --build-arg GIT_REPO=${GIT_REPO} |& tee ./logs/codenjoy-source.log" ;
+    eval_echo "docker build --target codenjoy_source -t codenjoy-source . --build-arg GIT_REPO=${GIT_REPO} --build-arg GIT_REPO=${GIT_REPO} --build-arg REF=${REVISION} |& tee ./logs/codenjoy-source.log" ;
 else
     echo "[94mImage codenjoy-source already installed[0m" ;
 fi

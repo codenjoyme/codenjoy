@@ -9,5 +9,7 @@ RUN mkdir -p /app
 
 COPY ${WAR_FILE} /app/server.war
 
-ENTRYPOINT ["java","-jar","/app/server.war"]
+WORKDIR /app
+
+ENTRYPOINT ["java","-jar","server.war"]
 CMD ["--spring.profiles.active=${SPRING_PROFILES}","--context=/${CODENJOY_CONTEXT}"]
