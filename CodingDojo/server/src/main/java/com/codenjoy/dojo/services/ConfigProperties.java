@@ -38,7 +38,7 @@ public class ConfigProperties {
     @Value("${email.verification}")
     private boolean isEmailVerificationNeeded;
 
-    @Value("${page.registration}")
+    @Value("${page.registration.page}")
     private String registrationPage;
 
     @Value("${page.main}")
@@ -58,6 +58,9 @@ public class ConfigProperties {
 
     @Value("${server.ip}")
     private String serverIp;
+
+    @Value("${page.registration.nickname}")
+    private boolean isNickNameAllowed;
 
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
@@ -89,5 +92,9 @@ public class ConfigProperties {
 
     public String getServerIp() {
         return serverIp;
+    }
+
+    public boolean isNickNameAllowed() {
+        return isNickNameAllowed;
     }
 }

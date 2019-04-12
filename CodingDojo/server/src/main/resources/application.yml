@@ -18,7 +18,9 @@ board.save.ticks: 1
 log.debug: false
 page:
   main: ''
-  registration: ''
+  registration:
+    page: ''
+    nickname: true
   help.language: ''
 email:
   verification: false
