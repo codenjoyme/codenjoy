@@ -40,7 +40,7 @@ namespace Demo
             // creating custom bomberman's Ai client
 
 
-            var bomber = new DashasSolver(ServerUrl);
+            var bomber = new YourSolver(ServerUrl);
 
             // starting thread with playing bomberman
             Thread thread = new Thread(bomber.Play);

@@ -27,19 +27,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace DemoTests
 {
     [TestClass]
-    public class DashasSolverTests
+    public class YourSolverTests
     {
         /// <summary>
         /// this unit test is an example how to test your solver
         /// </summary>
         [TestMethod]
-        public void ShouldDropBombAndGoUpUp() 
+        public void ShouldSomething()
         {
-            DashasSolver d = new DashasSolver("any server");
+            YourSolver d = new YourSolver("any server");
             Board b = new Board("any board");
+
             string firstStep = d.Get(b);
 
-            Assert.AreEqual("Act,Up", firstStep);
+            Assert.AreEqual("Up", firstStep);
 
             string secondStep = d.Get(b);
 
