@@ -560,6 +560,24 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>icancode</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <properties>
+                <exclude.icancode>false</exclude.icancode>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>icancode-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <dependencies>
