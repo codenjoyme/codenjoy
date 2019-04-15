@@ -804,5 +804,20 @@ from Alex: 2019-04-16
 +43) https://github.com/codenjoyme/codenjoy/pull/46/commits/ccb7ad074582a9b26214c62a1c4fab38be3af978
     Тут лучше мне кажется page.registration.url так же заменил page.main.url
 
+44) думаю что проперти для каждой игрушки в профилях pom.xml <exclude.sampletext>false</exclude.sampletext> больше не нужны, они были нужны для связки двух частей профилей и блока перепаковки ресурсов. Теперь у нас только профиля и все.
+
+45) создал ветку icancode-spring-boot куда вмерджил наши наработки
+    билджу ее так:
+        CodingDojo/games/engine clean install -DskipTests=true
+        CodingDojo/games/icancode clean install -DskipTests=true
+        CodingDojo/server clean install -DskipTests=true
+        CodingDojo/server clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -Picancode
+    Что не так:
+        пропертиз файл application.yml из ресурсов игрушки не подтянулся (а так можно было вообще?)
+            это я вижу когда захожу на http://127.0.0.1:8080/codenjoy-contest и там не кастомная страничка icancode, а дифолтная codenjoy
+    Попробовал переименовать application.yml в application-icancode.yml и запустить потом -Dspring.profiles.active=sqlite,trace,icancode
+        Так сработало!
+    Что хочется, чтобы запуск игрушек не отличался друг от друга. Мы можем сделать как-то чтобы конфиг если он прописан в игре то автоматом переоперделял то что указано в рутовом конфиге?
+
 За все остальные коммиты спасибо Игорь.
 
