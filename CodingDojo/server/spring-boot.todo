@@ -801,7 +801,8 @@ from Alex: 2019-04-16
 +42) https://github.com/codenjoyme/codenjoy/commit/681e502d2d365465256338327855bf9245f8ad5c
     Я через прочерк специально различю имена контейнеров от алиасов, чтобы не путаться. Там поключам не очевидно и одно и то же имя для разных целей юзается. Так удобнее по repalce all действовать.
 
-43) https://github.com/codenjoyme/codenjoy/pull/46/commits/ccb7ad074582a9b26214c62a1c4fab38be3af978
++43) https://github.com/codenjoyme/codenjoy/pull/46/commits/ccb7ad074582a9b26214c62a1c4fab38be3af978
     Тут лучше мне кажется page.registration.url так же заменил page.main.url
 
+За все остальные коммиты спасибо Игорь.
 
