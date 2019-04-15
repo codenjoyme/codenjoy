@@ -29,6 +29,7 @@
     <meta charset="utf-8">
     <title>Game board</title>
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
+
     <style>
         canvas {
             height: 100vh!important;

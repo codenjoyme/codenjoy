@@ -29,8 +29,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import org.apache.commons.collections4.BidiMap;
-import org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap;
+import com.codenjoy.dojo.services.security.GameAuthorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -333,7 +332,7 @@ public class RegistrationController {
                 if (!playerService.isRegistrationOpened()) {
                     return openRegistrationForm(request, model, id, email, name);
                 }
-                code = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData());
+                code = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
             } else {
                 code = registration.getCodeById(id);
             }

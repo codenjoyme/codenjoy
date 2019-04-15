@@ -27,14 +27,22 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Map;
 
+@Component
 public class ScreenController implements Controller<Map<ScreenRecipient, ScreenData>, Void> {
 
-    private PlayerTransport transport;
+    private final PlayerTransport transport;
 
+    public ScreenController(PlayerTransport screenPlayerTransport) {
+        this.transport = screenPlayerTransport;
+    }
+
+    @PostConstruct
     public void init() {
         registerPlayerTransport(Player.ANONYMOUS, null);
     }
@@ -59,9 +67,5 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     @Override
     public void unregisterPlayerTransport(Player player) {
         transport.unregisterPlayerEndpoint(player.getName());
-    }
-
-    public void setTransport(PlayerTransport transport) {
-        this.transport = transport;
     }
 }

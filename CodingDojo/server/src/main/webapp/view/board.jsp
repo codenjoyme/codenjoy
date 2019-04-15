@@ -31,9 +31,9 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+    <jsp:include page="common-inclusion.jsp" />
 
     <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
-    <script src="${ctx}/resources/js/all.min.js"></script>
     <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
 </head>
 <body style="display:none;">

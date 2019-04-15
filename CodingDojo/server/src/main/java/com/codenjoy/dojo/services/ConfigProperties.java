@@ -38,10 +38,10 @@ public class ConfigProperties {
     @Value("${email.verification}")
     private boolean isEmailVerificationNeeded;
 
-    @Value("${page.registration}")
+    @Value("${page.registration.url}")
     private String registrationPage;
 
-    @Value("${page.main}")
+    @Value("${page.main.url}")
     private String mainPage;
 
     @Value("${page.help.language}")
