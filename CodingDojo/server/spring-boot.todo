@@ -791,3 +791,17 @@ from Alex: 2019-04-05
             at org.postgresql.core.PGStream.<init>(PGStream.java:62)
             at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:76)
             ... 160 common frames omitted
+
+from Alex: 2019-04-16
+
+41) https://github.com/codenjoyme/codenjoy/pull/46/commits/152307c8958278c5f0bc55bb4480bc0d780ae001
+   Как теперь сейчас делается вызов рест апи без передачи админ токена через урл?
+   Скажем я js клиент, из кода что я должен сделать чтобы сделать вызов закрытого спрингсекьюрити рестапи? Каким-то параметром передавать логин/пароль? В хедере?
+
++42) https://github.com/codenjoyme/codenjoy/commit/681e502d2d365465256338327855bf9245f8ad5c
+    Я через прочерк специально различю имена контейнеров от алиасов, чтобы не путаться. Там поключам не очевидно и одно и то же имя для разных целей юзается. Так удобнее по repalce all действовать.
+
+43) https://github.com/codenjoyme/codenjoy/pull/46/commits/ccb7ad074582a9b26214c62a1c4fab38be3af978
+    Тут лучше мне кажется page.registration.url так же заменил page.main.url
+
+
