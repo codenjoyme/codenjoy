@@ -19,29 +19,27 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using System.Threading;
+using A2048.Api;
 
 namespace Demo
 {
-    class Program
+    /// <summary>
+    /// This is BombermanAI client demo.
+    /// </summary>
+    internal class YourSolver : AbstractSolver
     {
-        // you can get this URL after registration on the server with your email
-        static string ServerUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
+        public YourSolver(string server)
+            : base(server)
+        {            
+        }
 
-        static void Main(string[] args)
+        /// <summary>
+        /// Calls each move to make decision what to do (next move)
+        /// </summary>
+        protected override string Get(Board board)
         {
-            // creating custom AI client
-            var bot = new MyCustomLoderunnerAI(ServerUrl);
-            
-            // starting thread with playing game
-            (new Thread(bot.Play)).Start();
-            
-            // waiting for any key
-            Console.ReadKey();
-
-            // on any key - asking AI client to stop.
-            bot.InitiateExit();
+            var action = Direction.Up.ToString();            
+            return action;
         }
     }
 }

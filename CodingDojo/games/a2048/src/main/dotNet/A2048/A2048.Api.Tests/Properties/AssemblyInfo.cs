@@ -19,35 +19,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using System;
-using Bomberman.Api;
-using Demo;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
-namespace DemoTests
-{
-    [TestClass]
-    public class DashasSolverTests
-    {
-        /// <summary>
-        /// this unit test is an example how to test your solver
-        /// </summary>
-        [TestMethod]
-        public void ShouldDropBombAndGoUpUp() 
-        {
-            DashasSolver d = new DashasSolver("any server");
-            Board b = new Board("any board");
-            string firstStep = d.Get(b);
+[assembly: AssemblyTitle("2048 C# Client Tests")]
+[assembly: AssemblyDescription("Created by Oleksandr Lutsyk (aalutsyk@gmail.com)")]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("Codenjoy")]
+[assembly: AssemblyProduct("Codenjoy 2048 C# Client")]
+[assembly: AssemblyCopyright("Copyright © 2019 Codenjoy")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
-            Assert.AreEqual("Act,Up", firstStep);
+[assembly: ComVisible(false)]
 
-            string secondStep = d.Get(b);
+[assembly: Guid("02c7eca6-7d22-458a-b670-c5ba23176289")]
 
-            Assert.AreEqual("Up", secondStep);
-
-            string thirdStep = d.Get(b);
-
-            Assert.AreEqual("Up", thirdStep);
-        }
-    }
-}
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
