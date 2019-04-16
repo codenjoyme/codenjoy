@@ -26,9 +26,9 @@ using System.Threading;
 using System.Text;
 using WebSocketSharp;
 
-namespace Bomberman.Api
+namespace A2048.Api
 {
-   public abstract class AbstractSolver
+    public abstract class AbstractSolver
     {
         private const string ResponsePrefix = "board=";
 
@@ -43,7 +43,7 @@ namespace Bomberman.Api
         }
 
         public string ServerUrl { get; private set; }
-
+        
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -64,6 +64,8 @@ namespace Bomberman.Api
                 Thread.Sleep(50);
             }
         }
+
+
         private void Socket_OnMessage(object sender, MessageEventArgs e)
         {
             if (!ShouldExit)
@@ -115,7 +117,7 @@ namespace Bomberman.Api
         }
 
         protected internal abstract string Get(Board gameBoard);
-
+        
         /// <summary>
         /// Starts client shutdown.
         /// </summary>
