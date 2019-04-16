@@ -40,3 +40,10 @@ app:
     - com.epam.dojo
     - com.codenjoy
 
+logging:
+  level:
+    root: info
+    com:
+      codenjoy: debug
+      epam.dojo: debug
+      org.eclipse.jetty: debug
