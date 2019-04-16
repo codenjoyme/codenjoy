@@ -19,37 +19,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-using Bomberman.Api;
-
-namespace Demo
+namespace A2048.Api
 {
-    /// <summary>
-    /// This is BombermanAI client proposed and written by Daria Lutsyk
-    /// strategy is the following:
-    /// plant a bomb and move up :)
-    /// </summary>
-    internal class DashasSolver : AbstractSolver
+    public enum Direction
     {
-        private int moveNumber = 0;
-
-        public DashasSolver(string server)
-            : base(server)
-        {            
-        }
-
-        /// <summary>
-        /// Calls each move to make decision what to do (next move)
-        /// </summary>
-        protected override string Get(Board board)
-        {
-            var action = $"{Direction.Act},{Direction.Up}";
-
-            if (moveNumber++ % 7 != 0)
-            {
-                action = Direction.Up.ToString();
-            }
-            
-            return action;
-        }
+        Left,
+        Right,
+        Up,
+        Down,
+        Act,  // clear board
+        Stop  // do nothing
     }
 }

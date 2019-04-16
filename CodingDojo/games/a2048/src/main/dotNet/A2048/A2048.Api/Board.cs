@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bomberman.Api
+namespace A2048.Api
 {
     public class Board
     {
@@ -48,35 +48,16 @@ namespace Bomberman.Api
             }
         }
 
-        public Point GetBomberman()
+        public List<Point> GetBarriers()
         {
-            return Get(Element.BOMBERMAN)
-                    .Concat(Get(Element.BOMB_BOMBERMAN))
-                    .Concat(Get(Element.DEAD_BOMBERMAN))
-                    .Single();
-        }
-
-        public List<Point> GetOtherBombermans()
-        {
-            return Get(Element.OTHER_BOMBERMAN)
-                .Concat(Get(Element.OTHER_BOMB_BOMBERMAN))
-                .Concat(Get(Element.OTHER_DEAD_BOMBERMAN))
-                .ToList();
-        }
-
-        public bool isMyBombermanDead
-        {
-            get
-            {
-                return BoardString.Contains((char)Element.DEAD_BOMBERMAN);
-            }
+            return Get(Element._x);
         }
 
         public Element GetAt(Point point)
         {
             if (point.IsOutOf(Size))
             {
-                return Element.WALL;
+                return Element.NONE;
             }
             return (Element)BoardString[LengthXY.GetLength(point.X, point.Y)];
         }
@@ -108,42 +89,14 @@ namespace Bomberman.Api
         public string ToString()
         {
            return string.Format("{0}\n" +
-                    "Bomberman at: {1}\n" +
-                    "Other bombermans at: {2}\n" +
-                    "Meat choppers at: {3}\n" +
-                    "Destroy walls at: {4}\n" +
-                    "Bombs at: {5}\n" +
-                    "Blasts: {6}\n" +
-                    "Expected blasts at: {7}",
+                    "Barriers at: {1}",
                     BoardAsString(),
-                    GetBomberman(),
-                    ListToString(GetOtherBombermans()),
-                    ListToString(GetMeatChoppers()),
-                    ListToString(GetDestroyableWalls()),
-                    ListToString(GetBombs()),
-                    ListToString(GetBlasts()),
-                    ListToString(GetFutureBlasts()));
+                    ListToString(GetBarriers()));
         }
 
         private string ListToString(List<Point> list)
         {
             return string.Join(",", list.ToArray());
-        }
-
-        public List<Point> GetBarrier()
-        {
-            return GetMeatChoppers()
-                .Concat(GetWalls())
-                .Concat(GetBombs())
-                .Concat(GetDestroyableWalls())
-                .Concat(GetOtherBombermans())
-                .Distinct()
-                .ToList();
-        }
-
-        public List<Point> GetMeatChoppers()
-        {
-            return Get(Element.MEAT_CHOPPER);
         }
 
         public List<Point> Get(Element element)
@@ -161,49 +114,6 @@ namespace Bomberman.Api
             }
 
             return result;
-        }
-
-        public List<Point> GetWalls()
-        {
-            return Get(Element.WALL);
-        }
-
-        public List<Point> GetDestroyableWalls()
-        {
-            return Get(Element.DESTROYABLE_WALL);
-        }
-
-        public List<Point> GetBombs()
-        {
-            return Get(Element.BOMB_TIMER_1)
-                .Concat(Get(Element.BOMB_TIMER_2))
-                .Concat(Get(Element.BOMB_TIMER_3))
-                .Concat(Get(Element.BOMB_TIMER_4))
-                .Concat(Get(Element.BOMB_TIMER_5))
-                .Concat(Get(Element.BOMB_BOMBERMAN))
-                .Concat(Get(Element.OTHER_BOMB_BOMBERMAN))
-                .ToList();
-        }
-
-        public List<Point> GetBlasts()
-        {
-            return Get(Element.BOOM);
-        }
-
-        public List<Point> GetFutureBlasts()
-        {
-            var bombs = GetBombs();
-            var result = new List<Point>();
-            foreach (var bomb in bombs)
-            {
-                result.Add(bomb);
-                result.Add(bomb.ShiftLeft());
-                result.Add(bomb.ShiftRight());
-                result.Add(bomb.ShiftTop());
-                result.Add(bomb.ShiftBottom());
-            }
-
-            return result.Where(blast => !blast.IsOutOf(Size) && !GetWalls().Contains(blast)).Distinct().ToList();
         }
 
         public bool IsAnyOfAt(Point point, params Element[] elements)
@@ -224,7 +134,7 @@ namespace Bomberman.Api
 
         public bool IsBarrierAt(Point point)
         {
-            return GetBarrier().Contains(point);
+            return GetBarriers().Contains(point);
         }
 
         public int CountNear(Point point, Element element)
