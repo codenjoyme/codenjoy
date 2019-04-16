@@ -38,7 +38,7 @@ namespace A2048.Api
         /// <param name="server">server http address including email and code</param>
         public AbstractSolver(string server)
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            // Console.OutputEncoding = Encoding.UTF8;
             ServerUrl = server;
         }
 

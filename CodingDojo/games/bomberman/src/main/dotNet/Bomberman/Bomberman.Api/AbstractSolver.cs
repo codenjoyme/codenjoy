@@ -38,7 +38,7 @@ namespace Bomberman.Api
         /// <param name="server">server http address including email and code</param>
         public AbstractSolver(string server)
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            // Console.OutputEncoding = Encoding.UTF8;
             ServerUrl = server;
         }
 
@@ -64,8 +64,6 @@ namespace Bomberman.Api
                 Thread.Sleep(50);
             }
         }
-
-
         private void Socket_OnMessage(object sender, MessageEventArgs e)
         {
             if (!ShouldExit)
