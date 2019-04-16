@@ -23,7 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bomberman.Api
+namespace A2048.Api
 {
     public class Board
     {
@@ -48,7 +48,7 @@ namespace Bomberman.Api
             }
         }
 
-        public Point GetBarrier()
+        public List<Point> GetBarriers()
         {
             return Get(Element._x);
         }
@@ -91,7 +91,7 @@ namespace Bomberman.Api
            return string.Format("{0}\n" +
                     "Barriers at: {1}",
                     BoardAsString(),
-                    GetBarrier());
+                    ListToString(GetBarriers()));
         }
 
         private string ListToString(List<Point> list)
@@ -134,7 +134,7 @@ namespace Bomberman.Api
 
         public bool IsBarrierAt(Point point)
         {
-            return GetBarrier().Contains(point);
+            return GetBarriers().Contains(point);
         }
 
         public int CountNear(Point point, Element element)

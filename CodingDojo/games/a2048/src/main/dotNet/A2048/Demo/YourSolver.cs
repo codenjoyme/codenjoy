@@ -38,7 +38,7 @@ namespace Demo
         /// </summary>
         protected override string Get(Board board)
         {
-            var action = Direction.Act.ToString();            
+            var action = Direction.Up.ToString();            
             return action;
         }
     }
