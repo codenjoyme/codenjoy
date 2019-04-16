@@ -43,5 +43,7 @@
 /CodingDojo/portable/windows-cmd/jetty*/**
 /CodingDojo/portable/windows-cmd/maven/**
 /CodingDojo/portable/windows-cmd/tools/**
+/CodingDojo/games/a2048/src/main/dotNet/A2048/packages/**
+/CodingDojo/games/loderunner/src/main/dotNet/Loderunner/packages/**
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 /CodingDojo/portable/linux-docker-all
