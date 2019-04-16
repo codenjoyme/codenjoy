@@ -20,28 +20,40 @@
  * #L%
  */
 using System;
-using System.Threading;
 
-namespace Demo
+namespace A2048.Api
 {
-    class Program
+    public class LengthToXY
     {
-        // you can get this URL after registration on the server with your email
-        static string ServerUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
+        public int Size;
 
-        static void Main(string[] args)
+        public LengthToXY(int size)
         {
-            // creating custom AI client
-            var bot = new MyCustomLoderunnerAI(ServerUrl);
-            
-            // starting thread with playing game
-            (new Thread(bot.Play)).Start();
-            
-            // waiting for any key
-            Console.ReadKey();
+            Size = size;
+        }
 
-            // on any key - asking AI client to stop.
-            bot.InitiateExit();
+        private int InversionY(int y)
+        {
+            return Size - 1 - y;
+        }
+
+        private int InversionX(int x)
+        {
+            return x;
+        }
+
+        public int GetLength(int x, int y)
+        {
+            int xx = InversionX(x);
+            int yy = InversionY(y);
+            return yy * Size + xx;
+        }
+
+        public Point GetXY(int length)
+        {
+            int x = InversionX(length % Size);
+            int y = InversionY(length / Size);
+            return new Point(x, y);
         }
     }
 }

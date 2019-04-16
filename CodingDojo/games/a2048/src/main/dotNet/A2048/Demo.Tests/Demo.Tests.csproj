@@ -55,9 +55,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bomberman.Api\Bomberman.Api.csproj">
+    <ProjectReference Include="..\A2048.Api\A2048.Api.csproj">
       <Project>{26b1ae94-cb40-411a-8a64-84285e395780}</Project>
-      <Name>Bomberman.Api</Name>
+      <Name>A2048.Api</Name>
     </ProjectReference>
     <ProjectReference Include="..\Demo\Demo.csproj">
       <Project>{1527129c-c326-49e6-b53f-9e662baf81fb}</Project>

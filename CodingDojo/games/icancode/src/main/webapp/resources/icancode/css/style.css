@@ -1059,4 +1059,10 @@ canvas {
   .console-wrapper {
     height: 330px;
   }
+
+  .navbar-toggle .icon-bar {
+    width: 24px;
+    height: 3px;
+    background: white;
+  }
 }

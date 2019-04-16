@@ -33,22 +33,30 @@
 
     <div class="header-container">
       <div class="container-fluid">
-          <header class="header row">
-                <div class="col-xs-6">
+          <header class="header">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
                   <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
                   <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
-                  <span class="title icancode-title">ICanCode</span>
-                  </div>
-                <nav class="nav col-xs-6 pull-right text-right">
-                <ul class="nav-list">
-                  <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
-                  <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#">ApiDocs</a></li>
-                  <li class="title icancode-title inline"><a id="help-link" target="_blank" href="/codenjoy-contest/board">LeaderBoard</a></li>
-                  <li class="logo title inline"><img src="img/profile.png"></li>
-                  <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
-                </ul>
-            </nav>
+                  <span class="title icancode-title hidden-xs hidden-sm">ICanCode</span>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                  <nav class="nav col-xs-6 pull-right text-right">
+                    <ul class="nav-list">
+                      <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
+                      <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#">ApiDocs</a></li>
+                      <li class="title icancode-title inline"><a id="help-link" target="_blank" href="/codenjoy-contest/board">LeaderBoard</a></li>
+                      <li class="logo title inline hidden-xs hidden-sm"><img src="img/profile.png"></li>
+                      <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
+                    </ul>
+                  </nav>
+                </div>
           </header>
         </div>
     </div>
