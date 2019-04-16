@@ -22,7 +22,9 @@
 using System;
 using System.Web;
 using System.Linq;
+using System.Threading;
 using System.Text;
+using WebSocketSharp;
 
 namespace A2048.Api
 {
@@ -52,15 +54,25 @@ namespace A2048.Api
         {
             string url = GetWebSocketUrl(this.ServerUrl);
 
-            using (var socket = new WebSocket(new Uri(url)))
+            var socket = new WebSocket(url);
+
+            socket.OnMessage += Socket_OnMessage;
+            socket.Connect();
+
+            while (!ShouldExit && socket.ReadyState != WebSocketState.Closed)
             {
-                socket.Connect();
+                Thread.Sleep(50);
+            }
+        }
 
-                while (!ShouldExit)
-                {
-                    var response = socket.Recv();
 
-                    if (!response.StartsWith(ResponsePrefix))
+        private void Socket_OnMessage(object sender, MessageEventArgs e)
+        {
+            if (!ShouldExit)
+            {
+                var response = e.Data;
+
+                if (!response.StartsWith(ResponsePrefix))
                     {
                         Console.WriteLine("Something strange is happening on the server... Response:\n{0}", response);
                         ShouldExit = true;
@@ -80,9 +92,8 @@ namespace A2048.Api
                         Console.WriteLine("Answer: " + action);
                         Console.SetCursorPosition(0, 0);
 
-                        socket.Send(action);
+                        ((WebSocket)sender).Send(action);
                     }
-                }
             }
         }
 
@@ -96,6 +107,7 @@ namespace A2048.Api
 
             return GetWebSocketUrl(userName, code, server);
         }
+
         private static string GetWebSocketUrl(string userName, string code, string server)
         {
             return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
