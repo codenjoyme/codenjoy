@@ -31,16 +31,16 @@ namespace Demo
 
         static void Main(string[] args)
         {
-            // creating custom loderunner's AI client
+            // creating custom AI client
             var bot = new MyCustomLoderunnerAI(ServerUrl);
             
-            // starting thread with playing loderunner
+            // starting thread with playing game
             (new Thread(bot.Play)).Start();
             
             // waiting for any key
             Console.ReadKey();
 
-            // on any key - asking loderunner's AI client to stop. 
+            // on any key - asking AI client to stop.
             bot.InitiateExit();
         }
     }

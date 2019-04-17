@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk as java-workspace
+FROM openjdk:8-jdk as java_workspace
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
 USER root

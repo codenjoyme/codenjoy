@@ -22,11 +22,13 @@
 using System;
 using System.Web;
 using System.Linq;
+using System.Threading;
 using System.Text;
+using WebSocketSharp;
 
 namespace Bomberman.Api
 {
-    public abstract class AbstractSolver
+   public abstract class AbstractSolver
     {
         private const string ResponsePrefix = "board=";
 
@@ -36,12 +38,12 @@ namespace Bomberman.Api
         /// <param name="server">server http address including email and code</param>
         public AbstractSolver(string server)
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            // Console.OutputEncoding = Encoding.UTF8;
             ServerUrl = server;
         }
 
         public string ServerUrl { get; private set; }
-        
+
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -52,15 +54,23 @@ namespace Bomberman.Api
         {
             string url = GetWebSocketUrl(this.ServerUrl);
 
-            using (var socket = new WebSocket(new Uri(url)))
+            var socket = new WebSocket(url);
+
+            socket.OnMessage += Socket_OnMessage;
+            socket.Connect();
+
+            while (!ShouldExit && socket.ReadyState != WebSocketState.Closed)
             {
-                socket.Connect();
+                Thread.Sleep(50);
+            }
+        }
+        private void Socket_OnMessage(object sender, MessageEventArgs e)
+        {
+            if (!ShouldExit)
+            {
+                var response = e.Data;
 
-                while (!ShouldExit)
-                {
-                    var response = socket.Recv();
-
-                    if (!response.StartsWith(ResponsePrefix))
+                if (!response.StartsWith(ResponsePrefix))
                     {
                         Console.WriteLine("Something strange is happening on the server... Response:\n{0}", response);
                         ShouldExit = true;
@@ -80,9 +90,8 @@ namespace Bomberman.Api
                         Console.WriteLine("Answer: " + action);
                         Console.SetCursorPosition(0, 0);
 
-                        socket.Send(action);
+                        ((WebSocket)sender).Send(action);
                     }
-                }
             }
         }
 
@@ -96,6 +105,7 @@ namespace Bomberman.Api
 
             return GetWebSocketUrl(userName, code, server);
         }
+
         private static string GetWebSocketUrl(string userName, string code, string server)
         {
             return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
@@ -105,9 +115,9 @@ namespace Bomberman.Api
         }
 
         protected internal abstract string Get(Board gameBoard);
-        
+
         /// <summary>
-        /// Starts bomberman's client shutdown.
+        /// Starts client shutdown.
         /// </summary>
         public void InitiateExit()
         {

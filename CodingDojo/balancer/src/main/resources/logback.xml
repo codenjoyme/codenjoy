@@ -46,7 +46,7 @@
     </appender>
 
     <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
-    <logger name="com.epam.dojo" level="DEBUG" additivity="true"/>
+    <logger name="com.codenjoy.dojo" level="DEBUG" additivity="true"/>
     <logger name="org.eclipse.jetty" level="DEBUG" additivity="false"/>
 
     <root level="debug">
