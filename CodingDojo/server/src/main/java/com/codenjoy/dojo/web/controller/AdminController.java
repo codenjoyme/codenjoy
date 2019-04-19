@@ -33,7 +33,6 @@ import com.codenjoy.dojo.services.settings.Settings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +58,7 @@ public class AdminController {
 
     public static final String URI = "/admin";
 
-    static final String GAME_NAME = "gameName";
+    public static final String GAME_NAME_FORM_KEY = "gameName";
 
     private final TimerService timerService;
     private final PlayerService playerService;
@@ -309,7 +308,7 @@ public class AdminController {
             }
         }
 
-        request.setAttribute(GAME_NAME, settings.getGameName());
+        request.setAttribute(GAME_NAME_FORM_KEY, settings.getGameName());
         return getAdmin(settings.getGameName());
     }
 
@@ -332,7 +331,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin?" + GAME_NAME_FORM_KEY + "=" + gameName;
     }
 
     private String getAdmin() {
@@ -369,7 +368,7 @@ public class AdminController {
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
-        model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");
         model.addAttribute("generateCount", "30");
@@ -386,7 +385,7 @@ public class AdminController {
     }
 
     private String getGameName(HttpServletRequest request) {
-         String gameName = request.getParameter(GAME_NAME);
+         String gameName = request.getParameter(GAME_NAME_FORM_KEY);
         if (gameName == null || gameName.equals("null")) {
             return null;
         }
@@ -429,11 +428,11 @@ public class AdminController {
     }
 
     @RequestMapping(params = "select", method = RequestMethod.GET)
-    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME) String gameName) {
+    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME_FORM_KEY) String gameName) {
         if (gameName == null) {
             gameName = getDefaultGame();
         }
-        request.setAttribute(GAME_NAME, gameName);
+        request.setAttribute(GAME_NAME_FORM_KEY, gameName);
         return getAdmin(request);
     }
 

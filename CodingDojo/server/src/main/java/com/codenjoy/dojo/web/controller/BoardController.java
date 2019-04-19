@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME;
+import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_FORM_KEY;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -107,7 +107,7 @@ public class BoardController {
         }
 
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
@@ -126,7 +126,7 @@ public class BoardController {
             return "redirect:/register?id=" + playerName;
         }
 
-        model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
@@ -153,7 +153,7 @@ public class BoardController {
 
         Player player = playerService.getRandom(gameName);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?" + GAME_NAME + "=" + gameName;
+            return "redirect:/register?" + GAME_NAME_FORM_KEY + "=" + gameName;
         }
         GameType gameType = player.getGameType();
         if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
@@ -161,7 +161,7 @@ public class BoardController {
         }
 
         model.addAttribute("code", null);
-        model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", null);
         model.addAttribute("readableName", null);
@@ -188,7 +188,7 @@ public class BoardController {
         String gameName = player.getGameName();
 
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());

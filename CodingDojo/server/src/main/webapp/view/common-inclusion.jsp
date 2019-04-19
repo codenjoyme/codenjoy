@@ -28,6 +28,7 @@
 
 <head>
     <link href="${ctx}/resources/favicon.ico" rel="icon">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
     <c:choose>
         <c:when test="${debug}" >
@@ -40,10 +41,15 @@
 </head>
 <sec:authorize access="isAuthenticated()">
 <body>
-    <div class="center">
-        <form action="${ctx}/process_logout">
-            <input type="submit" value="Logout" class="btn btn-link">
-        </form>
+    <div class="user-controls-container">
+        <div class="user-control float-left">
+            <form class="user-control" action="${ctx}/process_logout">
+                <input type="submit" value="Logout" class="btn btn-link">
+            </form>
+        </div>
+        <div class="user-control">
+            <a href="${ctx}/" >Games</a>
+        </div>
     </div>
 </body>
 </sec:authorize>

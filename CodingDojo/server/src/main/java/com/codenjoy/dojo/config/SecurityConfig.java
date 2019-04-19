@@ -27,6 +27,7 @@ import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.LoginController;
 import com.codenjoy.dojo.web.controller.RegistrationController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
@@ -106,6 +108,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
 
+        @Autowired
+        private AuthenticationSuccessHandler authenticationSuccessHandler;
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
@@ -125,8 +130,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     .permitAll()
                                 .usernameParameter(USERNAME_FORM_PARAMETER)
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
-                                .defaultSuccessUrl("/")
-                                    .permitAll()
+                                .successHandler(authenticationSuccessHandler)
                             .permitAll()
                     .and()
                         .logout()
