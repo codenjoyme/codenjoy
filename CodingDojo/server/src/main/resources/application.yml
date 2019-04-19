@@ -22,8 +22,11 @@ registration:
     pasword:
       min-length: 8
 page:
-  main: ''
-  registration: ''
+  main:
+    url: ''
+  registration:
+    url: ''
+    nickname: true
   help.language: ''
 email:
   verification: false
@@ -45,3 +48,10 @@ app:
     - com.epam.dojo
     - com.codenjoy
 
+logging:
+  level:
+    root: info
+    com:
+      codenjoy: debug
+      epam.dojo: debug
+      org.eclipse.jetty: debug

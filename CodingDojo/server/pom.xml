@@ -110,9 +110,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.sample>false</exclude.sample>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -128,9 +125,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.sampletext>false</exclude.sampletext>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -146,9 +140,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.a2048>false</exclude.a2048>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -164,9 +155,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.battlecity>false</exclude.battlecity>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -182,9 +170,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.bomberman>false</exclude.bomberman>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -200,9 +185,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.chess>true</exclude.chess>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -218,9 +200,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.collapse>false</exclude.collapse>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -236,9 +215,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.hex>false</exclude.hex>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -254,9 +230,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.kata>false</exclude.kata>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -272,9 +245,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.loderunner>false</exclude.loderunner>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -290,9 +260,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.minesweeper>false</exclude.minesweeper>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -308,9 +275,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.rubicscube>false</exclude.rubicscube>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -326,9 +290,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.snake>false</exclude.snake>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -344,9 +305,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.snakebattle>false</exclude.snakebattle>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -362,9 +320,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.sudoku>false</exclude.sudoku>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -380,9 +335,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.moebius>false</exclude.moebius>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -398,9 +350,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.football>false</exclude.football>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -416,9 +365,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.startandjump>false</exclude.startandjump>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -434,9 +380,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.quake2d>false</exclude.quake2d>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -452,9 +395,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.pong>false</exclude.pong>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -470,9 +410,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.fifteen>false</exclude.fifteen>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -488,9 +425,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.puzzlebox>false</exclude.puzzlebox>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -506,9 +440,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.spacerace>false</exclude.spacerace>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -524,9 +455,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.reversi>false</exclude.reversi>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -542,9 +470,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.quadro>false</exclude.quadro>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -560,9 +485,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.lunolet>false</exclude.lunolet>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -578,9 +500,6 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.tetris>false</exclude.tetris>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
@@ -596,13 +515,25 @@
                     <name>allGames</name>
                 </property>
             </activation>
-            <properties>
-                <exclude.sokoban>false</exclude.sokoban>
-            </properties>
             <dependencies>
                 <dependency>
                     <groupId>${project.groupId}</groupId>
                     <artifactId>sokoban-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>icancode</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>icancode-engine</artifactId>
                     <version>${project.version}</version>
                 </dependency>
             </dependencies>
@@ -642,6 +573,24 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
@@ -832,6 +781,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>*</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>

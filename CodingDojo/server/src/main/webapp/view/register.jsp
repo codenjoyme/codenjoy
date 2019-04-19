@@ -99,7 +99,7 @@
                             <input type="submit" id="submit" value="Register" />
                         </c:when>
                         <c:otherwise>
-                            Registration is closed, please try again later.
+                            Registration was closed, please try again later.
                         </c:otherwise>
                     </c:choose>
                 </td>

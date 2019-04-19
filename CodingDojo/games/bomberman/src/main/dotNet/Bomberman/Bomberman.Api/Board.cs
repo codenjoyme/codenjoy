@@ -91,7 +91,7 @@ namespace Bomberman.Api
             return GetAt(point) == element;
         }
 
-        public string BoardAsAtring()
+        public string BoardAsString()
         {
             string result = "";
             for (int i = 0; i < Size; i++)
@@ -115,7 +115,7 @@ namespace Bomberman.Api
                     "Bombs at: {5}\n" +
                     "Blasts: {6}\n" +
                     "Expected blasts at: {7}",
-                    BoardAsAtring(),
+                    BoardAsString(),
                     GetBomberman(),
                     ListToString(GetOtherBombermans()),
                     ListToString(GetMeatChoppers()),

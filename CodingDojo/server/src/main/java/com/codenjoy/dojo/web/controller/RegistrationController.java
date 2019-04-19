@@ -145,9 +145,38 @@ public class RegistrationController {
         if (StringUtils.isEmpty(properties.getRegistrationPage())) {
             return "register";
         } else {
-            model.addAttribute("url", properties.getRegistrationPage());
+            model.addAttribute("url", getRedirectUrl(model));
             return "redirect";
         }
+    }
+
+    private String getRedirectUrl(Model model) {
+        String message = "";
+
+        Map<String, Object> map = model.asMap();
+        if (map.get("wait_approve") == Boolean.TRUE) {
+            message += "Please check your email for verigication. ";
+        }
+        if (map.get("opened") == Boolean.FALSE) {
+            message += "Registration was closed, please try again later. ";
+        }
+        if (map.get("bad_pass") == Boolean.TRUE) {
+            message += "Bad password. ";
+        }
+        if (map.get("bad_email") == Boolean.TRUE) {
+            message += map.get("bad_email_message");
+        }
+        if (map.get("bad_name") == Boolean.TRUE) {
+            message += map.get("bad_name_message");
+        }
+        if (map.get("email_busy") == Boolean.TRUE) {
+            message += "Email already used. ";
+        }
+        if (map.get("name_busy") == Boolean.TRUE) {
+            message += "Name already used. ";
+        }
+
+        return properties.getRegistrationPage() + "?message=" + message;
     }
 
     private String getIp(HttpServletRequest request) {
