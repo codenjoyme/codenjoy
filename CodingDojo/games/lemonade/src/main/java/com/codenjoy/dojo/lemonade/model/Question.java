@@ -36,8 +36,8 @@ public class Question {
                     boolean isBankrupt) {
 
         this.day = day;
-        this.lemonadePrice = lemonadePrice;
-        this.assets = assets;
+        this.lemonadePrice = toMoneyFormat(lemonadePrice);
+        this.assets = toMoneyFormat(assets);
         this.weatherForecast = weatherForecast;
         this.messages = messages;
         this.isBankrupt = isBankrupt;
@@ -52,5 +52,9 @@ public class Question {
         questionJson.put("messages", messages);
         questionJson.put("isBankrupt", isBankrupt);
         return questionJson;
+    }
+
+    private static double toMoneyFormat(double dollars){
+        return Math.round(dollars * 100) / 100.0;
     }
 }
