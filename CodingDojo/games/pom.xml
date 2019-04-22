@@ -73,6 +73,7 @@
         <module>lunolet</module>
         <module>tetris</module>
         <module>sokoban</module>
+        <module>lemonade</module>
     </modules>
 
     <dependencyManagement>

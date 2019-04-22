@@ -23,11 +23,9 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,9 +36,16 @@ import java.util.regex.Pattern;
  */
 public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
+    private static Pattern patternGo;
     private Simulator simulator;
+    private SalesResult salesResult;
     private boolean alive;
     private String answer;
+
+    static {
+        patternGo = Pattern.compile(
+                "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
+    }
 
     public Hero() {
         simulator = new Simulator((int) System.currentTimeMillis());
@@ -50,6 +55,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     @Override
     public void init(Field field) {
         simulator.reset();
+        //simulator.step(0,0,0);
 
         this.field = field;
     }
@@ -60,16 +66,50 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
         String command = s.toLowerCase();
 
-        Pattern patternGo = Pattern.compile(
-                "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
+        if(command.contains("reset")) {
+            simulator.reset();
+            return;
+        }
+
+        if(simulator.isBankrupt())
+        {
+            this.salesResult = null;
+            return;
+        }
+
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
             int lemonadeToMake = Integer.parseInt(matcher.group(1));
             int signsToMake = Integer.parseInt(matcher.group(2));
             int lemonadePriceCents = Integer.parseInt(matcher.group(3));
             simulate(lemonadeToMake, signsToMake, lemonadePriceCents);
+            readSalesResult();
             return;
         }
+    }
+
+    private void readSalesResult() {
+        int day = simulator.getDay();
+        int lemonadeSold = simulator.getLemonadeSold();
+        double lemonadePrice = simulator.getLemonadePrice();
+        double income = simulator.getIncome();
+        int lemonadeMade = simulator.getLemonadeMade();
+        int signsMade = simulator.getSignsMade();
+        double expenses = simulator.getExpenses();
+        double profit = simulator.getProfit();
+        double assets = simulator.getAssets();
+        boolean isBunkrupt = simulator.isBankrupt();
+        this.salesResult = new SalesResult(day,
+                lemonadeSold,
+                lemonadePrice,
+                income,
+                lemonadeMade,
+                signsMade,
+                expenses,
+                profit,
+                assets,
+                isBunkrupt
+                );
     }
 
     @Override
@@ -81,14 +121,29 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         return alive;
     }
 
-    public String popAnswer() {
-        String answer = this.answer;
-        this.answer = null;
-        return answer;
+    public Question getNextQuestion(){
+        int day = simulator.getDay();
+        double lemonadePrice = simulator.getLemonadePrice();
+        double assets = simulator.getAssets();
+        WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
+        String messages = simulator.getMessages();
+        Boolean isBankrupt = simulator.isBankrupt();
+        return new Question(day,
+                lemonadePrice,
+                assets,
+                weatherForecast,
+                messages,
+                isBankrupt);
     }
 
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
         simulator.step(lemonadeToMake, signsToMake, lemonadePriceCents);
         //TODO
+    }
+
+    public SalesResult popSalesResult() {
+        SalesResult result = this.salesResult;
+        this.salesResult = null;
+        return result;
     }
 }

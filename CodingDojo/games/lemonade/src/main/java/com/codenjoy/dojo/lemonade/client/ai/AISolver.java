@@ -23,9 +23,13 @@ package com.codenjoy.dojo.lemonade.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.AbstractJsonSolver;
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.AbstractTextSolver;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.services.Dice;
+import org.json.JSONObject;
 
 /**
  * User: your name
@@ -33,7 +37,7 @@ import com.codenjoy.dojo.services.Dice;
  * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
  * фреймворк для тебя.
  */
-public class AISolver extends AbstractTextSolver {
+public class AISolver implements Solver<Board> {
 
     private Dice dice;
     private AbstractTextBoard board;
@@ -43,7 +47,14 @@ public class AISolver extends AbstractTextSolver {
     }
 
     @Override
-    public String getAnswer(String question) {
-        return "answer" + question.substring("question".length());
+    public String get(Board board) {
+        if(board.isGameOver())
+            return "message('go reset')";
+        String a = toAnswerString(1,1,1);
+        return a;
+    }
+
+    private String toAnswerString(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
+        return String.format("message('go %d,%d,%d')", lemonadeToMake, signsToMake, lemonadePriceCents);
     }
 }

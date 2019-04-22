@@ -23,7 +23,8 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
-import com.codenjoy.dojo.lemonade.services.Events;
+import com.codenjoy.dojo.lemonade.services.EventArgs;
+import com.codenjoy.dojo.lemonade.services.EventType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -32,6 +33,8 @@ import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки.
@@ -40,7 +43,7 @@ import java.util.List;
 public class Player extends GamePlayer<Hero, Field> {
 
     private Field field;
-    private List<QuestionAnswer> history;
+    private Queue<SalesResult> history;
     private int questionIndex;
     Hero hero;
 
@@ -71,34 +74,30 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero != null && hero.isAlive();
     }
 
-    public String getNextQuestion() { // TODO test me
+    public JSONObject getNextQuestion() { // TODO test me
         if (field.isLastQuestion(questionIndex)) {
-            return "You win!";
+            return new JSONObject().put("messages", "You win!");
         }
-        return field.getQuestion(questionIndex);
+        return hero.getNextQuestion().toJson();
     }
 
-    public List<QuestionAnswer> getHistory() {
-        List<QuestionAnswer> result = new LinkedList<>();
-        result.addAll(history);
-        return result;
+    public JSONArray getHistoryJson() {
+        JSONArray historyJson = new JSONArray();
+        history.forEach(sr -> historyJson.put(sr.toJSONObject()));
+        return historyJson;
     }
 
     public void checkAnswer() {
         hero.tick();
-
-        String answer = hero.popAnswer();
-        if (answer != null && !field.isLastQuestion(questionIndex)) {
-            String question = field.getQuestion(questionIndex);
-            String validAnswer = field.getAnswer(questionIndex);
-            if (validAnswer.equals(answer)) {
-                logSuccess(question, answer);
-                event(Events.WIN);
-                questionIndex++;
+        SalesResult salesResult = hero.popSalesResult();
+        if (salesResult != null) {
+            history.add(salesResult);
+            while (history.size() > 10)
+                history.remove();
+            if (salesResult.isBunkrupt()) {
+                event(new EventArgs(EventType.LOOSE, (int)salesResult.getProfit()));
             } else {
-                logFailure(question, answer);
-                event(Events.LOOSE);
-                questionIndex = 0;
+                event(new EventArgs(EventType.WIN, (int)(100 * salesResult.getProfit())));
             }
         }
     }
@@ -114,6 +113,5 @@ public class Player extends GamePlayer<Hero, Field> {
     private void log(String question, String answer, boolean valid) {
         QuestionAnswer qa = new QuestionAnswer(question, answer);
         qa.setValid(valid);
-        history.add(qa);
     }
 }

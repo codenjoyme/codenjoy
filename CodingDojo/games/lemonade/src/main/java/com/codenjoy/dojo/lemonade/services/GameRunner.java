@@ -84,7 +84,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(0);
+        return v(25);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Enum[] getPlots() {
-        return new Enum[0];
+        return WeatherForecast.values();
     }
 
     @Override
@@ -120,11 +120,9 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public PrinterFactory getPrinterFactory() {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
-            JSONObject result = new JSONObject();
-
-            result.put("nextQuestion", player.getNextQuestion());
-            result.put("history", player.getHistory());
-
+            JSONObject result = player.getNextQuestion();
+            result.put("history", player.getHistoryJson());
+            //System.out.println(result.toString());
             return result;
         });
     }

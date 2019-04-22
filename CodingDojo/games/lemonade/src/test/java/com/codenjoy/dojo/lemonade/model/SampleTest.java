@@ -66,7 +66,7 @@ public class SampleTest {
     }
 
     private void thenHistory(String expected) {
-        assertEquals(expected, player.getHistory().toString().replace('\"', '\''));
+        assertEquals(expected, player.getHistoryJson().toString().replace('\"', '\''));
     }
 
     @Test
