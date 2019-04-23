@@ -184,7 +184,7 @@ public class Simulator {
         if(lemonadeToMake * C1 > A) {
             messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A) + "\n");
             messages.append("IN CASH AND TO MAKE " + lemonadeToMake + " GLASSES OF\n");
-            messages.append("LEMONADE YOU NEED $" + lemonadeToMake * C1 + " IN CASH.\n");
+            messages.append("LEMONADE YOU NEED " + formatCurrency(lemonadeToMake * C1) + " IN CASH.\n");
             inputError = true;
         }
 
