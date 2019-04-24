@@ -27,6 +27,10 @@ page:
   registration:
     url: ''
     nickname: true
+  login:
+    url: ''
+  admin:
+    url: ''
   help.language: ''
 email:
   verification: false

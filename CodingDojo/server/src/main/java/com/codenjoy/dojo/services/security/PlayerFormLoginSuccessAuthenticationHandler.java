@@ -23,10 +23,12 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.controller.AdminController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
@@ -77,6 +79,14 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
         }
 
         clearAuthenticationAttributes(request);
+
+        if (savedRequest instanceof DefaultSavedRequest) {
+            String requestURI = ((DefaultSavedRequest) savedRequest).getRequestURI();
+            if (requestURI != null && requestURI.endsWith(AdminController.URI)) {
+                getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
+                return;
+            }
+        }
 
         Registration.User principal = (Registration.User) authentication.getPrincipal();
         String gameName = obtainGameName(request, savedRequest);

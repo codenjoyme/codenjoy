@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,7 @@ public class AdminController {
     private final AutoSaver autoSaver;
     private final DebugService debugService;
     private final Registration registration;
+    private final ViewDelegationService viewDelegationService;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
@@ -328,8 +330,8 @@ public class AdminController {
     }
 
     private String getAdmin(String gameName) {
-        if (gameName == null) {
-            return getAdmin();
+        if (gameName == null || viewDelegationService.isCustomAdminView()) {
+            return viewDelegationService.adminView();
         }
         return "redirect:/admin?" + GAME_NAME_FORM_KEY + "=" + gameName;
     }

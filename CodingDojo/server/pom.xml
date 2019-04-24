@@ -69,41 +69,6 @@
 
     <profiles>
         <profile>
-            <id>sso</id>
-            <activation>
-                <property>
-                    <name>sso</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.security.oauth</groupId>
-                    <artifactId>spring-security-oauth2</artifactId>
-                    <version>${spring.security.oauth2.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-config</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-oauth2-client</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-oauth2-jose</artifactId>
-                    <version>${spring.security.jose.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.springframework.security</groupId>
-                    <artifactId>spring-security-jwt</artifactId>
-                    <version>${spring.security.jwt.version}</version>
-                </dependency>
-
-            </dependencies>
-        </profile>
-
-        <profile>
             <id>sample</id>
             <activation>
                 <property>
@@ -599,10 +564,33 @@
             <optional>true</optional>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version>${spring.security.oauth2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+            <version>${spring.security.jose.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+            <version>${spring.security.jwt.version}</version>
         </dependency>
 
         <dependency>

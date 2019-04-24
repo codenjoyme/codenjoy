@@ -195,6 +195,13 @@ a:visited {
     text-transform: uppercase;
 }
 
+.reg-link {
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    text-align: center;
+    line-height: 35pt;
+}
+
 .btn-submit:hover {
     background-color: #99ba40;
 }

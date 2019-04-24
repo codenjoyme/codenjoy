@@ -29,9 +29,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
-import com.codenjoy.dojo.web.controller.AdminController;
-import com.codenjoy.dojo.web.controller.RoomsAliaser;
-import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.controller.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -68,6 +66,7 @@ public class RegistrationService {
     private final ConfigProperties properties;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+    private final ViewDelegationService viewDelegationService;
 
     public String register(Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
@@ -188,7 +187,9 @@ public class RegistrationService {
         player.setName(id);
         player.setReadableName(name);
         player.setGameName(rooms.getAlias(gameName));
-        model.addAttribute("player", player);
+        if (!model.containsAttribute("player")) {
+            model.addAttribute("player", player);
+        }
 
         player.setCallbackUrl(ip);
 
@@ -224,12 +225,6 @@ public class RegistrationService {
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", rooms.alises());
-
-        if (StringUtils.isEmpty(properties.getRegistrationPage())) {
-            return "register";
-        } else {
-            model.addAttribute("url", properties.getRegistrationPage());
-            return "redirect";
-        }
+        return viewDelegationService.registrationView();
     }
 }

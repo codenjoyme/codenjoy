@@ -83,7 +83,7 @@ public class RegistrationController {
     public String registerByNameOrEmail(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
-            return "register";
+            return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 
         String gameName = rooms.getGameName(player.getGameName());

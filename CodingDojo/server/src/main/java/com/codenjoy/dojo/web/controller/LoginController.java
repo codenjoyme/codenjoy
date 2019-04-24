@@ -23,6 +23,8 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.security.RegistrationService;
+import com.codenjoy.dojo.services.security.ViewDelegationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,11 +45,13 @@ public class LoginController {
 
     private final PlayerService playerService;
     private final RoomsAliaser rooms;
+    private final RegistrationService registrationService;
+    private final ViewDelegationService viewDelegationService;
 
     @GetMapping
     public String register(Model model) {
         populateModel(model, false);
-        return "login";
+        return viewDelegationService.loginView();
     }
 
     @GetMapping(ADMIN)
@@ -60,5 +64,6 @@ public class LoginController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", rooms.alises());
         model.addAttribute("adminLogin", isAdmin);
+        model.addAttribute("registrationUri", viewDelegationService.registrationUri());
     }
 }

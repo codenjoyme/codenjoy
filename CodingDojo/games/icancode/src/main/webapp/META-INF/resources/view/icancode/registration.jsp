@@ -20,56 +20,65 @@
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
   -->
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>ICanCode | Registration</title>
-    <link href="css/reset.css" rel="stylesheet"/>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
-    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="css/registration-style.css" rel="stylesheet"/>
-    <script src="../js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="js/autofill-event.js"></script>
-    <script src="../js/jquery/jquery.md5.js"></script>
-    <script src="./js/game/admin-settings.js"></script>
-    <script src="./js/scripts/registration.js" type="application/javascript"></script>
+    <title>ICanCode | Sign Up</title>
+    <link href="${ctx}/resources/icancode/css/reset.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/icancode/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/icancode/css/registration-style.css" rel="stylesheet"/>
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="${ctx}/resources/icancode/js/autofill-event.js"></script>
+    <script src="${ctx}/resources/icancode/js/jquery/jquery.md5.js"></script>
+    <script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
+    <script src="${ctx}/resources/icancode/js/scripts/registration.js" type="application/javascript"></script>
   </head>
   <body>
     <div class="header-container">
       <div class="container-fluid">
         <header class="header row">
           <div class="col-xs-6">
-            <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+            <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
             <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-            <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
+            <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
             <span class="title icancode-title">ICanCode</span>
           </div>
           <nav class="nav col-xs-6 pull-right text-right">
             <ul class="nav-list">
               <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
               <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
-              <li class="logo title inline"><img src="img/profile.png"></li>
-              <li class="title inline"><a href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
+              <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
             </ul>
           </nav>
         </header>
       </div>
     </div>
     <div class="container-fluid">
-      <form class="form-registr" id="form" action="/codenjoy-contest/register" method="POST">
-        <h2 class="form-title">Sign up/Sign in</h2>
+      <form:form class="form-registr" id="form" modelAttribute="player" action="register" method="POST">
+        <h2 class="form-title">Sign up</h2>
         <div class="inputs">
           <div id="readableName" class="field not-valid" not-empty>
-            <input type="text" placeholder="FirstName LastName" name="readableName"/>
+            <form:errors path="readableName" cssClass="error-message" />
+            <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
             <span class="icon fa"></span>
           </div>
           <div id="email" class="field not-valid">
-            <input type="email" placeholder="Email address (valid)" name="email"/>
+            <form:errors path="email" cssClass="error-message" />
+            <form:input type="email" placeholder="Email address (valid)" path="email"/>
             <span class="icon fa"></span>
           </div>
           <div id="password" class="field not-valid">
-            <input type="password" placeholder="Password" name="password"/>
+            <form:errors path="password" cssClass="error-message" />
+            <form:input type="password" placeholder="Password" path="password"/>
+            <span class="icon fa"></span>
+          </div>
+          <div id="passwordConfirmation" class="field not-valid">
+            <form:errors path="passwordConfirmation" cssClass="error-message" />
+            <form:input type="password" placeholder="Confirm password" path="passwordConfirmation"/>
             <span class="icon fa"></span>
           </div>
           <!-- add attribute 'hidden' to the div if you want to hide this select box -->
@@ -81,7 +90,7 @@
             </select>
           </div>
           <div id="data" hidden>
-              <input type="text" name="data"/>
+              <form:input type="text" path="data"/>
           </div>
           <!-- add attribute 'not-empty' to the div if you want to enable validation -->
           <!-- add attribute 'hidden' to the div if you want to hide this edit box -->
@@ -98,11 +107,11 @@
             <input type="text" placeholder="Company"/>
             <span class="icon fa"></span>
           </div>
-          <input type="hidden" name="gameName" value="icancode"/>
-          <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
-          <div id="error-message" class="error-message" hidden></div>
+          <form:input type="hidden" path="gameName" value="icancode"/>
+          <button class="btn-submit" id="submit-button" type="button">Sign up</button>
+          <%--<div id="error-message" class="error-message" hidden></div>--%>
         </div>
-      </form>
+      </form:form>
     </div>
     <footer class="footer">
       <div class="container-fluid">

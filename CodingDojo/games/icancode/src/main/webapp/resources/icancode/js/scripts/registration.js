@@ -82,24 +82,10 @@
         });
     }
 
-    function showErrorMessage() {
-        var error = $('#error-message');
-        var params = new URLSearchParams(window.location.search);
-        if (params.has('message')) {
-            error.html(params.get('message'));
-            error.show();
-        } else {
-            error.html('');
-            error.hide();
-        }
-    }
-
     function loadRegistrationPage() {
         configureFormFromAdminSettings();
 
         fillFormFromLocalStorage();
-
-        showErrorMessage();
 
         var checkEls = {};
 
@@ -118,7 +104,14 @@
 
         checkEls['password'] = notEmpty;
 
+        if ($('#passwordConfirmation').length) {
+            checkEls['passwordConfirmation'] = notEmpty;
+        }
+
         var configurable = function (name) {
+            if (!$('#' + name).length) {
+                return;
+            }
             checkEls[name] = function (value) {
                 if ($('#' + name)[0].hasAttribute('hidden')) {
                     return false;
@@ -185,7 +178,6 @@
                     $('#data3 input').val()
                 );
 
-                $("#password input").val($.md5($("#password input").val()));
                 saveDataToLocalStorage();
                 $("#form").submit();
             }

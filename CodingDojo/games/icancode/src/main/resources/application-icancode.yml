@@ -2,7 +2,11 @@ game:
   ai: false
 page:
   main:
-    url: 'resources/icancode/registration.html'
+    url: ''
   registration:
-    url: 'resources/icancode/registration.html'
+    url: /icancode/registration
     nickname: false
+  login:
+    url: /icancode/login
+  admin:
+    url: /icancode/admin

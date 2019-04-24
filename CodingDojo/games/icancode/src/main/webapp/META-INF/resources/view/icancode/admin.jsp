@@ -19,23 +19,25 @@
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
   -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta charset="UTF-8">
 </head>
 <div id="layout" class="wrapper">
-    <link href="css/reset.css" rel="stylesheet"/>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
-    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="css/style.css" rel="stylesheet"/>
-    <link href="js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/icancode/css/reset.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/icancode/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/icancode/css/style.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/icancode/js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <div class="header-container">
         <div class="container-fluid">
             <header class="header row">
                 <div class="col-xs-6">
-                    <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
                     <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </div>
                 <span class="admin-title">
@@ -274,18 +276,18 @@
     </footer>
 </div>
 
-<script src="js/jquery/jquery-3.1.0.min.js"></script>
-<script src="js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
-<script src="../css/bootstrap/bootstrap.min.js"></script>
-<script src="js/game/editor.js"></script>
-<script src="js/game/progressbar.js"></script>
-<script src="js/game/admin-settings.js"></script>
-<script src="js/game/admin.js"></script>
+<script src="${ctx}/resources/icancode/js/jquery/jquery-3.1.0.min.js"></script>
+<script src="${ctx}/resources/icancode/js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="${ctx}/resources/icancode/js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="${ctx}/resources/icancode/js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="${ctx}/resources/css/bootstrap/bootstrap.min.js"></script>
+<script src="${ctx}/resources/icancode/js/game/editor.js"></script>
+<script src="${ctx}/resources/icancode/js/game/progressbar.js"></script>
+<script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
+<script src="${ctx}/resources/icancode/js/game/admin.js"></script>
 <script>
     $(document).ready(function () {
-        initAdmin('codenjoy-contest');
+        initAdmin(${ctx});
     });
 
 </script>

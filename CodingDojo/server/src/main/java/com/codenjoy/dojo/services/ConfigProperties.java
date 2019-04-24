@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +34,7 @@ import org.springframework.stereotype.Component;
  * Единственное место, где конфигурится *.properties - applicationContext.xml
  */
 @Component
+@Getter
 public class ConfigProperties {
 
     @Value("${email.verification}")
@@ -41,11 +43,17 @@ public class ConfigProperties {
     @Value("${page.registration.url}")
     private String registrationPage;
 
+    @Value("${page.login.url}")
+    private String loginPage;
+
     @Value("${page.main.url}")
     private String mainPage;
 
+    @Value("${page.admin.url}")
+    private String adminPage;
+
     @Value("${page.help.language}")
-    private String language;
+    private String helpLanguage;
 
     @Value("${donate.code}")
     private String donateCode;
@@ -68,30 +76,6 @@ public class ConfigProperties {
 
     public String getRegistrationPage() {
         return registrationPage;
-    }
-
-    public String getMainPage() {
-        return mainPage;
-    }
-
-    public String getHelpLanguage() {
-        return language;
-    }
-
-    public String getDonateCode() {
-        return donateCode;
-    }
-
-    public String getEmailHash() {
-        return emailHash;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public String getServerIp() {
-        return serverIp;
     }
 
     public boolean isNickNameAllowed() {
