@@ -903,9 +903,55 @@ from Alex: 2019-04-16
 
 
 63) Из icancode registration.js был удален function showErrorMessage() { как теперь отображаются ошибки?
+    а валидация-то как-то все же работает :) Вопрос только в том, как?
 
 64) Font-Awesome был добавлен, а что со старым?
 
 65) Простые странички были переделаны под JSP, почему бы не оставить html? Видимо это потянуло за собой все те депенденси лишние. Я бы хотел уходить в будущем от jsp вообще в пользу rest + front application
 
+Для мислей по списку ниже
+Запустил icancode в ветке icancode-stringboot-oauth2
+командой из IDE
+    clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Picancode -f pom.xml
 
+66) на страничке http://127.0.0.1:8080/codenjoy-contest/register
+    в каждом незаполненном поле "undefined"
+
+67) После регистрации нового юзера в icancode (icancode-stringboot-oauth2) перешел на страничку
+    http://127.0.0.1:8080/codenjoy-contest/board/player/1y1hopccoqzrg7mnkesg?code=5104238713285933858
+    Но страничка не загрузилась в консоле браузера написано
+    GET http://127.0.0.1:8080/codenjoy-contest/resources/icancode/board.html?_=1556293177555 404 (Not Found)
+
+68) В хедере http://127.0.0.1:8080/codenjoy-contest/
+    на линках Games и Logout поплыл дизайн
+    В iCancode их не должно быть, т.к. icancode не хочет знать что рядом есть другие игры
+
+69) Ссылка Join для игры icancode на страничке http://127.0.0.1:8080/codenjoy-contest/ с линком
+        http://127.0.0.1:8080/codenjoy-contest/TODO/icancode
+    выдает
+        Whitelabel Error Page
+        This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+        Fri Apr 26 18:43:10 EEST 2019
+        There was an unexpected error (type=Not Found, status=404).
+        Not Found
+
+70) Если я на страничке http://127.0.0.1:8080/codenjoy-contest/login
+    Ввожу неправильный пароль то ошибки не вижу при этом как на страничке регистрации
+
+Для мислей по списку ниже
+Запустил все игры в ветке icancode-stringboot-oauth2
+Командой из IDE
+    clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -DallGames -f pom.xml
+
+71) Сейчас нет возможности "подглядеть" игрушку, если ты не зарегистрирован в системе
+
+72) Я зарегался в 2048 впервые, а потом на страничке http://127.0.0.1:8080/codenjoy-contest/ хочу подглядеть bomberman но меня редиректит на форму регистрации снова
+
+73) Джоин так же в пре-условиях 72) не работает так как отправляет на http://127.0.0.1:8080/codenjoy-contest/TODO/battlecity
+
+74) Дизайн: линки на
+    a2048
+    View | Join
+    было бы наверное лучше в один рядок
+    a2048 - View | Join
