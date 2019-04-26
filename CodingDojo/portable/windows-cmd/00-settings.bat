@@ -8,8 +8,8 @@ set SKIP_TESTS=true
 set CONTEXT=/codenjoy-contest
 set SPRING_PROFILES=sqlite
 set DEBUG=false
-set GIT_REPO=https://github.com/Insomnium/codenjoy.git
-set GIT_REVISION=feature/deployment-scripts-rework
+set GIT_REPO=https://github.com/codenjoyme/codenjoy.git
+set GIT_REVISION=master
 
 set MAVEN_OPTS="-Dmaven.repo.local=%M2_HOME%\.m2\repository"
 
