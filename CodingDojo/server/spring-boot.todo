@@ -823,3 +823,89 @@ from Alex: 2019-04-16
 
 За все остальные коммиты спасибо Игорь.
 
+Мисли Саши от 2019-04-26
+
+51) Были удалены методы
+    public String approveEmail(Model model, @RequestParam("approve") String link) {
+    public @ResponseBody String isEmailApproved(@RequestParam("approved") String id) throws InterruptedException {
+        Нужены были для верификации имейла, давно не поддерживались, может вернуть?
+
+    public String removeUserFromGame(@RequestParam("code") String code) {
+        Нужен был для удаления юзера из игры по линку (есть вроде как аналог на rest)
+
+52) Что делают?
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+
+53) в GameUserDetailsService странно как-то ведь поиск по имейлу, а передается туда код. Точно тут все ок?
+    public UserDetails loadUserByUsername(String code) throws UsernameNotFoundException {
+        return registration.getUserByEmail(code);
+    }
+
+54) Расскажи плиз как работает
+    @Configuration
+    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
+
+55) В application.yml не тот имейл, все же это два разных проекта
+    admin:
+        login: admin@dojarena.io
+
+56) К классу RegistrationValidator не нашел тесты
+
+57) Login.jsp
+    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.js" rel="script">
+    их стоит в maven добавить в к
+    <groupId>com.samaxes.maven</groupId>
+    <artifactId>minify-maven-plugin</artifactId>
+    <version>${minify-maven-plugin.version}</version>
+
+58) Как работает профиль sso?
+
+59) Что делает PlayerFormLoginSuccessAuthenticationHandler?
+
+60) В тесте GameServiceTest фикс  в setup() выглядит как дублирование основной логики
+
+61) Что делает ViewDelegationService?
+
+62) Что дает в games pom.xml, это теперь все игры будут тянуть эти депенденси хотя они не должны быть тяжеловестными
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jsp</artifactId>
+            <version>9.4.14.v20181114</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.1.3.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+
+
+63) Из icancode registration.js был удален function showErrorMessage() { как теперь отображаются ошибки?
+
+64) Font-Awesome был добавлен, а что со старым?
+
+65) Простые странички были переделаны под JSP, почему бы не оставить html? Видимо это потянуло за собой все те депенденси лишние. Я бы хотел уходить в будущем от jsp вообще в пользу rest + front application
+
+
