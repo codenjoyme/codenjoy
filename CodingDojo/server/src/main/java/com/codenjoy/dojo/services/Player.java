@@ -27,14 +27,22 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
+import lombok.experimental.Wither;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
 
 @Getter
 @Setter
+@Accessors(chain = true)
+@Wither
+@NoArgsConstructor
+@AllArgsConstructor
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
@@ -53,9 +61,6 @@ public class Player implements ScreenRecipient, Closeable {
     private GameType gameType;
     private InformationCollector eventListener;
     private Closeable ai;
-
-    public Player() {
-    }
 
     public Player(String name) {
         this.name = name;

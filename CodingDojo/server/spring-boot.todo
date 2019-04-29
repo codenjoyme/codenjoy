@@ -832,26 +832,36 @@ from Alex: 2019-04-16
 
     public String removeUserFromGame(@RequestParam("code") String code) {
         Нужен был для удаления юзера из игры по линку (есть вроде как аналог на rest)
+ Igor: я эти методы удалил только потому, что они не поддерживались (мапинг был отключен). Если они ещё актуальны,
+ давай верну, только мне кажется, это было бы лучше сделать ещё одним PR'ом из другой ветки :)
 
 52) Что делают?
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
+ Igor: это базовые абстракции spring security. Первый отвечает за бОльшую часть флоу _аутентификации_, второй
+ вызывается первым для поиска пользователя в базе/памяти/etc. по логину с формы аутентификации. Дальше этот пользователь
+ (который в большинстве случаев является инстансом UserDetails) верифицируется менеджером и аппрувится, либо отстреливается.
 
 53) в GameUserDetailsService странно как-то ведь поиск по имейлу, а передается туда код. Точно тут все ок?
     public UserDetails loadUserByUsername(String code) throws UsernameNotFoundException {
         return registration.getUserByEmail(code);
     }
+ Igor: спасибо, что заметил, параметр забыл переименовать - поправил. // Осталось со времен "старого" PR, где логин
+ происходил по коду.
 
 54) Расскажи плиз как работает
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
+ Igor: это лучше голосом :(
 
 55) В application.yml не тот имейл, все же это два разных проекта
     admin:
         login: admin@dojarena.io
+ Igor: согласен, на какой заменить? admin@codenjoyme.com?
 
 56) К классу RegistrationValidator не нашел тесты
+ Igor: точно, добавил
 
 57) Login.jsp
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet">
