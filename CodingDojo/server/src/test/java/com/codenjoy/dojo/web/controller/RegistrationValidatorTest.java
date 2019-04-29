@@ -76,6 +76,14 @@ public class RegistrationValidatorTest {
     private Validator commonValidator;
 
     @Test
+    public void shouldPassValidUser() {
+        Errors errors = makeErrors();
+        validator.validate(PLAYER, errors);
+
+        assertTrue("Valid player binding result must contain no errors", !errors.hasErrors());
+    }
+
+    @Test
     public void shouldValidateNicknameStructure() {
         String readableName = "Unreadablename";
         Errors errors = makeErrors();
