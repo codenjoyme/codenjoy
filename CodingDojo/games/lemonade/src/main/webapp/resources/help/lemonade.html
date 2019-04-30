@@ -1,0 +1,149 @@
+﻿<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2019 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Lemonade — как играть? | Игры на работе</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+                <header class="entry-header">
+                    <h1 class="entry-title">Lemonade — как играть?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output">
+                        <p>
+                            Первоначальная версия игры Lemonade Stand была создана Bob Jamison в 1973 году для мэйнфреймов,
+                            затем в 1979 году Charlie Kellner портировал её на домашний компьютер Apple II.
+                            Предлагаемая вам версия игры основана на исходном коде игры 1979 года, написанном на Applesoft BASIC.
+                        </p>
+
+                        <h2>В чем суть игры?</h2>
+                        <div style="width: 48em; border: 1pt solid black; margin: 1em; padding: 1em; font-family: monospace;">
+                            HI! WELCOME TO LEMONSVILLE, CALIFORNIA!<br/><br/>
+                            IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.<br/>
+                            HOW MUCH PROFIT YOU MAKE IS UP TO YOU.<br/>
+                            IF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!<br/><br/>
+                            O MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:<br/>
+                            1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)<br/>
+                            2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)<br/>
+                            3. WHAT PRICE TO CHARGE FOR EACH GLASS<br/><br/>
+                            YOU WILL BEGIN WITH $2.00 CASH (ASSETS).<br/>
+                            BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,<br/>YOUR COST TO MAKE LEMONADE IS
+                            $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).<br/><br/>
+                            YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.<br/>
+                            YOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.<br/>
+                            THE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON<br/>
+                            THE NUMBER OF ADVERTISING SIGNS YOU USE.<br/>
+                            KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!<br/>
+                        </div>
+                        <p>
+                            В оригинальной игре, вы принимаете на себя роль школьника, который подрабатывает на каникулах, продавая на улице лимонад.
+                            С утра вы готовите лимонад и готовите рекламные плакаты, и в течение всего дня продаёте приготовленный объём напитка.
+                            У вас есть начальный капитал в размере $2.00 (величина A<sub>0</sub>).
+                            Стоимость стакана лимонада для вас составляет всего $0.02 (C), но со временем эта величина может измениться.
+                            На каждом ходу вам нужно решить, как потратить имеющиеся деньги, и вы выражаете своё решение, сообщая компьютеру три числа:
+                            <ol>
+                                <li>L = Сколько стаканов лимонада вы приготовите этим утром (целое число от 0 до 1000)</li>
+                                <li>S = Сколько рекламных плакатов вы установите в округе, каждый плакат стоит для вас $0.15 (целое число от 0 до 50)</li>
+                                <li>P = Цена которую вы просите за каждый стакан (цена в центах, целое число от 0 до 100)</li>
+                            </ol>
+                            Результатом для вас является финансовый отчёт, который показывает:
+                            <ul>
+                                <li>E = S &times; 0.15 &plus; L &times; C = расходы на изготовление рекламных плакатов и приготовление лимонада;</li>
+                                <li>N = сколько стаканов было продано; </li>
+                                <li>M = N &times; P = доход;</li>
+                                <li>M &minus; E = полученная прибыль;</li>
+                                <li>A<sub>n+1</sub> = A<sub>n</sub> &plus; (M &minus; E) = ваш капитал после сегодняшнего дня.</li>
+                            </ul>
+                            Величина N (сколько стаканов распродано) зависит от рекламы, цены за стакан, погоды, а также от некоторых случайных факторов.
+                            В начале каждого дня вам сообщают прогноз погоды, но погода в течение дня может и поменяться.
+                        </p>
+                        <div style="clear: left;"></div>
+
+                        <h2>Ваш игровой бот</h2>
+                        <p>
+                            Как и в других играх на платформе CodenJoy, здесь вы играете не сами, за вас играет ваш игровой бот &ndash; написанная вами программа.
+                            Ваш бот обменивается сообщениями с сервером.
+                            За каждый ход, ваш бот получает описание текущей ситуацию от сервера, и должен передать ему команду.
+                            В данной игре описание игровой ситуации включает две части:
+                            <ol>
+                                <li>
+                                    (В первый день) Приветственное сообщение с описанием игры
+                                    (см. выше текст "<span style="font-family: monospace">HI! WELCOME TO LEMONSVILLE, CALIFORNIA!</span>").<br/>
+                                    (В любой другой день) Финансовый отчёт за предыдущий день.
+                                </li>
+                                <li>Прогноз на утро нового дня.</li>
+                            </ol>
+                        </p>
+                        <p>Пример того как может выглядеть сообщение о результатах первого дня плюс прогноз на второй день:</p>
+                        <div style="width: 48em; border: 1pt solid black; margin: 1em; padding: 1em; font-family: monospace;">
+                                ** LEMONSVILLE DAILY FINANCIAL REPORT, DAY 1 **<br/>
+                                GLASSES SOLD: 10, PRICE $0.20 PER GLASS<br/>
+                                INCOME:   $2.00<br/>
+                                GLASSES MADE: 10, SIGNS MADE: 2<br/>
+                                EXPENSES: $0.50<br/>
+                                PROFIT:   $1.50<br/>
+                                ASSETS:   $3.50<br/><br/>                                
+                                YOUR ASSETS: $3.50<br/>
+                                LEMONSVILLE WEATHER REPORT:  CLOUDY<br/>
+                                ON DAY 2, THE COST OF LEMONADE IS $0.02<br/>
+                        </div>
+                        <p>Организаторы предоставляют игрокам подготовленные клиенты в исходном коде на нескольких языках:
+                                Java, C# и JavaScript.</p>
+
+                        <h2>Подключение к серверу</h2>
+
+                        <p>Игрок <a href="/codenjoy-contest/register?gameName=lemonade" target="_blank">
+                            регистрируется на сервере</a>, указывая свой email<br/>
+                            Далее необходимо скачать, настроить и запустить клиента, который подключается к серверу через веб-сокеты:
+                        </p>
+                        <ul>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-servers.zip">Java-клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-csharp-client.zip">C# клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-javascript-client.zip">JavaScript клиент</a>.</li>
+                        </ul>
+                        <p>Если в этом списке нет нужного языка, придётся написать свой клиент.</p>
+
+                        <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
+
+                        <p>Адрес для подключения к игре на сервере, развернутом в локальной сети:</p>
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=your@email.com&code=12345678901234567890</pre>
+
+                        <p>Здесь <code>your@email.com</code> &ndash; имейл, указанный при регистрации на сервере,
+                            a <code>12345678901234567890</code> &ndash; это security token, его можно получить из адресной
+                            строки браузера после регистрации/логина.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
