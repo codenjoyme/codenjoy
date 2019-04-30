@@ -161,6 +161,8 @@ public class Simulator {
         messages.append("THE NUMBER OF ADVERTISING SIGNS YOU USE.\n");
         messages.append("KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\n");
         messages.append("\n");
+
+        morning();
     }
 
     public void step(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
@@ -264,6 +266,11 @@ public class Simulator {
         R1 = 1;
         R2 = 0;
 
+        morning();
+    }
+
+    private void morning() {
+
         messages.append("YOUR ASSETS: " + formatCurrency(A) + "\n");
 
         // WEATHER
@@ -288,7 +295,7 @@ public class Simulator {
             C = 5;
         }
         // double C1 = C * 0.01;  // Cost of lemonade, dollars
-        messages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C1) + "\n");
+        messages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C * .01) + "\n");
 
         // CURRENT EVENTS
         if (D == 3) {
