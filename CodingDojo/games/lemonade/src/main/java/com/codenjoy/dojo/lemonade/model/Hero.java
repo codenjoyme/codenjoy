@@ -66,13 +66,12 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
         String command = s.toLowerCase();
 
-        if(command.contains("reset")) {
+        if (command.contains("reset")) {
             simulator.reset();
             return;
         }
 
-        if(simulator.isBankrupt())
-        {
+        if (simulator.isBankrupt()) {
             this.salesResult = null;
             return;
         }
@@ -98,7 +97,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         double expenses = simulator.getExpenses();
         double profit = simulator.getProfit();
         double assets = simulator.getAssets();
-        boolean isBunkrupt = simulator.isBankrupt();
+        boolean isBankrupt = simulator.isBankrupt();
         this.salesResult = new SalesResult(day,
                 lemonadeSold,
                 lemonadePrice,
@@ -108,8 +107,8 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
                 expenses,
                 profit,
                 assets,
-                isBunkrupt
-                );
+                isBankrupt
+        );
     }
 
     @Override
@@ -121,13 +120,13 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         return alive;
     }
 
-    public Question getNextQuestion(){
+    public Question getNextQuestion() {
         int day = simulator.getDay();
         double lemonadePrice = simulator.getLemonadePrice();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
         String messages = simulator.getMessages();
-        Boolean isBankrupt = simulator.isBankrupt();
+        boolean isBankrupt = simulator.isBankrupt();
         return new Question(day,
                 lemonadePrice,
                 assets,
