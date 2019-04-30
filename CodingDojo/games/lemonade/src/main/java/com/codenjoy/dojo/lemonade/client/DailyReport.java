@@ -33,10 +33,10 @@ public class DailyReport {
     private final int signsMade;
     private final float expenses;
     private final float profit;
-    private final float assets;
+    private final float assetsAfter;
 
     public DailyReport(int day, int lemonadeSold, float lemonadePrice, float income,
-                       int lemonadeMade, int signsMade, float expenses, float profit, float assets) {
+                       int lemonadeMade, int signsMade, float expenses, float profit, float assetsAfter) {
         this.day = day;
         this.lemonadeSold = lemonadeSold;
         this.lemonadePrice = lemonadePrice;
@@ -45,7 +45,7 @@ public class DailyReport {
         this.signsMade = signsMade;
         this.expenses = expenses;
         this.profit = profit;
-        this.assets = assets;
+        this.assetsAfter = assetsAfter;
     }
 
     public static DailyReport fromJson(Object report) {
@@ -58,7 +58,7 @@ public class DailyReport {
         int signsMade = reportJson.getInt("signsMade");
         float expenses = reportJson.getFloat("expenses");
         float profit = reportJson.getFloat("profit");
-        float assets = reportJson.getFloat("assets");
+        float assetsAfter = reportJson.getFloat("assetsAfter");
         return new DailyReport(day,
                 lemonadeSold,
                 lemonadePrice,
@@ -67,6 +67,6 @@ public class DailyReport {
                 signsMade,
                 expenses,
                 profit,
-                assets);
+                assetsAfter);
     }
 }

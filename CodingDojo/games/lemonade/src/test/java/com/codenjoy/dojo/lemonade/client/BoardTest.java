@@ -39,7 +39,7 @@ public class BoardTest {
                     "            signsMade : 3," +
                     "            expenses : 4.3," +
                     "            profit : -0.45," +
-                    "            assets : 2.55" +
+                    "            assetsAfter : 2.55" +
                     "        }," +
                     "        {" +
                     "            day : 2," +
@@ -50,13 +50,13 @@ public class BoardTest {
                     "            signsMade : 3," +
                     "            expenses : 4.3," +
                     "            profit : -0.45," +
-                    "            assets : 2.55" +
+                    "            assetsAfter : 2.55" +
                     "        }" +
                     "    ]," +
-                    "    day : 2," +
+                    "    day : 3," +
                     "    lemonadePrice : 0.02," +
                     "    assets : 1.55," +
-                    "    weatherForecast : SUNNY," +
+                    "    weatherForecast : \"SUNNY\"," +
                     "    messages : \"my test message\"," +
                     "    isBankrupt : true" +
                     "}";

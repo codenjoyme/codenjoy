@@ -55,7 +55,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     @Override
     public void init(Field field) {
         simulator.reset();
-        //simulator.step(0,0,0);
 
         this.field = field;
     }
@@ -78,37 +77,31 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
+            int day = simulator.getDay();
+            double assetsBefore = simulator.getAssets();
+
             int lemonadeToMake = Integer.parseInt(matcher.group(1));
             int signsToMake = Integer.parseInt(matcher.group(2));
             int lemonadePriceCents = Integer.parseInt(matcher.group(3));
+
             simulate(lemonadeToMake, signsToMake, lemonadePriceCents);
-            readSalesResult();
+
+            this.salesResult = new SalesResult(
+                    day,
+                    assetsBefore,
+                    simulator.getLemonadeSold(),
+                    simulator.getLemonadePrice(),
+                    simulator.getIncome(),
+                    simulator.getLemonadeMade(),
+                    simulator.getSignsMade(),
+                    simulator.getExpenses(),
+                    simulator.getProfit(),
+                    simulator.getAssets(),
+                    simulator.isBankrupt()
+            );
+
             return;
         }
-    }
-
-    private void readSalesResult() {
-        int day = simulator.getDay();
-        int lemonadeSold = simulator.getLemonadeSold();
-        double lemonadePrice = simulator.getLemonadePrice();
-        double income = simulator.getIncome();
-        int lemonadeMade = simulator.getLemonadeMade();
-        int signsMade = simulator.getSignsMade();
-        double expenses = simulator.getExpenses();
-        double profit = simulator.getProfit();
-        double assets = simulator.getAssets();
-        boolean isBankrupt = simulator.isBankrupt();
-        this.salesResult = new SalesResult(day,
-                lemonadeSold,
-                lemonadePrice,
-                income,
-                lemonadeMade,
-                signsMade,
-                expenses,
-                profit,
-                assets,
-                isBankrupt
-        );
     }
 
     @Override

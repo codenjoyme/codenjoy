@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 public class SalesResult {
     private final int day;
+    private final double assetsBefore;
     private final int lemonadeSold;
     private final double lemonadePrice;
     private final double income;
@@ -33,13 +34,14 @@ public class SalesResult {
     private final int signsMade;
     private final double expenses;
     private final double profit;
-    private final double assets;
+    private final double assetsAfter;
     private final boolean isBankrupt;
 
-    public SalesResult(int day, int lemonadeSold, double lemonadePrice, double income, int lemonadeMade, int signsMade,
-                       double expenses, double profit, double assets, boolean isBankrupt) {
+    public SalesResult(int day, double assetsBefore, int lemonadeSold, double lemonadePrice, double income, int lemonadeMade, int signsMade,
+                       double expenses, double profit, double assetsAfter, boolean isBankrupt) {
 
         this.day = day;
+        this.assetsBefore = toMoneyFormat(assetsBefore);
         this.lemonadeSold = lemonadeSold;
         this.lemonadePrice = toMoneyFormat(lemonadePrice);
         this.income = toMoneyFormat(income);
@@ -47,7 +49,7 @@ public class SalesResult {
         this.signsMade = signsMade;
         this.expenses = toMoneyFormat(expenses);
         this.profit = toMoneyFormat(profit);
-        this.assets = toMoneyFormat(assets);
+        this.assetsAfter = toMoneyFormat(assetsAfter);
         this.isBankrupt = isBankrupt;
     }
 
@@ -58,6 +60,7 @@ public class SalesResult {
     public JSONObject toJSONObject() {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("day", day);
+        jsonObj.put("assetsBefore", assetsBefore);
         jsonObj.put("lemonadeSold", lemonadeSold);
         jsonObj.put("lemonadePrice", lemonadePrice);
         jsonObj.put("income", income);
@@ -65,7 +68,7 @@ public class SalesResult {
         jsonObj.put("signsMade", signsMade);
         jsonObj.put("expenses", expenses);
         jsonObj.put("profit", profit);
-        jsonObj.put("assets", assets);
+        jsonObj.put("assetsAfter", assetsAfter);
         return jsonObj;
     }
 

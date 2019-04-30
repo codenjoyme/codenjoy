@@ -120,8 +120,9 @@ public class SmokeTest {
             expected.append("------------------------------------------");
 
             history.add("1:    {\n" +
-                    "1:      'assets':" + jsonStringForDouble(data[(day + 1) * dataSize]) + ",\n" +
-                    "1:      'day':" + (day + 2) + ",\n" +
+                    "1:      'assetsAfter':" + jsonStringForDouble(data[(day + 1) * dataSize]) + ",\n" +
+                    "1:      'assetsBefore':" + jsonStringForDouble(data[day * dataSize]) + ",\n" +
+                    "1:      'day':" + (day + 1) + ",\n" +
                     "1:      'expenses':" + jsonStringForDouble(data[(day + 1) * dataSize + 1]) + ",\n" +
                     "1:      'income':0.01,\n" +
                     "1:      'lemonadeMade':1,\n" +
