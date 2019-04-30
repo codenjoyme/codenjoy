@@ -178,10 +178,25 @@ public class Simulator {
             messages.append("lemonadePriceCents parameter should be in [0, 100] range.\n");
             inputError = true;
         }
+
+        A = A + .000000001; // reduce aberration
+        double C1 = C * .01;  // Cost of lemonade, dollars
+        if(lemonadeToMake * C1 > A) {
+            messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A) + "\n");
+            messages.append("IN CASH AND TO MAKE " + lemonadeToMake + " GLASSES OF\n");
+            messages.append("LEMONADE YOU NEED " + formatCurrency(lemonadeToMake * C1) + " IN CASH.\n");
+            inputError = true;
+        }
+
+        if(signsToMake * S3 > A - lemonadeToMake * C1) {
+            messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A - lemonadeToMake * C1) + "\n");
+            messages.append("IN CASH LEFT AFTER MAKING YOUR LEMONADE.\n");
+            messages.append("YOU CANNOT MAKE " + signsToMake + " SIGNS.");
+            inputError = true;
+        }
+
         if (inputError)
             return;
-
-        //TODO: Validate input values against C1
 
         L = lemonadeToMake;  // How many glasses to make
         S = signsToMake;  // How many signs to make
@@ -211,7 +226,7 @@ public class Simulator {
                     A = 0;
                 }
                 double N1;
-                if (P > P9) {
+                if (P < P9) {
                     N1 = (P9 - P) / P9 * 0.8 * S2 + S2;
                 } else {
                     N1 = ((Math.pow(P9, 2)) * S2 / Math.pow(P, 2));
@@ -270,7 +285,7 @@ public class Simulator {
         if (D > 6) {
             C = 5;
         }
-        double C1 = C * 0.01;  // Cost of lemonade, dollars
+        // double C1 = C * 0.01;  // Cost of lemonade, dollars
         messages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C1) + "\n");
 
         // CURRENT EVENTS

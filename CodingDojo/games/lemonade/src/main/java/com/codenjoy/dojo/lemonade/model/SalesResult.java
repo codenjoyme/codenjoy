@@ -41,13 +41,13 @@ public class SalesResult {
 
         this.day = day;
         this.lemonadeSold = lemonadeSold;
-        this.lemonadePrice = lemonadePrice;
-        this.income = income;
+        this.lemonadePrice = toMoneyFormat(lemonadePrice);
+        this.income = toMoneyFormat(income);
         this.lemonadeMade = lemonadeMade;
         this.signsMade = signsMade;
-        this.expenses = expenses;
-        this.profit = profit;
-        this.assets = assets;
+        this.expenses = toMoneyFormat(expenses);
+        this.profit = toMoneyFormat(profit);
+        this.assets = toMoneyFormat(assets);
         this.isBunkrupt = isBunkrupt;
     }
 
@@ -71,5 +71,9 @@ public class SalesResult {
 
     public double getProfit() {
         return this.profit;
+    }
+
+    private static double toMoneyFormat(double dollars){
+        return Math.round(dollars * 100) / 100.0;
     }
 }
