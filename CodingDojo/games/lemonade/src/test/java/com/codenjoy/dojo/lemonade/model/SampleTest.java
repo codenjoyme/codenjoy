@@ -59,7 +59,7 @@ public class SampleTest {
         level = new LevelImpl(questionAnswers);
         game = new Lemonade(level, dice);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, 1);
         game.newGame(player);
         hero = player.hero;
         hero.init(game);
@@ -100,7 +100,7 @@ public class SampleTest {
         hero.message("wrong-answer");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -116,8 +116,7 @@ public class SampleTest {
         hero.message("wrong-answer2");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer1','question':'question1','valid':false}, " +
-                "{'answer':'wrong-answer2','question':'question1','valid':false}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -133,8 +132,7 @@ public class SampleTest {
         hero.message("answer1");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -152,8 +150,7 @@ public class SampleTest {
 
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -172,9 +169,7 @@ public class SampleTest {
         hero.message("answer2");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}, " +
-                "{'answer':'answer2','question':'question2','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -197,9 +192,7 @@ public class SampleTest {
 
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}, " +
-                "{'answer':'answer2','question':'question2','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -221,8 +214,6 @@ public class SampleTest {
         hero.message("answer4");
         game.tick();
 
-        thenHistory("[{'answer':'answer1','question':'question1','valid':true}, " +
-                "{'answer':'answer2','question':'question2','valid':true}, " +
-                "{'answer':'answer3','question':'question3','valid':true}]");
+        thenHistory("[]");
     }
 }

@@ -42,10 +42,12 @@ public class Player extends GamePlayer<Hero, Field> {
     private Field field;
     private Queue<SalesResult> history;
     private int questionIndex;
+    private long heroRandomSeed;
     Hero hero;
 
-    public Player(EventListener listener) {
+    public Player(EventListener listener, long randomSeed) {
         super(listener);
+        heroRandomSeed = randomSeed;
         history = new LinkedList<>();
     }
 
@@ -61,7 +63,7 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Hero();
+        hero = new Hero(heroRandomSeed);
         this.field = field;
         hero.init(field);
     }

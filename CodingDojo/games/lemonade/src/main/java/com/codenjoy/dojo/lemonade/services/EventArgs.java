@@ -31,4 +31,9 @@ public class EventArgs {
         this.type = type;
         this.score = score;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s (%d)", type.toString(), score);
+    }
 }

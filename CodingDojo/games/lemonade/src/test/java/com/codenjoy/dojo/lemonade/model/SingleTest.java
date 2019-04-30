@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lemonade.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -48,6 +48,13 @@ public class SingleTest {
     private Dice dice;
     private Lemonade field;
 
+    private final String welcomeMessage = "\\nHI! WELCOME TO LEMONSVILLE, CALIFORNIA!\\n\\nIN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\\nHOW MUCH PROFIT YOU MAKE IS UP TO YOU.\\nIF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\\n\\nTO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\\n1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\\n2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\\n3. WHAT PRICE TO CHARGE FOR EACH GLASS\\n\\nYOU WILL BEGIN WITH $2.00 CASH (ASSETS).BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\\nYOUR COST TO MAKE LEMONADE IS $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\\n\\nYOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\\nYOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\\nTHE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\\nTHE NUMBER OF ADVERTISING SIGNS YOU USE.\\nKEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\\n\\n";
+    private final String expectedDay0 = "{" +
+            "'assets':2,'day':0,'history':[],'isBankrupt':false,'lemonadePrice':0," +
+            "'messages':'" + welcomeMessage + "'," +
+            "'weatherForecast':'UNKNOWN'" +
+            "}";
+
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
@@ -61,15 +68,15 @@ public class SingleTest {
         PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), factory);
+        game1 = new Single(new Player(listener1, 1), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), factory);
+        game2 = new Single(new Player(listener2, 1), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), factory);
+        game3 = new Single(new Player(listener3, 1), factory);
         game3.on(field);
 
         dice(1, 4);
@@ -105,9 +112,9 @@ public class SingleTest {
     // рисуем несколько игроков
     @Test
     public void shouldPrint() {
-        asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        asrtFl1(expectedDay0);
+        asrtFl2(expectedDay0);
+        asrtFl3(expectedDay0);
     }
 
     // Каждый игрок может упраыляться за тик игры независимо,
@@ -125,14 +132,11 @@ public class SingleTest {
         field.tick();
 
         // then
-        asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}]," +
-                "'nextQuestion':'question2'}");
+        asrtFl1(expectedDay0);
 
-        asrtFl2("{'history':[{'answer':'answer2','question':'question1','valid':false}]," +
-                "'nextQuestion':'question1'}");
+        asrtFl2(expectedDay0);
 
-        asrtFl3("{'history':[{'answer':'answer3','question':'question1','valid':false}]," +
-                "'nextQuestion':'question1'}");
+        asrtFl3(expectedDay0);
     }
 
     // игроков можно удалять из игры
@@ -142,10 +146,10 @@ public class SingleTest {
 
         field.tick();
 
-        asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[],'nextQuestion':'question1'}");
+        asrtFl1(expectedDay0);
+        asrtFl2(expectedDay0);
         try {
-            asrtFl3("{'history':[],'nextQuestion':'question1'}");
+            asrtFl3(expectedDay0);
         } catch (IllegalStateException e) {
             assertEquals("No board for this player", e.getMessage());
         }
@@ -161,17 +165,17 @@ public class SingleTest {
 
         field.tick();
 
-        asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
-        asrtFl2("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
-        asrtFl3("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
+        asrtFl1(expectedDay0);
+        asrtFl2(expectedDay0);
+        asrtFl3(expectedDay0);
 
         // when
         game1.newGame();
         field.tick();
 
-        asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
-        asrtFl3("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
+        asrtFl1(expectedDay0);
+        asrtFl2(expectedDay0);
+        asrtFl3(expectedDay0);
     }
 
     // игрок может ответить правильно и неправильно
@@ -184,9 +188,9 @@ public class SingleTest {
 
         field.tick();
 
-        asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
-        asrtFl2("{'history':[{'answer':'answer2','question':'question1','valid':false}],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[{'answer':'answer3','question':'question1','valid':false}],'nextQuestion':'question1'}");
+        asrtFl1(expectedDay0);
+        asrtFl2(expectedDay0);
+        asrtFl3(expectedDay0);
 
         // then
         /*verify(listener1).event(Events.WIN);

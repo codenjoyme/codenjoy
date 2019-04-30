@@ -52,7 +52,9 @@ public class Simulator {
     private double P1;
     private boolean B;  // Bankrupt flag
 
-    public Simulator(int randomSeed) {
+    public Simulator(long randomSeed) {
+        if (randomSeed == 0)
+            randomSeed = System.currentTimeMillis();
         rand = new Random(randomSeed);
         messages = new StringBuffer();
 

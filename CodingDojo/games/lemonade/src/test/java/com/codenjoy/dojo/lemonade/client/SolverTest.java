@@ -52,7 +52,7 @@ public class SolverTest {
         return new Board().forString(board);
     }
 
-    @Test
+    @Test @Ignore
     public void should() {
         asertAI("{'nextQuestion':'question1'}", "message('your answer')");
         asertAI("{'nextQuestion':'question2'}", "message('your answer')");

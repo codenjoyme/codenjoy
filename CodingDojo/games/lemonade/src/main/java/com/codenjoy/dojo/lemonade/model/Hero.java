@@ -47,8 +47,8 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
                 "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
     }
 
-    public Hero() {
-        simulator = new Simulator((int) System.currentTimeMillis());
+    public Hero(long randomSeed) {
+        simulator = new Simulator(randomSeed);
         alive = true;
     }
 
