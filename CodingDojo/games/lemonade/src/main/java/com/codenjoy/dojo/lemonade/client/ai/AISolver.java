@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.AbstractTextSolver;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.lemonade.client.Board;
+import com.codenjoy.dojo.lemonade.model.WeatherForecast;
 import com.codenjoy.dojo.services.Dice;
 import org.json.JSONObject;
 
@@ -50,7 +51,26 @@ public class AISolver implements Solver<Board> {
     public String get(Board board) {
         if (board.isGameOver())
             return "message('go reset')";
-        String a = toAnswerString(1, 1, 1);
+
+        double lemonadeCost = 0.05; //TODO: get from the board
+        // let's spend half of our assets on the lemonade
+        int lemonadeToMake = (int)Math.floor(board.getAssets() / 2 / lemonadeCost);
+        // let's make one sign for every 8 glasses of lemonade
+        int signsToMake = lemonadeToMake / 7;
+        if (board.getAssets() < 0.15)
+            signsToMake = 0;
+        if (board.getAssets() - lemonadeToMake * lemonadeCost < signsToMake * 0.15)
+            signsToMake = (int)Math.floor((board.getAssets() - lemonadeToMake * lemonadeCost) / 0.15);
+        if (signsToMake < 0)
+            signsToMake = 0;
+        // make the price depending on weather report
+        int lemonadePriceCents = 8;
+        if (board.getWeatherForecast() == WeatherForecast.CLOUDY)
+            lemonadePriceCents = 5;
+        else if (board.getWeatherForecast() == WeatherForecast.HOT_AND_DRY)
+            lemonadePriceCents = 11;
+
+        String a = toAnswerString(lemonadeToMake, signsToMake, lemonadePriceCents);
         return a;
     }
 

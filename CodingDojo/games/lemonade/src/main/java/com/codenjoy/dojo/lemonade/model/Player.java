@@ -96,7 +96,7 @@ public class Player extends GamePlayer<Hero, Field> {
             if (salesResult.isBankrupt()) {
                 event(new EventArgs(EventType.LOOSE, (int) salesResult.getProfit()));
             } else {
-                event(new EventArgs(EventType.WIN, (int) (100 * salesResult.getProfit())));
+                event(new EventArgs(EventType.WIN, (int) Math.round(100 * salesResult.getProfit())));
             }
         }
     }

@@ -28,8 +28,10 @@ import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -65,26 +67,43 @@ public class SmokeTest {
 
         // construct expected result
         final int dataSize = 6;
+        final String heatWave = "A HEAT WAVE IS PREDICTED FOR TODAY!";
         final String[] data = new String[]{
-                // assets before, expenses, profit, weather forecast, extra messages, event
-                "2.00", "0.17", "-0.16", "SUNNY", null, "WIN (-16)",
-                "1.84", "0.17", "-0.16", "SUNNY", null, "WIN (-16)",
-                "1.68", "0.17", "-0.16", "SUNNY", null, "WIN (-16)",
-                "1.50", "0.19", "-0.18", "SUNNY", "(YOUR MOTHER QUIT GIVING YOU FREE SUGAR)\\n", "WIN (-18)",
-                "1.32", "0.19", "-0.18", "HOT AND DRY", null, "WIN (-18)",
-                "1.14", "0.19", "-0.18", "HOT AND DRY", "A HEAT WAVE IS PREDICTED FOR TODAY!", "WIN (-18)",
-                "0.96", "0.19", "-0.18", "HOT AND DRY", "A HEAT WAVE IS PREDICTED FOR TODAY!", "WIN (-18)",
-                "0.77", "0.20", "-0.19", "SUNNY", "(THE PRICE OF LEMONADE MIX JUST WENT UP)\\nA HEAT WAVE IS PREDICTED FOR TODAY!", "WIN (-19)",
-                "0.58", "0.20", "-0.19", "SUNNY", null, "WIN (-19)",
-                "0.39", "0.20", "-0.19", "SUNNY", null, "WIN (-19)",
-                "0.20", "0.20", "-0.19", null, null, "WIN (-19)"
+                // assets before, move, expenses, profit, weather forecast, extra messages
+                "2.00", "20,2,8", "0.70", "0.90", "SUNNY", null,
+                "2.90", "29,4,8", "1.18", "1.14", "SUNNY", null,
+                "4.04", "40,5,8", "2.35", "0.85", "SUNNY", null,
+                "4.89", "48,6,8", "2.82", "1.02", "SUNNY", "(YOUR MOTHER QUIT GIVING YOU FREE SUGAR)\\n",
+                "5.91", "59,8,11", "3.56", "2.93", "HOT AND DRY", null,
+                "8.84", "88,12,11", "5.32", "4.36", "HOT AND DRY", heatWave,
+                "13.20", "131,18,11", "9.25", "1.64", "HOT AND DRY", heatWave,
+                "14.84", "148,21,8", "10.55", "-5.03", "SUNNY", "(THE PRICE OF LEMONADE MIX JUST WENT UP)\\n" + heatWave,
+                "9.81", "98,14,8", "7.00", "-1.48", "SUNNY", null,
+                "8.33", "83,11,8", "0.20", "-0.28", "SUNNY", null,
+                "9.81", null, null, null, null, null, null
         };
         StringBuilder expected = new StringBuilder();
         List<String> history = new LinkedList<>();
+        double lemonadePricePrev = 0.0;
+        double incomePrev = 0.0;
+        int lemonadeMadePrev = 0;
+        int signsMadePrev = 0;
+        String expensesStrPrev = null;
+        String profitStrPrev = null;
+        int lemonadeSoldPrev = 0;
         expected.append("DICE:1\n");
         for (int day = 0; day < 10; day++) {
             if (day > 0)
                 expected.append("\n");
+            String moveStr = data[day * dataSize + 1];
+            String expensesStr = data[day * dataSize + 2];
+            String profitStr = data[day * dataSize + 3];
+            String[] moveStrSplit = moveStr.split(",");
+            int lemonadeMade = Integer.parseInt(moveStrSplit[0]);
+            int signsMade = Integer.parseInt(moveStrSplit[1]);
+            double lemonadePrice = Integer.parseInt(moveStrSplit[2]) * .01;
+            double income = Double.valueOf(expensesStr) + Double.valueOf(profitStr);
+            int lemonadeSold = (int) (income / lemonadePrice + .5);
 
             expected.append("1:BoardData {\n");
             String shistory = (history.size() == 0)
@@ -94,54 +113,66 @@ public class SmokeTest {
                     "1:  'day':" + (day + 1) + ",\n" +
                     "1:  'history':" + shistory + ",\n" +
                     "1:  'isBankrupt':false,\n" +
-                    "1:  'lemonadePrice':" + (day == 0 ? "0" : "0.01") + ",\n" +
+                    "1:  'lemonadePrice':" + jsonStringForDouble(lemonadePricePrev) + ",\n" +
                     "1:  'messages':'");
             if (day == 0)
                 expected.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\\n\\nIN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\\nHOW MUCH PROFIT YOU MAKE IS UP TO YOU.\\nIF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\\n\\nTO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\\n1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\\n2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\\n3. WHAT PRICE TO CHARGE FOR EACH GLASS\\n\\nYOU WILL BEGIN WITH $2.00 CASH (ASSETS).BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\\nYOUR COST TO MAKE LEMONADE IS $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\\n\\nYOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\\nYOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\\nTHE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\\nTHE NUMBER OF ADVERTISING SIGNS YOU USE.\\nKEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\\n");
             else {
                 expected.append("** LEMONSVILLE DAILY FINANCIAL REPORT, DAY " + day + " **\\n" +
-                        "GLASSES SOLD: 1, PRICE $0.01 PER GLASS\\n" +
-                        "INCOME:   $0.01\\nGLASSES MADE: 1, SIGNS MADE: 1\\n" +
-                        "EXPENSES: $" + data[day * dataSize + 1] + "\\nPROFIT:   $" + data[day * dataSize + 2] + "\\n" +
+                        "GLASSES SOLD: " + lemonadeSoldPrev + ", PRICE $" + lemonadePricePrev + " PER GLASS\\n" +
+                        "INCOME:   " + formatCurrency(incomePrev) + "\\n" +
+                        "GLASSES MADE: " + lemonadeMadePrev + ", SIGNS MADE: " + signsMadePrev + "\\n" +
+                        "EXPENSES: $" + expensesStrPrev + "\\nPROFIT:   $" + profitStrPrev + "\\n" +
                         "ASSETS:   $" + data[day * dataSize] + "\\n");
             }
             String lemonadeCost = (day < 2) ? "0.02" : ((day < 6) ? "0.04" : "0.05");
             expected.append("\\nYOUR ASSETS: $" + data[day * dataSize] + "\\n" +
-                    "LEMONSVILLE WEATHER REPORT:  " + data[day * dataSize + 3] + "\\n" +
+                    "LEMONSVILLE WEATHER REPORT:  " + data[day * dataSize + 4] + "\\n" +
                     "ON DAY " + (day + 1) + ", THE COST OF LEMONADE IS $" + lemonadeCost + "\\n");
-            String extraMessage = data[(day + 1) * dataSize + 4];
+            String extraMessage = data[(day + 1) * dataSize + 5];
             if (extraMessage != null)
                 expected.append(extraMessage);
             expected.append("',\n");
-            expected.append("1:  'weatherForecast':'" + data[day * dataSize + 3].replace(' ', '_') + "'\n");
+            expected.append("1:  'weatherForecast':'" + data[day * dataSize + 4].replace(' ', '_') + "'\n");
             expected.append("1:}\n");
-            expected.append("1:Answer: message('go 1,1,1')\n");
-            expected.append("Fire Event: " + data[(day + 1) * dataSize + 5] + "\n");
+            expected.append("1:Answer: message('go " + moveStr + "')\n");
+            expected.append("Fire Event: WIN (" + (int) Math.round(Double.parseDouble(profitStr) * 100) + ")\n");
             expected.append("------------------------------------------");
 
             history.add("1:    {\n" +
                     "1:      'assetsAfter':" + jsonStringForDouble(data[(day + 1) * dataSize]) + ",\n" +
                     "1:      'assetsBefore':" + jsonStringForDouble(data[day * dataSize]) + ",\n" +
                     "1:      'day':" + (day + 1) + ",\n" +
-                    "1:      'expenses':" + jsonStringForDouble(data[(day + 1) * dataSize + 1]) + ",\n" +
-                    "1:      'income':0.01,\n" +
-                    "1:      'lemonadeMade':1,\n" +
-                    "1:      'lemonadePrice':0.01,\n" +
-                    "1:      'lemonadeSold':1,\n" +
-                    "1:      'profit':" + jsonStringForDouble(data[(day + 1) * dataSize + 2]) + ",\n" +
-                    "1:      'signsMade':1\n" +
+                    "1:      'expenses':" + jsonStringForDouble(expensesStr) + ",\n" +
+                    "1:      'income':" + jsonStringForDouble(income) + ",\n" +
+                    "1:      'lemonadeMade':" + lemonadeMade + ",\n" +
+                    "1:      'lemonadePrice':" + jsonStringForDouble(lemonadePrice) + ",\n" +
+                    "1:      'lemonadeSold':" + lemonadeSold + ",\n" +
+                    "1:      'profit':" + jsonStringForDouble(profitStr) + ",\n" +
+                    "1:      'signsMade':" + signsMade + "\n" +
                     "1:    }");
+
+            lemonadeMadePrev = lemonadeMade;
+            signsMadePrev = signsMade;
+            lemonadePricePrev = lemonadePrice;
+            lemonadeSoldPrev = lemonadeSold;
+            incomePrev = income;
+            expensesStrPrev = expensesStr;
+            profitStrPrev = profitStr;
         }
 
         // then
         assertEquals(expected.toString(), String.join("\n", messages));
     }
 
-    // Formats a double value the same way as JSONObject.numberToString() do
     static String jsonStringForDouble(String value) {
         Double d = Double.valueOf(value);
+        return jsonStringForDouble(d);
+    }
 
-        String string = d.toString();
+    // Formats a double value the same way as JSONObject.numberToString() do
+    static String jsonStringForDouble(Double value) {
+        String string = new Double(Math.round(value * 100) / 100.0).toString();
         if (string.indexOf(46) > 0 && string.indexOf(101) < 0 && string.indexOf(69) < 0) {
             while (string.endsWith("0")) {
                 string = string.substring(0, string.length() - 1);
@@ -153,5 +184,11 @@ public class SmokeTest {
         }
 
         return string;
+    }
+
+    private static DecimalFormat formatter = new DecimalFormat("0.00");
+
+    private static String formatCurrency(double value) {
+        return "$" + formatter.format(value);
     }
 }

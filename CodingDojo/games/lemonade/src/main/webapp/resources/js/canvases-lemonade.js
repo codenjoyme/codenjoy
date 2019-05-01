@@ -136,16 +136,6 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         var drawLayers = function(onDrawItem) {
             var board = getBoard();
 
-            var monofont = {
-                font: "13px monospace",
-                fillStyle: "#DDD",
-                textAlign: "left",
-                shadowColor: "#222",
-                shadowOffsetX: 0,
-                shadowOffsetY: 0,
-                shadowBlur: 8
-            }
-
             var ctx = canvas.getCanvasContext();
             ctx.beginPath();
             ctx.rect(0, 0, plotSize.width * boardSize, plotSize.height * boardSize);
@@ -195,10 +185,30 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                     ctx.stroke();
                 }
             }
+            // draw assets
+            var assetsfont = {
+                font: "24px monospace",
+                fillStyle: "#AA0",
+                textAlign: "left",
+                shadowColor: "#222",
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 8
+            }
+            canvas.drawText("Day " + board.day + "  $" + board.assets, {"x": 0, "y": 0}, assetsfont);
             // draw messages on top of everything
+            var messagefont = {
+                font: "13px monospace",
+                fillStyle: "#DDD",
+                textAlign: "left",
+                shadowColor: "#222",
+                shadowOffsetX: 0,
+                shadowOffsetY: 0,
+                shadowBlur: 8
+            }
             var messages = board.messages.split('\n');
             for (var i = 0; i < messages.length; i++) {
-                canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i * 0.8}, monofont);
+                canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i * 0.8}, messagefont);
             }
         }
 
