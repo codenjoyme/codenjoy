@@ -36,7 +36,7 @@ public class SimulatorTest {
 
         assertEquals(1, sut.getDay());
         assertEquals(0.02, sut.getLemonadeCost(), 0.001);
-        assertTrue(sut.getMessages().startsWith("\nHI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n"));
+        assertTrue(sut.getMessages().startsWith("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n"));
         assertEquals("CLOUDY", sut.getWeatherForecast());
         assertEquals(0, sut.getLemonadeMade());
         assertEquals(0, sut.getSignsMade());

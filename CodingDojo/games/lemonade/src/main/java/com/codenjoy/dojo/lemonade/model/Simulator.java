@@ -139,7 +139,6 @@ public class Simulator {
         messages.setLength(0);
 
         // START OF GAME, TITLE PAGE
-        messages.append("\n");
         messages.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n");
         messages.append("\n");
         messages.append("IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\n");
@@ -186,16 +185,15 @@ public class Simulator {
         A = A + .000000001; // reduce aberration
         double C1 = C * .01;  // Cost of lemonade, dollars
         if (lemonadeToMake * C1 > A) {
-            messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A) + "\n");
-            messages.append("IN CASH AND TO MAKE " + lemonadeToMake + " GLASSES OF\n");
-            messages.append("LEMONADE YOU NEED " + formatCurrency(lemonadeToMake * C1) + " IN CASH.\n");
+            messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
+                    .append("AND TO MAKE ").append(lemonadeToMake).append(" GLASSES OF LEMONADE YOU NEED ")
+                    .append(formatCurrency(lemonadeToMake * C1)).append(" IN CASH.\n");
             inputError = true;
         }
-
         if (signsToMake * S3 > A - lemonadeToMake * C1) {
-            messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A - lemonadeToMake * C1) + "\n");
-            messages.append("IN CASH LEFT AFTER MAKING YOUR LEMONADE.\n");
-            messages.append("YOU CANNOT MAKE " + signsToMake + " SIGNS.");
+            messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
+                    .append(" IN CASH LEFT AFTER MAKING YOUR LEMONADE.\nYOU CANNOT MAKE ")
+                    .append(signsToMake).append(" SIGNS.\n");
             inputError = true;
         }
 
@@ -208,7 +206,6 @@ public class Simulator {
         P = lemonadePriceCents;  // Price for a glass of lemonade
 
         // 1120 PRINT : IF SC = 10 AND RND (1) < .25 THEN 2300
-        messages.append("\n");
         if (SC == 10 && rand.nextDouble() < 0.25) {  // THUNDERSTORM!
             //X3 = 1;
             SC = 5;

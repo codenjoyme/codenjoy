@@ -138,12 +138,12 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
 
             var monofont = {
                 font: "13px monospace",
-                fillStyle: "#CCC",
+                fillStyle: "#DDD",
                 textAlign: "left",
                 shadowColor: "#222",
                 shadowOffsetX: 0,
                 shadowOffsetY: 0,
-                shadowBlur: 7
+                shadowBlur: 8
             }
 
             var ctx = canvas.getCanvasContext();
@@ -153,171 +153,53 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             ctx.fill();
 
             var weatherImg = sprites[board.weatherForecast.toLowerCase()];
-            if(!!weatherImg) {
+            if (!!weatherImg) {
+                ctx.globalAlpha = 0.67;
                 ctx.drawImage(weatherImg, 0, plotSize.height * boardSize - 200, 240, 200);
+                ctx.globalAlpha = 1;
             }
+
+            // draw assets graph
+            var history = board.history;
+            if (history && history.length > 1) {
+                var graphX = 245;
+                var graphY = plotSize.height * boardSize - 200;
+                var graphWidth = plotSize.width * boardSize - 250;
+                var graphHeight = 195;
+                // background
+                ctx.beginPath();
+                ctx.rect(graphX, graphY, graphWidth, graphHeight);
+                ctx.fillStyle = "#222";
+                ctx.fill();
+                // draw graph
+                ctx.lineWidth = 3;
+                var scaledAssetsList = history.map(function(salesResult) {
+                    return salesResult.assetsAfter * 100;
+                });
+                var assetsListLength = scaledAssetsList.length;
+                if (assetsListLength > 1) {
+                    var pInterval = (graphWidth - 40) / (assetsListLength - 1);
+                    var maxY = Math.max.apply(null, scaledAssetsList);
+                    var minY = Math.min.apply(null, scaledAssetsList);
+                    var scaleFactor = (graphHeight - 40) / (maxY - minY);
+                    var yShift = graphY + graphHeight - 20;
+                    var startX = graphX + 20;
+                    var startY = (minY - scaledAssetsList[0]) * scaleFactor + yShift;
+                    ctx.strokeStyle = "#EE0";
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    for (i = 1; i < assetsListLength; i++) {
+                        var y = (minY - scaledAssetsList[i]) * scaleFactor + yShift;
+                        ctx.lineTo(startX + i * pInterval, y);
+                    }
+                    ctx.stroke();
+                }
+            }
+            // draw messages on top of everything
             var messages = board.messages.split('\n');
-            var interval = board.weatherForecast.toLowerCase() == "unknown" ? 0.7 : 0.8;
-            for(var i=0; i< messages.length; i++){
-                canvas.drawText(messages[i], {"x": 0, "y": 23 - i * interval}, monofont);
+            for (var i = 0; i < messages.length; i++) {
+                canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i * 0.8}, monofont);
             }
-
-            // --- draw assets graph ---
-            var graphX = 245;
-            var graphY = plotSize.height * boardSize - 200;
-            var graphWidth = plotSize.width * boardSize - 250;
-            var graphHeight = 195;
-
-            // background
-            ctx.beginPath();
-            ctx.rect(graphX, graphY, graphWidth, graphHeight);
-            ctx.fillStyle = "darkgray";
-            ctx.fill();
-
-            // draw graph
-            ctx.lineWidth = 3;
-            var history = board.history;
-            var scaledAssetsList = history.map(function(salesResult) {
-                return salesResult.assets * 100;
-            });
-            var assetsListLength = scaledAssetsList.length;
-            if (assetsListLength > 1) {
-                var pInterval = (graphWidth - 40) / (assetsListLength - 1);
-                var maxY = Math.max.apply(null, scaledAssetsList);
-                var minY = Math.min.apply(null, scaledAssetsList);
-                var scaleFactor = (graphHeight - 40) / (maxY - minY);
-                var yShift = graphY + graphHeight - 20;
-                var startX = graphX + 20;
-                var startY = (minY - scaledAssetsList[0]) * scaleFactor + yShift;
-                ctx.strokeStyle = "#FF0";
-                ctx.beginPath();
-                ctx.moveTo(startX, startY);
-                for (i = 1; i < assetsListLength; i++) {
-                    var y = (minY - scaledAssetsList[i]) * scaleFactor + yShift;
-                    ctx.lineTo(startX + i * pInterval, y);
-                }
-                ctx.stroke();
-            }
-
-            /*if (board.hspeed >= 0.001) {
-                canvas.drawText("→", {"x": 18, "y": 17.2}, monofont);
-            }
-            else if (board.hspeed <= -0.001) {
-                canvas.drawText("←", {"x": 18, "y": 17.2}, monofont);
-            }
-            if (board.vspeed >= 0.001) {
-                canvas.drawText("↑", {"x": 18, "y": 16.4}, monofont);
-            }
-            else if (board.vspeed <= -0.001) {
-                canvas.drawText("↓", {"x": 18, "y": 16.4}, monofont);
-            }
-            canvas.drawText("LEVEL " + board.level, {"x": 0, "y": 0.4}, monofont);
-
-            var ctx = canvas.getCanvasContext();
-            // scale, move center to (300, 300), and flip vertically
-            var scale = 6;
-            var xshift = 300 - board.x * scale;
-            var yshift = 200 + board.y * scale;
-            ctx.setTransform(scale, 0, 0, -scale, xshift, yshift);
-            ctx.lineWidth = 1 / scale;
-
-            // draw relief
-            var relief = board.relief;
-            var reliefLen = relief.length;
-            if (reliefLen > 1) {
-                var ptstart = relief[0];
-                ctx.strokeStyle = "#313";
-                ctx.beginPath();
-                ctx.moveTo(ptstart.x, ptstart.y);
-                for (i = 1; i < reliefLen; i++) {
-                    var pt = relief[i];
-                    ctx.lineTo(pt.x, pt.y);
-                }
-                ctx.stroke();
-            }
-
-            // draw history for the last step
-            var history = board.history;
-            var historyLen = history.length;
-            if (historyLen > 1) {
-                var ptstart = history[0];
-                ctx.strokeStyle = "#282";
-                ctx.beginPath();
-                ctx.moveTo(ptstart.x, ptstart.y);
-                for (i = 1; i < historyLen; i++) {
-                    var pt = history[i];
-                    ctx.lineTo(pt.x, pt.y);
-                }
-                ctx.stroke();
-            }
-
-            // draw target (same transform)
-            var target = board.target;
-            if (target) {
-                ctx.strokeStyle = "#F44";
-                ctx.beginPath();
-                ctx.moveTo(target.x, target.y - 8/scale);  ctx.lineTo(target.x, target.y + 8/scale);
-                ctx.stroke();
-                ctx.beginPath();
-                ctx.moveTo(target.x - 8/scale, target.y);  ctx.lineTo(target.x + 8/scale, target.y);
-                ctx.stroke();
-            }
-
-            // draw crashes
-            var crashes = board.crashes;
-            if (crashes && crashes.length > 0) {
-                ctx.strokeStyle = "#888";
-                for (i = 0; i < crashes.length; i++) {
-                    var pt = crashes[i];
-                    ctx.beginPath();
-                    ctx.moveTo(pt.x, pt.y + 12/scale);  ctx.lineTo(pt.x, pt.y);
-                    ctx.stroke();
-                    ctx.beginPath();
-                    ctx.moveTo(pt.x - 4/scale, pt.y + 8/scale);  ctx.lineTo(pt.x + 4/scale, pt.y + 8/scale);
-                    ctx.stroke();
-                }
-            }
-
-            // draw the ship
-            var radian = board.angle / 180 * Math.PI;
-            var sin = Math.sin(radian);
-            var cos = Math.cos(radian);
-            ctx.setTransform(-cos * scale, -sin * scale, sin * scale, -cos * scale, xshift + board.x * scale, yshift - board.y * scale);
-            var consumption = board.consumption;
-            if (consumption && consumption > 0.01) {
-                ctx.strokeStyle = "#FA0";
-                ctx.beginPath();
-                ctx.moveTo(0.5, 0);  ctx.lineTo(0, -2 * consumption);  ctx.lineTo(-0.5, 0);
-                ctx.stroke();
-            }
-            ctx.strokeStyle = "#008";
-            ctx.beginPath();
-            ctx.moveTo(0, 0.0);  ctx.lineTo(-1, -0.2);  ctx.lineTo(-0.7, 1.1);
-            ctx.lineTo(0, 1.6);
-            ctx.lineTo(0.7, 1.1);  ctx.lineTo(1, -0.2);  ctx.lineTo(0, 0.0);
-            ctx.stroke();
-
-            // draw arrow pointing to target
-            if (target) {
-                var deltaX = target.x - board.x;
-                var deltaY = target.y - board.y;
-                var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                if (distance > 1) {
-                    var radian = Math.atan2(deltaY, deltaX); // In radians
-                    var sin = Math.sin(radian);
-                    var cos = Math.cos(radian);
-                    ctx.setTransform(cos, -sin, sin, cos, 300, 100);
-                    ctx.lineWidth = 1;
-                    ctx.strokeStyle = "#F44";
-                    ctx.beginPath();
-                    ctx.moveTo(-30, 0);  ctx.lineTo(0, 0);  ctx.moveTo(30, 0);
-                    ctx.lineTo(0, 5);  ctx.lineTo(0, -5);  ctx.lineTo(30, 0);
-                    ctx.stroke();
-                }
-            }
-
-            ctx.resetTransform();*/
-
         }
 
         var drawPlayerNames = function(font, beforeDraw) {
