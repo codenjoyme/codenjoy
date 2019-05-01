@@ -70,16 +70,16 @@ public class SmokeTest {
         final String heatWave = "A HEAT WAVE IS PREDICTED FOR TODAY!";
         final String[] data = new String[]{
                 // assets before, move, expenses, profit, weather forecast, extra messages
-                "2.00", "20,2,8", "0.70", "0.90", "SUNNY", null,
-                "2.90", "29,4,8", "1.18", "1.14", "SUNNY", null,
-                "4.04", "40,5,8", "2.35", "0.85", "SUNNY", null,
-                "4.89", "48,6,8", "2.82", "1.02", "SUNNY", "(YOUR MOTHER QUIT GIVING YOU FREE SUGAR)\\n",
-                "5.91", "59,8,11", "3.56", "2.93", "HOT AND DRY", null,
-                "8.84", "88,12,11", "5.32", "4.36", "HOT AND DRY", heatWave,
-                "13.20", "131,18,11", "9.25", "1.64", "HOT AND DRY", heatWave,
-                "14.84", "148,21,8", "10.55", "-5.03", "SUNNY", "(THE PRICE OF LEMONADE MIX JUST WENT UP)\\n" + heatWave,
-                "9.81", "98,14,8", "7.00", "-1.48", "SUNNY", null,
-                "8.33", "83,11,8", "0.20", "-0.28", "SUNNY", null,
+                "2.00", "31,4,8", "1.22", "1.26", "SUNNY", null,
+                "3.26", "50,7,8", "2.05", "1.95", "SUNNY", null,
+                "5.21", "40,5,8", "2.35", "0.85", "SUNNY", null,
+                "6.06", "47,6,8", "2.78", "0.98", "SUNNY", "(YOUR MOTHER QUIT GIVING YOU FREE SUGAR)\\n",
+                "7.04", "80,11,10", "4.85", "3.15", "HOT AND DRY", null,
+                "10.19", "115,16,10", "7.00", "4.50", "HOT AND DRY", heatWave,
+                "14.69", "133,19,10", "9.50", "2.40", "HOT AND DRY", heatWave,
+                "17.09", "106,15,8", "7.55", "-2.03", "SUNNY", "(THE PRICE OF LEMONADE MIX JUST WENT UP)\\n" + heatWave,
+                "15.06", "94,13,8", "6.65", "-1.13", "SUNNY", null,
+                "13.93", "87,12,8", "0.20", "-0.63", "SUNNY", null,
                 "9.81", null, null, null, null, null, null
         };
         StringBuilder expected = new StringBuilder();
@@ -120,7 +120,7 @@ public class SmokeTest {
                 expected.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\\n\\nIN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\\nHOW MUCH PROFIT YOU MAKE IS UP TO YOU.\\nIF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\\n\\nTO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\\n1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\\n2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\\n3. WHAT PRICE TO CHARGE FOR EACH GLASS\\n\\nYOU WILL BEGIN WITH $2.00 CASH (ASSETS).BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\\nYOUR COST TO MAKE LEMONADE IS $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\\n\\nYOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\\nYOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\\nTHE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\\nTHE NUMBER OF ADVERTISING SIGNS YOU USE.\\nKEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\\n");
             else {
                 expected.append("** LEMONSVILLE DAILY FINANCIAL REPORT, DAY " + day + " **\\n" +
-                        "GLASSES SOLD: " + lemonadeSoldPrev + ", PRICE $" + lemonadePricePrev + " PER GLASS\\n" +
+                        "GLASSES SOLD: " + lemonadeSoldPrev + ", PRICE " + formatCurrency(lemonadePricePrev) + " PER GLASS\\n" +
                         "INCOME:   " + formatCurrency(incomePrev) + "\\n" +
                         "GLASSES MADE: " + lemonadeMadePrev + ", SIGNS MADE: " + signsMadePrev + "\\n" +
                         "EXPENSES: $" + expensesStrPrev + "\\nPROFIT:   $" + profitStrPrev + "\\n" +

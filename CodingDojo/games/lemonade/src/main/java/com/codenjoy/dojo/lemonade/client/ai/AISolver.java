@@ -52,9 +52,14 @@ public class AISolver implements Solver<Board> {
         if (board.isGameOver())
             return "message('go reset')";
 
-        double lemonadeCost = 0.05; //TODO: get from the board
-        // let's spend half of our assets on the lemonade
-        int lemonadeToMake = (int)Math.floor(board.getAssets() / 2 / lemonadeCost);
+        double lemonadeCost = board.getLemonadeCost();
+        // let's spend some of our assets on the lemonade
+        double divider = 3.2;
+        if (board.getWeatherForecast() == WeatherForecast.CLOUDY)
+            divider = 4.0;
+        else if (board.getWeatherForecast() == WeatherForecast.HOT_AND_DRY)
+            divider = 2.2;
+        int lemonadeToMake = (int)Math.floor(board.getAssets() / divider / lemonadeCost);
         // let's make one sign for every 8 glasses of lemonade
         int signsToMake = lemonadeToMake / 7;
         if (board.getAssets() < 0.15)
@@ -68,10 +73,10 @@ public class AISolver implements Solver<Board> {
         if (board.getWeatherForecast() == WeatherForecast.CLOUDY)
             lemonadePriceCents = 5;
         else if (board.getWeatherForecast() == WeatherForecast.HOT_AND_DRY)
-            lemonadePriceCents = 11;
+            lemonadePriceCents = 10;
 
-        String a = toAnswerString(lemonadeToMake, signsToMake, lemonadePriceCents);
-        return a;
+        String answer = toAnswerString(lemonadeToMake, signsToMake, lemonadePriceCents);
+        return answer;
     }
 
     private String toAnswerString(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
