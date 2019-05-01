@@ -115,13 +115,13 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
     public Question getNextQuestion() {
         int day = simulator.getDay();
-        double lemonadePrice = simulator.getLemonadePrice();
+        double lemonadeCost = simulator.getLemonadeCost();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
         String messages = simulator.getMessages();
         boolean isBankrupt = simulator.isBankrupt();
         return new Question(day,
-                lemonadePrice,
+                lemonadeCost,
                 assets,
                 weatherForecast,
                 messages,

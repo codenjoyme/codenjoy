@@ -37,7 +37,7 @@ public class Board extends AbstractTextBoard {
     private ArrayList<DailyReport> history;
 
     private int day;
-    private double lemonadePrice;
+    private double lemonadeCost;
     private double assets;
     private WeatherForecast weatherForecast;
     private String messages;
@@ -60,7 +60,7 @@ public class Board extends AbstractTextBoard {
 
     private void parseData(JSONObject dataJson) {
         this.day = dataJson.getInt("day");
-        this.lemonadePrice = dataJson.getFloat("lemonadePrice");
+        this.lemonadeCost = dataJson.getFloat("lemonadeCost");
         this.assets = dataJson.getFloat("assets");
         this.weatherForecast = dataJson.getEnum(WeatherForecast.class, "weatherForecast");
         this.messages = dataJson.getString("messages");

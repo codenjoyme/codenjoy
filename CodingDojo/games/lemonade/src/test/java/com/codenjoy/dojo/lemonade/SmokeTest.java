@@ -109,11 +109,12 @@ public class SmokeTest {
             String shistory = (history.size() == 0)
                     ? "[]"
                     : "[\n" + String.join(",\n", history) + "\n1:  ]";
+            String lemonadeCost = (day < 2) ? "0.02" : ((day < 6) ? "0.04" : "0.05");
             expected.append("1:  'assets':" + jsonStringForDouble(data[day * dataSize]) + ",\n" +
                     "1:  'day':" + (day + 1) + ",\n" +
                     "1:  'history':" + shistory + ",\n" +
                     "1:  'isBankrupt':false,\n" +
-                    "1:  'lemonadePrice':" + jsonStringForDouble(lemonadePricePrev) + ",\n" +
+                    "1:  'lemonadeCost':" + jsonStringForDouble(lemonadeCost) + ",\n" +
                     "1:  'messages':'");
             if (day == 0)
                 expected.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\\n\\nIN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\\nHOW MUCH PROFIT YOU MAKE IS UP TO YOU.\\nIF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\\n\\nTO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\\n1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\\n2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\\n3. WHAT PRICE TO CHARGE FOR EACH GLASS\\n\\nYOU WILL BEGIN WITH $2.00 CASH (ASSETS).BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\\nYOUR COST TO MAKE LEMONADE IS $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\\n\\nYOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\\nYOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\\nTHE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\\nTHE NUMBER OF ADVERTISING SIGNS YOU USE.\\nKEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\\n");
@@ -125,7 +126,6 @@ public class SmokeTest {
                         "EXPENSES: $" + expensesStrPrev + "\\nPROFIT:   $" + profitStrPrev + "\\n" +
                         "ASSETS:   $" + data[day * dataSize] + "\\n");
             }
-            String lemonadeCost = (day < 2) ? "0.02" : ((day < 6) ? "0.04" : "0.05");
             expected.append("\\nYOUR ASSETS: $" + data[day * dataSize] + "\\n" +
                     "LEMONSVILLE WEATHER REPORT:  " + data[day * dataSize + 4] + "\\n" +
                     "ON DAY " + (day + 1) + ", THE COST OF LEMONADE IS $" + lemonadeCost + "\\n");

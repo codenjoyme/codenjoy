@@ -54,7 +54,7 @@ public class BoardTest {
                     "        }" +
                     "    ]," +
                     "    day : 3," +
-                    "    lemonadePrice : 0.02," +
+                    "    lemonadeCost : 0.02," +
                     "    assets : 1.55," +
                     "    weatherForecast : \"SUNNY\"," +
                     "    messages : \"my test message\"," +
