@@ -52,7 +52,9 @@ public class Simulator {
     private double P1;
     private boolean B;  // Bankrupt flag
 
-    public Simulator(int randomSeed) {
+    public Simulator(long randomSeed) {
+        if (randomSeed == 0)
+            randomSeed = System.currentTimeMillis();
         rand = new Random(randomSeed);
         messages = new StringBuffer();
 
@@ -137,7 +139,6 @@ public class Simulator {
         messages.setLength(0);
 
         // START OF GAME, TITLE PAGE
-        messages.append("\n");
         messages.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n");
         messages.append("\n");
         messages.append("IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\n");
@@ -159,6 +160,8 @@ public class Simulator {
         messages.append("THE NUMBER OF ADVERTISING SIGNS YOU USE.\n");
         messages.append("KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\n");
         messages.append("\n");
+
+        morning();
     }
 
     public void step(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
@@ -181,17 +184,16 @@ public class Simulator {
 
         A = A + .000000001; // reduce aberration
         double C1 = C * .01;  // Cost of lemonade, dollars
-        if(lemonadeToMake * C1 > A) {
-            messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A) + "\n");
-            messages.append("IN CASH AND TO MAKE " + lemonadeToMake + " GLASSES OF\n");
-            messages.append("LEMONADE YOU NEED " + formatCurrency(lemonadeToMake * C1) + " IN CASH.\n");
+        if (lemonadeToMake * C1 > A) {
+            messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
+                    .append("AND TO MAKE ").append(lemonadeToMake).append(" GLASSES OF LEMONADE YOU NEED ")
+                    .append(formatCurrency(lemonadeToMake * C1)).append(" IN CASH.\n");
             inputError = true;
         }
-
-        if(signsToMake * S3 > A - lemonadeToMake * C1) {
-            messages.append("THINK AGAIN!!! YOU HAVE ONLY " + formatCurrency(A - lemonadeToMake * C1) + "\n");
-            messages.append("IN CASH LEFT AFTER MAKING YOUR LEMONADE.\n");
-            messages.append("YOU CANNOT MAKE " + signsToMake + " SIGNS.");
+        if (signsToMake * S3 > A - lemonadeToMake * C1) {
+            messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
+                    .append(" IN CASH LEFT AFTER MAKING YOUR LEMONADE.\nYOU CANNOT MAKE ")
+                    .append(signsToMake).append(" SIGNS.\n");
             inputError = true;
         }
 
@@ -204,7 +206,6 @@ public class Simulator {
         P = lemonadePriceCents;  // Price for a glass of lemonade
 
         // 1120 PRINT : IF SC = 10 AND RND (1) < .25 THEN 2300
-        messages.append("\n");
         if (SC == 10 && rand.nextDouble() < 0.25) {  // THUNDERSTORM!
             //X3 = 1;
             SC = 5;
@@ -262,6 +263,11 @@ public class Simulator {
         R1 = 1;
         R2 = 0;
 
+        morning();
+    }
+
+    private void morning() {
+
         messages.append("YOUR ASSETS: " + formatCurrency(A) + "\n");
 
         // WEATHER
@@ -286,7 +292,7 @@ public class Simulator {
             C = 5;
         }
         // double C1 = C * 0.01;  // Cost of lemonade, dollars
-        messages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C1) + "\n");
+        messages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C * .01) + "\n");
 
         // CURRENT EVENTS
         if (D == 3) {

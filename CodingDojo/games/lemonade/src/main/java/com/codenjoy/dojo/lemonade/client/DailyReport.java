@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lemonade.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -33,10 +33,10 @@ public class DailyReport {
     private final int signsMade;
     private final float expenses;
     private final float profit;
-    private final float assets;
+    private final float assetsAfter;
 
     public DailyReport(int day, int lemonadeSold, float lemonadePrice, float income,
-                       int lemonadeMade, int signsMade, float expenses, float profit, float assets) {
+                       int lemonadeMade, int signsMade, float expenses, float profit, float assetsAfter) {
         this.day = day;
         this.lemonadeSold = lemonadeSold;
         this.lemonadePrice = lemonadePrice;
@@ -45,11 +45,11 @@ public class DailyReport {
         this.signsMade = signsMade;
         this.expenses = expenses;
         this.profit = profit;
-        this.assets = assets;
+        this.assetsAfter = assetsAfter;
     }
 
     public static DailyReport fromJson(Object report) {
-        JSONObject reportJson = (JSONObject)report;
+        JSONObject reportJson = (JSONObject) report;
         int day = reportJson.getInt("day");
         int lemonadeSold = reportJson.getInt("lemonadeSold");
         float lemonadePrice = reportJson.getFloat("lemonadePrice");
@@ -58,7 +58,7 @@ public class DailyReport {
         int signsMade = reportJson.getInt("signsMade");
         float expenses = reportJson.getFloat("expenses");
         float profit = reportJson.getFloat("profit");
-        float assets = reportJson.getFloat("assets");
+        float assetsAfter = reportJson.getFloat("assetsAfter");
         return new DailyReport(day,
                 lemonadeSold,
                 lemonadePrice,
@@ -67,6 +67,6 @@ public class DailyReport {
                 signsMade,
                 expenses,
                 profit,
-                assets);
+                assetsAfter);
     }
 }

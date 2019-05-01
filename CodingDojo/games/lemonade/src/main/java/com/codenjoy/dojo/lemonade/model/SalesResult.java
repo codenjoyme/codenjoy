@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lemonade.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 public class SalesResult {
     private final int day;
+    private final double assetsBefore;
     private final int lemonadeSold;
     private final double lemonadePrice;
     private final double income;
@@ -33,13 +34,14 @@ public class SalesResult {
     private final int signsMade;
     private final double expenses;
     private final double profit;
-    private final double assets;
-    private final boolean isBunkrupt;
+    private final double assetsAfter;
+    private final boolean isBankrupt;
 
-    public SalesResult(int day, int lemonadeSold, double lemonadePrice, double income, int lemonadeMade, int signsMade,
-                       double expenses, double profit, double assets, boolean isBunkrupt) {
+    public SalesResult(int day, double assetsBefore, int lemonadeSold, double lemonadePrice, double income, int lemonadeMade, int signsMade,
+                       double expenses, double profit, double assetsAfter, boolean isBankrupt) {
 
         this.day = day;
+        this.assetsBefore = toMoneyFormat(assetsBefore);
         this.lemonadeSold = lemonadeSold;
         this.lemonadePrice = toMoneyFormat(lemonadePrice);
         this.income = toMoneyFormat(income);
@@ -47,17 +49,18 @@ public class SalesResult {
         this.signsMade = signsMade;
         this.expenses = toMoneyFormat(expenses);
         this.profit = toMoneyFormat(profit);
-        this.assets = toMoneyFormat(assets);
-        this.isBunkrupt = isBunkrupt;
+        this.assetsAfter = toMoneyFormat(assetsAfter);
+        this.isBankrupt = isBankrupt;
     }
 
-    public boolean isBunkrupt(){
-        return isBunkrupt;
+    public boolean isBankrupt() {
+        return isBankrupt;
     }
 
-    public JSONObject toJSONObject(){
+    public JSONObject toJSONObject() {
         JSONObject jsonObj = new JSONObject();
         jsonObj.put("day", day);
+        jsonObj.put("assetsBefore", assetsBefore);
         jsonObj.put("lemonadeSold", lemonadeSold);
         jsonObj.put("lemonadePrice", lemonadePrice);
         jsonObj.put("income", income);
@@ -65,7 +68,7 @@ public class SalesResult {
         jsonObj.put("signsMade", signsMade);
         jsonObj.put("expenses", expenses);
         jsonObj.put("profit", profit);
-        jsonObj.put("assets", assets);
+        jsonObj.put("assetsAfter", assetsAfter);
         return jsonObj;
     }
 
@@ -73,7 +76,7 @@ public class SalesResult {
         return this.profit;
     }
 
-    private static double toMoneyFormat(double dollars){
+    private static double toMoneyFormat(double dollars) {
         return Math.round(dollars * 100) / 100.0;
     }
 }

@@ -34,25 +34,9 @@ public class SimulatorTest {
 
         Simulator sut = new Simulator(1);
 
-        assertEquals(0, sut.getDay());
-        assertEquals(0.02, sut.getLemonadeCost(), 0.001);
-        assertEquals("", sut.getMessages());
-        assertEquals("UNKNOWN", sut.getWeatherForecast());
-        assertEquals(0, sut.getLemonadeMade());
-        assertEquals(0, sut.getSignsMade());
-        assertEquals(0.0, sut.getLemonadePrice(), 0.001);
-        assertEquals(0, sut.getLemonadeSold());
-        assertEquals(0.00, sut.getIncome(), 0.001);
-        assertEquals(0.00, sut.getExpenses(), 0.001);
-        assertEquals(0.00, sut.getProfit(), 0.001);
-        assertEquals(2.00, sut.getAssets(), 0.001);
-        assertFalse(sut.isBankrupt());
-
-        sut.step(0, 0, 0);
-
         assertEquals(1, sut.getDay());
         assertEquals(0.02, sut.getLemonadeCost(), 0.001);
-        assertTrue(sut.getMessages().startsWith("\nHI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n"));
+        assertTrue(sut.getMessages().startsWith("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n"));
         assertEquals("CLOUDY", sut.getWeatherForecast());
         assertEquals(0, sut.getLemonadeMade());
         assertEquals(0, sut.getSignsMade());
@@ -69,9 +53,6 @@ public class SimulatorTest {
     public void simulateSeveralDays_checkInputLimits() {
 
         Simulator sut = new Simulator(1);
-
-        assertEquals(0, sut.getDay());
-        sut.step(0, 0, 0);
 
         assertEquals(1, sut.getDay());
         assertEquals(2.00, sut.getAssets(), 0.001);
@@ -108,16 +89,13 @@ public class SimulatorTest {
         assertTrue(sut.getMessages().contains("lemonadePriceCents parameter"));
         assertTrue(sut.getMessages().contains("signsToMake parameter"));
         assertTrue(sut.getMessages().contains("lemonadePriceCents parameter"));
-
+        assertEquals(2, sut.getDay());
     }
 
     @Test
     public void simulateSeveralDays_checkBeforeAndAfter() {
 
         Simulator sut = new Simulator(1);
-
-        assertEquals(0, sut.getDay());
-        sut.step(0, 0, 0);
 
         assertEquals(1, sut.getDay());
         assertEquals(2.00, sut.getAssets(), 0.001);

@@ -47,15 +47,14 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
                 "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
     }
 
-    public Hero() {
-        simulator = new Simulator((int) System.currentTimeMillis());
+    public Hero(long randomSeed) {
+        simulator = new Simulator(randomSeed);
         alive = true;
     }
 
     @Override
     public void init(Field field) {
         simulator.reset();
-        //simulator.step(0,0,0);
 
         this.field = field;
     }
@@ -66,50 +65,43 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
         String command = s.toLowerCase();
 
-        if(command.contains("reset")) {
+        if (command.contains("reset")) {
             simulator.reset();
             return;
         }
 
-        if(simulator.isBankrupt())
-        {
+        if (simulator.isBankrupt()) {
             this.salesResult = null;
             return;
         }
 
         Matcher matcher = patternGo.matcher(command);
         if (matcher.matches()) {
+            int day = simulator.getDay();
+            double assetsBefore = simulator.getAssets();
+
             int lemonadeToMake = Integer.parseInt(matcher.group(1));
             int signsToMake = Integer.parseInt(matcher.group(2));
             int lemonadePriceCents = Integer.parseInt(matcher.group(3));
+
             simulate(lemonadeToMake, signsToMake, lemonadePriceCents);
-            readSalesResult();
+
+            this.salesResult = new SalesResult(
+                    day,
+                    assetsBefore,
+                    simulator.getLemonadeSold(),
+                    simulator.getLemonadePrice(),
+                    simulator.getIncome(),
+                    simulator.getLemonadeMade(),
+                    simulator.getSignsMade(),
+                    simulator.getExpenses(),
+                    simulator.getProfit(),
+                    simulator.getAssets(),
+                    simulator.isBankrupt()
+            );
+
             return;
         }
-    }
-
-    private void readSalesResult() {
-        int day = simulator.getDay();
-        int lemonadeSold = simulator.getLemonadeSold();
-        double lemonadePrice = simulator.getLemonadePrice();
-        double income = simulator.getIncome();
-        int lemonadeMade = simulator.getLemonadeMade();
-        int signsMade = simulator.getSignsMade();
-        double expenses = simulator.getExpenses();
-        double profit = simulator.getProfit();
-        double assets = simulator.getAssets();
-        boolean isBunkrupt = simulator.isBankrupt();
-        this.salesResult = new SalesResult(day,
-                lemonadeSold,
-                lemonadePrice,
-                income,
-                lemonadeMade,
-                signsMade,
-                expenses,
-                profit,
-                assets,
-                isBunkrupt
-                );
     }
 
     @Override
@@ -121,13 +113,13 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         return alive;
     }
 
-    public Question getNextQuestion(){
+    public Question getNextQuestion() {
         int day = simulator.getDay();
         double lemonadePrice = simulator.getLemonadePrice();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
         String messages = simulator.getMessages();
-        Boolean isBankrupt = simulator.isBankrupt();
+        boolean isBankrupt = simulator.isBankrupt();
         return new Question(day,
                 lemonadePrice,
                 assets,

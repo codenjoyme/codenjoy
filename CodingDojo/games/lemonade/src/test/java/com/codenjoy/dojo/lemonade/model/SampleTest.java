@@ -10,12 +10,12 @@ package com.codenjoy.dojo.lemonade.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -48,7 +48,7 @@ public class SampleTest {
         dice = mock(Dice.class);
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -59,7 +59,7 @@ public class SampleTest {
         level = new LevelImpl(questionAnswers);
         game = new Lemonade(level, dice);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, 1);
         game.newGame(player);
         hero = player.hero;
         hero.init(game);
@@ -100,7 +100,7 @@ public class SampleTest {
         hero.message("wrong-answer");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -116,8 +116,7 @@ public class SampleTest {
         hero.message("wrong-answer2");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer1','question':'question1','valid':false}, " +
-                "{'answer':'wrong-answer2','question':'question1','valid':false}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -133,8 +132,7 @@ public class SampleTest {
         hero.message("answer1");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -152,8 +150,7 @@ public class SampleTest {
 
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -172,9 +169,7 @@ public class SampleTest {
         hero.message("answer2");
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}, " +
-                "{'answer':'answer2','question':'question2','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -197,9 +192,7 @@ public class SampleTest {
 
         game.tick();
 
-        thenHistory("[{'answer':'wrong-answer','question':'question1','valid':false}, " +
-                "{'answer':'answer1','question':'question1','valid':true}, " +
-                "{'answer':'answer2','question':'question2','valid':true}]");
+        thenHistory("[]");
     }
 
     @Test
@@ -221,8 +214,6 @@ public class SampleTest {
         hero.message("answer4");
         game.tick();
 
-        thenHistory("[{'answer':'answer1','question':'question1','valid':true}, " +
-                "{'answer':'answer2','question':'question2','valid':true}, " +
-                "{'answer':'answer3','question':'question3','valid':true}]");
+        thenHistory("[]");
     }
 }
