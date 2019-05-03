@@ -21,21 +21,20 @@
  */
 ﻿namespace LemonadeClient
 {
-	public class Board
-	{
-		public string Assets { get; set; }
+    public class Board
+    {
+        public int Day { get; set; }
 
-		public string WeatherForecast { get; set; }
+        public string Assets { get; set; }
 
-		public bool IsBankrupt { get; set; }
+        public string WeatherForecast { get; set; }
 
-		public string Messages { get; set; }
+        public bool IsBankrupt { get; set; }
 
-		public int Day { get; set; }
+        public string Messages { get; set; }
 
-		public double LemonadePrice { get; set; }
+        public decimal LemonadeCost { get; set; }
 
-		public History[] History { get; set; }
-
-	}
+        public History[] History { get; set; }
+    }
 }

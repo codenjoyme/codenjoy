@@ -20,23 +20,28 @@
  * #L%
  */
 ﻿using System;
+using System.Linq;
+using System.Web;
 
 namespace LemonadeClient
 {
-	class Program
-	{
-		// Server name and port number -- ask orgs
-		private static string ServerNameAndPort = "epruryaw0576.moscow.epam.com:43022";
-		// Register on the server, write down your registration name
-		private static string UserName = "borc1231231236a406kvh";
-		// Look up for the code in the browser url after the registration
-		private static string UserCode = "1555550509319024989";
-		static void Main(string[] args)
-		{
-			string url = $"ws://{ServerNameAndPort}/codenjoy-contest/ws?user={UserName}&code={UserCode}";
-			ClientWrapper client = new ClientWrapper(url, new MyLemonadeBot());
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // you can get this URL after registration on the server with your email
+            string serverUrl = "http://localhost:8080/codenjoy-contest/board/player/a1b2c3d4e5f6g7i8j9k0?code=1234567890123456789";
 
-			Console.Read();
-		}
-	}
+            var uri = new Uri(serverUrl);
+            var server = string.Format("{0}:{1}", uri.Host, uri.Port);
+            var userName = uri.Segments.Last();
+            var code = HttpUtility.ParseQueryString(uri.Query).Get("code");
+            var wsurl = string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
+                server, Uri.EscapeDataString(userName), code);
+
+            ClientWrapper client = new ClientWrapper(wsurl, new MyLemonadeBot());
+
+            Console.Read();
+        }
+    }
 }

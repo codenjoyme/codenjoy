@@ -21,16 +21,17 @@
  */
 ﻿namespace LemonadeClient
 {
-	public class History
-	{
-		public double Income { get; set; }
-		public int SignsMade { get; set; }
-		public double Assets { get; set; }
-		public int LemonadeSold { get; set; }
-		public int LemonadeMade { get; set; }
-		public int Day { get; set; }
-		public double Profit { get; set; }
-		public double LemonadePrice { get; set; }
-		public double Expenses { get; set; }
-	}
+    public class History
+    {
+        public int Day { get; set; }
+        public decimal AssetsBefore { get; set; }
+        public decimal AssetsAfter { get; set; }
+        public int LemonadeMade { get; set; }
+        public int SignsMade { get; set; }
+        public decimal LemonadePrice { get; set; }
+        public int LemonadeSold { get; set; }
+        public decimal Expenses { get; set; }
+        public decimal Income { get; set; }
+        public decimal Profit { get; set; }
+    }
 }
