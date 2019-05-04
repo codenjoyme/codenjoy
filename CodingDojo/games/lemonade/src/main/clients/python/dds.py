@@ -51,6 +51,7 @@ class MySolver:
         # print(self._board.assets())
         # print(self._board.lemonade_cost())
         # print(self._board.weather_forecast())
+        # print(self._board.history())
         # print(self._board.messages())
         print(self._board.to_string())
 

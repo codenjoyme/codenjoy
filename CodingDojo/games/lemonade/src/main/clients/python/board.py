@@ -50,6 +50,9 @@ class Board:
     def weather_forecast(self):
         return self._json["weatherForecast"]
 
+    def history(self):
+        return self._json["history"]
+
     def to_string(self):
         return self._json
 

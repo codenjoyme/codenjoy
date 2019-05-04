@@ -28,8 +28,16 @@ from websocket import WebSocketApp
 
 
 def _on_open(webclient):
-    print("Opened Connection.")
-    #webclient.send('NULL')
+    print("WebSocket opened.")
+    # webclient.send('NULL')
+
+
+def _on_close(webclient):
+    print("WebSocket closed.")
+
+
+def _on_error(webclient, error):
+    print("WebSocket error: {}".format(error))
 
 
 def _on_message(webclient, message):
@@ -47,10 +55,6 @@ def _on_message(webclient, message):
         print_exception(*exc_info())
 
 
-def _on_error(webclient, error):
-    print(error)
-
-
 class WebClient(WebSocketApp):
 
     def __init__(self, solver):
@@ -59,11 +63,14 @@ class WebClient(WebSocketApp):
         self._server = None
         self._user = None
 
-    def run(self, server, user, code):
-        super().__init__("{}?user={}&code={}".format(server, user, code))
-        self.on_message = _on_message
+    def run(self, serverandport, user, code):
+        super().__init__(
+            "ws://{}/codenjoy-contest/ws?user={}&code={}".format(serverandport, user, code))
         self.on_open = _on_open
-        self._server = server
+        self.on_close = _on_close
+        self.on_error = _on_error
+        self.on_message = _on_message
+        self._server = serverandport
         self._user = user
         self.run_forever()
 
