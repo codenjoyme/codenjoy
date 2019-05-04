@@ -37,11 +37,11 @@ public class Board extends AbstractTextBoard {
     private ArrayList<DailyReport> history;
 
     private int day;
-    private double lemonadePrice;
     private double assets;
-    private WeatherForecast weatherForecast;
     private String messages;
     private boolean isBankrupt;
+    private double lemonadeCost;
+    private WeatherForecast weatherForecast;
 
     @Override
     public boolean isGameOver() {
@@ -60,11 +60,11 @@ public class Board extends AbstractTextBoard {
 
     private void parseData(JSONObject dataJson) {
         this.day = dataJson.getInt("day");
-        this.lemonadePrice = dataJson.getFloat("lemonadePrice");
+        this.lemonadeCost = dataJson.getFloat("lemonadeCost");
         this.assets = dataJson.getFloat("assets");
         this.weatherForecast = dataJson.getEnum(WeatherForecast.class, "weatherForecast");
         this.messages = dataJson.getString("messages");
-        this.isBankrupt = dataJson.getBoolean("isBankrupt");
+        this.isBankrupt = dataJson.optBoolean("isBankrupt", false);
     }
 
     private void parseHistory(JSONArray historyJson) {
@@ -88,6 +88,10 @@ public class Board extends AbstractTextBoard {
 
     public String getMessages() {
         return this.messages;
+    }
+
+    public double getLemonadeCost() {
+        return this.lemonadeCost;
     }
 
     public WeatherForecast getWeatherForecast() {

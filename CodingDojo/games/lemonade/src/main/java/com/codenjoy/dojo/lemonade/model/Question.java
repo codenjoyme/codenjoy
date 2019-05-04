@@ -26,17 +26,17 @@ import org.json.JSONObject;
 
 public class Question {
     private final int day;
-    private final double lemonadePrice;
+    private final double lemonadeCost;
     private final double assets;
     private final WeatherForecast weatherForecast;
     private final String messages;
     private final boolean isBankrupt;
 
-    public Question(int day, double lemonadePrice, double assets, WeatherForecast weatherForecast, String messages,
+    public Question(int day, double lemonadeCost, double assets, WeatherForecast weatherForecast, String messages,
                     boolean isBankrupt) {
 
         this.day = day;
-        this.lemonadePrice = toMoneyFormat(lemonadePrice);
+        this.lemonadeCost = toMoneyFormat(lemonadeCost);
         this.assets = toMoneyFormat(assets);
         this.weatherForecast = weatherForecast;
         this.messages = messages;
@@ -46,7 +46,7 @@ public class Question {
     public JSONObject toJson() {
         JSONObject questionJson = new JSONObject();
         questionJson.put("day", day);
-        questionJson.put("lemonadePrice", lemonadePrice);
+        questionJson.put("lemonadeCost", lemonadeCost);
         questionJson.put("assets", assets);
         questionJson.put("weatherForecast", weatherForecast);
         questionJson.put("messages", messages);
