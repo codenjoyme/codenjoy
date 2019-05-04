@@ -182,23 +182,23 @@ public class Simulator {
             inputError = true;
         }
 
+        if (inputError)
+            return;
+
         A = A + .000000001; // reduce aberration
         double C1 = C * .01;  // Cost of lemonade, dollars
         if (lemonadeToMake * C1 > A) {
             messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
                     .append("AND TO MAKE ").append(lemonadeToMake).append(" GLASSES OF LEMONADE YOU NEED ")
                     .append(formatCurrency(lemonadeToMake * C1)).append(" IN CASH.\n");
-            inputError = true;
+            return;
         }
         if (signsToMake * S3 > A - lemonadeToMake * C1) {
             messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
                     .append(" IN CASH LEFT AFTER MAKING YOUR LEMONADE.\nYOU CANNOT MAKE ")
                     .append(signsToMake).append(" SIGNS.\n");
-            inputError = true;
-        }
-
-        if (inputError)
             return;
+        }
 
         L = lemonadeToMake;  // How many glasses to make
         S = signsToMake;  // How many signs to make

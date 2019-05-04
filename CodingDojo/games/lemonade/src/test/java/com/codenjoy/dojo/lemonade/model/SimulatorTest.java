@@ -50,6 +50,33 @@ public class SimulatorTest {
     }
 
     @Test
+    public void simulate_checkInputSumsIsMoreThanAssets() {
+
+        Simulator sut = new Simulator(1);
+
+        assertEquals(1, sut.getDay());
+        assertEquals(2.00, sut.getAssets(), 0.001);
+
+        // 101 * 0.02 = 2.02 is greater than 2.0
+        sut.step(101, 0, 0);
+        //System.out.println(sut.getMessages());
+        assertTrue(sut.getMessages().startsWith("THINK AGAIN! YOU HAVE ONLY $2.00"));
+        assertEquals(1, sut.getDay());
+
+        // 14 * 0.15 = 2.1 is greater than 2.0
+        sut.step(0, 14, 0);
+        //System.out.println(sut.getMessages());
+        assertTrue(sut.getMessages().startsWith("THINK AGAIN! YOU HAVE ONLY $2.00"));
+        assertEquals(1, sut.getDay());
+
+        // 51 * 0.02 + 7 * 0.15 = 2.07 is greater than 2.0
+        sut.step(51, 7, 0);
+        //System.out.println(sut.getMessages());
+        assertTrue(sut.getMessages().startsWith("THINK AGAIN! YOU HAVE ONLY $0.98"));
+        assertEquals(1, sut.getDay());
+    }
+
+    @Test
     public void simulateSeveralDays_checkInputLimits() {
 
         Simulator sut = new Simulator(1);
