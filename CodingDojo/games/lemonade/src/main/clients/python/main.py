@@ -24,13 +24,14 @@
 
 from sys import version_info
 from webclient import WebClient
-from dds import MySolver
+from mysolver import MySolver
 import re
 
 
 def main():
     assert version_info[0] == 3, "You should run me with Python 3.x"
 
+    # you can get this URL after registration on the server with your email
     url = "http://localhost:8080/codenjoy-contest/board/player/a1b2c3d4e5f6g7i8j9k0?code=1234567890123456789"
 
     repattern = re.compile(
