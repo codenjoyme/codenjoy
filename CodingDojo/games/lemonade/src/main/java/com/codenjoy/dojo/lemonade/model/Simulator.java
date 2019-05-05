@@ -35,6 +35,7 @@ public class Simulator {
     private final double C2 = 1;
 
     private Random rand;
+    private boolean inputError;
 
     private int D;  // Day number
     private double A;  //Assets
@@ -120,6 +121,10 @@ public class Simulator {
         return messages.toString();
     }
 
+    public boolean isInputError() {
+        return inputError;
+    }
+
     public void reset() {
         D = 0;
         A = A2;
@@ -167,7 +172,7 @@ public class Simulator {
     public void step(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
         messages.setLength(0);
 
-        boolean inputError = false;
+        inputError = false;
 
         if (lemonadeToMake < 0 || lemonadeToMake > 1000) {
             messages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
@@ -191,12 +196,14 @@ public class Simulator {
             messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
                     .append("AND TO MAKE ").append(lemonadeToMake).append(" GLASSES OF LEMONADE YOU NEED ")
                     .append(formatCurrency(lemonadeToMake * C1)).append(" IN CASH.\n");
+            inputError = true;
             return;
         }
         if (signsToMake * S3 > A - lemonadeToMake * C1) {
             messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
                     .append(" IN CASH LEFT AFTER MAKING YOUR LEMONADE.\nYOU CANNOT MAKE ")
                     .append(signsToMake).append(" SIGNS.\n");
+            inputError = true;
             return;
         }
 

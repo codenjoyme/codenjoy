@@ -89,7 +89,9 @@ public class Player extends GamePlayer<Hero, Field> {
     public void checkAnswer() {
         hero.tick();
         SalesResult salesResult = hero.popSalesResult();
-        if (salesResult != null) {
+
+        // put to history and raise events if there is salesResult and no input errors
+        if (salesResult != null && !salesResult.isInputError()) {
             history.add(salesResult);
             while (history.size() > 10)
                 history.remove();
@@ -99,18 +101,5 @@ public class Player extends GamePlayer<Hero, Field> {
                 event(new EventArgs(EventType.WIN, (int) Math.round(100 * salesResult.getProfit())));
             }
         }
-    }
-
-    private void logSuccess(String question, String answer) {
-        log(question, answer, true);
-    }
-
-    private void logFailure(String question, String answer) {
-        log(question, answer, false);
-    }
-
-    private void log(String question, String answer, boolean valid) {
-        QuestionAnswer qa = new QuestionAnswer(question, answer);
-        qa.setValid(valid);
     }
 }

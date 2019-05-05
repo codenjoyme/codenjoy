@@ -40,16 +40,22 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     private Simulator simulator;
     private SalesResult salesResult;
     private boolean alive;
-    private String answer;
+    private boolean isCommandInvalid;
 
     static {
         patternGo = Pattern.compile(
                 "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
     }
 
+    private final String invalidCommandMessage =
+            "Invalid input. lemonadeToMake parameter should be in [0, 1000] range.\n" +
+            "signsToMake parameter should be in [0, 50] range.\n" +
+            "lemonadePriceCents parameter should be in [0, 100] range.\n";
+
     public Hero(long randomSeed) {
         simulator = new Simulator(randomSeed);
         alive = true;
+        isCommandInvalid = false;
     }
 
     @Override
@@ -61,8 +67,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
     @Override
     public void message(String s) {
-        this.answer = s;
-
+        isCommandInvalid = false;
         String command = s.toLowerCase();
 
         if (command.contains("reset")) {
@@ -86,22 +91,27 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
             simulate(lemonadeToMake, signsToMake, lemonadePriceCents);
 
-            this.salesResult = new SalesResult(
-                    day,
-                    assetsBefore,
-                    simulator.getLemonadeSold(),
-                    simulator.getLemonadePrice(),
-                    simulator.getIncome(),
-                    simulator.getLemonadeMade(),
-                    simulator.getSignsMade(),
-                    simulator.getExpenses(),
-                    simulator.getProfit(),
-                    simulator.getAssets(),
-                    simulator.isBankrupt()
-            );
-
-            return;
+            readSalesResult(day, assetsBefore);
+        } else {
+            isCommandInvalid = true;
         }
+    }
+
+    private void readSalesResult(int day, double assetsBefore) {
+        this.salesResult = new SalesResult(
+                day,
+                assetsBefore,
+                simulator.getLemonadeSold(),
+                simulator.getLemonadePrice(),
+                simulator.getIncome(),
+                simulator.getLemonadeMade(),
+                simulator.getSignsMade(),
+                simulator.getExpenses(),
+                simulator.getProfit(),
+                simulator.getAssets(),
+                simulator.isBankrupt(),
+                simulator.isInputError()
+        );
     }
 
     @Override
@@ -118,7 +128,13 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
         double lemonadeCost = simulator.getLemonadeCost();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
-        String messages = simulator.getMessages();
+        String messages;
+        if (isCommandInvalid) {
+            isCommandInvalid = false;
+            messages = invalidCommandMessage;
+        } else {
+            messages = simulator.getMessages();
+        }
         boolean isBankrupt = simulator.isBankrupt();
         return new Question(day,
                 lemonadeCost,
