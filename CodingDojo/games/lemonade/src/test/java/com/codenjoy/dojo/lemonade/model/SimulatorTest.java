@@ -177,4 +177,34 @@ public class SimulatorTest {
         assertEquals("SUNNY", sut.getWeatherForecast());
         assertEquals(0.04, sut.getLemonadeCost(), 0.001);
     }
+
+    @Test
+    public void simulate_checkWeatherForecastProbabilities()
+    {
+        Simulator sut = new Simulator(0);
+
+        int sunny = 0;
+        int cloudy = 0;
+        int hotAndDry = 0;
+        int thunderstorm = 0;
+
+        for (int i = 0; i < 100000; i++)
+        {
+            sut.step(2, 0, 15);
+
+            if (sut.getWeatherForecast() == "SUNNY")
+                sunny++;
+            else if (sut.getWeatherForecast() == "CLOUDY")
+                cloudy++;
+            else if (sut.getWeatherForecast() == "HOT AND DRY")
+                hotAndDry++;
+            if (sut.getMessages().contains("A SEVERE THUNDERSTORM HIT LEMONSVILLE EARLIER TODAY"))
+                thunderstorm++;
+        }
+
+        assertEquals(0.60, sunny / 100000.0, 0.005);
+        assertEquals(0.20, cloudy / 100000.0, 0.005);
+        assertEquals(0.20, hotAndDry / 100000.0, 0.005);
+        assertEquals(0.05, thunderstorm / 100000.0, 0.005);
+    }
 }

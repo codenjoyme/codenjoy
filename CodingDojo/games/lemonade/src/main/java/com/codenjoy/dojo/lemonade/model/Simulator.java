@@ -168,7 +168,7 @@ public class Simulator {
         messages.setLength(0);
 
         boolean inputError = false;
-        double STI = A;
+
         if (lemonadeToMake < 0 || lemonadeToMake > 1000) {
             messages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
             inputError = true;
@@ -272,11 +272,11 @@ public class Simulator {
 
         // WEATHER
         double SCd = rand.nextDouble();
-        if (SCd < 0.6) {
+        if (SCd < 0.6) {  // 60% for SUNNY
             SC = 2;
-        } else if (SCd < 0.8) {
+        } else if (SCd < 0.8) {  // 20% for CLOUDY
             SC = 10;
-        } else {
+        } else {  // 20% for HOT AND DRY
             SC = 7;
         }
         messages.append("LEMONSVILLE WEATHER REPORT:  " + getWeatherForecast() + "\n");
