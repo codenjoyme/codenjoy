@@ -63,8 +63,8 @@
                             KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!<br/>
                         </div>
                         <p>
-                            В оригинальной игре, вы принимаете на себя роль школьника, который подрабатывает на каникулах, продавая на улице лимонад.
-                            С утра вы готовите лимонад и готовите рекламные плакаты, и в течение всего дня продаёте приготовленный объём напитка.
+                            В этой игре вы принимаете на себя роль школьника, который подрабатывает на каникулах, продавая на улице лимонад.
+                            С утра вы готовите лимонад и рекламные плакаты, и в течение всего дня продаёте приготовленный объём напитка.
                             У вас есть начальный капитал в размере $2.00 (величина A<sub>0</sub>).
                             Стоимость стакана лимонада для вас составляет всего $0.02 (C), но со временем эта величина может измениться.
                             На каждом ходу вам нужно решить, как потратить имеющиеся деньги, и вы выражаете своё решение, сообщая компьютеру три числа:
@@ -114,8 +114,66 @@
                                 LEMONSVILLE WEATHER REPORT:  CLOUDY<br/>
                                 ON DAY 2, THE COST OF LEMONADE IS $0.02<br/>
                         </div>
+                        <p>
+                            Эту информацию бот получает в виде JSON, который имеет вид:<br/>
+                            (строка messages здесь разделена на отдельные строки для удобства просмотра)
+                        </p>
+                        <pre>{
+    "lemonadeCost": 0.02,
+    "assets": 3.5,
+    "weatherForecast": "CLOUDY",
+    "isBankrupt": false,
+    "messages": "** LEMONSVILLE DAILY FINANCIAL REPORT, DAY 1 **\n
+        GLASSES SOLD: 10, PRICE $0.20 PER GLASS\nINCOME:   $2.00\n
+        GLASSES MADE: 10, SIGNS MADE: 2\nEXPENSES: $0.50\n
+        PROFIT:   $1.50\nASSETS:   $3.50\n\n
+        YOUR ASSETS: $3.50\n
+        LEMONSVILLE WEATHER REPORT:  CLOUDY\n
+        ON DAY 2, THE COST OF LEMONADE IS $0.02\n",
+    "history": [
+        {
+            "income": 2,
+            "signsMade": 2,
+            "lemonadeSold": 10,
+            "lemonadeMade": 10,
+            "assetsAfter": 3.5,
+            "day": 1,
+            "profit": 1.5,
+            "lemonadePrice": 0.2,
+            "assetsBefore": 2,
+            "expenses": 0.5
+        },
+    ],
+    "day": 2
+}</pre>
+                        <p>
+                            <code>day</code> &ndash; номер текущего дня;<br/>
+                            <code>assets</code> &ndash; сколько у вас сейчас есть денег;<br/>
+                            <code>isBankrupt</code> &ndash; признак того что вы банкрот &ndash; имеющихся денег нехватает на приготовление одного стакана лимонада;<br/>
+                            <code>messages</code> &ndash; все сообщения от сервера, для первого дня здесь будет приветственное сообщение и прогноз на текущий день;
+                                для второго и последующих дней здесь будет финансовый отчёт за день (day &minus; 1) и прогноз на текущий день;
+                                обращайте внимание на это поле, там могут быть неожиданности;<br/>
+                            <code>lemonadeCost</code> &ndash; стоимость стакана лимонада для вас, на сегодняшний день;<br/>
+                            <code>weatherForecast</code> &ndash; прогноз погоды на сегодняшний день;<br/>
+                            <code>history</code> &ndash; история за последние 10 дней.<br/>
+                        </p>
+                        <p>
+                            Получив информацию от сервера, ваш бот должен отправить команду вида:<br/>
+                            <code>message(go 2,1,15)</code><br/>
+                            где три числа это: сколько стаканов лимонада приготовить, сколько сделать рекламных плакатов, сколько будет стоить стакан лимонада.
+                        </p>
+                        <p>Игровой экран на странице игры выглядит примерно так:<br/>
+                            <img src="lemonade-board.png" /><br/>
+                            Здесь слева вверху выведены сообщения от сервера (messages),<br/>
+                            слева внизу рисунок показывает прогноз погоды на сегодня, номер дня (day) и текущую сумму денег (assets),<br/>
+                            справа внизу находится график истории изменения суммы денег (assets) за последние 10 дней.
+                        </p>
                         <p>Организаторы предоставляют игрокам подготовленные клиенты в исходном коде на нескольких языках:
-                                Java, C# и JavaScript.</p>
+                                Java, C#, JavaScript, Python.<br/>
+                            Каждый из этих клиентов уже умеет связываться с сервером,
+                            принимать и разбирать сообщение от сервера (обычно это называется board)
+                            и отправлять серверу команды.
+                        </p>
 
                         <h2>Подключение к серверу</h2>
 
@@ -126,7 +184,8 @@
                         <ul>
                             <li><a href="/codenjoy-contest/resources/user/lemonade-servers.zip">Java-клиент</a>;</li>
                             <li><a href="/codenjoy-contest/resources/user/lemonade-csharp-client.zip">C# клиент</a>;</li>
-                            <li><a href="/codenjoy-contest/resources/user/lemonade-javascript-client.zip">JavaScript клиент</a>.</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-javascript-client.zip">JavaScript клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-python-client.zip">Python клиент</a>.</li>
                         </ul>
                         <p>Если в этом списке нет нужного языка, придётся написать свой клиент.</p>
 
