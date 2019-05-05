@@ -25,6 +25,7 @@ package com.codenjoy.dojo.lemonade.client;
 import org.json.JSONObject;
 
 public class DailyReport {
+
     private final int day;
     private final int lemonadeSold;
     private final float lemonadePrice;
@@ -68,5 +69,41 @@ public class DailyReport {
                 expenses,
                 profit,
                 assetsAfter);
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public int getLemonadeMade() {
+        return lemonadeMade;
+    }
+
+    public int getSignsMade() {
+        return signsMade;
+    }
+
+    public float getLemonadePrice() {
+        return lemonadePrice;
+    }
+
+    public int getLemonadeSold() {
+        return lemonadeSold;
+    }
+
+    public float getExpenses() {
+        return expenses;
+    }
+
+    public float getIncome() {
+        return income;
+    }
+
+    public float getProfit() {
+        return profit;
+    }
+
+    public float getAssetsAfter() {
+        return assetsAfter;
     }
 }

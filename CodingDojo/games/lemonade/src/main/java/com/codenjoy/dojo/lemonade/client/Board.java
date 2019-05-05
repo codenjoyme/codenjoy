@@ -34,14 +34,14 @@ import java.util.List;
 
 public class Board extends AbstractTextBoard {
 
-    private ArrayList<DailyReport> history;
-
     private int day;
     private double assets;
     private String messages;
     private boolean isBankrupt;
     private double lemonadeCost;
     private WeatherForecast weatherForecast;
+
+    private ArrayList<DailyReport> history;
 
     @Override
     public boolean isGameOver() {
@@ -74,8 +74,8 @@ public class Board extends AbstractTextBoard {
         });
     }
 
-    public List<DailyReport> getHistory() {
-        return this.history;
+    public int getDay() {
+        return this.day;
     }
 
     public String getData() {
@@ -96,5 +96,9 @@ public class Board extends AbstractTextBoard {
 
     public WeatherForecast getWeatherForecast() {
         return this.weatherForecast;
+    }
+
+    public List<DailyReport> getHistory() {
+        return this.history;
     }
 }

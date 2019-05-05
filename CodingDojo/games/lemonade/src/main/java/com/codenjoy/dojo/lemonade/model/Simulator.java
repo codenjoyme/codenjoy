@@ -168,7 +168,7 @@ public class Simulator {
         messages.setLength(0);
 
         boolean inputError = false;
-        double STI = A;
+
         if (lemonadeToMake < 0 || lemonadeToMake > 1000) {
             messages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
             inputError = true;
@@ -182,23 +182,23 @@ public class Simulator {
             inputError = true;
         }
 
+        if (inputError)
+            return;
+
         A = A + .000000001; // reduce aberration
         double C1 = C * .01;  // Cost of lemonade, dollars
         if (lemonadeToMake * C1 > A) {
             messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
                     .append("AND TO MAKE ").append(lemonadeToMake).append(" GLASSES OF LEMONADE YOU NEED ")
                     .append(formatCurrency(lemonadeToMake * C1)).append(" IN CASH.\n");
-            inputError = true;
+            return;
         }
         if (signsToMake * S3 > A - lemonadeToMake * C1) {
             messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
                     .append(" IN CASH LEFT AFTER MAKING YOUR LEMONADE.\nYOU CANNOT MAKE ")
                     .append(signsToMake).append(" SIGNS.\n");
-            inputError = true;
-        }
-
-        if (inputError)
             return;
+        }
 
         L = lemonadeToMake;  // How many glasses to make
         S = signsToMake;  // How many signs to make
@@ -272,11 +272,11 @@ public class Simulator {
 
         // WEATHER
         double SCd = rand.nextDouble();
-        if (SCd < 0.6) {
+        if (SCd < 0.6) {  // 60% for SUNNY
             SC = 2;
-        } else if (SCd < 0.8) {
+        } else if (SCd < 0.8) {  // 20% for CLOUDY
             SC = 10;
-        } else {
+        } else {  // 20% for HOT AND DRY
             SC = 7;
         }
         messages.append("LEMONSVILLE WEATHER REPORT:  " + getWeatherForecast() + "\n");

@@ -50,6 +50,33 @@ public class SimulatorTest {
     }
 
     @Test
+    public void simulate_checkInputSumsIsMoreThanAssets() {
+
+        Simulator sut = new Simulator(1);
+
+        assertEquals(1, sut.getDay());
+        assertEquals(2.00, sut.getAssets(), 0.001);
+
+        // 101 * 0.02 = 2.02 is greater than 2.0
+        sut.step(101, 0, 0);
+        //System.out.println(sut.getMessages());
+        assertTrue(sut.getMessages().startsWith("THINK AGAIN! YOU HAVE ONLY $2.00"));
+        assertEquals(1, sut.getDay());
+
+        // 14 * 0.15 = 2.1 is greater than 2.0
+        sut.step(0, 14, 0);
+        //System.out.println(sut.getMessages());
+        assertTrue(sut.getMessages().startsWith("THINK AGAIN! YOU HAVE ONLY $2.00"));
+        assertEquals(1, sut.getDay());
+
+        // 51 * 0.02 + 7 * 0.15 = 2.07 is greater than 2.0
+        sut.step(51, 7, 0);
+        //System.out.println(sut.getMessages());
+        assertTrue(sut.getMessages().startsWith("THINK AGAIN! YOU HAVE ONLY $0.98"));
+        assertEquals(1, sut.getDay());
+    }
+
+    @Test
     public void simulateSeveralDays_checkInputLimits() {
 
         Simulator sut = new Simulator(1);
@@ -149,5 +176,35 @@ public class SimulatorTest {
         assertFalse(sut.isBankrupt());
         assertEquals("SUNNY", sut.getWeatherForecast());
         assertEquals(0.04, sut.getLemonadeCost(), 0.001);
+    }
+
+    @Test
+    public void simulate_checkWeatherForecastProbabilities()
+    {
+        Simulator sut = new Simulator(0);
+
+        int sunny = 0;
+        int cloudy = 0;
+        int hotAndDry = 0;
+        int thunderstorm = 0;
+
+        for (int i = 0; i < 100000; i++)
+        {
+            sut.step(2, 0, 15);
+
+            if (sut.getWeatherForecast() == "SUNNY")
+                sunny++;
+            else if (sut.getWeatherForecast() == "CLOUDY")
+                cloudy++;
+            else if (sut.getWeatherForecast() == "HOT AND DRY")
+                hotAndDry++;
+            if (sut.getMessages().contains("A SEVERE THUNDERSTORM HIT LEMONSVILLE EARLIER TODAY"))
+                thunderstorm++;
+        }
+
+        assertEquals(0.60, sunny / 100000.0, 0.005);
+        assertEquals(0.20, cloudy / 100000.0, 0.005);
+        assertEquals(0.20, hotAndDry / 100000.0, 0.005);
+        assertEquals(0.05, thunderstorm / 100000.0, 0.005);
     }
 }
