@@ -40,11 +40,11 @@ public class ScoresTest {
     private Integer winScore;
 
     public void loose() {
-        scores.event(new EventArgs(EventType.LOOSE, 100));
+        scores.event(new EventArgs(EventType.LOOSE, 100, 0));
     }
 
     public void win() {
-        scores.event(new EventArgs(EventType.WIN, 30));
+        scores.event(new EventArgs(EventType.WIN, 30, 30));
     }
 
     @Before

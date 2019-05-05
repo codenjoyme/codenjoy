@@ -96,9 +96,13 @@ public class Player extends GamePlayer<Hero, Field> {
             while (history.size() > 10)
                 history.remove();
             if (salesResult.isBankrupt()) {
-                event(new EventArgs(EventType.LOOSE, (int) salesResult.getProfit()));
+                event(new EventArgs(EventType.LOOSE,
+                        salesResult.getProfit(),
+                        salesResult.getAssetsAfter()));
             } else {
-                event(new EventArgs(EventType.WIN, (int) Math.round(100 * salesResult.getProfit())));
+                event(new EventArgs(EventType.WIN,
+                        salesResult.getProfit(),
+                        salesResult.getAssetsAfter()));
             }
         }
     }

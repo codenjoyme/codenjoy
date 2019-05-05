@@ -85,4 +85,8 @@ public class SalesResult {
     private static double toMoneyFormat(double dollars) {
         return Math.round(dollars * 100) / 100.0;
     }
+
+    public double getAssetsAfter() {
+        return assetsAfter;
+    }
 }

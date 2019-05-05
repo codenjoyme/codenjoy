@@ -25,15 +25,17 @@ package com.codenjoy.dojo.lemonade.services;
 
 public class EventArgs {
     public final EventType type;
-    public final int score;
+    public final double profit;
+    public final double assetsAfter;
 
-    public EventArgs(EventType type, int score) {
+    public EventArgs(EventType type, double profit, double assetsAfter) {
         this.type = type;
-        this.score = score;
+        this.profit = profit;
+        this.assetsAfter = assetsAfter;
     }
 
     @Override
     public String toString() {
-        return String.format("%s (%d)", type.toString(), score);
+        return String.format("%s (%d, %d)", type.toString(), profit, assetsAfter);
     }
 }
