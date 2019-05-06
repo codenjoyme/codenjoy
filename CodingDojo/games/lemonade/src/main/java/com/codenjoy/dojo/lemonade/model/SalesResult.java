@@ -86,6 +86,10 @@ public class SalesResult {
         return Math.round(dollars * 100) / 100.0;
     }
 
+    public int getDay() {
+        return day;
+    }
+
     public double getAssetsAfter() {
         return assetsAfter;
     }

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
@@ -40,7 +41,14 @@ public class LemonadePerformanceTest {
 
     @Test
     public void test() {
-        GameRunner gameType = new GameRunner();
+        GameRunner gameType = new GameRunner() {
+            @Override
+            public SettingsImpl createSettings(){
+                SettingsImpl settings = new SettingsImpl();
+                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+                return settings;
+            }
+        };
 
         List<Game> games = new LinkedList<Game>();
 

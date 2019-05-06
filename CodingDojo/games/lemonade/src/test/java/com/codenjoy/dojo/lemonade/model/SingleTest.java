@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,30 +63,34 @@ public class SingleTest {
             "'weatherForecast':'SUNNY'" +
             "}";
 
-
-
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
-                "question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
+        SettingsImpl settings = new SettingsImpl();
+        settings.addEditBox("Limit days").type(Integer.class).update(0);
+        GameSettings gameSettings = new GameSettings(settings);
         dice = mock(Dice.class);
-        field = new Lemonade(level, dice);
-        PrinterFactory factory = new GameRunner().getPrinterFactory();
+        field = new Lemonade(gameSettings);
+        GameRunner gameRunner = new GameRunner() {
+            @Override
+            public SettingsImpl createSettings(){
+                SettingsImpl settings = new SettingsImpl();
+                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+                return settings;
+            }
+        };
+        PrinterFactory factory = gameRunner.getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1, 1), factory);
+        game1 = new Single(new Player(listener1, 1, gameSettings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2, 1), factory);
+        game2 = new Single(new Player(listener2, 1, gameSettings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3, 1), factory);
+        game3 = new Single(new Player(listener3, 1, gameSettings), factory);
         game3.on(field);
 
         dice(1, 4);

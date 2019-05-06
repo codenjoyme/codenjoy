@@ -25,6 +25,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 import com.codenjoy.dojo.lemonade.services.EventArgs;
 import com.codenjoy.dojo.lemonade.services.EventType;
+import com.codenjoy.dojo.lemonade.services.ScoreMode;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import org.json.JSONArray;
@@ -39,15 +40,15 @@ import java.util.Queue;
  */
 public class Player extends GamePlayer<Hero, Field> {
 
-    private Field field;
     private Queue<SalesResult> history;
-    private int questionIndex;
-    private long heroRandomSeed;
+    private final GameSettings gameSettings;
     Hero hero;
+    private long heroRandomSeed;
 
-    public Player(EventListener listener, long randomSeed) {
+    public Player(EventListener listener, long heroRandomSeed, GameSettings gameSettings) {
         super(listener);
-        heroRandomSeed = randomSeed;
+        this.gameSettings = gameSettings;
+        this.heroRandomSeed = heroRandomSeed;
         history = new LinkedList<>();
     }
 
@@ -55,7 +56,6 @@ public class Player extends GamePlayer<Hero, Field> {
         if (history != null) {
             history.clear();
         }
-        questionIndex = 0;
     }
 
     public Hero getHero() {
@@ -63,8 +63,7 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Hero(heroRandomSeed);
-        this.field = field;
+        hero = new Hero(heroRandomSeed, gameSettings);
         hero.init(field);
     }
 
@@ -74,9 +73,6 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public JSONObject getNextQuestion() { // TODO test me
-        if (field.isLastQuestion(questionIndex)) {
-            return new JSONObject().put("messages", "You win!");
-        }
         return hero.getNextQuestion().toJson();
     }
 
@@ -92,6 +88,13 @@ public class Player extends GamePlayer<Hero, Field> {
 
         // put to history and raise events if there is salesResult and no input errors
         if (salesResult != null && !salesResult.isInputError()) {
+            if(gameSettings.getScoreMode() == ScoreMode.MAX_ASSETS) {
+                int day = salesResult.getDay();
+                if(day > gameSettings.getLimitDays())
+                    return;
+            }
+
+
             history.add(salesResult);
             while (history.size() > 10)
                 history.remove();

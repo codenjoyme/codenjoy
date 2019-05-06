@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
@@ -38,13 +39,11 @@ import static java.util.stream.Collectors.toList;
  */
 public class Lemonade implements Field {
 
-    private Level level;
+    private final GameSettings gameSettings;
     private List<Player> players;
-    private Dice dice;
 
-    public Lemonade(Level level, Dice dice) {
-        this.level = level;
-        this.dice = dice;
+    public Lemonade(GameSettings gameSettings) {
+        this.gameSettings = gameSettings;
         players = new LinkedList<>();
     }
 
@@ -79,20 +78,5 @@ public class Lemonade implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
-    }
-
-    @Override
-    public String getQuestion(int index) {
-        return level.getQuestions().get(index);
-    }
-
-    @Override
-    public String getAnswer(int index) {
-        return level.getAnswers().get(index);
-    }
-
-    @Override
-    public boolean isLastQuestion(int index) {
-        return index >= level.size();
     }
 }

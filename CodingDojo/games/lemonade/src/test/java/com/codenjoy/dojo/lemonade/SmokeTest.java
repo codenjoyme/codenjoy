@@ -28,7 +28,7 @@ import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
-import org.junit.Ignore;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
 import java.text.DecimalFormat;
@@ -57,6 +57,13 @@ public class SmokeTest {
             @Override
             public Dice getDice() {
                 return dice;
+            }
+
+            @Override
+            public SettingsImpl createSettings(){
+                SettingsImpl settings = new SettingsImpl();
+                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+                return settings;
             }
         };
 

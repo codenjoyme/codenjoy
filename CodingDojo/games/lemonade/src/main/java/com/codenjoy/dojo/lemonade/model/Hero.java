@@ -38,6 +38,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
     private static Pattern patternGo;
     private Simulator simulator;
+    private final GameSettings gameSettings;
     private SalesResult salesResult;
     private boolean alive;
     private boolean isCommandInvalid;
@@ -52,8 +53,9 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
             "signsToMake parameter should be in [0, 50] range.\n" +
             "lemonadePriceCents parameter should be in [0, 100] range.\n";
 
-    public Hero(long randomSeed) {
+    public Hero(long randomSeed, GameSettings gameSettings) {
         simulator = new Simulator(randomSeed);
+        this.gameSettings = gameSettings;
         alive = true;
         isCommandInvalid = false;
     }
@@ -67,6 +69,9 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
 
     @Override
     public void message(String s) {
+        if(!isAlive())
+            return;
+
         isCommandInvalid = false;
         String command = s.toLowerCase();
 
@@ -120,7 +125,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     }
 
     public boolean isAlive() {
-        return alive;
+        return gameSettings.getLimitDays() == 0 || gameSettings.getLimitDays() >= simulator.getDay();
     }
 
     public Question getNextQuestion() {
