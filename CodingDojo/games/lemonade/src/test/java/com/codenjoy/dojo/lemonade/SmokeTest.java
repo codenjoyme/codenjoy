@@ -80,7 +80,7 @@ public class SmokeTest {
                 "17.09", "106,15,8", "7.55", "-2.03", "SUNNY", "(THE PRICE OF LEMONADE MIX JUST WENT UP)\\n" + heatWave,
                 "15.06", "94,13,8", "6.65", "-1.13", "SUNNY", null,
                 "13.93", "87,12,8", "0.20", "-0.63", "SUNNY", null,
-                "9.81", null, null, null, null, null, null
+                "13.30", null, null, null, null, null, null
         };
         StringBuilder expected = new StringBuilder();
         List<String> history = new LinkedList<>();
@@ -136,7 +136,7 @@ public class SmokeTest {
             expected.append("1:  'weatherForecast':'" + data[day * dataSize + 4].replace(' ', '_') + "'\n");
             expected.append("1:}\n");
             expected.append("1:Answer: message('go " + moveStr + "')\n");
-            expected.append("Fire Event: WIN (" + (int) Math.round(Double.parseDouble(profitStr) * 100) + ")\n");
+            expected.append("Fire Event: WIN (" + profitStr + ", " + data[(day + 1) * dataSize] + ")\n");
             expected.append("------------------------------------------");
 
             history.add("1:    {\n" +

@@ -36,6 +36,6 @@ public class EventArgs {
 
     @Override
     public String toString() {
-        return String.format("%s (%d, %d)", type.toString(), profit, assetsAfter);
+        return String.format("%s (%.2f, %.2f)", type.toString(), profit, assetsAfter);
     }
 }

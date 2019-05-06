@@ -40,11 +40,11 @@ public class ScoresTest {
     private Integer winScore;
 
     public void loose() {
-        scores.event(new EventArgs(EventType.LOOSE, 100, 0));
+        scores.event(new EventArgs(EventType.LOOSE, 1, 0.3));
     }
 
     public void win() {
-        scores.event(new EventArgs(EventType.WIN, 30, 30));
+        scores.event(new EventArgs(EventType.WIN, 0.3, 0.3));
     }
 
     @Before
@@ -59,6 +59,7 @@ public class ScoresTest {
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
+        settings.getParameter("Limit days").update(0); // sets SUM_OF_PROFITS scores counting mode
 
         win();  //+30
         win();  //+30
