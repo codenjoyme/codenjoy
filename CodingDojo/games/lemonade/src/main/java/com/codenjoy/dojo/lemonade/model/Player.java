@@ -27,6 +27,7 @@ import com.codenjoy.dojo.lemonade.services.EventArgs;
 import com.codenjoy.dojo.lemonade.services.EventType;
 import com.codenjoy.dojo.lemonade.services.ScoreMode;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ import java.util.Queue;
  * Класс игрока. Тут кроме героя может подсчитываться очки.
  * Тут же ивенты передабтся лиснеру фреймворка.
  */
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends GamePlayer<Hero, GameField<Player>> {
 
     private Queue<SalesResult> history;
     private final GameSettings gameSettings;
@@ -62,7 +63,7 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero;
     }
 
-    public void newHero(Field field) {
+    public void newHero(GameField<Player> field) {
         hero = new Hero(heroRandomSeed, gameSettings);
         hero.init(field);
     }

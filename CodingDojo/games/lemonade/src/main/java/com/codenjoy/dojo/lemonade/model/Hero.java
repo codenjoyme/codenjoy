@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.regex.Matcher;
@@ -34,7 +35,7 @@ import java.util.regex.Pattern;
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
  * Эти интерфейсы объявлены в {@see PlayerHero}.
  */
-public class Hero extends PlayerHero<Field> implements MessageJoystick {
+public class Hero extends PlayerHero<GameField<Player>> implements MessageJoystick {
 
     private static Pattern patternGo;
     private Simulator simulator;
@@ -61,10 +62,8 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick {
     }
 
     @Override
-    public void init(Field field) {
+    public void init(GameField<Player> field) {
         simulator.reset();
-
-        this.field = field;
     }
 
     @Override

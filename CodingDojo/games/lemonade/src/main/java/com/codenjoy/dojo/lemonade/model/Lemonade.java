@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.toList;
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
  */
-public class Lemonade implements Field {
+public class Lemonade implements GameField<Player> {
 
     private final GameSettings gameSettings;
     private List<Player> players;

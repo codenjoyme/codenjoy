@@ -42,7 +42,6 @@ public class SampleTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private LevelImpl level;
     private GameSettings gameSettings;
 
     @Before
@@ -58,7 +57,6 @@ public class SampleTest {
     }
 
     private void givenQA(String... questionAnswers) {
-        level = new LevelImpl(questionAnswers);
         SettingsImpl settings = new SettingsImpl();
         settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
         gameSettings = new GameSettings(settings);
