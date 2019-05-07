@@ -61,6 +61,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {
+        // reused logic from SavedRequestAwareAuthenticationSuccessHandler::onAuthenticationSuccess
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         if (savedRequest == null) {
@@ -79,6 +80,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
         }
 
         clearAuthenticationAttributes(request);
+        // end of logic reuse
 
         if (savedRequest instanceof DefaultSavedRequest) {
             String requestURI = ((DefaultSavedRequest) savedRequest).getRequestURI();
