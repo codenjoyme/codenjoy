@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.security.ViewDelegationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,13 +48,15 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 @RequiredArgsConstructor
 public class BoardController {
 
+    public static final String URI = "/board";
+
     private final PlayerService playerService;
     private final Registration registration;
-    private final GameService gameService;
     private final Validator validator;
     private final ConfigProperties properties;
+    private final ViewDelegationService viewDelegationService;
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     method = RequestMethod.GET)
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
@@ -61,11 +64,11 @@ public class BoardController {
     {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
 
-        return boardPlayer(model, playerName, null, justBoard);
+        return boardPlayer(model, playerName, null, justBoard, (String) model.get("gameName"));
     }
 
     // TODO удалить это после того как попрошу Олега обновить фронт
-    @RequestMapping(value = "/board/player/id/{playerId:" + Validator.ID + "}",
+    @RequestMapping(value = URI + "/player/id/{playerId:" + Validator.ID + "}",
             method = RequestMethod.GET)
     public String boardPlayerById(ModelMap model,
                               @PathVariable("playerId") String playerId,
@@ -73,11 +76,11 @@ public class BoardController {
     {
         validator.checkPlayerId(playerId);
 
-        return boardPlayer(model, playerId, null, justBoard);
+        return boardPlayer(model, playerId, null, justBoard, (String) model.get("gameName"));
     }
 
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
+    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
     public String removePlayer(@PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         String playerId = validator.checkPlayerCode(playerName, code);
 
@@ -90,13 +93,14 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "/board/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     params = "code",
                     method = RequestMethod.GET)
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
                               @RequestParam("code") String code,
-                              @RequestParam(name = "only", required = false) Boolean justBoard)
+                              @RequestParam(name = "only", required = false) Boolean justBoard,
+                              @RequestParam(name = "gameName", required = false, defaultValue = "") String gameName)
     {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
@@ -112,11 +116,12 @@ public class BoardController {
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
+        String boardView = viewDelegationService.boardView(gameName);
 
-        return (justBoard == null || !justBoard) ? "board" : "board-only";
+        return (justBoard == null || !justBoard) ? boardView : "board-only";
     }
 
-    @RequestMapping(value = "/board/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
+    @RequestMapping(value = URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
             method = RequestMethod.GET)
     public String boardPlayerLog(ModelMap model, @PathVariable("playerName") String playerName) {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
@@ -134,7 +139,7 @@ public class BoardController {
         return "board-log";
     }
 
-    @RequestMapping(value = "/board", method = RequestMethod.GET)
+    @RequestMapping(value = URI, method = RequestMethod.GET)
     public String boardAll() {
         GameType gameType = playerService.getAnyGameWithPlayers();
         if (gameType == NullGameType.INSTANCE) {
@@ -143,7 +148,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = "/board/game/{gameName}", method = RequestMethod.GET)
+    @RequestMapping(value = URI + "/game/{gameName}", method = RequestMethod.GET)
     public String boardAllGames(ModelMap model, @PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
@@ -169,7 +174,7 @@ public class BoardController {
         return "board";
     }
 
-    @RequestMapping(value = "/board", params = "code", method = RequestMethod.GET)
+    @RequestMapping(value = URI, params = "code", method = RequestMethod.GET)
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         validator.checkCode(code, CAN_BE_NULL);
 

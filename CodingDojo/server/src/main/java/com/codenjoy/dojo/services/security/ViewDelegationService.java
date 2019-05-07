@@ -24,13 +24,13 @@ package com.codenjoy.dojo.services.security;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.web.controller.AdminController;
-import com.codenjoy.dojo.web.controller.LoginController;
+import com.codenjoy.dojo.web.controller.BoardController;
 import com.codenjoy.dojo.web.controller.RegistrationController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-
-import java.util.function.Supplier;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -40,42 +40,60 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class ViewDelegationService {
 
+    public static final String REGISTRATION_PAGE_PROP = "page.registration.url";
+    public static final String LOGIN_PAGE_PROP = "page.login.url";
+    public static final String MAIN_PAGE_PROP = "page.main.url";
+    public static final String ADMIN_PAGE_PROP = "page.admin.url";
+    public static final String BOARD_PAGE_PROP = "page.board.url";
+
     private final ConfigProperties properties;
 
-    public String loginUri() {
-        return getUri(properties::getLoginPage, LoginController.URI);
+    @Autowired
+    private Environment env;
+
+    public String registrationUri(String gameName) {
+        return resolveProperty(gameName, REGISTRATION_PAGE_PROP, RegistrationController.URI);
     }
 
-    public String loginView() {
-        return extractView(loginUri());
+//    public String registrationView(String gameName) {
+//        return extractView(registrationUri(gameName));
+//    }
+
+    public String adminUri(String gameName) {
+        return resolveProperty(gameName, ADMIN_PAGE_PROP, AdminController.URI);
     }
 
-    public String registrationUri() {
-        return getUri(properties::getRegistrationPage, RegistrationController.URI);
+    public String boardUri(String gameName) {
+        return resolveProperty(gameName, BOARD_PAGE_PROP, BoardController.URI);
     }
 
-    public String registrationView() {
-        return extractView(registrationUri());
+    public String boardView(String gameName) {
+        return extractView(boardUri(gameName));
     }
 
-    public String adminUri() {
-        return getUri(properties::getAdminPage, AdminController.URI);
+    public String adminView(String gameName) {
+        return extractView(adminUri(gameName));
     }
 
-    public String adminView() {
-        return extractView(adminUri());
-    }
-
-    public boolean isCustomAdminView() {
-        return StringUtils.hasText(adminUri());
+    public boolean isCustomAdminView(String gameName) {
+        return StringUtils.hasText(adminUri(gameName));
     }
 
     private String extractView(String uri) {
         return uri.startsWith("/") ? uri.substring(1) : uri;
     }
 
-    private String getUri(Supplier<String> uriSupplier, String defaultUri) {
-        String uri = uriSupplier.get();
-        return StringUtils.hasText(uri) ? uri : defaultUri;
+    private final String resolveProperty(String prefix, String key, String defaultValue) {
+        String prefixedKey = prefix + "." + key;
+        String property = env.containsProperty(prefixedKey)
+                ? env.getProperty(prefixedKey)
+                : env.getProperty(key);
+        return StringUtils.hasText(property) ? property : defaultValue;
+    }
+
+    public String buildBoardParam(String gameName) {
+        return StringUtils.hasText(gameName)
+                ? "&gameName=" + gameName
+                : "";
     }
 }

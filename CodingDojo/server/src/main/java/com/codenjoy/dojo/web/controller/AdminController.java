@@ -60,6 +60,7 @@ public class AdminController {
     public static final String URI = "/admin";
 
     public static final String GAME_NAME_FORM_KEY = "gameName";
+    public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
     private final TimerService timerService;
     private final PlayerService playerService;
@@ -330,14 +331,10 @@ public class AdminController {
     }
 
     private String getAdmin(String gameName) {
-        if (gameName == null || viewDelegationService.isCustomAdminView()) {
-            return viewDelegationService.adminView();
+        if (gameName == null || viewDelegationService.isCustomAdminView(gameName)) {
+            return viewDelegationService.adminView(gameName);
         }
         return "redirect:/admin?" + GAME_NAME_FORM_KEY + "=" + gameName;
-    }
-
-    private String getAdmin() {
-        return getAdmin(getDefaultGame());
     }
 
     private String getDefaultGame() {
@@ -345,17 +342,19 @@ public class AdminController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAdminPage(Model model, HttpServletRequest request) {
-        String gameName = getGameName(request);
+    public String getAdminPage(Model model, HttpServletRequest request,
+                               @RequestParam(value = GAME_NAME_FORM_KEY, required = false) String gameName) {
+
+        gameName = (gameName == null || gameName.equals("null")) ? null : gameName;
 
         if (gameName == null) {
-            return getAdmin();
+            return getAdmin(gameName);
         }
 
         GameType game = gameService.getGame(gameName);
 
         if (game instanceof NullGameType) {
-            return getAdmin();
+            return getAdmin(gameName);
         }
 
         Settings gameSettings = game.getSettings();

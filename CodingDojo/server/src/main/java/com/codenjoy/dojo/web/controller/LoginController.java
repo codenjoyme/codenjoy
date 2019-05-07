@@ -51,7 +51,7 @@ public class LoginController {
     @GetMapping
     public String register(Model model) {
         populateModel(model, false);
-        return viewDelegationService.loginView();
+        return "login";
     }
 
     @GetMapping(ADMIN)
@@ -64,6 +64,6 @@ public class LoginController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", rooms.alises());
         model.addAttribute("adminLogin", isAdmin);
-        model.addAttribute("registrationUri", viewDelegationService.registrationUri());
+//        model.addAttribute("registrationUri", viewDelegationService.registrationUri());
     }
 }

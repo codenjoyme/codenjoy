@@ -200,15 +200,15 @@ public class RegistrationService {
 
     public String register(String id, String code, String gameName, String ip) {
         Player player = playerService.register(id, ip, gameName);
-        return getBoardUrl(code, player);
+        return getBoardUrl(code, player, gameName);
     }
 
-    private String getBoardUrl(String code, Player player) {
+    private String getBoardUrl(String code, Player player, String gameName) {
         String playerName = player.getName();
         validator.checkPlayerName(playerName, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
-        return "board/player/" + playerName + "?code=" + code;
+        return "board/player/" + playerName + "?code=" + code + viewDelegationService.buildBoardParam(gameName);
     }
 
     private String getIp(HttpServletRequest request) {
@@ -225,6 +225,6 @@ public class RegistrationService {
     private String getRegister(Model model) {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", rooms.alises());
-        return viewDelegationService.registrationView();
+        return "register";
     }
 }

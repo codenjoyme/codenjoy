@@ -25,11 +25,10 @@ page:
   main:
     url: ''
   registration:
-    url: ''
     nickname: true
-  login:
-    url: ''
   admin:
+    url: ''
+  board:
     url: ''
   help.language: ''
 email:
@@ -58,4 +57,6 @@ logging:
     com:
       codenjoy: debug
       epam.dojo: debug
-      org.eclipse.jetty: debug
+    org:
+      eclipse.jetty: debug
+      springframework.mvc: debug

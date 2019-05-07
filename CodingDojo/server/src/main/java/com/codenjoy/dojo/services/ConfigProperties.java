@@ -40,17 +40,14 @@ public class ConfigProperties {
     @Value("${email.verification}")
     private boolean isEmailVerificationNeeded;
 
-    @Value("${page.registration.url}")
-    private String registrationPage;
-
-    @Value("${page.login.url}")
-    private String loginPage;
-
     @Value("${page.main.url}")
     private String mainPage;
 
     @Value("${page.admin.url}")
     private String adminPage;
+
+    @Value("${page.board.url}")
+    private String boardPage;
 
     @Value("${page.help.language}")
     private String helpLanguage;
@@ -72,10 +69,6 @@ public class ConfigProperties {
 
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
-    }
-
-    public String getRegistrationPage() {
-        return registrationPage;
     }
 
     public boolean isNickNameAllowed() {

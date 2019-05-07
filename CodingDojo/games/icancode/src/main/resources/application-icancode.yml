@@ -1,12 +1,12 @@
 game:
   ai: false
-page:
-  main:
-    url: ''
-  registration:
-    url: /icancode/registration
-    nickname: false
-  login:
-    url: /icancode/login
-  admin:
-    url: /icancode/admin
+icancode:
+  page:
+    main:
+      url: ''
+    registration:
+      nickname: false
+    admin:
+      url: /icancode/admin
+    board:
+      url: /icancode/board
