@@ -28,7 +28,7 @@ import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
-import org.junit.Ignore;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
 import java.text.DecimalFormat;
@@ -58,6 +58,13 @@ public class SmokeTest {
             public Dice getDice() {
                 return dice;
             }
+
+            @Override
+            public SettingsImpl createSettings(){
+                SettingsImpl settings = new SettingsImpl();
+                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+                return settings;
+            }
         };
 
         // when
@@ -80,7 +87,7 @@ public class SmokeTest {
                 "17.09", "106,15,8", "7.55", "-2.03", "SUNNY", "(THE PRICE OF LEMONADE MIX JUST WENT UP)\\n" + heatWave,
                 "15.06", "94,13,8", "6.65", "-1.13", "SUNNY", null,
                 "13.93", "87,12,8", "0.20", "-0.63", "SUNNY", null,
-                "9.81", null, null, null, null, null, null
+                "13.30", null, null, null, null, null, null
         };
         StringBuilder expected = new StringBuilder();
         List<String> history = new LinkedList<>();
@@ -136,7 +143,7 @@ public class SmokeTest {
             expected.append("1:  'weatherForecast':'" + data[day * dataSize + 4].replace(' ', '_') + "'\n");
             expected.append("1:}\n");
             expected.append("1:Answer: message('go " + moveStr + "')\n");
-            expected.append("Fire Event: WIN (" + (int) Math.round(Double.parseDouble(profitStr) * 100) + ")\n");
+            expected.append("Fire Event: WIN (" + profitStr + ", " + data[(day + 1) * dataSize] + ")\n");
             expected.append("------------------------------------------");
 
             history.add("1:    {\n" +

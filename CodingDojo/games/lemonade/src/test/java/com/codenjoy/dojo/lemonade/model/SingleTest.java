@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,34 +51,46 @@ public class SingleTest {
 
     private final String welcomeMessage = "HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\\n\\nIN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\\nHOW MUCH PROFIT YOU MAKE IS UP TO YOU.\\nIF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\\n\\nTO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\\n1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\\n2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\\n3. WHAT PRICE TO CHARGE FOR EACH GLASS\\n\\nYOU WILL BEGIN WITH $2.00 CASH (ASSETS).BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\\nYOUR COST TO MAKE LEMONADE IS $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\\n\\nYOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\\nYOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\\nTHE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\\nTHE NUMBER OF ADVERTISING SIGNS YOU USE.\\nKEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\\n";
     private final String morningDay0Message = "\\nYOUR ASSETS: $2.00\\nLEMONSVILLE WEATHER REPORT:  SUNNY\\nON DAY 1, THE COST OF LEMONADE IS $0.02\\n";
+    private final String invalidCommandMessage = "Invalid input. lemonadeToMake parameter should be in [0, 1000] range.\\nsignsToMake parameter should be in [0, 50] range.\\nlemonadePriceCents parameter should be in [0, 100] range.\\n";
     private final String expectedDay0 = "{" +
             "'assets':2,'day':1,'history':[],'isBankrupt':false,'lemonadeCost':0.02," +
             "'messages':'" + welcomeMessage + morningDay0Message + "'," +
+            "'weatherForecast':'SUNNY'" +
+            "}";
+    private final String expectedDay0InvalidCommand = "{" +
+            "'assets':2,'day':1,'history':[],'isBankrupt':false,'lemonadeCost':0.02," +
+            "'messages':'" + invalidCommandMessage + "'," +
             "'weatherForecast':'SUNNY'" +
             "}";
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
-                "question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
+        SettingsImpl settings = new SettingsImpl();
+        settings.addEditBox("Limit days").type(Integer.class).update(0);
+        GameSettings gameSettings = new GameSettings(settings);
         dice = mock(Dice.class);
-        field = new Lemonade(level, dice);
-        PrinterFactory factory = new GameRunner().getPrinterFactory();
+        field = new Lemonade(gameSettings);
+        GameRunner gameRunner = new GameRunner() {
+            @Override
+            public SettingsImpl createSettings(){
+                SettingsImpl settings = new SettingsImpl();
+                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+                return settings;
+            }
+        };
+        PrinterFactory factory = gameRunner.getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1, 1), factory);
+        game1 = new Single(new Player(listener1, 1, gameSettings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2, 1), factory);
+        game2 = new Single(new Player(listener2, 1, gameSettings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3, 1), factory);
+        game3 = new Single(new Player(listener3, 1, gameSettings), factory);
         game3.on(field);
 
         dice(1, 4);
@@ -133,11 +146,11 @@ public class SingleTest {
         field.tick();
 
         // then
-        asrtFl1(expectedDay0);
+        asrtFl1(expectedDay0InvalidCommand);
 
-        asrtFl2(expectedDay0);
+        asrtFl2(expectedDay0InvalidCommand);
 
-        asrtFl3(expectedDay0);
+        asrtFl3(expectedDay0InvalidCommand);
     }
 
     // игроков можно удалять из игры
@@ -166,9 +179,9 @@ public class SingleTest {
 
         field.tick();
 
-        asrtFl1(expectedDay0);
-        asrtFl2(expectedDay0);
-        asrtFl3(expectedDay0);
+        asrtFl1(expectedDay0InvalidCommand);
+        asrtFl2(expectedDay0InvalidCommand);
+        asrtFl3(expectedDay0InvalidCommand);
 
         // when
         game1.newGame();
@@ -189,9 +202,9 @@ public class SingleTest {
 
         field.tick();
 
-        asrtFl1(expectedDay0);
-        asrtFl2(expectedDay0);
-        asrtFl3(expectedDay0);
+        asrtFl1(expectedDay0InvalidCommand);
+        asrtFl2(expectedDay0InvalidCommand);
+        asrtFl3(expectedDay0InvalidCommand);
 
         // then
         /*verify(listener1).event(Events.WIN);

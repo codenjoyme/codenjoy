@@ -25,6 +25,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -41,7 +42,7 @@ public class SampleTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private LevelImpl level;
+    private GameSettings gameSettings;
 
     @Before
     public void setup() {
@@ -56,10 +57,12 @@ public class SampleTest {
     }
 
     private void givenQA(String... questionAnswers) {
-        level = new LevelImpl(questionAnswers);
-        game = new Lemonade(level, dice);
+        SettingsImpl settings = new SettingsImpl();
+        settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+        gameSettings = new GameSettings(settings);
+        game = new Lemonade(gameSettings);
         listener = mock(EventListener.class);
-        player = new Player(listener, 1);
+        player = new Player(listener, 1, gameSettings);
         game.newGame(player);
         hero = player.hero;
         hero.init(game);

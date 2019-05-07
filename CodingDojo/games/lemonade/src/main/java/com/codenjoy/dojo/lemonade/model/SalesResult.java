@@ -36,9 +36,10 @@ public class SalesResult {
     private final double profit;
     private final double assetsAfter;
     private final boolean isBankrupt;
+    private final boolean isInputError;
 
     public SalesResult(int day, double assetsBefore, int lemonadeSold, double lemonadePrice, double income, int lemonadeMade, int signsMade,
-                       double expenses, double profit, double assetsAfter, boolean isBankrupt) {
+                       double expenses, double profit, double assetsAfter, boolean isBankrupt, boolean isInputError) {
 
         this.day = day;
         this.assetsBefore = toMoneyFormat(assetsBefore);
@@ -51,6 +52,7 @@ public class SalesResult {
         this.profit = toMoneyFormat(profit);
         this.assetsAfter = toMoneyFormat(assetsAfter);
         this.isBankrupt = isBankrupt;
+        this.isInputError = isInputError;
     }
 
     public boolean isBankrupt() {
@@ -76,7 +78,19 @@ public class SalesResult {
         return this.profit;
     }
 
+    public boolean isInputError(){
+        return this.isInputError;
+    }
+
     private static double toMoneyFormat(double dollars) {
         return Math.round(dollars * 100) / 100.0;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public double getAssetsAfter() {
+        return assetsAfter;
     }
 }

@@ -35,6 +35,7 @@ public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> bankruptPenalty;
+    private final Parameter<Integer> limitDays;
 
     private volatile int score;
 
@@ -44,6 +45,7 @@ public class Scores implements PlayerScores {
         // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
         bankruptPenalty = settings.addEditBox("Bankrupt penalty").type(Integer.class).def(100);
+        limitDays = settings.addEditBox("Limit days").type(Integer.class).def(30);
     }
 
     @Override
@@ -59,14 +61,30 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         EventArgs eventArgs = (EventArgs) event;
+        ScoreMode mode = getScoreMode();
         switch (eventArgs.type) {
             case WIN:
-                score += eventArgs.score;
+                if(mode == ScoreMode.SUM_OF_PROFITS)
+                    score += toScore(eventArgs.profit);
+                if(mode == ScoreMode.MAX_ASSETS)
+                    score = Math.max(score, toScore(eventArgs.assetsAfter));
                 break;
             case LOOSE:
-                score -= bankruptPenalty.getValue();
+                if(mode == ScoreMode.SUM_OF_PROFITS)
+                    score -= bankruptPenalty.getValue();
                 break;
         }
         score = Math.max(0, score);
     }
+
+    private int toScore(double value){
+        return (int)(100 * value);
+    }
+
+    private ScoreMode getScoreMode(){
+        return limitDays.getValue() > 0
+                ? ScoreMode.MAX_ASSETS
+                : ScoreMode.SUM_OF_PROFITS;
+    }
+
 }
