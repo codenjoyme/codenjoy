@@ -331,10 +331,14 @@ public class AdminController {
     }
 
     private String getAdmin(String gameName) {
-        if (gameName == null || viewDelegationService.isCustomAdminView(gameName)) {
-            return viewDelegationService.adminView(gameName);
+        if (gameName == null) {
+            return getAdmin();
         }
         return "redirect:/admin?" + GAME_NAME_FORM_KEY + "=" + gameName;
+    }
+
+    private String getAdmin() {
+        return getAdmin(getDefaultGame());
     }
 
     private String getDefaultGame() {
@@ -342,13 +346,19 @@ public class AdminController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAdminPage(Model model, HttpServletRequest request,
-                               @RequestParam(value = GAME_NAME_FORM_KEY, required = false) String gameName) {
+    public String getAdminPage(Model model,
+                               @RequestParam(value = GAME_NAME_FORM_KEY, required = false) String gameName,
+                               @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
+                                           Boolean gameSpecificAdminPage) {
 
         gameName = (gameName == null || gameName.equals("null")) ? null : gameName;
 
         if (gameName == null) {
             return getAdmin(gameName);
+        }
+
+        if (gameSpecificAdminPage) {
+            return viewDelegationService.adminView(gameName);
         }
 
         GameType game = gameService.getGame(gameName);
