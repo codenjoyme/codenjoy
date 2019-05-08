@@ -22,6 +22,7 @@ License along with this program.  If not, see
 -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html lang="en">
 <head>
@@ -44,14 +45,18 @@ License along with this program.  If not, see
             <div class="col-xs-6">
                 <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
                 <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
-                <span class="title icancode-title">ICanCode</span>
+                <c:if test="${activeProfiles.contains('icancode')}">
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
+                    <span class="title icancode-title">ICanCode</span>
+                </c:if>
             </div>
             <nav class="nav col-xs-6 pull-right text-right">
                 <ul class="nav-list">
                     <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
                     <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
-                    <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
+                    <sec:authorize access="isAuthenticated()">
+                        <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
+                    </sec:authorize>
                 </ul>
             </nav>
         </header>
@@ -107,12 +112,8 @@ License along with this program.  If not, see
                 <input type="text" placeholder="Company"/>
                 <span class="icon fa"></span>
             </div>
-            <%--<form:input type="hidden" path="gameName" value="icancode"/>--%>
-            <button class="btn-submit" id="submit-button" type="button">Sign up</button>
-                <%--<div id="error-message" class="error-message" hidden></div>--%>
             <c:if test="${not adminLogin}">
                 <tr>
-                    <td>Your game</td>
                     <td>
                         <form:select items="${gameNames}" path="gameName"/>
                     </td>
@@ -121,6 +122,7 @@ License along with this program.  If not, see
                     </td>
                 </tr>
             </c:if>
+            <button class="btn-submit" id="submit-button" type="button">Sign up</button>
         </div>
     </form:form>
 </div>

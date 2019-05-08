@@ -8,5 +8,3 @@ icancode:
       nickname: false
     admin:
       url: /icancode/admin
-    board:
-      url: /icancode/board

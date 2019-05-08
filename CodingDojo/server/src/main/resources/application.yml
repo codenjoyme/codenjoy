@@ -28,8 +28,6 @@ page:
     nickname: true
   admin:
     url: ''
-  board:
-    url: ''
   help.language: ''
 email:
   verification: false
@@ -55,8 +53,8 @@ logging:
   level:
     root: info
     com:
-      codenjoy: debug
-      epam.dojo: debug
+      codenjoy: info
+      epam.dojo: info
     org:
-      eclipse.jetty: debug
-      springframework.mvc: debug
+      eclipse.jetty: info
+      springframework.mvc: info

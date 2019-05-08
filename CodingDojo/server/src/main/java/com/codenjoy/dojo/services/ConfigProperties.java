@@ -46,9 +46,6 @@ public class ConfigProperties {
     @Value("${page.admin.url}")
     private String adminPage;
 
-    @Value("${page.board.url}")
-    private String boardPage;
-
     @Value("${page.help.language}")
     private String helpLanguage;
 

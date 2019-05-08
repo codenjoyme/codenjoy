@@ -27,6 +27,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 
@@ -34,6 +36,7 @@ import java.util.stream.Stream;
 public class SystemControllerAdvice {
 
     public static final String DEBUG_ATTRIBUTE = "debug";
+    public static final String ACTIVE_PROFILES_ATTRIBUTE = "activeProfiles";
 
     @Autowired
     private Environment environment;
@@ -42,5 +45,10 @@ public class SystemControllerAdvice {
     public Boolean debugAdvice() {
         return Stream.of(environment.getActiveProfiles())
                 .anyMatch(p -> DEBUG_ATTRIBUTE.equalsIgnoreCase(p.toString()));
+    }
+
+    @ModelAttribute(ACTIVE_PROFILES_ATTRIBUTE)
+    public List<String> setProfilesVar() {
+        return Arrays.asList(environment.getActiveProfiles());
     }
 }

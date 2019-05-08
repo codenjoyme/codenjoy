@@ -23,12 +23,14 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.security.ViewDelegationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -54,7 +56,6 @@ public class BoardController {
     private final Registration registration;
     private final Validator validator;
     private final ConfigProperties properties;
-    private final ViewDelegationService viewDelegationService;
 
     @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     method = RequestMethod.GET)
@@ -116,9 +117,8 @@ public class BoardController {
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
-        String boardView = viewDelegationService.boardView(gameName);
 
-        return (justBoard == null || !justBoard) ? boardView : "board-only";
+        return (justBoard == null || !justBoard) ? "board" : "board-only";
     }
 
     @RequestMapping(value = URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",

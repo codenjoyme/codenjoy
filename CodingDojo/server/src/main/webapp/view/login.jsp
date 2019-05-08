@@ -21,6 +21,8 @@ License along with this program.  If not, see
 #L%
 -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html lang="en">
 <head>
@@ -43,21 +45,25 @@ License along with this program.  If not, see
             <div class="col-xs-6">
                 <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
                 <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
-                <span class="title icancode-title">ICanCode</span>
+                <c:if test="${activeProfiles.contains('icancode')}">
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
+                    <span class="title icancode-title">ICanCode</span>
+                </c:if>
             </div>
             <nav class="nav col-xs-6 pull-right text-right">
                 <ul class="nav-list">
                     <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
                     <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
-                    <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
+                    <sec:authorize access="isAuthenticated()">
+                        <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
+                    </sec:authorize>
                 </ul>
             </nav>
         </header>
     </div>
 </div>
 <div class="container-fluid">
-    <form class="form-registr" id="form" action="${ctx}/process_login" method="POST">
+    <form:form class="form-registr" id="form" action="${ctx}/process_login" method="POST">
         <h2 class="form-title">Sign in</h2>
         <div class="inputs">
             <div id="email" class="field not-valid">
@@ -79,6 +85,17 @@ License along with this program.  If not, see
             <div id="data" hidden>
                 <input type="text" name="data"/>
             </div>
+            <c:if test="${not adminLogin}">
+                <tr>
+                    <td>
+                        <select name="gameName">
+                            <c:forEach items="${gameNames}" var="g" >
+                                <option value="${g}">${g}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                </tr>
+            </c:if>
             <!-- add attribute 'not-empty' to the div if you want to enable validation -->
             <!-- add attribute 'hidden' to the div if you want to hide this edit box -->
             <input type="hidden" name="gameName" value="icancode"/>
@@ -86,7 +103,7 @@ License along with this program.  If not, see
             <a class="btn-submit reg-link" id="registration-button" href="${ctx}/register">Sign Up</a>
             <div id="error-message" class="error-message" hidden></div>
         </div>
-    </form>
+    </form:form>
 </div>
 <footer class="footer">
     <div class="container-fluid">

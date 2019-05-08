@@ -19,27 +19,25 @@
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
   -->
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta charset="UTF-8">
 </head>
 <div id="layout" class="wrapper">
-    <link href="${ctx}/resources/icancode/css/reset.css" rel="stylesheet"/>
-    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
-    <link href="${ctx}/resources/icancode/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="${ctx}/resources/icancode/css/board.css" rel="stylesheet"/>
-    <link href="${ctx}/resources/icancode/css/style.css" rel="stylesheet"/>
-    <link href="${ctx}/resources/icancode/css/befunge.css" rel="stylesheet"/>
-    <link href="${ctx}/resources/icancode/js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
+    <link href="css/reset.css" rel="stylesheet"/>
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/board.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <link href="css/befunge.css" rel="stylesheet"/>
+    <link href="js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <div class="header-container">
       <div class="container-fluid">
           <header class="header row">
                 <div class="col-xs-6">
-                  <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
+                  <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
                   <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
+                  <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
                   <span class="title icancode-title">ICanCode</span>
                   </div>
                 <nav class="nav col-xs-6 pull-right text-right">
@@ -47,7 +45,7 @@
                   <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
                   <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#">ApiDocs</a></li>
                   <li class="title icancode-title inline"><a id="help-link" target="_blank" href="/codenjoy-contest/board">LeaderBoard</a></li>
-                  <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
+                  <li class="logo title inline"><img src="img/profile.png"></li>
                   <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
                 </ul>
             </nav>
@@ -154,36 +152,36 @@
 
 <!--<script src="js/jquery/jquery-3.1.0.min.js"></script>-->
 
-<script src="${ctx}/resources/icancode/js/mousewheel/jquery.mousewheel.min.js"></script>
-<script src="${ctx}/resources/icancode/js/jquery/jquery-ui.min.js"></script>
-<script src="${ctx}/resources/icancode/js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="${ctx}/resources/css/bootstrap/bootstrap.min.css"></script>
+<script src="js/mousewheel/jquery.mousewheel.min.js"></script>
+<script src="js/jquery/jquery-ui.min.js"></script>
+<script src="js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="../css/bootstrap/bootstrap.min.js"></script>
 
-<script src="${ctx}/resources/icancode/js/game/console.js"></script>
-<script src="${ctx}/resources/icancode/js/game/buttons.js"></script>
+<script src="js/game/console.js"></script>
+<script src="js/game/buttons.js"></script>
 
-<script src="${ctx}/resources/icancode/js/game/point.js"></script>
-<script src="${ctx}/resources/icancode/js/game/direction.js"></script>
-<script src="${ctx}/resources/icancode/js/game/elements.js"></script>
-<script src="${ctx}/resources/icancode/js/game/board.js"></script>
-<script src="${ctx}/resources/icancode/js/game/level-info.js"></script>
-<script src="${ctx}/resources/icancode/js/game/autocomplete.js"></script>
-<script src="${ctx}/resources/icancode/js/game/editor.js"></script>
-<script src="${ctx}/resources/icancode/js/game/progressbar.js"></script>
-<script src="${ctx}/resources/icancode/js/game/levelProgress.js"></script>
+<script src="js/game/point.js"></script>
+<script src="js/game/direction.js"></script>
+<script src="js/game/elements.js"></script>
+<script src="js/game/board.js"></script>
+<script src="js/game/level-info.js"></script>
+<script src="js/game/autocomplete.js"></script>
+<script src="js/game/editor.js"></script>
+<script src="js/game/progressbar.js"></script>
+<script src="js/game/levelProgress.js"></script>
 
-<script src="${ctx}/resources/icancode/js/game/robot.js"></script>
-<script src="${ctx}/resources/icancode/js/game/socket.js"></script>
-<script src="${ctx}/resources/icancode/js/game/controller.js"></script>
+<script src="js/game/robot.js"></script>
+<script src="js/game/socket.js"></script>
+<script src="js/game/controller.js"></script>
 
-<script src="${ctx}/resources/icancode/js/game/runnerJs.js"></script>
-<script src="${ctx}/resources/icancode/js/game/runnerBefunge.js"></script>
-<script src="${ctx}/resources/icancode/js/game/loader/boardPageLoad.js"></script>
+<script src="js/game/runnerJs.js"></script>
+<script src="js/game/runnerBefunge.js"></script>
+<script src="js/game/loader/boardPageLoad.js"></script>
 
-<script src="${ctx}/resources/icancode/js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="${ctx}/resources/icancode/js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 
-<script src="${ctx}/resources/icancode/js/game/loader/boardAllPageLoad.js"></script>
+<script src="js/game/loader/boardAllPageLoad.js"></script>
 
 <!--<script src="../js/icancode.js"></script>-->
 
