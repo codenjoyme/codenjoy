@@ -53,12 +53,12 @@ public class SingleTest {
     private final String morningDay0Message = "\\nYOUR ASSETS: $2.00\\nLEMONSVILLE WEATHER REPORT:  SUNNY\\nON DAY 1, THE COST OF LEMONADE IS $0.02\\n";
     private final String invalidCommandMessage = "Invalid input. lemonadeToMake parameter should be in [0, 1000] range.\\nsignsToMake parameter should be in [0, 50] range.\\nlemonadePriceCents parameter should be in [0, 100] range.\\n";
     private final String expectedDay0 = "{" +
-            "'assets':2,'day':1,'history':[],'isBankrupt':false,'lemonadeCost':0.02," +
+            "'assets':2,'day':1,'history':[],'isBankrupt':false,'isGameOver':false,'lemonadeCost':0.02," +
             "'messages':'" + welcomeMessage + morningDay0Message + "'," +
             "'weatherForecast':'SUNNY'" +
             "}";
     private final String expectedDay0InvalidCommand = "{" +
-            "'assets':2,'day':1,'history':[],'isBankrupt':false,'lemonadeCost':0.02," +
+            "'assets':2,'day':1,'history':[],'isBankrupt':false,'isGameOver':false,'lemonadeCost':0.02," +
             "'messages':'" + invalidCommandMessage + "'," +
             "'weatherForecast':'SUNNY'" +
             "}";

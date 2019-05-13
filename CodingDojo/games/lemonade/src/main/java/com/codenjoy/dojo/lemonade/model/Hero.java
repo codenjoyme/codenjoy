@@ -145,7 +145,8 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
                 assets,
                 weatherForecast,
                 messages,
-                isBankrupt);
+                isBankrupt,
+                isBankrupt || !isAlive());
     }
 
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
