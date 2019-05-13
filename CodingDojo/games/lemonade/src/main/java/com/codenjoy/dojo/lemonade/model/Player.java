@@ -57,6 +57,10 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
         if (history != null) {
             history.clear();
         }
+
+        if(hero != null) {
+            hero.init(null);
+        }
     }
 
     public Hero getHero() {
