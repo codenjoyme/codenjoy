@@ -63,9 +63,6 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
 
     @Override
     public void message(String s) {
-        if(!isAlive())
-            return;
-
         serverMessagesManager.reset();
         String command = s.toLowerCase();
 
@@ -73,6 +70,9 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
             simulator.reset();
             return;
         }
+
+        if(!isAlive() || isGameOver())
+            return;
 
         if (simulator.isBankrupt()) {
             this.salesResult = null;
@@ -119,7 +119,11 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
     }
 
     public boolean isAlive() {
-        return gameSettings.getLimitDays() == 0 || gameSettings.getLimitDays() >= simulator.getDay();
+        return true;
+    }
+
+    private boolean isGameOver(){
+        return gameSettings.getLimitDays() != 0 && gameSettings.getLimitDays() < simulator.getDay();
     }
 
     public Question getNextQuestion() {
@@ -127,20 +131,24 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
         double lemonadeCost = simulator.getLemonadeCost();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
+        boolean isBankrupt = simulator.isBankrupt();
+        boolean isGameOver = isGameOver();
+
+        serverMessagesManager.setGameOver(isGameOver);
         serverMessagesManager.setMessages(
                 simulator.getStatusMessages(),
                 simulator.getReportMessages(),
                 simulator.getMorningMessages()
         );
         String messages = serverMessagesManager.getMessages();
-        boolean isBankrupt = simulator.isBankrupt();
+
         return new Question(day,
                 lemonadeCost,
                 assets,
                 weatherForecast,
                 messages,
                 isBankrupt,
-                isBankrupt || !isAlive());
+                isBankrupt || isGameOver);
     }
 
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {

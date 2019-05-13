@@ -29,11 +29,14 @@ public class ServerMessagesManager {
                     "signsToMake parameter should be in [0, 50] range.\n" +
                     "lemonadePriceCents parameter should be in [0, 100] range.\n";
 
+    private final String gameOverMessage =
+            "YOU WON. GAME IS OVER.\nPLEASE, SEND 'RESET' COMMAND IN ORDER TO START A NEW GAME.\n\n\n";
+
     private boolean isCommandInvalid;
+    private boolean isGameOver;
     private String statusMessages;
     private String reportMessages;
     private String morningMessages;
-
 
     public ServerMessagesManager() {
         isCommandInvalid = false;
@@ -41,10 +44,15 @@ public class ServerMessagesManager {
 
     public void reset() {
         isCommandInvalid = false;
+        isGameOver = false;
     }
 
     public void setCommandInvalid(boolean isInvalid) {
         isCommandInvalid = isInvalid;
+    }
+
+    public void setGameOver(boolean isGameOver) {
+        this.isGameOver = isGameOver;
     }
 
     public void setMessages(String statusMessages, String reportMessages, String morningMessages) {
@@ -54,10 +62,21 @@ public class ServerMessagesManager {
     }
 
     public String getMessages() {
-        if (isCommandInvalid) {
-            return invalidCommandMessage;
+
+        String statusMsg = this.statusMessages;
+        String reportMsg = this.reportMessages;
+        String morningMsg = this.morningMessages;
+
+        if (this.isCommandInvalid) {
+            statusMsg = invalidCommandMessage;
+            reportMsg = morningMsg = "";
         }
 
-        return String.join("", this.statusMessages, this.reportMessages, this.morningMessages);
+        if (this.isGameOver) {
+            statusMsg = gameOverMessage;
+            morningMsg = "";
+        }
+
+        return String.join("", statusMsg, reportMsg, morningMsg);
     }
 }
