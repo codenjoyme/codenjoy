@@ -31,3 +31,8 @@
 .float-left {
     float: left;
 }
+
+.float-right-before-fork {
+    float: right;
+    margin-right: 150px; /* form-me.png width */
+}

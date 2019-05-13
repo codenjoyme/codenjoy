@@ -45,8 +45,7 @@
             <ul>
             <c:forEach items="${gameNames}" var="gameName">
                 <li>
-                    <div>${gameName.value}</div>
-                    <div><a href="${ctx}/board/game/${gameName.key}">View</a> | <a href="${ctx}/TODO/${gameName.key}">Join</a></div>
+                    <div>${gameName.value}: <a href="${ctx}/board/game/${gameName.key}">View</a> | <a href="${ctx}/TODO/${gameName.key}">Join</a></div>
                 </li>
             </c:forEach>
             </ul>

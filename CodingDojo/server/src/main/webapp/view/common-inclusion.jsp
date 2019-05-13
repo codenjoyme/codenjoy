@@ -42,13 +42,13 @@
 <sec:authorize access="isAuthenticated()">
 <body>
     <div class="user-controls-container">
-        <div class="user-control float-left">
+        <div class="user-control">
+            <a href="${ctx}/" >Games</a>
+        </div>
+        <div class="user-control float-right-before-fork">
             <form class="user-control" action="${ctx}/process_logout">
                 <input type="submit" value="Logout" class="btn btn-link">
             </form>
-        </div>
-        <div class="user-control">
-            <a href="${ctx}/" >Games</a>
         </div>
     </div>
 </body>

@@ -195,7 +195,7 @@
 
     function loadInput(key, selector) {
         var value = localStorage.getItem(key);
-        if (!!value && !$(selector).attr('hidden')) {
+        if (!!value && value !== 'undefined' && !$(selector).attr('hidden')) {
             $(selector).find('input').val(value);
         }
     }

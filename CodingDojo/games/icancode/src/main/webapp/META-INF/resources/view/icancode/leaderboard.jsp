@@ -22,7 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <div id="layout">
-    <link href="${ctx}/resources/icancode/css/reset.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/css/reset.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/icancode/css/style.css" rel="stylesheet"/>
     <link href="${ctx}/resources/icancode/css/leaderboard.css" rel="stylesheet"/>
@@ -31,16 +31,16 @@
         <div class="container-fluid">
             <header class="header row">
                 <div class="col-xs-6">
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
                     <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/i_can_code_Logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </div>
                 <nav class="nav col-xs-6 pull-right text-right">
                     <ul class="nav-list">
                         <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
                         <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#">Help</a></li>
-                        <li class="logo title inline"><img src="${ctx}/resources/icancode/img/profile.png"></li>
+                        <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
                         <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
                     </ul>
                 </nav>

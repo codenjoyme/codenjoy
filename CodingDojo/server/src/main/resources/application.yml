@@ -41,7 +41,7 @@ database:
   user: ''
   password: ''
 admin:
-  login: admin@dojarena.io
+  login: admin@codenjoyme.com
   password: admin
 
 app:

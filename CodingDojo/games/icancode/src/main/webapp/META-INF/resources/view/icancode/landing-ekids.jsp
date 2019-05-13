@@ -25,7 +25,7 @@
 <html lang="en">
   <head>
     <title>ICanCode</title>
-    <link href="${ctx}/resources/icancode/css/reset.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/css/reset.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/icancode/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/icancode/css/landing-style.css" rel="stylesheet" />

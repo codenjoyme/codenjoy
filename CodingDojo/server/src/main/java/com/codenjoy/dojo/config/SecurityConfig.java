@@ -106,7 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @NonSSOProfile
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
-    public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
+    public static class FormLoginSecurityConf extends WebSecurityConfigurerAdapter {
 
         @Autowired
         private AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -131,6 +131,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .usernameParameter(USERNAME_FORM_PARAMETER)
                                 .passwordParameter(PASSWORD_FORM_PARAMETER)
                                 .successHandler(authenticationSuccessHandler)
+                                .failureUrl(LoginController.URI + "?failed=true")
                             .permitAll()
                     .and()
                         .logout()

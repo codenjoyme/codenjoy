@@ -825,7 +825,7 @@ from Alex: 2019-04-16
 
 Мисли Саши от 2019-04-26
 
-51) Были удалены методы
+- 51) Были удалены методы
     public String approveEmail(Model model, @RequestParam("approve") String link) {
     public @ResponseBody String isEmailApproved(@RequestParam("approved") String id) throws InterruptedException {
         Нужены были для верификации имейла, давно не поддерживались, может вернуть?
@@ -835,59 +835,83 @@ from Alex: 2019-04-16
  Igor: я эти методы удалил только потому, что они не поддерживались (мапинг был отключен). Если они ещё актуальны,
  давай верну, только мне кажется, это было бы лучше сделать ещё одним PR'ом из другой ветки :)
 
-52) Что делают?
+ UPD: TODO: поправить как дефект с низким приоритетом
+
++ 52) Что делают?
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
  Igor: это базовые абстракции spring security. Первый отвечает за бОльшую часть флоу _аутентификации_, второй
  вызывается первым для поиска пользователя в базе/памяти/etc. по логину с формы аутентификации. Дальше этот пользователь
  (который в большинстве случаев является инстансом UserDetails) верифицируется менеджером и аппрувится, либо отстреливается.
 
-53) в GameUserDetailsService странно как-то ведь поиск по имейлу, а передается туда код. Точно тут все ок?
++ 53) в GameUserDetailsService странно как-то ведь поиск по имейлу, а передается туда код. Точно тут все ок?
     public UserDetails loadUserByUsername(String code) throws UsernameNotFoundException {
         return registration.getUserByEmail(code);
     }
  Igor: спасибо, что заметил, параметр забыл переименовать - поправил. // Осталось со времен "старого" PR, где логин
  происходил по коду.
 
-54) Расскажи плиз как работает
++ 54) Расскажи плиз как работает
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
  Igor: это лучше голосом :(
     UPD: обсудили
 
-55) В application.yml не тот имейл, все же это два разных проекта
++ 55) В application.yml не тот имейл, все же это два разных проекта
     admin:
         login: admin@dojarena.io
- Igor: согласен, на какой заменить? admin@codenjoyme.com?
+ Igor: заменил на admin@codenjoyme.com
 
-56) К классу RegistrationValidator не нашел тесты
++ 56) К классу RegistrationValidator не нашел тесты
  Igor: точно, добавил
 
-57) Login.jsp
+- 57) Login.jsp
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.js" rel="script">
     их стоит в maven добавить в к
     <groupId>com.samaxes.maven</groupId>
     <artifactId>minify-maven-plugin</artifactId>
     <version>${minify-maven-plugin.version}</version>
+    TODO: поправить как дефект с низким приоритетом
 
-58) Как работает профиль sso?
++ 58) Как работает профиль sso?
  Igor: обсудили голосом. Без sso логин через форму, с sso через настроенный сервер авторизации (OAuth2) - см. application-sso.yml
 
-59) Что делает PlayerFormLoginSuccessAuthenticationHandler?
++- 59) Что делает PlayerFormLoginSuccessAuthenticationHandler?
  Igor: обсудили голосом - отдельная сущность для редиректа после успешной аутентификации. В коде добавил коммент по
  реализации. Отдельная сущность понадобилась, чтобы положить логику, которая раньше была в общем метода логина/регистрации,
  на spring security
+ TODO: избавиться от дублирования кода, дефект с низким приоритетом
 
-60) В тесте GameServiceTest фикс  в setup() выглядит как дублирование основной логики
+- 60) В тесте GameServiceTest фикс  в setup() выглядит как дублирование основной логики
  Igor: обсудили. Есть опция разнести в скриптах сборку с прогоном тестов отдельно (без профилей игр), и отдельно сборку
  с нужными игрушками, но без тестов. Вторая опция - оставить этот дубль логики поиска артефактов игр. Пока оставил второй
  вариант + добавил над неугодным методом аналогичный комментарий на будущее
+ TODO: поправить как дефект с низким приоритетом
 
-61) Что делает ViewDelegationService?
++ 61) Что делает ViewDelegationService?
+ Igor: абстракция для определения View (Spring MVC) под потенциальные кастомные страницы логина, регистрации, админок, etc.
+    Перенес формы логина/регистрации из icancode в модуль server как основные. Теперь ViewDelegationService используется
+    только для кастомной админки icancode.
+    Пример:
+    /codenjoyme-contest/admin&gameName=bomberman \
+                                                  - используются для стандартной админки сервера
+    /codenjoyme-contest/admin&gameName=icancode  /
 
-62) Что дает в games pom.xml, это теперь все игры будут тянуть эти депенденси хотя они не должны быть тяжеловестными
+    /codenjoyme-contest/admin&gameName=icancode&custom=true - используется для роутинга на кастомную админку конкретной игры.
+
+    Важно:
+    Для добавления переопределения страниц, в application-<gameProfileName>.yml файл необходимо добавить properties в
+    нотации:
+
+    icancode: # где icancode - имя модуля игры
+        page:
+            admin: ${URL_специфичной_админки}
+
+    TODO: тут если есть вопросы, можно обсудить голосом
+
++ 62) Что дает в games pom.xml, это теперь все игры будут тянуть эти депенденси хотя они не должны быть тяжеловестными
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -918,27 +942,38 @@ from Alex: 2019-04-16
             </exclusions>
             <scope>provided</scope>
         </dependency>
+ Igor: удалил. Они были в provided и нужны были только чтобы в IDE работал автокомплит в *.jsp (которых больше нет)
 
-
-63) Из icancode registration.js был удален function showErrorMessage() { как теперь отображаются ошибки?
++ 63) Из icancode registration.js был удален function showErrorMessage() { как теперь отображаются ошибки?
     а валидация-то как-то все же работает :) Вопрос только в том, как?
+ Igor: обсуждали голосом. Сейчас страницы регистрации и логина из icancode мигрировали в серверный модуль.
+    Конкретно этот кусок логики работает через spring form (form:errors компонент). Сама валидация имплементирована в
+    RegistrationValidator
 
-64) Font-Awesome был добавлен, а что со старым?
+- 64) Font-Awesome был добавлен, а что со старым?
+ Igor: Font-Awesome перенес из icancode на сервер. Видел их ещё в одно игре (TODO: перенести, дефект с низким приоритетом)
+    CSS и JS файлы, которые используются на формах логина и регистрации также перенес в серверный модуль
 
-65) Простые странички были переделаны под JSP, почему бы не оставить html? Видимо это потянуло за собой все те депенденси лишние. Я бы хотел уходить в будущем от jsp вообще в пользу rest + front application
++- 65) Простые странички были переделаны под JSP, почему бы не оставить html? Видимо это потянуло за собой все те депенденси лишние. Я бы хотел уходить в будущем от jsp вообще в пользу rest + front application
+ Igor: статику icancode вернул в *.html. В серверном модуле оставил *.jsp страницы. Пока не вижу необходимости их мигрировать
+ на html, сейчас там jsp скорее упрощают жизнь. В модулях игр можно продолжать использовать html статику по аналогии с
+ icancode.
+ TODO: если нужна миграция jsp -> html в server модуле, стоит поправить позже как дефект с низким приоритетом
 
 Для мислей по списку ниже
 Запустил icancode в ветке icancode-stringboot-oauth2
 командой из IDE
     clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Picancode -f pom.xml
 
-66) на страничке http://127.0.0.1:8080/codenjoy-contest/register
++ 66) на страничке http://127.0.0.1:8080/codenjoy-contest/register
     в каждом незаполненном поле "undefined"
+ Igor: поправил
 
-67) После регистрации нового юзера в icancode (icancode-stringboot-oauth2) перешел на страничку
++- 67) После регистрации нового юзера в icancode (icancode-stringboot-oauth2) перешел на страничку
     http://127.0.0.1:8080/codenjoy-contest/board/player/1y1hopccoqzrg7mnkesg?code=5104238713285933858
     Но страничка не загрузилась в консоле браузера написано
     GET http://127.0.0.1:8080/codenjoy-contest/resources/icancode/board.html?_=1556293177555 404 (Not Found)
+ Igor: проблему воспроизвёл и, кажется, поправил, проверил. Тем не менее, лучше ещё тщательно потестировать.
 
 68) В хедере http://127.0.0.1:8080/codenjoy-contest/
     на линках Games и Logout поплыл дизайн
@@ -954,8 +989,9 @@ from Alex: 2019-04-16
         There was an unexpected error (type=Not Found, status=404).
         Not Found
 
-70) Если я на страничке http://127.0.0.1:8080/codenjoy-contest/login
++- 70) Если я на страничке http://127.0.0.1:8080/codenjoy-contest/login
     Ввожу неправильный пароль то ошибки не вижу при этом как на страничке регистрации
+ Igor: добавил общую ошибку на неверные логин и пароль. Пустые поля также подсвечиваются как ошибочные.
 
 Для мислей по списку ниже
 Запустил все игры в ветке icancode-stringboot-oauth2

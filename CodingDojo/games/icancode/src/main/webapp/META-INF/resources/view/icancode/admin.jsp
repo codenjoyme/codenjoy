@@ -25,7 +25,7 @@
     <meta charset="UTF-8">
 </head>
 <div id="layout" class="wrapper">
-    <link href="${ctx}/resources/icancode/css/reset.css" rel="stylesheet"/>
+    <link href="${ctx}/resources/css/reset.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/icancode/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/icancode/css/style.css" rel="stylesheet"/>
@@ -35,9 +35,9 @@
         <div class="container-fluid">
             <header class="header row">
                 <div class="col-xs-6">
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
                     <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/icancode/img/i_can_code_Logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/i_can_code_Logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </div>
                 <span class="admin-title">

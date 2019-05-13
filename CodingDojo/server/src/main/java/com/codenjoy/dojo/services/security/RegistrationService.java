@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.web.controller.*;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -147,12 +148,17 @@ public class RegistrationService {
                 model.addAttribute("bad_pass", true);
                 return openRegistrationForm(request, model, id, email, name);
             }
-            return "redirect:/" + register(id, player.getCode(),
-                    gameName, request.getRemoteAddr());
+            return connectRegisteredPlayer(player, request, id, gameName);
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
         }
+    }
+
+    @NotNull
+    public String connectRegisteredPlayer(Player player, HttpServletRequest request, String id, String gameName) {
+        return "redirect:/" + register(id, player.getCode(),
+                gameName, request.getRemoteAddr());
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,

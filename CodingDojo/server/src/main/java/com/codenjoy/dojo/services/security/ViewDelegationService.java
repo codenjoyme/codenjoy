@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.web.controller.AdminController;
-import com.codenjoy.dojo.web.controller.RegistrationController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -38,18 +37,10 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class ViewDelegationService {
 
-    public static final String REGISTRATION_PAGE_PROP = "page.registration.url";
-    public static final String LOGIN_PAGE_PROP = "page.login.url";
-    public static final String MAIN_PAGE_PROP = "page.main.url";
     public static final String ADMIN_PAGE_PROP = "page.admin.url";
-    public static final String BOARD_PAGE_PROP = "page.board.url";
 
     @Autowired
     private Environment env;
-
-    public String registrationUri(String gameName) {
-        return resolveProperty(gameName, REGISTRATION_PAGE_PROP, RegistrationController.URI);
-    }
 
     public String adminUri(String gameName) {
         return resolveProperty(gameName, ADMIN_PAGE_PROP, AdminController.URI);
@@ -57,10 +48,6 @@ public class ViewDelegationService {
 
     public String adminView(String gameName) {
         return extractView(adminUri(gameName));
-    }
-
-    public boolean isCustomAdminView(String gameName) {
-        return StringUtils.hasText(adminUri(gameName));
     }
 
     private String extractView(String uri) {
