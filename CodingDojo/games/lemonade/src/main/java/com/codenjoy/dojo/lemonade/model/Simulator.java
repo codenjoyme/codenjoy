@@ -40,7 +40,10 @@ public class Simulator {
     private int D;  // Day number
     private double A;  //Assets
     private double C;  // Cost of lemonade, cents
-    private StringBuffer messages;
+    //private StringBuffer messages;
+    private StringBuffer statusMessages;
+    private StringBuffer reportMessages;
+    private StringBuffer morningMessages;
     private int SC;  // Weather forecast
     private double R1;
     private int R2;
@@ -57,7 +60,10 @@ public class Simulator {
         if (randomSeed == 0)
             randomSeed = System.currentTimeMillis();
         rand = new Random(randomSeed);
-        messages = new StringBuffer();
+        //messages = new StringBuffer();
+        statusMessages = new StringBuffer();
+        reportMessages = new StringBuffer();
+        morningMessages = new StringBuffer();
 
         reset();
     }
@@ -118,7 +124,8 @@ public class Simulator {
     }
 
     public String getMessages() {
-        return messages.toString();
+        return String.join("",
+                statusMessages.toString(), reportMessages.toString(), morningMessages.toString());
     }
 
     public boolean isInputError() {
@@ -141,49 +148,53 @@ public class Simulator {
         P1 = 0;
         B = false;
 
-        messages.setLength(0);
+        statusMessages.setLength(0);
+        reportMessages.setLength(0);
+        morningMessages.setLength(0);
 
         // START OF GAME, TITLE PAGE
-        messages.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n");
-        messages.append("\n");
-        messages.append("IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\n");
-        messages.append("HOW MUCH PROFIT YOU MAKE IS UP TO YOU.\n");
-        messages.append("IF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\n");
-        messages.append("\n");
-        messages.append("TO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\n");
-        messages.append("1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\n");
-        messages.append("2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\n");
-        messages.append("3. WHAT PRICE TO CHARGE FOR EACH GLASS\n");
-        messages.append("\n");
-        messages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS).");
-        messages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\nYOUR COST TO MAKE LEMONADE IS ");
-        messages.append("$0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\n");
-        messages.append("\n");
-        messages.append("YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\n");
-        messages.append("YOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\n");
-        messages.append("THE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\n");
-        messages.append("THE NUMBER OF ADVERTISING SIGNS YOU USE.\n");
-        messages.append("KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\n");
-        messages.append("\n");
+        statusMessages.append("HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\n");
+        statusMessages.append("\n");
+        statusMessages.append("IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\n");
+        statusMessages.append("HOW MUCH PROFIT YOU MAKE IS UP TO YOU.\n");
+        statusMessages.append("IF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\n");
+        statusMessages.append("\n");
+        statusMessages.append("TO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\n");
+        statusMessages.append("1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\n");
+        statusMessages.append("2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\n");
+        statusMessages.append("3. WHAT PRICE TO CHARGE FOR EACH GLASS\n");
+        statusMessages.append("\n");
+        statusMessages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS).");
+        statusMessages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\nYOUR COST TO MAKE LEMONADE IS ");
+        statusMessages.append("$0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\n");
+        statusMessages.append("\n");
+        statusMessages.append("YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\n");
+        statusMessages.append("YOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\n");
+        statusMessages.append("THE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\n");
+        statusMessages.append("THE NUMBER OF ADVERTISING SIGNS YOU USE.\n");
+        statusMessages.append("KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\n");
+        statusMessages.append("\n");
 
         morning();
     }
 
     public void step(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {
-        messages.setLength(0);
+        statusMessages.setLength(0);
+        reportMessages.setLength(0);
+        morningMessages.setLength(0);
 
         inputError = false;
 
         if (lemonadeToMake < 0 || lemonadeToMake > 1000) {
-            messages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
+            statusMessages.append("lemonadeToMake parameter should be in [0, 1000] range.\n");
             inputError = true;
         }
         if (signsToMake < 0 || signsToMake > 50) {
-            messages.append("signsToMake parameter should be in [0, 50] range.\n");
+            statusMessages.append("signsToMake parameter should be in [0, 50] range.\n");
             inputError = true;
         }
         if (lemonadePriceCents < 0 || lemonadePriceCents > 100) {
-            messages.append("lemonadePriceCents parameter should be in [0, 100] range.\n");
+            statusMessages.append("lemonadePriceCents parameter should be in [0, 100] range.\n");
             inputError = true;
         }
 
@@ -193,14 +204,14 @@ public class Simulator {
         A = A + .000000001; // reduce aberration
         double C1 = C * .01;  // Cost of lemonade, dollars
         if (lemonadeToMake * C1 > A) {
-            messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
+            statusMessages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A)).append(" IN CASH\n")
                     .append("AND TO MAKE ").append(lemonadeToMake).append(" GLASSES OF LEMONADE YOU NEED ")
                     .append(formatCurrency(lemonadeToMake * C1)).append(" IN CASH.\n");
             inputError = true;
             return;
         }
         if (signsToMake * S3 > A - lemonadeToMake * C1) {
-            messages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
+            statusMessages.append("THINK AGAIN! YOU HAVE ONLY ").append(formatCurrency(A - lemonadeToMake * C1))
                     .append(" IN CASH LEFT AFTER MAKING YOUR LEMONADE.\nYOU CANNOT MAKE ")
                     .append(signsToMake).append(" SIGNS.\n");
             inputError = true;
@@ -216,15 +227,15 @@ public class Simulator {
         if (SC == 10 && rand.nextDouble() < 0.25) {  // THUNDERSTORM!
             //X3 = 1;
             SC = 5;
-            messages.append("WEATHER REPORT: A SEVERE THUNDERSTORM HIT LEMONSVILLE EARLIER TODAY, JUST AS\n");
-            messages.append("THE LEMONADE STANDS WERE BEING SET UP. UNFORTUNATELY, EVERYTHING WAS RUINED!!\n");
+            statusMessages.append("WEATHER REPORT: A SEVERE THUNDERSTORM HIT LEMONSVILLE EARLIER TODAY, JUST AS\n");
+            statusMessages.append("THE LEMONADE STANDS WERE BEING SET UP. UNFORTUNATELY, EVERYTHING WAS RUINED!!\n");
             G = 0;
         }
 
-        messages.append("** LEMONSVILLE DAILY FINANCIAL REPORT, DAY " + D + " **\n");
+        reportMessages.append("** LEMONSVILLE DAILY FINANCIAL REPORT, DAY " + D + " **\n");
         // CALCULATE PROFITS
         if (R2 == 2) { // IF R2 = 2 THEN 2290
-            messages.append("THE STREET CREWS BOUGHT ALL YOUR LEMONADE AT LUNCHTIME!!\n");
+            reportMessages.append("THE STREET CREWS BOUGHT ALL YOUR LEMONADE AT LUNCHTIME!!\n");
         }
         {  // loop in lines 1185..1390
             if (R2 == 2) {
@@ -253,16 +264,16 @@ public class Simulator {
             P1 = M - E;  // PROFIT
             A = A + P1;
 
-            messages.append("GLASSES SOLD: " + N2 + ", PRICE " + formatCurrency(P / 100.0) + " PER GLASS\n");
-            messages.append("INCOME:   " + formatCurrency(M) + "\n");
-            messages.append("GLASSES MADE: " + L + ", SIGNS MADE: " + S + "\n");
-            messages.append("EXPENSES: " + formatCurrency(E) + "\n");
-            messages.append("PROFIT:   " + formatCurrency(P1) + "\n");
-            messages.append("ASSETS:   " + formatCurrency(A) + "\n");
-            messages.append("\n");
+            reportMessages.append("GLASSES SOLD: " + N2 + ", PRICE " + formatCurrency(P / 100.0) + " PER GLASS\n");
+            reportMessages.append("INCOME:   " + formatCurrency(M) + "\n");
+            reportMessages.append("GLASSES MADE: " + L + ", SIGNS MADE: " + S + "\n");
+            reportMessages.append("EXPENSES: " + formatCurrency(E) + "\n");
+            reportMessages.append("PROFIT:   " + formatCurrency(P1) + "\n");
+            reportMessages.append("ASSETS:   " + formatCurrency(A) + "\n");
+            reportMessages.append("\n");
 
             if (A <= C / 100) {
-                messages.append("YOU DON'T HAVE ENOUGH MONEY LEFT TO STAY IN BUSINESS YOU'RE BANKRUPT!\n");
+                reportMessages.append("YOU DON'T HAVE ENOUGH MONEY LEFT TO STAY IN BUSINESS YOU'RE BANKRUPT!\n");
                 B = true;
                 return;
             }
@@ -275,7 +286,7 @@ public class Simulator {
 
     private void morning() {
 
-        messages.append("YOUR ASSETS: " + formatCurrency(A) + "\n");
+        morningMessages.append("YOUR ASSETS: " + formatCurrency(A) + "\n");
 
         // WEATHER
         double SCd = rand.nextDouble();
@@ -286,7 +297,7 @@ public class Simulator {
         } else {  // 20% for HOT AND DRY
             SC = 7;
         }
-        messages.append("LEMONSVILLE WEATHER REPORT:  " + getWeatherForecast() + "\n");
+        morningMessages.append("LEMONSVILLE WEATHER REPORT:  " + getWeatherForecast() + "\n");
 
         // START OF NEW DAY
         D = D + 1;
@@ -299,27 +310,27 @@ public class Simulator {
             C = 5;
         }
         // double C1 = C * 0.01;  // Cost of lemonade, dollars
-        messages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C * .01) + "\n");
+        morningMessages.append("ON DAY " + D + ", THE COST OF LEMONADE IS " + formatCurrency(C * .01) + "\n");
 
         // CURRENT EVENTS
         if (D == 3) {
-            messages.append("(YOUR MOTHER QUIT GIVING YOU FREE SUGAR)\n");
+            morningMessages.append("(YOUR MOTHER QUIT GIVING YOU FREE SUGAR)\n");
         } else if (D == 7) {
-            messages.append("(THE PRICE OF LEMONADE MIX JUST WENT UP)\n");
+            morningMessages.append("(THE PRICE OF LEMONADE MIX JUST WENT UP)\n");
         }
         // AFTER 2 DAYS THINGS CAN HAPPEN
         if (D > 2) {  // 2000 REM RANDOM EVENTS
             if (SC == 10) {  // 2010 IF SC = 10 THEN 2110
                 int J = 30 + (int) Math.floor(rand.nextDouble() * 5) * 10;  // 30, 40, 50, 60, 70 %
-                messages.append("THERE IS A " + J + "% CHANCE OF LIGHT RAIN, AND THE WEATHER IS COOLER TODAY.\n");
+                morningMessages.append("THERE IS A " + J + "% CHANCE OF LIGHT RAIN, AND THE WEATHER IS COOLER TODAY.\n");
                 R1 = 1 - J / 100.0;
                 //X1 = 1;
             } else if (SC == 7) {  // 2030 IF SC = 7 THEN 2410
                 //X4 = 1;
-                messages.append("A HEAT WAVE IS PREDICTED FOR TODAY!");
+                morningMessages.append("A HEAT WAVE IS PREDICTED FOR TODAY!");
                 R1 = 2;
             } else if (rand.nextDouble() < 0.25) {  // 2040 IF RND (1) < .25 THEN 2210
-                messages.append("THE STREET DEPARTMENT IS WORKING TODAY. THERE WILL BE NO TRAFFIC ON YOUR STREET.\n");
+                morningMessages.append("THE STREET DEPARTMENT IS WORKING TODAY. THERE WILL BE NO TRAFFIC ON YOUR STREET.\n");
                 if (rand.nextDouble() >= 0.5) {
                     R2 = 2;
                 } else {
