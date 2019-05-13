@@ -188,8 +188,8 @@ public class SingleTest {
         field.tick();
 
         asrtFl1(expectedDay0);
-        asrtFl2(expectedDay0);
-        asrtFl3(expectedDay0);
+        asrtFl2(expectedDay0InvalidCommand);
+        asrtFl3(expectedDay0InvalidCommand);
     }
 
     // игрок может ответить правильно и неправильно

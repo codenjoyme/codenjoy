@@ -40,7 +40,6 @@ public class Simulator {
     private int D;  // Day number
     private double A;  //Assets
     private double C;  // Cost of lemonade, cents
-    //private StringBuffer messages;
     private StringBuffer statusMessages;
     private StringBuffer reportMessages;
     private StringBuffer morningMessages;
@@ -60,7 +59,6 @@ public class Simulator {
         if (randomSeed == 0)
             randomSeed = System.currentTimeMillis();
         rand = new Random(randomSeed);
-        //messages = new StringBuffer();
         statusMessages = new StringBuffer();
         reportMessages = new StringBuffer();
         morningMessages = new StringBuffer();
@@ -126,6 +124,18 @@ public class Simulator {
     public String getMessages() {
         return String.join("",
                 statusMessages.toString(), reportMessages.toString(), morningMessages.toString());
+    }
+
+    public String getStatusMessages() {
+        return statusMessages.toString();
+    }
+
+    public String getReportMessages() {
+        return reportMessages.toString();
+    }
+
+    public String getMorningMessages() {
+        return morningMessages.toString();
     }
 
     public boolean isInputError() {
