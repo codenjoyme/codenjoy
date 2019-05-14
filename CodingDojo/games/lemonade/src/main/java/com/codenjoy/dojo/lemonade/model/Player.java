@@ -58,7 +58,7 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
             history.clear();
         }
 
-        if(hero != null) {
+        if (hero != null) {
             hero.init(null);
         }
     }
@@ -68,7 +68,7 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
     }
 
     public void newHero(GameField<Player> field) {
-        hero = new Hero(heroRandomSeed, gameSettings);
+        hero = new Hero(heroRandomSeed, gameSettings, history);
         hero.init(field);
     }
 
@@ -93,12 +93,11 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
 
         // put to history and raise events if there is salesResult and no input errors
         if (salesResult != null && !salesResult.isInputError()) {
-            if(gameSettings.getScoreMode() == ScoreMode.MAX_ASSETS) {
-                int day = salesResult.getDay();
-                if(day > gameSettings.getLimitDays())
-                    return;
+            int day = salesResult.getDay();
+            boolean isLastDayAssetsGameMode = gameSettings.getScoreMode() == ScoreMode.LAST_DAY_ASSETS;
+            if (isLastDayAssetsGameMode && day > gameSettings.getLimitDays()) {
+                return;
             }
-
 
             history.add(salesResult);
             while (history.size() > 10)
@@ -108,9 +107,12 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
                         salesResult.getProfit(),
                         salesResult.getAssetsAfter()));
             } else {
-                event(new EventArgs(EventType.WIN,
-                        salesResult.getProfit(),
-                        salesResult.getAssetsAfter()));
+                // raise WIN event only on SUM_OF_PROFITS game mode OR on the last day in LAST_DAY_ASSETS game mode
+                if (!isLastDayAssetsGameMode || day == gameSettings.getLimitDays()) {
+                    event(new EventArgs(EventType.WIN,
+                            salesResult.getProfit(),
+                            salesResult.getAssetsAfter()));
+                }
             }
         }
     }

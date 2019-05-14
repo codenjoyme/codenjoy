@@ -23,6 +23,6 @@ package com.codenjoy.dojo.lemonade.services;
  */
 
 public enum ScoreMode {
-    MAX_ASSETS,
+    LAST_DAY_ASSETS,
     SUM_OF_PROFITS
 }
