@@ -174,7 +174,7 @@ public class Simulator {
         statusMessages.append("2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\n");
         statusMessages.append("3. WHAT PRICE TO CHARGE FOR EACH GLASS\n");
         statusMessages.append("\n");
-        statusMessages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS).");
+        statusMessages.append("YOU WILL BEGIN WITH $2.00 CASH (ASSETS). ");
         statusMessages.append("BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\nYOUR COST TO MAKE LEMONADE IS ");
         statusMessages.append("$0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\n");
         statusMessages.append("\n");

@@ -214,6 +214,10 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
 
             var messages = board.messages.split('\n');
             for (var i = 0; i < messages.length; i++) {
+                if (messages[i].startsWith("YOUR ASSETS:")) {
+                    messagefont.fillStyle = "#CEE";
+                }
+
                 canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i}, messagefont);
             }
         }
