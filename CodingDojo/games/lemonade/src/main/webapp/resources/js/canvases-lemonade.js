@@ -30,7 +30,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 drawBoard)
 {
     loadSprites(contextPath, spriteElements);
-    var plotSize = {width: 30, height: 16};
+    var plotSize = {width: 27, height: 16};
     var canvases = {};
     var infoPools = {};
     loadCanvasesData();
@@ -145,14 +145,14 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             var weatherImg = sprites[board.weatherForecast.toLowerCase()];
             if (!!weatherImg) {
                 ctx.globalAlpha = 0.67;
-                ctx.drawImage(weatherImg, 0, plotSize.height * boardSize - 200, 240, 200);
+                ctx.drawImage(weatherImg, plotSize.width * boardSize - 240, plotSize.height * boardSize - 200, 240, 200);
                 ctx.globalAlpha = 1;
             }
 
             // draw assets graph
             var history = board.history;
             if (history && history.length > 1) {
-                var graphX = 245;
+                var graphX = 5;
                 var graphY = plotSize.height * boardSize - 200;
                 var graphWidth = plotSize.width * boardSize - 250;
                 var graphHeight = 195;
@@ -195,7 +195,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 shadowOffsetY: 0,
                 shadowBlur: 8
             }
-            canvas.drawText("Day " + board.day + "  $" + board.assets, {"x": 0, "y": 0}, assetsfont);
+            canvas.drawText("Day " + board.day + "  $" + board.assets, {"x": 16, "y": 0}, assetsfont);
             // draw messages on top of everything
             var messagefont = {
                 font: "13px monospace",
