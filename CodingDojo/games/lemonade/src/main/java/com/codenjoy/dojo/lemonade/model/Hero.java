@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +42,7 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
     private final ServerMessagesManager serverMessagesManager;
     private Simulator simulator;
     private final GameSettings gameSettings;
+    private final Queue<SalesResult> history;
     private SalesResult salesResult;
     private boolean alive;
 
@@ -49,16 +51,19 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
                 "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
     }
 
-    public Hero(long randomSeed, GameSettings gameSettings) {
+    public Hero(long randomSeed, GameSettings gameSettings, Queue<SalesResult> history) {
         simulator = new Simulator(randomSeed);
         this.gameSettings = gameSettings;
         alive = true;
         serverMessagesManager = new ServerMessagesManager();
+        this.history = history;
     }
 
     @Override
     public void init(GameField<Player> field) {
         simulator.reset();
+        if (this.history != null)
+            this.history.clear();
     }
 
     @Override
@@ -67,11 +72,13 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
         String command = s.toLowerCase();
 
         if (command.contains("reset")) {
+            if (this.history != null)
+                this.history.clear();
             simulator.reset();
             return;
         }
 
-        if(!isAlive() || isGameOver())
+        if (!isAlive() || isGameOver())
             return;
 
         if (simulator.isBankrupt()) {
@@ -119,10 +126,11 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
     }
 
     public boolean isAlive() {
+        // if return false, server will restart game - avoiding this behavior
         return true;
     }
 
-    private boolean isGameOver(){
+    private boolean isGameOver() {
         return gameSettings.getLimitDays() != 0 && gameSettings.getLimitDays() < simulator.getDay();
     }
 

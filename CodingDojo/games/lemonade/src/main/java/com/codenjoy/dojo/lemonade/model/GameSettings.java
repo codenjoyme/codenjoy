@@ -39,7 +39,7 @@ public class GameSettings {
 
     public ScoreMode getScoreMode(){
         return getLimitDays() > 0
-                ? ScoreMode.MAX_ASSETS
+                ? ScoreMode.LAST_DAY_ASSETS
                 : ScoreMode.SUM_OF_PROFITS;
     }
 }
