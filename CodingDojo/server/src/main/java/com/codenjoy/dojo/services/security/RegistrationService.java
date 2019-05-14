@@ -29,9 +29,10 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
-import com.codenjoy.dojo.web.controller.*;
+import com.codenjoy.dojo.web.controller.AdminController;
+import com.codenjoy.dojo.web.controller.RoomsAliaser;
+import com.codenjoy.dojo.web.controller.Validator;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -155,7 +156,6 @@ public class RegistrationService {
         }
     }
 
-    @NotNull
     public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String gameName) {
         return "redirect:/" + register(id, code,
                 gameName, request.getRemoteAddr());
