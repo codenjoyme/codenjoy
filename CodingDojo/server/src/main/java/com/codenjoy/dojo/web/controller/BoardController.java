@@ -31,14 +31,14 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -56,6 +56,7 @@ public class BoardController {
     private final Registration registration;
     private final Validator validator;
     private final ConfigProperties properties;
+    private final RegistrationService registrationService;
 
     @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
                     method = RequestMethod.GET)
@@ -111,14 +112,32 @@ public class BoardController {
             return "redirect:/register?id=" + playerName;
         }
 
+        populateJoiningGameModel(model, code, player);
+
+        return (justBoard == null || !justBoard) ? "board" : "board-only";
+    }
+
+    @GetMapping(URI + "/game/{gameName}/rejoining")
+    public String rejoinGame(ModelMap model, @PathVariable("gameName") String gameName,
+                             HttpServletRequest request,
+                             @AuthenticationPrincipal Registration.User user) {
+
+        Player player = playerService.get(user.getCode());
+        if (player == NullPlayer.INSTANCE) {
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), gameName);
+        }
+
+        populateJoiningGameModel(model, player.getCode(), player);
+        return "board";
+    }
+
+    private void populateJoiningGameModel(ModelMap model, String code, Player player) {
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
-
-        return (justBoard == null || !justBoard) ? "board" : "board-only";
     }
 
     @RequestMapping(value = URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",

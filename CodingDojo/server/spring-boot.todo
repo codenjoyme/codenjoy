@@ -979,7 +979,7 @@ from Alex: 2019-04-16
     на линках Games и Logout поплыл дизайн
     В iCancode их не должно быть, т.к. icancode не хочет знать что рядом есть другие игры
 
-69) Ссылка Join для игры icancode на страничке http://127.0.0.1:8080/codenjoy-contest/ с линком
++ 69) Ссылка Join для игры icancode на страничке http://127.0.0.1:8080/codenjoy-contest/ с линком
         http://127.0.0.1:8080/codenjoy-contest/TODO/icancode
     выдает
         Whitelabel Error Page
@@ -988,6 +988,7 @@ from Alex: 2019-04-16
         Fri Apr 26 18:43:10 EEST 2019
         There was an unexpected error (type=Not Found, status=404).
         Not Found
+ Igor: не было имплементировано, добавил
 
 +- 70) Если я на страничке http://127.0.0.1:8080/codenjoy-contest/login
     Ввожу неправильный пароль то ошибки не вижу при этом как на страничке регистрации
@@ -998,14 +999,17 @@ from Alex: 2019-04-16
 Командой из IDE
     clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -DallGames -f pom.xml
 
-71) Сейчас нет возможности "подглядеть" игрушку, если ты не зарегистрирован в системе
+- 71) Сейчас нет возможности "подглядеть" игрушку, если ты не зарегистрирован в системе
+ Igor: TODO: нужно обсудить, сейчас переход на другие игрушки работает корректно (кнопка View в списке игр)
 
 72) Я зарегался в 2048 впервые, а потом на страничке http://127.0.0.1:8080/codenjoy-contest/ хочу подглядеть bomberman но меня редиректит на форму регистрации снова
 
-73) Джоин так же в пре-условиях 72) не работает так как отправляет на http://127.0.0.1:8080/codenjoy-contest/TODO/battlecity
++ 73) Джоин так же в пре-условиях 72) не работает так как отправляет на http://127.0.0.1:8080/codenjoy-contest/TODO/battlecity
+ Igor: поправлено в п. 69
 
-74) Дизайн: линки на
++ 74) Дизайн: линки на
     a2048
     View | Join
     было бы наверное лучше в один рядок
     a2048 - View | Join
+ Igor: верстку подправил, каждый пункт в одну строку

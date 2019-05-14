@@ -148,7 +148,7 @@ public class RegistrationService {
                 model.addAttribute("bad_pass", true);
                 return openRegistrationForm(request, model, id, email, name);
             }
-            return connectRegisteredPlayer(player, request, id, gameName);
+            return connectRegisteredPlayer(player.getCode(), request, id, gameName);
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
@@ -156,8 +156,8 @@ public class RegistrationService {
     }
 
     @NotNull
-    public String connectRegisteredPlayer(Player player, HttpServletRequest request, String id, String gameName) {
-        return "redirect:/" + register(id, player.getCode(),
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String gameName) {
+        return "redirect:/" + register(id, code,
                 gameName, request.getRemoteAddr());
     }
 
