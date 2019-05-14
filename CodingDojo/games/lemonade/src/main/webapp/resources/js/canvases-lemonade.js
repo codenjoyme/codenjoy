@@ -206,6 +206,12 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 shadowOffsetY: 0,
                 shadowBlur: 8
             }
+
+            if (board.isGameOver) {
+                messagefont.fillStyle = board.isBankrupt ? "#FCC" : "#FFB";
+                messagefont.shadowColor = board.isBankrupt ? "#411" : "#330";
+            }
+
             var messages = board.messages.split('\n');
             for (var i = 0; i < messages.length; i++) {
                 canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i}, messagefont);
