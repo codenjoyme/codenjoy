@@ -64,26 +64,26 @@ public class Scores implements PlayerScores {
         ScoreMode mode = getScoreMode();
         switch (eventArgs.type) {
             case WIN:
-                if(mode == ScoreMode.SUM_OF_PROFITS)
+                if (mode == ScoreMode.SUM_OF_PROFITS)
                     score += toScore(eventArgs.profit);
-                if(mode == ScoreMode.MAX_ASSETS)
+                if (mode == ScoreMode.LAST_DAY_ASSETS)
                     score = Math.max(score, toScore(eventArgs.assetsAfter));
                 break;
             case LOOSE:
-                if(mode == ScoreMode.SUM_OF_PROFITS)
+                if (mode == ScoreMode.SUM_OF_PROFITS)
                     score -= bankruptPenalty.getValue();
                 break;
         }
         score = Math.max(0, score);
     }
 
-    private int toScore(double value){
-        return (int)(100 * value);
+    private int toScore(double value) {
+        return (int) (100 * value);
     }
 
-    private ScoreMode getScoreMode(){
+    private ScoreMode getScoreMode() {
         return limitDays.getValue() > 0
-                ? ScoreMode.MAX_ASSETS
+                ? ScoreMode.LAST_DAY_ASSETS
                 : ScoreMode.SUM_OF_PROFITS;
     }
 
