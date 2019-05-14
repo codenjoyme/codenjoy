@@ -30,7 +30,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
                 drawBoard)
 {
     loadSprites(contextPath, spriteElements);
-    var plotSize = {width: 30, height: 20};
+    var plotSize = {width: 30, height: 16};
     var canvases = {};
     var infoPools = {};
     loadCanvasesData();
@@ -100,7 +100,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         playersList.forEach(function (player) {
             var playerName = player.name;
             var id = toId(playerName);
-            var name = playerName.split('@')[0];
+            name = player.readableName;
             var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
             templateData.push({name : name, id : id, visible : visible })
         });
@@ -208,7 +208,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             }
             var messages = board.messages.split('\n');
             for (var i = 0; i < messages.length; i++) {
-                canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i * 0.8}, messagefont);
+                canvas.drawText(messages[i], {"x": 0, "y": 22.4 - i}, messagefont);
             }
         }
 
