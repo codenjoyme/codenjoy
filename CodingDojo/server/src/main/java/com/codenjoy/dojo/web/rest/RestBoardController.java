@@ -32,8 +32,8 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,19 +48,20 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
 @RequestMapping(value = "/rest")
+@RequiredArgsConstructor
 public class RestBoardController {
 
-    @Autowired private GameService gameService;
-    @Autowired private RestRegistrationController registrationController;
-    @Autowired private PlayerService playerService;
-    @Autowired private Registration registration;
-    @Autowired private ServletContext servletContext;
-    @Autowired private Validator validator;
-    @Autowired private PlayerGames playerGames;
-    @Autowired private PlayerGamesView playerGamesView;
-    @Autowired private TimerService timerService;
-    @Autowired private SaveService saveService;
-    @Autowired private ActionLogger actionLogger;
+    private final GameService gameService;
+    private final RestRegistrationController registrationController;
+    private final PlayerService playerService;
+    private final Registration registration;
+    private final ServletContext servletContext;
+    private final Validator validator;
+    private final PlayerGames playerGames;
+    private final PlayerGamesView playerGamesView;
+    private final TimerService timerService;
+    private final SaveService saveService;
+    private final ActionLogger actionLogger;
 
 //    @RequestMapping(value = "/sprites", method = RequestMethod.GET)
 //    @ResponseBody

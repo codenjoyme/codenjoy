@@ -21,12 +21,14 @@
   --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <head>
     <link href="${ctx}/resources/favicon.ico" rel="icon">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
     <c:choose>
         <c:when test="${debug}" >
@@ -37,3 +39,17 @@
         </c:otherwise>
     </c:choose>
 </head>
+<sec:authorize access="isAuthenticated()">
+<body>
+    <div class="user-controls-container">
+        <div class="user-control">
+            <a href="${ctx}/" >Games</a>
+        </div>
+        <div class="user-control float-right-before-fork">
+            <form class="user-control" action="${ctx}/process_logout">
+                <input type="submit" value="Logout" class="btn btn-link">
+            </form>
+        </div>
+    </div>
+</body>
+</sec:authorize>

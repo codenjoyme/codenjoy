@@ -57,7 +57,10 @@ public enum GameAuthorities {
     }
 
     public static String[] splitRolesString(String roles) {
-        return roles.split(",");
+        return Stream.of(roles.split(","))
+                .map(String::trim)
+                .collect(Collectors.toList())
+                .toArray(new String[] {});
     }
 
     public static String authoritiesToRolesString(Collection<GrantedAuthority> authorities) {

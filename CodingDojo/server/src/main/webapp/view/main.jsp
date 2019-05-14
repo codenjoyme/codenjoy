@@ -39,18 +39,16 @@
     <div class="page-header">
         <h1>Hi ${(user!=null)?user:ip}, please:</h1>
     </div>
-    <ol>
-        <li><a href="${ctx}/help">How to start</a></li>
-        <c:if test="${!registered}">
-        <li><a href="${ctx}/register">Register/Login</a></li>
-        </c:if>
-        <c:if test="${registered}">
-            <li><a href="${ctx}/register?remove_me&code=${code}">Unregister</a></li>
-        </c:if>
-        <li>Check game board</li>
-        <c:forEach items="${gameNames}" var="gameName">
-            - <a href="${ctx}/board/game/${gameName.key}">${gameName.value}</a></br>
-        </c:forEach>
-    </div>
+        <div><a href="${ctx}/help">How to start</a></div>
+        <div>Check game board</div>
+        <div>
+            <ul>
+            <c:forEach items="${gameNames}" var="gameName">
+                <li>
+                        <div>${gameName.value}: <a href="${ctx}/board/game/${gameName.key}">View</a> | <a href="${ctx}/board/game/${gameName.key}/rejoining">Join</a></div>
+                </li>
+            </c:forEach>
+            </ul>
+        </div>
 <body>
 </html>

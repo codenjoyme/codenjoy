@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.config.meta;
 
 /*-
  * #%L
@@ -22,24 +22,20 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Profile;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * @author Igor_Petrov@epam.com
- * Created at 3/6/2019
+ * Created at 4/1/2019
  */
-@Data
-public class SQLConfProperties {
-
-    private DBProps files;
-
-    @Data
-    public class DBProps {
-        private String log;
-        private String saves;
-        private String users;
-        private String payment;
-        private String settings;
-    }
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+@Profile(DebugProfile.name)
+public @interface DebugProfile {
+    String name = "debug";
 }

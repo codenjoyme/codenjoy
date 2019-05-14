@@ -16,12 +16,18 @@ game:
   ai: true
 board.save.ticks: 1
 log.debug: false
+registration:
+    nickname:
+      allowed: false
+    pasword:
+      min-length: 8
 page:
   main:
     url: ''
   registration:
-    url: ''
     nickname: true
+  admin:
+    url: ''
   help.language: ''
 email:
   verification: false
@@ -34,7 +40,9 @@ database:
   name: ''
   user: ''
   password: ''
-admin.password: admin
+admin:
+  login: admin@codenjoyme.com
+  password: admin
 
 app:
   logging:
@@ -45,6 +53,8 @@ logging:
   level:
     root: info
     com:
-      codenjoy: debug
-      epam.dojo: debug
-      org.eclipse.jetty: debug
+      codenjoy: info
+      epam.dojo: info
+    org:
+      eclipse.jetty: info
+      springframework.mvc: info

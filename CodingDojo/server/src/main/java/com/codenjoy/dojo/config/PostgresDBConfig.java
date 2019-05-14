@@ -43,9 +43,6 @@ public class PostgresDBConfig {
     @Value("${database.host}:${database.port}/${database.name:postgres}?user=${database.user}&password=${database.password}")
     private String jdbcString;
 
-    @Value("${admin.password}")
-    private String adminPassword;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -65,8 +62,10 @@ public class PostgresDBConfig {
     }
 
     @Bean
-    public Registration registration() {
-        return new Registration(connectionThreadPollFactory(), adminPassword, passwordEncoder, true);
+    public Registration registration(@Value("${admin.login}") String adminLogin,
+                                     @Value("${admin.password}") String adminPassword) {
+        return new Registration(connectionThreadPollFactory(), adminLogin, adminPassword,
+                passwordEncoder, true);
     }
 
     @Bean

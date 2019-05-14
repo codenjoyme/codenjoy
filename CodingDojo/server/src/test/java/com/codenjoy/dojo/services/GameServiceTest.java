@@ -80,6 +80,11 @@ public class GameServiceTest {
 
     private Map<String, List<String>> expectedPlots;
 
+    /**
+     * FIXME: Логика здесь дублирует логику GameServiceImpl, и требуется для того, чтобы успешно проходили тесты при запуске сборки
+     *  с maven профилями других игр. Иначе в скриптах придется отдельно запускать сборку для прогона тестов (без профилей игр),
+     *  и только затем сборку с -DskipTests в профиле необходимой для ивента игры.
+     */
     @Before
     public void setup() {
         reset(timer, players);

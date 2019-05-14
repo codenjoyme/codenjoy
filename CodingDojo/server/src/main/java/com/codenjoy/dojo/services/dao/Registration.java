@@ -48,12 +48,11 @@ import java.util.stream.Stream;
 public class Registration {
 
     public static final int ADMIN_USER_ID = 0;
-    public static final String ADMIN_USER_CODE = "000000";
 
     private CrudConnectionThreadPool pool;
     private PasswordEncoder passwordEncoder;
 
-    public Registration(ConnectionThreadPoolFactory factory, String adminPassword, PasswordEncoder passwordEncoder, boolean initAdminUser) {
+    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, boolean initAdminUser) {
         this.passwordEncoder = passwordEncoder;
         adminPassword = passwordEncoder.encode(adminPassword);
         List<String> initialScripts = new ArrayList<>();
@@ -68,7 +67,7 @@ public class Registration {
                 "roles varchar(255));");
         if (initAdminUser) {
             initialScripts.add("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
-                    " select '" + ADMIN_USER_ID + "', 'admin@codenjoyme.com', 'admin', 1,  '" + adminPassword + "', '" + ADMIN_USER_CODE + "', '{}', 'ROLE_ADMIN, ROLE_USER'" +
+                    " select '" + ADMIN_USER_ID + "', '" + adminEmail + "', 'admin', 1,  '" + adminPassword + "', '000000000000', '{}', 'ROLE_ADMIN, ROLE_USER'" +
                     " where not exists (select 1 from users where id = '" + ADMIN_USER_ID + "')");
         }
         pool = factory.create(initialScripts.toArray(new String[initialScripts.size()]));
@@ -103,13 +102,13 @@ public class Registration {
         return count > 0;
     }
 
-    public String register(String id, String email, String readableName, String password, String data, String... roles) {
+    public User register(String id, String email, String readableName, String password, String data, String... roles) {
         roles = roles.length > 0 ? roles : GameAuthorities.USER.roles();
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
         pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
                 new Object[]{id, email, readableName, 0, password, code, data, GameAuthorities.buildRolesString(roles)});
-        return code;
+        return getUserByCode(code);
     }
 
     public String login(String id, String password) {
@@ -268,7 +267,16 @@ public class Registration {
     public User getUserByCode(String code) {
         return pool.select("SELECT * FROM users where code = ?", new Object[] {code}, rs -> {
             if (!rs.next()) {
-                throw new UsernameNotFoundException(String.format("User with id '%s' does not exist", code));
+                throw new UsernameNotFoundException(String.format("User with code '%s' does not exist", code));
+            }
+            return extractUser(rs);
+        });
+    }
+
+    public User getUserByEmail(String code) {
+        return pool.select("SELECT * FROM users where email = ?", new Object[] {code}, rs -> {
+            if (!rs.next()) {
+                throw new UsernameNotFoundException(String.format("User with email '%s' does not exist", code));
             }
             return extractUser(rs);
         });

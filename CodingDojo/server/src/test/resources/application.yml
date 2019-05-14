@@ -16,12 +16,21 @@ game:
   ai: true
 board.save.ticks: 1
 log.debug: false
+registration:
+  nickname:
+    allowed: false
+  pasword:
+    min-length: 8
 page:
   main:
     url: ''
   registration:
     url: ''
     nickname: true
+  login:
+    url: ''
+  admin:
+    url: ''
   help.language: ''
 email:
   verification: false
@@ -34,7 +43,9 @@ database:
   name: ''
   user: ''
   password: ''
-admin.password: admin
+admin:
+  login: admin@dojarena.io
+  password: admin
 
 app:
   logging:

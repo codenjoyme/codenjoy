@@ -19,3 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+.user-controls-container {
+    text-align: center;
+}
+
+.user-control {
+    display: inline;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right-before-fork {
+    float: right;
+    margin-right: 150px; /* form-me.png width */
+}

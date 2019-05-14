@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.transport.auth;
+package com.codenjoy.dojo.config;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,6 +22,27 @@ package com.codenjoy.dojo.transport.auth;
  * #L%
  */
 
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-public class AuthenticationException extends RuntimeException {
+/**
+ * @author Igor_Petrov@epam.com
+ * Created at 3/6/2019
+ */
+@Data
+@ConfigurationProperties("database")
+@SQLiteProfile
+public class SQLiteFilesProperties {
+
+    private DBProps files;
+
+    @Data
+    public static class DBProps {
+        private String log;
+        private String saves;
+        private String users;
+        private String payment;
+        private String settings;
+    }
 }

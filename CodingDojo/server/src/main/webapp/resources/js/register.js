@@ -42,10 +42,6 @@ function initRegistration(waitApprove, contextPath) {
 
     $(document).ready(function() {
         validatePlayerRegistration("#player");
-        if ($("#name").val() != "") {
-            $("#submit").val("Login");
-            $("#title").text("Login");
-        }
         if (waitApprove) {
             disable(true);
             $.ajax({ url:contextPath + '/register?approved=' + $("#name").val(),
@@ -62,8 +58,5 @@ function initRegistration(waitApprove, contextPath) {
                 $("#password").focus();
             }
         }
-        $("#player").submit(function() {
-            $("#password").val($.md5($("#password").val()));
-        });
     });
 }

@@ -1333,7 +1333,7 @@ public class PlayerServiceImplTest {
         assertEquals(gameName, playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA, player.getName());
-        assertNotNull(VASYA, player.getAI());
+        assertNotNull(VASYA, player.getAi());
     }
 
     @Test
@@ -1354,7 +1354,7 @@ public class PlayerServiceImplTest {
         assertEquals("game", playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getName());
-        assertNotNull(VASYA, player.getAI());
+        assertNotNull(VASYA, player.getAi());
 
     }
 
