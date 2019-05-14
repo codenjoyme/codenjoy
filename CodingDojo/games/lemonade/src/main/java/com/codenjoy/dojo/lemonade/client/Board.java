@@ -40,12 +40,13 @@ public class Board extends AbstractTextBoard {
     private boolean isBankrupt;
     private double lemonadeCost;
     private WeatherForecast weatherForecast;
+    private boolean isGameOver;
 
     private ArrayList<DailyReport> history;
 
     @Override
     public boolean isGameOver() {
-        return isBankrupt;
+        return isBankrupt || isGameOver;
     }
 
     @Override
@@ -65,6 +66,7 @@ public class Board extends AbstractTextBoard {
         this.weatherForecast = dataJson.getEnum(WeatherForecast.class, "weatherForecast");
         this.messages = dataJson.getString("messages");
         this.isBankrupt = dataJson.optBoolean("isBankrupt", false);
+        this.isGameOver = dataJson.optBoolean("isGameOver", false);
     }
 
     private void parseHistory(JSONArray historyJson) {

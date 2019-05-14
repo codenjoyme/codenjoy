@@ -38,27 +38,22 @@ import java.util.regex.Pattern;
 public class Hero extends PlayerHero<GameField<Player>> implements MessageJoystick {
 
     private static Pattern patternGo;
+    private final ServerMessagesManager serverMessagesManager;
     private Simulator simulator;
     private final GameSettings gameSettings;
     private SalesResult salesResult;
     private boolean alive;
-    private boolean isCommandInvalid;
 
     static {
         patternGo = Pattern.compile(
                 "go\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)[,\\s]\\s*(-?[\\d]+)", Pattern.CASE_INSENSITIVE);
     }
 
-    private final String invalidCommandMessage =
-            "Invalid input. lemonadeToMake parameter should be in [0, 1000] range.\n" +
-            "signsToMake parameter should be in [0, 50] range.\n" +
-            "lemonadePriceCents parameter should be in [0, 100] range.\n";
-
     public Hero(long randomSeed, GameSettings gameSettings) {
         simulator = new Simulator(randomSeed);
         this.gameSettings = gameSettings;
         alive = true;
-        isCommandInvalid = false;
+        serverMessagesManager = new ServerMessagesManager();
     }
 
     @Override
@@ -68,16 +63,16 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
 
     @Override
     public void message(String s) {
-        if(!isAlive())
-            return;
-
-        isCommandInvalid = false;
+        serverMessagesManager.reset();
         String command = s.toLowerCase();
 
         if (command.contains("reset")) {
             simulator.reset();
             return;
         }
+
+        if(!isAlive() || isGameOver())
+            return;
 
         if (simulator.isBankrupt()) {
             this.salesResult = null;
@@ -97,7 +92,7 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
 
             readSalesResult(day, assetsBefore);
         } else {
-            isCommandInvalid = true;
+            serverMessagesManager.setCommandInvalid(true);
         }
     }
 
@@ -124,7 +119,11 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
     }
 
     public boolean isAlive() {
-        return gameSettings.getLimitDays() == 0 || gameSettings.getLimitDays() >= simulator.getDay();
+        return true;
+    }
+
+    private boolean isGameOver(){
+        return gameSettings.getLimitDays() != 0 && gameSettings.getLimitDays() < simulator.getDay();
     }
 
     public Question getNextQuestion() {
@@ -132,20 +131,24 @@ public class Hero extends PlayerHero<GameField<Player>> implements MessageJoysti
         double lemonadeCost = simulator.getLemonadeCost();
         double assets = simulator.getAssets();
         WeatherForecast weatherForecast = Enum.valueOf(WeatherForecast.class, simulator.getWeatherForecast().replace(' ', '_'));
-        String messages;
-        if (isCommandInvalid) {
-            isCommandInvalid = false;
-            messages = invalidCommandMessage;
-        } else {
-            messages = simulator.getMessages();
-        }
         boolean isBankrupt = simulator.isBankrupt();
+        boolean isGameOver = isGameOver();
+
+        serverMessagesManager.setGameOver(isGameOver);
+        serverMessagesManager.setMessages(
+                simulator.getStatusMessages(),
+                simulator.getReportMessages(),
+                simulator.getMorningMessages()
+        );
+        String messages = serverMessagesManager.getMessages();
+
         return new Question(day,
                 lemonadeCost,
                 assets,
                 weatherForecast,
                 messages,
-                isBankrupt);
+                isBankrupt,
+                isBankrupt || isGameOver);
     }
 
     private void simulate(int lemonadeToMake, int signsToMake, int lemonadePriceCents) {

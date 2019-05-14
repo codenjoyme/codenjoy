@@ -26,6 +26,7 @@ package com.codenjoy.dojo.lemonade.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -56,7 +57,7 @@ public class SampleTest {
         }
     }
 
-    private void givenQA(String... questionAnswers) {
+    private void initGame(String... questionAnswers) {
         SettingsImpl settings = new SettingsImpl();
         settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
         gameSettings = new GameSettings(settings);
@@ -74,7 +75,7 @@ public class SampleTest {
 
     @Test
     public void shouldNoAnswersAtStart() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -83,7 +84,7 @@ public class SampleTest {
 
     @Test
     public void shouldNoAnswersAtStartAfterTick() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -95,7 +96,7 @@ public class SampleTest {
 
     @Test
     public void should_invalid() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -108,7 +109,7 @@ public class SampleTest {
 
     @Test
     public void should_invalid_invalid() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -124,7 +125,7 @@ public class SampleTest {
 
     @Test
     public void should_invalid_valid() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -140,7 +141,7 @@ public class SampleTest {
 
     @Test
     public void should_invalid_valid_tick() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -158,7 +159,7 @@ public class SampleTest {
 
     @Test
     public void should_invalid_valid_valid() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -177,7 +178,7 @@ public class SampleTest {
 
     @Test
     public void should_invalid_valid_tick_valid_tick() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -200,7 +201,7 @@ public class SampleTest {
 
     @Test
     public void shouldAfterLastQuestion() {
-        givenQA("question1=answer1",
+        initGame("question1=answer1",
                 "question2=answer2",
                 "question3=answer3");
 
@@ -216,6 +217,21 @@ public class SampleTest {
 
         hero.message("answer4");
         game.tick();
+
+        thenHistory("[]");
+    }
+
+    private final double expectedAssets = 2.0;
+
+    @Test
+    public void clearScoresShouldResetSimulator() {
+        initGame();
+
+        Assert.assertEquals(expectedAssets, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+        hero.message("go 10, 0, 10");
+        Assert.assertNotEquals(expectedAssets, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+        player.clearScore();
+        Assert.assertEquals(expectedAssets, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
 
         thenHistory("[]");
     }

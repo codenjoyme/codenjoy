@@ -121,6 +121,7 @@ public class SmokeTest {
                     "1:  'day':" + (day + 1) + ",\n" +
                     "1:  'history':" + shistory + ",\n" +
                     "1:  'isBankrupt':false,\n" +
+                    "1:  'isGameOver':false,\n" +
                     "1:  'lemonadeCost':" + jsonStringForDouble(lemonadeCost) + ",\n" +
                     "1:  'messages':'");
             if (day == 0)
