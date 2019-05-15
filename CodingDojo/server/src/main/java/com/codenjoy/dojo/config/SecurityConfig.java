@@ -27,6 +27,7 @@ import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.LoginController;
 import com.codenjoy.dojo.web.controller.RegistrationController;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -50,6 +51,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -106,7 +109,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @NonSSOProfile
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    @Slf4j
     public static class FormLoginSecurityConf extends WebSecurityConfigurerAdapter {
+
+        @PostConstruct
+        void info() {
+            log.warn("Running server with form-based authentication");
+        }
 
         @Autowired
         private AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -146,7 +155,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @SSOProfile
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    @Slf4j
     public static class SSOUserSecurityConf extends WebSecurityConfigurerAdapter {
+
+        @PostConstruct
+        void info() {
+            log.warn("Running server with OAuth2 authorization");
+        }
+
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
