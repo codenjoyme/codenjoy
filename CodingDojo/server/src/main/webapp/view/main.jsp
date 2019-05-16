@@ -45,10 +45,10 @@
             <ul>
             <c:forEach items="${gameNames}" var="gameName">
                 <li>
-                        <div>${gameName.value}: <a href="${ctx}/board/game/${gameName.key}">View</a> | <a href="${ctx}/board/game/${gameName.key}/rejoining">Join</a></div>
+                        <div>${gameName.value}: <a href="${ctx}/board/game/${gameName.key}?viewOnly=true">View</a> | <a href="${ctx}/board/game/${gameName.key}/rejoining">Join</a></div>
                 </li>
             </c:forEach>
             </ul>
         </div>
-<body>
+</body>
 </html>

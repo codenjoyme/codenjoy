@@ -24,6 +24,7 @@ package com.codenjoy.dojo.config;
 
 import com.codenjoy.dojo.config.meta.NonSSOProfile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
+import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.LoginController;
 import com.codenjoy.dojo.web.controller.RegistrationController;
@@ -41,13 +42,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -158,11 +159,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Slf4j
     public static class SSOUserSecurityConf extends WebSecurityConfigurerAdapter {
 
+        @Autowired
+        private OAuth2MappingUserService oAuth2MappingUserService;
+
         @PostConstruct
         void info() {
             log.warn("Running server with OAuth2 authorization");
         }
-
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -178,6 +181,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                     .and()
                         .oauth2Login()
+                            .userInfoEndpoint()
+                                .userService(oAuth2MappingUserService)
+                        .and()
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
