@@ -35,13 +35,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -237,7 +235,7 @@ public class Registration {
     @ToString(of = { "id", "email", "readableName", "approved", "code", "data" })
     @EqualsAndHashCode(callSuper = true)
     @Accessors(chain = true)
-    public static class User extends org.springframework.security.core.userdetails.User {
+    public static class User extends org.springframework.security.core.userdetails.User implements OAuth2User {
         private String email;
         private String id;
         private String readableName;
@@ -262,6 +260,16 @@ public class Registration {
         public void setCode(String code) {
             this.code = code;
         }
+
+        @Override
+        public Map<String, Object> getAttributes() {
+            return Collections.emptyMap();
+        }
+
+        @Override
+        public String getName() {
+            return id;
+        }
     }
 
     public User getUserByCode(String code) {
@@ -273,12 +281,12 @@ public class Registration {
         });
     }
 
-    public User getUserByEmail(String code) {
+    public Optional<User> getUserByEmail(String code) {
         return pool.select("SELECT * FROM users where email = ?", new Object[] {code}, rs -> {
             if (!rs.next()) {
-                throw new UsernameNotFoundException(String.format("User with email '%s' does not exist", code));
+                return Optional.empty();
             }
-            return extractUser(rs);
+            return Optional.of(extractUser(rs));
         });
     }
 

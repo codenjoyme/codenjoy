@@ -37,6 +37,7 @@ public class GameUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return registration.getUserByEmail(email);
+        return registration.getUserByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException(String.format("User with email '%s' does not exist", email)));
     }
 }
