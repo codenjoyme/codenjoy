@@ -65,7 +65,7 @@ namespace LemonadeClient
 
         public string Process()
         {
-            if (board.IsBankrupt)
+            if (board.IsBankrupt || board.IsGameOver)
             {
                 CommandText = GetResetCommand();
                 return CommandText;

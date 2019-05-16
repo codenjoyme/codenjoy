@@ -31,6 +31,8 @@
 
         public bool IsBankrupt { get; set; }
 
+        public bool IsGameOver { get; set; }
+
         public string Messages { get; set; }
 
         public decimal LemonadeCost { get; set; }
