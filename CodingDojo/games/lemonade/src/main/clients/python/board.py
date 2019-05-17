@@ -38,6 +38,9 @@ class Board:
     def is_bankrupt(self):
         return self._json["isBankrupt"]
 
+    def is_gameover(self):
+        return self._json["isGameOver"]
+
     def day(self):
         return self._json["day"]
 

@@ -36,17 +36,6 @@ var printArray = function (array) {
 };
 var util = require('util');
 
-// to use for local server
-//var hostIP = 'epruryaw0576';
-var hostIP = 'epruryaw0576.moscow.epam.com';
-var port = 43022;
-
-// this is your email
-var userName = 'borcwdgwta7o6a406kvh';
-// you can get this code after registration on the server with your email
-// http://servernameorip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
-var code = '1471240509319024989';
-
 var processBoard = function(boardString) {
     var board = new Board(boardString);
 	if (!!printBoardOnTextArea) {
@@ -63,10 +52,12 @@ var processBoard = function(boardString) {
     return answer;
 };
 
-var server = 'ws://' + hostIP + ':' + port + '/codenjoy-contest/ws';
+// you can get this URL after registration on the server with your email
+var url = new URL('http://epruryaw0576.moscow.epam.com:43022/codenjoy-contest/board/player/borcwdgwta7o6a406kvh?code=1471240509319024989');
+var server = 'ws://' + url.hostname + ':' + url.port + '/codenjoy-contest/ws';
 var WSocket = require('ws');
-var wsurl = server + '?user=' + userName + '&code=' + code;
-//log(wsurl);
+var wsurl = server + '?user=' + url.pathname.split('/').pop() + '&code=' + url.searchParams.get("code");
+
 var ws = new WSocket(wsurl);
 
 ws.on('open', function() {
@@ -108,14 +99,17 @@ var Board = function(board) {
     var isBankrupt = function() {
         return boardObj.isBankrupt;
     };
+    var isGameOver = function() {
+        return boardObj.isGameOver;
+    };
 	var getMessages = function() {
         return boardObj.messages;
     };
     var getDay = function() {
         return parseInt(boardObj.day);
     };
-    var getLemonadePrice = function() {
-        return parseFloat(boardObj.lemonadePrice);
+    var getLemonadeCost = function() {
+        return parseFloat(boardObj.lemonadeCost);
     };
     var getHistory = function() {
         return boardObj.history;
@@ -124,7 +118,7 @@ var Board = function(board) {
         return "Your assets: $" + getAssets() 
 			+ "\nLemonsville weather report: " + getWeatherForecast() 
 			+ "\nOn day " + getDay() 
-			+ ", the cost of lemonade is: $" + getLemonadePrice();
+			+ ", the cost of lemonade is: $" + getLemonadeCost();
     };
 	var getParsedBoard = function() {
         return boardObj;
@@ -134,9 +128,10 @@ var Board = function(board) {
 		getAssets : getAssets,
         getWeatherForecast : getWeatherForecast,
         isBankrupt : isBankrupt,
+        isGameOver : isGameOver,
         getMessages : getMessages,
         getDay : getDay,
-		getLemonadePrice : getLemonadePrice,
+		getLemonadeCost : getLemonadeCost,
 		getHistory : getHistory,
 		getLogString : getLogString,
 		getParsedBoard : getParsedBoard
@@ -154,12 +149,12 @@ var LemonadeSolver = function(board) {
          * @return next action
          */
         get : function() {
-            if (board.isBankrupt() == "true") {
+            if (board.isBankrupt() || board.isGameOver()) {
                 return resetCall();
             }
-
+			
             //TODO: Code your logic here and return direction
-            return getCommand(2,0,15);
+            return getCommand(30,0,10);
         }
     };
 };
