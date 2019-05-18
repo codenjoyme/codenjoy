@@ -43,6 +43,7 @@ public class Battlecity implements Field {
     private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
+    private final List<Bullet> bullets = new LinkedList<>();
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
         this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
@@ -60,6 +61,7 @@ public class Battlecity implements Field {
         for (Tank tank : aiTanks) {
             addAI(tank);
         }
+        generateBullets();
     }
 
     @Override
@@ -131,6 +133,16 @@ public class Battlecity implements Field {
         }
     }
 
+        private void generateBullets(){
+        int x,y;
+            for (int i = 0; i < 10; i++) {
+                do{
+                    x = dice.next(18);
+                    y = dice.next(18);
+                } while (!isBarrier(x, y));
+                bullets.add(new Bullet(null, null, new PointImpl(x,y), null,null));
+            }
+        }
     private void removeDeadTanks() {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
@@ -165,7 +177,7 @@ public class Battlecity implements Field {
 
             scoresForKill(bullet, tank);
 
-            tank.kill(bullet);
+//            tank.kill(bullet);
             bullet.onDestroy();  // TODO заимплементить взрыв
             return;
         }
@@ -197,27 +209,28 @@ public class Battlecity implements Field {
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
         Player died = null;
-        boolean aiDied = aiTanks.contains(diedTank);
-        if (!aiDied) {
+//        boolean aiDied = aiTanks.contains(diedTank);
+//        if (!aiDied) {
              died = getPlayer(diedTank);
-        }
+//        }
 
-        Tank killerTank = killedBullet.getOwner();
-        Player killer = null;
-        if (!aiTanks.contains(killerTank)) {
-            killer = getPlayer(killerTank);
-        }
-
-        if (killer != null) {
-            if (aiDied) {
-                killer.event(Events.KILL_OTHER_AI_TANK);
-            } else {
-                killer.killHero();
-                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
-            }
-        }
+//        Tank killerTank = killedBullet.getOwner();
+//        Player killer = null;
+//        if (!aiTanks.contains(killerTank)) {
+//            killer = getPlayer(killerTank);
+//        }
+//
+//        if (killer != null) {
+//            if (aiDied) {
+//                killer.event(Events.KILL_OTHER_AI_TANK);
+//            } else {
+//                killer.killHero();
+//                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
+//            }
+//        }
         if (died != null) {
             died.event(Events.KILL_YOUR_TANK);
+            died.event(Events.KILL_OTHER_HERO_TANK.apply(1));
         }
     }
 
@@ -243,11 +256,11 @@ public class Battlecity implements Field {
                 return true;
             }
         }
-        for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
-            if (tank.itsMe(x, y)) {
-                return true;
-            }
-        }
+//        for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
+//            if (tank.itsMe(x, y)) {
+//                return true;
+//            }
+//        }
         return outOfField(x, y);
     }
 
@@ -257,13 +270,12 @@ public class Battlecity implements Field {
     }
 
     private List<Bullet> getBullets() {
-        List<Bullet> result = new LinkedList<>();
-        for (Tank tank : getTanks()) {
-            for (Bullet bullet : tank.getBullets()) {
-                result.add(bullet);
-            }
-        }
-        return result;
+        //        for (Tank tank : getTanks()) {
+//            for (Bullet bullet : tank.getBullets()) {
+//                result.add(bullet);
+//            }
+//        }
+        return bullets;
     }
 
     @Override
