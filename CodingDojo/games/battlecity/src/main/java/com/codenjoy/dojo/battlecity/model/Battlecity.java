@@ -28,8 +28,7 @@ import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Battlecity implements Field {
 
@@ -82,58 +81,34 @@ public class Battlecity implements Field {
             tank.tick();
         }
 
-//        for (Bullet bullet : getBullets()) {
-//            if (bullet.destroyed()) {
-//                bullet.onDestroy();
-//            }
-//        }
-
-//        for (Tank tank : tanks) {
-//            if (tank.isAlive()) {
-//                tank.fire();
-//            }
-//        }
-
         for (int i = 0; i < tanks.size(); i++) {
             if (tanks.get(i).isAlive()) {
                 tanks.get(i).move();
+            }
+        }
+
+        for (int i = 0; i < tanks.size(); i++) {
+            if (tanks.get(i).isAlive()) {
                 for (int j = 0; j != i  && j < tanks.size(); j++) {
                     if (tanks.get(j).isAlive()) {
                         if (!(tanks.get(i).isGhost() && tanks.get(j).isGhost())) {
-                            if (tanks.get(i).getPosition().itsMe(tanks.get(j).getPosition())) {
+                            if (tanks.get(i).getPreviousPosition().itsMe(tanks.get(j).getPosition())) {
                                 if (tanks.get(i).getDirection() == tanks.get(j).getDirection().inverted()) {
                                     tanks.get(i).kill(null);
                                     tanks.get(j).kill(null);
                                     break;
-                                } else {
+                                } else if (tanks.get(i).getDirection() != tanks.get(j).getDirection()){
                                     if (tanks.get(i).getPosition().itsMe(tanks.get(i).getPreviousPosition())) {
                                         tanks.get(i).kill(null);
                                         break;
-                                    } else {
-                                        tanks.get(j).kill(null);
                                     }
                                 }
                             }
-//                        } else if ((tanks.get(i).getDirection() == tanks.get(j).getDirection().inverted()) &&
-//                                isSame(tanks.get(i).getDirection(), tanks.get(i).getPosition(), tanks.get(j).getPosition())) {
-//                            tanks.get(i).kill(null);
-//                            tanks.get(j).kill(null);
-//                        } else if ((tanks.get(i).getDirection() == tanks.get(j).getDirection()) &&
-//                                isSame(tanks.get(i).getDirection(), tanks.get(i).getPosition(), tanks.get(j).getPosition())) {
-//                            tanks.get(i).kill(null);
-//                            tanks.get(j).kill(null);
-//                        }
                         }
                     }
                 }
             }
         }
-
-//        for (int i = 0; i < tanks.size(); i++) {
-//            if (tanks.get(i).isAlive()) {
-//                tanks.get(i).move();
-//            }
-//        }
 
         for (Tank tank : tanks) {
             if (tank.isAlive()) {
@@ -145,9 +120,6 @@ public class Battlecity implements Field {
                 }
             }
         }
-//        for (Bullet bullet : getBullets()) {
-//            bullet.move();
-//        }
 
         for (Construction construction : constructions) {
             if (!tanks.contains(construction) && !getBullets().contains(construction)) {
@@ -190,8 +162,8 @@ public class Battlecity implements Field {
         int x, y;
 
         for (int i = 0; i < 25; i++) {
-                x = dice.next(this.size());
-                y = dice.next(this.size());
+            x = dice.next(this.size());
+            y = dice.next(this.size());
             bullets.add(new Bullet(this, null, new PointImpl(x, y), null, null));
         }
     }
@@ -208,6 +180,7 @@ public class Battlecity implements Field {
             }
         }
     }
+
     void addAI(Tank tank) {
         tank.init(this);
         aiTanks.add(tank);
@@ -273,7 +246,6 @@ public class Battlecity implements Field {
        }
 
 //        }
-
 
 //        Tank killerTank = killedBullet.getOwner();
 //        Player killer = null;
