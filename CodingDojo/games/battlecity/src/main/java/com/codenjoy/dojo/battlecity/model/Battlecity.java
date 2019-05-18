@@ -133,15 +133,16 @@ public class Battlecity implements Field {
     }
 
     private void generateBullets() {
-        int x, y;
-        Tank tank = getTanks().get(0);
+        generateBullet();
+    }
 
-        for (int i = 0; i < this.size(); i++) {
-//            do {
+    private void generateBullet() {
+        int x, y;
+
+        for (int i = 0; i < 25; i++) {
                 x = dice.next(this.size());
                 y = dice.next(this.size());
-//            } while (!isBarrier(x, y));
-            bullets.add(new Bullet(this, null, new PointImpl(x, y), tank, null));
+            bullets.add(new Bullet(this, null, new PointImpl(x, y), null, null));
         }
     }
 
@@ -157,7 +158,6 @@ public class Battlecity implements Field {
             }
         }
     }
-
     void addAI(Tank tank) {
         tank.init(this);
         aiTanks.add(tank);
@@ -173,14 +173,17 @@ public class Battlecity implements Field {
         if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
             Tank tank = getTanks().get(index);
-            if (tank == bullet.getOwner()) {
-                return;
-            }
+//            if (tank == bullet.getOwner()) {
+//                return;
+//            }
 
             scoresForKill(bullet, tank);
 
 //            tank.kill(bullet);
             bullet.onDestroy();  // TODO заимплементить взрыв
+            bullets.remove(bullet);
+            if(bullets.size() < 20)
+                generateBullet();
             return;
         }
 
@@ -213,8 +216,14 @@ public class Battlecity implements Field {
         Player died = null;
 //        boolean aiDied = aiTanks.contains(diedTank);
 //        if (!aiDied) {
-        died = getPlayer(diedTank);
+       try {
+           died = getPlayer(diedTank);
+       } catch (Exception e){
+
+       }
+
 //        }
+
 
 //        Tank killerTank = killedBullet.getOwner();
 //        Player killer = null;
@@ -231,7 +240,7 @@ public class Battlecity implements Field {
 //            }
 //        }
         if (died != null) {
-            died.event(Events.KILL_YOUR_TANK);
+//            died.event(Events.KILL_YOUR_TANK);
             died.event(Events.KILL_OTHER_HERO_TANK.apply(1));
         }
     }
