@@ -104,8 +104,8 @@ public class GameRunner extends AbstractGameType implements GameType {
      */
     public String getMap() {
         return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼"+
-                "☼ ☼☼ ☼☼☼ ☼ ☼☼☼ ☼☼ ☼"+
                 "☼        ☼        ☼"+
+                "☼ ☼☼ ☼☼☼ ☼ ☼☼☼ ☼☼ ☼"+
                 "☼                 ☼"+
                 "☼ ☼☼ ☼ ☼☼☼☼☼ ☼ ☼☼ ☼"+
                 "☼    ☼   ☼   ☼    ☼"+
