@@ -23,9 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.LinkedList;
@@ -47,11 +45,15 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected int speed;
     protected boolean moving;
     private boolean fire;
+    private Point previousPosition;
+    private boolean isGhost;
 
-    public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
+    public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets, boolean isGhost) {
         super(x, y);
+        previousPosition = new PointImpl(-1, -1);
         this.direction = direction;
         this.dice = dice;
+        this.isGhost = isGhost;
         gun = new Gun(ticksPerBullets);
         reset();
     }
@@ -102,7 +104,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             if (!moving) {
                 return;
             }
-
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
             moving(newX, newY);
@@ -113,6 +114,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (field.isBarrier(newX, newY)) {
             // do nothing
         } else {
+            previousPosition.setX(x);
+            previousPosition.setY(y);
             move(newX, newY);
         }
         moving = false;
@@ -205,5 +208,17 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (!bullets.contains(bullet)) {
             bullets.add(bullet);
         }
+    }
+
+    public Point getPosition() {
+        return new PointImpl(x, y);
+    }
+
+    public Point getPreviousPosition() {
+        return previousPosition;
+    }
+
+    public boolean isGhost() {
+        return isGhost;
     }
 }
