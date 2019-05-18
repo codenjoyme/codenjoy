@@ -136,14 +136,13 @@ public class Battlecity implements Field {
         int x, y;
         Tank tank = getTanks().get(0);
 
-        for (int i = 0; i < 10; i++) {
-            do {
-                x = dice.next(18);
-                y = dice.next(18);
-            } while (!isBarrier(x, y));
+        for (int i = 0; i < this.size(); i++) {
+//            do {
+                x = dice.next(this.size());
+                y = dice.next(this.size());
+//            } while (!isBarrier(x, y));
             bullets.add(new Bullet(this, null, new PointImpl(x, y), tank, null));
         }
-        tank.setBullets(bullets);
     }
 
     private void removeDeadTanks() {
