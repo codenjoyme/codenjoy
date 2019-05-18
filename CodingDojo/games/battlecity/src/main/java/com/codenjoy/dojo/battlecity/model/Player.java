@@ -69,7 +69,7 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
+        hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS, false);
         hero.removeBullets();
         hero.init(field);
         reset();

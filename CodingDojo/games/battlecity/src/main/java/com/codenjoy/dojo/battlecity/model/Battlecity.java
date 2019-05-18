@@ -50,7 +50,7 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
                       List<Border> borders, Tank... aiTanks) {
-        aiCount = aiTanks.length;
+        aiCount = 6;
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
@@ -94,18 +94,59 @@ public class Battlecity implements Field {
 //            }
 //        }
 
-        for (Tank tank : tanks) {
-            if (tank.isAlive()) {
-                tank.move();
-
-                List<Bullet> bullets = getBullets();
-                int index = bullets.indexOf(tank);
-                if (index != -1) {
-                    Bullet bullet = bullets.get(index);
-                    affect(bullet);
+        for (int i = 0; i < tanks.size(); i++) {
+            if (tanks.get(i).isAlive()) {
+                tanks.get(i).move();
+                for (int j = 0; j != i  && j < tanks.size(); j++) {
+                    if (tanks.get(j).isAlive()) {
+                        if (!(tanks.get(i).isGhost() && tanks.get(j).isGhost())) {
+                            if (tanks.get(i).getPosition().itsMe(tanks.get(j).getPosition())) {
+                                if (tanks.get(i).getDirection() == tanks.get(j).getDirection().inverted()) {
+                                    tanks.get(i).kill(null);
+                                    tanks.get(j).kill(null);
+                                    break;
+                                } else {
+                                    if (tanks.get(i).getPosition().itsMe(tanks.get(i).getPreviousPosition())) {
+                                        tanks.get(i).kill(null);
+                                        break;
+                                    } else {
+                                        tanks.get(j).kill(null);
+                                    }
+                                }
+                            }
+//                        } else if ((tanks.get(i).getDirection() == tanks.get(j).getDirection().inverted()) &&
+//                                isSame(tanks.get(i).getDirection(), tanks.get(i).getPosition(), tanks.get(j).getPosition())) {
+//                            tanks.get(i).kill(null);
+//                            tanks.get(j).kill(null);
+//                        } else if ((tanks.get(i).getDirection() == tanks.get(j).getDirection()) &&
+//                                isSame(tanks.get(i).getDirection(), tanks.get(i).getPosition(), tanks.get(j).getPosition())) {
+//                            tanks.get(i).kill(null);
+//                            tanks.get(j).kill(null);
+//                        }
+                        }
+                    }
                 }
             }
         }
+
+//        for (int i = 0; i < tanks.size(); i++) {
+//            if (tanks.get(i).isAlive()) {
+//                tanks.get(i).move();
+//            }
+//        }
+
+//        for (Tank tank : tanks) {
+//            if (tank.isAlive()) {
+//                tank.move();
+//
+//                List<Bullet> bullets = getBullets();
+//                int index = bullets.indexOf(tank);
+//                if (index != -1) {
+//                    Bullet bullet = bullets.get(index);
+//                    affect(bullet);
+//                }
+//            }
+//        }
 //        for (Bullet bullet : getBullets()) {
 //            bullet.move();
 //        }
@@ -115,6 +156,17 @@ public class Battlecity implements Field {
                 construction.tick();
             }
         }
+    }
+
+    private boolean isSame(Direction d, Point p1, Point p2) {
+        Point p = new PointImpl(p1);
+        switch (d) {
+            case UP: p.setY(p1.getY() + 1); break;
+            case DOWN: p.setY(p1.getY() - 1); break;
+            case RIGHT: p.setY(p1.getX() + 1); break;
+            case LEFT: p.setY(p1.getX() - 1); break;
+        }
+        return p.itsMe(p2);
     }
 
     private void newAI() {
