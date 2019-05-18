@@ -81,17 +81,17 @@ public class Battlecity implements Field {
             tank.tick();
         }
 
-        for (Bullet bullet : getBullets()) {
-            if (bullet.destroyed()) {
-                bullet.onDestroy();
-            }
-        }
+//        for (Bullet bullet : getBullets()) {
+//            if (bullet.destroyed()) {
+//                bullet.onDestroy();
+//            }
+//        }
 
-        for (Tank tank : tanks) {
-            if (tank.isAlive()) {
-                tank.fire();
-            }
-        }
+//        for (Tank tank : tanks) {
+//            if (tank.isAlive()) {
+//                tank.fire();
+//            }
+//        }
 
         for (Tank tank : tanks) {
             if (tank.isAlive()) {
@@ -105,9 +105,9 @@ public class Battlecity implements Field {
                 }
             }
         }
-        for (Bullet bullet : getBullets()) {
-            bullet.move();
-        }
+//        for (Bullet bullet : getBullets()) {
+//            bullet.move();
+//        }
 
         for (Construction construction : constructions) {
             if (!tanks.contains(construction) && !getBullets().contains(construction)) {
