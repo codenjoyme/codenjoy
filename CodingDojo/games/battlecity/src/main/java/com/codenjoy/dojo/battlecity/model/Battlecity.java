@@ -135,18 +135,16 @@ public class Battlecity implements Field {
 //            }
 //        }
 
-//        for (Tank tank : tanks) {
-//            if (tank.isAlive()) {
-//                tank.move();
-//
-//                List<Bullet> bullets = getBullets();
-//                int index = bullets.indexOf(tank);
-//                if (index != -1) {
-//                    Bullet bullet = bullets.get(index);
-//                    affect(bullet);
-//                }
-//            }
-//        }
+        for (Tank tank : tanks) {
+            if (tank.isAlive()) {
+                List<Bullet> bullets = getBullets();
+                int index = bullets.indexOf(tank);
+                if (index != -1) {
+                    Bullet bullet = bullets.get(index);
+                    affect(bullet);
+                }
+            }
+        }
 //        for (Bullet bullet : getBullets()) {
 //            bullet.move();
 //        }
