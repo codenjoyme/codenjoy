@@ -25,74 +25,108 @@ package com.codenjoy.dojo.battlecity.client.ai;
 
 import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Path;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class AISolver implements Solver<Board> {
+    private Dice dice;
+    private Board board;
+    private List<Path> closedList = new ArrayList<>();
 
-    private DeikstraFindWay way;
 
     public AISolver(Dice dice) {
-        this.way = new DeikstraFindWay();
+        this.dice = dice;
+
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
-        return new DeikstraFindWay.Possible() {
-            @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isBarrierAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.isBarrierAt(nx, ny)) return false;
-                if (board.isBulletAt(nx, ny)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
-            }
-        };
-    }
 
     @Override
     public String get(final Board board) {
-        if (board.isGameOver()) return act("");
-        List<Direction> result = getDirections(board);
-        if (result.isEmpty()) return act("");
-        return act(result.get(0).toString());
+        this.board = board;
+        if (board.isGameOver()) return "";
+        Direction direction = Direction.UP;
+        List<Point> bullets = this.board.getBullets();
+        final Point me = this.board.getMe();
+        Collections.sort(
+                bullets, new ShortestDistanceComparator(me));
+        for (Point point : bullets) {
+            List<Path> openList = new ArrayList<>();
+            closedList = new ArrayList<>();
+            addToOpenList(new Path(me, null, null), openList, closedList);
+            closedList.add(new Path(me, null, null));
+            if (traverse(openList, closedList, point)) {
+                Path path = closedList.get(closedList.indexOf(new Path(point, null, null)));
+                while (!path.getParent().getPoint().equals(me)) {
+                    path = path.getParent();
+                }
+                direction = path.getDirection();
+                break;
+            }
+        }
+        return direction.toString();
     }
 
-    private String act(String command) {
-        return ((command.equals("")?"":command + ", ") + "ACT");
+
+    private boolean traverse(List<Path> openList, List<Path> closedList, Point destination) {
+        if (!openList.isEmpty()) {
+            Collections.sort(openList, new ShortestPathComparator(destination));
+            Path minDistancePoint = openList.get(0);
+            closedList.add(minDistancePoint);
+            if (minDistancePoint.getPoint().itsMe(destination)) {
+                return true;
+            }
+            openList.remove(minDistancePoint);
+            addToOpenList(minDistancePoint, openList, closedList);
+            return traverse(openList, closedList, destination);
+        }
+        return false;
     }
 
-    public List<Direction> getDirections(Board board) {
-        int size = board.size();
-        Point from = board.getMe();
-        List<Point> to = board.get(Elements.AI_TANK_DOWN,
-                Elements.AI_TANK_LEFT,
-                Elements.AI_TANK_RIGHT,
-                Elements.AI_TANK_UP,
-                Elements.OTHER_TANK_DOWN,
-                Elements.OTHER_TANK_LEFT,
-                Elements.OTHER_TANK_RIGHT,
-                Elements.OTHER_TANK_UP);
-        DeikstraFindWay.Possible map = possible(board);
-        return way.getShortestWay(size, from, to, map);
+    private void addToOpenList(Path me, List<Path> openList, List<Path> closedList) {
+        directionTraversable(me.getPoint(), Direction.UP).ifPresent(getPointConsumer(openList, closedList, me, Direction.UP));
+        directionTraversable(me.getPoint(), Direction.DOWN).ifPresent(getPointConsumer(openList, closedList, me, Direction.DOWN));
+        directionTraversable(me.getPoint(), Direction.LEFT).ifPresent(getPointConsumer(openList, closedList, me, Direction.LEFT));
+        directionTraversable(me.getPoint(), Direction.RIGHT).ifPresent(getPointConsumer(openList, closedList, me, Direction.RIGHT));
     }
 
+    private Consumer<Point> getPointConsumer(List<Path> openList, List<Path> closedList, Path parent, Direction direction) {
+        return point -> {
+            if (!openList.contains(new Path(point, null, null)) && !closedList.contains(new Path(point, null, null)))
+                openList.add(new Path(point, parent, direction));
+        };
+    }
+
+    private Optional<Point> directionTraversable(Point from, Direction towards) {
+        Point destination = from.copy();
+        destination.change(towards);
+        return !this.board.isBarrierAt(destination.getX(), destination.getY()) ? Optional.of(destination) : Optional.empty();
+    }
+
+
+    class ShortestDistanceComparator implements Comparator<Point> {
+        private Point origin;
+        public ShortestDistanceComparator(Point origin) {
+            this.origin = origin;
+        }
+        public int compare(Point p1, Point p2) {
+            return (p1 == null) ? 1 : ((p2 == null) ? -1 : origin.distance(p1) > origin.distance(p2) ? 1 : -1);
+        }
+    }
+
+    class ShortestPathComparator implements Comparator<Path> {
+        private Point origin;
+        public ShortestPathComparator(Point origin) {
+            this.origin = origin;
+        }
+        public int compare(Path p1, Path p2) {
+            return (p1 == null) ? 1 : ((p2 == null) ? -1 : origin.distance(p1.getPoint()) > origin.distance(p2.getPoint()) ? 1 : -1);
+        }
+    }
 }
