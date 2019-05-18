@@ -10,18 +10,17 @@ package com.codenjoy.dojo.battlecity.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
@@ -133,16 +132,20 @@ public class Battlecity implements Field {
         }
     }
 
-        private void generateBullets(){
-        int x,y;
-            for (int i = 0; i < 10; i++) {
-                do{
-                    x = dice.next(18);
-                    y = dice.next(18);
-                } while (!isBarrier(x, y));
-                bullets.add(new Bullet(null, null, new PointImpl(x,y), null,null));
-            }
+    private void generateBullets() {
+        int x, y;
+        Tank tank = getTanks().get(0);
+
+        for (int i = 0; i < 10; i++) {
+            do {
+                x = dice.next(18);
+                y = dice.next(18);
+            } while (!isBarrier(x, y));
+            bullets.add(new Bullet(this, null, new PointImpl(x, y), tank, null));
         }
+        tank.setBullets(bullets);
+    }
+
     private void removeDeadTanks() {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
@@ -211,7 +214,7 @@ public class Battlecity implements Field {
         Player died = null;
 //        boolean aiDied = aiTanks.contains(diedTank);
 //        if (!aiDied) {
-             died = getPlayer(diedTank);
+        died = getPlayer(diedTank);
 //        }
 
 //        Tank killerTank = killedBullet.getOwner();
@@ -283,7 +286,7 @@ public class Battlecity implements Field {
         LinkedList<Tank> result = new LinkedList<>(aiTanks);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
-                result.add(player.getHero());
+            result.add(player.getHero());
 //            }
         }
         return result;

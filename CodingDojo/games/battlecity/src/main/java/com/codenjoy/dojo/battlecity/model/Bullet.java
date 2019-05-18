@@ -70,15 +70,16 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     }
 
     public boolean destroyed() {
-        return owner == null;
+        return false;
+//        return owner == null;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (destroyed()) {
-            return Elements.BANG;
-        } else {
+//        if (destroyed()) {
+//            return Elements.BANG;
+//        } else {
             return Elements.BULLET;
-        }
+//        }
     }
 }
