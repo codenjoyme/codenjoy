@@ -34,6 +34,11 @@ import java.util.List;
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     protected Dice dice;
+
+    public void setBullets(List<Bullet> bullets) {
+        this.bullets = bullets;
+    }
+
     private List<Bullet> bullets;
     private boolean alive;
     private Gun gun;
