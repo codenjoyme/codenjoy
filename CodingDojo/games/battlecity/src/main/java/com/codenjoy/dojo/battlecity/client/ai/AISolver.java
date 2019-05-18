@@ -56,7 +56,7 @@ public class AISolver implements Solver<Board> {
                 if (board.isOutOfField(nx, ny)) return false;
 
                 if (board.isBarrierAt(nx, ny)) return false;
-                if (board.isBulletAt(nx, ny)) return false;
+//                if (board.isBulletAt(nx, ny)) return false;
 
                 return true;
             }
@@ -83,14 +83,17 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.AI_TANK_DOWN,
-                Elements.AI_TANK_LEFT,
-                Elements.AI_TANK_RIGHT,
-                Elements.AI_TANK_UP,
-                Elements.OTHER_TANK_DOWN,
-                Elements.OTHER_TANK_LEFT,
-                Elements.OTHER_TANK_RIGHT,
-                Elements.OTHER_TANK_UP);
+        List<Point> to = board.get(
+//                Elements.AI_TANK_DOWN,
+//                Elements.AI_TANK_LEFT,
+//                Elements.AI_TANK_RIGHT,
+//                Elements.AI_TANK_UP,
+//                Elements.OTHER_TANK_DOWN,
+//                Elements.OTHER_TANK_LEFT,
+//                Elements.OTHER_TANK_RIGHT,
+//                Elements.OTHER_TANK_UP
+                Elements.BULLET
+        );
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }
