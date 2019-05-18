@@ -33,7 +33,7 @@ import java.util.*;
 public class Battlecity implements Field {
 
     private Dice dice;
-    private LinkedList<Tank> aiTanks;
+    private LinkedList<Pacman> aiTanks;
     private int aiCount;
 
     private int size;
@@ -41,14 +41,14 @@ public class Battlecity implements Field {
     private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
-    private final List<Bullet> bullets = new LinkedList<>();
+    private final List<Food> foods = new LinkedList<>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
+    public Battlecity(int size, Dice dice, List<Construction> constructions, Pacman... aiTanks) {
         this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Tank... aiTanks) {
+                      List<Border> borders, Pacman... aiTanks) {
         aiCount = 6;
         this.dice = dice;
         this.size = size;
@@ -56,8 +56,8 @@ public class Battlecity implements Field {
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
 
-        for (Tank tank : aiTanks) {
-            addAI(tank);
+        for (Pacman pacman : aiTanks) {
+            addAI(pacman);
         }
         generateBullets();
     }
@@ -66,7 +66,7 @@ public class Battlecity implements Field {
     public void clearScore() {
         players.forEach(Player::reset);
         constructions.forEach(Construction::reset);
-        getTanks().forEach(Tank::reset);
+        getTanks().forEach(Pacman::reset);
     }
 
     @Override
@@ -75,31 +75,31 @@ public class Battlecity implements Field {
 
         newAI();
 
-        List<Tank> tanks = getTanks();
+        List<Pacman> pacmen = getTanks();
 
-        for (Tank tank : tanks) {
-            tank.tick();
+        for (Pacman pacman : pacmen) {
+            pacman.tick();
         }
 
-        for (int i = 0; i < tanks.size(); i++) {
-            if (tanks.get(i).isAlive()) {
-                tanks.get(i).move();
+        for (int i = 0; i < pacmen.size(); i++) {
+            if (pacmen.get(i).isAlive()) {
+                pacmen.get(i).move();
             }
         }
 
-        for (int i = 0; i < tanks.size(); i++) {
-            if (tanks.get(i).isAlive()) {
-                for (int j = 0; j != i  && j < tanks.size(); j++) {
-                    if (tanks.get(j).isAlive()) {
-                        if (!(tanks.get(i).isGhost() && tanks.get(j).isGhost())) {
-                            if (tanks.get(i).getPreviousPosition().itsMe(tanks.get(j).getPosition())) {
-                                if (tanks.get(i).getDirection() == tanks.get(j).getDirection().inverted()) {
-                                    tanks.get(i).kill(null);
-                                    tanks.get(j).kill(null);
+        for (int i = 0; i < pacmen.size(); i++) {
+            if (pacmen.get(i).isAlive()) {
+                for (int j = 0; j != i  && j < pacmen.size(); j++) {
+                    if (pacmen.get(j).isAlive()) {
+                        if (!(pacmen.get(i).isGhost() && pacmen.get(j).isGhost())) {
+                            if (pacmen.get(i).getPreviousPosition().itsMe(pacmen.get(j).getPosition())) {
+                                if (pacmen.get(i).getDirection() == pacmen.get(j).getDirection().inverted()) {
+                                    pacmen.get(i).kill(null);
+                                    pacmen.get(j).kill(null);
                                     break;
-                                } else if (tanks.get(i).getDirection() != tanks.get(j).getDirection()){
-                                    if (tanks.get(i).getPosition().itsMe(tanks.get(i).getPreviousPosition())) {
-                                        tanks.get(i).kill(null);
+                                } else if (pacmen.get(i).getDirection() != pacmen.get(j).getDirection()){
+                                    if (pacmen.get(i).getPosition().itsMe(pacmen.get(i).getPreviousPosition())) {
+                                        pacmen.get(i).kill(null);
                                         break;
                                     }
                                 }
@@ -110,19 +110,19 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Tank tank : tanks) {
-            if (tank.isAlive()) {
-                List<Bullet> bullets = getBullets();
-                int index = bullets.indexOf(tank);
+        for (Pacman pacman : pacmen) {
+            if (pacman.isAlive()) {
+                List<Food> foods = getFoods();
+                int index = foods.indexOf(pacman);
                 if (index != -1) {
-                    Bullet bullet = bullets.get(index);
-                    affect(bullet);
+                    Food food = foods.get(index);
+                    affect(food);
                 }
             }
         }
 
         for (Construction construction : constructions) {
-            if (!tanks.contains(construction) && !getBullets().contains(construction)) {
+            if (!pacmen.contains(construction) && !getFoods().contains(construction)) {
                 construction.tick();
             }
         }
@@ -149,7 +149,7 @@ public class Battlecity implements Field {
             } while (isBarrier(x, y) && c++ < size);
 
             if (!isBarrier(x, y)) {
-                addAI(new AITank(x, y, dice, Direction.DOWN));
+                addAI(new Ghost(x, y, dice, Direction.DOWN));
             }
         }
     }
@@ -162,16 +162,18 @@ public class Battlecity implements Field {
         int x, y;
 
         for (int i = 0; i < 25; i++) {
-            x = dice.next(this.size());
-            y = dice.next(this.size());
-            bullets.add(new Bullet(this, null, new PointImpl(x, y), null, null));
+            do {
+                x = dice.next(this.size());
+                y = dice.next(this.size());
+            } while (isBarrier(x, y));
+            foods.add(new Food(this, null, new PointImpl(x, y), null, null));
         }
     }
 
     private void removeDeadTanks() {
-        for (Tank tank : getTanks()) {
-            if (!tank.isAlive()) {
-                aiTanks.remove(tank);
+        for (Pacman pacman : getTanks()) {
+            if (!pacman.isAlive()) {
+                aiTanks.remove(pacman);
             }
         }
         for (Player player : players.toArray(new Player[0])) {
@@ -181,73 +183,73 @@ public class Battlecity implements Field {
         }
     }
 
-    void addAI(Tank tank) {
-        tank.init(this);
-        aiTanks.add(tank);
+    void addAI(Pacman pacman) {
+        pacman.init(this);
+        aiTanks.add(pacman);
     }
 
     @Override
-    public void affect(Bullet bullet) {
-        if (borders.contains(bullet)) {
-            bullet.onDestroy();
+    public void affect(Food food) {
+        if (borders.contains(food)) {
+            food.onDestroy();
             return;
         }
 
-        if (getTanks().contains(bullet)) {
-            int index = getTanks().indexOf(bullet);
-            Tank tank = getTanks().get(index);
-//            if (tank == bullet.getOwner()) {
+        if (getTanks().contains(food)) {
+            int index = getTanks().indexOf(food);
+            Pacman pacman = getTanks().get(index);
+//            if (pacman == food.getOwner()) {
 //                return;
 //            }
 
-            scoresForKill(bullet, tank);
+            scoresForKill(food, pacman);
 
-//            tank.kill(bullet);
-            bullet.onDestroy();  // TODO заимплементить взрыв
-            bullets.remove(bullet);
-            if(bullets.size() < 20)
+//            pacman.kill(food);
+            food.onDestroy();  // TODO заимплементить взрыв
+            foods.remove(food);
+            if(foods.size() < 20)
                 generateBullet();
             return;
         }
 
-        for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
-            if (bullet != bullet2 && bullet.equals(bullet2)) {
-                bullet.boom();
-                bullet2.boom();
+        for (Food food2 : getFoods().toArray(new Food[0])) {
+            if (food != food2 && food.equals(food2)) {
+                food.boom();
+                food2.boom();
                 return;
             }
         }
 
-        if (constructions.contains(bullet)) {
-            Construction construction = getConstructionAt(bullet);
+        if (constructions.contains(food)) {
+            Construction construction = getConstructionAt(food);
 
             if (!construction.destroyed()) {
-                construction.destroyFrom(bullet.getDirection());
-                bullet.onDestroy();  // TODO заимплементить взрыв
+                construction.destroyFrom(food.getDirection());
+                food.onDestroy();  // TODO заимплементить взрыв
             }
 
             return;
         }
     }
 
-    private Construction getConstructionAt(Bullet bullet) {
-        int index = constructions.indexOf(bullet);
+    private Construction getConstructionAt(Food food) {
+        int index = constructions.indexOf(food);
         return constructions.get(index);
     }
 
-    private void scoresForKill(Bullet killedBullet, Tank diedTank) {
+    private void scoresForKill(Food killedFood, Pacman diedPacman) {
         Player died = null;
-//        boolean aiDied = aiTanks.contains(diedTank);
+//        boolean aiDied = aiTanks.contains(diedPacman);
 //        if (!aiDied) {
        try {
-           died = getPlayer(diedTank);
+           died = getPlayer(diedPacman);
        } catch (Exception e){
 
        }
 
 //        }
 
-//        Tank killerTank = killedBullet.getOwner();
+//        Pacman killerTank = killedFood.getOwner();
 //        Player killer = null;
 //        if (!aiTanks.contains(killerTank)) {
 //            killer = getPlayer(killerTank);
@@ -267,9 +269,9 @@ public class Battlecity implements Field {
         }
     }
 
-    private Player getPlayer(Tank tank) {
+    private Player getPlayer(Pacman pacman) {
         for (Player player : players) {
-            if (player.getHero().equals(tank)) {
+            if (player.getHero().equals(pacman)) {
                 return player;
             }
         }
@@ -289,7 +291,7 @@ public class Battlecity implements Field {
                 return true;
             }
         }
-//        for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
+//        for (Pacman tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
 //            if (tank.itsMe(x, y)) {
 //                return true;
 //            }
@@ -302,18 +304,18 @@ public class Battlecity implements Field {
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 
-    private List<Bullet> getBullets() {
-        //        for (Tank tank : getTanks()) {
-//            for (Bullet bullet : tank.getBullets()) {
+    private List<Food> getFoods() {
+        //        for (Pacman tank : getTanks()) {
+//            for (Food bullet : tank.getFoods()) {
 //                result.add(bullet);
 //            }
 //        }
-        return bullets;
+        return foods;
     }
 
     @Override
-    public List<Tank> getTanks() {
-        LinkedList<Tank> result = new LinkedList<>(aiTanks);
+    public List<Pacman> getTanks() {
+        LinkedList<Pacman> result = new LinkedList<>(aiTanks);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
             result.add(player.getHero());
@@ -356,7 +358,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getBorders());
                     addAll(Battlecity.this.getTanks());
                     addAll(Battlecity.this.getConstructions());
-                    addAll(Battlecity.this.getBullets());
+                    addAll(Battlecity.this.getFoods());
                 }};
             }
         };

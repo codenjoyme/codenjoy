@@ -25,7 +25,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 import com.codenjoy.dojo.battlecity.model.Border;
 import com.codenjoy.dojo.battlecity.model.Construction;
-import com.codenjoy.dojo.battlecity.model.Tank;
+import com.codenjoy.dojo.battlecity.model.Pacman;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public interface Level {
 
     List<Border> getBorders();
 
-    List<Tank> getTanks();
+    List<Pacman> getTanks();
 
     List<Construction> getConstructions();
 

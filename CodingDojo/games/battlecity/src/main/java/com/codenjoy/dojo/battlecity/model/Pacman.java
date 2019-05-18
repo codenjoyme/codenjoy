@@ -29,15 +29,15 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
+public class Pacman extends PlayerHero<Field> implements State<Elements, Player> {
 
     protected Dice dice;
 
-    public void setBullets(List<Bullet> bullets) {
-        this.bullets = bullets;
+    public void setFoods(List<Food> foods) {
+        this.foods = foods;
     }
 
-    private List<Bullet> bullets;
+    private List<Food> foods;
     private boolean alive;
     private Gun gun;
 
@@ -48,7 +48,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private Point previousPosition;
     private boolean isGhost;
 
-    public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets, boolean isGhost) {
+    public Pacman(int x, int y, Direction direction, Dice dice, int ticksPerBullets, boolean isGhost) {
         super(x, y);
         previousPosition = new PointImpl(-1, -1);
         this.direction = direction;
@@ -128,8 +128,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public Iterable<Bullet> getBullets() {
-        return new LinkedList<Bullet>(bullets);
+    public Iterable<Food> getFoods() {
+        return new LinkedList<Food>(foods);
     }
 
     public void init(Field field) {
@@ -145,7 +145,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
     }
 
-    public void kill(Bullet bullet) {
+    public void kill(Food food) {
         alive = false;
     }
 
@@ -154,7 +154,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void removeBullets() {
-        bullets.clear();
+        foods.clear();
     }
 
     @Override
@@ -193,7 +193,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         fire = false;
         alive = true;
         gun.reset();
-        bullets = new LinkedList<>();
+        foods = new LinkedList<>();
     }
 
     public void fire() {
@@ -202,11 +202,11 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
         if (!gun.tryToFire()) return;
 
-        Bullet bullet = new Bullet(field, direction, copy(), this,
-                b -> Tank.this.bullets.remove(b));
+        Food food = new Food(field, direction, copy(), this,
+                b -> Pacman.this.foods.remove(b));
 
-        if (!bullets.contains(bullet)) {
-            bullets.add(bullet);
+        if (!foods.contains(food)) {
+            foods.add(food);
         }
     }
 

@@ -27,8 +27,8 @@ import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Pacman;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
@@ -61,7 +61,7 @@ public class GameRunner extends AbstractGameType implements GameType {
                 getDice(),
                 level.getConstructions(),
                 level.getBorders(),
-                level.getTanks().toArray(new Tank[0]));
+                level.getTanks().toArray(new Pacman[0]));
     }
 
     @Override

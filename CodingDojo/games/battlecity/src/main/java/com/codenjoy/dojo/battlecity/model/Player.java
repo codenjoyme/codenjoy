@@ -29,11 +29,11 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-public class Player extends GamePlayer<Tank, Field> {
+public class Player extends GamePlayer<Pacman, Field> {
 
     public static final int TICKS_PER_BULLETS = 4;
 
-    private Tank hero;
+    private Pacman hero;
     private Dice dice;
     private int killed;
 
@@ -47,7 +47,7 @@ public class Player extends GamePlayer<Tank, Field> {
         killed = 0;
     }
 
-    public Tank getHero() {
+    public Pacman getHero() {
         return hero;
     }
 
@@ -69,7 +69,7 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS, false);
+        hero = new Pacman(0, 0, Direction.UP, dice, TICKS_PER_BULLETS, false);
         hero.removeBullets();
         hero.init(field);
         reset();
