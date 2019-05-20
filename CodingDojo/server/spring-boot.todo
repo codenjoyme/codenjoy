@@ -1013,3 +1013,151 @@ from Alex: 2019-04-16
     было бы наверное лучше в один рядок
     a2048 - View | Join
  Igor: верстку подправил, каждый пункт в одну строку
+
+
+Комменты от 2019-05-20:
+
+---
+Стартовал все игрушки (в том числе icancode) командой
+clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -DallGames -f pom.xml
+---
+
+
+80) В логе комменты флудят каждую секунду много
+    2019-05-20T08:30:06.455 [qtp489423829-24] DEBUG o.e.j.w.c.i.AbstractWebSocketConnection - SERVER onFillable()
+    2019-05-20T08:30:06.455 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ManagedSelector - update org.eclipse.jetty.io.ChannelEndPoint$1@6cd0425c
+    2019-05-20T08:30:06.455 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ChannelEndPoint - filled 16 DirectByteBuffer@29479ff0[p=0,l=16,c=4096,r=16]={<<<\x81\x8a2\x0c*\x05`EmMf \nDqX>>>\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
+    2019-05-20T08:30:06.456 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ChannelEndPoint - Key interests updated 0 -> 1 on SocketChannelEndPoint@4dc2b728{/127.0.0.1:8080<->/127.0.0.1:50023,OPEN,fill=FI,flush=-,to=2/300000}{io=1/1,kio=1,kro=1}->WebSocketClientConnection@e017ccea[ios=IOState@29df2cd6[OPEN,in,out],f=Flusher@6cddb789[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[CLIENT,validating],p=Parser@75dec7c3[ExtensionStack,s=START,c=0,len=2270,f=null]]
+    2019-05-20T08:30:06.456 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ManagedSelector - updates 0
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.j.w.c.i.AbstractWebSocketConnection - Filled 16 bytes - DirectByteBuffer@29479ff0[p=0,l=16,c=4096,r=16]={<<<\x81\x8a2\x0c*\x05`EmMf \nDqX>>>\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
+    2019-05-20T08:30:06.456 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@3644fbe7 waiting with 1 keys
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Parsing 16 bytes
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER OpCode TEXT, fin=true rsv=...
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Payload Length: 10 - Parser@67a5eadf[ExtensionStack,s=PAYLOAD_LEN,c=0,len=10,f=TEXT[len=0,fin=true,rsv=...,masked=true]]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Window: DirectByteBuffer@251cb586[p=0,l=10,c=10,r=10]={<<<`EmMf \nDqX>>>}
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Parsed Frame: TEXT[len=10,fin=true,rsv=...,masked=true]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Notify ExtensionStack[queueSize=0,extensions=[],incoming=org.eclipse.jetty.websocket.common.WebSocketSession,outgoing=org.eclipse.jetty.websocket.server.WebSocketServerConnection]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.j.w.c.events.AbstractEventDriver - incomingFrame(TEXT[len=10,fin=true,rsv=...,masked=true])
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Parsing 0 bytes
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ChannelEndPoint - filled 0 DirectByteBuffer@29479ff0[p=0,l=0,c=4096,r=0]={<<<>>>\x81\x8a2\x0c*\x05RIGHT, ACT\x00...\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.io.AbstractConnection - fillInterested WebSocketServerConnection@e00499b8::SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=-,flush=-,to=1/300000}{io=0/0,kio=0,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG org.eclipse.jetty.io.FillInterest - interested FillInterest@7d2f6593{AC.ReadCB@e00499b8{WebSocketServerConnection@e00499b8::SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=FI,flush=-,to=0/300000}{io=0/0,kio=0,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]}}
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ChannelEndPoint - changeInterests p=false 0->1 for SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=FI,flush=-,to=1/300000}{io=0/1,kio=0,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ManagedSelector - Queued change org.eclipse.jetty.io.ChannelEndPoint$1@2b5615e2 on ManagedSelector@332a3d42{STARTED} id=0 keys=4 selected=0 updates=0
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ManagedSelector - Wakeup on submit ManagedSelector@332a3d42{STARTED} id=0 keys=4 selected=0 updates=1
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG o.e.j.u.t.ReservedThreadExecutor - ReservedThreadExecutor@2f44a4de{s=4/4,p=0}@6fbcf98a waiting
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 woken with none selected
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 woken up from select, 0/0/4 selected
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 processing 0 keys, 1 updates
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - updateable 1
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - update org.eclipse.jetty.io.ChannelEndPoint$1@2b5615e2
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ChannelEndPoint - Key interests updated 0 -> 1 on SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=FI,flush=-,to=1/300000}{io=1/1,kio=1,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - updates 0
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 waiting with 4 keys
+
+81) На страничке регистрации http://127.0.0.1:8080/codenjoy-contest/register когда ввожу поля валидно ожидаю, что рамочка позеленеет, но она остается красной
+
+82) При загрузке этой же странички регистрации ошибка
+    jquery-3.1.0.min.js:11 Uncaught ReferenceError: AdminSettings is not defined
+        at configureFormFromAdminSettings (registration.js:44)
+        at HTMLDocument.loadRegistrationPage (registration.js:86)
+        at j (jquery-3.1.0.min.js:11)
+        at k (jquery-3.1.0.min.js:11)
+
+83) Такая же ошибка на логинке админки http://127.0.0.1:8080/codenjoy-contest/login/admin
+
+84) font-awesome-4.6.3 есть так же в icancode resources
+
+85) Редирект по хоткею Ctrl-Alt-A+D и другие, прописанные в Hotkeys не работает для login/register страничек, может и для других тоже
+
+86) Не нашел странички icancode admin html
+    а нет, она просто в jsp закодирована - видимо не перенесли назад. Так же есть другие jsp странички - дубликаты html'ных, видимо не удалили их.
+
+87) Кажется понял в чем дело. Вместе со страничкой регистрации стоит так же перенести и
+    admin-settings.js
+        внеся в него параметр gameName
+            var AdminSettings = function(contextPath, gameName, settingsName) {
+                var url = '/' + contextPath + '/settings/' + gameName + '/' + settingsName;
+        и добавив его в all.js в pom.xml сервера
+    и часть admin.js в разделах
+        --- general settings
+        --- collected general data
+    а так же admin.jsp в области
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="general">
+                <p class="message">Registration settings</p>
+    Это все сделать частью админки нынешней, поскольку именно с нее хочется для всех игр иметь возможность скрывать или отображать те или иные поля на форме регистрации
+    Так же уберется проверка
+        <c:if test="${activeProfiles.contains('icancode')}">
+            <script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
+        </c:if>
+
+88) На страничке логина и регистрации так же стоит воспользоваться общим подходом
+    <script src="${ctx}/resources/js/all.js"></script>
+    То есть скрипты привести к общему компонентному виду и встроить вместе с остальными
+        смотри например
+            joystick.js для файлов с функциями
+            register.js для бывшей странички регистрации
+        так же чтобы магия init.js сработала стоит добавить в новые странички login/register тег
+            <div id="settings" page="register"></div>
+            <div id="settings" page="login"></div>
+
+---
+Стартовал только icancode командой
+clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Picancode -f pom.xml
+---
+
+89) Добавить в icancode/.../dojo.css стиль
+        .user-controls-container {
+            display: none;
+        }
+
+90) И сделать как-то чтобы та кнопка логаута, что ее скрыли
+       работающая через
+            <div class="user-control float-right-before-fork">
+                <form class="user-control" action="${ctx}/process_logout">
+                    <input type="submit" value="Logout" class="btn btn-link">
+                </form>
+            </div>
+       чтобы она срабатывала по клику на logout что на icancode board.html
+            <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/registration.html">Log out</a></li>
+       можно ли сделать не сабмит формы, а GET запрос для логаута, тогда можно обойтись простой урлой /codenjoy-contest/logout
+
+91) Ссылка Games вообще-то кажется лишней, поскольку редирект на нее происходит если указать /codenjoy-contest/ без - можем убрать?
+    Останется только logout которую если можно по 90) перевести на get то вообще будет просто и замечательно
+
+92) На icancode при переходе на /codenjoy-contest/ хочется видеть не страничку со всеми играми, а board.html страничку как это после join происходит
+    Что елси сделать так - если у тебя только одна игра загружена, то ты видишь ее борд (зареган ты или нет)
+    Если же игр много - то список игрушек с возможностью заджойниться как сейчас
+    Я не помню как в icancode раньше было реализовано, но там на /codenjoy-contest/ была либо страничка регистрации, либо твоя борда
+    Что скажешь?
+
+---
+Стартовал только три игрушки tetris,bomberman,a2048 командой
+clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Ptetris,snake,a2048,battlecity -f pom.xml
+---
+
+93) Со странички регистрации-логина убрать все артефакты связывающие страничку с EPAM
+    хедер
+        оставляем иконку и надпись Coding Dojo вместо EPAM DOJO
+    футер
+        оставляем About DOJO = codenjoy.com
+        Codenjoy on GitHub  = github.com/codenjoyme
+        Ask me anything = email:codenjoyme@gmail.com
+    заголовок в браузере
+        Codenjoy | SignUp
+
+94) Сейчас если в tetris никто не зареган (0 игроков), а я допустим играю в 2048 то при кике на view вижу форму регистрации
+    кажется мы обсуждали какую-то надпись по типу "заджойнитесь и станьте первым игроком"
+
+95) Какой урл у админки? Не смог зайти на нее http://127.0.0.1:8080/codenjoy-contest/admin выдает
+    Whitelabel Error Page
+    This application has no explicit mapping for /error, so you are seeing this as a fallback.
+    Mon May 20 09:54:50 EEST 2019
+    There was an unexpected error (type=Forbidden, status=403).
+    Forbidden
+
++96) Зашел на аодминку под admin@codenjoyme.com / admin
+    Вроде все работает
+
+97) Документацию хочется по тому что сделано в этом PR в формате *.md где-то в корне проекта
