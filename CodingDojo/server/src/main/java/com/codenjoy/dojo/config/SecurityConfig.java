@@ -22,8 +22,8 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import com.codenjoy.dojo.config.meta.NonSSOProfile;
-import com.codenjoy.dojo.config.meta.SSOProfile;
+import com.codenjoy.dojo.config.meta.NonOAuth2Profile;
+import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.LoginController;
@@ -40,12 +40,17 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.jwt.crypto.sign.SignerVerifier;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -107,7 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @NonSSOProfile
+    @NonOAuth2Profile
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     @Slf4j
@@ -153,10 +158,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @SSOProfile
-    @Configuration
-    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+//    @SSOProfile
+//    @Configuration
+//    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     @Slf4j
+//    @EnableOAuth2Sso
     public static class SSOUserSecurityConf extends WebSecurityConfigurerAdapter {
 
         @Autowired
@@ -194,13 +200,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @SSOProfile
+    @OAuth2Profile
     @Configuration
+    @EnableResourceServer
+    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class ResourceServerSSOConf extends ResourceServerConfigurerAdapter {
+
+        @Autowired
+        private UserAuthenticationConverter oAuth2UserAuthenticationConverter;
 
         @Override
         public void configure(ResourceServerSecurityConfigurer config) {
-            config.tokenServices(tokenServices());
+            config
+                    .stateless(true)
+                    .resourceId("dojo")
+                    .tokenServices(tokenServices());
+        }
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http.sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                            .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
+                                    LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI)
+                                .permitAll()
+
+                            .anyRequest()
+                                .authenticated()
+//                                .hasRole("USER")
+//                    .and()
+//                        .and()
+//                            .oauth2Login()
+//                                .userInfoEndpoint()
+//                                    .userService(oAuth2MappingUserService)
+//                            .and()
+//                        .and()
+//                            .logout()
+//                                .logoutUrl(LOGOUT_PROCESSING_URI)
+//                                .invalidateHttpSession(true)
+                        .and()
+                        .csrf().disable();
+            // @formatter:on
         }
 
         @Bean
@@ -211,7 +254,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Bean
         public JwtAccessTokenConverter accessTokenConverter() {
             JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-            converter.setSigningKey("123");
+
+            DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
+            tokenConverter.setUserTokenConverter(oAuth2UserAuthenticationConverter);
+            converter.setAccessTokenConverter(tokenConverter);
+            converter.setVerifier(new SignerVerifier() {
+                @Override
+                public void verify(byte[] content, byte[] signature) {
+
+                }
+
+                @Override
+                public byte[] sign(byte[] bytes) {
+                    return new byte[0];
+                }
+
+                @Override
+                public String algorithm() {
+                    return null;
+                }
+            });
+//            converter.setSigningKey("123");
             return converter;
         }
 

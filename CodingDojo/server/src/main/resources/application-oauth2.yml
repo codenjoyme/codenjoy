@@ -1,0 +1,23 @@
+auth-server:
+  location: https://login-staging.telescopeai.com/core/connect
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          dojo:
+            client-id: dojo
+            client-secret: secret
+            client-authentication-method: basic
+            authorization-grant-type: authorization_code
+            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid profile email
+            client-name: dojo
+        provider:
+          dojo:
+            authorization-uri: ${auth-server.location}/authorize
+            token-uri: ${auth-server.location}/token
+#            jwk-set-uri: ${auth-server.location}
+            user-info-uri: ${auth-server.location}/userinfo
+            user-name-attribute: name
