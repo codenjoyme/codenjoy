@@ -1055,7 +1055,10 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
     2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - updates 0
     2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 waiting with 4 keys
 
+ Igor: в 'trace' профиле с давних времен org.eclipse.jetty логирование выставлено в debug. Отключить?
+
 81) На страничке регистрации http://127.0.0.1:8080/codenjoy-contest/register когда ввожу поля валидно ожидаю, что рамочка позеленеет, но она остается красной
+ Igor: fixed
 
 82) При загрузке этой же странички регистрации ошибка
     jquery-3.1.0.min.js:11 Uncaught ReferenceError: AdminSettings is not defined
@@ -1063,15 +1066,21 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
         at HTMLDocument.loadRegistrationPage (registration.js:86)
         at j (jquery-3.1.0.min.js:11)
         at k (jquery-3.1.0.min.js:11)
+ Igor: fixed
 
 83) Такая же ошибка на логинке админки http://127.0.0.1:8080/codenjoy-contest/login/admin
+ Igor: fixed
 
 84) font-awesome-4.6.3 есть так же в icancode resources
+ Igor: fixed
 
 85) Редирект по хоткею Ctrl-Alt-A+D и другие, прописанные в Hotkeys не работает для login/register страничек, может и для других тоже
+ Igor: ...
 
 86) Не нашел странички icancode admin html
     а нет, она просто в jsp закодирована - видимо не перенесли назад. Так же есть другие jsp странички - дубликаты html'ных, видимо не удалили их.
+ Igor: не помню, проговаривал ли в прошлый раз, что admin страницу пришлось оставить jsp. И пока это обязательное требование для
+  "перекрываемых" страниц
 
 87) Кажется понял в чем дело. Вместе со страничкой регистрации стоит так же перенести и
     admin-settings.js
@@ -1091,6 +1100,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
         <c:if test="${activeProfiles.contains('icancode')}">
             <script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
         </c:if>
+ Igor: верно, fixed
 
 88) На страничке логина и регистрации так же стоит воспользоваться общим подходом
     <script src="${ctx}/resources/js/all.js"></script>
@@ -1101,6 +1111,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
         так же чтобы магия init.js сработала стоит добавить в новые странички login/register тег
             <div id="settings" page="register"></div>
             <div id="settings" page="login"></div>
+ Igor: про всеобщую минификацию выше заведен тикет с низким приоритетом. TODO: что это за магия?
 
 ---
 Стартовал только icancode командой

@@ -35,9 +35,7 @@ License along with this program.  If not, see
     <link href="${ctx}/resources/css/registration-style.css" rel="stylesheet"/>
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/autofill-event.js"></script>
-    <c:if test="${activeProfiles.contains('icancode')}">
-        <script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
-    </c:if>
+    <script src="${ctx}/resources/js/admin-settings.js"></script>
     <script src="${ctx}/resources/js/scripts/registration.js" type="application/javascript"></script>
 </head>
 <body>
