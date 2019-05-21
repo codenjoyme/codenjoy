@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
@@ -41,6 +42,13 @@ public class Lemonade implements GameField<Player> {
 
     private final GameSettings gameSettings;
     private List<Player> players;
+    private static RandomDice dice;
+    private static int lastRandomSeed;
+    private static int newRandomSeed;
+
+    static {
+        dice = new RandomDice();
+    }
 
     public Lemonade(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
@@ -49,8 +57,28 @@ public class Lemonade implements GameField<Player> {
 
     @Override
     public void tick() {
+        // on first tick enable new random seed generation
+        if(lastRandomSeed != newRandomSeed){
+            lastRandomSeed = newRandomSeed;
+        }
+
         for (Player player : players) {
             player.checkAnswer();
+        }
+    }
+
+    @Override
+    public void clearScore() {
+        // it is supposed, we call cleanScore synchronously, so update seed on first call
+        if(lastRandomSeed == newRandomSeed)
+            newRandomSeed = dice.next(Integer.MAX_VALUE);
+
+        if(players != null && players.size() > 0){
+            for (Player player : players)
+            {
+                player.updateSeed(newRandomSeed);
+                player.newHero(this);
+            }
         }
     }
 
