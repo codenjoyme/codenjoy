@@ -45,6 +45,9 @@ class MySolver:
         if self._board.is_bankrupt():
             print("Bankrupt. Sending reset command...")
             return "message('go reset')"
+        if self._board.is_gameover():
+            print("Game Over. Sending reset command...")
+            return "message('go reset')"
 
         # print(self._board.day())
         # print(self._board.is_bankrupt())
