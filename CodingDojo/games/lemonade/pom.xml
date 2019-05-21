@@ -15,6 +15,9 @@
     <properties>
         <module.name>lemonade</module.name>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <client.csharp-sources>${user.resources}/${module.name}-csharp-client.zip</client.csharp-sources>
+        <client.javascript-sources>${user.resources}/${module.name}-javascript-client.zip</client.javascript-sources>
+        <client.python-sources>${user.resources}/${module.name}-python-client.zip</client.python-sources>
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
     </properties>
@@ -77,7 +80,95 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven-clean-plugin.version}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${user.resources}</directory>
+                            <includes>
+                                <include>**/${module.name}-servers.zip</include>
+                                <include>**/${module.name}-csharp-client.zip</include>
+                                <include>**/${module.name}-javascript-client.zip</include>
+                                <include>**/${module.name}-python-client.zip</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <inherited>false</inherited>
+                        <configuration combine.self="override">
+                            <target>
+                                <!-- TODO to use basic client build method on games/pom.xml -->
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                           src/main/java/com/codenjoy/dojo/${module.name}/model/WeatherForecast.java,
+                                           README.*,
+                                           src/license/**,
+                                           **/pom.xml"
+                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                           src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                           **/target/**,
+                                           **/clients/**,
+                                           **/utils/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/**"
+                                     excludes="src/main/java/**,
+                                            src/main/webapp/**,
+                                            src/main/resources/**,
+                                            **/target/**,
+                                            **/clients/**,
+                                            **/utils/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.csharp-sources}"
+                                     basedir="src/main/clients/csharp"
+                                     includes="**/*"
+                                     excludes="**/bin/**,
+                                            **/obj/**,
+                                            **/packages/**"
+                                     update="true"/>
+
+                                <zip destfile="${client.javascript-sources}"
+                                     basedir="src/main/clients/javascript"
+                                     includes="**/*"
+                                     update="true"/>
+
+                                <zip destfile="${client.python-sources}"
+                                     basedir="src/main/clients/python"
+                                     includes="**/*.py"
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/*.zip"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/*.zip"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
