@@ -116,4 +116,8 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
             }
         }
     }
+
+    public void updateSeed(int newSeed) {
+        heroRandomSeed = newSeed;
+    }
 }
