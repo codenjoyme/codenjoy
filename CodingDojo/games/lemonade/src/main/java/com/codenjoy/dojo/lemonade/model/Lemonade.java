@@ -46,10 +46,13 @@ public class Lemonade implements GameField<Player> {
     private static int lastRandomSeed;
     private static int newRandomSeed;
 
+    static {
+        dice = new RandomDice();
+    }
+
     public Lemonade(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
         players = new LinkedList<>();
-        dice = new RandomDice();
     }
 
     @Override
