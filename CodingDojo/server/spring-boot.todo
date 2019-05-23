@@ -1057,10 +1057,10 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
 
  Igor: в 'trace' профиле с давних времен org.eclipse.jetty логирование выставлено в debug. Отключить?
 
-81) На страничке регистрации http://127.0.0.1:8080/codenjoy-contest/register когда ввожу поля валидно ожидаю, что рамочка позеленеет, но она остается красной
++81) На страничке регистрации http://127.0.0.1:8080/codenjoy-contest/register когда ввожу поля валидно ожидаю, что рамочка позеленеет, но она остается красной
  Igor: fixed
 
-82) При загрузке этой же странички регистрации ошибка
++82) При загрузке этой же странички регистрации ошибка
     jquery-3.1.0.min.js:11 Uncaught ReferenceError: AdminSettings is not defined
         at configureFormFromAdminSettings (registration.js:44)
         at HTMLDocument.loadRegistrationPage (registration.js:86)
@@ -1068,21 +1068,21 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
         at k (jquery-3.1.0.min.js:11)
  Igor: fixed
 
-83) Такая же ошибка на логинке админки http://127.0.0.1:8080/codenjoy-contest/login/admin
++83) Такая же ошибка на логинке админки http://127.0.0.1:8080/codenjoy-contest/login/admin
  Igor: fixed
 
-84) font-awesome-4.6.3 есть так же в icancode resources
++84) font-awesome-4.6.3 есть так же в icancode resources
  Igor: fixed
 
-85) Редирект по хоткею Ctrl-Alt-A+D и другие, прописанные в Hotkeys не работает для login/register страничек, может и для других тоже
- Igor: ...
++85) Редирект по хоткею Ctrl-Alt-A+D и другие, прописанные в Hotkeys не работает для login/register страничек, может и для других тоже
+ Igor: fixed
 
-86) Не нашел странички icancode admin html
++86) Не нашел странички icancode admin html
     а нет, она просто в jsp закодирована - видимо не перенесли назад. Так же есть другие jsp странички - дубликаты html'ных, видимо не удалили их.
  Igor: не помню, проговаривал ли в прошлый раз, что admin страницу пришлось оставить jsp. И пока это обязательное требование для
   "перекрываемых" страниц
 
-87) Кажется понял в чем дело. Вместе со страничкой регистрации стоит так же перенести и
++87) Кажется понял в чем дело. Вместе со страничкой регистрации стоит так же перенести и
     admin-settings.js
         внеся в него параметр gameName
             var AdminSettings = function(contextPath, gameName, settingsName) {
@@ -1102,7 +1102,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
         </c:if>
  Igor: верно, fixed
 
-88) На страничке логина и регистрации так же стоит воспользоваться общим подходом
++88) На страничке логина и регистрации так же стоит воспользоваться общим подходом
     <script src="${ctx}/resources/js/all.js"></script>
     То есть скрипты привести к общему компонентному виду и встроить вместе с остальными
         смотри например
@@ -1111,7 +1111,8 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
         так же чтобы магия init.js сработала стоит добавить в новые странички login/register тег
             <div id="settings" page="register"></div>
             <div id="settings" page="login"></div>
- Igor: про всеобщую минификацию выше заведен тикет с низким приоритетом. TODO: что это за магия?
+ Igor: на страницах логина и регистрации вне all.js остался только один scripts/registration.js, т.к. иначе он ожидаемо
+  сыпет ошибками на всех остальных страницах.
 
 ---
 Стартовал только icancode командой
@@ -1123,7 +1124,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
             display: none;
         }
 
-90) И сделать как-то чтобы та кнопка логаута, что ее скрыли
++ 90) И сделать как-то чтобы та кнопка логаута, что ее скрыли
        работающая через
             <div class="user-control float-right-before-fork">
                 <form class="user-control" action="${ctx}/process_logout">
@@ -1133,22 +1134,25 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
        чтобы она срабатывала по клику на logout что на icancode board.html
             <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/registration.html">Log out</a></li>
        можно ли сделать не сабмит формы, а GET запрос для логаута, тогда можно обойтись простой урлой /codenjoy-contest/logout
+ Igor: перевел на линк вместо формы, на icancode спрятал общий logout link.
 
-91) Ссылка Games вообще-то кажется лишней, поскольку редирект на нее происходит если указать /codenjoy-contest/ без - можем убрать?
++ 91) Ссылка Games вообще-то кажется лишней, поскольку редирект на нее происходит если указать /codenjoy-contest/ без - можем убрать?
     Останется только logout которую если можно по 90) перевести на get то вообще будет просто и замечательно
+ Igor: Games link убрал, GET - см. выше, готово.
 
-92) На icancode при переходе на /codenjoy-contest/ хочется видеть не страничку со всеми играми, а board.html страничку как это после join происходит
++ 92) На icancode при переходе на /codenjoy-contest/ хочется видеть не страничку со всеми играми, а board.html страничку как это после join происходит
     Что елси сделать так - если у тебя только одна игра загружена, то ты видишь ее борд (зареган ты или нет)
     Если же игр много - то список игрушек с возможностью заджойниться как сейчас
     Я не помню как в icancode раньше было реализовано, но там на /codenjoy-contest/ была либо страничка регистрации, либо твоя борда
     Что скажешь?
+ Igor: практически уверен, что раньше работало не так, но всё же могу и ошибаться. Добавил логику, как описано выше
 
 ---
 Стартовал только три игрушки tetris,bomberman,a2048 командой
 clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Ptetris,snake,a2048,battlecity -f pom.xml
 ---
 
-93) Со странички регистрации-логина убрать все артефакты связывающие страничку с EPAM
++ 93) Со странички регистрации-логина убрать все артефакты связывающие страничку с EPAM
     хедер
         оставляем иконку и надпись Coding Dojo вместо EPAM DOJO
     футер
@@ -1158,17 +1162,23 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
     заголовок в браузере
         Codenjoy | SignUp
 
-94) Сейчас если в tetris никто не зареган (0 игроков), а я допустим играю в 2048 то при кике на view вижу форму регистрации
++ 94) Сейчас если в tetris никто не зареган (0 игроков), а я допустим играю в 2048 то при кике на view вижу форму регистрации
     кажется мы обсуждали какую-то надпись по типу "заджойнитесь и станьте первым игроком"
+ Igor: поправил, теперь логика такая: если пользователь пытается зайти во View, в игре при этом никого нет, всплывает стандартное
+  confirm окошко браузера с вопросом, готов ли пользователь заджойниться, т.к. в игре ещё никого нет: 'Yes' - джойн,
+  'No' - остаемся на странице со списокм игр.
 
-95) Какой урл у админки? Не смог зайти на нее http://127.0.0.1:8080/codenjoy-contest/admin выдает
+
++ 95) Какой урл у админки? Не смог зайти на нее http://127.0.0.1:8080/codenjoy-contest/admin выдает
     Whitelabel Error Page
     This application has no explicit mapping for /error, so you are seeing this as a fallback.
     Mon May 20 09:54:50 EEST 2019
     There was an unexpected error (type=Forbidden, status=403).
     Forbidden
+ Igor: никогда раньше не встречал эту проблему, но похоже на новых спрингах нельзя перемапить 'error' вью, просто переименовал
+  файл и ссылки на него из контроллеров
 
 +96) Зашел на аодминку под admin@codenjoyme.com / admin
     Вроде все работает
 
-97) Документацию хочется по тому что сделано в этом PR в формате *.md где-то в корне проекта
+TODO: 97) Документацию хочется по тому что сделано в этом PR в формате *.md где-то в корне проекта

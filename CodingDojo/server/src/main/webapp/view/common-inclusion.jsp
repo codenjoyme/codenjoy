@@ -39,17 +39,11 @@
         </c:otherwise>
     </c:choose>
 </head>
+
 <sec:authorize access="isAuthenticated()">
-<body>
-    <div class="user-controls-container">
-        <div class="user-control">
-            <a href="${ctx}/" >Games</a>
-        </div>
-        <div class="user-control float-right-before-fork">
-            <form class="user-control" action="${ctx}/process_logout">
-                <input type="submit" value="Logout" class="btn btn-link">
-            </form>
-        </div>
-    </div>
-</body>
+    <c:if test="${gameNameOnly != 'icancode'}" >
+        <body>
+            <a href="${ctx}/process_logout" class="logout-link">Logout</a>
+        </body>
+    </c:if>
 </sec:authorize>
