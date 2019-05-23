@@ -29,22 +29,20 @@ License along with this program.  If not, see
 <head>
     <meta charset="utf-8">
     <title>ICanCode | Sign In</title>
-    <link href="${ctx}/resources/css/reset.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/registration-style.css" rel="stylesheet"/>
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
-    <script src="${ctx}/resources/js/autofill-event.js"></script>
-    <script src="${ctx}/resources/js/admin-settings.js"></script>
+    <jsp:include page="common-inclusion.jsp" />
     <script src="${ctx}/resources/js/scripts/registration.js" type="application/javascript"></script>
 </head>
 <body>
+<div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
 <div class="header-container">
     <div class="container-fluid">
         <header class="header row">
             <div class="col-xs-6">
                 <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
-                <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <c:if test="${activeProfiles.contains('icancode')}">
                     <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/i_can_code_Logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
@@ -113,11 +111,9 @@ License along with this program.  If not, see
     <div class="container-fluid">
         <nav class="footer-nav">
             <ul class="footer-list">
-                <li class="footer-item inline"><a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a></li>
-                <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
-                <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
+                <li class="footer-item inline"><a href="http://codenjoy.com" target="blank">About DOJO</a></li>
                 <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
-                <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
+                <li class="footer-item inline"><a href="mailto:codenjoyme@gmail.com" target="blank">Ask me anything</a></li>
             </ul>
         </nav>
     </div>

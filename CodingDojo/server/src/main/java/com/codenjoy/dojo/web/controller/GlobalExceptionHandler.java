@@ -23,11 +23,9 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.hash.Hash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -105,7 +103,7 @@ public class GlobalExceptionHandler {
     }
 
     private void shouldErrorPage(ModelAndView result) {
-        result.setViewName("error");
+        result.setViewName("errorPage");
     }
 
     private String ticket() {
