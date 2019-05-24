@@ -33,7 +33,6 @@ License along with this program.  If not, see
     <link href="${ctx}/resources/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/registration-style.css" rel="stylesheet"/>
     <jsp:include page="common-inclusion.jsp" />
-    <script src="${ctx}/resources/js/scripts/registration.js" type="application/javascript"></script>
 </head>
 <body>
 <div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
