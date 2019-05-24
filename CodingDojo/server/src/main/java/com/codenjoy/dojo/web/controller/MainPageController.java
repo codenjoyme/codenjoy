@@ -73,6 +73,9 @@ public class MainPageController {
     public String getMainPage(HttpServletRequest request, Model model) {
         String mainPage = properties.getMainPage();
         if (StringUtils.isEmpty(mainPage)) {
+            if (gameService.getGameNames().size() == 1) {
+                return "redirect:board";
+            }
             return getMainPage(request, null, model);
         } else {
             model.addAttribute("url", mainPage);
@@ -101,7 +104,7 @@ public class MainPageController {
     public ModelAndView displayAccessDeniedPage(){
         return new ModelAndView(){{
             addObject("message", "Invalid Username or Password");
-            setViewName("error");
+            setViewName("errorPage");
         }};
     }
 

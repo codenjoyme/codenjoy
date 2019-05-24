@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -54,10 +55,10 @@ public class GameServiceImpl implements GameService {
     }
 
     private List<Class<? extends GameType>> allGames() {
-        List<Class<? extends GameType>> result = new LinkedList<>();
-        result.addAll(findInPackage("com.codenjoy.dojo"));
+        List<Class<? extends GameType>> result = new LinkedList<>(
+                findInPackage("com.codenjoy.dojo"));
 
-        Collections.sort(result, Comparator.comparing(Class::getName));
+        result.sort(Comparator.comparing(Class::getName));
 
         result.remove(NullGameType.class);
         result.remove(AbstractGameType.class);
@@ -65,10 +66,8 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        remove(result,
-                it -> Arrays.asList("chess", "sokoban", "expansion").stream()
-                    .filter(name -> it.getPackage().toString().contains(name))
-                    .count() != 0);
+        remove(result, it -> Stream.of("chess", "sokoban", "expansion")
+                .anyMatch(name -> it.getPackage().toString().contains(name)));
 
         return result;
     }

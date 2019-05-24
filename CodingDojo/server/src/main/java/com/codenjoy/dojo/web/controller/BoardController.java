@@ -102,8 +102,7 @@ public class BoardController {
                               @PathVariable("playerName") String playerName,
                               @RequestParam("code") String code,
                               @RequestParam(name = "only", required = false) Boolean justBoard,
-                              @RequestParam(name = "gameName", required = false, defaultValue = "") String gameName)
-    {
+                              @RequestParam(name = "gameName", required = false, defaultValue = "") String gameName) {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -210,7 +209,6 @@ public class BoardController {
         }
 
         String gameName = player.getGameName();
-
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
@@ -230,11 +228,5 @@ public class BoardController {
     @RequestMapping(value = "/help")
     public String help() {
         return "help";
-    }
-
-    @RequestMapping(value = "/error", params = "message")
-    public String error(ModelMap model, @RequestParam("message") String message) {
-        model.addAttribute("message", message);
-        return "error";
     }
 }

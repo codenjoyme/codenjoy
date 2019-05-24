@@ -26,6 +26,7 @@ import com.codenjoy.dojo.config.meta.NonOAuth2Profile;
 import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.web.controller.AdminController;
+import com.codenjoy.dojo.web.controller.ErrorController;
 import com.codenjoy.dojo.web.controller.LoginController;
 import com.codenjoy.dojo.web.controller.RegistrationController;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,7 @@ import org.springframework.security.oauth2.provider.token.UserAuthenticationConv
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -132,7 +134,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http
                     .authorizeRequests()
                         .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
-                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI)
+                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
+                                ErrorController.URI)
                             .permitAll()
 
                         .anyRequest()
@@ -151,6 +154,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
+                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
                             .invalidateHttpSession(true)
                     .and()
                     .csrf().disable();
@@ -179,7 +183,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http
                     .authorizeRequests()
                         .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
-                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI)
+                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
+                                ErrorController.URI)
                             .permitAll()
 
                         .anyRequest()
@@ -193,6 +198,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
+                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
                             .invalidateHttpSession(true)
                     .and()
                     .csrf().disable();
@@ -310,7 +316,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
-                            .invalidateHttpSession(true);
+                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                            .invalidateHttpSession(true)
+                    .and()
+                        .exceptionHandling()
+                            .accessDeniedHandler((request, response, accessDeniedException) ->
+                                    response.sendRedirect(request.getContextPath()
+                                            + "/error?message=Page access is restricted"));
             // @formatter:on
         }
     }

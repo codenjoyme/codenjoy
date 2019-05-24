@@ -1,6 +1,6 @@
-<!--
+<%--
   #%L
-  iCanCode - it's a dojo-like platform from developers to developers.
+  Codenjoy - it's a dojo-like platform from developers to developers.
   %%
   Copyright (C) 2018 Codenjoy
   %%
@@ -18,23 +18,30 @@
   License along with this program.  If not, see
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
-  -->
+  --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+
+<!DOCTYPE html>
+<html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
-    <meta charset="UTF-8">
-</head>
-<div id="test"></div>
+    <title>Codenjoy</title>
 
-<script src="${ctx}/resources/icancode/js/jquery/jquery-3.1.0.min.js"></script>
-<script src="${ctx}/resources/icancode/js/game/direction.js"></script>
-<script src="${ctx}/resources/icancode/js/game/elements.js"></script>
-<script src="${ctx}/resources/icancode/js/game/board.js"></script>
-<script src="${ctx}/resources/icancode/js/game/robot.js"></script>
-<script src="${ctx}/resources/icancode/js/game/point.js"></script>
-<script src="${ctx}/resources/icancode/js/game/test/robotTest.js"></script>
-<script>
-    $(document).ready(function () {
-        runTest();
-    });
-</script>
+    <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+    <jsp:include page="common-inclusion.jsp" />
+</head>
+<body>
+    <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
+    <%@include file="forkMe.jsp"%>
+
+    <div class="page-header">
+        <h1>WTF! Something wrong...</h1>
+    </div>
+        <div>${message}</div></br>
+        <div>${stacktrace}</div></br>
+        <a href="${ctx}">Go to main page</a>
+    </div>
+</body>
+</html>

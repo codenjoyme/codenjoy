@@ -811,6 +811,7 @@
                         <configuration>
                             <cssSourceDir>resources/css</cssSourceDir>
                             <cssSourceFiles>
+                                <cssInclude>reset.css</cssInclude>
                                 <cssInclude>bootstrap/bootstrap.css</cssInclude>
                                 <cssInclude>dojo.css</cssInclude>
                             </cssSourceFiles>
@@ -853,6 +854,8 @@
                                 <jsInclude>init.js</jsInclude>
 
                                 <!-- components -->
+                                <jsInclude>autofill-event.js</jsInclude>
+                                <jsInclude>admin-settings.js</jsInclude>
                                 <jsInclude>ajax-loader.js</jsInclude>
                                 <jsInclude>board-data-ws.js</jsInclude>
                                 <jsInclude>zoomer.js</jsInclude>

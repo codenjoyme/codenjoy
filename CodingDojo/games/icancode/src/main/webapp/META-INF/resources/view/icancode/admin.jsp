@@ -36,7 +36,7 @@
             <header class="header row">
                 <div class="col-xs-6">
                     <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
-                    <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/i_can_code_Logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </div>
@@ -256,19 +256,13 @@
             <nav class="footer-nav">
                 <ul class="footer-list">
                     <li class="footer-item inline">
-                        <a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a>
+                        <a href="http://codenjoy.com" target="blank">About DOJO</a>
                     </li>
                     <li class="footer-item inline">
-                        <a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a>
+                        <a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a>
                     </li>
                     <li class="footer-item inline">
-                        <a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a>
-                    </li>
-                    <li class="footer-item inline">
-                        <a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a>
-                    </li>
-                    <li class="footer-item inline">
-                        <a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a>
+                        <a href="mailto:codenjoyme@gmail.com" target="blank">Ask me anything</a>
                     </li>
                 </ul>
             </nav>
@@ -283,7 +277,7 @@
 <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js"></script>
 <script src="${ctx}/resources/icancode/js/game/editor.js"></script>
 <script src="${ctx}/resources/icancode/js/game/progressbar.js"></script>
-<script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
+<script src="${ctx}/resources/js/admin-settings.js"></script>
 <script src="${ctx}/resources/icancode/js/game/admin.js"></script>
 <script>
     $(document).ready(function () {
