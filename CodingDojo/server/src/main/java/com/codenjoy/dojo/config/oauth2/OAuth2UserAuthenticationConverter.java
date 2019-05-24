@@ -22,6 +22,7 @@ package com.codenjoy.dojo.config.oauth2;
  * #L%
  */
 
+import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthorities;
@@ -44,6 +45,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
  */
 @Component
 @RequiredArgsConstructor
+@SSOProfile
 public class OAuth2UserAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
     private final Registration registration;
