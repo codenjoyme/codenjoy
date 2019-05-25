@@ -23,7 +23,60 @@
 pages = pages || {};
 
 pages.admin = function() {
-    validatePlayerRegistration("#adminSettings");
+    var contextPath = game.contextPath = getSettings('contextPath');
 
+    // ------------------------ general settings -----------------------
+    var generalInfo = [];
+    var general = new AdminSettings(contextPath, 'general');
+
+    var loadGeneral = function() {
+        general.load(function(data) {
+            loadGeneralData(data);
+        });
+    }
+
+    var saveGeneral = function() {
+        general.save(generalInfo,
+            function() {
+                loadGeneral();
+            }, function(errMsg) {
+                console.log(errMsg);
+            });
+    }
+
+    // ------------------------ collected general data ----------------------
+    var updateGeneralData = function() {
+        var updated = {
+            showGamesOnRegistration : $('#show-games-on-registration').prop('checked'),
+            showNamesOnRegistration : $('#show-names-on-registration').prop('checked'),
+            showTechSkillsOnRegistration : $('#show-tech-on-registration').prop('checked'),
+            showUniversityOnRegistration : $('#show-university-on-registration').prop('checked'),
+            defaultGameOnRegistration : $('#default-game-on-registration').find('option:selected').text()
+        };
+
+        generalInfo = updated;
+    }
+
+    var loadGeneralData = function(data) {
+        if (!!data) {
+            generalInfo = data;
+        }
+
+        $('#show-games-on-registration').prop('checked', generalInfo.showGamesOnRegistration);
+        $('#show-names-on-registration').prop('checked', generalInfo.showNamesOnRegistration);
+        $('#show-tech-on-registration').prop('checked', generalInfo.showTechSkillsOnRegistration);
+        $('#show-university-on-registration').prop('checked', generalInfo.showUniversityOnRegistration);
+        $('#default-game-on-registration').val(generalInfo.defaultGameOnRegistration);
+    }
+
+    var generalSaveButton = $('#general-save-button');
+    generalSaveButton.click(function() {
+        updateGeneralData();
+        saveGeneral();
+    });
+
+    // ------------------------ init ----------------------
+    validatePlayerRegistration("#adminSettings");
     initHotkeys();
+    loadGeneral();
 }

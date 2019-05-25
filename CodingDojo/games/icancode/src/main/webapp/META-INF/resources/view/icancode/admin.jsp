@@ -47,52 +47,7 @@
         </div>
     </div>
     <div class="container-fluid">
-        <div class="row admin-main" id="general-settings">
-            <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active">
-                    <a href="#general" aria-controls="general" role="tab"
-                       data-toggle="tab">General settings</a>
-                </li>
-            </ul>
 
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="general">
-                    <p class="message">Registration settings</p>
-                    <div class="method">
-                        <input id="show-games-on-registration" type="checkbox">
-                        <label class="check-label" for="show-games-on-registration"></label>
-                        <span>Show games list on registration</span>
-                    </div>
-                    <div class="method">
-                        <input id="show-names-on-registration" type="checkbox">
-                        <label class="check-label" for="show-names-on-registration"></label>
-                        <span>Show first/last names on registration</span>
-                    </div>
-                    <div class="method">
-                        <input id="show-tech-on-registration" type="checkbox">
-                        <label class="check-label" for="show-tech-on-registration"></label>
-                        <span>Show tech skills on registration</span>
-                    </div>
-                    <div class="method">
-                        <input id="show-university-on-registration" type="checkbox">
-                        <label class="check-label" for="show-university-on-registration"></label>
-                        <span>Show university on registration</span>
-                    </div>
-                    <div class="method">
-                        <span class="white">Default game</span>
-                        <select placeholder="Select default game" id="default-game-on-registration">
-                            <option value="iCanCode Contest">iCanCode Contest</option>
-                            <option value="iCanCode Training">iCanCode Training</option>
-                            <option value="eKids">eKids</option>
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-            <div class="tab-bottom-panel">
-                <button id="general-save-button" class="button save">Save settings</button>
-            </div>
-        </div>
 
         <div class="row train mCustomScrollbar" hidden>
             <ul id="progress-bar" class="trainings">
