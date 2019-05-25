@@ -96,6 +96,7 @@ public class MainPageController {
         Player player = playerService.get(registration.getIdByCode(code));
         request.setAttribute("registered", player != NullPlayer.INSTANCE);
         request.setAttribute("code", code);
+        model.addAttribute("gameName", player.getGameName());
         model.addAttribute("gameNames", rooms.all());
         return "main";
     }
