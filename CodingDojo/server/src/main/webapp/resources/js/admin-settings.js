@@ -20,7 +20,7 @@
  * #L%
  */
 var AdminSettings = function(contextPath, settingsName) {
-    var url = '/' + contextPath + '/settings/icancode/' + settingsName;
+    var url = contextPath + '/settings/icancode/' + settingsName;
 
     var load = function(onSuccess) {
         $.get(url, null, onSuccess, 'json');

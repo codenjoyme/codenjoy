@@ -281,7 +281,7 @@
 <script src="${ctx}/resources/icancode/js/game/admin.js"></script>
 <script>
     $(document).ready(function () {
-        initAdmin(${ctx});
+        initAdmin('/' + ${ctx});
     });
 
 </script>
