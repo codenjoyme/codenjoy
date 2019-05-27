@@ -217,6 +217,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private OAuth2ClientProperties clientProperties;
 
+        @Value("${mvc.control-servlet-path}")
+        private String controlWsURI;
+
         @Override
         public void configure(ResourceServerSecurityConfigurer config) {
             config
@@ -232,7 +235,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                             .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
-                                    LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI)
+                                    LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
+                                    controlWsURI + "*")
                                 .permitAll()
 
                             .anyRequest()
