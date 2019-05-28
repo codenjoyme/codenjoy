@@ -23,25 +23,29 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.MockPlayerService;
-import com.codenjoy.dojo.services.mocks.MockTimerService;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.reset;
 
 /**
@@ -49,37 +53,69 @@ import static org.mockito.Mockito.reset;
  * Date: 17.12.13
  * Time: 18:51
  */
-@ContextConfiguration(classes = {
-        GameServiceImpl.class,
-        MockTimerService.class,
-        MockPlayerService.class})
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@RunWith(SpringRunner.class)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class GameServiceTest {
 
-    @Autowired private GameServiceImpl gameService;
-    @Autowired private TimerService timer;
-    @Autowired private PlayerService players;
+    @SuppressWarnings("unchecked")
+    private static final Set<Class<? extends GameType>> GAME_TEST_FILTER =
+            Sets.newHashSet(NullGameType.class, AbstractGameType.class);
 
+    @MockBean
+    private TimerService timer;
+
+    @MockBean
+    private PlayerService players;
+
+    @Autowired
+    private GameServiceImpl gameService;
+
+    @Autowired
+    private ApplicationContext appCtx;
+
+    private Map<String, GameType> loadedGameTypes;
+
+    private List<String> activeGameNames = new ArrayList<>();
+
+    private Map<String, List<String>> expectedPlots;
+
+    /**
+     * FIXME: Логика здесь дублирует логику GameServiceImpl, и требуется для того, чтобы успешно проходили тесты при запуске сборки
+     *  с maven профилями других игр. Иначе в скриптах придется отдельно запускать сборку для прогона тестов (без профилей игр),
+     *  и только затем сборку с -DskipTests в профиле необходимой для ивента игры.
+     */
     @Before
     public void setup() {
         reset(timer, players);
+
+        loadedGameTypes = gameService.findInPackage("com.codenjoy.dojo")
+                .stream()
+                .filter(gameClass -> !GAME_TEST_FILTER.contains(gameClass))
+                .map(gameService::loadGameType)
+                .peek(game -> activeGameNames.add(game.name()))
+                .collect(Collectors.toMap(GameType::name, Function.identity()));
+
+        expectedPlots = loadedGameTypes.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> Arrays.stream(e.getValue().getPlots())
+                                .map(Enum::name)
+                                .map(String::toLowerCase)
+                                .collect(Collectors.toList())));
     }
 
     @Test
     public void shouldGetGameNames() {
-        assertEquals("[first, second]",
-                gameService.getGameNames().toString());
+        assertThat("Games list must contain 'first', 'second' games, and" +
+                " games loaded by active maven profiles", gameService.getGameNames(),
+                containsInAnyOrder(activeGameNames.toArray()));
     }
 
     @Test
     public void shouldGetSprites() {
         Map<String, List<String>> sprites = gameService.getSprites();
-        assertEquals(
-            "{" +
-                "first=[none, wall, hero], " +
-                "second=[none, red, green, blue]" +
-            "}",
-                sprites.toString());
+        assertEquals(expectedPlots, sprites);
     }
 
     @Test
@@ -101,8 +137,9 @@ public class GameServiceTest {
         List<String> errors = new LinkedList<>();
         for (Map.Entry<String, List<String>> entry : sprites.entrySet()) {
             for (String sprite : entry.getValue()) {
-                File file = new File(String.format("target/test-classes/sprite/%s/%s.png", entry.getKey(), sprite));
-                if (!file.exists()) {
+                String spriteUri = String.format("/%s/%s.png", entry.getKey(), sprite);
+                File file = new File("target/test-classes/sprite" + spriteUri);
+                if (!file.exists() && !appCtx.getResource("/sprite" + spriteUri).exists()) {
                     errors.add("Файл не найден: " + file.getAbsolutePath());
                 }
             }

@@ -30,8 +30,7 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
-
-    <script src="${ctx}/resources/js/all.min.js"></script>
+    <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
     <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
@@ -40,18 +39,16 @@
     <div class="page-header">
         <h1>Hi ${(user!=null)?user:ip}, please:</h1>
     </div>
-    <ol>
-        <li><a href="${ctx}/help">How to start</a></li>
-        <c:if test="${!registered}">
-        <li><a href="${ctx}/register">Register/Login</a></li>
-        </c:if>
-        <c:if test="${registered}">
-            <li><a href="${ctx}/register?remove_me&code=${code}">Unregister</a></li>
-        </c:if>
-        <li>Check game board</li>
-        <c:forEach items="${gameNames}" var="gameName">
-            - <a href="${ctx}/board/game/${gameName.key}">${gameName.value}</a></br>
-        </c:forEach>
-    </div>
-<body>
+        <div><a href="${ctx}/help">How to start</a></div>
+        <div>Check game board</div>
+        <div>
+            <ul>
+            <c:forEach items="${gameNames}" var="gameName">
+                <li>
+                    <div>${gameName.value}: <a class="gameView" gameName="${gameName.key}" href="${ctx}/board/game/${gameName.key}?viewOnly=true">View</a> | <a id="rejoin-${gameName.key}" href="${ctx}/board/game/${gameName.key}/rejoining">Join</a></div>
+                </li>
+            </c:forEach>
+            </ul>
+        </div>
+</body>
 </html>

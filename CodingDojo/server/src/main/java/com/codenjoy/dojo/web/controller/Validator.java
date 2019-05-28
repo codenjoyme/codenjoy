@@ -87,18 +87,21 @@ public class Validator {
         }
     }
 
-    public void checkReadableName(String input) {
+    public boolean checkReadableName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !isFullName(input)) {
-            throw new IllegalArgumentException(String.format("Player name is invalid (should be 'Name Surname'): '%s'", input));
+            return false;
         }
+        return true;
     }
 
-    public void checkNickName(String input) {
+    public boolean checkNickName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !nickName.matcher(input).matches()) {
-            throw new IllegalArgumentException(String.format("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): '%s'", input));
+            return false;
         }
+
+        return true;
     }
 
     private boolean isFullName(String input) {
@@ -133,13 +136,12 @@ public class Validator {
     }
 
     // TODO test me
-    public void checkEmail(String input, boolean canBeNull) {
+    public boolean checkEmail(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
-        if (!(empty && canBeNull ||
-                !empty && isEmail(input)))
-        {
-            throw new IllegalArgumentException(String.format("Player email is invalid: '%s'", input));
+        if (!(empty && canBeNull || !empty && isEmail(input))) {
+            return false;
         }
+        return true;
     }
 
     private boolean isEmail(String input) {
@@ -161,13 +163,12 @@ public class Validator {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
-    public void checkGameName(String input, boolean canBeNull) {
+    public boolean checkGameName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
-        if (!(empty && canBeNull ||
-                !empty && gameName.matcher(input).matches()))
-        {
-            throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
+        if (!(empty && canBeNull || !empty && gameName.matcher(input).matches())) {
+            return false;
         }
+        return true;
     }
 
     public void checkMD5(String input) {

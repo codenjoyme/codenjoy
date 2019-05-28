@@ -23,13 +23,16 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.mocks.MockSaveService;
+import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.Mockito.*;
 
@@ -38,17 +41,19 @@ import static org.mockito.Mockito.*;
  * Date: 17.12.13
  * Time: 21:14
  */
-@ContextConfiguration(classes = {
-        AutoSaver.class,
-        MockSaveService.class})
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@RunWith(SpringRunner.class)
+@ActiveProfiles(SQLiteProfile.NAME)
 @TestPropertySource(properties = {
         "game.save.auto=true"
 })
-@RunWith(SpringJUnit4ClassRunner.class)
 public class AutoSaverTest {
 
-    @Autowired private AutoSaver autoSaver;
-    @Autowired private SaveService save;
+    @Autowired
+    private AutoSaver autoSaver;
+
+    @MockBean
+    private SaveService save;
 
     @Test
     public void testSaveEachNTicks() throws InterruptedException {

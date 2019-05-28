@@ -18,20 +18,44 @@ services:
    codenjoy_balancer:
      depends_on:                                          #!L#
        - codenjoy_db                                      #!L#
-     image: apofig/codenjoy-balancer:1.0.28
+     image: apofig/codenjoy-balancer:1.1.0
      container_name: codenjoy-balancer
      build:
         context: ./applications
         dockerfile: Dockerfile-balancer
-     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
+        args:
+          WAR_FILE: ./codenjoy-balancer.war
+     command: --spring.profiles.active=${DATABASE_TYPE} --context=/${CODENJOY_CONTEXT} # --debug
      volumes:
-#       - ./materials/database:/var/lib/jetty/database    #L#
-       - ./config/codenjoy:/var/lib/jetty/config
-       - ./logs/codenjoy/codenjoy-balancer.log:/var/lib/jetty/logs/codenjoy-balancer.log
+#       - ./materials/database:/database    #L#
+       - ./logs/codenjoy:/logs
        - /etc/localtime:/etc/localtime:ro
 #     ports:                                              #P#
 #       - "${BALANCER_PORT}:8080"                         #P#
      restart: always
+     environment:
+         LOG_DEBUG: "false"
+         DATABASE_HOST: codenjoy_db
+         DATABASE_PORT: 5432
+         DATABASE_NAME: ${CODENJOY_POSTGRES_DB}
+         DATABASE_USER: ${CODENJOY_POSTGRES_USER}
+         DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+         ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+         EMAIL_HASH: ${EMAIL_HASH}
+         SCORE_UPDATE_TIME: 10000
+         DISPATCHER_URL_CREATE: http://%s/codenjoy-contest/rest/player/create/%s
+         DISPATCHER_URL_REMOVE: http://%s/codenjoy-contest/rest/player/%s/remove/%s
+         DISPATCHER_URL_GET: http://%s/codenjoy-contest/rest/game/%s/players
+         DISPATCHER_URL_CLEAR: http://%s/codenjoy-contest/rest/scores/clear/%s
+         DISPATCHER_URL_EXISTS: http://%s/codenjoy-contest/rest/player/%s/exists
+         DISPATCHER_URL_ENABLED: http://%s/codenjoy-contest/rest/game/enabled/%s/%s
+         GAME_TYPE: ${GAME}
+         GAME_SERVERS: ${BALANCER_GAME_SERVERS}
+         GAME_ROOM: 10
+         GAME_START_DAY: 2019-01-28
+         GAME_END_DAY: 2019-02-13
+         GAME_FINALISTS_COUNT: 10
+         GAME_FINAL_TIME: 19:00
      networks:
          codenjoy:
              ipv4_address: 172.28.1.3

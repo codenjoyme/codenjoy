@@ -1,5 +1,5 @@
-def fromVersion = '1.0.28'
-def toVersion = '1.0.29'
+def fromVersion = '1.1.0'
+def toVersion = '1.1.1'
 
 // select root directories
 def base = '..\\..\\..\\..\\..\\..\\..\\..\\';
@@ -37,12 +37,14 @@ files << new File("${base}games\\engine\\setup.bat")
 files << new File("${base}portable\\windows-cmd\\00-settings.bat")
 files << new File("${base}portable\\linux-docker-compose\\balancer.yml")
 files << new File("${base}portable\\linux-docker-compose\\codenjoy.yml")
+files << new File("${base}portable\\linux-docker-compose\\rebuild.sh")
+files << new File("${base}portable\\linux-docker\\start.sh")
 files << new File("${base}games\\pom.xml")
-files << new File("${base}builder\\README.md")
 files << new File("${base}pom.xml")
 
 // replace in all files
 files.each {
+    println it
     def text = it.text
     for (i in 1..5) {
         text = (text =~ /$fromVersion/).replaceFirst("$toVersion")

@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.28</version>
+    <version>1.1.0</version>
 
     <packaging>pom</packaging>
 
@@ -68,6 +68,8 @@
         <module>puzzlebox</module>
         <module>spacerace</module>
         <module>kata</module>
+        <module>icancode</module>
+        <module>expansion</module>
         <module>reversi</module>
         <module>quadro</module>
         <module>lunolet</module>

@@ -10,13 +10,6 @@ attrib +h .git
 ren .gitignore_ .gitignore
 cd ../..
 
-cd CodingDojo/builder
-attrib -h .git_
-ren .git_ .git
-attrib +h .git
-ren .gitignore_ .gitignore
-cd ../..
-
 cd CodingDojo/games
 attrib -h .git_
 ren .git_ .git

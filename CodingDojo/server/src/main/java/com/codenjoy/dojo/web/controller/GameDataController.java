@@ -24,29 +24,18 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.dao.GameData;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 
 @Controller
+@RequiredArgsConstructor
 public class GameDataController {
 
-    @Autowired private GameData gameData;
-
-    public GameDataController() {
-    }
-
-    //for unit test
-    GameDataController(GameData gameData) {
-        this.gameData = gameData;
-    }
+    private final GameData gameData;
 
     @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.GET)
     public @ResponseBody String get(@PathVariable("gameType") String gameType, @PathVariable("key") String key) {
