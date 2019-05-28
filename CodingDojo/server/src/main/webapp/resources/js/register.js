@@ -56,15 +56,23 @@ function initRegistration(waitApprove, contextPath) {
         var general = new AdminSettings(contextPath, 'general', 'registration');
 
         general.load(function(data) {
-            data = data || {
-                showGamesOnRegistration : true,
-                showNamesOnRegistration : false,
-                showCitiesOnRegistration : false,
-                showTechSkillsOnRegistration : false,
-                showUniversityOnRegistration : false,
-                defaultGameOnRegistration : 'Contest'
-            };
+            if ($.isEmptyObject(data)) {
+                data = {
+                    showGamesOnRegistration: true,
+                    showNamesOnRegistration: false,
+                    showCitiesOnRegistration: false,
+                    showTechSkillsOnRegistration: false,
+                    showUniversityOnRegistration: false,
+                    defaultGameOnRegistration: null
+                };
+            }
 
+            var gamesCount = $('#gameName > option').length;
+            if (gamesCount > 1) {
+                $('#gameName').show();
+            } else {
+                $('#gameName').hide();
+            }
             if (data.showGamesOnRegistration) {
                 $('#game').show();
             } else {
@@ -89,6 +97,9 @@ function initRegistration(waitApprove, contextPath) {
                 $('#data3').show();
             } else {
                 $('#data3').hide();
+            }
+            if (!data.defaultGameOnRegistration) {
+                data.defaultGameOnRegistration = $("#game select option:first").val();
             }
             $('#game select').val(data.defaultGameOnRegistration);
         });

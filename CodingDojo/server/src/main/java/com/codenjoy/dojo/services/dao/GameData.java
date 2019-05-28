@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 
 public class GameData {
 
+    public static final String EMPTY_JSON = "{}";
+
     private CrudConnectionThreadPool pool;
 
     public GameData(ConnectionThreadPoolFactory factory) {
@@ -41,7 +43,7 @@ public class GameData {
     public String get(String gameType, String key) {
         return pool.select("SELECT value FROM game_settings WHERE game_type = ? AND key = ?;",
                 new Object[]{gameType, key},
-                rs -> rs.next() ? rs.getString("value") : null
+                rs -> rs.next() ? rs.getString("value") : EMPTY_JSON
         );
     }
 
