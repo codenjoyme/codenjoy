@@ -1,3 +1,18 @@
+#!/usr/bin/env sh
+
+DB_DIR=/data/dojoserver
+
+mkdir -p $DB_DIR
+
+docker run \
+        -d \
+        --name dojorena-game-server \
+        -e GAME_AI=true \
+        -e SPRING_PROFILES_ACTIVE=sqlite,debug,icancode \
+        -v $DB_DIR:/usr/app/database \
+        -p 8080:8080 \
+        dojorena/game-server:1.1.0
+igor_petrov@epam.com@ecsc00a04d45:/code/codenjoy/CodingDojo$ cat portable/Dockerfile
 ######################################################
 #           Game Server project build
 ######################################################
@@ -24,17 +39,21 @@ RUN mvn clean package -D$GAMES -DskipTests
 ######################################################
 FROM openjdk:8 as SERVER
 ENV APP_HOME=/usr/app
-ENV ARTIFACT_VERSION=1.1.0
+
 ENV ARTIFACT_NAME=codenjoy-contest.war
-ENV PROFILES="sqlite,debug,icancode"
-ENV SERVER_CONTEXT="codenjoy-contest"
+
+ARG PROFILES="sqlite,debug,icancode"
+ENV PROFILES=${PROFILES}
+
+ARG SERVER_CONTEXT="codenjoy-contest"
+ENV SERVER_CONTEXT=${SERVER_CONTEXT}
 
 WORKDIR $APP_HOME
 
-COPY --from=BUILD server/target/$ARTIFACT_NAME .
+COPY --from=BUILD /home/maven/server/target/$ARTIFACT_NAME .
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "$ARTIFACT_NAME"]
+ENTRYPOINT java -jar $ARTIFACT_NAME
 
-CMD ["--spring.profiles.active=${PROFILES}", "--context=/${SERVER_CONTEXT}"]
+CMD "--spring.profiles.active=${PROFILES} --context=/${SERVER_CONTEXT}"
