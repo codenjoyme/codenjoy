@@ -25,58 +25,62 @@ pages = pages || {};
 pages.admin = function() {
     var contextPath = game.contextPath = getSettings('contextPath');
 
-    // ------------------------ general settings -----------------------
-    var generalInfo = [];
-    var general = new AdminSettings(contextPath, 'general', 'registration');
+    // ------------------------ registration settings -----------------------
+    var settings = new AdminSettings(contextPath, 'general', 'registration');
 
-    var loadGeneral = function() {
-        general.load(function(data) {
-            loadGeneralData(data);
+    var loadRegSettings = function() {
+        settings.load(function(data) {
+            setRegSettings(data);
         });
     }
 
-    var saveGeneral = function() {
-        general.save(generalInfo,
+    var saveRegSettings = function() {
+        settings.save(getRegSettings(),
             function() {
-                loadGeneral();
+                loadRegSettings();
             }, function(errMsg) {
                 console.log(errMsg);
             });
     }
 
-    // ------------------------ collected general data ----------------------
-    var updateGeneralData = function() {
-        var updated = {
-            showGamesOnRegistration : $('#show-games-on-registration').prop('checked'),
-            showNamesOnRegistration : $('#show-names-on-registration').prop('checked'),
-            showTechSkillsOnRegistration : $('#show-tech-on-registration').prop('checked'),
-            showUniversityOnRegistration : $('#show-university-on-registration').prop('checked'),
-            defaultGameOnRegistration : $('#default-game-on-registration').find('option:selected').text()
+    var getRegSettings = function() {
+        return {
+            showGamesOnRegistration : $('#show-games').prop('checked'),
+            showNamesOnRegistration : $('#show-names').prop('checked'),
+            showTechSkillsOnRegistration : $('#show-tech').prop('checked'),
+            showUniversityOnRegistration : $('#show-university').prop('checked'),
+            defaultGameOnRegistration : $('#default-game').find('option:selected').text()
         };
-
-        generalInfo = updated;
     }
 
-    var loadGeneralData = function(data) {
-        if (!!data) {
-            generalInfo = data;
+    var setRegSettings = function(data) {
+        if ($.isEmptyObject(data)) {
+            data = {
+                showGamesOnRegistration: true,
+                showNamesOnRegistration: false,
+                showCitiesOnRegistration: false,
+                showTechSkillsOnRegistration: false,
+                showUniversityOnRegistration: false,
+                defaultGameOnRegistration: null
+            };
+        }
+        if (!data.defaultGameOnRegistration) {
+            data.defaultGameOnRegistration = $("#default-game option:first").val();
         }
 
-        $('#show-games-on-registration').prop('checked', generalInfo.showGamesOnRegistration);
-        $('#show-names-on-registration').prop('checked', generalInfo.showNamesOnRegistration);
-        $('#show-tech-on-registration').prop('checked', generalInfo.showTechSkillsOnRegistration);
-        $('#show-university-on-registration').prop('checked', generalInfo.showUniversityOnRegistration);
-        $('#default-game-on-registration').val(generalInfo.defaultGameOnRegistration);
+        $('#show-games').prop('checked', data.showGamesOnRegistration);
+        $('#show-names').prop('checked', data.showNamesOnRegistration);
+        $('#show-tech').prop('checked', data.showTechSkillsOnRegistration);
+        $('#show-university').prop('checked', data.showUniversityOnRegistration);
+        $('#default-game').val(data.defaultGameOnRegistration);
     }
 
-    var generalSaveButton = $('#general-save-button');
-    generalSaveButton.click(function() {
-        updateGeneralData();
-        saveGeneral();
+    $('#registration-save-button').click(function() {
+        saveRegSettings();
     });
 
     // ------------------------ init ----------------------
     validatePlayerRegistration("#adminSettings");
     initHotkeys();
-    loadGeneral();
+    loadRegSettings();
 }

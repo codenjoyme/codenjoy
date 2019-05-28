@@ -169,45 +169,45 @@
         </tr>
         <tr>
             <td>
-                <input id="show-games-on-registration" type="checkbox">
-                <label class="check-label" for="show-games-on-registration"></label>
+                <input id="show-games" type="checkbox">
+                <label class="check-label" for="show-games"></label>
                 <span>Show games list on registration</span>
             </td>
         </tr>
         <tr>
             <td>
-                <input id="show-names-on-registration" type="checkbox">
-                <label class="check-label" for="show-names-on-registration"></label>
+                <input id="show-names" type="checkbox">
+                <label class="check-label" for="show-names"></label>
                 <span>Show first/last names on registration</span>
             </td>
         </tr>
         <tr>
             <td>
-                <input id="show-tech-on-registration" type="checkbox">
-                <label class="check-label" for="show-tech-on-registration"></label>
+                <input id="show-tech" type="checkbox">
+                <label class="check-label" for="show-tech"></label>
                 <span>Show tech skills on registration</span>
             </td>
         </tr>
         <tr>
             <td>
-                <input id="show-university-on-registration" type="checkbox">
-                <label class="check-label" for="show-university-on-registration"></label>
+                <input id="show-university" type="checkbox">
+                <label class="check-label" for="show-university"></label>
                 <span>Show university on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <span class="white">Default game</span>
-                <select placeholder="Select default game" id="default-game-on-registration">
-                    <option value="iCanCode Contest">iCanCode Contest</option>
+                <select placeholder="Select default game" id="default-game">
                     <option value="iCanCode Training">iCanCode Training</option>
+                    <option value="iCanCode Contest">iCanCode Contest</option>
                     <option value="eKids">eKids</option>
                 </select>
             </td>
         </tr>
         <tr>
             <td>
-                <button id="general-save-button" class="button save">Save settings</button>
+                <button id="registration-save-button" class="button save">Save settings</button>
             </td>
         </tr>
     </table>
