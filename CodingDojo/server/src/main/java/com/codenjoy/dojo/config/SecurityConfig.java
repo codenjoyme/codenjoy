@@ -25,10 +25,7 @@ package com.codenjoy.dojo.config;
 import com.codenjoy.dojo.config.meta.NonSSOProfile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
-import com.codenjoy.dojo.web.controller.AdminController;
-import com.codenjoy.dojo.web.controller.ErrorController;
-import com.codenjoy.dojo.web.controller.LoginController;
-import com.codenjoy.dojo.web.controller.RegistrationController;
+import com.codenjoy.dojo.web.controller.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,6 +71,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_PROCESSING_URI = "/process_login";
     private static final String ADMIN_LOGIN_PROCESSING_URI = "/process_admin_login";
     private static final String LOGOUT_PROCESSING_URI = "/process_logout";
+
+    public static final String[] UNAUTHORIZED_URIS = {
+            LoginController.ADMIN_URI,
+            RegistrationController.URI + "*",
+            LOGIN_PROCESSING_URI,
+            ADMIN_LOGIN_PROCESSING_URI,
+            MVCConf.RESOURCES_URI,
+            ErrorController.URI,
+            GameDataController.URI + "/**",
+    };
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -128,9 +135,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // @formatter:off
             http
                     .authorizeRequests()
-                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
-                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
-                                ErrorController.URI)
+                        .antMatchers(UNAUTHORIZED_URIS)
                             .permitAll()
 
                         .anyRequest()
@@ -176,9 +181,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // @formatter:off
             http
                     .authorizeRequests()
-                        .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
-                                LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
-                                ErrorController.URI)
+                    .antMatchers(UNAUTHORIZED_URIS)
                             .permitAll()
 
                         .anyRequest()

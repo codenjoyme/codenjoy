@@ -284,3 +284,11 @@ footer {
 .icancode-title {
     text-transform: none;
 }
+
+.logout-link {
+    display: inline;
+    position: relative;
+    float: right;
+    margin-right: 150px; /* form-me.png width */
+    z-index: 100;
+}

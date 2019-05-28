@@ -87,8 +87,8 @@ License along with this program.  If not, see
             <div id="game" class="field valid" hidden>
                 <!-- TODO to remove from here -->
                 <select placeholder="Select your game" name="game">
-                    <option value="iCanCode Contest" >iCanCode Contest</option>
                     <option value="iCanCode Training" selected>iCanCode Training</option>
+                    <option value="iCanCode Contest" >iCanCode Contest</option>
                     <option value="eKids">eKids</option>
                 </select>
             </div>
@@ -113,7 +113,7 @@ License along with this program.  If not, see
             <c:if test="${not adminLogin}">
                 <tr>
                     <td>
-                        <form:select items="${gameNames}" path="gameName"/>
+                        <form:select items="${gameNames}" id="gameName" path="gameName"/>
                     </td>
                     <td>
                         <form:errors path="gameName" cssClass="error" />

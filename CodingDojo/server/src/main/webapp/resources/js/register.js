@@ -53,44 +53,55 @@ function initRegistration(waitApprove, contextPath) {
     };
 
     function configureFormFromAdminSettings() {
-        var general = new AdminSettings(contextPath, 'general');
+        var general = new AdminSettings(contextPath, 'general', 'registration');
 
         general.load(function(data) {
-            data = data || {
-                showGamesOnRegistration : true,
-                showNamesOnRegistration : false,
-                showCitiesOnRegistration : false,
-                showTechSkillsOnRegistration : false,
-                showUniversityOnRegistration : false,
-                defaultGameOnRegistration : 'Contest'
-            };
+            if ($.isEmptyObject(data)) {
+                data = {
+                    showGames: true,
+                    showNames: false,
+                    showCities: false,
+                    showTechSkills: false,
+                    showUniversity: false,
+                    defaultGame: null
+                };
+            }
 
-            if (data.showGamesOnRegistration) {
+            var gamesCount = $('#gameName > option').length;
+            if (gamesCount > 1) {
+                $('#gameName').show();
+            } else {
+                $('#gameName').hide();
+            }
+            if (data.showGames) {
                 $('#game').show();
             } else {
                 $('#game').hide();
             }
-            if (data.showNamesOnRegistration) {
+            if (data.showNames) {
                 $('#readableName').show();
             } else {
                 $('#readableName').hide();
             }
-            if (data.showCitiesOnRegistration) {
+            if (data.showCities) {
                 $('#data1').show();
             } else {
                 $('#data1').hide();
             }
-            if (data.showTechSkillsOnRegistration) {
+            if (data.showTechSkills) {
                 $('#data2').show();
             } else {
                 $('#data2').hide();
             }
-            if (data.showUniversityOnRegistration) {
+            if (data.showUniversity) {
                 $('#data3').show();
             } else {
                 $('#data3').hide();
             }
-            $('#game select').val(data.defaultGameOnRegistration);
+            if (!data.defaultGame) {
+                data.defaultGame = $("#game select option:first").val();
+            }
+            $('#game select').val(data.defaultGame);
         });
     }
 
