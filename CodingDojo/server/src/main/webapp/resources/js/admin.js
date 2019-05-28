@@ -27,7 +27,7 @@ pages.admin = function() {
 
     // ------------------------ general settings -----------------------
     var generalInfo = [];
-    var general = new AdminSettings(contextPath, 'general');
+    var general = new AdminSettings(contextPath, 'general', 'registration');
 
     var loadGeneral = function() {
         general.load(function(data) {

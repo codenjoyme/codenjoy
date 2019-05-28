@@ -19,8 +19,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var AdminSettings = function(contextPath, settingsName) {
-    var url = contextPath + '/settings/icancode/' + settingsName;
+var AdminSettings = function(contextPath, gameName, settingsName) {
+    var url = contextPath + '/settings/' + gameName + '/' + settingsName;
 
     var load = function(onSuccess) {
         $.get(url, null, onSuccess, 'json');

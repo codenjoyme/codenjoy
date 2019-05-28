@@ -69,7 +69,7 @@ function initAdmin(contextPath) {
     // ------------------------ communicate with server -----------------------
     // ------------------------ levels settings -----------------------
     var levelsInfo = [];
-    var levels = new AdminSettings(contextPath, 'levels');
+    var levels = new AdminSettings(contextPath, 'icancode', 'levels');
 
     var loadLevels = function() {
         levels.load(function(data) {

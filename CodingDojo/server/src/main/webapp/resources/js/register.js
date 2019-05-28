@@ -53,7 +53,7 @@ function initRegistration(waitApprove, contextPath) {
     };
 
     function configureFormFromAdminSettings() {
-        var general = new AdminSettings(contextPath, 'general');
+        var general = new AdminSettings(contextPath, 'general', 'registration');
 
         general.load(function(data) {
             data = data || {
