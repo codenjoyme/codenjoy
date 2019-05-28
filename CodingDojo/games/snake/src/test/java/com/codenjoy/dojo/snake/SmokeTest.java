@@ -89,14 +89,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼  ☺  ☼\n" +
-                        "1:☼☻    ☼\n" +
+                        "1:☼     ☼\n" +
                         "1:☼ ╘►  ☼\n" +
                         "1:☼     ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [3,3]\n" +
                         "1:Snake at: [[3,3], [2,3]]\n" +
                         "1:Current direction: RIGHT\n" +
@@ -105,14 +105,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼  ☺  ☼\n" +
-                        "1:☼☻ ▲  ☼\n" +
+                        "1:☼  ▲  ☼\n" +
                         "1:☼  ╙  ☼\n" +
                         "1:☼     ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [3,4]\n" +
                         "1:Snake at: [[3,4], [3,3]]\n" +
                         "1:Current direction: UP\n" +
@@ -141,14 +141,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼  ▲  ☼\n" +
-                        "1:☼☻ ║  ☼\n" +
+                        "1:☼  ║  ☼\n" +
                         "1:☼  ╙  ☼\n" +
                         "1:☼  ☺  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [3,5]\n" +
                         "1:Snake at: [[3,5], [3,3], [3,4]]\n" +
                         "1:Current direction: UP\n" +
@@ -157,14 +157,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼ ◄╗  ☼\n" +
-                        "1:☼☻ ╙  ☼\n" +
+                        "1:☼  ╙  ☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼  ☺  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [2,5]\n" +
                         "1:Snake at: [[2,5], [3,4], [3,5]]\n" +
                         "1:Current direction: LEFT\n" +
@@ -173,14 +173,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼ ╔╕  ☼\n" +
-                        "1:☼☻▼   ☼\n" +
+                        "1:☼ ▼   ☼\n" +
                         "1:☼     ☼\n" +
                         "1:☼  ☺  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [2,4]\n" +
                         "1:Snake at: [[2,4], [2,5], [3,5]]\n" +
                         "1:Current direction: DOWN\n" +
@@ -189,14 +189,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼ ╓   ☼\n" +
-                        "1:☼☻║   ☼\n" +
+                        "1:☼ ║   ☼\n" +
                         "1:☼ ▼   ☼\n" +
                         "1:☼  ☺  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [2,3]\n" +
                         "1:Snake at: [[2,3], [2,4], [2,5]]\n" +
                         "1:Current direction: DOWN\n" +
@@ -205,14 +205,14 @@ public class SmokeTest {
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:☼     ☼\n" +
-                        "1:☼☻╓   ☼\n" +
+                        "1:☼ ╓   ☼\n" +
                         "1:☼ ║   ☼\n" +
                         "1:☼ ▼☺  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Apple at: [[3,2]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [2,2]\n" +
                         "1:Snake at: [[2,2], [2,3], [2,4]]\n" +
                         "1:Current direction: DOWN\n" +
@@ -220,22 +220,18 @@ public class SmokeTest {
                         "Fire Event: EAT_APPLE\n" +
                         "DICE:1\n" +
                         "DICE:4\n" +
-                        "DICE:0\n" +
-                        "DICE:2\n" +
-                        "DICE:3\n" +
-                        "DICE:5\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼☻╓   ☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☺╓   ☼\n" +
                         "1:☼ ║   ☼\n" +
                         "1:☼ ╚►  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Apple at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [3,2]\n" +
                         "1:Snake at: [[3,2], [2,2], [2,3], [2,4]]\n" +
                         "1:Current direction: RIGHT\n" +
@@ -243,15 +239,15 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼☻    ☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☺    ☼\n" +
                         "1:☼ ╓▲  ☼\n" +
                         "1:☼ ╚╝  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Apple at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [3,3]\n" +
                         "1:Snake at: [[3,3], [2,2], [2,3], [3,2]]\n" +
                         "1:Current direction: UP\n" +
@@ -259,24 +255,19 @@ public class SmokeTest {
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼\n" +
-                        "1:☼  ☺  ☼\n" +
-                        "1:☼☻ ▲  ☼\n" +
+                        "1:☼     ☼\n" +
+                        "1:☼☺ ▲  ☼\n" +
                         "1:☼  ║  ☼\n" +
                         "1:☼ ╘╝  ☼\n" +
-                        "1:☼     ☼\n" +
+                        "1:☼   ☻ ☼\n" +
                         "1:☼☼☼☼☼☼☼\n" +
                         "1:\n" +
-                        "1:Apple at: [[3,5]]\n" +
-                        "1:Stones at: [[1,4]]\n" +
+                        "1:Apple at: [[1,4]]\n" +
+                        "1:Stones at: [[4,1]]\n" +
                         "1:Head at: [3,4]\n" +
                         "1:Snake at: [[3,4], [2,2], [3,2], [3,3]]\n" +
                         "1:Current direction: UP\n" +
-                        "1:Answer: UP\n" +
-                        "Fire Event: EAT_APPLE\n" +
-                        "DICE:4\n" +
-                        "DICE:6\n" +
-                        "DICE:1\n" +
-                        "DICE:2\n" +
+                        "1:Answer: LEFT\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

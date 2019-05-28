@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -42,7 +43,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -243,6 +244,7 @@ public class PlayerGamesViewTest {
         heroesData.add(heroData);
 
         Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null);
+        player.setEventListener(mock(InformationCollector.class));
         players.add(player);
 
         Controller controller = mock(Controller.class);

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class Sequence2Algorithm extends AlgorithmLevelImpl {
 
@@ -35,7 +35,7 @@ public class Sequence2Algorithm extends AlgorithmLevelImpl {
         for(int i = 1; i < n; i++) {
             String s = res.toString();
             String s2 = StringUtils.leftPad(s, 3, '0');
-            res = res - Integer.valueOf(s2.substring(0, 2));
+            res = res - Integer.parseInt(s2.substring(0, 2));
         }
 
         return res.toString();
@@ -50,7 +50,7 @@ public class Sequence2Algorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 12;
+        return 50;
     }
 
     @Override

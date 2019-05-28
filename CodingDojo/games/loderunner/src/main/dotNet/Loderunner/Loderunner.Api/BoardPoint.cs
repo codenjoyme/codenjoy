@@ -37,7 +37,7 @@ namespace Loderunner.Api
         /// <summary>
         /// Checks is current point on board or out of range.
         /// </summary>
-        /// <param name="boardSize">Board size to comapre</param>
+        /// <param name="boardSize">Board size to compare</param>
         public bool IsOutOfBoard(int boardSize)
         {
             return X >= boardSize || Y >= boardSize || X < 0 || Y < 0;
@@ -94,7 +94,7 @@ namespace Loderunner.Api
 
         public override string ToString()
         {
-            return String.Format("[{0},{1}]", X, Y);
+            return string.Format("[{0},{1}]", X, Y);
         }
 
         public override bool Equals(object obj)

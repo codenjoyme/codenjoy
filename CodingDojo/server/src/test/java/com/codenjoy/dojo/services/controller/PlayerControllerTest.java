@@ -23,7 +23,8 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
-import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
+import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -31,6 +32,14 @@ import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.nullobj.NullInformation;
 import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -39,44 +48,46 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-// TODO разобратсья почему не рабоатет весь тест
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class PlayerControllerTest {
-
-    public static final int PORT = 8082;
-    public static final String CONTEXT_PATH = "/appcontext";
-    private static WebSocketRunnerMock client;
-
-    private static String url;
-
-    private static PlayerController controller;
-    private static TimerService timer;
-    private static Registration registration;
-
-    private static SpringMockerJettyRunner runner;
-
-    private static Joystick joystick;
-    private static Player player;
-
-    private static final String SERVER = "ws://127.0.0.1:" + PORT + CONTEXT_PATH + "/ws";
     private static String USER_NAME = "apofig@gmail.com";
     private static String CODE = Hash.getCode("apofig@gmail.com", "secureSoul");
 
+    private static WebSocketRunnerMock client;
+
+    private String url;
+
+    private Joystick joystick;
+    private Player player;
+
+    private String serverAddress;
+
     private static List<String> serverMessages = new LinkedList<>();
 
-    @BeforeClass
-    public static void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", CONTEXT_PATH){{
-            mockBean("registration");
-        }};
+    @MockBean
+    private Registration registration;
 
-        int port = runner.start(PORT);
+    @Autowired
+    private PlayerController playerController;
 
-        url = runner.getUrl();
+    @Autowired
+    private TimerService timer;
+
+    @LocalServerPort
+    private int port;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
+    @Before
+    public void setupJetty() throws Exception {
+        url = String.format("http://localhost:%s%s", port, contextPath);
+
+        serverAddress = String.format("ws://localhost:%s%s", port, contextPath + "/ws");
+
         System.out.println("web application started at: " + url);
-
-        timer = runner.getBean(TimerService.class, "timerService");
-        controller = runner.getBean(PlayerController.class, "playerController");
-        registration = runner.getBean(Registration.class, "registration");
 
         timer.pause();
 
@@ -107,21 +118,31 @@ public class PlayerControllerTest {
             }
         };
 
+        createPlayer();
+    }
+
+    public void clean() {
+        if (player != null) {
+            playerController.unregisterPlayerTransport(player);
+        }
+        if (client != null) {
+            client.reset();
+        }
+        serverMessages.clear();
+    }
+
+    public void createPlayer() throws Exception {
+        clean();
+
         player = new Player(USER_NAME, "127.0.0.1", PlayerTest.mockGameType("game"),
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
 
-        controller.registerPlayerTransport(player, joystick);
+        playerController.registerPlayerTransport(player, joystick);
 
         // SecureAuthenticationService спросит Registration а можно ли этому юзеру что-то делать?
         when(registration.checkUser(USER_NAME, CODE)).thenReturn(USER_NAME);
 
-        client = WebSocketRunnerMock.run(SERVER, USER_NAME, CODE);
-    }
-
-    @Before
-    public void clean() {
-        client.reset();
-        serverMessages.clear();
+        client = new WebSocketRunnerMock(serverAddress, USER_NAME, CODE);
     }
 
     @AfterClass
@@ -131,7 +152,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldLeft() {
-        client.willAnswer("LEFT");
+        client.willAnswer("LEFT").start();
         waitForPlayerResponse();
 
         assertEquals("[left]", serverMessages.toString());
@@ -139,7 +160,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldRight() {
-        client.willAnswer("right");
+        client.willAnswer("right").start();
         waitForPlayerResponse();
 
         assertEquals("[right]", serverMessages.toString());
@@ -148,7 +169,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldUp() {
-        client.willAnswer("Up");
+        client.willAnswer("Up").start();
         waitForPlayerResponse();
 
         assertEquals("[up]", serverMessages.toString());
@@ -157,7 +178,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldAct() {
-        client.willAnswer("aCt");
+        client.willAnswer("aCt").start();
         waitForPlayerResponse();
 
         assertEquals("[act[]]", serverMessages.toString());
@@ -166,7 +187,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldActWithParameters() {
-        client.willAnswer("ACt(1,2 ,3, 5)");
+        client.willAnswer("ACt(1,2 ,3, 5)").start();
         waitForPlayerResponse();
 
         assertEquals("[act[1, 2, 3, 5]]", serverMessages.toString());
@@ -175,7 +196,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldDown() {
-        client.willAnswer("DowN");
+        client.willAnswer("DowN").start();
         waitForPlayerResponse();
 
         assertEquals("[down]", serverMessages.toString());
@@ -184,7 +205,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldRightAct() {
-        client.willAnswer("right,Act");
+        client.willAnswer("right,Act").start();
         waitForPlayerResponse();
 
         assertEquals("[right, act[]]", serverMessages.toString());
@@ -193,7 +214,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldMixed() {
-        client.willAnswer("Act,right, left ,act");
+        client.willAnswer("Act,right, left ,act").start();
         waitForPlayerResponse();
 
         assertEquals("[act[], right, left, act[]]", serverMessages.toString());
@@ -202,7 +223,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldCheckRequest() {
-        client.willAnswer("act");
+        client.willAnswer("act").start();
         waitForPlayerResponse();
 
         assertEquals("board=some-request-0", client.getRequest());
@@ -215,7 +236,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
         // given, when
-        client.willAnswer("LEFT").times(2);
+        client.willAnswer("LEFT").times(2).start();
         waitForPlayerResponse();
 
         // then
@@ -225,8 +246,9 @@ public class PlayerControllerTest {
 
     private void waitForPlayerResponse(int times) {
         try {
+            Thread.sleep(300);
             for (int index = 0; index < times; index++) {
-                controller.requestControl(player, "some-request-" + index);
+                playerController.requestControl(player, "some-request-" + index);
             }
             int count = 0;
             while (++count < 100 && serverMessages.isEmpty()) {
@@ -237,10 +259,10 @@ public class PlayerControllerTest {
         }
     }
 
-    @Test @Ignore 
+    @Test
     public void shouldClientGotOnlyOneWhenServerRequestTwice() {
         // given, when
-        client.willAnswer("LEFT").times(1).onlyOnce();
+        client.willAnswer("LEFT").times(1).onlyOnce().start();
         waitForPlayerResponse(2);
 
         // then

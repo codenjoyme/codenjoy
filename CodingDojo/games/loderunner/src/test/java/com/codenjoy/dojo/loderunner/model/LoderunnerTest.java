@@ -36,7 +36,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class LoderunnerTest {
@@ -67,7 +67,7 @@ public class LoderunnerTest {
         LevelImpl level = new LevelImpl(board);
         level.setAI(ai);
 
-        Hero hero = null;
+        Hero hero;
         if (level.getHeroes().isEmpty()) {
             throw new IllegalStateException("Нет героя!");
         } else {
@@ -1971,7 +1971,7 @@ public class LoderunnerTest {
     }
 
     private void ai(Direction value) {
-        when(ai.getDirection(any(Field.class), any(Hero.class), any(Point.class))).thenReturn(value, null);
+        when(ai.getDirection(any(Field.class), any(), any(Point.class))).thenReturn(value, null);
     }
 
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
@@ -2116,6 +2116,12 @@ public class LoderunnerTest {
         hero.right();
         hero.act();
         game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼R «☼" +
+                "☼#*#☼" +
+                "☼☼☼☼☼");
 
         enemy.left();
         game.tick();

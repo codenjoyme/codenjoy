@@ -23,13 +23,16 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,25 +44,19 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
+@RequiredArgsConstructor
 public class MainPageController {
 
-    @Autowired private PlayerService playerService;
-    @Autowired private Registration registration;
-    @Autowired private GameService gameService;
-    @Autowired private Validator validator;
-    @Autowired private ConfigProperties properties;
-
-    public MainPageController() {
-    }
-
-    //for unit test
-    MainPageController(PlayerService playerService) {
-        this.playerService = playerService;
-    }
+    private final PlayerService playerService;
+    private final Registration registration;
+    private final GameService gameService;
+    private final Validator validator;
+    private final ConfigProperties properties;
+    private final RoomsAliaser rooms;
 
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public String help(Model model) {
-        model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("gameNames", gameService.getOnlyGameNames());
         return "help";
     }
 
@@ -76,6 +73,9 @@ public class MainPageController {
     public String getMainPage(HttpServletRequest request, Model model) {
         String mainPage = properties.getMainPage();
         if (StringUtils.isEmpty(mainPage)) {
+            if (gameService.getGameNames().size() == 1) {
+                return "redirect:board";
+            }
             return getMainPage(request, null, model);
         } else {
             model.addAttribute("url", mainPage);
@@ -93,10 +93,13 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        Player player = playerService.get(registration.getEmail(code));
-        request.setAttribute("registered", player != NullPlayer.INSTANCE);
+        Player player = playerService.get(registration.getIdByCode(code));
+        boolean registered = player != NullPlayer.INSTANCE;
+        request.setAttribute("registered", registered);
         request.setAttribute("code", code);
-        model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("gameName",
+                registered ? player.getGameName() : StringUtils.EMPTY);
+        model.addAttribute("gameNames", rooms.all());
         return "main";
     }
 
@@ -104,7 +107,7 @@ public class MainPageController {
     public ModelAndView displayAccessDeniedPage(){
         return new ModelAndView(){{
             addObject("message", "Invalid Username or Password");
-            setViewName("error");
+            setViewName("errorPage");
         }};
     }
 

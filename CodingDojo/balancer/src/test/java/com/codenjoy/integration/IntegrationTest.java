@@ -23,6 +23,8 @@ package com.codenjoy.integration;
  */
 
 
+import com.codenjoy.dojo.BalancerApplication;
+import com.codenjoy.dojo.conf.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.GameServers;
 import com.codenjoy.dojo.services.TimerService;
@@ -32,12 +34,20 @@ import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.integration.mocker.SpringMockerJettyRunner;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpStatusCodeException;
-import org.springframework.web.client.RestTemplate;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest;
@@ -47,52 +57,49 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Random;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = BalancerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class IntegrationTest {
 
+    @Autowired
     private TimerService timer;
+
+    @Autowired
     private ConfigProperties config;
+
+    @SpyBean
     private Players players;
+
+    @SpyBean
     private Scores scores;
+
+    @MockBean
     private GameServers gameServers;
+
+    @SpyBean
     private GameServer game;
 
-    private SpringMockerJettyRunner runner;
+    @Value("${server.servlet.context-path}")
     private String context;
+
+    @LocalServerPort
     private int port;
-    private RestTemplate rest;
+
+    private TestRestTemplate rest = new TestRestTemplate();
 
     private String adminPassword;
 
     @BeforeTest
     public void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", "/codenjoy-balancer"){{
-            mockBean("gameServer");
-            spyBean("gameServers");
-            spyBean("configProperties");
-            spyBean("players");
-            spyBean("scores");
-        }};
-
-        port = runner.start(new Random().nextInt(1000) + 10000);
-
-        rest = new RestTemplate();
-
-        context = runner.getUrl();
+        rest = new TestRestTemplate();
         System.out.println(context);
-
-        timer = runner.getBean(TimerService.class, "timerService");
-        config = runner.getBean(ConfigProperties.class, "configProperties");
-        players = runner.getBean(Players.class, "players");
-        scores = runner.getBean(Scores.class, "scores");
-        gameServers = runner.getBean(GameServers.class, "gameServers");
-        game = runner.getBean(GameServer.class, "gameServer");
         timer.resume();
 
         adminPassword = Hash.md5(config.getAdminPassword());
@@ -105,10 +112,7 @@ public class IntegrationTest {
     @BeforeMethod
     public void before(Method method) {
         if (Arrays.stream(method.getDeclaredAnnotations())
-                .filter(a -> a.annotationType().equals(Clean.class))
-                .findAny()
-                .isPresent())
-        {
+                .anyMatch(a -> a.annotationType().equals(Clean.class))) {
             players.removeAll();
             scores.removeAll();
             resetMocks();
@@ -140,7 +144,7 @@ public class IntegrationTest {
                 "{\n" +
                 "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'btcfedopmomo66einibynbe',\n" +
+                "  'id':'nrnbnrmikfkiksoejwbf4ze',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 
@@ -360,7 +364,7 @@ public class IntegrationTest {
                 "{\n" +
                 "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'btcfedopmomo66einibynbe',\n" +
+                "  'id':'nrnbnrmikfkiksoejwbf4ze',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 

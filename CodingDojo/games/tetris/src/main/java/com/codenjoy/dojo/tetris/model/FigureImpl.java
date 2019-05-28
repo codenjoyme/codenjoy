@@ -23,7 +23,7 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class FigureImpl implements Figure, Cloneable {
 
@@ -97,7 +97,7 @@ public class FigureImpl implements Figure, Cloneable {
     }
 
     private void performRotate() {
-        char newRows[][] = new char[width()][rows.length];
+        char[][] newRows = new char[width()][rows.length];
         int newX = rows.length - y - 1;
         int newY = left();
         for (int y = 0; y < rows.length; y++) {

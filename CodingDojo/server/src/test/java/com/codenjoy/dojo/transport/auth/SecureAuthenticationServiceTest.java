@@ -29,7 +29,7 @@ import org.junit.Test;
 import javax.servlet.http.HttpServletRequest;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -48,7 +48,7 @@ public class SecureAuthenticationServiceTest {
 
     @Test
     public void user_registered() {
-        shouldCheckuserIs("userid");
+        shouldCheckUserIs("userid");
         assertAuth("userid",
                 "57823465983456583485", "user@email.com");
 
@@ -56,40 +56,40 @@ public class SecureAuthenticationServiceTest {
 
     @Test
     public void user_notRegistered() {
-        shouldCheckuserIs(null);
+        shouldCheckUserIs(null);
         assertAuth(null,
                 "57823465983456583485", "user@email.com");
     }
 
     @Test
     public void ai_withValidName_andValidCode() {
-        shouldCheckuserIs(null);
+        shouldCheckUserIs(null);
         assertAuth("some-text-super-ai@codenjoy.com",
                 "12345678901234567890", "some-text-super-ai@codenjoy.com");
     }
 
     @Test
     public void ai_withInvalidName_andValidCode() {
-        shouldCheckuserIs(null);
+        shouldCheckUserIs(null);
         assertAuth(null,
                 "12345678901234567890", "user@email.com");
     }
 
     @Test
     public void ai_withValidName_andInvalidCode_ignoreCode() {
-        shouldCheckuserIs(null);
-        assertAuth(null,
+        shouldCheckUserIs(null);
+        assertAuth("some-text-super-ai@codenjoy.com",
                 "11111111111111111110", "some-text-super-ai@codenjoy.com");
     }
 
     @Test
     public void ai_withInvalidName_andInvalidCode_ignoreCode() {
-        shouldCheckuserIs(null);
-        assertAuth("some-text-super-ai@codenjoy.com",
+        shouldCheckUserIs(null);
+        assertAuth(null,
                 "11111111111111111110", "user@email.com");
     }
 
-    private void shouldCheckuserIs(String exists) {
+    private void shouldCheckUserIs(String exists) {
         when(registration.checkUser(anyString(), anyString())).thenReturn(exists);
     }
 

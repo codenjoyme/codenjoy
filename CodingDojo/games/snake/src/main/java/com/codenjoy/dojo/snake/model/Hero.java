@@ -56,6 +56,11 @@ public class Hero extends PlayerHero<Field> implements Element, Iterable<Tail> {
         alive = true;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Snake[%s, %s]", direction, elements.toString());
+    }
+
     public static Hero createHero(int size, int startLength) {
         int x = (size - 1)/2;
         int y = (size - 1)/2;

@@ -23,4 +23,37 @@ pages = pages || {};
 
 pages.main = function() {
     initHotkeys();
+
+    bindActiveGameCheck();
+};
+
+
+function bindActiveGameCheck() {
+    $('.gameView').click(function(e) {
+
+        e.preventDefault();
+
+        var contextPath = 'codenjoy-contest';
+        var gameName = $(this).attr('gameName');
+        var viewLink = $(this);
+
+        $.get('/' + contextPath + '/rest/' + gameName + '/status',
+            null,
+            function(statusData) {
+                if (!statusData) {
+                    return;
+                }
+
+                if (!statusData.active === true) {
+                    if (confirm('Nobody is playing this game yet. Would you like to rejoin and become first?')) {
+                        $('#rejoin-' + gameName)[0].click();
+                    }
+                } else {
+                    viewLink.unbind('click');
+                    viewLink[0].click();
+                }
+            },
+            'json'
+        )
+    })
 }

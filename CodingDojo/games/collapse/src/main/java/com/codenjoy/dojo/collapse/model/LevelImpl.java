@@ -49,7 +49,7 @@ public class LevelImpl implements Level {
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             if (ch != Elements.BORDER.ch && ch != ' ') {
-                result.add(new Cell(xy.getXY(index), Integer.valueOf("" + ch)));
+                result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch)));
             }
         }
 

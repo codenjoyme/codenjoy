@@ -1,13 +1,15 @@
 set JAVA_HOME=%CD%\jdk8
 set M2_HOME=%CD%\maven
 set GIT_HOME=%CD%\git
-set JETTY_HOME=%CD%\jetty9
-set CODENJOY_VERSION=1.0.27
+set APP_HOME=%CD%\server-distr
+set CODENJOY_VERSION=1.1.0
 set ROOT=%CD%
 set SKIP_TESTS=true
-set CONTEXT=codenjoy-contest
+set CONTEXT=/codenjoy-contest
+set SPRING_PROFILES=sqlite
 set DEBUG=false
-rem set GIT_REVISION=9b51a26
+set GIT_REPO=https://github.com/codenjoyme/codenjoy.git
+set GIT_REVISION=master
 
 set MAVEN_OPTS="-Dmaven.repo.local=%M2_HOME%\.m2\repository"
 

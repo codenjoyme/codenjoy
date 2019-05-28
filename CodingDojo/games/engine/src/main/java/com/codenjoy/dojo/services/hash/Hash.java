@@ -23,7 +23,8 @@ package com.codenjoy.dojo.services.hash;
  */
 
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -70,11 +71,11 @@ public class Hash {
                 .toString();
     }
 
-    public static String getCode(String emailOrId, String password) {
+    public static String getCode(String id, String password) {
         return String.valueOf(Math.abs(
-                md5(md5(emailOrId) + md5(password)).hashCode()
-                + 10000000000000L * md5(md5(password) + md5(emailOrId) + emailOrId).hashCode()
-                ^ md5(emailOrId + password).hashCode() << 13 ^ 345378L * md5(password + md5(emailOrId)).hashCode()
+                md5(md5(id) + md5(password)).hashCode()
+                + 10000000000000L * md5(md5(password) + md5(id) + id).hashCode()
+                ^ md5(id + password).hashCode() << 13 ^ 345378L * md5(password + md5(id)).hashCode()
         ));
     }
 
@@ -96,7 +97,11 @@ public class Hash {
         System.out.println("---");
         System.out.printf("UPDATE players " +
                 "SET password = '%s', code = '%s' " +
-                "WHERE email = '%s';\n", passwordHash, code, email);
+                "WHERE email = '%s';%n", passwordHash, code, email);
+    }
+
+    public static String getRandomId() {
+        return RandomStringUtils.random(20, "abcdefghijklmnopqrstuvwxyz1234567890");
     }
 
 }

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.client;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -79,7 +80,7 @@ public class LocalGameRunner {
 
     public void run() {
         Integer count = countIterations;
-        while (count == null || (count != null && count-- > 0)) {
+        while (count == null || count-- > 0) {
 
             List<String> answers = new LinkedList<>();
 
@@ -165,7 +166,7 @@ public class LocalGameRunner {
     private Game createGame() {
         GamePlayer gamePlayer = gameType.createPlayer(
                 event -> out.accept("Fire Event: " + event.toString()),
-                null);
+                Hash.getRandomId());
 
         PrinterFactory factory = gameType.getPrinterFactory();
 

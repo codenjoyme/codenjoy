@@ -77,22 +77,23 @@ label.error {
     margin:10px;
 }
 
-#adminSettings input[type="text"] {
+.admin-table input[type="text"] {
     width:150px;
     height:24px;
 }
 
-#adminSettings .player-save {
+.admin-table .player-save {
     width: 300px!important;
     font-size: 12px;
 }
 
-#adminSettings input[type="checkbox"] {
-    width:19px;
-    height:24px;
+.admin-table input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
 }
 
-#adminSettings select {
+.admin-table select {
     width:150px;
     height:24px;
 }
@@ -192,4 +193,12 @@ canvas {
     margin-bottom: 1.625em;
     overflow: auto;
     padding: 0.75em 1.625em;
+}
+
+.logout-link {
+    display: inline;
+    position: relative;
+    float: right;
+    margin-right: 150px; /* form-me.png width */
+    z-index: 100;
 }

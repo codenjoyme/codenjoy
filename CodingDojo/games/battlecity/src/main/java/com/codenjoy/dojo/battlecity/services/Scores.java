@@ -30,15 +30,17 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> killYourTankPenalty;
-    private final Parameter<Integer> killOtherTankScore;
+    private final Parameter<Integer> killOtherHeroTankScore;
+    private final Parameter<Integer> killOtherAITankScore;
 
     private volatile int score;
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        killYourTankPenalty = settings.addEditBox("Kill your tank penalty").type(Integer.class).def(50);
-        killOtherTankScore = settings.addEditBox("Kill other tank score").type(Integer.class).def(100);
+        killYourTankPenalty = settings.addEditBox("Kill your tank penalty").type(Integer.class).def(0);
+        killOtherHeroTankScore = settings.addEditBox("Kill other hero tank score").type(Integer.class).def(50);
+        killOtherAITankScore = settings.addEditBox("Kill other AI tank score").type(Integer.class).def(25);
     }
 
     @Override
@@ -52,12 +54,18 @@ public class Scores implements PlayerScores {
     }
 
     @Override
-    public void event(Object event) {
-        if (event.equals(Events.KILL_YOUR_TANK)) {
+    public void event(Object object) {
+        if (!(object instanceof Events))
+            return;
+        Events event = (Events)object;
+        if (event.isKillYourTank()) {
             score -= killYourTankPenalty.getValue();
-        } else if (event.equals(Events.KILL_OTHER_TANK)) {
-            score += killOtherTankScore.getValue();
+        } else if (event.isKillOtherHeroTank()) {
+            score += killOtherHeroTankScore.getValue() * event.getAmount();
+        } else if (event.isKillOtherAITank()) {
+            score += killOtherAITankScore.getValue();
         }
+
         score = Math.max(0, score);
     }
 }

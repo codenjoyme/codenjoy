@@ -101,7 +101,7 @@ public class ReverseAddPalindromeAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 6;
+        return 45;
     }
 
     @Override

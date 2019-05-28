@@ -25,14 +25,10 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
-import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-@Component
 public class GameData {
+
+    public static final String EMPTY_JSON = "{}";
 
     private CrudConnectionThreadPool pool;
 
@@ -47,7 +43,7 @@ public class GameData {
     public String get(String gameType, String key) {
         return pool.select("SELECT value FROM game_settings WHERE game_type = ? AND key = ?;",
                 new Object[]{gameType, key},
-                rs -> rs.next() ? rs.getString("value") : null
+                rs -> rs.next() ? rs.getString("value") : EMPTY_JSON
         );
     }
 

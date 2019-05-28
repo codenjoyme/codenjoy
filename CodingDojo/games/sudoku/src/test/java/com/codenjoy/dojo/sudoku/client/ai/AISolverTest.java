@@ -146,9 +146,9 @@ public class AISolverTest {
         for (int i = 0; i < count; i++) {
             String actual = ai.get(board);
             if (actual.length() == 0) break;
-            int x = Integer.valueOf("" + actual.charAt(4));
-            int y = Integer.valueOf("" + actual.charAt(6));
-            int n = Integer.valueOf("" + actual.charAt(8));
+            int x = Integer.parseInt("" + actual.charAt(4));
+            int y = Integer.parseInt("" + actual.charAt(6));
+            int n = Integer.parseInt("" + actual.charAt(8));
             result.add(String.format("(%s:%s=%s)", x, y, n));
             board.set(x, y, n);
         }

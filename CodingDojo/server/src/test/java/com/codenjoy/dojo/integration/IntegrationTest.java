@@ -23,17 +23,29 @@ package com.codenjoy.dojo.integration;
  */
 
 
-import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
+import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.mail.MailService;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.MessagingException;
 import java.util.LinkedList;
@@ -42,46 +54,49 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class IntegrationTest {
-
-    private static PlayerService players;
-    private static TimerService timer;
-    private static SaveServiceImpl save;
-    private static GameServiceImpl game;
-    private static MailService mail;
     private static WebDriver driver;
-    private static SpringMockerJettyRunner runner;
-    private static PlayerGameSaver saver;
-    private static String url;
-    private static int port;
+    private String url;
 
-    @BeforeClass
-    public static void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", "/appcontext");
-        runner.spyBean("playerService");
-        runner.spyBean("mailService");
-        port = runner.start(new Random().nextInt(1000) + 10000);
+    @LocalServerPort
+    private int port;
 
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
 
-        url = runner.getUrl();
+    @SpyBean
+    private PlayerService playerService;
+
+    @SpyBean
+    private MailService mailService;
+
+    @Autowired
+    private TimerService timerService;
+
+    @Autowired
+    private SaveService saveService;
+
+    @Autowired
+    private PlayerGameSaver playerGameSaver;
+
+    @Before
+    public void setupJetty() throws Exception {
+        url = String.format("http://localhost:%s%s", port, contextPath);
+
         System.out.println(url);
-
-        players = runner.getBean(PlayerService.class, "playerService");
-        timer = runner.getBean(TimerService.class, "timerService");
-        save = runner.getBean(SaveServiceImpl.class, "saveService");
-        game = runner.getBean(GameServiceImpl.class, "gameService");
-        saver = runner.getBean(PlayerGameSaver.class, "playerGameSaver");
-        mail = runner.getBean(MailService.class, "mailService");
-        timer.pause();
+        timerService.pause();
 
         driver = new HtmlUnitDriver(true);
-        save.removeAllSaves();
-        players.removeAll();
+        saveService.removeAllSaves();
+        playerService.removeAll();
 
-        timer.resume();
+        timerService.resume();
     }
 
     @Test
@@ -119,7 +134,7 @@ public class IntegrationTest {
     }
 
     private String getEmail(String name) {
-        return name + Math.abs(new Random().nextInt()) + "@gmail.com";
+        return name + new Random().nextInt(Integer.MAX_VALUE) + "@gmail.com";
     }
 
     private void removeSaveAll(String saves) {
@@ -134,7 +149,7 @@ public class IntegrationTest {
     }
 
     private void assertPlayers(String names) {
-        List<Player> players = IntegrationTest.players.getAll();
+        List<Player> players = playerService.getAll();
         List<String> namesList = new LinkedList<String>();
         for (Player player : players) {
             namesList.add(player.getName());
@@ -144,14 +159,14 @@ public class IntegrationTest {
 
     private void saveAll(String saves) {
         driver.get(url + "admin");
-        save.removeAllSaves();
+        saveService.removeAllSaves();
         assertSaves("[]");
         driver.findElement(By.linkText("SaveAll")).click();
         assertSaves(saves);
     }
 
     private void assertSaves(String saves) {
-        assertEquals(saves, saver.getSavedList().toString());
+        assertEquals(saves, playerGameSaver.getSavedList().toString());
     }
 
     private void save(String saves) {
@@ -182,12 +197,12 @@ public class IntegrationTest {
 
     private String getActivationUrl(String name) throws MessagingException {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(mail).sendEmail(eq(name), eq("Codenjoy регистрация"), captor.capture());
+        verify(mailService).sendEmail(eq(name), eq("Codenjoy регистрация"), captor.capture());
         String message = captor.getValue();
         String str = "href=\"";
         int fromIndex = message.indexOf(str) + str.length();
         String activationUrl = message.substring(fromIndex, message.indexOf('"', fromIndex + 1));
-        activationUrl = activationUrl.replace("tetrisj.jvmhost.net:12270", "localhost:" + port);
+        activationUrl = activationUrl.replace("codenjoy.com:80", "localhost:" + port);
         return activationUrl;
     }
 

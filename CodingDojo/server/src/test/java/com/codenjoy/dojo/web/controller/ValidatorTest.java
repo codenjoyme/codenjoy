@@ -24,7 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +33,8 @@ import java.util.concurrent.Callable;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 import static junit.framework.TestCase.fail;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -127,78 +128,78 @@ public class ValidatorTest {
 
     @Test
     public void validateGameName() {
-        shouldError("Game name is invalid: 'null'",
-                () -> validator.checkGameName(null, CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'null'",
+                validator.checkGameName(null, CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName(null, CAN_BE_NULL));
+        assertTrue(validator.checkGameName(null, CAN_BE_NULL));
 
-        shouldError("Game name is invalid: ''",
-                () -> validator.checkGameName("", CANT_BE_NULL));
+        assertFalse("Game name is invalid: ''",
+                validator.checkGameName("", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("", CAN_BE_NULL));
+        assertTrue(validator.checkGameName("", CAN_BE_NULL));
 
-        shouldError("Game name is invalid: 'NuLL'",
-                () -> validator.checkGameName("NuLL", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'NuLL'",
+                validator.checkGameName("NuLL", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("NuLL", CAN_BE_NULL));
+        assertTrue(validator.checkGameName("NuLL", CAN_BE_NULL));
 
-        shouldError("Game name is invalid: 'null'",
-                () -> validator.checkGameName("null", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'null'",
+                validator.checkGameName("null", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("null", CAN_BE_NULL));
+        assertTrue(validator.checkGameName("null", CAN_BE_NULL));
 
-        shouldError("Game name is invalid: 'NULL'",
-                () -> validator.checkGameName("NULL", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'NULL'",
+                validator.checkGameName("NULL", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("NULL", CAN_BE_NULL));
+        assertTrue(validator.checkGameName("NULL", CAN_BE_NULL));
 
-        shouldError("Game name is invalid: '*F(@DF^@(&@DF(@^'",
-                () -> validator.checkGameName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
+        assertFalse("Game name is invalid: '*F(@DF^@(&@DF(@^'",
+                validator.checkGameName("*F(@DF^@(&@DF(@^", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
-                () -> validator.checkGameName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'",
+                validator.checkGameName("too large aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: '-game'",
-                () -> validator.checkGameName("-game", CANT_BE_NULL));
+        assertFalse("Game name is invalid: '-game'",
+                validator.checkGameName("-game", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: 'game-'",
-                () -> validator.checkGameName("game-", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'game-'",
+                validator.checkGameName("game-", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a-game", CANT_BE_NULL));
+        assertTrue(validator.checkGameName("a-game", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: '_game'",
-                () -> validator.checkGameName("_game", CANT_BE_NULL));
+        assertFalse("Game name is invalid: '_game'",
+                validator.checkGameName("_game", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: 'game_'",
-                () -> validator.checkGameName("game_", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'game_'",
+                validator.checkGameName("game_", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a_game", CANT_BE_NULL));
+        assertTrue(validator.checkGameName("a_game", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: '.game'",
-                () -> validator.checkGameName(".game", CANT_BE_NULL));
+        assertFalse("Game name is invalid: '.game'",
+                validator.checkGameName(".game", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: 'game.'",
-                () -> validator.checkGameName("game.", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'game.'",
+                validator.checkGameName("game.", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a.game", CANT_BE_NULL));
+        assertTrue(validator.checkGameName("a.game", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: '1'",
-                () -> validator.checkGameName("1", CANT_BE_NULL));
+        assertFalse("Game name is invalid: '1'",
+                validator.checkGameName("1", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a1", CANT_BE_NULL));
+        assertTrue(validator.checkGameName("a1", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("a1", CANT_BE_NULL));
+        assertTrue(validator.checkGameName("a1", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: '0'",
-                () -> validator.checkGameName("0", CAN_BE_NULL));
+        assertFalse("Game name is invalid: '0'",
+                validator.checkGameName("0", CAN_BE_NULL));
 
-        shouldError("Game name is invalid: '434589345613405760956134056340596345903465'",
-                () -> validator.checkGameName("434589345613405760956134056340596345903465", CANT_BE_NULL));
+        assertFalse("Game name is invalid: '434589345613405760956134056340596345903465'",
+                validator.checkGameName("434589345613405760956134056340596345903465", CANT_BE_NULL));
 
-        shouldOk(() -> validator.checkGameName("someGame", CANT_BE_NULL));
+        assertTrue(validator.checkGameName("someGame", CANT_BE_NULL));
 
-        shouldError("Game name is invalid: 'some@email.com'",
-                () -> validator.checkGameName("some@email.com", CANT_BE_NULL));
+        assertFalse("Game name is invalid: 'some@email.com'",
+                validator.checkGameName("some@email.com", CANT_BE_NULL));
     }
 
     @Test
@@ -426,59 +427,124 @@ public class ValidatorTest {
 
     @Test
     public void validateCheckReadablePlayerName() {
-        shouldOk(() -> validator.checkReadableName("Стивен Пупкин"));
+        assertTrue(validator.checkReadableName("Стивен Пупкин"));
 
-        shouldOk(() -> validator.checkReadableName("Oleksandr Baglay"));
+        assertTrue(validator.checkReadableName("Oleksandr Baglay"));
 
-        shouldOk(() -> validator.checkReadableName("Stiven Pupkin"));
+        assertTrue(validator.checkReadableName("Stiven Pupkin"));
 
-        shouldOk(() -> validator.checkReadableName("стивен пупкин"));
+        assertTrue(validator.checkReadableName("стивен пупкин"));
 
-        shouldOk(() -> validator.checkReadableName("stiven pupkin"));
+        assertTrue(validator.checkReadableName("stiven pupkin"));
 
-        shouldOk(() -> validator.checkReadableName("ABCDEFGHIJKLMNOPQRSTUVQXYZ abcdefghijklmnopqrstuvqxyz"));
+        assertTrue(validator.checkReadableName("ABCDEFGHIJKLMNOPQRSTUVQXYZ abcdefghijklmnopqrstuvqxyz"));
 
-        shouldOk(() -> validator.checkReadableName("abcdefghijklmnopqrstuvqxyz ABCDEFGHIJKLMNOPQRSTUVQXYZ"));
+        assertTrue(validator.checkReadableName("abcdefghijklmnopqrstuvqxyz ABCDEFGHIJKLMNOPQRSTUVQXYZ"));
 
-        shouldOk(() -> validator.checkReadableName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
+        assertTrue(validator.checkReadableName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
 
-        shouldOk(() -> validator.checkReadableName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
+        assertTrue(validator.checkReadableName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
 
-        shouldOk(() -> validator.checkReadableName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
+        assertTrue(validator.checkReadableName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
 
-        shouldOk(() -> validator.checkReadableName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
+        assertTrue(validator.checkReadableName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
 
-        shouldOk(() -> validator.checkReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
+        assertTrue(validator.checkReadableName("ҐґІіІіЄє ҐґІіІіЄє"));
 
-        shouldError("Readable player name is invalid: 'Стивен'",
-                () -> validator.checkReadableName("Стивен"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'Стивен'",
+                validator.checkReadableName("Стивен"));
 
-        shouldError("Readable player name is invalid: 'Я Д'Артаньян'",
-                () -> validator.checkReadableName("Я Д'Артаньян"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'Я Д'Артаньян'",
+                validator.checkReadableName("Я Д'Артаньян"));
 
-        shouldError("Readable player name is invalid: 'Дефис-нельзя'",
-                () -> validator.checkReadableName("Дефис-нельзя"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'Дефис-нельзя'",
+                validator.checkReadableName("Дефис-нельзя"));
 
-        shouldError("Readable player name is invalid: 'Двапробела  нельзя'",
-                () -> validator.checkReadableName("Двапробела  нельзя"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'Двапробела  нельзя'",
+                validator.checkReadableName("Двапробела  нельзя"));
 
-        shouldError("Readable player name is invalid: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
-                () -> validator.checkReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
+                validator.checkReadableName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
 
-        shouldError("Readable player name is invalid: 'email#&*^#gmail%#&^*com'",
-                () -> validator.checkReadableName("email#&*^#gmail%#&^*com"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'email#&*^#gmail%#&^*com'",
+                validator.checkReadableName("email#&*^#gmail%#&^*com"));
 
-        shouldError("Readable player name is invalid: 'null'",
-                () -> validator.checkReadableName(null));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'null'",
+                validator.checkReadableName(null));
 
-        shouldError("Readable player name is invalid: 'NuLL'",
-                () -> validator.checkReadableName("NuLL"));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'NuLL'",
+                validator.checkReadableName("NuLL"));
 
-        shouldError("Readable player name is invalid: ''",
-                () -> validator.checkReadableName(""));
+        assertFalse("Player name is invalid (should be 'Name Surname'): ''",
+                validator.checkReadableName(""));
 
-        shouldError("Readable player name is invalid: 'null'",
-                () -> validator.checkReadableName(null));
+        assertFalse("Player name is invalid (should be 'Name Surname'): 'null'",
+                validator.checkReadableName(null));
+    }
+
+    @Test
+    public void validateCheckNickName() {
+        assertTrue(validator.checkNickName("Стивен Пупкин"));
+
+        assertTrue(validator.checkNickName("Oleksandr Baglay"));
+
+        assertTrue(validator.checkNickName("Stiven Pupkin"));
+
+        assertTrue(validator.checkNickName("FuTuRamA"));
+
+        assertTrue(validator.checkNickName("BLIvl evLVe cyuw7 82fx"));
+
+        assertTrue(validator.checkNickName("123 444 56 7890 2231"));
+
+        assertTrue(validator.checkNickName("стивен пупкин"));
+
+        assertTrue(validator.checkNickName("stiven pupkin"));
+
+        assertTrue(validator.checkNickName("ABCDEFGHIJKLMNOP abcdefghijklmnop"));
+
+        assertTrue(validator.checkNickName("QRSTUVQXYZ qrstuvqxyz"));
+
+        assertTrue(validator.checkNickName("qrstuvqxyz QRSTUVQXYZ"));
+
+        assertTrue(validator.checkNickName("abcdefghijklmnop ABCDEFGHIJKLMNOP"));
+
+        assertTrue(validator.checkNickName("абвгдеёжзийклмо НПРСТУФХЧЦЬЫЪЭЮЯ"));
+
+        assertTrue(validator.checkNickName("нпрстуфхчцьыъэюя АБВГДЕЁЖЗИЙКЛМО"));
+
+        assertTrue(validator.checkNickName("АБВГДЕЁЖЗИЙКЛМО нпрстуфхчцьыъэюя"));
+
+        assertTrue(validator.checkNickName("НПРСТУФХЧЦЬЫЪЭЮЯ абвгдеёжзийклмо"));
+
+        assertTrue(validator.checkNickName("ҐґІіІіЄє ҐґІіІіЄє"));
+
+        assertTrue(validator.checkNickName("Стивен"));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'Я Д'Артаньян'",
+                validator.checkNickName("Я Д'Артаньян"));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'Дефис-нельзя'",
+                validator.checkNickName("Дефис-нельзя"));
+
+        assertTrue(validator.checkNickName("Двапробела  нельзя"));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa'",
+                validator.checkNickName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaa"));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'email#&*^#gmail%#&^*com'",
+                validator.checkNickName("email#&*^#gmail%#&^*com"));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'null'",
+                validator.checkNickName(null));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'NuLL'",
+                validator.checkNickName("NuLL"));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): ''",
+                validator.checkNickName(""));
+
+        assertFalse("Player name is invalid (should be 'Name Surname' or 'niCKnAMe'): 'null'",
+                validator.checkNickName(null));
     }
 
     private void shouldOk(Runnable toRun) {

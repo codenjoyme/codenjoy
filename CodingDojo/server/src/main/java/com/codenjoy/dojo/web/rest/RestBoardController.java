@@ -32,13 +32,9 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
 import java.util.*;
@@ -46,36 +42,34 @@ import java.util.*;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
-@Controller
+@RestController
 @RequestMapping(value = "/rest")
+@RequiredArgsConstructor
 public class RestBoardController {
 
-    @Autowired private GameService gameService;
-    @Autowired private RestRegistrationController registrationController;
-    @Autowired private PlayerService playerService;
-    @Autowired private Registration registration;
-    @Autowired private ServletContext servletContext;
-    @Autowired private Validator validator;
-    @Autowired private PlayerGames playerGames;
-    @Autowired private PlayerGamesView playerGamesView;
-    @Autowired private TimerService timerService;
-    @Autowired private SaveService saveService;
-    @Autowired private ActionLogger actionLogger;
+    private final GameService gameService;
+    private final RestRegistrationController registrationController;
+    private final PlayerService playerService;
+    private final Registration registration;
+    private final ServletContext servletContext;
+    private final Validator validator;
+    private final PlayerGames playerGames;
+    private final PlayerGamesView playerGamesView;
+    private final TimerService timerService;
+    private final SaveService saveService;
+    private final ActionLogger actionLogger;
 
 //    @RequestMapping(value = "/sprites", method = RequestMethod.GET)
-//    @ResponseBody
     public Map<String, List<String>> getAllSprites() {
         return gameService.getSprites();
     }
 
 //    @RequestMapping(value = "/sprites/{gameName}/exists", method = RequestMethod.GET)
-//    @ResponseBody
     public boolean isGraphicOrTextGame(@PathVariable("gameName") String gameName) {
         return !getSpritesForGame(gameName).isEmpty();
     }
 
 //    @RequestMapping(value = "/sprites/{gameName}", method = RequestMethod.GET)
-//    @ResponseBody
     public List<String> getSpritesForGame(@PathVariable("gameName") String gameName) {
         if (StringUtils.isEmpty(gameName)) {
             return new ArrayList<>();
@@ -84,13 +78,11 @@ public class RestBoardController {
     }
 
 //    @RequestMapping(value = "/sprites/alphabet", method = RequestMethod.GET)
-//    @ResponseBody
     public String getSpritesAlphabet() {
         return String.valueOf(GuiPlotColorDecoder.GUI.toCharArray());
     }
 
 //    @RequestMapping(value = "/context", method = RequestMethod.GET)
-//    @ResponseBody
     public String getContext() {
         String contextPath = servletContext.getContextPath();
         if (contextPath.charAt(contextPath.length() - 1) == '/') {
@@ -100,7 +92,6 @@ public class RestBoardController {
     }
 
 //    @RequestMapping(value = "/game/{gameName}/type", method = RequestMethod.GET)
-//    @ResponseBody
     public GameTypeInfo getGameType(@PathVariable("gameName") String gameName) {
         if (StringUtils.isEmpty(gameName)) {
             return new GameTypeInfo(NullGameType.INSTANCE);
@@ -110,8 +101,7 @@ public class RestBoardController {
         return new GameTypeInfo(game);
     }
 
-//    @RequestMapping(value = "/player/{player}/{code}/level/{level}", method = RequestMethod.GET)
-//    @ResponseBody
+    @RequestMapping(value = "/player/{player}/{code}/level/{level}", method = RequestMethod.GET)
     public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
                                 @PathVariable("code") String code,
                                 @PathVariable("level") int level)
@@ -125,7 +115,6 @@ public class RestBoardController {
 
     // TODO test me и вообще где это надо?
 //    @RequestMapping(value = "/player/all/groups", method = RequestMethod.GET)
-//    @ResponseBody
     public Map<String, List<List<String>>> getPlayersGroups() {
         Map<String, List<List<String>>> result = new HashMap<>();
         List<Player> players = playerService.getAll();
@@ -147,13 +136,11 @@ public class RestBoardController {
     }
 
 //    @RequestMapping(value = "/player/all/scores", method = RequestMethod.GET)
-//    @ResponseBody
     public Map<String, Object> getPlayersScores() {
         return playerGamesView.getScores();
     }
 
 //    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)
-//    @ResponseBody
     public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword) {
         validator.checkIsAdmin(adminPassword);
 
@@ -163,7 +150,6 @@ public class RestBoardController {
     }
 
 //    @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
-//    @ResponseBody
     public boolean startStopGame(@PathVariable("adminPassword") String adminPassword,
                                   @PathVariable("enabled") boolean enabled)
     {
@@ -180,7 +166,6 @@ public class RestBoardController {
 
     // TODO test me
 //    @RequestMapping(value = "/player/{player}/{code}/reset", method = RequestMethod.GET)
-//    @ResponseBody
     public synchronized boolean reset(@PathVariable("player") String emailOrId, @PathVariable("code") String code){
         String id = validator.checkPlayerCode(emailOrId, code);
 
@@ -204,7 +189,6 @@ public class RestBoardController {
 
     // TODO test me
     @RequestMapping(value = "/player/{player}/{code}/wantsToPlay/{gameName}", method = RequestMethod.GET)
-    @ResponseBody
     public synchronized PPlayerWantsToPlay playerWantsToPlay(
             @PathVariable("player") String emailOrId,
             @PathVariable("code") String code,
@@ -227,7 +211,6 @@ public class RestBoardController {
 
     // TOOD test me
     @RequestMapping(value = "/player/{player}/log/{time}", method = RequestMethod.GET)
-    @ResponseBody
     public List<BoardLog> changeLevel(@PathVariable("player") String emailOrId,
                                             @PathVariable("time") Long time)
     {
@@ -254,5 +237,10 @@ public class RestBoardController {
         });
 
         return result;
+    }
+
+    @GetMapping("/{gameName}/status")
+    public Map<String, Object> checkGameIsActive(@PathVariable("gameName") String gameName) {
+        return Collections.singletonMap("active", playerGames.getPlayers(gameName).size() > 0);
     }
 }

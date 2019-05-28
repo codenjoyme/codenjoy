@@ -1,0 +1,35 @@
+server:
+  servlet:
+    context-path: ${context:/codenjoy-balancer}
+
+mvc:
+  cache-period: 259200
+
+log:
+  debug: false
+admin:
+  login: admin
+  password: admin
+email:
+  hash: secureSoul
+score:
+  update:
+    time: 10000
+sender:
+    pool.size: 100
+dispatcher:
+  url:
+    create: "http://%s/codenjoy-contest/rest/player/create/%s"
+    remove: "http://%s/codenjoy-contest/rest/player/%s/remove/%s"
+    get: "http://%s/codenjoy-contest/rest/game/%s/players"
+    clear: "http://%s/codenjoy-contest/rest/scores/clear/%s"
+    exists: "http://%s/codenjoy-contest/rest/player/%s/exists"
+    enabled: "http://%s/codenjoy-contest/rest/game/enabled/%s/%s"
+game:
+  type: bomberman
+  servers: localhost:8080
+  room: 10
+  start.day: "2019-01-28"
+  end.day: "2019-02-13"
+  finalists.count: 10
+  final.time: "19:00"

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -98,9 +98,14 @@ public class ActionLoggerTest {
     private void addPlayer(PlayerGames playerGames, String board, int value, String name, String gameName) {
         PlayerScores score = getScore(value);
         Player player = new Player(name, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null);
+        player.setEventListener(mock(InformationCollector.class));
 
         TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player,
-                inv -> mock(GameField.class),
+                inv -> {
+                    GameField field = mock(GameField.class);
+                    when(field.reader()).thenReturn(mock(BoardReader.class));
+                    return field;
+                },
                 MultiplayerType.SINGLE,
                 null,
                 parameters -> board);

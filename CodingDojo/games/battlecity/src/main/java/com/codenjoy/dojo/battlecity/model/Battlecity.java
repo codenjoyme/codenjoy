@@ -53,13 +53,20 @@ public class Battlecity implements Field {
         aiCount = aiTanks.length;
         this.dice = dice;
         this.size = size;
-        this.aiTanks = new LinkedList<Tank>();
-        this.constructions = new LinkedList<Construction>(constructions);
-        this.borders = new LinkedList<Border>(borders);
+        this.aiTanks = new LinkedList<>();
+        this.constructions = new LinkedList<>(constructions);
+        this.borders = new LinkedList<>(borders);
 
         for (Tank tank : aiTanks) {
             addAI(tank);
         }
+    }
+
+    @Override
+    public void clearScore() {
+        players.forEach(Player::reset);
+        constructions.forEach(Construction::reset);
+        getTanks().forEach(Tank::reset);
     }
 
     @Override
@@ -68,7 +75,9 @@ public class Battlecity implements Field {
 
         newAI();
 
-        for (Tank tank : getTanks()) {
+        List<Tank> tanks = getTanks();
+
+        for (Tank tank : tanks) {
             tank.tick();
         }
 
@@ -78,7 +87,13 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Tank tank : getTanks()) {
+        for (Tank tank : tanks) {
+            if (tank.isAlive()) {
+                tank.fire();
+            }
+        }
+
+        for (Tank tank : tanks) {
             if (tank.isAlive()) {
                 tank.move();
 
@@ -95,7 +110,7 @@ public class Battlecity implements Field {
         }
 
         for (Construction construction : constructions) {
-            if (!getTanks().contains(construction) && !getBullets().contains(construction)) {
+            if (!tanks.contains(construction) && !getBullets().contains(construction)) {
                 construction.tick();
             }
         }
@@ -104,12 +119,11 @@ public class Battlecity implements Field {
     private void newAI() {
         for (int count = aiTanks.size(); count < aiCount; count++) {
             int y = size - 2;
-            int x = 0;
+            int x;
             int c = 0;
             do {
                 x = dice.next(size);
-                c++;
-            } while (isBarrier(x, y) & c < size);
+            } while (isBarrier(x, y) && c++ < size);
 
             if (!isBarrier(x, y)) {
                 addAI(new AITank(x, y, dice, Direction.DOWN));
@@ -183,7 +197,8 @@ public class Battlecity implements Field {
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
         Player died = null;
-        if (!aiTanks.contains(diedTank)) {
+        boolean aiDied = aiTanks.contains(diedTank);
+        if (!aiDied) {
              died = getPlayer(diedTank);
         }
 
@@ -194,7 +209,12 @@ public class Battlecity implements Field {
         }
 
         if (killer != null) {
-            killer.event(Events.KILL_OTHER_TANK);
+            if (aiDied) {
+                killer.event(Events.KILL_OTHER_AI_TANK);
+            } else {
+                killer.killHero();
+                killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
+            }
         }
         if (died != null) {
             died.event(Events.KILL_YOUR_TANK);
@@ -236,9 +256,8 @@ public class Battlecity implements Field {
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 
-    @Override
-    public List<Bullet> getBullets() {
-        List<Bullet> result = new LinkedList<Bullet>();
+    private List<Bullet> getBullets() {
+        List<Bullet> result = new LinkedList<>();
         for (Tank tank : getTanks()) {
             for (Bullet bullet : tank.getBullets()) {
                 result.add(bullet);
@@ -249,7 +268,7 @@ public class Battlecity implements Field {
 
     @Override
     public List<Tank> getTanks() {
-        LinkedList<Tank> result = new LinkedList<Tank>(aiTanks);
+        LinkedList<Tank> result = new LinkedList<>(aiTanks);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
                 result.add(player.getHero());
@@ -264,7 +283,7 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public void newGame(Player player) {  // TODO test me
+    public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
         }
@@ -300,7 +319,7 @@ public class Battlecity implements Field {
 
     @Override
     public List<Construction> getConstructions() {
-        List<Construction> result = new LinkedList<Construction>();
+        List<Construction> result = new LinkedList<>();
         for (Construction construction : constructions) {
             if (!construction.destroyed()) {
                 result.add(construction);

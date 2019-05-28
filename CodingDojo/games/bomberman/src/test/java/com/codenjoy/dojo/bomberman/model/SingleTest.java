@@ -37,7 +37,7 @@ import static com.codenjoy.dojo.bomberman.model.BombermanTest.DestroyWallAt;
 import static com.codenjoy.dojo.bomberman.model.BombermanTest.MeatChopperAt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class SingleTest {

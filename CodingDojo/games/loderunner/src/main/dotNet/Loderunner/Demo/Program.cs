@@ -26,18 +26,21 @@ namespace Demo
 {
     class Program
     {
+        // you can get this URL after registration on the server with your email
+        static string ServerUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
+
         static void Main(string[] args)
         {
-            // creating custom loderunner's Ai client
-            var bot = new MyCustomLoderunnerAI("ApiDotNet");
+            // creating custom AI client
+            var bot = new MyCustomLoderunnerAI(ServerUrl);
             
-            // starting thread with playing loderunner
+            // starting thread with playing game
             (new Thread(bot.Play)).Start();
             
-            // waiting for "anykey"
+            // waiting for any key
             Console.ReadKey();
 
-            // on "anykey" - asking loderunner's Ai client to stop. 
+            // on any key - asking AI client to stop.
             bot.InitiateExit();
         }
     }

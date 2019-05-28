@@ -25,16 +25,11 @@ package com.codenjoy.dojo.client.highload;
 
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.UrlParser;
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.api.Session;
-import org.eclipse.jetty.websocket.api.annotations.*;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class WebSocketClient implements Closeable {

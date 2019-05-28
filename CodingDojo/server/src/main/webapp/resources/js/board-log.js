@@ -29,6 +29,7 @@ pages.boardLog = function() {
     game.enablePlayerInfo = false;
     game.enablePlayerInfoLevel = false;
     game.enableLeadersTable = false;
+    game.enableForkMe = false;
     game.enableInfo = false;
     game.enableHotkeys = true;
     game.enableAdvertisement = false;
@@ -38,6 +39,7 @@ pages.boardLog = function() {
 
     game.gameName = getSettings('gameName');
     game.playerName = getSettings('playerName');
+    game.readableName = getSettings('readableName');
     game.contextPath = getSettings('contextPath');
     game.code = null;
     game.allPlayersScreen = false;

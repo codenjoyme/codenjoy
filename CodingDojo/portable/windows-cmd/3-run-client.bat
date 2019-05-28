@@ -23,8 +23,8 @@ Set SELECTED_GAME=%ROOT%\client\%GAME_TO_RUN%-servers
 
 if exist %SELECTED_GAME% (
 	cd %SELECTED_GAME%
-	call %M2_HOME%\bin\mvn clean install -DskipTests=%SKIP_TESTS%
-	call %M2_HOME%\bin\mvn exec:java -D"exec.mainClass"="com.codenjoy.dojo.%GAME_TO_RUN%.client.YourSolver"
+	call mvnw clean install -DskipTests=%SKIP_TESTS%
+	call mvnw exec:java -D"exec.mainClass"="com.codenjoy.dojo.%GAME_TO_RUN%.client.YourSolver"
 )
 
 if not exist %SELECTED_GAME% (

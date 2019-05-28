@@ -26,10 +26,10 @@ package com.codenjoy.dojo.utils;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 
 public class TestUtils {
 

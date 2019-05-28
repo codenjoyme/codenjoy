@@ -152,7 +152,7 @@ public class ScoresTest {
         minesweeperWin();    // +300
 
         Integer score = parameters.getParameter("Win score").type(Integer.class).getValue();
-        assertEquals(score.intValue(), scores.getScore());
+        assertEquals(score, scores.getScore());
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ScoresTest {
         minesweeperClearBoard();    // +1
 
         Integer score = parameters.getParameter("Clear board score").type(Integer.class).getValue();
-        assertEquals(score.intValue(), scores.getScore());
+        assertEquals(score, scores.getScore());
 
     }
 

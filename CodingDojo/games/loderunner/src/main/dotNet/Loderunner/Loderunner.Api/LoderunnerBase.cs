@@ -20,21 +20,23 @@
  * #L%
  */
 using System;
+using System.Linq;
+using System.Threading;
+using System.Web;
 using WebSocketSharp;
 
 namespace Loderunner.Api
 {
     public abstract class LoderunnerBase
     {
-        protected readonly string Server = @"ws://loderunner.luxoft.com:8080/codenjoy-contest/ws";
         private const string ResponsePrefix = "board=";
 
-        public LoderunnerBase(string userName)
+        protected LoderunnerBase(string serverUrl)
         {
-            UserName = userName;
+            ServerUrl = serverUrl;
         }
 
-        public string UserName { get; private set; }
+        public string ServerUrl { get; private set; }
 
         /// <summary>
         /// Set this property to true to finish playing
@@ -43,13 +45,36 @@ namespace Loderunner.Api
 
         public void Play()
         {
-            var socket = new WebSocket(Server + "?user=" + UserName);
+            string url = GetWebSocketUrl(this.ServerUrl);
+
+            var socket = new WebSocket(url);
+
             socket.OnMessage += Socket_OnMessage;
             socket.Connect();
 
             while (!ShouldExit && socket.ReadyState != WebSocketState.Closed)
             {
+                Thread.Sleep(50);
             }
+        }
+
+        private static string GetWebSocketUrl(string serverUrl)
+        {
+            Uri uri = new Uri(serverUrl);
+
+            var server = $"{uri.Host}:{uri.Port}";
+            var userName = uri.Segments.Last();
+            var code = HttpUtility.ParseQueryString(uri.Query).Get("code");
+
+            return GetWebSocketUrl(userName, code, server);
+        }
+
+        private static string GetWebSocketUrl(string userName, string code, string server)
+        {
+            return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
+                server,
+                Uri.EscapeDataString(userName),
+                code);
         }
 
         private void Socket_OnMessage(object sender, MessageEventArgs e)

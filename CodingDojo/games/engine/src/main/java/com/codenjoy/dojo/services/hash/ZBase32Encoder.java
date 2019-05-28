@@ -22,7 +22,7 @@ package com.codenjoy.dojo.services.hash;
  * #L%
  */
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Портировано с https://github.com/denxc/ZBase32Encoder/blob/master/ZBase32Encoder/ZBase32Encoder/ZBase32Encoder.cs
@@ -57,7 +57,7 @@ public class ZBase32Encoder {
 
             long buffer = 0;
             for (int j = 0; j < byteCount; ++j) {
-                buffer = (buffer << 8) | data[i + j];
+                buffer = ((buffer << 8) | (data[i + j] & 0xff));
             }
 
             int bitCount = byteCount * 8;

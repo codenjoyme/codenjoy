@@ -59,8 +59,7 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
         close();
 
         File file = new File(databaseFile);
-        file.delete();
-        if (file.exists()) {
+        if (!file.delete()) {
             throw new RuntimeException("Cant remove DB " + file.getAbsolutePath());
         }
     }

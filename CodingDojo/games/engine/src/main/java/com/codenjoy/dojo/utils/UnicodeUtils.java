@@ -23,15 +23,7 @@ package com.codenjoy.dojo.utils;
  */
 
 
-import com.cedarsoftware.util.io.JsonWriter;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.json.JSONArray;
-import org.json.SortedJSONArray;
-import org.json.SortedJSONObject;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Created by indigo on 2017-03-04.

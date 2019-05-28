@@ -55,6 +55,7 @@ public class Validator {
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
     public static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
     public static final String READABLE_NAME_CYR = "^[А-Яа-яЁёҐґІіІіЄє]{1,50}$";
+    public static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
@@ -63,6 +64,7 @@ public class Validator {
     private final Pattern id;
     private final Pattern readableNameLat;
     private final Pattern readableNameCyr;
+    private final Pattern nickName;
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
@@ -72,6 +74,7 @@ public class Validator {
         id = Pattern.compile(ID);
         readableNameLat = Pattern.compile(READABLE_NAME_LAT);
         readableNameCyr = Pattern.compile(READABLE_NAME_CYR);
+        nickName = Pattern.compile(NICK_NAME);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
@@ -84,11 +87,21 @@ public class Validator {
         }
     }
 
-    public void checkReadableName(String input) {
+    public boolean checkReadableName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !isFullName(input)) {
-            throw new IllegalArgumentException(String.format("Readable player name is invalid: '%s'", input));
+            return false;
         }
+        return true;
+    }
+
+    public boolean checkNickName(String input) {
+        boolean empty = isEmpty(input);
+        if (empty || !nickName.matcher(input).matches()) {
+            return false;
+        }
+
+        return true;
     }
 
     private boolean isFullName(String input) {
@@ -122,6 +135,15 @@ public class Validator {
         }
     }
 
+    // TODO test me
+    public boolean checkEmail(String input, boolean canBeNull) {
+        boolean empty = isEmpty(input);
+        if (!(empty && canBeNull || !empty && isEmail(input))) {
+            return false;
+        }
+        return true;
+    }
+
     private boolean isEmail(String input) {
         return input != null
                 && input.length() <= MAX_PLAYER_ID_LENGTH
@@ -141,13 +163,12 @@ public class Validator {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
-    public void checkGameName(String input, boolean canBeNull) {
+    public boolean checkGameName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
-        if (!(empty && canBeNull ||
-                !empty && gameName.matcher(input).matches()))
-        {
-            throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
+        if (!(empty && canBeNull || !empty && gameName.matcher(input).matches())) {
+            return false;
         }
+        return true;
     }
 
     public void checkMD5(String input) {

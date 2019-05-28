@@ -58,7 +58,7 @@ public class FibonacciNumbersAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 5;
+        return 20;
     }
 
     @Override

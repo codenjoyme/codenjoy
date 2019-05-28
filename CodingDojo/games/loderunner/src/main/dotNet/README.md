@@ -5,8 +5,8 @@ Loderunner .Net client
 - Open Loderunner.sln in VS2010.
 - Open file "Program.cs" from "Demo" project.
 - Find line, it looks like:
-       var bot = new MyCustomAI("ApiDotNet");
-- Replace "ApiDotNet" with your name, you got on step #1
+       static string ServerUrl = "http:// ...
+- Replace the URL with the one copied from the browser
 - Now you can run Demo :)
 - All "game logic" is in the class "MyCustomLoderunnerAI" in method "DoMove()"
 

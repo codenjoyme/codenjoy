@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -33,19 +34,20 @@ import org.springframework.stereotype.Component;
  * Единственное место, где конфигурится *.properties - applicationContext.xml
  */
 @Component
+@Getter
 public class ConfigProperties {
 
     @Value("${email.verification}")
     private boolean isEmailVerificationNeeded;
 
-    @Value("${page.registration}")
-    private String registrationPage;
-
-    @Value("${page.main}")
+    @Value("${page.main.url}")
     private String mainPage;
 
+    @Value("${page.admin.url}")
+    private String adminPage;
+
     @Value("${page.help.language}")
-    private String language;
+    private String helpLanguage;
 
     @Value("${donate.code}")
     private String donateCode;
@@ -56,31 +58,17 @@ public class ConfigProperties {
     @Value("${admin.password}")
     private String adminPassword;
 
+    @Value("${server.ip}")
+    private String serverIp;
+
+    @Value("${page.registration.nickname}")
+    private boolean isNickNameAllowed;
+
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
     }
 
-    public String getRegistrationPage() {
-        return registrationPage;
-    }
-
-    public String getMainPage() {
-        return mainPage;
-    }
-
-    public String getHelpLanguage() {
-        return language;
-    }
-
-    public String getDonateCode() {
-        return donateCode;
-    }
-
-    public String getEmailHash() {
-        return emailHash;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
+    public boolean isNickNameAllowed() {
+        return isNickNameAllowed;
     }
 }

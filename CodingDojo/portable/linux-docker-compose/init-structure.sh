@@ -11,11 +11,19 @@ echo "==================================================== Init structure ======
 echo "========================================================================================================================[0m"
 
 if [ "x$BASIC_AUTH_LOGIN" = "x" ]; then
-    BASIC_AUTH_LOGIN=codenjoy
+    . config.sh ;
 fi
 
 if [ "x$BASIC_AUTH_PASSWORD" = "x" ]; then
-    BASIC_AUTH_PASSWORD=codenjoy
+    . config.sh ;
+fi
+
+if [ "x$TIMEZONE" = "x" ]; then
+    . config.sh ;
+fi
+
+if [ "x$DATABASE_TYPE" = "x" ]; then
+    . config.sh ;
 fi
 
 eval_echo() {
@@ -27,10 +35,8 @@ eval_echo() {
     eval $to_run
 }
 
-eval_echo "ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
+eval_echo "unlink /etc/localtime & ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime"
 sudo dpkg-reconfigure -f noninteractive tzdata
-
-JETTY_UID=999
 
 # for nginx
 generate_htpasswd() {
@@ -49,22 +55,19 @@ eval_echo "chown root:root ./config/nginx/*"
 ls -la ./config/nginx
 
 # database
-eval_echo "mkdir -p ./materials/database"
-if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
-    eval_echo "chown root:root ./materials/database"
-else
-    eval_echo "chown $JETTY_UID:$JETTY_UID ./materials/database"
-fi
-ls -la ./materials/database
+eval_echo "mkdir -p ./materials/codenjoy/database"
+eval_echo "chown root:root ./materials/codenjoy/database"
+ls -la ./materials/codenjoy/database
 
 # for codenjoy_balancer / codenjoy_contest
 eval_echo "mkdir -p ./config/codenjoy"
-eval_echo "chown $JETTY_UID:$JETTY_UID ./config/codenjoy"
+eval_echo "chown root:root ./config/codenjoy"
 ls -la ./config/codenjoy
 
 eval_echo "mkdir -p ./logs/codenjoy"
-eval_echo "touch ./logs/codenjoy/codenjoy-balancer.log"
-eval_echo "touch ./logs/codenjoy/codenjoy-contest.log"
-eval_echo "chown $JETTY_UID:$JETTY_UID ./logs/codenjoy/codenjoy-balancer.log"
-eval_echo "chown $JETTY_UID:$JETTY_UID ./logs/codenjoy/codenjoy-contest.log"
+# TODO uncomment when fix
+# eval_echo "touch ./logs/codenjoy/codenjoy-balancer.log"
+# eval_echo "touch ./logs/codenjoy/codenjoy-contest.log"
+# eval_echo "chown root:root ./logs/codenjoy/codenjoy-balancer.log"
+# eval_echo "chown root:root ./logs/codenjoy/codenjoy-contest.log"
 ls -la ./logs/codenjoy

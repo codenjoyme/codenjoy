@@ -62,7 +62,7 @@ public class PrimeFactoryAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 10;
+        return 25;
     }
 
     @Override

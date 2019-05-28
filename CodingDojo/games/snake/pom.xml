@@ -7,13 +7,15 @@
     <parent>
         <groupId>com.codenjoy</groupId>
         <artifactId>games</artifactId>
-        <version>1.0.27</version>
+        <version>1.1.0</version>
     </parent>
 
     <artifactId>${module.name}-engine</artifactId>
 
     <properties>
         <module.name>snake</module.name>
+        <scala.version>2.12.7</scala.version>
+        <maven-scala-plugin.version>2.15.2</maven-scala-plugin.version>
     </properties>
 
     <repositories>
@@ -29,12 +31,12 @@
             <artifactId>engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+           <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -43,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -55,6 +57,12 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-reflect</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
         </dependency>
     </dependencies>
 
@@ -79,6 +87,25 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>${maven-scala-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <args>
+                        <arg>-g:line</arg>
+                    </args>
+                </configuration>
             </plugin>
         </plugins>
     </build>

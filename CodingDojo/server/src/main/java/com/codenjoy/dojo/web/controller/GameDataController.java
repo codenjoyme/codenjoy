@@ -24,36 +24,28 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.dao.GameData;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 
 @Controller
+@RequestMapping(GameDataController.URI)
+@RequiredArgsConstructor
 public class GameDataController {
 
-    @Autowired private GameData gameData;
+    public static final String URI = "/settings";
 
-    public GameDataController() {
-    }
+    private final GameData gameData;
 
-    //for unit test
-    GameDataController(GameData gameData) {
-        this.gameData = gameData;
-    }
-
-    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.GET)
+    @GetMapping("/{gameType}/{key}")
     public @ResponseBody String get(@PathVariable("gameType") String gameType, @PathVariable("key") String key) {
         return gameData.get(gameType, key);
     }
 
-    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.POST)
+    @PostMapping("/{gameType}/{key}")
     public @ResponseBody String set(@PathVariable("gameType") String gameType, @PathVariable("key") String key, @RequestBody String value) {
         try {
             gameData.set(gameType, key, URLDecoder.decode(value, "UTF-8"));

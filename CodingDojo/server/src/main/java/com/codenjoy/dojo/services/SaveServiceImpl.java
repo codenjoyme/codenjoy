@@ -41,11 +41,12 @@ public class SaveServiceImpl implements SaveService {
     @Autowired protected ConfigProperties config;
 
     @Override
-    public void saveAll() {
+    public long saveAll() {
         long now = System.currentTimeMillis();
         for (PlayerGame playerGame : playerGames) {
             saveGame(playerGame, now);
         }
+        return now;
     }
 
     @Override
@@ -56,12 +57,14 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public void save(String name) {
+    public long save(String name) {
         PlayerGame playerGame = playerGames.get(name);
         if (playerGame != NullPlayerGame.INSTANCE) {
             long now = System.currentTimeMillis();
             saveGame(playerGame, now);
+            return now;
         }
+        return -1;
     }
 
     private void saveGame(PlayerGame playerGame, long time) {
@@ -103,9 +106,9 @@ public class SaveServiceImpl implements SaveService {
         List<Player> active = playerService.getAll();
         for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player);
-            info.setCode(registration.getCode(player.getName()));
+            info.setCode(registration.getCodeById(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
-            info.setReadableName(registration.getReadableName(player.getName()));
+            info.setReadableName(registration.getNameById(player.getName()));
             info.setAIPlayer(player.hasAI());
 
             copySave(player, info);
@@ -122,7 +125,7 @@ public class SaveServiceImpl implements SaveService {
                 info.setSaved(true);
             } else {
                 PlayerSave save = saver.loadGame(name);
-                String code = registration.getCode(name);
+                String code = registration.getCodeById(name);
                 map.put(name, new PlayerInfo(name, code, save.getCallbackUrl(), save.getGameName(), true));
             }
         }

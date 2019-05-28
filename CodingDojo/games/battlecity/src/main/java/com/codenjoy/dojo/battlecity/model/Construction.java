@@ -34,7 +34,7 @@ public class Construction extends PointImpl implements Tickable, State<Elements,
 
     public Construction(int x, int y) {
         super(x, y);
-        ch = Elements.CONSTRUCTION;
+        reset();
     }
 
     public Construction(Point xy) {
@@ -94,11 +94,15 @@ public class Construction extends PointImpl implements Tickable, State<Elements,
     public void tick() {
         if (timer == REGENERATE_TIME) {
             timer = 0;
-            ch = Elements.CONSTRUCTION;
+            reset();
         }
         if (destroyed()) {
             timer++;
         }
+    }
+
+    public void reset() {
+        ch = Elements.CONSTRUCTION;
     }
 
     public boolean destroyed() {

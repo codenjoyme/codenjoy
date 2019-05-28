@@ -62,13 +62,13 @@ public class UrlParser {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Please set url in format " +
                     "'http://codenjoyDomainOrIP:8080/codenjoy-contest/" +
-                    "board/player/your@email.com?code=12345678901234567890'",
+                    "board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890'",
                     e);
         }
     }
 
     private IllegalArgumentException badUrl() {
-        return new IllegalArgumentException("Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        return new IllegalArgumentException("Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/playerid?code=12345678901234567890");
     }
 
     private String portPart(int port) {

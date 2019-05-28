@@ -35,10 +35,16 @@ public class Player extends GamePlayer<Tank, Field> {
 
     private Tank hero;
     private Dice dice;
+    private int killed;
 
     public Player(EventListener listener, Dice dice) {
         super(listener);
         this.dice = dice;
+        reset();
+    }
+
+    public void reset() {
+        killed = 0;
     }
 
     public Tank getHero() {
@@ -51,16 +57,29 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void event(Events event) {
-        switch (event) {
-            case KILL_YOUR_TANK:  hero.kill(null); break;
+        if (event.isKillYourTank()) {
+            hero.kill(null);
         }
 
         super.event(event);
+    }
+
+    public int killHero() {
+        return killed++;
     }
 
     public void newHero(Field field) {
         hero = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
         hero.removeBullets();
         hero.init(field);
+        reset();
+    }
+
+    public int score() {
+        return killed;
+    }
+
+    void setKilled(int killed) {
+        this.killed = killed;
     }
 }

@@ -1,0 +1,61 @@
+server:
+  servlet.context-path: ${context:/codenjoy-contest}
+  ip: 127.0.0.1
+
+rest-sender:
+  pool-size: 100
+
+mvc:
+  cache-period: 259200
+  screen-servlet-path: /screen-ws/*
+  control-servlet-path: /ws/*
+
+
+game:
+  save.auto: true
+  ai: true
+board.save.ticks: 1
+log.debug: false
+registration:
+    nickname:
+      allowed: false
+    pasword:
+      min-length: 8
+      autogen-length: 8
+page:
+  main:
+    url: ''
+  registration:
+    nickname: true
+  admin:
+    url: ''
+  help.language: ''
+email:
+  verification: false
+  password: ''
+  name: info@codenjoy.com
+  hash: secureSoul
+donate.code:
+database:
+  url: ''
+  name: ''
+  user: ''
+  password: ''
+admin:
+  login: admin@codenjoyme.com
+  password: admin
+
+app:
+  logging:
+    - com.epam.dojo
+    - com.codenjoy
+
+logging:
+  level:
+    root: info
+    com:
+      codenjoy: info
+      epam.dojo: info
+    org:
+      eclipse.jetty: info
+      springframework.mvc: info

@@ -1,0 +1,1237 @@
+Сделано:
+
+Модуль "server" переведен с war деплоймента Jetty на spring-boot 2 с embedded Jetty контейнером
+Добавлена поддержка spring-security (TODO: регистрация пользователей через него же)
+Переключение БД (sqlite/postgres) переведено на spring profiles
+Интеграционные тесты также переведены на спринт бут
+Добавлен 'debug' spring profile, подключающий не-минифицированный all.js для удобства отладки фронта
+Местами добавлена поддержа project lombok, просто для удобства. Может потребовать установки доп. плагина в IDE разработки. В случае с Intellij IDEA это lombok plugin
+P.S.: spring-boot 2 - чтобы было приятнее/проще/быстрее контрибьютить + более удобная поддержка нескольких OAuth2 IDP (на будущее)
+P.P.S: сохранил возможность сборки и запуска сервера с определенным набором игр через maven профили
+P.P.P.S: готов ответить за всё на любые вопросы
+
+Вопросы/фиксы:
+
+✓0) Создал ветку spring-boot и туда подтянул PR
+ 1) server\src\main\webapp\WEB-INF\web.xml
+     было закомменчено classpath:/com/codenjoy/dojo/server/spring-security.xml
+     а в нем было очень важная настройка безопасности, чтобы мы проходили тесты нашего секьюрити отдела
+         <http auto-config="true" use-expressions="true">
+             <intercept-url pattern="/**" access="permitAll"/>
+             <headers>
+                 <hsts max-age-seconds="31536000"/>
+                 <content-type-options/>
+                 <header name="Content-Security-Policy"
+                         value="default-src 'self';
+                         script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;
+                         img-src 'self' data: http://www.google-analytics.com;
+                         connect-src 'self' ws: wss: http: https:;
+                         font-src 'self';
+                         style-src 'self' 'unsafe-inline';"/>
+                 <xss-protection enabled="true" block="false"/>
+                 <cache-control/>
+             </headers>
+             <csrf disabled="true"/>
+         </http>
+✓?    Вопрос где это сейчас находится?
+         Вижу, SecurityConfig но там закомментировано
+             //                .and()
+             //                    .headers()
+             //                 .
+         Пока добавил TODO
+
+ Igor: Эта часть конфига была утеряна - вернул на место
+
+✓ 2) Очень стараюсь (хотя конечно не всегда) не использовать комментарий для кода, если же есть идея продолжить в этом месте, то обязательно TODO с сообщением что тут планируется делать
+     Давай все закомменченные дипенденси что остались во время фикса, а так же куски кода просто удалим. У нас есть git чтобы видеть хистори. Если цель была другой - поясни плиз
++    Это же касается server/pom.xml
++    Сюда же //@Component
+
+ Igor: спасибо, что помог почистить код. Закоменченные куски я забыл подтереть, поторопился.
+
+✓     MVCConf на тему favicon - добавил TODO
+
+ Igor:
+    тут странная проблема с кастомным servlet context path. Пришлось решить html'ным <link rel="icon" ... />
+
+ 3) Установил плагин ломбока и попробовал mvn clean install на codenjoy-parent проекте и он собрался, что отлично.
+     [INFO] ------------------------------------------------------------------------
+     [INFO] BUILD SUCCESS
+     [INFO] ------------------------------------------------------------------------
+     [INFO] Total time: 07:19 min
+?    Показалось что это происходило дольше чем раньше, но я могу ошибаться
+ Igor: плагинг нужен только для удобства разработки, чтобы IDE начала понимать наличие "несуществующих" до сборки проекта геттеров/сеттеров/конструкторов/etc.
+    Для сборки maven'ом плагины не нужны. А вот по поводу времени сборки - на многих проектах искользовал ломбок, не замечал какого-то оверхеда, может всё-таки показалось =\
+✓  4) Видел что логгер заккоментирован !--<logback.version>1.2.3</logback.version>-->
+     Вопрос, как сейчас происходит логгирование? Мне важно было на сервере получать в логе определенную инфу из определенных пакетов.
+ Igor: логирование по-прежнему работает через logback, зависимость я заэксклудил, чтобы тянулась совместимая со релизом спринга версия (она указана в parent)
+     Вижу, дошел до application.yml и там
+         logging:
+             level:
+                 root: debug
+ Igor: уже убрал, это лишнее
+?    Вопрос, как определяетс формат? Для меня важен <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+ Igor: оставил конфигурационный файл src/main/resources/logback.xml
+?    Как включается application-trace.yml
+?    Знал ли ты что у меня логгирование включается в рантайме на админке?
+ Igor:
++        Я проверил как оно работает. Все ок
+     Так же вижу, что в другом коммите вернулся logback.xml но там
+         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+             <encoder>
+                 <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+             </encoder>
+         </appender>
+?        Я так понимаю дело в том, что все пусть пишется в консоль, а логгингом пусть занимается докеркомпоуз? Или как? Почему в файл не пишем
+ Igor: вообще да, мысль была такая. Но по-моему всё-таки стоит вернуть логирование в файл, а под файлы в docker-compose манифесте подмонтировать папку.
+     Так же мне кажется, что комментировать лучше не так
+         <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">-->
+             <!--<file>logs/${project.artifactId}.log</file>-->
+             <!--<append>true</append>-->
+
+             <!--<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">-->
+                 <!--<maxFileSize>300MB</maxFileSize>-->
+             <!--</triggeringPolicy>-->
+             <!--<encoder>-->
+                 <!--<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+             <!--</encoder>-->
+         <!--</appender>-->
+     а так
+         <!--<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+             <file>logs/${project.artifactId}.log</file>
+             <append>true</append>
+
+             <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+                 <maxFileSize>300MB</maxFileSize>
+             </triggeringPolicy>
+             <encoder>
+                 <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+             </encoder>
+         </appender>-->
++    Делается это Ctrl-Shift-. вместо Ctrl-. и читабельность выше
+ Igor: не знал, что так можно. У меня этот шорткат не работает, но я поищу, как на это поведение повлиять :)
+    Плюс, с переходом на spring-boot версия logback апнулась, теперь пришлось немного конфигурацию под file appender поменять.
+✓5) в server/pom.xml встречается две зависимости
+     <joda-time.version>2.10.1</joda-time.version>
+     <joda-time.version>2.10.1</joda-time.version>
+ Igor: странно, вижу только одну. В идеале, стоит от Йоды избавиться, Datetime API в 8-ке покрывает его фичи целиком.
+ 6) @SneakyThrows кажется неочевидным, почему только в некоторых тестах есть эта аннотация. Не пытаемся ли мы устранять последствия, вместо того чтобы предложить решение?
+✓    Я закомментил одну такую аннотацию - тест запустил и он прошел. Вопрос - зачем тогда она нужна?
+ Igor: В своё время я его добавил в тесты, потому что у конструктора org.json.JSONObject внезапно в сигнатуре появился throws с checked исключением. Позже понял,
+    что класс тянулся не из той зависимости. В итоге зависимость в pom'нике поправил, а аннотации убрать забыл - спасибо, что обнаружил.
+    P.S.: аннотация вообще спорная, есть смысл использовать только если явно нет смысла обрабатывать checked exceptions.
+✓? 7) По какой-то причине на view Maven IDE
+         a2048-engine
+             Dependencies
+             com.codenjoy:engine:1.0.28                  // зависимость красная
+             org.apache.commons:commons-collections4:4.3
+             org.apache.commons:commons-lang3:3.8.1
+             junit:junit:4.12
+             org.mockito:mockito-core:2.24.0            // зависимость красная
+             org.easytesting:fest-assert:1.4
+             org.easytesting:fest-reflect:1.4.1
+ Igor: странно, у меня не воспроизводится. Реимпорт тоже не помог? Можем вместе посмотреть.
+✓8) Видел что в некоторых местах (пакет dao) //@Component что в 5м спринге не надо указывать эту аннотацию?
+     Причем для класса PlayerController эту аннотацию наоборот вернули на место
+     Вопрос снят - дошел до PostgresDBConfig/SqliteDDConfig
+✓9) В классе ActionLogger что делает? @NamedArg("databasePoolFactory") из import javafx.beans.NamedArg; ?
+ Igor: это по недосмотру, там должна была быть другая аннотация. Но т.к. сейчас сервер запускается только в одном из sqlite|postgres профилей, необходимости в квалифаерах нет - убрал.
+
+✓10) В коде MVCConf
+     вместо
+         @Bean
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+             ServletRegistrationBean servletRegistrationBean = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
+             servletRegistrationBean.setLoadOnStartup(100);
+             servletRegistrationBean.setName("wsControlServlet");
+             return servletRegistrationBean;
+         }
+     предпочитаю делать так
+         @Bean
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+             return new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path){{
+                 setLoadOnStartup(100);
+                 setLoadOnStartup(100);
+             }};
+         }
+     всегда когда метод возвращает new КакойТоКласс который тут же перед вовзратом чуть конфигурится я делаю анонимного наследника и в его динамическом блоке добавляю что надо
+     если мы говорим про сокращение строк кода всякими методами для удобства читабельности, то такой подход тоже годны
+     если не ок, тогда объект который возвращается из метода называю result, иначе слишком много слов Servlet+Registration+Bean для одного метода
+         вместо
+         @Bean
+         public ServletRegistrationBean wsControlServlet(@Value("${mvc.control-servlet-path}") String path) {
+             ServletRegistrationBean result = new ServletRegistrationBean<>(new ControlWebSocketServlet(timer, controlPlayerTransport), path);
+             result.setLoadOnStartup(100);
+             result.setName("wsControlServlet");
+             return result;
+         }
+ Igor: отличное замечание! Раньше только для инициализации коллекций использовал. Твой код выглядит читабельнее и понятнее (y)
+
+✓11) Что делают SQLiteProfile/PostgreSQLProfile
+?? Igor: создают connection пулы либо для sqlite, либо для postgres. У тебя раньше это было реализовано через import одной из xml конфигураций в applicationContext.xml в зависимости от пропертей в рантайме.
+  Просто перевел это логику на спринговые профили, их как раз для таких целей нынче принято использовать.
+  Но, я бы в перспективе вообще от классов PostgresDBConfig и SqliteDBConfig избавился и упростил конфиги. Осталось
+  только вместе обсудить 2 момента: для чего были нужны самописные connection пулы + для чего таблицы в sqlite разнесены по разным физическим файлам базы
+?? 12) Вижу в start-server.bat # -Dcontext=another-context # -Psnake,bomberman,sample
+     Контекст менять потребность есть, эту фичу надо оставить рабочей
+ Igor: здесь есть вопросы, давай обсудим вместе.
+ 13) В pom.xml билдера было случайно закоммичено
+     <exclude.bomberman>false</exclude.bomberman>
+     Да и вообще его удалять пора, от слова "вообще"
+✓+14) Длиные строчки как например в ControlWebSocketServlet я делаю по короче
+     @Override
+     public void configure(WebSocketServletFactory webSocketServletFactory) {
+         PlayerSocketCreator creator =
+                 new PlayerSocketCreator(
+                         controlPlayerTransport,
+                         authentication,
+                         PlayerSocket.SERVER_SEND_FIRST);
+
+         webSocketServletFactory.setCreator(creator);
+
+         timer.resume();
+     }
+
+ Igor: мне кажется, 120 символов в строке нынче уже вполне допустимо, но ок, буду иметь в виду :)
+✓+15) что делает SystemControllerAdvice ?
+     Вопрос снят, почитал дальше
+?    Вопрос, как оно передает сигнал в <c:when test="${debug}" >?
+?? Igor: хм, это стандартный атрибут в модели, который устанавливается перед загрузкой страницы. Может быть, я не понял вопрос...
+✓ 16) Во всех jsp дублирование, очень хочется его вынести
+     <c:choose>
+         <c:when test="${debug}" >
+             <script src="${ctx}/resources/js/all.js"></script>
+         </c:when>
+         <c:otherwise>
+             <script src="${ctx}/resources/js/all.min.js"></script>
+         </c:otherwise>
+     </c:choose>
+ Igor: действительно, done.
+ 17) Сейчас сервер запускается так
+         call mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug clean spring-boot:run -DallGames
+?    вопрос в том, как поменять codenjoy-contest ? работает ли как раньше
+         # -Dcontext=another-context # -Psnake,bomberman,sample
+?? Igor: давай вместе обсудим этот момент с контекстом.
+?18) Как подменить application.yml - раньше конфиг codenjoy-contest.properties можно было размещать в jetty/config и приложение брало его вначале оттуда, а потом из war (если не нашло), можно ли сейчас так же подменять? Это актуально для скриптов запуска на linux сервере и windows portable
+ Igor: подменять его не стоит, хотя можно. Для добавления предопределенных наборов настроек есть смысл завести в коде приложения аналогичный файл по маске application-${spring.profile.name}.yml
+ и добавить этот профиль в рантайме.
+ Для перекрытия настроек извне в spring boot (если не используется spring cloud, а он нам не нужен, думаю) используют 3 способа (на примере admin.password):
+    1. JVM аргументы (-Dadmin.password=supersecurepassword)
+    2. CLI аргументы (аргументы jar'ника: --admin.password=supersecurepassword)
+    3. ENV переменные среды (докер контейнера или хоста, в зависимости от способа запуска. Ключи заменяются на uppercase,
+        точки заменяются на underscore: ADMIN_PASSWORD=supersecurepassword)
+Плюс то, что мы обсудили в чатике:
+
+TODO: 19) так же переживаю за скрипты для сборки сервера на локали (winodws10) и на linux сервере (с докером и компоузом) https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable
+     Они так же должны быть обновлены перед влвианием в мастер
+
+✓ 20) Readme.md так же надо будет обновить под новые реалии. Поскольку там сейчас инфа как запуститься с билдером.
+
+✓ 21) И если билдер уже не нужен и с war мы не запускаеп, тогда получается его надо выпилить.
+
+Плюс то, что вылезло в ходе тестирования:
+
+✓  22) Не удалось мне с ключиком # -Dcontext=another-context запуститься с другим контекстом по
+    mvn clean spring-boot:run -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace,debug -Psnake,bomberman,sample -Dcontext=another-context
+ Igor: теперь должно работать
+ 23) зашел на админку http://127.0.0.1:8080/codenjoy-contest/admin
+    ввел логин пароль admin/admin
+    и получил  Whitelabel Error Page
+               This application has no explicit mapping for /error, so you are seeing this as a fallback.
+               null
+               There was an unexpected error (type=null, status=null).
+               Invalid Username or Password
+    23.1) что само по себе не очень информативно
+        почему-то не редиректится на error.jsp
+            @RequestMapping(value = "/error", params = "message")
+            public String error(ModelMap model, @RequestParam("message") String message) {
+                model.addAttribute("message", message);
+                return "error";
+            }
+        с
+            @RequestMapping(value = "/denied")
+            public ModelAndView displayAccessDeniedPage(){
+                return new ModelAndView(){{
+                    addObject("message", "Invalid Username or Password");
+                    setViewName("error");
+                }};
+            }
+        подозреваю что из за params = "message"
+
+    23.2) Но проблема так же в том, что на админку так и не попал
+            возможно дело в том, что
+                .antMatchers("/admin*")
+                    .hasRole("ADMIN")
+            а на админ контроллере
+                @Component
+                @RequestMapping("/admin")
+                @Secured("ROLE_ADMIN")
+            хотя не уверен
+✓24) Файлик codenjoy-contest.properties думаю можно удалить
+✓    Но на него завязаны MockPropertyPlaceholderConfigurer и дальше PlayerServiceImplTest а это та еще боль. Быть может тогда конфиг отнести в тесты?
+ Igor: в принципе, совсем нет боли, перевел на бутовый стартер, старые мок-конфигурации удалил.
+
+✓25) Как собрать codenjoy-contest.jar со всеми депенденсями? видимо надо какой-то maven-assembly
+    Чтобы потом для запуска сервера вызвать на linux в докере вызвать
+        java -jar codenjoy-contest.jar
+    Ведь на linux в одном докер контейнере с сырцами и мейвеном собирался war
+        а в другом контейнере этот war запускался в предустановленный jetty
+    Я попробовал
+        mvn clean package -Dmaven.test.skip=true -Psnake,bomberman,sample
+        cd target
+        java -Dspring-boot.run.profiles=sqlite,trace,debug -jar codenjoy-contest.jar
+    Но получил
+        02:55:03,679 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+        02:55:03,680 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback.groovy]
+        02:55:03,680 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/classes!/logback.xml]
+        02:55:03,684 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs multiple times on the classpath.
+        02:55:03,684 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/lib/engine-1.0.28.jar!/logback.xml]
+        02:55:03,684 |-WARN in ch.qos.logback.classic.LoggerContext[default] - Resource [logback.xml] occurs at [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/classes!/logback.xml]
+        02:55:03,747 |-INFO in ch.qos.logback.core.joran.spi.ConfigurationWatchList@5f4da5c3 - URL [jar:file:/D:/JavaForFun/Codenjoy/CodingDojo/server/target/codenjoy-contest.jar!/BOOT-INF/classes!/logback.xml] is not of type file
+        02:55:03,876 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - debug attribute not set
+        02:55:03,879 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+        02:55:03,903 |-INFO in ch.qos.logback.core.joran.action.AppenderAction - Naming appender as [STDOUT]
+        02:55:03,923 |-INFO in ch.qos.logback.core.joran.action.NestedComplexPropertyIA - Assuming default type [ch.qos.logback.classic.encoder.PatternLayoutEncoder] for [encoder] property
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.codenjoy] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.codenjoy] to true
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.epam.dojo] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.epam.dojo] to true
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [com.codenjoy.dojo.transport] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [com.codenjoy.dojo.transport] to true
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting level of logger [org.eclipse.jetty] to DEBUG
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.LoggerAction - Setting additivity of logger [org.eclipse.jetty] to false
+        02:55:04,043 |-INFO in ch.qos.logback.classic.joran.action.RootLoggerAction - Setting level of ROOT logger to INFO
+        02:55:04,044 |-INFO in ch.qos.logback.core.joran.action.AppenderRefAction - Attaching appender named [STDOUT] to Logger[ROOT]
+        02:55:04,045 |-INFO in ch.qos.logback.classic.joran.action.ConfigurationAction - End of configuration.
+        02:55:04,047 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@443b7951 - Registering current configuration as safe fallback point
+          .   ____          _            __ _ _
+         /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+        ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+         \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+          '  |____| .__|_| |_|_| |_\__, | / / / /
+         =========|_|==============|___/=/_/_/_/
+         :: Spring Boot ::        (v2.1.3.RELEASE)
+        2019-03-15T02:55:05.537 [main] INFO  c.c.dojo.CodenjoyContestApplication - Starting CodenjoyContestApplication v1.0.28 on indigo-pc with PID 360 (D:\JavaForFun\Codenjoy\CodingDojo\server\target\codenjoy-contest.jar started by indigo in D:\JavaForFun\Codenjoy\CodingDojo\server\target)
+        2019-03-15T02:55:05.542 [main] DEBUG c.c.dojo.CodenjoyContestApplication - Running with Spring Boot v2.1.3.RELEASE, Spring v5.1.5.RELEASE
+        2019-03-15T02:55:05.544 [main] INFO  c.c.dojo.CodenjoyContestApplication - No active profile set, falling back to default profiles: default
+        2019-03-15T02:55:09.145 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.configuration.ObjectP ostProcessorConfiguration' of type [org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$704d76fd] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.158 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'objectPostProcessor' of type [org.springframework.security.config.an notation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.172 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodS ecurityExpressionHandler@236e3f4e' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.176 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.method.configuration. GlobalMethodSecurityConfiguration' of type [org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$952219af] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:09.190 [main] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [org.springframework.security. access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+        2019-03-15T02:55:10.218 [main] INFO  o.s.b.w.e.j.JettyServletWebServerFactory - Server initialized with port: 8080
+        2019-03-15T02:55:10.322 [main] INFO  o.s.web.context.ContextLoader - Root WebApplicationContext: initialization completed in 4662 ms
+        2019-03-15T02:55:10.750 [main] INFO  org.reflections.Reflections - Reflections took 157 ms to scan 2 urls, producing 92 keys and 204 values
+        2019-03-15T02:55:11.104 [main] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Unable to start embedded Jetty web server
+        2019-03-15T02:55:11.138 [main] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+        2019-03-15T02:55:11.600 [main] ERROR o.s.b.d.LoggingFailureAnalysisReporter -
+        ***************************
+        APPLICATION FAILED TO START
+        ***************************
+        Description:
+        Field saver in com.codenjoy.dojo.services.SaveServiceImpl required a bean of type 'com.codenjoy.dojo.services.GameSaver' that could not be found.
+        The injection point has the following annotations:
+                - @org.springframework.beans.factory.annotation.Autowired(required=true)
+        Action:
+        Consider defining a bean of type 'com.codenjoy.dojo.services.GameSaver' in your configuration.
+    Решилось через запуск с ключиком "spring.profiles.active" вместо "spring-boot.run.profiles"
+        java -Dspring.profiles.active=sqlite,trace,debug -jar codenjoy-contest.jar
+?   Но не все так просто - пробую загрузить страничку http://127.0.0.1:8080/codenjoy-contest
+        2019-03-15T03:08:01.545 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - GET "/codenjoy-contest/", parameters={}
+        2019-03-15T03:08:01.549 [qtp1912960603-17] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to public java.lang.String com.codenjoy.dojo.web.controller.MainPageController.getMainPage(javax.servlet.http.HttpServletRequest,org.springframework.ui.Model)
+        2019-03-15T03:08:01.566 [qtp1912960603-17] DEBUG o.s.w.s.v.ContentNegotiatingViewResolver - Selected 'text/html' given [text/html, application/xhtml+xml, image/webp, image/apng, application/xml;q=0.9, */*;q=0.8]
+        2019-03-15T03:08:01.576 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - View name 'main', model {debug=true, ip=127.0.0.1, gameNames=[bomberman=bomberman, sample=sample, snake=snake]}
+        2019-03-15T03:08:01.589 [qtp1912960603-17] DEBUG o.s.web.servlet.view.JstlView - Forwarding to [/view/main.jsp]
+        2019-03-15T03:08:01.592 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - "ERROR" dispatch for GET "/codenjoy-contest/error", parameters={}
+        2019-03-15T03:08:01.599 [qtp1912960603-17] DEBUG o.s.w.s.m.m.a.RequestMappingHandlerMapping - Mapped to public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+        2019-03-15T03:08:01.605 [qtp1912960603-17] DEBUG o.s.w.s.v.ContentNegotiatingViewResolver - Selected 'text/html' given [text/html, text/html;q=0.8]
+        2019-03-15T03:08:01.613 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - Exiting from "ERROR" dispatch, status 404
+        2019-03-15T03:08:01.623 [qtp1912960603-17] DEBUG o.s.web.servlet.DispatcherServlet - Completed 404 NOT_FOUND
+✓   25.2) Кроме всего прочего, полученный jar не открываеся как архив, что очень странно
+ Igor: здесь всё обсудили на колле. Едиинственное, остался момент для ресерча, почему возникают проблемы при запуске jar'ника из папки target.
+
+Что могу сказать, все очень достойно! Ты крут, Игорь
+
+ Igor:
+??   +26) перевел вход в админку пользователем 'admin' из БД. Начались проблемы из-за того, что пришлось поменять DDL создания таблицы USERS в конструкторе Registration. Поэтому, пере
+   запуском сервера на SQLite, нужно удалить старый файл базы.
+   В кач-ве решения предлагаю перевести "проливку" БД на liquibase или flyway. Постараюсь сделать чуть позже. Сейчас это проблематично из-за самописного connection пула. Кстати,
+   хотел бы его голосом обсудить вместе.
+
+from Alex: 2019-03-23
+
+https://github.com/codenjoyme/codenjoy/pull/46/commits/3fbc36c0303ed06076d7ee47c9b253360aa07361
+    Пока не очень понятно что тут будет, но думаю дальше станет понятно
+ Igor: немного тут не понял, о чём именно было замечание
+https://github.com/codenjoyme/codenjoy/pull/46/commits/8b7d826bea6cbc6251eafa2118cb2b0d4b38d752
+    DLoggerFactory был реализован так, чтобы я мог на админке включать и выключать дебаг вручную (не при старте приложения) сейчас так понимаю это не работает
+ Igor: я специально проверял, эта логика работает. Я поправил её с DLoggerFactory враппера на API самого логгера (всё так же, только по двум интересующим нас пакетам).
+    В некоторых местах было прооптимизировано и убрана проверка log.isDebugEnabled. Я не уверен что это стоит делать, поскольку этот метод выполняется много раз подряд, а requested может приводиться к строке для выполнения этой функции.
+        if (log.isDebugEnabled()) {
+            log.debug("tick().requestControls() {} players", requested);
+        }
+ Igor: isDebugEnabled проверка есть внутри самого логгера. В былые времена она делалась "вручную", чтобы лишний раз не конкатенировать строки для лога, который,
+ возможно, и не было смысла писать, если isDebugEnabled возвращал false. Но сейчас методы логирования принимают строки с темплейтами
+ (например, log.debug("some {} happened", "stuff"). И шаблон отрабатывает только если уровень действительно выкручен в дебаг.
+https://github.com/codenjoyme/codenjoy/pull/46/commits/cc373402aebae1eb8744db405a012163cde249c4
+    Не совсем понял что тут делается, в коммите написано что пофиксил тест, а по факту - зачем не совсем понятно. С виду стало сложнее
+        if (initAdminUser) {
+            initialScripts.add("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
+                    " select '" + ADMIN_USER_ID + "', 'admin@codenjoyme.com', 'admin', 1,  '" + adminPassword + "', '" + ADMIN_USER_CODE + "', '{}', 'ROLE_ADMIN, ROLE_USER'" +
+                    " where not exists (select 1 from users where id = '" + ADMIN_USER_ID + "')");
+        }
+    Igor: согласен, стало сложнее. Было бы проще с liquibase, но ниже по комментам решили пока этого не делать. Я бы пока оставил этот кусок кода, если ты не против.
+    Когда я буду заводить PR по spring-security для обычных пользователей, я могу впилить пользователя админа в отдельный in-memory UserDetailsService.
+    А вижу вот
+        Igor:
+           +26) перевел вход в админку пользователем 'admin' из БД. Начались проблемы из-за того, что пришлось поменять DDL создания таблицы USERS в конструкторе Registration. Поэтому, пере
+           запуском сервера на SQLite, нужно удалить старый файл базы.
+           В кач-ве решения предлагаю перевести "проливку" БД на liquibase или flyway. Постараюсь сделать чуть позже. Сейчас это проблематично из-за самописного connection пула. Кстати,
+    Не, не неадо усложнять. Давай упрощать. Баз никаких долгосрочных нет. Да и по сути, что мешало оставить как есть? Пароль админа в конфиге.
+    Сейчас как-то сложнее все сделалось, не уверен на счет этого изменения
+
+    Igor: окей, согласен. Я сделал уже 2 подхода к снаряду, и выглядит так, что лучше пока оставить как есть.
+
+from Alex: 2019-04-05
+
+30) Свалился тест во время билда сервера, видимо тест не может найти ресурсы, которые упакованы внутри jar тетриса
+    cd /tmp/codenjoy/CodingDojo/server && mvnw clean package -Ptetris -DskipTests=false
+
+    [ERROR] Tests run: 4, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 3.429 s <<< FAILURE! - in com.codenjoy.dojo.services.GameServiceTest
+    [ERROR] shouldGetGameNames(com.codenjoy.dojo.services.GameServiceTest)  Time elapsed: 0.013 s  <<< FAILURE!
+    org.junit.ComparisonFailure: expected:<[first, second[]]> but was:<[first, second[, tetris]]>
+            at com.codenjoy.dojo.services.GameServiceTest.shouldGetGameNames(GameServiceTest.java:75)
+
+    [ERROR] shouldGetPngForSprites(com.codenjoy.dojo.services.GameServiceTest)  Time elapsed: 0.011 s  <<< FAILURE!
+    java.lang.AssertionError:
+    [Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/blue.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/cyan.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/orange.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/yellow.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/green.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/purple.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/red.png
+     Файл не найден: /tmp/codenjoy/CodingDojo/server/target/test-classes/sprite/tetris/none.png]
+            at com.codenjoy.dojo.services.GameServiceTest.shouldGetPngForSprites(GameServiceTest.java:116)
+
+    [ERROR] shouldGetSprites(com.codenjoy.dojo.services.GameServiceTest)  Time elapsed: 0.003 s  <<< FAILURE!
+    org.junit.ComparisonFailure: expected:<{[]first=[none, wall, h...> but was:<{[tetris=[blue, cyan, orange, yellow, green, purple, red, none], ]first=[none, wall, h...>
+            at com.codenjoy.dojo.services.GameServiceTest.shouldGetSprites(GameServiceTest.java:82)
+
+ Igor: странно, что раньше тест определения игр в рантайме работал корректно. Хотя, глубоко не вникал. Со спрайтами - действительно косяк.
+ Поправил тесты с поправкой на активные *maven* профили.
+
++ 31) balancer приложение так же надо перевести на новые рельсы spring-boot
+ Igor: переведен
+
++ 32) Почему-то лог файл в контейнере создается с ненормальным именем
+        root@885f2a4989f9:/logs# ls -la /logs
+        drwxr-xr-x  2 root root 4096 Apr  5 22:50 .
+        drwxr-xr-x 64 root root 4096 Apr  5 22:50 ..
+        -rw-r--r--  1 root root 5314 Apr  5 22:51 project.artifactId_IS_UNDEFINED.log
+    а должен быть codenjoy-context.log
+ Igor: какой-то глич из-за спринг-бутового плагина, пришлось поменять нотацию для плейсхолдера в logback.xml - теперь норм
+
+ 33) почему-то папки logs и database создаются в корне докера, а не в папке /app где я запускаю варник
+
++34) один из файлов базы sqlite в контейнере создался без контекста
+    drwxr-xr-x 2 root root 4096 Apr  5 23:04 .
+    drwxr-xr-x 3 root root 4096 Apr  5 19:37 ..
+ >> -rw-r--r-- 1 root root 8192 Apr  5 23:03 logs <<<<<<<<<<<<<<<<<<<<<<<<<
+    -rw-r--r-- 1 root root 8192 Apr  5 23:03 payment_codenjoy-contest.db
+    -rw-r--r-- 1 root root 8192 Apr  5 23:04 saves_codenjoy-contest.db
+    -rw-r--r-- 1 root root 8192 Apr  5 23:03 settings_codenjoy-contest.db
+    -rw-r--r-- 1 root root 8192 Apr  5 23:03 users_codenjoy-contest.db
+
++? 35) попытался зайти на админку под admin/admin но получил
+        java.util.concurrent.ExecutionException: org.springframework.security.core.userdetails.UsernameNotFoundException: User with id 'admin' does not exist
+    хотя в табличке есть запись
+        "admin@codenjoyme.com"	"0"	"admin"	"1"	"$2a$10$cmKGT1LRwtr1FGSQrducqefoWKAMVBwXK0/CMPZmv.ltBzhoKv22y"	"000000"	"{}"
+    пробовал я и admin@codenjoyme.com в качестве логина, не получилось
+    UPD логин 000000/admin прошел, хотя несколько это необычно
+ Igor: это действительно странное решение, но оно в принципе рабочее. Рядом уже готова ветка с доработками по spring-security - в ней
+ реализован логин по email.
+
++36) В конфигурации спринга почему-то не стартовало
++++UPD: дело было в том что раньше я юзал postgre а сейчас postgreS
+        ***************************
+        APPLICATION FAILED TO START
+        ***************************
+        Description:
+        Field saver in com.codenjoy.dojo.services.SaveServiceImpl required a bean of type 'com.codenjoy.dojo.services.GameSaver' that could not be found.
+        The injection point has the following annotations:
+                - @org.springframework.beans.factory.annotation.Autowired(required=true)
+        Action:
+        Consider defining a bean of type 'com.codenjoy.dojo.services.GameSaver' in your configuration.
+
+    вот стектрейс в дебаге
+
+        2019-04-05T23:21:54.440 [main] DEBUG o.s.b.d.LoggingFailureAnalysisReporter - Application failed to start due to an exception
+        org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'com.codenjoy.dojo.services.GameSaver' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.raiseNoMatchingBeanFound(DefaultListableBeanFactory.java:1654)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1213)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+                at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+                at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+                at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+                at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:392)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1305)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1144)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+                at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+                at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+                at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:235)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:226)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addServletContextInitializerBeans(ServletContextInitializerBeans.java:101)
+                at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:88)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:261)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:234)
+                at org.springframework.boot.web.embedded.jetty.ServletContextInitializerConfiguration.callInitializers(ServletContextInitializerConfiguration.java:66)
+                at org.springframework.boot.web.embedded.jetty.ServletContextInitializerConfiguration.configure(ServletContextInitializerConfiguration.java:55)
+                at org.eclipse.jetty.webapp.WebAppContext.configure(WebAppContext.java:517)
+                at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1454)
+                at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:852)
+                at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:278)
+                at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:545)
+                at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+                at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:138)
+                at org.eclipse.jetty.server.Server.start(Server.java:415)
+                at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:108)
+                at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+                at org.eclipse.jetty.server.Server.doStart(Server.java:382)
+                at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+                at org.springframework.boot.web.embedded.jetty.JettyWebServer.initialize(JettyWebServer.java:108)
+                at org.springframework.boot.web.embedded.jetty.JettyWebServer.<init>(JettyWebServer.java:86)
+                at org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory.getJettyWebServer(JettyServletWebServerFactory.java:410)
+                at org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory.getWebServer(JettyServletWebServerFactory.java:153)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:181)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:154)
+                at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+                at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142)
+                at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775)
+                at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397)
+                at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+                at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260)
+                at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248)
+                at com.codenjoy.dojo.CodenjoyContestApplication.main(CodenjoyContestApplication.java:49)
+                at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+                at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+                at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+                at java.lang.reflect.Method.invoke(Method.java:498)
+                at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:48)
+                at org.springframework.boot.loader.Launcher.launch(Launcher.java:87)
+                at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+                at org.springframework.boot.loader.WarLauncher.main(WarLauncher.java:58)
+
++37) А теперь не ризолвится хост codenjoy_db, хотя сетка докер компоуза так настроена, что раньше это работало
++++UPD: почему-то база вообще не поднялась, все из за того же postgre/postgreS - исправил
+
+    2019-04-05T23:37:22.943 [main] ERROR o.s.boot.SpringApplication - Application run failed
+    org.springframework.context.ApplicationContextException: Unable to start web server; nested exception is org.springframework.boot.web.server.WebServerException: Unable to start embedded Jetty web server
+            at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:157)
+            at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:543)
+            at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:142)
+            at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:775)
+            at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:397)
+            at org.springframework.boot.SpringApplication.run(SpringApplication.java:316)
+            at org.springframework.boot.SpringApplication.run(SpringApplication.java:1260)
+            at org.springframework.boot.SpringApplication.run(SpringApplication.java:1248)
+            at com.codenjoy.dojo.CodenjoyContestApplication.main(CodenjoyContestApplication.java:49)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:498)
+            at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:48)
+            at org.springframework.boot.loader.Launcher.launch(Launcher.java:87)
+            at org.springframework.boot.loader.Launcher.launch(Launcher.java:50)
+            at org.springframework.boot.loader.WarLauncher.main(WarLauncher.java:58)
+    Caused by: org.springframework.boot.web.server.WebServerException: Unable to start embedded Jetty web server
+            at org.springframework.boot.web.embedded.jetty.JettyWebServer.initialize(JettyWebServer.java:114)
+            at org.springframework.boot.web.embedded.jetty.JettyWebServer.<init>(JettyWebServer.java:86)
+            at org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory.getJettyWebServer(JettyServletWebServerFactory.java:410)
+            at org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory.getWebServer(JettyServletWebServerFactory.java:153)
+            at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:181)
+            at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:154)
+            ... 16 common frames omitted
+    Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'MVCConf': Unsatisfied dependency expressed through field 'timer'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'timerService': Unsatisfied dependency expressed through field 'playerService'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'playerService': Unsatisfied dependency expressed through field 'autoSaver'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'autoSaver': Unsatisfied dependency expressed through field 'save'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'saveService': Unsatisfied dependency expressed through field 'saver'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'playerGameSaver' defined in class path resource [com/codenjoy/dojo/config/PostgresDBConfig.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:596)
+            at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+            at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:392)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1305)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1144)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:204)
+            at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:235)
+            at org.springframework.boot.web.servlet.ServletContextInitializerBeans.getOrderedBeansOfType(ServletContextInitializerBeans.java:226)
+            at org.springframework.boot.web.servlet.ServletContextInitializerBeans.addServletContextInitializerBeans(ServletContextInitializerBeans.java:101)
+            at org.springframework.boot.web.servlet.ServletContextInitializerBeans.<init>(ServletContextInitializerBeans.java:88)
+            at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.getServletContextInitializerBeans(ServletWebServerApplicationContext.java:261)
+            at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.selfInitialize(ServletWebServerApplicationContext.java:234)
+            at org.springframework.boot.web.embedded.jetty.ServletContextInitializerConfiguration.callInitializers(ServletContextInitializerConfiguration.java:66)
+            at org.springframework.boot.web.embedded.jetty.ServletContextInitializerConfiguration.configure(ServletContextInitializerConfiguration.java:55)
+            at org.eclipse.jetty.webapp.WebAppContext.configure(WebAppContext.java:517)
+            at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1454)
+            at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:852)
+            at org.eclipse.jetty.servlet.ServletContextHandler.doStart(ServletContextHandler.java:278)
+            at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:545)
+            at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+            at org.eclipse.jetty.util.component.ContainerLifeCycle.start(ContainerLifeCycle.java:138)
+            at org.eclipse.jetty.server.Server.start(Server.java:415)
+            at org.eclipse.jetty.util.component.ContainerLifeCycle.doStart(ContainerLifeCycle.java:108)
+            at org.eclipse.jetty.server.handler.AbstractHandler.doStart(AbstractHandler.java:113)
+            at org.eclipse.jetty.server.Server.doStart(Server.java:382)
+            at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+            at org.springframework.boot.web.embedded.jetty.JettyWebServer.initialize(JettyWebServer.java:108)
+            ... 21 common frames omitted
+    Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'timerService': Unsatisfied dependency expressed through field 'playerService'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'playerService': Unsatisfied dependency expressed through field 'autoSaver'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'autoSaver': Unsatisfied dependency expressed through field 'save'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'saveService': Unsatisfied dependency expressed through field 'saver'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'playerGameSaver' defined in class path resource [com/codenjoy/dojo/config/PostgresDBConfig.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:596)
+            at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+            at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+            ... 60 common frames omitted
+    Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'playerService': Unsatisfied dependency expressed through field 'autoSaver'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'autoSaver': Unsatisfied dependency expressed through field 'save'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'saveService': Unsatisfied dependency expressed through field 'saver'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'playerGameSaver' defined in class path resource [com/codenjoy/dojo/config/PostgresDBConfig.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:596)
+            at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+            at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+            ... 73 common frames omitted
+    Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'autoSaver': Unsatisfied dependency expressed through field 'save'; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'saveService': Unsatisfied dependency expressed through field 'saver'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'playerGameSaver' defined in class path resource [com/codenjoy/dojo/config/PostgresDBConfig.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:596)
+            at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+            at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+            ... 86 common frames omitted
+    Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'saveService': Unsatisfied dependency expressed through field 'saver'; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'playerGameSaver' defined in class path resource [com/codenjoy/dojo/config/PostgresDBConfig.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:596)
+            at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:90)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:374)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1395)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:592)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+            at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+            ... 99 common frames omitted
+    Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'playerGameSaver' defined in class path resource [com/codenjoy/dojo/config/PostgresDBConfig.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:627)
+            at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:456)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1305)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1144)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:555)
+            at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:515)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:320)
+            at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:222)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:318)
+            at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:199)
+            at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:277)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1247)
+            at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1167)
+            at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:593)
+            ... 112 common frames omitted
+    Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [com.codenjoy.dojo.services.dao.PlayerGameSaver]: Factory method 'playerGameSaver' threw exception; nested exception is java.lang.RuntimeException: Error get connection
+            at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+            at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:622)
+            ... 125 common frames omitted
+    Caused by: java.lang.RuntimeException: Error get connection
+            at com.codenjoy.dojo.services.jdbc.ConnectionThreadPool.lambda$new$0(ConnectionThreadPool.java:45)
+            at java.util.concurrent.ThreadPoolExecutor$Worker.<init>(ThreadPoolExecutor.java:619)
+            at java.util.concurrent.ThreadPoolExecutor.addWorker(ThreadPoolExecutor.java:932)
+            at java.util.concurrent.ThreadPoolExecutor.execute(ThreadPoolExecutor.java:1367)
+            at java.util.concurrent.AbstractExecutorService.submit(AbstractExecutorService.java:134)
+            at com.codenjoy.dojo.services.jdbc.ConnectionThreadPool.run(ConnectionThreadPool.java:64)
+            at com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool.update(CrudConnectionThreadPool.java:60)
+            at com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool.update(CrudConnectionThreadPool.java:56)
+            at com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPool.createDB(PostgreSQLConnectionThreadPool.java:49)
+            at com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPool.<init>(PostgreSQLConnectionThreadPool.java:44)
+            at com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPoolFactory.create(PostgreSQLConnectionThreadPoolFactory.java:35)
+            at com.codenjoy.dojo.services.dao.PlayerGameSaver.<init>(PlayerGameSaver.java:40)
+            at com.codenjoy.dojo.config.PostgresDBConfig.playerGameSaver(PostgresDBConfig.java:64)
+            at com.codenjoy.dojo.config.PostgresDBConfig$$EnhancerBySpringCGLIB$$2dd141f1.CGLIB$playerGameSaver$2(<generated>)
+            at com.codenjoy.dojo.config.PostgresDBConfig$$EnhancerBySpringCGLIB$$2dd141f1$$FastClassBySpringCGLIB$$78722bcb.invoke(<generated>)
+            at org.springframework.cglib.proxy.MethodProxy.invokeSuper(MethodProxy.java:244)
+            at org.springframework.context.annotation.ConfigurationClassEnhancer$BeanMethodInterceptor.intercept(ConfigurationClassEnhancer.java:363)
+            at com.codenjoy.dojo.config.PostgresDBConfig$$EnhancerBySpringCGLIB$$2dd141f1.playerGameSaver(<generated>)
+            at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+            at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+            at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+            at java.lang.reflect.Method.invoke(Method.java:498)
+            at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+            ... 126 common frames omitted
+    Caused by: org.postgresql.util.PSQLException: The connection attempt failed.
+            at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:152)
+            at org.postgresql.core.ConnectionFactory.openConnection(ConnectionFactory.java:66)
+            at org.postgresql.jdbc2.AbstractJdbc2Connection.<init>(AbstractJdbc2Connection.java:125)
+            at org.postgresql.jdbc3.AbstractJdbc3Connection.<init>(AbstractJdbc3Connection.java:30)
+            at org.postgresql.jdbc3g.AbstractJdbc3gConnection.<init>(AbstractJdbc3gConnection.java:22)
+            at org.postgresql.jdbc4.AbstractJdbc4Connection.<init>(AbstractJdbc4Connection.java:32)
+            at org.postgresql.jdbc4.Jdbc4Connection.<init>(Jdbc4Connection.java:24)
+            at org.postgresql.Driver.makeConnection(Driver.java:393)
+            at org.postgresql.Driver.connect(Driver.java:267)
+            at java.sql.DriverManager.getConnection(DriverManager.java:664)
+            at java.sql.DriverManager.getConnection(DriverManager.java:270)
+            at com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPool.lambda$new$0(PostgreSQLConnectionThreadPool.java:38)
+            at com.codenjoy.dojo.services.jdbc.ConnectionThreadPool.lambda$new$0(ConnectionThreadPool.java:43)
+            ... 148 common frames omitted
+    Caused by: java.net.UnknownHostException: codenjoy_db
+            at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:184)
+            at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+            at java.net.Socket.connect(Socket.java:589)
+            at java.net.Socket.connect(Socket.java:538)
+            at java.net.Socket.<init>(Socket.java:434)
+            at java.net.Socket.<init>(Socket.java:211)
+            at org.postgresql.core.PGStream.<init>(PGStream.java:62)
+            at org.postgresql.core.v3.ConnectionFactoryImpl.openConnectionImpl(ConnectionFactoryImpl.java:76)
+            ... 160 common frames omitted
+
+from Alex: 2019-04-16
+
++41) https://github.com/codenjoyme/codenjoy/pull/46/commits/152307c8958278c5f0bc55bb4480bc0d780ae001
+   Как теперь сейчас делается вызов рест апи без передачи админ токена через урл?
+   Скажем я js клиент, из кода что я должен сделать чтобы сделать вызов закрытого спрингсекьюрити рестапи? Каким-то параметром передавать логин/пароль? В хедере?
+ Igor: да, обсудили голосом. Текущий фронт работает в контексте авторизованной сессии. Для внешних вызовов добавил поддержку basic авторизации (заголовок Authorization: Basic <...>)
+
++42) https://github.com/codenjoyme/codenjoy/commit/681e502d2d365465256338327855bf9245f8ad5c
+    Я через прочерк специально различю имена контейнеров от алиасов, чтобы не путаться. Там поключам не очевидно и одно и то же имя для разных целей юзается. Так удобнее по repalce all действовать.
+
++43) https://github.com/codenjoyme/codenjoy/pull/46/commits/ccb7ad074582a9b26214c62a1c4fab38be3af978
+    Тут лучше мне кажется page.registration.url так же заменил page.main.url
+
++44) думаю что проперти для каждой игрушки в профилях pom.xml <exclude.sampletext>false</exclude.sampletext> больше не нужны, они были нужны для связки двух частей профилей и блока перепаковки ресурсов. Теперь у нас только профиля и все.
+ Igor: да, обсудили - убрал
+
+45) создал ветку icancode-spring-boot куда вмерджил наши наработки
+    билджу ее так:
+        CodingDojo/games/engine clean install -DskipTests=true
+        CodingDojo/games/icancode clean install -DskipTests=true
+        CodingDojo/server clean install -DskipTests=true
+        CodingDojo/server clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -Picancode
+    Что не так:
+        пропертиз файл application.yml из ресурсов игрушки не подтянулся (а так можно было вообще?)
+            это я вижу когда захожу на http://127.0.0.1:8080/codenjoy-contest и там не кастомная страничка icancode, а дифолтная codenjoy
+    Попробовал переименовать application.yml в application-icancode.yml и запустить потом -Dspring.profiles.active=sqlite,trace,icancode
+        Так сработало!
+    Что хочется, чтобы запуск игрушек не отличался друг от друга. Мы можем сделать как-то чтобы конфиг если он прописан в игре то автоматом переоперделял то что указано в рутовом конфиге?
+
+За все остальные коммиты спасибо Игорь.
+
+Мисли Саши от 2019-04-26
+
+- 51) Были удалены методы
+    public String approveEmail(Model model, @RequestParam("approve") String link) {
+    public @ResponseBody String isEmailApproved(@RequestParam("approved") String id) throws InterruptedException {
+        Нужены были для верификации имейла, давно не поддерживались, может вернуть?
+
+    public String removeUserFromGame(@RequestParam("code") String code) {
+        Нужен был для удаления юзера из игры по линку (есть вроде как аналог на rest)
+ Igor: я эти методы удалил только потому, что они не поддерживались (мапинг был отключен). Если они ещё актуальны,
+ давай верну, только мне кажется, это было бы лучше сделать ещё одним PR'ом из другой ветки :)
+
+ UPD: TODO: поправить как дефект с низким приоритетом
+
++ 52) Что делают?
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+ Igor: это базовые абстракции spring security. Первый отвечает за бОльшую часть флоу _аутентификации_, второй
+ вызывается первым для поиска пользователя в базе/памяти/etc. по логину с формы аутентификации. Дальше этот пользователь
+ (который в большинстве случаев является инстансом UserDetails) верифицируется менеджером и аппрувится, либо отстреливается.
+
++ 53) в GameUserDetailsService странно как-то ведь поиск по имейлу, а передается туда код. Точно тут все ок?
+    public UserDetails loadUserByUsername(String code) throws UsernameNotFoundException {
+        return registration.getUserByEmail(code);
+    }
+ Igor: спасибо, что заметил, параметр забыл переименовать - поправил. // Осталось со времен "старого" PR, где логин
+ происходил по коду.
+
++ 54) Расскажи плиз как работает
+    @Configuration
+    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    public static class UserSecurityConf extends WebSecurityConfigurerAdapter {
+ Igor: это лучше голосом :(
+    UPD: обсудили
+
++ 55) В application.yml не тот имейл, все же это два разных проекта
+    admin:
+        login: admin@dojarena.io
+ Igor: заменил на admin@codenjoyme.com
+
++ 56) К классу RegistrationValidator не нашел тесты
+ Igor: точно, добавил
+
+- 57) Login.jsp
+    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/bootstrap/bootstrap.min.js" rel="script">
+    их стоит в maven добавить в к
+    <groupId>com.samaxes.maven</groupId>
+    <artifactId>minify-maven-plugin</artifactId>
+    <version>${minify-maven-plugin.version}</version>
+    TODO: поправить как дефект с низким приоритетом
+
++ 58) Как работает профиль sso?
+ Igor: обсудили голосом. Без sso логин через форму, с sso через настроенный сервер авторизации (OAuth2) - см. application-sso.yml
+
++- 59) Что делает PlayerFormLoginSuccessAuthenticationHandler?
+ Igor: обсудили голосом - отдельная сущность для редиректа после успешной аутентификации. В коде добавил коммент по
+ реализации. Отдельная сущность понадобилась, чтобы положить логику, которая раньше была в общем метода логина/регистрации,
+ на spring security
+ TODO: избавиться от дублирования кода, дефект с низким приоритетом
+
+- 60) В тесте GameServiceTest фикс  в setup() выглядит как дублирование основной логики
+ Igor: обсудили. Есть опция разнести в скриптах сборку с прогоном тестов отдельно (без профилей игр), и отдельно сборку
+ с нужными игрушками, но без тестов. Вторая опция - оставить этот дубль логики поиска артефактов игр. Пока оставил второй
+ вариант + добавил над неугодным методом аналогичный комментарий на будущее
+ TODO: поправить как дефект с низким приоритетом
+
++ 61) Что делает ViewDelegationService?
+ Igor: абстракция для определения View (Spring MVC) под потенциальные кастомные страницы логина, регистрации, админок, etc.
+    Перенес формы логина/регистрации из icancode в модуль server как основные. Теперь ViewDelegationService используется
+    только для кастомной админки icancode.
+    Пример:
+    /codenjoyme-contest/admin&gameName=bomberman \
+                                                  - используются для стандартной админки сервера
+    /codenjoyme-contest/admin&gameName=icancode  /
+
+    /codenjoyme-contest/admin&gameName=icancode&custom=true - используется для роутинга на кастомную админку конкретной игры.
+
+    Важно:
+    Для добавления переопределения страниц, в application-<gameProfileName>.yml файл необходимо добавить properties в
+    нотации:
+
+    icancode: # где icancode - имя модуля игры
+        page:
+            admin: ${URL_специфичной_админки}
+
+    TODO: тут если есть вопросы, можно обсудить голосом
+
++ 62) Что дает в games pom.xml, это теперь все игры будут тянуть эти депенденси хотя они не должны быть тяжеловестными
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jsp</artifactId>
+            <version>9.4.14.v20181114</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.annotation</groupId>
+                    <artifactId>javax.annotation-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.1.3.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+ Igor: удалил. Они были в provided и нужны были только чтобы в IDE работал автокомплит в *.jsp (которых больше нет)
+
++ 63) Из icancode registration.js был удален function showErrorMessage() { как теперь отображаются ошибки?
+    а валидация-то как-то все же работает :) Вопрос только в том, как?
+ Igor: обсуждали голосом. Сейчас страницы регистрации и логина из icancode мигрировали в серверный модуль.
+    Конкретно этот кусок логики работает через spring form (form:errors компонент). Сама валидация имплементирована в
+    RegistrationValidator
+
+- 64) Font-Awesome был добавлен, а что со старым?
+ Igor: Font-Awesome перенес из icancode на сервер. Видел их ещё в одно игре (TODO: перенести, дефект с низким приоритетом)
+    CSS и JS файлы, которые используются на формах логина и регистрации также перенес в серверный модуль
+
++- 65) Простые странички были переделаны под JSP, почему бы не оставить html? Видимо это потянуло за собой все те депенденси лишние. Я бы хотел уходить в будущем от jsp вообще в пользу rest + front application
+ Igor: статику icancode вернул в *.html. В серверном модуле оставил *.jsp страницы. Пока не вижу необходимости их мигрировать
+ на html, сейчас там jsp скорее упрощают жизнь. В модулях игр можно продолжать использовать html статику по аналогии с
+ icancode.
+ TODO: если нужна миграция jsp -> html в server модуле, стоит поправить позже как дефект с низким приоритетом
+
+Для мислей по списку ниже
+Запустил icancode в ветке icancode-stringboot-oauth2
+командой из IDE
+    clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Picancode -f pom.xml
+
++ 66) на страничке http://127.0.0.1:8080/codenjoy-contest/register
+    в каждом незаполненном поле "undefined"
+ Igor: поправил
+
++- 67) После регистрации нового юзера в icancode (icancode-stringboot-oauth2) перешел на страничку
+    http://127.0.0.1:8080/codenjoy-contest/board/player/1y1hopccoqzrg7mnkesg?code=5104238713285933858
+    Но страничка не загрузилась в консоле браузера написано
+    GET http://127.0.0.1:8080/codenjoy-contest/resources/icancode/board.html?_=1556293177555 404 (Not Found)
+ Igor: проблему воспроизвёл и, кажется, поправил, проверил. Тем не менее, лучше ещё тщательно потестировать.
+
+68) В хедере http://127.0.0.1:8080/codenjoy-contest/
+    на линках Games и Logout поплыл дизайн
+    В iCancode их не должно быть, т.к. icancode не хочет знать что рядом есть другие игры
+
++ 69) Ссылка Join для игры icancode на страничке http://127.0.0.1:8080/codenjoy-contest/ с линком
+        http://127.0.0.1:8080/codenjoy-contest/TODO/icancode
+    выдает
+        Whitelabel Error Page
+        This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+        Fri Apr 26 18:43:10 EEST 2019
+        There was an unexpected error (type=Not Found, status=404).
+        Not Found
+ Igor: не было имплементировано, добавил
+
++- 70) Если я на страничке http://127.0.0.1:8080/codenjoy-contest/login
+    Ввожу неправильный пароль то ошибки не вижу при этом как на страничке регистрации
+ Igor: добавил общую ошибку на неверные логин и пароль. Пустые поля также подсвечиваются как ошибочные.
+
+Для мислей по списку ниже
+Запустил все игры в ветке icancode-stringboot-oauth2
+Командой из IDE
+    clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -DallGames -f pom.xml
+
+- 71) Сейчас нет возможности "подглядеть" игрушку, если ты не зарегистрирован в системе
+ Igor: TODO: нужно обсудить, сейчас переход на другие игрушки работает корректно (кнопка View в списке игр)
+
+72) Я зарегался в 2048 впервые, а потом на страничке http://127.0.0.1:8080/codenjoy-contest/ хочу подглядеть bomberman но меня редиректит на форму регистрации снова
+
++ 73) Джоин так же в пре-условиях 72) не работает так как отправляет на http://127.0.0.1:8080/codenjoy-contest/TODO/battlecity
+ Igor: поправлено в п. 69
+
++ 74) Дизайн: линки на
+    a2048
+    View | Join
+    было бы наверное лучше в один рядок
+    a2048 - View | Join
+ Igor: верстку подправил, каждый пункт в одну строку
+
+
+Комменты от 2019-05-20:
+
+---
+Стартовал все игрушки (в том числе icancode) командой
+clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug -Dcontext=/codenjoy-contest -DallGames -f pom.xml
+---
+
+
+80) В логе комменты флудят каждую секунду много
+    2019-05-20T08:30:06.455 [qtp489423829-24] DEBUG o.e.j.w.c.i.AbstractWebSocketConnection - SERVER onFillable()
+    2019-05-20T08:30:06.455 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ManagedSelector - update org.eclipse.jetty.io.ChannelEndPoint$1@6cd0425c
+    2019-05-20T08:30:06.455 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ChannelEndPoint - filled 16 DirectByteBuffer@29479ff0[p=0,l=16,c=4096,r=16]={<<<\x81\x8a2\x0c*\x05`EmMf \nDqX>>>\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
+    2019-05-20T08:30:06.456 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ChannelEndPoint - Key interests updated 0 -> 1 on SocketChannelEndPoint@4dc2b728{/127.0.0.1:8080<->/127.0.0.1:50023,OPEN,fill=FI,flush=-,to=2/300000}{io=1/1,kio=1,kro=1}->WebSocketClientConnection@e017ccea[ios=IOState@29df2cd6[OPEN,in,out],f=Flusher@6cddb789[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[CLIENT,validating],p=Parser@75dec7c3[ExtensionStack,s=START,c=0,len=2270,f=null]]
+    2019-05-20T08:30:06.456 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ManagedSelector - updates 0
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.j.w.c.i.AbstractWebSocketConnection - Filled 16 bytes - DirectByteBuffer@29479ff0[p=0,l=16,c=4096,r=16]={<<<\x81\x8a2\x0c*\x05`EmMf \nDqX>>>\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00...\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
+    2019-05-20T08:30:06.456 [WebSocketClient@1880889636-52] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@3644fbe7 waiting with 1 keys
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Parsing 16 bytes
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER OpCode TEXT, fin=true rsv=...
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Payload Length: 10 - Parser@67a5eadf[ExtensionStack,s=PAYLOAD_LEN,c=0,len=10,f=TEXT[len=0,fin=true,rsv=...,masked=true]]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Window: DirectByteBuffer@251cb586[p=0,l=10,c=10,r=10]={<<<`EmMf \nDqX>>>}
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Parsed Frame: TEXT[len=10,fin=true,rsv=...,masked=true]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Notify ExtensionStack[queueSize=0,extensions=[],incoming=org.eclipse.jetty.websocket.common.WebSocketSession,outgoing=org.eclipse.jetty.websocket.server.WebSocketServerConnection]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.j.w.c.events.AbstractEventDriver - incomingFrame(TEXT[len=10,fin=true,rsv=...,masked=true])
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.websocket.common.Parser - SERVER Parsing 0 bytes
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ChannelEndPoint - filled 0 DirectByteBuffer@29479ff0[p=0,l=0,c=4096,r=0]={<<<>>>\x81\x8a2\x0c*\x05RIGHT, ACT\x00...\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00}
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG o.e.jetty.io.AbstractConnection - fillInterested WebSocketServerConnection@e00499b8::SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=-,flush=-,to=1/300000}{io=0/0,kio=0,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]
+    2019-05-20T08:30:06.456 [qtp489423829-24] DEBUG org.eclipse.jetty.io.FillInterest - interested FillInterest@7d2f6593{AC.ReadCB@e00499b8{WebSocketServerConnection@e00499b8::SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=FI,flush=-,to=0/300000}{io=0/0,kio=0,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]}}
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ChannelEndPoint - changeInterests p=false 0->1 for SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=FI,flush=-,to=1/300000}{io=0/1,kio=0,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ManagedSelector - Queued change org.eclipse.jetty.io.ChannelEndPoint$1@2b5615e2 on ManagedSelector@332a3d42{STARTED} id=0 keys=4 selected=0 updates=0
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG org.eclipse.jetty.io.ManagedSelector - Wakeup on submit ManagedSelector@332a3d42{STARTED} id=0 keys=4 selected=0 updates=1
+    2019-05-20T08:30:06.457 [qtp489423829-24] DEBUG o.e.j.u.t.ReservedThreadExecutor - ReservedThreadExecutor@2f44a4de{s=4/4,p=0}@6fbcf98a waiting
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 woken with none selected
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 woken up from select, 0/0/4 selected
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 processing 0 keys, 1 updates
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - updateable 1
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - update org.eclipse.jetty.io.ChannelEndPoint$1@2b5615e2
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ChannelEndPoint - Key interests updated 0 -> 1 on SocketChannelEndPoint@3d38be4{/127.0.0.1:50023<->/127.0.0.1:8080,OPEN,fill=FI,flush=-,to=1/300000}{io=1/1,kio=1,kro=1}->WebSocketServerConnection@e00499b8[ios=IOState@27db93e4[OPEN,in,out],f=Flusher@229cc9ad[queueSize=0,aggregateSize=-1,terminated=null],g=Generator[SERVER,validating],p=Parser@67a5eadf[ExtensionStack,s=START,c=0,len=10,f=null]]
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - updates 0
+    2019-05-20T08:30:06.457 [qtp489423829-83] DEBUG org.eclipse.jetty.io.ManagedSelector - Selector sun.nio.ch.WindowsSelectorImpl@211f3721 waiting with 4 keys
+
+ Igor: в 'trace' профиле с давних времен org.eclipse.jetty логирование выставлено в debug. Отключить?
+
++81) На страничке регистрации http://127.0.0.1:8080/codenjoy-contest/register когда ввожу поля валидно ожидаю, что рамочка позеленеет, но она остается красной
+ Igor: fixed
+
++82) При загрузке этой же странички регистрации ошибка
+    jquery-3.1.0.min.js:11 Uncaught ReferenceError: AdminSettings is not defined
+        at configureFormFromAdminSettings (registration.js:44)
+        at HTMLDocument.loadRegistrationPage (registration.js:86)
+        at j (jquery-3.1.0.min.js:11)
+        at k (jquery-3.1.0.min.js:11)
+ Igor: fixed
+
++83) Такая же ошибка на логинке админки http://127.0.0.1:8080/codenjoy-contest/login/admin
+ Igor: fixed
+
++84) font-awesome-4.6.3 есть так же в icancode resources
+ Igor: fixed
+
++85) Редирект по хоткею Ctrl-Alt-A+D и другие, прописанные в Hotkeys не работает для login/register страничек, может и для других тоже
+ Igor: fixed
+
++86) Не нашел странички icancode admin html
+    а нет, она просто в jsp закодирована - видимо не перенесли назад. Так же есть другие jsp странички - дубликаты html'ных, видимо не удалили их.
+ Igor: не помню, проговаривал ли в прошлый раз, что admin страницу пришлось оставить jsp. И пока это обязательное требование для
+  "перекрываемых" страниц
+
++87) Кажется понял в чем дело. Вместе со страничкой регистрации стоит так же перенести и
+    admin-settings.js
+        внеся в него параметр gameName
+            var AdminSettings = function(contextPath, gameName, settingsName) {
+                var url = '/' + contextPath + '/settings/' + gameName + '/' + settingsName;
+        и добавив его в all.js в pom.xml сервера
+    и часть admin.js в разделах
+        --- general settings
+        --- collected general data
+    а так же admin.jsp в области
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="general">
+                <p class="message">Registration settings</p>
+    Это все сделать частью админки нынешней, поскольку именно с нее хочется для всех игр иметь возможность скрывать или отображать те или иные поля на форме регистрации
+    Так же уберется проверка
+        <c:if test="${activeProfiles.contains('icancode')}">
+            <script src="${ctx}/resources/icancode/js/game/admin-settings.js"></script>
+        </c:if>
+ Igor: верно, fixed
+
++88) На страничке логина и регистрации так же стоит воспользоваться общим подходом
+    <script src="${ctx}/resources/js/all.js"></script>
+    То есть скрипты привести к общему компонентному виду и встроить вместе с остальными
+        смотри например
+            joystick.js для файлов с функциями
+            register.js для бывшей странички регистрации
+        так же чтобы магия init.js сработала стоит добавить в новые странички login/register тег
+            <div id="settings" page="register"></div>
+            <div id="settings" page="login"></div>
+ Igor: на страницах логина и регистрации вне all.js остался только один scripts/registration.js, т.к. иначе он ожидаемо
+  сыпет ошибками на всех остальных страницах.
+
+---
+Стартовал только icancode командой
+clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Picancode -f pom.xml
+---
+
+89) Добавить в icancode/.../dojo.css стиль
+        .user-controls-container {
+            display: none;
+        }
+
++ 90) И сделать как-то чтобы та кнопка логаута, что ее скрыли
+       работающая через
+            <div class="user-control float-right-before-fork">
+                <form class="user-control" action="${ctx}/process_logout">
+                    <input type="submit" value="Logout" class="btn btn-link">
+                </form>
+            </div>
+       чтобы она срабатывала по клику на logout что на icancode board.html
+            <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/registration.html">Log out</a></li>
+       можно ли сделать не сабмит формы, а GET запрос для логаута, тогда можно обойтись простой урлой /codenjoy-contest/logout
+ Igor: перевел на линк вместо формы, на icancode спрятал общий logout link.
+
++ 91) Ссылка Games вообще-то кажется лишней, поскольку редирект на нее происходит если указать /codenjoy-contest/ без - можем убрать?
+    Останется только logout которую если можно по 90) перевести на get то вообще будет просто и замечательно
+ Igor: Games link убрал, GET - см. выше, готово.
+
++ 92) На icancode при переходе на /codenjoy-contest/ хочется видеть не страничку со всеми играми, а board.html страничку как это после join происходит
+    Что елси сделать так - если у тебя только одна игра загружена, то ты видишь ее борд (зареган ты или нет)
+    Если же игр много - то список игрушек с возможностью заджойниться как сейчас
+    Я не помню как в icancode раньше было реализовано, но там на /codenjoy-contest/ была либо страничка регистрации, либо твоя борда
+    Что скажешь?
+ Igor: практически уверен, что раньше работало не так, но всё же могу и ошибаться. Добавил логику, как описано выше
+
+---
+Стартовал только три игрушки tetris,bomberman,a2048 командой
+clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Ptetris,snake,a2048,battlecity -f pom.xml
+---
+
++ 93) Со странички регистрации-логина убрать все артефакты связывающие страничку с EPAM
+    хедер
+        оставляем иконку и надпись Coding Dojo вместо EPAM DOJO
+    футер
+        оставляем About DOJO = codenjoy.com
+        Codenjoy on GitHub  = github.com/codenjoyme
+        Ask me anything = email:codenjoyme@gmail.com
+    заголовок в браузере
+        Codenjoy | SignUp
+
++ 94) Сейчас если в tetris никто не зареган (0 игроков), а я допустим играю в 2048 то при кике на view вижу форму регистрации
+    кажется мы обсуждали какую-то надпись по типу "заджойнитесь и станьте первым игроком"
+ Igor: поправил, теперь логика такая: если пользователь пытается зайти во View, в игре при этом никого нет, всплывает стандартное
+  confirm окошко браузера с вопросом, готов ли пользователь заджойниться, т.к. в игре ещё никого нет: 'Yes' - джойн,
+  'No' - остаемся на странице со списокм игр.
+
+
++ 95) Какой урл у админки? Не смог зайти на нее http://127.0.0.1:8080/codenjoy-contest/admin выдает
+    Whitelabel Error Page
+    This application has no explicit mapping for /error, so you are seeing this as a fallback.
+    Mon May 20 09:54:50 EEST 2019
+    There was an unexpected error (type=Forbidden, status=403).
+    Forbidden
+ Igor: никогда раньше не встречал эту проблему, но похоже на новых спрингах нельзя перемапить 'error' вью, просто переименовал
+  файл и ссылки на него из контроллеров
+
++96) Зашел на аодминку под admin@codenjoyme.com / admin
+    Вроде все работает
+
+TODO: 97) Документацию хочется по тому что сделано в этом PR в формате *.md где-то в корне проекта
+
+
+Комменты от 2019-05-25
+? на потом
++ исправлено
+! надо бы сделать перед мерджем в мастер
+
+?100) TODO Подумать над тем, как убрать из регистрации и логина то что имеет смысл только для icancode
+    <!-- TODO to remove from here -->
+    ну или заложить такую возможность для всех игрушек - подтип игры
+
++101) Почему-то иконка ICanCode на страничке регистрации и логина остается, то есть флаг на jsp не срабатывает
+    <c:if test="${activeProfiles.contains('icancode')}">
+    UPD: нашел причину - я забыл указать профайл icancode
+
+?101.2) TODO Я бы удалил вообще, или оставил контейнер, а в скрипте игрушки айкенкода я бы подобавлял динамически контент кастомный
+
+?102) TODO Так же надо сделать скриптом изменения футера из айкенкода (версия для компании)
+
++103) Объединил скрипт register & registration.js
+      как фикс 88)
+
++104) не работает переход по хорткею на админпейджу с main или info page
+
++105) перенес логику админки странички регистрации с icancode на серверную админку
+      как фикс 87)
+      Удалил попытку сделать это через проперти игры icancode
+
++106) В engine/pom.xml я нашел старую версию джетти <jetty.version>9.3.25.v20180904</jetty.version>
+     это относится к вебсокетам.
+     А еще нашел в server/pom.xml ссылку на jetty.version но не понятно какой версии, так как пропертя не указано в помнике
+     Вопрос, как обновить правильно все до последней версии, чтобы github не ругался
+     https://github.com/codenjoyme/codenjoy/network/alert/CodingDojo/server/pom.xml/org.eclipse.jetty:jetty-server/open
+ Igor: написал вопрос в скайп - эта ссылочка не открывается. Пока что версию jetty перевел под управление спринг-бута.
+
++107) Надо бы так же обновить и другие либины до последних версий
+    Не берусь это делать т.к. не уверен что spring boot понимаю как работает с депенденсями
+ Igor: зависимости, которые регулирует спринг-бут, я перевел на его bom. Остальные версии оставил без изменений, мне
+  кажется сейчас лучше избежать полного регресс теста?
+  TODO: избавиться от jetty в пользу Tomcat, от Joda time в пользу java8 datetime API
+
+!108) Так же надо бы обновить в первую очередь и
+    https://github.com/codenjoyme/codenjoy/network/alert/CodingDojo/server/pom.xml/com.fasterxml.jackson.core:jackson-databind/open
+ Igor: аналогично п. 106
+
++109) Обновил версии до 1.1.0
+
+!110) Затяни плиз все в PR я замерджу его от твоего имени
+ Igor: затянул фиксы в PR, спасибо большое
+
+Спасибо!
+
+

@@ -25,6 +25,7 @@ pages = pages || {};
 pages.board = function() {
     game.gameName = getSettings('gameName');
     game.playerName = getSettings('playerName');
+    game.readableName = getSettings('readableName');
     game.code = getSettings('code');
     game.allPlayersScreen = getSettings('allPlayersScreen');
     game.contextPath = getSettings('contextPath');
@@ -101,8 +102,11 @@ function initBoardComponents(game) {
         initLeadersTable(game.contextPath, game.playerName, game.code);
     }
 
-    if (!game.enableInfo) {
+    if (!game.enableForkMe) {
         $("#fork-me").hide();
+    }
+
+    if (!game.enableInfo) {
         $("#how-to-play").hide();
     }
 

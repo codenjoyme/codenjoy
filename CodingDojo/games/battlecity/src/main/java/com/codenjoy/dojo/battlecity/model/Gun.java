@@ -32,19 +32,23 @@ public class Gun implements Tickable {
 
     public Gun(int ticksPerBullets) {
         this.ticksPerBullets = ticksPerBullets;
+        reset();
+    }
+
+    public void reset() {
         ticks = 0;
         canFire = true;
     }
 
     @Override
     public void tick() {
-        ticks++;
+        if (!canFire) {
+            ticks++;
+        }
         if (ticksPerBullets <= 0) {
             canFire = true;
-        }
-        if (ticks == ticksPerBullets) {
-            canFire = true;
-            ticks = 0;
+        } else if (ticks == ticksPerBullets) {
+            reset();
         }
     }
 

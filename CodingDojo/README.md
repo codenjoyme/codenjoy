@@ -1,5 +1,6 @@
 Codenjoy
 ==============
+[![Build Status](https://travis-ci.org/codenjoyme/codenjoy.svg?branch=master)](https://travis-ci.org/codenjoyme/codenjoy)
 
 Introduction
 --------------
@@ -9,7 +10,7 @@ And you can write one that will be your own.
 
 Set up a development environment
 --------------
-All you need to develop a game is jdk7, maven3, git client and IDE Idea.
+All you need to develop a game is jdk8, maven3, git client and IDE Idea.
 
 - install a git client locally, for example, [tortoise git](https://code.google.com/p/tortoisegit/)
 - create an account on [github](http://github.com) or [bitbucket](http://bitbucket.org)
@@ -23,7 +24,7 @@ All you need to develop a game is jdk7, maven3, git client and IDE Idea.
 - add the `;%JAVA_HOME%\bin` string at the end of the Path variable
 - check by running cmd.exe with the `mvn -version` command.
 If installation is successful, you will see the command output the version of maven and java, rather than "command not found"
-```
+```bash
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
 Maven home: C:\java\apache-maven-3.x.x
@@ -35,54 +36,54 @@ C:\Users\user>
 ```
 - download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
 
-Run your game using Codenjoy-builder
+Run your game using Codenjoy-contest module
 --------------
 
 To build a project with your game, do the following:
 
 - download the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
-- In the `\CodingDojo\builder\pom.xml` file, specify the games you need. To achieve this:
-- add a dependency to a selected game in the `dependency` block
+- In the `\CodingDojo\server\pom.xml` file, specify the games you need. To achieve this:
+- add a dependency to a selected game in the `dependency` block under a new profile. Profile name should 
+represent game name for simplicity. 
+```xml
+<profile>
+    <id>sampleengine</id>
+    <activation>
+        <property>
+            <name>allGames</name>
+        </property>
+    </activation>
+    <properties>
+        <exclude.sampletext>false</exclude.sampletext>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>sample-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</profile>
 ```
-<dependency>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>sample-engine</artifactId>
-    <version>${project.version}</version>
-</dependency>
-```
-- In maven-dependency-plugin, in the executions\execution\configuration\artifactItems section, add
-```
-<artifactItem>
-    <groupId>${project.groupId}</groupId>
-    <artifactId>a2048-engine</artifactId>
-    <version>${project.version}</version>
-    <type>jar</type>
-    <overWrite>true</overWrite>
-    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
-    <includes>resources/**/*</includes>
-</artifactItem>
-```
-- if this is a new game, you can copy the `\CodingDojo\builder` project for it
 - you can add a new game to the `\CodingDojo\pom.xml` parent project in the modules section, or maintain it separately
-```
+```xml
 <modules>
-        <module>games/engine</module>
-
-		<module>games/sample</module>
-        ...
-        <module>games/your-game</module>
-
-        <module>server</module>
-        <module>builder</module>
-    </modules>
+    <module>games/engine</module>
+    <module>games/sample</module>
+    ...
+    <module>games/your-game</module> <!-- this is your new game -->
+    <module>server</module>
+</modules>
 ```
-- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\resources\com\codenjoy\dojo\server\codenjoy.properties`
-- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\webapp\resources\js\settings.js`
+- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\resources\application.yml`
+- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\webapp\resources\js\init.js`
 - that is, set `email.verification=false` to disable email verification during registration
 - run `mvn clean install` in the `\CodingDojo\games\engine` project to install the UI
 - run `mvn clean install` in the project root to install all other components
-- run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true jetty:run-war` in the `\CodingDojo\builder` project to launch the game
-- a simpler way of launching the game is by running a script in the root of the `\CodingDojo\start-server.bat` project
+- run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite spring-boot:run -Pyour-game-profile` 
+in the `\CodingDojo\server` project to launch the game (where 'your-game-profile') is a name of profile that you have set 
+recently in `\CodingDojo\server\pom.xml`
+- a simpler way of launching the game is by running a script in the root of the `\CodingDojo\server\start-server.bat` project
 - in the browser, access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
 - you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
 - in case of any problems, skype Oleksandr Baglai at `alexander.baglay`

@@ -55,9 +55,7 @@ public class Container<T, V> implements Iterable<V> {
         Iterator<T> iterator = data.keySet().iterator();
         if (!iterator.hasNext()) return null;
         T key = iterator.next();
-        V result = data.get(key);
-        data.remove(key);
-        return result;
+        return data.remove(key);
     }
 
     @Override

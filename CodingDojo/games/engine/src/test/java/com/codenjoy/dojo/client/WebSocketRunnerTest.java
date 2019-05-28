@@ -28,36 +28,38 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class WebSocketRunnerTest {
+
     @Test
     public void testUrlParser() {
-        assertURL("UrlParser{server='codenjoy.com:80', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
-                "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        assertURL("UrlParser{server='codenjoy.com:80', context='codenjoy-contest', code='12345678901234567890', userName='3edq63tw0bq4w4iem7nb'}",
+                "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
 
-        assertURL("UrlParser{server='codenjoy.com:80', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
-                "https://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        assertURL("UrlParser{server='codenjoy.com:80', context='codenjoy-contest', code='12345678901234567890', userName='3edq63tw0bq4w4iem7nb'}",
+                "https://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
 
-        assertURL("UrlParser{server='127.0.0.1:8080', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
-                "http://127.0.0.1:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        assertURL("UrlParser{server='127.0.0.1:8080', context='codenjoy-contest', code='12345678901234567890', userName='3edq63tw0bq4w4iem7nb'}",
+                "http://127.0.0.1:8080/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
 
-        assertURL("UrlParser{server='192.168.0.1', context='codenjoy-contest', code='12345678901234567890', userName='your@email.com'}",
-                "http://192.168.0.1/codenjoy-contest/board/player/your@email.com?code=12345678901234567890");
+        assertURL("UrlParser{server='192.168.0.1', context='codenjoy-contest', code='12345678901234567890', userName='3edq63tw0bq4w4iem7nb'}",
+                "http://192.168.0.1/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890");
 
         assertURL("UrlParser{server='otherDomain', context='other-context', code='otherCode', userName='otherEmail'}",
                 "http://otherDomain/other-context/board/player/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        String message = "Bad web socket server url, expected: http://server:port/codenjoy-contest/board/player/playerid?code=12345678901234567890";
+        assertURL(message,
                 "http://otherDomain/other-context/BUG/player/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/BUG/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/player/otherEmail?BUG=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/otherEmail?code=otherCode");
 
-        assertURL("Bad URL",
+        assertURL(message,
                 "http://otherDomain/other-context/board/player/BUG/otherEmail?code=otherCode");
     }
 

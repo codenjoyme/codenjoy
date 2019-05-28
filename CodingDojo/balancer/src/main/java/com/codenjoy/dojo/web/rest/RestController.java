@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,12 +82,9 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @RequestMapping(value = "/score/disqualify/{player}/{adminPassword}", method = RequestMethod.POST)
+    @RequestMapping(value = "/score/disqualify/{player}", method = RequestMethod.POST)
     @ResponseBody
-    public boolean disqualify(@RequestBody List<String> players,
-                                       @PathVariable("adminPassword") String adminPassword)
-    {
-        validator.checkIsAdmin(adminPassword);
+    public boolean disqualify(@RequestBody List<String> players) {
         players.stream().forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
@@ -97,11 +94,9 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @RequestMapping(value = "/score/disqualified/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/score/disqualified", method = RequestMethod.GET)
     @ResponseBody
-    public List<String> disqualified(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    public List<String> disqualified() {
         return dispatcher.disqualified();
     }
 
@@ -352,12 +347,9 @@ public class RestController {
         return result;
     }
 
-    @RequestMapping(value = "/remove/{player}/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/remove/{player}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean remove(@PathVariable("player") String email,
-                          @PathVariable("adminPassword") String adminPassword)
-    {
-        validator.checkIsAdmin(adminPassword); // TODO test me
+    public boolean remove(@PathVariable("player") String email) {
 
         Player player = players.get(email);
         if (player == null) {
@@ -386,11 +378,9 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/players/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/players", method = RequestMethod.GET)
     @ResponseBody
-    public List<Player> getPlayers(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    public List<Player> getPlayers() {
         return players.getPlayersDetails();
     }
 
@@ -409,12 +399,9 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.POST)
+    @RequestMapping(value = "/settings", method = RequestMethod.POST)
     @ResponseBody
-    public boolean saveSettings(@PathVariable("adminPassword") String adminPassword,
-                                   @RequestBody ConfigProperties config)
-    {
-        validator.checkIsAdmin(adminPassword);
+    public boolean saveSettings(@RequestBody ConfigProperties config) {
 
         this.config.updateFrom(config);
         gameSerers.update(config.getServers());
@@ -423,43 +410,31 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/settings/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/settings", method = RequestMethod.GET)
     @ResponseBody
-    public ConfigProperties getSettings(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    public ConfigProperties getSettings() {
         return config;
     }
 
     // TODO test me
-    @RequestMapping(value = "/debug/get/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/debug/get", method = RequestMethod.GET)
     @ResponseBody
-    public boolean getDebug(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    public boolean getDebug() {
         return debug.isWorking();
     }
 
     // TODO test me
-    @RequestMapping(value = "/debug/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/debug/set/{enabled}", method = RequestMethod.GET)
     @ResponseBody
-    public boolean setDebug(@PathVariable("adminPassword") String adminPassword,
-                                          @PathVariable("enabled") boolean enabled)
-    {
-        validator.checkIsAdmin(adminPassword);
-
+    public boolean setDebug(@PathVariable("enabled") boolean enabled) {
         debug.setDebugEnable(enabled);
-
         return debug.isWorking();
     }
 
     // TODO test me
-    @RequestMapping(value = "/contest/enable/set/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/contest/enable/set/{enabled}", method = RequestMethod.GET)
     @ResponseBody
-    public List<String> startContestStarted(@PathVariable("adminPassword") String adminPassword,
-                                     @PathVariable("enabled") boolean enabled)
-    {
-        validator.checkIsAdmin(adminPassword);
+    public List<String> startContestStarted(@PathVariable("enabled") boolean enabled) {
 
         List<String> status = new LinkedList<>();
         if (enabled) {
@@ -477,22 +452,17 @@ public class RestController {
 
 
     // TODO test me
-    @RequestMapping(value = "/contest/enable/get/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/contest/enable/get", method = RequestMethod.GET)
     @ResponseBody
-    public boolean getContestStarted(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    public boolean getContestStarted() {
         return timer.isPaused();
     }
 
     // TODO test me
-    @RequestMapping(value = "/cache/clear/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cache/clear", method = RequestMethod.GET)
     @ResponseBody
-    public boolean invalidateCache(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    public boolean invalidateCache() {
         dispatcher.clearCache();
-
         return true;
     }
 

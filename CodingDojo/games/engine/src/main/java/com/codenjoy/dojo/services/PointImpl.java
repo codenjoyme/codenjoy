@@ -165,6 +165,6 @@ public class PointImpl implements Point, Comparable<Point> {
         if (o == null) {
             return -1;
         }
-        return Integer.valueOf(this.hashCode()).compareTo(Integer.valueOf(o.hashCode()));
+        return Integer.compare(this.hashCode(), o.hashCode());
     }
 }

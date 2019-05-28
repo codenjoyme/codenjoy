@@ -38,7 +38,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import org.apache.commons.lang.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -48,15 +48,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component("playerService")
+@Slf4j
 public class PlayerServiceImpl implements PlayerService {
-
-    private static Logger logger = DLoggerFactory.getLogger(PlayerServiceImpl.class);
     
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
@@ -98,12 +96,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String name, String callbackUrl, String gameName) {
+    public Player register(String name, String ip, String gameName) {
         lock.writeLock().lock();
         try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Registered user {} in game {}", name, gameName);
-            }
+            log.debug("Registered user {} in game {}", name, gameName);
 
             if (!isRegOpened) {
                 return NullPlayer.INSTANCE;
@@ -111,7 +107,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             registerAIIfNeeded(name, gameName);
 
-            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, null));
+            Player player = register(new PlayerSave(name, ip, gameName, 0, null));
 
             return player;
         } finally {
@@ -152,7 +148,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void registerAI(String playerName, GameType gameType) {
         String code = isAI(playerName) ?
                 gerCodeForAI(playerName) :
-                registration.getCode(playerName);
+                registration.getCodeById(playerName);
 
         Closeable ai = createAI(playerName, code, gameType);
         if (ai != null) {
@@ -253,11 +249,9 @@ public class PlayerServiceImpl implements PlayerService {
 
             player = playerGame.getPlayer();
 
-            player.setReadableName(registration.getReadableName(player.getName()));
+            player.setReadableName(registration.getNameById(player.getName()));
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Player {} starting new game {}", name, playerGame.getGame());
-            }
+            log.debug("Player {} starting new game {}", name, playerGame.getGame());
         } else {
           // do nothing
         }
@@ -269,11 +263,9 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             long time = 0;
-            if (logger.isDebugEnabled()) {
-                logger.debug("==================================================================================");
-                logger.debug("PlayerService.tick() starts");
-                time = System.currentTimeMillis();
-            }
+            log.debug("==================================================================================");
+            log.debug("PlayerService.tick() starts");
+            time = System.currentTimeMillis();
 
             actionLogger.log(playerGames);
             autoSaver.tick();
@@ -282,9 +274,9 @@ public class PlayerServiceImpl implements PlayerService {
             sendScreenUpdates();
             requestControls();
 
-            if (logger.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 time = System.currentTimeMillis() - time;
-                logger.debug("PlayerService.tick() for all {} games is {} ms",
+                log.debug("PlayerService.tick() for all {} games is {} ms",
                         playerGames.size(), time);
             }
 
@@ -293,7 +285,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
         } catch (Error e) {
             e.printStackTrace();
-            logger.error("PlayerService.tick() throws", e);
+            log.error("PlayerService.tick() throws", e);
         } finally {
             lock.writeLock().unlock();
         }
@@ -311,13 +303,11 @@ public class PlayerServiceImpl implements PlayerService {
                     requested++;
                 }
             } catch (Exception e) {
-                logger.error("Unable to send control request to player " + player.getName() +
+                log.error("Unable to send control request to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("tick().requestControls() {} players", requested);
-        }
+        log.debug("tick().requestControls() {} players", requested);
     }
 
     private void sendScreenUpdates() {
@@ -352,7 +342,7 @@ public class PlayerServiceImpl implements PlayerService {
                         gameData.getScores(),
                         gameData.getHeroesData()));
             } catch (Exception e) {
-                logger.error("Unable to send screen updates to player " + player.getName() +
+                log.error("Unable to send screen updates to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
                 e.printStackTrace();
             }
@@ -365,7 +355,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             screenController.requestControlToAll(map);
         } catch (Exception e) {
-            logger.error("Unable to send screen updates to all players", e);
+            log.error("Unable to send screen updates to all players", e);
             e.printStackTrace();
         }
     }
@@ -396,10 +386,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             Player player = getPlayer(name);
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("Unregistered user {} from game {}",
-                        player.getName(), player.getGameName());
-            }
+            log.debug("Unregistered user {} from game {}", player.getName(), player.getGameName());
 
             playerGames.remove(player);
         } finally {
@@ -434,7 +421,7 @@ public class PlayerServiceImpl implements PlayerService {
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
                 playerToUpdate.setName(newPlayer.getName());
                 playerToUpdate.setReadableName(newPlayer.getReadableName());
-                registration.updateReadableName(newPlayer.getName(), newPlayer.getReadableName());
+                registration.updateName(newPlayer.getName(), newPlayer.getReadableName());
 
                 Game game = playerGame.getGame();
                 if (game != null && game.getSave() != null) {

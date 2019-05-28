@@ -50,7 +50,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
         final int TEN = 10;
         final int NOT_FOUND = -1;
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         int[] aa = new int[length * 2];
         int ia = 0;
@@ -58,7 +58,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
 
         boolean isCalcCeil = a >= b;
         if (!isCalcCeil) {
-            result += "0.";
+            result.append("0.");
             aa[ia++] = 0;
             aa[ia++] = DOT;
             ceilpos = ia - 1;
@@ -66,7 +66,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
         while (a != 0 && (result.length() - ceilpos) <= length) {
             if (a < b) {
                 if (isCalcCeil) {
-                    result += ".";
+                    result.append(".");
                     aa[ia++] = DOT;
                     ceilpos = ia - 1;
                     isCalcCeil = false;
@@ -74,7 +74,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
                 a = a * TEN;
             }
             while (a < b) {
-                result += "0";
+                result.append("0");
                 aa[ia++] = 0;
                 a = a * TEN;
             }
@@ -87,7 +87,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
                 }
             }
             if (found != NOT_FOUND) {
-                result = result.substring(0, found) + '(' + result.substring(found) + ')';
+                result = new StringBuilder(result.substring(0, found) + '(' + result.substring(found) + ')');
                 break;
             }
 
@@ -103,7 +103,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
                 aa[ia++] = a;
             }
             int d = a % b;
-            result += c;
+            result.append(c);
             a = d;
         }
 
@@ -155,7 +155,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 40;
+        return 60;
     }
 
     @Override

@@ -174,7 +174,11 @@ public class PlayerCommandTest {
 
     @Test
     public void shouldLeaveCharsCommand() {
-        String expected = "qwertyuiopasdfghjklzxcvbnm,./;'[]QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?1234567890-=`~!@#$%^&*()_+ ";
+        assertMessageIsValid("ASDFGHJKL:\"ZXCVBNM<>?1234567890-=`~!@#$%^&*()_+ ");
+        assertMessageIsValid("qwertyuiopasdfghjklzxcvbnm,./;'[]QWERTYUIOP{}");
+    }
+
+    private void assertMessageIsValid(String expected) {
         execute("message('" + expected + "')");
 
         InOrder inOrder = inOrder(joystick);

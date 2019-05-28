@@ -4,20 +4,41 @@ services:
    codenjoy_server:
      depends_on:                                            #!L#
        - codenjoy_db                                        #!L#
-     image: apofig/codenjoy-contest:1.0.28
+     image: apofig/codenjoy-contest:1.1.0
      container_name: codenjoy-contest
      build:
         context: ./applications
         dockerfile: Dockerfile-contest
-     command: java -jar /usr/local/jetty/start.jar -Ddatabase.type=${DATABASE_TYPE}
+        args:
+          WAR_FILE: ./codenjoy-contest.war
+     command: --spring.profiles.active=${DATABASE_TYPE} --context=/${CODENJOY_CONTEXT} # --debug
      volumes:
-#       - ./materials/database:/var/lib/jetty/database      #L#
-       - ./config/codenjoy:/var/lib/jetty/config
-       - ./logs/codenjoy/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log
+#       - ./materials/codenjoy/database:/database      #L#
+       - ./logs/codenjoy:/logs
        - /etc/localtime:/etc/localtime:ro
 #     ports:                                                #P#
 #       - "${CODENJOY_PORT}:8080"                           #P#
      restart: always
+     environment:
+         GAME_SAVE_AUTO: "true"
+         BOARD_SAVE_TICKS: 1
+         GAME_AI: "true"
+         LOG_DEBUG: "false"
+         PAGE_MAIN:
+         PAGE_REGISTRATION:
+         PAGE_HELP_LANGUAGE:
+         EMAIL_VERIFICATION: "false"
+         EMAIL_PASSWORD:
+         EMAIL_NAME: info@codenjoy.com
+         DONATE_CODE:
+         DATABASE_HOST: codenjoy_db
+         DATABASE_PORT: 5432
+         DATABASE_NAME: ${CODENJOY_POSTGRES_DB}
+         DATABASE_USER: ${CODENJOY_POSTGRES_USER}
+         DATABASE_PASSWORD: ${CODENJOY_POSTGRES_PASSWORD}
+         ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+         EMAIL_HASH: ${EMAIL_HASH}
+         SERVER_IP: ${SERVER_IP}
      networks:
          codenjoy:
              ipv4_address: 172.28.1.2
@@ -26,4 +47,4 @@ services:
      depends_on:
        - codenjoy_server
      volumes:
-       - ./config/nginx/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf
+       - ./config/nginx/conf.d/codenjoy-contest.conf:/etc/nginx/conf.d/codenjoy-contest.conf

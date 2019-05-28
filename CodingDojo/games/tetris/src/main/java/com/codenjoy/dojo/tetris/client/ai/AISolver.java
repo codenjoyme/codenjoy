@@ -31,8 +31,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.model.*;
-import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -210,13 +209,5 @@ public class AISolver extends AbstractJsonSolver<Board> {
             }
         }
         combo.setScore(gaps, height);
-    }
-
-    public static void main(String[] args) {
-        WebSocketRunner.runClient(
-                // paste here board page url from browser after registration
-                "http://127.0.0.1:8080/codenjoy-contest/board/player/apofig@gmail.com?code=20010765231070354251",
-                new AISolver(new RandomDice()),
-                new Board());
     }
 }

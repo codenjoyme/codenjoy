@@ -29,7 +29,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -53,7 +52,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Elements getAt(int x, int y) {
-        if (x < 0 || y < 0 || x >= size || y >= size) {
+        if (isOutOfField(x, y)) {
             return WALL;
         }
         return super.getAt(x, y);

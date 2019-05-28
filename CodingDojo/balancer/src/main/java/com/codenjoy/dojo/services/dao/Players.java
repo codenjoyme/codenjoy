@@ -27,14 +27,12 @@ import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
-import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-@Component
 public class Players {
 
     private CrudConnectionThreadPool pool;

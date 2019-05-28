@@ -29,6 +29,7 @@ pages.boardOnly = function() {
     game.enablePlayerInfo = false;
     game.enablePlayerInfoLevel = false;
     game.enableLeadersTable = false;
+    game.enableForkMe = false;
     game.enableInfo = false;
     game.enableHotkeys = true;
     game.enableAdvertisement = false;

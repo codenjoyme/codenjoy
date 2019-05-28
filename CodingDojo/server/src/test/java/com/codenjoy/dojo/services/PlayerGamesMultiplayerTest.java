@@ -41,8 +41,8 @@ import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -120,6 +120,7 @@ public class PlayerGamesMultiplayerTest {
     private void playerWantsToPlay(GameType gameType) {
         int index = gamePlayers.size();
         Player player = new Player("player" + index);
+        player.setEventListener(mock(InformationCollector.class));
         players.add(player);
         PlayerGame playerGame = playerWantsToPlay(gameType, player, null);
         getFileds.add(() -> playerGame.getGame().getField());

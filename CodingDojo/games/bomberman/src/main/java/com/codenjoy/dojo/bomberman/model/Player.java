@@ -47,8 +47,8 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void event(Events event) {
-        switch (event) {
-            case KILL_BOMBERMAN: hero.kill(); break;
+        if (event == Events.KILL_BOMBERMAN) {
+            hero.kill();
         }
 
         super.event(event);

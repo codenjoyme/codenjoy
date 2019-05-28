@@ -23,13 +23,18 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.controller.Controller;
+import com.codenjoy.dojo.services.controller.PlayerController;
+import com.codenjoy.dojo.services.controller.ScreenController;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.lock.LockedJoystick;
-import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.mocks.AISolverStub;
+import com.codenjoy.dojo.services.mocks.BoardStub;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
@@ -37,6 +42,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -44,12 +50,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.util.*;
@@ -58,23 +66,12 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-@ContextConfiguration(classes = {PlayerServiceImpl.class,
-        MockScreenSenderConfiguration.class,
-        MockPlayerController.class,
-        MockScreenController.class,
-        MockAutoSaver.class,
-        MockSaveService.class,
-        MockRegistration.class,
-        MockGameService.class,
-        MockConfigProperties.class,
-        MockActionLogger.class,
-        SpyPlayerGames.class,
-        MockPropertyPlaceholderConfigurer.class})
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class)
+@RunWith(SpringRunner.class)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class PlayerServiceImplTest {
 
     public static final String VASYA = "vasya@mail.com";
@@ -92,20 +89,49 @@ public class PlayerServiceImplTest {
     private ArgumentCaptor<List> plotsCaptor;
     private ArgumentCaptor<String> boardCaptor;
 
-    @Autowired private PlayerServiceImpl playerService;
-    @Autowired private Controller screenController;
-    @Autowired private Controller playerController;
-    @Autowired private GameService gameService;
-    @Autowired private AutoSaver autoSaver;
-    @Autowired private ActionLogger actionLogger;
-    @Autowired private PlayerGames playerGames;
-    @Autowired private Registration registration;
+    @MockBean
+    private ScreenSender screenSender;
 
+    @MockBean
+    private PlayerController playerController;
+
+    @MockBean
+    private ScreenController screenController;
+
+    @MockBean
+    private AutoSaver autoSaver;
+
+    @MockBean
+    private SaveService saveService;
+
+    @MockBean
+    private Registration registration;
+
+    @MockBean
+    private GameService gameService;
+
+    @MockBean
+    private ActionLogger actionLogger;
+
+    @SpyBean
+    private PlayerGames playerGames;
+
+    @SpyBean
+    private PlayerGamesView playerGamesView;
+
+    @Autowired
+    private PlayerServiceImpl playerService;
+
+    @Mock
     private GameType gameType;
+    @Mock
     private PlayerScores playerScores1;
+    @Mock
     private PlayerScores playerScores2;
+    @Mock
     private PlayerScores playerScores3;
     private InformationCollector informationCollector;
+    @Mock
     private GraphicPrinter printer;
     private List<Joystick> joysticks = new LinkedList<>();
     private List<GamePlayer> gamePlayers = new LinkedList<>();
@@ -125,19 +151,14 @@ public class PlayerServiceImplTest {
         plotsCaptor = ArgumentCaptor.forClass(List.class);
         boardCaptor = ArgumentCaptor.forClass(String.class);
 
-        playerScores1 = mock(PlayerScores.class);
         when(playerScores1.getScore()).thenReturn(0);
 
-        playerScores2 = mock(PlayerScores.class);
         when(playerScores2.getScore()).thenReturn(0);
 
-        playerScores3 = mock(PlayerScores.class);
         when(playerScores3.getScore()).thenReturn(0);
 
-        printer = mock(GraphicPrinter.class);
         when(printer.print(anyObject(), anyObject())).thenReturn("1234");
 
-        gameType = mock(GameType.class);
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
         when(gameType.getBoardSize()).thenReturn(v(15));
@@ -171,7 +192,7 @@ public class PlayerServiceImplTest {
         doAnswer(inv -> {
             String email = inv.getArgument(0);
             return "readable_" + email.split("@")[0];
-        }).when(registration).getReadableName(anyString());
+        }).when(registration).getNameById(anyString());
 
         playerGames.clear();
         Mockito.reset(playerController, screenController, actionLogger);
@@ -1312,7 +1333,7 @@ public class PlayerServiceImplTest {
         assertEquals(gameName, playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA, player.getName());
-        assertNotNull(VASYA, player.getAI());
+        assertNotNull(VASYA, player.getAi());
     }
 
     @Test
@@ -1333,7 +1354,7 @@ public class PlayerServiceImplTest {
         assertEquals("game", playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getName());
-        assertNotNull(VASYA, player.getAI());
+        assertNotNull(VASYA, player.getAi());
 
     }
 
