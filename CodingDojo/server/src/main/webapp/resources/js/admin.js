@@ -45,34 +45,34 @@ pages.admin = function() {
 
     var getRegSettings = function() {
         return {
-            showGamesOnRegistration : $('#show-games').prop('checked'),
-            showNamesOnRegistration : $('#show-names').prop('checked'),
-            showTechSkillsOnRegistration : $('#show-tech').prop('checked'),
-            showUniversityOnRegistration : $('#show-university').prop('checked'),
-            defaultGameOnRegistration : $('#default-game').find('option:selected').text()
+            showGames : $('#show-games').prop('checked'),
+            showNames : $('#show-names').prop('checked'),
+            showTechSkills : $('#show-tech').prop('checked'),
+            showUniversity : $('#show-university').prop('checked'),
+            defaultGame : $('#default-game').find('option:selected').text()
         };
     }
 
     var setRegSettings = function(data) {
         if ($.isEmptyObject(data)) {
             data = {
-                showGamesOnRegistration: true,
-                showNamesOnRegistration: false,
-                showCitiesOnRegistration: false,
-                showTechSkillsOnRegistration: false,
-                showUniversityOnRegistration: false,
-                defaultGameOnRegistration: null
+                showGames: true,
+                showNames: false,
+                showCities: false,
+                showTechSkills: false,
+                showUniversity: false,
+                defaultGame: null
             };
         }
-        if (!data.defaultGameOnRegistration) {
-            data.defaultGameOnRegistration = $("#default-game option:first").val();
+        if (!data.defaultGame) {
+            data.defaultGame = $("#default-game option:first").val();
         }
 
-        $('#show-games').prop('checked', data.showGamesOnRegistration);
-        $('#show-names').prop('checked', data.showNamesOnRegistration);
-        $('#show-tech').prop('checked', data.showTechSkillsOnRegistration);
-        $('#show-university').prop('checked', data.showUniversityOnRegistration);
-        $('#default-game').val(data.defaultGameOnRegistration);
+        $('#show-games').prop('checked', data.showGames);
+        $('#show-names').prop('checked', data.showNames);
+        $('#show-tech').prop('checked', data.showTechSkills);
+        $('#show-university').prop('checked', data.showUniversity);
+        $('#default-game').val(data.defaultGame);
     }
 
     $('#registration-save-button').click(function() {

@@ -58,12 +58,12 @@ function initRegistration(waitApprove, contextPath) {
         general.load(function(data) {
             if ($.isEmptyObject(data)) {
                 data = {
-                    showGamesOnRegistration: true,
-                    showNamesOnRegistration: false,
-                    showCitiesOnRegistration: false,
-                    showTechSkillsOnRegistration: false,
-                    showUniversityOnRegistration: false,
-                    defaultGameOnRegistration: null
+                    showGames: true,
+                    showNames: false,
+                    showCities: false,
+                    showTechSkills: false,
+                    showUniversity: false,
+                    defaultGame: null
                 };
             }
 
@@ -73,35 +73,35 @@ function initRegistration(waitApprove, contextPath) {
             } else {
                 $('#gameName').hide();
             }
-            if (data.showGamesOnRegistration) {
+            if (data.showGames) {
                 $('#game').show();
             } else {
                 $('#game').hide();
             }
-            if (data.showNamesOnRegistration) {
+            if (data.showNames) {
                 $('#readableName').show();
             } else {
                 $('#readableName').hide();
             }
-            if (data.showCitiesOnRegistration) {
+            if (data.showCities) {
                 $('#data1').show();
             } else {
                 $('#data1').hide();
             }
-            if (data.showTechSkillsOnRegistration) {
+            if (data.showTechSkills) {
                 $('#data2').show();
             } else {
                 $('#data2').hide();
             }
-            if (data.showUniversityOnRegistration) {
+            if (data.showUniversity) {
                 $('#data3').show();
             } else {
                 $('#data3').hide();
             }
-            if (!data.defaultGameOnRegistration) {
-                data.defaultGameOnRegistration = $("#game select option:first").val();
+            if (!data.defaultGame) {
+                data.defaultGame = $("#game select option:first").val();
             }
-            $('#game select').val(data.defaultGameOnRegistration);
+            $('#game select').val(data.defaultGame);
         });
     }
 
