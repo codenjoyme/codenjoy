@@ -38,7 +38,7 @@ a:focus {
 
 @font-face {
     font-family: Roboto;
-    src: url(/font/Roboto-Regular.ttf);
+    src: url(/codenjoy-contest/resources/font/Roboto-Regular.ttf);
 }
 
 * {
