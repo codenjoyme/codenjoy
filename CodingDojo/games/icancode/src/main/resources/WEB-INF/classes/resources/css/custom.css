@@ -19,12 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-
-/* TODO to remove this style from here to dojo.css */
 .logout-link {
-    display: inline;
-    position: relative;
-    float: right;
-    margin-right: 150px; /* form-me.png width */
-    z-index: 100;
+    display: none;
 }
