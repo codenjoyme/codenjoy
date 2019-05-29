@@ -12,7 +12,7 @@ RUN apt-get update \
 
 # -----------------------------------------------------------------------
 
-FROM java-workspace as codenjoy_source
+FROM java_workspace as codenjoy_source
 MAINTAINER Alexander Baglay <apofig@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
