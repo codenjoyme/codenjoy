@@ -22,7 +22,7 @@ if [ "x$TIMEZONE" = "x" ]; then
     . config.sh ;
 fi
 
-if [ "x$DATABASE_TYPE" = "x" ]; then
+if [ "x$SPRING_PROFILES" = "x" ]; then
     . config.sh ;
 fi
 

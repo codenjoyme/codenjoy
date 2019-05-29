@@ -11,7 +11,7 @@ services:
         dockerfile: Dockerfile-contest
         args:
           WAR_FILE: ./codenjoy-contest.war
-     command: --spring.profiles.active=${DATABASE_TYPE} --context=/${CODENJOY_CONTEXT} # --debug
+     command: --spring.profiles.active=${SPRING_PROFILES} --context=/${CODENJOY_CONTEXT} # --debug
      volumes:
 #       - ./materials/codenjoy/database:/database      #L#
        - ./logs/codenjoy:/logs

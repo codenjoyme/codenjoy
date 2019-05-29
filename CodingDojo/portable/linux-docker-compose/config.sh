@@ -105,10 +105,12 @@ eval_echo "ssl ./docker-compose.yml"
 
 database() {
     file=$1
-    if [ "x$DATABASE_TYPE" = "xpostgres" ]; then
+    if [[ "$SPRING_PROFILES" =~ "postgres" ]]; then
+        echo "[93mPostgres[0m";
         POSTGRE="true";
         SQLITE="false";
     else
+        echo "[93mSqlite[0m";
         POSTGRE="false";
         SQLITE="true";
     fi
