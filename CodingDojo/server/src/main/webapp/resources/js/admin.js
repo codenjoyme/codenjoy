@@ -57,7 +57,7 @@ pages.admin = function() {
         if ($.isEmptyObject(data)) {
             data = {
                 showGames: true,
-                showNames: false,
+                showNames: true,
                 showCities: false,
                 showTechSkills: false,
                 showUniversity: false,
