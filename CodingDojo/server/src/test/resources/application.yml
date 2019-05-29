@@ -27,7 +27,6 @@ page:
     url: ''
   registration:
     url: ''
-    nickname: true
   login:
     url: ''
   admin:

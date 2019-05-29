@@ -61,14 +61,8 @@ public class ConfigProperties {
     @Value("${server.ip}")
     private String serverIp;
 
-    @Value("${page.registration.nickname}")
-    private boolean isNickNameAllowed;
-
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
     }
 
-    public boolean isNickNameAllowed() {
-        return isNickNameAllowed;
-    }
 }

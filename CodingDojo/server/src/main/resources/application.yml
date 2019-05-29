@@ -26,7 +26,7 @@ page:
   main:
     url: ''
   registration:
-    nickname: true
+    url: ''
   admin:
     url: ''
   help.language: ''
