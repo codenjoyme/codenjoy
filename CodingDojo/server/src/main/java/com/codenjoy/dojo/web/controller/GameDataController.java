@@ -32,17 +32,20 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 @Controller
+@RequestMapping(GameDataController.URI)
 @RequiredArgsConstructor
 public class GameDataController {
 
+    public static final String URI = "/settings";
+
     private final GameData gameData;
 
-    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.GET)
+    @GetMapping("/{gameType}/{key}")
     public @ResponseBody String get(@PathVariable("gameType") String gameType, @PathVariable("key") String key) {
         return gameData.get(gameType, key);
     }
 
-    @RequestMapping(value = "/settings/{gameType}/{key}", method = RequestMethod.POST)
+    @PostMapping("/{gameType}/{key}")
     public @ResponseBody String set(@PathVariable("gameType") String gameType, @PathVariable("key") String key, @RequestBody String value) {
         try {
             gameData.set(gameType, key, URLDecoder.decode(value, "UTF-8"));

@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-contest</artifactId>
-    <version>1.0.28</version>
+    <version>1.1.0</version>
     <packaging>war</packaging>
 
     <parent>
@@ -19,24 +19,15 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <javax-servlet-api.version>4.0.1</javax-servlet-api.version>
-        <jackson.version>2.9.8</jackson.version>
-        <mail-api.version>1.6.2</mail-api.version>
         <json.version>20180813</json.version>
         <commons-collections.version>4.3</commons-collections.version>
-        <commons-lang.version>3.8.1</commons-lang.version>
         <reflections.version>0.9.11</reflections.version>
-        <joda-time.version>2.10.1</joda-time.version>
-        <sqlite-jdbc.version>3.25.2</sqlite-jdbc.version>
         <!--TODO обновить postgre и потестить-->
-        <postgresql-jdbc.version>9.1-901-1.jdbc4</postgresql-jdbc.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <rest-assured.version>3.3.0</rest-assured.version>
         <selenium.version>2.53.1</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
-        <junit.version>4.12</junit.version>
-        <mockito.version>2.24.0</mockito.version>
 
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
@@ -641,24 +632,20 @@
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-client</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
         <!-- JETTY ENDS -->
 
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
-            <version>${mail-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
@@ -668,22 +655,18 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>${sqlite-jdbc.version}</version>
         </dependency>
         <dependency>
-            <groupId>postgresql</groupId>
+            <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql-jdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
@@ -698,12 +681,10 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>${joda-time.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${javax-servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -727,7 +708,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang.version}</version>
         </dependency>
 
         <dependency>
@@ -751,13 +731,11 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

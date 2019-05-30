@@ -4,7 +4,7 @@ if [ "$EUID" -ne 0 ]; then
     exit ;
 fi
 
-DOCKER_IMAGE=apofig/codenjoy-contest:1.0.28
+DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
 SERVER_PORT=8080
 
 JETTY_PID=999

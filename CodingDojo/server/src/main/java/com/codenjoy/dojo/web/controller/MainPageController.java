@@ -30,9 +30,9 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,8 +94,11 @@ public class MainPageController {
         model.addAttribute("ip", userIp);
 
         Player player = playerService.get(registration.getIdByCode(code));
-        request.setAttribute("registered", player != NullPlayer.INSTANCE);
+        boolean registered = player != NullPlayer.INSTANCE;
+        request.setAttribute("registered", registered);
         request.setAttribute("code", code);
+        model.addAttribute("gameName",
+                registered ? player.getGameName() : StringUtils.EMPTY);
         model.addAttribute("gameNames", rooms.all());
         return "main";
     }

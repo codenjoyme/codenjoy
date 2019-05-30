@@ -57,11 +57,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
     );
 
     private Parameter<Integer> isTrainingMode;
-    private Parameter<Boolean> showGamesListOnRegistration;
-    private Parameter<Boolean> showFirstLastNamesOnRegistration;
-    private Parameter<Boolean> showTechSkillsOnRegistration;
-    private Parameter<Boolean> showUniversityOnRegistration;
-    private Parameter<String> defaultGame;
 
     public GameRunner() {
         setupSettings();
@@ -73,25 +68,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
         isTrainingMode = settings
                 .addEditBox("Is training mode")
                 .type(Integer.class).def(1);
-        showGamesListOnRegistration = settings
-                .addCheckBox("Show games list on registration")
-                .type(Boolean.class)
-                .def(false);
-        showFirstLastNamesOnRegistration = settings
-                .addCheckBox("Show first/last names on registration")
-                .type(Boolean.class)
-                .def(false);
-        showTechSkillsOnRegistration = settings
-                .addCheckBox("Show tech skills on registration")
-                .type(Boolean.class)
-                .def(false);
-        showUniversityOnRegistration = settings
-                .addCheckBox("Show university on registration")
-                .type(Boolean.class)
-                .def(false);
-        defaultGame = settings.addSelect("Default game", (List) GAMES)
-                .type(String.class)
-                .def(GAMES.get(0));
     }
     
     @Override

@@ -23,7 +23,64 @@
 pages = pages || {};
 
 pages.admin = function() {
-    validatePlayerRegistration("#adminSettings");
+    var contextPath = game.contextPath = getSettings('contextPath');
 
+    // ------------------------ registration settings -----------------------
+    var settings = new AdminSettings(contextPath, 'general', 'registration');
+
+    var loadRegSettings = function() {
+        settings.load(function(data) {
+            setRegSettings(data);
+        });
+    }
+
+    var saveRegSettings = function() {
+        settings.save(getRegSettings(),
+            function() {
+                loadRegSettings();
+            }, function(errMsg) {
+                console.log(errMsg);
+            });
+    }
+
+    var getRegSettings = function() {
+        return {
+            showGames : $('#show-games').prop('checked'),
+            showNames : $('#show-names').prop('checked'),
+            showTechSkills : $('#show-tech').prop('checked'),
+            showUniversity : $('#show-university').prop('checked'),
+            defaultGame : $('#default-game').find('option:selected').text()
+        };
+    }
+
+    var setRegSettings = function(data) {
+        if ($.isEmptyObject(data)) {
+            data = {
+                showGames: true,
+                showNames: false,
+                showCities: false,
+                showTechSkills: false,
+                showUniversity: false,
+                defaultGame: null
+            };
+        }
+        if (!data.defaultGame) {
+            data.defaultGame = $("#default-game option:first").val();
+        }
+
+        $('#show-games').prop('checked', data.showGames);
+        $('#show-names').prop('checked', data.showNames);
+        $('#show-tech').prop('checked', data.showTechSkills);
+        $('#show-university').prop('checked', data.showUniversity);
+        $('#default-game').val(data.defaultGame);
+    }
+
+    $('#registration-save-button').click(function() {
+        saveRegSettings();
+    });
+
+    // ------------------------ init ----------------------
+    validatePlayerRegistration("#adminSettings");
     initHotkeys();
+    loadRegSettings();
 }

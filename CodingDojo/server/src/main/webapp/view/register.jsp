@@ -27,12 +27,11 @@ License along with this program.  If not, see
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ICanCode | Sign Up</title>
+    <title>Codenjoy | Sign Up</title>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/registration-style.css" rel="stylesheet"/>
     <jsp:include page="common-inclusion.jsp" />
-    <script src="${ctx}/resources/js/scripts/registration.js" type="application/javascript"></script>
 </head>
 <body>
 <div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
@@ -43,6 +42,7 @@ License along with this program.  If not, see
                 <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
                 <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <c:if test="${activeProfiles.contains('icancode')}">
+                    <!-- TODO to remove from here -->
                     <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/i_can_code_Logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </c:if>
@@ -85,9 +85,10 @@ License along with this program.  If not, see
             </div>
             <!-- add attribute 'hidden' to the div if you want to hide this select box -->
             <div id="game" class="field valid" hidden>
+                <!-- TODO to remove from here -->
                 <select placeholder="Select your game" name="game">
-                    <option value="iCanCode Contest" >iCanCode Contest</option>
                     <option value="iCanCode Training" selected>iCanCode Training</option>
+                    <option value="iCanCode Contest" >iCanCode Contest</option>
                     <option value="eKids">eKids</option>
                 </select>
             </div>
@@ -112,7 +113,7 @@ License along with this program.  If not, see
             <c:if test="${not adminLogin}">
                 <tr>
                     <td>
-                        <form:select items="${gameNames}" path="gameName"/>
+                        <form:select items="${gameNames}" id="gameName" path="gameName"/>
                     </td>
                     <td>
                         <form:errors path="gameName" cssClass="error" />
