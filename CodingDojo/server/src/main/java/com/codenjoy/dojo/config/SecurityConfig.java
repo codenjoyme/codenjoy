@@ -22,6 +22,7 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.config.meta.DefaultAuth;
 import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
@@ -32,7 +33,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -120,7 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Profile("form-auth")
+    @DefaultAuth
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     @Slf4j
@@ -170,8 +170,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     @Slf4j
-//    @EnableOAuth2Sso
-    public static class SSOUserSecurityConf extends WebSecurityConfigurerAdapter {
+    public static class OAuth2UserSecurityConf extends WebSecurityConfigurerAdapter {
 
         @Autowired
         private OAuth2MappingUserService oAuth2MappingUserService;
@@ -212,6 +211,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Configuration
     @EnableResourceServer
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    @Slf4j
     public static class ResourceServerSSOConf extends ResourceServerConfigurerAdapter {
 
         @Autowired
@@ -222,6 +222,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Value("${mvc.control-servlet-path}")
         private String controlWsURI;
+
+        @PostConstruct
+        void info() {
+            log.warn("Running server with SSO authorization");
+        }
 
         @Override
         public void configure(ResourceServerSecurityConfigurer config) {
@@ -243,7 +248,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .permitAll()
 
                             .anyRequest()
-//                                .authenticated()
                                 .hasRole("USER")
                         .and()
                             .logout()
