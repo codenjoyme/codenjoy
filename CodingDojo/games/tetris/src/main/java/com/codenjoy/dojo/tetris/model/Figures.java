@@ -33,7 +33,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Figures implements FigureQueue {
-    public static int DEFAULT_FUTURE_COUNT = 4;
+    public static final int DEFAULT_FUTURE_COUNT = 4;
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
     private Type[] open = null;

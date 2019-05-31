@@ -78,7 +78,7 @@ public class CleanScoresTetrisTest {
         Level level = new LevelImpl(board);
         List<Plot> plots = level.plots();
 
-        queue = new Figures();
+        queue = new Figures(1);
         levels = new TestLevels(dice, queue);
         game = new Tetris(levels, queue, level.size());
         listener = mock(EventListener.class);
@@ -93,7 +93,6 @@ public class CleanScoresTetrisTest {
     @Test
     public void shouldChangeLevel_whenAcceptCriteria() {
         // given
-        Figures.DEFAULT_FUTURE_COUNT = 1;
         when(dice.next(anyInt())).thenReturn(0);
 
         givenFl("......." +
