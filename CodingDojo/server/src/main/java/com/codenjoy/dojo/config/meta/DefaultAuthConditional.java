@@ -22,20 +22,21 @@ package com.codenjoy.dojo.config.meta;
  * #L%
  */
 
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.stream.Stream;
 
 /**
  * @author Igor_Petrov@epam.com
- * Created at 3/29/2019
+ * Created at 5/30/2019
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Profile(NonSSOProfile.NAME)
-public @interface NonSSOProfile {
-    String NAME = "!" + SSOProfile.NAME;
+public class DefaultAuthConditional implements Condition {
+
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        return Stream.of(context.getEnvironment().getActiveProfiles())
+                .noneMatch(profile -> OAuth2Profile.NAME.equals(profile) || SSOProfile.NAME.equals(profile));
+    }
 }

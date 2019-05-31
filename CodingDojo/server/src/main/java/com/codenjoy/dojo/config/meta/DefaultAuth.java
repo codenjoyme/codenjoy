@@ -22,7 +22,7 @@ package com.codenjoy.dojo.config.meta;
  * #L%
  */
 
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,11 +31,10 @@ import java.lang.annotation.Target;
 
 /**
  * @author Igor_Petrov@epam.com
- * Created at 3/29/2019
+ * Created at 5/30/2019
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Profile(NonSSOProfile.NAME)
-public @interface NonSSOProfile {
-    String NAME = "!" + SSOProfile.NAME;
+@Conditional(DefaultAuthConditional.class)
+public @interface DefaultAuth {
 }
