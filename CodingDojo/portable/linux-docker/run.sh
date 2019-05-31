@@ -15,7 +15,6 @@ function usage() {
 	echo "$0 [OPTIONS]"
 	echo "--sso                 - use OAuth2 authorization with telescopeai as an Authorization Server"
 	echo "-f, --force           - forcefully kill already running instance if any"
-	echo "-i, --icancode        - turn on icancode game"
 	echo "-v, --debug           - turn off JS minification"
 	echo "--ai                  - turn in AI bots for all the games except icancode as it's not supported"
 	echo "--help                - usage"
@@ -25,7 +24,6 @@ function usage() {
 while true; do
 	case "$1" in
 		--sso) SSO=true; shift ;;
-		-i | --icancode) PROFILES="$PROFILES,icancode"; shift ;;
 		-v | --debug) PROFILES="$PROFILES,debug"; shift ;;
 		-f | --force) FORCE=true; shift ;;
 		--ai) GAME_AI=true; shift ;; 
