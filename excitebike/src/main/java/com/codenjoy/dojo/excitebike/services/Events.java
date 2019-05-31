@@ -23,10 +23,13 @@ package com.codenjoy.dojo.excitebike.services;
  */
 
 
-/**
- * Ивенты, которые могут возникать в игре опиши тут. Что есть ивенты? ну убили твоего героя и ты хочешь ему очков начислить штрафных
- * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
- */
 public enum Events {
-    WIN, LOOSE;
+    ACCELERATE,
+    SLOW_DOWN,
+    JUMP,
+    FORCED_LINE_CHANGE_TO_THE_LEFT,
+    FORCED_LINE_CHANGE_TO_THE_RIGHT,
+    COLLISION_WITH_ANOTHER_MOTORCYCLIST,
+    LOOSE,
+    WIN
 }
