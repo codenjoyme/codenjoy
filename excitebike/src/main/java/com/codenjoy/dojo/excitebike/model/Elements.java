@@ -25,19 +25,36 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-/**
- * Тут указана легенда всех возможных объектов на поле и их состояний.
- * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
- */
 public enum Elements implements CharElements {
 
-    NONE(' '),       // например это пустое место, куда можно перейти герою
-    WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
-    HERO('☺'),       // а это мой герой
-    OTHER_HERO('☻'), // это герои других игроков
-    DEAD_HERO('X'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-    GOLD('$'),       // это то, за чем будет охота
-    BOMB('x');       // а это бомба, на которой можно подорваться
+    //ASCII code of char in comment
+    //Drawable elements
+    BORDER('■'),    //254
+
+    //Interactive elements
+    BIKE_BACK('<'),
+    BIKE_FRONT('>'),
+    BIKE_FALLEN_BACK('`'),
+    BIKE_FALLEN_FRONT('~'),
+    BIKE_INCLINE_LEFT_BACK('('),
+    BIKE_INCLINE_LEFT_FRONT('['),
+    BIKE_INCLINE_RIGHT_BACK(')'),
+    BIKE_INCLINE_RIGHT_FRONT(']'),
+
+    ACCELERATOR('»'),   //175
+    INHIBITOR('▒'),    //177
+    OBSTACLE('█'),     //178
+    LINE_CHANGER_UP('▲'),  //30
+    LINE_CHANGER_DOWN('▼'),  //31
+    ROAD('░'),         //176
+    NONE(' '),
+
+    SPRINGBOARD_DARK('/'),
+    SPRINGBOARD_LIGHT('\\'),
+    SPRINGBOARD_LEFT_DOWN('╚'),     //200
+    SPRINGBOARD_LEFT_UP('╔'),       //201
+    SPRINGBOARD_RIGHT_DOWN('╝'),    //188
+    SPRINGBOARD_RIGHT_UP('╗');      //187
 
     final char ch;
 
