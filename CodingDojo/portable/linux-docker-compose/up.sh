@@ -35,7 +35,7 @@ if [ "x$WORDPRESS" = "xtrue" ]; then
     wordpress="-f wordpress.yml"
 fi
 
-if [ "x$DATABASE_TYPE" = "xpostgre" ]; then
+if [[ "$SPRING_PROFILES" =~ "postgres" ]]; then
     eval_echo "docker-compose -f docker-compose.yml $balancer $codenjoy $wordpress $pgadmin up -d codenjoy_db"
     sleep 10
 fi

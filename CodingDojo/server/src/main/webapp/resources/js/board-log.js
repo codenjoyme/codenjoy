@@ -39,6 +39,7 @@ pages.boardLog = function() {
 
     game.gameName = getSettings('gameName');
     game.playerName = getSettings('playerName');
+    game.readableName = getSettings('readableName');
     game.contextPath = getSettings('contextPath');
     game.code = null;
     game.allPlayersScreen = false;

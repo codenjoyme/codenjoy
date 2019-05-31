@@ -27,10 +27,13 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,33 +44,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping(AdminController.URI)
 @Secured("ROLE_ADMIN")
+@Slf4j
+@RequiredArgsConstructor
 public class AdminController {
 
-    public static final String GAME_NAME = "gameName";
+    public static final String URI = "/admin";
 
-    @Autowired private TimerService timerService;
-    @Autowired private PlayerService playerService;
-    @Autowired private SaveService saveService;
-    @Autowired private GameService gameService;
-    @Autowired private ActionLogger actionLogger;
-    @Autowired private AutoSaver autoSaver;
-    @Autowired private DebugService debugService;
-    @Autowired private Registration registration;
+    public static final String GAME_NAME_FORM_KEY = "gameName";
+    public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
-    public AdminController() {
-    }
-
-    //for unit test
-    AdminController(TimerService timerService, PlayerService playerService) {
-        this.timerService = timerService;
-        this.playerService = playerService;
-    }
+    private final TimerService timerService;
+    private final PlayerService playerService;
+    private final SaveService saveService;
+    private final GameService gameService;
+    private final ActionLogger actionLogger;
+    private final AutoSaver autoSaver;
+    private final DebugService debugService;
+    private final Registration registration;
+    private final ViewDelegationService viewDelegationService;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
@@ -210,7 +213,7 @@ public class AdminController {
     }
 
     private void checkDebugStatus(Model model) {
-        model.addAttribute("debug", debugService.isWorking());
+        model.addAttribute("debugLog", debugService.isWorking());
     }
 
     // ----------------
@@ -308,7 +311,7 @@ public class AdminController {
             }
         }
 
-        request.setAttribute(GAME_NAME, settings.getGameName());
+        request.setAttribute(GAME_NAME_FORM_KEY, settings.getGameName());
         return getAdmin(settings.getGameName());
     }
 
@@ -316,7 +319,7 @@ public class AdminController {
         if (registration.registered(playerName)) {
             return registration.login(playerName, playerName);
         } else {
-            return registration.register(playerName, playerName, playerName, playerName, "");
+            return registration.register(playerName, playerName, playerName, playerName, "", GameAuthorities.USER.roles()).getCode();
         }
     }
 
@@ -331,7 +334,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin?" + GAME_NAME + "=" + gameName;
+        return "redirect:/admin?" + GAME_NAME_FORM_KEY + "=" + gameName;
     }
 
     private String getAdmin() {
@@ -343,17 +346,25 @@ public class AdminController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAdminPage(Model model, HttpServletRequest request) {
-        String gameName = getGameName(request);
+    public String getAdminPage(Model model,
+                               @RequestParam(value = GAME_NAME_FORM_KEY, required = false) String gameName,
+                               @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
+                                           Boolean gameSpecificAdminPage) {
+
+        gameName = (gameName == null || gameName.equals("null")) ? null : gameName;
 
         if (gameName == null) {
-            return getAdmin();
+            return getAdmin(gameName);
+        }
+
+        if (gameSpecificAdminPage) {
+            return viewDelegationService.adminView(gameName);
         }
 
         GameType game = gameService.getGame(gameName);
 
         if (game instanceof NullGameType) {
-            return getAdmin();
+            return getAdmin(gameName);
         }
 
         Settings gameSettings = game.getSettings();
@@ -368,7 +379,7 @@ public class AdminController {
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
-        model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");
         model.addAttribute("generateCount", "30");
@@ -385,7 +396,7 @@ public class AdminController {
     }
 
     private String getGameName(HttpServletRequest request) {
-         String gameName = request.getParameter(GAME_NAME);
+         String gameName = request.getParameter(GAME_NAME_FORM_KEY);
         if (gameName == null || gameName.equals("null")) {
             return null;
         }
@@ -428,11 +439,11 @@ public class AdminController {
     }
 
     @RequestMapping(params = "select", method = RequestMethod.GET)
-    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME) String gameName) {
+    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME_FORM_KEY) String gameName) {
         if (gameName == null) {
             gameName = getDefaultGame();
         }
-        request.setAttribute(GAME_NAME, gameName);
+        request.setAttribute(GAME_NAME_FORM_KEY, gameName);
         return getAdmin(request);
     }
 

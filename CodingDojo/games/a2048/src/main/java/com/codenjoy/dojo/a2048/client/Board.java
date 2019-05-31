@@ -34,6 +34,11 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
+    @Override
+    protected int inversionY(int y) { // TODO разобраться с этим чудом
+        return size - 1 - y;
+    }
+
     public int getSumCountFor(Direction direction) {
         int result = 0;
 

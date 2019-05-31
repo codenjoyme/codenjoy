@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Do not forget to cleanup PGDATA dir on making changes
+
+DATA_VOLUME_MOUNTPOINT=/data/postgres-codenjoy
+
+mkdir -p "$DATA_VOLUME_MOUNTPOINT"
+
+PDATA="/var/lib/postgresql/data/pgdata"
+docker run --name postgres-codenjoy \
+    -e PGDATA="$PDATA" \
+    -v "$DATA_VOLUME_MOUNTPOINT:$PDATA" \
+    -p 5432:5432 \
+    -d \
+    dojo/postgres:codenjoy
+
+

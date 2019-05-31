@@ -29,6 +29,7 @@
     <meta charset="utf-8">
     <title>Game board</title>
     <link href="${ctx}/resources/css/all-board-only.min.css" rel="stylesheet">
+
     <style>
         canvas {
             height: 100vh!important;
@@ -41,7 +42,7 @@
     <script src="${ctx}/resources/js/all.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="boardLog" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}"></div>
+    <div id="settings" page="boardLog" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" readableName="${readableName}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

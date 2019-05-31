@@ -58,11 +58,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void left() {
+        if (isFirstStep()) {
+            return;
+        }
         moveHorizontallyIfAccepted(x - 1 < figure.left() ? figure.left() : x - 1);
     }
 
     @Override
     public void right() {
+        if (isFirstStep()) {
+            return;
+        }
         moveHorizontallyIfAccepted(x + 1 > field.size() - figure.right() ? field.size() - figure.right() : x + 1);
     }
 
@@ -84,6 +90,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void act(int times) {
+        if (isFirstStep()) {
+            return;
+        }
         Figure clonedFigure = figure.copy();
 
         figure.rotate(times);

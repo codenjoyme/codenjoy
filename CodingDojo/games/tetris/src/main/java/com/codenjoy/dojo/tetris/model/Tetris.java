@@ -56,6 +56,12 @@ public class Tetris implements Field {
     }
 
     @Override
+    public void clearScore() {
+        levels.clearScore();
+        newGame(player);
+    }
+
+    @Override
     public List<Type> getFuture() {
         return queue.future();
     }

@@ -1,6 +1,6 @@
 ﻿
 #default public server URI
-#[URI]$Global:BombermanURI = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=donNetClient@dot.net"
+#[URI]$Global:BombermanURI = "ws://codenjoy.com:80/codenjoy-contest/ws?user=donNetClient@dot.net"
 
 #default local server URI
 [URI]$Global:BombermanURI = "ws://127.0.0.1:8080/codenjoy-contest/ws?user=username@users.org"

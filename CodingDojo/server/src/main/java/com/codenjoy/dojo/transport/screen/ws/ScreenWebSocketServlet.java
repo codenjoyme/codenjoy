@@ -23,29 +23,22 @@ package com.codenjoy.dojo.transport.screen.ws;
  */
 
 
-import com.codenjoy.dojo.transport.auth.DefaultAuthenticationService;
+import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+@RequiredArgsConstructor
 public class ScreenWebSocketServlet extends WebSocketServlet{
 
-    @Autowired
-    @Qualifier("screenPlayerTransport")
-    private PlayerTransport transport;
-
-    @Autowired
-    private DefaultAuthenticationService authentication;
+    private final PlayerTransport transport;
+    private final AuthenticationService authentication;
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {
-        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-
         PlayerSocketCreator creator =
                 new PlayerSocketCreator(transport,
                         authentication,

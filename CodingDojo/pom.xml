@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-parent</artifactId>
-    <version>1.0.28</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <distributionManagement>
@@ -24,7 +24,6 @@
         <module>games</module>
         <module>server</module>
         <module>balancer</module>
-        <module>builder</module>
         <module>utilities</module>
     </modules>
 </project>

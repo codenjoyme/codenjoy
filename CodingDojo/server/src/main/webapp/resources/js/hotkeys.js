@@ -27,7 +27,7 @@ function initHotkeys() {
     var gameName = getSettings('gameName') || game.gameName;
     var contextPath = getSettings('contextPath') || game.contextPath;
 
-    var gameNameParam = ((gameName == '')?'':'gameName=' + gameName);
+    var gameNameParam = ((!gameName)?'':'gameName=' + gameName);
     $('body').keydown(function(ev) {
         if (!game.enableHotkeys) {
             return;

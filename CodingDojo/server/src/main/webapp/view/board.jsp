@@ -31,13 +31,13 @@
 
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
+    <jsp:include page="common-inclusion.jsp" />
 
     <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
-    <script src="${ctx}/resources/js/all.min.js"></script>
     <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 

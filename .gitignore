@@ -23,7 +23,6 @@
 /CodingDojo/builder/.git
 /CodingDojo/builder/.git_
 /CodingDojo/games/**/webapp/resources/user/*.zip
-/CodingDojo/games/icancode
 /CodingDojo/games/expansion
 /CodingDojo/expansion-repo
 /CodingDojo/icancode-builder
@@ -32,6 +31,7 @@
 /CodingDojo/bomberman-builder
 /CodingDojo/expansion-bots
 /CodingDojo/expansion-clients
+/CodingDojo/balancer-frontend
 /CodingDojo/*-portable
 /CodingDojo/stuff
 /_temp/**
@@ -42,5 +42,7 @@
 /CodingDojo/portable/windows-cmd/jetty*/**
 /CodingDojo/portable/windows-cmd/maven/**
 /CodingDojo/portable/windows-cmd/tools/**
+/CodingDojo/games/a2048/src/main/dotNet/A2048/packages/**
+/CodingDojo/games/loderunner/src/main/dotNet/Loderunner/packages/**
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 /CodingDojo/portable/linux-docker-all
