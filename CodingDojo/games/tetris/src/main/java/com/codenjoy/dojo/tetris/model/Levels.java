@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.NullGameLevel;
 
+import java.util.Arrays;
+
 public class Levels implements GlassEventListener {
 
     private GameLevel[] levels;
@@ -58,10 +60,14 @@ public class Levels implements GlassEventListener {
 
     private void applyLevelIfAccepted(GlassEvent event) {
         if (getNextLevel().accept(event)){
-            getNextLevel().apply();
-            currentLevel++;
-            onLevelChanged();
+            gotToNextLevel();
         }
+    }
+
+    private void gotToNextLevel() {
+        getNextLevel().apply();
+        currentLevel++;
+        onLevelChanged();
     }
 
     @Override
@@ -100,6 +106,12 @@ public class Levels implements GlassEventListener {
 
     public int totalRemovedLines() {
         return totalRemovedLines;
+    }
+
+    public void clearScore() {
+        Arrays.stream(levels).forEach(it -> it.queue().clear());
+        currentLevel = -1;
+        gotToNextLevel();
     }
 
     public class LevelsReader {
