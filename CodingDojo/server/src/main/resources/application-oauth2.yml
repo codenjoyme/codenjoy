@@ -18,4 +18,5 @@ spring:
           dojo:
             authorization-uri: ${auth-server.location}${OAUTH2_AUTH_URI}
             token-uri: ${auth-server.location}${OAUTH2_TOKEN_URI}
-            jwk-set-uri: ${auth-server.location}${OAUTH2_JWKS_URI}
+            user-info-uri: ${auth-server.location}${OAUTH2_USERINFO_URI}
+            user-name-attribute: ${OAUTH2_USERNAME_ATTR:name}

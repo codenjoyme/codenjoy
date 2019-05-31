@@ -22,30 +22,34 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import com.codenjoy.dojo.config.meta.NonSSOProfile;
+import com.codenjoy.dojo.config.meta.DefaultAuth;
+import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.web.controller.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.UserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.oauth2.provider.token.store.jwk.JwkTokenStore;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
@@ -116,7 +120,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @NonSSOProfile
+    @DefaultAuth
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     @Slf4j
@@ -162,11 +166,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
-    @SSOProfile
+    @OAuth2Profile
     @Configuration
     @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     @Slf4j
-    public static class SSOUserSecurityConf extends WebSecurityConfigurerAdapter {
+    public static class OAuth2UserSecurityConf extends WebSecurityConfigurerAdapter {
 
         @Autowired
         private OAuth2MappingUserService oAuth2MappingUserService;
@@ -205,31 +209,65 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @SSOProfile
     @Configuration
+    @EnableResourceServer
+    @Order(BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
+    @Slf4j
     public static class ResourceServerSSOConf extends ResourceServerConfigurerAdapter {
+
+        @Autowired
+        private UserAuthenticationConverter oAuth2UserAuthenticationConverter;
+
+        @Autowired
+        private OAuth2ClientProperties clientProperties;
+
+        @Value("${mvc.control-servlet-path}")
+        private String controlWsURI;
+
+        @PostConstruct
+        void info() {
+            log.warn("Running server with SSO authorization");
+        }
 
         @Override
         public void configure(ResourceServerSecurityConfigurer config) {
-            config.tokenServices(tokenServices());
+            config
+                    .stateless(true)
+                    .resourceId(clientProperties.getRegistration().get("dojo").getClientName());
+        }
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http.sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                            .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
+                                    LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
+                                    controlWsURI + "*")
+                                .permitAll()
+
+                            .anyRequest()
+                                .hasRole("USER")
+                        .and()
+                            .logout()
+                                .logoutUrl(LOGOUT_PROCESSING_URI)
+                                .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                                .invalidateHttpSession(true)
+                        .and()
+                        .csrf().disable();
+            // @formatter:on
         }
 
         @Bean
         public TokenStore tokenStore() {
-            return new JwtTokenStore(accessTokenConverter());
-        }
+            JwtAccessTokenConverter accessTokenConverter = new JwtAccessTokenConverter();
+            DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
+            tokenConverter.setUserTokenConverter(oAuth2UserAuthenticationConverter);
+            accessTokenConverter.setAccessTokenConverter(tokenConverter);
 
-        @Bean
-        public JwtAccessTokenConverter accessTokenConverter() {
-            JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-            converter.setSigningKey("123");
-            return converter;
-        }
-
-        @Bean
-        @Primary
-        public DefaultTokenServices tokenServices() {
-            DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-            defaultTokenServices.setTokenStore(tokenStore());
-            return defaultTokenServices;
+            return new JwkTokenStore(clientProperties.getProvider().get("dojo").getJwkSetUri(),
+                    accessTokenConverter);
         }
     }
 

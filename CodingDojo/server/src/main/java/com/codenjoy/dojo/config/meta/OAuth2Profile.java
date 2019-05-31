@@ -35,7 +35,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Profile(NonSSOProfile.NAME)
-public @interface NonSSOProfile {
-    String NAME = "!" + SSOProfile.NAME;
+@Profile(OAuth2Profile.NAME)
+public @interface OAuth2Profile {
+    String NAME = "oauth2";
 }
