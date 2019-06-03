@@ -28,10 +28,10 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.excitebike.model.Elements;
+import com.codenjoy.dojo.excitebike.model.Excitebike;
 import com.codenjoy.dojo.excitebike.model.Level;
 import com.codenjoy.dojo.excitebike.model.LevelImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
-import com.codenjoy.dojo.excitebike.model.Excitebike;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
@@ -48,49 +48,45 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
+    //TODO: move it to the Board class
+    public static final int EMPTY_LINES_ON_TOP = 3;
+    public static final int FIELD_LENGTH = 38;
+
     private final Level level;
 
     public GameRunner() {
-        new Scores(0, settings);
         level = new LevelImpl(getMap());
     }
 
     protected String getMap() {
-        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼          $                 ☼" +
-                "☼                            ☼" +
-                "☼   $              $         ☼" +
-                "☼                       $    ☼" +
-                "☼  $                         ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼        $                   ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼ $                         $☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼                            ☼" +
-                "☼    $                       ☼" +
-                "☼                            ☼" +
-                "☼                       $    ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼            $               ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼       $                $   ☼" +
-                "☼                            ☼" +
-                "☼       ☺        $           ☼" +
-                "☼                            ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < EMPTY_LINES_ON_TOP; i++) {
+            appendElementManyTimes(sb, Elements.NONE, FIELD_LENGTH);
+        }
+        appendElementManyTimes(sb, Elements.BORDER, FIELD_LENGTH);
+        appendBikeAtStartPoint(sb);
+        appendBikeAtStartPoint(sb);
+        appendElementManyTimes(sb, Elements.BORDER, FIELD_LENGTH);
+        return sb.toString();
+    }
+
+    private void appendElementManyTimes(StringBuilder sb, Elements element, int times) {
+        for (int i = 0; i < times; i++) {
+            sb.append(element);
+        }
+    }
+
+    private void appendBikeAtStartPoint(StringBuilder sb) {
+        sb.append(Elements.ROAD);
+        sb.append(Elements.BIKE_BACK);
+        sb.append(Elements.BIKE_FRONT);
+        appendElementManyTimes(sb, Elements.ROAD, FIELD_LENGTH - 3);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer) score, settings);
+        // nothing to implement
+        return null;
     }
 
     @Override
