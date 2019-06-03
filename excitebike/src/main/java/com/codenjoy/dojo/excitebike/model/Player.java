@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
  * Класс игрока. Тут кроме героя может подсчитываться очки.
  * Тут же ивенты передабтся лиснеру фреймворка.
  */
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends GamePlayer<Hero, GameField> {
 
     Hero hero;
 
@@ -43,9 +43,9 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     @Override
-    public void newHero(Field field) {
-        hero = new Hero(field.getFreeRandom());
-        hero.init(field);
+    public void newHero(GameField gameField) {
+        hero = new Hero(gameField.getFreeRandom());
+        hero.init(gameField);
     }
 
     @Override

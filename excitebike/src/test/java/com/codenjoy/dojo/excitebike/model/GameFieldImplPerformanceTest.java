@@ -37,7 +37,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-public class ExcitebikePerformanceTest {
+public class GameFieldImplPerformanceTest {
 
     @Test
     public void test() {

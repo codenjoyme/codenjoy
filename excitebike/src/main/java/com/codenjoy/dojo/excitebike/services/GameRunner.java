@@ -28,7 +28,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.excitebike.model.Elements;
-import com.codenjoy.dojo.excitebike.model.Excitebike;
+import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.model.Level;
 import com.codenjoy.dojo.excitebike.model.LevelImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
@@ -91,7 +91,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        return new Excitebike(level, getDice());
+        return new GameFieldImpl(level, getDice());
     }
 
     @Override

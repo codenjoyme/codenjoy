@@ -49,7 +49,7 @@ public class SingleTest {
     private Game game2;
     private Game game3;
     private Dice dice;
-    private Excitebike field;
+    private GameFieldImpl field;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -63,7 +63,7 @@ public class SingleTest {
                 "☼☼☼☼☼☼");
 
         dice = mock(Dice.class);
-        field = new Excitebike(level, dice);
+        field = new GameFieldImpl(level, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);

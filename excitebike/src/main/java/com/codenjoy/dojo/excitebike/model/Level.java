@@ -22,10 +22,6 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-
-import com.codenjoy.dojo.excitebike.model.items.Gold;
-import com.codenjoy.dojo.excitebike.model.items.Wall;
-
 import java.util.List;
 
 /**
@@ -38,9 +34,9 @@ public interface Level {
      */
     int getSize();
 
-    List<Wall> getWalls();
+    //List<Wall> getWalls();
 
     List<Hero> getHero();
 
-    List<Gold> getGold();
+    //List<Gold> getGold();
 }

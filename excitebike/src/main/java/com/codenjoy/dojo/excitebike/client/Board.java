@@ -40,19 +40,18 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL, Elements.OTHER_HERO);
+        return false;//isAt(x, y, Elements.WALL, Elements.OTHER_HERO);
     }
 
     public Point getMe() {
-        return get(Elements.DEAD_HERO,
-                Elements.HERO).get(0);
+        return null;//get(Elements.DEAD_HERO, Elements.HERO).get(0);
     }
 
     public boolean isGameOver() {
-        return !get(Elements.DEAD_HERO).isEmpty();
+        return false;//!get(Elements.DEAD_HERO).isEmpty();
     }
 
     public boolean isBombAt(int x, int y) {
-        return isAt(x, y, Elements.BOMB);
+        return false;//isAt(x, y, Elements.BOMB);
     }
 }

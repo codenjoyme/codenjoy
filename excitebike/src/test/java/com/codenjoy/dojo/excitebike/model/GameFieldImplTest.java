@@ -41,9 +41,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ExcitebikeTest {
+public class GameFieldImplTest {
 
-    private Excitebike game;
+    private GameFieldImpl game;
     private Hero hero;
     private Dice dice;
     private EventListener listener;
@@ -66,7 +66,7 @@ public class ExcitebikeTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        game = new Excitebike(level, dice);
+        game = new GameFieldImpl(level, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);

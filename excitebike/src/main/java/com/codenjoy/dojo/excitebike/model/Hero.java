@@ -34,7 +34,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
  * Ну и конечно же он имплементит {@see State}, а значит может быть отрисован на поле.
  * Часть этих интерфейсов объявлены в {@see PlayerHero}, а часть явно тут.
  */
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends PlayerHero<GameField> implements State<Elements, Player> {
 
     private boolean alive;
     private Direction direction;
@@ -46,8 +46,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public void init(Field field) {
-        this.field = field;
+    public void init(GameField gameField) {
+        this.field = gameField;
     }
 
     @Override
@@ -112,13 +112,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (!isAlive()) {
-            return Elements.DEAD_HERO;
+            return null;//Elements.DEAD_HERO;
         }
 
         if (this == player.getHero()) {
-            return Elements.HERO;
+            return null;//Elements.HERO;
         } else {
-            return Elements.OTHER_HERO;
+            return null;//Elements.OTHER_HERO;
         }
     }
 }

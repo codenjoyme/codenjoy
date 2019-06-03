@@ -23,9 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.Bomb;
-import com.codenjoy.dojo.excitebike.model.items.Gold;
-import com.codenjoy.dojo.excitebike.model.items.Wall;
+
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -40,27 +38,18 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Excitebike#tick()}
+ * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see GameField}
+ * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {GameFieldImpl#tick()}
  */
-public class Excitebike implements Field {
-
-    private List<Wall> walls;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
+public class GameFieldImpl implements GameField {
 
     private List<Player> players;
-
-    private final int size;
+    private Level level;
     private Dice dice;
 
-    public Excitebike(Level level, Dice dice) {
+    public GameFieldImpl(Level level, Dice dice) {
         this.dice = dice;
-        walls = level.getWalls();
-        gold = level.getGold();
-        size = level.getSize();
         players = new LinkedList<>();
-        bombs = new LinkedList<>();
     }
 
     /**
@@ -73,13 +62,13 @@ public class Excitebike implements Field {
 
             hero.tick();
 
-            if (gold.contains(hero)) {
+          /*  if (gold.contains(hero)) {
                 gold.remove(hero);
                 player.event(Events.WIN);
 
                 Point pos = getFreeRandom();
                 gold.add(new Gold(pos));
-            }
+            }*/
         }
 
         for (Player player : players) {
@@ -92,17 +81,17 @@ public class Excitebike implements Field {
     }
 
     public int size() {
-        return size;
+        return level.getSize();
     }
 
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > size - 1
+        return x > level.getSize() - 1
                 || x < 0
                 || y < 0
-                || y > size - 1
-                || walls.contains(pt)
+                || y > level.getSize() - 1
+                //|| walls.contains(pt)
                 || getHeroes().contains(pt);
     }
 
@@ -112,8 +101,8 @@ public class Excitebike implements Field {
         int y;
         int c = 0;
         do {
-            x = dice.next(size);
-            y = dice.next(size);
+            x = dice.next(level.getSize());
+            y = dice.next(level.getSize());
         } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
@@ -127,33 +116,33 @@ public class Excitebike implements Field {
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
-        return !(gold.contains(pt)
+        return false;/*!(gold.contains(pt)
                 || bombs.contains(pt)
                 || walls.contains(pt)
-                || getHeroes().contains(pt));
+                || getHeroes().contains(pt));*/
     }
 
     @Override
     public boolean isBomb(int x, int y) {
-        return bombs.contains(pt(x, y));
+        return false;//bombs.contains(pt(x, y));
     }
 
     @Override
     public void setBomb(int x, int y) {
         Point pt = pt(x, y);
-        if (!bombs.contains(pt)) {
+        /*if (!bombs.contains(pt)) {
             bombs.add(new Bomb(x, y));
-        }
+        }*/
     }
 
     @Override
     public void removeBomb(int x, int y) {
-        bombs.remove(pt(x, y));
+        //bombs.remove(pt(x, y));
     }
 
-    public List<Gold> getGold() {
+  /*  public List<Gold> getGold() {
         return gold;
-    }
+    }*/
 
     public List<Hero> getHeroes() {
         return players.stream()
@@ -174,31 +163,30 @@ public class Excitebike implements Field {
         players.remove(player);
     }
 
-    public List<Wall> getWalls() {
+    /*public List<Wall> getWalls() {
         return walls;
     }
 
     public List<Bomb> getBombs() {
         return bombs;
-    }
+    }*/
 
     @Override
     public BoardReader reader() {
         return new BoardReader() {
-            private int size = Excitebike.this.size;
 
             @Override
             public int size() {
-                return size;
+                return level.getSize();
             }
 
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>(){{
-                    addAll(Excitebike.this.getWalls());
-                    addAll(Excitebike.this.getHeroes());
-                    addAll(Excitebike.this.getGold());
-                    addAll(Excitebike.this.getBombs());
+                    //addAll(GameFieldImpl.this.getWalls());
+                    addAll(GameFieldImpl.this.getHeroes());
+                    //addAll(GameFieldImpl.this.getGold());
+                    //addAll(GameFieldImpl.this.getBombs());
                 }};
             }
         };
