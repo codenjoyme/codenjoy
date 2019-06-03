@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.model;
+package com.codenjoy.dojo.excitebike.model.items;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,23 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.Hero;
+import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import java.util.List;
+public class RoadElement extends PointImpl implements State<Elements, Player> {
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
-public interface Level {
+    public RoadElement(int x, int y) {
+        super(x, y);
+    }
 
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
-    int getSize();
+    public RoadElement(Point point) {
+        super(point);
+    }
 
-    //List<Wall> getWalls();
-
-    List<Hero> getHero();
-
-    //List<Gold> getGold();
+    @Override
+    public Elements state(Player player, Object... objects) {
+        return Elements.ROAD;
+    }
 }

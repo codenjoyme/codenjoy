@@ -22,13 +22,13 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
+import com.codenjoy.dojo.excitebike.model.items.Elements;
+import com.codenjoy.dojo.excitebike.model.items.Hero;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
@@ -68,7 +68,7 @@ public class LevelImpl implements Level {
         return pointsOf(WALL).stream()
                 .map(Wall::new)
                 .collect(toList());
-    }*/
+    }
 
     private List<Point> pointsOf(Elements element) {
         List<Point> result = new LinkedList<>();
@@ -78,5 +78,5 @@ public class LevelImpl implements Level {
             }
         }
         return result;
-    }
+    }*/
 }

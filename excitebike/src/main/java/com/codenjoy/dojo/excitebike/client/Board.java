@@ -24,7 +24,7 @@ package com.codenjoy.dojo.excitebike.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.excitebike.model.Elements;
+import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.services.Point;
 
 /**
