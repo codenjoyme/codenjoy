@@ -71,7 +71,7 @@ public class GameFieldImplTest {
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        player.hero = hero;
+        player.setHero(hero);
         hero.init(game);
         this.hero = game.getHeroes().get(0);
     }
@@ -332,7 +332,7 @@ public class GameFieldImplTest {
 
         hero.down();
         hero.act();
-//        hero.down();
+//        bike.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +

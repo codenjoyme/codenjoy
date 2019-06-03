@@ -33,7 +33,7 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isBarrier(int x, int y);
 
-    Point getFreeRandom();
+    Point getNewPlayerPosition();
 
     boolean isFree(int x, int y);
 

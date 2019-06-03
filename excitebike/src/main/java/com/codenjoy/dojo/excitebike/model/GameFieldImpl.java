@@ -67,7 +67,7 @@ public class GameFieldImpl implements GameField {
                 gold.remove(hero);
                 player.event(Events.WIN);
 
-                Point pos = getFreeRandom();
+                Point pos = getNewPlayerPosition();
                 gold.add(new Gold(pos));
             }*/
         }
@@ -97,7 +97,8 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public Point getFreeRandom() {
+    public Point getNewPlayerPosition() {
+        //TODO implement right logic
         int x;
         int y;
         int c = 0;

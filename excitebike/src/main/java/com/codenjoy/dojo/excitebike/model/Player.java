@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
  */
 public class Player extends GamePlayer<Hero, GameField> {
 
-    Hero hero;
+    private Hero hero;
 
     public Player(EventListener listener) {
         super(listener);
@@ -43,9 +43,13 @@ public class Player extends GamePlayer<Hero, GameField> {
         return hero;
     }
 
+    void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
     @Override
     public void newHero(GameField gameField) {
-        hero = new Hero(gameField.getFreeRandom());
+        hero = new Hero(gameField.getNewPlayerPosition());
         hero.init(gameField);
     }
 
