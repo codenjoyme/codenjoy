@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.model.items.Hero;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 

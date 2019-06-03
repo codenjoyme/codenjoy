@@ -25,7 +25,6 @@ package com.codenjoy.dojo.excitebike.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
-import com.codenjoy.dojo.excitebike.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;

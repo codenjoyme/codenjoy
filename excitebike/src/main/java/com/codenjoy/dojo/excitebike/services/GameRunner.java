@@ -27,7 +27,7 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
-import com.codenjoy.dojo.excitebike.model.Elements;
+import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.model.Level;
 import com.codenjoy.dojo.excitebike.model.LevelImpl;

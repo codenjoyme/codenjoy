@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.model;
+package com.codenjoy.dojo.excitebike.model.items.springboard;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,43 +22,20 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
+public enum SpringboardType implements CharElements {
 
-    //ASCII code of char in comment
-    //Drawable elements
-    BORDER('■'),    //254
-
-    //Interactive elements
-    BIKE_BACK('<'),
-    BIKE_FRONT('>'),
-    BIKE_FALLEN_BACK('`'),
-    BIKE_FALLEN_FRONT('~'),
-    BIKE_INCLINE_LEFT_BACK('('),
-    BIKE_INCLINE_LEFT_FRONT('['),
-    BIKE_INCLINE_RIGHT_BACK(')'),
-    BIKE_INCLINE_RIGHT_FRONT(']'),
-
-    ACCELERATOR('»'),   //175
-    INHIBITOR('▒'),    //177
-    OBSTACLE('█'),     //178
-    LINE_CHANGER_UP('▲'),  //30
-    LINE_CHANGER_DOWN('▼'),  //31
-    ROAD('░'),         //176
-    NONE(' '),
-
-    SPRINGBOARD_DARK('/'),
-    SPRINGBOARD_LIGHT('\\'),
-    SPRINGBOARD_LEFT_DOWN('╚'),     //200
-    SPRINGBOARD_LEFT_UP('╔'),       //201
-    SPRINGBOARD_RIGHT_DOWN('╝'),    //188
-    SPRINGBOARD_RIGHT_UP('╗');      //187
+    DARK('/'),
+    LIGHT('\\'),
+    LEFT_DOWN('╚'),     //200
+    LEFT_UP('╔'),       //201
+    RIGHT_DOWN('╝'),    //188
+    RIGHT_UP('╗');      //187
 
     final char ch;
 
-    Elements(char ch) {
+    SpringboardType(char ch) {
         this.ch = ch;
     }
 
@@ -72,13 +49,12 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static SpringboardType valueOf(char ch) {
+        for (SpringboardType el : SpringboardType.values()) {
             if (el.ch == ch) {
                 return el;
             }
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
-
 }

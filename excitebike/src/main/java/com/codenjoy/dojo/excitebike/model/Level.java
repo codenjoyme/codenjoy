@@ -22,6 +22,8 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
+import com.codenjoy.dojo.excitebike.model.items.Hero;
+
 import java.util.List;
 
 /**

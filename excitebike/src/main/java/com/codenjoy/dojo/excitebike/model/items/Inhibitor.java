@@ -22,7 +22,6 @@ package com.codenjoy.dojo.excitebike.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.Elements;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

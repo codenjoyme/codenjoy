@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model;
+package com.codenjoy.dojo.excitebike.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,9 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.model.GameField;
+import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;

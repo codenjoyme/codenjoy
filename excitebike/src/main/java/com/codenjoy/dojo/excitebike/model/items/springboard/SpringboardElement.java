@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model.items;
+package com.codenjoy.dojo.excitebike.model.items.springboard;
 
 /*-
  * #%L
@@ -22,27 +22,26 @@ package com.codenjoy.dojo.excitebike.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.Elements;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Springboard extends PointImpl implements State<Elements, Player> {
-    private SpringboardElement currentElement;
+public class SpringboardElement extends PointImpl implements State<SpringboardType, Player> {
+    private SpringboardType currentSpringboardType;
 
-    public Springboard(int x, int y, SpringboardElement currentElement) {
+    public SpringboardElement(int x, int y, SpringboardType type) {
         super(x, y);
-        this.currentElement = currentElement;
+        this.currentSpringboardType = type;
     }
 
-    public Springboard(Point point, SpringboardElement currentElement) {
+    public SpringboardElement(Point point, SpringboardType type) {
         super(point);
-        this.currentElement = currentElement;
+        this.currentSpringboardType = type;
     }
 
     @Override
-    public Elements state(Player player, Object... objects) {
-        return currentElement.getElement();
+    public SpringboardType state(Player player, Object... objects) {
+        return currentSpringboardType;
     }
 }

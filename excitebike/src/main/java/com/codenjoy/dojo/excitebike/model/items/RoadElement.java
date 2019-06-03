@@ -22,32 +22,23 @@ package com.codenjoy.dojo.excitebike.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.Elements;
+import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-public enum SpringboardElement {
-    DARK(Elements.SPRINGBOARD_DARK),
-    LIGHT(Elements.SPRINGBOARD_LIGHT),
-    LEFT_UP(Elements.SPRINGBOARD_LEFT_UP),
-    LEFT_DOWN(Elements.SPRINGBOARD_LEFT_DOWN),
-    RIGHT_UP(Elements.SPRINGBOARD_RIGHT_UP),
-    RIGHT_DOWN(Elements.SPRINGBOARD_RIGHT_DOWN);
+public class RoadElement extends PointImpl implements State<Elements, Player> {
 
-    final Elements element;
-
-    SpringboardElement(Elements element) {
-        this.element = element;
+    public RoadElement(int x, int y) {
+        super(x, y);
     }
 
-    public Elements getElement() {
-        return element;
+    public RoadElement(Point point) {
+        super(point);
     }
 
-    public static SpringboardElement valueOf(Elements element) {
-        for (SpringboardElement el : SpringboardElement.values()) {
-            if (el.getElement() == element) {
-                return el;
-            }
-        }
-        throw new IllegalArgumentException("No such element for " + element);
+    @Override
+    public Elements state(Player player, Object... objects) {
+        return Elements.ROAD;
     }
 }
