@@ -27,11 +27,13 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
-import com.codenjoy.dojo.excitebike.model.items.Elements;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeElementType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
@@ -40,6 +42,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.google.common.collect.ObjectArrays;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -77,10 +80,10 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     private void appendBikeAtStartPoint(StringBuilder sb) {
-        sb.append(Elements.ROAD);
-        sb.append(Elements.BIKE_BACK);
-        sb.append(Elements.BIKE_FRONT);
-        appendElementManyTimes(sb, Elements.ROAD, FIELD_HEIGHT - 3);
+        sb.append(GameElementType.ROAD);
+        sb.append(BikeElementType.BIKE_BACK);
+        sb.append(BikeElementType.BIKE_FRONT);
+        appendElementManyTimes(sb, GameElementType.ROAD, FIELD_HEIGHT - 3);
     }
 
     @Override
@@ -106,7 +109,8 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Enum[] getPlots() {
-        return Elements.values();
+        Enum[] tempArr = ObjectArrays.concat(GameElementType.values(), SpringboardElementType.values(), Enum.class);
+        return ObjectArrays.concat(tempArr, BikeElementType.values(), Enum.class);
     }
 
     @Override
