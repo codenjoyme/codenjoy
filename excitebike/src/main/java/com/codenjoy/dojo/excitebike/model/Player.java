@@ -23,7 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.Hero;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
@@ -31,31 +31,31 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
  * Класс игрока. Тут кроме героя может подсчитываться очки.
  * Тут же ивенты передабтся лиснеру фреймворка.
  */
-public class Player extends GamePlayer<Hero, GameField> {
+public class Player extends GamePlayer<Bike, GameField> {
 
-    private Hero hero;
+    private Bike bike;
 
     public Player(EventListener listener) {
         super(listener);
     }
 
-    public Hero getHero() {
-        return hero;
+    public Bike getHero() {
+        return bike;
     }
 
-    void setHero(Hero hero) {
-        this.hero = hero;
+    void setHero(Bike hero) {
+        this.bike = hero;
     }
 
     @Override
     public void newHero(GameField gameField) {
-        hero = new Hero(gameField.getNewPlayerPosition());
-        hero.init(gameField);
+//        bike = new Bike(gameField.getNewPlayerPosition());
+        bike.init(gameField);
     }
 
     @Override
     public boolean isAlive() {
-        return hero != null && hero.isAlive();
+        return bike != null && bike.isAlive();
     }
 
 }

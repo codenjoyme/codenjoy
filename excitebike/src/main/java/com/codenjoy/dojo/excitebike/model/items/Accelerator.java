@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Accelerator extends PointImpl implements State<Elements, Player> {
+public class Accelerator extends PointImpl implements State<GameElementType, Player> {
 
     public Accelerator(int x, int y) {
         super(x, y);
@@ -38,7 +38,7 @@ public class Accelerator extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... objects) {
-        return Elements.ACCELERATOR;
+    public GameElementType state(Player player, Object... objects) {
+        return GameElementType.ACCELERATOR;
     }
 }

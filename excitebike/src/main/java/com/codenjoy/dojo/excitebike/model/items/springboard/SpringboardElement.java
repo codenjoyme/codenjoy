@@ -27,21 +27,21 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class SpringboardElement extends PointImpl implements State<SpringboardType, Player> {
-    private SpringboardType currentSpringboardType;
+public class SpringboardElement extends PointImpl implements State<SpringboardElementType, Player> {
+    private SpringboardElementType currentSpringboardType;
 
-    public SpringboardElement(int x, int y, SpringboardType type) {
+    public SpringboardElement(int x, int y, SpringboardElementType type) {
         super(x, y);
         this.currentSpringboardType = type;
     }
 
-    public SpringboardElement(Point point, SpringboardType type) {
+    public SpringboardElement(Point point, SpringboardElementType type) {
         super(point);
         this.currentSpringboardType = type;
     }
 
     @Override
-    public SpringboardType state(Player player, Object... objects) {
+    public SpringboardElementType state(Player player, Object... objects) {
         return currentSpringboardType;
     }
 }

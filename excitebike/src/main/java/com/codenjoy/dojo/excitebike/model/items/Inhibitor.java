@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Inhibitor extends PointImpl implements State<Elements, Player> {
+public class Inhibitor extends PointImpl implements State<GameElementType, Player> {
 
     public Inhibitor(int x, int y) {
         super(x, y);
@@ -38,7 +38,7 @@ public class Inhibitor extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... objects) {
-        return Elements.INHIBITOR;
+    public GameElementType state(Player player, Object... objects) {
+        return GameElementType.INHIBITOR;
     }
 }

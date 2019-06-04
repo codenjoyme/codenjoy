@@ -24,9 +24,9 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 
-import com.codenjoy.dojo.excitebike.model.items.Hero;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.Border;
 import com.codenjoy.dojo.excitebike.services.Events;
-import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
@@ -38,18 +38,15 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see GameField}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {GameFieldImpl#tick()}
- */
 public class GameFieldImpl implements GameField {
+    private static final int BIKE_START_POSITION = 3;
 
     private List<Player> players;
-    private MapParser mapParser;
+
+    private Level level;
     private Dice dice;
 
-    public GameFieldImpl(MapParser mapParser, Dice dice) {
+    public GameFieldImpl(Level level, Dice dice) {
         this.dice = dice;
         players = new LinkedList<>();
     }
@@ -60,9 +57,11 @@ public class GameFieldImpl implements GameField {
     @Override
     public void tick() {
         for (Player player : players) {
-            Hero hero = player.getHero();
+            Bike hero = player.getHero();
 
             hero.tick();
+
+            Border b = new Border(1,2);
 
           /*  if (gold.contains(hero)) {
                 gold.remove(hero);
@@ -74,7 +73,7 @@ public class GameFieldImpl implements GameField {
         }
 
         for (Player player : players) {
-            Hero hero = player.getHero();
+            Bike hero = player.getHero();
 
             if (!hero.isAlive()) {
                 player.event(Events.LOOSE);
@@ -83,18 +82,7 @@ public class GameFieldImpl implements GameField {
     }
 
     public int size() {
-        return mapParser.getXSize();
-    }
-
-    @Override
-    public boolean isBarrier(int x, int y) {
-        Point pt = pt(x, y);
-        return x > mapParser.getXSize() - 1
-                || x < 0
-                || y < 0
-                || y > mapParser.getXSize() - 1
-                //|| walls.contains(pt)
-                || getHeroes().contains(pt);
+        return level.getSize();
     }
 
     @Override
@@ -103,51 +91,74 @@ public class GameFieldImpl implements GameField {
         int x;
         int y;
         int c = 0;
-        do {
-            x = dice.next(mapParser.getXSize());
-            y = dice.next(mapParser.getXSize());
-        } while (!isFree(x, y) && c++ < 100);
+//        do {
+//            x = dice.next(level.getSize());
+//            y = dice.next(level.getSize());
+//        } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
             return pt(0, 0);
         }
 
-        return pt(x, y);
+//        return pt(x, y);
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
-        return false;/*!(gold.contains(pt)
-                || bombs.contains(pt)
-                || walls.contains(pt)
-                || getHeroes().contains(pt));*/
+    public boolean isBorder(int x, int y) {
+        Point point = pt(x, y);
+//        return level.getBorders().contains(point);
+        return false;
     }
 
     @Override
-    public boolean isBomb(int x, int y) {
-        return false;//bombs.contains(pt(x, y));
+    public boolean isInhibitor(int x, int y) {
+        Point point = pt(x, y);
+//        return level.getInhibitors().contains(point);
+        return false;
     }
 
     @Override
-    public void setBomb(int x, int y) {
-        Point pt = pt(x, y);
-        /*if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(x, y));
-        }*/
+    public boolean isAccelerator(int x, int y) {
+        Point point = pt(x, y);
+        return false;
     }
 
     @Override
-    public void removeBomb(int x, int y) {
-        //bombs.remove(pt(x, y));
+    public boolean isObstacle(int x, int y) {
+        Point point = pt(x, y);
+        return false;
     }
 
-  /*  public List<Gold> getGold() {
-        return gold;
-    }*/
+    @Override
+    public boolean isLineChanger(int x, int y) {
+        Point point = pt(x, y);
+        return false;
+    }
 
-    public List<Hero> getHeroes() {
+    @Override
+    public boolean isRoadElement(int x, int y) {
+        Point point = pt(x, y);
+        return false;
+    }
+
+    @Override
+    public boolean isBike(int x, int y) {
+        Point point = pt(x, y);
+        return false;
+    }
+
+    @Override
+    public void inclineBikeToLeft() {
+
+    }
+
+    @Override
+    public void inclineBikeToRight() {
+
+    }
+
+
+    public List<Bike> getHeroes() {
         return players.stream()
                 .map(Player::getHero)
                 .collect(toList());
@@ -166,21 +177,14 @@ public class GameFieldImpl implements GameField {
         players.remove(player);
     }
 
-    /*public List<Wall> getWalls() {
-        return walls;
-    }
-
-    public List<Bomb> getBombs() {
-        return bombs;
-    }*/
-
+    //TODO make correct when Level class will be implemented
     @Override
     public BoardReader reader() {
         return new BoardReader() {
 
             @Override
             public int size() {
-                return mapParser.getXSize();
+                return level.getSize();
             }
 
             @Override

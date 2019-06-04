@@ -102,7 +102,7 @@ public class AISolver implements Solver<Board> {
         }
 
         Point from = board.getMe();
-        List<Point> to = null;//board.get(Elements.GOLD);
+        List<Point> to = null;//board.get(GameElementType.GOLD);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }
@@ -115,9 +115,9 @@ public class AISolver implements Solver<Board> {
         Point atUp = Direction.UP.change(me);
         Point atDown = Direction.DOWN.change(me);
 
-        return false;/*board.isAt(atLeft.getX(), atLeft.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atRight.getX(), atRight.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);*/
+        return false;/*board.isAt(atLeft.getX(), atLeft.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO) &&
+                board.isAt(atRight.getX(), atRight.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO) &&
+                board.isAt(atUp.getX(), atUp.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO) &&
+                board.isAt(atDown.getX(), atDown.getY(), GameElementType.BOMB, GameElementType.WALL, GameElementType.OTHER_HERO);*/
     }
 }

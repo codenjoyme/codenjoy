@@ -31,15 +31,23 @@ import com.codenjoy.dojo.services.Point;
  */
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
 
-    boolean isBarrier(int x, int y);
-
     Point getNewPlayerPosition();
 
-    boolean isFree(int x, int y);
+    boolean isBorder(int x, int y);
 
-    boolean isBomb(int x, int y);
+    boolean isInhibitor(int x, int y);
 
-    void setBomb(int x, int y);
+    boolean isAccelerator(int x, int y);
 
-    void removeBomb(int x, int y);
+    boolean isObstacle(int x, int y);
+
+    boolean isLineChanger(int x, int y);
+
+    boolean isRoadElement(int x, int y);
+
+    boolean isBike(int x, int y);
+
+    void inclineBikeToLeft();
+
+    void inclineBikeToRight();
 }

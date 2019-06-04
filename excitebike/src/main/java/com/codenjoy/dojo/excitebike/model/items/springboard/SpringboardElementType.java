@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.model.items;
+package com.codenjoy.dojo.excitebike.model.items.springboard;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,25 +22,20 @@ package com.codenjoy.dojo.excitebike.model.items;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum Elements implements CharElements {
+public enum SpringboardElementType implements CharElements {
 
-    //ASCII code of char in comment
-    BORDER('■'),    //254
-
-    ACCELERATOR('»'),   //175
-    INHIBITOR('▒'),    //177
-    OBSTACLE('█'),     //178
-    LINE_CHANGER_UP('▲'),  //30
-    LINE_CHANGER_DOWN('▼'),  //31
-    ROAD('░'),         //176
-    NONE(' ');
+    DARK('/'),
+    LIGHT('\\'),
+    LEFT_DOWN('╚'),     //200
+    LEFT_UP('╔'),       //201
+    RIGHT_DOWN('╝'),    //188
+    RIGHT_UP('╗');      //187
 
     final char ch;
 
-    Elements(char ch) {
+    SpringboardElementType(char ch) {
         this.ch = ch;
     }
 
@@ -54,13 +49,12 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
+    public static SpringboardElementType valueOf(char ch) {
+        for (SpringboardElementType el : SpringboardElementType.values()) {
             if (el.ch == ch) {
                 return el;
             }
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
-
 }
