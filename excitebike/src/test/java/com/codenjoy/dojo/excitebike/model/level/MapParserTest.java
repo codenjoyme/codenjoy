@@ -1,27 +1,5 @@
 package com.codenjoy.dojo.excitebike.model.level;
 
-/*-
- * #%L
- * Codenjoy - it's a dojo-like platform from developers to developers.
- * %%
- * Copyright (C) 2018 - 2019 Codenjoy
- * %%
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public
- * License along with this program.  If not, see
- * <http://www.gnu.org/licenses/gpl-3.0.html>.
- * #L%
- */
-
 import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
@@ -51,7 +29,7 @@ public class MapParserTest {
         this.element = element;
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "''{0}''")
     public static Collection data() {
         return Lists.newArrayList(
                 Elements.BORDER,
@@ -71,7 +49,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -101,7 +79,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithElementsOfCertainTypeOnly() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithAcceleratorsOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch() +
@@ -144,7 +122,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -169,7 +147,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithElementsOfCertainTypeOnly() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithAcceleratorsOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
