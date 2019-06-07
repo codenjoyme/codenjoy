@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.Hero;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -63,9 +64,9 @@ public class GameFieldImplTest {
         }
     }
 
-    private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+    private void givenFl(String board, int fieldHeight) {
+        MapParserImpl level = new MapParserImpl(board, fieldHeight);
+        Hero hero = level.getHeroes().get(0);
 
         game = new GameFieldImpl(level, dice);
         listener = mock(EventListener.class);
@@ -88,7 +89,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -104,7 +106,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.left();
         game.tick();
@@ -150,7 +153,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼  ☺☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.left();
         game.tick();
@@ -177,7 +181,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼  ☺☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.right();
         game.tick();
@@ -195,7 +200,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼☺  ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.left();
         game.tick();
@@ -213,7 +219,8 @@ public class GameFieldImplTest {
                 "☼ ☼ ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.up();
         game.tick();
@@ -231,7 +238,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼ ☼ ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.down();
         game.tick();
@@ -250,7 +258,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.act();
         hero.down();
@@ -307,7 +316,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺$☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         dice(1, 3);
         hero.right();
@@ -328,7 +338,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.down();
         hero.act();
@@ -349,7 +360,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺$☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         dice(2, 2);
         hero.right();
@@ -370,7 +382,8 @@ public class GameFieldImplTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
-                "☼☼☼☼☼");
+                "☼☼☼☼☼",
+                5);
 
         hero.act();
         game.tick();

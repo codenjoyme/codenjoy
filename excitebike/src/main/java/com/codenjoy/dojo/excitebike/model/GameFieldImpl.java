@@ -26,6 +26,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.Hero;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
@@ -45,10 +46,10 @@ import static java.util.stream.Collectors.toList;
 public class GameFieldImpl implements GameField {
 
     private List<Player> players;
-    private Level level;
+    private MapParser mapParser;
     private Dice dice;
 
-    public GameFieldImpl(Level level, Dice dice) {
+    public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
         players = new LinkedList<>();
     }
@@ -82,16 +83,16 @@ public class GameFieldImpl implements GameField {
     }
 
     public int size() {
-        return level.getSize();
+        return mapParser.getXSize();
     }
 
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > level.getSize() - 1
+        return x > mapParser.getXSize() - 1
                 || x < 0
                 || y < 0
-                || y > level.getSize() - 1
+                || y > mapParser.getXSize() - 1
                 //|| walls.contains(pt)
                 || getHeroes().contains(pt);
     }
@@ -103,8 +104,8 @@ public class GameFieldImpl implements GameField {
         int y;
         int c = 0;
         do {
-            x = dice.next(level.getSize());
-            y = dice.next(level.getSize());
+            x = dice.next(mapParser.getXSize());
+            y = dice.next(mapParser.getXSize());
         } while (!isFree(x, y) && c++ < 100);
 
         if (c >= 100) {
@@ -179,7 +180,7 @@ public class GameFieldImpl implements GameField {
 
             @Override
             public int size() {
-                return level.getSize();
+                return mapParser.getXSize();
             }
 
             @Override
