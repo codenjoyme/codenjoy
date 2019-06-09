@@ -64,26 +64,25 @@ public class GameRunner extends AbstractGameType implements GameType {
     protected String getMap() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < EMPTY_LINES_ON_TOP; i++) {
-            appendElementManyTimes(sb, Elements.NONE, FIELD_HEIGHT);
+            appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT);
         }
-        appendElementManyTimes(sb, Elements.BORDER, FIELD_HEIGHT);
+        appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
         appendBikeAtStartPoint(sb);
         appendBikeAtStartPoint(sb);
-        appendElementManyTimes(sb, Elements.BORDER, FIELD_HEIGHT);
+        appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
         return sb.toString();
     }
 
-    private void appendElementManyTimes(StringBuilder sb, Elements element, int times) {
+    private void appendElementManyTimes(StringBuilder sb, GameElementType element, int times) {
         for (int i = 0; i < times; i++) {
             sb.append(element);
         }
     }
 
     private void appendBikeAtStartPoint(StringBuilder sb) {
-        sb.append(GameElementType.ROAD);
-        sb.append(BikeElementType.BIKE_BACK);
-        sb.append(BikeElementType.BIKE_FRONT);
-        appendElementManyTimes(sb, GameElementType.ROAD, FIELD_HEIGHT - 3);
+        sb.append(GameElementType.NONE);
+        sb.append(BikeElementType.BIKE);
+        appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT - 2);
     }
 
     @Override

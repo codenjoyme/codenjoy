@@ -25,26 +25,23 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class Bike extends PlayerHero<GameField> implements State<BikeElementType, Player> {
-
-    private boolean front;
+public class Bike extends PlayerHero<GameField> implements State<BikeElementType, Player>, Shiftable {
 
     private Direction direction;
-    private BikeState state;
 
     private BikeElementType type;
 
-    public Bike(Point xy, boolean front, BikeElementType type) {
+    public Bike(Point xy) {
         super(xy);
         direction = null;
-        this.front = front;
-        this.type = type;
-        state = BikeState.HORIZONTAL;
+        type = BikeElementType.BIKE;
     }
 
     @Override
@@ -54,92 +51,96 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
 
     @Override
     public void down() {
-//        if (!alive) return;
+        if (!isAlive()) return;
 
-        direction = Direction.DOWN;
+        setDirection(Direction.DOWN);
     }
 
     @Override
     public void up() {
-//        if (!alive) return;
+        if (!isAlive()) return;
 
-        direction = Direction.UP;
+        setDirection(Direction.UP);
     }
 
     @Override
     public void left() {
-        //nothing to do
+        if (!isAlive()) return;
+
+        changeIncline(BikeElementType.BIKE_INCLINE_LEFT, BikeElementType.BIKE_INCLINE_RIGHT);
     }
 
     @Override
     public void right() {
-        //nothing to do
+        if (!isAlive()) return;
+
+        changeIncline(BikeElementType.BIKE_INCLINE_RIGHT, BikeElementType.BIKE_INCLINE_LEFT);
+    }
+
+    private void changeIncline(BikeElementType toIncline, BikeElementType inclinedTo) {
+        if (getType() == BikeElementType.BIKE) {
+            setType(toIncline);
+        } else if (getType() == inclinedTo) {
+            setType(BikeElementType.BIKE);
+        }
     }
 
     @Override
     public void act(int... p) {
-//        if (!alive) return;
-//
-//        field.setBomb(x, y);
+        //nothing to do
+        //TODO add change to jump type
     }
 
     @Override
     public void tick() {
-//        if (!alive) return;
-//
-//        if (direction != null) {
-//            int newX = direction.changeX(x);
-//            int newY = direction.changeY(y);
-//
-//            if (field.isBomb(newX, newY)) {
-//                alive = false;
-//                field.removeBomb(newX, newY);
-//            }
-//
-//            if (!field.isBarrier(newX, newY)) {
-//                move(newX, newY);
-//            }
-//        }
-        direction = null;
-    }
+        if (isAlive()) {
+            if (direction != null) {
+                int newX = direction.changeX(x);
+                int newY = direction.changeY(y);
+                move(newX, newY);
+            }
 
-    public boolean isFront() {
-        return front;
-    }
+            resetDirection();
+        } else {
 
-    public boolean isAlive() {
-        return state != BikeState.FALLEN;
-    }
-
-    public BikeState getState() {
-        return state;
+        }
     }
 
     @Override
     public BikeElementType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
 
-        return this == bike
-                ? getTypeDependsOnState(state, isFront())
-                : getTypeDependsOnState(bike.getState(), bike.isFront());
+        return this == bike ? getType() : bike.getType();
     }
 
-    private static BikeElementType getTypeDependsOnState(BikeState state, boolean front) {
-        switch (state) {
-            case HORIZONTAL: {
-                return front ? BikeElementType.BIKE_FRONT : BikeElementType.BIKE_BACK;
-            }
-            case INCLINE_LEFT: {
-                return front ? BikeElementType.BIKE_INCLINE_LEFT_FRONT : BikeElementType.BIKE_INCLINE_LEFT_BACK;
-            }
-            case INCLINE_RIGHT: {
-                return front ? BikeElementType.BIKE_INCLINE_RIGHT_FRONT : BikeElementType.BIKE_INCLINE_RIGHT_BACK;
-            }
-            case FALLEN: {
-                return front ? BikeElementType.BIKE_FALLEN_FRONT : BikeElementType.BIKE_FALLEN_BACK;
-            }
-            default:
-                return null;    //TODO refactor this null
+    public boolean isAlive() {
+        return type != BikeElementType.BIKE_FALLEN;
+    }
+
+    private BikeElementType getType() {
+        return type;
+    }
+
+    private void setType(BikeElementType type) {
+        this.type = type;
+    }
+
+    private Direction getDirection() {
+        return direction;
+    }
+
+    private void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    private void resetDirection() {
+        setDirection(null);
+    }
+
+    @Override
+    public void shift() {
+        if (!isAlive()) {
+            Shiftable.super.shift();
         }
     }
 }

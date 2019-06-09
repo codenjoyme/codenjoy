@@ -22,25 +22,21 @@ package com.codenjoy.dojo.excitebike.services.parse;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.Border;
-import com.codenjoy.dojo.excitebike.model.items.Hero;
-import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
-import com.codenjoy.dojo.excitebike.model.items.LineChanger;
-import com.codenjoy.dojo.excitebike.model.items.Obstacle;
-import com.codenjoy.dojo.excitebike.model.items.RoadElement;
+import com.codenjoy.dojo.excitebike.model.items.*;
+import com.codenjoy.dojo.excitebike.model.items.OffRoad;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 
 import java.util.List;
 
 public interface MapParser {
+    char LINE_SEPARATOR = ' ';  //ASCII 255 - nbsp symbol
 
     int getXSize();
 
     int getYSize();
 
-    //TODO adjust in scope of the 'Bike' task
-    List<Hero> getHeroes();
+    List<Bike> getBikes();
 
     List<Accelerator> getAccelerators();
 
@@ -54,7 +50,7 @@ public interface MapParser {
 
     List<Obstacle> getObstacles();
 
-    List<RoadElement> getRoadElements();
+    List<OffRoad> getOffRoads();
 
     List<SpringboardElement> getSpringboardDarkElements();
 

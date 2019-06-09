@@ -4,14 +4,10 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum BikeElementType implements CharElements {
-    BIKE_BACK('<'),
-    BIKE_FRONT('>'),
-    BIKE_FALLEN_BACK('`'),
-    BIKE_FALLEN_FRONT('~'),
-    BIKE_INCLINE_LEFT_BACK('('),
-    BIKE_INCLINE_LEFT_FRONT('['),
-    BIKE_INCLINE_RIGHT_BACK(')'),
-    BIKE_INCLINE_RIGHT_FRONT(']');
+    BIKE('o'),
+    BIKE_FALLEN('~'),
+    BIKE_INCLINE_LEFT('('),
+    BIKE_INCLINE_RIGHT(')');
 
     final char ch;
 

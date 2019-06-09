@@ -28,17 +28,14 @@ import com.codenjoy.dojo.services.printer.CharElements;
 public enum GameElementType implements CharElements {
 
     //ASCII code of char in comment
-    //Drawable elements
+    NONE(' '),  //space
     BORDER('■'),    //254
-
-    //Interactive elements
     ACCELERATOR('»'),   //175
     INHIBITOR('▒'),    //177
     OBSTACLE('█'),     //178
     LINE_CHANGER_UP('▲'),  //30
     LINE_CHANGER_DOWN('▼'),  //31
-    ROAD('░'),         //176
-    NONE(' ');
+    OFF_ROAD('░');        //176
 
     final char ch;
 

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class LineChanger extends PointImpl implements State<GameElementType, Player> {
+public class LineChanger extends PointImpl implements State<GameElementType, Player>, Shiftable {
     private boolean upper;
 
     public LineChanger(int x, int y, boolean upper) {

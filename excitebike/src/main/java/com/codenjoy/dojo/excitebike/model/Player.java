@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 /**
@@ -43,13 +44,14 @@ public class Player extends GamePlayer<Bike, GameField> {
         return bike;
     }
 
-    void setHero(Bike hero) {
-        this.bike = hero;
+    void setHero(Bike bike) {
+        this.bike = bike;
     }
 
     @Override
     public void newHero(GameField gameField) {
-//        bike = new Bike(gameField.getNewPlayerPosition());
+        //TODO set correct start coordinates
+        bike = new Bike(new PointImpl(-1,-1));
         bike.init(gameField);
     }
 

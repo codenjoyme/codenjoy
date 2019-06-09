@@ -27,18 +27,18 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class RoadElement extends PointImpl implements State<GameElementType, Player> {
+public class OffRoad extends PointImpl implements State<GameElementType, Player>, Shiftable {
 
-    public RoadElement(int x, int y) {
+    public OffRoad(int x, int y) {
         super(x, y);
     }
 
-    public RoadElement(Point point) {
+    public OffRoad(Point point) {
         super(point);
     }
 
     @Override
     public GameElementType state(Player player, Object... objects) {
-        return GameElementType.ROAD;
+        return GameElementType.OFF_ROAD;
     }
 }

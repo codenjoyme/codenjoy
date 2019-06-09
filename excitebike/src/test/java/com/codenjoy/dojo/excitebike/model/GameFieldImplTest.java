@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,7 +24,6 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
-import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -36,17 +35,14 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class GameFieldImplTest {
 
     private GameFieldImpl game;
-    private Bike hero;
+    private Bike bike;
     private Dice dice;
     private EventListener listener;
     private Player player;
@@ -57,24 +53,24 @@ public class GameFieldImplTest {
         dice = mock(Dice.class);
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
         }
     }
 
-    private void givenFl(String board, int fieldHeight) {
-        MapParserImpl level = new MapParserImpl(board, fieldHeight);
-        Hero hero = level.getHeroes().get(0);
+    private void givenFl(String board) {
+        MapParserImpl parser = new MapParserImpl(board);
+        Bike bike = parser.getBikes().get(0);
 
-        game = new GameFieldImpl(level, dice);
+        game = new GameFieldImpl(parser, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        player.setHero(hero);
-        hero.init(game);
-        this.hero = game.getHeroes().get(0);
+        player.setHero(bike);
+        bike.init(game);
+        this.bike = game.getBikes().get(0);
     }
 
     private void assertE(String expected) {
@@ -84,18 +80,122 @@ public class GameFieldImplTest {
 
     @Test
     public void shouldFieldAtStart() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+        givenFl("■■■■■" +
+                " o ▼ " +
+                "  » ░" +
+                " ▲ ▒ " +
+                "■■■■■");
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("■■■■■" +
+                " o ▼ " +
+                "  » ░" +
+                " ▲ ▒ " +
+                "■■■■■");
+    }
+
+    @Test
+    public void shouldShiftTrack() {
+        givenFl("■■■■■" +
+                " o ▼ " +
+                "  » ░" +
+                " ▲ ▒ " +
+                "■■■■■");
+
+        game.tick();
+
+        assertE("■■■■■" +
+                " o▼  " +
+                " » ░ " +
+                "▲ ▒  " +
+                "■■■■■");
+    }
+
+    @Test
+    public void shouldReplaceShiftableElementToBike() {
+        givenFl("■■■■■" +
+                " o▼  " +
+                "     " +
+                "     " +
+                "■■■■■");
+
+        game.tick();
+
+        assertE("■■■■■" +
+                " o   " +
+                "     " +
+                "     " +
+                "■■■■■");
+
+//        game.tick();
+//
+//        assertE("■■■■■" +
+//                "▼o   " +
+//                "     " +
+//                "     " +
+//                "■■■■■");
+    }
+
+    @Test
+    public void shouldMoveBikeVertically() {
+        givenFl("■■■■■" +
+                " o   " +
+                "     " +
+                "     " +
+                "■■■■■");
+
+        bike.down();
+        game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                " o   " +
+                "     " +
+                "■■■■■");
+
+        bike.up();
+        game.tick();
+
+        assertE("■■■■■" +
+                " o   " +
+                "     " +
+                "     " +
+                "■■■■■");
+    }
+
+    @Test
+    public void shouldInclineBikeToLeftAndRight() {
+        givenFl("■■■■■" +
+                "     " +
+                "  o  " +
+                "     " +
+                "■■■■■");
+
+        bike.right();
+        game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                "  )  " +
+                "     " +
+                "■■■■■");
+
+        bike.left();
+        game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                "  o  " +
+                "     " +
+                "■■■■■");
+
+        bike.left();
+        game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                "  (  " +
+                "     " +
+                "■■■■■");
     }
 
 }
