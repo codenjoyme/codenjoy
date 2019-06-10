@@ -119,13 +119,13 @@ public class GameFieldImplTest {
                 "     " +
                 "■■■■■");
 
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
         assertE("■■■■■" +
                 " o   " +
                 "     " +
-                "    »" +
+                "     " +
                 "■■■■■");
 
         game.tick();
@@ -133,12 +133,14 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "▼o   " +
                 "     " +
-                "   »»" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldMoveBikeVertically() {
+        when(dice.next(anyInt())).thenReturn(5);
+
         givenFl("■■■■■" +
                 " o   " +
                 "     " +
@@ -151,7 +153,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 " o   " +
-                "    »" +
+                "     " +
                 "■■■■■");
 
         bike.up();
@@ -160,13 +162,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 " o   " +
                 "     " +
-                "   »»" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldInclineBikeToLeftAndRight() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -180,7 +182,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "  )  " +
-                "    »" +
+                "     " +
                 "■■■■■");
 
         bike.left();
@@ -189,7 +191,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "  o  " +
-                "   »»" +
+                "     " +
                 "■■■■■");
 
         bike.left();
@@ -198,7 +200,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "  (  " +
-                "  »»»" +
+                "     " +
                 "■■■■■");
 
         bike.right();
@@ -207,13 +209,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "  o  " +
-                " »»»»" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldFallBike() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -227,13 +229,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 " ~   " +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldIgnoreMovingAfterFallingBike() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -247,7 +249,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 " ~   " +
-                "    »" +
+                "     " +
                 "■■■■■");
 
         bike.up();
@@ -256,13 +258,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "~    " +
-                "   »»" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldInhibitBike() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -275,13 +277,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "o    " +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldInhibitBike2() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -294,13 +296,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 " o ▒ " +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldInhibitBikeAfterMovingUp() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "   ▒ " +
@@ -314,13 +316,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "o ▒  " +
                 "     " +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldAccelerateBike() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -333,13 +335,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "» o  " +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldAccelerateBike2() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -352,13 +354,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   »o" +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldAccelerateBikeAfterMovingUp() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "   » " +
@@ -372,13 +374,13 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "  » o" +
                 "     " +
-                "    »" +
+                "     " +
                 "■■■■■");
     }
 
     @Test
     public void shouldObstructBike() {
-        when(dice.next(anyInt())).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(5);
 
         givenFl("■■■■■" +
                 "     " +
@@ -391,7 +393,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "  ~█ " +
-                "    »" +
+                "     " +
                 "■■■■■");
 
         game.tick();
@@ -399,7 +401,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 " ~█  " +
-                "   »»" +
+                "     " +
                 "■■■■■");
 
         game.tick();
@@ -407,7 +409,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "~█   " +
-                "  »»»" +
+                "     " +
                 "■■■■■");
 
         game.tick();
@@ -415,7 +417,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "█    " +
-                " »»»»" +
+                "     " +
                 "■■■■■");
 
         game.tick();
@@ -423,7 +425,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "     " +
-                "»»»»»" +
+                "     " +
                 "■■■■■");
     }
 }

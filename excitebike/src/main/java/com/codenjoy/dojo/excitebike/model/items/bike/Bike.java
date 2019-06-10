@@ -28,7 +28,6 @@ import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
@@ -51,14 +50,14 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
     public void down() {
         if (!isAlive()) return;
 
-        setDirection(Direction.DOWN);
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
         if (!isAlive()) return;
 
-        setDirection(Direction.UP);
+        direction = Direction.UP;
     }
 
     @Override
@@ -76,15 +75,15 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
     }
 
     private void changeIncline(BikeElementType toIncline, BikeElementType inclinedTo) {
-        if (getType() == BikeElementType.BIKE) {
-            setType(toIncline);
-        } else if (getType() == inclinedTo) {
-            setType(BikeElementType.BIKE);
+        if (type == BikeElementType.BIKE) {
+            type = toIncline;
+        } else if (type == inclinedTo) {
+            type = BikeElementType.BIKE;
         }
     }
 
     public void crush() {
-        setType(BikeElementType.BIKE_FALLEN);
+        type = BikeElementType.BIKE_FALLEN;
     }
 
     public void jump() {
@@ -117,22 +116,19 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
         int inhibitorStep = -2;
 
         if (field.isAccelerator(x, y)) {
-            if (getX() + acceleratorStep < field.size()) {
-                move(getX() + acceleratorStep, getY());
+            if (x + acceleratorStep < field.size()) {
+                move(x + acceleratorStep, y);
             } else {
-                move(field.size() - 1, getY());
+                move(field.size() - 1, y);
             }
-//            interactWithAcceleratorOrInhibitor(field.size(), -1, acceleratorStep);
         }
 
         if (field.isInhibitor(x, y)) {
-            if (getX() + inhibitorStep >= 0) {
-                move(getX() + inhibitorStep, getY());
+            if (x + inhibitorStep >= 0) {
+                move(x + inhibitorStep, y);
             } else {
-                move(0, getY());
+                move(0, y);
             }
-
-//            interactWithAcceleratorOrInhibitor(0, 0, inhibitorStep);
         }
 
         if (field.isObstacle(x, y)) {
@@ -140,14 +136,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
             shift();
         }
     }
-
-//    private void interactWithAcceleratorOrInhibitor(int bound, int dxIfOutOfBound, int step) {
-//        if (getX() + step < bound) {
-//            move(getX() + step, getY());
-//        } else {
-//            move(bound + dxIfOutOfBound, getY());
-//        }
-//    }
 
     @Override
     public BikeElementType state(Player player, Object... alsoAtPoint) {
@@ -164,20 +152,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
         return type;
     }
 
-    private void setType(BikeElementType type) {
-        this.type = type;
-    }
-
     private Direction getDirection() {
         return direction;
     }
-
-    private void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    private void resetDirection() {
-        setDirection(null);
-    }
-
 }

@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Bike, GameField> {
+    private static final int BIKE_START_X = 1;
 
     private Bike bike;
 
@@ -46,8 +47,8 @@ public class Player extends GamePlayer<Bike, GameField> {
 
     @Override
     public void newHero(GameField gameField) {
-        //TODO set correct start coordinates
-        bike = new Bike(new PointImpl(-1,-1));
+        //TODO correct coordinates
+        bike = new Bike(new PointImpl(BIKE_START_X, gameField.getPlayersNumber()));
         bike.init(gameField);
     }
 

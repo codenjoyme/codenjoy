@@ -44,4 +44,6 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
     boolean isOffRoad(int x, int y);
 
     boolean isBike(int x, int y);
+
+    int getPlayersNumber();
 }

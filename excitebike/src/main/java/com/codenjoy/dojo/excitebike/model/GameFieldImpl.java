@@ -43,43 +43,28 @@ public class GameFieldImpl implements GameField {
     private MapParser mapParser;
 
     //TODO mb use Set not List
-    private Map<CharElements, List<? extends Shiftable>> allShiftableElements;
+    private Map<GameElementType, List<? extends Shiftable>> allShiftableElements = new EnumMap<>(GameElementType.class);
 
-    private List<Player> players;
+    private List<Player> players = new LinkedList<>();
 
     private List<Border> borders;
-
-    private List<OffRoad> offRoads;
-    private List<Accelerator> accelerators;
-    private List<Inhibitor> inhibitors;
-    private List<Obstacle> obstacles;
-    private List<LineChanger> lineUpChangers;
-    private List<LineChanger> lineDownChangers;
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
         this.mapParser = mapParser;
 
-        players = new LinkedList<>();
-
         borders = mapParser.getBorders();
-        offRoads = mapParser.getOffRoads();
-        accelerators = mapParser.getAccelerators();
-        inhibitors = mapParser.getInhibitors();
-        obstacles = mapParser.getObstacles();
-        lineUpChangers = mapParser.getLineUpChangers();
-        lineDownChangers = mapParser.getLineDownChangers();
 
-        allShiftableElements = new HashMap<>();
-        allShiftableElements.put(GameElementType.OFF_ROAD, offRoads);
-        allShiftableElements.put(GameElementType.ACCELERATOR, accelerators);
-        allShiftableElements.put(GameElementType.INHIBITOR, inhibitors);
-        allShiftableElements.put(GameElementType.OBSTACLE, obstacles);
-        allShiftableElements.put(GameElementType.LINE_CHANGER_UP, lineUpChangers);
-        allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, lineDownChangers);
+        allShiftableElements.put(GameElementType.OFF_ROAD, mapParser.getOffRoads());
+        allShiftableElements.put(GameElementType.ACCELERATOR, mapParser.getAccelerators());
+        allShiftableElements.put(GameElementType.INHIBITOR, mapParser.getInhibitors());
+        allShiftableElements.put(GameElementType.OBSTACLE, mapParser.getObstacles());
+        allShiftableElements.put(GameElementType.LINE_CHANGER_UP, mapParser.getLineUpChangers());
+        allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, mapParser.getLineDownChangers());
     }
 
     //TODO remove player when bike is not alive and cross last possible x
+
     /**
      * @see Tickable#tick()
      */
@@ -109,17 +94,17 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isInhibitor(int x, int y) {
-        return inhibitors.contains(pt(x, y));
+        return allShiftableElements.get(GameElementType.INHIBITOR).contains(pt(x, y));
     }
 
     @Override
     public boolean isAccelerator(int x, int y) {
-        return accelerators.contains(pt(x, y));
+        return allShiftableElements.get(GameElementType.ACCELERATOR).contains(pt(x, y));
     }
 
     @Override
     public boolean isObstacle(int x, int y) {
-        return obstacles.contains(pt(x, y));
+        return allShiftableElements.get(GameElementType.OBSTACLE).contains(pt(x, y));
     }
 
     @Override
@@ -138,6 +123,11 @@ public class GameFieldImpl implements GameField {
     public boolean isBike(int x, int y) {
         Point point = pt(x, y);
         return false;
+    }
+
+    @Override
+    public int getPlayersNumber() {
+        return players.size();
     }
 
     public List<Bike> getBikes() {
@@ -187,26 +177,27 @@ public class GameFieldImpl implements GameField {
         final int lastPossibleX = 0;
         final int firstPossibleX = mapParser.getXSize() - 1;
 
-        allShiftableElements.values().forEach(
-                pointsOfElementType -> {pointsOfElementType.forEach(Shiftable::shift);
-                    pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX);}
+        allShiftableElements.values().parallelStream().forEach(
+                pointsOfElementType -> {
+                    pointsOfElementType.forEach(Shiftable::shift);
+                    pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX);
+                }
         );
-
-//        allShiftableElements.values().forEach(
-//                pointsOfElementType -> pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX)
-//        );
 
         generateNewTrackStep(mapParser.getXSize(), firstPossibleX);
     }
 
     private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
-        int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 3) + 2;
-        int rndNonBorderLaneNumber = dice.next(laneNumber - 3) + 1;
+        boolean needGenerate = dice.next(10) < 5;
+        if(needGenerate){
+            int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 3) + 2;
+            int rndNonBorderLaneNumber = dice.next(laneNumber - 3) + 1;
 
-        GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
-        List<Shiftable> elements = (List<Shiftable>) allShiftableElements.get(randomType);
-        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
-        elements.add(newElement);
+            GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
+            List<Shiftable> elements = (List<Shiftable>) allShiftableElements.get(randomType);
+            Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
+            elements.add(newElement);
+        }
     }
 
     private Shiftable getNewElement(GameElementType randomType, int x, int y) {
