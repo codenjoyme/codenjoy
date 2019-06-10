@@ -49,7 +49,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -79,7 +79,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithAcceleratorsOnly() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithElementsOfCertainTypeOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch() +
@@ -122,7 +122,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -147,7 +147,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithAcceleratorsOnly() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithElementsOfCertainTypeOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
