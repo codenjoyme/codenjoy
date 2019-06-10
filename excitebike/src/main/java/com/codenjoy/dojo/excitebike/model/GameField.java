@@ -23,15 +23,13 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
-
 /**
  * Так случилось что доска знает про героя, а герой про доску.
  * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
  */
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
 
-    Point getNewPlayerPosition();
+    int size();
 
     boolean isBorder(int x, int y);
 
@@ -43,11 +41,7 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isLineChanger(int x, int y);
 
-    boolean isRoadElement(int x, int y);
+    boolean isOffRoad(int x, int y);
 
     boolean isBike(int x, int y);
-
-    void inclineBikeToLeft();
-
-    void inclineBikeToRight();
 }

@@ -46,14 +46,15 @@ public class GameFieldImpl implements GameField {
     private Map<CharElements, List<? extends Shiftable>> allShiftableElements;
 
     private List<Player> players;
+
     private List<Border> borders;
+
     private List<OffRoad> offRoads;
     private List<Accelerator> accelerators;
     private List<Inhibitor> inhibitors;
     private List<Obstacle> obstacles;
     private List<LineChanger> lineUpChangers;
     private List<LineChanger> lineDownChangers;
-
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
@@ -78,6 +79,7 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, lineDownChangers);
     }
 
+    //TODO remove player when bike is not alive and cross last possible x
     /**
      * @see Tickable#tick()
      */
@@ -90,46 +92,12 @@ public class GameFieldImpl implements GameField {
 
             bike.tick();
         }
-//
-//          /*  if (gold.contains(hero)) {
-//                gold.remove(hero);
-//                player.event(Events.WIN);
-//
-//                Point pos = getNewPlayerPosition();
-//                gold.add(new Gold(pos));
-//            }*/
-//        }
-//
-//        for (Player player : players) {
-//            Bike hero = player.getHero();
-//
-//            if (!hero.isAlive()) {
-//                player.event(Events.LOOSE);
-//            }
-//        }
+
+        //TODO login for each element
     }
 
     public int size() {
         return mapParser.getXSize();
-    }
-
-    @Override
-    public Point getNewPlayerPosition() {
-        //TODO implement right logic
-        int x;
-        int y;
-        int c = 0;
-//        do {
-//            x = dice.next(level.getSize());
-//            y = dice.next(level.getSize());
-//        } while (!isFree(x, y) && c++ < 100);
-
-        if (c >= 100) {
-            return pt(0, 0);
-        }
-
-//        return pt(x, y);
-        return null;
     }
 
     @Override
@@ -141,21 +109,17 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isInhibitor(int x, int y) {
-        Point point = pt(x, y);
-//        return level.getInhibitors().contains(point);
-        return false;
+        return inhibitors.contains(pt(x, y));
     }
 
     @Override
     public boolean isAccelerator(int x, int y) {
-        Point point = pt(x, y);
-        return false;
+        return accelerators.contains(pt(x, y));
     }
 
     @Override
     public boolean isObstacle(int x, int y) {
-        Point point = pt(x, y);
-        return false;
+        return obstacles.contains(pt(x, y));
     }
 
     @Override
@@ -165,7 +129,7 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isRoadElement(int x, int y) {
+    public boolean isOffRoad(int x, int y) {
         Point point = pt(x, y);
         return false;
     }
@@ -174,16 +138,6 @@ public class GameFieldImpl implements GameField {
     public boolean isBike(int x, int y) {
         Point point = pt(x, y);
         return false;
-    }
-
-    @Override
-    public void inclineBikeToLeft() {
-
-    }
-
-    @Override
-    public void inclineBikeToRight() {
-
     }
 
     public List<Bike> getBikes() {
@@ -196,7 +150,6 @@ public class GameFieldImpl implements GameField {
         return borders;
     }
 
-    //TODO mb add bikes to shiftables
     @Override
     public void newGame(Player player) {
         if (!players.contains(player)) {
@@ -210,7 +163,6 @@ public class GameFieldImpl implements GameField {
         players.remove(player);
     }
 
-    //TODO make correct when Level class will be implemented
     @Override
     public BoardReader reader() {
         return new BoardReader() {
@@ -233,27 +185,28 @@ public class GameFieldImpl implements GameField {
 
     private void shiftTrack() {
         final int lastPossibleX = 0;
-        final int firstPossibleX = mapParser.getXSize();
+        final int firstPossibleX = mapParser.getXSize() - 1;
 
         allShiftableElements.values().forEach(
-                pointsOfElementType -> pointsOfElementType.forEach(Shiftable::shift)
+                pointsOfElementType -> {pointsOfElementType.forEach(Shiftable::shift);
+                    pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX);}
         );
 
-        allShiftableElements.values().forEach(
-                pointsOfElementType -> pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX)
-        );
+//        allShiftableElements.values().forEach(
+//                pointsOfElementType -> pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX)
+//        );
 
         generateNewTrackStep(mapParser.getXSize(), firstPossibleX);
     }
 
     private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
+        int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 3) + 2;
+        int rndNonBorderLaneNumber = dice.next(laneNumber - 3) + 1;
 
-        int pseudoRandomForElem = 3; //TODO 2<rnd<GameElementType.values().length   -none,-border
-        int pseudoRandomForLane = 3; //TODO 1<rnd<laneNumber-1  -borders
-
-        GameElementType randomType = GameElementType.values()[pseudoRandomForElem];
+        GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
         List<Shiftable> elements = (List<Shiftable>) allShiftableElements.get(randomType);
-//        elements.add(getNewElement(randomType, firstPossibleX, pseudoRandomForLane));
+        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
+        elements.add(newElement);
     }
 
     private Shiftable getNewElement(GameElementType randomType, int x, int y) {
@@ -271,10 +224,7 @@ public class GameFieldImpl implements GameField {
             case LINE_CHANGER_DOWN:
                 return new LineChanger(x, y, false);
             default:
-                return null;
+                throw new IllegalArgumentException("No such element for " + randomType);
         }
     }
-
-//    private List<Point> replaceShiftableByBike(List<Shiftable> shiftables){
-//    }
 }

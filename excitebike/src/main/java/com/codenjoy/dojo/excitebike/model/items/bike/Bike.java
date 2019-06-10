@@ -36,12 +36,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
 
     private Direction direction;
 
-    private BikeElementType type;
+    private BikeElementType type = BikeElementType.BIKE;
 
     public Bike(Point xy) {
         super(xy);
-        direction = null;
-        type = BikeElementType.BIKE;
     }
 
     @Override
@@ -85,10 +83,18 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
         }
     }
 
+    public void crush() {
+        setType(BikeElementType.BIKE_FALLEN);
+    }
+
+    public void jump() {
+        //TODO add new BikeElementType.JUMP
+        //setType(BikeElementType.BIKE_JUMP);
+    }
+
     @Override
     public void act(int... p) {
         //nothing to do
-        //TODO add change to jump type
     }
 
     @Override
@@ -98,13 +104,50 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
                 int newX = direction.changeX(x);
                 int newY = direction.changeY(y);
                 move(newX, newY);
+                direction = null;
             }
-
-            resetDirection();
+            interactWithOtherElements(x, y);
         } else {
-
+            shift();
         }
     }
+
+    private void interactWithOtherElements(final int x, final int y) {
+        int acceleratorStep = 2;
+        int inhibitorStep = -2;
+
+        if (field.isAccelerator(x, y)) {
+            if (getX() + acceleratorStep < field.size()) {
+                move(getX() + acceleratorStep, getY());
+            } else {
+                move(field.size() - 1, getY());
+            }
+//            interactWithAcceleratorOrInhibitor(field.size(), -1, acceleratorStep);
+        }
+
+        if (field.isInhibitor(x, y)) {
+            if (getX() + inhibitorStep >= 0) {
+                move(getX() + inhibitorStep, getY());
+            } else {
+                move(0, getY());
+            }
+
+//            interactWithAcceleratorOrInhibitor(0, 0, inhibitorStep);
+        }
+
+        if (field.isObstacle(x, y)) {
+            crush();
+            shift();
+        }
+    }
+
+//    private void interactWithAcceleratorOrInhibitor(int bound, int dxIfOutOfBound, int step) {
+//        if (getX() + step < bound) {
+//            move(getX() + step, getY());
+//        } else {
+//            move(bound + dxIfOutOfBound, getY());
+//        }
+//    }
 
     @Override
     public BikeElementType state(Player player, Object... alsoAtPoint) {
@@ -137,10 +180,4 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
         setDirection(null);
     }
 
-    @Override
-    public void shift() {
-        if (!isAlive()) {
-            Shiftable.super.shift();
-        }
-    }
 }
