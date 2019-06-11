@@ -29,7 +29,7 @@ public class MapParserTest {
         this.element = element;
     }
 
-    @Parameterized.Parameters(name = "''{0}''")
+    @Parameterized.Parameters(name = "{0}")
     public static Collection data() {
         return Lists.newArrayList(
                 Elements.BORDER,
