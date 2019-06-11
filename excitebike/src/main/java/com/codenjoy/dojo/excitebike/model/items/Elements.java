@@ -28,18 +28,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 public enum Elements implements CharElements {
 
     //ASCII code of char in comment
-    //Drawable elements
     BORDER('■'),    //254
-
-    //Interactive elements
-    BIKE_BACK('<'),
-    BIKE_FRONT('>'),
-    BIKE_FALLEN_BACK('`'),
-    BIKE_FALLEN_FRONT('~'),
-    BIKE_INCLINE_LEFT_BACK('('),
-    BIKE_INCLINE_LEFT_FRONT('['),
-    BIKE_INCLINE_RIGHT_BACK(')'),
-    BIKE_INCLINE_RIGHT_FRONT(']'),
 
     ACCELERATOR('»'),   //175
     INHIBITOR('▒'),    //177
