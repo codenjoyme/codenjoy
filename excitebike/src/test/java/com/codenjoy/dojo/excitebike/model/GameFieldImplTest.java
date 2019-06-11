@@ -428,4 +428,69 @@ public class GameFieldImplTest {
                 "     " +
                 "■■■■■");
     }
+
+    @Test
+    public void shouldCrushEnemyBikeAfterClash() {
+        when(dice.next(anyInt())).thenReturn(5);
+
+        givenFl("■■■■■" +
+                "     " +
+                "   o " +
+                "     " +
+                "■■■■■");
+
+        Bike enemyBike = new Bike(bike.getX(), bike.getY()-1);
+        Player enemyPlayer = new Player(listener);
+        game.newGame(enemyPlayer);
+        enemyPlayer.setHero(enemyBike);
+        enemyBike.init(game);
+
+        assertE("■■■■■" +
+                "     " +
+                "   o " +
+                "   o " +
+                "■■■■■");
+
+        bike.down();
+        enemyBike.up();
+        game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                "   o " +
+                "   o " +
+                "■■■■■");
+
+        bike.up();
+        game.tick();
+
+        assertE("■■■■■" +
+                "   o " +
+                "     " +
+                "   o " +
+                "■■■■■");
+
+        //TODO
+//        bike.down();
+//        enemyBike.up();
+//        game.tick();
+//
+//        assertE("■■■■■" +
+//                "   o " +
+//                "     " +
+//                "   o " +
+//                "■■■■■");
+
+        bike.down();
+        game.tick();
+        bike.down();
+        game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                "   o " +
+                "  ~  " +
+                "■■■■■");
+
+    }
 }

@@ -27,14 +27,16 @@ import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toList;
 
 public class GameFieldImpl implements GameField {
@@ -72,24 +74,37 @@ public class GameFieldImpl implements GameField {
     public void tick() {
         shiftTrack();
 
-        for (Player player : players) {
-            Bike bike = player.getHero();
+//        Optional<Bike> enemyBike = field.getEnemyBike(newX, newY);
+//        enemyBike.ifPresent(this::interactWithOtherBike);
 
-            bike.tick();
-        }
+        players.forEach(player -> player.getHero().tick());
+
+
 
         //TODO login for each element
     }
+
+//    private void interactWithOtherBike(Bike enemyBike){
+//        if((direction == Direction.UP && enemyBike.direction == null)
+//                || (direction == Direction.DOWN && enemyBike.direction == null)){
+//            direction = null;
+//            enemyBike.crush();
+//        }
+//    }
+
 
     public int size() {
         return mapParser.getXSize();
     }
 
     @Override
-    public boolean isBorder(int x, int y) {
-        Point point = pt(x, y);
-//        return level.getBorders().contains(point);
+    public boolean isFree(int x, int y) {
         return false;
+    }
+
+    @Override
+    public boolean isBorder(int x, int y) {
+        return y < 1 && y > mapParser.getYSize()-2;
     }
 
     @Override
@@ -108,9 +123,13 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isLineChanger(int x, int y) {
-        Point point = pt(x, y);
-        return false;
+    public boolean isUpLineChanger(int x, int y) {
+        return allShiftableElements.get(GameElementType.LINE_CHANGER_UP).contains(pt(x,y));
+    }
+
+    @Override
+    public boolean isDownLineChanger(int x, int y) {
+        return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x,y));
     }
 
     @Override
@@ -120,9 +139,8 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isBike(int x, int y) {
-        Point point = pt(x, y);
-        return false;
+    public Optional<Bike> getEnemyBike(int x, int y) {
+        return players.parallelStream().map(Player::getHero).filter(bike -> bike.itsMe(x, y)).findFirst();
     }
 
     @Override
@@ -189,7 +207,7 @@ public class GameFieldImpl implements GameField {
 
     private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
         boolean needGenerate = dice.next(10) < 5;
-        if(needGenerate){
+        if (needGenerate) {
             int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 3) + 2;
             int rndNonBorderLaneNumber = dice.next(laneNumber - 3) + 1;
 

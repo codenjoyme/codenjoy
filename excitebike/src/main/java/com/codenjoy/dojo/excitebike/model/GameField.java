@@ -23,6 +23,10 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+
+import java.util.Optional;
+
 /**
  * Так случилось что доска знает про героя, а герой про доску.
  * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
@@ -30,6 +34,8 @@ package com.codenjoy.dojo.excitebike.model;
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
 
     int size();
+
+    boolean isFree(int x, int y);
 
     boolean isBorder(int x, int y);
 
@@ -39,11 +45,13 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isObstacle(int x, int y);
 
-    boolean isLineChanger(int x, int y);
+    boolean isUpLineChanger(int x, int y);
+
+    boolean isDownLineChanger(int x, int y);
 
     boolean isOffRoad(int x, int y);
 
-    boolean isBike(int x, int y);
+    Optional<Bike> getEnemyBike(int x, int y);
 
     int getPlayersNumber();
 }

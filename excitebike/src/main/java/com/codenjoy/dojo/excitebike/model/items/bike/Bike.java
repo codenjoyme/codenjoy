@@ -31,6 +31,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.Optional;
+
 public class Bike extends PlayerHero<GameField> implements State<BikeElementType, Player>, Shiftable {
 
     private Direction direction;
@@ -39,6 +41,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
 
     public Bike(Point xy) {
         super(xy);
+    }
+
+    public Bike(int x, int y) {
+        super(x, y);
     }
 
     @Override
@@ -102,12 +108,29 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
             if (direction != null) {
                 int newX = direction.changeX(x);
                 int newY = direction.changeY(y);
-                move(newX, newY);
-                direction = null;
+                move1(newX, newY);
             }
             interactWithOtherElements(x, y);
         } else {
             shift();
+        }
+    }
+
+    private void move1(final int x, final int y){
+        Optional<Bike> enemyBike = field.getEnemyBike(x, y);
+        enemyBike.ifPresent(this::interactWithOtherBike);
+
+        if (!field.isBorder(x, y) && !enemyBike.isPresent()) {
+            move(x, y);
+        }
+        direction = null;
+    }
+
+    private void interactWithOtherBike(Bike enemyBike) {
+        if (enemyBike.direction == null) {
+            enemyBike.crush();
+        } else {
+            enemyBike.direction = null;
         }
     }
 
@@ -135,13 +158,22 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
             crush();
             shift();
         }
+
+        if (field.isUpLineChanger(x, y)) {
+
+        }
+
+        if (field.isUpLineChanger(x, y)) {
+
+        }
+
     }
 
     @Override
     public BikeElementType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
 
-        return this == bike ? getType() : bike.getType();
+        return this == bike ? type : bike.type;
     }
 
     public boolean isAlive() {
