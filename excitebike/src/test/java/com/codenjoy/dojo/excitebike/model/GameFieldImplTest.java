@@ -35,6 +35,8 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -114,7 +116,7 @@ public class GameFieldImplTest {
     @Test
     public void shouldReplaceShiftableElementToBike() {
         givenFl("■■■■■" +
-                " o▼  " +
+                " o░  " +
                 "     " +
                 "     " +
                 "■■■■■");
@@ -131,7 +133,7 @@ public class GameFieldImplTest {
         game.tick();
 
         assertE("■■■■■" +
-                "▼o   " +
+                "░o   " +
                 "     " +
                 "     " +
                 "■■■■■");
@@ -451,6 +453,43 @@ public class GameFieldImplTest {
                 "   o " +
                 "■■■■■");
 
+
+        bike.down();
+        game.tick();
+
+        assertFalse(enemyBike.isAlive());
+        assertTrue(bike.isAlive());
+
+        //        assertE("■■■■■" +
+//                "     " +
+//                "   o " +
+//                "  ~  " +
+//                "■■■■■");
+
+    }
+
+    @Test
+    public void shouldDoNothingAfterBikesClashEachOther() {
+        when(dice.next(anyInt())).thenReturn(5);
+
+        givenFl("■■■■■" +
+                "     " +
+                "   o " +
+                "     " +
+                "■■■■■");
+
+        Bike enemyBike = new Bike(bike.getX(), bike.getY()-1);
+        Player enemyPlayer = new Player(listener);
+        game.newGame(enemyPlayer);
+        enemyPlayer.setHero(enemyBike);
+        enemyBike.init(game);
+
+        assertE("■■■■■" +
+                "     " +
+                "   o " +
+                "   o " +
+                "■■■■■");
+
         bike.down();
         enemyBike.up();
         game.tick();
@@ -480,17 +519,70 @@ public class GameFieldImplTest {
 //                "     " +
 //                "   o " +
 //                "■■■■■");
+    }
+
+    @Test
+    public void shouldMoveBikes() {
+        when(dice.next(anyInt())).thenReturn(5);
+
+        givenFl("■■■■■" +
+                "     " +
+                "   o " +
+                "     " +
+                "■■■■■");
+
+        Bike enemyBike = new Bike(bike.getX(), bike.getY()-1);
+        Player enemyPlayer = new Player(listener);
+        game.newGame(enemyPlayer);
+        enemyPlayer.setHero(enemyBike);
+        enemyBike.init(game);
+
+        assertE("■■■■■" +
+                "     " +
+                "   o " +
+                "   o " +
+                "■■■■■");
+
+        bike.up();
+        enemyBike.up();
+        game.tick();
+
+        assertE("■■■■■" +
+                "   o " +
+                "   o " +
+                "     " +
+                "■■■■■");
 
         bike.down();
+        enemyBike.down();
         game.tick();
+
+        assertE("■■■■■" +
+                "     " +
+                "   o " +
+                "   o " +
+                "■■■■■");
+
+
+        enemyBike.up();
+        bike.up();
+        game.tick();
+
+        assertE("■■■■■" +
+                "   o " +
+                "   o " +
+                "     " +
+                "■■■■■");
+
+
+        enemyBike.down();
         bike.down();
         game.tick();
 
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "  ~  " +
+                "   o " +
                 "■■■■■");
-
     }
 }

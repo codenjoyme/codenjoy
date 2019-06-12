@@ -73,25 +73,8 @@ public class GameFieldImpl implements GameField {
     @Override
     public void tick() {
         shiftTrack();
-
-//        Optional<Bike> enemyBike = field.getEnemyBike(newX, newY);
-//        enemyBike.ifPresent(this::interactWithOtherBike);
-
         players.forEach(player -> player.getHero().tick());
-
-
-
-        //TODO login for each element
     }
-
-//    private void interactWithOtherBike(Bike enemyBike){
-//        if((direction == Direction.UP && enemyBike.direction == null)
-//                || (direction == Direction.DOWN && enemyBike.direction == null)){
-//            direction = null;
-//            enemyBike.crush();
-//        }
-//    }
-
 
     public int size() {
         return mapParser.getXSize();
@@ -134,8 +117,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isOffRoad(int x, int y) {
-        Point point = pt(x, y);
-        return false;
+        return allShiftableElements.get(GameElementType.OFF_ROAD).contains(pt(x,y));
     }
 
     @Override

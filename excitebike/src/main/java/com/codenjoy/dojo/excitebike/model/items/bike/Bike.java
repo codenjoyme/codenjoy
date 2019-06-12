@@ -108,7 +108,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
             if (direction != null) {
                 int newX = direction.changeX(x);
                 int newY = direction.changeY(y);
-                move1(newX, newY);
+                tryToMove(newX, newY);
             }
             interactWithOtherElements(x, y);
         } else {
@@ -116,21 +116,27 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
         }
     }
 
-    private void move1(final int x, final int y){
+    private void tryToMove(final int x, final int y) {
         Optional<Bike> enemyBike = field.getEnemyBike(x, y);
         enemyBike.ifPresent(this::interactWithOtherBike);
 
-        if (!field.isBorder(x, y) && !enemyBike.isPresent()) {
+        if (canMoveTo(x, y) && direction != null) {
             move(x, y);
+            direction = null;
         }
-        direction = null;
+    }
+
+    private boolean canMoveTo(final int x, final int y) {
+        return !field.isBorder(x, y);
     }
 
     private void interactWithOtherBike(Bike enemyBike) {
         if (enemyBike.direction == null) {
             enemyBike.crush();
-        } else {
+            direction = null;
+        } else if (direction != enemyBike.direction) {
             enemyBike.direction = null;
+            direction = null;
         }
     }
 
@@ -144,6 +150,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
             } else {
                 move(field.size() - 1, y);
             }
+            return;
         }
 
         if (field.isInhibitor(x, y)) {
@@ -152,20 +159,28 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
             } else {
                 move(0, y);
             }
+            return;
         }
 
         if (field.isObstacle(x, y)) {
             crush();
             shift();
+            return;
         }
 
         if (field.isUpLineChanger(x, y)) {
-
+            tryToMove(x, Direction.UP.changeY(y));
+            return;
         }
 
-        if (field.isUpLineChanger(x, y)) {
-
+        if (field.isDownLineChanger(x, y)) {
+            tryToMove(x, Direction.DOWN.changeY(y));
+//            return;
         }
+
+//        if (field.isOffRoad(x, y) && x > 0) {
+//            shift();
+//        }
 
     }
 
@@ -173,7 +188,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
     public BikeElementType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
 
-        return this == bike ? type : bike.type;
+        return bike.type;
     }
 
     public boolean isAlive() {
