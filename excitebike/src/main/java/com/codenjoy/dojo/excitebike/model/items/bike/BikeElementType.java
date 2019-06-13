@@ -7,7 +7,12 @@ public enum BikeElementType implements CharElements {
     BIKE('o'),
     BIKE_FALLEN('~'),
     BIKE_INCLINE_LEFT('('),
-    BIKE_INCLINE_RIGHT(')');
+    BIKE_INCLINE_RIGHT(')'),
+
+    ENEMY_BIKE('x'),
+    ENEMY_BIKE_FALLEN('z'),
+    ENEMY_BIKE_INCLINE_LEFT('['),
+    ENEMY_BIKE_INCLINE_RIGHT(']');
 
     final char ch;
 
@@ -33,5 +38,4 @@ public enum BikeElementType implements CharElements {
         }
         throw new IllegalArgumentException("No such element for " + ch);
     }
-
 }

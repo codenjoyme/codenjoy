@@ -33,7 +33,6 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -43,8 +42,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Ignore
-public class SingleTest {
+public class MultiplayerTest {
 
     private EventListener listener1;
     private EventListener listener2;
@@ -55,16 +53,15 @@ public class SingleTest {
     private Dice dice;
     private GameFieldImpl field;
 
-    // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        MapParser mapParser = new MapParserImpl(
-                "☼☼☼☼☼☼" +
-                "☼   $☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼☼☼☼☼☼", 6);
+        MapParser mapParser = new MapParserImpl("■■■■■■■" +
+                        "       " +
+                        "       " +
+                        "       " +
+                        "       " +
+                        "       " +
+                        "■■■■■■■");
 
         dice = mock(Dice.class);
         field = new GameFieldImpl(mapParser, dice);
@@ -82,13 +79,10 @@ public class SingleTest {
         game3 = new Single(new Player(listener3), factory);
         game3.on(field);
 
-        dice(1, 4);
         game1.newGame();
 
-        dice(2, 2);
         game2.newGame();
 
-        dice(3, 4);
         game3.newGame();
     }
 
@@ -108,64 +102,67 @@ public class SingleTest {
         assertEquals(expected, game3.getBoardAsString());
     }
 
-    // рисуем несколько игроков
     @Test
     public void shouldPrint() {
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼☺ ☻$☼\n" +
-                "☼    ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " x     \n" +
+                " x     \n" +
+                " o     \n" +
+                "■■■■■■■\n");
 
-        asrtFl2(
-                "☼☼☼☼☼☼\n" +
-                "☼☻ ☻$☼\n" +
-                "☼    ☼\n" +
-                "☼ ☺  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+        asrtFl2("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " x     \n" +
+                " o     \n" +
+                " x     \n" +
+                "■■■■■■■\n");
 
-        asrtFl3(
-                "☼☼☼☼☼☼\n" +
-                "☼☻ ☺$☼\n" +
-                "☼    ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+        asrtFl3("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " o     \n" +
+                " x     \n" +
+                " x     \n" +
+                "■■■■■■■\n");
     }
 
-    // Каждый игрок может упраыляться за тик игры независимо
     @Test
     public void shouldJoystick() {
-        game1.getJoystick().act();
+        when(dice.next(anyInt())).thenReturn(5);
+
+        game3.getJoystick().up();
+        game2.getJoystick().left();
         game1.getJoystick().down();
-        game2.getJoystick().right();
-        game3.getJoystick().down();
 
         field.tick();
 
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼x  $☼\n" +
-                "☼☺ ☻ ☼\n" +
-                "☼  ☻ ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                " x     \n" +
+                "       \n" +
+                " [     \n" +
+                " o     \n" +
+                "■■■■■■■\n");
     }
 
-    // игроков можно удалять из игры
     @Test
     public void shouldRemove() {
+        when(dice.next(anyInt())).thenReturn(5);
+
         game3.close();
 
         field.tick();
 
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼☺  $☼\n" +
-                "☼    ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                " x     \n" +
+                " o     \n" +
+                "■■■■■■■\n");
     }
 
     // игрок может взорваться на бомбе

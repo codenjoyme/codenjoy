@@ -188,7 +188,22 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
     public BikeElementType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
 
-        return bike.type;
+        return this == bike ? bike.type : this.getEnemyBikeType();
+    }
+
+    private BikeElementType getEnemyBikeType() {
+        switch (type) {
+            case BIKE:
+                return BikeElementType.ENEMY_BIKE;
+            case BIKE_FALLEN:
+                return BikeElementType.ENEMY_BIKE_FALLEN;
+            case BIKE_INCLINE_LEFT:
+                return BikeElementType.ENEMY_BIKE_INCLINE_LEFT;
+            case BIKE_INCLINE_RIGHT:
+                return BikeElementType.ENEMY_BIKE_INCLINE_RIGHT;
+            default:
+                throw new IllegalArgumentException("No such element for " + type);
+        }
     }
 
     public boolean isAlive() {

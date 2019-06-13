@@ -450,7 +450,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "   o " +
+                "   x " +
                 "■■■■■");
 
 
@@ -487,7 +487,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "   o " +
+                "   x " +
                 "■■■■■");
 
         bike.down();
@@ -497,7 +497,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "   o " +
+                "   x " +
                 "■■■■■");
 
         bike.up();
@@ -506,7 +506,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "   o " +
                 "     " +
-                "   o " +
+                "   x " +
                 "■■■■■");
 
         //TODO
@@ -517,7 +517,7 @@ public class GameFieldImplTest {
 //        assertE("■■■■■" +
 //                "   o " +
 //                "     " +
-//                "   o " +
+//                "   x " +
 //                "■■■■■");
     }
 
@@ -540,7 +540,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "   o " +
+                "   x " +
                 "■■■■■");
 
         bike.up();
@@ -549,7 +549,7 @@ public class GameFieldImplTest {
 
         assertE("■■■■■" +
                 "   o " +
-                "   o " +
+                "   x " +
                 "     " +
                 "■■■■■");
 
@@ -560,7 +560,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "   o " +
+                "   x " +
                 "■■■■■");
 
 
@@ -570,7 +570,7 @@ public class GameFieldImplTest {
 
         assertE("■■■■■" +
                 "   o " +
-                "   o " +
+                "   x " +
                 "     " +
                 "■■■■■");
 
@@ -582,7 +582,7 @@ public class GameFieldImplTest {
         assertE("■■■■■" +
                 "     " +
                 "   o " +
-                "   o " +
+                "   x " +
                 "■■■■■");
     }
 }

@@ -87,7 +87,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isBorder(int x, int y) {
-        return y < 1 && y > mapParser.getYSize()-2;
+        return y < 1 || y > mapParser.getYSize()-2;
     }
 
     @Override
