@@ -1012,6 +1012,10 @@ canvas {
     min-width: auto;
   }
 
+  .modal-footer {
+    padding: 0 10px;
+  }
+
   .game {
     position: initial;
     width: 100% !important;
@@ -1035,7 +1039,7 @@ canvas {
   }
 
   .button.modal-button {
-    font-size: 9px;
+    font-size: 14px;
   }
   .console, .console.close {
     position: initial;
