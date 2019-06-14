@@ -77,7 +77,6 @@ License along with this program.  If not, see
                 <input type="password" placeholder="Password" name="password"/>
                 <span class="icon fa"></span>
             </div>
-            <!-- add attribute 'hidden' to the div if you want to hide this select box -->
             <div id="game" class="field valid" hidden>
                 <!-- TODO to remove from here -->
                 <select placeholder="Select your game" name="game">
@@ -100,9 +99,6 @@ License along with this program.  If not, see
                     </td>
                 </tr>
             </c:if>
-            <!-- add attribute 'not-empty' to the div if you want to enable validation -->
-            <!-- add attribute 'hidden' to the div if you want to hide this edit box -->
-            <input type="hidden" name="gameName" value="icancode"/>
             <button class="btn-submit" id="submit-button" type="button">Sign in</button>
             <a class="btn-submit reg-link" id="registration-button" href="${ctx}/register">Sign Up</a>
         </div>
