@@ -88,6 +88,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        securityHeaders(http);
+    }
+
+    private static HttpSecurity securityHeaders(HttpSecurity http) throws Exception {
         // @formatter:off
         http.cors()
                 .and()
@@ -98,8 +102,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()
                         .contentSecurityPolicy(
                                 "default-src 'self';" +
-                                "script-src 'self' 'unsafe-eval' 'unsafe-inline' http://www.google-analytics.com;" +
-                                "img-src 'self' data: http://www.google-analytics.com;" +
+                                "script-src 'self' 'unsafe-eval' 'unsafe-inline';" +
+                                "img-src 'self' data:;" +
                                 "connect-src 'self' ws: wss: http: https:;" +
                                 "font-src 'self';" +
                                 "style-src 'self' 'unsafe-inline';")
@@ -107,6 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .csrf().disable();
         // @formatter:on
+        return http;
     }
 
     @Bean
@@ -137,14 +142,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            http
-                    .authorizeRequests()
-                        .antMatchers(UNAUTHORIZED_URIS)
-                            .permitAll()
-
-                        .anyRequest()
-                            .hasRole("USER")
-
+            securityHeaders(http)
+                        .authorizeRequests()
+                            .antMatchers(UNAUTHORIZED_URIS)
+                                .permitAll()
+                            .anyRequest()
+                                .hasRole("USER")
                     .and()
                         .formLogin()
                             .loginPage(LoginController.URI)
@@ -159,9 +162,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
-                            .invalidateHttpSession(true)
-                    .and()
-                    .csrf().disable();
+                            .invalidateHttpSession(true);
             // @formatter:on
         }
     }
@@ -183,14 +184,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            http
-                    .authorizeRequests()
-                    .antMatchers(UNAUTHORIZED_URIS)
-                            .permitAll()
-
-                        .anyRequest()
-                            .hasRole("USER")
-
+            securityHeaders(http)
+                        .authorizeRequests()
+                            .antMatchers(UNAUTHORIZED_URIS)
+                                .permitAll()
+                            .anyRequest()
+                                .hasRole("USER")
                     .and()
                         .oauth2Login()
                             .userInfoEndpoint()
@@ -200,9 +199,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
-                            .invalidateHttpSession(true)
-                    .and()
-                    .csrf().disable();
+                            .invalidateHttpSession(true);
             // @formatter:on
         }
     }
@@ -238,10 +235,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            http.sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
+            securityHeaders(http)
+                        .sessionManagement()
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                        .authorizeRequests()
                             .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
                                     LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
                                     controlWsURI + "*")
@@ -249,13 +247,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                             .anyRequest()
                                 .hasRole("USER")
-                        .and()
-                            .logout()
-                                .logoutUrl(LOGOUT_PROCESSING_URI)
-                                .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
-                                .invalidateHttpSession(true)
-                        .and()
-                        .csrf().disable();
+                    .and()
+                        .logout()
+                            .logoutUrl(LOGOUT_PROCESSING_URI)
+                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                            .invalidateHttpSession(true);
             // @formatter:on
         }
 
@@ -278,11 +274,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            http
-                    .antMatcher(AdminController.URI + "*")
-                        .authorizeRequests()
-                            .anyRequest()
-                                .hasRole("ADMIN")
+            securityHeaders(http)
+                        .antMatcher(AdminController.URI + "*")
+                            .authorizeRequests()
+                                .anyRequest()
+                                    .hasRole("ADMIN")
                     .and()
                         .formLogin()
                             .loginPage(LoginController.ADMIN_URI)
@@ -315,7 +311,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
-            http
+            securityHeaders(http)
                     .antMatcher(controlWsURI + "*")
                         .authorizeRequests()
                             .anyRequest().permitAll();
