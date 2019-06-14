@@ -3,15 +3,19 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum BikeElementType implements CharElements {
+public enum BikeType implements CharElements {
     BIKE('o'),
     BIKE_FALLEN('~'),
     BIKE_INCLINE_LEFT('('),
-    BIKE_INCLINE_RIGHT(')');
+    BIKE_INCLINE_RIGHT(')'),
+    OTHER_BIKE('e'),
+    OTHER_BIKE_FALLEN('_'),
+    OTHER_BIKE_INCLINE_LEFT('z'),
+    OTHER_BIKE_INCLINE_RIGHT('x');
 
     final char ch;
 
-    BikeElementType(char ch) {
+    BikeType(char ch) {
         this.ch = ch;
     }
 
@@ -25,8 +29,8 @@ public enum BikeElementType implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static BikeElementType valueOf(char ch) {
-        for (BikeElementType el : BikeElementType.values()) {
+    public static BikeType valueOf(char ch) {
+        for (BikeType el : BikeType.values()) {
             if (el.ch == ch) {
                 return el;
             }
