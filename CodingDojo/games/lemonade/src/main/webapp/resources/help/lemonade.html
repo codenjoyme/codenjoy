@@ -1,0 +1,212 @@
+﻿<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2019 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Lemonade — как играть? | Игры на работе</title>
+    <link href="../css/all.min.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+                <header class="entry-header">
+                    <h1 class="entry-title">Lemonade — как играть?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output">
+                        <p>
+                            Первоначальная версия игры Lemonade Stand была создана Bob Jamison в 1973 году для мэйнфреймов,
+                            затем в 1979 году Charlie Kellner портировал её на домашний компьютер Apple II.
+                            Предлагаемая вам версия игры основана на исходном коде игры 1979 года, написанном на Applesoft BASIC.
+                        </p>
+
+                        <h2>В чем суть игры?</h2>
+                        <div style="width: 48em; border: 1pt solid black; margin: 1em; padding: 1em; font-family: monospace;">
+                            HI! WELCOME TO LEMONSVILLE, CALIFORNIA!<br/><br/>
+                            IN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.<br/>
+                            HOW MUCH PROFIT YOU MAKE IS UP TO YOU.<br/>
+                            IF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!<br/><br/>
+                            TO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:<br/>
+                            1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)<br/>
+                            2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)<br/>
+                            3. WHAT PRICE TO CHARGE FOR EACH GLASS<br/><br/>
+                            YOU WILL BEGIN WITH $2.00 CASH (ASSETS).<br/>
+                            BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,<br/>YOUR COST TO MAKE LEMONADE IS
+                            $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).<br/><br/>
+                            YOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.<br/>
+                            YOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.<br/>
+                            THE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON<br/>
+                            THE NUMBER OF ADVERTISING SIGNS YOU USE.<br/>
+                            KEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!<br/>
+                        </div>
+                        <p>
+                            В этой игре вы принимаете на себя роль школьника, который подрабатывает на каникулах, продавая на улице лимонад.
+                            С утра вы готовите лимонад и рекламные плакаты и в течение всего дня продаёте приготовленный объём напитка.
+                            У вас есть начальный капитал в размере $2.00 (величина A<sub>0</sub>).
+                            Стоимость стакана лимонада для вас составляет всего $0.02 (C), но со временем эта величина может измениться.
+                            На каждом ходу вам нужно решить, как потратить имеющиеся деньги, и вы выражаете своё решение, сообщая компьютеру три числа:
+                            <ol>
+                                <li>L = Сколько стаканов лимонада вы приготовите этим утром (<code>glasses made</code>, целое число от 0 до 1000)</li>
+                                <li>S = Сколько рекламных плакатов вы установите в округе, каждый плакат стоит для вас $0.15 (<code>signs made</code>, целое число от 0 до 50)</li>
+                                <li>P = Цена, которую вы просите за каждый стакан (<code>price</code>, цена в центах, целое число от 0 до 100)</li>
+                            </ol>
+                            Результатом для вас является финансовый отчёт, который показывает:
+                            <ul>
+                                <li>E = S &times; 0.15 &plus; L &times; C = расходы на изготовление рекламных плакатов и приготовление лимонада (<code>expenses</code>);</li>
+                                <li>N = сколько стаканов было продано (<code>glasses sold</code>);</li>
+                                <li>M = N &times; P = доход (<code>income</code>);</li>
+                                <li>M &minus; E = полученная прибыль (<code>profit</code>);</li>
+                                <li>A<sub>n+1</sub> = A<sub>n</sub> &plus; (M &minus; E) = ваш капитал после сегодняшнего дня (<code>assets</code>).</li>
+                            </ul>
+                            Величина N (сколько стаканов распродано) зависит от рекламы, цены за стакан, погоды, а также от некоторых случайных факторов.
+                            В начале каждого дня вам сообщают прогноз погоды, но погода в течение дня может и поменяться.
+                        </p>
+                        <div style="clear: left;"></div>
+
+                        <h2>Ваш игровой бот</h2>
+                        <p>
+                            Как и в других играх на платформе CodenJoy, здесь вы играете не сами, за вас играет ваш игровой бот &ndash; написанная вами программа.
+                            Ваш бот обменивается сообщениями с сервером.
+                            За каждый ход ваш бот получает описание текущей ситуации от сервера и должен передать ему команду.
+                            В данной игре описание игровой ситуации включает две части:
+                            <ol>
+                                <li>
+                                    (В первый день) Приветственное сообщение с описанием игры
+                                    (см. выше текст "<span style="font-family: monospace">HI! WELCOME TO LEMONSVILLE, CALIFORNIA!</span>").<br/>
+                                    (В любой другой день) Финансовый отчёт за предыдущий день.
+                                </li>
+                                <li>Прогноз на утро нового дня.</li>
+                            </ol>
+                        </p>
+                        <p>Пример того, как может выглядеть сообщение о результатах первого дня плюс прогноз на второй день:</p>
+                        <div style="width: 48em; border: 1pt solid black; margin: 1em; padding: 1em; font-family: monospace;">
+                                ** LEMONSVILLE DAILY FINANCIAL REPORT, DAY 1 **<br/>
+                                GLASSES SOLD: 10, PRICE $0.20 PER GLASS<br/>
+                                INCOME:   $2.00<br/>
+                                GLASSES MADE: 10, SIGNS MADE: 2<br/>
+                                EXPENSES: $0.50<br/>
+                                PROFIT:   $1.50<br/>
+                                ASSETS:   $3.50<br/><br/>                                
+                                YOUR ASSETS: $3.50<br/>
+                                LEMONSVILLE WEATHER REPORT:  CLOUDY<br/>
+                                ON DAY 2, THE COST OF LEMONADE IS $0.02<br/>
+                        </div>
+                        <p>
+                            Эту информацию бот получает в виде JSON, который имеет вид
+                            (строка messages здесь разделена на отдельные строки для удобства просмотра, значения не обязательно передаются в этом порядке):
+                        </p>
+                        <pre>{
+    "lemonadeCost": 0.02,
+    "assets": 3.5,
+    "weatherForecast": "CLOUDY",
+    "isBankrupt": false,
+    "isGameOver": false,
+    "messages": "** LEMONSVILLE DAILY FINANCIAL REPORT, DAY 1 **\n
+        GLASSES SOLD: 10, PRICE $0.20 PER GLASS\nINCOME:   $2.00\n
+        GLASSES MADE: 10, SIGNS MADE: 2\nEXPENSES: $0.50\n
+        PROFIT:   $1.50\nASSETS:   $3.50\n\n
+        YOUR ASSETS: $3.50\n
+        LEMONSVILLE WEATHER REPORT:  CLOUDY\n
+        ON DAY 2, THE COST OF LEMONADE IS $0.02\n",
+    "history": [
+        {
+            "income": 2,
+            "signsMade": 2,
+            "lemonadeSold": 10,
+            "lemonadeMade": 10,
+            "assetsAfter": 3.5,
+            "day": 1,
+            "profit": 1.5,
+            "lemonadePrice": 0.2,
+            "assetsBefore": 2,
+            "expenses": 0.5
+        },
+    ],
+    "day": 2
+}</pre>
+                        <p>
+                            <code>day</code> &ndash; номер текущего дня;<br/>
+                            <code>assets</code> &ndash; сколько у вас сейчас есть денег;<br/>
+                            <code>isBankrupt</code> &ndash; признак того, что вы банкрот, то есть имеющихся денег не хватает на приготовление одного стакана лимонада;<br/>
+                            <code>isGameOver</code> &ndash; признак того, что игра окончена, то есть либо вы банкрот, либо вы дошли до конца игры и победили;<br/>
+                            <code>messages</code> &ndash; все сообщения от сервера, для первого дня здесь будет приветственное сообщение и прогноз на текущий день;
+                                для второго и последующих дней здесь будет финансовый отчёт за день (day &minus; 1) и прогноз на текущий день;
+                                обращайте внимание на это поле, там могут быть неожиданности;<br/>
+                            <code>lemonadeCost</code> &ndash; стоимость стакана лимонада для вас на сегодняшний день;<br/>
+                            <code>weatherForecast</code> &ndash; прогноз погоды на сегодняшний день;<br/>
+                            <code>history</code> &ndash; история за последние 10 дней.<br/>
+                        </p>
+                        <p>
+                            Получив информацию от сервера, ваш бот должен отправить команду вида:<br/>
+                            <code>message('go 2,1,15')</code><br/>
+                            где три числа это: сколько стаканов лимонада приготовить, сколько сделать рекламных плакатов, сколько будет стоить стакан лимонада.<br/>
+                            В случае, когда вы достигли конца игры, ваш бот должен отправить команду вида:<br/>
+							<code>message('go reset')</code>,<br/>
+							чтобы начать игру заново.
+                        </p>
+                        <p>Игровой экран на странице игры выглядит примерно так:<br/>
+                            <img src="lemonade-board.png" /><br/>
+                            Здесь слева вверху выведены сообщения от сервера (messages),<br/>
+                            справа внизу рисунок показывает прогноз погоды на сегодня, номер дня (day) и текущую сумму денег (assets),<br/>
+                            слева внизу находится график истории изменения суммы денег (assets) за последние 10 дней.
+                        </p>
+                        <p>Организаторы предоставляют игрокам подготовленные клиенты в исходном коде на нескольких языках:
+                                Java, C#, JavaScript, Python.<br/>
+                            Каждый из этих клиентов уже умеет связываться с сервером,
+                            принимать и разбирать сообщение от сервера (обычно это называется board)
+                            и отправлять серверу команды.
+                        </p>
+
+                        <h2>Подключение к серверу</h2>
+
+                        <p>Игрок <a href="/codenjoy-contest/register?gameName=lemonade" target="_blank">
+                            регистрируется на сервере</a>, указывая свой email.<br/>
+                            Далее необходимо скачать, настроить и запустить клиента, который подключается к серверу через веб-сокеты:
+                        </p>
+                        <ul>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-servers.zip">Java-клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-csharp-client.zip">C# клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-javascript-client.zip">JavaScript клиент</a>;</li>
+                            <li><a href="/codenjoy-contest/resources/user/lemonade-python-client.zip">Python клиент</a>.</li>
+                        </ul>
+                        <p>Если в этом списке нет нужного языка, придётся написать свой клиент.</p>
+
+                        <p>После регистрации на сервере в адресной строке браузера вы увидите URL вида:</p>
+                        <pre>http://epruryaw0576.moscow.epam.com:43022/codenjoy-contest/board/player/np0mlqtjasknp3554pi4?code=12345678901234567890</pre>
+                        <p>
+                            В коде вашего клиента вам нужно найти похожую строчку и заменить её на URL из вашего браузера &ndash; тем самым, вы задаёте логин/пароль для доступа к серверу.
+                            Затем запустите ваш клиент и убедитесь, что сервер получает команды вашего клиента.
+                            После этого можно приступать к работе над логикой вашего бота.
+                        </p>
+                        <p>Удачной игры!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

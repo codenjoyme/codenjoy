@@ -25,14 +25,15 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,14 +43,15 @@ import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping(value = "/rest")
+@RequiredArgsConstructor
 public class RestRegistrationController {
 
-    @Autowired private Registration registration;
-    @Autowired private PlayerService playerService;
-    @Autowired private PlayerGames playerGames;
-    @Autowired private PlayerGamesView playerGamesView;
-    @Autowired private SaveService saveService;
-    @Autowired private Validator validator;
+    private final Registration registration;
+    private final PlayerService playerService;
+    private final PlayerGames playerGames;
+    private final PlayerGamesView playerGamesView;
+    private final SaveService saveService;
+    private final Validator validator;
 
 //    @RequestMapping(value = "/player/{player}/check/{code}", method = RequestMethod.GET)
 //    @ResponseBody

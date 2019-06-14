@@ -33,7 +33,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-@Component
 public class Payment {
 
     private CrudConnectionThreadPool pool;

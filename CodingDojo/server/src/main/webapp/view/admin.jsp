@@ -32,7 +32,8 @@
     <link href="${ctx}/resources/css/all.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/custom.css" rel="stylesheet">
 
-    <script src="${ctx}/resources/js/all.min.js"></script>
+    <jsp:include page="common-inclusion.jsp" />
+
 </head>
 <body>
     <div id="settings" page="admin" contextPath="${ctx}" gameName="${gameName}"></div>
@@ -80,7 +81,7 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <form:form commandName="adminSettings" action="admin" method="POST">
+            <form:form modelAttribute="adminSettings" action="admin" method="POST">
                 <tr>
                     <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
                 </tr>
@@ -113,7 +114,7 @@
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${debug}">
+                    <c:when test="${debugLog}">
                         <b>The debug in progress</b></br> <a href="${ctx}/admin?stopDebug&gameName=${gameName}">Stop debug</a>.
                     </c:when>
                     <c:otherwise>
@@ -162,7 +163,56 @@
         </tr>
     </table>
 
-    <form:form commandName="adminSettings" action="admin" method="POST">
+    <table class="admin-table" id="cleanGame">
+        <tr>
+            <td><b>Registration settings</b></td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-games" type="checkbox">
+                <label class="check-label" for="show-games"></label>
+                <span>Show games list on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-names" type="checkbox">
+                <label class="check-label" for="show-names"></label>
+                <span>Show first/last names on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-tech" type="checkbox">
+                <label class="check-label" for="show-tech"></label>
+                <span>Show tech skills on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-university" type="checkbox">
+                <label class="check-label" for="show-university"></label>
+                <span>Show university on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="white">Default game</span>
+                <select placeholder="Select default game" id="default-game">
+                    <option value="iCanCode Training">iCanCode Training</option>
+                    <option value="iCanCode Contest">iCanCode Contest</option>
+                    <option value="eKids">eKids</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button id="registration-save-button" class="button save">Save settings</button>
+            </td>
+        </tr>
+    </table>
+
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
         <table class="admin-table" id="createNewUsers">
             <tr>
                 <td>NameMask</td>
@@ -181,7 +231,7 @@
     </form:form>
 
     <c:if test="${parameters.size() != 0}">
-        <form:form commandName="adminSettings" action="admin" method="POST">
+        <form:form modelAttribute="adminSettings" action="admin" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -217,7 +267,7 @@
     </c:if>
 
     <c:if test="${players != null || savedGames != null}">
-        <form:form commandName="adminSettings" action="admin" method="POST">
+        <form:form modelAttribute="adminSettings" action="admin" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>

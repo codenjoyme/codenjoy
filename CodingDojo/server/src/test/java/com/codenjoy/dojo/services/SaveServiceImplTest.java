@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

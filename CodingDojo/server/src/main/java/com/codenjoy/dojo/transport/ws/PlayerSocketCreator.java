@@ -25,6 +25,7 @@ package com.codenjoy.dojo.transport.ws;
 
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
@@ -37,9 +38,8 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 public class PlayerSocketCreator implements WebSocketCreator {
-
-    private static Logger logger = DLoggerFactory.getLogger(PlayerSocketCreator.class);
 
     private PlayerTransport transport;
     private AuthenticationService authenticationService;
@@ -60,11 +60,11 @@ public class PlayerSocketCreator implements WebSocketCreator {
         String authId = authenticationService.authenticate(request);
         PlayerSocket socket = new PlayerSocket(authId, waitForClient);
         if (authId == null) {
-            logger.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
+            log.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
             try {
                 response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
             } catch (IOException e) {
-                logger.warn("Error sending status {}", e.getMessage());
+                log.warn("Error sending status {}", e.getMessage());
             }
             return null;
         }

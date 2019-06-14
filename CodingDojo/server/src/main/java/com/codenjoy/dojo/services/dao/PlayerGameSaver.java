@@ -32,7 +32,6 @@ import org.springframework.stereotype.Component;
 import java.sql.Date;
 import java.util.*;
 
-@Component
 public class PlayerGameSaver implements GameSaver {
 
     private CrudConnectionThreadPool pool;

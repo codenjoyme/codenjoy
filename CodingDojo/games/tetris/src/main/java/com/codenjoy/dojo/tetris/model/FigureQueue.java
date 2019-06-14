@@ -29,4 +29,6 @@ public interface FigureQueue {
     Figure next();
 
     List<Type> future();
+
+    void clear();
 }

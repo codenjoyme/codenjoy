@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.SneakyThrows;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;

@@ -23,7 +23,8 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
-import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
+import com.codenjoy.dojo.CodenjoyContestApplication;
+import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -31,6 +32,14 @@ import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.nullobj.NullInformation;
 import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -39,43 +48,46 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = CodenjoyContestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles(SQLiteProfile.NAME)
 public class PlayerControllerTest {
-
-    public static final int PORT = 8082;
-    public static final String CONTEXT_PATH = "/appcontext";
-    private static WebSocketRunnerMock client;
-
-    private static String url;
-
-    private static PlayerController controller;
-    private static TimerService timer;
-    private static Registration registration;
-
-    private static SpringMockerJettyRunner runner;
-
-    private static Joystick joystick;
-    private static Player player;
-
-    private static final String SERVER = "ws://127.0.0.1:" + PORT + CONTEXT_PATH + "/ws";
     private static String USER_NAME = "apofig@gmail.com";
     private static String CODE = Hash.getCode("apofig@gmail.com", "secureSoul");
 
+    private static WebSocketRunnerMock client;
+
+    private String url;
+
+    private Joystick joystick;
+    private Player player;
+
+    private String serverAddress;
+
     private static List<String> serverMessages = new LinkedList<>();
 
-    @BeforeClass
-    public static void setupJetty() throws Exception {
-        runner = new SpringMockerJettyRunner("src/main/webapp", CONTEXT_PATH){{
-            mockBean("registration");
-        }};
+    @MockBean
+    private Registration registration;
 
-        int port = runner.start(PORT);
+    @Autowired
+    private PlayerController playerController;
 
-        url = runner.getUrl();
+    @Autowired
+    private TimerService timer;
+
+    @LocalServerPort
+    private int port;
+
+    @Value("${server.servlet.context-path}")
+    private String contextPath;
+
+    @Before
+    public void setupJetty() throws Exception {
+        url = String.format("http://localhost:%s%s", port, contextPath);
+
+        serverAddress = String.format("ws://localhost:%s%s", port, contextPath + "/ws");
+
         System.out.println("web application started at: " + url);
-
-        timer = runner.getBean(TimerService.class, "timerService");
-        controller = runner.getBean(PlayerController.class, "playerController");
-        registration = runner.getBean(Registration.class, "registration");
 
         timer.pause();
 
@@ -105,11 +117,13 @@ public class PlayerControllerTest {
                 serverMessages.add("act" + Arrays.toString(p));
             }
         };
+
+        createPlayer();
     }
 
     public void clean() {
         if (player != null) {
-            controller.unregisterPlayerTransport(player);
+            playerController.unregisterPlayerTransport(player);
         }
         if (client != null) {
             client.reset();
@@ -117,19 +131,18 @@ public class PlayerControllerTest {
         serverMessages.clear();
     }
 
-    @Before
     public void createPlayer() throws Exception {
         clean();
 
         player = new Player(USER_NAME, "127.0.0.1", PlayerTest.mockGameType("game"),
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
 
-        controller.registerPlayerTransport(player, joystick);
+        playerController.registerPlayerTransport(player, joystick);
 
         // SecureAuthenticationService спросит Registration а можно ли этому юзеру что-то делать?
         when(registration.checkUser(USER_NAME, CODE)).thenReturn(USER_NAME);
 
-        client = new WebSocketRunnerMock(SERVER, USER_NAME, CODE);
+        client = new WebSocketRunnerMock(serverAddress, USER_NAME, CODE);
     }
 
     @AfterClass
@@ -235,7 +248,7 @@ public class PlayerControllerTest {
         try {
             Thread.sleep(300);
             for (int index = 0; index < times; index++) {
-                controller.requestControl(player, "some-request-" + index);
+                playerController.requestControl(player, "some-request-" + index);
             }
             int count = 0;
             while (++count < 100 && serverMessages.isEmpty()) {

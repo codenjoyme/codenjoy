@@ -36,8 +36,8 @@ eval_echo "cd $DIR/applications && bash build.sh"
 eval_echo "docker container rm $(docker ps -a | grep -v 'CONTAINER' | cut -d ' ' -f1) --force"
 # TODO this is balancer frontend, merge it in codenjoy git repo
 # eval_echo "docker rmi vreshch/codenjoy-lb"
-eval_echo "docker rmi apofig/codenjoy-contest:1.0.28 --force"
-eval_echo "docker rmi apofig/codenjoy-balancer:1.0.28 --force"
+eval_echo "docker rmi apofig/codenjoy-contest:1.1.0 --force"
+eval_echo "docker rmi apofig/codenjoy-balancer:1.1.0 --force"
 
 echo "[92m========================================================================================================================"
 echo "================================================ Docker compose starting ==============================================="

@@ -27,12 +27,19 @@ import com.codenjoy.dojo.services.BoardGameState;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class PlayerController implements Controller<String, Joystick> {
 
-    private PlayerTransport transport;
+    private final PlayerTransport transport;
+
+    public PlayerController(PlayerTransport controlPlayerTransport) { // autowiring by name
+        this.transport = controlPlayerTransport;
+        this.transport.setDefaultFilter(Object::toString);
+    }
 
     @Override
     public void requestControlToAll(String board) {
@@ -53,10 +60,5 @@ public class PlayerController implements Controller<String, Joystick> {
     @Override
     public void unregisterPlayerTransport(Player player) {
         transport.unregisterPlayerEndpoint(player.getName());
-    }
-
-    public void setTransport(PlayerTransport transport) {
-        this.transport = transport;
-        transport.setDefaultFilter(data -> data.toString());
     }
 }

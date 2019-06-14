@@ -43,9 +43,18 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import org.json.JSONObject;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
+
+    private static final List<String> GAMES = Arrays.asList(
+            "iCanCode Contest",
+            "iCanCode Training",
+            "eKids"
+    );
 
     private Parameter<Integer> isTrainingMode;
 
@@ -53,9 +62,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
         setupSettings();
     }
 
+    @SuppressWarnings("unchecked")
     private void setupSettings() {
         new Scores(0, settings);
-        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(1);
+        isTrainingMode = settings
+                .addEditBox("Is training mode")
+                .type(Integer.class).def(1);
     }
     
     @Override

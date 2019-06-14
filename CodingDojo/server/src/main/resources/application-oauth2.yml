@@ -1,0 +1,22 @@
+auth-server:
+  location: ${OAUTH2_AUTH_SERVER_URL}
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          dojo:
+            client-id: ${OAUTH2_CLIENT_ID}
+            client-secret: ${OAUTH2_CLIENT_SECRET}
+            client-authentication-method: basic
+            authorization-grant-type: authorization_code
+            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: ${OAUTH2_SCOPES:openid profile email}
+            client-name: ${CLIENT_NAME}
+        provider:
+          dojo:
+            authorization-uri: ${auth-server.location}${OAUTH2_AUTH_URI}
+            token-uri: ${auth-server.location}${OAUTH2_TOKEN_URI}
+            user-info-uri: ${auth-server.location}${OAUTH2_USERINFO_URI}
+            user-name-attribute: ${OAUTH2_USERNAME_ATTR:name}

@@ -40,9 +40,9 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities1(){
         Randomizer randomizer = new ProbabilityRandomizer(dice, 20);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 10, COUNT_ITERATIONS);
+        Map<Integer, Integer> map = calculateFiguresProbabilities(randomizer, 10, COUNT_ITERATIONS);
 
-        assertEquals("{0=10.87, 1=10.87, 2=10.87, 3=10.87, 4=10.87, 5=10.87, 6=10.87, 7=10.87, 8=10.87, 9=2.1}",
+        assertEquals("{0=11, 1=11, 2=11, 3=11, 4=11, 5=11, 6=11, 7=11, 8=11, 9=2}",
                 map.toString());
     }
 
@@ -50,9 +50,9 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities2(){
         Randomizer randomizer = new ProbabilityRandomizer(dice, 50);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 5, COUNT_ITERATIONS);
+        Map<Integer, Integer> map = calculateFiguresProbabilities(randomizer, 5, COUNT_ITERATIONS);
 
-        assertEquals("{0=22.45, 1=22.45, 2=22.45, 3=22.45, 4=10.2}",
+        assertEquals("{0=22, 1=22, 2=22, 3=22, 4=10}",
                 map.toString());
     }
 
@@ -60,9 +60,9 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities3(){
         Randomizer randomizer = new ProbabilityRandomizer(dice, 100);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, COUNT_ITERATIONS);
+        Map<Integer, Integer> map = calculateFiguresProbabilities(randomizer, 3, COUNT_ITERATIONS);
 
-        assertEquals("{0=33.33, 1=33.33, 2=33.33}",
+        assertEquals("{0=33, 1=33, 2=33}",
                 map.toString());
     }
 
@@ -70,13 +70,13 @@ public class ProbabilityRandomizerTest {
     public void checkProbabilities4(){
         Randomizer randomizer = new EquiprobableRandomizer(dice);
 
-        Map<Integer, Double> map = calculateFiguresProbabilities(randomizer, 3, COUNT_ITERATIONS);
+        Map<Integer, Integer> map = calculateFiguresProbabilities(randomizer, 3, COUNT_ITERATIONS);
 
-        assertEquals("{0=33.33, 1=33.33, 2=33.33}",
+        assertEquals("{0=33, 1=33, 2=33}",
                 map.toString());
     }
 
-    public static Map<Integer, Double> calculateFiguresProbabilities(Randomizer randomizer, int countFigures, int countIterations) {
+    public static Map<Integer, Integer> calculateFiguresProbabilities(Randomizer randomizer, int countFigures, int countIterations) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < countIterations; i ++) {
             int number = randomizer.getNextNumber(countFigures);
@@ -87,10 +87,10 @@ public class ProbabilityRandomizerTest {
             map.put(number, count + 1);
         }
 
-        Map<Integer, Double> map2 = new HashMap<>();
+        Map<Integer, Integer> map2 = new HashMap<>();
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            double figureProbability = 10000L * entry.getValue() / countIterations;
-            map2.put(entry.getKey(), 1D * figureProbability / 100);
+            double figureProbability = 100D * entry.getValue() / countIterations;
+            map2.put(entry.getKey(), (int)Math.round(figureProbability));
         }
 
         return map2;

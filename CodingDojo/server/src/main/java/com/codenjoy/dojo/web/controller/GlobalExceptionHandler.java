@@ -23,10 +23,9 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.hash.Hash;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,15 +41,14 @@ import java.util.Calendar;
  * Created by Oleksandr_Baglai on 2018-06-26.
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
-
-    private static Logger logger = DLoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
         String url = req.getRequestURL().toString();
         String ticket = ticket();
-        logger.error("[TICKET:URL] {}:{} {}", ticket, url, e);
+        log.error("[TICKET:URL] {}:{} {}", ticket, url, e);
         System.err.printf("[TICKET:URL] %s:%s%n", ticket, url);
         e.printStackTrace();
 
@@ -105,7 +103,7 @@ public class GlobalExceptionHandler {
     }
 
     private void shouldErrorPage(ModelAndView result) {
-        result.setViewName("error");
+        result.setViewName("errorPage");
     }
 
     private String ticket() {

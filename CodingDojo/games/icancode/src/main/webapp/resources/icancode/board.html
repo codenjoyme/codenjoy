@@ -23,41 +23,41 @@
     <meta charset="UTF-8">
 </head>
 <div id="layout" class="wrapper">
-    <link href="css/reset.css" rel="stylesheet"/>
+    <link href="../css/reset.css" rel="stylesheet"/>
     <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
-    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
     <link href="css/board.css" rel="stylesheet"/>
     <link href="css/style.css" rel="stylesheet"/>
     <link href="css/befunge.css" rel="stylesheet"/>
     <link href="js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <div class="header-container">
-      <div class="container-fluid">
-          <header class="header">
+        <div class="container-fluid">
+            <header class="header">
                 <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
-                  <span class="title dojo-title">EPAM DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
-                  <span class="title icancode-title hidden-xs hidden-sm">ICanCode</span>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="logo inline" href="#" title="Home"><img src="../img/logo.png"></a>
+                    <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <a class="logo inline" href="#" title="Home"><img src="../img/i_can_code_Logo.png"></a>
+                    <span class="title icancode-title hidden-xs hidden-sm">ICanCode</span>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
-                  <nav class="nav col-xs-6 pull-right text-right">
-                    <ul class="nav-list">
-                      <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
-                      <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#">ApiDocs</a></li>
-                      <li class="title icancode-title inline"><a id="help-link" target="_blank" href="/codenjoy-contest/board">LeaderBoard</a></li>
-                      <li class="logo title inline hidden-xs hidden-sm"><img src="img/profile.png"></li>
-                      <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
-                    </ul>
-                  </nav>
+                    <nav class="nav col-xs-6 pull-right text-right">
+                        <ul class="nav-list">
+                            <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
+                            <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#">ApiDocs</a></li>
+                            <li class="title icancode-title inline"><a id="help-link" target="_blank" href="/codenjoy-contest/board">LeaderBoard</a></li>
+                            <li class="logo title inline hidden-xs hidden-sm"><img src="../img/profile.png"></li>
+                            <li class="title inline"><a id="register-link" href="/codenjoy-contest/process_logout">Log out</a></li>
+                        </ul>
+                    </nav>
                 </div>
-          </header>
+            </header>
         </div>
     </div>
     <div class="container-fluid">
@@ -85,75 +85,75 @@
             </div>
             <div id="main_leaderboard">
             </div>
-          <div class="main-block console-open" id="block">
-            <div class="editor-block">
-              <div class="open-panel" id="editor-panel">
-                <i class="fa fa-angle-left panel-icon" id="editor-panel-icon"></i>
-              </div>
-                <div id="ide-content"></div>
+            <div class="main-block console-open" id="block">
+                <div class="editor-block">
+                    <div class="open-panel" id="editor-panel">
+                        <i class="fa fa-angle-left panel-icon" id="editor-panel-icon"></i>
+                    </div>
+                    <div id="ide-content"></div>
 
-                <div class="bottom-panel">
-                    <button class="button reset" id="ide-reset">Reset</button>
-                    <button class="button commit" id="ide-commit">Commit</button>
-                    <button class="button help" id="ide-help">Help</button>
-                  <div class="autocomplete">
-                      <i class="fa fa-keyboard-o"></i> <span data-toggle="tooltip" data-placement="top" title="Use Ctrl + Space for autocomplete">Ctrl + Space</span>
+                    <div class="bottom-panel">
+                        <button class="button reset" id="ide-reset">Reset</button>
+                        <button class="button commit" id="ide-commit">Commit</button>
+                        <button class="button help" id="ide-help">Help</button>
+                        <div class="autocomplete">
+                            <i class="fa fa-keyboard-o"></i> <span data-toggle="tooltip" data-placement="top" title="Use Ctrl + Space for autocomplete">Ctrl + Space</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="console open" id="console">
+                    <div class="open-panel" id="console-panel">
+                        <i class="fa fa-angle-right panel-icon" id="console-panel-icon"></i>
+                    </div>
+                    <div class="console-wrapper">
+                        <div id="ide-console" class="content">
+                            > Connected to Robo!<br>
+                            > Hi User! I am Robo! You can code your program for me.<br>
+                        </div>
                     </div>
                 </div>
             </div>
-              <div class="console open" id="console">
-              <div class="open-panel" id="console-panel">
-                <i class="fa fa-angle-right panel-icon" id="console-panel-icon"></i>
-              </div>
-              <div class="console-wrapper">
-                <div id="ide-console" class="content">
-                    > Connected to Robo!<br>
-                    > Hi User! I am Robo! You can code your program for me.<br>
+            <di v class="modal-bg close" id="modal">
+                <div class="modal-window">
+                    <header class="modal-header">
+                        <i class="fa fa-question-circle help-icon"></i>Help
+                        <i class="fa fa-close close-icon" id="close"></i>
+                    </header>
+                    <p class="help-description" id="ide-help-window">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    </p>
                 </div>
-              </div>
-          </div>
         </div>
-  <di v class="modal-bg close" id="modal">
-    <div class="modal-window">
-    <header class="modal-header">
-      <i class="fa fa-question-circle help-icon"></i>Help
-      <i class="fa fa-close close-icon" id="close"></i>
-    </header>
-    <p class="help-description" id="ide-help-window">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </p>
-  </div>
-  </div>
-    <div class="modal-bg close" id="modal-level">
-      <div class="modal-window">
-        <header class="modal-header">
-          <i class="fa fa-smile-o help-icon"></i>congratulations
-          <i class="fa fa-close close-icon" id="close-level-modal"></i>
-        </header>
-      <p class="modal-description">
-        You have successfully completed the level!
-      </p>
-      <footer class="modal-footer">
-        <button class="button modal-button previous" id="previous-level-modal">Сheck previous levels</button>
-        <button class="button modal-button next" id="next-level-modal">Go to next level</button>
-      </footer>
+        <div class="modal-bg close" id="modal-level">
+            <div class="modal-window">
+                <header class="modal-header">
+                    <i class="fa fa-smile-o help-icon"></i>congratulations
+                    <i class="fa fa-close close-icon" id="close-level-modal"></i>
+                </header>
+                <p class="modal-description">
+                    You have successfully completed the level!
+                </p>
+                <footer class="modal-footer">
+                    <button class="button modal-button previous" id="previous-level-modal">Сheck previous levels</button>
+                    <button class="button modal-button next" id="next-level-modal">Go to next level</button>
+                </footer>
+            </div>
+        </div>
     </div>
-  </div>
-  </div>
-    </div>
-      <footer class="footer">
+</div>
+<footer class="footer">
     <div class="container-fluid" style="text-align:-webkit-right">
-      <nav class="footer-nav">
-        <ul class="footer-list">
-            <li class="footer-item inline"><a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a></li>
-            <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
-            <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
-            <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a></li>
-            <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
-        </ul>
-      </nav>
+        <nav class="footer-nav">
+            <ul class="footer-list">
+                <li class="footer-item inline"><a href="https://epa.ms/dojo-habr" target="blank">About DOJO</a></li>
+                <li class="footer-item inline"><a href="https://epa.ms/EPMDOJO" target="blank">DOJO KB</a></li>
+                <li class="footer-item inline"><a href="https://epa.ms/DOJO-CHAT" target="blank">DOJO CHAT</a></li>
+                <li class="footer-item inline"><a href="https://epa.ms/codenjoy-github" target="blank">Codenjoy on GitHub</a></li>
+                <li class="footer-item inline"><a href="mailto:Oleksandr_Baglai@Epam.com" target="blank">Ask me anything</a></li>
+            </ul>
+        </nav>
     </div>
-  </footer>
+</footer>
 </div>
 
 <!-- these scripts will not be loaded - only for UI design fixing by running board.html -->
@@ -193,5 +193,3 @@
 <script src="js/game/loader/boardAllPageLoad.js"></script>
 
 <!--<script src="../js/icancode.js"></script>-->
-
-

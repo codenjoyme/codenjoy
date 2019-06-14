@@ -33,7 +33,6 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Figures implements FigureQueue {
-    // TODO вот тут вообще ничего не понятно :)
     public static final int DEFAULT_FUTURE_COUNT = 4;
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -72,6 +71,11 @@ public class Figures implements FigureQueue {
     @Override
     public List<Type> future() {
         return Collections.unmodifiableList(new LinkedList<>(figures));
+    }
+
+    @Override
+    public void clear() {
+        figures.clear();
     }
 
     private Randomizer getRandomizer() {

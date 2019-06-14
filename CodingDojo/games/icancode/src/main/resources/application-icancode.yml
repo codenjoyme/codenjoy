@@ -1,0 +1,10 @@
+game:
+  ai: false
+icancode:
+  page:
+    main:
+      url: ''
+    registration:
+      nickname: false
+    admin:
+      url: /icancode/admin
