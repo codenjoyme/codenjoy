@@ -25,7 +25,7 @@ package com.codenjoy.dojo.excitebike.services.parse;
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.OffRoad;
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeElementType;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Point;
@@ -48,11 +48,6 @@ public class MapParserImpl implements MapParser {
         this.map = map;
     }
 
-//    public MapParserImpl(String map) {
-//        this.xSize = map.indexOf(MapParser.LINE_SEPARATOR);
-//        this.map = map.replace("" + MapParser.LINE_SEPARATOR, "");
-//    }
-
     public MapParserImpl(String map, int xSize) {
         this.map = map;
         this.xSize = xSize;
@@ -70,7 +65,7 @@ public class MapParserImpl implements MapParser {
 
     @Override
     public List<Bike> getBikes() {
-        return parseAndConvertElements(Bike::new, BikeElementType.BIKE);
+        return parseAndConvertElements(Bike::new, BikeType.BIKE);
     }
 
     @Override

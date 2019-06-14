@@ -22,7 +22,6 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum BikeType implements CharElements {

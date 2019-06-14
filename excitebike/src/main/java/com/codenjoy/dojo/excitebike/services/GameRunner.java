@@ -32,7 +32,7 @@ import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeElementType;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
@@ -52,23 +52,23 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     //TODO: move it to the Board class
-    public static final int EMPTY_LINES_ON_TOP = 3;
-    public static final int FIELD_HEIGHT = 38;
+//    public static final int EMPTY_LINES_ON_TOP = 3;
+    public static final int FIELD_HEIGHT = 12;
 
     private final MapParser mapParser;
 
     public GameRunner() {
-        mapParser = new MapParserImpl(getMap(), FIELD_HEIGHT);
+        mapParser = new MapParserImpl(getMap());
     }
 
     protected String getMap() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < EMPTY_LINES_ON_TOP; i++) {
+        appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
+        for (int i = 0; i < FIELD_HEIGHT-2; i++) {
             appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT);
         }
-        appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
-        appendBikeAtStartPoint(sb);
-        appendBikeAtStartPoint(sb);
+//        appendBikeAtStartPoint(sb);
+//        appendBikeAtStartPoint(sb);
         appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
         return sb.toString();
     }
@@ -81,14 +81,13 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     private void appendBikeAtStartPoint(StringBuilder sb) {
         sb.append(GameElementType.NONE);
-        sb.append(BikeElementType.BIKE);
+        sb.append(BikeType.BIKE);
         appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT - 2);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        // nothing to implement
-        return null;
+        return new Scores((Integer)score, settings);
     }
 
     @Override
@@ -108,8 +107,9 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Enum[] getPlots() {
-        Enum[] tempArr = ObjectArrays.concat(GameElementType.values(), SpringboardElementType.values(), Enum.class);
-        return ObjectArrays.concat(tempArr, BikeElementType.values(), Enum.class);
+        Enum[] result = ObjectArrays.concat(GameElementType.values(), SpringboardElementType.values(), Enum.class);
+        result = ObjectArrays.concat(result, BikeType.values(), Enum.class);
+        return result;
     }
 
     @Override

@@ -33,11 +33,11 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Optional;
 
-public class Bike extends PlayerHero<GameField> implements State<BikeElementType, Player>, Shiftable {
+public class Bike extends PlayerHero<GameField> implements State<BikeType, Player>, Shiftable {
 
     private Direction direction;
 
-    private BikeElementType type = BikeElementType.BIKE;
+    private BikeType type = BikeType.BIKE;
 
     public Bike(Point xy) {
         super(xy);
@@ -70,31 +70,31 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
     public void left() {
         if (!isAlive()) return;
 
-        changeIncline(BikeElementType.BIKE_INCLINE_LEFT, BikeElementType.BIKE_INCLINE_RIGHT);
+        changeIncline(BikeType.BIKE_INCLINE_LEFT, BikeType.BIKE_INCLINE_RIGHT);
     }
 
     @Override
     public void right() {
         if (!isAlive()) return;
 
-        changeIncline(BikeElementType.BIKE_INCLINE_RIGHT, BikeElementType.BIKE_INCLINE_LEFT);
+        changeIncline(BikeType.BIKE_INCLINE_RIGHT, BikeType.BIKE_INCLINE_LEFT);
     }
 
-    private void changeIncline(BikeElementType toIncline, BikeElementType inclinedTo) {
-        if (type == BikeElementType.BIKE) {
+    private void changeIncline(BikeType toIncline, BikeType inclinedTo) {
+        if (type == BikeType.BIKE) {
             type = toIncline;
         } else if (type == inclinedTo) {
-            type = BikeElementType.BIKE;
+            type = BikeType.BIKE;
         }
     }
 
     public void crush() {
-        type = BikeElementType.BIKE_FALLEN;
+        type = BikeType.BIKE_FALLEN;
     }
 
     public void jump() {
-        //TODO add new BikeElementType.JUMP
-        //setType(BikeElementType.BIKE_JUMP);
+        //TODO add new BikeType.JUMP
+        //setType(BikeType.BIKE_JUMP);
     }
 
     @Override
@@ -169,12 +169,14 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
         }
 
         if (field.isUpLineChanger(x, y)) {
-            tryToMove(x, Direction.UP.changeY(y));
+            direction = Direction.UP;
+            tryToMove(x, direction.changeY(y));
             return;
         }
 
         if (field.isDownLineChanger(x, y)) {
-            tryToMove(x, Direction.DOWN.changeY(y));
+            direction = Direction.DOWN;
+            tryToMove(x, direction.changeY(y));
 //            return;
         }
 
@@ -185,32 +187,32 @@ public class Bike extends PlayerHero<GameField> implements State<BikeElementType
     }
 
     @Override
-    public BikeElementType state(Player player, Object... alsoAtPoint) {
+    public BikeType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
 
         return this == bike ? bike.type : this.getEnemyBikeType();
     }
 
-    private BikeElementType getEnemyBikeType() {
+    private BikeType getEnemyBikeType() {
         switch (type) {
             case BIKE:
-                return BikeElementType.ENEMY_BIKE;
+                return BikeType.OTHER_BIKE;
             case BIKE_FALLEN:
-                return BikeElementType.ENEMY_BIKE_FALLEN;
+                return BikeType.OTHER_BIKE_FALLEN;
             case BIKE_INCLINE_LEFT:
-                return BikeElementType.ENEMY_BIKE_INCLINE_LEFT;
+                return BikeType.OTHER_BIKE_INCLINE_LEFT;
             case BIKE_INCLINE_RIGHT:
-                return BikeElementType.ENEMY_BIKE_INCLINE_RIGHT;
+                return BikeType.OTHER_BIKE_INCLINE_RIGHT;
             default:
                 throw new IllegalArgumentException("No such element for " + type);
         }
     }
 
     public boolean isAlive() {
-        return type != BikeElementType.BIKE_FALLEN;
+        return type != BikeType.BIKE_FALLEN;
     }
 
-    private BikeElementType getType() {
+    private BikeType getType() {
         return type;
     }
 

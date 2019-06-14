@@ -107,25 +107,25 @@ public class MultiplayerTest {
         asrtFl1("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " x     \n" +
-                " x     \n" +
+                " e     \n" +
+                " e     \n" +
                 " o     \n" +
                 "■■■■■■■\n");
 
         asrtFl2("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " x     \n" +
+                " e     \n" +
                 " o     \n" +
-                " x     \n" +
+                " e     \n" +
                 "■■■■■■■\n");
 
         asrtFl3("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
                 " o     \n" +
-                " x     \n" +
-                " x     \n" +
+                " e     \n" +
+                " e     \n" +
                 "■■■■■■■\n");
     }
 
@@ -141,9 +141,9 @@ public class MultiplayerTest {
 
         asrtFl1("■■■■■■■\n" +
                 "       \n" +
-                " x     \n" +
+                " e     \n" +
                 "       \n" +
-                " [     \n" +
+                " z     \n" +
                 " o     \n" +
                 "■■■■■■■\n");
     }
@@ -160,85 +160,85 @@ public class MultiplayerTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " x     \n" +
+                " e     \n" +
                 " o     \n" +
                 "■■■■■■■\n");
     }
 
-    // игрок может взорваться на бомбе
-    @Test
-    public void shouldKill() {
-        game1.getJoystick().down();
-        game1.getJoystick().act();
-        game3.getJoystick().left();
-
-        field.tick();
-
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼x☻ $☼\n" +
-                "☼☺   ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        game3.getJoystick().left();
-        field.tick();
-
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼X  $☼\n" +
-                "☼☺   ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        verify(listener3).event(Events.LOOSE);
-        assertTrue(game3.isGameOver());
-
-        dice(4, 1);
-        game3.newGame();
-
-        field.tick();
-
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼   $☼\n" +
-                "☼☺   ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼   ☻☼\n" +
-                "☼☼☼☼☼☼\n");
-    }
-
-    // игрок может подобрать золото
-    @Test
-    public void shouldGetGold() {
-        game3.getJoystick().right();
-
-        dice(1, 2);
-
-        field.tick();
-
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼☺  ☻☼\n" +
-                "☼    ☼\n" +
-                "☼$☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        verify(listener3).event(Events.WIN);
-    }
-
-    // игрок не может пойи на другого игрока
-    @Test
-    public void shouldCantGoOnHero() {
-        game1.getJoystick().right();
-        game3.getJoystick().left();
-
-        field.tick();
-
-        asrtFl1("☼☼☼☼☼☼\n" +
-                "☼ ☺☻$☼\n" +
-                "☼    ☼\n" +
-                "☼ ☻  ☼\n" +
-                "☼    ☼\n" +
-                "☼☼☼☼☼☼\n");
-    }
+//    // игрок может взорваться на бомбе
+//    @Test
+//    public void shouldKill() {
+//        game1.getJoystick().down();
+//        game1.getJoystick().act();
+//        game3.getJoystick().left();
+//
+//        field.tick();
+//
+//        asrtFl1("☼☼☼☼☼☼\n" +
+//                "☼x☻ $☼\n" +
+//                "☼☺   ☼\n" +
+//                "☼ ☻  ☼\n" +
+//                "☼    ☼\n" +
+//                "☼☼☼☼☼☼\n");
+//
+//        game3.getJoystick().left();
+//        field.tick();
+//
+//        asrtFl1("☼☼☼☼☼☼\n" +
+//                "☼X  $☼\n" +
+//                "☼☺   ☼\n" +
+//                "☼ ☻  ☼\n" +
+//                "☼    ☼\n" +
+//                "☼☼☼☼☼☼\n");
+//
+//        verify(listener3).event(Events.LOOSE);
+//        assertTrue(game3.isGameOver());
+//
+//        dice(4, 1);
+//        game3.newGame();
+//
+//        field.tick();
+//
+//        asrtFl1("☼☼☼☼☼☼\n" +
+//                "☼   $☼\n" +
+//                "☼☺   ☼\n" +
+//                "☼ ☻  ☼\n" +
+//                "☼   ☻☼\n" +
+//                "☼☼☼☼☼☼\n");
+//    }
+//
+//    // игрок может подобрать золото
+//    @Test
+//    public void shouldGetGold() {
+//        game3.getJoystick().right();
+//
+//        dice(1, 2);
+//
+//        field.tick();
+//
+//        asrtFl1("☼☼☼☼☼☼\n" +
+//                "☼☺  ☻☼\n" +
+//                "☼    ☼\n" +
+//                "☼$☻  ☼\n" +
+//                "☼    ☼\n" +
+//                "☼☼☼☼☼☼\n");
+//
+//        verify(listener3).event(Events.WIN);
+//    }
+//
+//    // игрок не может пойи на другого игрока
+//    @Test
+//    public void shouldCantGoOnHero() {
+//        game1.getJoystick().right();
+//        game3.getJoystick().left();
+//
+//        field.tick();
+//
+//        asrtFl1("☼☼☼☼☼☼\n" +
+//                "☼ ☺☻$☼\n" +
+//                "☼    ☼\n" +
+//                "☼ ☻  ☼\n" +
+//                "☼    ☼\n" +
+//                "☼☼☼☼☼☼\n");
+//    }
 }

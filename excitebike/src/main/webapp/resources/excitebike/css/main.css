@@ -19,3 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+
+ #tribune{
+     background: url(../img/tribune.png) center repeat-x;
+     background-size: auto 100%;
+ }
