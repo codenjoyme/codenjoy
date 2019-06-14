@@ -97,23 +97,23 @@ License along with this program.  If not, see
             </div>
             <!-- add attribute 'not-empty' to the div if you want to enable validation -->
             <!-- add attribute 'hidden' to the div if you want to hide this edit box -->
-            <div id="data1" class="field not-valid" not-empty>
+            <div id="data1" class="field not-valid" not-empty hidden>
                 <input type="text" placeholder="Tech skills"/>
                 <span class="icon fa"></span>
             </div>
-            <div id="data2" class="field not-valid" not-empty>
+            <div id="data2" class="field not-valid" not-empty hidden>
                 <!-- also you can change input placeholder="..." -->
                 <input type="text" placeholder="Experience (years)"/>
                 <span class="icon fa"></span>
             </div>
-            <div id="data3" class="field not-valid" not-empty>
+            <div id="data3" class="field not-valid" not-empty hidden>
                 <input type="text" placeholder="Company"/>
                 <span class="icon fa"></span>
             </div>
             <c:if test="${not adminLogin}">
                 <tr>
                     <td>
-                        <form:select items="${gameNames}" id="gameName" path="gameName"/>
+                        <form:select items="${gameNames}" id="gameName" path="gameName" hidden="true"/>
                     </td>
                     <td>
                         <form:errors path="gameName" cssClass="error" />

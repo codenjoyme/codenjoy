@@ -92,7 +92,7 @@ License along with this program.  If not, see
             <c:if test="${not adminLogin}">
                 <tr>
                     <td>
-                        <select name="gameName" id="gameName">
+                        <select name="gameName" id="gameName" hidden>
                             <c:forEach items="${gameNames}" var="game" >
                                 <option value="${game}">${game}</option>
                             </c:forEach>
