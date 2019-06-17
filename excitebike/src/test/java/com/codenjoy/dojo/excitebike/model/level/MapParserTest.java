@@ -61,12 +61,12 @@ public class MapParserTest {
                 GameElementType.LINE_CHANGER_UP,
                 GameElementType.LINE_CHANGER_DOWN,
                 GameElementType.OFF_ROAD,
-                SpringboardElementType.DARK,
-                SpringboardElementType.LIGHT,
-                SpringboardElementType.LEFT_DOWN,
-                SpringboardElementType.LEFT_UP,
-                SpringboardElementType.RIGHT_DOWN,
-                SpringboardElementType.RIGHT_UP
+                SpringboardElementType.SPRINGBOARD_DARK,
+                SpringboardElementType.SPRINGBOARD_LIGHT,
+                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
+                SpringboardElementType.SPRINGBOARD_LEFT_UP,
+                SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
+                SpringboardElementType.SPRINGBOARD_RIGHT_UP
         );
     }
 
@@ -216,17 +216,17 @@ public class MapParserTest {
             return (List<T>) mapParser.getLineDownChangers();
         } else if (element == GameElementType.OFF_ROAD) {
             return (List<T>) mapParser.getOffRoads();
-        } else if (element == SpringboardElementType.DARK) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_DARK) {
             return (List<T>) mapParser.getSpringboardDarkElements();
-        } else if (element == SpringboardElementType.LEFT_DOWN) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {
             return (List<T>) mapParser.getSpringboardLeftDownElements();
-        } else if (element == SpringboardElementType.LEFT_UP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_UP) {
             return (List<T>) mapParser.getSpringboardLeftUpElements();
-        } else if (element == SpringboardElementType.LIGHT) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LIGHT) {
             return (List<T>) mapParser.getSpringboardLightElements();
-        } else if (element == SpringboardElementType.RIGHT_DOWN) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_DOWN) {
             return (List<T>) mapParser.getSpringboardRightDownElements();
-        } else if (element == SpringboardElementType.RIGHT_UP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
             return (List<T>) mapParser.getSpringboardRightUpElements();
         }
         return null;

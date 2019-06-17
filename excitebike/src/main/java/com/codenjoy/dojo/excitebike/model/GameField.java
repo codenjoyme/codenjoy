@@ -27,15 +27,9 @@ import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 
 import java.util.Optional;
 
-/**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
 
     int size();
-
-    boolean isFree(int x, int y);
 
     boolean isBorder(int x, int y);
 

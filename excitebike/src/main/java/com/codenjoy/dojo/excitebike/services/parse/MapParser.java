@@ -23,14 +23,12 @@ package com.codenjoy.dojo.excitebike.services.parse;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.*;
-import com.codenjoy.dojo.excitebike.model.items.OffRoad;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 
 import java.util.List;
 
 public interface MapParser {
-    char LINE_SEPARATOR = ' ';  //ASCII 255 - nbsp symbol
 
     int getXSize();
 

@@ -27,24 +27,22 @@ import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.stream.Collectors.partitioningBy;
 import static java.util.stream.Collectors.toList;
 
+
+//TODO remove player when bike is not alive and cross last possible x
 public class GameFieldImpl implements GameField {
 
     private Dice dice;
     private MapParser mapParser;
 
-    //TODO mb use Set not List
     private Map<GameElementType, List<? extends Shiftable>> allShiftableElements = new EnumMap<>(GameElementType.class);
 
     private List<Player> players = new LinkedList<>();
@@ -65,8 +63,6 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(GameElementType.LINE_CHANGER_DOWN, mapParser.getLineDownChangers());
     }
 
-    //TODO remove player when bike is not alive and cross last possible x
-
     /**
      * @see Tickable#tick()
      */
@@ -78,11 +74,6 @@ public class GameFieldImpl implements GameField {
 
     public int size() {
         return mapParser.getXSize();
-    }
-
-    @Override
-    public boolean isFree(int x, int y) {
-        return false;
     }
 
     @Override
@@ -166,7 +157,7 @@ public class GameFieldImpl implements GameField {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(GameFieldImpl.this.getBikes());
-                    GameFieldImpl.this.allShiftableElements.values().forEach(els -> this.addAll(els));
+                    GameFieldImpl.this.allShiftableElements.values().forEach(this::addAll);
                     addAll(getBorders());
                 }};
             }
@@ -202,8 +193,6 @@ public class GameFieldImpl implements GameField {
 
     private Shiftable getNewElement(GameElementType randomType, int x, int y) {
         switch (randomType) {
-            case OFF_ROAD:
-                return new OffRoad(x, y);
             case ACCELERATOR:
                 return new Accelerator(x, y);
             case INHIBITOR:
@@ -214,6 +203,8 @@ public class GameFieldImpl implements GameField {
                 return new LineChanger(x, y, true);
             case LINE_CHANGER_DOWN:
                 return new LineChanger(x, y, false);
+            case OFF_ROAD:
+                return new OffRoad(x, y);
             default:
                 throw new IllegalArgumentException("No such element for " + randomType);
         }

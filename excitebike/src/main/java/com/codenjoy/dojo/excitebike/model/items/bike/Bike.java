@@ -93,8 +93,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     public void jump() {
-        //TODO add new BikeType.JUMP
-        //setType(BikeType.BIKE_JUMP);
+        //TODO add new BikeType.JUMP for springboard
+        //type = BikeType.BIKE_JUMP;
     }
 
     @Override
@@ -177,12 +177,12 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (field.isDownLineChanger(x, y)) {
             direction = Direction.DOWN;
             tryToMove(x, direction.changeY(y));
-//            return;
+            return;
         }
 
-//        if (field.isOffRoad(x, y) && x > 0) {
-//            shift();
-//        }
+        if (field.isOffRoad(x, y) && x > 0) {
+            //TODO something like shift()
+        }
 
     }
 
@@ -210,13 +210,5 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     public boolean isAlive() {
         return type != BikeType.BIKE_FALLEN;
-    }
-
-    private BikeType getType() {
-        return type;
-    }
-
-    private Direction getDirection() {
-        return direction;
     }
 }

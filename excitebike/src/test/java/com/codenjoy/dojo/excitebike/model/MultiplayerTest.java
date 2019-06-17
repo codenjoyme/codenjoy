@@ -23,7 +23,6 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -35,11 +34,9 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MultiplayerTest {
@@ -241,4 +238,131 @@ public class MultiplayerTest {
 //                "☼    ☼\n" +
 //                "☼☼☼☼☼☼\n");
 //    }
+
+    @Test
+    public void shouldCrushEnemyBikeAfterClash() {
+        when(dice.next(anyInt())).thenReturn(5);
+
+        game1.getJoystick().up();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " e     \n" +
+                "_      \n" +
+                " o     \n" +
+                "■■■■■■■\n");
+
+        assertTrue(game2.isGameOver());
+    }
+
+    @Test
+    public void shouldDoNothingAfterBikesClashEachOther() {
+        when(dice.next(anyInt())).thenReturn(5);
+
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " e     \n" +
+                " e     \n" +
+                " o     \n" +
+                "■■■■■■■\n");
+
+        game3.getJoystick().up();
+        game2.getJoystick().up();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                " e     \n" +
+                " e     \n" +
+                "       \n" +
+                " o     \n" +
+                "■■■■■■■\n");
+
+//        TODO
+//        game1.getJoystick().up();
+//        game2.getJoystick().down();
+//
+//        field.tick();
+//
+//        asrtFl1("■■■■■■■\n" +
+//                "       \n" +
+//                " e     \n" +
+//                " e     \n" +
+//                "       \n" +
+//                " o     \n" +
+//                "■■■■■■■\n");
+
+    }
+
+    @Test
+    public void shouldMoveBikesInAnyOrderOfCall() {
+        when(dice.next(anyInt())).thenReturn(5);
+
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        game3.getJoystick().up();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                " e     \n" +
+                " e     \n" +
+                " o     \n" +
+                "       \n" +
+                "■■■■■■■\n");
+
+        game3.getJoystick().up();
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                " e     \n" +
+                " e     \n" +
+                " o     \n" +
+                "       \n" +
+                "       \n" +
+                "■■■■■■■\n");
+
+        game2.getJoystick().down();
+        game3.getJoystick().down();
+        game1.getJoystick().down();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                " e     \n" +
+                " e     \n" +
+                " o     \n" +
+                "       \n" +
+                "■■■■■■■\n");
+
+        game3.getJoystick().down();
+        game2.getJoystick().down();
+        game1.getJoystick().down();
+
+        field.tick();
+
+        asrtFl1("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " e     \n" +
+                " e     \n" +
+                " o     \n" +
+                "■■■■■■■\n");
+    }
+
 }
