@@ -29,6 +29,7 @@ import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.excitebike.model.items.Elements;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
@@ -78,8 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     private void appendBikeAtStartPoint(StringBuilder sb) {
         sb.append(Elements.ROAD);
-        sb.append(Elements.BIKE_BACK);
-        sb.append(Elements.BIKE_FRONT);
+        sb.append(BikeType.BIKE);
         appendElementManyTimes(sb, Elements.ROAD, FIELD_HEIGHT - 3);
     }
 

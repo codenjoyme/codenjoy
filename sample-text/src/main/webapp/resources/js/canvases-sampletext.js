@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.sample.model;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -22,25 +20,4 @@ package com.codenjoy.dojo.sample.model;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-
-/**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
-public interface Field extends GameField<Player> {
-
-    boolean isBarrier(Point pt);
-
-    Point getFreeRandom();
-
-    boolean isFree(Point pt);
-
-    boolean isBomb(Point pt);
-
-    void setBomb(Point pt);
-
-    void removeBomb(Point pt);
-}
+var doNothing = true;

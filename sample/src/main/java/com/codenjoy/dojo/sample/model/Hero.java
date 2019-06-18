@@ -23,7 +23,9 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 /**
@@ -80,7 +82,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void act(int... p) {
         if (!alive) return;
 
-        field.setBomb(x, y);
+        field.setBomb(this);
     }
 
     @Override
@@ -88,16 +90,15 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (!alive) return;
 
         if (direction != null) {
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
+            Point to = direction.change(this.copy());
 
-            if (field.isBomb(newX, newY)) {
+            if (field.isBomb(to)) {
                 alive = false;
-                field.removeBomb(newX, newY);
+                field.removeBomb(to);
             }
 
-            if (!field.isBarrier(newX, newY)) {
-                move(newX, newY);
+            if (!field.isBarrier(to)) {
+                move(to);
             }
         }
         direction = null;

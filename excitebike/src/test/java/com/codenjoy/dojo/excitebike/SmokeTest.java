@@ -30,6 +30,7 @@ import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.excitebike.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class SmokeTest {
 
     private Dice dice;

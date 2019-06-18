@@ -28,6 +28,9 @@
 /expansion/**
 /reversi/**
 /sokoban/**
+/icancode/**
+/snakebattle/**
+/lemonade/**
 /engine/src/**
 /engine/target/**
 /engine/.idea/**
