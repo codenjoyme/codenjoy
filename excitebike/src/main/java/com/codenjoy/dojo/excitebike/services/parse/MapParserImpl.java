@@ -98,11 +98,6 @@ public class MapParserImpl implements MapParser {
     }
 
     @Override
-    public List<OffRoad> getOffRoads() {
-        return parseAndConvertElements(OffRoad::new, GameElementType.OFF_ROAD);
-    }
-
-    @Override
     public List<SpringboardElement> getSpringboardDarkElements() {
         return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_DARK), SpringboardElementType.SPRINGBOARD_DARK);
     }

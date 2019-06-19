@@ -60,7 +60,6 @@ public class MapParserTest {
                 GameElementType.OBSTACLE,
                 GameElementType.LINE_CHANGER_UP,
                 GameElementType.LINE_CHANGER_DOWN,
-                GameElementType.OFF_ROAD,
                 SpringboardElementType.SPRINGBOARD_DARK,
                 SpringboardElementType.SPRINGBOARD_LIGHT,
                 SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
@@ -214,8 +213,6 @@ public class MapParserTest {
             return (List<T>) mapParser.getLineUpChangers();
         } else if (element == GameElementType.LINE_CHANGER_DOWN) {
             return (List<T>) mapParser.getLineDownChangers();
-        } else if (element == GameElementType.OFF_ROAD) {
-            return (List<T>) mapParser.getOffRoads();
         } else if (element == SpringboardElementType.SPRINGBOARD_DARK) {
             return (List<T>) mapParser.getSpringboardDarkElements();
         } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {

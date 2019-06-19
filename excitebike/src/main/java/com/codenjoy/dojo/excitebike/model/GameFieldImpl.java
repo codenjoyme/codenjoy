@@ -37,7 +37,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 
-//TODO remove player when bike is not alive and cross last possible x
+//TODO remove player when bike is not alive and cross last possible x TASK - 31-make-correct-bike-lose-and-game-finish-logic
 public class GameFieldImpl implements GameField {
 
     private Dice dice;
@@ -55,7 +55,6 @@ public class GameFieldImpl implements GameField {
 
         borders = mapParser.getBorders();
 
-        allShiftableElements.put(GameElementType.OFF_ROAD, mapParser.getOffRoads());
         allShiftableElements.put(GameElementType.ACCELERATOR, mapParser.getAccelerators());
         allShiftableElements.put(GameElementType.INHIBITOR, mapParser.getInhibitors());
         allShiftableElements.put(GameElementType.OBSTACLE, mapParser.getObstacles());
@@ -104,11 +103,6 @@ public class GameFieldImpl implements GameField {
     @Override
     public boolean isDownLineChanger(int x, int y) {
         return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x,y));
-    }
-
-    @Override
-    public boolean isOffRoad(int x, int y) {
-        return allShiftableElements.get(GameElementType.OFF_ROAD).contains(pt(x,y));
     }
 
     @Override
@@ -203,8 +197,6 @@ public class GameFieldImpl implements GameField {
                 return new LineChanger(x, y, true);
             case LINE_CHANGER_DOWN:
                 return new LineChanger(x, y, false);
-            case OFF_ROAD:
-                return new OffRoad(x, y);
             default:
                 throw new IllegalArgumentException("No such element for " + randomType);
         }

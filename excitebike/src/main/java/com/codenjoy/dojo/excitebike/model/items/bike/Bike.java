@@ -93,7 +93,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     public void jump() {
-        //TODO add new BikeType.JUMP for springboard
+        //TODO add new BikeType.JUMP for springboard TASK - 26-springboard-item
         //type = BikeType.BIKE_JUMP;
     }
 
@@ -177,13 +177,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (field.isDownLineChanger(x, y)) {
             direction = Direction.DOWN;
             tryToMove(x, direction.changeY(y));
-            return;
         }
-
-        if (field.isOffRoad(x, y) && x > 0) {
-            //TODO something like shift()
-        }
-
     }
 
     @Override

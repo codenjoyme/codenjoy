@@ -46,13 +46,8 @@ import com.google.common.collect.ObjectArrays;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    //TODO: move it to the Board class
-//    public static final int EMPTY_LINES_ON_TOP = 3;
     public static final int FIELD_HEIGHT = 12;
 
     private final MapParser mapParser;
@@ -67,8 +62,6 @@ public class GameRunner extends AbstractGameType implements GameType {
         for (int i = 0; i < FIELD_HEIGHT-2; i++) {
             appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT);
         }
-//        appendBikeAtStartPoint(sb);
-//        appendBikeAtStartPoint(sb);
         appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
         return sb.toString();
     }
@@ -87,7 +80,22 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new PlayerScores() {
+            @Override
+            public Object getScore() {
+                return 0;
+            }
+
+            @Override
+            public int clear() {
+                return 0;
+            }
+
+            @Override
+            public void event(Object o) {
+                //nothing to do
+            }
+        };
     }
 
     @Override

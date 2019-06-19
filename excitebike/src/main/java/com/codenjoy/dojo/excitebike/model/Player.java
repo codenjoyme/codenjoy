@@ -47,7 +47,7 @@ public class Player extends GamePlayer<Bike, GameField> {
 
     @Override
     public void newHero(GameField gameField) {
-        //TODO correct coordinates
+        //TODO correct coordinates TASK - 27-player-spawn
         bike = new Bike(new PointImpl(BIKE_START_X, gameField.getPlayersNumber()));
         bike.init(gameField);
     }

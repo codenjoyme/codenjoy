@@ -82,13 +82,13 @@ public class GameFieldImplTest {
     public void shouldFieldAtStart() {
         givenFl("■■■■■" +
                 " o ▼ " +
-                "  » ░" +
+                "  »  " +
                 " ▲ ▒ " +
                 "■■■■■");
 
         assertE("■■■■■" +
                 " o ▼ " +
-                "  » ░" +
+                "  »  " +
                 " ▲ ▒ " +
                 "■■■■■");
     }
@@ -97,7 +97,7 @@ public class GameFieldImplTest {
     public void shouldShiftTrack() {
         givenFl("■■■■■" +
                 " o ▼ " +
-                "  » ░" +
+                "  »  " +
                 " ▲ ▒ " +
                 "■■■■■");
 
@@ -106,34 +106,8 @@ public class GameFieldImplTest {
 
         assertE("■■■■■" +
                 " o▼  " +
-                " » ░▒" +
+                " »  ▒" +
                 "▲ ▒  " +
-                "■■■■■");
-    }
-
-    @Test
-    public void shouldReplaceShiftableElementToBike() {
-        givenFl("■■■■■" +
-                " o░  " +
-                "     " +
-                "     " +
-                "■■■■■");
-
-        when(dice.next(anyInt())).thenReturn(5);
-        game.tick();
-
-        assertE("■■■■■" +
-                " o   " +
-                "     " +
-                "     " +
-                "■■■■■");
-
-        game.tick();
-
-        assertE("■■■■■" +
-                "░o   " +
-                "     " +
-                "     " +
                 "■■■■■");
     }
 

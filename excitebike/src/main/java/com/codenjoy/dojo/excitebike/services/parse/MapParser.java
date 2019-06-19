@@ -48,8 +48,6 @@ public interface MapParser {
 
     List<Obstacle> getObstacles();
 
-    List<OffRoad> getOffRoads();
-
     List<SpringboardElement> getSpringboardDarkElements();
 
     List<SpringboardElement> getSpringboardLightElements();
