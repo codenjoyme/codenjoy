@@ -39,7 +39,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MultiplayerTest {
+public class MultiplayerSystemTest {
 
     private EventListener listener1;
     private EventListener listener2;
@@ -124,149 +124,109 @@ public class MultiplayerTest {
 
     @Test
     public void shouldJoystick() {
+        //given
         when(dice.next(anyInt())).thenReturn(5);
 
         game3.getJoystick().up();
         game2.getJoystick().left();
         game1.getJoystick().down();
 
+        //when
         field.tick();
 
-        asrtFl1("■■■■■■■\n" +
+        //then
+        String expected = "■■■■■■■\n" +
                 "       \n" +
                 " e     \n" +
                 "       \n" +
                 " z     \n" +
                 " o     \n" +
-                "■■■■■■■\n");
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
     }
 
     @Test
     public void shouldRemove() {
+        //given
         when(dice.next(anyInt())).thenReturn(5);
 
+        //when
         game3.close();
-
         field.tick();
 
-        asrtFl1("■■■■■■■\n" +
+        //then
+        String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
                 "       \n" +
                 " e     \n" +
                 " o     \n" +
-                "■■■■■■■\n");
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
     }
 
     @Test
     public void shouldCrushEnemyBikeAfterClash() {
+        //given
         when(dice.next(anyInt())).thenReturn(5);
 
+        //when
         game1.getJoystick().up();
-
         field.tick();
 
-        asrtFl1("■■■■■■■\n" +
+        //then
+        String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
                 " e     \n" +
                 "_      \n" +
                 " o     \n" +
-                "■■■■■■■\n");
-
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
         assertTrue(game2.isGameOver());
     }
 
     @Test
     public void shouldDoNothingAfterBikesClashEachOther() {
+        //given
         when(dice.next(anyInt())).thenReturn(5);
 
+        //when
         game1.getJoystick().up();
         game2.getJoystick().down();
-
         field.tick();
 
-        asrtFl1("■■■■■■■\n" +
+        //then
+        String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
                 " e     \n" +
                 " e     \n" +
                 " o     \n" +
-                "■■■■■■■\n");
-
-        game3.getJoystick().up();
-        game2.getJoystick().up();
-
-        field.tick();
-
-        asrtFl1("■■■■■■■\n" +
-                "       \n" +
-                " e     \n" +
-                " e     \n" +
-                "       \n" +
-                " o     \n" +
-                "■■■■■■■\n");
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
     }
 
     @Test
     public void shouldMoveBikesInAnyOrderOfCall() {
+        //given
         when(dice.next(anyInt())).thenReturn(5);
 
+        //when
         game1.getJoystick().up();
         game2.getJoystick().up();
         game3.getJoystick().up();
-
         field.tick();
 
-        asrtFl1("■■■■■■■\n" +
+        //then
+        String expected = "■■■■■■■\n" +
                 "       \n" +
                 " e     \n" +
                 " e     \n" +
                 " o     \n" +
                 "       \n" +
-                "■■■■■■■\n");
-
-        game3.getJoystick().up();
-        game1.getJoystick().up();
-        game2.getJoystick().up();
-
-        field.tick();
-
-        asrtFl1("■■■■■■■\n" +
-                " e     \n" +
-                " e     \n" +
-                " o     \n" +
-                "       \n" +
-                "       \n" +
-                "■■■■■■■\n");
-
-        game2.getJoystick().down();
-        game3.getJoystick().down();
-        game1.getJoystick().down();
-
-        field.tick();
-
-        asrtFl1("■■■■■■■\n" +
-                "       \n" +
-                " e     \n" +
-                " e     \n" +
-                " o     \n" +
-                "       \n" +
-                "■■■■■■■\n");
-
-        game3.getJoystick().down();
-        game2.getJoystick().down();
-        game1.getJoystick().down();
-
-        field.tick();
-
-        asrtFl1("■■■■■■■\n" +
-                "       \n" +
-                "       \n" +
-                " e     \n" +
-                " e     \n" +
-                " o     \n" +
-                "■■■■■■■\n");
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
     }
 
 }
