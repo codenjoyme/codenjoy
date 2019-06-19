@@ -83,10 +83,6 @@ public class MultiplayerTest {
         game3.newGame();
     }
 
-    private void dice(int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
-    }
-
     private void asrtFl1(String expected) {
         assertEquals(expected, game1.getBoardAsString());
     }

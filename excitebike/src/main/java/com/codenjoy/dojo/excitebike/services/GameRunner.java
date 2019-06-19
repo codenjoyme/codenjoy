@@ -72,12 +72,6 @@ public class GameRunner extends AbstractGameType implements GameType {
         }
     }
 
-    private void appendBikeAtStartPoint(StringBuilder sb) {
-        sb.append(GameElementType.NONE);
-        sb.append(BikeType.BIKE);
-        appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT - 2);
-    }
-
     @Override
     public PlayerScores getPlayerScores(Object score) {
         return new PlayerScores() {
