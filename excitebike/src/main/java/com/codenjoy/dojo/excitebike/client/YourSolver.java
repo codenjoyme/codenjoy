@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.client;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
@@ -37,25 +38,21 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    private Dice dice;
-    private Board board;
+    private AISolver aiSolver;
 
     public YourSolver(Dice dice) {
-        this.dice = dice;
+        aiSolver = new AISolver(dice);
     }
 
     @Override
     public String get(Board board) {
-        this.board = board;
-        if (board.isGameOver()) return "";
-
-        return Direction.UP.toString();
+        return aiSolver.get(board);
     }
 
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
-                "http://codenjoy.com:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
+                "http://localhost:8080/codenjoy-contest/board/player/pmy8dshjv0o9o1rrjv04?code=7685646871932912113",
                 new YourSolver(new RandomDice()),
                 new Board());
     }
