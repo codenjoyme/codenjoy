@@ -23,11 +23,12 @@ package com.codenjoy.dojo.excitebike.model.items.springboard;
  */
 
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class SpringboardElement extends PointImpl implements State<SpringboardElementType, Player> {
+public class SpringboardElement extends PointImpl implements State<SpringboardElementType, Player>, Shiftable {
     private SpringboardElementType currentSpringboardType;
 
     public SpringboardElement(int x, int y, SpringboardElementType type) {
