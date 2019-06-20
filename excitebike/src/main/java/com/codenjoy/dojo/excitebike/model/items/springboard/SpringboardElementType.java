@@ -10,38 +10,51 @@ package com.codenjoy.dojo.excitebike.model.items.springboard;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.Player;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.printer.CharElements;
 
-public class SpringboardElement extends PointImpl implements State<SpringboardElementType, Player> {
-    private SpringboardElementType currentSpringboardType;
+public enum SpringboardElementType implements CharElements {
 
-    public SpringboardElement(int x, int y, SpringboardElementType type) {
-        super(x, y);
-        this.currentSpringboardType = type;
-    }
+    SPRINGBOARD_DARK('/'),
+    SPRINGBOARD_LIGHT('\\'),
+    SPRINGBOARD_LEFT_DOWN('╚'),     //200
+    SPRINGBOARD_LEFT_UP('╔'),       //201
+    SPRINGBOARD_RIGHT_DOWN('╝'),    //188
+    SPRINGBOARD_RIGHT_UP('╗');      //187
 
-    public SpringboardElement(Point point, SpringboardElementType type) {
-        super(point);
-        this.currentSpringboardType = type;
+    final char ch;
+
+    SpringboardElementType(char ch) {
+        this.ch = ch;
     }
 
     @Override
-    public SpringboardElementType state(Player player, Object... objects) {
-        return currentSpringboardType;
+    public char ch() {
+        return ch;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(ch);
+    }
+
+    public static SpringboardElementType valueOf(char ch) {
+        for (SpringboardElementType el : SpringboardElementType.values()) {
+            if (el.ch == ch) {
+                return el;
+            }
+        }
+        throw new IllegalArgumentException("No such element for " + ch);
     }
 }

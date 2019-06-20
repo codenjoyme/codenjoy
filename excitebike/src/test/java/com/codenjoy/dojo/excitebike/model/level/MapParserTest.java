@@ -22,8 +22,8 @@ package com.codenjoy.dojo.excitebike.model.level;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.Elements;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -51,27 +51,26 @@ public class MapParserTest {
         this.element = element;
     }
 
-    @Parameterized.Parameters(name = "{0}")
+    @Parameterized.Parameters(name = "''{0}''")
     public static Collection data() {
         return Lists.newArrayList(
-                Elements.BORDER,
-                Elements.ACCELERATOR,
-                Elements.INHIBITOR,
-                Elements.OBSTACLE,
-                Elements.LINE_CHANGER_UP,
-                Elements.LINE_CHANGER_DOWN,
-                Elements.ROAD,
-                SpringboardType.DARK,
-                SpringboardType.LIGHT,
-                SpringboardType.LEFT_DOWN,
-                SpringboardType.LEFT_UP,
-                SpringboardType.RIGHT_DOWN,
-                SpringboardType.RIGHT_UP
+                GameElementType.BORDER,
+                GameElementType.ACCELERATOR,
+                GameElementType.INHIBITOR,
+                GameElementType.OBSTACLE,
+                GameElementType.LINE_CHANGER_UP,
+                GameElementType.LINE_CHANGER_DOWN,
+                SpringboardElementType.SPRINGBOARD_DARK,
+                SpringboardElementType.SPRINGBOARD_LIGHT,
+                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
+                SpringboardElementType.SPRINGBOARD_LEFT_UP,
+                SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
+                SpringboardElementType.SPRINGBOARD_RIGHT_UP
         );
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -101,7 +100,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithElementsOfCertainTypeOnly() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithAcceleratorsOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch() +
@@ -144,7 +143,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -169,7 +168,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithElementsOfCertainTypeOnly() {
+    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithAcceleratorsOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
@@ -202,31 +201,29 @@ public class MapParserTest {
     }
 
     private <T extends PointImpl> List<T> callTestMethod(MapParserImpl mapParser) {
-        if (element == Elements.BORDER) {
+        if (element == GameElementType.BORDER) {
             return (List<T>) mapParser.getBorders();
-        } else if (element == Elements.ACCELERATOR) {
+        } else if (element == GameElementType.ACCELERATOR) {
             return (List<T>) mapParser.getAccelerators();
-        } else if (element == Elements.INHIBITOR) {
+        } else if (element == GameElementType.INHIBITOR) {
             return (List<T>) mapParser.getInhibitors();
-        } else if (element == Elements.OBSTACLE) {
+        } else if (element == GameElementType.OBSTACLE) {
             return (List<T>) mapParser.getObstacles();
-        } else if (element == Elements.LINE_CHANGER_UP) {
+        } else if (element == GameElementType.LINE_CHANGER_UP) {
             return (List<T>) mapParser.getLineUpChangers();
-        } else if (element == Elements.LINE_CHANGER_DOWN) {
+        } else if (element == GameElementType.LINE_CHANGER_DOWN) {
             return (List<T>) mapParser.getLineDownChangers();
-        } else if (element == Elements.ROAD) {
-            return (List<T>) mapParser.getRoadElements();
-        } else if (element == SpringboardType.DARK) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_DARK) {
             return (List<T>) mapParser.getSpringboardDarkElements();
-        } else if (element == SpringboardType.LEFT_DOWN) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {
             return (List<T>) mapParser.getSpringboardLeftDownElements();
-        } else if (element == SpringboardType.LEFT_UP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_UP) {
             return (List<T>) mapParser.getSpringboardLeftUpElements();
-        } else if (element == SpringboardType.LIGHT) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LIGHT) {
             return (List<T>) mapParser.getSpringboardLightElements();
-        } else if (element == SpringboardType.RIGHT_DOWN) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_DOWN) {
             return (List<T>) mapParser.getSpringboardRightDownElements();
-        } else if (element == SpringboardType.RIGHT_UP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
             return (List<T>) mapParser.getSpringboardRightUpElements();
         }
         return null;

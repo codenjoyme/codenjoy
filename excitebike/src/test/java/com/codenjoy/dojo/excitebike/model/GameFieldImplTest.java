@@ -4,7 +4,7 @@ package com.codenjoy.dojo.excitebike.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,401 +22,218 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-
-import com.codenjoy.dojo.excitebike.model.items.Hero;
-import com.codenjoy.dojo.excitebike.services.Events;
-import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
+import com.codenjoy.dojo.excitebike.model.items.Accelerator;
+import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
+import com.codenjoy.dojo.excitebike.model.items.LineChanger;
+import com.codenjoy.dojo.excitebike.model.items.Obstacle;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyInt;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@Ignore
 public class GameFieldImplTest {
-
-    private GameFieldImpl game;
-    private Hero hero;
-    private Dice dice;
-    private EventListener listener;
-    private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    GameField gameField;
+    MapParser mapParser;
+    Dice dice;
 
     @Before
-    public void setup() {
+    public void init() {
+        mapParser = mock(MapParser.class);
         dice = mock(Dice.class);
     }
 
-    private void dice(int...ints) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
-            when = when.thenReturn(i);
-        }
-    }
-
-    private void givenFl(String board, int fieldHeight) {
-        MapParserImpl level = new MapParserImpl(board, fieldHeight);
-        Hero hero = level.getHeroes().get(0);
-
-        game = new GameFieldImpl(level, dice);
-        listener = mock(EventListener.class);
-        player = new Player(listener);
-        game.newGame(player);
-        player.setHero(hero);
-        hero.init(game);
-        this.hero = game.getHeroes().get(0);
-    }
-
-    private void assertE(String expected) {
-        assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.reader(), player).print());
-    }
-
-    // есть карта со мной
     @Test
-    public void shouldFieldAtStart() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void isBorder__shouldReturnTrue__IfYEqualsZero() {
+        //given
+        int x = 1, y = 0;
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
+        //when
+        boolean result = gameField.isBorder(x, y);
 
-    // я ходить
-    @Test
-    public void shouldWalk() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
-
-        hero.left();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.right();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.up();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        hero.down();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // если небыло команды я никуда не иду
-    @Test
-    public void shouldStopWhenNoMoreRightCommand() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
-
-        hero.left();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // я останавливаюсь возле границы
-    @Test
-    public void shouldStopWhenWallRight() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
-
-        hero.right();
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(true));
     }
 
     @Test
-    public void shouldStopWhenWallLeft() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void isBorder__shouldReturnTrue__IfYEqualsMaxPossibleValue() {
+        //given
+        int x = 1, y = 2;
+        when(mapParser.getYSize()).thenReturn(3);
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        hero.left();
-        game.tick();
+        //when
+        boolean result = gameField.isBorder(x, y);
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(true));
     }
 
     @Test
-    public void shouldStopWhenWallUp() {
-        givenFl("☼☼☼☼☼" +
-                "☼ ☼ ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void isBorder__shouldReturnFalse__IfYIsNotZeroAndMaxPossibleValue() {
+        //given
+        int x = 1, y = 1;
+        when(mapParser.getYSize()).thenReturn(3);
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        hero.up();
-        game.tick();
+        //when
+        boolean result = gameField.isBorder(x, y);
 
-        assertE("☼☼☼☼☼" +
-                "☼ ☼ ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(false));
     }
 
     @Test
-    public void shouldStopWhenWallDown() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼ ☼ ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void isInhibitor__shouldReturnTrue() {
+        //given
+        int x = 1, y = 1;
+        Inhibitor inhibitor = new Inhibitor(x, y);
+        when(mapParser.getInhibitors()).thenReturn(Collections.singletonList(inhibitor));
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        hero.down();
-        game.tick();
+        //when
+        boolean result = gameField.isInhibitor(x, y);
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼ ☼ ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(true));
     }
 
-    // я могу оставить бомбу
     @Test
-    public void shouldMakeBomb() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void isAccelerator__shouldReturnTrue() {
+        //given
+        int x = 1, y = 1;
+        Accelerator accelerator = new Accelerator(x, y);
+        when(mapParser.getAccelerators()).thenReturn(Collections.singletonList(accelerator));
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        hero.act();
-        hero.down();
-        game.tick();
+        //when
+        boolean result = gameField.isAccelerator(x, y);
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ ☺ ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(true));
     }
 
-    // на бомбе я взрываюсь
     @Test
-    public void shouldDieOnBomb() {
-        shouldMakeBomb();
+    public void isObstacle__shouldReturnTrue() {
+        //given
+        int x = 1, y = 1;
+        Obstacle obstacle = new Obstacle(x, y);
+        when(mapParser.getObstacles()).thenReturn(Collections.singletonList(obstacle));
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        assertTrue(hero.isAlive());
+        //when
+        boolean result = gameField.isObstacle(x, y);
 
-        hero.up();
-        game.tick();
-        verify(listener).event(Events.LOOSE);
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ X ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        assertFalse(hero.isAlive());
+        //then
+        assertThat(result, is(true));
     }
 
-    // я могу оставить бомб сколько хочу
     @Test
-    public void shouldMakeBombTwice() {
-        shouldMakeBomb();
+    public void isUpLineChanger__shouldReturnTrue() {
+        //given
+        int x = 1, y = 1;
+        LineChanger lineChanger = new LineChanger(x, y, true);
+        when(mapParser.getLineUpChangers()).thenReturn(Collections.singletonList(lineChanger));
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        hero.act();
-        hero.right();
-        game.tick();
+        //when
+        boolean result = gameField.isUpLineChanger(x, y);
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ x☺☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(true));
     }
 
-    // я могу собирать золото и получать очки
-    // новое золото появится в рендомном месте
     @Test
-    public void shouldGetGold() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺$☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void isDownLineChanger__shouldReturnTrue() {
+        //given
+        int x = 1, y = 1;
+        LineChanger lineChanger = new LineChanger(x, y, false);
+        when(mapParser.getLineDownChangers()).thenReturn(Collections.singletonList(lineChanger));
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        dice(1, 3);
-        hero.right();
-        game.tick();
-        verify(listener).event(Events.WIN);
+        //when
+        boolean result = gameField.isDownLineChanger(x, y);
 
-        assertE("☼☼☼☼☼" +
-                "☼$  ☼" +
-                "☼  ☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(result, is(true));
     }
 
-    // выполнения команд left + act не зависят от порядка - если они сделаны в одном тике, то будет дырка слева без перемещения
     @Test
-    public void shouldMakeBomb2() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void getEnemyBike__shouldReturnSingletonListOfGivenBike() {
+        //given
+        gameField = new GameFieldImpl(mapParser, dice);
+        Player player = new Player(mock(EventListener.class));
+        gameField.newGame(player);
 
-        hero.down();
-        hero.act();
-//        bike.down();
-        game.tick();
+        //when
+        Optional<Bike> enemyBike = gameField.getEnemyBike(player.getHero().getX(), player.getHero().getY());
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ ☺ ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(enemyBike.isPresent(), is(true));
     }
 
-    // проверить, что если новому обекту не где появится то программа не зависает - там бесконечный цикл потенциальный есть
-    @Test(timeout = 1000)
-    public void shouldNoDeadLoopWhenNewObjectCreation() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺$☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
-
-        dice(2, 2);
-        hero.right();
-        game.tick();
-        verify(listener).event(Events.WIN);
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ $☺☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-    }
-
-    // я не могу ставить две бомбы на одной клетке
     @Test
-    public void shouldMakeOnlyOneBomb() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼",
-                5);
+    public void tick__shouldShiftAllShiftableElementsAndRemoveTheseAreOutOfBound() {
+        //given
+        Accelerator accelerator = new Accelerator(0, 1);
+        Inhibitor inhibitor = new Inhibitor(1, 1);
+        Obstacle obstacle = new Obstacle(2, 1);
+        LineChanger upperLineChanger = new LineChanger(0, 2, true);
+        LineChanger lowerLineChanger = new LineChanger(1, 2, false);
 
-        hero.act();
-        game.tick();
+        when(mapParser.getAccelerators()).thenReturn(new ArrayList<>(Collections.singletonList(accelerator)));
+        when(mapParser.getInhibitors()).thenReturn(new ArrayList<>(Collections.singletonList(inhibitor)));
+        when(mapParser.getObstacles()).thenReturn(new ArrayList<>(Collections.singletonList(obstacle)));
+        when(mapParser.getLineUpChangers()).thenReturn(new ArrayList<>(Collections.singletonList(upperLineChanger)));
+        when(mapParser.getLineDownChangers()).thenReturn(new ArrayList<>(Collections.singletonList(lowerLineChanger)));
 
-        hero.act();
-        hero.down();
-        game.tick();
+        gameField = new GameFieldImpl(mapParser, dice);
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ x ☼" +
-                "☼ ☺ ☼" +
-                "☼☼☼☼☼");
+        when(dice.next(anyInt())).thenReturn(5);
 
-        dice(1, 2);
-        hero.up();
-        game.tick();
+        //when
+        gameField.tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ X ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
-
-        game.newGame(player);
-        game.tick();
-
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        //then
+        assertThat(accelerator.getX(), is(-1));
+        assertThat(gameField.isAccelerator(accelerator.getX(), accelerator.getY()), is(false));
+        assertThat(inhibitor.getX(), is(0));
+        assertThat(obstacle.getX(), is(1));
+        assertThat(upperLineChanger.getX(), is(-1));
+        assertThat(gameField.isUpLineChanger(upperLineChanger.getX(), upperLineChanger.getY()), is(false));
+        assertThat(lowerLineChanger.getX(), is(0));
     }
+
+    @Test
+    public void tick__shouldGenerateAccelerator() {
+        //given
+        int xSize = 5;
+        int generateChance = 1; //if less than 5 then element will be generated
+        int nonBorderElementOrdinal = 0;
+        int nonBorderLaneNumber = 0;
+
+        gameField = new GameFieldImpl(mapParser, dice);
+        when(mapParser.getXSize()).thenReturn(xSize);
+        when(dice.next(anyInt())).thenReturn(generateChance, nonBorderElementOrdinal, nonBorderLaneNumber);
+
+        //when
+        gameField.tick();
+
+        //then
+        assertThat(gameField.isAccelerator(xSize-1, 1), is(true));
+    }
+
+
 }

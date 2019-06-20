@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,39 +23,38 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.Hero;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки.
- * Тут же ивенты передабтся лиснеру фреймворка.
- */
-public class Player extends GamePlayer<Hero, GameField> {
+public class Player extends GamePlayer<Bike, GameField> {
+    private static final int BIKE_START_X = 1;
 
-    private Hero hero;
+    private Bike bike;
 
     public Player(EventListener listener) {
         super(listener);
     }
 
-    public Hero getHero() {
-        return hero;
+    public Bike getHero() {
+        return bike;
     }
 
-    void setHero(Hero hero) {
-        this.hero = hero;
+    void setHero(Bike bike) {
+        this.bike = bike;
     }
 
     @Override
     public void newHero(GameField gameField) {
-        hero = new Hero(gameField.getNewPlayerPosition());
-        hero.init(gameField);
+        //TODO correct coordinates TASK - 27-player-spawn
+        bike = new Bike(new PointImpl(BIKE_START_X, gameField.getPlayersNumber()));
+        bike.init(gameField);
     }
 
     @Override
     public boolean isAlive() {
-        return hero != null && hero.isAlive();
+        return bike != null && bike.isAlive();
     }
 
 }

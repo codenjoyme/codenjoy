@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Obstacle extends PointImpl implements State<Elements, Player> {
+public class Obstacle extends PointImpl implements State<GameElementType, Player>, Shiftable {
 
     public Obstacle(int x, int y) {
         super(x, y);
@@ -38,7 +38,7 @@ public class Obstacle extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player, Object... objects) {
-        return Elements.OBSTACLE;
+    public GameElementType state(Player player, Object... objects) {
+        return GameElementType.OBSTACLE;
     }
 }

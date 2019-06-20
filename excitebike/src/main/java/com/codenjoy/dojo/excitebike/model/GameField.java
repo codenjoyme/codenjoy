@@ -23,23 +23,27 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 
-/**
- * Так случилось что доска знает про героя, а герой про доску.
- * И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
+import java.util.Optional;
+
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
 
-    boolean isBarrier(int x, int y);
+    int size();
 
-    Point getNewPlayerPosition();
+    boolean isBorder(int x, int y);
 
-    boolean isFree(int x, int y);
+    boolean isInhibitor(int x, int y);
 
-    boolean isBomb(int x, int y);
+    boolean isAccelerator(int x, int y);
 
-    void setBomb(int x, int y);
+    boolean isObstacle(int x, int y);
 
-    void removeBomb(int x, int y);
+    boolean isUpLineChanger(int x, int y);
+
+    boolean isDownLineChanger(int x, int y);
+
+    Optional<Bike> getEnemyBike(int x, int y);
+
+    int getPlayersNumber();
 }

@@ -22,16 +22,11 @@ package com.codenjoy.dojo.excitebike.services.parse;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.Border;
-import com.codenjoy.dojo.excitebike.model.items.Elements;
-import com.codenjoy.dojo.excitebike.model.items.Hero;
-import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
-import com.codenjoy.dojo.excitebike.model.items.LineChanger;
-import com.codenjoy.dojo.excitebike.model.items.Obstacle;
-import com.codenjoy.dojo.excitebike.model.items.RoadElement;
+import com.codenjoy.dojo.excitebike.model.items.*;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -46,6 +41,11 @@ public class MapParserImpl implements MapParser {
 
     private String map;
     private int xSize;
+
+    public MapParserImpl(String map) {
+        this.xSize = (int) Math.sqrt(map.length());
+        this.map = map;
+    }
 
     public MapParserImpl(String map, int xSize) {
         this.map = map;
@@ -63,74 +63,68 @@ public class MapParserImpl implements MapParser {
     }
 
     @Override
-    public List<Hero> getHeroes() {
-        //TODO adjust after Bike class realization
-        return parseAndConvertElements(Hero::new, null);
+    public List<Bike> getBikes() {
+        return parseAndConvertElements(Bike::new, BikeType.BIKE);
     }
 
     @Override
     public List<Accelerator> getAccelerators() {
-        return parseAndConvertElements(Accelerator::new, Elements.ACCELERATOR);
+        return parseAndConvertElements(Accelerator::new, GameElementType.ACCELERATOR);
     }
 
     @Override
     public List<Border> getBorders() {
-        return parseAndConvertElements(Border::new, Elements.BORDER);
+        return parseAndConvertElements(Border::new, GameElementType.BORDER);
     }
 
     @Override
     public List<Inhibitor> getInhibitors() {
-        return parseAndConvertElements(Inhibitor::new, Elements.INHIBITOR);
+        return parseAndConvertElements(Inhibitor::new, GameElementType.INHIBITOR);
     }
 
     @Override
     public List<LineChanger> getLineUpChangers() {
-        return parseAndConvertElements(point -> new LineChanger(point, true), Elements.LINE_CHANGER_UP);
+        return parseAndConvertElements(point -> new LineChanger(point, true), GameElementType.LINE_CHANGER_UP);
     }
 
     @Override
     public List<LineChanger> getLineDownChangers() {
-        return parseAndConvertElements(point -> new LineChanger(point, false), Elements.LINE_CHANGER_DOWN);
+        return parseAndConvertElements(point -> new LineChanger(point, false), GameElementType.LINE_CHANGER_DOWN);
     }
 
     @Override
     public List<Obstacle> getObstacles() {
-        return parseAndConvertElements(Obstacle::new, Elements.OBSTACLE);
-    }
-
-    @Override
-    public List<RoadElement> getRoadElements() {
-        return parseAndConvertElements(RoadElement::new, Elements.ROAD);
+        return parseAndConvertElements(Obstacle::new, GameElementType.OBSTACLE);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardDarkElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardType.DARK), SpringboardType.DARK);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_DARK), SpringboardElementType.SPRINGBOARD_DARK);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardLightElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardType.LIGHT), SpringboardType.LIGHT);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LIGHT), SpringboardElementType.SPRINGBOARD_LIGHT);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardLeftDownElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardType.LEFT_DOWN), SpringboardType.LEFT_DOWN);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LEFT_DOWN), SpringboardElementType.SPRINGBOARD_LEFT_DOWN);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardLeftUpElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardType.LEFT_UP), SpringboardType.LEFT_UP);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LEFT_UP), SpringboardElementType.SPRINGBOARD_LEFT_UP);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardRightDownElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardType.RIGHT_DOWN), SpringboardType.RIGHT_DOWN);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT_DOWN), SpringboardElementType.SPRINGBOARD_RIGHT_DOWN);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardRightUpElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardType.RIGHT_UP), SpringboardType.RIGHT_UP);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT_UP), SpringboardElementType.SPRINGBOARD_RIGHT_UP);
     }
 
     private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements elementType) {

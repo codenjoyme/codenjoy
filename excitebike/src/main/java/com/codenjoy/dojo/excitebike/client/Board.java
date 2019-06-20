@@ -24,7 +24,7 @@ package com.codenjoy.dojo.excitebike.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.excitebike.model.items.Elements;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.services.Point;
 
 /**
@@ -32,26 +32,26 @@ import com.codenjoy.dojo.services.Point;
  * Содержит ряд унаследованных методов {@see AbstractBoard},
  * но ты можешь добавить сюда любые свои методы на их основе.
  */
-public class Board extends AbstractBoard<Elements> {
+public class Board extends AbstractBoard<GameElementType> {
 
     @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
+    public GameElementType valueOf(char ch) {
+        return GameElementType.valueOf(ch);
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return false;//isAt(x, y, Elements.WALL, Elements.OTHER_HERO);
+        return false;//isAt(x, y, GameElementType.WALL, GameElementType.OTHER_HERO);
     }
 
     public Point getMe() {
-        return null;//get(Elements.DEAD_HERO, Elements.HERO).get(0);
+        return null;//get(GameElementType.DEAD_HERO, GameElementType.HERO).get(0);
     }
 
     public boolean isGameOver() {
-        return false;//!get(Elements.DEAD_HERO).isEmpty();
+        return false;//!get(GameElementType.DEAD_HERO).isEmpty();
     }
 
     public boolean isBombAt(int x, int y) {
-        return false;//isAt(x, y, Elements.BOMB);
+        return false;//isAt(x, y, GameElementType.BOMB);
     }
 }

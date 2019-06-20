@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.model.items.bike;
+package com.codenjoy.dojo.excitebike.model.items;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,21 +22,23 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
  * #L%
  */
 
+
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum BikeType implements CharElements {
-    BIKE('o'),
-    BIKE_FALLEN('~'),
-    BIKE_INCLINE_LEFT('('),
-    BIKE_INCLINE_RIGHT(')'),
-    OTHER_BIKE('e'),
-    OTHER_BIKE_FALLEN('_'),
-    OTHER_BIKE_INCLINE_LEFT('z'),
-    OTHER_BIKE_INCLINE_RIGHT('x');
+public enum GameElementType implements CharElements {
+
+    //ASCII code of char in comment
+    NONE(' '),  //space
+    BORDER('■'),    //254
+    ACCELERATOR('»'),   //175
+    INHIBITOR('▒'),    //177
+    OBSTACLE('█'),     //178
+    LINE_CHANGER_UP('▲'),  //30
+    LINE_CHANGER_DOWN('▼');  //31
 
     final char ch;
 
-    BikeType(char ch) {
+    GameElementType(char ch) {
         this.ch = ch;
     }
 
@@ -50,8 +52,8 @@ public enum BikeType implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static BikeType valueOf(char ch) {
-        for (BikeType el : BikeType.values()) {
+    public static GameElementType valueOf(char ch) {
+        for (GameElementType el : GameElementType.values()) {
             if (el.ch == ch) {
                 return el;
             }
