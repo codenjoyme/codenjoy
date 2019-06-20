@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model.level;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,13 +27,16 @@ import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementTy
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,26 +54,19 @@ public class MapParserTest {
         this.element = element;
     }
 
-    @Parameterized.Parameters(name = "''{0}''")
+    @Parameterized.Parameters(name = "{0}")
     public static Collection data() {
-        return Lists.newArrayList(
-                GameElementType.BORDER,
-                GameElementType.ACCELERATOR,
-                GameElementType.INHIBITOR,
-                GameElementType.OBSTACLE,
-                GameElementType.LINE_CHANGER_UP,
-                GameElementType.LINE_CHANGER_DOWN,
-                SpringboardElementType.SPRINGBOARD_DARK,
-                SpringboardElementType.SPRINGBOARD_LIGHT,
-                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
-                SpringboardElementType.SPRINGBOARD_LEFT_UP,
-                SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
-                SpringboardElementType.SPRINGBOARD_RIGHT_UP
-        );
+        return Stream.of(
+                Arrays.stream(GameElementType.values()),
+                Arrays.stream(SpringboardElementType.values())
+        )
+                .flatMap(Function.identity())
+                .filter(e -> e != GameElementType.NONE)
+                .collect(Collectors.toList());
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -100,7 +96,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsSquareWithAcceleratorsOnly() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsSquareWithElementsOfCertainTypeOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch() +
@@ -143,7 +139,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithDifferentObjects() {
         //given
         String map = "     " +
                 "   " + element.ch() + " " +
@@ -168,7 +164,7 @@ public class MapParserTest {
     }
 
     @Test
-    public void getPointImplMethods__shouldReturnAllAcceleratorsWithCorrectCoordinates__ifGivenMapIsRectangleWithAcceleratorsOnly() {
+    public void getPointImplMethods__shouldReturnAllElementsOfCertainTypeWithCorrectCoordinates__ifGivenMapIsRectangleWithElementsOfCertainTypeOnly() {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
