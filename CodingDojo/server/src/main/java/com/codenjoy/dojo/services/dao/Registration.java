@@ -43,6 +43,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
+import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+
 public class Registration {
 
     public static final int ADMIN_USER_ID = 0;
@@ -64,9 +67,11 @@ public class Registration {
                 "data varchar(255)," +
                 "roles varchar(255));");
         if (initAdminUser) {
-            initialScripts.add("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
-                    " select '" + ADMIN_USER_ID + "', '" + adminEmail + "', 'admin', 1,  '" + adminPassword + "', '000000000000', '{}', 'ROLE_ADMIN, ROLE_USER'" +
-                    " where not exists (select 1 from users where id = '" + ADMIN_USER_ID + "')");
+            initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
+                    " select '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s'" +
+                    " where not exists (select 1 from users where id = '%s')",
+                    ADMIN_USER_ID, adminEmail, "admin", "1", adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,
+                    ADMIN_USER_ID));
         }
         pool = factory.create(initialScripts.toArray(new String[initialScripts.size()]));
     }
@@ -335,7 +340,7 @@ public class Registration {
     }
 
     public void removeAll() {
-        pool.update("DELETE FROM users;");
+        pool.update("DELETE FROM users WHERE roles NOT LIKE '%" + ROLE_ADMIN + "%';");
     }
 
 }

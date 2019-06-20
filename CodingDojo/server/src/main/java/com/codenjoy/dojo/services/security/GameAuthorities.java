@@ -31,9 +31,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
+import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+
 public enum GameAuthorities {
-    ADMIN("ROLE_ADMIN", "ROLE_USER"),
-    USER("ROLE_USER");
+
+    ADMIN(ROLE_ADMIN, ROLE_USER),
+    USER(ROLE_USER);
 
     GameAuthorities(String... roles) {
         this.roles = Stream.of(roles).collect(Collectors.toSet());

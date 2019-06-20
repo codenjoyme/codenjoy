@@ -50,9 +50,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+
 @Controller
 @RequestMapping(AdminController.URI)
-@Secured("ROLE_ADMIN")
+@Secured(GameAuthoritiesConstants.ROLE_ADMIN)
 @Slf4j
 @RequiredArgsConstructor
 public class AdminController {

@@ -36,7 +36,9 @@ import java.util.Collections;
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.TestUtils.assertUsersEqual;
+import static com.codenjoy.dojo.services.security.GameAuthorities.ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthorities.USER;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 
 public class RegistrationTest {
@@ -322,11 +324,31 @@ public class RegistrationTest {
 
         assertUsersEqual(expectedUser1, service.getUserByCode(code1), "pass1", PASSWORD_ENCODER);
         assertUsersEqual(expectedUser2, service.getUserByCode(code2), "pass2", PASSWORD_ENCODER);
+
         // when
         service.removeAll();
 
         // then
         assertTrue(service.getUsers().isEmpty());
+    }
+
+    @Test
+    public void shouldRemoveAllUsers_exceptAdmins() {
+        // given
+        String code1 = service.register("user1", "email1", "name1", "pass1", "someData1", USER.roles()).getCode();
+        String code2 = service.register("user2", "email2", "name2", "pass2", "someData2", USER.roles()).getCode();
+        String code3 = service.register("admin3", "email3", "name3", "pass3", "someData3", ADMIN.roles()).getCode();
+        String code4 = service.register("admin4", "email4", "name4", "pass4", "someData4", ADMIN.roles()).getCode();
+
+        // when
+        service.removeAll();
+
+        // then
+        assertEquals("[admin3, admin4]", service.getUsers()
+                            .stream()
+                            .map(Registration.User::getName)
+                            .collect(toList())
+                        .toString());
     }
 
     @Test
