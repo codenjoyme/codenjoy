@@ -37,7 +37,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 
-//TODO remove player when bike is not alive and cross last possible x TASK - 31-make-correct-bike-lose-and-game-finish-logic
 public class GameFieldImpl implements GameField {
 
     private Dice dice;
