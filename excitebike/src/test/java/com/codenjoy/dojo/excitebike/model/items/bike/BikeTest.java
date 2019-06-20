@@ -24,6 +24,7 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -88,10 +89,10 @@ public class BikeTest {
     }
 
     @Test
-    public void tick__shouldNotMoveBike_ifUpperPositionIsOtherBike() {
+    public void tick__shouldMoveBike_ifUpperPositionIsOtherBike() {
         //given
         when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
-        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(0,0)));
+        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(5,6)));
         bike.up();
 
         //when
@@ -99,7 +100,7 @@ public class BikeTest {
 
         //then
         assertEquals(5, bike.getX());
-        assertEquals(5, bike.getY());
+        assertEquals(6, bike.getY());
     }
 
     @Test
@@ -133,18 +134,18 @@ public class BikeTest {
     }
 
     @Test
-    public void tick__shouldNotMoveBike_ifLowerPositionIsOtherBike() {
+    public void tick__shouldMoveBike_ifLowerPositionIsOtherBike() {
         //given
         when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
-        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(0,0)));
-        bike.up();
+        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(5,4)));
+        bike.down();
 
         //when
         bike.tick();
 
         //then
         assertEquals(5, bike.getX());
-        assertEquals(5, bike.getY());
+        assertEquals(4, bike.getY());
     }
 
     @Test
@@ -245,18 +246,18 @@ public class BikeTest {
     }
 
     @Test
-    public void tick__shouldNotMoveBike_ifBikeTakeUpLineChangerAndUpperPositionIsOtherBike() {
+    public void tick__shouldMoveBike_ifBikeTakeUpLineChangerAndUpperPositionIsOtherBike() {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
         when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
-        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(0,0)));
+        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(5,6)));
 
         //when
         bike.tick();
 
         //then
         assertEquals(5, bike.getX());
-        assertEquals(5, bike.getY());
+        assertEquals(6, bike.getY());
     }
 
     @Test
@@ -290,18 +291,56 @@ public class BikeTest {
     }
 
     @Test
-    public void tick__shouldNotMoveBike_ifBikeTakeDownLineChangerAndLowerPositionIsOtherBike() {
+    public void tick__shouldMoveBike_ifBikeTakeDownLineChangerAndLowerPositionIsOtherBike() {
         //given
         when(gameField.isDownLineChanger(anyInt(), anyInt())).thenReturn(true);
         when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
-        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(0,0)));
+        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(new Bike(5,6)));
 
         //when
         bike.tick();
 
         //then
         assertEquals(5, bike.getX());
+        assertEquals(6, bike.getY());
+    }
+
+    @Test
+    public void tick__shouldCrushBike_ifBikeCollideOtherCrushedBike() {
+        //given
+        Bike enemyBike = new Bike(6,5);
+        enemyBike.crush();
+        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(enemyBike));
+
+        //when
+        bike.tick();
+
+        //then
+        assertFalse(bike.isAlive());
+        assertEquals(5, bike.getX());
         assertEquals(5, bike.getY());
+        assertEquals(6, enemyBike.getX());
+        assertEquals(5, enemyBike.getY());
+    }
+
+    @Test
+    public void tick__shouldCrushOtherBike_ifBikeCollideOtherBikeAndOtherBikeCantChangeLine() {
+        //given
+        Bike enemyBike = new Bike(5,4);
+        when(gameField.getEnemyBike(anyInt(), anyInt())).thenReturn(Optional.of(enemyBike));
+        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(true);
+
+        //when
+        bike.down();
+        bike.tick();
+        enemyBike.tick();
+
+        //then
+        assertFalse(enemyBike.isAlive());
+        assertEquals(5, bike.getX());
+        assertEquals(4, bike.getY());
+        assertEquals(4, enemyBike.getX());
+        assertEquals(4, enemyBike.getY());
     }
 
 }
