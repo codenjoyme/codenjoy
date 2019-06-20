@@ -206,13 +206,4 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         return type != BikeType.BIKE_FALLEN;
     }
 
-    @Override
-    public String toString() {
-        return "Bike{" +
-                "direction=" + direction +
-                ", type=" + type +
-                ", x=" + x +
-                ", y=" + y +
-                '}';
-    }
 }
