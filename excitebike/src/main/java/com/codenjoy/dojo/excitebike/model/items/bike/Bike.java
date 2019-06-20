@@ -111,7 +111,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 tryToMove(newX, newY);
             }
             interactWithOtherElements(x, y);
-        } else {
+        } else if (x >= 0) {
             shift();
         }
     }
@@ -204,5 +204,15 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     public boolean isAlive() {
         return type != BikeType.BIKE_FALLEN;
+    }
+
+    @Override
+    public String toString() {
+        return "Bike{" +
+                "direction=" + direction +
+                ", type=" + type +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
