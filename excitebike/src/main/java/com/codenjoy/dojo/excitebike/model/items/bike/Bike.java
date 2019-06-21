@@ -114,7 +114,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                     tryToMove(newX, newY);
                 }
                 interactWithOtherElements(x, y);
-            } else {
+            } else if (x >= 0) {
                 shift();
             }
         }
