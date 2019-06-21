@@ -63,6 +63,14 @@ game.onBoardAllPageLoad = function() {
 
             $(document.body).show();
         });
-}
+}*/
 
-*/
+window.onload = function() {
+    let canvasElement = document.getElementsByTagName('canvas')[0];
+    let tribuneDiv = document.createElement('div');
+    tribuneDiv.style.background = "url("+document.location.origin+game.contextPath+"/resources/img/tribune.png) center repeat-x"
+    tribuneDiv.style.backgroundSize = "auto 100%"
+    tribuneDiv.style.height = canvasElement.height/3+"px";
+    canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
+     $(document.body).show();
+}
