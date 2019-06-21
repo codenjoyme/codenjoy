@@ -24,7 +24,9 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
@@ -45,5 +47,7 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     Optional<Bike> getEnemyBike(int x, int y);
 
-    int getPlayersNumber();
+    List<Player> getPlayers();
+
+    Point getFreeNewBikePosition();
 }

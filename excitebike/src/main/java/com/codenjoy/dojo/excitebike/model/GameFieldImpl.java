@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.GameRunner;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -77,7 +78,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isBorder(int x, int y) {
-        return y < 1 || y > mapParser.getYSize()-2;
+        return y < 1 || y > mapParser.getYSize() - 2;
     }
 
     @Override
@@ -97,12 +98,12 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isUpLineChanger(int x, int y) {
-        return allShiftableElements.get(GameElementType.LINE_CHANGER_UP).contains(pt(x,y));
+        return allShiftableElements.get(GameElementType.LINE_CHANGER_UP).contains(pt(x, y));
     }
 
     @Override
     public boolean isDownLineChanger(int x, int y) {
-        return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x,y));
+        return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x, y));
     }
 
     @Override
@@ -111,8 +112,20 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public int getPlayersNumber() {
-        return players.size();
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    @Override
+    public Point getFreeNewBikePosition() {
+        final int X = 1;
+        final int step = 3;
+        int dx = (int) Math.ceil(GameRunner.FIELD_HEIGHT - 2 / players.size());
+        int x = X + step * dx;
+
+//        getBikes().stream().filter(bike -> bike.getX())
+
+        return null;
     }
 
     public List<Bike> getBikes() {
