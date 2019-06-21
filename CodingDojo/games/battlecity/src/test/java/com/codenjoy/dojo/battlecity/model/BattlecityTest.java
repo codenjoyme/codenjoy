@@ -58,50 +58,50 @@ public class BattlecityTest {
         ticksPerBullets = 1;
     }
 
-    private void givenGame(Tank tank, Construction... constructions) {
+    private void givenGame(Pacman pacman, Construction... constructions) {
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions));
-        initPlayer(game, tank);
-        this.hero = tank;
+        initPlayer(game, pacman);
+        this.hero = pacman;
     }
 
-    private void givenGame(Tank tank, Border... walls) {
+    private void givenGame(Pacman pacman, Border... walls) {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders);
-        initPlayer(game, tank);
-        this.hero = tank;
+        initPlayer(game, pacman);
+        this.hero = pacman;
     }
 
-    private void givenGameWithAI(Tank tank, Tank... aiTanks) {
+    private void givenGameWithAI(Pacman pacman, Pacman... aiTanks) {
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
-        initPlayer(game, tank);
-        this.hero = tank;
+        initPlayer(game, pacman);
+        this.hero = pacman;
     }
 
-    private Player initPlayer(Battlecity game, Tank tank) {
+    private Player initPlayer(Battlecity game, Pacman pacman) {
         Player player = mock(Player.class);
-        when(player.getHero()).thenReturn(tank);
+        when(player.getHero()).thenReturn(pacman);
         players.add(player);
-        tank.init(game);
+        pacman.init(game);
         game.newGame(player);
         return player;
     }
 
-    private void givenGameWithTanks(Tank... tanks) {
+    private void givenGameWithTanks(Pacman... pacmen) {
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}));
-        for (Tank tank : tanks) {
-            initPlayer(game, tank);
+        for (Pacman pacman : pacmen) {
+            initPlayer(game, pacman);
         }
-        this.hero = tanks[0];
+        this.hero = pacmen[0];
     }
 
-    public static Tank tank(int x, int y, Direction direction, int ticksPerBullets) {
+    public static Pacman tank(int x, int y, Direction direction, int ticksPerBullets) {
         Dice dice = getDice(x, y);
-        return new Tank(x, y, direction, dice, ticksPerBullets);
+        return new Pacman(x, y, direction, dice, ticksPerBullets, true);
     }
 
-    public Tank tank(int x, int y, Direction direction) {
+    public Pacman tank(int x, int y, Direction direction) {
         return tank(x, y, direction, ticksPerBullets);
     }
 
@@ -115,8 +115,8 @@ public class BattlecityTest {
         givenGame(tank(1, 1, Direction.UP), new Construction(x, y));
     }
 
-    public void givenGameWithConstruction(Tank tank, int x, int y) {
-        givenGame(tank, new Construction(x, y));
+    public void givenGameWithConstruction(Pacman pacman, int x, int y) {
+        givenGame(pacman, new Construction(x, y));
     }
 
     public void givenGameWithTankAt(int x, int y) {
@@ -242,11 +242,11 @@ public class BattlecityTest {
                 "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        Tank someTank = tank(5, 5, Direction.UP);
-        game.addAI(someTank);
+        Pacman somePacman = tank(5, 5, Direction.UP);
+        game.addAI(somePacman);
 
-        someTank.right();
-        someTank.right();
+        somePacman.right();
+        somePacman.right();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ˃☼\n" +
@@ -256,8 +256,8 @@ public class BattlecityTest {
                 "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        someTank.up();
-        someTank.up();
+        somePacman.up();
+        somePacman.up();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ˄☼\n" +
@@ -274,8 +274,8 @@ public class BattlecityTest {
         hero.act();
         game.tick();
 
-        Tank realTank = (Tank) hero;
-        assertEquals(realTank.getBullets().iterator().next().getDirection(), realTank.getDirection());
+        Pacman realPacman = (Pacman) hero;
+        assertEquals(realPacman.getFoods().iterator().next().getDirection(), realPacman.getDirection());
     }
 
     @Test
@@ -1634,9 +1634,9 @@ public class BattlecityTest {
     // стоять, если спереди другой танк
     @Test
     public void shouldStopWhenBeforeOtherTank() {
-        Tank tank1 = tank(1, 2, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 2, Direction.DOWN);
+        Pacman pacman2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1646,8 +1646,8 @@ public class BattlecityTest {
                 "☼˄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank1.down();
-        tank2.up();
+        pacman1.down();
+        pacman2.up();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -1662,10 +1662,10 @@ public class BattlecityTest {
     // геймовер, если убили не бот-танк
     @Test
     public void shouldDieWhenOtherTankKillMe() {
-        Tank tank1 = tank(1, 1, Direction.UP);
-        Tank tank2 = tank(1, 2, Direction.DOWN);
-        Tank tank3 = tank(1, 3, Direction.DOWN);
-        givenGameWithTanks(tank1, tank2, tank3);
+        Pacman pacman1 = tank(1, 1, Direction.UP);
+        Pacman pacman2 = tank(1, 2, Direction.DOWN);
+        Pacman pacman3 = tank(1, 3, Direction.DOWN);
+        givenGameWithTanks(pacman1, pacman2, pacman3);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1675,11 +1675,11 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertAlive(tank1);
-        assertAlive(tank2);
-        assertAlive(tank3);
+        assertAlive(pacman1);
+        assertAlive(pacman2);
+        assertAlive(pacman3);
 
-        tank1.act();
+        pacman1.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -1690,9 +1690,9 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertAlive(tank1);
-        assertGameOver(tank2);
-        assertAlive(tank3);
+        assertAlive(pacman1);
+        assertGameOver(pacman2);
+        assertAlive(pacman3);
 
         game.tick();
 
@@ -1704,7 +1704,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank3.act();
+        pacman3.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -1715,31 +1715,31 @@ public class BattlecityTest {
                 "☼Ѡ    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertGameOver(tank1);
-        assertGameOver(tank2);
-        assertAlive(tank3);
+        assertGameOver(pacman1);
+        assertGameOver(pacman2);
+        assertAlive(pacman3);
 
         game.tick();
 
-        assertGameOver(tank1);
-        assertGameOver(tank2);
-        assertAlive(tank3);
+        assertGameOver(pacman1);
+        assertGameOver(pacman2);
+        assertAlive(pacman3);
     }
 
-    private void assertGameOver(Tank tank) {
-        assertFalse(tank.isAlive());
+    private void assertGameOver(Pacman pacman) {
+        assertFalse(pacman.isAlive());
     }
 
-    private void assertAlive(Tank tank) {
-        assertTrue(tank.isAlive());
+    private void assertAlive(Pacman pacman) {
+        assertTrue(pacman.isAlive());
     }
 
     // стоять, если меня убили
     @Test
     public void shouldStopWhenKill() {
-        Tank tank1 = tank(1, 2, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 2, Direction.DOWN);
+        Pacman pacman2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1749,8 +1749,8 @@ public class BattlecityTest {
                 "☼˄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank1.act();
-        tank2.left();
+        pacman1.act();
+        pacman2.left();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -1764,9 +1764,9 @@ public class BattlecityTest {
 
     @Test
     public void shouldNoConcurrentException() {
-        Tank tank1 = tank(1, 2, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 2, Direction.DOWN);
+        Pacman pacman2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1776,8 +1776,8 @@ public class BattlecityTest {
                 "☼˄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank2.act();
-        tank1.act();
+        pacman2.act();
+        pacman1.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -1803,9 +1803,9 @@ public class BattlecityTest {
     @Test
     public void shouldDestroyBullet() {
         size = 9;
-        Tank tank1 = tank(1, 7, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 7, Direction.DOWN);
+        Pacman pacman2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
@@ -1817,8 +1817,8 @@ public class BattlecityTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank1.act();
-        tank2.act();
+        pacman1.act();
+        pacman2.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -1859,9 +1859,9 @@ public class BattlecityTest {
     @Test
     public void shouldDestroyBullet2() {
         size = 9;
-        Tank tank1 = tank(1, 6, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 6, Direction.DOWN);
+        Pacman pacman2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -1873,8 +1873,8 @@ public class BattlecityTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank1.act();
-        tank2.act();
+        pacman1.act();
+        pacman2.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -2122,12 +2122,12 @@ public class BattlecityTest {
 
     @Test
     public void shouldTankCanFireIfAtWayEnemyBullet() {
-        Tank tank1 = tank(1, 1, Direction.UP);
-        Tank tank2 = tank(1, 5, Direction.DOWN);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 1, Direction.UP);
+        Pacman pacman2 = tank(1, 5, Direction.DOWN);
+        givenGameWithTanks(pacman1, pacman2);
 
-        tank1.act();
-        tank2.act();
+        pacman1.act();
+        pacman2.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2399,8 +2399,8 @@ public class BattlecityTest {
     @Test
     public void shouldEnemyCanKillTankOnConstruction() {
         givenGame(tank(1, 1, Direction.UP), new Construction(1, 2));
-        Tank tank2 = tank(1, 3, Direction.DOWN);
-        initPlayer(game, tank2);
+        Pacman pacman2 = tank(1, 3, Direction.DOWN);
+        initPlayer(game, pacman2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -2446,7 +2446,7 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank2.act();
+        pacman2.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2462,9 +2462,9 @@ public class BattlecityTest {
     @Test
     public void shouldDieWhenMoveOnBullet() {
         size = 9;
-        Tank tank1 = tank(1, 6, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 6, Direction.DOWN);
+        Pacman pacman2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2476,7 +2476,7 @@ public class BattlecityTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank1.act();
+        pacman1.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -2489,7 +2489,7 @@ public class BattlecityTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank2.up();
+        pacman2.up();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -2506,9 +2506,9 @@ public class BattlecityTest {
     @Test
     public void shouldDieWhenMoveOnBullet2() {
         size = 9;
-        Tank tank1 = tank(1, 6, Direction.DOWN);
-        Tank tank2 = tank(1, 2, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 6, Direction.DOWN);
+        Pacman pacman2 = tank(1, 2, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2520,7 +2520,7 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank1.act();
+        pacman1.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -2533,7 +2533,7 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank2.up();
+        pacman2.up();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -2550,9 +2550,9 @@ public class BattlecityTest {
     @Test
     public void shouldDieWhenMoveOnBullet3() {
         size = 9;
-        Tank tank1 = tank(1, 6, Direction.DOWN);
-        Tank tank2 = tank(1, 3, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        Pacman pacman1 = tank(1, 6, Direction.DOWN);
+        Pacman pacman2 = tank(1, 3, Direction.UP);
+        givenGameWithTanks(pacman1, pacman2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2564,7 +2564,7 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank1.act();
+        pacman1.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -2577,7 +2577,7 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank2.up();
+        pacman2.up();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +

@@ -27,10 +27,10 @@ import com.codenjoy.dojo.services.Joystick;
 
 import java.util.List;
 
-public interface ITanks {
+public interface IPacmen {
     Joystick getJoystick();
 
-    List<Tank> getTanks();
+    List<Pacman> getTanks();
 
     void remove(Player player);
 

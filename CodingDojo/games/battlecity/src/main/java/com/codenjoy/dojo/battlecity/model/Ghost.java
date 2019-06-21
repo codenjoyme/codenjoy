@@ -26,12 +26,12 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 
-public class AITank extends Tank {
+public class Ghost extends Pacman {
 
     private int act;
 
-    public AITank(int x, int y, Dice dice, Direction direction) {
-        super(x, y, direction, dice, 1);
+    public Ghost(int x, int y, Dice dice, Direction direction) {
+        super(x, y, direction, dice, 1, true);
     }
 
     @Override

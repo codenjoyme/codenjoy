@@ -45,13 +45,13 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        return Direction.UP.toString();
+        return Direction.DOWN.toString();
     }
 
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
-                "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
+                "http://localhost:8080/codenjoy-contest/board/player/nlzfhc8embhyqci3tvjf?code=126310728573820408",
                 new YourSolver(new RandomDice()),
                 new Board());
     }

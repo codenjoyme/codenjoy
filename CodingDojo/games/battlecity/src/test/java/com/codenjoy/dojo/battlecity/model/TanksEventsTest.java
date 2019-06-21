@@ -45,11 +45,11 @@ import static org.mockito.Mockito.when;
 
 public class TanksEventsTest {
 
-    private Tank enemy;
+    private Pacman enemy;
     private Battlecity game;
     private EventListener events;
     private Player player;
-    private Tank hero;
+    private Pacman hero;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     @Before
@@ -151,7 +151,7 @@ public class TanksEventsTest {
         EventListener events2 = mock(EventListener.class);
         Player player2 = player(5, 1, events2);
         game.newGame(player2);
-        Tank tank2 = player2.getHero();
+        Pacman pacman2 = player2.getHero();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
@@ -195,7 +195,7 @@ public class TanksEventsTest {
         EventListener events2 = mock(EventListener.class);
         Player player2 = player(5, 1, events2);
         game.newGame(player2);
-        Tank tank2 = player2.getHero();
+        Pacman pacman2 = player2.getHero();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
@@ -205,8 +205,8 @@ public class TanksEventsTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank2.left();
-        tank2.act();
+        pacman2.left();
+        pacman2.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -244,7 +244,7 @@ public class TanksEventsTest {
         EventListener events2 = mock(EventListener.class);
         Player player2 = player(5, 1, events2);
         game.newGame(player2);
-        Tank tank2 = player2.getHero();
+        Pacman pacman2 = player2.getHero();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +

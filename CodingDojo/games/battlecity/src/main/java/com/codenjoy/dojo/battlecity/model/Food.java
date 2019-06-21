@@ -28,13 +28,13 @@ import com.codenjoy.dojo.services.MovingObject;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 
-public class Bullet extends MovingObject implements State<Elements, Player> {
+public class Food extends MovingObject implements State<Elements, Player> {
 
     private Field field;
-    private Tank owner;
+    private Pacman owner;
     private OnDestroy onDestroy;
 
-    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, OnDestroy onDestroy) {
+    public Food(Field field, Direction tankDirection, Point from, Pacman owner, OnDestroy onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
         this.owner = owner;
@@ -60,7 +60,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         }
     }
 
-    public Tank getOwner() {
+    public Pacman getOwner() {
         return owner;
     }
 
@@ -70,15 +70,16 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     }
 
     public boolean destroyed() {
-        return owner == null;
+        return false;
+//        return owner == null;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (destroyed()) {
-            return Elements.BANG;
-        } else {
+//        if (destroyed()) {
+//            return Elements.BANG;
+//        } else {
             return Elements.BULLET;
-        }
+//        }
     }
 }
