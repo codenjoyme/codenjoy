@@ -52,6 +52,9 @@ function initButtons(onCommitClick, onResetClick, onHelpClick) {
         },
         enableReset : function() {
             enable(resetButton, true);
+        },
+        disableHelp : function() {
+            enable(helpButton, false);
         }
     }
 }

@@ -230,7 +230,7 @@ var boardPageLoad = function() {
             buttons.enableAll();
         });
     } else {
-        buttons.enable(helpButton, false);
+        buttons.disableHelp();
 
         var link = $('#register-link').attr('href');
         logger.print('<a href="' + link + '">Please register</a>');
