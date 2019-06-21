@@ -179,11 +179,55 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 " e     \n" +
-                "_      \n" +
-                " o     \n" +
+                "_o     \n" +
+                "       \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
         assertTrue(game2.isGameOver());
+    }
+
+    @Test
+    public void shouldCrushEnemyBikeAfterClash2() {
+        //given
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "_e     \n" +
+                " o     \n" +
+                "       \n" +
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
+        assertTrue(game3.isGameOver());
+    }
+
+    @Test
+    public void shouldCrushEnemyBikeAfterClash3() {
+        //given
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game1.getJoystick().down();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " e     \n" +
+                "       \n" +
+                "_o     \n" +
+                "■■■■■■■\n";
+        assertEquals(expected, game2.getBoardAsString());
+        assertTrue(game1.isGameOver());
     }
 
     @Test

@@ -68,6 +68,7 @@ public class GameFieldImpl implements GameField {
     public void tick() {
         shiftTrack();
         players.forEach(player -> player.getHero().tick());
+        players.forEach(player -> player.getHero().setTicked(false));
     }
 
     public int size() {
@@ -200,4 +201,5 @@ public class GameFieldImpl implements GameField {
                 throw new IllegalArgumentException("No such element for " + randomType);
         }
     }
+
 }

@@ -39,6 +39,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     private BikeType type = BikeType.BIKE;
 
+    private boolean ticked;
+
     public Bike(Point xy) {
         super(xy);
     }
@@ -104,15 +106,17 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     @Override
     public void tick() {
-        if (isAlive()) {
-            if (direction != null) {
-                int newX = direction.changeX(x);
-                int newY = direction.changeY(y);
-                tryToMove(newX, newY);
+        if (!ticked) {
+            if (isAlive()) {
+                if (direction != null) {
+                    int newX = direction.changeX(x);
+                    int newY = direction.changeY(y);
+                    tryToMove(newX, newY);
+                }
+                interactWithOtherElements(x, y);
+            } else if (x >= 0) {
+                shift();
             }
-            interactWithOtherElements(x, y);
-        } else if (x >= 0) {
-            shift();
         }
     }
 
@@ -131,12 +135,25 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     private void interactWithOtherBike(Bike enemyBike) {
-        if (enemyBike.direction == null) {
-            enemyBike.crush();
-            direction = null;
-        } else if (direction != enemyBike.direction) {
-            enemyBike.direction = null;
-            direction = null;
+        if (enemyBike != this) {
+            if (!enemyBike.isAlive()) {
+                crush();
+                return;
+            }
+
+            if (enemyBike.direction == null) {
+                enemyBike.crush();
+                move(enemyBike);
+                enemyBike.shift();
+                enemyBike.ticked = true;
+                direction = null;
+            } else if (direction != enemyBike.direction) {
+                enemyBike.direction = null;
+                direction = null;
+            } else {
+                enemyBike.tick();
+                enemyBike.ticked = true;
+            }
         }
     }
 
@@ -177,7 +194,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (field.isDownLineChanger(x, y)) {
             direction = Direction.DOWN;
             tryToMove(x, direction.changeY(y));
+            return;
         }
+
+        tryToMove(x, y);
     }
 
     @Override
@@ -206,4 +226,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         return type != BikeType.BIKE_FALLEN;
     }
 
+    public void setTicked(boolean ticked) {
+        this.ticked = ticked;
+    }
 }
