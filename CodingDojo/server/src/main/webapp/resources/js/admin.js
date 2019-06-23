@@ -31,7 +31,7 @@ function defaultRegistrationSettings() {
         showUniversity: false,
         defaultGame: null,
         gameTypes: {
-            icancode: ['iCanCode Training', 'iCanCode Contest', 'eKids']
+            icancode: ['Training', 'Contest', 'eKids', 'Befunge']
         }
     };
 }

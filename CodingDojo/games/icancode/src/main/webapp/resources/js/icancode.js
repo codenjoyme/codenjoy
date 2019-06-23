@@ -52,14 +52,17 @@ if (typeof game == 'undefined') {
 }
 
 var gameName = localStorage.getItem('gameType'); // check KEYS constants in register.js
-if (gameName == 'iCanCode Training') {
+if (gameName == 'Training') {
     game.enableBefunge = false;
     game.sprites = 'robot';
 } else if (gameName == 'eKids') {
     game.enableBefunge = true;
     game.sprites = 'ekids';
+} else if (gameName == 'Befunge') {
+    game.enableBefunge = true;
+    game.sprites = 'robot';
 } else { // if (gameName == 'iCanCode Contest') { by default
-    gameName = 'iCanCode Contest'; // TODO because gameName can be null if go to app without registration page
+    gameName = 'Contest';
     game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
