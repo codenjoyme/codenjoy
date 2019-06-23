@@ -80,7 +80,7 @@ public class MainPageController {
             return "redirect";
         }
 
-        if (gameService.getGameNames().size() != 1) {
+        if (gameService.getGameNames().size() > 1) {
             return getMainPage(request, null, model);
         }
 
