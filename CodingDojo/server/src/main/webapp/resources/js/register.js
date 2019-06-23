@@ -257,12 +257,10 @@ function initRegistration(waitApprove, contextPath) {
         loadGameNameSelect(KEYS.game.name, '#gameName', function(gameName) {
             var select = fillGameTypes('#gameType', gameName, data.gameTypes);
 
-            if (select.find('option').length > 0) {
-                select.parent().show();
-                loadGameTypeSelect(KEYS.game.type, '#gameType', data.defaultGame);
-            } else {
-                select.parent().hide();
-            }
+            var isVisible = (select.find('option').length > 0 && !!data.showGames);
+            display('#gameType', isVisible);
+
+            loadGameTypeSelect(KEYS.game.type, '#gameType', data.defaultGame);
         });
         loadInput(KEYS.userData.email, '#email');
         loadInput(KEYS.userData.readableName, '#readableName');
