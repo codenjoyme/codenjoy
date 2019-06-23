@@ -38,10 +38,14 @@ function initRegistration(waitApprove, contextPath) {
         $("#readable-name").prop("disabled", status);
         $("#password").prop("disabled", status);
         $("#gameName select").prop("disabled", status)
+        $("#gameType select").prop("disabled", status)
     }
 
     var KEYS = {
-        gameName: "gameName",
+        game: {
+            name: "gameName",
+            type: "gameType"
+        },
         userData: {
             email: "registration-email",
             readableName: "registration-readableName",
@@ -52,7 +56,18 @@ function initRegistration(waitApprove, contextPath) {
         }
     };
 
-    function configureFormFromAdminSettings() {
+    function display(element, isVisible) {
+        element = $(element);
+        if (isVisible) {
+            element.removeAttr('hidden');
+            element.show();
+        } else {
+            element.attr('hidden', 'hidden');
+            element.hide();
+        }
+    }
+
+    function configureFormFromAdminSettings(onFinish) {
         var general = new AdminSettings(contextPath, 'general', 'registration');
 
         general.load(function(data) {
@@ -68,48 +83,24 @@ function initRegistration(waitApprove, contextPath) {
             }
 
             var gamesCount = $('#gameName select > option').length;
-            if (gamesCount > 1) {
-                $('#gameName').show();
-            } else {
-                $('#gameName').hide();
+            display('#gameName', gamesCount > 1);
+
+            display('#gameType', data.showGames);
+            display('#readableName', data.showNames);
+            display('#data1', data.showCities);
+            display('#data2', data.showTechSkills);
+            display('#data3', data.showUniversity);
+
+            fillFormFromLocalStorage(data);
+
+
+            if (!!onFinish) {
+                onFinish();
             }
-            if (data.showGames) {
-                $('#game').show();
-            } else {
-                $('#game').hide();
-            }
-            if (data.showNames) {
-                $('#readableName').show();
-            } else {
-                $('#readableName').hide();
-            }
-            if (data.showCities) {
-                $('#data1').show();
-            } else {
-                $('#data1').hide();
-            }
-            if (data.showTechSkills) {
-                $('#data2').show();
-            } else {
-                $('#data2').hide();
-            }
-            if (data.showUniversity) {
-                $('#data3').show();
-            } else {
-                $('#data3').hide();
-            }
-            if (!data.defaultGame) {
-                data.defaultGame = $("#game select option:first").val();
-            }
-            $('#game select').val(data.defaultGame);
         });
     }
 
     function loadRegistrationPage() {
-        configureFormFromAdminSettings();
-
-        fillFormFromLocalStorage();
-
         var checkEls = {};
 
         var validateEmail = function (email) {
@@ -207,7 +198,7 @@ function initRegistration(waitApprove, contextPath) {
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #game, #skills, #readableName, #data1, #data2, #data3').keypress(function (e) {
+        $('#email, #password, #gameName, #gameType, #skills, #readableName, #data1, #data2, #data3').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();
@@ -223,15 +214,19 @@ function initRegistration(waitApprove, contextPath) {
         }
     }
 
-    function fillFormFromLocalStorage() {
-        var gameName = localStorage.getItem(KEYS.gameName);
-        if (!!gameName && !$('#game').attr('hidden')) {
-            $('#game select').val(gameName);
+    function fillFormFromLocalStorage(data) {
+        var gameType = localStorage.getItem(KEYS.game.type);
+        if (!!gameType && !$('#gameType').attr('hidden')) {
+            $('#gameType select').val(gameType);
         } else {
-            var def = $('#game select option[default]').attr('value');
-            if (!!def) {
-                $('#game select').val(def);
+            if (!!data.defaultGame) {
+                $('#gameType select').val(data.defaultGame);
             }
+        }
+
+        var gameName = localStorage.getItem(KEYS.game.name);
+        if (!!gameName) {
+            $('#gameName select').val(gameName);
         }
 
         loadInput(KEYS.userData.email, '#email');
@@ -242,7 +237,8 @@ function initRegistration(waitApprove, contextPath) {
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(KEYS.gameName, $('#game').find('option:selected').text());
+        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').text());
+        localStorage.setItem(KEYS.game.name, $('#gameName').find('option:selected').text());
         localStorage.setItem(KEYS.userData.email, $('#email input').val());
         localStorage.setItem(KEYS.userData.readableName, $('#readableName input').val());
         localStorage.setItem(KEYS.userData.data1, $('#data1 input').val());
@@ -267,7 +263,7 @@ function initRegistration(waitApprove, contextPath) {
             } else {
                 $("#password").focus();
             }
-            loadRegistrationPage();
+            configureFormFromAdminSettings(loadRegistrationPage);
         }
     });
 }

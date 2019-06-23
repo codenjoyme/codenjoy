@@ -117,10 +117,10 @@ License along with this program.  If not, see
                     <form:errors path="gameName" cssClass="error" />
                 </div>
 
-                <div id="game" class="field valid" hidden>
+                <div id="gameType" class="field valid" hidden>
                     <!-- TODO to remove from here -->
                     <select placeholder="Select your game" name="game">
-                        <option value="iCanCode Training" selected>iCanCode Training</option>
+                        <option value="iCanCode Training">iCanCode Training</option>
                         <option value="iCanCode Contest" >iCanCode Contest</option>
                         <option value="eKids">eKids</option>
                     </select>
