@@ -58,13 +58,15 @@ pages.admin = function() {
     }
 
     var getRegSettings = function() {
-        return {
-            showGames : $('#show-games').prop('checked'),
-            showNames : $('#show-names').prop('checked'),
-            showTechSkills : $('#show-tech').prop('checked'),
-            showUniversity : $('#show-university').prop('checked'),
-            defaultGame : $('#default-game').find('option:selected').text()
-        };
+        var result = defaultRegistrationSettings();
+
+        result.showGames = $('#show-games').prop('checked');
+        result.showNames = $('#show-names').prop('checked');
+        result.showTechSkills = $('#show-tech').prop('checked');
+        result.showUniversity = $('#show-university').prop('checked');
+        result.defaultGame = $('#default-game').find('option:selected').text();
+
+        return result;
     }
 
     var setRegSettings = function(data) {
