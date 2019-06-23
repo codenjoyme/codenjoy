@@ -9,7 +9,7 @@ import { Layout } from '../../layouts';
 export default class LoginPage extends Component {
     render() {
         return (
-            <DocumentTitle title='EPAM Bot Challenge'>
+            <DocumentTitle title='Bot Challenge'>
                 <Layout>
                     <LoginContainer />
                 </Layout>

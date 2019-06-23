@@ -379,8 +379,8 @@ class RulesContainer extends Component {
                     <p>
                         У разі будь-яких питань звертайтеся за електронною
                         адресою &nbsp;
-                        <a href='mailto:OrgBotChallengeUA@epam.com'>
-                            OrgBotChallengeUA@epam.com
+                        <a href='mailto:codenjoyme@gmail.com'>
+                            codenjoyme@gmail.com
                         </a>
                     </p>
                     <p>

@@ -20,7 +20,7 @@ class HeaderComponent extends PureComponent {
                 <div className={ Styles.container }>
                     <NavLink className={ Styles.logoContainer } to={ book.home }>
                         <img className={ Styles.logo } src={ logo } alt='' />
-                        <span>EPAM BOT CHALLENGE</span>
+                        <span>BOT CHALLENGE</span>
                     </NavLink>
 
                     <ul>

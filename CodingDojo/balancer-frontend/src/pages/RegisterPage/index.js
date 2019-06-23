@@ -9,7 +9,7 @@ import { RegisterContainer } from '../../containers';
 export default class RegisterPage extends Component {
     render() {
         return (
-            <DocumentTitle title='EPAM Bot Challenge'>
+            <DocumentTitle title='Bot Challenge'>
                 <Layout>
                     <RegisterContainer />
                 </Layout>

@@ -9,7 +9,7 @@ import { RulesContainer } from '../../containers';
 export default class RulesPage extends Component {
     render() {
         return (
-            <DocumentTitle title='EPAM Bot Challenge'>
+            <DocumentTitle title='Bot Challenge'>
                 <Layout>
                     <RulesContainer />
                 </Layout>

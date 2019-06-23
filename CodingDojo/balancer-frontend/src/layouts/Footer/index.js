@@ -27,7 +27,7 @@ export class Footer extends PureComponent {
                 </ul>
                 <ul className={ classnames(Styles.navigation) }>
                     <li>
-                        <a href='mailto:OrgBotChallengeUA@epam.com'>
+                        <a href='mailto:codenjoyme@gmail.com'>
                             Зв'язатися з нами
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }

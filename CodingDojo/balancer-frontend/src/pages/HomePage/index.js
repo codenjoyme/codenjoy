@@ -9,7 +9,7 @@ import { HomeContainer } from '../../containers';
 export default class HomePage extends Component {
     render() {
         return (
-            <DocumentTitle title='EPAM Bot Challenge'>
+            <DocumentTitle title='Bot Challenge'>
                 <Layout>
                     <HomeContainer />
                 </Layout>

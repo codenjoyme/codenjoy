@@ -7,7 +7,7 @@ import { Layout } from '../../layouts';
 import { PrivacyRulesContainer } from '../../containers';
 
 const PrivacyPolicyPage = () => (
-    <DocumentTitle title='EPAM Bot Challenge'>
+    <DocumentTitle title='Bot Challenge'>
         <Layout>
             <PrivacyRulesContainer />
         </Layout>
