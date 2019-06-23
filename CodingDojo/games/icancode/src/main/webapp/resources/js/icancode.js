@@ -51,7 +51,7 @@ if (typeof game == 'undefined') {
     }
 }
 
-var gameName = localStorage.getItem('gameName');
+var gameName = localStorage.getItem('gameType'); // check KEYS constants in register.js
 if (gameName == 'iCanCode Training') {
     game.enableBefunge = false;
     game.sprites = 'robot';
