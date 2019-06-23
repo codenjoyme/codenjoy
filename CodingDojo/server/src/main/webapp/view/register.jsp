@@ -118,11 +118,10 @@ License along with this program.  If not, see
                 </div>
 
                 <div id="gameType" class="field valid" hidden>
-                    <!-- TODO to remove from here -->
                     <select placeholder="Select your game" name="game">
-                        <option value="iCanCode Training">iCanCode Training</option>
-                        <option value="iCanCode Contest" >iCanCode Contest</option>
-                        <option value="eKids">eKids</option>
+                        <!--option value="Type1">Type1</option-->
+                        <!--option value="Type2">Type2</option-->
+                        <!--option value="Type3">Type3</option-->
                     </select>
                 </div>
             </c:if>

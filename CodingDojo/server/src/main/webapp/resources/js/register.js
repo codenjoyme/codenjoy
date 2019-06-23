@@ -72,14 +72,7 @@ function initRegistration(waitApprove, contextPath) {
 
         general.load(function(data) {
             if ($.isEmptyObject(data)) {
-                data = {
-                    showGames: true,
-                    showNames: true,
-                    showCities: false,
-                    showTechSkills: false,
-                    showUniversity: false,
-                    defaultGame: null
-                };
+                data = defaultRegistrationSettings();
             }
 
             var gamesCount = $('#gameName select > option').length;
@@ -92,7 +85,6 @@ function initRegistration(waitApprove, contextPath) {
             display('#data3', data.showUniversity);
 
             fillFormFromLocalStorage(data);
-
 
             if (!!onFinish) {
                 onFinish();
@@ -214,21 +206,64 @@ function initRegistration(waitApprove, contextPath) {
         }
     }
 
-    function fillFormFromLocalStorage(data) {
-        var gameType = localStorage.getItem(KEYS.game.type);
-        if (!!gameType && !$('#gameType').attr('hidden')) {
-            $('#gameType select').val(gameType);
+    function loadGameNameSelect(key, selector, onSelect) {
+        var value = localStorage.getItem(key);
+        var select = $(selector).find('select');
+        if (!!value) {
+            select.val(value);
+        }
+
+        select.off();
+        select.change(function() {
+            onSelect(select.val());
+        });
+        onSelect(select.val());
+    }
+
+    function loadGameTypeSelect(key, selector, def) {
+        var value = localStorage.getItem(key);
+        var select = $(selector).find('select');
+        if (!!value && !$(selector).attr('hidden')) {
+            select.val(value);
         } else {
-            if (!!data.defaultGame) {
-                $('#gameType select').val(data.defaultGame);
+            if (!!def) {
+                select.val(def);
+            }
+        }
+    }
+
+    function fillGameTypes(selector, gameName, gameTypes) {
+        var select = $(selector).find('select');
+        select.children().remove();
+
+        var currentGameName = null;
+        for (var index in gameTypes) {
+            var types = gameTypes[index];
+            if (gameName == index && !!types) {
+                currentGameName = types;
+                break;
             }
         }
 
-        var gameName = localStorage.getItem(KEYS.game.name);
-        if (!!gameName) {
-            $('#gameName select').val(gameName);
+        for (var index in currentGameName) {
+            var gameType = currentGameName[index];
+            select.append('<option value="' + gameType + '">' + gameType + '</option>');
         }
 
+        return select;
+    }
+
+    function fillFormFromLocalStorage(data) {
+        loadGameNameSelect(KEYS.game.name, '#gameName', function(gameName) {
+            var select = fillGameTypes('#gameType', gameName, data.gameTypes);
+
+            if (select.find('option').length > 0) {
+                select.parent().show();
+                loadGameTypeSelect(KEYS.game.type, '#gameType', data.defaultGame);
+            } else {
+                select.parent().hide();
+            }
+        });
         loadInput(KEYS.userData.email, '#email');
         loadInput(KEYS.userData.readableName, '#readableName');
         loadInput(KEYS.userData.data1, '#data1');

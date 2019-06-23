@@ -199,6 +199,7 @@
             <td>
                 <span class="white">Default game</span>
                 <select placeholder="Select default game" id="default-game">
+                    <!-- TODO to use data from game settings -->
                     <option value="iCanCode Training">iCanCode Training</option>
                     <option value="iCanCode Contest">iCanCode Contest</option>
                     <option value="eKids">eKids</option>

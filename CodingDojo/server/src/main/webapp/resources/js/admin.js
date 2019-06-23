@@ -22,6 +22,20 @@
 
 pages = pages || {};
 
+function defaultRegistrationSettings() {
+    return {
+        showGames: true,
+        showNames: true,
+        showCities: false,
+        showTechSkills: false,
+        showUniversity: false,
+        defaultGame: null,
+        gameTypes: {
+            icancode: ['iCanCode Training', 'iCanCode Contest', 'eKids']
+        }
+    };
+}
+
 pages.admin = function() {
     var contextPath = game.contextPath = getSettings('contextPath');
 
@@ -55,14 +69,7 @@ pages.admin = function() {
 
     var setRegSettings = function(data) {
         if ($.isEmptyObject(data)) {
-            data = {
-                showGames: true,
-                showNames: true,
-                showCities: false,
-                showTechSkills: false,
-                showUniversity: false,
-                defaultGame: null
-            };
+            data = defaultRegistrationSettings();
         }
         if (!data.defaultGame) {
             data.defaultGame = $("#default-game option:first").val();
