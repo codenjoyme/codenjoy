@@ -1,0 +1,116 @@
+.homeTitle {
+    padding: 45px 0 55px;
+    width: 100%;
+    background-image: url(./../../styles/images/layout/dark.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto;
+    color: white;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.homeTitle .mainText {
+    font-size: 58px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.homeTitle .subText {
+    font-size: 30px;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.acceptButton {
+    font-family: 'Museo Sans Cyrl';
+    font-size: 20px;
+    font-weight: 300;
+    text-align: center;
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    padding: 20px 58px;
+    text-decoration: none;
+}
+
+.guideContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: stretch;
+    align-content: stretch;
+    margin-bottom: 40px;
+}
+
+.guideStep {
+    min-width: 250px;
+    max-width: 298px;
+    background-color: var(--block-bg-color);
+    padding: 16px;
+    width: 33%;
+}
+
+.steps img {
+    width: 100%;
+    min-height: 102px;
+    max-height: 124px;
+}
+
+.stepTitle {
+    font-family: 'Museo Sans Cyrl';
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 0.71;
+    color: #ffffff;
+    margin: 24px 0;
+}
+
+.stepDescription {
+    font-family: 'Museo Sans Cyrl';
+    font-size: 20px;
+    line-height: 1.3;
+    letter-spacing: normal;
+    color: var(--title-bg-color);
+    font-weight: 200;
+}
+
+.prizeImage {
+    margin: 10px;
+    height: 180px;
+}
+
+.prizeList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+@media all and (max-width: 1030px) {
+    .guideContainer {
+        justify-content: space-around;
+    }
+    .guideStep {
+        margin-bottom: 10px;
+    }
+}
+
+@media all and (max-width: 820px) {
+    .guideContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+    .guideStep {
+        max-width: 330px;
+        width: 50%;
+    }
+}

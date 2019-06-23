@@ -1,0 +1,42 @@
+.boardContainer {
+    padding-bottom: 15px;
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    flex-direction: column;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    flex: 1 1 auto;
+}
+
+.frame {
+    padding: 0px 30px 10px 30px;
+    flex: 1 1 auto;
+}
+
+.rating {
+    padding: 0px 30px 10px 30px;
+    flex: 2 1 auto;
+    display: flex;
+    justify-content: center;
+}
+
+@media all and (max-width: 900px) {
+    .frame {
+        padding: 30px 30px 30px 30px;
+        max-width: 900px;
+        order: 1;
+        width: auto;
+    }
+    .rating {
+        order: 2;
+        width: auto;
+    }
+    .wrapper {
+        flex-direction: column;
+    }
+}

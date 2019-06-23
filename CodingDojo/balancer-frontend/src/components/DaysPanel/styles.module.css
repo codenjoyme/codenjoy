@@ -1,0 +1,51 @@
+.dayPanel {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px 33px;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.dayName {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(161, 176, 187);
+    font-size: 18px;
+}
+
+.dayButton {
+    margin: 10px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--main-bg-color);
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0px;
+}
+
+.dayButton:not(.dayButtonDisabled):hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dayButton:focus {
+    outline: 0;
+}
+
+.dayButtonSelected {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dayButtonDisabled {
+    border: 1.5px solid rgb(48, 113, 137);
+    color: rgb(48, 113, 137);
+    cursor: not-allowed;
+}

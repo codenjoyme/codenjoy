@@ -1,0 +1,50 @@
+.gameElements {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.elementContainer {
+    display: flex;
+    flex-direction: row;
+    width: 270px;
+    margin: 15px 0px;
+}
+
+.elementDescriptionContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 8px;
+}
+
+.elementImage {
+    align-self: flex-start;
+}
+
+.elementTitle {
+    padding: 7px 10px;
+    background-color: var(--block-bg-color);
+    font-family: 'Museo Sans Cyrl';
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--primary-color);
+}
+
+.elementDescription {
+    font-family: 'Museo Sans Cyrl';
+    font-size: 14px;
+    font-weight: 200;
+    line-height: 1.43;
+    letter-spacing: normal;
+    color: var(--title-bg-color);
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+@media all and (max-width: 930px) {
+    .gameElements {
+        justify-content: space-around;
+    }
+}
