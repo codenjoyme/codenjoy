@@ -37,7 +37,7 @@ function initRegistration(waitApprove, contextPath) {
         $("#name").prop("disabled", status);
         $("#readable-name").prop("disabled", status);
         $("#password").prop("disabled", status);
-        $("#gameName").prop("disabled", status)
+        $("#gameName select").prop("disabled", status)
     }
 
     var KEYS = {
@@ -67,7 +67,7 @@ function initRegistration(waitApprove, contextPath) {
                 };
             }
 
-            var gamesCount = $('#gameName > option').length;
+            var gamesCount = $('#gameName select > option').length;
             if (gamesCount > 1) {
                 $('#gameName').show();
             } else {

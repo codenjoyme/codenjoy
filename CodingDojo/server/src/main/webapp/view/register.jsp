@@ -112,8 +112,8 @@ License along with this program.  If not, see
                 <span class="icon fa"></span>
             </div>
             <c:if test="${not adminLogin}">
-                <div class="field valid">
-                    <form:select items="${gameNames}" id="gameName" path="gameName" hidden="true"/>
+                <div id="gameName" class="field valid" hidden>
+                    <form:select id="gameNameSelect" items="${gameNames}" path="gameName"/>
                     <form:errors path="gameName" cssClass="error" />
                 </div>
 

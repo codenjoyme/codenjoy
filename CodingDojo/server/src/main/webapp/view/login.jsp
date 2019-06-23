@@ -82,8 +82,8 @@ License along with this program.  If not, see
                 <input type="text" name="data"/>
             </div>
             <c:if test="${not adminLogin}">
-                <div class="field valid">
-                    <select name="gameName" id="gameName" hidden>
+                <div id="gameName" class="field valid" hidden>
+                    <select name="gameName">
                         <c:forEach items="${gameNames}" var="game" >
                             <option value="${game}">${game}</option>
                         </c:forEach>
