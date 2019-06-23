@@ -206,11 +206,10 @@ public class RegistrationService {
 
     public String register(String id, String code, String gameName, String ip) {
         Player player = playerService.register(id, ip, gameName);
-        return getBoardUrl(code, player, gameName);
+        return getBoardUrl(code, player.getName(), gameName);
     }
 
-    private String getBoardUrl(String code, Player player, String gameName) {
-        String playerName = player.getName();
+    public String getBoardUrl(String code, String playerName, String gameName) {
         validator.checkPlayerName(playerName, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
