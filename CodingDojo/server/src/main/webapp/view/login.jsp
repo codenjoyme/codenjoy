@@ -78,27 +78,25 @@ License along with this program.  If not, see
                 <input type="password" placeholder="Password" name="password"/>
                 <span class="icon fa"></span>
             </div>
-            <div id="game" class="field valid" hidden>
-                <!-- TODO to remove from here -->
-                <select placeholder="Select your game" name="game">
-                    <option value="iCanCode Training" selected>iCanCode Training</option>
-                    <option value="iCanCode Contest" >iCanCode Contest</option>
-                    <option value="eKids">eKids</option>
-                </select>
-            </div>
             <div id="data" hidden>
                 <input type="text" name="data"/>
             </div>
             <c:if test="${not adminLogin}">
-                <tr>
-                    <td>
-                        <select name="gameName" id="gameName" hidden>
-                            <c:forEach items="${gameNames}" var="game" >
-                                <option value="${game}">${game}</option>
-                            </c:forEach>
-                        </select>
-                    </td>
-                </tr>
+                <div class="field valid">
+                    <select name="gameName" id="gameName" hidden>
+                        <c:forEach items="${gameNames}" var="game" >
+                            <option value="${game}">${game}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div id="game" class="field valid" hidden>
+                    <!-- TODO to remove from here -->
+                    <select placeholder="Select your game" name="game">
+                        <option value="iCanCode Training" selected>iCanCode Training</option>
+                        <option value="iCanCode Contest" >iCanCode Contest</option>
+                        <option value="eKids">eKids</option>
+                    </select>
+                </div>
             </c:if>
             <button class="btn-submit" id="submit-button" type="button">Sign in</button>
             <a class="btn-submit reg-link" id="registration-button" href="${ctx}/register">Sign Up</a>

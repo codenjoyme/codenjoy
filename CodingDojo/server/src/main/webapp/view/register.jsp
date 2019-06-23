@@ -93,15 +93,6 @@ License along with this program.  If not, see
                 <form:input type="password" placeholder="Confirm password" path="passwordConfirmation"/>
                 <span class="icon fa"></span>
             </div>
-            <!-- add attribute 'hidden' to the div if you want to hide this select box -->
-            <div id="game" class="field valid" hidden>
-                <!-- TODO to remove from here -->
-                <select placeholder="Select your game" name="game">
-                    <option value="iCanCode Training" selected>iCanCode Training</option>
-                    <option value="iCanCode Contest" >iCanCode Contest</option>
-                    <option value="eKids">eKids</option>
-                </select>
-            </div>
             <div id="data" hidden>
                 <form:input type="text" path="data"/>
             </div>
@@ -121,14 +112,19 @@ License along with this program.  If not, see
                 <span class="icon fa"></span>
             </div>
             <c:if test="${not adminLogin}">
-                <tr>
-                    <td>
-                        <form:select items="${gameNames}" id="gameName" path="gameName" hidden="true"/>
-                    </td>
-                    <td>
-                        <form:errors path="gameName" cssClass="error" />
-                    </td>
-                </tr>
+                <div class="field valid">
+                    <form:select items="${gameNames}" id="gameName" path="gameName" hidden="true"/>
+                    <form:errors path="gameName" cssClass="error" />
+                </div>
+
+                <div id="game" class="field valid" hidden>
+                    <!-- TODO to remove from here -->
+                    <select placeholder="Select your game" name="game">
+                        <option value="iCanCode Training" selected>iCanCode Training</option>
+                        <option value="iCanCode Contest" >iCanCode Contest</option>
+                        <option value="eKids">eKids</option>
+                    </select>
+                </div>
             </c:if>
             <button class="btn-submit" id="submit-button" type="button">Sign up</button>
         </div>
