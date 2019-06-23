@@ -81,7 +81,20 @@ pages.admin = function() {
         $('#show-names').prop('checked', data.showNames);
         $('#show-tech').prop('checked', data.showTechSkills);
         $('#show-university').prop('checked', data.showUniversity);
-        $('#default-game').val(data.defaultGame);
+
+        var select = $('#default-game');
+        select.children().remove();
+
+        var allTypes = defaultRegistrationSettings().gameTypes;
+        for (var gameName in allTypes) {
+            var gameTypes = allTypes[gameName];
+            for (var index in gameTypes) {
+                var gameType = gameTypes[index];
+                select.append('<option value="' + gameType + '">' + gameType + '</option>');
+            }
+        }
+
+        select.val(data.defaultGame);
     }
 
     $('#registration-save-button').click(function() {
