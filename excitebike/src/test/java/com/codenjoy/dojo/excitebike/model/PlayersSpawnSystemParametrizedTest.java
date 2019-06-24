@@ -19,6 +19,7 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,11 +32,19 @@ public class PlayersSpawnSystemParametrizedTest {
     private String name;
     private String init;
     private String expected;
+    private int newPlayerNumberAfterInit;
 
     public PlayersSpawnSystemParametrizedTest(String name, String init, String expected) {
         this.name = name;
         this.init = init;
         this.expected = expected;
+    }
+
+    public PlayersSpawnSystemParametrizedTest(String name, String init, String expected, int newPlayerNumberAfterInit) {
+        this.name = name;
+        this.init = init;
+        this.expected = expected;
+        this.newPlayerNumberAfterInit = newPlayerNumberAfterInit;
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -119,7 +128,8 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "   o   \n" +
                                 "       \n" +
                                 "    e  \n" +
-                                "■■■■■■■\n"
+                                "■■■■■■■\n",
+                        1
                 }
         );
     }
@@ -139,27 +149,33 @@ public class PlayersSpawnSystemParametrizedTest {
         if (mapParser.getBikes().isEmpty()) {
             int playersNumber = StringUtils.countMatches(expected, BikeType.OTHER_BIKE.ch()) + 1;
             for (int i = 0; i < playersNumber; i++) {
-                Game game = new Single(new Player(mock(EventListener.class)), factory);
-                game.on(field);
+                Game game = createNewGame(field, factory);
                 games.add(game);
-                game.newGame();
             }
         } else {
-            for (Bike bike: mapParser.getBikes()) {
-                Game game = new Single(new Player(mock(EventListener.class)), factory);
-                game.on(field);
+            for (Bike bike : mapParser.getBikes()) {
+                Game game = createNewGame(field, factory);
                 games.add(game);
-                game.newGame();
-                ((Player)game.getPlayer()).setHero(bike);
+                ((Player) game.getPlayer()).setHero(bike);
             }
         }
 
         //when
+        for (int i = 0; i < newPlayerNumberAfterInit; i++) {
+            Game game = createNewGame(field, factory);
+            games.add(game);
+        }
         String res = (String) games.get(0).getBoardAsString();
 
         //then
         assertEquals(expected, res);
     }
 
+    private Game createNewGame(GameField field, PrinterFactory factory) {
+        Game game = new Single(new Player(mock(EventListener.class)), factory);
+        game.on(field);
+        game.newGame();
+        return game;
+    }
 
 }
