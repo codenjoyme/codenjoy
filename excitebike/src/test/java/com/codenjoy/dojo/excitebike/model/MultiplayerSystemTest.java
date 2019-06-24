@@ -101,7 +101,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 " e     \n" +
-                " e     \n" +
+                "  e    \n" +
                 " o     \n" +
                 "■■■■■■■\n");
 
@@ -109,7 +109,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 " e     \n" +
-                " o     \n" +
+                "  o    \n" +
                 " e     \n" +
                 "■■■■■■■\n");
 
@@ -117,7 +117,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 " o     \n" +
-                " e     \n" +
+                "  e    \n" +
                 " e     \n" +
                 "■■■■■■■\n");
     }
@@ -139,7 +139,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 " e     \n" +
                 "       \n" +
-                " z     \n" +
+                "  z    \n" +
                 " o     \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
@@ -159,7 +159,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " e     \n" +
+                "  e    \n" +
                 " o     \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());

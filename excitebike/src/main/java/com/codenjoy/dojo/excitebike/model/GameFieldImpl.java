@@ -29,6 +29,7 @@ import com.codenjoy.dojo.excitebike.services.GameRunner;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
@@ -117,20 +118,39 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public Point getFreeNewBikePosition() {
-        final int X = 1;
+    public Bike getNewFreeBike() {
+        final int minPossibleX = 1;
         final int step = 3;
-        int dx = (int) Math.ceil(GameRunner.FIELD_HEIGHT - 2 / players.size());
-        int x = X + step * dx;
 
-//        getBikes().stream().filter(bike -> bike.getX())
+//        int y = 1;
+//        int dx = players.size() / (mapParser.getYSize() - 1);
+//        int x = minPossibleX + step * dx;
 
-        return null;
+        Bike newBike = new Bike(1, 1);
+
+        for (int i = minPossibleX; i < mapParser.getXSize(); i += step) {
+            for (int j = 1; j < mapParser.getYSize() - 1; j++) {
+                newBike.setX(j % 2 == 0 ? i + 1 : i);
+                newBike.setY(j);
+                if (!getBikes().contains(newBike)){
+                    return newBike;
+                }
+            }
+        }
+
+        return newBike;
+
+//        return getBikes().stream()
+//                .filter(bike -> bike.getX() == x || bike.getX() == x + 1)
+//                .max(Comparator.comparing(PointImpl::getY))
+//                .map(bike -> new Bike(bike.getX() == x ? x + 1 : x, bike.getY() + 1))
+//                .orElse(new Bike(x, y));
     }
 
     public List<Bike> getBikes() {
         return players.stream()
                 .map(Player::getHero)
+                .filter(Objects::nonNull)
                 .collect(toList());
     }
 
