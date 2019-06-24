@@ -31,13 +31,11 @@ public class PlayersSpawnSystemParametrizedTest {
     private String name;
     private String init;
     private String expected;
-    private boolean defaultSpawn;
 
-    public PlayersSpawnSystemParametrizedTest(String name, String init, String expected, boolean defaultSpawn) {
+    public PlayersSpawnSystemParametrizedTest(String name, String init, String expected) {
         this.name = name;
         this.init = init;
         this.expected = expected;
-        this.defaultSpawn = defaultSpawn;
     }
 
     @Parameterized.Parameters(name = "{0}")
@@ -57,8 +55,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " e     \n" +
                                 "  e    \n" +
                                 " o     \n" +
-                                "■■■■■■■\n",
-                        true
+                                "■■■■■■■\n"
                 },
                 new Object[]{"FivePlayersInFirstFullChessColumn",
                         "■■■■■■■" +
@@ -74,8 +71,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " e     \n" +
                                 "  e    \n" +
                                 " o     \n" +
-                                "■■■■■■■\n",
-                        true
+                                "■■■■■■■\n"
                 },
                 new Object[]{"SevenPlayersInFirstAnSecondChessColumns",
                         "■■■■■■■" +
@@ -91,8 +87,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " e     \n" +
                                 "  e  e \n" +
                                 " o  e  \n" +
-                                "■■■■■■■\n",
-                        true
+                                "■■■■■■■\n"
                 },
                 new Object[]{"TenPlayersInFirstAnSecondFullChessColumns",
                         "■■■■■■■" +
@@ -108,8 +103,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " e  e  \n" +
                                 "  e  e \n" +
                                 " o  e  \n" +
-                                "■■■■■■■\n",
-                        true
+                                "■■■■■■■\n"
                 },
                 new Object[]{"123",
                         "■■■■■■■" +
@@ -125,8 +119,7 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "   o   \n" +
                                 "       \n" +
                                 "    e  \n" +
-                                "■■■■■■■\n",
-                        false
+                                "■■■■■■■\n"
                 }
         );
     }
@@ -141,11 +134,9 @@ public class PlayersSpawnSystemParametrizedTest {
         GameField field = new GameFieldImpl(mapParser, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
-
-//        int playersNumber = defaultSpawn ? StringUtils.countMatches(expected, BikeType.OTHER_BIKE.ch())+1 : StringUtils.countMatches(init, BikeType.BIKE.ch());
         List<Game> games = new ArrayList<>();
 
-        if (defaultSpawn) {
+        if (mapParser.getBikes().isEmpty()) {
             int playersNumber = StringUtils.countMatches(expected, BikeType.OTHER_BIKE.ch()) + 1;
             for (int i = 0; i < playersNumber; i++) {
                 Game game = new Single(new Player(mock(EventListener.class)), factory);
