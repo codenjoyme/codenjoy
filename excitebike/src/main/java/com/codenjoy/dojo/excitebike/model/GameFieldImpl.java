@@ -31,6 +31,7 @@ import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
@@ -52,16 +53,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.*;
 import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.Map.Entry.comparingByValue;
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 
@@ -71,6 +66,7 @@ public class GameFieldImpl implements GameField {
     private MapParser mapParser;
     private Map<CharElements, List<Shiftable>> allShiftableElements = new HashMap<>();
     private List<Player> players = new LinkedList<>();
+
     private List<Border> borders;
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
@@ -85,6 +81,7 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
         allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
         allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
+        allShiftableElements.put(SPRINGBOARD, new LinkedList<>());
     }
 
     /**
@@ -153,6 +150,17 @@ public class GameFieldImpl implements GameField {
                         .filter(bike -> bike.state(player).name().contains(OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
                         .findFirst()
                 : Optional.empty();
+    }
+
+    @Override
+    public Optional<Springboard> getSpringboardThatContainsPoint(Point point) {
+        List<Springboard> springboards = allShiftableElements.get(GameElementType.SPRINGBOARD);
+        for (Springboard springboard: springboards) {
+            if (springboard.getElements().contains(point)){
+                return Optional.of(springboard);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -302,6 +310,8 @@ public class GameFieldImpl implements GameField {
                 return new LineChanger(x, y, true);
             case LINE_CHANGER_DOWN:
                 return new LineChanger(x, y, false);
+            case SPRINGBOARD:
+                return new Springboard(x, mapParser.getYSize(), 3);
             default:
                 throw new IllegalArgumentException("No such element for " + randomType);
         }

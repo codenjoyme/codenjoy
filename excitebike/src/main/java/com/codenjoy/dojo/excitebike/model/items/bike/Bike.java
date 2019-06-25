@@ -328,6 +328,19 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (!field.getEnemyBike(x, y, field.getPlayerOfBike(this)).isPresent()) {
             type = atNothingType();
         }
+
+        field.getSpringboardThatContainsPoint(this)
+                .ifPresent(springboard -> {
+                    if (springboard.isOnRise(this)){
+                        setY(getY()+1);
+                    }
+//                    if (springboard.isOnSpringBoardTop(this)){
+//                        x
+//                    }
+                    if (springboard.isOnDescent(this)){
+                        setY(getY()-1);
+                    }
+                });
     }
 
     @Override

@@ -34,7 +34,8 @@ public enum GameElementType implements CharElements {
     INHIBITOR('<'),    //177
     OBSTACLE('|'),     //178
     LINE_CHANGER_UP('▲'),  //30
-    LINE_CHANGER_DOWN('▼');  //31
+    LINE_CHANGER_DOWN('▼'),  //31
+    SPRINGBOARD('^');  //31
 
     final char ch;
 

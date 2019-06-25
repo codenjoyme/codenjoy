@@ -24,6 +24,8 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +51,8 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
     List<Player> getPlayers();
 
     Bike getNewFreeBike();
+
+    Optional<Springboard> getSpringboardThatContainsPoint(Point point);
 
     Player getPlayerOfBike(Bike bike);
 }
