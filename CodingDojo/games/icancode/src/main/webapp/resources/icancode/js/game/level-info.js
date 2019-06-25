@@ -554,8 +554,74 @@ var initLevelInfo = function() {
     }
 
     levelInfo[15] = {
-        'help':'',
+        'help':'There is a lot of gold on this maze. But it seems we are not alone here.<br>' +
+        'Hurry, the Zombie are not as fast as you.<br><br>' +
+        'Scanner will help Robot to detect Zombie also. If you want to find Zombie on map - try use "ZOMBIE" element.<br>' +
+        '<pre>var scanner = robot.getScanner();\n' +
+        'if (scanner.at("LEFT") == "ZOMBIE") {\n' +
+        '    // some statement here\n' +
+        '}</pre>' +
+        'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[14].defaultCode,
+        'winCode':levelInfo[14].winCode,
+        'autocomplete':{
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'ZOMBIE\'']
+            }
+        }
+    }
+
+    levelInfo[16] = {
+        'help':'Zombie in your way. You will meet!<br><br>' +
+        'By the way, we did not tell you, but through Zombie you can also jump over:' +
+        '<pre>robot.jump();\n' +
+        'robot.jumpLeft();\n' +
+        'robot.jump("RIGHT");</pre>' +
+        'Remember! Your program should work for all previous levels too.',
+        'defaultCode':levelInfo[15].defaultCode,
+        'winCode':levelInfo[15].winCode
+    }
+
+    levelInfo[17] = {
+        'help':'The more gold you collect, the more points you earn. But zombies are on the way. <br><br>' +
+        'Рay attention - the laser kills zombie. If it happens you will see "ZOMBIE_DIE" on board. <br><br>' +
+        'Another way to get lasershow on board - fire. Yes you can do it! Sorry, we forgot to tell you about that...<br><br>' +
+        'There are several method for the Robot:' +
+        '<pre>robot.fireLeft();\n' +
+        'robot.fireRight();\n' +
+        'robot.fireUp();\n' +
+        'robot.fireDown();\n' +
+        'robot.fire("LEFT");</pre>' +
+        'Good luck!',
+        'defaultCode':levelInfo[16].defaultCode,
+        'winCode':levelInfo[16].winCode,
+        'autocomplete': {
+            'robot.': {
+                'synonyms': [],
+                'values': ['fireLeft()', 'fireUp()', 'fireLeft()', 'fireRight()', 'fire()']
+            },
+            '.fire(': {
+                'synonyms': [],
+                'values': ['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
+            },
+        }
+    }
+
+    levelInfo[18] = {
+        'help':'It looks like this labyrinth is much bigger than it seems.<br><br>' +
+        'But look how much gold there is! See if you can collect all this gold.<br><br>' +
+        'Remember that boxes can be moved:' +
+        '<pre>robot.pull("UP");\n' +
+        '// same as\n' +
+        'robot.pullUp();</pre>',
+        'defaultCode':levelInfo[17].defaultCode,
+        'winCode':levelInfo[17].winCode
+    }
+
+    levelInfo[19] = {
+        'help':'',
+        'defaultCode':levelInfo[18].defaultCode,
         'winCode':'function program(robot) {' +
         '    var scanner = robot.getScanner();' +
         '    ' +

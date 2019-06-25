@@ -64,7 +64,7 @@ public final class Levels {
             "                                      " +
             "   ######      ###########            " +
             "   #$..˅#      #˃.....$..#            " +
-            "   #BB.O#      #.........# ########   " +
+            "   #BB.O#      #....Z....# ########   " +
             "   #B...#      #...B.BBBB# #˃.O..O#   " +
             "   #..O.#  #####˃...$...O# #..$.BB#   " +
             "   #˃...####......O......# #O...O˂#   " +
@@ -76,10 +76,10 @@ public final class Levels {
             "    #.#   #$..###.B.#######B.B###     " +
             "    #.#   #...# #BB.#     #O..BB#     " +
             "    #.#   ##### #...#     #.$..˂#     " +
-            "   ##.###       #.B.#  ####.....#     " +
+            "   ##.###       #.B.#  ####.Z...#     " +
             "   #..B.#  ######.BB#  #....BO.$#     " +
             "   #...$#  #B.......####.BB.B...#     " +
-            "   #O...####O...O...$....######.#     " +
+            "   #OZ..####O...O...$....######.#     " +
             "   #..O.........S..O######    #.##### " +
             "   #˄...####.OB.E...#       ###.B...# " +
             "   #BB..#  #BBB....˄#  ######˃....$.# " +
@@ -89,12 +89,12 @@ public final class Levels {
             " #..O...˂#  ####.##########     #.O.# " +
             " #....O..#  #......$..B.BB#     #O..# " +
             " #$#######  #.#####.BB..BB#######.### " +
-            " #.#        #.#   #....O..........#   " +
+            " #.#        #.#   #....O....Z.....#   " +
             " #.# ########.##  ####....#####.B##   " +
             " #.# #.....˂...##### ###.##   #..#    " +
             " #.# #B.O....O..$..#   #.#    #B.#### " +
             " #.###..O.$....###.#####.#### #.$...# " +
-            " #.$....O..O.BB# #.BB˃...O..# #....˂# " +
+            " #.$....O.ZO.BB# #.BB˃...O..# #....˂# " +
             " #.#####BB.BBBB# #.....$....# #..B..# " +
             " #˄#   #.$....˂# ####.BO..OB# #˃....# " +
             " ###   #...$...#    ######### #...B.# " +
@@ -253,7 +253,7 @@ public final class Levels {
             " ######## " +
             "          ";
 
-    public static final String LEVEL_2B =
+    public static final String LEVEL_1C =
             "          " +
             " ######## " +
             " #S.O..$# " +
@@ -265,7 +265,7 @@ public final class Levels {
             " ######## " +
             "          ";
 
-    public static final String LEVEL_3B =
+    public static final String LEVEL_2C =
             "             " +
             "   #######   " +
             "   #S.O..#   " +
@@ -280,7 +280,7 @@ public final class Levels {
             "   ######### " +
             "             ";
 
-    public static final String LEVEL_1C =
+    public static final String LEVEL_1D =
             "              " +
             "   ########   " +
             "   #S...B.#   " +
@@ -296,7 +296,7 @@ public final class Levels {
             "              " +
             "              ";
 
-    public static final String LEVEL_1D =
+    public static final String LEVEL_1E =
             "                " +
             "  #####         " +
             "  #S..#         " +
@@ -314,66 +314,41 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL_ZOMBIE_1 =
+    public static final String LEVEL_1F =
+            "                " +
+            "  ##### ####### " +
+            "  #S..# #....Z# " +
+            "  #...###...### " +
+            "  #...$...$.#   " +
+            "  ###.......#   " +
+            "    #..$....#   " +
+            "    #.....$.### " +
+            "    #.###....E# " +
+            "    #$# #.$...# " +
+            "    #.###...### " +
+            "    #...$..##   " +
+            "    #.######    " +
+            "    ###         " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL_2F =
             "              " +
             "              " +
             " ############ " +
-            " #......$..E# " +
-            " #.########.# " +
-            " #.#      #.# " +
-            " #$# #### #.# " +
-            " #.# #.Z# #.# " +
-            " #.# #.## #.# " +
-            " #.# #.#  #.# " +
-            " #.# #.####.# " +
-            " #S# #......# " +
-            " ### ######## " +
+            " #S.........# " +
+            " ##########.# " +
+            "          #.# " +
+            " ##########.# " +
+            " #....Z.....# " +
+            " #.########## " +
+            " #.#          " +
+            " #.########## " +
+            " #.........E# " +
+            " ############ " +
             "              ";
 
-    public static final String LEVEL_ZOMBIE_2 =
-            " #########" +
-            " #S....˅.#" +
-            " #..$....#" +
-            " #..###$.#" +
-            " #..# #..#" +
-            " #.$###.$#" +
-            " #˃......#" +
-            " #..$...E#" +
-            " #########" +
-            "          ";
-
-    public static final String LEVEL_ZOMBIE_3 =
-            "             " +
-            "   #######   " +
-            "   #S.O..#   " +
-            "   ####.$#   " +
-            "      #..#   " +
-            "   ####..### " +
-            "   #$B.OO..# " +
-            "   #.###...# " +
-            "   #$# #$..# " +
-            "   #.###..E# " +
-            "   #Z...$..# " +
-            "   ######### " +
-            "             ";
-
-    public static final String LEVEL_ZOMBIE_4 =
-            "              " +
-            "   ########   " +
-            "   #S...B.#   " +
-            "   ###B...#   " +
-            "     #B...#   " +
-            "   ###$B..####" +
-            "   #$...B...B#" +
-            "   #.#####...#" +
-            "   #.#   #..Z#" +
-            "   #.#####B..#" +
-            "   #.E.....B.#" +
-            "   ###########" +
-            "              " +
-            "              ";
-
-    public static final String MULTI_LEVEL_SIMPLE_ZOMBIES =
+    public static final String LEVEL_3F =
             "    ############### " +
             "    #Z.....E...$.Z# " +
             "    #B...O###B....# " +
@@ -383,7 +358,7 @@ public final class Levels {
             "  #.O..#     ###..# " +
             "  #..$.#####   #.O# " +
             "  #BB......#####..# " +
-            "  ######.B........# " +
+            "  ######˃.........# " +
             "       ##....###### " +
             " #####  #.O..#      " +
             " #.$.#  #.$.B###### " +
@@ -395,6 +370,38 @@ public final class Levels {
             " #S...O$........S#  " +
             " #################  ";
 
+    public static final String LEVEL_1G =
+            "  ############  ############# " +
+            "  #..OB..$.BB#  #...B..B.O..# " +
+            "  #.####..O..####.###...$...# " +
+            "###.#  #B.....$...# #.####B.# " +
+            "#.$.#  ###..B..O..# #O#  #..# " +
+            "#.###    #.$.E....###.## #BB# " +
+            "#O#      #.......B..$..# #..# " +
+            "#.###    #B...O###B...$# #.$# " +
+            "#.$$#  ###.B.B.# #.....# #B$# " +
+            "#####  #.$.....# #B.$..# #..# " +
+            "       #...B#### ##..O.# #.B# " +
+            " #######.O..#     ###..# #..# " +
+            " #$...B...$.#####   #.O# #..# " +
+            " #..####BB......#####..# #.O# " +
+            " #OB#  ######...$......# #..# " +
+            " #..#       ##....###### #B.# " +
+            " #$$# #####  #.O..#      #$$# " +
+            " #..# #.$.#  #.$.B###### #.$# " +
+            " #BB# #...####.......O.# #..# " +
+            " #..# #....O...####B..## #### " +
+            " #.O# ####..$..#  #####       " +
+            " #..#    #$..O.#        ##### " +
+            " #$$# ####....B######## #$$.# " +
+            " #### #....O$...O...$.# #...# " +
+            "      #.#####..######## ###B# " +
+            "   ####$#   #..#          #.# " +
+            "   #..O.#   #..#####  #####.# " +
+            "####.####   #.O....####..$..# " +
+            "#S...#      #...$..B.....#### " +
+            "######      ##############    ";
+
     public static ILevel loadLevel(int level) {
         return load(getSingleMaps().get(level));
     }
@@ -402,14 +409,16 @@ public final class Levels {
     public static List<String> getSingleMaps() {
         return Arrays.asList(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                 LEVEL_7A, LEVEL_8A, LEVEL_9A,
-                LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C, LEVEL_1D);
-        // TODO this is for zombie levels - create config for this
-//        return Arrays.asList(LEVEL_ZOMBIE_1, LEVEL_ZOMBIE_2,
-//                LEVEL_ZOMBIE_3, LEVEL_ZOMBIE_4);
+                LEVEL_1B,
+                LEVEL_1C, LEVEL_2C,
+                LEVEL_1D,
+                LEVEL_1E,
+                LEVEL_1F, LEVEL_2F, LEVEL_3F,
+                LEVEL_1G);
     }
 
     public static ILevel getMultiple() {
-        return load(MULTI_LEVEL_SIMPLE);
+        return load(MULTI_LEVEL);
     }
 
     public static ILevel load(String levelMap) {
@@ -452,18 +461,7 @@ public final class Levels {
                     continue;
                 }
 
-                if (chk("###" +
-                        "#  " +
-                        "#  ", x, y, map) ||
-                    chk("## " +
-                        "#  " +
-                        "#  ", x, y, map) ||
-                    chk("###" +
-                        "#  " +
-                        "   ", x, y, map) ||
-                    chk("## " +
-                        "#  " +
-                        "   ", x, y, map))
+                if (isaBoolean(map, x, y, "###", "#  ", "## "))
                 {
                     out.setAt(x, y, Elements.ANGLE_IN_LEFT.ch());
                 } else
@@ -607,6 +605,21 @@ public final class Levels {
         }
 
         return out.getMap();
+    }
+
+    private static boolean isaBoolean(LengthToXY.Map map, int x, int y, String s, String s2, String s3) {
+        return chk(s +
+                s2 +
+                s2, x, y, map) ||
+                chk(s3 +
+                        s2 +
+                        s2, x, y, map) ||
+                chk(s +
+                        s2 +
+                        "   ", x, y, map) ||
+                chk(s3 +
+                        s2 +
+                        "   ", x, y, map);
     }
 
     private static boolean chk(String mask, int x, int y, LengthToXY.Map map) {
