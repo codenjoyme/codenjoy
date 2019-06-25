@@ -52,4 +52,8 @@ public class HeroItem extends FieldItem implements Tickable {
     public void tick() {
         hero.tick();
     }
+
+    public void fixLayer() {
+        hero.fixLayer();
+    }
 }

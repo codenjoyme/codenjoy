@@ -92,6 +92,11 @@ public class ICanCode implements Tickable, IField {
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
 
+        // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
+        level.getItems(HeroItem.class).stream()
+                .map(it -> (HeroItem)it)
+                .forEach(HeroItem::fixLayer);
+
         for (Player player : players) {
             Hero hero = player.getHero();
 

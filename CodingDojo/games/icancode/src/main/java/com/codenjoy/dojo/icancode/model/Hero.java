@@ -299,6 +299,14 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         }
     }
 
+    public void fixLayer() {
+        if (flying) {
+            item.getCell().jump(item);
+        } else {
+            item.getCell().landOn(item);
+        }
+    }
+
     private void pullBox(int x, int y) {
         int boxX = direction.inverted().changeX(x);
         int boxY = direction.inverted().changeY(y);

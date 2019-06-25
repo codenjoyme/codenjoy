@@ -47,4 +47,8 @@ public interface ICell extends Point {
     <T extends IItem> List<T> getItems();
 
     void removeItem(IItem item);
+
+    void jump(IItem item);
+
+    void landOn(IItem item);
 }
