@@ -53,4 +53,9 @@ public class Scores implements PlayerScores {
             }
         }
     }
+
+    @Override
+    public void update(Object score) {
+        this.score = Integer.valueOf(score.toString());
+    }
 }

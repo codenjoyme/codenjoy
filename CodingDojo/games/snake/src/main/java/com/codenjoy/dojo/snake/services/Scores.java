@@ -86,4 +86,9 @@ public class Scores implements PlayerScores {
         score -= eatStonePenalty.getValue();
         length -= eatStoneDecrease.getValue();
     }
+
+    @Override
+    public void update(Object score) {
+        this.score = Integer.valueOf(score.toString());
+    }
 }

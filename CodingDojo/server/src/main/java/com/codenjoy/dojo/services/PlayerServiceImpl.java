@@ -39,6 +39,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -414,28 +415,53 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             for (int index = 0; index < playerGames.size(); index ++) {
-                PlayerGame playerGame = playerGames.get(index);
-                Player playerToUpdate = playerGame.getPlayer();
-                Player newPlayer = players.get(index);
-
-                playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
-                playerToUpdate.setName(newPlayer.getName());
-                playerToUpdate.setReadableName(newPlayer.getReadableName());
-                registration.updateName(newPlayer.getName(), newPlayer.getReadableName());
-
-                Game game = playerGame.getGame();
-                if (game != null && game.getSave() != null) {
-                    String oldSave = game.getSave().toString();
-                    String newSave = newPlayer.getData();
-                    if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
-                        playerGames.setLevel(
-                                newPlayer.getName(),
-                                new JSONObject(newSave));
-                    }
-                }
+                updatePlayer(playerGames.get(index), players.get(index));
             }
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void update(Player player) { // TODO test me
+        lock.writeLock().lock();
+        try {
+            updatePlayer(playerGames.get(player.getName()), player);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private void updatePlayer(PlayerGame playerGame, Player input) {
+        Player updated = playerGame.getPlayer();
+
+        if (StringUtils.isNotEmpty(input.getCallbackUrl())) {
+            updated.setCallbackUrl(input.getCallbackUrl());
+        }
+
+        boolean updateReadableName = StringUtils.isNotEmpty(input.getReadableName());
+        if (updateReadableName) {
+            updated.setReadableName(input.getReadableName());
+            registration.updateName(input.getName(), input.getReadableName());
+        }
+
+        try {
+            if (input.getScore() != null) {
+                updated.getScores().update(input.getScore());
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
+
+        Game game = playerGame.getGame();
+        if (game != null && game.getSave() != null) {
+            String oldSave = game.getSave().toString();
+            String newSave = input.getData();
+            if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
+                playerGames.setLevel(
+                        input.getName(),
+                        new JSONObject(newSave));
+            }
         }
     }
 

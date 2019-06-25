@@ -110,6 +110,7 @@ public class SaveServiceImpl implements SaveService {
             info.setCallbackUrl(player.getCallbackUrl());
             info.setReadableName(registration.getNameById(player.getName()));
             info.setAIPlayer(player.hasAI());
+            info.setScores(player.getScores()); // TODO test me
 
             copySave(player, info);
             map.put(player.getName(), info);

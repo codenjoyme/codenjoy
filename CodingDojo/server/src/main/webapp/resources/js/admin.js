@@ -101,8 +101,50 @@ pages.admin = function() {
         saveRegSettings();
     });
 
+    // ------------------------ save user details ----------------------
+
+    var setupSaveUserDetails = function() {
+        var ajax = new AdminAjax(contextPath, 'admin/user/info');
+
+        var names = $('[id$=\\.name]');
+        names.each(function(index, obj) {
+            var name = $(obj);
+            var index = name.attr('index');
+            var prefix = '#players' + index + '\\.';
+
+            var setup = function(field) {
+                var input = $(prefix + field);
+                input.on('input', function() {
+                    if (!!input.data('button')) return;
+                    var test = $('<button type="button">Save</button>').click(function () {
+                        var data = {};
+                        data['name'] = name.val();
+                        data[field] = input.val();
+                        ajax.save(data,
+                            function() {
+                                input.data('button', null);
+                                test.remove();
+                            },
+                            function(e) {
+                                alert('error: ' + e);
+                            });
+                    });
+                    input.after(test);
+                    input.data('button', test);
+                });
+            };
+
+            setup('readableName');
+            setup('name');
+            setup('score');
+            setup('callbackUrl');
+            setup('data');
+        });
+    }
+
     // ------------------------ init ----------------------
     validatePlayerRegistration("#adminSettings");
     initHotkeys();
     loadRegSettings();
+    setupSaveUserDetails();
 }

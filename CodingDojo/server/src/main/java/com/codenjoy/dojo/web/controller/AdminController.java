@@ -38,12 +38,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -463,6 +462,16 @@ public class AdminController {
     public String open(Model model, HttpServletRequest request) {
         playerService.openRegistration();
         return getAdmin(request);
+    }
+
+    @PostMapping("/user/info")
+    public @ResponseBody String update(@RequestBody Player player) {
+        try {
+            playerService.update(player);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "{}";
     }
 
 }

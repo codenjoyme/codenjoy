@@ -31,7 +31,7 @@ public class PlayerInfo extends Player {
     private boolean hasAI;
 
     public PlayerInfo() {
-        //
+        initScores();
     }
 
     public PlayerInfo(String name, String code, String url, String gameName, boolean saved) {
