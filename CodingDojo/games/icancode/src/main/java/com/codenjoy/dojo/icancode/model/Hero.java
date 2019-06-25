@@ -278,18 +278,19 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {
-                    field.move(this.item, newX, newY);
+                    field.move(item, newX, newY);
                 }
             } else if (!field.isBarrier(newX, newY)) {
-                if (!wasPush) {
+                if (!wasPush && pull) {
                     pullBox(x, y);
                 }
-                field.move(this.item, newX, newY);
+                field.move(item, newX, newY);
 
             } else {
                 if (landOn) {
                     landOn = false;
-                    item.getCell().comeIn(this.item);
+
+                    item.getCell().comeIn(item);
                 }
             }
         }
@@ -299,9 +300,6 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     }
 
     private void pullBox(int x, int y) {
-        if (!pull) {
-            return;
-        }
         int boxX = direction.inverted().changeX(x);
         int boxY = direction.inverted().changeY(y);
 
