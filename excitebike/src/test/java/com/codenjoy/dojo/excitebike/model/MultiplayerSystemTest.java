@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -169,6 +170,8 @@ public class MultiplayerSystemTest {
     public void shouldCrushEnemyBikeAfterClash() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX()-1);
 
         //when
         game1.getJoystick().up();
@@ -190,6 +193,8 @@ public class MultiplayerSystemTest {
     public void shouldCrushEnemyBikeAfterClash2() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX()-1);
 
         //when
         game1.getJoystick().up();
@@ -212,6 +217,8 @@ public class MultiplayerSystemTest {
     public void shouldCrushEnemyBikeAfterClash3() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX()-1);
 
         //when
         game1.getJoystick().down();
@@ -234,6 +241,8 @@ public class MultiplayerSystemTest {
     public void shouldDoNothingAfterBikesClashEachOther() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX()-1);
 
         //when
         game1.getJoystick().up();
@@ -255,6 +264,8 @@ public class MultiplayerSystemTest {
     public void shouldMoveBikesInAnyOrderOfCall() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX()-1);
 
         //when
         game1.getJoystick().up();
@@ -272,5 +283,4 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
     }
-
 }

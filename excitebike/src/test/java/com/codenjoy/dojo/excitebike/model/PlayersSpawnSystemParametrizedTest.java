@@ -1,5 +1,27 @@
 package com.codenjoy.dojo.excitebike.model;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2019 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
@@ -19,7 +41,6 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -34,23 +55,18 @@ public class PlayersSpawnSystemParametrizedTest {
     private String expected;
     private int newPlayerNumberAfterInit;
 
-    public PlayersSpawnSystemParametrizedTest(String name, String init, String expected) {
+    public PlayersSpawnSystemParametrizedTest(String name, int newPlayerNumberAfterInit, String init, String expected) {
         this.name = name;
-        this.init = init;
-        this.expected = expected;
-    }
-
-    public PlayersSpawnSystemParametrizedTest(String name, String init, String expected, int newPlayerNumberAfterInit) {
-        this.name = name;
-        this.init = init;
-        this.expected = expected;
         this.newPlayerNumberAfterInit = newPlayerNumberAfterInit;
+        this.init = init;
+        this.expected = expected;
     }
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object> data() {
         return Lists.newArrayList(
-                new Object[]{"ThreePlayersInFirstChessColumn",
+                new Object[]{"shouldAddThreeBikesInFirstChessColumn",
+                        0,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -66,7 +82,8 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " o     \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"FivePlayersInFirstFullChessColumn",
+                new Object[]{"shouldAddFiveBikesInFirstFullChessColumn",
+                        0,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -82,7 +99,8 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " o     \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"SevenPlayersInFirstAnSecondChessColumns",
+                new Object[]{"shouldAddSevenBikesInFirstAnSecondChessColumns",
+                        0,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -98,7 +116,8 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " o  e  \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"TenPlayersInFirstAnSecondFullChessColumns",
+                new Object[]{"shouldAddTenBikesInFirstAnSecondFullChessColumns",
+                        0,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -114,7 +133,8 @@ public class PlayersSpawnSystemParametrizedTest {
                                 " o  e  \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"123",
+                new Object[]{"shouldAddOneNewBike",
+                        1,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -126,10 +146,26 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       \n" +
                                 "       \n" +
                                 "   o   \n" +
-                                "       \n" +
+                                "  e    \n" +
                                 "    e  \n" +
-                                "■■■■■■■\n",
-                        1
+                                "■■■■■■■\n"
+                },
+                new Object[]{"shouldAddManyNewBikes",
+                        3,
+                        "■■■■■■■" +
+                                "       " +
+                                "     o " +
+                                " o     " +
+                                "      o" +
+                                "    o o" +
+                                "■■■■■■■",
+                        "■■■■■■■\n" +
+                                " e     \n" +
+                                "  e  o \n" +
+                                " e     \n" +
+                                "  e   e\n" +
+                                "    e e\n" +
+                                "■■■■■■■\n"
                 }
         );
     }

@@ -25,7 +25,6 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
-import com.codenjoy.dojo.excitebike.services.GameRunner;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -34,9 +33,12 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.stream.Collectors.toList;
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.*;
 
 
 public class GameFieldImpl implements GameField {
@@ -119,32 +121,66 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public Bike getNewFreeBike() {
+        return createNewFreeBike(getBikesCountOnEachY());
+    }
+
+    private Map<Integer, Long> getBikesCountOnEachY(){
+        Map<Integer, Long> bikesCountOnEachY = getBikes().stream().collect(
+                groupingBy(
+                        PointImpl::getY,
+                        Collectors.counting()
+                )
+        );
+        IntStream.range(1, mapParser.getYSize() - 1).forEach(value -> bikesCountOnEachY.putIfAbsent(value, 0L));
+        return bikesCountOnEachY;
+    }
+
+    private int getYWithMinNumberOfBikes(Map<Integer, Long> bikesCountOnEachY){
+        return bikesCountOnEachY.entrySet()
+                .stream()
+                .min(
+                        Comparator.comparingLong(Map.Entry::getValue)
+                )
+                .map(Map.Entry::getKey)
+                .orElseGet(() -> 1);
+    }
+
+    private Bike createNewFreeBike(Map<Integer, Long> bikesCountOnEachY){
         final int minPossibleX = 1;
         final int step = 3;
+        int y = getYWithMinNumberOfBikes(bikesCountOnEachY);
 
-//        int y = 1;
-//        int dx = players.size() / (mapParser.getYSize() - 1);
-//        int x = minPossibleX + step * dx;
-
-        Bike newBike = new Bike(1, 1);
+        Bike newBike = new Bike(minPossibleX, y);
 
         for (int i = minPossibleX; i < mapParser.getXSize(); i += step) {
-            for (int j = 1; j < mapParser.getYSize() - 1; j++) {
-                newBike.setX(j % 2 == 0 ? i + 1 : i);
-                newBike.setY(j);
-                if (!getBikes().contains(newBike)){
-                    return newBike;
-                }
+            newBike.setX(newBike.getY() % 2 == 0 ? i + 1 : i);
+            if (isFree(newBike) || tryToSetFreeCoordinates(newBike, bikesCountOnEachY, i)) {
+                break;
+            }
+            newBike.setY(1);
+        }
+        return newBike;
+    }
+
+    private boolean tryToSetFreeCoordinates(Bike bike, Map<Integer, Long> bikesOnYCount, int x){
+        List<Integer> yCoordinatesSortedByBikesCount = bikesOnYCount.entrySet()
+                .stream()
+                .sorted(comparingByValue())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        for (Integer possibleY : yCoordinatesSortedByBikesCount) {
+            bike.setY(possibleY);
+            bike.setX(possibleY % 2 == 0 ? x + 1 : x);
+            if (isFree(bike)) {
+                return true;
             }
         }
+        return false;
+    }
 
-        return newBike;
-
-//        return getBikes().stream()
-//                .filter(bike -> bike.getX() == x || bike.getX() == x + 1)
-//                .max(Comparator.comparing(PointImpl::getY))
-//                .map(bike -> new Bike(bike.getX() == x ? x + 1 : x, bike.getY() + 1))
-//                .orElse(new Bike(x, y));
+    boolean isFree(Point point) {
+        return !getBikes().contains(point) && !borders.contains(point) && !allShiftableElements.get(GameElementType.OBSTACLE).contains(point);
     }
 
     public List<Bike> getBikes() {
