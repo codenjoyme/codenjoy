@@ -47,4 +47,9 @@ public class NullPlayerScores implements PlayerScores {
     public void event(Object event) {
         // do nothing
     }
+
+    @Override
+    public void update(Object score) {
+        // do nothing
+    }
 }

@@ -37,4 +37,10 @@ public interface PlayerScores extends EventListener {
      * @return очистка очков с возвращением последнего значения.
      */
     int clear();
+
+    /**
+     * В крайних случаях можно обновить количество очков
+     * @param score
+     */
+    void update(Object score);
 }

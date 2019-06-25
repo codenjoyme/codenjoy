@@ -414,28 +414,41 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             for (int index = 0; index < playerGames.size(); index ++) {
-                PlayerGame playerGame = playerGames.get(index);
-                Player playerToUpdate = playerGame.getPlayer();
-                Player newPlayer = players.get(index);
-
-                playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
-                playerToUpdate.setName(newPlayer.getName());
-                playerToUpdate.setReadableName(newPlayer.getReadableName());
-                registration.updateName(newPlayer.getName(), newPlayer.getReadableName());
-
-                Game game = playerGame.getGame();
-                if (game != null && game.getSave() != null) {
-                    String oldSave = game.getSave().toString();
-                    String newSave = newPlayer.getData();
-                    if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
-                        playerGames.setLevel(
-                                newPlayer.getName(),
-                                new JSONObject(newSave));
-                    }
-                }
+                updatePlayer(playerGames.get(index), players.get(index));
             }
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void update(Player player) { // TODO test me
+        lock.writeLock().lock();
+        try {
+            updatePlayer(playerGames.get(player.getName()), player);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private void updatePlayer(PlayerGame playerGame, Player newPlayer) {
+        Player playerToUpdate = playerGame.getPlayer();
+
+        playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
+        playerToUpdate.setName(newPlayer.getName());
+        playerToUpdate.setReadableName(newPlayer.getReadableName());
+        playerToUpdate.getScores().update(newPlayer.getScore());
+        registration.updateName(newPlayer.getName(), newPlayer.getReadableName());
+
+        Game game = playerGame.getGame();
+        if (game != null && game.getSave() != null) {
+            String oldSave = game.getSave().toString();
+            String newSave = newPlayer.getData();
+            if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
+                playerGames.setLevel(
+                        newPlayer.getName(),
+                        new JSONObject(newSave));
+            }
         }
     }
 

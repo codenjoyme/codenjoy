@@ -68,4 +68,9 @@ public class Scores implements PlayerScores {
         }
         score = Math.max(0, score);
     }
+
+    @Override
+    public void update(Object score) {
+        this.score = Integer.valueOf(score.toString());
+    }
 }
