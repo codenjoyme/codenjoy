@@ -81,4 +81,8 @@ public class LaserMachine extends FieldItem implements Tickable {
         }
     }
 
+    public void reset() {
+        timer = 0;
+        field.lasers().forEach(it -> it.die());
+    }
 }

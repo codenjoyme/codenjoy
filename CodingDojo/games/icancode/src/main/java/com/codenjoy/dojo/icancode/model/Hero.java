@@ -201,7 +201,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             reset = true;
         } else if (p[0] == -1) { // TODO test me
             ICell end = field.getEndPosition();
-            field.move(this.item, end.getX(), end.getY());
+            field.move(item, end.getX(), end.getY());
         }
     }
 

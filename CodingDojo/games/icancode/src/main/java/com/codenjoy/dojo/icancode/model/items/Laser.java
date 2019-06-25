@@ -74,14 +74,14 @@ public class Laser extends FieldItem implements Tickable {
         if (heroItem != null) {
             Hero hero = heroItem.getHero();
             if (!hero.isFlying()) {
-                removeFromCell();
+                die();
                 hero.dieOnLaser();
             }
         }
 
         Zombie zombie = getIf(item, Zombie.class);
         if (zombie != null) {
-            removeFromCell();
+            die();
             zombie.die();
         }
     }
@@ -109,5 +109,9 @@ public class Laser extends FieldItem implements Tickable {
             return true;
         }
         return false;
+    }
+
+    public void die() {
+        removeFromCell();
     }
 }

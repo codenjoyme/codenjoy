@@ -120,6 +120,26 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
+    public List<Laser> lasers() {
+        return level.getItems(Laser.class);
+    }
+
+    @Override
+    public List<Gold> golds() {
+        return level.getItems(Gold.class);
+    }
+
+    @Override
+    public List<LaserMachine> laserMachines() {
+        return level.getItems(LaserMachine.class);
+    }
+
+    @Override
+    public List<ZombiePot> zombiePots() {
+        return level.getItems(ZombiePot.class);
+    }
+
+    @Override
     public boolean isBarrier(int x, int y) {
         return level.isBarrier(x, y);
     }
@@ -170,16 +190,19 @@ public class ICanCode implements Tickable, IField {
 
     @Override
     public void reset() {
-        // TODO think about it
-        List<BaseItem> golds = level.getItems(Gold.class);
+        List<Gold> golds = golds();
 
         if (isMultiplayer) {
             setRandomGold(golds); // TODO test me
         }
 
-        for (BaseItem gold : golds) {
-            ((Gold) gold).reset();
-        }
+        golds.forEach(it -> it.reset());
+
+        // TODO test me
+        zombiePots().forEach(it -> it.reset());
+
+        // TODO test me
+        laserMachines().forEach(it -> it.reset());
     }
 
     @Override
@@ -187,8 +210,8 @@ public class ICanCode implements Tickable, IField {
         return isMultiplayer;
     }
 
-    private void setRandomGold(List<BaseItem> golds) {
-        List<BaseItem> floors = level.getItems(Floor.class);
+    private void setRandomGold(List<Gold> golds) {
+        List<Floor> floors = level.getItems(Floor.class);
 
         for (int i = floors.size() - 1; i > -1; --i) {
             if (floors.get(i).getCell().getItems().size() > 1) {
@@ -196,19 +219,16 @@ public class ICanCode implements Tickable, IField {
             }
         }
 
-        Gold gold;
-        for (BaseItem item : golds) {
-            gold = (Gold) item;
-
+        for (Gold gold : golds) {
             if (gold.getHidden() && !floors.isEmpty()) {
                 int random = dice.next(floors.size());
 
-                Floor floor = (Floor) floors.get(random);
+                Floor floor = floors.get(random);
                 floors.remove(random);
 
-                ICell fromCell = gold.getCell();
+                ICell cell = gold.getCell();
                 floor.getCell().addItem(gold);
-                fromCell.addItem(floor);
+                cell.addItem(floor);
             }
         }
     }

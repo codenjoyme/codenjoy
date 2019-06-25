@@ -265,6 +265,19 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         game.newGame(player);
         game.tick();
         game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        game.tick();
 
         // then
         assertE("------" +
