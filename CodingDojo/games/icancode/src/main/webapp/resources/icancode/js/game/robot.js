@@ -134,6 +134,14 @@ function initRobot(logger, controller) {
         return valid;
     }
 
+    var validate2Points = function(arg) {
+        var valid = (arg.length == 2 && isPoint(arg[0]) && isPoint(arg[1]));
+        if (!valid) {
+            logger.print("You tried to call function(point, point) with parameters [" + Array.from(arg).join(',') + "].");
+        }
+        return valid;
+    }
+
     var collect = function(e1, e2) {
         var elements = [];
 
@@ -522,11 +530,18 @@ function initRobot(logger, controller) {
                 return at(Direction.DOWN);
             }
 
-            var getShortestWay = function(to) {
-                if (!validatePoint(arguments)) {
-                    return null;
+            var getShortestWay = function(pt1, pt2) {
+                if (!pt2) {
+                    if (!validatePoint(arguments)) {
+                        return null;
+                    }
+                    return b.getShortestWay(getMe(), pt1);
+                } else {
+                    if (!validate2Points(arguments)) {
+                        return null;
+                    }
+                    return b.getShortestWay(pt1, pt2);
                 }
-                return b.getShortestWay(getMe(), to);
             }
 
             return {
