@@ -251,6 +251,7 @@ Send program to Robot by running the YourSolver class as Main Application.
     EXIT(LAYER1, 'E'),
     HOLE(LAYER1, 'O'),
     BOX(LAYER2, 'B'),
+    ZOMBIE_START(LAYER1, 'Z'),
     GOLD(LAYER1, '$'),
 
     // your robot
@@ -271,16 +272,23 @@ Send program to Robot by running the YourSolver class as Main Application.
     LASER_LEFT(LAYER2, '←'),
     LASER_RIGHT(LAYER2, '→'),
     LASER_UP(LAYER2, '↑'),
-    LASER_DOWN(LAYER2, '↓')
+    LASER_DOWN(LAYER2, '↓'),
+
+    // zombie
+    FEMALE_ZOMBIE(LAYER2, '♀'),
+    MALE_ZOMBIE(LAYER2, '♂'),
+    ZOMBIE_DIE(LAYER2, '✝')
 }</pre>
 
-        <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
+        <p>Robot can walk, jump over (holes, lasers, pull boxes and zombie) and fire with the following code:</p>
           
 <pre>public Command whatToDo(Board board) {
     return Command.go("RIGHT");
     // return Command.jump("RIGHT");
     // return Command.pull("RIGHT");
+    // return Command.fire("RIGHT");
 }</pre>
+
           <p>You can use this method to detect Elements throughout the world:</p>
           
 <pre>if (board.isAt(4, 8, Elements.HOLE)) {

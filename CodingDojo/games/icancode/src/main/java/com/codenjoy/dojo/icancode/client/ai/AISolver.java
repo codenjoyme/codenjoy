@@ -58,11 +58,11 @@ public class AISolver extends AbstractSolver {
         Point me = board.getMe();
         Point whereToGo = nextStep.change(me);
         if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BOX, LASER_RIGHT, LASER_LEFT, LASER_UP, LASER_DOWN)) {
-            return jumpTo(nextStep);
+            return Command.jump(nextStep);
         }
 
         if (shortestWay.size() != 1 && board.isAt(whereToGo.getX(), whereToGo.getY(), EXIT)) {
-            return jumpTo(nextStep);
+            return Command.jump(nextStep);
         }
 
         return go(nextStep);

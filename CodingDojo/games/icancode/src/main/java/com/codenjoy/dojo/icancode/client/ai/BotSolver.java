@@ -59,7 +59,7 @@ public class BotSolver extends AbstractSolver {
 
         if (result.jump) {
             if (result.direction != null) {
-                return Command.jumpTo(result.direction);
+                return Command.jump(result.direction);
             } else {
                 return Command.jump();
             }
