@@ -104,6 +104,7 @@ var initLevelInfo = function() {
         '} else {\n' +
         '    // statement\n' +
         '}</pre>' +
+
         'Be careful ! The program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -143,12 +144,16 @@ var initLevelInfo = function() {
         'You can use new methods for refactoring:<br>' +
         '<pre>scanner.at("RIGHT");\n' +
         'robot.go("LEFT");</pre>' +
+
         'If you want to know where we came from - use this expression:<br>' +
         '<pre>robot.cameFrom() == "LEFT"</pre>' +
+
         'If you want to know where we came to on our previous step, use:<br>' +
         '<pre>robot.previousDirection() == "RIGHT"</pre>' +
+
         'You can use these commands with previous to tell robot to go on one direction, like:<br>' +
         '<pre>robot.go(robot.previousDirection());</pre>' +
+
         'Be careful ! The program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -287,6 +292,7 @@ var initLevelInfo = function() {
         '    var direction = directions[index];\n' +
         '    // do something with current direction\n' +
         '}</pre>' +
+
         'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[6].defaultCode,
         'winCode':'function program(robot) {\n' +
@@ -385,16 +391,19 @@ var initLevelInfo = function() {
         'if (scanner.at("LEFT") == "HOLE") {\n' +
         '    // some statement here\n' +
         '}</pre>' +
+
         'And these new methods for jumping through it:<br>' +
         '<pre>robot.jumpLeft();\n' +
         'robot.jumpRight();\n' +
         'robot.jumpUp();\n' +
         'robot.jumpDown();\n' +
         'robot.jump("LEFT");</pre>' +
+
         'Also you can add new method to robot by:' +
         '<pre>robot.doSmthNew = function(parameter) {\n' +
         '    // some statement here\n' +
         '}</pre>' +
+
         'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[10].defaultCode,
         'winCode':'function program(robot) {\n' +
@@ -566,11 +575,13 @@ var initLevelInfo = function() {
     levelInfo[15] = {
         'help':'There is a lot of gold on this maze. But it seems we are not alone here.<br>' +
         'Hurry, the Zombie are not as fast as you.<br><br>' +
+
         'Scanner will help Robot to detect Zombie also. If you want to find Zombie on map - try use "ZOMBIE" element.<br>' +
         '<pre>var scanner = robot.getScanner();\n' +
         'if (scanner.at("LEFT") == "ZOMBIE") {\n' +
         '    // some statement here\n' +
         '}</pre>' +
+
         'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[14].defaultCode,
         'winCode':levelInfo[14].winCode,
@@ -584,10 +595,12 @@ var initLevelInfo = function() {
 
     levelInfo[16] = {
         'help':'Zombie in your way. You will meet !<br><br>' +
+
         'By the way, we did not tell you, but through Zombie you can also jump over:' +
         '<pre>robot.jump();\n' +
         'robot.jumpLeft();\n' +
         'robot.jump("RIGHT");</pre>' +
+
         'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[15].defaultCode,
         'winCode':levelInfo[15].winCode
@@ -595,15 +608,20 @@ var initLevelInfo = function() {
 
     levelInfo[17] = {
         'help':'The more gold you collect, the more points you earn. But zombies are on the way. <br><br>' +
+
         'Рay attention - the laser kills zombie. If it happens you will see "ZOMBIE_DIE" on board. <br><br>' +
+
         'Another way to get lasershow on board - fire. Yes you can do it ! Sorry, we forgot to tell you about that...<br><br>' +
+
         'There are several method for the Robot:' +
         '<pre>robot.fireLeft();\n' +
         'robot.fireRight();\n' +
         'robot.fireUp();\n' +
         'robot.fireDown();\n' +
         'robot.fire("LEFT");</pre>' +
-        'Good luck !',
+        'Good luck !<br><br>' +
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[16].defaultCode,
         'winCode':levelInfo[16].winCode,
         'autocomplete': {
@@ -625,7 +643,9 @@ var initLevelInfo = function() {
         'Remember that boxes can be moved:' +
         '<pre>robot.pull("UP");\n' +
         '// same as\n' +
-        'robot.pullUp();</pre>',
+        'robot.pullUp();</pre>' +
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[17].defaultCode,
         'winCode':levelInfo[17].winCode
     }
