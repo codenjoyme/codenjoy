@@ -273,8 +273,8 @@
                     <td><b>Registered Players</b></td>
                 </tr>
                 <tr>
-                    <td class="header">Player name</td>
-                    <td class="header">Player id/email</td>
+                    <td class="header">PlayerId</td>
+                    <td class="header">PlayerName</td>
                     <td class="header">Score</td>
                     <td class="header">IP</td>
                     <td class="header">GameName</td>
@@ -312,8 +312,8 @@
                     </c:choose>
                         <c:choose>
                             <c:when test="${player.active}">
+                                <td><form:input readonly="true" index="${status.index}" path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].readableName"/></td>
-                                <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].score"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
@@ -360,13 +360,13 @@
                                         <td><form:input class="player-save" path="players[${status.index}].data"/></td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><input type="button" id="save-user-${status.index}" index="${status.index}" value="Save"/></td>
                             </c:when>
 
                             <c:otherwise>
-                                <td><input class="uneditable-input" value="${player.readableName}"/></td>
-                                <td><input class="uneditable-input" value="${player.name}"/></td>
-                                <td><input class="uneditable-input" value="${player.callbackUrl}"/></td>
+                                <td><input readonly="true" value="${player.name}"/></td>
+                                <td><input readonly="true" value="${player.readableName}"/></td>
+                                <td><input readonly="true" value="${player.score}"/></td>
+                                <td><input readonly="true" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td>Save</td>
                                 <c:choose>
@@ -404,7 +404,6 @@
                                         <td><form:input class="player-save" path="players[${status.index}].data"/></td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td></td>
                             </c:otherwise>
                         </c:choose>
                     </tr>

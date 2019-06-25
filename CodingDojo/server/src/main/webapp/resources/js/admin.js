@@ -106,27 +106,39 @@ pages.admin = function() {
     var setupSaveUserDetails = function() {
         var ajax = new AdminAjax(contextPath, 'admin/user/info');
 
-        var buttons = $('[id^=save-user]');
-        buttons.each(function(index, obj) {
-            var button = $(obj);
-            var index = button.attr('index');
-            var preffix = '#players' + index + '\\.';
+        var names = $('[id$=\\.name]');
+        names.each(function(index, obj) {
+            var name = $(obj);
+            var index = name.attr('index');
+            var prefix = '#players' + index + '\\.';
 
-            button.click(function() {
-                ajax.save({
-                        readableName : $(preffix + 'readableName').val(),
-                        name : $(preffix + 'name').val(),
-                        score : $(preffix + 'score').val(),
-                        callbackUrl : $(preffix + 'callbackUrl').val(),
-                        data : $(preffix + 'data').val()
-                    },
-                    function() {
-                        // do nothing
-                    },
-                    function(e) {
-                        alert('error: ' + e);
+            var setup = function(field) {
+                var input = $(prefix + field);
+                input.on('input', function() {
+                    if (!!input.data('button')) return;
+                    var test = $('<button type="button">Save</button>').click(function () {
+                        var data = {};
+                        data['name'] = name.val();
+                        data[field] = input.val();
+                        ajax.save(data,
+                            function() {
+                                input.data('button', null);
+                                test.remove();
+                            },
+                            function(e) {
+                                alert('error: ' + e);
+                            });
                     });
-            });
+                    input.after(test);
+                    input.data('button', test);
+                });
+            };
+
+            setup('readableName');
+            setup('name');
+            setup('score');
+            setup('callbackUrl');
+            setup('data');
         });
     }
 
