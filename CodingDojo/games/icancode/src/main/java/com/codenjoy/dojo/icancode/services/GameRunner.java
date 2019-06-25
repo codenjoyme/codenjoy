@@ -43,18 +43,11 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
 
-    private static final List<String> GAMES = Arrays.asList(
-            "iCanCode Contest",
-            "iCanCode Training",
-            "eKids"
-    );
+    public static final int COUNT_LAYERS = 3;
 
     private Parameter<Integer> isTrainingMode;
 
@@ -143,7 +136,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
                     () -> player.getField().layeredReader(),
                     () -> player,
                     Levels.size(),
-                    2);
+                    COUNT_LAYERS);
 
             PrinterData data = printer.print();
 

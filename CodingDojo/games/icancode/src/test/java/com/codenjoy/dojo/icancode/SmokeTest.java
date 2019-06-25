@@ -40,7 +40,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
     @Test
-    @Ignore // TODO в maven валится
+//    @Ignore // TODO в maven валится
     public void test() {
         // given
         List<String> messages = new LinkedList<>();

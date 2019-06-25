@@ -37,6 +37,9 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -45,7 +48,7 @@ import static org.mockito.Mockito.when;
 public class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
-    private static final int COUNT_LAYERS = 2;
+    private static final int COUNT_LAYERS = 3;
     ICanCode game;
     private Printer<PrinterData> printer;
 
@@ -76,7 +79,7 @@ public class AbstractGameTest {
         player = new Player(listener);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
-        level.getItems(HeroItem.class) //
+        level.getItems(HeroItem.class)
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
                     if (heroItem.getHero() == null) {
@@ -105,12 +108,19 @@ public class AbstractGameTest {
     }
 
     void assertL(String expected) {
+        assertA(expected, LAYER1);
+    }
+
+    private void assertA(String expected, int index) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(printer.print().getLayers().get(0)));
+                TestUtils.injectN(printer.print().getLayers().get(index)));
     }
 
     void assertE(String expected) {
-        assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(printer.print().getLayers().get(1)));
+        assertA(expected, LAYER2);
+    }
+
+    void assertF(String expected) {
+        assertA(expected, LAYER3);
     }
 }

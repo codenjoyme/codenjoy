@@ -42,6 +42,9 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -113,8 +116,12 @@ public class SingleTest {
     }
 
     private void assertL(Single single, String expected) {
+        assertA(single, expected, LAYER1);
+    }
+
+    private void assertA(Single single, String expected, int index) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(getLayer(single, 0)));
+                TestUtils.injectN(getLayer(single, index)));
     }
 
     private String getLayer(Single single, int index) {
@@ -122,8 +129,11 @@ public class SingleTest {
     }
 
     private void assertE(Single single, String expected) {
-        assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(getLayer(single, 1)));
+        assertA(single, expected, LAYER2);
+    }
+
+    private void assertF(Single single, String expected) {
+        assertA(single, expected, LAYER3);
     }
 
     @Test
@@ -934,7 +944,14 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "-----" +
-                "-№%--" +
+                "-BB--" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "-----" +
+                "-*^--" +
                 "-----" +
                 "-----");
 
@@ -948,7 +965,14 @@ public class SingleTest {
         assertE(single2,
                 "-----" +
                 "-----" +
-                "-%№--" +
+                "-BB--" +
+                "-----" +
+                "-----");
+
+        assertF(single2,
+                "-----" +
+                "-----" +
+                "-^*--" +
                 "-----" +
                 "-----");
 
@@ -1030,6 +1054,13 @@ public class SingleTest {
                 "-----" +
                 "-----");
 
+        assertF(single1,
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         assertL(single2,
                 "╔═══┐" +
                 "║S..│" +
@@ -1040,6 +1071,13 @@ public class SingleTest {
         assertE(single2,
                 "-----" +
                 "-X☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single2,
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1058,7 +1096,14 @@ public class SingleTest {
 
         assertE(single1,
                 "-----" +
-                "-*X--" +
+                "--X--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "-*---" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1072,7 +1117,60 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "-^☺--" +
+                "--☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single2,
+                "-----" +
+                "-^---" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        // when
+        tick(single1);
+        tick(single2);
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-☺X--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-X☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single2,
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1091,7 +1189,14 @@ public class SingleTest {
 
         assertE(single1,
                 "-----" +
-                "-☺^--" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "--^--" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1105,7 +1210,14 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "-X*--" +
+                "-X---" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single2,
+                "-----" +
+                "--*--" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1665,7 +1777,13 @@ public class SingleTest {
                 "-☺---" +
                 "-----" +
                 "-----" +
-                "-----']", single1);
+                "-----'," +
+                "'-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----'" +
+                "]", single1);
 
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
@@ -1679,8 +1797,13 @@ public class SingleTest {
                 "-☺---" +
                 "-----" +
                 "-----" +
-                "-----']",
-                single2);
+                "-----'," +
+                "'-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----'" +
+                "]", single2);
 
         // go to next level
         hero1().right();
@@ -1738,8 +1861,13 @@ public class SingleTest {
                 "--☺--" +
                 "-X---" +
                 "-----" +
-                "-----']",
-                single1);
+                "-----'," +
+                "'-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----'" +
+                "]", single1);
 
         // when then
         assertBoardData("{'current':1,'lastPassed':0,'total':1}",
@@ -1753,8 +1881,13 @@ public class SingleTest {
                 "--X--" +
                 "-☺---" +
                 "-----" +
-                "-----']",
-                single2);
+                "-----'," +
+                "'-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----'" +
+                "]", single2);
     }
 
     @Test
@@ -1817,7 +1950,23 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------" +
-                "--B-------------']", single1);
+                "--B-------------'," +
+                "'----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------']", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
                 "{'x':0,'y':4}",
@@ -1852,7 +2001,23 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------" +
-                "--B-------------']", single2);
+                "--B-------------'," +
+                "'----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------']", single2);
 
         // when
         for (int i = 0; i < 17; i++) {
@@ -1884,6 +2049,22 @@ public class SingleTest {
                 "'----------------" +
                 "--------------☺-" +
                 "-----------B----" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------'," +
+                "'----------------" +
+                "----------------" +
+                "----------------" +
                 "----------------" +
                 "----------------" +
                 "----------------" +
@@ -1931,6 +2112,22 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "-☺--------------" +
+                "----------------'," +
+                "'----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
                 "----------------']", single2);
     }
 

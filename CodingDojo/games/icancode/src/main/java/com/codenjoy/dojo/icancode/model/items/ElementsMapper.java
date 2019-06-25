@@ -71,13 +71,11 @@ public class ElementsMapper {
         put(ROBO, HeroItem.class);
         put(ROBO_FALLING, HeroItem.class);
         put(ROBO_FLYING, HeroItem.class);
-        put(ROBO_FLYING_ON_BOX, HeroItem.class);
         put(ROBO_LASER, HeroItem.class);
 
         put(ROBO_OTHER, HeroItem.class);
         put(ROBO_OTHER_FALLING, HeroItem.class);
         put(ROBO_OTHER_FLYING, HeroItem.class);
-        put(ROBO_OTHER_FLYING_ON_BOX, HeroItem.class);
         put(ROBO_OTHER_LASER, HeroItem.class);
 
         put(LASER_LEFT, Laser.class);

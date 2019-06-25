@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.icancode.model.Elements;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
@@ -71,12 +72,15 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns position of your robot.
      */
     public Point getMe() {
-        List<Point> points = get(LAYER2,
-                ROBO_FALLING,
-                ROBO_FLYING,
-                ROBO_FLYING_ON_BOX,
-                ROBO_LASER,
-                ROBO);
+        List<Point> points = new LinkedList<Point>() {{
+            addAll(Board.this.get(LAYER2,
+                    ROBO_FALLING,
+                    ROBO_LASER,
+                    ROBO));
+            addAll(Board.this.get(LAYER3,
+                    ROBO_FLYING));
+        }};
+
         if (points.isEmpty()) {
             return null;
         }
@@ -87,12 +91,14 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all visible enemy Robots.
      */
     public List<Point> getOtherHeroes() {
-        return get(LAYER2,
-                ROBO_OTHER_FALLING,
-                ROBO_OTHER_FLYING,
-                ROBO_OTHER_FLYING_ON_BOX,
-                ROBO_OTHER_LASER,
-                ROBO_OTHER);
+        return new LinkedList<Point>(){{
+            addAll(Board.this.get(LAYER2,
+                    ROBO_OTHER_FALLING,
+                    ROBO_OTHER_LASER,
+                    ROBO_OTHER));
+            addAll(Board.this.get(LAYER2,
+                    ROBO_OTHER_FLYING));
+        }};
     }
 
     /**
@@ -147,9 +153,7 @@ public class Board extends AbstractBoard<Elements> {
      */
     public List<Point> getBoxes() {
         return get(LAYER2,
-                BOX,
-                ROBO_FLYING_ON_BOX,
-                ROBO_OTHER_FLYING_ON_BOX);
+                BOX);
     }
 
     /**
@@ -220,16 +224,19 @@ public class Board extends AbstractBoard<Elements> {
         StringBuilder builder = new StringBuilder();
         String[] layer1 = boardAsString(LAYER1).split("\n");
         String[] layer2 = boardAsString(LAYER2).split("\n");
+        String[] layer3 = boardAsString(LAYER3).split("\n");
 
         String numbers = temp.substring(0, layer1.length);
         String space = StringUtils.leftPad("", layer1.length - 5);
-        String numbersLine = numbers + "   " + numbers;
-        String firstPart = " Layer1 " + space + " Layer2\n  " + numbersLine;
+        String numbersLine = numbers + "   " + numbers + "   " + numbers;
+        String firstPart = " Layer1 " + space + " Layer2" + space + " Layer3" + "\n  " + numbersLine;
 
         for (int i = 0; i < layer1.length; ++i) {
             int ii = size - 1 - i;
             String index = (ii < 10 ? " " : "") + ii;
-            builder.append(index + layer1[i] + " " + index + maskOverlay(layer2[i], layer1[i]));
+            builder.append(index + layer1[i]
+                    + " " + index + maskOverlay(layer2[i], layer1[i])
+                    + " " + index + maskOverlay(layer3[i], layer1[i]));
 
             switch (i) {
                 case 0:
