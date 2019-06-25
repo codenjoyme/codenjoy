@@ -4144,6 +4144,12 @@ public class ICanCodeTest extends AbstractGameTest {
         // then
         assertE("-----" +
                 "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
                 "--*--" +
                 "-----" +
                 "-----");
@@ -4161,6 +4167,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "-←-☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
 
