@@ -73,4 +73,6 @@ public interface IField extends GameField<Player> {
     List<LaserMachine> laserMachines();
 
     List<ZombiePot> zombiePots();
+
+    List<Floor> floors();
 }

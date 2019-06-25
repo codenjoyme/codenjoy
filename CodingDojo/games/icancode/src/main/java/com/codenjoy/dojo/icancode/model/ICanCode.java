@@ -140,6 +140,11 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
+    public List<Floor> floors() {
+        return level.getItems(Floor.class);
+    }
+
+    @Override
     public boolean isBarrier(int x, int y) {
         return level.isBarrier(x, y);
     }
@@ -198,11 +203,13 @@ public class ICanCode implements Tickable, IField {
 
         golds.forEach(it -> it.reset());
 
-        // TODO test me
-        zombiePots().forEach(it -> it.reset());
+        if (!isMultiplayer) {
+            // TODO test me
+            zombiePots().forEach(it -> it.reset());
 
-        // TODO test me
-        laserMachines().forEach(it -> it.reset());
+            // TODO test me
+            laserMachines().forEach(it -> it.reset());
+        }
     }
 
     @Override
@@ -211,7 +218,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     private void setRandomGold(List<Gold> golds) {
-        List<Floor> floors = level.getItems(Floor.class);
+        List<Floor> floors = floors();
 
         for (int i = floors.size() - 1; i > -1; --i) {
             if (floors.get(i).getCell().getItems().size() > 1) {
