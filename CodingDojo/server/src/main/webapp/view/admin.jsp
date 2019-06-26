@@ -312,10 +312,10 @@
                     </c:choose>
                         <c:choose>
                             <c:when test="${player.active}">
-                                <td><form:input readonly="true" index="${status.index}" path="players[${status.index}].name"/></td>
-                                <td><form:input path="players[${status.index}].readableName"/></td>
-                                <td><form:input path="players[${status.index}].score"/></td>
-                                <td><form:input path="players[${status.index}].callbackUrl"/></td>
+                                <td><form:input class="input-id" readonly="true" index="${status.index}" path="players[${status.index}].name"/></td>
+                                <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
+                                <td><form:input class="input-score" path="players[${status.index}].score"/></td>
+                                <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td><a href="${ctx}/admin?save=${player.name}&gameName=${gameName}">Save</a></td>
                                 <c:choose>
@@ -363,10 +363,10 @@
                             </c:when>
 
                             <c:otherwise>
-                                <td><input readonly="true" value="${player.name}"/></td>
-                                <td><input readonly="true" value="${player.readableName}"/></td>
-                                <td><input readonly="true" value="${player.score}"/></td>
-                                <td><input readonly="true" value="${player.callbackUrl}"/></td>
+                                <td><input type="text" readonly="true" class="input-id"       value="${player.name}"/></td>
+                                <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
+                                <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
+                                <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td>Save</td>
                                 <c:choose>
