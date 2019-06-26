@@ -41,6 +41,7 @@ public interface PlayerService extends Tickable {
     GameType getAnyGameWithPlayers();
 
     void cleanAllScores();
+    void loadSaveForAll(String gameName, String save);
 
     Joystick getJoystick(String name); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
 

@@ -26,6 +26,8 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
@@ -272,6 +274,11 @@ public class AdminController {
             }
         }
 
+        if (settings.getProgress() != null) {
+            playerService.loadSaveForAll(settings.getGameName(),
+                    settings.getProgress());
+        }
+
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
@@ -385,6 +392,10 @@ public class AdminController {
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");
         model.addAttribute("generateCount", "30");
         model.addAttribute("timerPeriod", timerService.getPeriod());
+
+        MultiplayerType type = gameService.getGame(gameName).getMultiplayerType();
+        JSONObject save = new LevelProgress(type).saveTo(new JSONObject());
+        model.addAttribute("defaultProgress", save.toString().replace('"', '\''));
 
         checkGameStatus(model);
         checkRecordingStatus(model);

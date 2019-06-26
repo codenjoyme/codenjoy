@@ -465,6 +465,19 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
+    @Override // TODO test me
+    public void loadSaveForAll(String gameName, String newSave) {
+        lock.writeLock().lock();
+        try {
+            List<Player> players = playerGames.getPlayers(gameName);
+            players.forEach(player -> playerGames.setLevel(
+                    player.getName(),
+                    new JSONObject(newSave)));
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
     @Override
     public boolean contains(String name) {
         lock.readLock().lock();

@@ -163,6 +163,23 @@
         </tr>
     </table>
 
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <table class="admin-table" id="loadSaveForAll">
+            <tr>
+                <td><b>Load save (progress) for all</b></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="player-save" name="progress" value="${defaultProgress}"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="gameName" value="${gameName}"/>
+                    <input type="submit" value="Apply for all"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
     <table class="admin-table" id="cleanGame">
         <tr>
             <td><b>Registration settings</b></td>

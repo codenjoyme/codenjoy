@@ -40,6 +40,8 @@ public class AdminSettings {
 
     private String timerPeriod;
 
+    private String progress;
+
     public void setGameName(String gameName) {
         this.gameName = gameName;
     }
@@ -86,5 +88,13 @@ public class AdminSettings {
 
     public void setTimerPeriod(String timerPeriod) {
         this.timerPeriod = timerPeriod;
+    }
+
+    public String getProgress() {
+        return progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
     }
 }
