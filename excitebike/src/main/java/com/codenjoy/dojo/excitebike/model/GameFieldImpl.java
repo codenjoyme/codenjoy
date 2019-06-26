@@ -69,6 +69,8 @@ public class GameFieldImpl implements GameField {
 
     private List<Border> borders;
 
+    private int generationLock;
+
     public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
         this.mapParser = mapParser;
@@ -154,9 +156,9 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public Optional<Springboard> getSpringboardThatContainsPoint(Point point) {
-        List<Springboard> springboards = allShiftableElements.get(GameElementType.SPRINGBOARD);
-        for (Springboard springboard: springboards) {
-            if (springboard.getElements().contains(point)){
+        List<Springboard> springboards = allShiftableElements.get(SPRINGBOARD);
+        for (Springboard springboard : springboards) {
+            if (springboard.getElements().contains(point)) {
                 return Optional.of(springboard);
             }
         }
@@ -264,6 +266,7 @@ public class GameFieldImpl implements GameField {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(GameFieldImpl.this.getBikes());
+                    GameFieldImpl.this.allShiftableElements.get(GameElementType.SPRINGBOARD).forEach(springboard -> addAll(((Springboard) springboard).getElements()));
                     GameFieldImpl.this.allShiftableElements.values().forEach(this::addAll);
                     addAll(getBorders());
                 }};
@@ -286,6 +289,11 @@ public class GameFieldImpl implements GameField {
     }
 
     private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
+        if (generationLock > 0) {
+            generationLock--;
+            return;
+        }
+
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
             int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 2) + 2;
@@ -311,7 +319,11 @@ public class GameFieldImpl implements GameField {
             case LINE_CHANGER_DOWN:
                 return new LineChanger(x, y, false);
             case SPRINGBOARD:
-                return new Springboard(x, mapParser.getYSize(), 3);
+                final int clearLinesAroundSpringboard = 1;
+                final int springboardTopMaXWidth = 5;
+                int springboardWidth = dice.next(springboardTopMaXWidth) + 2;
+                generationLock = springboardWidth + clearLinesAroundSpringboard * 2;
+                return new Springboard(x + clearLinesAroundSpringboard, mapParser.getYSize(), springboardWidth);
             default:
                 throw new IllegalArgumentException("No such element for " + randomType);
         }

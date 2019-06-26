@@ -26,12 +26,14 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_ACCELERATOR;
@@ -256,6 +258,39 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     private void adjustStateToElement() {
         if (!isAlive()) {
+            return;
+        }
+
+        Optional<Springboard> optionalSpringboard = field.getSpringboardThatContainsPoint(this);
+//                .ifPresent(springboard -> {
+//                    if (springboard.isOnRise(this)){
+//                        setY(getY()+1);
+//                    }
+////                    if (springboard.isOnSpringBoardTop(this)){
+////                        x
+////                    }
+//                    if (springboard.isOnDescent(this)){
+//                        setY(getY()-1);
+//                    }
+//                });
+
+        if (optionalSpringboard.isPresent()) {
+            Springboard springboard = optionalSpringboard.get();
+            if (springboard.isOnRise(this)) {
+                if (type == BikeType.BIKE_INCLINE_LEFT){
+                    //TODO x+1
+                }
+                if (type == BikeType.BIKE_INCLINE_RIGHT){
+                    //TODO crush()
+                }
+                setY(getY() + 1);
+            }
+//                    if (springboard.isOnSpringBoardTop(this)){
+//                        x
+//                    }
+            if (springboard.isOnDescent(this)) {
+                setY(getY() - 1);
+            }
             return;
         }
 
