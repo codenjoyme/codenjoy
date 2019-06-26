@@ -49,7 +49,7 @@ function initProgressbar(container) {
         progressBar.remove(level, "hidden");
     }
     progressBar.countLevels = function(count) {
-        progressBar.countLevelsChanged = true;
+        progressBar.levelsCount = count;
         for (var level = 0; level < progressBar.length; level++) {
             progressBar.name(level, "Level " + (level + 1));
             if (level == count) {
