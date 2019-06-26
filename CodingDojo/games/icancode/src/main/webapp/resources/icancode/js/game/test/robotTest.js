@@ -137,7 +137,7 @@ runTest = function() {
 
     board = 'board={"layers":["' +
                         '╔═══════┐' + // 0
-                        '║S.$◄...│' + // 1
+                        '║S.$◄..O│' + // 1
                         '║....$O.│' + // 2
                         '║.$E....│' + // 3
                         '║˃..O...│' + // 4
@@ -147,14 +147,25 @@ runTest = function() {
                         '└───────┘",' + // 8
                       // 012345678
                        '"---------' + // 0
-                        '--☺---^--' + // 1
-                        '-X----x--' + // 2
+                        '--☺----o-' + // 1
+                        '-X----x☻-' + // 2
                         '-X---B---' + // 3
-                        '--→B-↓%--' + // 4
+                        '--→B-↓B--' + // 4
                         '-♂♂♀✝B---' + // 5
                         '--&--↑←--' + // 6
                         '---------' + // 7
-                        '---------"]}'; // 8
+                        '---------",' + // 8
+                      // 012345678
+                       '"---------' + // 0
+                        '------*--' + // 1
+                        '---------' + // 2
+                        '---------' + // 3
+                        '------^--' + // 4
+                        '---------' + // 5
+                        '---------' + // 6
+                        '---------' + // 7
+                        '---------"' + // 8
+                        ']}';
 
 
     robot = initRobot(logger, controller);
@@ -179,7 +190,7 @@ runTest = function() {
     assertEquals("HOLE,OTHER_ROBOT",
         scanner.at(6, 2));
 
-    assertEquals("OTHER_ROBOT,BOX",
+    assertEquals("BOX,OTHER_ROBOT",
         scanner.at(6, 4));
 
     assertEquals("OTHER_ROBOT", //TODO here also laser
@@ -233,6 +244,12 @@ runTest = function() {
     assertEquals("OTHER_ROBOT",
         scanner.atNearRobot(-1, 1));
 
+    assertEquals("MY_ROBOT", // мoй другой робот что летает LAYER3
+        scanner.atNearRobot(4, 0));
+
+    assertEquals("BOX,OTHER_ROBOT", // чужой робот, что летает LAYER3
+        scanner.atNearRobot(4, 3));
+
     assertEquals(null,
         scanner.atNearRobot());
     assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
@@ -275,6 +292,12 @@ runTest = function() {
     assertEquals(false,
         scanner.isAt(2, 1, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
 
+    assertEquals(true,
+        scanner.isAt(6, 1, ['MY_ROBOT'])); // мой летает на LAYER3
+
+    assertEquals(true,
+        scanner.isAt(6, 4, ['OTHER_ROBOT'])); // чужой летает на LAYER3
+
     assertEquals(false,
         scanner.isAt(2, 1));
     assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
@@ -302,6 +325,12 @@ runTest = function() {
     assertEquals("GOLD",
         scanner.getAt(3, 1));
 
+    assertEquals("MY_ROBOT",
+        scanner.getAt(6, 1));
+
+    assertEquals("BOX,OTHER_ROBOT",
+        scanner.getAt(6, 4));
+
     assertEquals(null,
         scanner.getAt());
     assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
@@ -315,6 +344,15 @@ runTest = function() {
 
     assertEquals("[2,3],[3,1],[5,2]",
         scanner.findAll("GOLD"));
+
+    assertEquals("[1,2],[1,3],[6,4],[2,6]", // TODO почему-то не находит падающих в дыры
+        scanner.findAll("OTHER_ROBOT"));
+
+    assertEquals("[2,1],[6,1],[7,2]", // TODO почему-то не находит падающих в дыры
+        scanner.findAll("MY_ROBOT"));
+
+    assertEquals("[1,2],[1,3],[6,4],[2,6],[2,1],[6,1],[7,2]", // TODO почему-то не находит падающих в дыры
+        scanner.findAll(["OTHER_ROBOT","MY_ROBOT"]));
 
     assertEquals("[2,3],[3,1],[5,2]",
         scanner.findAll(["GOLD"]));
@@ -342,6 +380,12 @@ runTest = function() {
 
     assertEquals(false,
         scanner.isAnyOfAt(2, 1, 'OTHER_ROBOT'));
+
+    assertEquals(true,
+        scanner.isAnyOfAt(6, 1, ['OTHER_ROBOT','MY_ROBOT']));
+
+    assertEquals(true,
+        scanner.isAnyOfAt(6, 4, ['OTHER_ROBOT','MY_ROBOT']));
 
     assertEquals(true,
         scanner.isAnyOfAt(2, 1, 'MY_ROBOT'));
@@ -380,6 +424,12 @@ runTest = function() {
 
     assertEquals(false,
         scanner.isNear(2, 2, ['ZOMBIE', 'HOLE']));
+
+    assertEquals(true,
+        scanner.isNear(5, 1, ['OTHER_ROBOT','MY_ROBOT']));
+
+    assertEquals(true,
+        scanner.isNear(5, 4, ['OTHER_ROBOT','MY_ROBOT']));
 
     assertEquals(true,
         scanner.isNear(2, 2, ['MY_ROBOT', 'GOLD']));
@@ -438,10 +488,19 @@ runTest = function() {
     assertEquals(1,
         scanner.countNear(2, 2, "MY_ROBOT"));
 
+    assertEquals(0,
+        scanner.countNear(5, 1, ['OTHER_ROBOT']));
+
+    assertEquals(1,
+        scanner.countNear(5, 1, ['MY_ROBOT']));
+
+    assertEquals(1,
+        scanner.countNear(5, 4, ['OTHER_ROBOT','MY_ROBOT']));
+
     assertEquals(1,
         scanner.countNear(2, 2, "OTHER_ROBOT"));
 
-    assertEquals(6, // TODO should be 3
+    assertEquals(10, // TODO should be 3
         scanner.countNear(3, 2, "NONE"));
 
     assertEquals(2, // TODO should be 3
@@ -462,7 +521,7 @@ runTest = function() {
     // getOtherRobots
     resetMocks();
 
-    assertEquals("[1,2],[1,3],[2,6],[6,1],[6,2],[6,4]",
+    assertEquals("[1,2],[1,3],[2,6],[6,2],[6,4]",
         scanner.getOtherRobots());
 
     // getLaserMachines
@@ -516,7 +575,7 @@ runTest = function() {
     // getHoles
     resetMocks();
 
-    assertEquals("[2,5],[4,4],[6,2]",
+    assertEquals("[2,5],[4,4],[6,2],[7,1]",
         scanner.getHoles());
 
     // getBarriers
@@ -531,7 +590,7 @@ runTest = function() {
     assertEquals("NONE,WALL,LASER_MACHINE,LASER_MACHINE_READY,START,EXIT,HOLE,BOX,ZOMBIE_START,GOLD,MY_ROBOT,OTHER_ROBOT,LASER_LEFT,LASER_RIGHT,LASER_UP,LASER_DOWN,ZOMBIE,ZOMBIE_DIE",
         scanner.getElements());
 
-    // getShortestWay
+    // getShortestWay with 1 point
     resetMocks();
 
     assertEquals("[2,1]",
@@ -547,8 +606,8 @@ runTest = function() {
         scanner.getShortestWay(new Point(6, 6)));
 
     assertEquals("null",
-        scanner.getShortestWay(1, 2));
-    assertActions("You tried to call function(point) with parameters [1,2].", loggerActions);
+        scanner.getShortestWay(1));
+    assertActions("You tried to call function(point) with parameters [1].", loggerActions);
 
     assertEquals("null",
         scanner.getShortestWay(null));
@@ -559,9 +618,39 @@ runTest = function() {
     assertActions("You tried to call function(point) with parameters [[1,2]].", loggerActions);
 
     assertEquals("null",
-        scanner.getShortestWay(new Point(1, 2), 3));
-    assertActions("You tried to call function(point) with parameters [[1,2],3].", loggerActions);
+        scanner.getShortestWay("string"));
+    assertActions("You tried to call function(point) with parameters [string].", loggerActions);
 
+    // getShortestWay with 2 points
+    resetMocks();
+
+    assertEquals("[2,1]",
+        scanner.getShortestWay(new Point(2, 1), scanner.getMe()));
+
+    assertEquals("[2,1],[2,2],[2,3],[3,3]",
+        scanner.getShortestWay(new Point(2, 1), scanner.getExit()[0]));
+
+    assertEquals("[2,1],[1,1]",
+        scanner.getShortestWay(new Point(2, 1), scanner.getStart()[0]));
+
+    assertEquals("[2,1],[2,2],[2,3],[2,4],[2,5],[3,5],[4,5],[4,6],[5,6],[6,6]",
+        scanner.getShortestWay(new Point(2, 1), new Point(6, 6)));
+
+    assertEquals("null",
+        scanner.getShortestWay(1, 2));
+    assertActions("You tried to call function(point, point) with parameters [1,2].", loggerActions);
+
+    assertEquals("null",
+        scanner.getShortestWay(null, 2));
+    assertActions("You tried to call function(point, point) with parameters [,2].", loggerActions);
+
+    assertEquals("null",
+        scanner.getShortestWay([new Point(1, 2)],[1]));
+    assertActions("You tried to call function(point, point) with parameters [[1,2],1].", loggerActions);
+
+    assertEquals("null",
+        scanner.getShortestWay(new Point(1, 2), 3));
+    assertActions("You tried to call function(point, point) with parameters [[1,2],3].", loggerActions);
 
     // isMyRobotAlive
     resetMocks();

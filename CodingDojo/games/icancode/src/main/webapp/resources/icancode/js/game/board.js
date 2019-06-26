@@ -47,6 +47,7 @@ var LengthToXY = function (boardSize) {
 
 var LAYER1 = 0;
 var LAYER2 = 1;
+var LAYER3 = 2;
 
 var Board = function (boardString) {
     var board = eval(boardString);
@@ -163,14 +164,16 @@ var Board = function (boardString) {
     };
 
     var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_FLYING_ON_BOX, Element.ROBOT_LASER];
-        var result = findAllElements(elements, LAYER2);
+        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_LASER];
+        var result = findAllElements(elements, LAYER2)
+            .concat(findAll(Element.ROBOT_FLYING, LAYER3));
         return result[0];
     };
 
     var getOtherHeroes = function () {
-        var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_FLYING, Element.ROBOT_OTHER_FLYING_ON_BOX, Element.ROBOT_OTHER_LASER];
-        return findAllElements(elements, LAYER2);
+        var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_LASER];
+        return findAllElements(elements, LAYER2)
+            .concat(findAll(Element.ROBOT_OTHER_FLYING, LAYER3));
     };
 
     var getLaserMachines = function () {
@@ -199,9 +202,7 @@ var Board = function (boardString) {
     };
 
     var getBoxes = function () {
-        return findAllElements([Element.BOX,
-            Element.ROBOT_FLYING_ON_BOX,
-            Element.ROBOT_OTHER_FLYING_ON_BOX], LAYER2);
+        return findAll(Element.BOX, LAYER2);
     };
 
     var getStart = function () {
@@ -348,12 +349,14 @@ var Board = function (boardString) {
         return String.format(
             "Board layer 1:\n{0}\n" +
             "Board layer 2:\n{1}\n" +
-            "Robot at: {2}\n" +
-            "Other robots at: {3}\n" +
-            "LaserMachine at: {4}" +
-            "Laser at: {5}" +
+            "Board layer 3:\n{2}\n" +
+            "Robot at: {3}\n" +
+            "Other robots at: {4}\n" +
+            "LaserMachine at: {5}" +
+            "Laser at: {6}" +
             boardAsString(LAYER1),
             boardAsString(LAYER2),
+            boardAsString(LAYER3),
             getHero(),
             printArray(getOtherHeroes()),
             printArray(getLaserMachines()),
@@ -385,6 +388,9 @@ var Board = function (boardString) {
         },
         layer2: function () {
             return boardAsString(LAYER2)
+        },
+        layer3: function () {
+            return boardAsString(LAYER3)
         },
         getBarriers: getBarriers,
         findAll: findAll,

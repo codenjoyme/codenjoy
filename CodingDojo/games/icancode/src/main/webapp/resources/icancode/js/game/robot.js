@@ -142,7 +142,7 @@ function initRobot(logger, controller) {
         return valid;
     }
 
-    var collect = function(e1, e2) {
+    var collect = function(e1, e2, e3) {
         var elements = [];
 
         if (Array.isArray(e1)) {
@@ -155,6 +155,12 @@ function initRobot(logger, controller) {
             elements = elements.concat(e2);
         } else {
             elements.push(e2);
+        }
+
+        if (Array.isArray(e3)) {
+            elements = elements.concat(e3);
+        } else {
+            elements.push(e3);
         }
 
         var result = [];
@@ -321,8 +327,9 @@ function initRobot(logger, controller) {
 
                 var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
                 var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
+                var element3 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER3);
 
-                return collect(element1.type, element2.type);
+                return collect(element1.type, element2.type, element3.type);
             }
 
             var getMe = function() {
@@ -344,7 +351,8 @@ function initRobot(logger, controller) {
                     var found = false;
                     forAll(elementType, function(element) {
                         if (b.isAt(x, y, LAYER1, element) ||
-                            b.isAt(x, y, LAYER2, element))
+                            b.isAt(x, y, LAYER2, element) ||
+                            b.isAt(x, y, LAYER3, element))
                         {
                             if (!found) {
                                 found = true;
@@ -365,8 +373,9 @@ function initRobot(logger, controller) {
 
                 var element1 = b.getAt(x, y, LAYER1);
                 var element2 = b.getAt(x, y, LAYER2);
+                var element3 = b.getAt(x, y, LAYER3);
 
-                return collect(element1.type, element2.type);
+                return collect(element1.type, element2.type, element3.type);
             }
 
             var findAll = function(elementTypes) {
@@ -381,6 +390,10 @@ function initRobot(logger, controller) {
                         result.push(found[index]);
                     }
                     found = b.findAll(element, LAYER2);
+                    for (var index in found) {
+                        result.push(found[index]);
+                    }
+                    found = b.findAll(element, LAYER3);
                     for (var index in found) {
                         result.push(found[index]);
                     }
@@ -399,7 +412,8 @@ function initRobot(logger, controller) {
                 });
 
                 if (b.isAnyOfAt(x, y, LAYER1, elements) ||
-                    b.isAnyOfAt(x, y, LAYER2, elements))
+                    b.isAnyOfAt(x, y, LAYER2, elements) ||
+                    b.isAnyOfAt(x, y, LAYER3, elements))
                 {
                     return true;
                 }
@@ -414,7 +428,8 @@ function initRobot(logger, controller) {
                 var found = false;
                 forAll(elementTypes, function(element) {
                     if (b.isNear(x, y, LAYER1, element) ||
-                        b.isNear(x, y, LAYER2, element))
+                        b.isNear(x, y, LAYER2, element) ||
+                        b.isNear(x, y, LAYER3, element))
                     {
                         found = true;
                     }
@@ -439,6 +454,7 @@ function initRobot(logger, controller) {
                 forAll(elementTypes, function(element) {
                     count += b.countNear(x, y, LAYER1, element);
                     count += b.countNear(x, y, LAYER2, element);
+                    count += b.countNear(x, y, LAYER3, element);
                 });
                 return count;
             }
