@@ -590,6 +590,12 @@ runTest = function() {
     assertEquals("NONE,WALL,LASER_MACHINE,LASER_MACHINE_READY,START,EXIT,HOLE,BOX,ZOMBIE_START,GOLD,MY_ROBOT,OTHER_ROBOT,LASER_LEFT,LASER_RIGHT,LASER_UP,LASER_DOWN,ZOMBIE,ZOMBIE_DIE",
         scanner.getElements());
 
+    // getShortestWay deadloop
+    resetMocks();
+
+    assertEquals("[0,0]",
+        scanner.getShortestWay(new Point(0, 0), scanner.getMe()));
+
     // getShortestWay with 1 point
     resetMocks();
 
@@ -650,6 +656,7 @@ runTest = function() {
 
     assertEquals("null",
         scanner.getShortestWay(new Point(1, 2), 3));
+
     assertActions("You tried to call function(point, point) with parameters [[1,2],3].", loggerActions);
 
     // isMyRobotAlive
