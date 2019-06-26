@@ -34,8 +34,9 @@ public class PlayerInfo extends Player {
         initScores();
     }
 
-    public PlayerInfo(String name, String code, String url, String gameName, boolean saved) {
+    public PlayerInfo(String name, String readableName, String code, String url, String gameName, boolean saved) {
         setName(name);
+        setReadableName(readableName);
         setCode(code);
         setCallbackUrl(url);
         setGameName(gameName);

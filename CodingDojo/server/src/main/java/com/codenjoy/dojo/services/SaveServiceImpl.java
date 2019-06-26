@@ -126,8 +126,10 @@ public class SaveServiceImpl implements SaveService {
                 info.setSaved(true);
             } else {
                 PlayerSave save = saver.loadGame(name);
+                // TODO оптимизнуть два запроса в один
                 String code = registration.getCodeById(name);
-                map.put(name, new PlayerInfo(name, code, save.getCallbackUrl(), save.getGameName(), true));
+                String readableName = registration.getNameById(name);
+                map.put(name, new PlayerInfo(name, readableName, code, save.getCallbackUrl(), save.getGameName(), true));
             }
         }
 
