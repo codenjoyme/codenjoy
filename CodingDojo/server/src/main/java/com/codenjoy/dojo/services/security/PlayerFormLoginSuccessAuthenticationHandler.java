@@ -109,7 +109,8 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
         String gameName = ofNullable(queryParamGameName)
                 .orElse(loginFormGameName);
 
-        // TODO иногда при первой загрузке если сразу залогиниться в админку то получаем gameName == null
+        // TODO при первой загрузке если сразу залогиниться в админку то получаем gameName == null
+        // все потому что там на поле с играми стоит <c:if test="${not adminLogin}">
         log.debug("Game name was chosen: {}", gameName);
 
         return gameName;
