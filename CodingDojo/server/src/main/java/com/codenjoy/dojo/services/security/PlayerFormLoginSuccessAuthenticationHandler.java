@@ -109,6 +109,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
         String gameName = ofNullable(queryParamGameName)
                 .orElse(loginFormGameName);
 
+        // TODO иногда при первой загрузке если сразу залогиниться в админку то получаем gameName == null
         log.debug("Game name was chosen: {}", gameName);
 
         return gameName;

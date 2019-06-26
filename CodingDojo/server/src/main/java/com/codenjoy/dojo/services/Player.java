@@ -116,7 +116,7 @@ public class Player implements ScreenRecipient, Closeable {
     }
 
     public Object getScore() {
-        return scores.getScore();
+        return (scores != null) ? scores.getScore() : null;
     }
 
     // TODO this method is only for admin save player score
