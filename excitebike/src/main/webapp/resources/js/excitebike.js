@@ -19,58 +19,25 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-// ты можешь включать или выключать те или иные компоненты
-// например этот скрипт настроен на то, что будет только борда и
-// встроится она в layout указанный в ресурсах
-// если заремарить это все, тогда UI будет базовый
 
-/*
-game.enableDonate = false;
-game.enableJoystick = true;
-game.enableAlways = true;
-game.enablePlayerInfo = false;
-game.enableLeadersTable = false;
-game.enableHotkeys = true;
-game.enableAdvertisement = false;
-game.showBody = false;
-
-game.onBoardPageLoad = function() {
-    initLayout(game.gameName, 'board.html', game.contextPath,
-        function() {
-            $("#main_board").empty();
-            $("#glasses").prependTo($("#main_board"));
-
-            $("#main_leaderboard").empty();
-            $("#leaderboard").prependTo($("#main_leaderboard"));
-        },
-        ['js/lib1/script1.js',
-            'js/lib2/script1.js',
-            'js/lib2/script2.js',
-        ],
-        function() {
-            // setup UI
-
-            $(document.body).show();
-        });
-}
-
-game.onBoardAllPageLoad = function() {
-    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
-        null,
-        [],
-        function() {
-            // setup UI
-
-            $(document.body).show();
-        });
-}*/
-
-window.onload = function() {
-    let canvasElement = document.getElementsByTagName('canvas')[0];
-    let tribuneDiv = document.createElement('div');
-    tribuneDiv.style.background = "url("+document.location.origin+game.contextPath+"/resources/img/tribune.png) center repeat-x"
-    tribuneDiv.style.backgroundSize = "auto 100%"
-    tribuneDiv.style.height = canvasElement.height/3+"px";
-    canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
-     $(document.body).show();
+window.onload = function(){
+    let initTribune = function() {
+        let divCanvas = document.getElementsByClassName('player-canvas');
+        if(divCanvas!=null && document.getElementsByTagName('canvas').length>1){
+            let canvasElement = document.getElementById(game.playerName);
+            if(canvasElement==null){
+                canvasElement = document.getElementsByTagName('canvas')[0];
+            }
+            document.getElementsByTagName("head")[0].insertAdjacentHTML(
+                     "beforeend",
+                     "<link rel=\"stylesheet\" href=\""+document.location.origin+game.contextPath+"/resources/css/"+game.gameName+".css"+"\" />");
+            let tribuneDiv = document.createElement('div');
+            tribuneDiv.id = 'tribune';
+            tribuneDiv.style.height = canvasElement.height/3+'px';
+            canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
+        } else {
+        setTimeout(initTribune, 100);
+        }
+    }
+    initTribune();
 }
