@@ -175,7 +175,7 @@ public class GameFieldImpl implements GameField {
     private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
-            int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 3) + 2;
+            int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 2) + 2;
             int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
 
             GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
