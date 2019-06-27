@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -41,9 +41,13 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -77,9 +81,9 @@ public class PlayersSpawnSystemParametrizedTest {
                         "■■■■■■■\n" +
                                 "       \n" +
                                 "       \n" +
+                                "e      \n" +
                                 " e     \n" +
-                                "  e    \n" +
-                                " o     \n" +
+                                "o      \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddFiveBikesInFirstFullChessColumn",
@@ -92,11 +96,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
+                                "e      \n" +
                                 " e     \n" +
-                                "  e    \n" +
+                                "e      \n" +
                                 " e     \n" +
-                                "  e    \n" +
-                                " o     \n" +
+                                "o      \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddSevenBikesInFirstAnSecondChessColumns",
@@ -109,11 +113,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
+                                "e      \n" +
                                 " e     \n" +
-                                "  e    \n" +
-                                " e     \n" +
-                                "  e  e \n" +
-                                " o  e  \n" +
+                                "e      \n" +
+                                " e  e  \n" +
+                                "o  e   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddTenBikesInFirstAnSecondFullChessColumns",
@@ -126,11 +130,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
+                                "e  e   \n" +
                                 " e  e  \n" +
-                                "  e  e \n" +
+                                "e  e   \n" +
                                 " e  e  \n" +
-                                "  e  e \n" +
-                                " o  e  \n" +
+                                "o  e   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddOneNewBike",
@@ -138,33 +142,33 @@ public class PlayersSpawnSystemParametrizedTest {
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
-                                "   o   " +
+                                "  o    " +
                                 "       " +
-                                "    o  " +
+                                "   o   " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
                                 "       \n" +
                                 "       \n" +
-                                "   o   \n" +
-                                "  e    \n" +
-                                "    e  \n" +
+                                "  o    \n" +
+                                " e     \n" +
+                                "   e   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddManyNewBikes",
                         3,
                         "■■■■■■■" +
                                 "       " +
+                                "    o  " +
+                                "o      " +
                                 "     o " +
-                                " o     " +
-                                "      o" +
-                                "    o o" +
+                                "   o o " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                " e     \n" +
-                                "  e  o \n" +
-                                " e     \n" +
-                                "  e   e\n" +
-                                "    e e\n" +
+                                "e      \n" +
+                                " e  o  \n" +
+                                "e      \n" +
+                                " e   e \n" +
+                                "   e e \n" +
                                 "■■■■■■■\n"
                 }
         );
@@ -184,27 +188,21 @@ public class PlayersSpawnSystemParametrizedTest {
 
         if (mapParser.getBikes().isEmpty()) {
             int playersNumber = StringUtils.countMatches(expected, BikeType.OTHER_BIKE.ch()) + 1;
-            for (int i = 0; i < playersNumber; i++) {
-                Game game = createNewGame(field, factory);
-                games.add(game);
-            }
+            IntStream.range(0, playersNumber).forEach(value -> games.add(createNewGame(field, factory)));
         } else {
-            for (Bike bike : mapParser.getBikes()) {
+            mapParser.getBikes().forEach(bike -> {
                 Game game = createNewGame(field, factory);
                 games.add(game);
                 ((Player) game.getPlayer()).setHero(bike);
-            }
+            });
         }
 
         //when
-        for (int i = 0; i < newPlayerNumberAfterInit; i++) {
-            Game game = createNewGame(field, factory);
-            games.add(game);
-        }
+        IntStream.range(0, newPlayerNumberAfterInit).mapToObj(i -> createNewGame(field, factory)).forEach(games::add);
         String res = (String) games.get(0).getBoardAsString();
 
         //then
-        assertEquals(expected, res);
+        assertThat(expected, is(res));
     }
 
     private Game createNewGame(GameField field, PrinterFactory factory) {

@@ -124,7 +124,7 @@ public class GameFieldImpl implements GameField {
         return createNewFreeBike(getBikesCountOnEachY());
     }
 
-    private Map<Integer, Long> getBikesCountOnEachY(){
+    private Map<Integer, Long> getBikesCountOnEachY() {
         Map<Integer, Long> bikesCountOnEachY = getBikes().stream().collect(
                 groupingBy(
                         PointImpl::getY,
@@ -135,7 +135,7 @@ public class GameFieldImpl implements GameField {
         return bikesCountOnEachY;
     }
 
-    private int getYWithMinNumberOfBikes(Map<Integer, Long> bikesCountOnEachY){
+    private int getYWithMinNumberOfBikes(Map<Integer, Long> bikesCountOnEachY) {
         return bikesCountOnEachY.entrySet()
                 .stream()
                 .min(
@@ -145,8 +145,8 @@ public class GameFieldImpl implements GameField {
                 .orElseGet(() -> 1);
     }
 
-    private Bike createNewFreeBike(Map<Integer, Long> bikesCountOnEachY){
-        final int minPossibleX = 1;
+    private Bike createNewFreeBike(Map<Integer, Long> bikesCountOnEachY) {
+        final int minPossibleX = 0;
         final int step = 3;
         int y = getYWithMinNumberOfBikes(bikesCountOnEachY);
 
@@ -162,24 +162,19 @@ public class GameFieldImpl implements GameField {
         return newBike;
     }
 
-    private boolean tryToSetFreeCoordinates(Bike bike, Map<Integer, Long> bikesOnYCount, int x){
-        List<Integer> yCoordinatesSortedByBikesCount = bikesOnYCount.entrySet()
+    private boolean tryToSetFreeCoordinates(Bike bike, Map<Integer, Long> bikesOnYCount, int x) {
+        return bikesOnYCount.entrySet()
                 .stream()
                 .sorted(comparingByValue())
                 .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-
-        for (Integer possibleY : yCoordinatesSortedByBikesCount) {
-            bike.setY(possibleY);
-            bike.setX(possibleY % 2 == 0 ? x + 1 : x);
-            if (isFree(bike)) {
-                return true;
-            }
-        }
-        return false;
+                .anyMatch(y -> {
+                    bike.setY(y);
+                    bike.setX(y % 2 == 0 ? x + 1 : x);
+                    return isFree(bike);
+                });
     }
 
-    boolean isFree(Point point) {
+    private boolean isFree(Point point) {
         return !getBikes().contains(point) && !borders.contains(point) && !allShiftableElements.get(GameElementType.OBSTACLE).contains(point);
     }
 
