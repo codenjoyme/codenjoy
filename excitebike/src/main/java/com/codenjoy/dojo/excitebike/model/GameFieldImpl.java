@@ -176,7 +176,7 @@ public class GameFieldImpl implements GameField {
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
             int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 3) + 2;
-            int rndNonBorderLaneNumber = dice.next(laneNumber - 3) + 1;
+            int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
 
             GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
             List<Shiftable> elements = (List<Shiftable>) allShiftableElements.get(randomType);
