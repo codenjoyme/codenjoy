@@ -519,4 +519,27 @@ public class GameFieldImplSystemTest {
         assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
     }
 
+    @Test
+    public void shouldSpawnAcceleratorOnTheHighestLine(){
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "     " +
+                "o    " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(0, 0, 2);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "    »" +
+                "     " +
+                "o    " +
+                "■■■■■";
+        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+    }
+
 }
