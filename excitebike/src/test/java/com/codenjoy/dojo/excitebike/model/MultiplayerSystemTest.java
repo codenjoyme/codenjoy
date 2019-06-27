@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -290,6 +291,54 @@ public class MultiplayerSystemTest {
                 " e     \n" +
                 " o     \n" +
                 "       \n" +
+                "■■■■■■■\n";
+        assertEquals(expected, game1.getBoardAsString());
+    }
+
+    @Ignore
+    @Test
+    public void shouldAddToPlayerScoreDefaultValue(){
+        //given
+        int defaultValue = 10;
+        when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
+
+        //when
+        game1.getJoystick().up();
+        field.tick();
+        game3.getJoystick().down();
+        field.tick();
+
+        //then
+        assertEquals(defaultValue, game3.getProgress().getCurrent());
+    }
+
+    @Ignore
+    @Test
+    public void shouldResetAllPlayersBikesAndCleanField(){
+        //given
+        when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
+
+        //when
+        game1.getJoystick().up();
+        field.tick();
+        game3.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "e      \n" +
+                " e     \n" +
+                "o      \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
     }

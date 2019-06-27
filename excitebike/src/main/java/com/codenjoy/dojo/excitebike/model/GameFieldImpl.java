@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -73,6 +74,15 @@ public class GameFieldImpl implements GameField {
         shiftTrack();
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
+        if (players.stream().filter(Player::isAlive).count() == 1 && players.size() > 1) {
+            players.stream().filter(Player::isAlive).findFirst().ifPresent(player -> player.event(Events.WIN));
+            restart();
+        }
+    }
+
+    private void restart(){
+        players.forEach(player -> player.setHero(null));
+        allShiftableElements.values().forEach(List::clear);
     }
 
     public int size() {
