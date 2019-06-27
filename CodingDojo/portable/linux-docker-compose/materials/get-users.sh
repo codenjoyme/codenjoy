@@ -1,0 +1,1 @@
+docker exec -i codenjoy-database psql -U codenjoy -c "SELECT email, readable_name FROM users;"
